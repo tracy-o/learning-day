@@ -24,7 +24,7 @@ defmodule IngressTest do
       assert conn.state == :sent
       assert conn.status == 200
       assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
-      assert conn.resp_body == "hello from the root"
+      assert conn.resp_body == "hello homepage"
     end
   end
 
@@ -43,18 +43,22 @@ defmodule IngressTest do
   describe "GET /:service" do
     for path <- ["/news", "/sport", "/weather", "/bytesize", "/cbeebies", "/dynasties"] do
       @path path
+
       test "#{@path} will return a 200" do
         conn = conn(:get, @path)
         conn = Ingress.call(conn, [])
 
         assert conn.status == 200
         assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
+
+        service = String.replace(@path, "/", "")
+        assert conn.resp_body == "hello #{service}"
       end
     end
   end
 
   describe "Page not found" do
-    test "will return a welcome message" do
+    test "will return a 'Not Found' message" do
       conn = conn(:get, "/foobar")
       conn = Ingress.call(conn, [])
 

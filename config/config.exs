@@ -29,4 +29,7 @@ use Mix.Config
 #
 
 config :ingress, http_port: 7080
+config :ingress, env:       Mix.env
+config :ingress, origin:    System.get_env("INGRESS_ORIGIN")
+
 import_config "#{Mix.env()}.exs"
