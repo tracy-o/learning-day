@@ -1,11 +1,16 @@
 defmodule Ingress do
-  alias Ingress.HTTPClient
+  alias Ingress.{HTTPClient, Guardian}
 
   @origin Application.get_env(:ingress, :origin)
 
   def handle(service) do
     env = Application.get_env(:ingress, :env)
-    HTTPClient.get(@origin, service, env)
+    {:ok ,origin} = Guardian.origin(:guardian)
+
+    {:ok, resp} = HTTPClient.get(origin, service, env)
+    Guardian.inc(:guardian, resp.status_code)
+
+    resp.body
   end
 
   def handle(instance_role_name, lambda_role_arn, function_name, function_payload) do

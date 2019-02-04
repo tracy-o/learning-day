@@ -8,6 +8,7 @@ defmodule Ingress.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
+      Ingress.Guardian,
       Ingress.Web
     ]
 

@@ -30,5 +30,9 @@ use Mix.Config
 
 config :ingress, env: Mix.env()
 config :ingress, origin: System.get_env("INGRESS_ORIGIN")
+config :ingress, fallback: System.get_env("INGRESS_FALLBACK")
+
+config :ingress, guardian_threshold: 1000  # per min
+config :ingress, guardian_interval:  60000 # 60sec
 
 import_config "#{Mix.env()}.exs"
