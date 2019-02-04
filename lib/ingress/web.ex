@@ -1,4 +1,4 @@
-defmodule Ingress do
+defmodule Ingress.Web do
   use Plug.Router
 
   alias Ingress.Handler
@@ -35,5 +35,13 @@ defmodule Ingress do
     conn
     |> put_resp_content_type("text/html")
     |> send_resp(404, "Not Found")
+  end
+
+  def child_spec(_arg) do
+    Plug.Adapters.Cowboy.child_spec(
+      scheme: :http,
+      options: [port: Application.fetch_env!(:ingress, :http_port), protocol_options: [max_keepalive: 5_000_000]],
+      plug: __MODULE__
+    )
   end
 end

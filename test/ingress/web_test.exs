@@ -1,13 +1,14 @@
-defmodule IngressTest do
+defmodule Ingress.WebTest do
   use ExUnit.Case
   use Plug.Test
 
+  alias Ingress.Web
   #@opts Ingress.init([])
 
   describe "GET /status" do
     test "will return 'OK'" do
       conn = conn(:get, "/status")
-      conn = Ingress.call(conn, [])
+      conn = Web.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 200
@@ -19,7 +20,7 @@ defmodule IngressTest do
   describe "GET /" do
     test "will return a welcome message" do
       conn = conn(:get, "/")
-      conn = Ingress.call(conn, [])
+      conn = Web.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 200
@@ -31,7 +32,7 @@ defmodule IngressTest do
   describe "HEAD /" do
     test "will return a welcome message" do
       conn = conn(:head, "/")
-      conn = Ingress.call(conn, [])
+      conn = Web.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 200
@@ -46,7 +47,7 @@ defmodule IngressTest do
 
       test "#{@path} will return a 200" do
         conn = conn(:get, @path)
-        conn = Ingress.call(conn, [])
+        conn = Web.call(conn, [])
 
         assert conn.status == 200
         assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
@@ -60,7 +61,7 @@ defmodule IngressTest do
   describe "Page not found" do
     test "will return a 'Not Found' message" do
       conn = conn(:get, "/foobar")
-      conn = Ingress.call(conn, [])
+      conn = Web.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 404
