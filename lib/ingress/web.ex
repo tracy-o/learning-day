@@ -7,7 +7,7 @@ defmodule Ingress.Web do
   plug :match
   plug :dispatch
 
-  @services ["news", "sport", "weather", "bytesize", "cbeebies", "dynasties"]
+  @services ["news", "sport", "weather", "bitesize", "cbeebies", "dynasties"]
 
   get "/status" do
     conn
