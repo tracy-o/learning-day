@@ -31,6 +31,15 @@ defmodule Ingress.Web do
     |> send_resp(200, resp.body)
   end
 
+  post "/graphql" do
+    {:ok, body, conn} = Plug.Conn.read_body(conn)
+    {:ok, resp} = Handler.handle("graphql", body)
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, resp.body)
+  end
+
   match _ do
     conn
     |> put_resp_content_type("text/html")
