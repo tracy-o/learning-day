@@ -1,8 +1,6 @@
 defmodule Ingress.Web do
   use Plug.Router
 
-  alias Ingress.Handler
-
   plug Plug.Head
   plug :match
   plug :dispatch
@@ -16,7 +14,7 @@ defmodule Ingress.Web do
   end
 
   get "/" do
-    {:ok, resp} = Handler.handle("homepage")
+    {:ok, resp} = Ingress.handle("homepage")
 
     conn
     |> put_resp_content_type("text/html")
@@ -24,7 +22,7 @@ defmodule Ingress.Web do
   end
 
   get "/:service" when service in(@services) do
-    {:ok, resp} = Handler.handle(service)
+    {:ok, resp} = Ingress.handle(service)
 
     conn
     |> put_resp_content_type("text/html")
@@ -33,7 +31,7 @@ defmodule Ingress.Web do
 
   post "/graphql" do
     {:ok, body, conn} = Plug.Conn.read_body(conn)
-    {:ok, resp} = Handler.handle("graphql", body)
+    {:ok, resp} = Ingress.handle("graphql", body)
 
     conn
     |> put_resp_content_type("application/json")
