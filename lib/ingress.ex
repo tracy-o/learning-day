@@ -10,7 +10,7 @@ defmodule Ingress do
     {:ok, resp} = HTTPClient.get(origin, service, env)
     Guardian.inc(:guardian, resp.status_code)
 
-    resp.body
+    {:ok, resp}
   end
 
   def handle(instance_role_name, lambda_role_arn, function_name, function_payload) do
