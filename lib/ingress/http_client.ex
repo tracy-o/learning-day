@@ -12,4 +12,18 @@ defmodule Ingress.HTTPClient do
     endpoint = origin <> service
     HTTPoison.get(endpoint, headers, options)
   end
+
+  def post(_origin, _service, :test, _body) do
+    {:ok, %HTTPoison.Response{body: "{\"data\":[]}"}}
+  end
+
+  def post(origin, service, _env, body) do
+    headers = [
+      "Content-Type": "application/json"
+    ]
+    options = [recv_timeout: @timeout]
+
+    endpoint = origin <> service
+    HTTPoison.post(endpoint, body, headers, options)
+  end
 end

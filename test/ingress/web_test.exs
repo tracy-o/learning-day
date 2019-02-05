@@ -42,7 +42,7 @@ defmodule Ingress.WebTest do
   end
 
   describe "GET /:service" do
-    for path <- ["/news", "/sport", "/weather", "/bytesize", "/cbeebies", "/dynasties"] do
+    for path <- ["/news", "/sport", "/weather", "/bitesize", "/cbeebies", "/dynasties"] do
       @path path
 
       test "#{@path} will return a 200" do
@@ -58,6 +58,18 @@ defmodule Ingress.WebTest do
     end
   end
 
+  describe "POST /graphql" do
+    test "will return a 200" do
+      conn = conn(:post, "/graphql", "{\"a\":1}")
+      conn = Web.call(conn, [])
+
+      assert conn.status == 200
+      assert get_resp_header(conn, "content-type") == ["application/json; charset=utf-8"]
+
+      assert conn.resp_body == "{\"data\":[]}"
+    end
+  end
+
   describe "Page not found" do
     test "will return a 'Not Found' message" do
       conn = conn(:get, "/foobar")
@@ -67,6 +79,6 @@ defmodule Ingress.WebTest do
       assert conn.status == 404
       assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
       assert conn.resp_body == "Not Found"
-      end
     end
+  end
 end
