@@ -28,7 +28,7 @@ defmodule Ingress.HandlersCache do
   def handle_call({:put, name, origin}, _from, table) do
     case lookup(name) do
       {:ok, _origin} ->
-        {:reply, {:ok, :exiisting}, table}
+        {:reply, {:ok, :existing}, table}
       :error ->
         :ets.insert(table, {name, origin})
         {:reply, {:ok, :created}, table}
