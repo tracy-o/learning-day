@@ -8,8 +8,10 @@ defmodule Ingress do
     HTTPClient.get(@origin, service, env)
   end
 
-  def handle(service, body) do
-    env = Application.get_env(:ingress, :env)
-    HTTPClient.post(@origin, service, env, body)
+  def handle(role, function_name, function_payload) do
+    InvokeLambda.invoke(function_name, %{
+      role: role,
+      function_payload: function_payload
+    })
   end
 end
