@@ -16,22 +16,38 @@ defmodule Ingress.HandlersCache do
     GenServer.call(server, {:put, name, origin})
   end
 
+  def reset(server) do
+    GenServer.call(server, :delete)
+  end
+
   ## Server callbacks
 
   @impl true
   def init(_) do
-    table = :ets.new(__MODULE__, [:named_table, read_concurrency: true])
-    {:ok, table}
+    {:ok, init_table()}
   end
 
   @impl true
   def handle_call({:put, name, origin}, _from, table) do
     case lookup(name) do
-      {:ok, _origin} ->
+    {:ok, ^origin} ->
         {:reply, {:ok, :existing}, table}
+      {:ok, _origin} ->
+        :ets.insert(table, {name, origin})
+        {:reply, {:ok, :updated}, table}
       :error ->
         :ets.insert(table, {name, origin})
         {:reply, {:ok, :created}, table}
     end
+  end
+
+  @impl true
+  def handle_call(:delete, _from, table) do
+    :ets.delete(table)
+    {:reply, :ok, init_table()}
+  end
+
+  defp init_table do
+    :ets.new(__MODULE__, [:named_table, read_concurrency: true])
   end
 end

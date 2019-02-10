@@ -9,7 +9,6 @@ config :ingress, lambda_business_layer: "business-layer"
 config :ingress, lambda_service_worker: "service-worker"
 config :ingress, lambda_service_worker_role: "service-worker-role"
 config :ingress, http_scheme: :http
-config :ingress, guardian_threshold: 20  # per min
-config :ingress, guardian_interval:  5   # 5sec
-
+config :ingress, guardian_threshold: 20    # per min
+config :ingress, guardian_interval:  1_000 # 1sec
 config :ingress, fallback: "https://s3.aws.com/"

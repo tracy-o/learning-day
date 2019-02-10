@@ -32,9 +32,8 @@ defmodule Ingress.Guardian do
 
   @impl GenServer
   def handle_cast({:inc, http_status}, state) do
-    state = %{state | counter: Counter.inc(state.counter, http_status)}
-
-    exceed = Counter.exceed?(state.counter, :errors, @threshold)
+    state    = %{state | counter: Counter.inc(state.counter, http_status)}
+    exceed   = Counter.exceed?(state.counter, :errors, @threshold)
     {:ok, _} = HandlersCache.put(Ingress.HandlersCache, "handler", origin_pointer(exceed))
 
     {:noreply, state}
