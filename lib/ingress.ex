@@ -8,9 +8,10 @@ defmodule Ingress do
     HTTPClient.get(@origin, service, env)
   end
 
-  def handle(role, function_name, function_payload) do
+  def handle(ec2_role, lambda_role, function_name, function_payload) do
     InvokeLambda.invoke(function_name, %{
-      role: role,
+      ec2_role:         ec2_role,
+      lambda_role:      lambda_role,
       function_payload: function_payload
     })
   end

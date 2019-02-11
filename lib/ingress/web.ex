@@ -14,14 +14,15 @@ defmodule Ingress.Web do
   end
 
   get "/" do
-    role = Application.fetch_env!(:ingress, :lambda_presentation_role)
+    ec2_role = Application.fetch_env!(:ingress, :ec2_role)
+    lambda_role = Application.fetch_env!(:ingress, :lambda_presentation_role)
     lambda = Application.fetch_env!(:ingress, :lambda_presentation_layer)
 
     function_payload = %{
       path: conn.request_path
     }
 
-    {200, resp} = Ingress.handle(role, lambda, function_payload)
+    {200, resp} = Ingress.handle(ec2_role, lambda_role, lambda, function_payload)
 
     conn
     |> put_resp_content_type("text/html")
@@ -29,14 +30,15 @@ defmodule Ingress.Web do
   end
 
   get "/:service" when service in(@services) do
-    role = Application.fetch_env!(:ingress, :lambda_presentation_role)
+    ec2_role = Application.fetch_env!(:ingress, :ec2_role)
+    lambda_role = Application.fetch_env!(:ingress, :lambda_presentation_role)
     lambda = Application.fetch_env!(:ingress, :lambda_presentation_layer)
 
     function_payload = %{
       path: conn.request_path
     }
 
-    {200, resp} = Ingress.handle(role, lambda, function_payload)
+    {200, resp} = Ingress.handle(ec2_role, lambda_role, lambda, function_payload)
 
     conn
     |> put_resp_content_type("text/html")
@@ -51,9 +53,10 @@ defmodule Ingress.Web do
       httpMethod: "POST"
     }
 
-    role = Application.fetch_env!(:ingress, :lambda_business_role)
+    ec2_role = Application.fetch_env!(:ingress, :ec2_role)
+    lambda_role = Application.fetch_env!(:ingress, :lambda_business_role)
     lambda = Application.fetch_env!(:ingress, :lambda_business_layer)
-    {200, resp} = Ingress.handle(role, lambda, function_payload)
+    {200, resp} = Ingress.handle(ec2_role, lambda_role, lambda, function_payload)
 
     conn
     |> put_resp_content_type("application/json")
