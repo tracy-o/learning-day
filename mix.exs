@@ -28,7 +28,8 @@ defmodule Ingress.MixProject do
       {:httpoison, "~> 1.5"},
       {:poison, "~> 3.1"},
       {:invoke_lambda, git: "https://github.com/james-bowers/elixir-invoke-lambda.git"},
-      {:mock, "~> 0.3", only: :test}
+      {:mock, "~> 0.3", only: :test},
+      {:distillery, "~> 2.0"}
     ]
   end
 end
