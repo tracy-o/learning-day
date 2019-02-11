@@ -26,6 +26,7 @@ defmodule Ingress.MixProject do
       {:cowboy, "~> 2.4"},
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.5"},
+      {:distillery, "~> 2.0"}
     ]
   end
 end
