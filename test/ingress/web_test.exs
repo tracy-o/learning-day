@@ -32,7 +32,7 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "presentation-layer",
-            %{ec2_role: "ec2-role",function_payload: %{path: "/"}, lambda_role: "presentation-role"})
+            %{instance_role_name: "ec2-role",function_payload: %{path: "/"}, lambda_role_arn: "presentation-role"})
         )
       end
     end
@@ -52,7 +52,7 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "presentation-layer",
-            %{ec2_role: "ec2-role",function_payload: %{path: "/"}, lambda_role: "presentation-role"})
+            %{instance_role_name: "ec2-role",function_payload: %{path: "/"}, lambda_role_arn: "presentation-role"})
         )
       end
     end
@@ -77,7 +77,7 @@ defmodule Ingress.WebTest do
           assert_called(
             InvokeLambda.invoke(
               "presentation-layer",
-              %{ec2_role: "ec2-role",function_payload: %{path: @path}, lambda_role: "presentation-role"})
+              %{instance_role_name: "ec2-role",function_payload: %{path: @path}, lambda_role_arn: "presentation-role"})
           )
         end
       end
@@ -101,7 +101,7 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "business-layer",
-            %{ec2_role: "ec2-role",function_payload: %{body: @request_payload, httpMethod: "POST"}, lambda_role: "business-role"}
+            %{instance_role_name: "ec2-role",function_payload: %{body: @request_payload, httpMethod: "POST"}, lambda_role_arn: "business-role"}
           )
         )
       end
