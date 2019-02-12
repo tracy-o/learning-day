@@ -8,9 +8,9 @@ defmodule Ingress.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
+      Ingress.HandlersRegistry,
       Ingress.HandlersSupervisor,
       Ingress.HandlersCache,
-      Ingress.Guardian,
       Ingress.Web
     ]
 

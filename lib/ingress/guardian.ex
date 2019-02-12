@@ -1,23 +1,28 @@
 defmodule Ingress.Guardian do
-  use GenServer
+  use GenServer, restart: :temporary
 
-  alias Ingress.{Counter, HandlersCache}
+  alias Ingress.{Counter, HandlersCache, HandlersRegistry}
 
   @threshold Application.get_env(:ingress, :guardian_threshold)
   @interval  Application.get_env(:ingress, :guardian_interval)
   @origin    Application.get_env(:ingress, :origin)
   @fallback  Application.get_env(:ingress, :fallback)
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: :guardian)
+  def start_link(name) do
+    IO.puts("Startinng handler for #{name}")
+    GenServer.start_link(__MODULE__, name, name: via_tuple(name))
   end
 
-  def origin(_server) do
-    HandlersCache.lookup("handler")
+  def origin(name) do
+    HandlersCache.lookup(name)
   end
 
-  def inc(server, http_status) do
-    GenServer.cast(server, {:inc, http_status})
+  def inc(name, http_status) do
+    GenServer.cast(via_tuple(name), {:inc, http_status})
+  end
+
+  defp via_tuple(name) do
+    HandlersRegistry.via_tuple({__MODULE__, name})
   end
 
   # callbacks
