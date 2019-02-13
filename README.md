@@ -1,10 +1,42 @@
 # Ingress
 
-** Entry point for the Web Core framework**
+__Ingress__ is the entrypoint for the Web Core framework.
 
-## Non functional requirements
+## Getting it running
 
-* be resilient
-* be performant
+### Install Elixir
+
+Get Elixir 1.8 on your Mac.
+
+```
+brew install elixir
+```
+
+### Install Hex
+
+Hex is a package manager for Elixir. You'll need it to install dependencies.
+
+```
+mix local.hex
+```
+
+### Install dependencies
+
+```
+mix deps.get
+```
+
+### Run the app
+
+```
+mix run --no-halt
+```
+
+The app runs on port 7080.
+
+## Properties of Ingress
+
+* resilient
+* performant
 * handle failures
 * more to come...
