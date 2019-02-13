@@ -7,6 +7,20 @@ defmodule Ingress.Web do
 
   @services ["news", "sport", "weather", "bitesize", "cbeebies", "dynasties"]
 
+  get "/service-worker.js" do
+    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
+    lambda_role_arn = Application.fetch_env!(:ingress, :lambda_service_worker_role)
+    lambda = Application.fetch_env!(:ingress, :lambda_service_worker)
+
+    function_payload = %{}
+
+    {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
+
+    conn
+    |> put_resp_content_type("application/javascript")
+    |> send_resp(200, resp["body"])
+  end
+
   get "/status" do
     conn
     |> put_resp_content_type("text/plain")
