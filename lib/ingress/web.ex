@@ -84,10 +84,28 @@ defmodule Ingress.Web do
   end
 
   def child_spec(_arg) do
+    scheme = Application.fetch_env!(:ingress, :http_scheme)
+
     Plug.Adapters.Cowboy.child_spec(
-      scheme: :http,
-      options: [port: Application.fetch_env!(:ingress, :http_port), protocol_options: [max_keepalive: 5_000_000]],
+      scheme: scheme,
+      options: Enum.concat([
+        port: Application.fetch_env!(:ingress, :http_port),
+        protocol_options: [max_keepalive: 5_000_000]
+      ],options(scheme)),
       plug: __MODULE__
     )
+  end
+
+  def options(:http) do
+    []
+  end
+
+  def options(:https) do
+    [
+      certfile:   Application.fetch_env!(:ingress, :http_cert),
+      keyfile:    Application.fetch_env!(:ingress, :http_cert_key),
+      cacertfile: Application.fetch_env!(:ingress, :http_cert_ca),
+      otp_app:    :ingress
+    ]
   end
 end
