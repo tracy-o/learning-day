@@ -5,7 +5,7 @@ defmodule Ingress.Web do
   plug :match
   plug :dispatch
 
-  @services ["news", "sport", "weather", "bitesize", "cbeebies", "dynasties"]
+  alias Ingress.ErrorView
 
   get "/service-worker.js" do
     instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
@@ -27,37 +27,7 @@ defmodule Ingress.Web do
     |> send_resp(200, "ok!")
   end
 
-  get "/" do
-    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
-    lambda_role_arn = Application.fetch_env!(:ingress, :lambda_presentation_role)
-    lambda = Application.fetch_env!(:ingress, :lambda_presentation_layer)
-
-    function_payload = %{
-      path: conn.request_path
-    }
-
-    {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
-
-    conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(200, resp["body"])
-  end
-
-  get "/:service" when service in(@services) do
-    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
-    lambda_role_arn = Application.fetch_env!(:ingress, :lambda_presentation_role)
-    lambda = Application.fetch_env!(:ingress, :lambda_presentation_layer)
-
-    function_payload = %{
-      path: conn.request_path
-    }
-
-    {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
-
-    conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(200, resp["body"])
-  end
+  get _, to: Ingress.PresentationController
 
   post "/graphql" do
     {:ok, body, conn} = Plug.Conn.read_body(conn)
@@ -79,8 +49,7 @@ defmodule Ingress.Web do
 
   match _ do
     conn
-    |> put_resp_content_type("text/html")
-    |> send_resp(404, "Not Found")
+    |> ErrorView.render(404)
   end
 
   def child_spec(_arg) do

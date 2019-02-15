@@ -59,7 +59,7 @@ defmodule Ingress.WebTest do
   end
 
   describe "GET /:service" do
-    for path <- ["/news", "/sport", "/weather", "/bitesize", "/cbeebies", "/dynasties"] do
+    for path <- ["/news", "/sport", "/weather", "/bitesize", "/cbeebies", "/dynasties", "/web/shell"] do
       @path path
 
       test "#{@path} will return a 200" do
