@@ -15,7 +15,7 @@ defmodule Ingress.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Ingress.Application, []}
+      mod: {Ingress.Application, [env: Mix.env()]}
     ]
   end
 

@@ -8,7 +8,7 @@ defmodule Ingress.Web do
   alias Ingress.ErrorView
 
   get "/service-worker.js" do
-    instance_role_name = System.get_env("INSTANCE_ROLE_NAME")
+    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
     lambda_role_arn = Application.fetch_env!(:ingress, :lambda_service_worker_role)
     lambda = Application.fetch_env!(:ingress, :lambda_service_worker)
 
@@ -37,7 +37,7 @@ defmodule Ingress.Web do
       httpMethod: "POST"
     }
 
-    instance_role_name = System.get_env("INSTANCE_ROLE_NAME")
+    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
     lambda_role_arn = Application.fetch_env!(:ingress, :lambda_business_role)
     lambda = Application.fetch_env!(:ingress, :lambda_business_layer)
     {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)

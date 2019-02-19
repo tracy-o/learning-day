@@ -37,7 +37,7 @@ defmodule Ingress.PresentationController do
 
   defp invoke_lambda_options do
     {
-      System.get_env("INSTANCE_ROLE_NAME"),
+      Application.fetch_env!(:ingress, :instance_role_name),
       Application.fetch_env!(:ingress, :lambda_presentation_role),
       Application.fetch_env!(:ingress, :lambda_presentation_layer)
     }
