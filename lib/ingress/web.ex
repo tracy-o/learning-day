@@ -1,9 +1,9 @@
 defmodule Ingress.Web do
   use Plug.Router
 
-  plug Plug.Head
-  plug :match
-  plug :dispatch
+  plug(Plug.Head)
+  plug(:match)
+  plug(:dispatch)
 
   alias Ingress.ErrorView
 
@@ -27,7 +27,7 @@ defmodule Ingress.Web do
     |> send_resp(200, "ok!")
   end
 
-  get _, to: Ingress.PresentationController
+  get(_, to: Ingress.PresentationController)
 
   post "/graphql" do
     {:ok, body, conn} = Plug.Conn.read_body(conn)
@@ -57,10 +57,14 @@ defmodule Ingress.Web do
 
     Plug.Adapters.Cowboy.child_spec(
       scheme: scheme,
-      options: Enum.concat([
-        port: Application.fetch_env!(:ingress, :http_port),
-        protocol_options: [max_keepalive: 5_000_000]
-      ],options(scheme)),
+      options:
+        Enum.concat(
+          [
+            port: Application.fetch_env!(:ingress, :http_port),
+            protocol_options: [max_keepalive: 5_000_000]
+          ],
+          options(scheme)
+        ),
       plug: __MODULE__
     )
   end
@@ -71,10 +75,10 @@ defmodule Ingress.Web do
 
   def options(:https) do
     [
-      certfile:   Application.fetch_env!(:ingress, :http_cert),
-      keyfile:    Application.fetch_env!(:ingress, :http_cert_key),
+      certfile: Application.fetch_env!(:ingress, :http_cert),
+      keyfile: Application.fetch_env!(:ingress, :http_cert_key),
       cacertfile: Application.fetch_env!(:ingress, :http_cert_ca),
-      otp_app:    :ingress
+      otp_app: :ingress
     ]
   end
 end
