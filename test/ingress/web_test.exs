@@ -20,7 +20,8 @@ defmodule Ingress.WebTest do
 
   describe "GET /" do
     test "will return a welcome message" do
-      with_mock InvokeLambda, [invoke: fn(_function_name, _options) -> {200, %{"body" => "hello homepage"}} end] do
+      with_mock InvokeLambda,
+        invoke: fn _function_name, _options -> {200, %{"body" => "hello homepage"}} end do
         conn = conn(:get, "/")
         conn = Web.call(conn, [])
 
@@ -32,7 +33,12 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "presentation-layer",
-            %{instance_role_name: "ec2-role",function_payload: %{path: "/"}, lambda_role_arn: "presentation-role"})
+            %{
+              instance_role_name: "ec2-role",
+              function_payload: %{path: "/"},
+              lambda_role_arn: "presentation-role"
+            }
+          )
         )
       end
     end
@@ -40,7 +46,8 @@ defmodule Ingress.WebTest do
 
   describe "HEAD /" do
     test "will return a welcome message" do
-      with_mock InvokeLambda, [invoke: fn(_function_name, _options) -> {200, %{"body" => "hello homepage"}} end] do
+      with_mock InvokeLambda,
+        invoke: fn _function_name, _options -> {200, %{"body" => "hello homepage"}} end do
         conn = conn(:head, "/")
         conn = Web.call(conn, [])
 
@@ -52,20 +59,34 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "presentation-layer",
-            %{instance_role_name: "ec2-role",function_payload: %{path: "/"}, lambda_role_arn: "presentation-role"})
+            %{
+              instance_role_name: "ec2-role",
+              function_payload: %{path: "/"},
+              lambda_role_arn: "presentation-role"
+            }
+          )
         )
       end
     end
   end
 
   describe "GET /:service" do
-    for path <- ["/news", "/sport", "/weather", "/bitesize", "/cbeebies", "/dynasties", "/web/shell"] do
+    for path <- [
+          "/news",
+          "/sport",
+          "/weather",
+          "/bitesize",
+          "/cbeebies",
+          "/dynasties",
+          "/web/shell"
+        ] do
       @path path
 
       test "#{@path} will return a 200" do
         service = String.replace(@path, "/", "")
 
-        with_mock InvokeLambda, [invoke: fn(_function_name, _options) -> {200, %{"body" => "hello #{service}"}} end] do
+        with_mock InvokeLambda,
+          invoke: fn _function_name, _options -> {200, %{"body" => "hello #{service}"}} end do
           conn = conn(:get, @path)
           conn = Web.call(conn, [])
 
@@ -77,7 +98,12 @@ defmodule Ingress.WebTest do
           assert_called(
             InvokeLambda.invoke(
               "presentation-layer",
-              %{instance_role_name: "ec2-role",function_payload: %{path: @path}, lambda_role_arn: "presentation-role"})
+              %{
+                instance_role_name: "ec2-role",
+                function_payload: %{path: @path},
+                lambda_role_arn: "presentation-role"
+              }
+            )
           )
         end
       end
@@ -89,7 +115,8 @@ defmodule Ingress.WebTest do
     @response_payload "{\"my\":\"response\"}"
 
     test "will return a 200" do
-      with_mock InvokeLambda, [invoke: fn(_function_name, _options) -> {200, %{"body" => @response_payload}} end] do
+      with_mock InvokeLambda,
+        invoke: fn _function_name, _options -> {200, %{"body" => @response_payload}} end do
         conn = conn(:post, "/graphql", @request_payload)
         conn = Web.call(conn, [])
 
@@ -101,7 +128,11 @@ defmodule Ingress.WebTest do
         assert_called(
           InvokeLambda.invoke(
             "business-layer",
-            %{instance_role_name: "ec2-role",function_payload: %{body: @request_payload, httpMethod: "POST"}, lambda_role_arn: "business-role"}
+            %{
+              instance_role_name: "ec2-role",
+              function_payload: %{body: @request_payload, httpMethod: "POST"},
+              lambda_role_arn: "business-role"
+            }
           )
         )
       end

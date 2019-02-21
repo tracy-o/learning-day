@@ -2,7 +2,7 @@ defmodule Ingress.HTTPClient do
   @timeout 1_000
 
   def get(_origin, service, :test) do
-    {:ok,  %HTTPoison.Response{body: "hello #{service}"}}
+    {:ok, %HTTPoison.Response{body: "hello #{service}"}}
   end
 
   def get(origin, service, _env) when is_binary(origin) and is_binary(service) do
@@ -21,6 +21,7 @@ defmodule Ingress.HTTPClient do
     headers = [
       "Content-Type": "application/json"
     ]
+
     options = [recv_timeout: @timeout]
 
     endpoint = origin <> service
