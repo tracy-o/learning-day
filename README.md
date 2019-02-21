@@ -1,5 +1,6 @@
 # Ingress
-
+[![Build Status](https://travis-ci.org/bbc/ingress.svg?branch=master)](https://travis-ci.org/bbc/ingress)
+ 
 __Ingress__ is the entrypoint for the Web Core framework.
 
 ## Getting it running
