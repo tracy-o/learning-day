@@ -1,7 +1,7 @@
 defmodule Ingress.Guardian do
   use GenServer, restart: :temporary
 
-  alias Ingress.{Counter, HandlersCache, HandlersRegistry}
+  alias Ingress.{Counter, HandlersRegistry}
 
   @threshold Application.get_env(:ingress, :guardian_threshold)
   @interval  Application.get_env(:ingress, :guardian_interval)
@@ -9,12 +9,12 @@ defmodule Ingress.Guardian do
   @fallback  Application.get_env(:ingress, :fallback)
 
   def start_link(name) do
-    IO.puts("Startinng handler for #{name}")
+    IO.puts("Starting handler for #{name}")
     GenServer.start_link(__MODULE__, name, name: via_tuple(name))
   end
 
-  def origin(name) do
-    HandlersCache.lookup(name)
+  def origin(server) do
+    GenServer.call(server, :origin)
   end
 
   def inc(name, http_status) do
@@ -30,16 +30,20 @@ defmodule Ingress.Guardian do
   @impl GenServer
   def init(_) do
     Process.send_after(self(), :reset, @interval)
-    {:ok, _} = HandlersCache.put(Ingress.HandlersCache, "handler", @origin)
 
     {:ok, %{counter: Counter.init, tripped: false}}
   end
 
   @impl GenServer
+  def handle_call(:origin, _from, state) do
+    exceed = Counter.exceed?(state.counter, :errors, @threshold)
+
+    {:reply, {:ok, origin_pointer(exceed)}, state}
+  end
+
+  @impl GenServer
   def handle_cast({:inc, http_status}, state) do
-    state    = %{state | counter: Counter.inc(state.counter, http_status)}
-    exceed   = Counter.exceed?(state.counter, :errors, @threshold)
-    {:ok, _} = HandlersCache.put(Ingress.HandlersCache, "handler", origin_pointer(exceed))
+    state = %{state | counter: Counter.inc(state.counter, http_status)}
 
     {:noreply, state}
   end
@@ -51,7 +55,6 @@ defmodule Ingress.Guardian do
   def handle_info(:reset, state) do
     Process.send_after(self(), :reset, @interval)
     state = %{state | counter: Counter.init}
-    {:ok, _} = HandlersCache.put(Ingress.HandlersCache, "handler", @origin)
 
     {:noreply, state}
   end

@@ -10,7 +10,6 @@ defmodule Ingress.Supervisor do
     children = [
       Ingress.HandlersRegistry,
       Ingress.HandlersSupervisor,
-      Ingress.HandlersCache,
       Ingress.Web
     ]
 
