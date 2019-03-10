@@ -5,16 +5,13 @@ defmodule Ingress.Guardian do
 
   @threshold Application.get_env(:ingress, :guardian_threshold)
   @interval  Application.get_env(:ingress, :guardian_interval)
-  @origin    Application.get_env(:ingress, :origin)
-  @fallback  Application.get_env(:ingress, :fallback)
 
   def start_link(name) do
-    IO.puts("Starting handler for #{name}")
-    GenServer.start_link(__MODULE__, name, name: via_tuple(name))
+    GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
 
-  def origin(server) do
-    GenServer.call(server, :origin)
+  def origin(name) do
+    GenServer.call(via_tuple(name), :origin)
   end
 
   def inc(name, http_status) do
@@ -59,6 +56,6 @@ defmodule Ingress.Guardian do
     {:noreply, state}
   end
 
-  defp origin_pointer(false), do: @origin
-  defp origin_pointer(true),  do: @fallback
+  defp origin_pointer(false), do: Application.get_env(:ingress, :origin)
+  defp origin_pointer(true),  do: Application.get_env(:ingress, :fallback)
 end

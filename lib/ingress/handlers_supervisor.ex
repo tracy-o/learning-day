@@ -1,6 +1,5 @@
 defmodule Ingress.HandlersSupervisor do
   def start_link() do
-    IO.puts("Starting handler supervisor")
     DynamicSupervisor.start_link(
       name: __MODULE__,
       strategy: :one_for_one
@@ -15,7 +14,7 @@ defmodule Ingress.HandlersSupervisor do
     }
   end
 
-  def server_process(name) do
+  def start_handler(name) do
     case start_child(name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
