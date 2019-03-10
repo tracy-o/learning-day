@@ -10,8 +10,8 @@ defmodule Ingress.Loop do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
 
-  def origin(name) do
-    GenServer.call(via_tuple(name), :origin)
+  def state(name) do
+    GenServer.call(via_tuple(name), :state)
   end
 
   def inc(name, http_status) do
@@ -28,14 +28,14 @@ defmodule Ingress.Loop do
   def init(_) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init, tripped: false}}
+    {:ok, %{counter: Counter.init, pipeline: [:lambda_prep]}}
   end
 
   @impl GenServer
-  def handle_call(:origin, _from, state) do
+  def handle_call(:state, _from, state) do
     exceed = Counter.exceed?(state.counter, :errors, @threshold)
 
-    {:reply, {:ok, origin_pointer(exceed)}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed)})}, state}
   end
 
   @impl GenServer

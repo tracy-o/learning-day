@@ -1,14 +1,12 @@
 defmodule Ingress do
   alias Ingress.{HTTPClient, Loop, LoopsRegistry}
 
-  @origin Application.get_env(:ingress, :origin)
-
   def handle(service) do
     env = Application.get_env(:ingress, :env)
 
     LoopsRegistry.find_or_start(service)
 
-    {:ok ,origin} = Loop.origin(service)
+    {:ok ,origin} = Loop.state(service).origin
 
     {:ok, resp} = HTTPClient.get(origin, service, env)
     Loop.inc(:loop, resp.status_code)
