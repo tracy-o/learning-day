@@ -8,8 +8,8 @@ defmodule Ingress.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
-      Ingress.HandlersRegistry,
-      Ingress.HandlersSupervisor,
+      Ingress.LoopsRegistry,
+      Ingress.LoopsSupervisor,
       Ingress.Web
     ]
 

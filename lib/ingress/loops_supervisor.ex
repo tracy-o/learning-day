@@ -1,4 +1,4 @@
-defmodule Ingress.HandlersSupervisor do
+defmodule Ingress.LoopsSupervisor do
   def start_link() do
     DynamicSupervisor.start_link(
       name: __MODULE__,
@@ -24,7 +24,7 @@ defmodule Ingress.HandlersSupervisor do
   defp start_child(name) do
     DynamicSupervisor.start_child(
       __MODULE__,
-      {Ingress.Guardian, name}
+      {Ingress.Loop, name}
     )
   end
 end

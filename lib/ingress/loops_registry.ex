@@ -1,5 +1,5 @@
-defmodule Ingress.HandlersRegistry do
-  alias Ingress.HandlersSupervisor
+defmodule Ingress.LoopsRegistry do
+  alias Ingress.LoopsSupervisor
 
   def start_link do
     Registry.start_link(keys: :unique, name: __MODULE__)
@@ -8,7 +8,7 @@ defmodule Ingress.HandlersRegistry do
   def find_or_start(name) do
     case Registry.lookup(__MODULE__, name) do
       [{pid, _}] -> pid
-      []         -> HandlersSupervisor.start_handler(name)
+      []         -> LoopsSupervisor.start_handler(name)
     end
   end
 

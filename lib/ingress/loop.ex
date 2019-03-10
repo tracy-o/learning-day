@@ -1,10 +1,10 @@
-defmodule Ingress.Guardian do
+defmodule Ingress.Loop do
   use GenServer, restart: :temporary
 
-  alias Ingress.{Counter, HandlersRegistry}
+  alias Ingress.{Counter, LoopsRegistry}
 
-  @threshold Application.get_env(:ingress, :guardian_threshold)
-  @interval  Application.get_env(:ingress, :guardian_interval)
+  @threshold Application.get_env(:ingress, :errors_threshold)
+  @interval  Application.get_env(:ingress, :errors_interval)
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
@@ -19,7 +19,7 @@ defmodule Ingress.Guardian do
   end
 
   defp via_tuple(name) do
-    HandlersRegistry.via_tuple({__MODULE__, name})
+    LoopsRegistry.via_tuple({__MODULE__, name})
   end
 
   # callbacks
