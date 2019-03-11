@@ -6,12 +6,12 @@ defmodule Ingress.LoopTest do
   setup do
     DynamicSupervisor.stop(LoopsSupervisor)
     Process.sleep 5
-    LoopsSupervisor.start_handlery("test")
+    LoopsSupervisor.start_loop("test")
     :ok
   end
 
   test "returns a state pointer" do
-    assert Loop.state("test") == {:ok, %{counter: %{}, origin: "https://demo.web.test.api.bbci.co.uk/", pipeline: [:lambda_prep]}}
+    assert Loop.state("test") == {:ok, %{counter: %{}, origin: "https://origin.bbc.com/", pipeline: [:lambda_prep]}}
   end
 
   test "increments status codes counter and trips the circuit breaker" do

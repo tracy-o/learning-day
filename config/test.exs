@@ -10,5 +10,6 @@ config :ingress, lambda_service_worker: "service-worker"
 config :ingress, lambda_service_worker_role: "service-worker-role"
 config :ingress, http_scheme: :http
 config :ingress, errors_threshold: 20
-config :ingress, errors_interval: 1_000 # 60sec window before resetting the circuit breaker
+config :ingress, errors_interval: 1_000 # 1 sec window before resetting the circuit breaker
+config :ingress, origin: "https://origin.bbc.com/"
 config :ingress, fallback: "https://s3.aws.com/"
