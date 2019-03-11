@@ -40,6 +40,6 @@ defmodule Ingress.CounterTest do
   test "will not accept an increment of the :error key as it's used internally" do
     state = Counter.init
 
-    assert Counter.inc(state, :error) == {:ko, "key not allowed: ':error'"}
+    assert Counter.inc(state, :error) == {:error, "key not allowed: ':error'"}
   end
 end

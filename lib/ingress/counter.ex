@@ -16,7 +16,7 @@ defmodule Ingress.Counter do
   end
 
   def inc(_state, key) when key == :error do
-    {:ko, "key not allowed: ':error'"}
+    {:error, "key not allowed: ':error'"}
   end
 
   def inc(state, key) do
