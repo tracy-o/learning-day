@@ -14,7 +14,7 @@ defmodule Ingress.LoopsSupervisor do
     }
   end
 
-  def start_handler(name) do
+  def start_loop(name) do
     case start_child(name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid

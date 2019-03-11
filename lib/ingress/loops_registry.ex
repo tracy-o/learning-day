@@ -8,7 +8,7 @@ defmodule Ingress.LoopsRegistry do
   def find_or_start(name) do
     case Registry.lookup(__MODULE__, name) do
       [{pid, _}] -> pid
-      []         -> LoopsSupervisor.start_handler(name)
+      []         -> LoopsSupervisor.start_loop(name)
     end
   end
 

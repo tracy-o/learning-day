@@ -6,7 +6,7 @@ defmodule Ingress.LoopTest do
   setup do
     DynamicSupervisor.stop(LoopsSupervisor)
     Process.sleep 5
-    LoopsSupervisor.start_handler("test")
+    LoopsSupervisor.start_handlery("test")
     :ok
   end
 

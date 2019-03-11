@@ -6,9 +6,9 @@ defmodule Ingress do
 
     LoopsRegistry.find_or_start(service)
 
-    {:ok ,origin} = Loop.state(service).origin
+    {:ok, state} = Loop.state(service)
 
-    {:ok, resp} = HTTPClient.get(origin, service, env)
+    {:ok, resp} = HTTPClient.get(state.origin, service, env)
     Loop.inc(:loop, resp.status_code)
 
     {:ok, resp}

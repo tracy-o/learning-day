@@ -32,7 +32,7 @@ config :ingress, env: Mix.env()
 config :ingress, origin: System.get_env("INGRESS_ORIGIN")
 config :ingress, fallback: System.get_env("INGRESS_FALLBACK")
 
-config :ingress, errors_threshold: 1000  # per min
-config :ingress, errors_interval:  60000 # 60sec
+config :ingress, errors_threshold: 1_000
+config :ingress, errors_interval: 60_000 # 60sec window before resetting the circuit breaker
 
 import_config "#{Mix.env()}.exs"
