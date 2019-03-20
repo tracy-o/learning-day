@@ -1,4 +1,4 @@
-defmodule Ingress.ErrorView do
+defmodule IngressWeb.ErrorView do
   import Plug.Conn
 
   def render(conn, 404) do

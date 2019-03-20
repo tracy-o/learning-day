@@ -1,15 +1,15 @@
-defmodule Ingress.WebTest do
+defmodule IngressWeb.RouterTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias Ingress.Web
+  alias IngressWeb.Router
 
   import Mock
 
   describe "GET /status" do
     test "will return 'OK'" do
       conn = conn(:get, "/status")
-      conn = Web.call(conn, [])
+      conn = Router.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 200
@@ -23,7 +23,7 @@ defmodule Ingress.WebTest do
       with_mock InvokeLambda,
         invoke: fn _function_name, _options -> {200, %{"body" => "hello homepage"}} end do
         conn = conn(:get, "/")
-        conn = Web.call(conn, [])
+        conn = Router.call(conn, [])
 
         assert conn.state == :sent
         assert conn.status == 200
@@ -49,7 +49,7 @@ defmodule Ingress.WebTest do
       with_mock InvokeLambda,
         invoke: fn _function_name, _options -> {200, %{"body" => "hello homepage"}} end do
         conn = conn(:head, "/")
-        conn = Web.call(conn, [])
+        conn = Router.call(conn, [])
 
         assert conn.state == :sent
         assert conn.status == 200
@@ -88,7 +88,7 @@ defmodule Ingress.WebTest do
         with_mock InvokeLambda,
           invoke: fn _function_name, _options -> {200, %{"body" => "hello #{service}"}} end do
           conn = conn(:get, @path)
-          conn = Web.call(conn, [])
+          conn = Router.call(conn, [])
 
           assert conn.status == 200
           assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
@@ -118,7 +118,7 @@ defmodule Ingress.WebTest do
       with_mock InvokeLambda,
         invoke: fn _function_name, _options -> {200, %{"body" => @response_payload}} end do
         conn = conn(:post, "/graphql", @request_payload)
-        conn = Web.call(conn, [])
+        conn = Router.call(conn, [])
 
         assert conn.status == 200
         assert get_resp_header(conn, "content-type") == ["application/json; charset=utf-8"]
@@ -142,7 +142,7 @@ defmodule Ingress.WebTest do
   describe "Page not found" do
     test "will return a 'Not Found' message" do
       conn = conn(:get, "/foobar")
-      conn = Web.call(conn, [])
+      conn = Router.call(conn, [])
 
       assert conn.state == :sent
       assert conn.status == 404

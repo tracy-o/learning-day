@@ -1,11 +1,11 @@
-defmodule Ingress.Web do
+defmodule IngressWeb.Router do
   use Plug.Router
 
   plug(Plug.Head)
   plug(:match)
   plug(:dispatch)
 
-  alias Ingress.ErrorView
+  alias IngressWeb.ErrorView
 
   get "/service-worker.js" do
     instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
@@ -27,7 +27,7 @@ defmodule Ingress.Web do
     |> send_resp(200, "ok!")
   end
 
-  get(_, to: Ingress.PresentationController)
+  get(_, to: IngressWeb.PresentationController)
 
   post "/graphql" do
     {:ok, body, conn} = Plug.Conn.read_body(conn)

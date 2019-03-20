@@ -10,7 +10,7 @@ defmodule Ingress.Supervisor do
     children = [
       Ingress.LoopsRegistry,
       Ingress.LoopsSupervisor,
-      Ingress.Web
+      IngressWeb.Router
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

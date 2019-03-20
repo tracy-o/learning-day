@@ -1,7 +1,7 @@
-defmodule Ingress.PresentationController do
+defmodule IngressWeb.PresentationController do
   import Plug.Conn
 
-  alias Ingress.ErrorView
+  alias IngressWeb.ErrorView
 
   @paths [
     "/",
