@@ -9,9 +9,12 @@ defmodule Ingress.Services.LambdaTest do
     test "given a path it invokes the lambda" do
       with_mock InvokeLambda,
         [ invoke: fn _function_name, _options ->
-          {200, %{"body" => "hello homepage"}} end ] do
+          {200, %{"some_data" => "hello homepage"}} end ] do
 
-        Lambda.dispatch(%{request: %{path: "/"}})
+        assert(
+          Lambda.dispatch(%{request: %{path: "/"}}) ==
+          %{request: %{path: "/"}, response: %{status: 200, body: %{"some_data" => "hello homepage"}}}
+        )
 
         assert_called(
           InvokeLambda.invoke(

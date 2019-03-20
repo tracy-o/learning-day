@@ -4,11 +4,13 @@ defmodule Ingress.Services.Lambda do
 
   @impl Service
   def dispatch(%{request: request}) do
-    InvokeLambda.invoke(lambda_function(), %{
+    {status, body} = InvokeLambda.invoke(lambda_function(), %{
       instance_role_name: instance_role_name(),
       lambda_role_arn: lambda_role_arn(),
       function_payload: request
     })
+
+    %{ request: request, response: %{status: status, body: body} }
   end
 
   defp instance_role_name() do
