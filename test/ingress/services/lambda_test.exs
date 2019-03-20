@@ -28,5 +28,28 @@ defmodule Ingress.Services.LambdaTest do
         )
       end
     end
+
+    test "given the lambda is down" do
+      with_mock InvokeLambda,
+        [ invoke: fn _function_name, _options ->
+          {500, %{"error" => "Internal server error"}} end ] do
+
+        assert(
+          Lambda.dispatch(%{request: %{path: "/"}}) ==
+          %{request: %{path: "/"}, response: %{status: 500, body: %{"error" => "Internal server error"}}}
+        )
+
+        assert_called(
+          InvokeLambda.invoke(
+            "presentation-layer",
+            %{
+              instance_role_name: "ec2-role",
+              function_payload: %{path: "/"},
+              lambda_role_arn: "presentation-role"
+            }
+          )
+        )
+      end
+    end
   end
 end
