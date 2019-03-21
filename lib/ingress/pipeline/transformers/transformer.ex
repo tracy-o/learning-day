@@ -1,4 +1,6 @@
 defmodule Ingress.Pipeline.Transformers.Transformer do
+  @namespace "Elixir.Ingress.Pipeline.Transformers"
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Ingress.Behaviours.Transformer
@@ -7,9 +9,10 @@ defmodule Ingress.Pipeline.Transformers.Transformer do
   end
 
   def pipe_to([next | rest], struct) do
-    mod = String.to_existing_atom("Elixir.Ingress.Pipeline.Transformers.#{next}")
+    next_transformer = String.to_existing_atom(@namespace <> "." <> next)
+    struct = update_in(struct.private.transformers_tail, &([next | &1]))
 
-    apply(mod, :call, [rest, struct])
+    apply(next_transformer, :call, [rest, struct])
   end
 
   def pipe_to([], struct) do
