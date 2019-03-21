@@ -4,7 +4,14 @@ defmodule Ingress.Loop do
   alias Ingress.{Counter, LoopsRegistry}
 
   @threshold Application.get_env(:ingress, :errors_threshold)
-  @interval  Application.get_env(:ingress, :errors_interval)
+  @interval Application.get_env(:ingress, :errors_interval)
+
+  def name_for([_product, _page_type, _resource_id] = segments) do
+    segments
+    |> Enum.take(2)
+    |> Enum.map(&String.downcase/1)
+    |> Enum.join("_")
+  end
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
@@ -28,7 +35,7 @@ defmodule Ingress.Loop do
   def init(_) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init, pipeline: [:lambda_prep]}}
+    {:ok, %{counter: Counter.init(), pipeline: [:lambda_prep]}}
   end
 
   @impl GenServer
@@ -51,11 +58,11 @@ defmodule Ingress.Loop do
   @impl GenServer
   def handle_info(:reset, state) do
     Process.send_after(self(), :reset, @interval)
-    state = %{state | counter: Counter.init}
+    state = %{state | counter: Counter.init()}
 
     {:noreply, state}
   end
 
   defp origin_pointer(false), do: Application.get_env(:ingress, :origin)
-  defp origin_pointer(true),  do: Application.get_env(:ingress, :fallback)
+  defp origin_pointer(true), do: Application.get_env(:ingress, :fallback)
 end

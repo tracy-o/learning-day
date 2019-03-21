@@ -5,52 +5,54 @@ defmodule IngressWeb.Router do
   plug(:match)
   plug(:dispatch)
 
-  alias IngressWeb.ErrorView
+  alias IngressWeb.{View, WebCoreRoutes, LegacyRoutes}
 
-  get "/service-worker.js" do
-    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
-    lambda_role_arn = Application.fetch_env!(:ingress, :lambda_service_worker_role)
-    lambda = Application.fetch_env!(:ingress, :lambda_service_worker)
-
-    function_payload = %{}
-
-    {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
-
-    conn
-    |> put_resp_content_type("application/javascript")
-    |> send_resp(200, resp["body"])
-  end
+  @product_allowlist ~w{_ingress news sport weather cbeebies bitesize dynasties web graphql}
+  @allowed_http_methods [:head, :get, :post]
 
   get "/status" do
     conn
-    |> put_resp_content_type("text/plain")
-    |> send_resp(200, "ok!")
+    |> View.render(200, "I'm ok thanks")
   end
 
-  get(_, to: IngressWeb.PresentationController)
+  match("/:product/*_rest" when product in @product_allowlist,
+    via: @allowed_http_methods,
+    to: WebCoreRoutes
+  )
 
-  post "/graphql" do
-    {:ok, body, conn} = Plug.Conn.read_body(conn)
+  match(_, via: @allowed_http_methods, to: LegacyRoutes)
 
-    function_payload = %{
-      body: body,
-      httpMethod: "POST"
-    }
+  # get "/service-worker.js" do
+  #   instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
+  #   lambda_role_arn = Application.fetch_env!(:ingress, :lambda_service_worker_role)
+  #   lambda = Application.fetch_env!(:ingress, :lambda_service_worker)
 
-    instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
-    lambda_role_arn = Application.fetch_env!(:ingress, :lambda_business_role)
-    lambda = Application.fetch_env!(:ingress, :lambda_business_layer)
-    {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
+  #   function_payload = %{}
 
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, resp["body"])
-  end
+  #   {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
 
-  match _ do
-    conn
-    |> ErrorView.render(404)
-  end
+  #   conn
+  #   |> put_resp_content_type("application/javascript")
+  #   |> send_resp(200, resp["body"])
+  # end
+
+  # post "/graphql" do
+  #   {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+  #   function_payload = %{
+  #     body: body,
+  #     httpMethod: "POST"
+  #   }
+
+  #   instance_role_name = Application.fetch_env!(:ingress, :instance_role_name)
+  #   lambda_role_arn = Application.fetch_env!(:ingress, :lambda_business_role)
+  #   lambda = Application.fetch_env!(:ingress, :lambda_business_layer)
+  #   {200, resp} = Ingress.handle(instance_role_name, lambda_role_arn, lambda, function_payload)
+
+  #   conn
+  #   |> put_resp_content_type("application/json")
+  #   |> send_resp(200, resp["body"])
+  # end
 
   def child_spec(_arg) do
     scheme = Application.fetch_env!(:ingress, :http_scheme)
