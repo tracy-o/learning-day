@@ -10,7 +10,7 @@ defmodule Ingress.Pipeline.Transformers.Transformer do
 
   def pipe_to([next | rest], struct) do
     next_transformer = String.to_existing_atom(@namespace <> "." <> next)
-    struct = update_in(struct.private.transformers_tail, &([next | &1]))
+    struct = update_in(struct, [:debug, :pipeline_tail], &([next | &1]))
 
     apply(next_transformer, :call, [rest, struct])
   end

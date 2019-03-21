@@ -1,7 +1,7 @@
 defmodule Ingress.Pipeline do
   def process(struct = %{private: %{req_pipeline: [first | rest]}}) do
     root_transformer = String.to_existing_atom("Elixir.Ingress.Pipeline.Transformers.#{first}")
-    struct = put_in(struct,[:private, :transformers_tail], [first])
+    struct = put_in(struct,[:debug, :pipeline_tail], [first])
 
     case apply(root_transformer, :call, [rest, struct]) do
       {:ok, struct}            -> call_service(struct)
