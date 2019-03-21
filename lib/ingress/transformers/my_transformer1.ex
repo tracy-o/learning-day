@@ -1,12 +1,10 @@
-defmodule Ingress.Pipeline.Transformers.MyTransformer1 do
-  use Ingress.Pipeline.Transformers.Transformer
+defmodule Ingress.Transformers.MyTransformer1 do
+  use Ingress.Transformers.Transformer
 
   @impl true
   def call(rest, struct) do
-    IO.puts("Transformer #{__MODULE__} called")
+    struct = Map.merge(struct, %{sample_change: "foo"})
 
-    struct = Map.merge(struct, %{tr1: 1})
-
-    pipe_to(rest, struct)
+    then(rest, struct)
   end
 end
