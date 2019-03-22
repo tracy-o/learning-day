@@ -16,10 +16,10 @@ defmodule IngressWeb.Integration.LegacyTest do
                                  }
                                )
 
-    test "GET request to legacy" do
+    test "GET homepage request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["_legacy"]},
+                              private: %Private{loop_id: ["legacy"]},
                               request: %Request{path: "/_legacy"}
                             } ->
         @struct_with_html_response
@@ -35,10 +35,48 @@ defmodule IngressWeb.Integration.LegacyTest do
              } = sent_resp(conn)
     end
 
-    test "POST reqeust to legacy" do
+    test "GET page-type request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["_legacy"]},
+                              private: %Private{loop_id: ["legacy", "page_type"]},
+                              request: %Request{path: "/_legacy/page-type"}
+                            } ->
+        @struct_with_html_response
+      end)
+
+      conn = conn(:get, "/_legacy/page-type")
+      conn = Router.call(conn, [])
+
+      assert {
+               200,
+               _headers,
+               "<p>Basic HTML response</p>"
+             } = sent_resp(conn)
+    end
+
+    test "GET page-type with id request to legacy" do
+      IngressMock
+      |> expect(:handle, fn %Struct{
+                              private: %Private{loop_id: ["legacy", "page_type_with_id"]},
+                              request: %Request{path: "/_legacy/page-type/123"}
+                            } ->
+        @struct_with_html_response
+      end)
+
+      conn = conn(:get, "/_legacy/page-type/123")
+      conn = Router.call(conn, [])
+
+      assert {
+               200,
+               _headers,
+               "<p>Basic HTML response</p>"
+             } = sent_resp(conn)
+    end
+
+    test "POST homepage reqeust to legacy" do
+      IngressMock
+      |> expect(:handle, fn %Struct{
+                              private: %Private{loop_id: ["legacy"]},
                               request: %Request{
                                 path: "/_legacy",
                                 payload: %{"query" => "some data please"}
