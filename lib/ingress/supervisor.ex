@@ -22,8 +22,6 @@ defmodule Ingress.Supervisor do
 
   @impl true
   def init(args) do
-    children = children(args)
-
-    Supervisor.init(children, strategy: :one_for_one)
+    Supervisor.init(children(args), strategy: :one_for_one)
   end
 end
