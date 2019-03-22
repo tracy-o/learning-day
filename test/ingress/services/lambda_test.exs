@@ -4,7 +4,6 @@ defmodule Ingress.Services.LambdaTest do
 
   import Mock
 
-
   describe "lambda service" do
     test "given a path it invokes the lambda" do
       with_mock InvokeLambda,
