@@ -4,10 +4,9 @@ defmodule IngressWeb.View do
   alias Ingress.Struct
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
-
     conn
     |> add_response_headers(struct)
-    |> render(struct.response.http_status, struct.response.body)
+    |> render(response.http_status, response.body)
   end
 
   def render(conn, 404) do

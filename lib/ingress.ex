@@ -1,16 +1,16 @@
 defmodule Ingress do
   alias Ingress.{Struct, Loop, LoopsRegistry}
 
-  @callback handle({atom(), Struct}) :: Struct
+  @callback handle(Struct) :: Struct
 
-  def handle({loop_name, _struct = Struct}) do
-    LoopsRegistry.find_or_start(loop_name)
-    Loop.state(loop_name)
+  def handle(struct = Struct) do
+    LoopsRegistry.find_or_start(struct.private.loop_id)
+    Loop.state(struct.private.loop_id)
 
     # Note: In future, this could become something like:
 
     # struct
-    # Processor.add_loop(loop_name)
+    # Processor.get_loop()
     # |> Processor.req_transformers()
     # |> Processor.proxy_service()
     # |> Processor.resp_transformers()

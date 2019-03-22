@@ -5,14 +5,6 @@ defmodule Ingress.Loop do
 
   @threshold Application.get_env(:ingress, :errors_threshold)
   @interval Application.get_env(:ingress, :errors_interval)
-
-  def name_for([_product, _page_type, _resource_id] = segments) do
-    segments
-    |> Enum.filter(&(!is_nil(&1)))
-    |> Enum.map(&String.downcase/1)
-    |> Enum.join("_")
-  end
-
   def start_link(name) do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end

@@ -4,14 +4,6 @@ defmodule Test.Support.Helper do
       import Mox
       setup :verify_on_exit!
       setup :set_mox_global
-
-      setup do
-        Application.put_env(:ingress, :ingress, IngressMock)
-
-        on_exit(fn ->
-          Application.put_env(:ingress, :ingress, Ingress)
-        end)
-      end
     end
   end
 

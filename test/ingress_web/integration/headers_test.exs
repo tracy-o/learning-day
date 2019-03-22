@@ -9,13 +9,16 @@ defmodule IngressWeb.Integration.HeadersTest do
 
   describe "content type headers" do
     def test_content_type!(body, content_type) do
-      struct_with_response = StructHelper.build(response: %{
-        body: body,
-        headers: %{"content-type" => "#{content_type}; charset=utf-8"}
-      })
+      struct_with_response =
+        StructHelper.build(
+          response: %{
+            body: body,
+            headers: %{"content-type" => "#{content_type}; charset=utf-8"}
+          }
+        )
 
       IngressMock
-      |> expect(:handle, fn {"_web_core", _struct} ->
+      |> expect(:handle, fn _struct ->
         struct_with_response
       end)
 

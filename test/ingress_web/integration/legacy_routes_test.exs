@@ -1,4 +1,4 @@
-defmodule IngressWeb.Integration.WebCoreRoutesTest do
+defmodule IngressWeb.Integration.LegacyTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :ingress_mox
@@ -8,7 +8,7 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
   alias IngressWeb.Router
   alias Test.Support.StructHelper
 
-  describe "valid web core route with HTML response" do
+  describe "valid legacy route with HTML response" do
     @struct_with_html_response StructHelper.build(
                                  response: %{
                                    body: "<p>Basic HTML response</p>",
@@ -16,16 +16,16 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
                                  }
                                )
 
-    test "GET request to web core" do
+    test "GET request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["_web_core"]},
-                              request: %Request{path: "/_web_core"}
+                              private: %Private{loop_id: ["_legacy"]},
+                              request: %Request{path: "/_legacy"}
                             } ->
         @struct_with_html_response
       end)
 
-      conn = conn(:get, "/_web_core")
+      conn = conn(:get, "/_legacy")
       conn = Router.call(conn, [])
 
       assert {
@@ -35,22 +35,19 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
              } = sent_resp(conn)
     end
 
-    test "POST request to web core" do
+    test "POST reqeust to legacy" do
       IngressMock
-      |> expect(:handle, fn
-        %Struct{
-          private: %Private{
-            loop_id: ["_web_core"]
-          },
-          request: %Request{
-            path: "/_web_core",
-            payload: %{"query" => "Some data please"}
-          }
-        } ->
-          @struct_with_html_response
+      |> expect(:handle, fn %Struct{
+                              private: %Private{loop_id: ["_legacy"]},
+                              request: %Request{
+                                path: "/_legacy",
+                                payload: %{"query" => "some data please"}
+                              }
+                            } ->
+        @struct_with_html_response
       end)
 
-      conn = conn(:post, "/_web_core", %{"query" => "Some data please"})
+      conn = conn(:post, "/_legacy", %{"query" => "some data please"})
       conn = Router.call(conn, [])
 
       assert {

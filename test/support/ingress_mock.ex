@@ -3,5 +3,5 @@ defmodule IngressMock do
   alias Ingress.{Struct}
 
   @impl Ingress
-  def handle({_loop_name, struct = Struct}), do: struct
+  def handle(struct = Struct), do: struct
 end

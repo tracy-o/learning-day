@@ -11,8 +11,7 @@ defmodule Ingress.Struct.Response do
 end
 
 defmodule Ingress.Struct.Private do
-  # e.g :req_pipelines, :res_pipelines
-  defstruct []
+  defstruct [:loop_id]
 end
 
 defmodule Ingress.Struct do
