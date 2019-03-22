@@ -16,7 +16,7 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
                                  }
                                )
 
-    test "GET request to web core" do
+    test "GET request to web core homepage" do
       IngressMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["_web_core"]},
@@ -35,7 +35,7 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
              } = sent_resp(conn)
     end
 
-    test "POST request to web core" do
+    test "POST request to web core homepage" do
       IngressMock
       |> expect(:handle, fn
         %Struct{
@@ -59,5 +59,43 @@ defmodule IngressWeb.Integration.WebCoreRoutesTest do
                "<p>Basic HTML response</p>"
              } = sent_resp(conn)
     end
+  end
+
+  test "GET page-type request to web_core" do
+    IngressMock
+    |> expect(:handle, fn %Struct{
+                            private: %Private{loop_id: ["_web_core", "page-type"]},
+                            request: %Request{path: "/_web_core/page-type"}
+                          } ->
+      @struct_with_html_response
+    end)
+
+    conn = conn(:get, "/_web_core/page-type")
+    conn = Router.call(conn, [])
+
+    assert {
+             200,
+             _headers,
+             "<p>Basic HTML response</p>"
+           } = sent_resp(conn)
+  end
+
+  test "GET page-type with id request to web_core" do
+    IngressMock
+    |> expect(:handle, fn %Struct{
+                            private: %Private{loop_id: ["_web_core", "page-type"]},
+                            request: %Request{path: "/_web_core/page-type/123"}
+                          } ->
+      @struct_with_html_response
+    end)
+
+    conn = conn(:get, "/_web_core/page-type/123")
+    conn = Router.call(conn, [])
+
+    assert {
+             200,
+             _headers,
+             "<p>Basic HTML response</p>"
+           } = sent_resp(conn)
   end
 end
