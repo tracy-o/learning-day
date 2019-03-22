@@ -1,4 +1,4 @@
-defmodule IngressWeb.RouterTest do
+defmodule IngressWeb.Integration.RouterTest do
   use ExUnit.Case
   use Plug.Test
 
@@ -23,8 +23,5 @@ defmodule IngressWeb.RouterTest do
       assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
       assert conn.resp_body == "Not Found"
     end
-  end
-
-  describe "" do
   end
 end

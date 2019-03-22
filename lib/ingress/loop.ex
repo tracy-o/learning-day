@@ -8,7 +8,7 @@ defmodule Ingress.Loop do
 
   def name_for([_product, _page_type, _resource_id] = segments) do
     segments
-    |> Enum.take(2)
+    |> Enum.filter(&(!is_nil(&1)))
     |> Enum.map(&String.downcase/1)
     |> Enum.join("_")
   end

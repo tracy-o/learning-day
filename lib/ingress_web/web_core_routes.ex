@@ -14,8 +14,6 @@ defmodule IngressWeb.WebCoreRoutes do
   def init(options), do: options
 
   def call(conn, _opts) do
-    # [product, page_type, resource_id] = segments = get_route_values(conn)
-
     get_route_values(conn)
     |> Loop.name_for()
     |> StructAdapter.adapt(conn)
@@ -25,7 +23,7 @@ defmodule IngressWeb.WebCoreRoutes do
 
   defp get_route_values(conn) do
     case conn.path_info do
-      [product] -> [product, "homepage", nil]
+      [product] -> [product, nil, nil]
       [product, page_type] -> [product, page_type, nil]
       [product, page_type, resource_id] -> [product, page_type, resource_id]
     end

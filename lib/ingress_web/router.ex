@@ -7,7 +7,7 @@ defmodule IngressWeb.Router do
 
   alias IngressWeb.{View, WebCoreRoutes, LegacyRoutes}
 
-  @product_allowlist ~w{_ingress news sport weather cbeebies bitesize dynasties web graphql}
+  @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web graphql}
   @allowed_http_methods [:head, :get, :post]
 
   get "/status" do

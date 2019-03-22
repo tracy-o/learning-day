@@ -1,19 +1,22 @@
 # An attempt to start defining the struct called Struct
 
 defmodule Ingress.Struct.Request do
-  defstruct [:request_id, :format]
+  @enforce_keys [:path]
+  defstruct [:path, :payload]
 end
 
 defmodule Ingress.Struct.Response do
+  @enforce_keys [:http_status, :headers, :body]
   defstruct [:http_status, :headers, :body]
 end
 
 defmodule Ingress.Struct.Private do
-  defstruct [:req_pipelines, :res_pipelines]
+  # e.g :req_pipelines, :res_pipelines
+  defstruct []
 end
 
 defmodule Ingress.Struct do
-  defstruct request: %Ingress.Struct.Request{},
-            private: %Ingress.Struct.Private{},
-            response: %Ingress.Struct.Response{}
+  defstruct request: Ingress.Struct.Request,
+            private: Ingress.Struct.Private,
+            response: Ingress.Struct.Response
 end
