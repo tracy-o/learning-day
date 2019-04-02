@@ -5,14 +5,23 @@ defmodule Ingress.Supervisor do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  @impl true
-  def init(_init_arg) do
-    children = [
+  def children([env: :prod]) do
+    [
+      {IngressWeb.Router, [scheme: :https, port: 7443]}
+    ] ++ children(nil)
+  end
+
+  def children(_args) do
+    [
       Ingress.LoopsRegistry,
       Ingress.LoopsSupervisor,
-      IngressWeb.Router
+      {IngressWeb.Router, [scheme: :http, port: 7080]}
     ]
+  end
 
-    Supervisor.init(children, strategy: :one_for_one)
+
+  @impl true
+  def init(args) do
+    Supervisor.init(children(args), strategy: :one_for_one)
   end
 end

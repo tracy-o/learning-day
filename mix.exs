@@ -31,7 +31,8 @@ defmodule Ingress.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.5"},
       {:poison, "~> 3.1"},
-      {:invoke_lambda, git: "https://github.com/james-bowers/elixir-invoke-lambda.git"},
+      {:invoke_lambda, git: "https://github.com/bbc/elixir-invoke-lambda.git"},
+      {:mock, "~> 0.3", only: :test},
       {:distillery, "~> 2.0"},
       {:mox, "~> 0.5", only: :test}
     ]
