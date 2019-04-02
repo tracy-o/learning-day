@@ -9,8 +9,8 @@ defmodule Ingress.Loop do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
 
-  def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), :state)
+  def state(struct = %Struct{private: %Struct.Private{loop_id: name}}) do
+    {struct, GenServer.call(via_tuple(name), :state)}
   end
 
   def inc(%Struct{

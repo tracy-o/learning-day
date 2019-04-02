@@ -11,7 +11,15 @@ defmodule Ingress.Struct.Response do
 end
 
 defmodule Ingress.Struct.Private do
-  defstruct [:loop_id]
+  defstruct [:loop_id] 
+
+  defp put_state(struct=Struct, {:ok, loop}) do
+    struct
+     |> put_in(:private, Map.merge(struct.private, loop))
+  end
+  
+  defp put_state(_struct, {:error, _reason}) do
+  end
 end
 
 defmodule Ingress.Struct do
