@@ -1,7 +1,7 @@
 defmodule Ingress.Loop do
   use GenServer, restart: :temporary
 
-  alias Ingress.{Counter, LoopsRegistry}
+  alias Ingress.{Counter, LoopsRegistry, Struct}
 
   @threshold Application.get_env(:ingress, :errors_threshold)
   @interval Application.get_env(:ingress, :errors_interval)
@@ -9,11 +9,14 @@ defmodule Ingress.Loop do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
 
-  def state(name) do
+  def state(%Struct{private: %Struct.Private{loop_id: name}}) do
     GenServer.call(via_tuple(name), :state)
   end
 
-  def inc(name, http_status) do
+  def inc(%Struct{
+        private: %Struct.Private{loop_id: name},
+        response: %Struct.Response{http_status: http_status}
+      }) do
     GenServer.cast(via_tuple(name), {:inc, http_status})
   end
 
