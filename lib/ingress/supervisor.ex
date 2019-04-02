@@ -7,7 +7,7 @@ defmodule Ingress.Supervisor do
 
   def children([env: :prod]) do
     [
-      {Ingress.Web, [scheme: :https, port: 7443]}
+      {IngressWeb.Router, [scheme: :https, port: 7443]}
     ] ++ children(nil)
   end
 
@@ -15,7 +15,7 @@ defmodule Ingress.Supervisor do
     [
       Ingress.LoopsRegistry,
       Ingress.LoopsSupervisor,
-      {Ingress.Web, [scheme: :http, port: 7080]}
+      {IngressWeb.Router, [scheme: :http, port: 7080]}
     ]
   end
 

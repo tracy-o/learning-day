@@ -7,9 +7,13 @@ defmodule Ingress.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -29,7 +33,8 @@ defmodule Ingress.MixProject do
       {:poison, "~> 3.1"},
       {:invoke_lambda, git: "https://github.com/bbc/elixir-invoke-lambda.git"},
       {:mock, "~> 0.3", only: :test},
-      {:distillery, "~> 2.0"}
+      {:distillery, "~> 2.0"},
+      {:mox, "~> 0.5", only: :test}
     ]
   end
 end

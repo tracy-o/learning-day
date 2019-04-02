@@ -1,24 +1,18 @@
 defmodule Ingress do
-  alias Ingress.{HTTPClient, Loop, LoopsRegistry}
+  alias Ingress.{Struct, Loop, LoopsRegistry}
 
-  def handle(service) do
-    env = Application.get_env(:ingress, :env)
+  @callback handle(Struct) :: Struct
 
-    LoopsRegistry.find_or_start(service)
+  def handle(struct = Struct) do
+    LoopsRegistry.find_or_start(struct.private.loop_id)
+    Loop.state(struct.private.loop_id)
 
-    {:ok, state} = Loop.state(service)
+    # Note: In future, this could become something like:
 
-    {:ok, resp} = HTTPClient.get(state.origin, service, env)
-    Loop.inc(:loop, resp.status_code)
-
-    {:ok, resp}
-  end
-
-  def handle(instance_role_name, lambda_role_arn, function_name, function_payload) do
-    InvokeLambda.invoke(function_name, %{
-      instance_role_name: instance_role_name,
-      lambda_role_arn: lambda_role_arn,
-      function_payload: function_payload
-    })
+    # struct
+    # Processor.get_loop()
+    # |> Processor.req_transformers()
+    # |> Processor.proxy_service()
+    # |> Processor.resp_transformers()
   end
 end

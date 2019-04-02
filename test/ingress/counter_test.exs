@@ -4,10 +4,11 @@ defmodule Ingress.CounterTest do
   alias Ingress.Counter
 
   test "increments a value" do
-    state = Counter.init
-    |> Counter.inc(200)
-    |> Counter.inc(200)
-    |> Counter.inc(500)
+    state =
+      Counter.init()
+      |> Counter.inc(200)
+      |> Counter.inc(200)
+      |> Counter.inc(500)
 
     assert Counter.get(state, 200) == 2
     assert Counter.get(state, 500) == 1
@@ -15,22 +16,24 @@ defmodule Ingress.CounterTest do
   end
 
   test "error codes increment a global :errors counter" do
-    state = Counter.init
-    |> Counter.inc(200)
-    |> Counter.inc(500)
-    |> Counter.inc(500)
-    |> Counter.inc(502)
-    |> Counter.inc(408)
+    state =
+      Counter.init()
+      |> Counter.inc(200)
+      |> Counter.inc(500)
+      |> Counter.inc(500)
+      |> Counter.inc(502)
+      |> Counter.inc(408)
 
     assert Counter.get(state, :errors) == 4
   end
 
   test "returns true if count is over the passed threshold" do
-    state = Counter.init
-    |> Counter.inc(500)
-    |> Counter.inc(500)
-    |> Counter.inc(500)
-    |> Counter.inc(500)
+    state =
+      Counter.init()
+      |> Counter.inc(500)
+      |> Counter.inc(500)
+      |> Counter.inc(500)
+      |> Counter.inc(500)
 
     assert Counter.get(state, 500) == 4
     assert Counter.exceed?(state, 500, 3) == true
@@ -38,7 +41,7 @@ defmodule Ingress.CounterTest do
   end
 
   test "will not accept an increment of the :error key as it's used internally" do
-    state = Counter.init
+    state = Counter.init()
 
     assert Counter.inc(state, :error) == {:error, "key not allowed: ':error'"}
   end
