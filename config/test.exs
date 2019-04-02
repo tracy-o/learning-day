@@ -14,7 +14,5 @@ config :ingress,
   # 1 sec window before resetting the circuit breaker
   errors_interval: 1_000,
   origin: "https://origin.bbc.com/",
-  fallback: "https://s3.aws.com/"
-
-config :ingress,
+  fallback: "https://s3.aws.com/",
   ingress: IngressMock
