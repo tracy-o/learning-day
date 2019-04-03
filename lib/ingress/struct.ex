@@ -6,7 +6,7 @@ defmodule Ingress.Struct do
 end
 
 defmodule Ingress.Struct.Debug do
-  defstruct [:pipeline_trail]
+  defstruct pipeline_trail: []
 end
 
 defmodule Ingress.Struct.Request do
@@ -16,12 +16,12 @@ end
 
 defmodule Ingress.Struct.Response do
   @enforce_keys [:http_status, :headers, :body]
-  defstruct [:http_status, :headers, :body]
+  defstruct http_status: 200, headers: %{}, body: nil
 end
 
 defmodule Ingress.Struct.Private do
   @enforce_keys [:loop_id]
-  defstruct [:loop_id, :origin, :pipeline, :counter]
+  defstruct loop_id: nil, origin: nil, counter: %{}, pipeline: []
 
   def put_loop(struct = %Ingress.Struct{private: %Ingress.Struct.Private{}}, loop) do
     struct

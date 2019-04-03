@@ -2,9 +2,8 @@ defmodule Ingress.Pipeline do
   alias Ingress.Struct
 
   def process(struct = %Struct{private: %Struct.Private{pipeline: [first | rest]}}) do
-    IO.inspect(first)
     root_transformer = String.to_existing_atom("Elixir.Ingress.Transformers.#{first}")
-    # struct = update_in(struct, [:debug, :pipeline_trail], &[first | &1])
+    struct = update_in(struct.debug.pipeline_trail, &[first | &1])
 
     case apply(root_transformer, :call, [rest, struct]) do
       {:ok, struct} -> call_service(struct)

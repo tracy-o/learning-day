@@ -15,7 +15,7 @@ defmodule Ingress.Transformers.MyTransformer1Test do
     {:ok, next_struct} = Subject.call(pipeline, @original_struct)
 
     assert next_struct.sample_change == "foo"
-    # assert next_struct.debug.pipeline_trail == pipeline
+    assert next_struct.debug.pipeline_trail == pipeline
   end
 
   test 'call with remaining transformers' do
@@ -23,6 +23,6 @@ defmodule Ingress.Transformers.MyTransformer1Test do
     {:ok, next_struct} = Subject.call(pipeline, @original_struct)
 
     assert next_struct.sample_change == "foo"
-    # assert next_struct.debug.pipeline_trail == Enum.reverse(pipeline)
+    assert next_struct.debug.pipeline_trail == Enum.reverse(pipeline)
   end
 end
