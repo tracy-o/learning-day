@@ -5,7 +5,8 @@ defmodule Ingress.Processor do
     LoopsRegistry.find_or_start(struct)
 
     with {:ok, loop} <- Loop.state(struct) do
-      Struct.Private.put_loop(struct, loop)
+      # Struct.Private.put_loop(struct, loop)
+      Map.put(struct, :private, Map.merge(struct.private, loop))
     else
       _ -> raise "Failed to start loop."
     end

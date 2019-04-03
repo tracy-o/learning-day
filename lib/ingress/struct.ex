@@ -22,9 +22,4 @@ end
 defmodule Ingress.Struct.Private do
   @enforce_keys [:loop_id]
   defstruct loop_id: nil, origin: nil, counter: %{}, pipeline: []
-
-  def put_loop(struct = %Ingress.Struct{private: %Ingress.Struct.Private{}}, loop) do
-    struct
-    |> Map.put(:private, Map.merge(struct.private, loop))
-  end
 end
