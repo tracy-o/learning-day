@@ -1,3 +1,4 @@
 defmodule Ingress.Behaviours.Service do
-  @callback dispatch(map()) :: map()
+  alias Ingress.Struct
+  @callback dispatch(Struct) :: Struct
 end

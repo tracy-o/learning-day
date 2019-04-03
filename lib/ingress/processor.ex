@@ -16,7 +16,8 @@ defmodule Ingress.Processor do
   end
 
   def proxy_service(struct = %Struct{}) do
-    struct
+    # For now, we are only invoking lambdas
+    Ingress.Services.Lambda.dispatch(struct)
   end
 
   def resp_pipeline(struct = %Struct{}) do

@@ -1,6 +1,16 @@
 defmodule Ingress.Services.LambdaTest do
   alias Ingress.Services.Lambda
+  alias Test.Support.StructHelper
+
   use ExUnit.Case
+
+  @struct StructHelper.build(
+            request: %{
+              payload: %{
+                path: "/"
+              }
+            }
+          )
 
   import Mock
 
@@ -10,13 +20,12 @@ defmodule Ingress.Services.LambdaTest do
         invoke: fn _function_name, _options ->
           {200, %{"some_data" => "hello homepage"}}
         end do
-        assert(
-          Lambda.dispatch(%{request: %{path: "/"}}) ==
-            %{
-              request: %{path: "/"},
-              response: %{status: 200, body: %{"some_data" => "hello homepage"}}
-            }
-        )
+        assert %{
+                 response: %Ingress.Struct.Response{
+                   http_status: 200,
+                   body: %{"some_data" => "hello homepage"}
+                 }
+               } = Lambda.dispatch(@struct)
 
         assert_called(
           InvokeLambda.invoke(
@@ -36,13 +45,12 @@ defmodule Ingress.Services.LambdaTest do
         invoke: fn _function_name, _options ->
           {500, %{"error" => "Internal server error"}}
         end do
-        assert(
-          Lambda.dispatch(%{request: %{path: "/"}}) ==
-            %{
-              request: %{path: "/"},
-              response: %{status: 500, body: %{"error" => "Internal server error"}}
-            }
-        )
+        assert %{
+                 response: %Ingress.Struct.Response{
+                   http_status: 500,
+                   body: %{"error" => "Internal server error"}
+                 }
+               } = Lambda.dispatch(@struct)
 
         assert_called(
           InvokeLambda.invoke(

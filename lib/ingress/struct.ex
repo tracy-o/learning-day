@@ -15,7 +15,7 @@ defmodule Ingress.Struct.Request do
 end
 
 defmodule Ingress.Struct.Response do
-  @enforce_keys [:http_status, :headers, :body]
+  @enforce_keys [:http_status, :body]
   defstruct http_status: 200, headers: %{}, body: nil
 end
 
