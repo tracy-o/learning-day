@@ -26,20 +26,21 @@ defmodule Ingress.ProcessorTest do
 
   describe "Processor.req_pipeline/1" do
     @struct StructHelper.build(
-      private: %{
-        loop_id: "example_loop_id",
-        origin: "https://origin.bbc.co.uk/",
-        counter: %{},
-        pipeline: ["MyTransformer1"]
-      }
-    )
+              private: %{
+                loop_id: "example_loop_id",
+                origin: "https://origin.bbc.co.uk/",
+                counter: %{},
+                pipeline: ["MyTransformer1"]
+              }
+            )
 
     test "runs struct through transformers" do
-      assert = %{
-        request: _request,
-        private: _private,
-        sample_change: "foo"
-      } = Processor.req_pipeline(@struct)
+      assert =
+        %{
+          request: _request,
+          private: _private,
+          sample_change: "foo"
+        } = Processor.req_pipeline(@struct)
     end
   end
 end

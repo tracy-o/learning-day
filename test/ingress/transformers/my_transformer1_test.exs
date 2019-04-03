@@ -5,10 +5,10 @@ defmodule Ingress.Transformers.MyTransformer1Test do
   alias Test.Support.StructHelper
 
   @original_struct StructHelper.build(
-    private: %{
-      pipeline: ["MyTransformer1"]
-    }
-  )
+                     private: %{
+                       pipeline: ["MyTransformer1"]
+                     }
+                   )
 
   test 'call with no remaining transformers' do
     pipeline = ["MyTransformer1"]
