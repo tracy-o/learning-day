@@ -7,12 +7,15 @@ defmodule Ingress.Services.LambdaTest do
   describe "lambda service" do
     test "given a path it invokes the lambda" do
       with_mock InvokeLambda,
-        [ invoke: fn _function_name, _options ->
-          {200, %{"some_data" => "hello homepage"}} end ] do
-
+        invoke: fn _function_name, _options ->
+          {200, %{"some_data" => "hello homepage"}}
+        end do
         assert(
           Lambda.dispatch(%{request: %{path: "/"}}) ==
-          %{request: %{path: "/"}, response: %{status: 200, body: %{"some_data" => "hello homepage"}}}
+            %{
+              request: %{path: "/"},
+              response: %{status: 200, body: %{"some_data" => "hello homepage"}}
+            }
         )
 
         assert_called(
@@ -30,12 +33,15 @@ defmodule Ingress.Services.LambdaTest do
 
     test "given the lambda is down" do
       with_mock InvokeLambda,
-        [ invoke: fn _function_name, _options ->
-          {500, %{"error" => "Internal server error"}} end ] do
-
+        invoke: fn _function_name, _options ->
+          {500, %{"error" => "Internal server error"}}
+        end do
         assert(
           Lambda.dispatch(%{request: %{path: "/"}}) ==
-          %{request: %{path: "/"}, response: %{status: 500, body: %{"error" => "Internal server error"}}}
+            %{
+              request: %{path: "/"},
+              response: %{status: 500, body: %{"error" => "Internal server error"}}
+            }
         )
 
         assert_called(

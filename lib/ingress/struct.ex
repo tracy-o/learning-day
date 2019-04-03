@@ -1,4 +1,13 @@
-# An attempt to start defining the struct called Struct
+defmodule Ingress.Struct do
+  defstruct request: Ingress.Struct.Request,
+            private: Ingress.Struct.Private,
+            response: Ingress.Struct.Response,
+            debug: Ingress.Struct.Debug
+end
+
+defmodule Ingress.Struct.Debug do
+  defstruct [:pipeline_trail]
+end
 
 defmodule Ingress.Struct.Request do
   @enforce_keys [:path]
@@ -11,19 +20,11 @@ defmodule Ingress.Struct.Response do
 end
 
 defmodule Ingress.Struct.Private do
-  defstruct [:loop_id] 
+  @enforce_keys [:loop_id]
+  defstruct [:loop_id, :origin, :pipeline, :counter]
 
-  defp put_state(struct=Struct, {:ok, loop}) do
+  def put_loop(struct = %Ingress.Struct{private: %Ingress.Struct.Private{}}, loop) do
     struct
-     |> put_in(:private, Map.merge(struct.private, loop))
+    |> Map.put(:private, Map.merge(struct.private, loop))
   end
-  
-  defp put_state(_struct, {:error, _reason}) do
-  end
-end
-
-defmodule Ingress.Struct do
-  defstruct request: Ingress.Struct.Request,
-            private: Ingress.Struct.Private,
-            response: Ingress.Struct.Response
 end

@@ -10,7 +10,7 @@ defmodule Ingress.Loop do
   end
 
   def state(struct = %Struct{private: %Struct.Private{loop_id: name}}) do
-    {struct, GenServer.call(via_tuple(name), :state)}
+    GenServer.call(via_tuple(name), :state)
   end
 
   def inc(%Struct{
