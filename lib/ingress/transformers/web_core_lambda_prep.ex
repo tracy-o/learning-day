@@ -9,6 +9,6 @@ defmodule Ingress.Transformers.WebCoreLambdaPrep do
 
   defp web_core_payload(struct) do
     struct.request
-    |> Map.take([:path, :payload])
+    |> Map.take([:path, :payload, :method])
   end
 end

@@ -8,7 +8,8 @@ defmodule IngressWeb.StructAdapter do
     %Struct{
       request: %Request{
         path: conn.request_path,
-        payload: conn.body_params
+        payload: conn.body_params,
+        method: conn.method
       },
       private: %Private{
         loop_id: loop_id

@@ -1,7 +1,7 @@
 defmodule Ingress do
   alias Ingress.{Processor, Struct}
 
-  @callback handle(Struct) :: Struct
+  @callback handle(Struct.t()) :: Struct.t()
 
   def handle(struct = %Struct{}) do
     struct

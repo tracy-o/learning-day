@@ -7,11 +7,21 @@ defmodule IngressTest do
   alias Ingress.Services.ServiceMock
   alias Test.Support.StructHelper
 
-  @initial_struct StructHelper.build(
-                    private: %{
-                      loop_id: ["test_loop"]
-                    }
-                  )
+  @get_request_struct StructHelper.build(
+                        private: %{
+                          loop_id: ["test_loop"]
+                        }
+                      )
+
+  @post_request_struct StructHelper.build(
+                         request: %{
+                           method: "POST",
+                           payload: ~s({"some": "data please"})
+                         },
+                         private: %{
+                           loop_id: ["test_loop"]
+                         }
+                       )
 
   @struct_with_html_response StructHelper.build(
                                response: %{
@@ -20,7 +30,7 @@ defmodule IngressTest do
                                }
                              )
 
-  test "invokes lambda service after WebCoreLambda transformer" do
+  test "GET request invokes lambda service with WebCoreLambda transformer" do
     ServiceMock
     |> expect(:dispatch, fn %Struct{
                               private: %Struct.Private{loop_id: ["test_loop"]},
@@ -28,13 +38,33 @@ defmodule IngressTest do
                                 path: "/_web_core",
                                 payload: %{
                                   path: "/_web_core",
-                                  payload: nil
+                                  payload: nil,
+                                  method: "GET"
                                 }
                               }
                             } ->
       @struct_with_html_response
     end)
 
-    Ingress.handle(@initial_struct)
+    Ingress.handle(@get_request_struct)
+  end
+
+  test "POST request invokes lambda service with WebCoreLambda transformer" do
+    ServiceMock
+    |> expect(:dispatch, fn %Struct{
+                              private: %Struct.Private{loop_id: ["test_loop"]},
+                              request: %Struct.Request{
+                                path: "/_web_core",
+                                payload: %{
+                                  path: "/_web_core",
+                                  payload: ~s({"some": "data please"}),
+                                  method: "POST"
+                                }
+                              }
+                            } ->
+      @struct_with_html_response
+    end)
+
+    Ingress.handle(@post_request_struct)
   end
 end

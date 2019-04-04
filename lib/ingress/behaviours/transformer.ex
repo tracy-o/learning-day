@@ -1,4 +1,4 @@
 defmodule Ingress.Behaviours.Transformer do
   alias Ingress.Struct
-  @callback call([String.t()], Struct) :: {:ok, Struct} | {:error, Struct, String.t()}
+  @callback call([String.t()], Struct.t()) :: {:ok, Struct.t()} | {:error, Struct.t(), String.t()}
 end

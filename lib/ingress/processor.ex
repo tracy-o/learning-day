@@ -7,14 +7,12 @@ defmodule Ingress.Processor do
     LoopsRegistry.find_or_start(struct)
 
     with {:ok, loop} <- Loop.state(struct) do
-      # Struct.Private.put_loop(struct, loop)
       Map.put(struct, :private, Map.merge(struct.private, loop))
     else
-      _ -> raise "Failed to start loop."
+      _ -> raise "Failed to load loop state."
     end
   end
 
-  @spec req_pipeline(Ingress.Struct.t()) :: any()
   def req_pipeline(struct = %Struct{}) do
     Transformers.Transformer.start(struct)
   end

@@ -10,8 +10,8 @@ defmodule Ingress.Struct.Debug do
 end
 
 defmodule Ingress.Struct.Request do
-  @enforce_keys [:path]
-  defstruct [:path, :payload]
+  @enforce_keys [:path, :method]
+  defstruct [:path, :payload, :method]
 end
 
 defmodule Ingress.Struct.Response do
