@@ -3,7 +3,7 @@ defmodule Ingress do
 
   @callback handle(Struct) :: Struct
 
-  def handle(struct = Struct) do
+  def handle(struct = %Struct{}) do
     struct
     |> Processor.get_loop()
     |> Processor.req_pipeline()

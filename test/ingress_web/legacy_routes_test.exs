@@ -1,7 +1,7 @@
-defmodule IngressWeb.Integration.LegacyTest do
+defmodule IngressWeb.LegacyTest do
   use ExUnit.Case
   use Plug.Test
-  use Test.Support.Helper, :ingress_mox
+  use Test.Support.Helper, :mox
 
   alias Ingress.Struct
   alias Ingress.Struct.{Private, Request}

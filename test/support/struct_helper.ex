@@ -2,7 +2,7 @@ defmodule Test.Support.StructHelper do
   alias Ingress.Struct
   alias Ingress.Struct.{Request, Private, Response, Debug}
 
-  @base_request_struct %{path: "_web_core"}
+  @base_request_struct %{path: "/_web_core"}
 
   @base_response_struct %{
     http_status: 200

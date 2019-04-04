@@ -1,11 +1,11 @@
-defmodule IngressWeb.Integration.HeadersTest do
+defmodule IngressWeb.HeadersTest do
   use ExUnit.Case
   use Plug.Test
 
   alias IngressWeb.Router
   alias Test.Support.StructHelper
 
-  use Test.Support.Helper, :ingress_mox
+  use Test.Support.Helper, :mox
 
   describe "content type headers" do
     def test_content_type!(body, content_type) do

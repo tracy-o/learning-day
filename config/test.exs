@@ -15,4 +15,5 @@ config :ingress,
   errors_interval: 1_000,
   origin: "https://origin.bbc.com/",
   fallback: "https://s3.aws.com/",
-  ingress: IngressMock
+  ingress: IngressMock,
+  service: Ingress.Services.ServiceMock
