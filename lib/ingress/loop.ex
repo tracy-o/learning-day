@@ -9,7 +9,7 @@ defmodule Ingress.Loop do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
 
-  def state(struct = %Struct{private: %Struct.Private{loop_id: name}}) do
+  def state(%Struct{private: %Struct.Private{loop_id: name}}) do
     GenServer.call(via_tuple(name), :state)
   end
 
@@ -30,7 +30,7 @@ defmodule Ingress.Loop do
   def init(_) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init(), pipeline: ["WebCoreLambdaPrep"]}}
+    {:ok, %{counter: Counter.init(), pipeline: ["MockTransformer"]}}
   end
 
   @impl GenServer

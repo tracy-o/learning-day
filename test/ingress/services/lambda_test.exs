@@ -2,15 +2,11 @@ defmodule Ingress.Services.LambdaTest do
   alias Ingress.Services.Lambda
   alias Test.Support.StructHelper
 
+  alias Ingress.Struct
+
   use ExUnit.Case
 
-  @struct StructHelper.build(
-            request: %{
-              payload: %{
-                path: "/"
-              }
-            }
-          )
+  @struct StructHelper.build()
 
   import Mock
 
@@ -21,7 +17,7 @@ defmodule Ingress.Services.LambdaTest do
           {200, %{"some_data" => "hello homepage"}}
         end do
         assert %{
-                 response: %Ingress.Struct.Response{
+                 response: %Struct.Response{
                    http_status: 200,
                    body: %{"some_data" => "hello homepage"}
                  }
@@ -32,7 +28,7 @@ defmodule Ingress.Services.LambdaTest do
             "presentation-layer",
             %{
               instance_role_name: "ec2-role",
-              function_payload: %{path: "/"},
+              function_payload: %Struct.Request{path: "/_web_core", method: "GET", payload: nil},
               lambda_role_arn: "presentation-role"
             }
           )
@@ -57,7 +53,7 @@ defmodule Ingress.Services.LambdaTest do
             "presentation-layer",
             %{
               instance_role_name: "ec2-role",
-              function_payload: %{path: "/"},
+              function_payload: %{path: "/_web_core"},
               lambda_role_arn: "presentation-role"
             }
           )

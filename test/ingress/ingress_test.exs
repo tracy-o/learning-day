@@ -36,11 +36,7 @@ defmodule IngressTest do
                               private: %Struct.Private{loop_id: ["test_loop"]},
                               request: %Struct.Request{
                                 path: "/_web_core",
-                                payload: %{
-                                  path: "/_web_core",
-                                  payload: nil,
-                                  method: "GET"
-                                }
+                                method: "GET"
                               }
                             } ->
       @struct_with_html_response
@@ -55,11 +51,8 @@ defmodule IngressTest do
                               private: %Struct.Private{loop_id: ["test_loop"]},
                               request: %Struct.Request{
                                 path: "/_web_core",
-                                payload: %{
-                                  path: "/_web_core",
-                                  payload: ~s({"some": "data please"}),
-                                  method: "POST"
-                                }
+                                payload: ~s({"some": "data please"}),
+                                method: "POST"
                               }
                             } ->
       @struct_with_html_response

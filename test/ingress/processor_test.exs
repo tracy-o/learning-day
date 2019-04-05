@@ -35,12 +35,11 @@ defmodule Ingress.ProcessorTest do
             )
 
     test "runs struct through transformers" do
-      assert =
-        %{
-          request: _request,
-          private: _private,
-          sample_change: "foo"
-        } = Processor.req_pipeline(@struct)
+      assert %{
+               request: _request,
+               private: _private,
+               sample_change: "foo"
+             } = Processor.req_pipeline(@struct)
     end
   end
 end
