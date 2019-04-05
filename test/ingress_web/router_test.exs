@@ -1,4 +1,4 @@
-defmodule IngressWeb.Integration.RouterTest do
+defmodule IngressWeb.RouterTest do
   use ExUnit.Case
   use Plug.Test
 

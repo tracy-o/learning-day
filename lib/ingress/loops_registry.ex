@@ -1,14 +1,14 @@
 defmodule Ingress.LoopsRegistry do
-  alias Ingress.LoopsSupervisor
+  alias Ingress.{Struct, LoopsSupervisor}
 
   def start_link do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
-  def find_or_start(name) do
-    case Registry.lookup(__MODULE__, name) do
+  def find_or_start(%Struct{private: %Struct.Private{loop_id: loop_id}}) do
+    case Registry.lookup(__MODULE__, loop_id) do
       [{pid, _}] -> pid
-      [] -> LoopsSupervisor.start_loop(name)
+      [] -> LoopsSupervisor.start_loop(loop_id)
     end
   end
 

@@ -1,8 +1,11 @@
 defmodule Ingress.Transformers.Transformer do
+  alias Ingress.Struct
+
   @namespace "Elixir.Ingress.Transformers"
 
   defmacro __using__(_opts) do
     quote do
+      alias Ingress.Struct
       @behaviour Ingress.Behaviours.Transformer
       import Ingress.Transformers.Transformer
     end
@@ -10,7 +13,7 @@ defmodule Ingress.Transformers.Transformer do
 
   def then([next | rest], struct) do
     next_transformer = String.to_existing_atom(@namespace <> "." <> next)
-    struct = update_in(struct, [:debug, :pipeline_trail], &([next | &1]))
+    struct = update_in(struct.debug.pipeline_trail, &[next | &1])
 
     apply(next_transformer, :call, [rest, struct])
   end

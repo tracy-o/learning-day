@@ -1,5 +1,5 @@
 defmodule Test.Support.Helper do
-  def ingress_mox do
+  def mox do
     quote do
       import Mox
       setup :verify_on_exit!

@@ -1,16 +1,18 @@
 defmodule Ingress.Services.Lambda do
+  alias Ingress.Struct
   alias Ingress.Behaviours.Service
   @behaviour Service
 
   @impl Service
-  def dispatch(struct = %{request: request}) do
-    {status, body} = InvokeLambda.invoke(lambda_function(), %{
-      instance_role_name: instance_role_name(),
-      lambda_role_arn: lambda_role_arn(),
-      function_payload: request
-    })
+  def dispatch(struct = %Struct{request: request}) do
+    {status, body} =
+      InvokeLambda.invoke(lambda_function(), %{
+        instance_role_name: instance_role_name(),
+        lambda_role_arn: lambda_role_arn(),
+        function_payload: request
+      })
 
-    Map.put(struct, :response, %{status: status, body: body})
+    Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
   defp instance_role_name() do

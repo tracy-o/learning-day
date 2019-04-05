@@ -2,7 +2,7 @@ defmodule Ingress.Transformers.MyTransformer3 do
   use Ingress.Transformers.Transformer
 
   @impl true
-  def call(rest, struct) do
+  def call(rest, struct = %Struct{}) do
     if 1 == 2 do
       then(rest, struct)
     else
