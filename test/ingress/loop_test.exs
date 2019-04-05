@@ -29,10 +29,12 @@ defmodule Ingress.LoopTest do
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@req_struct)
 
-    assert %{counter: %{
-      unquote(@failure_status_code) => 30,
-      :errors => 30
-    }} = state
+    assert %{
+             counter: %{
+               unquote(@failure_status_code) => 30,
+               :errors => 30
+             }
+           } = state
 
     assert state.origin == "https://s3.aws.com/"
   end

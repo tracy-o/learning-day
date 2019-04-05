@@ -6,16 +6,11 @@ defmodule Ingress.Pipeline do
     struct = update_in(struct.debug.pipeline_trail, &[first | &1])
 
     case apply(root_transformer, :call, [rest, struct]) do
-      {:ok, struct} -> call_service(struct)
+      {:ok, struct} -> {:ok, struct}
       {:redirect, struct, msg} -> call_redirect(struct, msg)
       {:error, struct, msg} -> call_500(struct, msg)
       _ -> handle_error()
     end
-  end
-
-  defp call_service(struct) do
-    # for now..
-    {:ok, struct}
   end
 
   defp call_500(struct, msg) do

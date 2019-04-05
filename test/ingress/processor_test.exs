@@ -24,7 +24,7 @@ defmodule Ingress.ProcessorTest do
     end
   end
 
-  describe "Processor.req_pipeline/1" do
+  describe "Processor.request_pipeline/1" do
     @struct StructHelper.build(
               private: %{
                 loop_id: "example_loop_id",
@@ -39,7 +39,7 @@ defmodule Ingress.ProcessorTest do
                request: _request,
                private: _private,
                sample_change: "foo"
-             } = Processor.req_pipeline(@struct)
+             } = Processor.request_pipeline(@struct)
     end
   end
 end
