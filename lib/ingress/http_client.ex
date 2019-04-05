@@ -1,30 +1,14 @@
 defmodule Ingress.HTTPClient do
-  @timeout 1_000
+  @callback get(String.t(), String.t(), List.t(), Keyword.t())
+  @callback post(String.t(), String.t(), Map.t(), List.t(), Keyword.t())
 
-  def get(_origin, service, :test) do
-    {:ok, %HTTPoison.Response{body: "hello #{service}"}}
+  def get(host, path, headers \\ [], options \\ [])
+      when is_binary(host) and is_binary(path) and is_list(headers) do
+    HTTPoison.get(host <> path, headers, options)
   end
 
-  def get(origin, service, _env) when is_binary(origin) and is_binary(service) do
-    headers = []
-    options = [recv_timeout: @timeout]
-
-    endpoint = origin <> service
-    HTTPoison.get(endpoint, headers, options)
-  end
-
-  def post(_origin, _service, :test, _body) do
-    {:ok, %HTTPoison.Response{body: "{\"data\":[]}"}}
-  end
-
-  def post(origin, service, _env, body) do
-    headers = [
-      "Content-Type": "application/json"
-    ]
-
-    options = [recv_timeout: @timeout]
-
-    endpoint = origin <> service
-    HTTPoison.post(endpoint, body, headers, options)
+  def post(host, path, body, headers \\ [], options \\ [])
+      when is_binary(host) and is_binary(path) and is_map(body) and is_list(headers) do
+    HTTPoison.post(host <> path, Poison.decode!(body), headers, options)
   end
 end
