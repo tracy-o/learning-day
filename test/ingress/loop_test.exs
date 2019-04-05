@@ -11,10 +11,12 @@ defmodule Ingress.LoopTest do
     :ok
   end
 
+  @failure_status_code Enum.random(500..504)
+
   @req_struct StructHelper.build(private: %{loop_id: "test"})
   @resp_struct StructHelper.build(
                  private: %{loop_id: "test"},
-                 response: %{http_status: Enum.random(500..504)}
+                 response: %{http_status: @failure_status_code}
                )
 
   test "returns a state pointer" do
@@ -26,7 +28,12 @@ defmodule Ingress.LoopTest do
   test "increments status codes counter and trips the circuit breaker" do
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@req_struct)
-    assert state.counter != %{}
+
+    assert %{counter: %{
+      unquote(@failure_status_code) => 30,
+      :errors => 30
+    }} = state
+
     assert state.origin == "https://s3.aws.com/"
   end
 
