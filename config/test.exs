@@ -18,3 +18,7 @@ config :ingress,
   ingress: IngressMock,
   service: Ingress.Services.ServiceMock,
   http_client: Ingress.Services.HTTPClientMock
+
+config :ex_metrics,
+  send_metrics: false,
+  raise_on_undefined_metrics: true

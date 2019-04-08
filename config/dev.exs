@@ -11,3 +11,7 @@ config :ingress,
   http_port: 7080,
   http_scheme: :http,
   origin: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com"
+
+config :ex_metrics,
+  send_metrics: false,
+  raise_on_undefined_metrics: true

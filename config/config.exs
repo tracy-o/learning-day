@@ -36,3 +36,4 @@ config :ingress,
   errors_threshold: 1_000
 
 import_config "#{Mix.env()}.exs"
+import_config "metrics.exs"

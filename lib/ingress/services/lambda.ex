@@ -5,12 +5,14 @@ defmodule Ingress.Services.Lambda do
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
-    {status, body} =
-      InvokeLambda.invoke(lambda_function(), %{
-        instance_role_name: instance_role_name(),
-        lambda_role_arn: lambda_role_arn(),
-        function_payload: request
-      })
+    ExMetrics.timeframe "function.timing.service.lambda.invoke" do
+      {status, body} =
+        InvokeLambda.invoke(lambda_function(), %{
+          instance_role_name: instance_role_name(),
+          lambda_role_arn: lambda_role_arn(),
+          function_payload: request
+        })
+    end
 
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
