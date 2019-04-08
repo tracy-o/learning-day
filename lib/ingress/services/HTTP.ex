@@ -13,19 +13,24 @@ defmodule Ingress.Services.HTTP do
     |> handle_response()
   end
 
-  def handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct}) do
+  defp handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct}) do
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
-  def handle_response({{:error, _reason}, struct}) do
+  defp handle_response({{:error, _reason}, struct}) do
     # Log error and add debug info to struct
     struct
   end
 
-  def execute_request(struct = %Struct{request: request, private: private}) do
-    {case request.method do
-       "GET" -> @http_client.get(private.origin, request.path)
-       "POST" -> @http_client.post(private.origin, request.path, request.payload)
-     end, struct}
+  defp execute_request(
+        struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}
+      ) do
+    {@http_client.post(private.origin, request.path, request.payload), struct}
+  end
+
+  defp execute_request(
+        struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}
+      ) do
+    {@http_client.get(private.origin, request.path), struct}
   end
 end
