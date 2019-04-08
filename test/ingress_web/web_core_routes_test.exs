@@ -44,13 +44,13 @@ defmodule IngressWeb.WebCoreRoutesTest do
           },
           request: %Request{
             path: "/_web_core",
-            payload: %{"query" => "Some data please"}
+            payload: ~s({"query":"Some data please"})
           }
         } ->
           @struct_with_html_response
       end)
 
-      conn = conn(:post, "/_web_core", %{"query" => "Some data please"})
+      conn = conn(:post, "/_web_core", ~s({"query":"Some data please"}))
       conn = Router.call(conn, [])
 
       assert {
