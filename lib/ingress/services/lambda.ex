@@ -16,7 +16,7 @@ defmodule Ingress.Services.Lambda do
         })
     end
 
-    ExMetrics.increment("service.lamda.response.#{status}")
+    ExMetrics.increment("service.lambda.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 

@@ -1,16 +1,13 @@
 use Mix.Config
 
+lambda_response_code_metrics = Enum.map(200..599, fn x -> "service.lambda.response.#{x}}" end)
+
 config :ex_metrics,
   metrics: [
     "function.timing.service.lambda.invoke",
-    "service.lamda.response.200",
-    "service.lamda.response.403",
-    "service.lamda.response.404",
-    "service.lamda.response.408", # dynamic/programmed way to define these? Or don't bother?
-    "service.lamda.response.500",
     "error.loop.threshold.exceeded",
     "error.loop.state",
     "error.pipeline.process",
     "error.pipeline.process.redirect",
     "error.pipeline.process.unhandled"
-  ]
+  ] ++ lambda_response_code_metrics

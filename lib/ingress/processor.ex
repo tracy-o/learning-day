@@ -8,7 +8,7 @@ defmodule Ingress.Processor do
 
     case Loop.state(struct) do
       {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
-      _ -> loop_state_failure
+      _ -> loop_state_failure()
     end
   end
 
