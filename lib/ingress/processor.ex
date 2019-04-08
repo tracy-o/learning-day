@@ -1,7 +1,7 @@
 defmodule Ingress.Processor do
   alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, Services}
 
-  @service Application.get_env(:ingress, :service, Services.Lambda)
+  @service Application.get_env(:ingress, :service, Services.HTTP)
 
   def get_loop(struct = %Struct{}) do
     LoopsRegistry.find_or_start(struct)

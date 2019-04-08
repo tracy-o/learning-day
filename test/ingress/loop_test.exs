@@ -22,7 +22,7 @@ defmodule Ingress.LoopTest do
   test "returns a state pointer" do
     assert Loop.state(@req_struct) ==
              {:ok,
-              %{counter: %{}, origin: "https://origin.bbc.com/", pipeline: ["MockTransformer"]}}
+              %{counter: %{}, origin: "https://origin.bbc.com/", pipeline: ["MyTransformer1"]}}
   end
 
   test "increments status codes counter and trips the circuit breaker" do

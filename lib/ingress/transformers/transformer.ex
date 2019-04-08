@@ -1,6 +1,4 @@
 defmodule Ingress.Transformers.Transformer do
-  alias Ingress.Struct
-
   @namespace "Elixir.Ingress.Transformers"
 
   defmacro __using__(_opts) do
