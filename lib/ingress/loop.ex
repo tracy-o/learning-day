@@ -59,5 +59,10 @@ defmodule Ingress.Loop do
   end
 
   defp origin_pointer(false), do: Application.get_env(:ingress, :origin)
-  defp origin_pointer(true), do: Application.get_env(:ingress, :fallback)
+
+  defp origin_pointer(true) do
+    # can't work out how to know the loop name here, don't think you can currently
+    ExMetrics.increment("error.loop.threshold.exceeded")
+    Application.get_env(:ingress, :fallback)
+  end
 end

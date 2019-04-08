@@ -1,4 +1,6 @@
 defmodule Ingress.Services.Lambda do
+  use ExMetrics
+
   alias Ingress.Struct
   alias Ingress.Behaviours.Service
   @behaviour Service
@@ -14,6 +16,7 @@ defmodule Ingress.Services.Lambda do
         })
     end
 
+    ExMetrics.increment("service.lamda.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 

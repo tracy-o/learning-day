@@ -15,16 +15,19 @@ defmodule Ingress.Pipeline do
 
   defp call_500(struct, msg) do
     # for now..
+    ExMetrics.increment("error.pipeline.process")
     {:error, struct, msg}
   end
 
   defp call_redirect(struct, msg) do
+    ExMetrics.increment("error.pipeline.process.redirect")
     IO.puts("redirect called")
     IO.puts(msg)
     struct
   end
 
   def handle_error() do
+    ExMetrics.increment("error.pipeline.process.unhandled")
     IO.puts("error")
   end
 end
