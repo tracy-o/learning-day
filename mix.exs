@@ -34,7 +34,8 @@ defmodule Ingress.MixProject do
       {:invoke_lambda, git: "https://github.com/bbc/elixir-invoke-lambda.git"},
       {:mock, "~> 0.3", only: :test},
       {:distillery, "~> 2.0"},
-      {:mox, "~> 0.5", only: :test}
+      {:mox, "~> 0.5", only: :test},
+      {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"}
     ]
   end
 end
