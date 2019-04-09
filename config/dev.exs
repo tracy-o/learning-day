@@ -8,6 +8,4 @@ config :ingress,
   lambda_business_layer: "business-layer",
   lambda_service_worker: "service-worker",
   lambda_service_worker_role: "service-worker-arn",
-  http_port: 7080,
-  http_scheme: :http,
   origin: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com"
