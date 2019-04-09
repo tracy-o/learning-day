@@ -11,5 +11,4 @@ config :ingress, http_cert_key: System.get_env("HTTP_CERT_KEY")
 config :ingress, http_cert_ca: System.get_env("HTTP_CERT_CA")
 
 config :ex_metrics,
-  send_metrics: true,
-  raise_on_undefined_metrics: false
+  send_metrics: true
