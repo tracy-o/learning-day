@@ -1,12 +1,12 @@
+defmodule Ingress.Struct.Debug do
+  defstruct pipeline_trail: []
+end
+
 defmodule Ingress.Struct do
   defstruct request: Ingress.Struct.Request,
             private: Ingress.Struct.Private,
             response: Ingress.Struct.Response,
-            debug: Ingress.Struct.Debug
-end
-
-defmodule Ingress.Struct.Debug do
-  defstruct pipeline_trail: []
+            debug: %Ingress.Struct.Debug{}
 end
 
 defmodule Ingress.Struct.Request do

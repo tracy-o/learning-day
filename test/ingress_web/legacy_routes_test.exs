@@ -79,13 +79,13 @@ defmodule IngressWeb.LegacyTest do
                               private: %Private{loop_id: ["legacy"]},
                               request: %Request{
                                 path: "/_legacy",
-                                payload: %{"query" => "some data please"}
+                                payload: ~s({"query":"some data please"})
                               }
                             } ->
         @struct_with_html_response
       end)
 
-      conn = conn(:post, "/_legacy", %{"query" => "some data please"})
+      conn = conn(:post, "/_legacy", ~s({"query":"some data please"}))
       conn = Router.call(conn, [])
 
       assert {

@@ -1,30 +1,17 @@
 defmodule Ingress.HTTPClient do
-  @timeout 1_000
+  @callback get(String.t(), String.t()) :: HTTPoison.Response
+  @callback get(String.t(), String.t(), List.t()) :: HTTPoison.Response
+  @callback get(String.t(), String.t(), List.t(), Keyword.t()) :: HTTPoison.Response
 
-  def get(_origin, service, :test) do
-    {:ok, %HTTPoison.Response{body: "hello #{service}"}}
+  @callback post(String.t(), String.t(), Map.t()) :: HTTPoison.Response
+  @callback post(String.t(), String.t(), Map.t(), List.t()) :: HTTPoison.Response
+  @callback post(String.t(), String.t(), Map.t(), List.t(), Keyword.t()) :: HTTPoison.Response
+
+  def get(host, path, headers \\ [], options \\ []) do
+    HTTPoison.get(host <> path, headers, options)
   end
 
-  def get(origin, service, _env) when is_binary(origin) and is_binary(service) do
-    headers = []
-    options = [recv_timeout: @timeout]
-
-    endpoint = origin <> service
-    HTTPoison.get(endpoint, headers, options)
-  end
-
-  def post(_origin, _service, :test, _body) do
-    {:ok, %HTTPoison.Response{body: "{\"data\":[]}"}}
-  end
-
-  def post(origin, service, _env, body) do
-    headers = [
-      "Content-Type": "application/json"
-    ]
-
-    options = [recv_timeout: @timeout]
-
-    endpoint = origin <> service
-    HTTPoison.post(endpoint, body, headers, options)
+  def post(host, path, body, headers \\ [], options \\ []) when is_binary(body) do
+    HTTPoison.post(host <> path, body, headers, options)
   end
 end

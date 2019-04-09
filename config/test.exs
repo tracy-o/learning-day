@@ -16,4 +16,5 @@ config :ingress,
   origin: "https://origin.bbc.com/",
   fallback: "https://s3.aws.com/",
   ingress: IngressMock,
-  service: Ingress.Services.ServiceMock
+  service: Ingress.Services.ServiceMock,
+  http_client: Ingress.Services.HTTPClientMock

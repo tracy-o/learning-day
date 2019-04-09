@@ -8,13 +8,20 @@ defmodule IngressWeb.StructAdapter do
     %Struct{
       request: %Request{
         path: conn.request_path,
-        payload: conn.body_params,
+        payload: body(conn),
         method: conn.method
       },
       private: %Private{
         loop_id: loop_id
       }
     }
+  end
+
+  defp body(conn) do
+    case read_body(conn) do
+      {:ok, body, _conn} -> body
+      _ -> nil
+    end
   end
 
   def adapt(conn = %Conn{}) do
