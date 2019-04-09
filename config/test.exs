@@ -23,4 +23,4 @@ config :ex_metrics,
   send_metrics: false
 
 config :logger,
-       backends: []
+  backends: []

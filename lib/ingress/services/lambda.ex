@@ -7,18 +7,31 @@ defmodule Ingress.Services.Lambda do
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
-    ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      {status, body} =
+    {status, body} =
+      ExMetrics.timeframe "function.timing.service.lambda.invoke" do
         InvokeLambda.invoke(lambda_function(), %{
           instance_role_name: instance_role_name(),
           lambda_role_arn: lambda_role_arn(),
           function_payload: request
         })
-    end
+      end
 
     ExMetrics.increment("service.lambda.response.#{status}")
+    log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
+
+  defp log(status, body, struct) when status > 200 do
+    Stump.log(:error, %{
+      msg: "Lambda Service returned a non 200 status",
+      http_status: status,
+      body: body,
+      lambda_function: lambda_function(),
+      struct: Map.from_struct(struct)
+    })
+  end
+
+  defp log(_, _, _), do: nil
 
   defp instance_role_name() do
     Application.fetch_env!(:ingress, :instance_role_name)

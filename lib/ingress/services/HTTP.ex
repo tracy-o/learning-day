@@ -16,13 +16,34 @@ defmodule Ingress.Services.HTTP do
     end
   end
 
+  defp handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct})
+       when status > 200 do
+    ExMetrics.increment("service.HTTP.response.#{status}")
+
+    Stump.log(:error, %{
+      msg: "Non 200 response from HTTP Service request",
+      status: status,
+      body: body,
+      struct: Map.from_struct(struct)
+    })
+
+    Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
+  end
+
   defp handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct}) do
     ExMetrics.increment("service.HTTP.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
-  defp handle_response({{:error, _reason}, struct}) do
+  defp handle_response({{:error, reason}, struct}) do
     ExMetrics.increment("error.service.HTTP.request")
+
+    Stump.log(:error, %{
+      msg: "HTTP Service request error",
+      reason: reason,
+      struct: Map.from_struct(struct)
+    })
+
     struct
   end
 
