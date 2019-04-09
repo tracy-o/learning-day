@@ -17,16 +17,16 @@ defmodule IngressWeb.StructAdapter do
     }
   end
 
+  def adapt(conn = %Conn{}) do
+    conn
+    |> put_private(:loop_id, conn.path_info |> Enum.take(2))
+    |> adapt()
+  end
+
   defp body(conn) do
     case read_body(conn) do
       {:ok, body, _conn} -> body
       _ -> nil
     end
-  end
-
-  def adapt(conn = %Conn{}) do
-    conn
-    |> put_private(:loop_id, conn.path_info |> Enum.take(2))
-    |> adapt()
   end
 end

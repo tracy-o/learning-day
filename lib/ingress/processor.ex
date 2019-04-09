@@ -8,13 +8,14 @@ defmodule Ingress.Processor do
 
     case Loop.state(struct) do
       {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
-      _ -> raise "Failed to load loop state."
+      _ -> loop_state_failure()
     end
   end
 
   def request_pipeline(struct = %Struct{}) do
     case Pipeline.process(struct) do
       {:ok, struct} -> struct
+      {:redirect, struct} -> struct
       {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
     end
   end
@@ -26,5 +27,10 @@ defmodule Ingress.Processor do
 
   def resp_pipeline(struct = %Struct{}) do
     struct
+  end
+
+  defp loop_state_failure do
+    ExMetrics.increment("error.loop.state")
+    raise "Failed to load loop state."
   end
 end
