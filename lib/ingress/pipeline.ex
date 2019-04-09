@@ -19,10 +19,7 @@ defmodule Ingress.Pipeline do
     {:error, struct, msg}
   end
 
-  defp call_redirect(struct) do
-    ExMetrics.increment("error.pipeline.process.redirect")
-    {:ok, struct}
-  end
+  defp call_redirect(struct), do: {:redirect, struct}
 
   def handle_error(struct) do
     ExMetrics.increment("error.pipeline.process.unhandled")

@@ -15,6 +15,5 @@ config :ex_metrics,
       "error.loop.threshold.exceeded",
       "error.loop.state",
       "error.pipeline.process",
-      "error.pipeline.process.redirect",
       "error.pipeline.process.unhandled"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics

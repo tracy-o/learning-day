@@ -15,6 +15,7 @@ defmodule Ingress.Processor do
   def request_pipeline(struct = %Struct{}) do
     case Pipeline.process(struct) do
       {:ok, struct} -> struct
+      {:redirect, struct} -> struct
       {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
     end
   end
