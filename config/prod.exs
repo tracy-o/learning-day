@@ -12,3 +12,12 @@ config :ingress, http_cert_ca: System.get_env("HTTP_CERT_CA")
 
 config :ex_metrics,
   send_metrics: true
+
+
+config :logger,
+       backends: [{LoggerFileBackend, :file}]
+
+config :logger, :file,
+       path: "/var/log/mozart_fetcher/error.log",
+       format: "$message\n",
+       level: :error
