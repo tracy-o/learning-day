@@ -7,9 +7,9 @@ defmodule Ingress.Pipeline do
 
     case apply(root_transformer, :call, [rest, struct]) do
       {:ok, struct} -> {:ok, struct}
-      {:redirect, struct, msg} -> call_redirect(struct, msg)
+      {:redirect, struct} -> call_redirect(struct)
       {:error, struct, msg} -> call_500(struct, msg)
-      _ -> handle_error()
+      _ -> handle_error(struct)
     end
   end
 
@@ -19,15 +19,13 @@ defmodule Ingress.Pipeline do
     {:error, struct, msg}
   end
 
-  defp call_redirect(struct, msg) do
+  defp call_redirect(struct) do
     ExMetrics.increment("error.pipeline.process.redirect")
-    IO.puts("redirect called")
-    IO.puts(msg)
-    struct
+    {:ok, struct}
   end
 
-  def handle_error() do
+  def handle_error(struct) do
     ExMetrics.increment("error.pipeline.process.unhandled")
-    IO.puts("error")
+    {:error, struct, "Transformer did not return a valid response tuple"}
   end
 end
