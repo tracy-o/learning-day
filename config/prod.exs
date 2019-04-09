@@ -15,7 +15,7 @@ config :ex_metrics,
 
 
 config :logger,
-       backends: [{LoggerFileBackend, :file}]
+       backends: [{LoggerFileBackend, :file}, :console]
 
 config :logger, :file,
        path: "/var/log/mozart_fetcher/error.log",
