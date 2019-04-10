@@ -17,11 +17,11 @@ defmodule Ingress.Services.Lambda do
       end
 
     ExMetrics.increment("service.lambda.response.#{status}")
-    log(status, body, struct)
+    if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
-  defp log(status, body, struct) when status > 200 do
+  defp log(status, body, struct) do
     Stump.log(:error, %{
       msg: "Lambda Service returned a non 200 status",
       http_status: status,
@@ -30,8 +30,6 @@ defmodule Ingress.Services.Lambda do
       struct: Map.from_struct(struct)
     })
   end
-
-  defp log(_, _, _), do: nil
 
   defp instance_role_name() do
     Application.fetch_env!(:ingress, :instance_role_name)
