@@ -35,5 +35,7 @@ config :ingress,
   origin: System.get_env("INGRESS_ORIGIN"),
   errors_threshold: 1_000
 
+config :logger, :console, format: "$message\n"
+
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"

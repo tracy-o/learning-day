@@ -62,6 +62,7 @@ defmodule Ingress.Loop do
 
   defp origin_pointer(true) do
     ExMetrics.increment("error.loop.threshold.exceeded")
+    Stump.log(:error, "Error threshold exceeded for loop")
     Application.get_env(:ingress, :fallback)
   end
 end
