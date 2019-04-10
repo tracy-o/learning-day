@@ -17,6 +17,6 @@ config :logger,
   backends: [{LoggerFileBackend, :file}, :console]
 
 config :logger, :file,
-  path: "/var/log/mozart_fetcher/error.log",
+  path: System.get_env("LOG_PATH"),
   format: "$message\n",
   level: :error
