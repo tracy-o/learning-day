@@ -7,7 +7,7 @@ defmodule Ingress.Struct.Request do
 end
 
 defmodule Ingress.Struct.Response do
-  defstruct [:http_status, :headers, :body]
+  defstruct [http_status: nil, headers: %{}, body: nil]
 end
 
 defmodule Ingress.Struct.Private do

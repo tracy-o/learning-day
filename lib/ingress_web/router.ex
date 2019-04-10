@@ -25,15 +25,14 @@ defmodule IngressWeb.Router do
 
   match(_, via: @allowed_http_methods, to: LegacyRoutes)
 
-  def child_spec(_arg) do
-    scheme = Application.fetch_env!(:ingress, :http_scheme)
+  def child_spec([scheme: scheme, port: port]) do
 
     Plug.Adapters.Cowboy.child_spec(
       scheme: scheme,
       options:
         Enum.concat(
           [
-            port: Application.fetch_env!(:ingress, :http_port),
+            port: port,
             protocol_options: [max_keepalive: 5_000_000]
           ],
           options(scheme)
