@@ -6,7 +6,6 @@ defmodule IngressWeb.Headers.Vary do
   @behaviour Headers
 
   @impl Headers
-
   def add_header(conn, _struct) do
     put_resp_header(conn, "vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country")
   end
