@@ -2,7 +2,8 @@ defmodule IngressWeb.View do
   import Plug.Conn
 
   alias Ingress.Struct
-  alias IngressWeb.DefaultHeaders
+
+  @default_headers [IngressWeb.Headers.Vary]
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -22,7 +23,7 @@ defmodule IngressWeb.View do
       conn
       |> put_resp_header(header_key, header_value)
     end)
-    |> DefaultHeaders.add_default_headers(struct)
+    |> add_default_headers(struct)
   end
 
   def render(conn, status, content) when is_map(content) do
@@ -33,5 +34,11 @@ defmodule IngressWeb.View do
   def render(conn, status, content) when is_binary(content) do
     conn
     |> send_resp(status, content)
+  end
+
+  defp add_default_headers(conn, struct) do
+    Enum.reduce(@default_headers, conn, fn headers_module, output_conn ->
+      apply(headers_module, :add_header, [output_conn, struct])
+    end)
   end
 end

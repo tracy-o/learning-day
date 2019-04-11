@@ -23,7 +23,7 @@ defmodule IngressWeb.HeadersTest do
       end)
 
       conn = conn(:get, "/_web_core")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
 
     def test_content_type!(body, content_type) do
