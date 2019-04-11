@@ -1,11 +1,15 @@
 defmodule IngressWeb.Headers.VaryTest do
   use ExUnit.Case
+  use Plug.Test
 
   alias IngressWeb.Headers.Vary
 
   doctest Vary
 
-  test "module exists" do
-    assert is_list(Vary.module_info())
+  test "Adding vary returns conn with vary header added" do
+    input_conn = conn(:get, "/_web_core")
+    output_conn = Vary.add_header(input_conn, nil)
+
+    assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"] == get_resp_header(output_conn, "vary")
   end
 end
