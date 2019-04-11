@@ -2,6 +2,7 @@ defmodule IngressWeb.View do
   import Plug.Conn
 
   alias Ingress.Struct
+  alias IngressWeb.DefaultHeaders
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -21,6 +22,7 @@ defmodule IngressWeb.View do
       conn
       |> put_resp_header(header_key, header_value)
     end)
+    |> DefaultHeaders.add_default_headers(struct)
   end
 
   def render(conn, status, content) when is_map(content) do
