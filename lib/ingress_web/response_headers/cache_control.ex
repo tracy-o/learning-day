@@ -1,11 +1,11 @@
-defmodule IngressWeb.Headers.CacheControl do
+defmodule IngressWeb.ResponseHeaders.CacheControl do
   import Plug.Conn
 
-  alias IngressWeb.Behaviours.Headers
+  alias IngressWeb.Behaviours.ResponseHeaders
 
-  @behaviour Headers
+  @behaviour ResponseHeaders
 
-  @impl Headers
+  @impl ResponseHeaders
   def add_header(conn, struct) do
     put_resp_header(
       conn,

@@ -1,11 +1,11 @@
-defmodule IngressWeb.Headers.Vary do
+defmodule IngressWeb.ResponseHeaders.Vary do
   import Plug.Conn
 
-  alias IngressWeb.Behaviours.Headers
+  alias IngressWeb.Behaviours.ResponseHeaders
 
-  @behaviour Headers
+  @behaviour ResponseHeaders
 
-  @impl Headers
+  @impl ResponseHeaders
   def add_header(conn, _struct) do
     put_resp_header(conn, "vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country")
   end

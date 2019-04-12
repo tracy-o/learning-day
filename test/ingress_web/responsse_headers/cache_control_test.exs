@@ -1,8 +1,8 @@
-defmodule IngressWeb.Headers.CacheControlTest do
+defmodule IngressWeb.ResponseHeaders.CacheControlTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.Headers.CacheControl
+  alias IngressWeb.ResponseHeaders.CacheControl
   alias Ingress.Struct
   alias Test.Support.StructHelper
 

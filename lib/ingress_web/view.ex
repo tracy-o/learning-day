@@ -3,7 +3,7 @@ defmodule IngressWeb.View do
 
   alias Ingress.Struct
 
-  @default_headers [IngressWeb.Headers.Vary, IngressWeb.Headers.CacheControl]
+  @default_headers [IngressWeb.ResponseHeaders.Vary, IngressWeb.ResponseHeaders.CacheControl]
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
