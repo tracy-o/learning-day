@@ -33,6 +33,10 @@ defmodule Ingress.Supervisor do
 
   @impl true
   def init(args) do
-    Supervisor.init(children(args), strategy: :one_for_one)
+    Supervisor.init(children(args) ++ hackney_setup(), strategy: :one_for_one)
+  end
+
+  defp hackney_setup do
+    [:hackney_pool.child_spec(:origin_pool, timeout: 1000, max_connections: 20000)]
   end
 end
