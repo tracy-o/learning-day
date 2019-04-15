@@ -20,11 +20,11 @@ defmodule IngressWeb.HeadersSanitiser do
     headers[:edge] || headers[:forwarded] || headers[:http]
   end
 
-  defp edge(headers, "1") do
+  defp edge(headers, true) do
     headers[:edge]
   end
 
-  defp edge(headers, cache) when cache != "1" do
+  defp edge(headers, false) do
     nil
   end
 end

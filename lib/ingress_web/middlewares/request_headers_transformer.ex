@@ -10,9 +10,7 @@ defmodule IngressWeb.Middlewares.RequestHeadersTransformer do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    conn = put_private(conn, :bbc_headers, bbc_headers(HeadersMapper.map(conn.req_headers)))
-
-    conn
+    put_private(conn, :bbc_headers, bbc_headers(HeadersMapper.map(conn.req_headers)))
   end
 
   defp bbc_headers(req_headers) do

@@ -27,7 +27,7 @@ defmodule IngressWeb.HeadersSanitiserTest do
 
   describe "country headers" do
     test "uses edge country when set and edge cache is set" do
-      assert HeadersSanitiser.country(%{edge: "gb"}, true) == "gb"
+      assert HeadersSanitiser.country(%{edge: "de"}, true) == "de"
     end
 
     test "uses x country when edge country is set and edge cache is not set" do
