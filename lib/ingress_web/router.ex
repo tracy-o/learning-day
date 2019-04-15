@@ -3,11 +3,11 @@ defmodule IngressWeb.Router do
   use Plug.ErrorHandler
   use ExMetrics
 
-  alias IngressWeb.Middleware
+  alias IngressWeb.Middlewares
 
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
-  plug(Middleware.HeadersSanitiser)
+  plug(Middlewares.RequestHeadersTransformer)
   plug(:match)
   plug(:dispatch)
 
