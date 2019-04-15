@@ -1,8 +1,6 @@
-defmodule IngressWeb.HeadersSanitiser do
+defmodule IngressWeb.RequestHeaders.Sanitiser do
   @moduledoc """
   """
-
-  alias IngressWeb.HeadersMapper
 
   def cache(headers, _cache) do
     headers[:edge]

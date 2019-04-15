@@ -1,4 +1,4 @@
-defmodule IngressWeb.HeadersMapper do
+defmodule IngressWeb.RequestHeaders.Mapper do
   @map %{
     cache: %{edge: "x-bbc-edge-cache"},
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},

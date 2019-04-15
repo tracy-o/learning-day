@@ -1,12 +1,12 @@
-defmodule IngressWeb.HeadersMapperTest do
+defmodule IngressWeb.RequestHeaders.MapperTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.HeadersMapper
+  alias IngressWeb.RequestHeaders.Mapper
 
   describe "headers mapper" do
     test "returns headers map when no request headers are set" do
-      assert HeadersMapper.map([{}]) ==
+      assert Mapper.map([{}]) ==
                %{
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
@@ -21,7 +21,7 @@ defmodule IngressWeb.HeadersMapperTest do
         {"x-country", "gb"}
       ]
 
-      assert HeadersMapper.map(req_headers) ==
+      assert Mapper.map(req_headers) ==
                %{
                  cache: %{edge: "1"},
                  country: %{edge: "**", varnish: "gb"},
@@ -36,7 +36,7 @@ defmodule IngressWeb.HeadersMapperTest do
         {"x-country", ""}
       ]
 
-      assert HeadersMapper.map(req_headers) ==
+      assert Mapper.map(req_headers) ==
                %{
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
