@@ -37,7 +37,8 @@ defmodule Ingress.MixProject do
       {:mox, "~> 0.5", only: :test},
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
       {:stump, "~> 1.0"},
-      {:logger_file_backend, "~> 0.0.10"}
+      {:logger_file_backend, "~> 0.0.10"},
+      {:benchee, "~> 1.0.1", only: :dev}
     ]
   end
 end

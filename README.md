@@ -35,6 +35,11 @@ mix run --no-halt
 
 The app runs on port 7080.
 
+### Run benchmark performance tests
+```
+mix benchmark
+```
+
 ## Properties of Ingress
 
 * resilient
