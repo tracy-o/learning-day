@@ -13,8 +13,9 @@
 ##-heart
 
 ## Enable kernel poll and a few async threads
-##+K true
-##+A 5
++K true
++A 64
+
 ## For OTP21+, the +A flag is not used anymore,
 ## +SDio replace it to use dirty schedulers
 ##+SDio 5
@@ -28,3 +29,23 @@
 # Enable SMP automatically based on availability
 # On OTP21+, this is not needed anymore.
 -smp auto
+
+## max process numbers
++P 134217727
+
+## Erlang max ports
++Q 1048576
+
+##-------------------------------------------------------------------------
+## Env
+##-------------------------------------------------------------------------
+
+## Increase number of concurrent ports/sockets
+-env ERL_MAX_PORTS 1048576
+
+-env ERTS_MAX_PORTS 1048576
+
+-env ERL_MAX_ETS_TABLES 1024
+
+## Tweak GC to run more often
+-env ERL_FULLSWEEP_AFTER 1000
