@@ -1,8 +1,6 @@
 defmodule IngressWeb.Router do
   use Plug.Router
-  use ExMetrics
 
-  plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(:match)
   plug(:dispatch)

@@ -14,27 +14,12 @@ defmodule Ingress.Pipeline do
   end
 
   defp call_500(struct, msg) do
-    # for now..
-    ExMetrics.increment("error.pipeline.process")
-
-    Stump.log(:error, %{
-      msg: "Transformer returned an early error",
-      struct: Map.from_struct(struct)
-    })
-
     {:error, struct, msg}
   end
 
   defp call_redirect(struct), do: {:redirect, struct}
 
   def handle_error(struct) do
-    ExMetrics.increment("error.pipeline.process.unhandled")
-
-    Stump.log(:error, %{
-      msg: "Transformer did not return a valid response tuple",
-      struct: Map.from_struct(struct)
-    })
-
     {:error, struct, "Transformer did not return a valid response tuple"}
   end
 end
