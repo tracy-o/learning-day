@@ -20,8 +20,8 @@ defmodule IngressWeb.RouterTest do
       conn = Router.call(conn, [])
 
       assert conn.status == 404
-      assert get_resp_header(conn, "content-type") == ["text/html; charset=utf-8"]
-      assert conn.resp_body == "Not Found"
+      assert get_resp_header(conn, "content-type") == ["text/plain; charset=utf-8"]
+      assert conn.resp_body == "404 Not Found"
     end
   end
 end

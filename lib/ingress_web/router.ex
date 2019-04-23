@@ -1,7 +1,6 @@
 defmodule IngressWeb.Router do
-  @callback handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack})
-
   use Plug.Router
+  use Plug.ErrorHandler
   use ExMetrics
 
   plug(ExMetrics.Plug.PageMetrics)
@@ -56,12 +55,13 @@ defmodule IngressWeb.Router do
     ]
   end
 
-  def handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
-    case conn.status do
-      500 ->
-        View.render(conn, 500)
-      _ ->
-        View.render(conn, 404)
-      end
+  def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
+    Stump.log(:error, %{
+      msg: "Router Service returned a 500 status",
+      kind: kind,
+      reason: reason,
+      stack: Exception.format_stacktrace(stack)
+    })
+    View.render(conn, 500)
   end
 end
