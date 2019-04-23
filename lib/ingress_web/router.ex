@@ -1,5 +1,6 @@
 defmodule IngressWeb.Router do
   use Plug.Router
+  use Plug.ErrorHandler
   use ExMetrics
 
   plug(ExMetrics.Plug.PageMetrics)
@@ -52,5 +53,15 @@ defmodule IngressWeb.Router do
       cacertfile: Application.fetch_env!(:ingress, :http_cert_ca),
       otp_app: :ingress
     ]
+  end
+
+  def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
+    Stump.log(:error, %{
+      msg: "Router Service returned a 500 status",
+      kind: kind,
+      reason: reason,
+      stack: Exception.format_stacktrace(stack)
+    })
+    View.render(conn, 500)
   end
 end
