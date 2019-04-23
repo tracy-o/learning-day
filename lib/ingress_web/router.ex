@@ -26,8 +26,7 @@ defmodule IngressWeb.Router do
 
   match(_, via: @allowed_http_methods, to: LegacyRoutes)
 
-  def child_spec([scheme: scheme, port: port]) do
-
+  def child_spec(scheme: scheme, port: port) do
     Plug.Adapters.Cowboy.child_spec(
       scheme: scheme,
       options:

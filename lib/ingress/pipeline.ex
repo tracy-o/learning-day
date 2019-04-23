@@ -14,7 +14,6 @@ defmodule Ingress.Pipeline do
   end
 
   defp call_500(struct, msg) do
-    # for now..
     ExMetrics.increment("error.pipeline.process")
 
     Stump.log(:error, %{
