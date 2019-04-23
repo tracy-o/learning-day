@@ -6,12 +6,15 @@ defmodule IngressWeb.RequestHeaders.Mapper do
   }
 
   def map(req_headers) do
-    Enum.into(@map, %{}, fn {k, v} ->
-      {k, Enum.into(v, %{}, fn {i, j} -> {i, get_req_header(req_headers, j)} end)}
+    Enum.into(@map, %{}, fn {header_key, headers_map} ->
+      {header_key,
+       Enum.into(headers_map, %{}, fn {bbc_header_from, bbc_header_key} ->
+         {bbc_header_from, get_req_header(req_headers, bbc_header_key)}
+       end)}
     end)
   end
 
-  defp get_req_header(headers, key) when headers == [{}], do: nil
+  defp get_req_header(headers, _key) when headers == [{}], do: nil
 
   defp get_req_header(headers, key) do
     headers
