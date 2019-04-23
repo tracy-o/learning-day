@@ -21,7 +21,9 @@ defmodule Mix.Tasks.Benchmark do
   end
 
   defp benchmark_request_pipeline do
-    struct = %Struct{private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "test_loop_id"}}
+    struct = %Struct{
+      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "test_loop_id"}
+    }
 
     Benchee.run(
       %{

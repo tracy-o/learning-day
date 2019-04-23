@@ -1,4 +1,5 @@
 defmodule Ingress.Services.HTTP do
+  use ExMetrics
 
   alias Ingress.Behaviours.Service
   alias Ingress.{HTTPClient, Struct}
@@ -9,16 +10,27 @@ defmodule Ingress.Services.HTTP do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    execute_request(struct)
-    |> handle_response()
+    ExMetrics.timeframe "function.timing.service.HTTP.request" do
+      execute_request(struct)
+      |> handle_response()
+    end
   end
 
   defp handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct}) do
+    ExMetrics.increment("service.HTTP.response.#{status}")
     if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
   defp handle_response({{:error, reason}, struct}) do
+    ExMetrics.increment("error.service.HTTP.request")
+
+    Stump.log(:error, %{
+      msg: "HTTP Service request error",
+      reason: reason,
+      struct: Map.from_struct(struct)
+    })
+
     struct
   end
 

@@ -1,6 +1,8 @@
 defmodule IngressWeb.Router do
   use Plug.Router
+  use ExMetrics
 
+  plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(:match)
   plug(:dispatch)
@@ -23,8 +25,7 @@ defmodule IngressWeb.Router do
 
   match(_, via: @allowed_http_methods, to: LegacyRoutes)
 
-  def child_spec([scheme: scheme, port: port]) do
-
+  def child_spec(scheme: scheme, port: port) do
     Plug.Adapters.Cowboy.child_spec(
       scheme: scheme,
       options:

@@ -1,4 +1,6 @@
 defmodule Ingress.Services.Lambda do
+  use ExMetrics
+
   alias Ingress.Struct
   alias Ingress.Behaviours.Service
   @behaviour Service
@@ -6,14 +8,27 @@ defmodule Ingress.Services.Lambda do
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
     {status, body} =
+      ExMetrics.timeframe "function.timing.service.lambda.invoke" do
+        InvokeLambda.invoke(lambda_function(), %{
+          instance_role_name: instance_role_name(),
+          lambda_role_arn: lambda_role_arn(),
+          function_payload: request
+        })
+      end
 
-    InvokeLambda.invoke(lambda_function(), %{
-      instance_role_name: instance_role_name(),
-      lambda_role_arn: lambda_role_arn(),
-      function_payload: request
-    })
-
+    ExMetrics.increment("service.lambda.response.#{status}")
+    if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
+  end
+
+  defp log(status, body, struct) do
+    Stump.log(:error, %{
+      msg: "Lambda Service returned a non 200 status",
+      http_status: status,
+      body: body,
+      lambda_function: lambda_function(),
+      struct: Map.from_struct(struct)
+    })
   end
 
   defp instance_role_name() do
