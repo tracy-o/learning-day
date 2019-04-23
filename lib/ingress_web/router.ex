@@ -1,4 +1,6 @@
 defmodule IngressWeb.Router do
+  @callback handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack})
+
   use Plug.Router
   use ExMetrics
 
@@ -52,5 +54,14 @@ defmodule IngressWeb.Router do
       cacertfile: Application.fetch_env!(:ingress, :http_cert_ca),
       otp_app: :ingress
     ]
+  end
+
+  def handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+    case conn.status do
+      500 ->
+        View.render(conn, 500)
+      _ ->
+        View.render(conn, 404)
+      end
   end
 end
