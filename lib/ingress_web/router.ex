@@ -17,9 +17,12 @@ defmodule IngressWeb.Router do
   @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web graphql service-worker.js}
   @allowed_http_methods [:head, :get, :post]
 
+  # TODO: perhaps create a struct/have a loop generation and serve this 200 by going all the way through the app
+  # this would give us more confidence in /status but could be overkill in effort
+  # it would also mean put_response could become private to the view and be renamed to render
   get "/status" do
     conn
-    |> View.render(200, "I'm ok thanks")
+    |> View.put_response(200, "I'm ok thanks")
   end
 
   match("/:product/*_rest" when product in @product_allowlist,

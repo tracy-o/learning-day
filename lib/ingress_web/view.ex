@@ -5,28 +5,28 @@ defmodule IngressWeb.View do
 
   @default_headers [IngressWeb.ResponseHeaders.Vary, IngressWeb.ResponseHeaders.CacheControl]
 
-  def render_struct(struct = %Struct{response: response = %Struct.Response{}}, conn) do
+  def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
     |> add_response_headers(struct)
-    |> render(response.http_status, response.body)
+    |> put_response(response.http_status, response.body)
   end
 
   def not_found(conn), do: error(conn, 404, "404 Not Found")
 
   def internal_server_error(conn), do: error(conn, 500, "500 Internal Server Error")
 
-  def render(conn, status, content) when is_map(content) do
+  def put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
-    |> render(status, Poison.encode!(content))
+    |> put_response(status, Poison.encode!(content))
   end
 
-  def render(conn, status, content) when is_binary(content), do: send_resp(conn, status, content)
+  def put_response(conn, status, content) when is_binary(content), do: send_resp(conn, status, content)
 
   defp error(conn, status, content) do
     conn
     |> put_resp_content_type("text/plain")
-    |> render(status, content)
+    |> put_response(status, content)
   end
 
   # TODO: handle unknown content type. I.e content.t != binary or map

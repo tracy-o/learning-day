@@ -20,7 +20,7 @@ defmodule IngressWeb.LegacyRoutes do
       |> put_private(:loop_id, loop_id)
       |> StructAdapter.adapt()
       |> @ingress.handle()
-      |> View.render_struct(conn)
+      |> View.render(conn)
     else
       nil -> View.not_found(conn)
     end
