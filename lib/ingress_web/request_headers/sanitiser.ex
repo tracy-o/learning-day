@@ -9,9 +9,7 @@ defmodule IngressWeb.RequestHeaders.Sanitiser do
   end
 
   def country(headers, cache) do
-    edge(headers, cache) || headers[:varnish] ||
-      "gb"
-      |> to_string()
+    edge(headers, cache) || headers[:varnish] || "gb"
   end
 
   def host(headers, _cache) do

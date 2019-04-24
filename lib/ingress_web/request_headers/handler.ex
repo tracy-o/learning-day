@@ -1,4 +1,4 @@
-defmodule IngressWeb.RequestHeaders.Transformer do
+defmodule IngressWeb.RequestHeaders.Handler do
   import Plug.Conn
 
   @moduledoc """

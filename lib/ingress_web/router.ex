@@ -7,7 +7,7 @@ defmodule IngressWeb.Router do
 
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
-  plug(RequestHeaders.Transformer)
+  plug(RequestHeaders.Handler)
   plug(:match)
   plug(:dispatch)
 
@@ -64,6 +64,7 @@ defmodule IngressWeb.Router do
       reason: reason,
       stack: Exception.format_stacktrace(stack)
     })
+
     View.render(conn, 500)
   end
 end
