@@ -65,6 +65,6 @@ defmodule IngressWeb.Router do
       stack: Exception.format_stacktrace(stack)
     })
 
-    View.render(conn, 500)
+    View.internal_server_error(conn)
   end
 end

@@ -13,6 +13,6 @@ defmodule IngressWeb.WebCoreRoutes do
     conn
     |> StructAdapter.adapt()
     |> @ingress.handle()
-    |> View.render(conn)
+    |> View.render_struct(conn)
   end
 end
