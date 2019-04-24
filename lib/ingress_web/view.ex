@@ -15,6 +15,7 @@ defmodule IngressWeb.View do
 
   def internal_server_error(conn), do: error(conn, 500, "500 Internal Server Error")
 
+  # TODO: handle unknown content type. I.e content.t != binary or map
   def put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
@@ -28,8 +29,6 @@ defmodule IngressWeb.View do
     |> put_resp_content_type("text/plain")
     |> put_response(status, content)
   end
-
-  # TODO: handle unknown content type. I.e content.t != binary or map
 
   defp add_response_headers(conn, struct) do
     struct.response.headers
