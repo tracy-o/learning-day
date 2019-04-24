@@ -25,6 +25,7 @@ defmodule Ingress.Processor do
   end
 
   def resp_pipeline(struct = %Struct{}) do
+    Loop.inc(struct)
     struct
   end
 

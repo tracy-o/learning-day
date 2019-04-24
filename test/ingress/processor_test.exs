@@ -42,4 +42,25 @@ defmodule Ingress.ProcessorTest do
              } = Processor.request_pipeline(@struct)
     end
   end
+
+  describe "Processor.resp_pipeline/1" do
+    @resp_struct StructHelper.build(
+              private: %{loop_id: "example_loop_id"},
+              response: %{http_status: "200"}
+            )
+    test "increments status" do 
+      Processor.resp_pipeline(@resp_struct)
+      assert %Struct{
+        debug: _debug,
+        private: %Struct.Private{
+          counter: %{"200" => 1},
+          loop_id: "example_loop_id",
+          origin: "https://origin.bbc.com/",
+          pipeline: ["MyTransformer1"]
+        },
+        request: _request,
+        response: _response
+      } = Processor.get_loop(@resp_struct)
+    end
+  end
 end
