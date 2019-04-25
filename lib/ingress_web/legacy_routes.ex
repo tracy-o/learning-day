@@ -22,7 +22,7 @@ defmodule IngressWeb.LegacyRoutes do
       |> @ingress.handle()
       |> View.render(conn)
     else
-      nil -> View.render(conn, 404)
+      nil -> View.not_found(conn)
     end
   end
 
