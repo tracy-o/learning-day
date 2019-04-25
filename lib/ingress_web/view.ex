@@ -22,7 +22,8 @@ defmodule IngressWeb.View do
     |> put_response(status, Poison.encode!(content))
   end
 
-  def put_response(conn, status, content) when is_binary(content), do: send_resp(conn, status, content)
+  def put_response(conn, status, content) when is_binary(content),
+    do: send_resp(conn, status, content)
 
   defp error(conn, status, content) do
     conn
