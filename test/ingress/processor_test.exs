@@ -51,15 +51,9 @@ defmodule Ingress.ProcessorTest do
     test "increments status" do 
       Processor.resp_pipeline(@resp_struct)
       assert %Struct{
-        debug: _debug,
         private: %Struct.Private{
-          counter: %{"200" => 1},
-          loop_id: "example_loop_id",
-          origin: "https://origin.bbc.com/",
-          pipeline: ["MyTransformer1"]
-        },
-        request: _request,
-        response: _response
+          counter: %{"200" => 1}
+        }
       } = Processor.get_loop(@resp_struct)
     end
   end
