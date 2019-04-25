@@ -49,10 +49,11 @@ defmodule Ingress.ProcessorTest do
               response: %{http_status: "200"}
             )
     test "increments status" do 
+      Ingress.LoopsRegistry.find_or_start(@resp_struct)
       Processor.resp_pipeline(@resp_struct)
       assert %Struct{
         private: %Struct.Private{
-          counter: %{"200" => 1}
+          counter: %{"200" => 1},
         }
       } = Processor.get_loop(@resp_struct)
     end
