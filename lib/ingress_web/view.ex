@@ -24,7 +24,16 @@ defmodule IngressWeb.View do
   def put_response(conn, status, content) when is_binary(content),
     do: send_resp(conn, status, content)
 
-  def put_response(conn, _, _), do: internal_server_error(conn)
+  def put_response(conn, _, content) do
+    ExMetrics.increment("error.view.render.unhandled_content_type")
+
+    Stump.log(:error, %{
+      msg: "Unhandled content type in the response. Expects a String or Map.",
+      content: content
+    })
+
+    internal_server_error(conn)
+  end
 
   defp error(conn, status, content) do
     conn
