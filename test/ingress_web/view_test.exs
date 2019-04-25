@@ -8,18 +8,9 @@ defmodule IngressWeb.ViewTest do
   doctest View
 
   defp build_struct_and_render(body) do
-    conn = conn(:get, "/_web_core")
-
-    struct =
-      StructHelper.build(
-        response: %{
-          body: body
-        }
-      )
-
-    View.render(struct, conn)
-
-    sent_resp(conn)
+    StructHelper.build(response: %{body: body})
+    |> View.render(conn(:get, "/_web_core"))
+    |> sent_resp()
   end
 
   test "Rendering response from a struct with a 200 HTML response" do
@@ -41,5 +32,25 @@ defmodule IngressWeb.ViewTest do
 
     assert status == 500
     assert body == "500 Internal Server Error"
+  end
+
+  test "Rendering a generic 500" do
+    {status, _headers, body} =
+      conn(:get, "/_web_core")
+      |> View.internal_server_error()
+      |> sent_resp()
+
+    assert status == 500
+    assert body == "500 Internal Server Error"
+  end
+
+  test "Rendering a generic 404" do
+    {status, _headers, body} =
+      conn(:get, "/_web_core")
+      |> View.not_found()
+      |> sent_resp()
+
+    assert status == 404
+    assert body == "404 Not Found"
   end
 end
