@@ -29,7 +29,7 @@ defmodule Ingress.MixProject do
       {:plug, "~> 1.7.1"},
       {:cowboy, "~> 2.4"},
       {:plug_cowboy, "~> 2.0"},
-      {:httpoison, "~> 1.5"},
+      {:mojito, "~> 0.2.2"},
       {:poison, "~> 3.1"},
       {:invoke_lambda, git: "https://github.com/bbc/elixir-invoke-lambda.git"},
       {:mock, "~> 0.3", only: :test},
