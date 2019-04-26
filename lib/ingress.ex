@@ -8,6 +8,6 @@ defmodule Ingress do
     |> Processor.get_loop()
     |> Processor.request_pipeline()
     |> Processor.perform_call()
-    |> Processor.resp_pipeline()
+    |> Processor.response_pipeline()
   end
 end
