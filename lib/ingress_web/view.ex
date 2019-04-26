@@ -15,7 +15,6 @@ defmodule IngressWeb.View do
 
   def internal_server_error(conn), do: error(conn, 500, "500 Internal Server Error")
 
-  # TODO: handle unknown content type. I.e content.t != binary or map
   def put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
@@ -24,6 +23,17 @@ defmodule IngressWeb.View do
 
   def put_response(conn, status, content) when is_binary(content),
     do: send_resp(conn, status, content)
+
+  def put_response(conn, _, content) do
+    ExMetrics.increment("error.view.render.unhandled_content_type")
+
+    Stump.log(:error, %{
+      msg: "Unhandled content type in the response. Expects a String or Map.",
+      content: content
+    })
+
+    internal_server_error(conn)
+  end
 
   defp error(conn, status, content) do
     conn
