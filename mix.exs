@@ -26,8 +26,6 @@ defmodule Ingress.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug, "~> 1.7.1"},
-      {:cowboy, "~> 2.4"},
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.5"},
       {:poison, "~> 3.1"},

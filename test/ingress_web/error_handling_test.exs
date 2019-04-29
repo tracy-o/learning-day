@@ -14,7 +14,7 @@ defmodule IngressWeb.ErrorHandlingTest do
 
       conn = conn(:get, "/_web_core")
 
-      assert_raise RuntimeError, "Something broke", fn ->
+      assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
         Router.call(conn, [])
       end
 
