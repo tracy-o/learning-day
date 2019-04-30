@@ -26,6 +26,11 @@ defmodule IngressWeb.HeadersTest do
       Router.call(conn, [])
     end
 
+    def make_404_call(body, headers = %{}, path) do
+      conn = conn(:get, path)
+      Router.call(conn, [])
+    end
+
     def test_content_type!(body, content_type) do
       conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/_web_core")
 
@@ -50,10 +55,16 @@ defmodule IngressWeb.HeadersTest do
   end
 
   describe "default response_headers" do
-    test "default response_headers are added" do
+    test "with a valid path default response_headers are added" do
       conn = make_call("<p>some html content</p>", %{}, "/_web_core")
 
       assert ["cache-control", "vary"] == get_header_keys(conn)
+    end
+
+    test "with an 404 path default response_headers are added" do
+      conn = make_404_call("<p>some html content</p>", %{}, "/_non_existing_path")
+
+      assert ["cache-control", "vary", "content-type"] == get_header_keys(conn)
     end
   end
 end
