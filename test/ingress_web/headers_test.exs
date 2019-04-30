@@ -7,8 +7,8 @@ defmodule IngressWeb.HeadersTest do
 
   use Test.Support.Helper, :mox
 
-  describe "content type responsse_headers" do
-    def make_call(body, headers = %{}) do
+  describe "content type response_headers" do
+    def make_call(body, headers = %{}, path) do
       struct_with_response =
         StructHelper.build(
           response: %{
@@ -22,12 +22,12 @@ defmodule IngressWeb.HeadersTest do
         struct_with_response
       end)
 
-      conn = conn(:get, "/_web_core")
+      conn = conn(:get, path)
       Router.call(conn, [])
     end
 
     def test_content_type!(body, content_type) do
-      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"})
+      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/_web_core")
 
       assert ["#{content_type}; charset=utf-8"] == get_resp_header(conn, "content-type")
     end
@@ -49,9 +49,9 @@ defmodule IngressWeb.HeadersTest do
     Enum.map(conn.resp_headers, fn header_tuple -> elem(header_tuple, 0) end)
   end
 
-  describe "default responsse_headers" do
-    test "default responsse_headers are added" do
-      conn = make_call("<p>some html content</p>", %{})
+  describe "default response_headers" do
+    test "default response_headers are added" do
+      conn = make_call("<p>some html content</p>", %{}, "/_web_core")
 
       assert ["cache-control", "vary"] == get_header_keys(conn)
     end
