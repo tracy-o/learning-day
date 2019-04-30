@@ -42,7 +42,7 @@ defmodule Ingress.Loop do
 
   @impl GenServer
   def handle_cast({:inc, http_status}, state) do
-    state = %{state | counter: Counter.inc(state.counter, http_status)}
+    state = %{state | counter: Counter.inc(state.counter, http_status, state.origin)}
 
     {:noreply, state}
   end

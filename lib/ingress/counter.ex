@@ -9,10 +9,15 @@ defmodule Ingress.Counter do
     %{}
   end
 
-  def inc(state, key) when is_error(key) do
-    state
-    |> Map.update(:errors, 1, &(&1 + 1))
-    |> Map.update(key, 1, &(&1 + 1))
+  # def inc(state, key) when is_error(key) do
+  #   state
+  #   |> Map.update(:errors, 1, &(&1 + 1))
+  #   |> Map.update(key, 1, &(&1 + 1))
+  # end
+
+  def inc(state, key, origin) when is_error(key) do
+    state = get_and_update_in(state[origin][:errors], &(&1 + 1))
+    state = get_and_update_in(state[origin][key], &(&1 + 1))
   end
 
   def inc(_state, key) when key == :error do

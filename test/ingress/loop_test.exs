@@ -15,7 +15,11 @@ defmodule Ingress.LoopTest do
   @req_struct StructHelper.build(private: %{loop_id: "legacy"})
   @req_struct_2 StructHelper.build(private: %{loop_id: "webcore"})
   @resp_struct StructHelper.build(
-                 private: %{loop_id: "legacy"},
+                 private: %{loop_id: "legacy", origin: "https://origin.bbc.com/" },
+                 response: %{http_status: @failure_status_code}
+               )
+  @alt_origin_resp_struct StructHelper.build(
+                 private: %{loop_id: "test", origin: "https://s3.aws.com/" },
                  response: %{http_status: @failure_status_code}
                )
 
@@ -37,6 +41,27 @@ defmodule Ingress.LoopTest do
            } = state
 
     assert state.origin == "https://s3.aws.com/"
+  end
+
+  test "returns a different count per origin" do
+    for _ <- 1..15 do
+      Loop.inc(@resp_struct)
+      Loop.inc(@alt_origin_resp_struct)
+    end
+    {:ok, 
+      %{
+        counter: %{
+          "https://origin.bbc.com/" => %{
+            unquote(@failure_status_code) => 15,
+            :errors => 15
+          },
+          "https://s3.aws.com/" => %{
+            unquote(@failure_status_code) => 15,
+            :errors => 15
+          }
+        }
+      } = Loop.state(@resp_struct)
+    }
   end
 
   test "resets after a specific time" do
