@@ -31,6 +31,20 @@ defmodule IngressWeb.HeadersTest do
       Router.call(conn, [])
     end
 
+    def make_500_call(_body, headers = %{}, path) do
+      IngressMock
+      |> expect(:handle, fn _ ->
+        raise("Something broke")
+      end)
+
+      conn = conn(:get, path)
+
+      assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
+        Router.call(conn, [])
+      end
+      conn
+    end
+
     def test_content_type!(body, content_type) do
       conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/_web_core")
 
@@ -61,10 +75,20 @@ defmodule IngressWeb.HeadersTest do
       assert ["cache-control", "vary"] == get_header_keys(conn)
     end
 
-    test "with an 404 path default response_headers are added" do
+    test "with a 404 path default response_headers are added" do
       conn = make_404_call("<p>some html content</p>", %{}, "/_non_existing_path")
 
       assert ["cache-control", "vary", "content-type"] == get_header_keys(conn)
+    end
+
+    test "with a 500 path default response_headers are added" do
+      conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
+
+      assert {_, [
+          {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
+          {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+          {"content-type", "text/plain; charset=utf-8"}
+        ], _} = sent_resp(conn)
     end
   end
 end
