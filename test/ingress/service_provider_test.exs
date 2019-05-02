@@ -4,7 +4,11 @@ defmodule Ingress.ServiceProviderTest do
   alias Ingress.{Services, ServiceProvider}
 
   describe "ServiceProvider.service_for/1" do
-    test "when origin is http/s it returns the HTTP Service" do
+    test "when origin is http it returns the HTTP Service" do
+      assert Services.HTTP == ServiceProvider.service_for("http://www.bbc.co.uk")
+    end
+
+    test "when origin is https it returns the HTTP Service" do
       assert Services.HTTP == ServiceProvider.service_for("https://www.bbc.co.uk")
     end
 
