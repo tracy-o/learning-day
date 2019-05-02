@@ -62,10 +62,9 @@ defmodule Ingress.Loop do
 
   defp origin_pointer(false, loop_id) do
     case Enum.member?(@legacy_routes, loop_id) do
-      true  -> Application.get_env(:ingress, :origin)
+      true -> Application.get_env(:ingress, :origin)
       false -> Application.get_env(:ingress, :lambda_presentation_layer)
     end
-    
   end
 
   defp origin_pointer(true, _) do

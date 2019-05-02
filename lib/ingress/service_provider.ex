@@ -6,7 +6,7 @@ defmodule Ingress.ServiceProvider do
   @impl ServiceProvider
   def service_for(origin) do
     case origin =~ ~r/^(https)/ do
-      true  -> Services.HTTP
+      true -> Services.HTTP
       false -> Services.Lambda
     end
   end

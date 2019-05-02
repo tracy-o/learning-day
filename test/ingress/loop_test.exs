@@ -7,14 +7,14 @@ defmodule Ingress.LoopTest do
   setup do
     LoopsSupervisor.start_loop("legacy")
     LoopsSupervisor.start_loop("webcore")
-    on_exit fn -> LoopsSupervisor.killall end
+    on_exit(fn -> LoopsSupervisor.killall() end)
   end
 
   @failure_status_code Enum.random(500..504)
 
-  @req_struct   StructHelper.build(private: %{loop_id: "legacy"})
+  @req_struct StructHelper.build(private: %{loop_id: "legacy"})
   @req_struct_2 StructHelper.build(private: %{loop_id: "webcore"})
-  @resp_struct  StructHelper.build(
+  @resp_struct StructHelper.build(
                  private: %{loop_id: "legacy"},
                  response: %{http_status: @failure_status_code}
                )
