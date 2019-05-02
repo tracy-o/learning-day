@@ -10,7 +10,7 @@ defmodule Ingress.Loop do
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), :state)
+    GenServer.call(via_tuple(name), {:state, name})
   end
 
   def inc(%Struct{
@@ -34,10 +34,10 @@ defmodule Ingress.Loop do
   end
 
   @impl GenServer
-  def handle_call(:state, _from, state) do
+  def handle_call({:state, loop_id}, _from, state) do
     exceed = Counter.exceed?(state.counter, :errors, @threshold)
 
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed)})}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id)})}, state}
   end
 
   @impl GenServer
@@ -58,9 +58,17 @@ defmodule Ingress.Loop do
     {:noreply, state}
   end
 
-  defp origin_pointer(false), do: Application.get_env(:ingress, :origin)
+  @legacy_routes ["mondo", "legacy", "legacy_page_type", "legacy_page_type_with_id"]
 
-  defp origin_pointer(true) do
+  defp origin_pointer(false, loop_id) do
+    case Enum.member?(@legacy_routes, loop_id) do
+      true  -> Application.get_env(:ingress, :origin)
+      false -> Application.get_env(:ingress, :lambda_presentation_layer)
+    end
+    
+  end
+
+  defp origin_pointer(true, _) do
     ExMetrics.increment("error.loop.threshold.exceeded")
     Stump.log(:error, "Error threshold exceeded for loop")
     Application.get_env(:ingress, :fallback)

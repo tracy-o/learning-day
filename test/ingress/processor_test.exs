@@ -1,7 +1,7 @@
 defmodule Ingress.ProcessorTest do
   use ExUnit.Case
 
-  alias Ingress.{Processor, Struct}
+  alias Ingress.{Processor, Struct, Services, LoopsSupervisor}
   alias Test.Support.StructHelper
 
   describe "Processor.get_loop/1" do
@@ -42,4 +42,10 @@ defmodule Ingress.ProcessorTest do
              } = Processor.request_pipeline(@struct)
     end
   end
+
+  # describe "Processor.perform_call/1" do
+  #   test "when origin is http/s it dispatches the HTTP Service" do
+  #     assert "I am the HTTP service" == Processor.perform_call(StructHelper.build(private: %{origin: "https://www.bbc.co.uk"}))
+  #   end
+  # end
 end

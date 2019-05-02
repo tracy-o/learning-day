@@ -19,7 +19,7 @@ defmodule IngressWeb.LegacyTest do
     test "GET homepage request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["legacy"]},
+                              private: %Private{loop_id: "legacy"},
                               request: %Request{path: "/_legacy"}
                             } ->
         @struct_with_html_response
@@ -38,7 +38,7 @@ defmodule IngressWeb.LegacyTest do
     test "GET page-type request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["legacy", "page_type"]},
+                              private: %Private{loop_id: "legacy_page_type"},
                               request: %Request{path: "/_legacy/page-type"}
                             } ->
         @struct_with_html_response
@@ -57,7 +57,7 @@ defmodule IngressWeb.LegacyTest do
     test "GET page-type with id request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["legacy", "page_type_with_id"]},
+                              private: %Private{loop_id: "legacy_page_type_with_id"},
                               request: %Request{path: "/_legacy/page-type/123"}
                             } ->
         @struct_with_html_response
@@ -76,7 +76,7 @@ defmodule IngressWeb.LegacyTest do
     test "POST homepage reqeust to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: ["legacy"]},
+                              private: %Private{loop_id: "legacy"},
                               request: %Request{
                                 path: "/_legacy",
                                 payload: ~s({"query":"some data please"})

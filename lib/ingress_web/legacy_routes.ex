@@ -8,10 +8,10 @@ defmodule IngressWeb.LegacyRoutes do
   def init(options), do: options
 
   @routes [
-    {~r/mondo/, ["mondo"]},
-    {~r/_legacy$/, ["legacy"]},
-    {~r/_legacy\/page-type$/, ["legacy", "page_type"]},
-    {~r/_legacy\/page-type\/123$/, ["legacy", "page_type_with_id"]}
+    {~r/mondo/, "mondo"},
+    {~r/_legacy$/, "legacy"},
+    {~r/_legacy\/page-type$/, "legacy_page_type"},
+    {~r/_legacy\/page-type\/123$/, "legacy_page_type_with_id"}
   ]
 
   def call(%{} = conn, _opts) do
