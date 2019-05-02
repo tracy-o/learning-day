@@ -8,7 +8,8 @@ config :ingress,
   lambda_business_layer: "business-layer",
   lambda_service_worker: "service-worker",
   lambda_service_worker_role: "service-worker-arn",
-  origin: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com"
+  origin: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com",
+  service_provider: Ingress.ServiceProvider
 
 config :ex_metrics,
   send_metrics: false

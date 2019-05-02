@@ -9,6 +9,7 @@ config :ingress, lambda_service_worker_role: System.get_env("LAMBDA_SERVICE_WORK
 config :ingress, http_cert: System.get_env("HTTP_CERT")
 config :ingress, http_cert_key: System.get_env("HTTP_CERT_KEY")
 config :ingress, http_cert_ca: System.get_env("HTTP_CERT_CA")
+config :ingress, service_provider: Ingress.ServiceProvider
 
 config :ex_metrics,
   send_metrics: true
