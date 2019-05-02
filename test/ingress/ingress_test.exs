@@ -4,7 +4,7 @@ defmodule IngressTest do
   use Test.Support.Helper, :mox
 
   alias Ingress.Struct
-  alias Ingress.Services.LambdaMock
+  alias Ingress.Services.ServiceMock
   alias Test.Support.StructHelper
 
   @get_request_struct StructHelper.build(
@@ -31,7 +31,7 @@ defmodule IngressTest do
                              )
 
   test "GET request invokes lambda service with WebCoreLambda transformer" do
-    LambdaMock
+    ServiceMock
     |> expect(:dispatch, fn %Struct{
                               private: %Struct.Private{loop_id: "test_loop"},
                               request: %Struct.Request{
@@ -46,7 +46,7 @@ defmodule IngressTest do
   end
 
   test "POST request invokes lambda service with WebCoreLambda transformer" do
-    LambdaMock
+    ServiceMock
     |> expect(:dispatch, fn %Struct{
                               private: %Struct.Private{loop_id: "test_loop"},
                               request: %Struct.Request{

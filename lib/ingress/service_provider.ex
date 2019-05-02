@@ -1,13 +1,13 @@
 defmodule Ingress.ServiceProvider do
-  alias Ingress.{Services}
+  alias Ingress.{Services, Behaviours.ServiceProvider}
 
-  @http_service Application.get_env(:ingress, :http_service, Services.HTTP)
-  @lamdba_service Application.get_env(:ingress, :lambda_service, Services.Lambda)
+  @behaviour ServiceProvider
 
+  @impl ServiceProvider
   def service_for(origin) do
     case origin =~ ~r/^(https)/ do
-      true  -> @http_service
-      false -> @lamdba_service
+      true  -> Services.HTTP
+      false -> Services.Lambda
     end
   end
 end
