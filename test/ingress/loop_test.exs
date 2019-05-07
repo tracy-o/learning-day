@@ -1,21 +1,21 @@
 defmodule Ingress.LoopTest do
   use ExUnit.Case, async: true
 
-  alias Ingress.{Loop, LoopsSupervisor}
+  alias Ingress.{Loop, LoopsSupervisor, Struct, LoopsRegistry}
   alias Test.Support.StructHelper
 
   setup do
-    DynamicSupervisor.stop(LoopsSupervisor)
-    Process.sleep(5)
-    LoopsSupervisor.start_loop("test")
-    :ok
+    LoopsSupervisor.start_loop("legacy")
+    LoopsSupervisor.start_loop("webcore")
+    on_exit(fn -> LoopsSupervisor.kill_all() end)
   end
 
   @failure_status_code Enum.random(500..504)
 
-  @req_struct StructHelper.build(private: %{loop_id: "test"})
+  @req_struct StructHelper.build(private: %{loop_id: "legacy"})
+  @req_struct_2 StructHelper.build(private: %{loop_id: "webcore"})
   @resp_struct StructHelper.build(
-                 private: %{loop_id: "test"},
+                 private: %{loop_id: "legacy"},
                  response: %{http_status: @failure_status_code}
                )
 
@@ -47,9 +47,17 @@ defmodule Ingress.LoopTest do
     {:ok, state} = Loop.state(@req_struct)
     assert state.origin == "https://s3.aws.com/"
 
-    Process.sleep(Application.get_env(:ingress, :errors_interval) + 100)
+    Process.sleep(Application.get_env(:ingress, :circuit_breaker_reset_interval) + 100)
 
     {:ok, state} = Loop.state(@req_struct)
     assert state.origin == Application.get_env(:ingress, :origin)
+  end
+
+  test "decides the origin based on the loop_id" do
+    {:ok, state} = Loop.state(@req_struct)
+    assert state.origin == Application.get_env(:ingress, :origin)
+
+    {:ok, state} = Loop.state(@req_struct_2)
+    assert state.origin == Application.get_env(:ingress, :lambda_presentation_layer)
   end
 end

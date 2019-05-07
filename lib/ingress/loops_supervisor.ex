@@ -21,6 +21,15 @@ defmodule Ingress.LoopsSupervisor do
     end
   end
 
+  def kill_all do
+    DynamicSupervisor.which_children(__MODULE__)
+    |> Enum.each(&kill_child/1)
+  end
+
+  defp kill_child({_, pid, _, _}) do
+    Process.exit(pid, :stop)
+  end
+
   defp start_child(name) do
     DynamicSupervisor.start_child(
       __MODULE__,
