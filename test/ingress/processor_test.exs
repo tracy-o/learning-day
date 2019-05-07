@@ -1,7 +1,7 @@
 defmodule Ingress.ProcessorTest do
   use ExUnit.Case
 
-  alias Ingress.{Processor, Struct, Services, LoopsSupervisor}
+  alias Ingress.{Processor, Struct}
   alias Test.Support.StructHelper
 
   describe "Processor.get_loop/1" do
