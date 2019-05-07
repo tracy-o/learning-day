@@ -7,7 +7,7 @@ defmodule Ingress.LoopTest do
   setup do
     LoopsSupervisor.start_loop("legacy")
     LoopsSupervisor.start_loop("webcore")
-    on_exit(fn -> LoopsSupervisor.killall() end)
+    on_exit(fn -> LoopsSupervisor.kill_all() end)
   end
 
   @failure_status_code Enum.random(500..504)

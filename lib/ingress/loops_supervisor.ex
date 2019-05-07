@@ -21,7 +21,7 @@ defmodule Ingress.LoopsSupervisor do
     end
   end
 
-  def killall do
+  def kill_all do
     DynamicSupervisor.which_children(__MODULE__)
     |> Enum.each(&kill_child/1)
   end
