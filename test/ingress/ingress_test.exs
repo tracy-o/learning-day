@@ -9,7 +9,7 @@ defmodule IngressTest do
 
   @get_request_struct StructHelper.build(
                         private: %{
-                          loop_id: "test_loop"
+                          loop_id: ["test_loop"]
                         }
                       )
 
@@ -19,7 +19,7 @@ defmodule IngressTest do
                            payload: ~s({"some": "data please"})
                          },
                          private: %{
-                           loop_id: "test_loop"
+                           loop_id: ["test_loop"]
                          }
                        )
 
@@ -33,7 +33,7 @@ defmodule IngressTest do
   test "GET request invokes lambda service with WebCoreLambda transformer" do
     ServiceMock
     |> expect(:dispatch, fn %Struct{
-                              private: %Struct.Private{loop_id: "test_loop"},
+                              private: %Struct.Private{loop_id: ["test_loop"]},
                               request: %Struct.Request{
                                 path: "/_web_core",
                                 method: "GET"
@@ -48,7 +48,7 @@ defmodule IngressTest do
   test "POST request invokes lambda service with WebCoreLambda transformer" do
     ServiceMock
     |> expect(:dispatch, fn %Struct{
-                              private: %Struct.Private{loop_id: "test_loop"},
+                              private: %Struct.Private{loop_id: ["test_loop"]},
                               request: %Struct.Request{
                                 path: "/_web_core",
                                 payload: ~s({"some": "data please"}),
