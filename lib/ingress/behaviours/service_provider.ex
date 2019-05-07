@@ -1,4 +1,3 @@
 defmodule Ingress.Behaviours.ServiceProvider do
-  alias Ingress.Behaviours.Service
-  @callback service_for(String.t()) :: Service
+  @callback service_for(String.t()) :: Ingress.Behaviours.Service
 end
