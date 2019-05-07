@@ -9,11 +9,16 @@ defmodule Ingress.Services.Lambda do
   def dispatch(struct = %Struct{request: request}) do
     {status, body} =
       ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-        InvokeLambda.invoke(lambda_function(), %{
-          instance_role_name: instance_role_name(),
-          lambda_role_arn: lambda_role_arn(),
-          function_payload: request
-        })
+        {:ok, %{body: credentials}} =
+          ExAws.STS.assume_role(lambda_role_arn(), "lambda-role")
+          |> ExAws.request()
+
+        ExAws.Lambda.invoke(instance_role_name(), request, %{})
+        |> ExAws.request(
+          security_token: credentials.session_token,
+          access_key_id: credentials.access_key_id,
+          secret_access_key: credentials.secret_access_key
+        )
       end
 
     ExMetrics.increment("service.lambda.response.#{status}")
