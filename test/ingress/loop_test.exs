@@ -47,7 +47,7 @@ defmodule Ingress.LoopTest do
     {:ok, state} = Loop.state(@req_struct)
     assert state.origin == "https://s3.aws.com/"
 
-    Process.sleep(Application.get_env(:ingress, :errors_interval) + 100)
+    Process.sleep(Application.get_env(:ingress, :circuit_breaker_reset_interval) + 100)
 
     {:ok, state} = Loop.state(@req_struct)
     assert state.origin == Application.get_env(:ingress, :origin)

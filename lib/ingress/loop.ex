@@ -4,7 +4,7 @@ defmodule Ingress.Loop do
   alias Ingress.{Counter, LoopsRegistry, Struct}
 
   @threshold Application.get_env(:ingress, :errors_threshold)
-  @interval Application.get_env(:ingress, :errors_interval)
+  @interval Application.get_env(:ingress, :circuit_breaker_reset_interval)
   def start_link(name) do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end

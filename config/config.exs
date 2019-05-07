@@ -29,8 +29,7 @@ use Mix.Config
 #
 
 config :ingress,
-  # 60sec window before resetting the circuit breaker
-  errors_interval: 60_000,
+  circuit_breaker_reset_interval: 60_000,
   fallback: System.get_env("INGRESS_FALLBACK"),
   origin: System.get_env("INGRESS_ORIGIN"),
   errors_threshold: 1_000,

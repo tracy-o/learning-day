@@ -1,8 +1,7 @@
 use Mix.Config
 
 config :ingress,
-  # 1 sec window before resetting the circuit breaker
-  errors_interval: 1_000,
+  circuit_breaker_reset_interval: 1_000,
   errors_threshold: 20,
   fallback: "https://s3.aws.com/",
   http_client: Ingress.Services.HTTPClientMock,
