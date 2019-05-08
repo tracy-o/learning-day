@@ -37,7 +37,7 @@ defmodule IngressWeb.View do
 
   defp error(conn, status, content) do
     conn
-    |> add_default_headers(%Struct{response: response = %Struct.Response{http_status: status}})
+    |> add_default_headers(%Struct{response: %Struct.Response{http_status: status}})
     |> put_resp_content_type("text/plain")
     |> put_response(status, content)
   end

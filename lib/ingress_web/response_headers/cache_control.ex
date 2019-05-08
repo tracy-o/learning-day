@@ -16,5 +16,5 @@ defmodule IngressWeb.ResponseHeaders.CacheControl do
 
   defp max_age(status) when status in [404, 500], do: 5
 
-  defp max_age(_response), do: 30
+  defp max_age(_status), do: 30
 end
