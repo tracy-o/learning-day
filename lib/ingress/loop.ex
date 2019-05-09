@@ -13,11 +13,11 @@ defmodule Ingress.Loop do
     GenServer.call(via_tuple(name), {:state, name})
   end
 
-  def inc(%Struct{
-        private: %Struct.Private{loop_id: name},
+  def inc(struct = %Struct{
+        private: %Struct.Private{loop_id: name, origin: origin},
         response: %Struct.Response{http_status: http_status}
       }) do
-    GenServer.cast(via_tuple(name), {:inc, http_status})
+    GenServer.cast(via_tuple(name), {:inc, http_status, origin})
   end
 
   defp via_tuple(name) do
@@ -41,8 +41,8 @@ defmodule Ingress.Loop do
   end
 
   @impl GenServer
-  def handle_cast({:inc, http_status}, state) do
-    state = %{state | counter: Counter.inc(state.counter, http_status, state.origin)}
+  def handle_cast({:inc, http_status, origin}, state) do
+    state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
 
     {:noreply, state}
   end
