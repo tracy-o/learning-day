@@ -34,15 +34,14 @@ defmodule Ingress.Counter do
   end
 
   defp increment_key(counter, origin, key) do
+    ensure_origin(counter, origin)
+    {_, counter} = get_and_update_in([origin, key], &{&1, (&1 || 0) + 1})
     counter
-    |> ensure_origin(origin)
-    |> get_and_update_in([origin, key], &{&1, (&1||0) + 1})  
-    |> elem(1)
   end
 
   defp ensure_origin(counter, origin) do
     case Map.has_key?(counter, origin) do
-      true  -> counter
+      true -> counter
       false -> Map.put(counter, origin, %{errors: 0})
     end
   end
