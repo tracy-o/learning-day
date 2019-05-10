@@ -57,6 +57,9 @@ defmodule Ingress.LoopTest do
     test "when there are errors" do
       for _ <- 1..15 do
         Loop.inc(@resp_struct)
+      end
+
+      for _ <- 1..9 do
         Loop.inc(@resp_struct_2)
       end
 
@@ -68,8 +71,8 @@ defmodule Ingress.LoopTest do
                     :errors => 15
                   },
                   "https://s3.aws.com/" => %{
-                    unquote(@failure_status_code) => 15,
-                    :errors => 15
+                    unquote(@failure_status_code) => 9,
+                    :errors => 9
                   }
                 }
               }} = Loop.state(@resp_struct)
@@ -94,7 +97,7 @@ defmodule Ingress.LoopTest do
               }} = Loop.state(@resp_struct)
     end
 
-    test "when there are errors and no errors" do
+    test "when there are a mix of errors and success responses" do
       for _ <- 1..15 do
         Loop.inc(@non_error_resp_struct)
         Loop.inc(@resp_struct)
