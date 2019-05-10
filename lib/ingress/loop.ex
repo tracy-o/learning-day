@@ -13,7 +13,7 @@ defmodule Ingress.Loop do
     GenServer.call(via_tuple(name), {:state, name})
   end
 
-  def inc(struct = %Struct{
+  def inc(%Struct{
         private: %Struct.Private{loop_id: name, origin: origin},
         response: %Struct.Response{http_status: http_status}
       }) do

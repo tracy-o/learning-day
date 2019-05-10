@@ -23,7 +23,6 @@ defmodule Ingress.CounterTest do
       |> Counter.inc(500)
       |> Counter.inc(502)
       |> Counter.inc(408)
-
     assert Counter.get(state, :errors) == 4
   end
 

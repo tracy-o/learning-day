@@ -45,8 +45,11 @@ defmodule Ingress.ProcessorTest do
 
   describe "Processor.response_pipeline/1" do
     @resp_struct StructHelper.build(
-              private: %{loop_id: "example_loop_id"},
-              response: %{http_status: "200"}
+              private: %{
+                loop_id: "example_loop_id",
+                origin: "https://origin.bbc.co.uk/"
+              },
+              response: %{http_status: 501}
             )
     
     test "increments status" do 
@@ -54,7 +57,10 @@ defmodule Ingress.ProcessorTest do
       Processor.response_pipeline(@resp_struct)
       assert {:ok, 
         %{
-          counter: %{"200" => 1}
+          counter:
+            %{ "https://origin.bbc.co.uk/" => %{
+              501 => 1, :errors => 1}
+          }
         }
       } = Ingress.Loop.state(@resp_struct)
     end

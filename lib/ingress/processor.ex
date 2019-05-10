@@ -26,7 +26,6 @@ defmodule Ingress.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     Loop.inc(struct)
-    #add sending status per origin
     struct
   end
 
