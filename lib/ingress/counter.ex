@@ -17,7 +17,7 @@ defmodule Ingress.Counter do
     |> Map.update(:errors, 1, &(&1 + 1))
   end
 
-  def inc(_state, key) when key == :error do
+  def inc(_state, key, _origin) when key == :error do
     {:error, "key not allowed: ':error'"}
   end
 

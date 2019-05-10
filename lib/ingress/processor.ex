@@ -1,5 +1,5 @@
 defmodule Ingress.Processor do
-  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, Services, ServiceProvider}
+  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, ServiceProvider}
 
   @service_provider Application.get_env(:ingress, :service_provider, ServiceProvider)
 
