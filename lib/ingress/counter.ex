@@ -9,20 +9,20 @@ defmodule Ingress.Counter do
     %{}
   end
 
-  def inc(counter, key, origin) when is_error(key) do
+  def inc(counter, status, origin) when is_error(status) do
     counter
-    |> increment_key(origin, key)
+    |> increment_key(origin, status)
     |> increment_key(origin, :errors)
     |> Map.update(:errors, 1, &(&1 + 1))
   end
 
-  def inc(_state, key, _origin) when key == :error do
+  def inc(_state, status, _origin) when status == :error do
     {:error, "key not allowed: ':error'"}
   end
 
-  def inc(counter, key, origin) do
+  def inc(counter, status, origin) do
     counter
-    |> increment_key(origin, key)
+    |> increment_key(origin, status)
   end
 
   def exceed?(state, key, threshold) do
@@ -34,8 +34,6 @@ defmodule Ingress.Counter do
   end
 
   defp increment_key(counter, origin, key) do
-    ensure_origin(counter, origin)
-
     counter
     |> ensure_origin(origin)
     |> get_and_update_in([origin, key], &{&1, (&1 || 0) + 1})
