@@ -16,7 +16,7 @@ defmodule Ingress.Services.HTTP do
     end
   end
 
-  defp handle_response({{:ok, %HTTPoison.Response{status_code: status, body: body}}, struct}) do
+  defp handle_response({{:ok, %Mojito.Response{status_code: status, body: body}}, struct}) do
     ExMetrics.increment("service.HTTP.response.#{status}")
     if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})

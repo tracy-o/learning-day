@@ -27,7 +27,7 @@ defmodule Ingress.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"},
-      {:httpoison, "~> 1.5"},
+      {:mojito, "~> 0.2.2"},
       {:poison, "~> 3.1"},
       {:invoke_lambda, git: "https://github.com/bbc/elixir-invoke-lambda.git"},
       {:mock, "~> 0.3", only: :test},

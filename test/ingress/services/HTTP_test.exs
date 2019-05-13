@@ -13,7 +13,7 @@ defmodule Ingress.Services.HTTPTest do
                )
 
   @generic_response {:ok,
-                     %HTTPoison.Response{
+                     %Mojito.Response{
                        status_code: 200,
                        headers: [{"content-type", "application/json"}],
                        body: "{}"
