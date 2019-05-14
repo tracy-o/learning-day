@@ -1,5 +1,5 @@
 defmodule Ingress.Processor do
-  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, Services, ServiceProvider}
+  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, ServiceProvider}
 
   @service_provider Application.get_env(:ingress, :service_provider, ServiceProvider)
 
@@ -24,7 +24,8 @@ defmodule Ingress.Processor do
     @service_provider.service_for(origin).dispatch(struct)
   end
 
-  def resp_pipeline(struct = %Struct{}) do
+  def response_pipeline(struct = %Struct{}) do
+    Loop.inc(struct)
     struct
   end
 
