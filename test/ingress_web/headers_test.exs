@@ -42,6 +42,7 @@ defmodule IngressWeb.HeadersTest do
       assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
         Router.call(conn, [])
       end
+
       conn
     end
 
@@ -70,35 +71,41 @@ defmodule IngressWeb.HeadersTest do
 
   describe "default response_headers" do
     test "with a valid path default response_headers are added" do
-      conn = make_call("<p>some html content</p>", %{"content-type" => "text/html; charset=utf-8"}, "/_web_core")
+      conn =
+        make_call(
+          "<p>some html content</p>",
+          %{"content-type" => "text/html; charset=utf-8"},
+          "/_web_core"
+        )
 
       assert {200,
-      [
-        {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
-        {"content-type", "text/html; charset=utf-8"},
-        {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
-      ], "<p>some html content</p>"} == sent_resp(conn)
+              [
+                {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
+                {"content-type", "text/html; charset=utf-8"},
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"}
+              ], "<p>some html content</p>"} == sent_resp(conn)
     end
 
     test "with a 404 path default response_headers are added" do
       conn = make_404_call("<p>some html content</p>", %{}, "/_non_existing_path")
 
       assert {404,
-      [
-        {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
-        {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
-        {"content-type", "text/plain; charset=utf-8"}
-      ], "404 Not Found"} == sent_resp(conn)
+              [
+                {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+                {"content-type", "text/plain; charset=utf-8"}
+              ], "404 Not Found"} == sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
       conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
 
-      assert {500, [
-          {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
-          {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
-          {"content-type", "text/plain; charset=utf-8"}
-        ], "500 Internal Server Error"} = sent_resp(conn)
+      assert {500,
+              [
+                {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+                {"content-type", "text/plain; charset=utf-8"}
+              ], "500 Internal Server Error"} = sent_resp(conn)
     end
   end
 end
