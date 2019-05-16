@@ -7,8 +7,8 @@ defmodule IngressWeb.HeadersTest do
 
   use Test.Support.Helper, :mox
 
-  describe "content type responsse_headers" do
-    def make_call(body, headers = %{}) do
+  describe "content type response_headers" do
+    def make_call(body, headers = %{}, path) do
       struct_with_response =
         StructHelper.build(
           response: %{
@@ -22,12 +22,31 @@ defmodule IngressWeb.HeadersTest do
         struct_with_response
       end)
 
-      conn = conn(:get, "/_web_core")
+      conn = conn(:get, path)
       Router.call(conn, [])
     end
 
+    def make_404_call(body, headers = %{}, path) do
+      conn = conn(:get, path)
+      Router.call(conn, [])
+    end
+
+    def make_500_call(_body, headers = %{}, path) do
+      IngressMock
+      |> expect(:handle, fn _ ->
+        raise("Something broke")
+      end)
+
+      conn = conn(:get, path)
+
+      assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
+        Router.call(conn, [])
+      end
+      conn
+    end
+
     def test_content_type!(body, content_type) do
-      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"})
+      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/_web_core")
 
       assert ["#{content_type}; charset=utf-8"] == get_resp_header(conn, "content-type")
     end
@@ -49,11 +68,37 @@ defmodule IngressWeb.HeadersTest do
     Enum.map(conn.resp_headers, fn header_tuple -> elem(header_tuple, 0) end)
   end
 
-  describe "default responsse_headers" do
-    test "default responsse_headers are added" do
-      conn = make_call("<p>some html content</p>", %{})
+  describe "default response_headers" do
+    test "with a valid path default response_headers are added" do
+      conn = make_call("<p>some html content</p>", %{"content-type" => "text/html; charset=utf-8"}, "/_web_core")
 
-      assert ["cache-control", "vary"] == get_header_keys(conn)
+      assert {200,
+      [
+        {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
+        {"content-type", "text/html; charset=utf-8"},
+        {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+      ], "<p>some html content</p>"} == sent_resp(conn)
+    end
+
+    test "with a 404 path default response_headers are added" do
+      conn = make_404_call("<p>some html content</p>", %{}, "/_non_existing_path")
+
+      assert {404,
+      [
+        {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+        {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+        {"content-type", "text/plain; charset=utf-8"}
+      ], "404 Not Found"} == sent_resp(conn)
+    end
+
+    test "with a 500 path default response_headers are added" do
+      conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
+
+      assert {500, [
+          {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+          {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+          {"content-type", "text/plain; charset=utf-8"}
+        ], "500 Internal Server Error"} = sent_resp(conn)
     end
   end
 end
