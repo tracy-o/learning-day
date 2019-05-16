@@ -35,6 +35,7 @@ defmodule IngressWeb.View do
     internal_server_error(conn)
   end
 
+  # TODO: Should we set the content type to be relating to the original request, as per this discussion: https://github.com/bbc/ingress/pull/41#discussion_r281946726
   defp error(conn, status, content) do
     conn
     |> add_default_headers(%Struct{response: %Struct.Response{http_status: status}})
