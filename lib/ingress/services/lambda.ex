@@ -5,6 +5,8 @@ defmodule Ingress.Services.Lambda do
   alias Ingress.Behaviours.Service
   @behaviour Service
 
+  @lambda_client Application.get_env(:ingress, :lambda_client, LambdaClient)
+
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
     {status, body} =

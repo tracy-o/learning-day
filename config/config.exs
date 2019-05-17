@@ -38,7 +38,8 @@ config :ingress,
 config :logger, :console, format: "$message\n"
 
 config :ex_aws,
-  region: "eu-west-1"
+  region: "eu-west-1",
+  http_client: Ingress.LambdaClient
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"

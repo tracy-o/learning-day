@@ -27,7 +27,7 @@ defmodule Ingress.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"},
-      {:mojito, "~> 0.2.2"},
+      {:mojito, "~> 0.3.0"},
       {:poison, "~> 3.1"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_sts, "~> 2.0"},
