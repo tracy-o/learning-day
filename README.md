@@ -1,5 +1,4 @@
 # Ingress
-[![Build Status](https://travis-ci.org/bbc/ingress.svg?branch=master)](https://travis-ci.org/bbc/ingress)
 
 ## What is Ingress
 
