@@ -39,7 +39,7 @@ config :logger, :console, format: "$message\n"
 
 config :ex_aws,
   region: "eu-west-1",
-  http_client: Ingress.LambdaClient
+  http_client: Mojito
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"

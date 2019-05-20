@@ -5,6 +5,7 @@ config :ingress,
   errors_threshold: 20,
   fallback: "https://s3.aws.com/",
   http_client: Ingress.HTTPClientMock,
+  lambda_client: Ingress.LambdaClientMock,
   ingress: IngressMock,
   instance_role_name: "ec2-role",
   lambda_business_layer: "business-layer",
@@ -18,7 +19,7 @@ config :ingress,
 
 config :ex_aws,
   region: "eu-west-1",
-  http_client: Ingress.LambdaClientMock
+  http_client: Mojito
 
 config :ex_metrics,
   send_metrics: false
