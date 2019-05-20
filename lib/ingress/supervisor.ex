@@ -5,22 +5,16 @@ defmodule Ingress.Supervisor do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  def children(env: :prod) do
-    [
-      {IngressWeb.Router, [scheme: :https, port: 7443]},
-      {IngressWeb.Router, [scheme: :http, port: 7080]}
-    ] ++ default_children()
-  end
-
   def children(env: env) do
-    port =
+    router_options =
       case env do
-        :test -> 7080
-        :dev -> 7081
+        :test -> [scheme: :http, port: 7081]
+        :dev -> [scheme: :http, port: 7080]
+        :prod -> [scheme: :https, port: 7443]
       end
 
     [
-      {IngressWeb.Router, [scheme: :http, port: port]}
+      {IngressWeb.Router, router_options}
     ] ++ default_children()
   end
 
