@@ -1,4 +1,5 @@
 Mox.defmock(IngressMock, for: Ingress)
 Mox.defmock(Ingress.Services.ServiceMock, for: Ingress.Behaviours.Service)
 Mox.defmock(Ingress.HTTPClientMock, for: Ingress.HTTPClient)
+Mox.defmock(Ingress.LambdaClientMock, for: Ingress.LambdaClient)
 ExUnit.start(trace: true)
