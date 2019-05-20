@@ -9,7 +9,13 @@ defmodule Ingress.Services.Lambda do
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
-    {status, body} = @lambda_client.call_lambda(instance_role_name(), lambda_role_arn(), lambda_function(), request)
+    {status, body} =
+      @lambda_client.call_lambda(
+        instance_role_name(),
+        lambda_role_arn(),
+        lambda_function(),
+        request
+      )
 
     ExMetrics.increment("service.lambda.response.#{status}")
     if status > 200, do: log(status, body, struct)
