@@ -1,4 +1,4 @@
-defmodule Ingress.Services.HTTPClientMock do
+defmodule Ingress.HTTPClientMock do
   @behaviour Ingress.HTTPClient
   alias Ingress.HTTPClient
 

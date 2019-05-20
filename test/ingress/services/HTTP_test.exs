@@ -1,5 +1,5 @@
 defmodule Ingress.Services.HTTPTest do
-  alias Ingress.Services.HTTPClientMock
+  alias Ingress.HTTPClientMock
   alias Ingress.Services.HTTP
   alias Test.Support.StructHelper
 
