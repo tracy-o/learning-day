@@ -1,6 +1,6 @@
 # Elixir & Erlang
 
-Elixir builds on top of Erlang. Erlang's design goals are to abstract away many of the problems of designing and deploying highly available, concurrent, fault-tolerant systems.
+EElixir compiles to Erlang with no performance loss. Erlang's design goals are to abstract away many of the problems of designing and deploying highly available, concurrent, fault-tolerant systems.
 
 ## The Web is concurrent
 

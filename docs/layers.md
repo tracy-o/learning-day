@@ -55,7 +55,7 @@ Some transformers, at the beginning and end of the pipeline are implicit, while 
 Internally the list of transformers will be represented by a list of symbols:
  `pipeline = [:t1, :t2, :t3]`.
 
-![alt text](./docs/pipeline.png "Pipeline")
+![alt text](./pipeline.png "Pipeline")
 
 
 ## Services
