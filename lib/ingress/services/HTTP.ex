@@ -2,9 +2,9 @@ defmodule Ingress.Services.HTTP do
   use ExMetrics
 
   alias Ingress.Behaviours.Service
-  alias Ingress.{Struct}
+  alias Ingress.{Clients, Struct}
 
-  @http_client Application.get_env(:ingress, :http_client, HTTPClient)
+  @http_client Application.get_env(:ingress, :http_client, Clients.HTTP)
 
   @behaviour Service
 

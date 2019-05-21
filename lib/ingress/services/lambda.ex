@@ -1,11 +1,11 @@
 defmodule Ingress.Services.Lambda do
   use ExMetrics
 
-  alias Ingress.Struct
+  alias Ingress.{Clients, Struct}
   alias Ingress.Behaviours.Service
   @behaviour Service
 
-  @lambda_client Application.get_env(:ingress, :lambda_client, LambdaClient)
+  @lambda_client Application.get_env(:ingress, :lambda_client, Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do

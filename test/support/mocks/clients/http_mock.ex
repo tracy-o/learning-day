@@ -1,6 +1,6 @@
-defmodule Ingress.HTTPClientMock do
-  @behaviour Ingress.HTTPClient
-  alias Ingress.HTTPClient
+defmodule Ingress.Clients.HTTPMock do
+  @behaviour Ingress.Clients.HTTP
+  alias Ingress.Clients.HTTP
 
   @generic_response {:ok,
                      %Mojito.Response{
@@ -9,8 +9,8 @@ defmodule Ingress.HTTPClientMock do
                        body: "{}"
                      }}
 
-  @impl HTTPClient
+  @impl HTTP
   def get(_host, _path, _headers \\ [], _options \\ []), do: @generic_response
-  @impl HTTPClient
+  @impl HTTP
   def post(_host, _path, _body, _headers \\ [], _options \\ []), do: @generic_response
 end

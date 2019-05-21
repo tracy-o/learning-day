@@ -1,5 +1,5 @@
 defmodule Ingress.Services.HTTPTest do
-  alias Ingress.HTTPClientMock
+  alias Ingress.Clients
   alias Ingress.Services.HTTP
   alias Test.Support.StructHelper
 
@@ -21,14 +21,14 @@ defmodule Ingress.Services.HTTPTest do
 
   describe "HTTP service" do
     test "get returns a response" do
-      HTTPClientMock
+      Clients.HTTPMock
       |> expect(:get, fn "https://www.bbc.co.uk", "/_web_core" -> @generic_response end)
 
       HTTP.dispatch(@get_struct)
     end
 
     test "post returns a response" do
-      HTTPClientMock
+      Clients.HTTPMock
       |> expect(:post, fn "https://www.bbc.co.uk", "/_web_core", ~s({"some": "data"}) ->
         @generic_response
       end)

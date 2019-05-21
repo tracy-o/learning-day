@@ -1,4 +1,4 @@
-defmodule Ingress.HTTPClient do
+defmodule Ingress.Clients.HTTP do
   @callback get(String.t(), String.t()) :: Mojito.Response
   @callback get(String.t(), String.t(), List.t()) :: Mojito.Response
   @callback get(String.t(), String.t(), List.t(), Keyword.t()) :: Mojito.Response

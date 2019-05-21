@@ -1,4 +1,4 @@
-defmodule Ingress.LambdaClient do
+defmodule Ingress.Clients.Lambda do
   use ExMetrics
 
   @callback call_lambda(String.t(), String.t(), String.t(), Ingress.Struct.Request.t()) ::
