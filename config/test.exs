@@ -17,10 +17,6 @@ config :ingress,
   origin: "https://origin.bbc.com/",
   service_provider: Ingress.ServiceProviderMock
 
-config :ex_aws,
-  region: "eu-west-1",
-  http_client: Mojito
-
 config :ex_metrics,
   send_metrics: false
 
