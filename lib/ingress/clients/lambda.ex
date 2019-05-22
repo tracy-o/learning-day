@@ -7,7 +7,7 @@ defmodule Ingress.Clients.Lambda do
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ []) do
-    Mojito.request(method, url, headers, body)
+    Mojito.request(method, url, headers, body, opts: [protocols: [:http1]])
   end
 
   def call_lambda(role_name, arn, function, request) do
@@ -29,14 +29,14 @@ defmodule Ingress.Clients.Lambda do
   end
 
   defp invoke_lambda(function, request, credentials) do
-    with {:ok, %{status_code: status, body: body}} <-
+    with {:ok, body} <-
            ExAws.Lambda.invoke(function, request, %{})
            |> ExAws.request(
              security_token: credentials.session_token,
              access_key_id: credentials.access_key_id,
              secret_access_key: credentials.secret_access_key
            ) do
-      {status, body}
+      {200, body}
     else
       {:error, reason} ->
         Stump.log(:error, %{message: "Failed to Invoke Lambda", reason: reason})
