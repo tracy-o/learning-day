@@ -17,4 +17,10 @@ node {
       sh 'mix format --check-formatted'
     }
   }
+
+  stage('Build RPM') {
+    if (env.BRANCH_NAME == 'master') {
+      build '../ingress-build/master'
+    }
+  }
 }
