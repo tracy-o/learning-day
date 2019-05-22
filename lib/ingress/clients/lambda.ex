@@ -1,8 +1,14 @@
 defmodule Ingress.Clients.Lambda do
   use ExMetrics
+  @behaviour ExAws.Request.HttpClient
 
   @callback call_lambda(String.t(), String.t(), String.t(), Ingress.Struct.Request.t()) ::
               Tuple.t()
+
+  @impl ExAws.Request.HttpClient
+  def request(method, url, body, headers) do
+    Mojito.request(method, url, headers, body)
+  end
 
   def call_lambda(role_name, arn, function, request) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
