@@ -6,22 +6,42 @@ defmodule Ingress.Clients.Lambda do
               Tuple.t()
 
   @impl ExAws.Request.HttpClient
-  def request(method, url, body, headers) do
+  def request(method, url, body \\ "", headers \\ []) do
     Mojito.request(method, url, headers, body)
   end
 
   def call_lambda(role_name, arn, function, request) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      {:ok, %{body: credentials}} =
-        ExAws.STS.assume_role(arn, role_name)
-        |> ExAws.request()
+      with {:ok, %{body: credentials}} <- assume_role(arn, role_name) do
+        invoke_lambda(function, request, credentials)
+      else
+        {:error, _reason} ->
+          Stump.log(:error, %{message: "Failed to assume role"})
+          ExMetrics.increment("clients.lambda.assume_role_failure")
+          {500, "Failed to assume role"}
+      end
+    end
+  end
 
-      ExAws.Lambda.invoke(function, request, %{})
-      |> ExAws.request(
-        security_token: credentials.session_token,
-        access_key_id: credentials.access_key_id,
-        secret_access_key: credentials.secret_access_key
-      )
+  defp assume_role(arn, role_name) do
+    ExAws.STS.assume_role(arn, role_name)
+    |> ExAws.request()
+  end
+
+  defp invoke_lambda(function, request, credentials) do
+    with {:ok, %{status_code: status, body: body}} <-
+           ExAws.Lambda.invoke(function, request, %{})
+           |> ExAws.request(
+             security_token: credentials.session_token,
+             access_key_id: credentials.access_key_id,
+             secret_access_key: credentials.secret_access_key
+           ) do
+      {status, body}
+    else
+      {:error, reason} ->
+        Stump.log(:error, %{message: "Failed to Invoke Lambda", reason: reason})
+        ExMetrics.increment("clients.lambda.invoke_failure")
+        {500, "Failed to Invoke Lambda"}
     end
   end
 end
