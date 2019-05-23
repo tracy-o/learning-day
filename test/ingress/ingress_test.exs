@@ -8,7 +8,7 @@ defmodule IngressTest do
   alias Test.Support.StructHelper
 
   @get_request_struct StructHelper.build(
-                    private: %{
+                        private: %{
                           loop_id: ["test_loop"]
                         },
                         request: %{
