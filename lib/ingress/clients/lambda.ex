@@ -5,8 +5,8 @@ defmodule Ingress.Clients.Lambda do
   @callback call(String.t(), String.t(), String.t(), Ingress.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
-  def request(method, url, body \\ "", headers \\ []) do
-    Mojito.request(method, url, headers, body, opts: [protocols: [:http1], pool: false])
+  def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
+    Mojito.request(method, url, headers, body, opts: http_opts ++ [protocols: [:http1], pool: false])
   end
 
   def call(role_name, arn, function, request) do
