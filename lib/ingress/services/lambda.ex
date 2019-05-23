@@ -1,20 +1,21 @@
 defmodule Ingress.Services.Lambda do
   use ExMetrics
 
-  alias Ingress.Struct
+  alias Ingress.{Clients, Struct}
   alias Ingress.Behaviours.Service
   @behaviour Service
+
+  @lambda_client Application.get_env(:ingress, :lambda_client, Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
     {status, body} =
-      ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-        InvokeLambda.invoke(lambda_function(), %{
-          instance_role_name: instance_role_name(),
-          lambda_role_arn: lambda_role_arn(),
-          function_payload: request
-        })
-      end
+      @lambda_client.call(
+        instance_role_name(),
+        lambda_role_arn(),
+        lambda_function(),
+        request
+      )
 
     ExMetrics.increment("service.lambda.response.#{status}")
     if status > 200, do: log(status, body, struct)
