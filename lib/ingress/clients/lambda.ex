@@ -15,8 +15,8 @@ defmodule Ingress.Clients.Lambda do
       with {:ok, %{body: credentials}} <- assume_role(arn, role_name) do
         invoke_lambda(function, request, credentials)
       else
-        {:error, _reason} ->
-          Stump.log(:error, %{message: "Failed to assume role"})
+        {:error, reason} ->
+          Stump.log(:error, %{message: "Failed to assume role", reason: reason})
           ExMetrics.increment("clients.lambda.assume_role_failure")
           {500, "Failed to assume role"}
       end
