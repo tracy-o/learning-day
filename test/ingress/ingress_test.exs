@@ -8,15 +8,19 @@ defmodule IngressTest do
   alias Test.Support.StructHelper
 
   @get_request_struct StructHelper.build(
-                        private: %{
+                    private: %{
                           loop_id: ["test_loop"]
+                        },
+                        request: %{
+                          country: "gb"
                         }
                       )
 
   @post_request_struct StructHelper.build(
                          request: %{
                            method: "POST",
-                           payload: ~s({"some": "data please"})
+                           payload: ~s({"some": "data please"}),
+                           country: "gb"
                          },
                          private: %{
                            loop_id: ["test_loop"]
@@ -36,7 +40,8 @@ defmodule IngressTest do
                               private: %Struct.Private{loop_id: ["test_loop"]},
                               request: %Struct.Request{
                                 path: "/_web_core",
-                                method: "GET"
+                                method: "GET",
+                                country: "gb"
                               }
                             } ->
       @struct_with_html_response
@@ -52,7 +57,8 @@ defmodule IngressTest do
                               request: %Struct.Request{
                                 path: "/_web_core",
                                 payload: ~s({"some": "data please"}),
-                                method: "POST"
+                                method: "POST",
+                                country: "gb"
                               }
                             } ->
       @struct_with_html_response
