@@ -8,17 +8,24 @@ defmodule Ingress.MixProject do
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      aliases: aliases()
     ]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  defp aliases do
+    [
+      t: ["format", "cmd mix test --force --color"]
+    ]
+  end
+
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :cachex],
       mod: {Ingress.Application, [env: Mix.env()]}
     ]
   end
@@ -40,7 +47,8 @@ defmodule Ingress.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:poison, "~> 3.1"},
       {:stump, "~> 1.0"},
-      {:sweet_xml, "~> 0.6"}
+      {:sweet_xml, "~> 0.6"},
+      {:cachex, "~> 3.1"}
     ]
   end
 end

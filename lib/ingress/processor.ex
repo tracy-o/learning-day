@@ -1,5 +1,13 @@
 defmodule Ingress.Processor do
-  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, RequestHash, ServiceProvider}
+  alias Ingress.{
+    LoopsRegistry,
+    Struct,
+    Loop,
+    Pipeline,
+    RequestHash,
+    ServiceProvider,
+    Cache
+  }
 
   @service_provider Application.get_env(:ingress, :service_provider, ServiceProvider)
 
@@ -16,6 +24,10 @@ defmodule Ingress.Processor do
     RequestHash.generate(struct)
   end
 
+  def query_cache_for_early_response(struct = %Struct{}) do
+    Cache.add_response_from_cache(struct, [:fresh])
+  end
+
   def request_pipeline(struct = %Struct{}) do
     case Pipeline.process(struct) do
       {:ok, struct} -> struct
@@ -29,6 +41,14 @@ defmodule Ingress.Processor do
   end
 
   def response_pipeline(struct = %Struct{}) do
+    # TODO: some struct mutations here, before we cache
+
+    struct
+    |> Cache.store_if_successful()
+    |> Cache.fallback_if_required()
+  end
+
+  def init_post_response_side_effects(struct = %Struct{}) do
     Loop.inc(struct)
     struct
   end

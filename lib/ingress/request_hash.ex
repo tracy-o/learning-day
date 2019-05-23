@@ -1,4 +1,5 @@
 defmodule Ingress.RequestHash do
+  alias Ingress.Struct
   @signature_keys [:path, :country]
 
   def generate(struct) do
@@ -12,7 +13,6 @@ defmodule Ingress.RequestHash do
   end
 
   defp update_struct(request_hash, struct) do
-    request = Map.put(struct.request, :request_hash, request_hash)
-    Map.put(struct, :request, request)
+    Struct.add(struct, :request, %{request_hash: request_hash})
   end
 end

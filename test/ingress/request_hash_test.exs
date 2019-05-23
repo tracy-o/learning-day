@@ -1,7 +1,7 @@
 defmodule Ingress.RequestHashTest do
   use ExUnit.Case
 
-  alias Ingress.{RequestHash, Struct}
+  alias Ingress.RequestHash
   alias Test.Support.StructHelper
 
   @struct StructHelper.build(request: %{path: "/news/clips/abc123", country: "gb"})

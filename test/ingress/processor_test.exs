@@ -43,7 +43,7 @@ defmodule Ingress.ProcessorTest do
     end
   end
 
-  describe "Processor.response_pipeline/1" do
+  describe "Processor.init_post_response_side_effects/1" do
     @resp_struct StructHelper.build(
                    private: %{
                      loop_id: "example_loop_id",
@@ -54,7 +54,7 @@ defmodule Ingress.ProcessorTest do
 
     test "increments status" do
       Ingress.LoopsRegistry.find_or_start(@resp_struct)
-      Processor.response_pipeline(@resp_struct)
+      Processor.init_post_response_side_effects(@resp_struct)
 
       assert {:ok,
               %{

@@ -8,7 +8,7 @@ defmodule IngressWeb.ViewTest do
   doctest View
 
   defp build_struct_and_render(body) do
-    StructHelper.build(response: %{body: body})
+    StructHelper.build(response: %{body: body, http_status: 200})
     |> View.render(conn(:get, "/_web_core"))
     |> sent_resp()
   end
