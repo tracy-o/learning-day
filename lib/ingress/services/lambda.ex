@@ -10,7 +10,7 @@ defmodule Ingress.Services.Lambda do
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
     {status, body} =
-      @lambda_client.call_lambda(
+      @lambda_client.call(
         instance_role_name(),
         lambda_role_arn(),
         lambda_function(),

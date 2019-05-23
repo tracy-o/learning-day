@@ -3,7 +3,7 @@ defmodule Ingress.Clients.LambdaMock do
   alias Ingress.Clients.Lambda
 
   @impl Lambda
-  def call_lambda(_role_name, _arn, _function, _request) do
+  def call(_role_name, _arn, _function, _request) do
     {200, "foobar"}
   end
 end

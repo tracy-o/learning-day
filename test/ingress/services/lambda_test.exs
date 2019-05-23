@@ -15,7 +15,7 @@ defmodule Ingress.Services.LambdaTest do
 
   describe "lambda service" do
     test "given a path it invokes the lambda" do
-      expect(Clients.LambdaMock, :call_lambda, fn _, _, _, @struct_request -> {200, "foobar"} end)
+      expect(Clients.LambdaMock, :call, fn _, _, _, @struct_request -> {200, "foobar"} end)
 
       assert %Struct{
                response: %Struct.Response{
@@ -26,7 +26,7 @@ defmodule Ingress.Services.LambdaTest do
     end
 
     test "given the lambda is down" do
-      expect(Clients.LambdaMock, :call_lambda, fn _, _, _, @struct_request ->
+      expect(Clients.LambdaMock, :call, fn _, _, _, @struct_request ->
         {500, %{"error" => "Internal server error"}}
       end)
 
