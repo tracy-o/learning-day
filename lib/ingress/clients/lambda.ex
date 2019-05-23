@@ -7,7 +7,7 @@ defmodule Ingress.Clients.Lambda do
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ []) do
-    Mojito.request(method, url, headers, body, opts: [protocols: [:http1]])
+    Mojito.request(method, url, headers, body, opts: [protocols: [:http1], pool: false])
   end
 
   def call_lambda(role_name, arn, function, request) do
