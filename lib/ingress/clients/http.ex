@@ -17,7 +17,7 @@ defmodule Ingress.Clients.HTTP do
     Mojito.request(:post, host <> path, headers, body, build_options(options))
   end
 
-  defp build_options(options) do
+  def build_options(options) do
     Keyword.merge([timeout: @timeout], options)
   end
 end
