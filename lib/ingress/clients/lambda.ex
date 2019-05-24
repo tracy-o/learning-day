@@ -5,8 +5,8 @@ defmodule Ingress.Clients.Lambda do
   @callback call(String.t(), String.t(), String.t(), Ingress.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
-  def request(method, url, body \\ "", headers \\ []) do
-    Mojito.request(method, url, headers, body, opts: [protocols: [:http1], pool: false])
+  def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
+    Mojito.request(method, url, headers, body, opts: build_options(http_opts))
   end
 
   def call(role_name, arn, function, request) do
@@ -42,5 +42,9 @@ defmodule Ingress.Clients.Lambda do
         ExMetrics.increment("clients.lambda.invoke_failure")
         {500, "Failed to Invoke Lambda"}
     end
+  end
+
+  def build_options(opts) do
+    Keyword.merge([protocols: [:http1], pool: false], opts)
   end
 end
