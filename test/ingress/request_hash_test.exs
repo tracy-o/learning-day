@@ -19,11 +19,13 @@ defmodule Ingress.RequestHashTest do
     end
 
     test "given the path is the same, when the country is not the same assert the request_hashes are different" do
-      assert RequestHash.generate(@struct).request.request_hash != RequestHash.generate(@struct_with_different_country)
+      assert RequestHash.generate(@struct).request.request_hash !=
+               RequestHash.generate(@struct_with_different_country)
     end
 
     test "given the country is the same, when the path is not the same assert the request_hashes are different" do
-      assert RequestHash.generate(@struct).request.request_hash != RequestHash.generate(@struct_with_different_path)
+      assert RequestHash.generate(@struct).request.request_hash !=
+               RequestHash.generate(@struct_with_different_path)
     end
   end
 end
