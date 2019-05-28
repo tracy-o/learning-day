@@ -2,12 +2,12 @@ defmodule Ingress.RequestHash do
   @signature_keys [:path, :country]
 
   def generate(struct) do
-    sanitise(struct.request)
+    extract_keys(struct.request)
     |> Crimpex.signature()
     |> update_struct(struct)
   end
 
-  defp sanitise(request) do
+  defp extract_keys(request) do
     Map.take(request, @signature_keys)
   end
 
