@@ -1,5 +1,5 @@
 defmodule Ingress.Processor do
-  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, ServiceProvider}
+  alias Ingress.{LoopsRegistry, Struct, Loop, Pipeline, RequestHash, ServiceProvider}
 
   @service_provider Application.get_env(:ingress, :service_provider, ServiceProvider)
 
@@ -10,6 +10,10 @@ defmodule Ingress.Processor do
       {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
       _ -> loop_state_failure()
     end
+  end
+
+  def generate_request_hash(struct = %Struct{}) do
+    RequestHash.generate(struct)
   end
 
   def request_pipeline(struct = %Struct{}) do

@@ -3,7 +3,7 @@ defmodule Ingress.Struct.Debug do
 end
 
 defmodule Ingress.Struct.Request do
-  defstruct [:path, :payload, :method]
+  defstruct [:path, :payload, :method, :country]
 end
 
 defmodule Ingress.Struct.Response do

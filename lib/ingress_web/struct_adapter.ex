@@ -4,12 +4,13 @@ defmodule IngressWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  def adapt(conn = %Conn{private: %{loop_id: loop_id}}) do
+  def adapt(conn = %Conn{private: %{loop_id: loop_id, bbc_headers: bbc_headers}}) do
     %Struct{
       request: %Request{
         path: conn.request_path,
         payload: body(conn),
-        method: conn.method
+        method: conn.method,
+        country: bbc_headers.country
       },
       private: %Private{
         loop_id: loop_id
