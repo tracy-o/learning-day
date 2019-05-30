@@ -30,7 +30,9 @@ defmodule IngressTest do
   @struct_with_html_response StructHelper.build(
                                response: %{
                                  body: "<p>Basic HTML response</p>",
-                                 headers: %{"content-type" => "text/html; charset=utf-8"}
+                                 headers: %{"content-type" => "text/html; charset=utf-8"},
+                                 http_status: 200,
+                                 cacheable_content: false
                                }
                              )
 

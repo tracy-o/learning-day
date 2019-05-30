@@ -21,7 +21,8 @@ defmodule Ingress.Supervisor do
   def default_children do
     [
       Ingress.LoopsRegistry,
-      Ingress.LoopsSupervisor
+      Ingress.LoopsSupervisor,
+      worker(Cachex, [:cache, []])
     ]
   end
 

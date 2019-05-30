@@ -4,30 +4,20 @@ defmodule Test.Support.StructHelper do
 
   @base_request_struct %{path: "/_web_core", method: "GET"}
 
-  @base_response_struct %{
-    http_status: 200
-  }
-  @base_private_struct %{}
-  @base_debug_struct %{}
-
   def response_struct(overrides \\ %{}) do
-    Response
-    |> struct(Map.merge(@base_response_struct, overrides))
+    struct(Response, overrides)
   end
 
   def request_struct(overrides \\ %{}) do
-    Request
-    |> struct(Map.merge(@base_request_struct, overrides))
+    struct(Request, Map.merge(@base_request_struct, overrides))
   end
 
   def private_struct(overrides \\ %{}) do
-    Private
-    |> struct(Map.merge(@base_private_struct, overrides))
+    struct(Private, Map.merge(%{cache_ttl: 30}, overrides))
   end
 
   def debug_struct(overrides \\ %{}) do
-    Debug
-    |> struct(Map.merge(@base_debug_struct, overrides))
+    struct(Debug, overrides)
   end
 
   def build(override_options \\ []) do

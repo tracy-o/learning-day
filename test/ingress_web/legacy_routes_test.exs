@@ -12,7 +12,8 @@ defmodule IngressWeb.LegacyTest do
     @struct_with_html_response StructHelper.build(
                                  response: %{
                                    body: "<p>Basic HTML response</p>",
-                                   headers: %{"content-type" => "text/html; charset=utf-8"}
+                                   headers: %{"content-type" => "text/html; charset=utf-8"},
+                                   http_status: 200
                                  }
                                )
 
@@ -73,7 +74,7 @@ defmodule IngressWeb.LegacyTest do
              } = sent_resp(conn)
     end
 
-    test "POST homepage reqeust to legacy" do
+    test "POST homepage request to legacy" do
       IngressMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["legacy"]},

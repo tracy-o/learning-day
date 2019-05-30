@@ -13,7 +13,8 @@ defmodule IngressWeb.HeadersTest do
         StructHelper.build(
           response: %{
             body: body,
-            headers: headers
+            headers: headers,
+            http_status: 200
           }
         )
 
@@ -26,12 +27,12 @@ defmodule IngressWeb.HeadersTest do
       Router.call(conn, [])
     end
 
-    def make_404_call(body, headers = %{}, path) do
+    def make_404_call(body, _headers = %{}, path) do
       conn = conn(:get, path)
       Router.call(conn, [])
     end
 
-    def make_500_call(_body, headers = %{}, path) do
+    def make_500_call(_body, _headers = %{}, path) do
       IngressMock
       |> expect(:handle, fn _ ->
         raise("Something broke")

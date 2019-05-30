@@ -3,15 +3,21 @@ defmodule Ingress.Struct.Debug do
 end
 
 defmodule Ingress.Struct.Request do
-  defstruct [:path, :payload, :method, :country]
+  defstruct [:path, :payload, :method, :country, :request_hash]
 end
 
 defmodule Ingress.Struct.Response do
-  defstruct http_status: nil, headers: %{}, body: nil
+  # TODO: When we start serving personalised pages, we should default to `cacheable_content: false`
+  defstruct http_status: nil, headers: %{}, body: nil, cacheable_content: true
 end
 
 defmodule Ingress.Struct.Private do
-  defstruct loop_id: nil, origin: nil, counter: %{}, pipeline: []
+  defstruct fallback_ttl: :timer.hours(6),
+            cache_ttl: nil,
+            loop_id: nil,
+            origin: nil,
+            counter: %{},
+            pipeline: []
 end
 
 defmodule Ingress.Struct do
@@ -19,4 +25,8 @@ defmodule Ingress.Struct do
             private: %Ingress.Struct.Private{},
             response: %Ingress.Struct.Response{},
             debug: %Ingress.Struct.Debug{}
+
+  def add(struct, key, values) do
+    Map.put(struct, key, Map.merge(Map.get(struct, key), values))
+  end
 end
