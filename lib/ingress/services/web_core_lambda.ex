@@ -9,27 +9,55 @@ defmodule Ingress.Services.WebCoreLambda do
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
-    {status, body} =
+    response =
       @lambda_client.call(
         instance_role_name(),
         lambda_role_arn(),
         lambda_function(),
-        request
+        build_payload(struct)
       )
+      |> format_invoke_response()
 
-    ExMetrics.increment("service.lambda.response.#{status}")
-    if status > 200, do: log(status, body, struct)
-    Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
+    Struct.add(struct, :response, response)
   end
 
-  defp log(status, body, struct) do
-    Stump.log(:error, %{
-      msg: "Lambda Service returned a non 200 status",
-      http_status: status,
+  defp build_payload(struct) do
+    %{
+      headers: %{
+        country: struct.request.country
+      },
+      body: struct.request.payload,
+      httpMethod: struct.request.method
+    }
+  end
+
+  defp format_invoke_response({:error, _reason}) do
+    %Struct.Response{
+      http_status: 500,
+      headers: %{},
+      body: "",
+      cacheable_content: true
+    }
+  end
+
+  defp format_invoke_response(
+         {:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}
+       ) do
+    %Struct.Response{
+      http_status: http_status,
+      headers: headers,
       body: body,
-      lambda_function: lambda_function(),
-      struct: Map.from_struct(struct)
-    })
+      cacheable_content: true
+    }
+  end
+
+  defp format_invoke_response({:ok, _invalid_response_from_web_core}) do
+    %Struct.Response{
+      http_status: 500,
+      headers: %{},
+      body: "",
+      cacheable_content: true
+    }
   end
 
   defp instance_role_name() do

@@ -1,4 +1,4 @@
-defmodule Ingress.Services.LambdaTest do
+defmodule Ingress.Services.WebCoreLambdaTest do
   alias Ingress.{Clients, Struct}
   alias Ingress.Services.WebCoreLambda
   alias Test.Support.StructHelper
@@ -11,29 +11,75 @@ defmodule Ingress.Services.LambdaTest do
             request: %{payload: ~s({"some": "data"}), method: "POST"}
           )
 
-  @struct_request @struct.request
+  @web_core_lambda_response %{
+    "headers" => %{},
+    "statusCode" => 200,
+    "body" => "<h1>Hello from Lambda!</h1>"
+  }
 
-  describe "lambda service" do
+  @web_core_lambda_response_internal_fail %{
+    "headers" => %{},
+    "statusCode" => 500,
+    "body" => "oh dear, presentation layer broke"
+  }
+
+  describe "web core lambda service" do
     test "given a path it invokes the lambda" do
-      expect(Clients.LambdaMock, :call, fn _, _, _, @struct_request -> {200, "foobar"} end)
+      expect(Clients.LambdaMock, :call, fn _,
+                                           _,
+                                           _,
+                                           %{
+                                             body: "{\"some\": \"data\"}",
+                                             headers: %{country: nil},
+                                             httpMethod: "POST"
+                                           } ->
+        {:ok, @web_core_lambda_response}
+      end)
 
       assert %Struct{
                response: %Struct.Response{
                  http_status: 200,
-                 body: "foobar"
+                 body: "<h1>Hello from Lambda!</h1>"
                }
              } = WebCoreLambda.dispatch(@struct)
     end
 
-    test "given the lambda is down" do
-      expect(Clients.LambdaMock, :call, fn _, _, _, @struct_request ->
-        {500, %{"error" => "Internal server error"}}
+    test "lambda is invoked, but web core says its an error" do
+      expect(Clients.LambdaMock, :call, fn _,
+                                           _,
+                                           _,
+                                           %{
+                                             body: "{\"some\": \"data\"}",
+                                             headers: %{country: nil},
+                                             httpMethod: "POST"
+                                           } ->
+        {:ok, @web_core_lambda_response_internal_fail}
       end)
 
       assert %Struct{
                response: %Struct.Response{
                  http_status: 500,
-                 body: %{"error" => "Internal server error"}
+                 body: "oh dear, presentation layer broke"
+               }
+             } = WebCoreLambda.dispatch(@struct)
+    end
+
+    test "cannot invoke the lambda" do
+      expect(Clients.LambdaMock, :call, fn _,
+                                           _,
+                                           _,
+                                           %{
+                                             body: "{\"some\": \"data\"}",
+                                             headers: %{country: nil},
+                                             httpMethod: "POST"
+                                           } ->
+        {:error, :failed_to_invoke_lambda}
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 500,
+                 body: ""
                }
              } = WebCoreLambda.dispatch(@struct)
     end

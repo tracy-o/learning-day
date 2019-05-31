@@ -13,7 +13,7 @@ defmodule Ingress.ServiceProviderTest do
     end
 
     test "when origin is not http/s it returns the Lambda Service" do
-      assert Services.Lambda == ServiceProvider.service_for("lambda-presentation-layer")
+      assert Services.WebCoreLambda == ServiceProvider.service_for("lambda-presentation-layer")
     end
   end
 end
