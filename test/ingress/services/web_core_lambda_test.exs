@@ -1,6 +1,6 @@
 defmodule Ingress.Services.LambdaTest do
   alias Ingress.{Clients, Struct}
-  alias Ingress.Services.Lambda
+  alias Ingress.Services.WebCoreLambda
   alias Test.Support.StructHelper
 
   use ExUnit.Case
@@ -22,7 +22,7 @@ defmodule Ingress.Services.LambdaTest do
                  http_status: 200,
                  body: "foobar"
                }
-             } = Lambda.dispatch(@struct)
+             } = WebCoreLambda.dispatch(@struct)
     end
 
     test "given the lambda is down" do
@@ -35,7 +35,7 @@ defmodule Ingress.Services.LambdaTest do
                  http_status: 500,
                  body: %{"error" => "Internal server error"}
                }
-             } = Lambda.dispatch(@struct)
+             } = WebCoreLambda.dispatch(@struct)
     end
   end
 end
