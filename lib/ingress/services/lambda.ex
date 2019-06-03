@@ -51,7 +51,12 @@ defmodule Ingress.Services.Lambda do
     }
   end
 
-  defp format_invoke_response({:ok, _invalid_response_from_web_core}) do
+  defp format_invoke_response({:ok, invalid_response_from_web_core}) do
+    Stump.log(:error, %{
+      msg: "Received an invalid response from web core",
+      web_core_response: invalid_response_from_web_core
+    })
+
     %Struct.Response{
       http_status: 500,
       headers: %{},
