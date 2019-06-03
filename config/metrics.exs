@@ -9,11 +9,12 @@ http_response_code_metrics =
 config :ex_metrics,
   metrics:
     [
-      "function.timing.service.lambda.invoke",
-      "function.timing.service.HTTP.request",
-      "error.service.HTTP.request",
-      "error.loop.threshold.exceeded",
+      "error.fallback.served",
       "error.loop.state",
+      "error.loop.threshold.exceeded",
       "error.pipeline.process",
-      "error.pipeline.process.unhandled"
+      "error.pipeline.process.unhandled",
+      "error.service.HTTP.request",
+      "function.timing.service.HTTP.request",
+      "function.timing.service.lambda.invoke"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics
