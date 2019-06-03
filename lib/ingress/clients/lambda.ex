@@ -45,6 +45,6 @@ defmodule Ingress.Clients.Lambda do
   end
 
   def build_options(opts) do
-    Keyword.merge([protocols: [:http1], pool: false], opts)
+    Keyword.merge(opts, protocols: [:http1], pool: false)
   end
 end
