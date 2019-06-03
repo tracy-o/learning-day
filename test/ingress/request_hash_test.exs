@@ -4,15 +4,34 @@ defmodule Ingress.RequestHashTest do
   alias Ingress.RequestHash
   alias Test.Support.StructHelper
 
-  @struct StructHelper.build(request: %{path: "/news/clips/abc123", country: "gb"})
+  @struct StructHelper.build(request: %{path: "/news/clips/abc123", country: "gb", method: "GET"})
+
   @struct_with_different_country StructHelper.build(
-                                   request: %{path: "/news/clips/abc123", country: "usa"}
+                                   request: %{
+                                     path: "/news/clips/abc123",
+                                     country: "usa",
+                                     method: "GET"
+                                   }
                                  )
   @struct_with_different_path StructHelper.build(
-                                request: %{path: "/sport/football/abc123", country: "gb"}
+                                request: %{
+                                  path: "/sport/football/abc123",
+                                  country: "gb",
+                                  method: "GET"
+                                }
                               )
 
   describe "Ingress.RequestHash.generate/1" do
+    test "varies on method" do
+      assert RequestHash.generate(@struct).request.request_hash ==
+               "4886146b40a8572214f8acf77649b16c"
+
+      post_struct = Ingress.Struct.add(@struct, :request, %{method: "POST"})
+
+      assert "a195c6e7cde34e40a2fd16be9cfaccaa" ==
+               RequestHash.generate(post_struct).request.request_hash
+    end
+
     test "when given a valid path and country" do
       assert RequestHash.generate(@struct).request.request_hash ==
                "4886146b40a8572214f8acf77649b16c"
