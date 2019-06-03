@@ -25,11 +25,11 @@ defmodule Ingress.Services.WebCoreLambdaTest do
 
   describe "web core lambda service" do
     test "given a path it invokes the lambda" do
-      expect(Clients.LambdaMock, :call, fn _,
-                                           _,
-                                           _,
+      expect(Clients.LambdaMock, :call, fn "ec2-role",
+                                           "presentation-role",
+                                           "presentation-layer",
                                            %{
-                                             body: "{\"some\": \"data\"}",
+                                             body: ~s({"some": "data"}),
                                              headers: %{country: nil},
                                              httpMethod: "POST"
                                            } ->
@@ -45,11 +45,11 @@ defmodule Ingress.Services.WebCoreLambdaTest do
     end
 
     test "lambda is invoked, but web core says its an error" do
-      expect(Clients.LambdaMock, :call, fn _,
-                                           _,
-                                           _,
+      expect(Clients.LambdaMock, :call, fn "ec2-role",
+                                           "presentation-role",
+                                           "presentation-layer",
                                            %{
-                                             body: "{\"some\": \"data\"}",
+                                             body: ~s({"some": "data"}),
                                              headers: %{country: nil},
                                              httpMethod: "POST"
                                            } ->
@@ -65,11 +65,11 @@ defmodule Ingress.Services.WebCoreLambdaTest do
     end
 
     test "cannot invoke the lambda" do
-      expect(Clients.LambdaMock, :call, fn _,
-                                           _,
-                                           _,
+      expect(Clients.LambdaMock, :call, fn "ec2-role",
+                                           "presentation-role",
+                                           "presentation-layer",
                                            %{
-                                             body: "{\"some\": \"data\"}",
+                                             body: ~s({"some": "data"}),
                                              headers: %{country: nil},
                                              httpMethod: "POST"
                                            } ->
