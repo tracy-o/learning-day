@@ -7,7 +7,7 @@ defmodule Ingress.ServiceProvider do
   def service_for(origin) do
     case origin =~ ~r/^http(s)?:\/\// do
       true -> Services.HTTP
-      false -> Services.WebCoreLambda
+      false -> Services.Lambda
     end
   end
 end

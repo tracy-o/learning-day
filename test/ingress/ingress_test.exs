@@ -32,7 +32,7 @@ defmodule IngressTest do
   @web_core_lambda_response {:ok,
                              %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
 
-  test "GET request invokes lambda service with WebCoreLambda transformer" do
+  test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "ec2-role",
                         "presentation-role",
@@ -44,7 +44,7 @@ defmodule IngressTest do
     Ingress.handle(@get_request_struct)
   end
 
-  test "POST request invokes lambda service with WebCoreLambda transformer" do
+  test "POST request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "ec2-role",
                         "presentation-role",

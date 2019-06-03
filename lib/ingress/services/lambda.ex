@@ -1,4 +1,4 @@
-defmodule Ingress.Services.WebCoreLambda do
+defmodule Ingress.Services.Lambda do
   use ExMetrics
 
   alias Ingress.{Clients, Struct}

@@ -1,6 +1,6 @@
-defmodule Ingress.Services.WebCoreLambdaTest do
+defmodule Ingress.Services.LambdaTest do
   alias Ingress.{Clients, Struct}
-  alias Ingress.Services.WebCoreLambda
+  alias Ingress.Services.Lambda
   alias Test.Support.StructHelper
 
   use ExUnit.Case
@@ -41,7 +41,7 @@ defmodule Ingress.Services.WebCoreLambdaTest do
                  http_status: 200,
                  body: "<h1>Hello from Lambda!</h1>"
                }
-             } = WebCoreLambda.dispatch(@struct)
+             } = Lambda.dispatch(@struct)
     end
 
     test "lambda is invoked, but web core says its an error" do
@@ -61,7 +61,7 @@ defmodule Ingress.Services.WebCoreLambdaTest do
                  http_status: 500,
                  body: "oh dear, presentation layer broke"
                }
-             } = WebCoreLambda.dispatch(@struct)
+             } = Lambda.dispatch(@struct)
     end
 
     test "cannot invoke the lambda" do
@@ -81,7 +81,7 @@ defmodule Ingress.Services.WebCoreLambdaTest do
                  http_status: 500,
                  body: ""
                }
-             } = WebCoreLambda.dispatch(@struct)
+             } = Lambda.dispatch(@struct)
     end
   end
 end
