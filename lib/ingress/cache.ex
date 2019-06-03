@@ -10,8 +10,13 @@ defmodule Ingress.Cache do
 
   def fallback_if_required(struct = %Ingress.Struct{}) do
     case is_successful_response?(struct) do
-      true -> struct
-      false -> add_response_from_cache(struct, [:fresh, :stale])
+      true ->
+        struct
+
+      false ->
+        ExMetrics.increment("error.fallback.served")
+        Stump.log(:error, %{message: "Content was served from fallback", struct: struct})
+        add_response_from_cache(struct, [:fresh, :stale])
     end
   end
 
