@@ -4,6 +4,6 @@ defmodule Ingress.Clients.LambdaMock do
 
   @impl Lambda
   def call(_role_name, _arn, _function, _request) do
-    {200, "foobar"}
+    {:ok, %{}}
   end
 end

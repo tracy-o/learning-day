@@ -4,7 +4,7 @@ defmodule IngressTest do
   use Test.Support.Helper, :mox
 
   alias Ingress.Struct
-  alias Ingress.Services.ServiceMock
+  alias Ingress.Clients.LambdaMock
   alias Test.Support.StructHelper
 
   @get_request_struct StructHelper.build(
@@ -12,6 +12,8 @@ defmodule IngressTest do
                           loop_id: ["test_loop"]
                         },
                         request: %{
+                          path: "/_web_core",
+                          method: "GET",
                           country: "gb"
                         }
                       )
@@ -27,43 +29,32 @@ defmodule IngressTest do
                          }
                        )
 
-  @struct_with_html_response StructHelper.build(
-                               response: %{
-                                 body: "<p>Basic HTML response</p>",
-                                 headers: %{"content-type" => "text/html; charset=utf-8"},
-                                 http_status: 200,
-                                 cacheable_content: false
-                               }
-                             )
+  @web_core_lambda_response {:ok,
+                             %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
 
-  test "GET request invokes lambda service with WebCoreLambda transformer" do
-    ServiceMock
-    |> expect(:dispatch, fn %Struct{
-                              private: %Struct.Private{loop_id: ["test_loop"]},
-                              request: %Struct.Request{
-                                path: "/_web_core",
-                                method: "GET",
-                                country: "gb"
-                              }
-                            } ->
-      @struct_with_html_response
+  test "GET request invokes lambda service with Lambda transformer" do
+    LambdaMock
+    |> expect(:call, fn "ec2-role",
+                        "presentation-role",
+                        "presentation-layer",
+                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
+      @web_core_lambda_response
     end)
 
     Ingress.handle(@get_request_struct)
   end
 
-  test "POST request invokes lambda service with WebCoreLambda transformer" do
-    ServiceMock
-    |> expect(:dispatch, fn %Struct{
-                              private: %Struct.Private{loop_id: ["test_loop"]},
-                              request: %Struct.Request{
-                                path: "/_web_core",
-                                payload: ~s({"some": "data please"}),
-                                method: "POST",
-                                country: "gb"
-                              }
-                            } ->
-      @struct_with_html_response
+  test "POST request invokes lambda service with Lambda transformer" do
+    LambdaMock
+    |> expect(:call, fn "ec2-role",
+                        "presentation-role",
+                        "presentation-layer",
+                        %{
+                          body: ~s({"some": "data please"}),
+                          headers: %{country: "gb"},
+                          httpMethod: "POST"
+                        } ->
+      @web_core_lambda_response
     end)
 
     Ingress.handle(@post_request_struct)

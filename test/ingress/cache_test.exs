@@ -2,27 +2,40 @@ defmodule Ingress.IngressCacheTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
+  alias Ingress.RequestHash
   alias Ingress.Struct
   alias Test.Support.StructHelper
-  alias Ingress.Services.ServiceMock
+  alias Ingress.Clients.LambdaMock
   alias Ingress.Cache
 
   @fresh_cache_get_request_struct StructHelper.build(
                                     request: %{
-                                      country: "variant-1"
+                                      country: "variant-1",
+                                      method: "GET"
                                     },
                                     private: %{
                                       loop_id: ["test_loop"]
                                     }
                                   )
+
   @stale_cache_get_request_struct StructHelper.build(
                                     request: %{
-                                      country: "variant-2"
+                                      country: "variant-2",
+                                      method: "GET"
                                     },
                                     private: %{
                                       loop_id: ["test_loop"]
                                     }
                                   )
+
+  @web_core_lambda_response {:ok,
+                             %{
+                               "body" => ~s({"hi": "bonjour"}),
+                               "headers" => %{"content-type" => "application/json"},
+                               "statusCode" => 200
+                             }}
+
+  @failed_web_core_lambda_response {:ok, %{"body" => "", "headers" => %{}, "statusCode" => 500}}
 
   @response %Ingress.Struct.Response{
     body: ~s({"hi": "bonjour"}),
@@ -30,8 +43,6 @@ defmodule Ingress.IngressCacheTest do
     http_status: 200,
     cacheable_content: true
   }
-
-  @failed_response Map.merge(@response, %{http_status: 500, body: "{}"})
 
   setup do
     :ets.delete_all_objects(:cache)
@@ -44,13 +55,13 @@ defmodule Ingress.IngressCacheTest do
     end
 
     insert_seed_cache.(
-      id: "da12198824acac13a4cbb352cf3e2c6c",
+      id: RequestHash.generate(@fresh_cache_get_request_struct).request.request_hash,
       expires_in: :timer.hours(6),
       last_updated: Ingress.Timer.now_ms()
     )
 
     insert_seed_cache.(
-      id: "1beb1aebb32bbb194c9697a5c5e956a2",
+      id: RequestHash.generate(@stale_cache_get_request_struct).request.request_hash,
       expires_in: :timer.hours(6),
       last_updated: Ingress.Timer.now_ms() - :timer.seconds(31)
     )
@@ -83,11 +94,14 @@ defmodule Ingress.IngressCacheTest do
 
   describe "a stale cache" do
     test "uses service response" do
-      ServiceMock
+      LambdaMock
       |> expect(
-        :dispatch,
-        fn struct ->
-          Struct.add(struct, :response, @response)
+        :call,
+        fn "ec2-role",
+           "presentation-role",
+           "presentation-layer",
+           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+          @web_core_lambda_response
         end
       )
 
@@ -99,11 +113,14 @@ defmodule Ingress.IngressCacheTest do
     end
 
     test "uses fallback when service fails" do
-      ServiceMock
+      LambdaMock
       |> expect(
-        :dispatch,
-        fn struct ->
-          Struct.add(struct, :response, @failed_response)
+        :call,
+        fn "ec2-role",
+           "presentation-role",
+           "presentation-layer",
+           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+          @failed_web_core_lambda_response
         end
       )
 

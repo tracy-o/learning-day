@@ -1,6 +1,6 @@
 defmodule Ingress.RequestHash do
   alias Ingress.Struct
-  @signature_keys [:path, :country]
+  @signature_keys [:path, :country, :method]
 
   def generate(struct) do
     extract_keys(struct.request)
