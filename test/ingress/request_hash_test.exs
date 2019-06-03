@@ -15,7 +15,7 @@ defmodule Ingress.RequestHashTest do
   describe "Ingress.RequestHash.generate/1" do
     test "when given a valid path and country" do
       assert RequestHash.generate(@struct).request.request_hash ==
-               "cd33ccc1ce3c7b99780b4d2c44c2eb49"
+               "4886146b40a8572214f8acf77649b16c"
     end
 
     test "given the path is the same, when the country is not the same assert the request_hashes are different" do

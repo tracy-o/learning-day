@@ -14,8 +14,7 @@ config :ingress,
   lambda_presentation_role: "presentation-role",
   lambda_service_worker: "service-worker",
   lambda_service_worker_role: "service-worker-role",
-  origin: "https://origin.bbc.com/",
-  service_provider: Ingress.ServiceProviderMock
+  origin: "https://origin.bbc.com/"
 
 config :ex_metrics,
   send_metrics: false
