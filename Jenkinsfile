@@ -41,7 +41,6 @@ node {
   }
 
   stage('Build RPM') {
-    sh 'rm -rf SOURCES/ingress.tar.gz'
     sh 'mkdir -p SOURCES'
     String vars = buildVariables()
     docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
