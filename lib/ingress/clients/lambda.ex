@@ -6,7 +6,7 @@ defmodule Ingress.Clients.Lambda do
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
-    Mojito.request(method, url, headers, body, opts: build_options(http_opts))
+    Mojito.request(method, url, headers, body, build_options(http_opts))
   end
 
   def call(role_name, arn, function, payload) do
@@ -45,6 +45,6 @@ defmodule Ingress.Clients.Lambda do
   end
 
   def build_options(opts) do
-    Keyword.merge(opts, protocols: [:http1], pool: false)
+    Keyword.merge(opts, protocols: [:http2], pool: false)
   end
 end
