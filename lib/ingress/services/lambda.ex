@@ -27,7 +27,8 @@ defmodule Ingress.Services.Lambda do
         country: struct.request.country
       },
       body: struct.request.payload,
-      httpMethod: struct.request.method
+      httpMethod: struct.request.method,
+      path: struct.request.path
     }
   end
 

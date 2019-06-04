@@ -31,7 +31,8 @@ defmodule Ingress.Services.LambdaTest do
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
-                                             httpMethod: "POST"
+                                             httpMethod: "POST",
+                                             path: "/_web_core"
                                            } ->
         {:ok, @web_core_lambda_response}
       end)
@@ -51,7 +52,8 @@ defmodule Ingress.Services.LambdaTest do
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
-                                             httpMethod: "POST"
+                                             httpMethod: "POST",
+                                             path: "/_web_core"
                                            } ->
         {:ok, @web_core_lambda_response_internal_fail}
       end)
@@ -71,7 +73,8 @@ defmodule Ingress.Services.LambdaTest do
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
-                                             httpMethod: "POST"
+                                             httpMethod: "POST",
+                                             path: "/_web_core"
                                            } ->
         {:error, :failed_to_invoke_lambda}
       end)
