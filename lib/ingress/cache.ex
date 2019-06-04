@@ -11,32 +11,26 @@ defmodule Ingress.Cache do
   def fallback_if_required(struct = %Ingress.Struct{}) do
     case is_successful_response?(struct) do
       true -> struct
-      false -> add_fallback_response(struct, [:fresh, :stale])
+      false -> add_response_from_cache(struct, [:fresh, :stale])
     end
   end
 
   def add_response_from_cache(struct, accepted_freshness) do
     with {:ok, freshness, response} <- Local.fetch(struct),
          true <- freshness in accepted_freshness do
+      log_cache_access(freshness, struct)
       Struct.add(struct, :response, response)
     else
       _ -> struct
     end
   end
 
-  def add_fallback_response(struct, accepted_freshness) do
-    with {:ok, freshness, response} <- Local.fetch(struct),
-         true <- freshness in accepted_freshness do
-      ExMetrics.increment("error.fallback.served")
-      Stump.log(:error, %{message: "Content was served from fallback", struct: struct})
-      Struct.add(struct, :response, response)
-    else
-      _ ->
-        ExMetrics.increment("error.fallback.failed")
-        Stump.log(:error, %{message: "Failed to fetch content from fallback", struct: struct})
-        struct
-    end
+  defp log_cache_access(:stale, struct) do
+    ExMetrics.increment("cache.stale_response_added_to_struct")
+    Stump.log(:warn, %{message: "Stale response added to struct from cache.", struct: struct})
   end
+
+  defp log_cache_access(_freshness, _struct), do: :ok
 
   defp is_cacheable?(struct) do
     is_successful_response?(struct) and is_get_request?(struct) and

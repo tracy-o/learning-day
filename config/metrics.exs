@@ -9,7 +9,7 @@ http_response_code_metrics =
 config :ex_metrics,
   metrics:
     [
-      "error.fallback.served",
+      "cache.stale_response_added_to_struct",
       "error.loop.state",
       "error.loop.threshold.exceeded",
       "error.pipeline.process",
