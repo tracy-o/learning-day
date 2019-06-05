@@ -21,6 +21,7 @@ defmodule Ingress.Cache do
       log_cache_access(freshness, struct)
       Struct.add(struct, :response, response)
     else
+      {:ok, :content_not_found} -> log_cache_access(struct)
       _ -> struct
     end
   end
@@ -28,6 +29,12 @@ defmodule Ingress.Cache do
   defp log_cache_access(:stale, struct) do
     ExMetrics.increment("cache.stale_response_added_to_struct")
     Stump.log(:warn, %{message: "Stale response added to struct from cache.", struct: struct})
+  end
+
+  defp log_cache_access(struct) do
+    ExMetrics.increment("cache.item_does_not_exist")
+    Stump.log(:warn, %{message: "Failed to fetch item from cache", struct: struct})
+    struct
   end
 
   defp log_cache_access(_freshness, _struct), do: :ok

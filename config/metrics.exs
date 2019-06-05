@@ -9,6 +9,7 @@ http_response_code_metrics =
 config :ex_metrics,
   metrics:
     [
+      "cache.item_does_not_exist",
       "cache.stale_response_added_to_struct",
       "error.loop.state",
       "error.loop.threshold.exceeded",
