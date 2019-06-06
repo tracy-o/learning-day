@@ -17,6 +17,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
 
 Requires: cosmos-ca-chains cosmos-ca-tools
+Requires: bbc-statsd-cloudwatch
+Requires: amazon-cloudwatch-agent
 Requires: cfn-signal
 Requires: component-logger
 
