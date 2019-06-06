@@ -21,8 +21,7 @@ defmodule Ingress.Cache do
       log_cache_access(freshness, struct)
       Struct.add(struct, :response, response)
     else
-      {:ok, :content_not_found} -> log_cache_access(struct)
-      _ -> struct
+      _ -> item_missing(accepted_freshness, struct)
     end
   end
 
@@ -31,13 +30,19 @@ defmodule Ingress.Cache do
     Stump.log(:warn, %{message: "Stale response added to struct from cache.", struct: struct})
   end
 
-  defp log_cache_access(struct) do
-    ExMetrics.increment("cache.item_does_not_exist")
-    Stump.log(:warn, %{message: "Failed to fetch item from cache", struct: struct})
-    struct
-  end
-
   defp log_cache_access(_freshness, _struct), do: :ok
+
+  defp item_missing(accepted_freshness, struct) do
+    case Enum.member?(accepted_freshness, :stale) do
+      true ->
+        ExMetrics.increment("cache.fallback_item_does_not_exist")
+        Stump.log(:warn, %{message: "Failed to fetch fallback item from cache", struct: struct})
+        struct
+
+      false ->
+        struct
+    end
+  end
 
   defp is_cacheable?(struct) do
     is_successful_response?(struct) and is_get_request?(struct) and
