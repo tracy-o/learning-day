@@ -39,7 +39,7 @@ Ingress currently uses the "Erlang Term Storage" or ETS for in-memory cache. We 
 ### Resiliency
 
 #### Fallback
-Fallback is the first resiliency feature to be added to Ingress. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expirey and will not be stored indefinitely.
+Fallback is the first resiliency feature to be added to Ingress. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expiry and will not be stored indefinitely.
 
 This feature is only available for non-personalised responses.
 
