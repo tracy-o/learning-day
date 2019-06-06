@@ -33,6 +33,16 @@ It's the responsibility of the web interface to transform the struct into the fi
 
 [Struct examples are in the Struct document](./docs/struct.md)
 
+### Caching
+Ingress currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
+
+### Resiliency
+
+#### Fallback
+Fallback is the first resiliency feature to be added to Ingress. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expiry and will not be stored indefinitely.
+
+This feature is only available for non-personalised responses.
+
 ## Properties of Ingress
 
 * resilient
