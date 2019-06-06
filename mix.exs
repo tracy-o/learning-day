@@ -38,7 +38,7 @@ defmodule Ingress.MixProject do
       {:distillery, "~> 2.0"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_lambda, "~> 2.0"},
-      {:ex_aws_sts, "~> 2.0"},
+      {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
