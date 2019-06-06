@@ -21,7 +21,7 @@ defmodule Ingress.Cache do
       log_cache_access(freshness, struct)
       Struct.add(struct, :response, response)
     else
-      _ -> item_missing(accepted_freshness, struct)
+      _ -> metric_fallback_miss(accepted_freshness, struct)
     end
   end
 
@@ -32,11 +32,10 @@ defmodule Ingress.Cache do
 
   defp log_cache_access(_freshness, _struct), do: :ok
 
-  defp item_missing(accepted_freshness, struct) do
+  defp metric_fallback_miss(accepted_freshness, struct) do
     case Enum.member?(accepted_freshness, :stale) do
       true ->
         ExMetrics.increment("cache.fallback_item_does_not_exist")
-        Stump.log(:warn, %{message: "Failed to fetch fallback item from cache", struct: struct})
         struct
 
       false ->
