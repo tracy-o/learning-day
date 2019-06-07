@@ -5,13 +5,13 @@ defmodule Ingress.ProcessorTest do
   alias Test.Support.StructHelper
 
   describe "Processor.get_loop/1" do
-    @struct StructHelper.build(private: %{loop_id: "example_loop_id"})
+    @struct StructHelper.build(private: %{loop_id: ["example_loop_id"]})
 
     test "adds loop information to Struct.private" do
       assert %Struct{
                request: _request,
                private: %Struct.Private{
-                 loop_id: "example_loop_id",
+                 loop_id: ["example_loop_id"],
                  origin: origin,
                  counter: counter,
                  pipeline: pipeline
@@ -27,7 +27,7 @@ defmodule Ingress.ProcessorTest do
   describe "Processor.request_pipeline/1" do
     @struct StructHelper.build(
               private: %{
-                loop_id: "example_loop_id",
+                loop_id: ["example_loop_id"],
                 origin: "https://origin.bbc.co.uk/",
                 counter: %{},
                 pipeline: ["MyTransformer1"]
@@ -46,7 +46,7 @@ defmodule Ingress.ProcessorTest do
   describe "Processor.init_post_response_side_effects/1" do
     @resp_struct StructHelper.build(
                    private: %{
-                     loop_id: "example_loop_id",
+                     loop_id: ["example_loop_id"],
                      origin: "https://origin.bbc.co.uk/"
                    },
                    response: %{http_status: 501}

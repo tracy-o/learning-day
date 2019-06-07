@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Benchmark do
   end
 
   defp benchmark_get_loop do
-    struct = %Struct{private: %Struct.Private{loop_id: "test_loop_id"}}
+    struct = %Struct{private: %Struct.Private{loop_id: ["test_loop_id"]}}
 
     Benchee.run(
       %{
@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Benchmark do
 
   defp benchmark_request_pipeline do
     struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "test_loop_id"}
+      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: ["test_loop_id"]}
     }
 
     Benchee.run(
@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Benchmark do
 
   defp benchmark_response_pipeline do
     struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "test_loop_id"}
+      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: ["test_loop_id"]}
     }
 
     Benchee.run(
