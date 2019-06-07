@@ -18,19 +18,18 @@ defmodule Ingress.Cache do
   def add_response_from_cache(struct, accepted_freshness) do
     with {:ok, freshness, response} <- Local.fetch(struct),
          true <- freshness in accepted_freshness do
-      log_cache_access(freshness, struct)
+      metric_stale_response(freshness, struct)
       Struct.add(struct, :response, response)
     else
       _ -> metric_fallback_miss(accepted_freshness, struct)
     end
   end
 
-  defp log_cache_access(:stale, struct) do
+  defp metric_stale_response(:stale, struct) do
     ExMetrics.increment("cache.stale_response_added_to_struct")
-    Stump.log(:warn, %{message: "Stale response added to struct from cache.", struct: struct})
   end
 
-  defp log_cache_access(_freshness, _struct), do: :ok
+  defp metric_stale_response(_freshness, _struct), do: :ok
 
   defp metric_fallback_miss(accepted_freshness, struct) do
     case Enum.member?(accepted_freshness, :stale) do
