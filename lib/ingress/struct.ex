@@ -13,7 +13,7 @@ end
 
 defmodule Ingress.Struct.Private do
   defstruct fallback_ttl: :timer.hours(6),
-            cache_ttl: nil,
+            cache_ttl: 30,
             loop_id: nil,
             origin: nil,
             counter: %{},
