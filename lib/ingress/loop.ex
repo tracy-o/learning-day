@@ -58,10 +58,15 @@ defmodule Ingress.Loop do
     {:noreply, state}
   end
 
-  @legacy_routes ["mondo", "legacy", "legacy_page_type", "legacy_page_type_with_id"]
+  @legacy_route_loop_ids [
+    ["mondo"],
+    ["legacy"],
+    ["legacy_page_type"],
+    ["legacy_page_type_with_id"]
+  ]
 
   defp origin_pointer(false, loop_id) do
-    case Enum.member?(@legacy_routes, loop_id) do
+    case Enum.member?(@legacy_route_loop_ids, loop_id) do
       true -> Application.get_env(:ingress, :origin)
       false -> Application.get_env(:ingress, :lambda_presentation_layer)
     end

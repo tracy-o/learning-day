@@ -5,29 +5,29 @@ defmodule Ingress.LoopTest do
   alias Test.Support.StructHelper
 
   setup do
-    LoopsSupervisor.start_loop("legacy")
-    LoopsSupervisor.start_loop("webcore")
+    LoopsSupervisor.start_loop(["legacy"])
+    LoopsSupervisor.start_loop(["webcore"])
     on_exit(fn -> LoopsSupervisor.kill_all() end)
   end
 
   @failure_status_code Enum.random(500..504)
 
-  @req_struct StructHelper.build(private: %{loop_id: "legacy"})
-  @req_struct_2 StructHelper.build(private: %{loop_id: "webcore"})
+  @req_struct StructHelper.build(private: %{loop_id: ["legacy"]})
+  @req_struct_2 StructHelper.build(private: %{loop_id: ["webcore"]})
   @resp_struct StructHelper.build(
-                 private: %{loop_id: "legacy", origin: "https://origin.bbc.com/"},
+                 private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
                  response: %{http_status: @failure_status_code}
                )
   @resp_struct_2 StructHelper.build(
-                   private: %{loop_id: "legacy", origin: "https://s3.aws.com/"},
+                   private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
                    response: %{http_status: @failure_status_code}
                  )
   @non_error_resp_struct StructHelper.build(
-                           private: %{loop_id: "legacy", origin: "https://origin.bbc.com/"},
+                           private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
                            response: %{http_status: 200}
                          )
   @non_error_resp_struct_2 StructHelper.build(
-                             private: %{loop_id: "legacy", origin: "https://s3.aws.com/"},
+                             private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
                              response: %{http_status: 200}
                            )
 
