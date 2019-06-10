@@ -25,6 +25,8 @@ defmodule IngressWeb.Router do
     |> View.put_response(200, "I'm ok thanks")
   end
 
+  match("/", via: @allowed_http_methods, to: WebCoreRoutes)
+
   match("/:product/*_rest" when product in @product_allowlist,
     via: @allowed_http_methods,
     to: WebCoreRoutes
