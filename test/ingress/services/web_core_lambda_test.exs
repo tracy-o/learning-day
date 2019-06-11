@@ -25,8 +25,7 @@ defmodule Ingress.Services.LambdaTest do
 
   describe "web core lambda service" do
     test "given a path it invokes the lambda" do
-      expect(Clients.LambdaMock, :call, fn "ec2-role",
-                                           "webcore-lambda-role-arn",
+      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
                                            "webcore-lambda-name-progressive-web-app",
                                            %{
                                              body: ~s({"some": "data"}),
@@ -46,8 +45,7 @@ defmodule Ingress.Services.LambdaTest do
     end
 
     test "lambda is invoked, but web core says its an error" do
-      expect(Clients.LambdaMock, :call, fn "ec2-role",
-                                           "webcore-lambda-role-arn",
+      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
                                            "webcore-lambda-name-progressive-web-app",
                                            %{
                                              body: ~s({"some": "data"}),
@@ -67,8 +65,7 @@ defmodule Ingress.Services.LambdaTest do
     end
 
     test "cannot invoke the lambda" do
-      expect(Clients.LambdaMock, :call, fn "ec2-role",
-                                           "webcore-lambda-role-arn",
+      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
                                            "webcore-lambda-name-progressive-web-app",
                                            %{
                                              body: ~s({"some": "data"}),

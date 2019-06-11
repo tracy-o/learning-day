@@ -2,7 +2,7 @@ defmodule Ingress.Clients.Lambda do
   use ExMetrics
   @behaviour ExAws.Request.HttpClient
 
-  @callback call(String.t(), String.t(), String.t(), Ingress.Struct.Request.t()) :: Tuple.t()
+  @callback call(String.t(), String.t(), Ingress.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
@@ -10,9 +10,11 @@ defmodule Ingress.Clients.Lambda do
     Mojito.request(method, url, headers, body, build_options(http_opts))
   end
 
-  def call(role_name, arn, function, payload) do
+  @aws_client Application.get_env(:ingress, :aws_client)
+
+  def call(arn, function, payload) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      with {:ok, %{body: credentials}} <- assume_role(arn, role_name) do
+      with {:ok, %{body: credentials}} <- assume_role(arn, "presentation layer role") do
         invoke_lambda(function, payload, credentials)
       else
         {:error, reason} ->
@@ -24,14 +26,14 @@ defmodule Ingress.Clients.Lambda do
   end
 
   defp assume_role(arn, role_name) do
-    ExAws.STS.assume_role(arn, role_name)
-    |> ExAws.request()
+    @aws_client.STS.assume_role(arn, role_name)
+    |> @aws_client.request()
   end
 
   defp invoke_lambda(function, payload, credentials) do
     with {:ok, body} <-
-           ExAws.Lambda.invoke(function, payload, %{})
-           |> ExAws.request(
+           @aws_client.Lambda.invoke(function, payload, %{})
+           |> @aws_client.request(
              security_token: credentials.session_token,
              access_key_id: credentials.access_key_id,
              secret_access_key: credentials.secret_access_key

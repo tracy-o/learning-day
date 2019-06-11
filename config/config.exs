@@ -29,10 +29,11 @@ use Mix.Config
 #
 
 config :ingress,
+  aws_client: ExAws,
   circuit_breaker_reset_interval: 60_000,
+  errors_threshold: 1_000,
   fallback: System.get_env("INGRESS_FALLBACK"),
-  origin: System.get_env("INGRESS_ORIGIN"),
-  errors_threshold: 1_000
+  origin: System.get_env("INGRESS_ORIGIN")
 
 config :logger, :console, format: "$message\n"
 

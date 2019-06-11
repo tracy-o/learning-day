@@ -97,8 +97,7 @@ defmodule Ingress.IngressCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "ec2-role",
-           "webcore-lambda-role-arn",
+        fn "webcore-lambda-role-arn",
            "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @web_core_lambda_response
@@ -116,8 +115,7 @@ defmodule Ingress.IngressCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "ec2-role",
-           "webcore-lambda-role-arn",
+        fn "webcore-lambda-role-arn",
            "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @failed_web_core_lambda_response
