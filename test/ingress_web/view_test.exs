@@ -24,7 +24,7 @@ defmodule IngressWeb.ViewTest do
     {status, _headers, body} = build_struct_and_render(%{some: "json data"})
 
     assert status == 200
-    assert body == Poison.encode!(%{some: "json data"})
+    assert body == Jason.encode!(%{some: "json data"})
   end
 
   test "Rendering response from a struct with a 200 and a nil response" do

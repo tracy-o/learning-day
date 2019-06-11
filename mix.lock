@@ -13,6 +13,7 @@
   "ex_aws_lambda": {:hex, :ex_aws_lambda, "2.0.1", "d1904b9705244f2c56ab6284ac00af802b8b0b5531559ab58f64c1a9710f3c22", [:mix], [{:ex_aws, "~> 2.0", [hex: :ex_aws, repo: "hexpm", optional: false]}], "hexpm"},
   "ex_aws_sts": {:git, "https://github.com/ex-aws/ex_aws_sts.git", "2296f01daedfa050ee2e2d68bf071a999f00a821", []},
   "ex_metrics": {:git, "https://github.com/bbc/ExMetrics.git", "02aa81015a2673b82e70317b36d18fe817f443c0", []},
+  "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
   "jumper": {:hex, :jumper, "1.0.1", "3c00542ef1a83532b72269fab9f0f0c82bf23a35e27d278bfd9ed0865cecabff", [:mix], [], "hexpm"},
   "logger_file_backend": {:hex, :logger_file_backend, "0.0.10", "876f9f84ae110781207c54321ffbb62bebe02946fe3c13f0d7c5f5d8ad4fa910", [:mix], [], "hexpm"},
   "meck": {:hex, :meck, "0.8.13", "ffedb39f99b0b99703b8601c6f17c7f76313ee12de6b646e671e3188401f7866", [:rebar3], [], "hexpm"},
