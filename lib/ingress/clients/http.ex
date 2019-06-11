@@ -18,6 +18,6 @@ defmodule Ingress.Clients.HTTP do
   end
 
   def build_options(options) do
-    Keyword.merge([timeout: @timeout], options)
+    Keyword.merge([timeout: @timeout, pool: false], options)
   end
 end
