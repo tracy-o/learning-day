@@ -31,6 +31,11 @@ defmodule Ingress.LoopTest do
                              response: %{http_status: 200}
                            )
 
+  @fallback_resp_struct StructHelper.build(
+                          private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
+                          response: %{http_status: 200, fallback: true}
+                        )
+
   test "returns a state pointer" do
     assert Loop.state(@req_struct) ==
              {:ok,
@@ -136,5 +141,23 @@ defmodule Ingress.LoopTest do
 
     {:ok, state} = Loop.state(@req_struct_2)
     assert state.origin == Application.get_env(:ingress, :lambda_presentation_layer)
+  end
+
+  describe "when in fallback" do
+    test "it increments both the status and fallback counters" do
+      for _ <- 1..30, do: Loop.inc(@fallback_resp_struct)
+      {:ok, state} = Loop.state(@req_struct)
+
+      assert %{
+               counter: %{
+                 "https://origin.bbc.com/" => %{
+                   :fallback => 30,
+                   200 => 30
+                 }
+               }
+             } = state
+
+      assert state.origin == "https://origin.bbc.com/"
+    end
   end
 end

@@ -15,9 +15,9 @@ defmodule Ingress.Loop do
 
   def inc(%Struct{
         private: %Struct.Private{loop_id: name, origin: origin},
-        response: %Struct.Response{http_status: http_status}
+        response: %Struct.Response{http_status: http_status, fallback: fallback}
       }) do
-    GenServer.cast(via_tuple(name), {:inc, http_status, origin})
+    GenServer.cast(via_tuple(name), {:inc, http_status, origin, fallback})
   end
 
   defp via_tuple(name) do
@@ -41,8 +41,12 @@ defmodule Ingress.Loop do
   end
 
   @impl GenServer
-  def handle_cast({:inc, http_status, origin}, state) do
-    state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
+  def handle_cast({:inc, http_status, origin, fallback}, state) do
+    state =
+      case fallback do
+        true -> fallback_state(state, fallback, origin, http_status)
+        _ -> %{state | counter: Counter.inc(state.counter, http_status, origin)}
+      end
 
     {:noreply, state}
   end
@@ -76,5 +80,10 @@ defmodule Ingress.Loop do
     ExMetrics.increment("error.loop.threshold.exceeded")
     Stump.log(:error, "Error threshold exceeded for loop")
     Application.get_env(:ingress, :fallback)
+  end
+
+  defp fallback_state(state, fallback, origin, http_status) do
+    state = %{state | counter: Counter.inc(state.counter, :fallback, origin)}
+    state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
   end
 end
