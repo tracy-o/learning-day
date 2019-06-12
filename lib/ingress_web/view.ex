@@ -18,7 +18,7 @@ defmodule IngressWeb.View do
   def put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
-    |> put_response(status, Poison.encode!(content))
+    |> put_response(status, Jason.encode!(content))
   end
 
   def put_response(conn, status, content) when is_binary(content),
