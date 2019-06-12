@@ -14,9 +14,13 @@ defmodule Ingress.Clients.Lambda do
 
   def call(arn, function, payload) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      with {:ok, %{body: credentials}} <- assume_role(arn, "presentation layer role") do
-        invoke_lambda(function, payload, credentials)
-      else
+      case assume_role(arn, "presentation layer role") do
+        {:ok, %{body: credentials}} ->
+          invoke_lambda(function, payload, credentials)
+        {:error, {:http_error, status_code, response}} ->
+          Stump.log(:error, %{message: "Failed to assume role", status: status_code, response: response})
+          ExMetrics.increment("clients.lambda.assume_role_failure")
+          {:error, :failed_to_assume_role}
         {:error, reason} ->
           Stump.log(:error, %{message: "Failed to assume role", reason: reason})
           ExMetrics.increment("clients.lambda.assume_role_failure")
