@@ -159,5 +159,16 @@ defmodule Ingress.LoopTest do
 
       assert state.origin == "https://origin.bbc.com/"
     end
+
+    test "it does not increment fallback for successful responses" do
+      for _ <- 1..15 do
+        Loop.inc(@non_error_resp_struct)
+        Loop.inc(@resp_struct)
+      end
+
+      assert {:ok, %{counter: counter}} = Loop.state(@resp_struct)
+
+      assert not Map.has_key?(counter, :fallback)
+    end
   end
 end
