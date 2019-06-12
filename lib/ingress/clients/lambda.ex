@@ -18,7 +18,7 @@ defmodule Ingress.Clients.Lambda do
 
   def call(arn, function, payload) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      case assume_role(arn, "presentation layer role") do
+      case assume_role(arn, "ingress_session") do
         {:ok, %{body: credentials}} ->
           invoke_lambda(function, payload, credentials)
 
