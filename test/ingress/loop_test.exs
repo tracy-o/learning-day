@@ -16,19 +16,19 @@ defmodule Ingress.LoopTest do
   @req_struct_2 StructHelper.build(private: %{loop_id: ["webcore"]})
   @resp_struct StructHelper.build(
                  private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
-                 response: %{http_status: @failure_status_code}
+                 response: %{http_status: @failure_status_code, fallback: nil}
                )
   @resp_struct_2 StructHelper.build(
                    private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
-                   response: %{http_status: @failure_status_code}
+                   response: %{http_status: @failure_status_code, fallback: nil}
                  )
   @non_error_resp_struct StructHelper.build(
                            private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
-                           response: %{http_status: 200}
+                           response: %{http_status: 200, fallback: nil}
                          )
   @non_error_resp_struct_2 StructHelper.build(
                              private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
-                             response: %{http_status: 200}
+                             response: %{http_status: 200, fallback: nil}
                            )
 
   @fallback_resp_struct StructHelper.build(
