@@ -19,7 +19,7 @@ defmodule Ingress.Cache do
     with {:ok, freshness, response} <- Local.fetch(struct),
          true <- freshness in accepted_freshness do
       metric_stale_response(freshness, struct)
-      Struct.add(struct, :response, response)
+      add_response_to_struct(struct, freshness, response)
     else
       _ -> metric_fallback_miss(accepted_freshness, struct)
     end
@@ -39,6 +39,16 @@ defmodule Ingress.Cache do
 
       false ->
         struct
+    end
+  end
+
+  defp add_response_to_struct(struct, freshness, response) do
+    case freshness do
+      :stale ->
+        Struct.add(struct, :response, response) |> Struct.add(:response, %{fallback: true})
+
+      _ ->
+        Struct.add(struct, :response, response)
     end
   end
 
