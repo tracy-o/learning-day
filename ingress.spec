@@ -13,7 +13,6 @@ Source2: bake-scripts.tar.gz
 Source3: ingress-status-cfn-signal.sh
 Source4: cloudformation-signal.service
 Source5: nofile.conf
-Source6: ip_local_port_range
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -37,7 +36,6 @@ from browsers to the lambda web renderers of web-core
 mkdir -p %{buildroot}/home/component
 mkdir -p %{buildroot}/home/component/ingress
 mkdir -p %{buildroot}/etc/security/limits.d
-mkdir -p %{buildroot}/proc/sys/net/ipv4
 tar -C %{buildroot}/home/component/ingress -xzf %{SOURCE0}
 mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %{SOURCE1} %{buildroot}/usr/lib/systemd/system/ingress.service
@@ -50,7 +48,6 @@ cp %{SOURCE4} %{buildroot}/usr/lib/systemd/system/cloudformation-signal.service
 mkdir -p %{buildroot}/var/log/component
 touch %{buildroot}/var/log/component/app.log
 cp %{SOURCE5} %{buildroot}/etc/security/limits.d/nofile.conf
-cp %{SOURCE6} %{buildroot}/proc/sys/net/ipv4/ip_local_port_range
 
 %post
 systemctl enable ingress
@@ -68,4 +65,3 @@ systemctl enable cloudformation-signal
 /etc/systemd/system/ingress.service.d/env.conf
 /var/log/component/app.log
 /etc/security/limits.d/nofile.conf
-/proc/sys/net/ipv4/ip_local_port_range
