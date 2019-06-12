@@ -135,6 +135,6 @@ defmodule Ingress.LoopTest do
     assert state.origin == Application.get_env(:ingress, :origin)
 
     {:ok, state} = Loop.state(@req_struct_2)
-    assert state.origin == Application.get_env(:ingress, :lambda_presentation_layer)
+    assert state.origin == Application.get_env(:ingress, :webcore_lambda_name_progressive_web_app)
   end
 end

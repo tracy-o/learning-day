@@ -35,8 +35,8 @@ defmodule IngressTest do
   test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "ec2-role",
-                        "presentation-role",
-                        "presentation-layer",
+                        "webcore-lambda-role-arn",
+                        "webcore-lambda-name-progressive-web-app",
                         %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
       @web_core_lambda_response
     end)
@@ -47,8 +47,8 @@ defmodule IngressTest do
   test "POST request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "ec2-role",
-                        "presentation-role",
-                        "presentation-layer",
+                        "webcore-lambda-role-arn",
+                        "webcore-lambda-name-progressive-web-app",
                         %{
                           body: ~s({"some": "data please"}),
                           headers: %{country: "gb"},
