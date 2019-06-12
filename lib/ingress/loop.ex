@@ -41,7 +41,7 @@ defmodule Ingress.Loop do
   end
 
   @impl GenServer
-  def handle_cast({:inc, http_status, origin, fallback = true}, state) do
+  def handle_cast({:inc, http_status, origin, true}, state) do
     state = %{state | counter: Counter.inc(state.counter, :fallback, origin)}
     state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
 
