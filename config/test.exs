@@ -8,13 +8,9 @@ config :ingress,
   lambda_client: Ingress.Clients.LambdaMock,
   ingress: IngressMock,
   instance_role_name: "ec2-role",
-  lambda_business_layer: "business-layer",
-  lambda_business_role: "business-role",
-  lambda_presentation_layer: "presentation-layer",
-  lambda_presentation_role: "presentation-role",
-  lambda_service_worker: "service-worker",
-  lambda_service_worker_role: "service-worker-role",
-  origin: "https://origin.bbc.com/"
+  origin: "https://origin.bbc.com/",
+  webcore_lambda_name_progressive_web_app: "webcore-lambda-name-progressive-web-app",
+  webcore_lambda_role_arn: "webcore-lambda-role-arn"
 
 config :ex_metrics,
   send_metrics: false

@@ -83,7 +83,7 @@ defmodule Ingress.IngressCacheTest do
       assert {:ok,
               %{
                 counter: %{
-                  "presentation-layer" => %{
+                  "webcore-lambda-name-progressive-web-app" => %{
                     200 => 1,
                     :errors => 0
                   }
@@ -98,8 +98,8 @@ defmodule Ingress.IngressCacheTest do
       |> expect(
         :call,
         fn "ec2-role",
-           "presentation-role",
-           "presentation-layer",
+           "webcore-lambda-role-arn",
+           "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @web_core_lambda_response
         end
@@ -117,8 +117,8 @@ defmodule Ingress.IngressCacheTest do
       |> expect(
         :call,
         fn "ec2-role",
-           "presentation-role",
-           "presentation-layer",
+           "webcore-lambda-role-arn",
+           "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @failed_web_core_lambda_response
         end

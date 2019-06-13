@@ -71,10 +71,10 @@ defmodule Ingress.Services.Lambda do
   end
 
   defp lambda_role_arn() do
-    Application.fetch_env!(:ingress, :lambda_presentation_role)
+    Application.fetch_env!(:ingress, :webcore_lambda_role_arn)
   end
 
   defp lambda_function() do
-    Application.fetch_env!(:ingress, :lambda_presentation_layer)
+    Application.fetch_env!(:ingress, :webcore_lambda_name_progressive_web_app)
   end
 end

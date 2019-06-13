@@ -68,7 +68,7 @@ defmodule Ingress.Loop do
   defp origin_pointer(false, loop_id) do
     case Enum.member?(@legacy_route_loop_ids, loop_id) do
       true -> Application.get_env(:ingress, :origin)
-      false -> Application.get_env(:ingress, :lambda_presentation_layer)
+      false -> Application.get_env(:ingress, :webcore_lambda_name_progressive_web_app)
     end
   end
 
