@@ -11,7 +11,6 @@ defmodule Ingress.Services.Lambda do
   def dispatch(struct = %Struct{request: request}) do
     response =
       @lambda_client.call(
-        instance_role_name(),
         lambda_role_arn(),
         lambda_function(),
         build_payload(struct)
@@ -64,10 +63,6 @@ defmodule Ingress.Services.Lambda do
       body: "",
       cacheable_content: true
     }
-  end
-
-  defp instance_role_name() do
-    Application.fetch_env!(:ingress, :instance_role_name)
   end
 
   defp lambda_role_arn() do

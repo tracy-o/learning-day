@@ -61,6 +61,7 @@ defmodule Ingress.IngressCacheTest do
 
   setup do
     :ets.delete_all_objects(:cache)
+    Ingress.LoopsSupervisor.kill_all()
 
     insert_seed_cache = fn [id: id, expires_in: expires_in, last_updated: last_updated] ->
       :ets.insert(
@@ -80,8 +81,6 @@ defmodule Ingress.IngressCacheTest do
       expires_in: :timer.hours(6),
       last_updated: Ingress.Timer.now_ms() - :timer.seconds(31)
     )
-
-    on_exit(fn -> Ingress.LoopsSupervisor.kill_all() end)
 
     :ok
   end
@@ -112,8 +111,7 @@ defmodule Ingress.IngressCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "ec2-role",
-           "webcore-lambda-role-arn",
+        fn "webcore-lambda-role-arn",
            "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @web_core_lambda_response
@@ -131,8 +129,7 @@ defmodule Ingress.IngressCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "ec2-role",
-           "webcore-lambda-role-arn",
+        fn "webcore-lambda-role-arn",
            "webcore-lambda-name-progressive-web-app",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @failed_web_core_lambda_response
