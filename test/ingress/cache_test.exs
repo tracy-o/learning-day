@@ -44,6 +44,21 @@ defmodule Ingress.IngressCacheTest do
     cacheable_content: true
   }
 
+  @response %Ingress.Struct.Response{
+    body: ~s({"hi": "bonjour"}),
+    headers: %{"content-type" => "application/json"},
+    http_status: 200,
+    cacheable_content: true
+  }
+
+  @fallback_response %Ingress.Struct.Response{
+    body: ~s({"hi": "bonjour"}),
+    headers: %{"content-type" => "application/json"},
+    http_status: 200,
+    cacheable_content: true,
+    fallback: true
+  }
+
   setup do
     :ets.delete_all_objects(:cache)
 
@@ -124,7 +139,7 @@ defmodule Ingress.IngressCacheTest do
         end
       )
 
-      assert %Ingress.Struct{response: @response} =
+      assert %Ingress.Struct{response: @fallback_response} =
                Ingress.handle(@stale_cache_get_request_struct)
     end
   end

@@ -16,20 +16,25 @@ defmodule Ingress.LoopTest do
   @req_struct_2 StructHelper.build(private: %{loop_id: ["webcore"]})
   @resp_struct StructHelper.build(
                  private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
-                 response: %{http_status: @failure_status_code}
+                 response: %{http_status: @failure_status_code, fallback: nil}
                )
   @resp_struct_2 StructHelper.build(
                    private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
-                   response: %{http_status: @failure_status_code}
+                   response: %{http_status: @failure_status_code, fallback: nil}
                  )
   @non_error_resp_struct StructHelper.build(
                            private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
-                           response: %{http_status: 200}
+                           response: %{http_status: 200, fallback: nil}
                          )
   @non_error_resp_struct_2 StructHelper.build(
                              private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
-                             response: %{http_status: 200}
+                             response: %{http_status: 200, fallback: nil}
                            )
+
+  @fallback_resp_struct StructHelper.build(
+                          private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
+                          response: %{http_status: 200, fallback: true}
+                        )
 
   test "returns a state pointer" do
     assert Loop.state(@req_struct) ==
@@ -136,5 +141,34 @@ defmodule Ingress.LoopTest do
 
     {:ok, state} = Loop.state(@req_struct_2)
     assert state.origin == Application.get_env(:ingress, :webcore_lambda_name_progressive_web_app)
+  end
+
+  describe "when in fallback" do
+    test "it increments both the status and fallback counters" do
+      for _ <- 1..30, do: Loop.inc(@fallback_resp_struct)
+      {:ok, state} = Loop.state(@req_struct)
+
+      assert %{
+               counter: %{
+                 "https://origin.bbc.com/" => %{
+                   :fallback => 30,
+                   200 => 30
+                 }
+               }
+             } = state
+
+      assert state.origin == "https://origin.bbc.com/"
+    end
+
+    test "it does not increment fallback for successful responses" do
+      for _ <- 1..15 do
+        Loop.inc(@non_error_resp_struct)
+        Loop.inc(@resp_struct)
+      end
+
+      assert {:ok, %{counter: counter}} = Loop.state(@resp_struct)
+
+      assert not Map.has_key?(counter, :fallback)
+    end
   end
 end

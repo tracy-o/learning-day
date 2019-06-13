@@ -8,7 +8,7 @@ end
 
 defmodule Ingress.Struct.Response do
   # TODO: When we start serving personalised pages, we should default to `cacheable_content: false`
-  defstruct http_status: nil, headers: %{}, body: nil, cacheable_content: true
+  defstruct [:fallback, http_status: nil, headers: %{}, body: nil, cacheable_content: true]
 end
 
 defmodule Ingress.Struct.Private do
