@@ -17,32 +17,11 @@ defmodule Ingress.Clients.Lambda do
   @aws_client Application.get_env(:ingress, :aws_client)
 
   def call(arn, function, payload) do
-    case assume_role(arn, "ingress_session") do
-      {:ok, %{body: credentials}} ->
-        invoke_lambda(function, payload, credentials)
-
-      {:error, {:http_error, status_code, response}} ->
-        failed_to_assume_role(status_code, response)
-
-      {:error, _} ->
-        failed_to_assume_role(nil, nil)
+    with {:ok, credentials} <- Ingress.Cache.STS.fetch(arn) do
+      invoke_lambda(function, payload, credentials)
+    else
+      error -> error
     end
-  end
-
-  defp failed_to_assume_role(status_code, response) do
-    Stump.log(:error, %{
-      message: "Failed to assume role",
-      status: status_code,
-      response: response
-    })
-
-    ExMetrics.increment("clients.lambda.assume_role_failure")
-    {:error, :failed_to_assume_role}
-  end
-
-  defp assume_role(arn, role_name) do
-    @aws_client.STS.assume_role(arn, role_name)
-    |> @aws_client.request()
   end
 
   defp invoke_lambda(function, payload, credentials) do
