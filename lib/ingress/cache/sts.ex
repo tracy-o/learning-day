@@ -2,6 +2,7 @@ defmodule Ingress.Cache.STS do
   use GenServer
 
   @aws_client Application.get_env(:ingress, :aws_client)
+  @refresh_rate 3_000
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :sts_cache_refresh)
@@ -10,8 +11,7 @@ defmodule Ingress.Cache.STS do
   def init(initial_state) do
     :ets.new(:sts_cache, [:set, :protected, :named_table, read_concurrency: true])
     GenServer.cast(self(), :refresh)
-
-    schedule_work(Keyword.get(initial_state, :frequency_ms))
+    schedule_work()
     {:ok, initial_state}
   end
 
@@ -22,16 +22,14 @@ defmodule Ingress.Cache.STS do
     end
   end
 
-  def handle_cast(:refresh, state = [frequency_ms: frequency_ms]) do
+  def handle_cast(:refresh, state) do
     refresh_credentials()
-
-    schedule_work(frequency_ms)
-
+    schedule_work()
     {:noreply, state}
   end
 
-  defp schedule_work(frequency_ms) do
-    Process.send_after(self(), :refresh, frequency_ms)
+  defp schedule_work do
+    Process.send_after(self(), :refresh, @refresh_rate)
   end
 
   defp refresh_credentials do
@@ -52,8 +50,6 @@ defmodule Ingress.Cache.STS do
   defp store_credentials(arn, credentials) do
     :ets.insert(:sts_cache, {arn, credentials})
   end
-
-  defp store_credentials(_), do: nil
 
   defp format_response(sts_response) do
     case sts_response do

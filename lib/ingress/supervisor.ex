@@ -22,7 +22,7 @@ defmodule Ingress.Supervisor do
     [
       Ingress.LoopsRegistry,
       Ingress.LoopsSupervisor,
-      {Ingress.Cache.STS, [frequency_ms: 3_000]},
+      Ingress.Cache.STS,
       worker(Cachex, [:cache, []])
     ]
   end
