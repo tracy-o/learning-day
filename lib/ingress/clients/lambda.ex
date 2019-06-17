@@ -17,17 +17,15 @@ defmodule Ingress.Clients.Lambda do
   @aws_client Application.get_env(:ingress, :aws_client)
 
   def call(arn, function, payload) do
-    ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      case assume_role(arn, "ingress_session") do
-        {:ok, %{body: credentials}} ->
-          invoke_lambda(function, payload, credentials)
+    case assume_role(arn, "ingress_session") do
+      {:ok, %{body: credentials}} ->
+        invoke_lambda(function, payload, credentials)
 
-        {:error, {:http_error, status_code, response}} ->
-          failed_to_assume_role(status_code, response)
+      {:error, {:http_error, status_code, response}} ->
+        failed_to_assume_role(status_code, response)
 
-        {:error, _} ->
-          failed_to_assume_role(nil, nil)
-      end
+      {:error, _} ->
+        failed_to_assume_role(nil, nil)
     end
   end
 
@@ -48,20 +46,22 @@ defmodule Ingress.Clients.Lambda do
   end
 
   defp invoke_lambda(function, payload, credentials) do
-    case @aws_client.Lambda.invoke(function, payload, %{})
-         |> @aws_client.request(
-           security_token: credentials.session_token,
-           access_key_id: credentials.access_key_id,
-           secret_access_key: credentials.secret_access_key
-         ) do
-      {:ok, body} ->
-        {:ok, body}
+    ExMetrics.timeframe "function.timing.service.lambda.invoke" do
+      case @aws_client.Lambda.invoke(function, payload, %{})
+           |> @aws_client.request(
+             security_token: credentials.session_token,
+             access_key_id: credentials.access_key_id,
+             secret_access_key: credentials.secret_access_key
+           ) do
+        {:ok, body} ->
+          {:ok, body}
 
-      {:error, {:http_error, status_code, response}} ->
-        failed_to_invoke_lambda(status_code, response)
+        {:error, {:http_error, status_code, response}} ->
+          failed_to_invoke_lambda(status_code, response)
 
-      {:error, _} ->
-        failed_to_invoke_lambda(nil, nil)
+        {:error, _} ->
+          failed_to_invoke_lambda(nil, nil)
+      end
     end
   end
 
