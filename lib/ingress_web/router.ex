@@ -14,7 +14,7 @@ defmodule IngressWeb.Router do
   alias IngressWeb.{View, WebCoreRoutes, LegacyRoutes}
 
   # TODO: convince me we need an allowlist here
-  @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web bbcthree graphql service-worker.js}
+  @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web bbcthree topics graphql service-worker.js}
   @allowed_http_methods [:head, :get, :post]
 
   # TODO: perhaps create a struct/have a loop generation and serve this 200 by going all the way through the app
