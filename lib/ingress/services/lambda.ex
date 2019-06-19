@@ -43,6 +43,8 @@ defmodule Ingress.Services.Lambda do
   defp format_invoke_response(
          {:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}
        ) do
+    ExMetrics.increment("service.lambda.response.#{http_status}")
+
     %Struct.Response{
       http_status: http_status,
       headers: headers,
