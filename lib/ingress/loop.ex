@@ -60,6 +60,7 @@ defmodule Ingress.Loop do
   # the counter to the Controller app.
   @impl GenServer
   def handle_info(:reset, state) do
+    Ingress.Monitor.record_loop(state)
     Process.send_after(self(), :reset, @interval)
     state = %{state | counter: Counter.init()}
 
