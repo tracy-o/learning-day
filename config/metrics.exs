@@ -11,6 +11,8 @@ config :ex_metrics,
     [
       "cache.item_does_not_exist",
       "cache.stale_response_added_to_struct",
+      "clients.lambda.invoke_failure",
+      "clients.lambda.assume_role_failure",
       "error.loop.state",
       "error.loop.threshold.exceeded",
       "error.pipeline.process",
