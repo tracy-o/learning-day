@@ -11,7 +11,6 @@ defmodule Ingress.Cache.STS do
   def init(initial_state) do
     :ets.new(:sts_cache, [:set, :protected, :named_table, read_concurrency: true])
     send(self(), :refresh)
-    schedule_work()
     {:ok, initial_state}
   end
 
@@ -25,6 +24,17 @@ defmodule Ingress.Cache.STS do
   def handle_info(:refresh, state) do
     refresh_credentials()
     schedule_work()
+    {:noreply, state}
+  end
+
+  # Avoids leak from Mojito? which
+  # might not handle this info message correctly???
+  # (Related to https://elixirforum.com/t/ssl-closed-error-in-genserver/19814)
+  def handle_info({:ssl_closed, _}, state) do
+    Stump.log(:info, %{
+      msg: "Received :ssl_closed info message in :sts_cache_refresh process."
+    })
+
     {:noreply, state}
   end
 
