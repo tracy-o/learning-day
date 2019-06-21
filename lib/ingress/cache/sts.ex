@@ -10,7 +10,7 @@ defmodule Ingress.Cache.STS do
 
   def init(initial_state) do
     :ets.new(:sts_cache, [:set, :protected, :named_table, read_concurrency: true])
-    GenServer.cast(self(), :refresh)
+    send(self(), :refresh)
     schedule_work()
     {:ok, initial_state}
   end
@@ -22,7 +22,7 @@ defmodule Ingress.Cache.STS do
     end
   end
 
-  def handle_cast(:refresh, state) do
+  def handle_info(:refresh, state) do
     refresh_credentials()
     schedule_work()
     {:noreply, state}
