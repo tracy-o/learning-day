@@ -32,6 +32,7 @@ environment :dev do
   set dev_mode: true
   set include_erts: false
   set cookie: :"I%cla{Ao7kp[wp79kJu67R]@3=jqpDv4jk{$`En@0t,E8HVlA,L,J_IXB_7hCg{G"
+  set vm_args: "rel/vm.args"
 end
 
 environment :prod do
