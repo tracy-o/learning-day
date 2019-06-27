@@ -3,7 +3,7 @@ defmodule Ingress.Struct.Debug do
 end
 
 defmodule Ingress.Struct.Request do
-  defstruct [:path, :payload, :method, :country, :request_hash]
+  defstruct [:path, :payload, :method, :country, :request_hash, has_been_replayed?: nil]
 end
 
 defmodule Ingress.Struct.Response do

@@ -10,7 +10,8 @@ defmodule IngressWeb.StructAdapter do
         path: conn.request_path,
         payload: body(conn),
         method: conn.method,
-        country: bbc_headers.country
+        country: bbc_headers.country,
+        has_been_replayed?: bbc_headers.replayed_traffic
       },
       private: %Private{
         loop_id: loop_id
