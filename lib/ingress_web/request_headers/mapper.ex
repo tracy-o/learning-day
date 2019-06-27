@@ -2,7 +2,8 @@ defmodule IngressWeb.RequestHeaders.Mapper do
   @map %{
     cache: %{edge: "x-bbc-edge-cache"},
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},
-    host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"}
+    host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
+    replayed_traffic: %{replayed_traffic: "replayed-traffic"}
   }
 
   def map(req_headers) do

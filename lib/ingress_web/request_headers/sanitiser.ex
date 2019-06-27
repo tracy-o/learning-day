@@ -16,6 +16,9 @@ defmodule IngressWeb.RequestHeaders.Sanitiser do
     headers[:edge] || headers[:forwarded] || headers[:http]
   end
 
+  def replayed_traffic(%{replayed_traffic: "true"}, _), do: true
+  def replayed_traffic(_, _), do: nil
+
   defp edge(headers, true) do
     headers[:edge]
   end
