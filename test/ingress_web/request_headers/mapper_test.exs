@@ -10,7 +10,8 @@ defmodule IngressWeb.RequestHeaders.MapperTest do
                %{
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
-                 host: %{edge: nil, forwarded: nil, http: nil}
+                 host: %{edge: nil, forwarded: nil, http: nil},
+                 replayed_traffic: %{replayed_traffic: nil}
                }
     end
 
@@ -18,14 +19,16 @@ defmodule IngressWeb.RequestHeaders.MapperTest do
       req_headers = [
         {"x-bbc-edge-cache", "1"},
         {"x-bbc-edge-country", "**"},
-        {"x-country", "gb"}
+        {"x-country", "gb"},
+        {"replayed-traffic", "true"}
       ]
 
       assert Mapper.map(req_headers) ==
                %{
                  cache: %{edge: "1"},
                  country: %{edge: "**", varnish: "gb"},
-                 host: %{edge: nil, forwarded: nil, http: nil}
+                 host: %{edge: nil, forwarded: nil, http: nil},
+                 replayed_traffic: %{replayed_traffic: "true"}
                }
     end
 
@@ -33,14 +36,16 @@ defmodule IngressWeb.RequestHeaders.MapperTest do
       req_headers = [
         {"x-bbc-edge-cache", ""},
         {"x-bbc-edge-country", ""},
-        {"x-country", ""}
+        {"x-country", ""},
+        {"replayed-traffic", ""}
       ]
 
       assert Mapper.map(req_headers) ==
                %{
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
-                 host: %{edge: nil, forwarded: nil, http: nil}
+                 host: %{edge: nil, forwarded: nil, http: nil},
+                 replayed_traffic: %{replayed_traffic: nil}
                }
     end
   end

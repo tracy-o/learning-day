@@ -30,7 +30,7 @@ defmodule Ingress.Loop do
   def init(_) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init(), pipeline: ["MyTransformer1"]}}
+    {:ok, %{counter: Counter.init(), pipeline: ["ReplayedTrafficTransformer"]}}
   end
 
   @impl GenServer
