@@ -7,7 +7,6 @@ services:
     image: belfrage:latest
     ports:
       - "7080:7080"
-
   monitor:
     image: monitor:latest
     ports:

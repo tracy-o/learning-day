@@ -2,6 +2,7 @@
 
 # Extend from the official Elixir image
 FROM elixir:latest
+ENV LOCATION=docker
 
 # Create app directory and copy the Elixir projects into it
 RUN mkdir /app
@@ -16,5 +17,4 @@ RUN mix deps.get
 RUN mix compile
 RUN mix release
 
-CMD ["/bin/sh", "./rel/docker_boot.sh", "foreground"]
-
+CMD ["_build/dev/rel/ingress/bin/ingress", "foreground"]

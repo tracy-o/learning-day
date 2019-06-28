@@ -33,6 +33,7 @@ environment :dev do
   set include_erts: false
   set cookie: :"I%cla{Ao7kp[wp79kJu67R]@3=jqpDv4jk{$`En@0t,E8HVlA,L,J_IXB_7hCg{G"
   set vm_args: "rel/vm.args"
+  set pre_configure_hooks: "rel/hooks/dev_pre_configure"
 end
 
 environment :prod do
@@ -40,6 +41,7 @@ environment :prod do
   set include_src: false
   set cookie: :"T:5196)>.Ll`Y&usT2(zBarAkP/BOEEwoWBdQz8])cDPRgl`6iSe}%Tqf2{$0YbE"
   set vm_args: "rel/vm.args"
+  set pre_configure_hooks: "rel/hooks/prod_pre_configure"
 end
 
 # You may define one or more releases in this file.
