@@ -1,5 +1,7 @@
 defmodule Belfrage.Clients.Lambda do
   use ExMetrics
+  @http_client Application.get_env(:ingress, :http_client, Clients.HTTP)
+
   @behaviour ExAws.Request.HttpClient
 
   @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
@@ -7,11 +9,13 @@ defmodule Belfrage.Clients.Lambda do
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
     headers = Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
-    Mojito.request(method, url, headers, body, build_options(http_opts))
+    %URI{host: host, path: path} = URI.parse(url)
+
+    @http_client.post(host, path, headers, body, build_options(http_opts))
   end
 
   def build_options(opts) do
-    Keyword.merge(opts, protocols: [:http2, :http1], pool: false)
+    Keyword.merge([protocols: [:http2, :http1], pool: false, timeout: 1000], opts)
   end
 
   @aws_client Application.get_env(:belfrage, :aws_client)

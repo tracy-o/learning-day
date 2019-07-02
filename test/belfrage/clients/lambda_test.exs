@@ -1,6 +1,7 @@
 defmodule Belfrage.Clients.LambdaTest do
   alias Belfrage.Clients.Lambda
   use ExUnit.Case
+  use Test.Support.Helper, :mox
 
   describe "Belfrage.Clients.Lambda.call/3" do
     test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
@@ -22,17 +23,40 @@ defmodule Belfrage.Clients.LambdaTest do
   describe "Belfrage.Clients.Lambda.build_options/1" do
     test "combines default and passed in options if keys are unique" do
       assert Lambda.build_options(timeout: 1000) == [
-               timeout: 1000,
                protocols: [:http2, :http1],
-               pool: false
+               pool: false,
+               timeout: 1000
              ]
     end
 
     test "overwrites default if the same option is passed" do
       assert Lambda.build_options(protocols: [:http2], pool: true) == [
-               protocols: [:http2, :http1],
-               pool: false
+               timeout: 1000,
+               protocols: [:http2],
+               pool: true
              ]
+    end
+  end
+
+  describe "ExAWS request callback" do
+    @generic_response {:ok,
+                       %Mojito.Response{
+                         status_code: 200,
+                         headers: [{"content-type", "application/json"}],
+                         body: "{}"
+                       }}
+
+    test "post returns a response" do
+      Ingress.Clients.HTTPMock
+      |> expect(:post, fn "www.example.com",
+                          "/foo",
+                          [],
+                          ~s({"some": "data"}),
+                          [protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+        @generic_response
+      end)
+
+      Lambda.request(:post, "https://www.example.com/foo", ~s({"some": "data"}))
     end
   end
 end
