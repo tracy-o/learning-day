@@ -1,7 +1,7 @@
 # ./Dockerfile
 
 # Extend from the official Elixir image
-FROM elixir:latest
+FROM qixxit/elixir-centos:latest
 ENV LOCATION=docker
 
 # Create app directory and copy the Elixir projects into it
