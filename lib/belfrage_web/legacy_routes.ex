@@ -1,5 +1,5 @@
-defmodule IngressWeb.LegacyRoutes do
-  alias IngressWeb.{View, StructAdapter}
+defmodule BelfrageWeb.LegacyRoutes do
+  alias BelfrageWeb.{View, StructAdapter}
 
   @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 

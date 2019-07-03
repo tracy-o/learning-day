@@ -60,7 +60,7 @@ defmodule Belfrage.Cache.LocalTest do
                    body: "hello!",
                    headers: %{"content-type" => "application/json"},
                    http_status: 200
-                 }, _ingress_determined_last_updated}}
+                 }, _belfrage_determined_last_updated}}
              ] = :ets.lookup(:cache, "abc123")
     end
 

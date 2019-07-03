@@ -1,4 +1,4 @@
-defmodule IngressMock do
+defmodule BelfrageMock do
   @behaviour Belfrage
   alias Belfrage.{Struct}
 

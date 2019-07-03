@@ -1,4 +1,4 @@
-defmodule IngressWeb.StructAdapter do
+defmodule BelfrageWeb.StructAdapter do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
   alias Plug.Conn

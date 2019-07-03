@@ -1,13 +1,13 @@
-defmodule IngressWeb.ErrorHandlingTest do
+defmodule BelfrageWeb.ErrorHandlingTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
 
-  alias IngressWeb.Router
+  alias BelfrageWeb.Router
 
   describe "erroneous web core route" do
     test "Responds with 500 status code" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn _ ->
         raise("Something broke")
       end)

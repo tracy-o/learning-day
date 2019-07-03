@@ -1,9 +1,9 @@
-defmodule IngressWeb.WebCoreRoutes do
+defmodule BelfrageWeb.WebCoreRoutes do
   @moduledoc """
   Call Belfrage.handle with the Struct
   """
 
-  alias IngressWeb.{View, StructAdapter}
+  alias BelfrageWeb.{View, StructAdapter}
 
   @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 

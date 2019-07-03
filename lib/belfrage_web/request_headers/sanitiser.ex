@@ -1,4 +1,4 @@
-defmodule IngressWeb.RequestHeaders.Sanitiser do
+defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   @moduledoc """
   """
 

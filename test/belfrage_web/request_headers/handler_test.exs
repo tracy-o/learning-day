@@ -1,8 +1,8 @@
-defmodule IngressWeb.RequestHeaders.HandlerTest do
+defmodule BelfrageWeb.RequestHeaders.HandlerTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.RequestHeaders.Handler
+  alias BelfrageWeb.RequestHeaders.Handler
 
   describe "call" do
     test "sets edge country header in the conn" do

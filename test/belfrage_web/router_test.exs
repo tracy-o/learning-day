@@ -1,8 +1,8 @@
-defmodule IngressWeb.RouterTest do
+defmodule BelfrageWeb.RouterTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.Router
+  alias BelfrageWeb.Router
 
   describe "GET /status" do
     test "will return 'OK'" do

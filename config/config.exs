@@ -32,8 +32,8 @@ config :belfrage,
   aws_client: ExAws,
   circuit_breaker_reset_interval: 60_000,
   errors_threshold: 1_000,
-  fallback: System.get_env("INGRESS_FALLBACK"),
-  origin: System.get_env("INGRESS_ORIGIN")
+  fallback: System.get_env("BELFRAGE_FALLBACK"),
+  origin: System.get_env("BELFRAGE_ORIGIN")
 
 config :logger, :console, format: "$message\n"
 

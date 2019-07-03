@@ -1,11 +1,11 @@
-defmodule IngressWeb.LegacyTest do
+defmodule BelfrageWeb.LegacyTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Private, Request}
-  alias IngressWeb.Router
+  alias BelfrageWeb.Router
   alias Test.Support.StructHelper
 
   describe "valid legacy route with HTML response" do
@@ -18,7 +18,7 @@ defmodule IngressWeb.LegacyTest do
                                )
 
     test "GET homepage request to legacy" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["legacy"]},
                               request: %Request{path: "/_legacy"}
@@ -37,7 +37,7 @@ defmodule IngressWeb.LegacyTest do
     end
 
     test "GET page-type request to legacy" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["legacy", "page_type"]},
                               request: %Request{path: "/_legacy/page-type"}
@@ -56,7 +56,7 @@ defmodule IngressWeb.LegacyTest do
     end
 
     test "GET page-type with id request to legacy" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["legacy", "page_type_with_id"]},
                               request: %Request{path: "/_legacy/page-type/123"}
@@ -75,7 +75,7 @@ defmodule IngressWeb.LegacyTest do
     end
 
     test "POST homepage request to legacy" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["legacy"]},
                               request: %Request{

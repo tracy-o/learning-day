@@ -1,7 +1,7 @@
-defmodule IngressWeb.ResponseHeaders.Vary do
+defmodule BelfrageWeb.ResponseHeaders.Vary do
   import Plug.Conn
 
-  alias IngressWeb.Behaviours.ResponseHeaders
+  alias BelfrageWeb.Behaviours.ResponseHeaders
 
   @behaviour ResponseHeaders
 

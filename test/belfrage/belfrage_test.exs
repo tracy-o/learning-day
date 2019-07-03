@@ -1,4 +1,4 @@
-defmodule IngressTest do
+defmodule BelfrageTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox

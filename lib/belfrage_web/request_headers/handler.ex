@@ -1,11 +1,11 @@
-defmodule IngressWeb.RequestHeaders.Handler do
+defmodule BelfrageWeb.RequestHeaders.Handler do
   import Plug.Conn
 
   @moduledoc """
   """
 
-  alias IngressWeb.RequestHeaders.Sanitiser
-  alias IngressWeb.RequestHeaders.Mapper
+  alias BelfrageWeb.RequestHeaders.Sanitiser
+  alias BelfrageWeb.RequestHeaders.Mapper
 
   def init(opts), do: opts
 

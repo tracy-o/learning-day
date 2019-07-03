@@ -1,11 +1,11 @@
-defmodule IngressWeb.WebCoreRoutesTest do
+defmodule BelfrageWeb.WebCoreRoutesTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Private, Request}
-  alias IngressWeb.Router
+  alias BelfrageWeb.Router
   alias Test.Support.StructHelper
 
   describe "valid web core route with HTML response" do
@@ -18,7 +18,7 @@ defmodule IngressWeb.WebCoreRoutesTest do
                                )
 
     test "GET request to web core homepage" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: ["_web_core"]},
                               request: %Request{path: "/_web_core"}
@@ -37,7 +37,7 @@ defmodule IngressWeb.WebCoreRoutesTest do
     end
 
     test "POST request to web core homepage" do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn
         %Struct{
           private: %Private{
@@ -63,7 +63,7 @@ defmodule IngressWeb.WebCoreRoutesTest do
   end
 
   test "GET page-type request to web_core" do
-    IngressMock
+    BelfrageMock
     |> expect(:handle, fn %Struct{
                             private: %Private{loop_id: ["_web_core", "page-type"]},
                             request: %Request{path: "/_web_core/page-type"}
@@ -82,7 +82,7 @@ defmodule IngressWeb.WebCoreRoutesTest do
   end
 
   test "GET page-type with id request to web_core" do
-    IngressMock
+    BelfrageMock
     |> expect(:handle, fn %Struct{
                             private: %Private{loop_id: ["_web_core", "page-type"]},
                             request: %Request{path: "/_web_core/page-type/123"}

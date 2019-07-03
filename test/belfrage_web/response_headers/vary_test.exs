@@ -1,8 +1,8 @@
-defmodule IngressWeb.ResponseHeaders.VaryTest do
+defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.ResponseHeaders.Vary
+  alias BelfrageWeb.ResponseHeaders.Vary
 
   doctest Vary
 

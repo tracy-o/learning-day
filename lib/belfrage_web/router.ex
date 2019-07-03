@@ -1,9 +1,9 @@
-defmodule IngressWeb.Router do
+defmodule BelfrageWeb.Router do
   use Plug.Router
   use Plug.ErrorHandler
   use ExMetrics
 
-  alias IngressWeb.RequestHeaders
+  alias BelfrageWeb.RequestHeaders
 
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
@@ -11,7 +11,7 @@ defmodule IngressWeb.Router do
   plug(:match)
   plug(:dispatch)
 
-  alias IngressWeb.{View, WebCoreRoutes, LegacyRoutes}
+  alias BelfrageWeb.{View, WebCoreRoutes, LegacyRoutes}
 
   # TODO: convince me we need an allowlist here
   @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web bbcthree topics graphql service-worker.js}

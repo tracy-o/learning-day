@@ -14,7 +14,7 @@ defmodule Belfrage.Supervisor do
       end
 
     [
-      {IngressWeb.Router, router_options}
+      {BelfrageWeb.Router, router_options}
     ] ++ default_children()
   end
 

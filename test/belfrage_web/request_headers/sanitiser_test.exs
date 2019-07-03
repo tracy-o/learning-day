@@ -1,7 +1,7 @@
-defmodule IngressWeb.RequestHeaders.SanitiserTest do
+defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
   use ExUnit.Case
 
-  alias IngressWeb.RequestHeaders.Sanitiser
+  alias BelfrageWeb.RequestHeaders.Sanitiser
 
   describe "edge cache header" do
     test "returns true when edge cache is '1'" do

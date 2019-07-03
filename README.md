@@ -2,7 +2,7 @@
 
 ## What is Belfrage
 
-__Ingress__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Belfrage is generic enough to be used as an entry point for any BBC service with minimal effort.
+__Belfrage__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Belfrage is generic enough to be used as an entry point for any BBC service with minimal effort.
 
 Belfrage looks after the resiliency of the page, it monitors in real-time the status of the responses and can take actions in case of errors.
 

@@ -1,9 +1,9 @@
-defmodule IngressWeb.View do
+defmodule BelfrageWeb.View do
   import Plug.Conn
 
   alias Belfrage.Struct
 
-  @default_headers [IngressWeb.ResponseHeaders.Vary, IngressWeb.ResponseHeaders.CacheControl]
+  @default_headers [BelfrageWeb.ResponseHeaders.Vary, BelfrageWeb.ResponseHeaders.CacheControl]
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn

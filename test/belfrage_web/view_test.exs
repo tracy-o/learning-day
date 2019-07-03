@@ -1,8 +1,8 @@
-defmodule IngressWeb.ViewTest do
+defmodule BelfrageWeb.ViewTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.View
+  alias BelfrageWeb.View
   alias Test.Support.StructHelper
 
   doctest View

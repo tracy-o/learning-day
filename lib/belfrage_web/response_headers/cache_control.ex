@@ -1,7 +1,7 @@
-defmodule IngressWeb.ResponseHeaders.CacheControl do
+defmodule BelfrageWeb.ResponseHeaders.CacheControl do
   import Plug.Conn
 
-  alias IngressWeb.Behaviours.ResponseHeaders
+  alias BelfrageWeb.Behaviours.ResponseHeaders
 
   @behaviour ResponseHeaders
 

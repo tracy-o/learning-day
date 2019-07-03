@@ -7,7 +7,7 @@ config :belfrage,
   fallback: "https://s3.aws.com/",
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,
-  belfrage: IngressMock,
+  belfrage: BelfrageMock,
   origin: "https://origin.bbc.com/",
   webcore_lambda_name_progressive_web_app: "webcore-lambda-name-progressive-web-app",
   webcore_lambda_role_arn: "webcore-lambda-role-arn"

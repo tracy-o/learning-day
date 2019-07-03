@@ -1,8 +1,8 @@
-defmodule IngressWeb.HeadersTest do
+defmodule BelfrageWeb.HeadersTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.Router
+  alias BelfrageWeb.Router
   alias Test.Support.StructHelper
 
   use Test.Support.Helper, :mox
@@ -18,7 +18,7 @@ defmodule IngressWeb.HeadersTest do
           }
         )
 
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn _struct ->
         struct_with_response
       end)
@@ -33,7 +33,7 @@ defmodule IngressWeb.HeadersTest do
     end
 
     def make_500_call(_body, _headers = %{}, path) do
-      IngressMock
+      BelfrageMock
       |> expect(:handle, fn _ ->
         raise("Something broke")
       end)

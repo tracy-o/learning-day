@@ -18,4 +18,4 @@ Every single HTTP request against Belfrage will create a new Erlang process. Thi
 Apart from a bit of pre work, most of the request time in Belfrage will be spent in waiting, Belfrage sends the request to the presentation layer which will do the hard job of transforming the request into a full page, then Belfrage will send it back to the user. 
 Concurrency allow us to have processes on hold, waiting for their pages while leaving the server free to handle other incoming requests.
 
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_597D568B71C1719AF6004629DE6055CDF1335896E4BB3C9AB9432D233E8E245B_1552558055231_ingress+zzz.png)
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_597D568B71C1719AF6004629DE6055CDF1335896E4BB3C9AB9432D233E8E245B_1552558055231_belfrage+zzz.png)

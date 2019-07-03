@@ -1,8 +1,8 @@
-defmodule IngressWeb.RequestHeaders.MapperTest do
+defmodule BelfrageWeb.RequestHeaders.MapperTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias IngressWeb.RequestHeaders.Mapper
+  alias BelfrageWeb.RequestHeaders.Mapper
 
   describe "headers mapper" do
     test "returns headers map when no request headers are set" do

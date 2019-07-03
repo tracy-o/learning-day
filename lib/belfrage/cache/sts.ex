@@ -48,7 +48,7 @@ defmodule Belfrage.Cache.STS do
     # if on :dev, then fetch the credentials from the wormhole
     # instead of calling STS.
     with {:ok, credentials} <-
-           @aws_client.STS.assume_role(arn, "ingress_session")
+           @aws_client.STS.assume_role(arn, "belfrage_session")
            |> @aws_client.request()
            |> format_response() do
       store_credentials(arn, credentials)

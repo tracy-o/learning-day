@@ -1,4 +1,4 @@
-defmodule Belfrage.IngressCacheTest do
+defmodule Belfrage.BelfrageCacheTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
