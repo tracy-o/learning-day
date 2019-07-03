@@ -1,7 +1,7 @@
-defmodule Ingress.LoopTest do
+defmodule Belfrage.LoopTest do
   use ExUnit.Case, async: true
 
-  alias Ingress.{Loop, LoopsSupervisor}
+  alias Belfrage.{Loop, LoopsSupervisor}
   alias Test.Support.StructHelper
 
   setup do
@@ -127,24 +127,24 @@ defmodule Ingress.LoopTest do
 
   test "resets after a specific time" do
     {:ok, state} = Loop.state(@req_struct)
-    assert state.origin == Application.get_env(:ingress, :origin)
+    assert state.origin == Application.get_env(:belfrage, :origin)
 
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@req_struct)
     assert state.origin == "https://s3.aws.com/"
 
-    Process.sleep(Application.get_env(:ingress, :circuit_breaker_reset_interval) + 100)
+    Process.sleep(Application.get_env(:belfrage, :circuit_breaker_reset_interval) + 100)
 
     {:ok, state} = Loop.state(@req_struct)
-    assert state.origin == Application.get_env(:ingress, :origin)
+    assert state.origin == Application.get_env(:belfrage, :origin)
   end
 
   test "decides the origin based on the loop_id" do
     {:ok, state} = Loop.state(@req_struct)
-    assert state.origin == Application.get_env(:ingress, :origin)
+    assert state.origin == Application.get_env(:belfrage, :origin)
 
     {:ok, state} = Loop.state(@req_struct_2)
-    assert state.origin == Application.get_env(:ingress, :webcore_lambda_name_progressive_web_app)
+    assert state.origin == Application.get_env(:belfrage, :webcore_lambda_name_progressive_web_app)
   end
 
   describe "when in fallback" do

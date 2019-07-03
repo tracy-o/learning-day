@@ -1,6 +1,6 @@
-defmodule Ingress.Services.LambdaTest do
-  alias Ingress.{Clients, Struct}
-  alias Ingress.Services.Lambda
+defmodule Belfrage.Services.LambdaTest do
+  alias Belfrage.{Clients, Struct}
+  alias Belfrage.Services.Lambda
   alias Test.Support.StructHelper
 
   use ExUnit.Case

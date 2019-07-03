@@ -1,7 +1,7 @@
-defmodule Ingress.ProcessorTest do
+defmodule Belfrage.ProcessorTest do
   use ExUnit.Case
 
-  alias Ingress.{Processor, Struct}
+  alias Belfrage.{Processor, Struct}
   alias Test.Support.StructHelper
 
   describe "Processor.get_loop/1" do
@@ -53,13 +53,13 @@ defmodule Ingress.ProcessorTest do
                  )
 
     test "increments status" do
-      Ingress.LoopsRegistry.find_or_start(@resp_struct)
+      Belfrage.LoopsRegistry.find_or_start(@resp_struct)
       Processor.init_post_response_side_effects(@resp_struct)
 
       assert {:ok,
               %{
                 counter: %{"https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1}}
-              }} = Ingress.Loop.state(@resp_struct)
+              }} = Belfrage.Loop.state(@resp_struct)
     end
   end
 end

@@ -3,8 +3,8 @@ defmodule IngressTest do
   use Plug.Test
   use Test.Support.Helper, :mox
 
-  alias Ingress.Struct
-  alias Ingress.Clients.LambdaMock
+  alias Belfrage.Struct
+  alias Belfrage.Clients.LambdaMock
   alias Test.Support.StructHelper
 
   @get_request_struct StructHelper.build(
@@ -40,7 +40,7 @@ defmodule IngressTest do
       @web_core_lambda_response
     end)
 
-    Ingress.handle(@get_request_struct)
+    Belfrage.handle(@get_request_struct)
   end
 
   test "POST request invokes lambda service with Lambda transformer" do
@@ -55,6 +55,6 @@ defmodule IngressTest do
       @web_core_lambda_response
     end)
 
-    Ingress.handle(@post_request_struct)
+    Belfrage.handle(@post_request_struct)
   end
 end

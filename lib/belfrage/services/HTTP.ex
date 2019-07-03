@@ -1,10 +1,10 @@
-defmodule Ingress.Services.HTTP do
+defmodule Belfrage.Services.HTTP do
   use ExMetrics
 
-  alias Ingress.Behaviours.Service
-  alias Ingress.{Clients, Struct}
+  alias Belfrage.Behaviours.Service
+  alias Belfrage.{Clients, Struct}
 
-  @http_client Application.get_env(:ingress, :http_client, Clients.HTTP)
+  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
   @behaviour Service
 

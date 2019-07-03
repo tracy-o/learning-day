@@ -1,6 +1,6 @@
-defmodule Ingress.Services.HTTPTest do
-  alias Ingress.Clients
-  alias Ingress.Services.HTTP
+defmodule Belfrage.Services.HTTPTest do
+  alias Belfrage.Clients
+  alias Belfrage.Services.HTTP
   alias Test.Support.StructHelper
 
   use ExUnit.Case

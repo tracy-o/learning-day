@@ -1,5 +1,5 @@
-defmodule Ingress.Transformers.MyTransformer1 do
-  use Ingress.Transformers.Transformer
+defmodule Belfrage.Transformers.MyTransformer1 do
+  use Belfrage.Transformers.Transformer
 
   @impl true
   def call(rest, struct = %Struct{}) do

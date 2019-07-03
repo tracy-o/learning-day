@@ -2,10 +2,10 @@
 
 library 'BBCNews'
 
-String cosmosService = 'ingress'
+String cosmosService = 'belfrage'
 
 String buildVariables() {
-  def envFile = readFile 'ingress-build/build.env'
+  def envFile = readFile 'belfrage-build/build.env'
   def envVars = ''
   envFile.split('\n').each { env ->
     envVars = "$envVars -e $env"
@@ -25,16 +25,16 @@ node {
     ])
   ])
 
-  stage('Checkout build variables from ingress-build') {
-    sh 'rm -rf ingress-build'
-    sh 'mkdir -p ingress-build'
-    dir('ingress-build') {
-      git url: 'https://github.com/bbc/ingress-build', credentialsId: 'github', branch: 'master'
+  stage('Checkout build variables from belfrage-build') {
+    sh 'rm -rf belfrage-build'
+    sh 'mkdir -p belfrage-build'
+    dir('belfrage-build') {
+      git url: 'https://github.com/bbc/belfrage-build', credentialsId: 'github', branch: 'master'
     }
   }
 
   stage('Set Cosmos config') {
-    BBCNews.uploadCosmosConfig(cosmosService, params.ENVIRONMENT, "ingress-build/cosmos_config/${params.ENVIRONMENT}-ingress.json", params.FORCE_RELEASE)
+    BBCNews.uploadCosmosConfig(cosmosService, params.ENVIRONMENT, "belfrage-build/cosmos_config/${params.ENVIRONMENT}-belfrage.json", params.FORCE_RELEASE)
   }
 
   if (params.ENVIRONMENT == 'test') {
@@ -52,11 +52,11 @@ node {
       docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
         sh 'mix release'
       }
-      sh 'cp _build/prod/rel/ingress/releases/*/ingress.tar.gz SOURCES/'
+      sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
     }
     BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
-    BBCNews.buildRPMWithMock(cosmosService, 'ingress.spec', params.FORCE_RELEASE)
-    BBCNews.setRepositories(cosmosService, 'ingress-build/repositories.json')
+    BBCNews.buildRPMWithMock(cosmosService, 'belfrage.spec', params.FORCE_RELEASE)
+    BBCNews.setRepositories(cosmosService, 'belfrage-build/repositories.json')
     BBCNews.cosmosRelease(cosmosService, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
   }
 }

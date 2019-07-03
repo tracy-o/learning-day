@@ -1,8 +1,8 @@
-defmodule Ingress.Pipeline do
-  alias Ingress.Struct
+defmodule Belfrage.Pipeline do
+  alias Belfrage.Struct
 
   def process(struct = %Struct{private: %Struct.Private{pipeline: [first | rest]}}) do
-    root_transformer = String.to_existing_atom("Elixir.Ingress.Transformers.#{first}")
+    root_transformer = String.to_existing_atom("Elixir.Belfrage.Transformers.#{first}")
     struct = update_in(struct.debug.pipeline_trail, &[first | &1])
 
     case apply(root_transformer, :call, [rest, struct]) do

@@ -1,18 +1,18 @@
 defmodule IngressWeb.WebCoreRoutes do
   @moduledoc """
-  Call Ingress.handle with the Struct
+  Call Belfrage.handle with the Struct
   """
 
   alias IngressWeb.{View, StructAdapter}
 
-  @ingress Application.get_env(:ingress, :ingress, Ingress)
+  @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 
   def init(options), do: options
 
   def call(conn, _opts) do
     conn
     |> StructAdapter.adapt()
-    |> @ingress.handle()
+    |> @belfrage.handle()
     |> View.render(conn)
   end
 end

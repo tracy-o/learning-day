@@ -1,6 +1,6 @@
 defmodule IngressWeb.StructAdapter do
-  alias Ingress.Struct
-  alias Ingress.Struct.{Request, Private}
+  alias Belfrage.Struct
+  alias Belfrage.Struct.{Request, Private}
   alias Plug.Conn
   import Plug.Conn
 

@@ -1,11 +1,11 @@
-defmodule Ingress.Transformers.Transformer do
-  @namespace "Elixir.Ingress.Transformers"
+defmodule Belfrage.Transformers.Transformer do
+  @namespace "Elixir.Belfrage.Transformers"
 
   defmacro __using__(_opts) do
     quote do
-      alias Ingress.Struct
-      @behaviour Ingress.Behaviours.Transformer
-      import Ingress.Transformers.Transformer
+      alias Belfrage.Struct
+      @behaviour Belfrage.Behaviours.Transformer
+      import Belfrage.Transformers.Transformer
     end
   end
 

@@ -1,7 +1,7 @@
-defmodule Ingress.Cache.STS do
+defmodule Belfrage.Cache.STS do
   use GenServer
 
-  @aws_client Application.get_env(:ingress, :aws_client)
+  @aws_client Application.get_env(:belfrage, :aws_client)
   @refresh_rate 3_000
 
   def start_link(opts) do
@@ -43,7 +43,7 @@ defmodule Ingress.Cache.STS do
   end
 
   defp refresh_credentials do
-    arn = Application.get_env(:ingress, :webcore_lambda_role_arn)
+    arn = Application.get_env(:belfrage, :webcore_lambda_role_arn)
     # This is where we could also look at the env, and
     # if on :dev, then fetch the credentials from the wormhole
     # instead of calling STS.

@@ -39,7 +39,7 @@ defmodule ExAwsMock do
      {:http_error, 404,
       %{
         body:
-          "{\"Message\":\"Function not found: arn:aws:lambda:eu-west-1:134209033928:function:test-ingress-fake-origin-main-LambdaFunction-W0UE8751BFOO\",\"Type\":\"User\"}"
+          "{\"Message\":\"Function not found: arn:aws:lambda:eu-west-1:134209033928:function:test-belfrage-fake-origin-main-LambdaFunction-W0UE8751BFOO\",\"Type\":\"User\"}"
       }}}
   end
 

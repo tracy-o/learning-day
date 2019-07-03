@@ -1,8 +1,8 @@
-defmodule Ingress.Clients.Lambda do
+defmodule Belfrage.Clients.Lambda do
   use ExMetrics
   @behaviour ExAws.Request.HttpClient
 
-  @callback call(String.t(), String.t(), Ingress.Struct.Request.t()) :: Tuple.t()
+  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
@@ -14,10 +14,10 @@ defmodule Ingress.Clients.Lambda do
     Keyword.merge(opts, protocols: [:http2, :http1], pool: false)
   end
 
-  @aws_client Application.get_env(:ingress, :aws_client)
+  @aws_client Application.get_env(:belfrage, :aws_client)
 
   def call(arn, function, payload) do
-    with {:ok, credentials} <- Ingress.Cache.STS.fetch(arn) do
+    with {:ok, credentials} <- Belfrage.Cache.STS.fetch(arn) do
       invoke_lambda(function, payload, credentials)
     else
       error -> error

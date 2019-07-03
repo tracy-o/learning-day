@@ -1,4 +1,4 @@
-Mox.defmock(IngressMock, for: Ingress)
-Mox.defmock(Ingress.Clients.HTTPMock, for: Ingress.Clients.HTTP)
-Mox.defmock(Ingress.Clients.LambdaMock, for: Ingress.Clients.Lambda)
+Mox.defmock(IngressMock, for: Belfrage)
+Mox.defmock(Belfrage.Clients.HTTPMock, for: Belfrage.Clients.HTTP)
+Mox.defmock(Belfrage.Clients.LambdaMock, for: Belfrage.Clients.Lambda)
 ExUnit.start(trace: true)

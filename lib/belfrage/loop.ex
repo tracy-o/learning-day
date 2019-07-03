@@ -1,10 +1,10 @@
-defmodule Ingress.Loop do
+defmodule Belfrage.Loop do
   use GenServer, restart: :temporary
 
-  alias Ingress.{Counter, LoopsRegistry, Struct}
+  alias Belfrage.{Counter, LoopsRegistry, Struct}
 
-  @threshold Application.get_env(:ingress, :errors_threshold)
-  @interval Application.get_env(:ingress, :circuit_breaker_reset_interval)
+  @threshold Application.get_env(:belfrage, :errors_threshold)
+  @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
   def start_link(name) do
     GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
   end
@@ -60,7 +60,7 @@ defmodule Ingress.Loop do
   # the counter to the Controller app.
   @impl GenServer
   def handle_info(:reset, state) do
-    Ingress.Monitor.record_loop(state)
+    Belfrage.Monitor.record_loop(state)
     Process.send_after(self(), :reset, @interval)
     state = %{state | counter: Counter.init()}
 
@@ -76,14 +76,14 @@ defmodule Ingress.Loop do
 
   defp origin_pointer(false, loop_id) do
     case Enum.member?(@legacy_route_loop_ids, loop_id) do
-      true -> Application.get_env(:ingress, :origin)
-      false -> Application.get_env(:ingress, :webcore_lambda_name_progressive_web_app)
+      true -> Application.get_env(:belfrage, :origin)
+      false -> Application.get_env(:belfrage, :webcore_lambda_name_progressive_web_app)
     end
   end
 
   defp origin_pointer(true, _) do
     ExMetrics.increment("error.loop.threshold.exceeded")
     Stump.log(:error, "Error threshold exceeded for loop")
-    Application.get_env(:ingress, :fallback)
+    Application.get_env(:belfrage, :fallback)
   end
 end

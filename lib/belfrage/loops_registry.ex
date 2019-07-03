@@ -1,5 +1,5 @@
-defmodule Ingress.LoopsRegistry do
-  alias Ingress.{Struct, LoopsSupervisor}
+defmodule Belfrage.LoopsRegistry do
+  alias Belfrage.{Struct, LoopsSupervisor}
 
   def start_link do
     Registry.start_link(keys: :unique, name: __MODULE__)

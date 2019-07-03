@@ -1,6 +1,6 @@
-defmodule Ingress.Cache do
-  alias Ingress.Struct
-  alias Ingress.Cache.Local
+defmodule Belfrage.Cache do
+  alias Belfrage.Struct
+  alias Belfrage.Cache.Local
 
   def store_if_successful(struct) do
     if is_cacheable?(struct), do: Local.store(struct)
@@ -8,7 +8,7 @@ defmodule Ingress.Cache do
     struct
   end
 
-  def fallback_if_required(struct = %Ingress.Struct{}) do
+  def fallback_if_required(struct = %Belfrage.Struct{}) do
     case is_successful_response?(struct) do
       true -> struct
       false -> add_response_from_cache(struct, [:fresh, :stale])

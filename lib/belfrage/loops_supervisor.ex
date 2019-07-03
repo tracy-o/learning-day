@@ -1,4 +1,4 @@
-defmodule Ingress.LoopsSupervisor do
+defmodule Belfrage.LoopsSupervisor do
   def start_link() do
     DynamicSupervisor.start_link(
       name: __MODULE__,
@@ -33,7 +33,7 @@ defmodule Ingress.LoopsSupervisor do
   defp start_child(name) do
     DynamicSupervisor.start_child(
       __MODULE__,
-      {Ingress.Loop, name}
+      {Belfrage.Loop, name}
     )
   end
 end

@@ -1,8 +1,8 @@
-defmodule Ingress.Clients.HTTPTest do
-  alias Ingress.Clients.HTTP
+defmodule Belfrage.Clients.HTTPTest do
+  alias Belfrage.Clients.HTTP
   use ExUnit.Case
 
-  describe "Ingress.Clients.HTTP.build_options/1" do
+  describe "Belfrage.Clients.HTTP.build_options/1" do
     test "combines default and passed in options if keys are unique" do
       assert HTTP.build_options(protocol: [:http1]) == [
                timeout: 1000,

@@ -1,11 +1,11 @@
-defmodule Ingress.Services.Lambda do
+defmodule Belfrage.Services.Lambda do
   use ExMetrics
 
-  alias Ingress.{Clients, Struct}
-  alias Ingress.Behaviours.Service
+  alias Belfrage.{Clients, Struct}
+  alias Belfrage.Behaviours.Service
   @behaviour Service
 
-  @lambda_client Application.get_env(:ingress, :lambda_client, Clients.Lambda)
+  @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{request: request}) do
@@ -68,10 +68,10 @@ defmodule Ingress.Services.Lambda do
   end
 
   defp lambda_role_arn() do
-    Application.fetch_env!(:ingress, :webcore_lambda_role_arn)
+    Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end
 
   defp lambda_function() do
-    Application.fetch_env!(:ingress, :webcore_lambda_name_progressive_web_app)
+    Application.fetch_env!(:belfrage, :webcore_lambda_name_progressive_web_app)
   end
 end

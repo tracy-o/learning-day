@@ -1,13 +1,13 @@
 [Unit]
-Description=Start the ingress service
+Description=Start the belfrage service
 After=network.target network-online.target
 [Service]
 Environment=HOME=/home/component
 Environment=PORT=7080
 User=component
 Group=component
-WorkingDirectory=/home/component/ingress
-ExecStart=/home/component/ingress/bin/ingress foreground
+WorkingDirectory=/home/component/belfrage
+ExecStart=/home/component/belfrage/bin/belfrage foreground
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target

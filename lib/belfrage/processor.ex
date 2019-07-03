@@ -1,5 +1,5 @@
-defmodule Ingress.Processor do
-  alias Ingress.{
+defmodule Belfrage.Processor do
+  alias Belfrage.{
     LoopsRegistry,
     Struct,
     Loop,

@@ -55,10 +55,10 @@ defmodule IngressWeb.Router do
 
   def options(:https) do
     [
-      certfile: Application.fetch_env!(:ingress, :http_cert),
-      keyfile: Application.fetch_env!(:ingress, :http_cert_key),
-      cacertfile: Application.fetch_env!(:ingress, :http_cert_ca),
-      otp_app: :ingress
+      certfile: Application.fetch_env!(:belfrage, :http_cert),
+      keyfile: Application.fetch_env!(:belfrage, :http_cert_key),
+      cacertfile: Application.fetch_env!(:belfrage, :http_cert_ca),
+      otp_app: :belfrage
     ]
   end
 

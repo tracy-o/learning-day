@@ -1,12 +1,12 @@
-defmodule Ingress.IngressCacheTest do
+defmodule Belfrage.IngressCacheTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Ingress.RequestHash
-  alias Ingress.Struct
+  alias Belfrage.RequestHash
+  alias Belfrage.Struct
   alias Test.Support.StructHelper
-  alias Ingress.Clients.LambdaMock
-  alias Ingress.Cache
+  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.Cache
 
   @fresh_cache_get_request_struct StructHelper.build(
                                     request: %{
@@ -37,21 +37,21 @@ defmodule Ingress.IngressCacheTest do
 
   @failed_web_core_lambda_response {:ok, %{"body" => "", "headers" => %{}, "statusCode" => 500}}
 
-  @response %Ingress.Struct.Response{
+  @response %Belfrage.Struct.Response{
     body: ~s({"hi": "bonjour"}),
     headers: %{"content-type" => "application/json"},
     http_status: 200,
     cacheable_content: true
   }
 
-  @response %Ingress.Struct.Response{
+  @response %Belfrage.Struct.Response{
     body: ~s({"hi": "bonjour"}),
     headers: %{"content-type" => "application/json"},
     http_status: 200,
     cacheable_content: true
   }
 
-  @fallback_response %Ingress.Struct.Response{
+  @fallback_response %Belfrage.Struct.Response{
     body: ~s({"hi": "bonjour"}),
     headers: %{"content-type" => "application/json"},
     http_status: 200,
@@ -61,7 +61,7 @@ defmodule Ingress.IngressCacheTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Ingress.LoopsSupervisor.kill_all()
+    Belfrage.LoopsSupervisor.kill_all()
 
     insert_seed_cache = fn [id: id, expires_in: expires_in, last_updated: last_updated] ->
       :ets.insert(
@@ -73,13 +73,13 @@ defmodule Ingress.IngressCacheTest do
     insert_seed_cache.(
       id: RequestHash.generate(@fresh_cache_get_request_struct).request.request_hash,
       expires_in: :timer.hours(6),
-      last_updated: Ingress.Timer.now_ms()
+      last_updated: Belfrage.Timer.now_ms()
     )
 
     insert_seed_cache.(
       id: RequestHash.generate(@stale_cache_get_request_struct).request.request_hash,
       expires_in: :timer.hours(6),
-      last_updated: Ingress.Timer.now_ms() - :timer.seconds(31)
+      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
 
     :ok
@@ -87,12 +87,12 @@ defmodule Ingress.IngressCacheTest do
 
   describe "a fresh cache" do
     test "serves a cached response" do
-      assert %Ingress.Struct{response: @response} =
-               Ingress.handle(@fresh_cache_get_request_struct)
+      assert %Belfrage.Struct{response: @response} =
+               Belfrage.handle(@fresh_cache_get_request_struct)
     end
 
     test "served early from cache still increments loop" do
-      Ingress.handle(@fresh_cache_get_request_struct)
+      Belfrage.handle(@fresh_cache_get_request_struct)
 
       assert {:ok,
               %{
@@ -102,7 +102,7 @@ defmodule Ingress.IngressCacheTest do
                     :errors => 0
                   }
                 }
-              }} = Ingress.Loop.state(@fresh_cache_get_request_struct)
+              }} = Belfrage.Loop.state(@fresh_cache_get_request_struct)
     end
   end
 
@@ -119,8 +119,8 @@ defmodule Ingress.IngressCacheTest do
       )
 
       assert struct =
-               %Ingress.Struct{response: @response} =
-               Ingress.handle(@stale_cache_get_request_struct)
+               %Belfrage.Struct{response: @response} =
+               Belfrage.handle(@stale_cache_get_request_struct)
 
       assert {:ok, :fresh, _} = Cache.Local.fetch(struct)
     end
@@ -136,8 +136,8 @@ defmodule Ingress.IngressCacheTest do
         end
       )
 
-      assert %Ingress.Struct{response: @fallback_response} =
-               Ingress.handle(@stale_cache_get_request_struct)
+      assert %Belfrage.Struct{response: @fallback_response} =
+               Belfrage.handle(@stale_cache_get_request_struct)
     end
   end
 end

@@ -1,9 +1,9 @@
-defmodule Ingress.Transformers.ReplayedTrafficTransformerTest do
+defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
   use ExUnit.Case
 
-  alias Ingress.Transformers.ReplayedTrafficTransformer
+  alias Belfrage.Transformers.ReplayedTrafficTransformer
   alias Test.Support.StructHelper
-  alias Ingress.Struct
+  alias Belfrage.Struct
 
   @replayed_request_struct StructHelper.build(
                              request: %{has_been_replayed?: true},
@@ -29,12 +29,12 @@ defmodule Ingress.Transformers.ReplayedTrafficTransformerTest do
   end
 
   test "replayed traffic will be sent to a different origin" do
-    http_origin = Application.get_env(:ingress, :origin)
+    http_origin = Application.get_env(:belfrage, :origin)
 
     assert {
              :ok,
-             %Ingress.Struct{
-               private: %Ingress.Struct.Private{
+             %Belfrage.Struct{
+               private: %Belfrage.Struct.Private{
                  origin: ^http_origin
                }
              }

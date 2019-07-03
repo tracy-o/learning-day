@@ -1,5 +1,5 @@
-defmodule Ingress.ServiceProvider do
-  alias Ingress.{Services, Behaviours.ServiceProvider}
+defmodule Belfrage.ServiceProvider do
+  alias Belfrage.{Services, Behaviours.ServiceProvider}
 
   @behaviour ServiceProvider
 

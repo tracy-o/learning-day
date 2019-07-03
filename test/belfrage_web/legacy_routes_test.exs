@@ -3,8 +3,8 @@ defmodule IngressWeb.LegacyTest do
   use Plug.Test
   use Test.Support.Helper, :mox
 
-  alias Ingress.Struct
-  alias Ingress.Struct.{Private, Request}
+  alias Belfrage.Struct
+  alias Belfrage.Struct.{Private, Request}
   alias IngressWeb.Router
   alias Test.Support.StructHelper
 

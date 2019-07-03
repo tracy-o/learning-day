@@ -1,9 +1,9 @@
-defmodule Ingress.Application do
+defmodule Belfrage.Application do
   @moduledoc false
 
   use Application
 
   def start(_type, args) do
-    Ingress.Supervisor.start_link(args)
+    Belfrage.Supervisor.start_link(args)
   end
 end

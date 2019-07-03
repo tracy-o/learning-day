@@ -9,7 +9,7 @@ STACKID=${ENVIRONMENT}-${COMPONENT_NAME}-main
 # beginning of app testing loop
 # edit the contents of the next two lines to define a specific test for your application
 until [ "$status" == "pong" ]; do
-status=$(sudo -u component /home/component/ingress/bin/ingress ping);
+status=$(sudo -u component /home/component/belfrage/bin/belfrage ping);
 sleep 5;
 done
 # end of app testing loop

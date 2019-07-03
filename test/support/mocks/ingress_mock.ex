@@ -1,7 +1,7 @@
 defmodule IngressMock do
-  @behaviour Ingress
-  alias Ingress.{Struct}
+  @behaviour Belfrage
+  alias Belfrage.{Struct}
 
-  @impl Ingress
+  @impl Belfrage
   def handle(struct = Struct), do: struct
 end

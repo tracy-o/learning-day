@@ -1,4 +1,4 @@
-defmodule Ingress.Supervisor do
+defmodule Belfrage.Supervisor do
   use Supervisor
 
   def start_link(init_arg) do
@@ -20,9 +20,9 @@ defmodule Ingress.Supervisor do
 
   def default_children do
     [
-      Ingress.LoopsRegistry,
-      Ingress.LoopsSupervisor,
-      Ingress.Cache.STS,
+      Belfrage.LoopsRegistry,
+      Belfrage.LoopsSupervisor,
+      Belfrage.Cache.STS,
       worker(Cachex, [:cache, []])
     ]
   end

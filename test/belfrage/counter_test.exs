@@ -1,7 +1,7 @@
-defmodule Ingress.CounterTest do
+defmodule Belfrage.CounterTest do
   use ExUnit.Case
 
-  alias Ingress.Counter
+  alias Belfrage.Counter
 
   @origin "https://origin.bbc.com/"
 

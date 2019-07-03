@@ -1,7 +1,7 @@
-defmodule Ingress.RequestHashTest do
+defmodule Belfrage.RequestHashTest do
   use ExUnit.Case
 
-  alias Ingress.RequestHash
+  alias Belfrage.RequestHash
   alias Test.Support.StructHelper
 
   @struct StructHelper.build(request: %{path: "/news/clips/abc123", country: "gb", method: "GET"})
@@ -21,12 +21,12 @@ defmodule Ingress.RequestHashTest do
                                 }
                               )
 
-  describe "Ingress.RequestHash.generate/1" do
+  describe "Belfrage.RequestHash.generate/1" do
     test "varies on method" do
       assert RequestHash.generate(@struct).request.request_hash ==
                "4886146b40a8572214f8acf77649b16c"
 
-      post_struct = Ingress.Struct.add(@struct, :request, %{method: "POST"})
+      post_struct = Belfrage.Struct.add(@struct, :request, %{method: "POST"})
 
       assert "a195c6e7cde34e40a2fd16be9cfaccaa" ==
                RequestHash.generate(post_struct).request.request_hash

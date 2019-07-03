@@ -1,6 +1,6 @@
 # Layers
 
-Ingress processes a request in different layers.
+Belfrage processes a request in different layers.
 
 ## Web Interface
 > input: HTTP request, output: sanitised HTTP request

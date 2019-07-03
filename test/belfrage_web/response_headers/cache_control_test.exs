@@ -3,7 +3,7 @@ defmodule IngressWeb.ResponseHeaders.CacheControlTest do
   use Plug.Test
 
   alias IngressWeb.ResponseHeaders.CacheControl
-  alias Ingress.Struct
+  alias Belfrage.Struct
   alias Test.Support.StructHelper
 
   doctest CacheControl

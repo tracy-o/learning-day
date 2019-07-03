@@ -1,5 +1,5 @@
-defmodule Ingress.RequestHash do
-  alias Ingress.Struct
+defmodule Belfrage.RequestHash do
+  alias Belfrage.Struct
   @signature_keys [:path, :country, :method]
 
   def generate(struct) do

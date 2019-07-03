@@ -1,4 +1,4 @@
-defmodule Ingress.Counter do
+defmodule Belfrage.Counter do
   defmacro is_error(http_status) do
     quote do
       unquote(http_status) in 500..504 or unquote(http_status) == 408

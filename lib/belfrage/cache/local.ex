@@ -1,6 +1,6 @@
-defmodule Ingress.Cache.Local do
+defmodule Belfrage.Cache.Local do
   def fetch(
-        struct = %Ingress.Struct{
+        struct = %Belfrage.Struct{
           request: %{request_hash: request_hash},
           private: %{cache_ttl: cache_ttl}
         }
@@ -9,10 +9,10 @@ defmodule Ingress.Cache.Local do
     |> format_cache_result(cache_ttl)
   end
 
-  def store(struct = %Ingress.Struct{}) do
+  def store(struct = %Belfrage.Struct{}) do
     case stale?(struct) do
       true ->
-        Cachex.put(:cache, struct.request.request_hash, {struct.response, Ingress.Timer.now_ms()},
+        Cachex.put(:cache, struct.request.request_hash, {struct.response, Belfrage.Timer.now_ms()},
           ttl: struct.private.fallback_ttl
         )
 
@@ -22,7 +22,7 @@ defmodule Ingress.Cache.Local do
   end
 
   defp format_cache_result({:ok, {response, last_updated}}, cache_ttl) do
-    case Ingress.Timer.stale?(last_updated, cache_ttl) do
+    case Belfrage.Timer.stale?(last_updated, cache_ttl) do
       true -> {:ok, :stale, response}
       false -> {:ok, :fresh, response}
     end

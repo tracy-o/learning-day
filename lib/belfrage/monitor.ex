@@ -1,4 +1,4 @@
-defmodule Ingress.Monitor do
+defmodule Belfrage.Monitor do
   def record_loop(loop_state) do
     with monitor_node when not is_nil(monitor_node) <- monitor_address() do
       GenServer.cast({:data_store, monitor_node}, {:store, loop_state})

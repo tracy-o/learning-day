@@ -1,9 +1,9 @@
-defmodule Ingress.Transformers.ReplayedTrafficTransformer do
-  use Ingress.Transformers.Transformer
+defmodule Belfrage.Transformers.ReplayedTrafficTransformer do
+  use Belfrage.Transformers.Transformer
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{has_been_replayed?: true}}) do
-    struct = Struct.add(struct, :private, %{origin: Application.get_env(:ingress, :origin)})
+    struct = Struct.add(struct, :private, %{origin: Application.get_env(:belfrage, :origin)})
 
     then(rest, struct)
   end

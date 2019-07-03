@@ -8,7 +8,7 @@ def main(argv):
     key_values = config_json["configuration"]
     noecho_key_values = config_json["secure_configuration"]
 
-    f = open("/etc/systemd/system/ingress.service.d/env.conf", "w")
+    f = open("/etc/systemd/system/belfrage.service.d/env.conf", "w")
     f.write("[Service]\n")
     for key, value in key_values.items():
         f.write("Environment=%s=%s\n" % (key, pipes.quote(value)))

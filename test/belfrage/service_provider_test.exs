@@ -1,7 +1,7 @@
-defmodule Ingress.ServiceProviderTest do
+defmodule Belfrage.ServiceProviderTest do
   use ExUnit.Case
 
-  alias Ingress.{Services, ServiceProvider}
+  alias Belfrage.{Services, ServiceProvider}
 
   describe "ServiceProvider.service_for/1" do
     test "when origin is http it returns the HTTP Service" do

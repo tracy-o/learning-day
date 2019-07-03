@@ -1,7 +1,7 @@
 defmodule IngressWeb.LegacyRoutes do
   alias IngressWeb.{View, StructAdapter}
 
-  @ingress Application.get_env(:ingress, :ingress, Ingress)
+  @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 
   import Plug.Conn
 
@@ -19,7 +19,7 @@ defmodule IngressWeb.LegacyRoutes do
       conn
       |> put_private(:loop_id, loop_id)
       |> StructAdapter.adapt()
-      |> @ingress.handle()
+      |> @belfrage.handle()
       |> View.render(conn)
     else
       nil -> View.not_found(conn)

@@ -1,13 +1,13 @@
 use Mix.Config
 
-config :ingress,
+config :belfrage,
   aws_client: ExAwsMock,
   circuit_breaker_reset_interval: 1_000,
   errors_threshold: 20,
   fallback: "https://s3.aws.com/",
-  http_client: Ingress.Clients.HTTPMock,
-  lambda_client: Ingress.Clients.LambdaMock,
-  ingress: IngressMock,
+  http_client: Belfrage.Clients.HTTPMock,
+  lambda_client: Belfrage.Clients.LambdaMock,
+  belfrage: IngressMock,
   origin: "https://origin.bbc.com/",
   webcore_lambda_name_progressive_web_app: "webcore-lambda-name-progressive-web-app",
   webcore_lambda_role_arn: "webcore-lambda-role-arn"

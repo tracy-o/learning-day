@@ -1,6 +1,6 @@
-defmodule Ingress.Cache.LocalTest do
+defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case
-  alias Ingress.Cache
+  alias Belfrage.Cache
   alias Test.Support.StructHelper
 
   setup do
@@ -10,7 +10,7 @@ defmodule Ingress.Cache.LocalTest do
       :ets.insert(
         :cache,
         {:entry, id, last_updated, expires_in,
-         {%Ingress.Struct.Response{
+         {%Belfrage.Struct.Response{
             body: "hello!",
             headers: %{"content-type" => "application/json"},
             http_status: 200
@@ -21,19 +21,19 @@ defmodule Ingress.Cache.LocalTest do
     insert_seed_cache.(
       id: "cache_fresh",
       expires_in: :timer.hours(6),
-      last_updated: Ingress.Timer.now_ms()
+      last_updated: Belfrage.Timer.now_ms()
     )
 
     insert_seed_cache.(
       id: "stale_cache",
       expires_in: :timer.hours(6),
-      last_updated: Ingress.Timer.now_ms() - :timer.seconds(31)
+      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
 
     insert_seed_cache.(
       id: "expired",
       expires_in: :timer.hours(6),
-      last_updated: Ingress.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(1))
+      last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(1))
     )
 
     :ok
@@ -56,7 +56,7 @@ defmodule Ingress.Cache.LocalTest do
 
       assert [
                {:entry, "abc123", _cachex_determined_last_update, _cachex_expires_in,
-                {%Ingress.Struct.Response{
+                {%Belfrage.Struct.Response{
                    body: "hello!",
                    headers: %{"content-type" => "application/json"},
                    http_status: 200
@@ -116,7 +116,7 @@ defmodule Ingress.Cache.LocalTest do
         StructHelper.build(request: %{request_hash: "cache_fresh"}, private: %{cache_ttl: 30})
 
       assert {:ok, :fresh,
-              %Ingress.Struct.Response{
+              %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
@@ -128,7 +128,7 @@ defmodule Ingress.Cache.LocalTest do
         StructHelper.build(request: %{request_hash: "stale_cache"}, private: %{cache_ttl: 30})
 
       assert {:ok, :stale,
-              %Ingress.Struct.Response{
+              %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
@@ -161,7 +161,7 @@ defmodule Ingress.Cache.LocalTest do
       assert {:ok, true} == Cache.Local.store(struct_with_response)
 
       assert {:ok, :fresh,
-              %Ingress.Struct.Response{
+              %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200

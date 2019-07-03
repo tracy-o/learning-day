@@ -1,7 +1,7 @@
-defmodule Ingress.PipelineTest do
+defmodule Belfrage.PipelineTest do
   use ExUnit.Case
 
-  alias Ingress.Pipeline, as: Subject
+  alias Belfrage.Pipeline, as: Subject
   alias Test.Support.StructHelper
 
   test "process producing a successful response" do

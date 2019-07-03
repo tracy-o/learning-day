@@ -1,6 +1,6 @@
-defmodule Ingress.TimerTest do
+defmodule Belfrage.TimerTest do
   use ExUnit.Case
-  alias Ingress.Timer
+  alias Belfrage.Timer
 
   describe "is stale?" do
     test "returns true" do

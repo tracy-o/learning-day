@@ -1,5 +1,5 @@
-defmodule Ingress do
-  alias Ingress.{Processor, Struct}
+defmodule Belfrage do
+  alias Belfrage.{Processor, Struct}
 
   @callback handle(Struct.t()) :: Struct.t()
 

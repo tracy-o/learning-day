@@ -1,7 +1,7 @@
-defmodule Ingress.Transformers.MyTransformer1Test do
+defmodule Belfrage.Transformers.MyTransformer1Test do
   use ExUnit.Case
 
-  alias Ingress.Transformers.MyTransformer1, as: Subject
+  alias Belfrage.Transformers.MyTransformer1, as: Subject
   alias Test.Support.StructHelper
 
   @original_struct StructHelper.build(
