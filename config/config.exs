@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :ingress, key: :value
+#     config :belfrage, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:ingress, :key)
+#     Application.get_env(:belfrage, :key)
 #
 # You can also configure a 3rd-party app:
 #
@@ -28,18 +28,18 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 
-config :ingress,
+config :belfrage,
   aws_client: ExAws,
   circuit_breaker_reset_interval: 60_000,
   errors_threshold: 1_000,
-  fallback: System.get_env("INGRESS_FALLBACK"),
-  origin: System.get_env("INGRESS_ORIGIN")
+  fallback: System.get_env("BELFRAGE_FALLBACK"),
+  origin: System.get_env("BELFRAGE_ORIGIN")
 
 config :logger, :console, format: "$message\n"
 
 config :ex_aws,
   region: "eu-west-1",
-  http_client: Ingress.Clients.Lambda
+  http_client: Belfrage.Clients.Lambda
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"

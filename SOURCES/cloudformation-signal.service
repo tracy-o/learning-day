@@ -2,6 +2,6 @@
 Description=Start the cloudformation signal generator script
 After=network.target network-online.target
 [Service]
-ExecStart=/home/component/ingress-status-cfn-signal.sh
+ExecStart=/home/component/belfrage-status-cfn-signal.sh
 [Install]
 WantedBy=multi-user.target

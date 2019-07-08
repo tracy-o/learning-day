@@ -47,7 +47,7 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
-release :ingress do
+release :belfrage do
   set overlays: [
     {:copy, "rel/runtime_config.exs", "etc/runtime_config.exs"}
   ]
@@ -56,7 +56,7 @@ release :ingress do
     {Mix.Releases.Config.Providers.Elixir, ["${RELEASE_ROOT_DIR}/etc/runtime_config.exs"]}
   ]
 
-  set version: current_version(:ingress)
+  set version: current_version(:belfrage)
   set applications: [
     :runtime_tools
   ]

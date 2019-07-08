@@ -6,6 +6,6 @@ use Mix.Config
     raise "Config not set in environment: #{config_key}"
   end
 
-  config :ingress,
+  config :belfrage,
          Keyword.new([{String.to_atom(String.downcase(config_key)), System.get_env(config_key)}])
 end)

@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :ingress,
+config :belfrage,
   http_cert: System.get_env("HTTP_CERT"),
   http_cert_key: System.get_env("HTTP_CERT_KEY"),
   http_cert_ca: System.get_env("HTTP_CERT_CA")

@@ -1,6 +1,6 @@
-defmodule Ingress.Clients.HTTPMock do
-  @behaviour Ingress.Clients.HTTP
-  alias Ingress.Clients.HTTP
+defmodule Belfrage.Clients.HTTPMock do
+  @behaviour Belfrage.Clients.HTTP
+  alias Belfrage.Clients.HTTP
 
   @generic_response {:ok,
                      %Mojito.Response{

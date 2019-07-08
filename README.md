@@ -1,14 +1,14 @@
-# Ingress
+# Belfrage
 
-## What is Ingress
+## What is Belfrage
 
-__Ingress__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Ingress is generic enough to be used as an entry point for any BBC service with minimal effort.
+__Belfrage__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Belfrage is generic enough to be used as an entry point for any BBC service with minimal effort.
 
-Ingress looks after the resiliency of the page, it monitors in real-time the status of the responses and can take actions in case of errors.
+Belfrage looks after the resiliency of the page, it monitors in real-time the status of the responses and can take actions in case of errors.
 
-Ingress is simple and fast, with a number of ancillary apps outside of the traffic flow to add additional features and functionality.
+Belfrage is simple and fast, with a number of ancillary apps outside of the traffic flow to add additional features and functionality.
 
-## Key features of Ingress
+## Key features of Belfrage
 
 ### Layers
 
@@ -34,16 +34,16 @@ It's the responsibility of the web interface to transform the struct into the fi
 [Struct examples are in the Struct document](./docs/struct.md)
 
 ### Caching
-Ingress currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
+Belfrage currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
 
 ### Resiliency
 
 #### Fallback
-Fallback is the first resiliency feature to be added to Ingress. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expiry and will not be stored indefinitely.
+Fallback is the first resiliency feature to be added to Belfrage. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expiry and will not be stored indefinitely.
 
 This feature is only available for non-personalised responses.
 
-## Properties of Ingress
+## Properties of Belfrage
 
 * resilient
 * performant

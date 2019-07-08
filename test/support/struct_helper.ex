@@ -1,6 +1,6 @@
 defmodule Test.Support.StructHelper do
-  alias Ingress.Struct
-  alias Ingress.Struct.{Request, Private, Response, Debug}
+  alias Belfrage.Struct
+  alias Belfrage.Struct.{Request, Private, Response, Debug}
 
   @base_request_struct %{path: "/_web_core", method: "GET"}
 

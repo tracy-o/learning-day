@@ -1,10 +1,10 @@
 version: '3.1'
 services:
-  ingress:
+  belfrage:
     environment:
       - WEBCORE_LAMBDA_NAME_PROGRESSIVE_WEB_APP=foo
       - WEBCORE_LAMBDA_ROLE_ARN=bar
-    image: ingress:latest
+    image: belfrage:latest
     ports:
       - "7080:7080"
 

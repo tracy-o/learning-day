@@ -1,9 +1,9 @@
-defmodule Ingress.MixProject do
+defmodule Belfrage.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :ingress,
+      app: :belfrage,
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
@@ -26,7 +26,7 @@ defmodule Ingress.MixProject do
   def application do
     [
       extra_applications: [:logger, :cachex],
-      mod: {Ingress.Application, [env: Mix.env()]}
+      mod: {Belfrage.Application, [env: Mix.env()]}
     ]
   end
 

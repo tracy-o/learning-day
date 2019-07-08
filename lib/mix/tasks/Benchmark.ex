@@ -1,9 +1,9 @@
 defmodule Mix.Tasks.Benchmark do
   use Mix.Task
-  alias Ingress.{Struct, Processor}
+  alias Belfrage.{Struct, Processor}
 
   def run(_) do
-    {:ok, _started} = Application.ensure_all_started(:ingress)
+    {:ok, _started} = Application.ensure_all_started(:belfrage)
     benchmark_get_loop()
     benchmark_request_pipeline()
     benchmark_response_pipeline()
