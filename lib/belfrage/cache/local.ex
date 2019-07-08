@@ -12,7 +12,10 @@ defmodule Belfrage.Cache.Local do
   def store(struct = %Belfrage.Struct{}) do
     case stale?(struct) do
       true ->
-        Cachex.put(:cache, struct.request.request_hash, {struct.response, Belfrage.Timer.now_ms()},
+        Cachex.put(
+          :cache,
+          struct.request.request_hash,
+          {struct.response, Belfrage.Timer.now_ms()},
           ttl: struct.private.fallback_ttl
         )
 

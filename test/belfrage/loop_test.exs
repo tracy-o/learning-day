@@ -144,7 +144,9 @@ defmodule Belfrage.LoopTest do
     assert state.origin == Application.get_env(:belfrage, :origin)
 
     {:ok, state} = Loop.state(@req_struct_2)
-    assert state.origin == Application.get_env(:belfrage, :webcore_lambda_name_progressive_web_app)
+
+    assert state.origin ==
+             Application.get_env(:belfrage, :webcore_lambda_name_progressive_web_app)
   end
 
   describe "when in fallback" do
