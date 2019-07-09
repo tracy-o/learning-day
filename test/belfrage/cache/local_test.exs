@@ -112,8 +112,7 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "fetching a cached response" do
     test "fetches a fresh cache" do
-      struct =
-        StructHelper.build(request: %{request_hash: "cache_fresh"}, private: %{cache_ttl: 30})
+      struct = StructHelper.build(request: %{request_hash: "cache_fresh"}, private: %{cache_ttl: 30})
 
       assert {:ok, :fresh,
               %Belfrage.Struct.Response{
@@ -124,8 +123,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "fetches a stale cache" do
-      struct =
-        StructHelper.build(request: %{request_hash: "stale_cache"}, private: %{cache_ttl: 30})
+      struct = StructHelper.build(request: %{request_hash: "stale_cache"}, private: %{cache_ttl: 30})
 
       assert {:ok, :stale,
               %Belfrage.Struct.Response{
@@ -144,8 +142,7 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "cachex integration test" do
     test "stores and retrieves a response" do
-      struct_without_response =
-        StructHelper.build(request: %{request_hash: "asdf567"}, private: %{cache_ttl: 30})
+      struct_without_response = StructHelper.build(request: %{request_hash: "asdf567"}, private: %{cache_ttl: 30})
 
       struct_with_response =
         StructHelper.build(
