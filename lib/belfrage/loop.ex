@@ -6,7 +6,7 @@ defmodule Belfrage.Loop do
   @threshold Application.get_env(:belfrage, :errors_threshold)
   @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
   def start_link(name) do
-    GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
+    GenServer.start_link(__MODULE__, %{loop_id: name}, name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
@@ -27,10 +27,11 @@ defmodule Belfrage.Loop do
   # callbacks
 
   @impl GenServer
-  def init(_) do
+  def init(args) do
+    IO.inspect(args, label: :opts)
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init(), pipeline: ["ReplayedTrafficTransformer"]}}
+    {:ok, %{loop_id: args.loop_id, counter: Counter.init(), pipeline: ["ReplayedTrafficTransformer"]}}
   end
 
   @impl GenServer
@@ -68,10 +69,10 @@ defmodule Belfrage.Loop do
   end
 
   @legacy_route_loop_ids [
-    ["mondo"],
+    ["mundo"],
     ["legacy"],
-    ["legacy_page_type"],
-    ["legacy_page_type_with_id"]
+    ["legacy", "page_type"],
+    ["legacy", "page_type_with_id"]
   ]
 
   defp origin_pointer(false, loop_id) do

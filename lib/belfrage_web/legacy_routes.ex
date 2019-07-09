@@ -8,11 +8,13 @@ defmodule BelfrageWeb.LegacyRoutes do
   def init(options), do: options
 
   @routes [
-    {~r/mondo/, ["mondo"]},
-    {~r/_legacy$/, ["legacy"]},
-    {~r/_legacy\/page-type$/, ["legacy", "page_type"]},
-    {~r/_legacy\/page-type\/123$/, ["legacy", "page_type_with_id"]}
-  ]
+    {~r(mundo), ["mundo"]},
+    {~r(_legacy$), ["legacy"]},
+    {~r(_legacy/page-type$), ["legacy", "page_type"]},
+    {~r(_legacy/page-type/123$), ["legacy", "page_type_with_id"]},
+    {~r(load/test/no_cache$), ["load_test", "no_cache"]},
+    {~r(load/test/with_cache$), ["load_test", "with_cache"]}
+]
 
   def call(%{} = conn, _opts) do
     with {_matcher, loop_id} <- find_loop_id(conn) do

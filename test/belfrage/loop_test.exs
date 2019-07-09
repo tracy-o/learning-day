@@ -40,6 +40,7 @@ defmodule Belfrage.LoopTest do
     assert Loop.state(@req_struct) ==
              {:ok,
               %{
+                loop_id: ["legacy"],
                 counter: %{},
                 origin: "https://origin.bbc.com/",
                 pipeline: ["ReplayedTrafficTransformer"]
