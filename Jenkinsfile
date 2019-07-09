@@ -50,7 +50,7 @@ node {
       sh 'mkdir -p SOURCES'
       String vars = buildVariables()
       docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
-        sh 'mix release'
+        sh 'mix distillery.release'
       }
       sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
     }
