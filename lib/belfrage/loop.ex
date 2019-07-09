@@ -28,7 +28,6 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def init(args) do
-    IO.inspect(args, label: :opts)
     Process.send_after(self(), :reset, @interval)
 
     {:ok, %{loop_id: args.loop_id, counter: Counter.init(), pipeline: ["ReplayedTrafficTransformer"]}}
