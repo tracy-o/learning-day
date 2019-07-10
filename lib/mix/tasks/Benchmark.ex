@@ -7,6 +7,7 @@ defmodule Mix.Tasks.Benchmark do
     benchmark_get_loop()
     benchmark_request_pipeline()
     benchmark_response_pipeline()
+    benchmark_memory_check()
   end
 
   defp benchmark_get_loop do
@@ -47,5 +48,28 @@ defmodule Mix.Tasks.Benchmark do
       time: 10,
       memory_time: 2
     )
+  end
+
+  defp benchmark_memory_check do
+    :ets.new(:benchmark_table, [:set, :protected, :named_table, read_concurrency: true])
+
+    Enum.each(1..10_000, fn i -> :ets.insert(:benchmark_table, {i, random_string() }) end)
+
+    Benchee.run(
+      %{
+        "memsup" => fn -> :memsup.get_system_memory_data() end,
+        "ets.get_inf" => fn -> :memsup.get_system_memory_data() end
+      },
+      time: 10,
+      memory_time: 2
+    )
+  end
+
+  defp random_string do
+    size_in_bytes = (:rand.uniform(2_047)+1) * 1024 #between 1kb and 2mb
+
+    :crypto.strong_rand_bytes(size_in_bytes)
+    |> Base.encode64
+    |> binary_part(0, size_in_bytes)
   end
 end
