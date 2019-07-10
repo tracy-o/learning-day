@@ -14,7 +14,7 @@ RUN mix local.hex --force
 RUN mix local.rebar --force
 RUN mix deps.get
 RUN mix compile
-RUN mix release
+RUN mix distillery.release
 
 CMD ["/bin/sh", "./rel/docker_boot.sh", "foreground"]
 
