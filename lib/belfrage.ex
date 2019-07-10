@@ -17,8 +17,7 @@ defmodule Belfrage do
   end
 
   # temporary, only for demo purposes
-  defp check_cache(struct = %Struct{private: %Struct.Private{loop_id: loop_id}})
-       when loop_id == ["load_test", "no_cache"] do
+  defp check_cache(struct = %Struct{private: %Struct.Private{loop_id: ["load_test", "no_cache"]}}) do
     struct
   end
 

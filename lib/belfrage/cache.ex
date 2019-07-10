@@ -52,11 +52,6 @@ defmodule Belfrage.Cache do
     end
   end
 
-  # temporary, only for demo purposes
-  defp is_cacheable?(%Struct{private: %Struct.Private{loop_id: loop_id}}) when loop_id == ["load_test", "no_cache"] do
-    false
-  end
-
   defp is_cacheable?(struct) do
     is_successful_response?(struct) and is_get_request?(struct) and
       struct.response.cacheable_content
