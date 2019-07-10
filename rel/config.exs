@@ -53,7 +53,7 @@ release :belfrage do
   ]
 
   set config_providers: [
-    {Mix.Releases.Config.Providers.Elixir, ["${RELEASE_ROOT_DIR}/etc/runtime_config.exs"]}
+    {Distillery.Releases.Config.Providers.Elixir, ["${RELEASE_ROOT_DIR}/etc/runtime_config.exs"]}
   ]
 
   set version: current_version(:belfrage)
