@@ -40,9 +40,7 @@ defmodule Belfrage.Services.Lambda do
     }
   end
 
-  defp format_invoke_response(
-         {:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}
-       ) do
+  defp format_invoke_response({:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}) do
     ExMetrics.increment("service.lambda.response.#{http_status}")
 
     %Struct.Response{

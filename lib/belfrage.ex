@@ -16,6 +16,11 @@ defmodule Belfrage do
     |> Processor.generate_request_hash()
   end
 
+  # temporary, only for demo purposes
+  defp check_cache(struct = %Struct{private: %Struct.Private{loop_id: ["load_test", "no_cache"]}}) do
+    struct
+  end
+
   defp check_cache(struct), do: Processor.query_cache_for_early_response(struct)
 
   defp generate_response(struct = %Struct{response: %Struct.Response{http_status: http_status}})

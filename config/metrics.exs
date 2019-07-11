@@ -1,10 +1,8 @@
 use Mix.Config
 
-lambda_response_code_metrics =
-  Enum.map(200..599, fn status -> "service.lambda.response.#{status}" end)
+lambda_response_code_metrics = Enum.map(200..599, fn status -> "service.lambda.response.#{status}" end)
 
-http_response_code_metrics =
-  Enum.map(200..599, fn status -> "service.HTTP.response.#{status}" end)
+http_response_code_metrics = Enum.map(200..599, fn status -> "service.HTTP.response.#{status}" end)
 
 config :ex_metrics,
   metrics:
