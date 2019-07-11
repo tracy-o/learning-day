@@ -68,10 +68,10 @@ defmodule Belfrage.Loop do
   end
 
   @legacy_route_loop_ids [
-    ["mondo"],
+    ["mundo"],
     ["legacy"],
-    ["legacy_page_type"],
-    ["legacy_page_type_with_id"]
+    ["legacy", "page_type"],
+    ["legacy", "page_type_with_id"]
   ]
 
   defp origin_pointer(false, loop_id) do

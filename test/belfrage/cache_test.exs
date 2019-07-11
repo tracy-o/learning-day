@@ -87,8 +87,7 @@ defmodule Belfrage.BelfrageCacheTest do
 
   describe "a fresh cache" do
     test "serves a cached response" do
-      assert %Belfrage.Struct{response: @response} =
-               Belfrage.handle(@fresh_cache_get_request_struct)
+      assert %Belfrage.Struct{response: @response} = Belfrage.handle(@fresh_cache_get_request_struct)
     end
 
     test "served early from cache still increments loop" do
@@ -118,9 +117,7 @@ defmodule Belfrage.BelfrageCacheTest do
         end
       )
 
-      assert struct =
-               %Belfrage.Struct{response: @response} =
-               Belfrage.handle(@stale_cache_get_request_struct)
+      assert struct = %Belfrage.Struct{response: @response} = Belfrage.handle(@stale_cache_get_request_struct)
 
       assert {:ok, :fresh, _} = Cache.Local.fetch(struct)
     end
@@ -136,8 +133,7 @@ defmodule Belfrage.BelfrageCacheTest do
         end
       )
 
-      assert %Belfrage.Struct{response: @fallback_response} =
-               Belfrage.handle(@stale_cache_get_request_struct)
+      assert %Belfrage.Struct{response: @fallback_response} = Belfrage.handle(@stale_cache_get_request_struct)
     end
   end
 end

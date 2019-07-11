@@ -29,8 +29,7 @@ defmodule BelfrageTest do
                          }
                        )
 
-  @web_core_lambda_response {:ok,
-                             %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
+  @web_core_lambda_response {:ok, %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
 
   test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
