@@ -71,7 +71,9 @@ defmodule Belfrage.Loop do
     ["mundo"],
     ["legacy"],
     ["legacy", "page_type"],
-    ["legacy", "page_type_with_id"]
+    ["legacy", "page_type_with_id"],
+    ["load_test", "no_cache"],
+    ["load_test", "with_cache"]
   ]
 
   defp origin_pointer(false, loop_id) do
