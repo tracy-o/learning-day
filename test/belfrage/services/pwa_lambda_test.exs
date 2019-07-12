@@ -23,8 +23,8 @@ defmodule Belfrage.Services.LambdaTest do
     "body" => "oh dear, presentation layer broke"
   }
 
-  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
-  @function Application.fetch_env!(:belfrage, :webcore_lambda_name_progressive_web_app)
+  @arn Application.fetch_env!(:belfrage, :pwa_lambda_role_arn)
+  @function Application.fetch_env!(:belfrage, :pwa_lambda_function)
 
   describe "web core lambda service" do
     test "given a path it invokes the lambda" do
