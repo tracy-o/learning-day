@@ -22,6 +22,7 @@ defmodule Belfrage.Supervisor do
     [
       Belfrage.LoopsRegistry,
       Belfrage.LoopsSupervisor,
+      Belfrage.Cache.Cleaner,
       Belfrage.Cache.STS,
       worker(Cachex, [:cache, []])
     ]

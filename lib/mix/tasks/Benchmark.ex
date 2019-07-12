@@ -53,7 +53,7 @@ defmodule Mix.Tasks.Benchmark do
   defp benchmark_memory_check do
     :ets.new(:benchmark_table, [:set, :protected, :named_table, read_concurrency: true])
 
-    Enum.each(1..10_000, fn i -> :ets.insert(:benchmark_table, {i, random_string() }) end)
+    Enum.each(1..10_000, fn i -> :ets.insert(:benchmark_table, {i, random_string()}) end)
 
     Benchee.run(
       %{
@@ -66,10 +66,11 @@ defmodule Mix.Tasks.Benchmark do
   end
 
   defp random_string do
-    size_in_bytes = (:rand.uniform(2_047)+1) * 1024 #between 1kb and 2mb
+    # between 1kb and 2mb
+    size_in_bytes = (:rand.uniform(2_047) + 1) * 1024
 
     :crypto.strong_rand_bytes(size_in_bytes)
-    |> Base.encode64
+    |> Base.encode64()
     |> binary_part(0, size_in_bytes)
   end
 end
