@@ -29,19 +29,20 @@ defmodule Belfrage.Cache.Cleaner do
 
   # Danger close! clean everything older than 1 hour
   def clean_cache(mem) when mem >= 95 do
-    :ets.select_delete(:cache, filter_older_than(1))
+    :ets.select_delete(:cache, filter_older_than(:timer.hours(1)))
   end
 
   def clean_cache(mem) when mem >= 90 do
-    :ets.select_delete(:cache, filter_older_than(5))
+    :ets.select_delete(:cache, filter_older_than(:timer.hours(5)))
   end
 
   # don't clean the cache when we still have room
   def clean_cache(_), do: 0
 
   # The Cachex.Query module should have made this cleaner but it doesn't return true for matches so select_
-  defp filter_older_than(hours),
-    do: Cachex.Query.raw({:<, :"$2", Belfrage.Timer.now_ms() - :timer.hours(hours)}, true)
+  defp filter_older_than(age) do
+    Cachex.Query.raw({:<, :"$2", Belfrage.Timer.now_ms() - age}, true)
+  end
 
   defp mem_used_percent do
     memory_data = :memsup.get_system_memory_data()
