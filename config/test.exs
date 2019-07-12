@@ -10,7 +10,11 @@ config :belfrage,
   belfrage: BelfrageMock,
   origin: "https://origin.bbc.com/",
   webcore_lambda_name_progressive_web_app: "webcore-lambda-name-progressive-web-app",
-  webcore_lambda_role_arn: "webcore-lambda-role-arn"
+  webcore_lambda_role_arn: "webcore-lambda-role-arn",
+  graphql_lambda_function: "graphql-lambda-function",
+  graphql_lambda_role_arn: "graphql-lambda-role-arn",
+  service_worker_lambda_function: "service-worker-lambda-function",
+  service_worker_lambda_role_arn: "service-worker-lambda-role-arn"
 
 config :ex_metrics,
   send_metrics: false

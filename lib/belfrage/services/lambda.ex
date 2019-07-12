@@ -2,17 +2,14 @@ defmodule Belfrage.Services.Lambda do
   use ExMetrics
 
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Behaviours.Service
-  @behaviour Service
 
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 
-  @impl Service
-  def dispatch(struct = %Struct{request: request}) do
+  def dispatch(arn, lambda_function, struct) do
     response =
       @lambda_client.call(
-        lambda_role_arn(),
-        lambda_function(),
+        arn,
+        lambda_function,
         build_payload(struct)
       )
       |> format_invoke_response()
@@ -63,13 +60,5 @@ defmodule Belfrage.Services.Lambda do
       body: "",
       cacheable_content: true
     }
-  end
-
-  defp lambda_role_arn() do
-    Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
-  end
-
-  defp lambda_function() do
-    Application.fetch_env!(:belfrage, :webcore_lambda_name_progressive_web_app)
   end
 end

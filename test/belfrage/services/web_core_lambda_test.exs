@@ -23,6 +23,9 @@ defmodule Belfrage.Services.LambdaTest do
     "body" => "oh dear, presentation layer broke"
   }
 
+  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
+  @function Application.fetch_env!(:belfrage, :webcore_lambda_name_progressive_web_app)
+
   describe "web core lambda service" do
     test "given a path it invokes the lambda" do
       expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
@@ -41,10 +44,10 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 200,
                  body: "<h1>Hello from Lambda!</h1>"
                }
-             } = Lambda.dispatch(@struct)
+             } = Lambda.dispatch(@arn, @function, @struct)
     end
 
-    test "lambda is invoked, but web core says its an error" do
+    test "lambda is invoked, but web core returns an error" do
       expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
                                            "webcore-lambda-name-progressive-web-app",
                                            %{
@@ -61,7 +64,7 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 500,
                  body: "oh dear, presentation layer broke"
                }
-             } = Lambda.dispatch(@struct)
+             } = Lambda.dispatch(@arn, @function, @struct)
     end
 
     test "cannot invoke the lambda" do
@@ -81,7 +84,7 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 500,
                  body: ""
                }
-             } = Lambda.dispatch(@struct)
+             } = Lambda.dispatch(@arn, @function, @struct)
     end
   end
 end
