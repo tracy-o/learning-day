@@ -4,7 +4,7 @@ defmodule Belfrage.Clients.LambdaTest do
 
   describe "Belfrage.Clients.Lambda.call/3" do
     test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
-      assert Lambda.call("webcore-lambda-role-arn", "presentation-lambda", %{some: "data"}) ==
+      assert Lambda.call("pwa-lambda-role-arn", "pwa-lambda-function", %{some: "data"}) ==
                {:ok, "<h1>A Page</h1>"}
     end
 
