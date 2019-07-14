@@ -10,15 +10,15 @@ defmodule Belfrage.Services.Webcore.Lambda do
       @arn Keyword.fetch!(unquote(opts), :arn)
       @lambda_function Keyword.fetch!(unquote(opts), :lambda_function)
 
-      def arn() do
+      defp arn() do
         Application.fetch_env!(:belfrage, @arn)
       end
 
-      def lambda_function() do
+      defp lambda_function() do
         Application.fetch_env!(:belfrage, @lambda_function)
       end
 
-      def lambda_client() do
+      defp lambda_client() do
         Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
       end
     end
