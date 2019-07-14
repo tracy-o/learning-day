@@ -1,17 +1,13 @@
 defmodule Belfrage.Services.Lambda.ServiceWorker do
-  alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Lambda.{Request, Response}
-
-  alias Belfrage.Behaviours.Service
-  @behaviour Service
-
-  @arn Application.fetch_env!(:belfrage, :service_worker_lambda_role_arn)
-  @lambda_function Application.fetch_env!(:belfrage, :service_worker_lambda_function)
-  @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
+  use Belfrage.Services.Lambda.Lambda,
+    [
+      arn: :service_worker_lambda_role_arn,
+      lambda_function: :service_worker_lambda_function
+    ]
 
   @impl Service
   def dispatch(struct) do
-    response = @lambda_client.call(@arn, @lambda_function, Request.build(struct))
+    response = lambda_client.call(arn(), lambda_function(), Request.build(struct))
     Struct.add(struct, :response, Response.build(response))
   end
 end
