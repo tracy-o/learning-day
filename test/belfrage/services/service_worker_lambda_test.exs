@@ -1,6 +1,6 @@
 defmodule Belfrage.Services.ServiceWorkerLambdaTest do
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Lambda.ServiceWorker
+  alias Belfrage.Services.Webcore.ServiceWorker
   alias Test.Support.StructHelper
 
   use ExUnit.Case

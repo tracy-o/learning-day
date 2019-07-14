@@ -1,4 +1,4 @@
-defmodule Belfrage.Services.Lambda.Request do
+defmodule Belfrage.Services.Webcore.Request do
   alias Belfrage.Struct
 
   def build(struct) do

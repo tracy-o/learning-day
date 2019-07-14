@@ -1,6 +1,6 @@
 defmodule Belfrage.Services.GraphqlLambdaTest do
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Lambda.Graphql
+  alias Belfrage.Services.Webcore.Graphql
   alias Test.Support.StructHelper
 
   use ExUnit.Case

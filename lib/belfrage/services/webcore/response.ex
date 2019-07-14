@@ -1,4 +1,4 @@
-defmodule Belfrage.Services.Lambda.Response do
+defmodule Belfrage.Services.Webcore.Response do
   use ExMetrics
 
   alias Belfrage.Struct

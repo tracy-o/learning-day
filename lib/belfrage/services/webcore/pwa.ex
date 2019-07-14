@@ -1,9 +1,7 @@
-defmodule Belfrage.Services.Lambda.Pwa do
-  use Belfrage.Services.Lambda.Lambda,
-    [
-      arn: :pwa_lambda_role_arn,
-      lambda_function: :pwa_lambda_function
-    ]
+defmodule Belfrage.Services.Webcore.Pwa do
+  use Belfrage.Services.Webcore.Lambda,
+    arn: :pwa_lambda_role_arn,
+    lambda_function: :pwa_lambda_function
 
   @impl Service
   def dispatch(struct) do

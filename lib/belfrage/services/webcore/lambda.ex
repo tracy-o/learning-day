@@ -1,8 +1,8 @@
-defmodule Belfrage.Services.Lambda.Lambda do
+defmodule Belfrage.Services.Webcore.Lambda do
   defmacro __using__(opts) do
     quote do
       alias Belfrage.{Clients, Struct}
-      alias Belfrage.Services.Lambda.{Request, Response}
+      alias Belfrage.Services.Webcore.{Request, Response}
       alias Belfrage.Behaviours.Service
 
       @behaviour Service

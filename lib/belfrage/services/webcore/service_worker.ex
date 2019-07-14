@@ -1,9 +1,7 @@
-defmodule Belfrage.Services.Lambda.Graphql do
-  use Belfrage.Services.Lambda.Lambda,
-    [
-      arn: :graphql_lambda_role_arn,
-      lambda_function: :graphql_lambda_function
-    ]
+defmodule Belfrage.Services.Webcore.ServiceWorker do
+  use Belfrage.Services.Webcore.Lambda,
+    arn: :service_worker_lambda_role_arn,
+    lambda_function: :service_worker_lambda_function
 
   @impl Service
   def dispatch(struct) do

@@ -1,6 +1,6 @@
-defmodule Belfrage.Services.Lambda.PwaTest do
+defmodule Belfrage.Services.Webcore.PwaTest do
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Lambda.Pwa
+  alias Belfrage.Services.Webcore.Pwa
   alias Test.Support.StructHelper
 
   use ExUnit.Case
