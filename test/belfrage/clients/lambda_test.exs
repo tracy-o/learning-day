@@ -14,7 +14,7 @@ defmodule Belfrage.Clients.LambdaTest do
     end
 
     test "Given a working role, but an incorrect function name we return the :failed_to_invoke_lambda error" do
-      assert Lambda.call("webcore-lambda-role-arn", "not-a-real-lambda", %{some: "data"}) ==
+      assert Lambda.call("pwa-lambda-role-arn", "not-a-real-lambda", %{some: "data"}) ==
                {:error, :failed_to_invoke_lambda}
     end
   end

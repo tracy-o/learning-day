@@ -2,8 +2,12 @@ version: '3.1'
 services:
   belfrage:
     environment:
-      - WEBCORE_LAMBDA_NAME_PROGRESSIVE_WEB_APP=foo
-      - WEBCORE_LAMBDA_ROLE_ARN=bar
+      - PWA_LAMBDA_FUNCTION=foo
+      - PWA_LAMBDA_ROLE_ARN=bar
+      - GRAPHQL_LAMBDA_FUNCTION=foo
+      - GRAPHQL_LAMBDA_ROLE_ARN=bar
+      - SERVICE_WORKER_LAMBDA_FUNCTION=foo
+      - SERVICE_WORKER_LAMBDA_ROLE_ARN=bar
     image: belfrage:latest
     ports:
       - "7080:7080"

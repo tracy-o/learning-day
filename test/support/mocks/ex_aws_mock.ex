@@ -1,6 +1,6 @@
 defmodule ExAwsMock do
   defmodule STS do
-    def assume_role("webcore-lambda-role-arn", _role_name) do
+    def assume_role("pwa-lambda-role-arn", _role_name) do
       :assume_role_successfully
     end
 

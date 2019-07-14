@@ -96,7 +96,7 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok,
               %{
                 counter: %{
-                  "webcore-lambda-name-progressive-web-app" => %{
+                  "pwa-lambda-function" => %{
                     200 => 1,
                     :errors => 0
                   }
@@ -110,8 +110,8 @@ defmodule Belfrage.BelfrageCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "webcore-lambda-role-arn",
-           "webcore-lambda-name-progressive-web-app",
+        fn "pwa-lambda-role-arn",
+           "pwa-lambda-function",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @web_core_lambda_response
         end
@@ -126,8 +126,8 @@ defmodule Belfrage.BelfrageCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "webcore-lambda-role-arn",
-           "webcore-lambda-name-progressive-web-app",
+        fn "pwa-lambda-role-arn",
+           "pwa-lambda-function",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @failed_web_core_lambda_response
         end
