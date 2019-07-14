@@ -1,6 +1,6 @@
-defmodule Belfrage.Services.LambdaTest do
+defmodule Belfrage.Services.Lambda.PwaTest do
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Lambda
+  alias Belfrage.Services.Lambda.Pwa
   alias Test.Support.StructHelper
 
   use ExUnit.Case
@@ -23,13 +23,10 @@ defmodule Belfrage.Services.LambdaTest do
     "body" => "oh dear, presentation layer broke"
   }
 
-  @arn Application.fetch_env!(:belfrage, :pwa_lambda_role_arn)
-  @function Application.fetch_env!(:belfrage, :pwa_lambda_function)
-
   describe "web core lambda service" do
     test "given a path it invokes the lambda" do
-      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
-                                           "webcore-lambda-name-progressive-web-app",
+      expect(Clients.LambdaMock, :call, fn "pwa-lambda-role-arn",
+                                           "pwa-lambda-function",
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
@@ -44,12 +41,12 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 200,
                  body: "<h1>Hello from Lambda!</h1>"
                }
-             } = Lambda.dispatch(@arn, @function, @struct)
+             } = Pwa.dispatch(@struct)
     end
 
     test "lambda is invoked, but web core returns an error" do
-      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
-                                           "webcore-lambda-name-progressive-web-app",
+      expect(Clients.LambdaMock, :call, fn "pwa-lambda-role-arn",
+                                           "pwa-lambda-function",
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
@@ -64,12 +61,12 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 500,
                  body: "oh dear, presentation layer broke"
                }
-             } = Lambda.dispatch(@arn, @function, @struct)
+             } = Pwa.dispatch(@struct)
     end
 
     test "cannot invoke the lambda" do
-      expect(Clients.LambdaMock, :call, fn "webcore-lambda-role-arn",
-                                           "webcore-lambda-name-progressive-web-app",
+      expect(Clients.LambdaMock, :call, fn "pwa-lambda-role-arn",
+                                           "pwa-lambda-function",
                                            %{
                                              body: ~s({"some": "data"}),
                                              headers: %{country: nil},
@@ -84,7 +81,7 @@ defmodule Belfrage.Services.LambdaTest do
                  http_status: 500,
                  body: ""
                }
-             } = Lambda.dispatch(@arn, @function, @struct)
+             } = Pwa.dispatch(@struct)
     end
   end
 end
