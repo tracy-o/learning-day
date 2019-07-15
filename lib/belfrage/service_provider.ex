@@ -6,10 +6,8 @@ defmodule Belfrage.ServiceProvider do
   @impl ServiceProvider
   def service_for(origin) do
     cond do
-      origin =~ ~r[service-worker.js$] -> Services.Webcore.ServiceWorker
-      origin =~ ~r[graphql] -> Services.Webcore.Graphql
       origin =~ ~r[^http(s)?://] -> Services.HTTP
-      true -> Services.Webcore.Pwa
+      true -> Services.Webcore
     end
   end
 end

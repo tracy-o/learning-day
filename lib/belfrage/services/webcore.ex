@@ -1,20 +1,19 @@
-defmodule Belfrage.Services.Webcore.ServiceWorker do
+defmodule Belfrage.Services.Webcore do
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Services.Webcore.{Request, Response}
+  alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
 
   @behaviour Service
 
   @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
-  @lambda_function Application.fetch_env!(:belfrage, :service_worker_lambda_function)
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 
   @impl Service
-  def dispatch(struct) do
+  def dispatch(struct = %Struct{private: private}) do
     Struct.add(
       struct,
       :response,
-      Response.build(@lambda_client.call(@arn, @lambda_function, Request.build(struct)))
+      Webcore.Response.build(@lambda_client.call(@arn, private.origin, Webcore.Request.build(struct)))
     )
   end
 end

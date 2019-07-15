@@ -4,14 +4,6 @@ defmodule Belfrage.ServiceProviderTest do
   alias Belfrage.{Services, ServiceProvider}
 
   describe "ServiceProvider.service_for/1" do
-    test "when the origin ends with service-worker.js it returns the ServiceWorker Service" do
-      assert Services.Webcore.ServiceWorker == ServiceProvider.service_for("http://www.bbc.co.uk/service-worker.js")
-    end
-
-    test "when the origin ends with graphql it returns the Graphql Service" do
-      assert Services.Webcore.Graphql == ServiceProvider.service_for("http://www.bbc.co.uk/graphql")
-    end
-
     test "when origin is http it returns the HTTP Service" do
       assert Services.HTTP == ServiceProvider.service_for("http://www.bbc.co.uk")
     end
@@ -20,8 +12,8 @@ defmodule Belfrage.ServiceProviderTest do
       assert Services.HTTP == ServiceProvider.service_for("https://www.bbc.co.uk")
     end
 
-    test "when origin doesnt match the other scenarios it returns the Pwa Service" do
-      assert Services.Webcore.Pwa == ServiceProvider.service_for("lambda-presentation-layer")
+    test "when origin doesnt match the other scenarios it returns the Webcore Service" do
+      assert Services.Webcore == ServiceProvider.service_for("arn:aws:lambda:eu-west-1:123456:function:webcore")
     end
   end
 end
