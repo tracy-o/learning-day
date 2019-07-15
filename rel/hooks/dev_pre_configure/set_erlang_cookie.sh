@@ -1,0 +1,1 @@
+export ERLANG_COOKIE=I%cla{Ao7kp[wp79kJu67R]@3=jqpDv4jk{$\`En@0t,E8HVlA,L,J_IXB_7hCg{G

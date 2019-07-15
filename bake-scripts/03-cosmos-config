@@ -10,7 +10,7 @@ def main(argv):
 
     f = open("/etc/systemd/system/belfrage.service.d/env.conf", "w")
     f.write("[Service]\n")
-    for key, value in key_values.items():
+    for key, value in key_values.items() + noecho_key_values.items():
         f.write("Environment=%s=%s\n" % (key, pipes.quote(value)))
     f.close()
     return 0

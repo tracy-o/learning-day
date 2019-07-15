@@ -29,17 +29,19 @@ environment :dev do
   # It is recommended that you build with MIX_ENV=prod and pass
   # the --env flag to Distillery explicitly if you want to use
   # dev mode.
+  set pre_configure_hooks: "rel/hooks/dev_pre_configure"
   set dev_mode: true
   set include_erts: false
-  set cookie: :"I%cla{Ao7kp[wp79kJu67R]@3=jqpDv4jk{$`En@0t,E8HVlA,L,J_IXB_7hCg{G"
+  set cookie: :set_in_pre_configure_release_hook
   set vm_args: "rel/vm.args"
   set pre_configure_hooks: "rel/hooks/dev_pre_configure"
 end
 
 environment :prod do
+  set pre_configure_hooks: "rel/hooks/prod_pre_configure"
   set include_erts: true
   set include_src: false
-  set cookie: :"T:5196)>.Ll`Y&usT2(zBarAkP/BOEEwoWBdQz8])cDPRgl`6iSe}%Tqf2{$0YbE"
+  set cookie: :set_in_pre_configure_release_hook
   set vm_args: "rel/vm.args"
   set pre_configure_hooks: "rel/hooks/prod_pre_configure"
 end
