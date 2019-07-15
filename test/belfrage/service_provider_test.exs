@@ -9,7 +9,7 @@ defmodule Belfrage.ServiceProviderTest do
     end
 
     test "when the origin ends with graphql it returns the Graphql Service" do
-      assert Services.Lambda.Graphql == ServiceProvider.service_for("http://www.bbc.co.uk/graphql")
+      assert Services.Webcore.Graphql == ServiceProvider.service_for("http://www.bbc.co.uk/graphql")
     end
 
     test "when origin is http it returns the HTTP Service" do
