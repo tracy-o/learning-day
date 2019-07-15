@@ -7,6 +7,7 @@ defmodule Mix.Tasks.Benchmark do
     benchmark_get_loop()
     benchmark_request_pipeline()
     benchmark_response_pipeline()
+    benchmark_memory_check()
   end
 
   defp benchmark_get_loop do
@@ -47,5 +48,31 @@ defmodule Mix.Tasks.Benchmark do
       time: 10,
       memory_time: 2
     )
+  end
+
+  defp benchmark_memory_check do
+    :ets.new(:benchmark_table, [:set, :protected, :named_table, read_concurrency: true])
+
+    Enum.each(1..5_000, fn i -> :ets.insert(:benchmark_table, {i, random_string()}) end)
+
+    Benchee.run(
+      %{
+        "memsup" => fn -> :memsup.get_system_memory_data() end,
+        # Sadly the memory used by ets only includes pointers to the Strings, so is much smaller than the "real" memory usage
+        "ets.info" => fn -> :ets.info(:benchmark_table) end,
+        ":erlang.memory" => fn -> :erlang.memory() end
+      },
+      time: 10,
+      memory_time: 2
+    )
+  end
+
+  defp random_string do
+    # between 1kb and 2mb
+    size_in_bytes = (:rand.uniform(2_047) + 1) * 1024
+
+    :crypto.strong_rand_bytes(size_in_bytes)
+    |> Base.encode64()
+    |> binary_part(0, size_in_bytes)
   end
 end

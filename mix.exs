@@ -25,7 +25,7 @@ defmodule Belfrage.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :cachex],
+      extra_applications: [:logger, :cachex, :os_mon],
       mod: {Belfrage.Application, [env: Mix.env()]}
     ]
   end

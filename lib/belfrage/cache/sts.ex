@@ -27,14 +27,9 @@ defmodule Belfrage.Cache.STS do
     {:noreply, state}
   end
 
-  # Avoids leak from Mojito? which
-  # might not handle this info message correctly???
-  # (Related to https://elixirforum.com/t/ssl-closed-error-in-genserver/19814)
-  def handle_info({:ssl_closed, _}, state) do
-    Stump.log(:info, %{
-      msg: "Received :ssl_closed info message in :sts_cache_refresh process."
-    })
-
+  # Catch all to handle unexpected messages
+  # https://elixir-lang.org/getting-started/mix-otp/genserver.html#call-cast-or-info
+  def handle_info(_any_message, state) do
     {:noreply, state}
   end
 
