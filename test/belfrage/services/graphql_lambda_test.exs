@@ -23,7 +23,7 @@ defmodule Belfrage.Services.GraphqlLambdaTest do
     "body" => "oh dear, GraphQL broke"
   }
 
-  @arn Application.fetch_env!(:belfrage, :graphql_lambda_role_arn)
+  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   @function Application.fetch_env!(:belfrage, :graphql_lambda_function)
 
   describe "graphql lambda service" do

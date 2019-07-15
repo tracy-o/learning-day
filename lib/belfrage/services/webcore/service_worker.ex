@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Webcore.ServiceWorker do
 
   @behaviour Service
 
-  @arn Application.fetch_env!(:belfrage, :service_worker_lambda_role_arn)
+  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   @lambda_function Application.fetch_env!(:belfrage, :service_worker_lambda_function)
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 

@@ -23,7 +23,7 @@ defmodule Belfrage.Services.ServiceWorkerLambdaTest do
     "body" => "oh dear, Service Worker broke"
   }
 
-  @arn Application.fetch_env!(:belfrage, :service_worker_lambda_role_arn)
+  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   @function Application.fetch_env!(:belfrage, :service_worker_lambda_function)
 
   describe "service worker lambda service" do

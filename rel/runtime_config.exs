@@ -1,7 +1,6 @@
 use Mix.Config
 
-["PWA_LAMBDA_FUNCTION", "PWA_LAMBDA_ROLE_ARN", "GRAPHQL_LAMBDA_FUNCTION", "GRAPHQL_LAMBDA_ROLE_ARN",
- "SERVICE_WORKER_LAMBDA_FUNCTION", "SERVICE_WORKER_LAMBDA_ROLE_ARN"]
+["WEBCORE_LAMBDA_ROLE_ARN", "PWA_LAMBDA_FUNCTION", "GRAPHQL_LAMBDA_FUNCTION", "SERVICE_WORKER_LAMBDA_FUNCTION"]
 |> Enum.each(fn config_key ->
   if System.get_env(config_key) == nil do
     raise "Config not set in environment: #{config_key}"

@@ -9,12 +9,10 @@ config :belfrage,
   lambda_client: Belfrage.Clients.LambdaMock,
   belfrage: BelfrageMock,
   origin: "https://origin.bbc.com/",
+  webcore_lambda_role_arn: "webcore-lambda-role-arn",
   pwa_lambda_function: "pwa-lambda-function",
-  pwa_lambda_role_arn: "pwa-lambda-role-arn",
   graphql_lambda_function: "graphql-lambda-function",
-  graphql_lambda_role_arn: "graphql-lambda-role-arn",
-  service_worker_lambda_function: "service-worker-lambda-function",
-  service_worker_lambda_role_arn: "service-worker-lambda-role-arn"
+  service_worker_lambda_function: "service-worker-lambda-function"
 
 config :ex_metrics,
   send_metrics: false
