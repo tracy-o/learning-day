@@ -38,7 +38,7 @@ defmodule Belfrage.Cache.STS do
   end
 
   defp refresh_credentials do
-    arn = Application.get_env(:belfrage, :webcore_lambda_role_arn)
+    arn = Application.get_env(:belfrage, :pwa_lambda_role_arn)
     # This is where we could also look at the env, and
     # if on :dev, then fetch the credentials from the wormhole
     # instead of calling STS.

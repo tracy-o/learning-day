@@ -1,6 +1,4 @@
 defmodule Belfrage.Services.Webcore.Request do
-  alias Belfrage.Struct
-
   def build(struct) do
     %{
       headers: %{
