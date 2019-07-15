@@ -11,13 +11,13 @@ defmodule Belfrage.Services.ServiceWorkerLambdaTest do
             request: %{method: "GET", path: "/service-worker.js"}
           )
 
-  @graphql_lambda_response %{
+  @service_worker_lambda_response %{
     "headers" => %{},
     "statusCode" => 200,
     "body" => "<h1>Hello from Service Worker!</h1>"
   }
 
-  @graphql_lambda_response_internal_fail %{
+  @service_worker_lambda_response_internal_fail %{
     "headers" => %{},
     "statusCode" => 500,
     "body" => "oh dear, Service Worker broke"
@@ -35,7 +35,7 @@ defmodule Belfrage.Services.ServiceWorkerLambdaTest do
                                              httpMethod: "GET",
                                              path: "/service-worker.js"
                                            } ->
-        {:ok, @graphql_lambda_response}
+        {:ok, @service_worker_lambda_response}
       end)
 
       assert %Struct{
@@ -54,7 +54,7 @@ defmodule Belfrage.Services.ServiceWorkerLambdaTest do
                                              httpMethod: "GET",
                                              path: "/service-worker.js"
                                            } ->
-        {:ok, @graphql_lambda_response_internal_fail}
+        {:ok, @service_worker_lambda_response_internal_fail}
       end)
 
       assert %Struct{
