@@ -1,21 +1,24 @@
 defmodule Belfrage.Cache.Local do
+  alias Belfrage.Cache.CacheControlParser
+
   def fetch(
         struct = %Belfrage.Struct{
-          request: %{request_hash: request_hash},
-          private: %{cache_ttl: cache_ttl}
+          request: %{request_hash: request_hash}
         }
       ) do
     Cachex.get(:cache, request_hash)
-    |> format_cache_result(cache_ttl)
+    |> format_cache_result()
   end
 
   def store(struct = %Belfrage.Struct{}) do
+    cache_ttl = CacheControlParser.parse(struct.response)
+
     case stale?(struct) do
       true ->
         Cachex.put(
           :cache,
           struct.request.request_hash,
-          {struct.response, Belfrage.Timer.now_ms()},
+          {struct.response, Belfrage.Timer.now_ms(), cache_ttl},
           ttl: struct.private.fallback_ttl
         )
 
@@ -24,14 +27,14 @@ defmodule Belfrage.Cache.Local do
     end
   end
 
-  defp format_cache_result({:ok, {response, last_updated}}, cache_ttl) do
+  defp format_cache_result({:ok, {response, last_updated, cache_ttl}}) do
     case Belfrage.Timer.stale?(last_updated, cache_ttl) do
       true -> {:ok, :stale, response}
       false -> {:ok, :fresh, response}
     end
   end
 
-  defp format_cache_result({:ok, nil}, _cache_ttl) do
+  defp format_cache_result({:ok, nil}) do
     {:ok, :content_not_found}
   end
 

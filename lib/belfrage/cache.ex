@@ -54,7 +54,7 @@ defmodule Belfrage.Cache do
 
   defp is_cacheable?(struct) do
     is_successful_response?(struct) and is_get_request?(struct) and
-      struct.response.cacheable_content
+      Belfrage.Cache.CacheControlParser.parse(struct.response) > 0
   end
 
   defp is_successful_response?(struct) do
