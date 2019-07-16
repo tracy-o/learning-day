@@ -12,8 +12,8 @@ defmodule Belfrage.ServiceProviderTest do
       assert Services.HTTP == ServiceProvider.service_for("https://www.bbc.co.uk")
     end
 
-    test "when origin is not http/s it returns the Lambda Service" do
-      assert Services.Lambda == ServiceProvider.service_for("lambda-presentation-layer")
+    test "when origin doesnt match the other scenarios it returns the Webcore Service" do
+      assert Services.Webcore == ServiceProvider.service_for("arn:aws:lambda:eu-west-1:123456:function:webcore")
     end
   end
 end

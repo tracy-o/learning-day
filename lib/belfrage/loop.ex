@@ -76,10 +76,18 @@ defmodule Belfrage.Loop do
     ["load_test", "with_cache"]
   ]
 
+  defp origin_pointer(false, ["service-worker.js"]) do
+    Application.get_env(:belfrage, :service_worker_lambda_function)
+  end
+
+  defp origin_pointer(false, ["graphql"]) do
+    Application.get_env(:belfrage, :graphql_lambda_function)
+  end
+
   defp origin_pointer(false, loop_id) do
     case Enum.member?(@legacy_route_loop_ids, loop_id) do
       true -> Application.get_env(:belfrage, :origin)
-      false -> Application.get_env(:belfrage, :webcore_lambda_name_progressive_web_app)
+      false -> Application.get_env(:belfrage, :pwa_lambda_function)
     end
   end
 

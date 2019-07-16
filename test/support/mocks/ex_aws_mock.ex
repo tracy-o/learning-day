@@ -10,7 +10,7 @@ defmodule ExAwsMock do
   end
 
   defmodule Lambda do
-    def invoke("presentation-lambda", _payload, _headers) do
+    def invoke("pwa-lambda-function", _payload, _headers) do
       :invoke_successfully
     end
 

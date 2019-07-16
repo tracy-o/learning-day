@@ -5,9 +5,9 @@ defmodule Belfrage.ServiceProvider do
 
   @impl ServiceProvider
   def service_for(origin) do
-    case origin =~ ~r/^http(s)?:\/\// do
-      true -> Services.HTTP
-      false -> Services.Lambda
+    cond do
+      origin =~ ~r[^http(s)?://] -> Services.HTTP
+      true -> Services.Webcore
     end
   end
 end

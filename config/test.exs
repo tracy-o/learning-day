@@ -9,8 +9,10 @@ config :belfrage,
   lambda_client: Belfrage.Clients.LambdaMock,
   belfrage: BelfrageMock,
   origin: "https://origin.bbc.com/",
-  webcore_lambda_name_progressive_web_app: "webcore-lambda-name-progressive-web-app",
-  webcore_lambda_role_arn: "webcore-lambda-role-arn"
+  webcore_lambda_role_arn: "webcore-lambda-role-arn",
+  pwa_lambda_function: "pwa-lambda-function",
+  graphql_lambda_function: "graphql-lambda-function",
+  service_worker_lambda_function: "service-worker-lambda-function"
 
 config :ex_metrics,
   send_metrics: false
