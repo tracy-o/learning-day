@@ -5,7 +5,6 @@ defmodule Belfrage.Services.Webcore do
 
   @behaviour Service
 
-  @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 
   @impl Service
@@ -13,7 +12,11 @@ defmodule Belfrage.Services.Webcore do
     Struct.add(
       struct,
       :response,
-      Webcore.Response.build(@lambda_client.call(@arn, private.origin, Webcore.Request.build(struct)))
+      Webcore.Response.build(@lambda_client.call(arn(), private.origin, Webcore.Request.build(struct)))
     )
+  end
+
+  defp arn do
+    Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end
 end
