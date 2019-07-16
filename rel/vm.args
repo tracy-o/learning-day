@@ -6,7 +6,7 @@
 -name <%= release_name %>@${INSTANCE_IP}
 
 ## Cookie for distributed erlang
--setcookie <%= release.profile.cookie %>
+-setcookie ${ERLANG_COOKIE}
 
 ## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
 ## (Disabled by default..use with caution!)
@@ -29,3 +29,6 @@
 # Enable SMP automatically based on availability
 # On OTP21+, this is not needed anymore.
 -smp auto
+
+# Enable distributed nodes to talk on ports ranging from:
+-kernel inet_dist_listen_min 9100 inet_dist_listen_max 9155

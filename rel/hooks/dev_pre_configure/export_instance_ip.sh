@@ -3,7 +3,7 @@ set -e
 
 export REPLACE_OS_VARS=true
 
-if [ $LOCATION = "docker" ]
+if [ "$LOCATION" = "docker" ]
 then
     echo "getting IP of docker container for erlang node name"
     export INSTANCE_IP=$(awk 'END{print $1}' /etc/hosts)

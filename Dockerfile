@@ -17,4 +17,5 @@ RUN mix deps.get
 RUN mix compile
 RUN mix distillery.release
 
-CMD ["_build/dev/rel/ingress/bin/ingress", "foreground"]
+CMD ["_build/dev/rel/belfrage/bin/belfrage", "foreground"]
+
