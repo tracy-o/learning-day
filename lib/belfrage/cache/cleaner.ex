@@ -40,7 +40,7 @@ defmodule Belfrage.Cache.Cleaner do
 
   defp mem_used_percent do
     memory_data = :memsup.get_system_memory_data()
-    memory_data[:free_memory] / memory_data[:total_memory] * 100
+    100 - memory_data[:free_memory] / memory_data[:total_memory] * 100
   end
 
   defp schedule_work(mem) when mem >= 90, do: Process.send_after(self(), :refresh, 1_000)
