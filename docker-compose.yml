@@ -2,10 +2,10 @@ version: '3.1'
 services:
   belfrage:
     environment:
-      - WEBCORE_LAMBDA_ROLE_ARN=foobar
-      - PWA_LAMBDA_FUNCTION=foo
-      - GRAPHQL_LAMBDA_FUNCTION=foo
-      - SERVICE_WORKER_LAMBDA_FUNCTION=foo
+      - WEBCORE_LAMBDA_ROLE_ARN=arn:aws:iam::123456:role/BelfrageLambdaExecRole
+      - PWA_LAMBDA_FUNCTION=arn:aws:lambda:eu-west-1:123456:function:webcore-pwa
+      - GRAPHQL_LAMBDA_FUNCTION=arn:aws:lambda:eu-west-1:123456:function:webcore-api
+      - SERVICE_WORKER_LAMBDA_FUNCTION=arn:aws:lambda:eu-west-1:123456:function:webcore-sw
     image: belfrage:latest
     ports:
       - "7080:7080"
