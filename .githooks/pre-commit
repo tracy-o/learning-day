@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+# We don't want to fail a commit if you haven't formatted un-staged changes
+# Unfortunately if you have staged and un-staged changes in the same file we have to format it all (should be rare)
+staged_elixir_changes=$(git diff --name-only --cached | grep -e .ex -e .exs | tr '\r\n' ' ')
+
+# if formatting fails for staged files             then:    format staged files               and don't commit
+mix format --check-formatted ${staged_elixir_changes} || (mix format ${staged_elixir_changes} && exit 1)
