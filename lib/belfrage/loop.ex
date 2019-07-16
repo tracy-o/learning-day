@@ -76,7 +76,7 @@ defmodule Belfrage.Loop do
     ["load_test", "with_cache"]
   ]
 
-  defp origin_pointer(false, ["service_worker"]) do
+  defp origin_pointer(false, ["service-worker.js"]) do
     Application.get_env(:belfrage, :service_worker_lambda_function)
   end
 
