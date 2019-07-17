@@ -86,3 +86,11 @@ The app runs on port 7080.
 ```
 mix benchmark
 ```
+
+## Code style
+
+We use the `mix format` to apply code style and formatting rules automatically. Our CI will fail if you do not run `mix format`
+
+Want `mix format` to run automatically? Consider getting your IDE to do this on file changes, or alternatively run `git config core.hooksPath .githooks` from this directory to add a pre-commit hook that will run `mix format` for you before allowing you to commit.
+
+Got an opinion on how `mix format` could do a better job? Edit `.formatter.exs`
