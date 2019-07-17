@@ -51,12 +51,12 @@ defmodule Belfrage.Cache.CleanerTest do
     end
 
     test "When the mem usage is high, it cleans cache items older than 5 hours including expired ones" do
-      assert 2 == Cache.Cleaner.clean_cache(90)
+      assert 2 == Cache.Cleaner.clean_cache(75)
       assert length(:ets.tab2list(:cache)) == 2
     end
 
     test "When the mem usage is dangerously high, it cleans cache items older than 1 hour" do
-      assert 3 == Cache.Cleaner.clean_cache(95)
+      assert 3 == Cache.Cleaner.clean_cache(80)
       assert length(:ets.tab2list(:cache)) == 1
     end
 
