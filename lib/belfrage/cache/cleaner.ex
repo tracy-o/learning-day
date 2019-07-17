@@ -23,11 +23,15 @@ defmodule Belfrage.Cache.Cleaner do
   end
 
   # Danger close! clean everything older than 1 hour
-  def clean_cache(mem) when mem >= 95 do
+  def clean_cache(mem) when mem >= 90 do
+    :ets.select_delete(:cache, filter_older_than(:timer.minutes(30)))
+  end
+
+  def clean_cache(mem) when mem >= 80 do
     :ets.select_delete(:cache, filter_older_than(:timer.hours(1)))
   end
 
-  def clean_cache(mem) when mem >= 90 do
+  def clean_cache(mem) when mem >= 75 do
     :ets.select_delete(:cache, filter_older_than(:timer.hours(5)))
   end
 
@@ -43,8 +47,8 @@ defmodule Belfrage.Cache.Cleaner do
     100 - memory_data[:free_memory] / memory_data[:total_memory] * 100
   end
 
-  defp schedule_work(mem) when mem >= 90, do: Process.send_after(self(), :refresh, 1_000)
-  defp schedule_work(mem) when mem >= 70, do: Process.send_after(self(), :refresh, 3_000)
+  defp schedule_work(mem) when mem >= 75, do: Process.send_after(self(), :refresh, 1_000)
+  defp schedule_work(mem) when mem >= 60, do: Process.send_after(self(), :refresh, 3_000)
   defp schedule_work(mem) when mem >= 50, do: Process.send_after(self(), :refresh, 10_000)
   defp schedule_work(_mem), do: Process.send_after(self(), :refresh, 60_000)
 end
