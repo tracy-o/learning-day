@@ -83,7 +83,7 @@ defmodule BelfrageWeb.HeadersTest do
               [
                 {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
                 {"content-type", "text/html; charset=utf-8"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"}
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"}
               ], "<p>some html content</p>"} == sent_resp(conn)
     end
 
@@ -93,7 +93,7 @@ defmodule BelfrageWeb.HeadersTest do
       assert {404,
               [
                 {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"},
                 {"content-type", "text/plain; charset=utf-8"}
               ], "404 Not Found"} == sent_resp(conn)
     end
@@ -104,7 +104,7 @@ defmodule BelfrageWeb.HeadersTest do
       assert {500,
               [
                 {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country"},
+                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"},
                 {"content-type", "text/plain; charset=utf-8"}
               ], "500 Internal Server Error"} = sent_resp(conn)
     end
