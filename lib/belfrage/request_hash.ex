@@ -1,6 +1,6 @@
 defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
-  @signature_keys [:path, :country, :method, :has_been_replayed?]
+  @signature_keys [:path, :country, :method, :query_params, :has_been_replayed?]
 
   def generate(struct) do
     extract_keys(struct.request)
