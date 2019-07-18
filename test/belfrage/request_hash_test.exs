@@ -35,8 +35,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "varies on query_params" do
-      query_string_struct =
-        Belfrage.Struct.add(@struct, :request, %{query_params: %{"foo" => "bar"}})
+      query_string_struct = Belfrage.Struct.add(@struct, :request, %{query_params: %{"foo" => "bar"}})
 
       assert RequestHash.generate(@struct).request.request_hash !=
                RequestHash.generate(query_string_struct).request.request_hash

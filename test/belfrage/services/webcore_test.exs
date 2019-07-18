@@ -10,7 +10,11 @@ defmodule Belfrage.Services.WebcoreTest do
 
   @graphql_struct StructHelper.build(
                     private: %{origin: "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql"},
-                    request: %{method: "GET", path: "/graphql?operationName=ContainersPromoGroup", query_params: %{"id" => "1234"}}
+                    request: %{
+                      method: "GET",
+                      path: "/graphql?operationName=ContainersPromoGroup",
+                      query_params: %{"id" => "1234"}
+                    }
                   )
 
   @graphql_lambda_response %{
@@ -27,7 +31,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/graphql?operationName=ContainersPromoGroup",
-                                             queryStringParameters:  %{"id" => "1234"}
+                                             queryStringParameters: %{"id" => "1234"}
                                            } ->
         {:ok, @graphql_lambda_response}
       end)
