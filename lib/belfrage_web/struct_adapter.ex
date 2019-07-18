@@ -4,7 +4,7 @@ defmodule BelfrageWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  @query_string_allowlist ["query", "operationName", "variables"]
+  @query_string_allowlist ["query", "operationName", "variables", "extensions"]
 
   def adapt(conn = %Conn{private: %{loop_id: loop_id, bbc_headers: bbc_headers}}) do
     %Struct{
