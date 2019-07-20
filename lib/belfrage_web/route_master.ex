@@ -22,8 +22,6 @@ defmodule BelfrageWeb.RouteMaster do
   end
 
   def yield(id, conn) do
-    IO.inspect apply(:"Elixir.BelfrageWeb.Routes.#{id}", :specs, [])
-    #"Served by " <> "BelfrageRouter.Loops." <> id
     conn
     |> StructAdapter.adapt(id)
     |> @belfrage.handle()

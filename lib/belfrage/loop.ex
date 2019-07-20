@@ -6,7 +6,7 @@ defmodule Belfrage.Loop do
   @threshold Application.get_env(:belfrage, :errors_threshold)
   @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
   def start_link(name) do
-    GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
+    GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
@@ -24,13 +24,17 @@ defmodule Belfrage.Loop do
     LoopsRegistry.via_tuple({__MODULE__, name})
   end
 
+  defp specs_for(name) do
+    Module.concat([Belfrage, Loops, name]).specs()
+  end
+
   # callbacks
 
   @impl GenServer
-  def init(_) do
+  def init(specs) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init()}}
+    {:ok, Map.put(specs, :counter, Counter.init())}
   end
 
   @impl GenServer
