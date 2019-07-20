@@ -1,4 +1,8 @@
 defmodule BelfrageWeb.RouteMaster do
+  alias BelfrageWeb.{View, StructAdapter}
+
+  @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
+
   defmacro __using__(_opts) do
     quote do
       use Plug.Router
@@ -17,13 +21,14 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  def examples(list) do
-    IO.puts list
-  end
-
-  #  apply(__MODULE__, name, [])
-  def using(id) do
-    "Served by " <> "BelfrageRouter.Loops." <> id
+  def yield(id, conn) do
+    IO.inspect apply(:"Elixir.BelfrageWeb.Routes.#{id}", :specs, [])
+    #"Served by " <> "BelfrageRouter.Loops." <> id
+    conn
+    |> StructAdapter.adapt(id)
+    |> @belfrage.handle()
+    |> IO.inspect
+    |> View.render(conn)
   end
 
   defmacro handle(matcher, [using: id, examples: examples]) do
@@ -31,7 +36,7 @@ defmodule BelfrageWeb.RouteMaster do
       @routes [{unquote(matcher), unquote(examples)} | @routes]
 
       get unquote(matcher) do
-        send_resp(var!(conn), 200, using(unquote(id)))
+        yield unquote(id), var!(conn)
       end
     end
   end
