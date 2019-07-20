@@ -1,12 +1,11 @@
 defmodule Routes.Specs.SportVideos do
   def specs do
-    IO.puts " in the sport video loop!"
-
+    # TODO: this can be a struct with all the validations!
     %{
       owner: "team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/mozart/Mozart+runbook",
       platform: "webcore",
-      pipeline:  ["ReplayedTrafficTransformer"],
+      pipeline: ["ReplayedTrafficTransformer"],
       resp_pipeline: [],
       ttl: "30s",
       timeout: "1000ms"

@@ -8,8 +8,8 @@ defmodule BelfrageWeb.Router do
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
-  plug :match
-  plug :dispatch
+  plug(:match)
+  plug(:dispatch)
 
   get "/status" do
     send_resp(conn, 200, "I'm ok thanks")
@@ -21,13 +21,13 @@ defmodule BelfrageWeb.Router do
     Plug.Adapters.Cowboy.child_spec(
       scheme: scheme,
       options:
-      Enum.concat(
-        [
-          port: port,
-          protocol_options: [max_keepalive: 5_000_000]
-        ],
-        options(scheme)
-      ),
+        Enum.concat(
+          [
+            port: port,
+            protocol_options: [max_keepalive: 5_000_000]
+          ],
+          options(scheme)
+        ),
       plug: __MODULE__
     )
   end
@@ -47,11 +47,11 @@ defmodule BelfrageWeb.Router do
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
     Stump.log(:error, %{
-          msg: "Router Service returned a 500 status",
-          kind: kind,
-          reason: reason,
-          stack: Exception.format_stacktrace(stack)
-              })
+      msg: "Router Service returned a 500 status",
+      kind: kind,
+      reason: reason,
+      stack: Exception.format_stacktrace(stack)
+    })
 
     BelfrageWeb.View.internal_server_error(conn)
   end

@@ -6,8 +6,8 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro __using__(_opts) do
     quote do
       use Plug.Router
-      plug :match
-      plug :dispatch
+      plug(:match)
+      plug(:dispatch)
 
       import BelfrageWeb.RouteMaster
 
@@ -25,16 +25,16 @@ defmodule BelfrageWeb.RouteMaster do
     conn
     |> StructAdapter.adapt(id)
     |> @belfrage.handle()
-    |> IO.inspect
+    |> IO.inspect()
     |> View.render(conn)
   end
 
-  defmacro handle(matcher, [using: id, examples: examples]) do
+  defmacro handle(matcher, using: id, examples: examples) do
     quote do
       @routes [{unquote(matcher), unquote(examples)} | @routes]
 
       get unquote(matcher) do
-        yield unquote(id), var!(conn)
+        yield(unquote(id), var!(conn))
       end
     end
   end
@@ -42,9 +42,9 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro __before_compile__(_env) do
     quote do
       def run do
-        Enum.map @routes, fn matcher ->
-          IO.inspect matcher
-        end
+        Enum.map(@routes, fn matcher ->
+          IO.inspect(matcher)
+        end)
       end
     end
   end
