@@ -1,4 +1,4 @@
-defmodule Belfrage.Loops.SportVideos do
+defmodule Routes.Specs.SportVideos do
   def specs do
     IO.puts " in the sport video loop!"
 

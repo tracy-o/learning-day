@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.Routefile do
+defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
   handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/123"]

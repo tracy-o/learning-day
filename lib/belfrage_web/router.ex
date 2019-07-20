@@ -15,7 +15,7 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 200, "I'm ok thanks")
   end
 
-  match(_, to: BelfrageWeb.Routefile)
+  match(_, to: Routes.Routefile)
 
   def child_spec(scheme: scheme, port: port) do
     Plug.Adapters.Cowboy.child_spec(

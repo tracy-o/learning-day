@@ -25,7 +25,7 @@ defmodule Belfrage.Loop do
   end
 
   defp specs_for(name) do
-    Module.concat([Belfrage, Loops, name]).specs()
+    Module.concat([Routes, Specs, name]).specs()
   end
 
   # callbacks
