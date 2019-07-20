@@ -70,4 +70,18 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  # TODO: needs better handling of the host
+  # something like:
+  # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)
+  # plus the port etc.
+  defmacro redirect(path, to: location, status: status) do
+    quote do
+      match(unquote(path)) do
+        var!(conn)
+        |> resp(:found, "")
+        |> put_status(unquote(status) || 302)
+        |> put_resp_header("location", unquote(location))
+      end
+    end
+  end
 end

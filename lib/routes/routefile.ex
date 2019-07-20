@@ -1,6 +1,9 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
+  redirect "/news/0", to: "/news", status: 302
+  redirect "/weather/0", to: "/weather", status: 301
+
   handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/123"]
   handle "/news", using: "NewsFrontPage", examples: ["/news"]
 
