@@ -7,4 +7,6 @@ defmodule Routes.Routefile do
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/p077pnkr"] do
 	return_404 if: String.length(id) != 8
   end
+
+  handle "/*any", using: "ProxyPass", examples: ["/foo/bar"]
 end
