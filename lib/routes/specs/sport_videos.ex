@@ -5,9 +5,9 @@ defmodule Routes.Specs.SportVideos do
     %{
       owner: "team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/mozart/Mozart+runbook",
+      platform: "webcore",
       pipeline:  ["ReplayedTrafficTransformer"],
       resp_pipeline: [],
-      origins: [:webcore, :fallback],
       ttl: "30s",
       timeout: "1000ms"
     }
