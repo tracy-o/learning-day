@@ -29,16 +29,6 @@ defmodule BelfrageWeb.RouteMaster do
     |> View.render(conn)
   end
 
-  defmacro handle(matcher, using: id, examples: examples) do
-    quote do
-      @routes [{unquote(matcher), unquote(examples)} | @routes]
-
-      get unquote(matcher) do
-        yield(unquote(id), var!(conn))
-      end
-    end
-  end
-
   defmacro __before_compile__(_env) do
     quote do
       def run do
@@ -48,4 +38,36 @@ defmodule BelfrageWeb.RouteMaster do
       end
     end
   end
+
+  defmacro handle(matcher, [using: id, examples: examples], do: block) do
+    quote do
+      @routes [{unquote(matcher), unquote(examples)} | @routes]
+
+      get unquote(matcher) do
+        unquote(block) || yield(unquote(id), var!(conn))
+      end
+    end
+  end
+
+  defmacro handle(matcher, using: id, examples: examples) do
+    quote do
+      @routes [{unquote(matcher), unquote(examples)} | @routes]
+
+      #TODO: add other methods.
+      get unquote(matcher) do
+        yield(unquote(id), var!(conn))
+      end
+    end
+  end
+
+  # TODO: this is just an example, and could be replaced/explanded
+  # in a validator library.
+  defmacro return_404(if: check_pass) do
+    quote do
+      if unquote(check_pass) do
+        View.not_found(var!(conn))
+      end
+    end
+  end
+
 end

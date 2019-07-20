@@ -3,5 +3,8 @@ defmodule Routes.Routefile do
 
   handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/123"]
   handle "/news", using: "NewsFrontPage", examples: ["/news"]
-  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/p077pnkr"]
+
+  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/p077pnkr"] do
+	return_404 if: String.length(id) != 8
+  end
 end
