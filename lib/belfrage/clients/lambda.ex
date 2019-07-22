@@ -1,6 +1,6 @@
 defmodule Belfrage.Clients.Lambda do
   use ExMetrics
-  @http_client Application.get_env(:ingress, :http_client, Clients.HTTP)
+  @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
   @behaviour ExAws.Request.HttpClient
 
@@ -11,7 +11,7 @@ defmodule Belfrage.Clients.Lambda do
     headers = Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
     %URI{host: host, path: path} = URI.parse(url)
 
-    @http_client.post(host, path, headers, body, build_options(http_opts))
+    @http_client.post(host, path, body, headers, build_options(http_opts))
   end
 
   def build_options(opts) do

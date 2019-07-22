@@ -47,11 +47,11 @@ defmodule Belfrage.Clients.LambdaTest do
                        }}
 
     test "post returns a response" do
-      Ingress.Clients.HTTPMock
+      Belfrage.Clients.HTTPMock
       |> expect(:post, fn "www.example.com",
                           "/foo",
-                          [],
                           ~s({"some": "data"}),
+                          [],
                           [protocols: [:http2, :http1], pool: false, timeout: 1000] ->
         @generic_response
       end)
