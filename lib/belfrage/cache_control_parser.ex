@@ -20,6 +20,8 @@ defmodule Belfrage.CacheControlParser do
   end
 
   def parse(cache_control_header) do
+    cache_control_header = standardise_cache_control_header(cache_control_header)
+
     %{
       cacheability: parse_cacheability(cache_control_header),
       max_age: parse_max_age(cache_control_header),
@@ -28,18 +30,16 @@ defmodule Belfrage.CacheControlParser do
   end
 
   def parse_cacheability(cache_control_header) do
-    if String.contains?(cache_control_header, "public"), do: "public", else: "private"
+    if Enum.member?(cache_control_header, "public"), do: "public", else: "private"
   end
 
   def parse_max_age(cache_control_header) do
     cache_control_header
-    |> standardise_cache_control_header()
     |> FindValue.find(key: :max_age, default: 0)
   end
 
   def parse_stale_if_error(cache_control_header) do
     cache_control_header
-    |> standardise_cache_control_header()
     |> FindValue.find(key: :stale_if_error, default: 0)
   end
 
