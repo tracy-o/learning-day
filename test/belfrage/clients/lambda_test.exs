@@ -29,11 +29,11 @@ defmodule Belfrage.Clients.LambdaTest do
              ]
     end
 
-    test "overwrites default if the same option is passed" do
+    test "overwrites ExAws values if the same option is passed" do
       assert Lambda.build_options(protocols: [:http2], pool: true) == [
-               timeout: 1000,
-               protocols: [:http2],
-               pool: true
+               protocols: [:http2, :http1],
+               pool: false,
+               timeout: 1000
              ]
     end
   end
@@ -46,7 +46,7 @@ defmodule Belfrage.Clients.LambdaTest do
                          body: "{}"
                        }}
 
-    test "post returns a response" do
+    test "Lambda request function uses http client to send POST" do
       Belfrage.Clients.HTTPMock
       |> expect(:post, fn "www.example.com",
                           "/foo",
