@@ -4,10 +4,9 @@ defmodule Test.Support.Helper do
         id: id,
         response: response,
         expires_in: expires_in,
-        last_updated: last_updated,
-        cache_ttl: cache_ttl
+        last_updated: last_updated
       ) do
-    item_to_store = {response, last_updated, cache_ttl}
+    item_to_store = {response, last_updated}
 
     :ets.insert(
       :cache,

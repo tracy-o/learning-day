@@ -3,11 +3,11 @@ defmodule Belfrage.Cache.LocalTest do
   alias Belfrage.Cache
   alias Test.Support.StructHelper
 
-  @cache_ttl 30
   @response %Belfrage.Struct.Response{
     body: "hello!",
     headers: %{"content-type" => "application/json"},
-    http_status: 200
+    http_status: 200,
+    cache_directive: %{cacheability: "public", max_age: 30}
   }
 
   setup do
@@ -17,24 +17,21 @@ defmodule Belfrage.Cache.LocalTest do
       id: "cache_fresh",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms(),
-      cache_ttl: @cache_ttl
+      last_updated: Belfrage.Timer.now_ms()
     )
 
     Test.Support.Helper.insert_cache_seed(
       id: "stale_cache",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31),
-      cache_ttl: @cache_ttl
+      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
 
     Test.Support.Helper.insert_cache_seed(
       id: "expired",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(1)),
-      cache_ttl: @cache_ttl
+      last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(2))
     )
 
     :ok
@@ -46,9 +43,10 @@ defmodule Belfrage.Cache.LocalTest do
         StructHelper.build(
           request: %{request_hash: "abc123"},
           response: %{
-            headers: %{"content-type" => "application/json", "cache-control" => @cache_ttl},
+            headers: %{"content-type" => "application/json"},
             body: "hello!",
-            http_status: 200
+            http_status: 200,
+            cache_directive: %{cacheability: "public", max_age: 30}
           }
         )
 
@@ -59,8 +57,9 @@ defmodule Belfrage.Cache.LocalTest do
                 {%Belfrage.Struct.Response{
                    body: "hello!",
                    headers: %{"content-type" => "application/json"},
-                   http_status: 200
-                 }, _belfrage_determined_last_updated, @cache_ttl}}
+                   http_status: 200,
+                   cache_directive: %{cacheability: "public", max_age: 30}
+                 }, _belfrage_determined_last_updated}}
              ] = :ets.lookup(:cache, "abc123")
     end
 
@@ -69,7 +68,7 @@ defmodule Belfrage.Cache.LocalTest do
         StructHelper.build(
           request: %{request_hash: "cache_fresh"},
           response: %{
-            headers: %{"content-type" => "application/json", "cache-control" => @cache_ttl},
+            headers: %{"content-type" => "application/json"},
             body: "hello!",
             http_status: 200
           }
@@ -83,7 +82,7 @@ defmodule Belfrage.Cache.LocalTest do
         StructHelper.build(
           request: %{request_hash: "expired"},
           response: %{
-            headers: %{"content-type" => "application/json", "cache-control" => @cache_ttl},
+            headers: %{"content-type" => "application/json"},
             body: "hello!",
             http_status: 200
           }
@@ -97,7 +96,7 @@ defmodule Belfrage.Cache.LocalTest do
         StructHelper.build(
           request: %{request_hash: "stale_cache"},
           response: %{
-            headers: %{"content-type" => "application/json", "cache-control" => @cache_ttl},
+            headers: %{"content-type" => "application/json"},
             body: "hello!",
             http_status: 200
           }
@@ -109,11 +108,7 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "fetching a cached response" do
     test "fetches a fresh cache" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "cache_fresh"},
-          response: %{headers: %{"cache-control" => @cache_ttl}}
-        )
+      struct = StructHelper.build(request: %{request_hash: "cache_fresh"})
 
       assert {:ok, :fresh,
               %Belfrage.Struct.Response{
@@ -124,11 +119,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "fetches a stale cache" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "stale_cache"},
-          response: %{headers: %{"cache-control" => @cache_ttl}}
-        )
+      struct = StructHelper.build(request: %{request_hash: "stale_cache"})
 
       assert {:ok, :stale,
               %Belfrage.Struct.Response{
@@ -139,8 +130,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "does not fetch an expired cache" do
-      struct =
-        StructHelper.build(request: %{request_hash: "expired"}, response: %{headers: %{"cache-control" => @cache_ttl}})
+      struct = StructHelper.build(request: %{request_hash: "expired"})
 
       assert {:ok, :content_not_found} = Cache.Local.fetch(struct)
     end
@@ -148,16 +138,16 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "cachex integration test" do
     test "stores and retrieves a response" do
-      struct_without_response =
-        StructHelper.build(request: %{request_hash: "asdf567"}, response: %{headers: %{"cache-control" => @cache_ttl}})
+      struct_without_response = StructHelper.build(request: %{request_hash: "asdf567"})
 
       struct_with_response =
         StructHelper.build(
           request: %{request_hash: "asdf567"},
           response: %{
-            headers: %{"content-type" => "application/json", "cache-control" => @cache_ttl},
+            headers: %{"content-type" => "application/json"},
             body: "hello!",
-            http_status: 200
+            http_status: 200,
+            cache_directive: %{cacheability: "public", max_age: 30}
           }
         )
 

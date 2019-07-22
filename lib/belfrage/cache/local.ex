@@ -11,14 +11,12 @@ defmodule Belfrage.Cache.Local do
   end
 
   def store(struct = %Belfrage.Struct{}) do
-    cache_ttl = CacheControlParser.parse(struct.response)
-
     case stale?(struct) do
       true ->
         Cachex.put(
           :cache,
           struct.request.request_hash,
-          {struct.response, Belfrage.Timer.now_ms(), cache_ttl},
+          {struct.response, Belfrage.Timer.now_ms()},
           ttl: struct.private.fallback_ttl
         )
 
@@ -27,8 +25,10 @@ defmodule Belfrage.Cache.Local do
     end
   end
 
-  defp format_cache_result({:ok, {response, last_updated, cache_ttl}}) do
-    case Belfrage.Timer.stale?(last_updated, cache_ttl) do
+  defp format_cache_result({:ok, {response, last_updated}}) do
+    %{max_age: max_age} = response.cache_directive
+
+    case Belfrage.Timer.stale?(last_updated, max_age) do
       true -> {:ok, :stale, response}
       false -> {:ok, :fresh, response}
     end

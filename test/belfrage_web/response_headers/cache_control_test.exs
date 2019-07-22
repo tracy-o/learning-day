@@ -8,24 +8,15 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
 
   doctest CacheControl
 
-  test "Adding cache control returns conn with cache control header with max age of 30 added" do
-    input_conn = conn(:get, "/_web_core")
-
-    output_conn = CacheControl.add_header(input_conn, %Struct{response: StructHelper.response_struct()})
-
-    assert ["public, stale-while-revalidate=10, max-age=30"] ==
-             get_resp_header(output_conn, "cache-control")
-  end
-
-  test "Adding cache control with a 404 response returns conn with cache control header with max age of 5 added" do
+  test "Adding cache control returns conn with cache control header with max age equal to the cache directive in the struct." do
     input_conn = conn(:get, "/_web_core")
 
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
-        response: StructHelper.response_struct(%{http_status: 404})
+        response: StructHelper.response_struct(headers: %{"cache-control" => "private, max-age=0"})
       })
 
-    assert ["public, stale-while-revalidate=10, max-age=5"] ==
+    assert ["private, max-age=0"] ==
              get_resp_header(output_conn, "cache-control")
   end
 end

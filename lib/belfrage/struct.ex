@@ -7,7 +7,13 @@ defmodule Belfrage.Struct.Request do
 end
 
 defmodule Belfrage.Struct.Response do
-  defstruct [:fallback, http_status: nil, headers: %{}, body: nil]
+  defstruct [
+    :fallback,
+    http_status: nil,
+    headers: %{},
+    body: nil,
+    cache_directive: %{cacheability: "private", max_age: 0, stale_if_error: 0}
+  ]
 end
 
 defmodule Belfrage.Struct.Private do
