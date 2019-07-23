@@ -4,7 +4,8 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   describe "&parse/1" do
     test "parse basic cache control header" do
-      assert %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0} == CacheControlParser.parse("private")
+      assert %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0} ==
+               CacheControlParser.parse("private")
     end
 
     test "parse cache control header with max-age" do

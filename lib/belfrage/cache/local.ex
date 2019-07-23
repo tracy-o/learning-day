@@ -1,9 +1,7 @@
 defmodule Belfrage.Cache.Local do
-  def fetch(
-        %Belfrage.Struct{
-          request: %{request_hash: request_hash}
-        }
-      ) do
+  def fetch(%Belfrage.Struct{
+        request: %{request_hash: request_hash}
+      }) do
     Cachex.get(:cache, request_hash)
     |> format_cache_result()
   end
