@@ -4,22 +4,27 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   describe "&parse/1" do
     test "parse basic cache control header" do
-      assert %{cacheability: "private", max_age: 0, stale_if_error: 0} == CacheControlParser.parse("private")
+      assert %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0} == CacheControlParser.parse("private")
     end
 
     test "parse cache control header with max-age" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 0} ==
+      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 0, stale_while_revalidate: 0} ==
                CacheControlParser.parse("public, max-age=31536000")
     end
 
     test "parse cache control header with stale-if-error" do
-      assert %{cacheability: "public", max_age: 0, stale_if_error: 500_000} ==
+      assert %{cacheability: "public", max_age: 0, stale_if_error: 500_000, stale_while_revalidate: 0} ==
                CacheControlParser.parse("public, stale-if-error=500000")
     end
 
     test "parse cache control header with max-age and stale-if-error" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000} ==
+      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 0} ==
                CacheControlParser.parse("public, max-age='31536000', stale-if-error=500000")
+    end
+
+    test "parse cache control header with max-age, stale-if-error and stale-while-revalidate" do
+      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 10} ==
+               CacheControlParser.parse("public, max-age='31536000', stale-if-error=500000, stale-while-revalidate=10")
     end
   end
 

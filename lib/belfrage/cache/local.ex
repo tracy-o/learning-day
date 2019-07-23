@@ -1,8 +1,6 @@
 defmodule Belfrage.Cache.Local do
-  alias Belfrage.Cache.CacheControlParser
-
   def fetch(
-        struct = %Belfrage.Struct{
+        %Belfrage.Struct{
           request: %{request_hash: request_hash}
         }
       ) do
