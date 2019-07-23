@@ -45,7 +45,6 @@ defmodule Belfrage.MixProject do
       {:mojito, "~> 0.3.0"},
       {:mox, "~> 0.5", only: :test},
       {:plug_cowboy, "~> 2.0"},
-      {:poison, "~> 3.0"},
       {:jason, "~> 1.1"},
       {:stump, "~> 1.0"},
       {:sweet_xml, "~> 0.6"},
