@@ -26,7 +26,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "GraphQL Webcore lambda service" do
     test "given a GraphQL path it invokes the Graphql lambda" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -59,7 +59,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "Service Worker Webcore lambda service" do
     test "given a Service Worker path it invokes the Service Worker lambda" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-service-worker",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-service-worker:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -91,7 +91,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "Progressive Web App Webcore lambda service" do
     test "given a Progressive Web App path it invokes the Progressive Web App lambda" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -106,6 +106,31 @@ defmodule Belfrage.Services.WebcoreTest do
                  body: "<h1>Hello from the Progressive Web App!</h1>"
                }
              } = Webcore.dispatch(@pwa_struct)
+    end
+
+    test "given a request with a non www subdomain, it invokes the Progressive Web App lambda with an alias" do
+      expect(Clients.LambdaMock, :call, fn @arn,
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa:example-branch",
+                                           %{
+                                             headers: %{country: nil},
+                                             httpMethod: "GET",
+                                             path: "/_web_core"
+                                           } ->
+        {:ok, @pwa_lambda_response}
+      end)
+
+      pwa_struct_with_subdomain =
+        StructHelper.build(
+          private: %{origin: "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa", subdomain: "example-branch"},
+          request: %{method: "GET", path: "/_web_core"}
+        )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "<h1>Hello from the Progressive Web App!</h1>"
+               }
+             } = Webcore.dispatch(pwa_struct_with_subdomain)
     end
   end
 
@@ -130,7 +155,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "Failures from Webcore services" do
     test "GraphQL lambda is invoked, but GraphQL returns an error" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -149,7 +174,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
     test "Service Worker lambda is invoked, but the Service Worker returns an error" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-service-worker",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-service-worker:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -168,7 +193,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
     test "Progressive Web App lambda is invoked, but the Progressive Web App returns an error" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-pwa:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -187,7 +212,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
     test "cannot invoke a lambda it serves a generic 500" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql",
+                                           "arn:aws:lambda:eu-west-1:123456:function:webcore-graphql:test",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",

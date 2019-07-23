@@ -33,7 +33,7 @@ defmodule BelfrageTest do
   test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function",
+                        "pwa-lambda-function:test",
                         %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
       @web_core_lambda_response
     end)
@@ -44,7 +44,7 @@ defmodule BelfrageTest do
   test "POST request invokes lambda service with Lambda transformer" do
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function",
+                        "pwa-lambda-function:test",
                         %{
                           body: ~s({"some": "data please"}),
                           headers: %{country: "gb"},
