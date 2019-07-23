@@ -12,7 +12,8 @@ config :belfrage,
   circuit_breaker_reset_interval: 60_000,
   errors_threshold: 1_000,
   fallback: System.get_env("BELFRAGE_FALLBACK"),
-  origin: System.get_env("BELFRAGE_ORIGIN")
+  origin: System.get_env("BELFRAGE_ORIGIN"),
+  lambda_timeout: System.get_env("LAMBDA_TIMEOUT")
 
 config :logger, :console, format: "$message\n"
 

@@ -14,8 +14,10 @@ defmodule Belfrage.Clients.Lambda do
     @http_client.post(host, path, body, headers, build_options(http_opts))
   end
 
+  @timeout Application.get_env(:belfrage, :lambda_timeout)
+
   def build_options(opts) do
-    Keyword.merge(opts, protocols: [:http2, :http1], pool: false, timeout: 1000)
+    Keyword.merge(opts, protocols: [:http2, :http1], pool: false, timeout: @timeout)
   end
 
   @aws_client Application.get_env(:belfrage, :aws_client)
