@@ -3,7 +3,6 @@ defmodule BelfrageTest do
   use Plug.Test
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Struct
   alias Belfrage.Clients.LambdaMock
   alias Test.Support.StructHelper
 

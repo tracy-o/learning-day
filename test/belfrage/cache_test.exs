@@ -3,7 +3,6 @@ defmodule Belfrage.BelfrageCacheTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestHash
-  alias Belfrage.Struct
   alias Test.Support.StructHelper
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Cache

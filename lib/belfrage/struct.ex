@@ -21,7 +21,8 @@ defmodule Belfrage.Struct.Private do
             loop_id: nil,
             origin: nil,
             counter: %{},
-            pipeline: []
+            pipeline: [],
+            subdomain: "www"
 end
 
 defmodule Belfrage.Struct do

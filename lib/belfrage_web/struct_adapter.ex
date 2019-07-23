@@ -17,7 +17,8 @@ defmodule BelfrageWeb.StructAdapter do
         has_been_replayed?: bbc_headers.replayed_traffic
       },
       private: %Private{
-        loop_id: loop_id
+        loop_id: loop_id,
+        subdomain: subdomain(conn)
       }
     }
   end
@@ -38,5 +39,11 @@ defmodule BelfrageWeb.StructAdapter do
       {:ok, body, _conn} -> body
       _ -> nil
     end
+  end
+
+  defp subdomain(conn) do
+    conn.host
+    |> String.split(".")
+    |> List.first()
   end
 end
