@@ -59,10 +59,10 @@ defmodule Belfrage.Clients.LambdaTest do
       Lambda.request(:post, "https://www.example.com/foo", ~s({"some": "data"}))
     end
 
-    test "Lambda request function doesn't pass through query strings" do
+    test "Lambda request function does pass through query strings" do
       Belfrage.Clients.HTTPMock
       |> expect(:post, fn "www.example.com",
-                          "/foo",
+                          "/foo?some-qs=hello",
                           ~s({"some": "data"}),
                           [],
                           [protocols: [:http2, :http1], pool: false, timeout: 1000] ->
