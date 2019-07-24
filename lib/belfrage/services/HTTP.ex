@@ -44,10 +44,10 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
-    {@http_client.post(private.origin, request.path, request.payload), struct}
+    {@http_client.request(:post, private.origin <> request.path, request.payload), struct}
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
-    {@http_client.get(private.origin, request.path), struct}
+    {@http_client.request(:get, private.origin <> request.path), struct}
   end
 end

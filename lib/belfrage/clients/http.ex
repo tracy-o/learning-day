@@ -1,20 +1,22 @@
 defmodule Belfrage.Clients.HTTP do
-  @callback get(String.t(), String.t()) :: Mojito.Response
-  @callback get(String.t(), String.t(), List.t()) :: Mojito.Response
-  @callback get(String.t(), String.t(), List.t(), Keyword.t()) :: Mojito.Response
+  @type request_type :: :get | :post
 
-  @callback post(String.t(), String.t(), Map.t()) :: Mojito.Response
-  @callback post(String.t(), String.t(), Map.t(), List.t()) :: Mojito.Response
-  @callback post(String.t(), String.t(), Map.t(), List.t(), Keyword.t()) :: Mojito.Response
+  @callback request(:get, String.t()) :: Mojito.Response
+  @callback request(:get, String.t(), Keyword.t()) :: Mojito.Response
+
+  @callback request(:post, String.t(), String.t(), Map.t()) :: Mojito.Response
+  @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: Mojito.Response
+  @callback request(:post, String.t(), String.t(), List.t(), Keyword.t()) :: Mojito.Response
 
   @timeout 1_000
 
-  def get(host, path, headers \\ [], options \\ []) do
-    Mojito.request(:get, host <> path, headers, "", build_options(options))
+  def request(:get, url, options \\ []) do
+    request(:get, url, "", options)
   end
 
-  def post(host, path, body, headers \\ [], options \\ []) when is_binary(body) do
-    Mojito.request(:post, host <> path, headers, body, build_options(options))
+  def request(method, url, body, options) do
+    headers = Keyword.get(options, :headers, [])
+    Mojito.request(:get, url, headers, body, build_options(options))
   end
 
   def build_options(options) do

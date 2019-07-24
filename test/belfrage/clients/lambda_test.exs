@@ -48,11 +48,10 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Lambda request function uses http client to send POST" do
       Belfrage.Clients.HTTPMock
-      |> expect(:post, fn "www.example.com",
-                          "/foo",
-                          ~s({"some": "data"}),
-                          [],
-                          [protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+      |> expect(:request, fn :post,
+                             "https://www.example.com/foo",
+                             ~s({"some": "data"}),
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
         @generic_response
       end)
 
@@ -61,15 +60,26 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Lambda request function does pass through query strings" do
       Belfrage.Clients.HTTPMock
-      |> expect(:post, fn "www.example.com",
-                          "/foo?some-qs=hello",
-                          ~s({"some": "data"}),
-                          [],
-                          [protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+      |> expect(:request, fn :post,
+                             "https://www.example.com/foo?some-qs=hello",
+                             ~s({"some": "data"}),
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
         @generic_response
       end)
 
       Lambda.request(:post, "https://www.example.com/foo?some-qs=hello", ~s({"some": "data"}))
+    end
+
+    test "Lambda request handles get" do
+      Belfrage.Clients.HTTPMock
+      |> expect(:request, fn :get,
+                             "https://www.example.com/foo?some-qs=hello",
+                             "",
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+        @generic_response
+      end)
+
+      Lambda.request(:get, "https://www.example.com/foo?some-qs=hello")
     end
   end
 end

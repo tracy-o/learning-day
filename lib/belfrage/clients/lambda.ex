@@ -9,15 +9,8 @@ defmodule Belfrage.Clients.Lambda do
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
     headers = Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
-    %URI{host: host, path: path, query: query} = URI.parse(url)
-
-    parsed_path =
-      case query do
-        nil -> path
-        _ -> path <> "?" <> query
-      end
-
-    @http_client.post(host, parsed_path, body, headers, build_options(http_opts))
+    http_opts = Keyword.put(http_opts, :headers, headers)
+    @http_client.request(method, url, body, build_options(http_opts))
   end
 
   @timeout Application.get_env(:belfrage, :lambda_timeout)
