@@ -14,7 +14,8 @@ defmodule BelfrageWeb.HeadersTest do
           response: %{
             body: body,
             headers: headers,
-            http_status: 200
+            http_status: 200,
+            cache_directive: %{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
           }
         )
 
@@ -70,7 +71,7 @@ defmodule BelfrageWeb.HeadersTest do
     Enum.map(conn.resp_headers, fn header_tuple -> elem(header_tuple, 0) end)
   end
 
-  describe "default response_headers" do
+  describe "response headers determined by the origin" do
     test "with a valid path default response_headers are added" do
       conn =
         make_call(
@@ -81,7 +82,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {200,
               [
-                {"cache-control", "public, stale-while-revalidate=10, max-age=30"},
+                {"cache-control", "private, stale-while-revalidate=0, max-age=25"},
                 {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"}
               ], "<p>some html content</p>"} == sent_resp(conn)
@@ -92,10 +93,10 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {404,
               [
-                {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+                {"cache-control", "private, stale-while-revalidate=0, max-age=0"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"},
                 {"content-type", "text/plain; charset=utf-8"}
-              ], "404 Not Found"} == sent_resp(conn)
+              ], "404 Not Found"} = sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
@@ -103,7 +104,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {500,
               [
-                {"cache-control", "public, stale-while-revalidate=10, max-age=5"},
+                {"cache-control", "private, stale-while-revalidate=0, max-age=0"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic"},
                 {"content-type", "text/plain; charset=utf-8"}
               ], "500 Internal Server Error"} = sent_resp(conn)

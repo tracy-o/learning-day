@@ -31,7 +31,10 @@ defmodule Belfrage.BelfrageCacheTest do
   @web_core_lambda_response {:ok,
                              %{
                                "body" => ~s({"hi": "bonjour"}),
-                               "headers" => %{"content-type" => "application/json"},
+                               "headers" => %{
+                                 "content-type" => "application/json",
+                                 "cache-control" => "public, max-age=30"
+                               },
                                "statusCode" => 200
                              }}
 
@@ -41,21 +44,14 @@ defmodule Belfrage.BelfrageCacheTest do
     body: ~s({"hi": "bonjour"}),
     headers: %{"content-type" => "application/json"},
     http_status: 200,
-    cacheable_content: true
-  }
-
-  @response %Belfrage.Struct.Response{
-    body: ~s({"hi": "bonjour"}),
-    headers: %{"content-type" => "application/json"},
-    http_status: 200,
-    cacheable_content: true
+    cache_directive: %{cacheability: "public", max_age: 30}
   }
 
   @fallback_response %Belfrage.Struct.Response{
     body: ~s({"hi": "bonjour"}),
+    cache_directive: %{cacheability: "public", max_age: 30},
     headers: %{"content-type" => "application/json"},
     http_status: 200,
-    cacheable_content: true,
     fallback: true
   }
 
@@ -63,21 +59,16 @@ defmodule Belfrage.BelfrageCacheTest do
     :ets.delete_all_objects(:cache)
     Belfrage.LoopsSupervisor.kill_all()
 
-    insert_seed_cache = fn [id: id, expires_in: expires_in, last_updated: last_updated] ->
-      :ets.insert(
-        :cache,
-        {:entry, id, last_updated, expires_in, {@response, last_updated}}
-      )
-    end
-
-    insert_seed_cache.(
+    Test.Support.Helper.insert_cache_seed(
       id: RequestHash.generate(@fresh_cache_get_request_struct).request.request_hash,
+      response: @response,
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms()
     )
 
-    insert_seed_cache.(
+    Test.Support.Helper.insert_cache_seed(
       id: RequestHash.generate(@stale_cache_get_request_struct).request.request_hash,
+      response: @response,
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
@@ -106,7 +97,7 @@ defmodule Belfrage.BelfrageCacheTest do
   end
 
   describe "a stale cache" do
-    test "uses service response" do
+    test "calls the service when a request for a page in the stale cache is made" do
       LambdaMock
       |> expect(
         :call,

@@ -6,7 +6,8 @@ defmodule Belfrage.Processor do
     Pipeline,
     RequestHash,
     ServiceProvider,
-    Cache
+    Cache,
+    ResponseTransformers
   }
 
   def get_loop(struct = %Struct{}) do
@@ -39,9 +40,8 @@ defmodule Belfrage.Processor do
   end
 
   def response_pipeline(struct = %Struct{}) do
-    # TODO: some struct mutations here, before we cache
-
     struct
+    |> ResponseTransformers.CacheDirective.call()
     |> Cache.store_if_successful()
     |> Cache.fallback_if_required()
   end

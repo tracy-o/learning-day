@@ -1,12 +1,9 @@
 defmodule Belfrage.Cache.Local do
-  def fetch(
-        struct = %Belfrage.Struct{
-          request: %{request_hash: request_hash},
-          private: %{cache_ttl: cache_ttl}
-        }
-      ) do
+  def fetch(%Belfrage.Struct{
+        request: %{request_hash: request_hash}
+      }) do
     Cachex.get(:cache, request_hash)
-    |> format_cache_result(cache_ttl)
+    |> format_cache_result()
   end
 
   def store(struct = %Belfrage.Struct{}) do
@@ -24,14 +21,16 @@ defmodule Belfrage.Cache.Local do
     end
   end
 
-  defp format_cache_result({:ok, {response, last_updated}}, cache_ttl) do
-    case Belfrage.Timer.stale?(last_updated, cache_ttl) do
+  defp format_cache_result({:ok, {response, last_updated}}) do
+    %{max_age: max_age} = response.cache_directive
+
+    case Belfrage.Timer.stale?(last_updated, max_age) do
       true -> {:ok, :stale, response}
       false -> {:ok, :fresh, response}
     end
   end
 
-  defp format_cache_result({:ok, nil}, _cache_ttl) do
+  defp format_cache_result({:ok, nil}) do
     {:ok, :content_not_found}
   end
 

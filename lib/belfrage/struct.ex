@@ -7,13 +7,17 @@ defmodule Belfrage.Struct.Request do
 end
 
 defmodule Belfrage.Struct.Response do
-  # TODO: When we start serving personalised pages, we should default to `cacheable_content: false`
-  defstruct [:fallback, http_status: nil, headers: %{}, body: nil, cacheable_content: true]
+  defstruct [
+    :fallback,
+    http_status: nil,
+    headers: %{},
+    body: nil,
+    cache_directive: %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0}
+  ]
 end
 
 defmodule Belfrage.Struct.Private do
   defstruct fallback_ttl: :timer.hours(6),
-            cache_ttl: 30,
             loop_id: nil,
             origin: nil,
             counter: %{},

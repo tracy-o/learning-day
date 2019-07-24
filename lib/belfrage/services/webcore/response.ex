@@ -7,8 +7,7 @@ defmodule Belfrage.Services.Webcore.Response do
     %Struct.Response{
       http_status: 500,
       headers: %{},
-      body: "",
-      cacheable_content: true
+      body: ""
     }
   end
 
@@ -18,8 +17,7 @@ defmodule Belfrage.Services.Webcore.Response do
     %Struct.Response{
       http_status: http_status,
       headers: headers,
-      body: body,
-      cacheable_content: true
+      body: body
     }
   end
 
@@ -32,8 +30,7 @@ defmodule Belfrage.Services.Webcore.Response do
     %Struct.Response{
       http_status: 500,
       headers: %{},
-      body: "",
-      cacheable_content: true
+      body: ""
     }
   end
 end

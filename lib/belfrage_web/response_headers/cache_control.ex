@@ -10,12 +10,15 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControl do
     put_resp_header(
       conn,
       "cache-control",
-      "public, stale-while-revalidate=10, max-age=#{max_age(struct.response.http_status)}"
+      cache_directive(struct)
     )
   end
 
   # TODO: implement no-cache for 500's if the requirements come up as per this discussion: https://github.com/bbc/belfrage/pull/41#discussion_r281946187
-  defp max_age(status) when status in [404, 500], do: 5
+  defp cache_directive(struct) do
+    %{cacheability: cacheability, max_age: max_age, stale_while_revalidate: stale_while_revalidate} =
+      struct.response.cache_directive
 
-  defp max_age(_status), do: 30
+    "#{cacheability}, stale-while-revalidate=#{stale_while_revalidate}, max-age=#{max_age}"
+  end
 end
