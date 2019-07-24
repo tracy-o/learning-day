@@ -27,6 +27,11 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 10} ==
                CacheControlParser.parse("public, max-age='31536000', stale-if-error=500000, stale-while-revalidate=10")
     end
+
+    test "is case in-sensitive" do
+      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 10} ==
+               CacheControlParser.parse("pubLic, mAx-aGe='31536000', stAle-if-errOr=500000, stale-whiLe-revaliDate=10")
+    end
   end
 
   describe "&parse_cacheability/1" do
