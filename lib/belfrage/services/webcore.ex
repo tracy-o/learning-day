@@ -6,7 +6,7 @@ defmodule Belfrage.Services.Webcore do
   @behaviour Service
 
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
-  @production_environment Application.get_env(:belfrage, :production_environment, "test")
+  @production_environment Application.get_env(:belfrage, :production_environment)
 
   @impl Service
   def dispatch(struct = %Struct{private: private}) do
