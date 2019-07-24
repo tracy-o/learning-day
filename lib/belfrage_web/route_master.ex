@@ -25,7 +25,6 @@ defmodule BelfrageWeb.RouteMaster do
     conn
     |> StructAdapter.adapt(id)
     |> @belfrage.handle()
-    |> IO.inspect()
     |> View.render(conn)
   end
 
@@ -76,6 +75,8 @@ defmodule BelfrageWeb.RouteMaster do
   # plus the port etc.
   defmacro redirect(path, to: location, status: status) do
     quote do
+      @routes [{unquote(path), []} | @routes]
+
       match(unquote(path)) do
         var!(conn)
         |> resp(:found, "")
