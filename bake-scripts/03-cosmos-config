@@ -7,7 +7,7 @@ def main(argv):
     config_json = json.load(open(argv[1], "r"))
     key_values = config_json["configuration"]
     noecho_key_values = config_json["secure_configuration"]
-    production_environment = {"production_environment": config_json["environment"]}
+    production_environment = {"PRODUCTION_ENVIRONMENT": config_json["environment"]}
 
     f = open("/etc/systemd/system/belfrage.service.d/env.conf", "w")
     f.write("[Service]\n")
