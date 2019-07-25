@@ -24,46 +24,46 @@ defmodule Belfrage.RequestHashTest do
                               )
 
   describe "Belfrage.RequestHash.generate/1" do
-    test "varies on method" do
-      assert RequestHash.generate(@struct).request.request_hash ==
-               "fe074dec5f43c9d2babdf970ff031fd5"
+    test "when given a valid path and country" do
+      assert is_binary(RequestHash.generate(@struct).request.request_hash)
+    end
 
+    test "varies on method" do
       post_struct = Belfrage.Struct.add(@struct, :request, %{method: "POST"})
 
-      assert "9db381a125afa360a6f6cc17d629c00e" ==
+      refute RequestHash.generate(@struct).request.request_hash ==
                RequestHash.generate(post_struct).request.request_hash
     end
 
     test "varies on query_params" do
       query_string_struct = Belfrage.Struct.add(@struct, :request, %{query_params: %{"foo" => "bar"}})
 
-      assert RequestHash.generate(@struct).request.request_hash !=
+      refute RequestHash.generate(@struct).request.request_hash ==
                RequestHash.generate(query_string_struct).request.request_hash
     end
 
-    test "when given a valid path and country" do
-      assert RequestHash.generate(@struct).request.request_hash ==
-               "fe074dec5f43c9d2babdf970ff031fd5"
-    end
-
     test "varies for replayed traffic" do
-      assert RequestHash.generate(@struct).request.request_hash ==
-               "fe074dec5f43c9d2babdf970ff031fd5"
-
       replayed_struct = Belfrage.Struct.add(@struct, :request, %{has_been_replayed?: true})
 
-      assert RequestHash.generate(replayed_struct).request.request_hash ==
-               "d655ba205f3b08a77f3ff56b80b752c8"
+      refute RequestHash.generate(@struct).request.request_hash ==
+               RequestHash.generate(replayed_struct).request.request_hash
     end
 
     test "given the path is the same, when the country is not the same assert the request_hashes are different" do
-      assert RequestHash.generate(@struct).request.request_hash !=
-               RequestHash.generate(@struct_with_different_country)
+      refute RequestHash.generate(@struct).request.request_hash ==
+               RequestHash.generate(@struct_with_different_country).request.request_hash
     end
 
     test "given the country is the same, when the path is not the same assert the request_hashes are different" do
-      assert RequestHash.generate(@struct).request.request_hash !=
-               RequestHash.generate(@struct_with_different_path)
+      refute RequestHash.generate(@struct).request.request_hash ==
+               RequestHash.generate(@struct_with_different_path).request.request_hash
+    end
+
+    test "varies on subdomain" do
+      custom_subdomain_struct = Belfrage.Struct.add(@struct, :request, %{subdomain: "example-branch"})
+
+      refute RequestHash.generate(@struct).request.request_hash ==
+               RequestHash.generate(custom_subdomain_struct).request.request_hash
     end
   end
 end

@@ -4,15 +4,15 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
   @production_environment Application.get_env(:belfrage, :production_environment)
 
   @impl true
-  def call(rest, struct = %Struct{private: %Struct.Private{origin: origin, subdomain: "www"}}) do
-    struct = Struct.add(struct, :private, %{origin: "#{origin}:#{@production_environment}"})
+  def call(rest, struct = %Struct{request: %Struct.Request{subdomain: "www"}, private: private}) do
+    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{@production_environment}"})
 
     then(rest, struct)
   end
 
   @impl true
-  def call(rest, struct = %Struct{private: %Struct.Private{origin: origin, subdomain: subdomain}}) do
-    struct = Struct.add(struct, :private, %{origin: "#{origin}:#{subdomain}"})
+  def call(rest, struct = %Struct{request: request, private: private}) do
+    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{request.subdomain}"})
 
     then(rest, struct)
   end

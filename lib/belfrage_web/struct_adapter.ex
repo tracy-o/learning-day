@@ -14,11 +14,11 @@ defmodule BelfrageWeb.StructAdapter do
         method: conn.method,
         country: bbc_headers.country,
         query_params: query_string(conn),
-        has_been_replayed?: bbc_headers.replayed_traffic
+        has_been_replayed?: bbc_headers.replayed_traffic,
+        subdomain: subdomain(conn)
       },
       private: %Private{
-        loop_id: loop_id,
-        subdomain: subdomain(conn)
+        loop_id: loop_id
       }
     }
   end
