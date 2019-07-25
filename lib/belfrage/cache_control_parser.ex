@@ -56,6 +56,7 @@ defmodule Belfrage.CacheControlParser do
 
   defp standardise_cache_control_header(cache_control_header) do
     cache_control_header
+    |> String.downcase()
     |> String.replace([~s('), ~s("), ~s(,)], "")
     |> String.split(" ")
   end
