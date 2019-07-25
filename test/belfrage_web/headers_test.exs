@@ -28,7 +28,7 @@ defmodule BelfrageWeb.HeadersTest do
       Router.call(conn, [])
     end
 
-    def make_404_call(body, _headers = %{}, path) do
+    def make_404_call(_body, _headers = %{}, path) do
       conn = conn(:get, path)
       Router.call(conn, [])
     end
@@ -65,10 +65,6 @@ defmodule BelfrageWeb.HeadersTest do
     test "application/javascript" do
       test_content_type!("console.log(\"hey! I'm javascript\");", "application/javascript")
     end
-  end
-
-  defp get_header_keys(conn) do
-    Enum.map(conn.resp_headers, fn header_tuple -> elem(header_tuple, 0) end)
   end
 
   describe "response headers determined by the origin" do

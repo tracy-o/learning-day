@@ -30,14 +30,14 @@ defmodule Belfrage.Loop do
   def init(_) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init(), pipeline: ["ReplayedTrafficTransformer"]}}
+    {:ok, %{counter: Counter.init()}}
   end
 
   @impl GenServer
   def handle_call({:state, loop_id}, _from, state) do
     exceed = Counter.exceed?(state.counter, :errors, @threshold)
 
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id)})}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id), pipeline: pipeline(loop_id)})}, state}
   end
 
   @impl GenServer
@@ -95,5 +95,13 @@ defmodule Belfrage.Loop do
     ExMetrics.increment("error.loop.threshold.exceeded")
     Stump.log(:error, "Error threshold exceeded for loop")
     Application.get_env(:belfrage, :fallback)
+  end
+
+  defp pipeline(loop_id) when loop_id in @legacy_route_loop_ids do
+    ["ReplayedTrafficTransformer"]
+  end
+
+  defp pipeline(_loop_id) do
+    ["LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"]
   end
 end

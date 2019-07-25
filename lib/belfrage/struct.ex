@@ -3,7 +3,16 @@ defmodule Belfrage.Struct.Debug do
 end
 
 defmodule Belfrage.Struct.Request do
-  defstruct [:path, :payload, :method, :country, :request_hash, :query_params, has_been_replayed?: nil]
+  defstruct [
+    :path,
+    :payload,
+    :method,
+    :country,
+    :request_hash,
+    :query_params,
+    has_been_replayed?: nil,
+    subdomain: "www"
+  ]
 end
 
 defmodule Belfrage.Struct.Response do

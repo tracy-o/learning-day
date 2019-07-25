@@ -3,7 +3,6 @@ defmodule Belfrage.BelfrageCacheTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestHash
-  alias Belfrage.Struct
   alias Test.Support.StructHelper
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Cache
@@ -102,7 +101,7 @@ defmodule Belfrage.BelfrageCacheTest do
       |> expect(
         :call,
         fn "webcore-lambda-role-arn",
-           "pwa-lambda-function",
+           "pwa-lambda-function:test",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @web_core_lambda_response
         end
@@ -118,7 +117,7 @@ defmodule Belfrage.BelfrageCacheTest do
       |> expect(
         :call,
         fn "webcore-lambda-role-arn",
-           "pwa-lambda-function",
+           "pwa-lambda-function:test",
            %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
           @failed_web_core_lambda_response
         end
