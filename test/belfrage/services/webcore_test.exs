@@ -26,7 +26,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "Webcore lambda service" do
     test "given a struct it invokes the origin lambda" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:test",
+                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -44,7 +44,7 @@ defmodule Belfrage.Services.WebcoreTest do
              } = Webcore.dispatch(@struct)
     end
 
-    test "given a request with a non www subdomain, it invokes the origin lambda with an alias" do
+    test "given an origin with an alias, it invokes the origin lambda with that alias" do
       expect(Clients.LambdaMock, :call, fn @arn,
                                            "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch",
                                            %{
@@ -56,7 +56,10 @@ defmodule Belfrage.Services.WebcoreTest do
         {:ok, @lambda_response}
       end)
 
-      struct = %{@struct | private: %{@struct.private | subdomain: "example-branch"}}
+      struct = %{
+        @struct
+        | private: %{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch"}
+      }
 
       assert %Struct{
                response: %Struct.Response{
@@ -76,7 +79,7 @@ defmodule Belfrage.Services.WebcoreTest do
   describe "Failures from Webcore services" do
     test "The origin Lambda is invoked, but it returns an error" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:test",
+                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
@@ -96,7 +99,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
     test "cannot invoke a lambda it serves a generic 500" do
       expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:test",
+                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
