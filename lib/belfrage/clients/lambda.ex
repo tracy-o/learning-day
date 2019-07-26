@@ -41,8 +41,6 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp function_not_found(response) do
-    IO.inspect(response)
-
     Stump.log(:error, %{
       message: "Function not found",
       status: 404,
