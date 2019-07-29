@@ -13,9 +13,9 @@ defmodule Belfrage.Clients.HTTP do
     request(:get, url, "", options)
   end
 
-  def request(:post, url, body, options) do
+  def request(method, url, body, options) do
     headers = Keyword.get(options, :headers, [])
-    Mojito.request(:post, url, headers, body, build_options(options))
+    Mojito.request(method, url, headers, body, build_options(options))
   end
 
   def build_options(options) do
