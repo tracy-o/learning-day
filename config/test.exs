@@ -13,7 +13,7 @@ config :belfrage,
   graphql_lambda_function: "graphql-lambda-function",
   service_worker_lambda_function: "service-worker-lambda-function",
   production_environment: "test",
-  lambda_timeout: 1_000
+  lambda_timeout: 1_000,
   origin_simulator: "http://origin.bbc.com"
 
 config :ex_metrics,
