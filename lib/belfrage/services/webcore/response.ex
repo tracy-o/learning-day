@@ -3,6 +3,14 @@ defmodule Belfrage.Services.Webcore.Response do
 
   alias Belfrage.Struct
 
+  def build({:error, :function_not_found}) do
+    %Struct.Response{
+      http_status: 404,
+      headers: %{},
+      body: "404 - not found"
+    }
+  end
+
   def build({:error, _reason}) do
     %Struct.Response{
       http_status: 500,

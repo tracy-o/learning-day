@@ -37,16 +37,23 @@ defmodule Belfrage.Clients.Lambda do
              access_key_id: credentials.access_key_id,
              secret_access_key: credentials.secret_access_key
            ) do
-        {:ok, body} ->
-          {:ok, body}
-
-        {:error, {:http_error, status_code, response}} ->
-          failed_to_invoke_lambda(status_code, response)
-
-        {:error, _} ->
-          failed_to_invoke_lambda(nil, nil)
+        {:ok, body} -> {:ok, body}
+        {:error, {:http_error, 404, response}} -> function_not_found(response)
+        {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
+        {:error, _} -> failed_to_invoke_lambda(nil, nil)
       end
     end
+  end
+
+  defp function_not_found(response) do
+    Stump.log(:error, %{
+      message: "Function not found",
+      status: 404,
+      response: response.body
+    })
+
+    ExMetrics.increment("clients.lambda.function_not_found")
+    {:error, :function_not_found}
   end
 
   defp failed_to_invoke_lambda(status_code, response) do

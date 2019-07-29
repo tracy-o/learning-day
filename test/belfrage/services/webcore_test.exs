@@ -116,5 +116,25 @@ defmodule Belfrage.Services.WebcoreTest do
                }
              } = Webcore.dispatch(@struct)
     end
+
+    test "When the alias cannot be found, we serve a 404" do
+      expect(Clients.LambdaMock, :call, fn @arn,
+                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           %{
+                                             headers: %{country: nil},
+                                             httpMethod: "GET",
+                                             path: "/_web_core",
+                                             queryStringParameters: %{"id" => "1234"}
+                                           } ->
+        {:error, :function_not_found}
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 404,
+                 body: "404 - not found"
+               }
+             } = Webcore.dispatch(@struct)
+    end
   end
 end

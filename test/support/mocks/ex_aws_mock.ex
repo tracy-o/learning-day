@@ -14,12 +14,18 @@ defmodule ExAwsMock do
       :invoke_successfully
     end
 
+    def invoke("pwa-lambda-function:unknown-alias", _payload, _headers) do
+      :lambda_not_found
+    end
+
     def invoke(_wrong_function, _payload, _headers) do
       :fail_to_invoke
     end
   end
 
-  def request(:assume_role_successfully, _opts \\ []) do
+  def request(_kind_of_request, _opts \\ [])
+
+  def request(:assume_role_successfully, _opts) do
     {
       :ok,
       %{
@@ -34,12 +40,20 @@ defmodule ExAwsMock do
 
   def request(:fail_to_assume, _opts), do: {:error, {:http_error, 403, %{code: "AccessDenied"}}}
 
-  def request(:fail_to_invoke, _opts) do
+  def request(:lambda_not_found, _opts) do
     {:error,
      {:http_error, 404,
       %{
         body:
-          "{\"Message\":\"Function not found: arn:aws:lambda:eu-west-1:134209033928:function:test-belfrage-fake-origin-main-LambdaFunction-W0UE8751BFOO\",\"Type\":\"User\"}"
+          "{\"Message\":\"Function not found: arn:aws:lambda:eu-west-1:123456789:function:some-lambda-function\",\"Type\":\"User\"}"
+      }}}
+  end
+
+  def request(:fail_to_invoke, _opts) do
+    {:error,
+     {:http_error, 500,
+      %{
+        body: "{\"Message\":\"Some error was raised.\",\"Type\":\"User\"}"
       }}}
   end
 
