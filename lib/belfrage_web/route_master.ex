@@ -80,7 +80,7 @@ defmodule BelfrageWeb.RouteMaster do
       match(unquote(path)) do
         var!(conn)
         |> resp(:found, "")
-        |> put_status(unquote(status) || 302)
+        |> put_status(unquote(status))
         |> put_resp_header("location", unquote(location))
       end
     end
