@@ -12,7 +12,7 @@ defmodule Belfrage.Services.HTTPTest do
               )
   @post_struct StructHelper.build(
                  private: %{origin: "https://www.bbc.co.uk"},
-                 request: %{payload: ~s({"some": "data"}), method: "POST"}
+                 request: %{payload: ~s({"some": "data"}), method: "POST", query_params: %{"foo" => "bar"}}
                )
 
   @generic_response {:ok,
@@ -32,7 +32,7 @@ defmodule Belfrage.Services.HTTPTest do
 
     test "post returns a response" do
       Clients.HTTPMock
-      |> expect(:request, fn :post, "https://www.bbc.co.uk/_web_core", ~s({"some": "data"}) ->
+      |> expect(:request, fn :post, "https://www.bbc.co.uk/_web_core?foo=bar", ~s({"some": "data"}) ->
         @generic_response
       end)
 

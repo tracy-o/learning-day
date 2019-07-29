@@ -6,7 +6,6 @@ defmodule Belfrage.Clients.HTTP do
 
   @callback request(:post, String.t(), String.t(), Map.t()) :: Mojito.Response
   @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: Mojito.Response
-  @callback request(:post, String.t(), String.t(), List.t(), Keyword.t()) :: Mojito.Response
 
   @timeout 1_000
 
@@ -14,9 +13,9 @@ defmodule Belfrage.Clients.HTTP do
     request(:get, url, "", options)
   end
 
-  def request(method, url, body, options) do
+  def request(:post, url, body, options) do
     headers = Keyword.get(options, :headers, [])
-    Mojito.request(:get, url, headers, body, build_options(options))
+    Mojito.request(:post, url, headers, body, build_options(options))
   end
 
   def build_options(options) do

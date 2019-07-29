@@ -44,7 +44,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp parse_query_params(map) when is_map(map) do
-    map = "?" <> Enum.map_join(map, "&", fn {k, v} -> "#{k}=#{v}" end)
+    map = "?" <> URI.encode_query(map)
   end
 
   defp parse_query_params(_) do
