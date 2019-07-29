@@ -99,4 +99,15 @@ defmodule BelfrageWeb.WebCoreRoutesTest do
              "<p>Basic HTML response</p>"
            } = sent_resp(conn)
   end
+
+  test "GET /service-worker.js" do
+    conn = conn(:get, "/service-worker.js")
+    conn = Router.call(conn, [])
+
+    assert {
+             404,
+             _headers,
+             "404 Not Found"
+           } = sent_resp(conn)
+  end
 end
