@@ -5,7 +5,7 @@ defmodule Belfrage.Clients.HTTPTest do
   describe "Belfrage.Clients.HTTP.build_options/1" do
     test "combines default and passed in options if keys are unique" do
       assert HTTP.build_options(protocol: [:http1]) == [
-               timeout: 1000,
+               timeout: 10000,
                pool: false,
                protocol: [:http1]
              ]
