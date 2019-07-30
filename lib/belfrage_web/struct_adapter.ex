@@ -14,8 +14,8 @@ defmodule BelfrageWeb.StructAdapter do
         method: conn.method,
         country: bbc_headers.country,
         query_params: query_string(conn),
-        scheme: conn.scheme,
-        host: host(conn),
+        scheme: bbc_headers.scheme,
+        host: bbc_headers.host,
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn)
       },

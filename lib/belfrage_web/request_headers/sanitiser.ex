@@ -16,6 +16,10 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
     headers[:edge] || headers[:forwarded] || headers[:http]
   end
 
+  def scheme(headers, _cache) do
+    String.to_atom(headers[:edge] || "https")
+  end
+
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true
   def replayed_traffic(_, _), do: nil
 

@@ -11,7 +11,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
-                 replayed_traffic: %{replayed_traffic: nil}
+                 replayed_traffic: %{replayed_traffic: nil},
+                 scheme: %{edge: nil}
                }
     end
 
@@ -28,7 +29,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: "1"},
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
-                 replayed_traffic: %{replayed_traffic: "true"}
+                 replayed_traffic: %{replayed_traffic: "true"},
+                 scheme: %{edge: nil}
                }
     end
 
@@ -45,7 +47,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
-                 replayed_traffic: %{replayed_traffic: nil}
+                 replayed_traffic: %{replayed_traffic: nil},
+                 scheme: %{edge: nil}
                }
     end
   end

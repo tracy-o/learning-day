@@ -3,7 +3,6 @@ defmodule Belfrage.Transformers.HTTPSredirectTest do
 
   alias Belfrage.Transformers.HTTPSredirect
   alias Test.Support.StructHelper
-  alias Belfrage.Struct
 
   @http_request_struct StructHelper.build(
                          private: %{origin: "http://www.bbc.co.uk"},
