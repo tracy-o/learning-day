@@ -7,7 +7,7 @@ defmodule Belfrage.Clients.HTTP do
   @callback request(:post, String.t(), String.t(), Map.t()) :: Mojito.Response
   @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: Mojito.Response
 
-  @timeout 10_000
+  @timeout 1_000
 
   def request(:get, url, options \\ []) do
     request(:get, url, "", options)
