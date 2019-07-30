@@ -2,6 +2,7 @@ defmodule Belfrage.Clients.LambdaTest do
   alias Belfrage.Clients.Lambda
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   describe "Belfrage.Clients.Lambda.call/3" do
     test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
@@ -32,10 +33,11 @@ defmodule Belfrage.Clients.LambdaTest do
 
   describe "Belfrage.Clients.Lambda.build_options/1" do
     test "combines default and passed in options if keys are unique" do
-      assert Lambda.build_options(timeout: 1000) == [
+      assert Lambda.build_options(foo: "bar") == [
+               foo: "bar",
                protocols: [:http2, :http1],
                pool: false,
-               timeout: 1000
+               timeout: @lambda_timeout
              ]
     end
 
@@ -43,7 +45,7 @@ defmodule Belfrage.Clients.LambdaTest do
       assert Lambda.build_options(protocols: [:http2], pool: true) == [
                protocols: [:http2, :http1],
                pool: false,
-               timeout: 1000
+               timeout: @lambda_timeout
              ]
     end
   end
@@ -61,7 +63,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :post,
                              "https://www.example.com/foo",
                              ~s({"some": "data"}),
-                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: @lambda_timeout] ->
         @generic_response
       end)
 
@@ -73,7 +75,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :post,
                              "https://www.example.com/foo?some-qs=hello",
                              ~s({"some": "data"}),
-                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: @lambda_timeout] ->
         @generic_response
       end)
 
@@ -85,7 +87,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :get,
                              "https://www.example.com/foo?some-qs=hello",
                              "",
-                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: 1000] ->
+                             [headers: [], protocols: [:http2, :http1], pool: false, timeout: @lambda_timeout] ->
         @generic_response
       end)
 
