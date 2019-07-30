@@ -22,7 +22,7 @@ defmodule Belfrage.Transformers.HTTPSredirectTest do
                           }
                         )
 
-  test "http request will be re-directed to https" do
+  test "http request will be redirected to https" do
     assert {
              :redirect,
              %Belfrage.Struct{
@@ -36,7 +36,7 @@ defmodule Belfrage.Transformers.HTTPSredirectTest do
            } = HTTPSredirect.call([], @http_request_struct)
   end
 
-  test "https request will not be re-directed" do
+  test "https request will not be redirected" do
     assert {
              :ok,
              @https_request_struct
