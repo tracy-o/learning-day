@@ -19,6 +19,11 @@ defmodule Belfrage.Clients.LambdaTest do
                {:error, :failed_to_invoke_lambda}
     end
 
+    test "Given a working role, a correct function name and the lambda timesout we return the :failed_to_invoke_lambda error" do
+      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:timeout", %{some: "data"}) ==
+               {:error, :failed_to_invoke_lambda}
+    end
+
     test "Given a working role, a correct function name, but a non-existant alias we return the :function_not_found error" do
       assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:unknown-alias", %{some: "data"}) ==
                {:error, :function_not_found}
