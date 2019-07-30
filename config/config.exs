@@ -13,7 +13,7 @@ config :belfrage,
   errors_threshold: 1_000,
   fallback: System.get_env("BELFRAGE_FALLBACK"),
   origin: System.get_env("BELFRAGE_ORIGIN"),
-  lambda_timeout: 1_000
+  lambda_timeout: 10_000
 
 config :logger, :console, format: "$message\n"
 
