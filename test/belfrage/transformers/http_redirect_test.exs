@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.HTTPSredirectTest do
+defmodule Belfrage.Transformers.HTTPredirectTest do
   use ExUnit.Case
 
-  alias Belfrage.Transformers.HTTPSredirect
+  alias Belfrage.Transformers.HTTPredirect
   alias Test.Support.StructHelper
 
   @http_request_struct StructHelper.build(
@@ -32,13 +32,13 @@ defmodule Belfrage.Transformers.HTTPSredirectTest do
                  }
                }
              }
-           } = HTTPSredirect.call([], @http_request_struct)
+           } = HTTPredirect.call([], @http_request_struct)
   end
 
   test "https request will not be redirected" do
     assert {
              :ok,
              @https_request_struct
-           } = HTTPSredirect.call([], @https_request_struct)
+           } = HTTPredirect.call([], @https_request_struct)
   end
 end

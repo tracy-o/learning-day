@@ -17,7 +17,11 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   end
 
   def scheme(headers, _cache) do
-    String.to_atom(headers[:edge] || "https")
+    headers[:edge]
+    |> to_string()
+    |> String.split(",", trim: true)
+    |> Enum.find("https", fn x -> String.equivalent?("http" || "https") end)
+    |> String.to_atom()
   end
 
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true

@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.HTTPSredirect do
+defmodule Belfrage.Transformers.HTTPredirect do
   alias Belfrage.Helpers.QueryParams
   use Belfrage.Transformers.Transformer
 
