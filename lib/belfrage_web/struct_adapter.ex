@@ -14,6 +14,8 @@ defmodule BelfrageWeb.StructAdapter do
         method: conn.method,
         country: bbc_headers.country,
         query_params: query_string(conn),
+        scheme: conn.scheme,
+        host: host(conn),
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn)
       },
@@ -45,5 +47,11 @@ defmodule BelfrageWeb.StructAdapter do
     conn.host
     |> String.split(".")
     |> List.first()
+  end
+
+  defp host(conn) do
+    conn.host
+    |> String.split("//")
+    |> List.last()
   end
 end

@@ -3,6 +3,7 @@ defmodule Belfrage.Services.HTTP do
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
+  alias Belfrage.Helpers.QueryParams
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
@@ -43,23 +44,15 @@ defmodule Belfrage.Services.HTTP do
     })
   end
 
-  defp parse_query_params(map) when is_map(map) do
-    map = "?" <> URI.encode_query(map)
-  end
-
-  defp parse_query_params(_) do
-    ""
-  end
-
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
     {@http_client.request(
        :post,
-       private.origin <> request.path <> parse_query_params(request.query_params),
+       private.origin <> request.path <> QueryParams.parse(request.query_params),
        request.payload
      ), struct}
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
-    {@http_client.request(:get, private.origin <> request.path <> parse_query_params(request.query_params)), struct}
+    {@http_client.request(:get, private.origin <> request.path <> QueryParams.parse(request.query_params)), struct}
   end
 end
