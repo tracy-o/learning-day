@@ -2,6 +2,7 @@ defmodule Belfrage.Clients.LambdaTest do
   alias Belfrage.Clients.Lambda
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   describe "Belfrage.Clients.Lambda.call/3" do
     test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
@@ -31,8 +32,6 @@ defmodule Belfrage.Clients.LambdaTest do
   end
 
   describe "Belfrage.Clients.Lambda.build_options/1" do
-    @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
-
     test "combines default and passed in options if keys are unique" do
       assert Lambda.build_options(foo: "bar") == [
                foo: "bar",
@@ -52,7 +51,6 @@ defmodule Belfrage.Clients.LambdaTest do
   end
 
   describe "ExAWS request callback" do
-    @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
     @generic_response {:ok,
                        %Mojito.Response{
                          status_code: 200,
