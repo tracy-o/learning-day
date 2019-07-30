@@ -56,6 +56,16 @@ defmodule Belfrage.Clients.Lambda do
     {:error, :function_not_found}
   end
 
+  defp failed_to_invoke_lambda(status_code, nil) do
+    Stump.log(:error, %{
+      message: "Failed to Invoke Lambda",
+      status: status_code
+    })
+
+    ExMetrics.increment("clients.lambda.invoke_failure")
+    {:error, :failed_to_invoke_lambda}
+  end
+
   defp failed_to_invoke_lambda(status_code, response) do
     Stump.log(:error, %{
       message: "Failed to Invoke Lambda",

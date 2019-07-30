@@ -18,6 +18,10 @@ defmodule ExAwsMock do
       :lambda_not_found
     end
 
+    def invoke("pwa-lambda-function:timeout", _payload, _headers) do
+      :timeout
+    end
+
     def invoke(_wrong_function, _payload, _headers) do
       :fail_to_invoke
     end
@@ -55,6 +59,10 @@ defmodule ExAwsMock do
       %{
         body: "{\"Message\":\"Some error was raised.\",\"Type\":\"User\"}"
       }}}
+  end
+
+  def request(:timeout, _opts) do
+    {:error, :timeout}
   end
 
   def request(:invoke_successfully, _opts), do: {:ok, "<h1>A Page</h1>"}
