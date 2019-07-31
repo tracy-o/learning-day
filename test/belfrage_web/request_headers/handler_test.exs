@@ -9,7 +9,7 @@ defmodule BelfrageWeb.RequestHeaders.HandlerTest do
       conn = conn("get", "/", "") |> put_req_header("x-bbc-edge-country", "gb")
 
       assert %{
-               bbc_headers: %{cache: false, country: "gb", host: nil}
+               bbc_headers: %{cache: false, country: "gb", host: ""}
              } = Handler.call(conn, []).private
     end
 
