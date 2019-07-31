@@ -48,10 +48,4 @@ defmodule BelfrageWeb.StructAdapter do
     |> String.split(".")
     |> List.first()
   end
-
-  defp host(conn) do
-    conn.host
-    |> String.split("//")
-    |> List.last()
-  end
 end

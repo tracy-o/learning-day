@@ -13,10 +13,9 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   end
 
   def host(headers, _cache) do
-    headers[:edge] || headers[:forwarded] ||
-      headers[:http]
-      |> to_string()
-      |> String.replace(~r{\A\.}, "")
+    (headers[:edge] || headers[:forwarded] || headers[:http])
+    |> to_string()
+    |> String.replace(~r{\A\.}, "")
   end
 
   def scheme(headers, _cache) do
