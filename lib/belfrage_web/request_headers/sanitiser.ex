@@ -13,7 +13,17 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   end
 
   def host(headers, _cache) do
-    headers[:edge] || headers[:forwarded] || headers[:http]
+    (headers[:edge] || headers[:forwarded] || headers[:http])
+    |> to_string()
+    |> String.replace(~r{\A\.}, "")
+  end
+
+  def scheme(headers, _cache) do
+    headers[:edge]
+    |> to_string()
+    |> String.split(",", trim: true)
+    |> Enum.find("https", fn x -> String.match?(x, ~r{^(http)(s)*$}) end)
+    |> String.to_atom()
   end
 
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true

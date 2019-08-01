@@ -53,11 +53,37 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
                "www.test.bbc.com"
     end
 
+    test "uses http host when neither edge or forwarded host are set" do
+      assert Sanitiser.host(%{edge: nil, forwarded: nil, http: "www.test.bbc.com"}, false) ==
+               "www.test.bbc.com"
+    end
+
+    test "when a host starting with a . is present, it is removed" do
+      assert Sanitiser.host(%{edge: ".www.test.bbc.com"}, false) ==
+               "www.test.bbc.com"
+    end
+
     test "uses http host when edge host and forwarded host are not set" do
-      assert Sanitiser.host(
-               %{edge: nil, forwarded: nil, http: "www.http-host.bbc.co.uk"},
-               false
-             ) == "www.http-host.bbc.co.uk"
+      assert Sanitiser.host(%{edge: nil, forwarded: nil, http: "www.http-host.bbc.co.uk"}, false) ==
+               "www.http-host.bbc.co.uk"
+    end
+  end
+
+  describe "scheme headers" do
+    test "uses edge scheme when set" do
+      assert Sanitiser.scheme(%{edge: "https"}, false) == :https
+    end
+
+    test "defaults to https when edge scheme is not set" do
+      assert Sanitiser.scheme(%{edge: nil}, false) == :https
+    end
+
+    test "defaults to https when edge scheme is invalid" do
+      assert Sanitiser.scheme(%{edge: "foo"}, false) == :https
+    end
+
+    test "use only 1 scheme edge scheme is set with multiple values" do
+      assert Sanitiser.scheme(%{edge: "http,https"}, false) == :http
     end
   end
 end
