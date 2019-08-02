@@ -75,12 +75,15 @@ defmodule BelfrageWeb.RouteMaster do
   # plus the port etc.
   defmacro redirect(path, to: location, status: status) do
     quote do
+      if unquote(status) not in [301, 302] do
+        raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
+      end
+
       @routes [{unquote(path), []} | @routes]
 
       match(unquote(path)) do
         var!(conn)
-        |> resp(:found, "")
-        |> put_status(unquote(status))
+        |> resp(unquote(status), "")
         |> put_resp_header("location", unquote(location))
       end
     end
