@@ -36,6 +36,7 @@ defmodule Belfrage.MixProject do
       {:benchee, "~> 1.0.1", only: :dev},
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
+      {:eljiffy, "~> 1.2.0"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_lambda, "~> 2.0"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
@@ -45,7 +46,6 @@ defmodule Belfrage.MixProject do
       {:mojito, "~> 0.3.0"},
       {:mox, "~> 0.5", only: :test},
       {:plug_cowboy, "~> 2.0"},
-      {:jason, "~> 1.1"},
       {:stump, "~> 1.0"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"}
