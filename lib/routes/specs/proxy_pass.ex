@@ -6,8 +6,6 @@ defmodule Routes.Specs.ProxyPass do
       platform: "OriginSimulator",
       pipeline: ["ReplayedTrafficTransformer"],
       resp_pipeline: [],
-      ttl: "30s",
-      timeout: "1000ms"
     }
   end
 end

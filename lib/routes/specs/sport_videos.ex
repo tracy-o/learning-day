@@ -7,8 +7,6 @@ defmodule Routes.Specs.SportVideos do
       platform: "webcore",
       pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       resp_pipeline: [],
-      ttl: "30s",
-      timeout: "1000ms"
     }
   end
 end

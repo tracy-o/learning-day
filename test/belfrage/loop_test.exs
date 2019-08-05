@@ -47,9 +47,7 @@ defmodule Belfrage.LoopTest do
                 runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
                 platform: "OriginSimulator",
                 pipeline: ["ReplayedTrafficTransformer"],
-                resp_pipeline: [],
-                ttl: "30s",
-                timeout: "1000ms"
+                resp_pipeline: []
               }}
   end
 
