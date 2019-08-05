@@ -73,19 +73,19 @@ defmodule Belfrage.Loop do
 
   # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
 
-  defp origin_pointer(false, "ServiceWorker", "webcore") do
+  defp origin_pointer(false, "ServiceWorker", :webcore) do
     Application.get_env(:belfrage, :service_worker_lambda_function)
   end
 
-  defp origin_pointer(false, "Graphql", "webcore") do
+  defp origin_pointer(false, "Graphql", :webcore) do
     Application.get_env(:belfrage, :graphql_lambda_function)
   end
 
-  defp origin_pointer(false, _, "webcore") do
+  defp origin_pointer(false, _, :webcore) do
     Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
-  defp origin_pointer(false, _, "OriginSimulator") do
+  defp origin_pointer(false, _, :origin_simulator) do
     Application.get_env(:belfrage, :origin_simulator)
   end
 

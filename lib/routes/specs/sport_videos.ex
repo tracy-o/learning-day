@@ -4,7 +4,7 @@ defmodule Routes.Specs.SportVideos do
     %{
       owner: "team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/mozart/Mozart+runbook",
-      platform: "webcore",
+      platform: :webcore,
       pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       resp_pipeline: [],
     }

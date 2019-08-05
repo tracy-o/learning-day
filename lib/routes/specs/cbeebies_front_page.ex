@@ -3,7 +3,7 @@ defmodule Routes.Specs.CBeebiesFrontPage do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: "webcore",
+      platform: :webcore,
       pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       resp_pipeline: [],
     }
