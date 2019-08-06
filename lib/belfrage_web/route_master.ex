@@ -12,12 +12,6 @@ defmodule BelfrageWeb.RouteMaster do
       import BelfrageWeb.RouteMaster
 
       @routes []
-
-      @before_compile BelfrageWeb.RouteMaster
-
-      get "/private/routes" do
-        send_resp(var!(conn), 200, "Routes: #{run()}")
-      end
     end
   end
 
@@ -26,16 +20,6 @@ defmodule BelfrageWeb.RouteMaster do
     |> StructAdapter.adapt(id)
     |> @belfrage.handle()
     |> View.render(conn)
-  end
-
-  defmacro __before_compile__(_env) do
-    quote do
-      def run do
-        Enum.map(@routes, fn matcher ->
-          IO.inspect(matcher)
-        end)
-      end
-    end
   end
 
   defmacro handle(matcher, [using: id, examples: examples], do: block) do
@@ -52,14 +36,14 @@ defmodule BelfrageWeb.RouteMaster do
     quote do
       @routes [{unquote(matcher), unquote(examples)} | @routes]
 
-      #TODO: add other methods.
+      # TODO: use match here...
       get unquote(matcher) do
         yield(unquote(id), var!(conn))
       end
     end
   end
 
-  # TODO: this is just an example, and could be replaced/explanded
+  # TODO: this is just an example, and could be replaced/expanded
   # in a validator library.
   defmacro return_404(if: check_pass) do
     quote do
