@@ -11,28 +11,11 @@ defmodule BelfrageWeb.Router do
   plug(:match)
   plug(:dispatch)
 
-  alias BelfrageWeb.{View, WebCoreRoutes, LegacyRoutes}
-
-  # TODO: convince me we need an allowlist here
-  @product_allowlist ~w{_web_core news sport weather cbeebies bitesize dynasties web bbcthree topics graphql}
-  @allowed_http_methods [:head, :get, :post]
-
-  # TODO: perhaps create a struct/have a loop generation and serve this 200 by going all the way through the app
-  # this would give us more confidence in /status but could be overkill in effort
-  # it would also mean put_response could become private to the view and be renamed to render
   get "/status" do
-    conn
-    |> View.put_response(200, "I'm ok thanks")
+    send_resp(conn, 200, "I'm ok thanks")
   end
 
-  match("/", via: @allowed_http_methods, to: WebCoreRoutes)
-
-  match("/:product/*_rest" when product in @product_allowlist,
-    via: @allowed_http_methods,
-    to: WebCoreRoutes
-  )
-
-  match(_, via: @allowed_http_methods, to: LegacyRoutes)
+  match(_, to: Routes.Routefile)
 
   def child_spec(scheme: scheme, port: port) do
     Plug.Adapters.Cowboy.child_spec(
@@ -70,6 +53,6 @@ defmodule BelfrageWeb.Router do
       stack: Exception.format_stacktrace(stack)
     })
 
-    View.internal_server_error(conn)
+    BelfrageWeb.View.internal_server_error(conn)
   end
 end

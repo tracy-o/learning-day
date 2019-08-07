@@ -3,5 +3,5 @@ defmodule BelfrageMock do
   alias Belfrage.{Struct}
 
   @impl Belfrage
-  def handle(struct = Struct), do: struct
+  def handle(struct = %Struct{}), do: struct
 end

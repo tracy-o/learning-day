@@ -6,7 +6,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   describe "BelfrageWeb.StructAdapter.adapt" do
     test "Adds www as the subdomain to the struct" do
-      conn = conn(:get, "https://www.belfrage.com/_web_core")
+      id = "12345678"
+      conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
 
       conn =
         put_private(conn, :bbc_headers, %{
@@ -16,10 +17,11 @@ defmodule BelfrageWeb.StructAdapterTest do
           replayed_traffic: false
         })
 
-      assert "www" == StructAdapter.adapt(conn).request.subdomain
+      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
     end
 
     test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
+      id = "12345678"
       conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
 
       conn =
@@ -30,7 +32,7 @@ defmodule BelfrageWeb.StructAdapterTest do
           replayed_traffic: false
         })
 
-      assert "test-branch" == StructAdapter.adapt(conn).request.subdomain
+      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
     end
   end
 end

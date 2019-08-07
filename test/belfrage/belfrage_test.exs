@@ -8,7 +8,7 @@ defmodule BelfrageTest do
 
   @get_request_struct StructHelper.build(
                         private: %{
-                          loop_id: ["test_loop"]
+                          loop_id: "SportVideos"
                         },
                         request: %{
                           path: "/_web_core",
@@ -24,7 +24,7 @@ defmodule BelfrageTest do
                            country: "gb"
                          },
                          private: %{
-                           loop_id: ["test_loop"]
+                           loop_id: "SportVideos"
                          }
                        )
 

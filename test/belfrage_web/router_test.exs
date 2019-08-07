@@ -13,15 +13,4 @@ defmodule BelfrageWeb.RouterTest do
       assert conn.resp_body == "I'm ok thanks"
     end
   end
-
-  describe "Page not found" do
-    test "will return a 'Not Found' message" do
-      conn = conn(:get, "/foobar")
-      conn = Router.call(conn, [])
-
-      assert conn.status == 404
-      assert get_resp_header(conn, "content-type") == ["text/plain; charset=utf-8"]
-      assert conn.resp_body == "404 Not Found"
-    end
-  end
 end

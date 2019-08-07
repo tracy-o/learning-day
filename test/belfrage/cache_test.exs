@@ -13,7 +13,7 @@ defmodule Belfrage.BelfrageCacheTest do
                                       method: "GET"
                                     },
                                     private: %{
-                                      loop_id: ["test_loop"]
+                                      loop_id: "SportVideos"
                                     }
                                   )
 
@@ -23,7 +23,7 @@ defmodule Belfrage.BelfrageCacheTest do
                                       method: "GET"
                                     },
                                     private: %{
-                                      loop_id: ["test_loop"]
+                                      loop_id: "SportVideos"
                                     }
                                   )
 

@@ -6,7 +6,7 @@ defmodule Belfrage.Loop do
   @threshold Application.get_env(:belfrage, :errors_threshold)
   @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
   def start_link(name) do
-    GenServer.start_link(__MODULE__, nil, name: via_tuple(name))
+    GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
@@ -24,20 +24,24 @@ defmodule Belfrage.Loop do
     LoopsRegistry.via_tuple({__MODULE__, name})
   end
 
+  defp specs_for(name) do
+    Module.concat([Routes, Specs, name]).specs()
+  end
+
   # callbacks
 
   @impl GenServer
-  def init(_) do
+  def init(specs) do
     Process.send_after(self(), :reset, @interval)
 
-    {:ok, %{counter: Counter.init()}}
+    {:ok, Map.put(specs, :counter, Counter.init())}
   end
 
   @impl GenServer
   def handle_call({:state, loop_id}, _from, state) do
     exceed = Counter.exceed?(state.counter, :errors, @threshold)
 
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id), pipeline: pipeline(loop_id)})}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id, state.platform)})}, state}
   end
 
   @impl GenServer
@@ -67,41 +71,27 @@ defmodule Belfrage.Loop do
     {:noreply, state}
   end
 
-  @legacy_route_loop_ids [
-    ["mundo"],
-    ["legacy"],
-    ["legacy", "page_type"],
-    ["legacy", "page_type_with_id"],
-    ["load_test", "no_cache"],
-    ["load_test", "with_cache"]
-  ]
+  # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
 
-  defp origin_pointer(false, ["service-worker.js"]) do
+  defp origin_pointer(false, "ServiceWorker", :webcore) do
     Application.get_env(:belfrage, :service_worker_lambda_function)
   end
 
-  defp origin_pointer(false, ["graphql"]) do
+  defp origin_pointer(false, "Graphql", :webcore) do
     Application.get_env(:belfrage, :graphql_lambda_function)
   end
 
-  defp origin_pointer(false, loop_id) do
-    case Enum.member?(@legacy_route_loop_ids, loop_id) do
-      true -> Application.get_env(:belfrage, :origin)
-      false -> Application.get_env(:belfrage, :pwa_lambda_function)
-    end
+  defp origin_pointer(false, _, :webcore) do
+    Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
-  defp origin_pointer(true, _) do
+  defp origin_pointer(false, _, :origin_simulator) do
+    Application.get_env(:belfrage, :origin_simulator)
+  end
+
+  defp origin_pointer(true, _, _) do
     ExMetrics.increment("error.loop.threshold.exceeded")
     Stump.log(:error, "Error threshold exceeded for loop")
     Application.get_env(:belfrage, :fallback)
-  end
-
-  defp pipeline(loop_id) when loop_id in @legacy_route_loop_ids do
-    ["ReplayedTrafficTransformer"]
-  end
-
-  defp pipeline(_loop_id) do
-    ["LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"]
   end
 end

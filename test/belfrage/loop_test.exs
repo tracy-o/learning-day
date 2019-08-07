@@ -5,50 +5,55 @@ defmodule Belfrage.LoopTest do
   alias Test.Support.StructHelper
 
   setup do
-    LoopsSupervisor.start_loop(["legacy"])
-    LoopsSupervisor.start_loop(["webcore"])
+    LoopsSupervisor.start_loop("ProxyPass")
+    LoopsSupervisor.start_loop("SportVideos")
     on_exit(fn -> LoopsSupervisor.kill_all() end)
   end
 
   @failure_status_code Enum.random(500..504)
 
-  @legacy_request_strcut StructHelper.build(private: %{loop_id: ["legacy"]})
-  @webcore_request_strcut StructHelper.build(private: %{loop_id: ["webcore"]})
+  @legacy_request_struct StructHelper.build(private: %{loop_id: "ProxyPass"})
+  @webcore_request_struct StructHelper.build(private: %{loop_id: "SportVideos"})
+
   @resp_struct StructHelper.build(
-                 private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
+                 private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
                  response: %{http_status: @failure_status_code, fallback: nil}
                )
   @resp_struct_2 StructHelper.build(
-                   private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
+                   private: %{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
                    response: %{http_status: @failure_status_code, fallback: nil}
                  )
   @non_error_resp_struct StructHelper.build(
-                           private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
+                           private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
                            response: %{http_status: 200, fallback: nil}
                          )
   @non_error_resp_struct_2 StructHelper.build(
-                             private: %{loop_id: ["legacy"], origin: "https://s3.aws.com/"},
+                             private: %{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
                              response: %{http_status: 200, fallback: nil}
                            )
 
   @fallback_resp_struct StructHelper.build(
-                          private: %{loop_id: ["legacy"], origin: "https://origin.bbc.com/"},
+                          private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
                           response: %{http_status: 200, fallback: true}
                         )
 
   test "returns a state pointer" do
-    assert Loop.state(@legacy_request_strcut) ==
+    assert Loop.state(@legacy_request_struct) ==
              {:ok,
               %{
                 counter: %{},
-                origin: "https://origin.bbc.com/",
-                pipeline: ["ReplayedTrafficTransformer"]
+                origin: "http://origin.bbc.com",
+                owner: "belfrage-team@bbc.co.uk",
+                runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+                platform: :origin_simulator,
+                pipeline: ["ReplayedTrafficTransformer"],
+                resp_pipeline: []
               }}
   end
 
   test "increments status codes counter and trips the circuit breaker" do
     for _ <- 1..30, do: Loop.inc(@resp_struct)
-    {:ok, state} = Loop.state(@legacy_request_strcut)
+    {:ok, state} = Loop.state(@legacy_request_struct)
 
     assert %{
              counter: %{
@@ -126,31 +131,31 @@ defmodule Belfrage.LoopTest do
   end
 
   test "resets after a specific time" do
-    {:ok, state} = Loop.state(@legacy_request_strcut)
-    assert state.origin == Application.get_env(:belfrage, :origin)
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert state.origin == "http://origin.bbc.com"
 
     for _ <- 1..30, do: Loop.inc(@resp_struct)
-    {:ok, state} = Loop.state(@legacy_request_strcut)
+    {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.origin == "https://s3.aws.com/"
 
     Process.sleep(Application.get_env(:belfrage, :circuit_breaker_reset_interval) + 100)
 
-    {:ok, state} = Loop.state(@legacy_request_strcut)
-    assert state.origin == Application.get_env(:belfrage, :origin)
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert state.origin == "http://origin.bbc.com"
   end
 
   test "decides the origin based on the loop_id" do
-    {:ok, state} = Loop.state(@legacy_request_strcut)
-    assert state.origin == Application.get_env(:belfrage, :origin)
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert state.origin == "http://origin.bbc.com"
 
-    {:ok, state} = Loop.state(@webcore_request_strcut)
+    {:ok, state} = Loop.state(@webcore_request_struct)
     assert state.origin == Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
   describe "when in fallback" do
     test "it increments both the status and fallback counters" do
       for _ <- 1..30, do: Loop.inc(@fallback_resp_struct)
-      {:ok, state} = Loop.state(@legacy_request_strcut)
+      {:ok, state} = Loop.state(@legacy_request_struct)
 
       assert %{
                counter: %{
@@ -161,7 +166,7 @@ defmodule Belfrage.LoopTest do
                }
              } = state
 
-      assert state.origin == "https://origin.bbc.com/"
+      assert state.origin == "http://origin.bbc.com"
     end
 
     test "it does not increment fallback for successful responses" do
@@ -174,13 +179,5 @@ defmodule Belfrage.LoopTest do
 
       assert not Map.has_key?(counter, :fallback)
     end
-  end
-
-  test "Adds the lambda alias transformer to the pipeline based on the loop_id" do
-    {:ok, state} = Loop.state(@legacy_request_strcut)
-    refute Enum.member?(state.pipeline, "LambdaOriginAliasTransformer")
-
-    {:ok, state} = Loop.state(@webcore_request_strcut)
-    assert Enum.member?(state.pipeline, "LambdaOriginAliasTransformer")
   end
 end
