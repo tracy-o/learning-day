@@ -29,13 +29,11 @@ defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
   end
 
   test "replayed traffic will be sent to a different origin" do
-    http_origin = Application.get_env(:belfrage, :origin)
-
     assert {
              :ok,
              %Belfrage.Struct{
                private: %Belfrage.Struct.Private{
-                 origin: ^http_origin
+                 origin: "http://origin.bbc.com"
                }
              }
            } = ReplayedTrafficTransformer.call([], @replayed_request_struct)
