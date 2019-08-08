@@ -47,7 +47,7 @@ defmodule BelfrageTest do
 
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:example-branch",
+                        "preview_pwa_lambda_function:example-branch",
                         %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
       @web_core_lambda_response
     end)
@@ -60,7 +60,7 @@ defmodule BelfrageTest do
 
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:example-branch",
+                        "preview_pwa_lambda_function:example-branch",
                         %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
       @web_core_404_lambda_response
     end)
