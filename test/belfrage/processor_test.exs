@@ -43,6 +43,24 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
+  describe "Processor.request_pipeline/1 with empty pipeline" do
+    @struct StructHelper.build(
+              private: %{
+                loop_id: "SportVideos",
+                origin: "https://origin.bbc.co.uk/",
+                counter: %{},
+                pipeline: []
+              }
+            )
+
+    test "returns the unmodified struct" do
+      assert %{
+               request: _request,
+               private: _private
+             } = Processor.request_pipeline(@struct)
+    end
+  end
+
   describe "Processor.init_post_response_side_effects/1" do
     @resp_struct StructHelper.build(
                    private: %{

@@ -13,6 +13,10 @@ defmodule Belfrage.Pipeline do
     end
   end
 
+  def process(struct = %Struct{private: %Struct.Private{pipeline: []}}) do
+    {:ok, struct}
+  end
+
   defp call_500(struct, msg) do
     ExMetrics.increment("error.pipeline.process")
 
