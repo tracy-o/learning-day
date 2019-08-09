@@ -85,4 +85,26 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@post_request_struct)
   end
+
+  @redirect_request_struct StructHelper.build(
+                             private: %{
+                               loop_id: "SportVideos"
+                             },
+                             request: %{
+                               path: "/_web_core",
+                               method: "GET",
+                               country: "gb",
+                               host: "www.bbc.com",
+                               scheme: :http
+                             }
+                           )
+
+  test "A HTTP request redirects to https, and doesn't call the lambda" do
+    LambdaMock
+    |> expect(:call, 0, fn _, _, _ -> :this_should_not_be_called end)
+
+    response_struct = Belfrage.handle(@redirect_request_struct)
+
+    assert response_struct.response.http_status == 302
+  end
 end
