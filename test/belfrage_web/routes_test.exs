@@ -63,14 +63,14 @@ defmodule BelfrageWeb.LegacyTest do
     end
 
     test "301 redirect" do
-      conn = conn(:get, "/weather/0") |> Router.call([])
+      conn = conn(:get, "/example/weather/0") |> Router.call([])
 
       assert conn.status == 301
       assert get_resp_header(conn, "location") == ["/weather"]
     end
 
     test "302 redirect" do
-      conn = conn(:get, "/news/0") |> Router.call([])
+      conn = conn(:get, "/example/news/0") |> Router.call([])
 
       assert conn.status == 302
       assert get_resp_header(conn, "location") == ["/news"]
