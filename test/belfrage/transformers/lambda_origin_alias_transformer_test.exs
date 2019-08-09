@@ -24,7 +24,7 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
       LambdaOriginAliasTransformer.call([], @struct_with_custom_subdomain)
 
-    assert origin == "preview_pwa_lambda_function:example-branch"
+    assert origin == "preview-pwa-lambda-function:example-branch"
   end
 
   test "custom subdomains are used as the alias for the origin for GraphQL" do
@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
 
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAliasTransformer.call([], graphql_struct)
 
-    assert origin == "preview_graphql_lambda_function:example-branch"
+    assert origin == "preview-graphql-lambda-function:example-branch"
   end
 
   test "custom subdomains are used as the alias for the origin for Service Worker" do
@@ -41,6 +41,6 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
       LambdaOriginAliasTransformer.call([], service_worker_struct)
 
-    assert origin == "preview_service_worker_lambda_function:example-branch"
+    assert origin == "preview-service-worker-lambda-function:example-branch"
   end
 end

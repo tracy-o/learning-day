@@ -26,9 +26,13 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
     "#{origin(struct.private.loop_id)}:#{struct.request.subdomain}"
   end
 
-  defp origin("ServiceWorker"), do: :preview_service_worker_lambda_function
+  defp origin(name) do
+    Application.get_env(:belfrage, origin_pointer(name))
+  end
 
-  defp origin("Graphql"), do: :preview_graphql_lambda_function
+  defp origin_pointer("ServiceWorker"), do: :preview_service_worker_lambda_function
 
-  defp origin(_), do: :preview_pwa_lambda_function
+  defp origin_pointer("Graphql"), do: :preview_graphql_lambda_function
+
+  defp origin_pointer(_), do: :preview_pwa_lambda_function
 end
