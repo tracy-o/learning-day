@@ -1,9 +1,6 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
-  redirect "/news/0", to: "/news", status: 302
-  redirect "/weather/0", to: "/weather", status: 301
-
   handle "/", using: "HomePage", examples: ["/"]
   handle "/news", using: "NewsFrontPage", examples: ["/news"]
   handle "/sport", using: "SportFrontPage", examples: ["/sport"]
@@ -14,7 +11,7 @@ defmodule Routes.Routefile do
 
   handle "/graphql", using: "Graphql", examples: ["/graphql"]
 
-  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/48521428"] do
+  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
 
