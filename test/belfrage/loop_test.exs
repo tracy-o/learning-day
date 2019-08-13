@@ -47,7 +47,8 @@ defmodule Belfrage.LoopTest do
                 runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
                 platform: :origin_simulator,
                 pipeline: [],
-                resp_pipeline: []
+                resp_pipeline: [],
+                loop_id: "ProxyPass"
               }}
   end
 

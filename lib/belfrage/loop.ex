@@ -26,6 +26,7 @@ defmodule Belfrage.Loop do
 
   defp specs_for(name) do
     Module.concat([Routes, Specs, name]).specs()
+    |> Map.put(:loop_id, name)
   end
 
   # callbacks
