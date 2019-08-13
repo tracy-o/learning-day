@@ -29,7 +29,8 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
                  http_status: 302,
                  body: "Redirecting",
                  headers: %{
-                   "location" => "https://www.bbc.co.uk/_web_core?foo=bar"
+                   "location" => "https://www.bbc.co.uk/_web_core?foo=bar",
+                   "X-BBC-No-Scheme-Rewrite" => "1"
                  }
                }
              }
