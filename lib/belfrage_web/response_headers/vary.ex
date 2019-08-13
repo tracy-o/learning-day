@@ -7,6 +7,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   @impl ResponseHeaders
   def add_header(conn, _struct) do
-    put_resp_header(conn, "vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic")
+    put_resp_header(conn, "vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic, X-BBC-Edge-Scheme")
   end
 end
