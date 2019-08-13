@@ -40,6 +40,7 @@ defmodule Belfrage.Clients.Lambda do
         {:ok, body} -> {:ok, body}
         {:error, {:http_error, 404, response}} -> function_not_found(response)
         {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
+        {:error, :timeout} -> failed_to_invoke_lambda(408, :timeout)
         {:error, _} -> failed_to_invoke_lambda(nil, nil)
       end
     end
@@ -63,6 +64,16 @@ defmodule Belfrage.Clients.Lambda do
     })
 
     ExMetrics.increment("clients.lambda.invoke_failure")
+    {:error, :failed_to_invoke_lambda}
+  end
+
+  defp failed_to_invoke_lambda(status_code, :timeout) do
+    Stump.log(:error, %{
+      message: "The Lambda Invokation timed out",
+      status: status_code
+    })
+
+    ExMetrics.increment("clients.lambda.invoke_timeout")
     {:error, :failed_to_invoke_lambda}
   end
 
