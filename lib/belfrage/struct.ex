@@ -9,11 +9,11 @@ defmodule Belfrage.Struct.Request do
     :method,
     :country,
     :request_hash,
-    :query_params,
     :scheme,
     :host,
     has_been_replayed?: nil,
-    subdomain: "www"
+    subdomain: "www",
+    query_params: %{}
   ]
 end
 

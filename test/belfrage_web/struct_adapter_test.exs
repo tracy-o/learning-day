@@ -34,5 +34,37 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
     end
+
+    test "When the request contains a query string it is added to the struct" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{foo: "ba"},
+          replayed_traffic: false
+        })
+
+      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+    end
+
+    test "When the request does not have a query string it adds an empty map to the struct" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: false
+        })
+
+      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+    end
   end
 end
