@@ -5,6 +5,10 @@ defmodule Belfrage.Monitor do
   end
 
   defp send_to_monitor_node(node, loop_state) do
-    GenServer.cast({:data_store, node}, {:store, loop_state})
+    GenServer.cast({:message_interface, node}, {:store, message_content(loop_state)})
+  end
+
+  defp message_content(loop_state) do
+    {node(), "first-belfrage-stack", loop_state}
   end
 end
