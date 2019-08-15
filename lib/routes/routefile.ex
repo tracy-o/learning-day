@@ -18,5 +18,7 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
-  handle "/*any", using: "ProxyPass", examples: ["/foo/bar"]
+  handle "/*any", using: "ProxyPass", examples: ["/foo/bar"] do
+    return_404 if: Application.get_env(:belfrage, :production_environment) == "live"
+  end
 end
