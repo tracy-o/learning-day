@@ -18,6 +18,10 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
+  handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
+    return_404 if: !String.match(id, ~r/^c[\w]{10}t$/)
+  end
+
   handle "/*any", using: "ProxyPass", examples: ["/foo/bar"] do
     return_404 if: Application.get_env(:belfrage, :production_environment) == "live"
   end
