@@ -19,7 +19,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
-    return_404 if: !String.match(id, ~r/^c[\w]{10}t$/)
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
   handle "/*any", using: "ProxyPass", examples: ["/foo/bar"] do
