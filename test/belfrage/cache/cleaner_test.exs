@@ -46,22 +46,22 @@ defmodule Belfrage.Cache.CleanerTest do
 
   describe "cache cleaning" do
     test "When the mem usage is low, it doesn't clean anything" do
-      assert 0 == Cache.Cleaner.clean_cache(10)
+      assert 0 == Cache.Cleaner.clean(10)
       assert length(:ets.tab2list(:cache)) == 4
     end
 
     test "When the mem usage is high, it cleans cache items older than 5 hours including expired ones" do
-      assert 2 == Cache.Cleaner.clean_cache(75)
+      assert 2 == Cache.Cleaner.clean(75)
       assert length(:ets.tab2list(:cache)) == 2
     end
 
     test "When the mem usage is dangerously high, it cleans cache items older than 1 hour" do
-      assert 3 == Cache.Cleaner.clean_cache(80)
+      assert 3 == Cache.Cleaner.clean(80)
       assert length(:ets.tab2list(:cache)) == 1
     end
 
     test "When cleaning the cache, the fresh items are not deleted" do
-      Cache.Cleaner.clean_cache(95)
+      Cache.Cleaner.clean(95)
       assert length(:ets.tab2list(:cache)) == 1
       assert [{:entry, "cache_fresh", _, _, _}] = :ets.lookup(:cache, "cache_fresh")
     end

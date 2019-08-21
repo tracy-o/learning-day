@@ -48,7 +48,8 @@ defmodule Belfrage.MixProject do
       {:jason, "~> 1.1"},
       {:stump, "~> 1.0"},
       {:sweet_xml, "~> 0.6"},
-      {:cachex, "~> 3.1"}
+      {:cachex, "~> 3.1"},
+      {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"}
     ]
   end
 end
