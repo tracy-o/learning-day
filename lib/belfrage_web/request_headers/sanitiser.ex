@@ -29,6 +29,9 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true
   def replayed_traffic(_, _), do: nil
 
+  def varnish(%{varnish: "1"}, _), do: true
+  def varnish(_, _), do: nil
+
   defp edge(headers, true) do
     headers[:edge]
   end
