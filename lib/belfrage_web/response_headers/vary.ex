@@ -11,10 +11,10 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     put_resp_header(
       conn,
       "vary",
-      "Accept-Encoding, X-BBC-Edge-Cache, #{varnish?(request.varnish?)}, Replayed-Traffic, X-BBC-Edge-Scheme"
+      "Accept-Encoding, X-BBC-Edge-Cache, #{country(request.varnish?)}, Replayed-Traffic, X-BBC-Edge-Scheme"
     )
   end
 
-  def varnish?(true), do: "X-Country"
-  def varnish?(_), do: "X-BBC-Edge-Country"
+  def country(true), do: "X-Country"
+  def country(_), do: "X-BBC-Edge-Country"
 end
