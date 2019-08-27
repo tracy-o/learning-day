@@ -4,7 +4,8 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},
     host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
     scheme: %{edge: "x-bbc-edge-scheme"},
-    replayed_traffic: %{replayed_traffic: "replayed-traffic"}
+    replayed_traffic: %{replayed_traffic: "replayed-traffic"},
+    varnish: %{varnish: "x-varnish"}
   }
 
   def map(req_headers) do

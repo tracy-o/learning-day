@@ -17,7 +17,8 @@ defmodule BelfrageWeb.StructAdapter do
         scheme: bbc_headers.scheme,
         host: bbc_headers.host,
         has_been_replayed?: bbc_headers.replayed_traffic,
-        subdomain: subdomain(conn)
+        subdomain: subdomain(conn),
+        varnish?: bbc_headers.varnish
       },
       private: %Private{
         loop_id: loop_id

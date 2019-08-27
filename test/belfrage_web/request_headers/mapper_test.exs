@@ -12,7 +12,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  replayed_traffic: %{replayed_traffic: nil},
-                 scheme: %{edge: nil}
+                 scheme: %{edge: nil},
+                 varnish: %{varnish: nil}
                }
     end
 
@@ -21,7 +22,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-cache", "1"},
         {"x-bbc-edge-country", "**"},
         {"x-country", "gb"},
-        {"replayed-traffic", "true"}
+        {"replayed-traffic", "true"},
+        {"varnish", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -30,7 +32,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  replayed_traffic: %{replayed_traffic: "true"},
-                 scheme: %{edge: nil}
+                 scheme: %{edge: nil},
+                 varnish: %{varnish: nil}
                }
     end
 
@@ -39,7 +42,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-cache", ""},
         {"x-bbc-edge-country", ""},
         {"x-country", ""},
-        {"replayed-traffic", ""}
+        {"replayed-traffic", ""},
+        {"varnish", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -48,7 +52,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  replayed_traffic: %{replayed_traffic: nil},
-                 scheme: %{edge: nil}
+                 scheme: %{edge: nil},
+                 varnish: %{varnish: nil}
                }
     end
   end
