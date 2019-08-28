@@ -20,7 +20,7 @@ config :logger, :console, format: "$message\n"
 config :ex_aws,
   region: "eu-west-1",
   http_client: Belfrage.Clients.Lambda,
-  json_codec: Jason
+  json_codec: Eljiffy
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"
