@@ -14,6 +14,10 @@ defmodule Routes.Routefile do
 
   handle "/graphql", using: "Graphql", examples: ["/graphql"]
 
+  handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  end
+
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
