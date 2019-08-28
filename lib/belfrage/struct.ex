@@ -11,7 +11,8 @@ defmodule Belfrage.Struct.Request do
     :request_hash,
     :scheme,
     :host,
-    :varnish?,
+    varnish?: false,
+    cache?: false,
     has_been_replayed?: nil,
     subdomain: "www",
     query_params: %{}
