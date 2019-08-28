@@ -32,6 +32,18 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  defmacro handle(matcher, using: id, only_on: env, examples: examples) do
+    quote do
+      @routes [{unquote(matcher), unquote(examples)} | @routes]
+
+      # TODO: use match here...
+      get unquote(matcher) do
+        return_404(if: Application.get_env(:belfrage, :production_environment) != unquote(env))
+        yield(unquote(id), var!(conn))
+      end
+    end
+  end
+
   defmacro handle(matcher, using: id, examples: examples) do
     quote do
       @routes [{unquote(matcher), unquote(examples)} | @routes]

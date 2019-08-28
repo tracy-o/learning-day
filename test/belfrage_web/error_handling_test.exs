@@ -5,14 +5,30 @@ defmodule BelfrageWeb.ErrorHandlingTest do
 
   alias BelfrageWeb.Router
 
-  describe "erroneous web core route" do
+  describe "Serving error pages" do
+    test "responds with 404 status code" do
+      BelfrageMock
+      |> expect(:handle, fn _ ->
+        raise("Something broke")
+      end)
+
+      conn = conn(:get, "/foo_bar")
+
+      assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
+        Router.call(conn, [])
+      end
+
+      assert_received {:plug_conn, :sent}
+      assert {404, _headers, "404 Not Found"} = sent_resp(conn)
+    end
+
     test "Responds with 500 status code" do
       BelfrageMock
       |> expect(:handle, fn _ ->
         raise("Something broke")
       end)
 
-      conn = conn(:get, "/_web_core")
+      conn = conn(:get, "/sport")
 
       assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
         Router.call(conn, [])
