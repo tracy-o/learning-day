@@ -5,7 +5,7 @@ defmodule BelfrageWeb.RouterTest do
   alias BelfrageWeb.Router
 
   describe "OPTIONS" do
-    test "will return a 406" do
+    test "will return a 405" do
       conn = conn(:options, "/")
       conn = Router.call(conn, [])
 
