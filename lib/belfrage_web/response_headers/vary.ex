@@ -16,6 +16,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   def country(true, false), do: "X-Country" <> ", "
-  def country(false, true), do: "X-BBC-Edge-Country" <> ", "
+  def country(_, true), do: "X-BBC-Edge-Country" <> ", "
   def country(false, false), do: ""
 end
