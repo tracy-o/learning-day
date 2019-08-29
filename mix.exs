@@ -43,7 +43,7 @@ defmodule Belfrage.MixProject do
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
-      {:mojito, "~> 0.4.0"},
+      {:mojito, "~> 0.5.0"},
       {:mox, "~> 0.5", only: :test},
       {:plug_cowboy, "~> 2.0"},
       {:stump, "~> 1.0"},
