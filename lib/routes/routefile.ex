@@ -34,5 +34,5 @@ defmodule Routes.Routefile do
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
-  handle("/*any", using: "ProxyPass", only_on: "live", examples: ["/foo/bar"])
+  handle("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 end

@@ -17,14 +17,6 @@ defmodule BelfrageWeb.ErrorHandlingTest do
                             )
 
   describe "catchall for live routes" do
-    setup do
-      Application.put_env(:belfrage, :production_environment, "live")
-
-      on_exit(fn ->
-        Application.put_env(:belfrage, :production_environment, "test")
-      end)
-    end
-
     test "when on live responds with 404 status code for catch all" do
       BelfrageMock
       |> expect(:handle, fn %Struct{
@@ -47,7 +39,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
         raise("Something broke")
       end)
 
-      conn = conn(:get, "/sport")
+      conn = conn(:get, "/_web_core")
 
       assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
         Router.call(conn, [])

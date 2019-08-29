@@ -73,7 +73,7 @@ defmodule BelfrageWeb.HeadersTest do
         make_call(
           "<p>some html content</p>",
           %{"content-type" => "text/html; charset=utf-8"},
-          "/sport"
+          "/_web_core"
         )
 
       assert {200,
@@ -96,7 +96,7 @@ defmodule BelfrageWeb.HeadersTest do
     end
 
     test "with a 500 path default response_headers are added" do
-      conn = make_500_call("<p>some html content</p>", %{}, "/sport")
+      conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
 
       assert {500,
               [
