@@ -86,4 +86,14 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
       assert Sanitiser.scheme(%{edge: "http,https"}, false) == :http
     end
   end
+
+  describe "varnish headers" do
+    test "returns true when varnish id is set" do
+      assert Sanitiser.varnish(%{varnish: "12345354"}, false) == true
+    end
+
+    test "defaults to https when edge scheme is not set" do
+      assert Sanitiser.varnish(%{varnish: nil}, false) == false
+    end
+  end
 end

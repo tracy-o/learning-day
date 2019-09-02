@@ -29,8 +29,8 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true
   def replayed_traffic(_, _), do: nil
 
-  def varnish(%{varnish: "1"}, _), do: true
-  def varnish(_, _), do: false
+  def varnish(%{varnish: nil}, _), do: false
+  def varnish(_, _), do: true
 
   def cache(%{cache: "1"}, _), do: true
   def cache(_, _), do: false
