@@ -12,7 +12,7 @@ defmodule Belfrage.Struct.Request do
     :scheme,
     :host,
     varnish?: false,
-    cache?: false,
+    edge_cache?: false,
     has_been_replayed?: nil,
     subdomain: "www",
     query_params: %{}
