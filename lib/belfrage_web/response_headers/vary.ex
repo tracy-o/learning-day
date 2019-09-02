@@ -20,7 +20,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       "Accept-Encoding",
       "X-BBC-Edge-Cache",
       country(edge_cache: request.edge_cache?, varnish: request.varnish?),
-      "Replayed-Traffic",
       "X-BBC-Edge-Scheme"
     ]
     |> Enum.reject(&is_nil/1)

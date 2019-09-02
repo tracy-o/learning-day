@@ -16,7 +16,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @with_varnish_no_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, Replayed-Traffic, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -24,7 +24,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @non_varnish_with_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -32,7 +32,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @no_varnish_or_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, Replayed-Traffic, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
   end
