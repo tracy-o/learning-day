@@ -1,18 +1,18 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
-  redirect("/example/news/0", to: "/news", status: 302)
-  redirect("/example/weather/0", to: "/weather", status: 301)
+  redirect "/example/news/0", to: "/news", status: 302
+  redirect "/example/weather/0", to: "/weather", status: 301
 
-  handle("/", using: "HomePage", examples: ["/"])
-  handle("/news", using: "NewsFrontPage", examples: ["/news"])
-  handle("/sport", using: "SportFrontPage", examples: ["/sport"])
-  handle("/weather", using: "WeatherFrontPage", examples: ["/weather"])
-  handle("/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"])
-  handle("/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"])
-  handle("/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"])
+  handle "/", using: "HomePage", examples: ["/"]
+  handle "/news", using: "NewsFrontPage", examples: ["/news"]
+  handle "/sport", using: "SportFrontPage", examples: ["/sport"]
+  handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]
+  handle "/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"]
+  handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
+  handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
-  handle("/graphql", using: "Graphql", examples: ["/graphql"])
+  handle "/graphql", using: "Graphql", examples: ["/graphql"]
 
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
@@ -34,5 +34,5 @@ defmodule Routes.Routefile do
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
-  handle("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
+  handle "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 end
