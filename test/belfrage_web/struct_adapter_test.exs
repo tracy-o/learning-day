@@ -15,7 +15,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           host: "www.belfrage.com",
           country: "gb",
           replayed_traffic: false,
-          varnish: 1
+          varnish: 1,
+          cache: 0
         })
 
       assert "www" == StructAdapter.adapt(conn, id).request.subdomain
@@ -31,7 +32,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           host: "test-branch.belfrage.com",
           country: "gb",
           replayed_traffic: false,
-          varnish: 1
+          varnish: 1,
+          cache: 0
         })
 
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
@@ -48,7 +50,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           country: "gb",
           query_string: %{foo: "ba"},
           replayed_traffic: false,
-          varnish: 1
+          varnish: 1,
+          cache: 0
         })
 
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
@@ -65,7 +68,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           country: "gb",
           query_string: %{},
           replayed_traffic: false,
-          varnish: 1
+          varnish: 1,
+          cache: 0
         })
 
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain

@@ -5,24 +5,35 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   alias BelfrageWeb.ResponseHeaders.Vary
   alias Test.Support.StructHelper
 
-  @non_varnish StructHelper.build(request: %{varnish?: nil})
-  @varnish_true StructHelper.build(request: %{varnish?: true})
+  @non_varnish_with_cache StructHelper.build(request: %{varnish?: false, edge_cache?: true})
+  @with_varnish_no_cache StructHelper.build(request: %{varnish?: true, edge_cache?: false})
+  @no_varnish_or_cache StructHelper.build(request: %{varnish?: false, edge_cache?: false})
 
   doctest Vary
 
-  test "Adding vary returns conn with vary header added" do
-    input_conn = conn(:get, "/_web_core")
-    output_conn = Vary.add_header(input_conn, @non_varnish)
+  describe "Country Header" do
+    test "When the request is from varnish and the cache header isnt set it varies on X-Country" do
+      input_conn = conn(:get, "/sport")
+      output_conn = Vary.add_header(input_conn, @with_varnish_no_cache)
 
-    assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, Replayed-Traffic, X-BBC-Edge-Scheme"] ==
-             get_resp_header(output_conn, "vary")
-  end
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-BBC-Edge-Scheme"] ==
+               get_resp_header(output_conn, "vary")
+    end
 
-  test "When the request is not from varnish it varies on X-Country not X-BBC-Edge-Country" do
-    input_conn = conn(:get, "/_web_core")
-    output_conn = Vary.add_header(input_conn, @varnish_true)
+    test "When the cache header is set it varies on X-BBC-Edge-Country" do
+      input_conn = conn(:get, "/sport")
+      output_conn = Vary.add_header(input_conn, @non_varnish_with_cache)
 
-    assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, Replayed-Traffic, X-BBC-Edge-Scheme"] ==
-             get_resp_header(output_conn, "vary")
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-Scheme"] ==
+               get_resp_header(output_conn, "vary")
+    end
+
+    test "When the request is not from varnish and the cache header isnt set it doesnt vary on a country header" do
+      input_conn = conn(:get, "/sport")
+      output_conn = Vary.add_header(input_conn, @no_varnish_or_cache)
+
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"] ==
+               get_resp_header(output_conn, "vary")
+    end
   end
 end

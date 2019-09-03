@@ -11,10 +11,22 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     put_resp_header(
       conn,
       "vary",
-      "Accept-Encoding, X-BBC-Edge-Cache, #{country(request.varnish?)}, Replayed-Traffic, X-BBC-Edge-Scheme"
+      vary_headers(request)
     )
   end
 
-  def country(true), do: "X-Country"
-  def country(_), do: "X-BBC-Edge-Country"
+  def vary_headers(request) do
+    [
+      "Accept-Encoding",
+      "X-BBC-Edge-Cache",
+      country(edge_cache: request.edge_cache?, varnish: request.varnish?),
+      "X-BBC-Edge-Scheme"
+    ]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join(", ")
+  end
+
+  def country(edge_cache: true, varnish: _), do: "X-BBC-Edge-Country"
+  def country(edge_cache: false, varnish: true), do: "X-Country"
+  def country(edge_cache: false, varnish: false), do: nil
 end
