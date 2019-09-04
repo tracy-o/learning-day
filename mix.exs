@@ -36,7 +36,7 @@ defmodule Belfrage.MixProject do
       {:benchee, "~> 1.0.1", only: :dev},
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
-      {:eljiffy, git: "https://github.com/lilrooness/eljiffy.git"},
+      {:eljiffy, "~> 1.3.0"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_lambda, "~> 2.0"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
