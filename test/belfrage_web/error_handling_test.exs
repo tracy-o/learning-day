@@ -3,28 +3,18 @@ defmodule BelfrageWeb.ErrorHandlingTest do
   use Plug.Test
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Request
   alias BelfrageWeb.Router
-  alias Test.Support.StructHelper
-
-  @struct_with_404_response StructHelper.build(
-                              response: %{
-                                body: "404 Not Found",
-                                headers: %{"content-type" => "text/html; charset=utf-8"},
-                                http_status: 404
-                              }
-                            )
 
   describe "catchall for live routes" do
-    test "when on live responds with 404 status code for catch all" do
-      BelfrageMock
-      |> expect(:handle, fn %Struct{
-                              request: %Request{path: "/foo_bar"}
-                            } ->
-        @struct_with_404_response
-      end)
+    setup do
+      Application.put_env(:belfrage, :production_environment, "live")
 
+      on_exit(fn ->
+        Application.put_env(:belfrage, :production_environment, "test")
+      end)
+    end
+
+    test "when on live responds with 404 status code for catch all" do
       conn = conn(:get, "/foo_bar")
       Router.call(conn, [])
 
