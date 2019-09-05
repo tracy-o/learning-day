@@ -5,7 +5,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
 
   alias BelfrageWeb.Router
 
-  describe "erroneous web core route" do
+  describe "Belfrage raising an exception" do
     test "Responds with 500 status code" do
       BelfrageMock
       |> expect(:handle, fn _ ->

@@ -20,18 +20,19 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
+
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
 
   handle "/test/greeting-loader", using: "TestGreetingLoader", examples: ["/test/greeting-loader"]
   handle "/test/media-player", using: "TestMediaPlayer", examples: ["/test/media-player"]
+
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
-  handle "/*any", using: "ProxyPass", examples: ["/foo/bar"] do
-    return_404 if: Application.get_env(:belfrage, :production_environment) == "live"
-  end
+
+  handle "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 end
