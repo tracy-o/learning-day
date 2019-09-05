@@ -5,24 +5,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
 
   alias BelfrageWeb.Router
 
-  describe "catchall for live routes" do
-    setup do
-      Application.put_env(:belfrage, :production_environment, "live")
-
-      on_exit(fn ->
-        Application.put_env(:belfrage, :production_environment, "test")
-      end)
-    end
-
-    test "when on live responds with 404 status code for catch all" do
-      conn = conn(:get, "/foo_bar")
-      Router.call(conn, [])
-
-      assert {404, _headers, "404 Not Found"} = sent_resp(conn)
-    end
-  end
-
-  describe "catch all for test routes" do
+  describe "Belfrage raising an exception" do
     test "Responds with 500 status code" do
       BelfrageMock
       |> expect(:handle, fn _ ->
