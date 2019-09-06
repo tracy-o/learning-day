@@ -9,7 +9,9 @@ defmodule Routes.Routefile do
   handle "/sport", using: "SportFrontPage", examples: ["/sport"]
   handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]
   handle "/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"]
+  handle "/cbbc/search", using: "CbbcSearch", examples: ["/cbbc/search"]
   handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
+  handle "/cbeebies/search", using: "CBeebiesSearch", examples: ["/cbeebies/search"]
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/graphql", using: "Graphql", examples: ["/graphql"]
@@ -24,9 +26,6 @@ defmodule Routes.Routefile do
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
-
-  handle "/test/greeting-loader", using: "TestGreetingLoader", examples: ["/test/greeting-loader"]
-  handle "/test/media-player", using: "TestMediaPlayer", examples: ["/test/media-player"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
