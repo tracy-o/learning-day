@@ -2,6 +2,13 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :mojito,
+  pool_opts: [
+    size: 20,
+    pools: 10,
+    max_overflow: 20
+  ]
+
 config :ex_aws, :retries,
   max_attempts: 1,
   base_backoff_in_ms: 10,
