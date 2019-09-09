@@ -15,6 +15,7 @@ defmodule Routes.Routefile do
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/graphql", using: "Graphql", examples: ["/graphql"]
+  handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
