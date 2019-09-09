@@ -9,8 +9,8 @@ config :ex_aws, :retries,
 
 config :belfrage,
   aws_client: ExAws,
-  circuit_breaker_reset_interval: 60_000,
-  errors_threshold: 1_000,
+  circuit_breaker_reset_interval: 5_000,
+  errors_threshold: 100,
   fallback: System.get_env("BELFRAGE_FALLBACK"),
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
   lambda_timeout: 10_000
