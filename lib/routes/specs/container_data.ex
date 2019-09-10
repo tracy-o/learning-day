@@ -1,4 +1,4 @@
-defmodule Routes.Specs.Graphql do
+defmodule Routes.Specs.ContainerData do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",

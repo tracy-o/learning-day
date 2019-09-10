@@ -78,8 +78,8 @@ defmodule Belfrage.Loop do
     Application.get_env(:belfrage, :service_worker_lambda_function)
   end
 
-  defp origin_pointer(false, "Graphql", :webcore) do
-    Application.get_env(:belfrage, :graphql_lambda_function)
+  defp origin_pointer(false, "ContainerData", :webcore) do
+    Application.get_env(:belfrage, :api_lambda_function)
   end
 
   defp origin_pointer(false, _, :webcore) do

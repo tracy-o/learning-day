@@ -27,12 +27,12 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
     assert origin == "preview-pwa-lambda-function:example-branch"
   end
 
-  test "custom subdomains are used as the alias for the origin for GraphQL" do
-    graphql_struct = Belfrage.Struct.add(@struct_with_custom_subdomain, :private, %{loop_id: "Graphql"})
+  test "custom subdomains are used as the alias for the origin for ContainerData" do
+    api_struct = Belfrage.Struct.add(@struct_with_custom_subdomain, :private, %{loop_id: "ContainerData"})
 
-    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAliasTransformer.call([], graphql_struct)
+    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAliasTransformer.call([], api_struct)
 
-    assert origin == "preview-graphql-lambda-function:example-branch"
+    assert origin == "preview-api-lambda-function:example-branch"
   end
 
   test "custom subdomains are used as the alias for the origin for Service Worker" do
