@@ -22,17 +22,8 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
 
   defp production_environment(), do: Application.get_env(:belfrage, :production_environment)
 
-  defp preview_origin_override(struct = %Struct{request: %Struct.Request{subdomain: subdomain}}) when subdomain != "" and subdomain != nil do
+  defp preview_origin_override(struct = %Struct{request: %Struct.Request{subdomain: subdomain}}) do
     "#{origin(struct.private.loop_id)}:#{struct.request.subdomain}"
-  end
-
-  defp preview_origin_override(struct) do
-    Stump.log(:error, %{
-      info: "If you see this, please tell James.",
-      struct: struct
-    })
-
-    raise "alias could not be determined by subdomain"
   end
 
   defp origin(name) do

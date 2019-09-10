@@ -39,6 +39,40 @@ defmodule BelfrageWeb.StructAdapterTest do
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
     end
 
+    test "when the host header is empty, we default to www" do
+      id = "12345678"
+      conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, "")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "www",
+          country: "gb",
+          replayed_traffic: false,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
+    end
+
+    test "when the host header is not binary, we default to www" do
+      id = "12345678"
+      conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, nil)
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "www",
+          country: "gb",
+          replayed_traffic: false,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
+    end
+
     test "When the request contains a query string it is added to the struct" do
       id = "12345678"
       conn = conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
