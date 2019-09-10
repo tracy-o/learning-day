@@ -15,8 +15,6 @@ config :belfrage,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
   lambda_timeout: 10_000
 
-config :logger, :console, format: "$message\n"
-
 config :ex_aws,
   region: "eu-west-1",
   http_client: Belfrage.Clients.Lambda,

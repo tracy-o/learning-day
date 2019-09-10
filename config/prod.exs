@@ -9,7 +9,7 @@ config :ex_metrics,
   send_metrics: true
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, :console]
+  backends: [{LoggerFileBackend, :file}]
 
 config :logger, :file,
   path: System.get_env("LOG_PATH"),
