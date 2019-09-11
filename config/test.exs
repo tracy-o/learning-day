@@ -2,9 +2,8 @@ use Mix.Config
 
 config :belfrage,
   aws_client: ExAwsMock,
-  circuit_breaker_reset_interval: 1_000,
+  circuit_breaker_reset_interval: 100,
   errors_threshold: 20,
-  fallback: "https://s3.aws.com/",
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,
   belfrage: BelfrageMock,
