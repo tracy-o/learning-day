@@ -17,6 +17,7 @@ config :ex_metrics,
       "error.pipeline.process",
       "error.pipeline.process.unhandled",
       "error.service.HTTP.request",
+      "error.service.HTTP.timeout",
       "function.timing.service.HTTP.request",
       "function.timing.service.lambda.invoke"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics

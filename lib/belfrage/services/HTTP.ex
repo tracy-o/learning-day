@@ -23,16 +23,24 @@ defmodule Belfrage.Services.HTTP do
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
-  defp handle_response({{:error, reason}, struct}) do
-    ExMetrics.increment("error.service.HTTP.request")
+  defp handle_response({{:error, %{reason: :timeout}}, struct}) do
+    ExMetrics.increment("error.service.HTTP.timeout")
+    log(:timeout, struct)
+    Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
+  end
 
+  defp handle_response({{:error, error}, struct}) do
+    ExMetrics.increment("error.service.HTTP.request")
+    log(error, struct)
+    Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
+  end
+
+  defp log(reason, struct) do
     Stump.log(:error, %{
       msg: "HTTP Service request error",
       reason: reason,
       struct: Map.from_struct(struct)
     })
-
-    struct
   end
 
   defp log(status, body, struct) do
