@@ -3,13 +3,13 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: "www"}, private: private}) do
-    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{production_environment}"})
+    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{production_environment()}"})
 
     then(rest, struct)
   end
 
   @impl true
-  def call(rest, struct = %Struct{request: request, private: private}) do
+  def call(rest, struct = %Struct{}) do
     struct = Struct.add(struct, :private, %{origin: preview_origin_override(struct)})
 
     then(rest, struct)

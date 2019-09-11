@@ -25,7 +25,7 @@ defmodule Belfrage.Cache do
     end
   end
 
-  defp metric_stale_response(:stale, struct) do
+  defp metric_stale_response(:stale, _struct) do
     ExMetrics.increment("cache.stale_response_added_to_struct")
   end
 
