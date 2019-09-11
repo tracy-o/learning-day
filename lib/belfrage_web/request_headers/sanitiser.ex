@@ -32,14 +32,6 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def varnish(%{varnish: nil}, _), do: false
   def varnish(_, _), do: true
 
-  def cache(%{cache: "1"}, _), do: true
-  def cache(_, _), do: false
-
-  defp edge(headers, true) do
-    headers[:edge]
-  end
-
-  defp edge(headers, false) do
-    nil
-  end
+  defp edge(headers, true), do: headers[:edge]
+  defp edge(_headers, false), do: nil
 end

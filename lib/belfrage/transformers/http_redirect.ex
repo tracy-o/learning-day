@@ -3,18 +3,17 @@ defmodule Belfrage.Transformers.HTTPredirect do
   use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{scheme: :http}}) do
+  def call(_rest, struct = %Struct{request: %Struct.Request{scheme: :http}}) do
     redirect_url =
       "https://" <> struct.request.host <> struct.request.path <> QueryParams.parse(struct.request.query_params)
 
     struct =
       Struct.add(struct, :response, %{
         http_status: 302,
-        headers: 
-          %{
-            "location" => redirect_url,
-            "X-BBC-No-Scheme-Rewrite" => "1" 
-            },
+        headers: %{
+          "location" => redirect_url,
+          "X-BBC-No-Scheme-Rewrite" => "1"
+        },
         body: "Redirecting"
       })
 
