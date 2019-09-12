@@ -52,22 +52,6 @@ defmodule Belfrage.LoopTest do
               }}
   end
 
-  test "increments status codes counter and trips the circuit breaker" do
-    for _ <- 1..30, do: Loop.inc(@resp_struct)
-    {:ok, state} = Loop.state(@legacy_request_struct)
-
-    assert %{
-             counter: %{
-               "https://origin.bbc.com/" => %{
-                 unquote(@failure_status_code) => 30,
-                 :errors => 30
-               }
-             }
-           } = state
-
-    assert state.origin == "https://s3.aws.com/"
-  end
-
   describe "returns a different count per origin" do
     test "when there are errors" do
       for _ <- 1..15 do
@@ -137,12 +121,12 @@ defmodule Belfrage.LoopTest do
 
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@legacy_request_struct)
-    assert state.origin == "https://s3.aws.com/"
+    assert state.counter.errors == 30
 
-    Process.sleep(Application.get_env(:belfrage, :circuit_breaker_reset_interval) + 100)
+    Process.sleep(Application.get_env(:belfrage, :circuit_breaker_reset_interval) + 1)
 
     {:ok, state} = Loop.state(@legacy_request_struct)
-    assert state.origin == "http://origin.bbc.com"
+    assert false == Map.has_key?(state.counter, :error), "Loop should have reset"
   end
 
   test "decides the origin based on the loop_id" do

@@ -2,6 +2,13 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :mojito,
+  pool_opts: [
+    size: 20,
+    pools: 10,
+    max_overflow: 20
+  ]
+
 config :ex_aws, :retries,
   max_attempts: 1,
   base_backoff_in_ms: 10,
@@ -11,11 +18,8 @@ config :belfrage,
   aws_client: ExAws,
   circuit_breaker_reset_interval: 5_000,
   errors_threshold: 100,
-  fallback: System.get_env("BELFRAGE_FALLBACK"),
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
   lambda_timeout: 10_000
-
-config :logger, :console, format: "$message\n"
 
 config :ex_aws,
   region: "eu-west-1",

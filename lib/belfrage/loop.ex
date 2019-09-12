@@ -40,9 +40,7 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_call({:state, loop_id}, _from, state) do
-    exceed = Counter.exceed?(state.counter, :errors, @threshold)
-
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(exceed, loop_id, state.platform)})}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(loop_id, state.platform)})}, state}
   end
 
   @impl GenServer
@@ -74,25 +72,19 @@ defmodule Belfrage.Loop do
 
   # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
 
-  defp origin_pointer(false, "ServiceWorker", :webcore) do
+  defp origin_pointer("ServiceWorker", :webcore) do
     Application.get_env(:belfrage, :service_worker_lambda_function)
   end
 
-  defp origin_pointer(false, "ContainerData", :webcore) do
+  defp origin_pointer("ContainerData", :webcore) do
     Application.get_env(:belfrage, :api_lambda_function)
   end
 
-  defp origin_pointer(false, _, :webcore) do
+  defp origin_pointer(_, :webcore) do
     Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
-  defp origin_pointer(false, _, :origin_simulator) do
+  defp origin_pointer(_, :origin_simulator) do
     Application.get_env(:belfrage, :origin_simulator)
-  end
-
-  defp origin_pointer(true, _, _) do
-    ExMetrics.increment("error.loop.threshold.exceeded")
-    Stump.log(:error, "Error threshold exceeded for loop")
-    Application.get_env(:belfrage, :fallback)
   end
 end

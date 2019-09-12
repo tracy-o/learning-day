@@ -7,7 +7,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   @behaviour ResponseHeaders
 
   @impl ResponseHeaders
-  def add_header(conn, struct = %Struct{request: request}) do
+  def add_header(conn, %Struct{request: request}) do
     put_resp_header(
       conn,
       "vary",

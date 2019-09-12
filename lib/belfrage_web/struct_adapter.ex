@@ -39,9 +39,11 @@ defmodule BelfrageWeb.StructAdapter do
     end
   end
 
-  defp subdomain(conn) do
-    conn.host
+  defp subdomain(%Plug.Conn{host: host}) when bit_size(host) > 0 do
+    host
     |> String.split(".")
     |> List.first()
   end
+
+  defp subdomain(_conn), do: "www"
 end
