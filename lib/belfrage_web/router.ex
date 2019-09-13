@@ -22,7 +22,7 @@ defmodule BelfrageWeb.Router do
   match(_, to: Routes.Routefile)
 
   def child_spec(scheme: scheme, port: port) do
-    Plug.Adapters.Cowboy.child_spec(
+    Plug.Cowboy.child_spec(
       scheme: scheme,
       options:
         Enum.concat(
