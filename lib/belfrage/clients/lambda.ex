@@ -16,7 +16,7 @@ defmodule Belfrage.Clients.Lambda do
   @timeout Application.get_env(:belfrage, :lambda_timeout)
 
   def build_options(opts) do
-    Keyword.merge(opts, protocols: [:http2, :http1], timeout: @timeout)
+    Keyword.merge(opts, protocols: [:http1], timeout: @timeout)
   end
 
   @aws_client Application.get_env(:belfrage, :aws_client)
