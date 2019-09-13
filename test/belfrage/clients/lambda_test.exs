@@ -35,14 +35,14 @@ defmodule Belfrage.Clients.LambdaTest do
     test "combines default and passed in options if keys are unique" do
       assert Lambda.build_options(foo: "bar") == [
                foo: "bar",
-               protocols: [:http2, :http1],
+               protocols: [:http1],
                timeout: @lambda_timeout
              ]
     end
 
     test "overwrites ExAws values if the same option is passed" do
       assert Lambda.build_options(protocols: [:http2]) == [
-               protocols: [:http2, :http1],
+               protocols: [:http1],
                timeout: @lambda_timeout
              ]
     end
@@ -61,7 +61,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :post,
                              "https://www.example.com/foo",
                              ~s({"some": "data"}),
-                             [headers: [], protocols: [:http2, :http1], timeout: @lambda_timeout] ->
+                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
         @generic_response
       end)
 
@@ -73,7 +73,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :post,
                              "https://www.example.com/foo?some-qs=hello",
                              ~s({"some": "data"}),
-                             [headers: [], protocols: [:http2, :http1], timeout: @lambda_timeout] ->
+                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
         @generic_response
       end)
 
@@ -85,7 +85,7 @@ defmodule Belfrage.Clients.LambdaTest do
       |> expect(:request, fn :get,
                              "https://www.example.com/foo?some-qs=hello",
                              "",
-                             [headers: [], protocols: [:http2, :http1], timeout: @lambda_timeout] ->
+                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
         @generic_response
       end)
 
