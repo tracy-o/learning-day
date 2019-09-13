@@ -14,7 +14,7 @@ defmodule Routes.Routefile do
   handle "/cbeebies/search", using: "CBeebiesSearch", examples: ["/cbeebies/search"]
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
-  handle "/wc-data/container/:id", using: "ContainerData", examples: ["/wc-data-container/promo-group"]
+  handle "/wc-data/container/:id", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
   handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
