@@ -10,7 +10,7 @@ config :mojito,
   ]
 
 config :ex_aws, :retries,
-  max_attempts: 1,
+  max_attempts: 2,
   base_backoff_in_ms: 10,
   max_backoff_in_ms: 200
 
@@ -19,7 +19,7 @@ config :belfrage,
   circuit_breaker_reset_interval: 5_000,
   errors_threshold: 100,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
-  lambda_timeout: 10_000
+  lambda_timeout: 5_000
 
 config :ex_aws,
   region: "eu-west-1",
