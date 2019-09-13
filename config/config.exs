@@ -4,8 +4,8 @@ use Mix.Config
 
 config :mojito,
   pool_opts: [
-    size: 20,
-    pools: 10,
+    size: 5,
+    pools: 5,
     max_overflow: 20
   ]
 
