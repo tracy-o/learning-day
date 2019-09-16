@@ -40,21 +40,6 @@ defmodule BelfrageWeb.LegacyTest do
       assert conn.resp_body == "<p>Basic HTML response</p>"
     end
 
-    test "200 GET on service-worker.js" do
-      BelfrageMock
-      |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: "SportVideos"},
-                              request: %Request{path: "/sport/videos/service-worker.js"}
-                            } ->
-        @struct_with_html_response
-      end)
-
-      conn = conn(:get, "/sport/videos/service-worker.js") |> Router.call([])
-
-      assert conn.status == 200
-      assert conn.resp_body == "<p>Basic HTML response</p>"
-    end
-
     test "404 downstream GET" do
       BelfrageMock
       |> expect(:handle, fn %Struct{
