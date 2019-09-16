@@ -15,7 +15,8 @@ defmodule Belfrage.Struct.Request do
     edge_cache?: false,
     has_been_replayed?: nil,
     subdomain: "www",
-    query_params: %{}
+    query_params: %{},
+    path_params: %{}
   ]
 end
 

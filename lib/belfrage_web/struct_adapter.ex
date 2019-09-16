@@ -13,6 +13,7 @@ defmodule BelfrageWeb.StructAdapter do
         payload: body(conn),
         method: conn.method,
         country: bbc_headers.country,
+        path_params: conn.path_params,
         query_params: query_string(conn),
         scheme: bbc_headers.scheme,
         host: bbc_headers.host,
