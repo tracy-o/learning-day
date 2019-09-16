@@ -25,9 +25,11 @@ defmodule Routes.Routefile do
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
 
+  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
+
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
