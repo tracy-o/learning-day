@@ -108,5 +108,24 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
     end
+
+    test "when the path has path parameters" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: false,
+          varnish: 1,
+          cache: 0
+        })
+        |> Map.put(:path_params, %{"id" => "article-1234"})
+
+      assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
+    end
   end
 end
