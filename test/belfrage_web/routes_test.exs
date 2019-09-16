@@ -40,7 +40,7 @@ defmodule BelfrageWeb.LegacyTest do
       assert conn.resp_body == "<p>Basic HTML response</p>"
     end
 
-    test "200 GET" do
+    test "200 GET on service-worker.js" do
       BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: "SportVideos"},
