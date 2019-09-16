@@ -26,7 +26,7 @@ defmodule Routes.Routefile do
   handle "/search", using: "Search", examples: ["/search"]
 
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
-    return_404 if: String.length(id) != 8
+    return_404 if: String.length(id) != 8 || !String.match(id, 'service-worker.js')
   end
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
