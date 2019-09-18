@@ -22,6 +22,15 @@ defmodule Belfrage.ProcessorTest do
       assert counter != nil, "Expected a counter value to be provided by the loop"
       assert pipeline != nil, "Expected a pipeline value to be provided by the loop"
     end
+
+    test "query_params_allowlist defaults to empty" do
+      assert %Struct{
+               request: _request,
+               private: %Struct.Private{
+                 query_params_allowlist: []
+               }
+             } = Processor.get_loop(@struct)
+    end
   end
 
   describe "Processor.request_pipeline/1" do
