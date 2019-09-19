@@ -4,8 +4,6 @@ defmodule BelfrageWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  @query_string_allowlist ["query", "operationName", "variables", "extensions"]
-
   def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, loop_id) do
     %Struct{
       request: %Request{
@@ -30,7 +28,6 @@ defmodule BelfrageWeb.StructAdapter do
 
   defp query_string(conn) do
     Plug.Conn.Query.decode(conn.query_string)
-    |> Map.take(@query_string_allowlist)
   end
 
   defp body(conn) do

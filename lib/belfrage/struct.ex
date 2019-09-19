@@ -35,7 +35,8 @@ defmodule Belfrage.Struct.Private do
             loop_id: nil,
             origin: nil,
             counter: %{},
-            pipeline: []
+            pipeline: [],
+            query_params_allowlist: []
 end
 
 defmodule Belfrage.Struct do

@@ -6,6 +6,7 @@ defmodule Routes.Specs.ContainerData do
       platform: :webcore,
       pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       resp_pipeline: [],
+      query_params_allowlist: "*"
     }
   end
 end
