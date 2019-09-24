@@ -50,7 +50,7 @@ defmodule Belfrage.Clients.LambdaTest do
 
   describe "ExAWS request callback" do
     @generic_response {:ok,
-                       %Mojito.Response{
+                       %MachineGun.Response{
                          status_code: 200,
                          headers: [{"content-type", "application/json"}],
                          body: "{}"

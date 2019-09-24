@@ -7,7 +7,7 @@ defmodule Belfrage.Clients.HTTP do
   @callback request(:post, String.t(), String.t(), Map.t()) :: MachineGun.Response
   @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: MachineGun.Response
 
-  @timeout 10_000
+  @timeout 1_000
 
   def request(:get, url, options \\ []) do
     request(:get, url, "", options)
@@ -19,7 +19,6 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   def build_options(options) do
-    #Keyword.merge([protocols: [:http1], timeout: @timeout], options)
-    %{}
+    Keyword.merge([request_timeout: @timeout], options)
   end
 end

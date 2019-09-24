@@ -35,7 +35,7 @@ defmodule Belfrage.Services.HTTPTest do
 
   @ok_response {
     :ok,
-    %Mojito.Response{
+    %MachineGun.Response{
       status_code: 200,
       headers: [{"content-type", "application/json"}],
       body: "{\"some\": \"body\"}"
@@ -74,7 +74,7 @@ defmodule Belfrage.Services.HTTPTest do
         fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
           {
             :ok,
-            %Mojito.Response{
+            %MachineGun.Response{
               status_code: 500,
               headers: [{"content-type", "text/plain"}],
               body: "500 - Internal Server Error"
@@ -98,11 +98,8 @@ defmodule Belfrage.Services.HTTPTest do
         fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
           {
             :error,
-            %Mojito.Error{
-              message: nil,
-              reason: %Mint.TransportError{
-                reason: {:tls_alert, 'unknown ca'}
-              }
+            %MachineGun.Error{
+              reason: "Error!"
             }
           }
         end
@@ -123,7 +120,7 @@ defmodule Belfrage.Services.HTTPTest do
         fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
           {
             :error,
-            %Mojito.Error{message: nil, reason: :timeout}
+            %MachineGun.Error{reason: :request_timeout}
           }
         end
       )
