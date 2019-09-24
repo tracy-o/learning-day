@@ -2,12 +2,17 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :mojito,
-  pool_opts: [
-    size: 5,
-    pools: 5,
-    max_overflow: 20
-  ]
+config :machine_gun,
+  default: %{
+    # Poolboy size
+    pool_size: 512,
+    # Poolboy max_overflow
+    pool_max_overflow: 256,
+    pool_timeout: 6_000,
+    request_timeout: 6_000,
+    # Gun connection options
+    conn_opts: %{}
+  }
 
 config :ex_aws, :retries,
   max_attempts: 2,
