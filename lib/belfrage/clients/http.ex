@@ -1,11 +1,11 @@
 defmodule Belfrage.Clients.HTTP do
   @type request_type :: :get | :post
 
-  @callback request(:get, String.t()) :: Mojito.Response
-  @callback request(:get, String.t(), Keyword.t()) :: Mojito.Response
+  @callback request(:get, String.t()) :: MachineGun.Response
+  @callback request(:get, String.t(), Keyword.t()) :: MachineGun.Response
 
-  @callback request(:post, String.t(), String.t(), Map.t()) :: Mojito.Response
-  @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: Mojito.Response
+  @callback request(:post, String.t(), String.t(), Map.t()) :: MachineGun.Response
+  @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: MachineGun.Response
 
   @timeout 1_000
 
@@ -15,10 +15,10 @@ defmodule Belfrage.Clients.HTTP do
 
   def request(method, url, body, options) do
     headers = Keyword.get(options, :headers, [])
-    Mojito.request(method, url, headers, body, build_options(options))
+    MachineGun.request(method, url, body, headers, build_options(options))
   end
 
   def build_options(options) do
-    Keyword.merge([timeout: @timeout], options)
+    Keyword.merge([request_timeout: @timeout], options)
   end
 end
