@@ -72,10 +72,6 @@ defmodule Belfrage.Loop do
 
   # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
 
-  defp origin_pointer("ServiceWorker", :webcore) do
-    Application.get_env(:belfrage, :service_worker_lambda_function)
-  end
-
   defp origin_pointer("ContainerData", :webcore) do
     Application.get_env(:belfrage, :api_lambda_function)
   end

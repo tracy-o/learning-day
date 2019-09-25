@@ -30,8 +30,6 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
     Application.get_env(:belfrage, origin_pointer(name))
   end
 
-  defp origin_pointer("ServiceWorker"), do: :preview_service_worker_lambda_function
-
   defp origin_pointer("ContainerData"), do: :preview_api_lambda_function
 
   defp origin_pointer(_), do: :preview_pwa_lambda_function
