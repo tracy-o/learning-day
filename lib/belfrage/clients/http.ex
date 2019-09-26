@@ -19,6 +19,6 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   def build_options(options) do
-    Keyword.merge([request_timeout: @timeout], options)
+    [request_timeout: @timeout] ++ options |> Enum.into(%{})
   end
 end
