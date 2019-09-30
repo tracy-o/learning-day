@@ -153,5 +153,24 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       assert StructAdapter.adapt(conn, id).request.playground? == true
     end
+
+    test "when the request is not for the playground" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: nil,
+          playground: nil,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert StructAdapter.adapt(conn, id).request.playground? == nil
+    end
   end
 end
