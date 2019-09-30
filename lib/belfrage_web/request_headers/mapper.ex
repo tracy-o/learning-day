@@ -5,6 +5,7 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
+    playground: %{playground: "playground"},
     varnish: %{varnish: "x-varnish"}
   }
 
