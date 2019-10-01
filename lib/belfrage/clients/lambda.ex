@@ -40,7 +40,7 @@ defmodule Belfrage.Clients.Lambda do
         {:ok, body} -> {:ok, body}
         {:error, {:http_error, 404, response}} -> function_not_found(response)
         {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
-        {:error, :timeout} -> failed_to_invoke_lambda(408, :timeout)
+        {:error, :request_timeout} -> failed_to_invoke_lambda(408, :timeout)
         {:error, reason} -> failed_to_invoke_lambda(nil, {:catch_other_invoke_fails, reason})
       end
     end
