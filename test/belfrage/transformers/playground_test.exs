@@ -51,4 +51,45 @@ defmodule Belfrage.Transformers.PlaygroundTest do
              }
            } = Playground.call([], struct)
   end
+
+  describe "when playground lambda function arns are not set" do
+    setup do
+      saved_api = Application.get_env(:belfrage, :playground_api_lambda_function)
+      saved_pwa = Application.get_env(:belfrage, :playground_pwa_lambda_function)
+
+      Application.put_env(:belfrage, :playground_api_lambda_function, nil)
+      Application.put_env(:belfrage, :playground_pwa_lambda_function, nil)
+
+      on_exit(fn ->
+        Application.put_env(:belfrage, :playground_api_lambda_function, saved_api)
+        Application.put_env(:belfrage, :playground_pwa_lambda_function, saved_pwa)
+      end)
+
+      :ok
+    end
+
+    test "the request continues to the original origin" do
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   origin: "an-origin-set-by-the-loop"
+                 }
+               }
+             } = Playground.call([], @playground_request_struct)
+    end
+
+    test "ContainerData request continues to the original origin" do
+      struct = Struct.add(@playground_request_struct, :private, %{loop_id: "ContainerData"})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   origin: "an-origin-set-by-the-loop"
+                 }
+               }
+             } = Playground.call([], struct)
+    end
+  end
 end
