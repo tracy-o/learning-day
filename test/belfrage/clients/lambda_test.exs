@@ -31,26 +31,9 @@ defmodule Belfrage.Clients.LambdaTest do
     end
   end
 
-  describe "Belfrage.Clients.Lambda.build_options/1" do
-    test "combines default and passed in options if keys are unique" do
-      assert Lambda.build_options(foo: "bar") == [
-               foo: "bar",
-               protocols: [:http1],
-               timeout: @lambda_timeout
-             ]
-    end
-
-    test "overwrites ExAws values if the same option is passed" do
-      assert Lambda.build_options(protocols: [:http2]) == [
-               protocols: [:http1],
-               timeout: @lambda_timeout
-             ]
-    end
-  end
-
   describe "ExAWS request callback" do
     @generic_response {:ok,
-                       %MachineGun.Response{
+                       %Belfrage.Clients.HTTP.Response{
                          status_code: 200,
                          headers: [{"content-type", "application/json"}],
                          body: "{}"
@@ -58,10 +41,13 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Lambda request function uses http client to send POST" do
       Belfrage.Clients.HTTPMock
-      |> expect(:request, fn :post,
-                             "https://www.example.com/foo",
-                             ~s({"some": "data"}),
-                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
+      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
+                               method: :post,
+                               url: "https://www.example.com/foo",
+                               payload: ~s({"some": "data"}),
+                               headers: [],
+                               timeout: @lambda_timeout
+                             } ->
         @generic_response
       end)
 
@@ -70,10 +56,13 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Lambda request function does pass through query strings" do
       Belfrage.Clients.HTTPMock
-      |> expect(:request, fn :post,
-                             "https://www.example.com/foo?some-qs=hello",
-                             ~s({"some": "data"}),
-                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
+      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
+                               method: :post,
+                               url: "https://www.example.com/foo?some-qs=hello",
+                               payload: ~s({"some": "data"}),
+                               headers: [],
+                               timeout: @lambda_timeout
+                             } ->
         @generic_response
       end)
 
@@ -82,10 +71,13 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Lambda request handles get" do
       Belfrage.Clients.HTTPMock
-      |> expect(:request, fn :get,
-                             "https://www.example.com/foo?some-qs=hello",
-                             "",
-                             [headers: [], protocols: [:http1], timeout: @lambda_timeout] ->
+      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
+                               method: :get,
+                               url: "https://www.example.com/foo?some-qs=hello",
+                               payload: "",
+                               headers: [],
+                               timeout: @lambda_timeout
+                             } ->
         @generic_response
       end)
 

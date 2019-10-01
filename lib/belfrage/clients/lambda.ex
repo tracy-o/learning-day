@@ -1,25 +1,27 @@
 defmodule Belfrage.Clients.Lambda do
   use ExMetrics
+  alias Belfrage.Clients.HTTP
+
+  @timeout Application.get_env(:belfrage, :lambda_timeout)
+  @aws_client Application.get_env(:belfrage, :aws_client)
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
+  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @behaviour ExAws.Request.HttpClient
-
   @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
-    headers = Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
-    http_opts = Keyword.put(http_opts, :headers, headers)
-    @http_client.request(method, url, body, build_options(http_opts))
+    %HTTP.Request{
+      method: method,
+      url: url,
+      payload: body,
+      timeout: @lambda_timeout,
+      headers: headers
+    }
+    |> HTTP.Request.downcase_headers()
+    |> @http_client.execute()
   end
-
-  @timeout Application.get_env(:belfrage, :lambda_timeout)
-
-  def build_options(opts) do
-    Keyword.merge(opts, protocols: [:http1], timeout: @timeout)
-  end
-
-  @aws_client Application.get_env(:belfrage, :aws_client)
 
   def call(arn, function, payload) do
     with {:ok, credentials} <- Belfrage.Cache.STS.fetch(arn) do
@@ -40,8 +42,8 @@ defmodule Belfrage.Clients.Lambda do
         {:ok, body} -> {:ok, body}
         {:error, {:http_error, 404, response}} -> function_not_found(response)
         {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
-        {:error, :request_timeout} -> failed_to_invoke_lambda(408, :timeout)
-        {:error, reason} -> failed_to_invoke_lambda(nil, {:catch_other_invoke_fails, reason})
+        {:error, :timeout} -> failed_to_invoke_lambda(408, :timeout)
+        {:error, nil} -> failed_to_invoke_lambda(nil, nil)
       end
     end
   end
@@ -57,11 +59,9 @@ defmodule Belfrage.Clients.Lambda do
     {:error, :function_not_found}
   end
 
-  defp failed_to_invoke_lambda(status_code, {:catch_other_invoke_fails, reason}) do
+  defp failed_to_invoke_lambda(nil, nil) do
     Stump.log(:error, %{
-      message: "Failed to Invoke Lambda",
-      status: status_code,
-      reason: reason
+      message: "Failed to Invoke Lambda"
     })
 
     ExMetrics.increment("clients.lambda.invoke_failure")

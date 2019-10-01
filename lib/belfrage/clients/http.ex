@@ -1,24 +1,36 @@
 defmodule Belfrage.Clients.HTTP do
+  @moduledoc """
+  Abstracts 3rd party http clients.
+
+  Makes requests and formats responses using Belfrage's
+  own HTTP Request, Response and Error structs.
+  """
+  alias Belfrage.Clients.HTTP
   @type request_type :: :get | :post
 
-  @callback request(:get, String.t()) :: MachineGun.Response
-  @callback request(:get, String.t(), Keyword.t()) :: MachineGun.Response
+  @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
 
-  @callback request(:post, String.t(), String.t(), Map.t()) :: MachineGun.Response
-  @callback request(:post, String.t(), String.t(), Map.t(), List.t()) :: MachineGun.Response
-
-  @timeout 1_000
-
-  def request(:get, url, options \\ []) do
-    request(:get, url, "", options)
+  def execute(request = %HTTP.Request{}) do
+    MachineGun.request(request.method, request.url, request.payload, request.headers, build_options(request))
+    |> format_response()
   end
 
-  def request(method, url, body, options) do
-    headers = Keyword.get(options, :headers, [])
-    MachineGun.request(method, url, body, headers, build_options(options))
+  @doc """
+  Build the options, as MachineGun wants them
+  """
+  def build_options(request) do
+    %{request_timeout: request.timeout}
   end
 
-  def build_options(options) do
-    [request_timeout: @timeout] ++ options |> Enum.into(%{})
+  defp format_response({:ok, machine_response = %MachineGun.Response{}}) do
+    {:ok, %HTTP.Response{
+      status_code: machine_response.status_code,
+      body: machine_response.body,
+      headers: machine_response.headers
+    }}
+  end
+
+  defp format_response({:error, %MachineGun.Error{reason: reason}}) do
+    {:error, HTTP.Error.new(reason)}
   end
 end

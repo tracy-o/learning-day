@@ -9,7 +9,6 @@ config :machine_gun,
     # Poolboy max_overflow
     pool_max_overflow: 256,
     pool_timeout: 6_000,
-    request_timeout: 6_000,
     # Gun connection options
     conn_opts: %{}
   }
@@ -24,7 +23,8 @@ config :belfrage,
   circuit_breaker_reset_interval: 5_000,
   errors_threshold: 100,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
-  lambda_timeout: 5_000
+  lambda_timeout: 5_000,
+  default_timeout: 6_000
 
 config :ex_aws,
   region: "eu-west-1",

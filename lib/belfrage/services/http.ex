@@ -17,13 +17,13 @@ defmodule Belfrage.Services.HTTP do
     end
   end
 
-  defp handle_response({{:ok, %MachineGun.Response{status_code: status, body: body}}, struct}) do
+  defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body}}, struct}) do
     ExMetrics.increment("service.HTTP.response.#{status}")
     if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body})
   end
 
-  defp handle_response({{:error, %{reason: :request_timeout}}, struct}) do
+  defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
     ExMetrics.increment("error.service.HTTP.timeout")
     log(:timeout, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
@@ -53,14 +53,20 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
-    {@http_client.request(
-       :post,
-       private.origin <> request.path <> QueryParams.parse(request.query_params),
-       request.payload
+    {@http_client.execute(
+      %Clients.HTTP.Request{
+        method: :post,
+        url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+        payload: request.payload
+      }
      ), struct}
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
-    {@http_client.request(:get, private.origin <> request.path <> QueryParams.parse(request.query_params)), struct}
+    {@http_client.execute(
+      %Clients.HTTP.Request{
+        method: :get,
+        url: private.origin <> request.path <> QueryParams.parse(request.query_params)
+      }), struct}
   end
 end
