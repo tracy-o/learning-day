@@ -34,13 +34,4 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
 
     assert origin == "preview-api-lambda-function:example-branch"
   end
-
-  test "custom subdomains are used as the alias for the origin for Service Worker" do
-    service_worker_struct = Belfrage.Struct.add(@struct_with_custom_subdomain, :private, %{loop_id: "ServiceWorker"})
-
-    {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
-      LambdaOriginAliasTransformer.call([], service_worker_struct)
-
-    assert origin == "preview-service-worker-lambda-function:example-branch"
-  end
 end
