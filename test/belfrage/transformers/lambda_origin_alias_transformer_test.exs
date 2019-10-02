@@ -34,4 +34,16 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
 
     assert origin == "preview-api-lambda-function:example-branch"
   end
+
+  describe "playground requests" do
+    test "function is not changed for ad-hoc requests to the belfrage playground lambda" do
+      api_struct =
+        @struct_with_custom_subdomain
+        |> Belfrage.Struct.add(:request, %{playground?: true})
+
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAliasTransformer.call([], api_struct)
+
+      assert origin == "lambda-function:example-branch"
+    end
+  end
 end

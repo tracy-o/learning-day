@@ -22,6 +22,10 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
 
   defp production_environment(), do: Application.get_env(:belfrage, :production_environment)
 
+  defp preview_origin_override(struct = %Struct{request: %Struct.Request{subdomain: subdomain, playground?: true}}) do
+    "#{struct.private.origin}:#{struct.request.subdomain}"
+  end
+
   defp preview_origin_override(struct = %Struct{request: %Struct.Request{subdomain: subdomain}}) do
     "#{origin(struct.private.loop_id)}:#{struct.request.subdomain}"
   end
