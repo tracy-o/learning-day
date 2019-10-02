@@ -2,7 +2,6 @@ defmodule Belfrage.Clients.Lambda do
   use ExMetrics
   alias Belfrage.Clients.HTTP
 
-  @timeout Application.get_env(:belfrage, :lambda_timeout)
   @aws_client Application.get_env(:belfrage, :aws_client)
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)

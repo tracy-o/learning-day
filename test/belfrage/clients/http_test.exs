@@ -47,7 +47,11 @@ defmodule Belfrage.Clients.HTTPTest do
 
     test ":get request" do
       Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn :get, "http://example.com?foo=bar", "", [{"content-length", "0"}], %{request_timeout: 500} ->
+      |> expect(:request, fn :get,
+                             "http://example.com?foo=bar",
+                             "",
+                             [{"content-length", "0"}],
+                             %{request_timeout: 500} ->
         {:ok, %MachineGun.Response{status_code: 200, body: ~s(<p>some content</p>), headers: []}}
       end)
 
