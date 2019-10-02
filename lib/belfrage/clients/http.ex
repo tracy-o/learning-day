@@ -1,22 +1,39 @@
+defmodule Belfrage.Clients.HTTP.MachineGun do
+  @moduledoc """
+  `Mox`able abstraction module for Machine gun.
+  """
+  @type method :: :get | :post
+  @type payload :: String.t()
+  @type url :: String.t()
+  @type headers :: list()
+  @type options :: map()
+  @callback request(method, url, payload, headers, options) :: {:ok, MachineGun.Response.t()} | {:error, MachineGun.Error.t()}
+
+  defdelegate request(_method, _url, _payload, _headers, _options), to: MachineGun, as: :request
+end
+
 defmodule Belfrage.Clients.HTTP do
   @moduledoc """
-  Abstracts 3rd party http clients.
+  Calls 3rd party http clients to make requests.
 
   Makes requests and formats responses using Belfrage's
   own HTTP Request, Response and Error structs.
   """
   alias Belfrage.Clients.HTTP
-  @type request_type :: :get | :post
+  @machine_gun Application.get_env(:belfrage, :machine_gun)
 
+  @type request_type :: :get | :post
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
 
   def execute(request = %HTTP.Request{}) do
-    MachineGun.request(request.method, request.url, request.payload, request.headers, build_options(request))
+    @machine_gun.request(request.method, request.url, request.payload, request.headers, build_options(request))
     |> format_response()
   end
 
   @doc """
-  Build the options, as MachineGun wants them
+  Build the options, as MachineGun wants them.
+  Most of the options are configured in the application
+  config, rather than for each request.
   """
   def build_options(request) do
     %{request_timeout: request.timeout}

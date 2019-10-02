@@ -14,7 +14,8 @@ config :belfrage,
   preview_api_lambda_function: "preview-api-lambda-function",
   production_environment: "test",
   lambda_timeout: 1_000,
-  origin_simulator: "http://origin.bbc.com"
+  origin_simulator: "http://origin.bbc.com",
+  machine_gun: Belfrage.Clients.HTTP.MachineGunMock
 
 config :ex_metrics,
   send_metrics: false

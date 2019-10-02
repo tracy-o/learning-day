@@ -24,7 +24,8 @@ config :belfrage,
   errors_threshold: 100,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
   lambda_timeout: 5_000,
-  default_timeout: 6_000
+  default_timeout: 6_000,
+  machine_gun: Belfrage.Clients.HTTP.MachineGun
 
 config :ex_aws,
   region: "eu-west-1",
