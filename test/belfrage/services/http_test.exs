@@ -35,17 +35,27 @@ defmodule Belfrage.Services.HTTPTest do
 
   @ok_response {
     :ok,
-    %MachineGun.Response{
+    %Belfrage.Clients.HTTP.Response{
       status_code: 200,
       headers: [{"content-type", "application/json"}],
-      body: "{\"some\": \"body\"}"
+      body: ~s({"some": "body"})
     }
   }
 
   describe "HTTP service" do
     test "get returns a response" do
       Clients.HTTPMock
-      |> expect(:request, fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" -> @ok_response end)
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core?foo=bar",
+             payload: "",
+             headers: []
+           } ->
+          @ok_response
+        end
+      )
 
       assert %Struct{
                response: %Struct.Response{
@@ -57,7 +67,17 @@ defmodule Belfrage.Services.HTTPTest do
 
     test "post returns a response" do
       Clients.HTTPMock
-      |> expect(:request, fn :post, "https://www.bbc.co.uk/_web_core?foo=bar", ~s({"some": "data"}) -> @ok_response end)
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :post,
+             url: "https://www.bbc.co.uk/_web_core?foo=bar",
+             payload: ~s({"some": "data"}),
+             headers: []
+           } ->
+          @ok_response
+        end
+      )
 
       assert %Struct{
                response: %Struct.Response{
@@ -69,19 +89,19 @@ defmodule Belfrage.Services.HTTPTest do
 
     test "origin returns a 500 response" do
       Clients.HTTPMock
-      |> expect(
-        :request,
-        fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
-          {
-            :ok,
-            %MachineGun.Response{
-              status_code: 500,
-              headers: [{"content-type", "text/plain"}],
-              body: "500 - Internal Server Error"
-            }
-          }
-        end
-      )
+      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
+                               method: :get,
+                               url: "https://www.bbc.co.uk/_web_core?foo=bar",
+                               payload: "",
+                               headers: []
+                             } ->
+        {:ok,
+         %Belfrage.Clients.HTTP.Response{
+           status_code: 500,
+           headers: [{"content-type", "text/plain"}],
+           body: "500 - Internal Server Error"
+         }}
+      end)
 
       assert %Struct{
                response: %Struct.Response{
@@ -94,12 +114,17 @@ defmodule Belfrage.Services.HTTPTest do
     test "Cannot connect to origin" do
       Clients.HTTPMock
       |> expect(
-        :request,
-        fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core?foo=bar",
+             payload: "",
+             headers: []
+           } ->
           {
             :error,
-            %MachineGun.Error{
-              reason: "Error!"
+            %Belfrage.Clients.HTTP.Error{
+              reason: :failed_to_connect
             }
           }
         end
@@ -116,11 +141,16 @@ defmodule Belfrage.Services.HTTPTest do
     test "origin times out" do
       Clients.HTTPMock
       |> expect(
-        :request,
-        fn :get, "https://www.bbc.co.uk/_web_core?foo=bar" ->
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core?foo=bar",
+             payload: "",
+             headers: []
+           } ->
           {
             :error,
-            %MachineGun.Error{reason: :request_timeout}
+            %Belfrage.Clients.HTTP.Error{reason: :timeout}
           }
         end
       )
