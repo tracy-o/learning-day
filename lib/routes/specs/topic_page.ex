@@ -4,7 +4,7 @@ defmodule Routes.Specs.TopicPage do
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Runbooks",
       platform: :webcore,
-      pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
+      pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias"],
       resp_pipeline: [],
     }
   end

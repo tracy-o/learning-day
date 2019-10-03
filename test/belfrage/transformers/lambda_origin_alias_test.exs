@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
+defmodule Belfrage.Transformers.LambdaOriginAliasTest do
   use ExUnit.Case
 
-  alias Belfrage.Transformers.LambdaOriginAliasTransformer
+  alias Belfrage.Transformers.LambdaOriginAlias
   alias Belfrage.Struct
 
   @struct_with_default_subdomain %Struct{private: %Struct.Private{origin: "lambda-function"}}
@@ -15,23 +15,22 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTransformerTest do
     production_env = Application.get_env(:belfrage, :production_environment)
 
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
-      LambdaOriginAliasTransformer.call([], @struct_with_default_subdomain)
+      LambdaOriginAlias.call([], @struct_with_default_subdomain)
 
     assert origin == "lambda-function:#{production_env}"
   end
 
   test "custom subdomains are used as the alias for the origin for PWA" do
-    {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
-      LambdaOriginAliasTransformer.call([], @struct_with_custom_subdomain)
+    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], @struct_with_custom_subdomain)
 
-    assert origin == "preview-pwa-lambda-function:example-branch"
+    assert origin == "lambda-function:example-branch"
   end
 
   test "custom subdomains are used as the alias for the origin for ContainerData" do
     api_struct = Belfrage.Struct.add(@struct_with_custom_subdomain, :private, %{loop_id: "ContainerData"})
 
-    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAliasTransformer.call([], api_struct)
+    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], api_struct)
 
-    assert origin == "preview-api-lambda-function:example-branch"
+    assert origin == "lambda-function:example-branch"
   end
 end

@@ -14,7 +14,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           scheme: :https,
           host: "www.belfrage.com",
           country: "gb",
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -31,7 +32,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           scheme: :https,
           host: "test-branch.belfrage.com",
           country: "gb",
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -48,7 +50,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           scheme: :https,
           host: "www",
           country: "gb",
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -65,7 +68,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           scheme: :https,
           host: "www",
           country: "gb",
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -83,7 +87,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           host: "test-branch.belfrage.com",
           country: "gb",
           query_string: %{foo: "ba"},
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -101,7 +106,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           host: "test-branch.belfrage.com",
           country: "gb",
           query_string: %{},
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
@@ -119,13 +125,52 @@ defmodule BelfrageWeb.StructAdapterTest do
           host: "test-branch.belfrage.com",
           country: "gb",
           query_string: %{},
-          replayed_traffic: false,
+          replayed_traffic: nil,
+          playground: nil,
           varnish: 1,
           cache: 0
         })
         |> Map.put(:path_params, %{"id" => "article-1234"})
 
       assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
+    end
+
+    test "when the request is for the playground" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: nil,
+          playground: true,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert StructAdapter.adapt(conn, id).request.playground? == true
+    end
+
+    test "when the request is not for the playground" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: nil,
+          playground: nil,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert StructAdapter.adapt(conn, id).request.playground? == nil
     end
   end
 end

@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
+defmodule Belfrage.Transformers.ReplayedTrafficTest do
   use ExUnit.Case
 
-  alias Belfrage.Transformers.ReplayedTrafficTransformer
+  alias Belfrage.Transformers.ReplayedTraffic
   alias Test.Support.StructHelper
   alias Belfrage.Struct
 
@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
                              request: %{has_been_replayed?: true},
                              private: %{
                                origin: "an-origin-set-by-the-loop",
-                               pipeline: ["ReplayedTrafficTransformer"]
+                               pipeline: ["ReplayedTraffic"]
                              }
                            )
 
@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
                  origin: "an-origin-set-by-the-loop"
                }
              }
-           } = ReplayedTrafficTransformer.call([], @non_replayed_request_struct)
+           } = ReplayedTraffic.call([], @non_replayed_request_struct)
   end
 
   test "replayed traffic will be sent to a different origin" do
@@ -36,6 +36,6 @@ defmodule Belfrage.Transformers.ReplayedTrafficTransformerTest do
                  origin: "http://origin.bbc.com"
                }
              }
-           } = ReplayedTrafficTransformer.call([], @replayed_request_struct)
+           } = ReplayedTraffic.call([], @replayed_request_struct)
   end
 end

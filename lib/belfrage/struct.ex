@@ -14,6 +14,7 @@ defmodule Belfrage.Struct.Request do
     varnish?: false,
     edge_cache?: false,
     has_been_replayed?: nil,
+    playground?: nil,
     subdomain: "www",
     query_params: %{},
     path_params: %{}

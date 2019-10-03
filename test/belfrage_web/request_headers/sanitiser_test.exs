@@ -96,4 +96,18 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
       assert Sanitiser.varnish(%{varnish: nil}, false) == false
     end
   end
+
+  describe "playground header" do
+    test "returns true when playground header is true" do
+      assert Sanitiser.playground(%{playground: "true"}, false) == true
+    end
+
+    test "returns nil when playground header is not set" do
+      assert Sanitiser.playground(%{playground: nil}, false) == nil
+    end
+
+    test "returns nil when playground header is not true" do
+      assert Sanitiser.playground(%{playground: "foo"}, false) == nil
+    end
+  end
 end
