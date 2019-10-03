@@ -21,10 +21,9 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
   end
 
   test "custom subdomains are used as the alias for the origin for PWA" do
-    {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
-      LambdaOriginAlias.call([], @struct_with_custom_subdomain)
+    {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], @struct_with_custom_subdomain)
 
-    assert origin == "preview-pwa-lambda-function:example-branch"
+    assert origin == "lambda-function:example-branch"
   end
 
   test "custom subdomains are used as the alias for the origin for ContainerData" do
@@ -32,18 +31,6 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
 
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], api_struct)
 
-    assert origin == "preview-api-lambda-function:example-branch"
-  end
-
-  describe "playground requests" do
-    test "function is not changed for ad-hoc requests to the belfrage playground lambda" do
-      api_struct =
-        @struct_with_custom_subdomain
-        |> Belfrage.Struct.add(:request, %{playground?: true})
-
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], api_struct)
-
-      assert origin == "lambda-function:example-branch"
-    end
+    assert origin == "lambda-function:example-branch"
   end
 end
