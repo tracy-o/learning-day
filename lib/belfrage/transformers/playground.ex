@@ -3,7 +3,7 @@ defmodule Belfrage.Transformers.Playground do
   Direct playground requests towards the playground lambda.
 
   This should be specified in the routespec pipeline before the 
-  LambdaOriginAliasTransformer, if the alias is to be sent to the
+  LambdaOriginAlias, if the alias is to be sent to the
   playground lambda.
   """
   use Belfrage.Transformers.Transformer

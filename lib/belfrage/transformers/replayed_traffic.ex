@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.ReplayedTrafficTransformer do
+defmodule Belfrage.Transformers.ReplayedTraffic do
   use Belfrage.Transformers.Transformer
 
   @impl true

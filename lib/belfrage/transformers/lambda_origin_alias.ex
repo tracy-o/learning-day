@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.LambdaOriginAliasTransformer do
+defmodule Belfrage.Transformers.LambdaOriginAlias do
   use Belfrage.Transformers.Transformer
 
   @impl true
