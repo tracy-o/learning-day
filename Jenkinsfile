@@ -59,4 +59,10 @@ node {
     BBCNews.setRepositories(cosmosService, 'belfrage-build/repositories.json')
     BBCNews.cosmosRelease(cosmosService, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
   }
+  stage("clean up after ourselves") {
+    cleanWs()
+    dir("${env.WORKSPACE}@libs") {
+      deleteDir()
+    }
+  }
 }
