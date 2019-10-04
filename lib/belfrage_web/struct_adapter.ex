@@ -19,7 +19,7 @@ defmodule BelfrageWeb.StructAdapter do
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
         edge_cache?: bbc_headers.cache,
-        playground?: bbc_headers.playground
+        playground?: playground(bbc_headers.playground)
       },
       private: %Private{
         loop_id: loop_id
@@ -45,4 +45,18 @@ defmodule BelfrageWeb.StructAdapter do
   end
 
   defp subdomain(_conn), do: "www"
+
+  def playground(true) do
+    playground_arns_exist?() || nil
+  end
+
+  def playground(_), do: nil
+
+  defp playground_arns_exist? do
+    Enum.all?([
+      !!Application.get_env(:belfrage, :playground_api_lambda_function),
+      !!Application.get_env(:belfrage, :playground_pwa_lambda_function),
+      !!Application.get_env(:belfrage, :playground_lambda_role_arn)
+    ])
+  end
 end
