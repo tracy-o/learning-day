@@ -1,17 +1,17 @@
 use Mix.Config
 
 [
-  "WEBCORE_LAMBDA_ROLE_ARN",
-  "PWA_LAMBDA_FUNCTION",
-  "API_LAMBDA_FUNCTION",
-  "PREVIEW_PWA_LAMBDA_FUNCTION",
-  "PREVIEW_API_LAMBDA_FUNCTION",
-  "PLAYGROUND_PWA_LAMBDA_FUNCTION",
-  "PLAYGROUND_API_LAMBDA_FUNCTION",
-  "PRODUCTION_ENVIRONMENT"
+  {"WEBCORE_LAMBDA_ROLE_ARN", :required},
+  {"PWA_LAMBDA_FUNCTION", :required},
+  {"API_LAMBDA_FUNCTION", :required},
+  {"PREVIEW_PWA_LAMBDA_FUNCTION", :required},
+  {"PREVIEW_API_LAMBDA_FUNCTION", :required},
+  {"PRODUCTION_ENVIRONMENT", :required},
+  {"PLAYGROUND_PWA_LAMBDA_FUNCTION", :optional},
+  {"PLAYGROUND_API_LAMBDA_FUNCTION", :optional}
 ]
-|> Enum.each(fn config_key ->
-  if System.get_env(config_key) == nil do
+|> Enum.each(fn {config_key, importance} ->
+  if System.get_env(config_key) == nil and importance != :optional do
     raise "Config not set in environment: #{config_key}"
   end
 
