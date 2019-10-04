@@ -9,6 +9,7 @@ config :belfrage,
   preview_pwa_lambda_function: "preview-pwa-lambda-function",
   preview_api_lambda_function: "preview-api-lambda-function",
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
+  playground_lambda_role_arn: "playground-lambda-role-arn",
   production_environment: "test"
 
 config :ex_metrics,

@@ -22,8 +22,10 @@ defmodule Belfrage.Cache.STS do
   end
 
   def handle_info(:refresh, state) do
-    refresh_credentials()
     schedule_work()
+    refresh_credentials(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
+    refresh_credentials(Application.get_env(:belfrage, :playground_lambda_role_arn), "playground_session")
+
     {:noreply, state}
   end
 
@@ -37,13 +39,12 @@ defmodule Belfrage.Cache.STS do
     Process.send_after(self(), :refresh, @refresh_rate)
   end
 
-  defp refresh_credentials do
-    arn = Application.get_env(:belfrage, :webcore_lambda_role_arn)
+  defp refresh_credentials(arn, session_name) do
     # This is where we could also look at the env, and
     # if on :dev, then fetch the credentials from the wormhole
     # instead of calling STS.
     with {:ok, credentials} <-
-           @aws_client.STS.assume_role(arn, "belfrage_session")
+           @aws_client.STS.assume_role(arn, session_name)
            |> @aws_client.request()
            |> format_response() do
       store_credentials(arn, credentials)

@@ -12,11 +12,15 @@ defmodule Belfrage.Services.Webcore do
     Struct.add(
       struct,
       :response,
-      Webcore.Response.build(@lambda_client.call(arn(), private.origin, Webcore.Request.build(struct)))
+      Webcore.Response.build(@lambda_client.call(arn(struct), private.origin, Webcore.Request.build(struct)))
     )
   end
 
-  defp arn do
+  defp arn(%Struct{request: %Struct.Request{playground?: true}}) do
+    Application.fetch_env!(:belfrage, :playground_lambda_role_arn)
+  end
+
+  defp arn(_) do
     Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end
 end

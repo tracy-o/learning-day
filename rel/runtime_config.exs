@@ -8,7 +8,8 @@ use Mix.Config
   {"PREVIEW_API_LAMBDA_FUNCTION", :required},
   {"PRODUCTION_ENVIRONMENT", :required},
   {"PLAYGROUND_PWA_LAMBDA_FUNCTION", :optional},
-  {"PLAYGROUND_API_LAMBDA_FUNCTION", :optional}
+  {"PLAYGROUND_API_LAMBDA_FUNCTION", :optional},
+  {"PLAYGROUND_LAMBDA_ROLE_ARN", :optional}
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do
