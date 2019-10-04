@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.PlaygroundTest do
+defmodule Belfrage.Transformers.PlaygroundLambdaTest do
   use ExUnit.Case
 
-  alias Belfrage.Transformers.Playground
+  alias Belfrage.Transformers.PlaygroundLambda
   alias Test.Support.StructHelper
   alias Belfrage.Struct
 
@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.PlaygroundTest do
                  origin: "an-origin-set-by-the-loop"
                }
              }
-           } = Playground.call([], @non_playground_request_struct)
+           } = PlaygroundLambda.call([], @non_playground_request_struct)
   end
 
   test "playground PWA lambda traffic will be sent to the playground PWA lambda" do
@@ -36,7 +36,7 @@ defmodule Belfrage.Transformers.PlaygroundTest do
                  origin: "playground-pwa-lambda-function"
                }
              }
-           } = Playground.call([], @playground_request_struct)
+           } = PlaygroundLambda.call([], @playground_request_struct)
   end
 
   test "playground API lambda traffic will be sent to the playground API lambda" do
@@ -49,7 +49,7 @@ defmodule Belfrage.Transformers.PlaygroundTest do
                  origin: "playground-api-lambda-function"
                }
              }
-           } = Playground.call([], struct)
+           } = PlaygroundLambda.call([], struct)
   end
 
   describe "when playground lambda function arns are not set" do
@@ -76,7 +76,7 @@ defmodule Belfrage.Transformers.PlaygroundTest do
                    origin: "an-origin-set-by-the-loop"
                  }
                }
-             } = Playground.call([], @playground_request_struct)
+             } = PlaygroundLambda.call([], @playground_request_struct)
     end
 
     test "ContainerData request continues to the original origin" do
@@ -89,7 +89,7 @@ defmodule Belfrage.Transformers.PlaygroundTest do
                    origin: "an-origin-set-by-the-loop"
                  }
                }
-             } = Playground.call([], struct)
+             } = PlaygroundLambda.call([], struct)
     end
   end
 end

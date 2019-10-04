@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.Playground do
+defmodule Belfrage.Transformers.PlaygroundLambda do
   @moduledoc """
   Direct playground requests towards the playground lambda.
 
