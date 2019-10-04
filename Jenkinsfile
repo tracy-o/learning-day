@@ -61,5 +61,8 @@ node {
   }
   stage("clean up after ourselves") {
     cleanWs()
+    dir("${env.WORKSPACE}@libs") {
+      deleteDir()
+    }
   }
 }
