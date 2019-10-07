@@ -4,137 +4,137 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   alias BelfrageWeb.StructAdapter
 
-  describe "BelfrageWeb.StructAdapter.adapt" do
-    test "Adds www as the subdomain to the struct" do
-      id = "12345678"
-      conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
+  test "Adds www as the subdomain to the struct" do
+    id = "12345678"
+    conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "www.belfrage.com",
-          country: "gb",
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "www.belfrage.com",
+        country: "gb",
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "www" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+  test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
+    id = "12345678"
+    conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "test-branch.belfrage.com",
+        country: "gb",
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "when the host header is empty, we default to www" do
-      id = "12345678"
-      conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, "")
+  test "when the host header is empty, we default to www" do
+    id = "12345678"
+    conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, "")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "www",
-          country: "gb",
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "www",
+        country: "gb",
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "www" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "when the host header is not binary, we default to www" do
-      id = "12345678"
-      conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, nil)
+  test "when the host header is not binary, we default to www" do
+    id = "12345678"
+    conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, nil)
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "www",
-          country: "gb",
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "www",
+        country: "gb",
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "www" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "www" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "When the request contains a query string it is added to the struct" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
+  test "When the request contains a query string it is added to the struct" do
+    id = "12345678"
+    conn = conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{foo: "ba"},
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "test-branch.belfrage.com",
+        country: "gb",
+        query_string: %{foo: "ba"},
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "When the request does not have a query string it adds an empty map to the struct" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+  test "When the request does not have a query string it adds an empty map to the struct" do
+    id = "12345678"
+    conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{},
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "test-branch.belfrage.com",
+        country: "gb",
+        query_string: %{},
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
 
-      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
-    end
+    assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+  end
 
-    test "when the path has path parameters" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
+  test "when the path has path parameters" do
+    id = "12345678"
+    conn = conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
 
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{},
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
-        |> Map.put(:path_params, %{"id" => "article-1234"})
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "test-branch.belfrage.com",
+        country: "gb",
+        query_string: %{},
+        replayed_traffic: nil,
+        playground: nil,
+        varnish: 1,
+        cache: 0
+      })
+      |> Map.put(:path_params, %{"id" => "article-1234"})
 
-      assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
-    end
+    assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
+  end
 
+  describe "when playground config values are all setup" do
     test "when the request is for the playground" do
       id = "12345678"
       conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
@@ -171,6 +171,58 @@ defmodule BelfrageWeb.StructAdapterTest do
         })
 
       assert StructAdapter.adapt(conn, id).request.playground? == nil
+    end
+
+    test "when request is for playground" do
+      assert StructAdapter.playground(true) == true
+    end
+
+    test "when request is not for playground" do
+      assert StructAdapter.playground(false) == nil
+    end
+  end
+
+  describe "when playground config values are not setup" do
+    setup do
+      saved_api = Application.get_env(:belfrage, :playground_api_lambda_function)
+      saved_pwa = Application.get_env(:belfrage, :playground_pwa_lambda_function)
+
+      Application.put_env(:belfrage, :playground_api_lambda_function, nil)
+      Application.put_env(:belfrage, :playground_pwa_lambda_function, nil)
+
+      on_exit(fn ->
+        Application.put_env(:belfrage, :playground_api_lambda_function, saved_api)
+        Application.put_env(:belfrage, :playground_pwa_lambda_function, saved_pwa)
+      end)
+
+      :ok
+    end
+
+    test "playground request is rejected" do
+      id = "12345678"
+      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
+
+      conn =
+        put_private(conn, :bbc_headers, %{
+          scheme: :https,
+          host: "test-branch.belfrage.com",
+          country: "gb",
+          query_string: %{},
+          replayed_traffic: nil,
+          playground: true,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert StructAdapter.adapt(conn, id).request.playground? == nil
+    end
+
+    test "when request is for playground" do
+      assert StructAdapter.playground(true) == nil
+    end
+
+    test "when request is not for playground" do
+      assert StructAdapter.playground(false) == nil
     end
   end
 end
