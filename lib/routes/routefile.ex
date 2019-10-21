@@ -18,7 +18,15 @@ defmodule Routes.Routefile do
   handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
-  handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
+  handle "/news/beta/article/:id", using: "ArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  end
+
+  handle "/newsround/beta/article/:id", using: "ArticlePage", examples: ["/newsround/beta/article/49081103"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  end
+
+  handle "/sport/beta/article/:id", using: "ArticlePage", examples: ["/sport/beta/article/rugby-union%2F49590345"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
 

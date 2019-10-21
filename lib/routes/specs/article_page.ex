@@ -1,4 +1,4 @@
-defmodule Routes.Specs.NewsArticlePage do
+defmodule Routes.Specs.ArticlePage do
   def specs do
     %{
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
