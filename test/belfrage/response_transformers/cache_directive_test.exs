@@ -11,7 +11,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
       on_exit(fn ->
         File.write!(@dials_location, original_dials)
-        Process.send(:dials, :refresh, [])
+        Belfrage.Dials.refresh_now()
       end)
 
       :ok
@@ -33,7 +33,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
     test "Given a max age, and a multiplier, this multiplied cache directive is returned in the response" do
       File.write!(@dials_location, Eljiffy.encode!(%{ttl_multiplier: "2"}))
-      Process.send(:dials, :refresh, [])
+      Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{

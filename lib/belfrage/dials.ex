@@ -12,6 +12,10 @@ defmodule Belfrage.Dials do
     GenServer.call(:dials, :state)
   end
 
+  def refresh_now() do
+    Process.send(:dials, :refresh, [])
+  end
+
   @impl GenServer
   def init(initial_state) do
     send(self(), :refresh)
@@ -41,7 +45,7 @@ defmodule Belfrage.Dials do
   end
 
   defp schedule_work do
-    Process.send_after(self(), :refresh, @refresh_rate)
+    Process.send_after(:dials, :refresh, @refresh_rate)
   end
 
   defp refresh_dials do
