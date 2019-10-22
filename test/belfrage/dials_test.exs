@@ -1,12 +1,12 @@
 defmodule Belfrage.DialsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias Belfrage.Dials
 
   @dials_location Application.get_env(:belfrage, :dials_location)
 
   setup do
-    Dials.init(nil)
+    Process.send(:dials, :refresh, [])
     original_dials = File.read!(@dials_location)
 
     on_exit(fn ->

@@ -12,10 +12,21 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   def call(struct = %Struct{response: %Struct.Response{headers: %{"cache-control" => cache_control}}}) do
     response_headers = Map.delete(struct.response.headers, "cache-control")
 
+    cache_directive = CacheControlParser.parse(cache_control)
+    cache_directive = %{cache_directive | max_age: dial_multiply(cache_directive[:max_age])}
+
     struct
-    |> Struct.add(:response, %{cache_directive: CacheControlParser.parse(cache_control), headers: response_headers})
+    |> Struct.add(:response, %{cache_directive: cache_directive, headers: response_headers})
   end
 
   @impl true
   def call(struct), do: struct
+
+  defp dial_multiply(max_age) when is_integer(max_age) do
+    Belfrage.Dials.state()["ttl_multiplier"]
+    |> Kernel.||("1")
+    |> Integer.parse()
+    |> elem(0)
+    |> Kernel.*(max_age)
+  end
 end
