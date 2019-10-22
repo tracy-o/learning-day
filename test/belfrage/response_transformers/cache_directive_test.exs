@@ -43,5 +43,18 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
                }
              }).response.cache_directive.max_age == 2000
     end
+
+    test "Given a max age, but no multiplier, the cache directive with the original max_age is returned in the response" do
+      File.write!(@dials_location, Eljiffy.encode!(%{something: "else"}))
+      Belfrage.Dials.refresh_now()
+
+      assert CacheDirective.call(%Struct{
+               response: %Struct.Response{
+                 headers: %{
+                   "cache-control" => "public, max-age=1000"
+                 }
+               }
+             }).response.cache_directive.max_age == 1000
+    end
   end
 end
