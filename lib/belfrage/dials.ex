@@ -42,6 +42,6 @@ defmodule Belfrage.Dials do
   end
 
   defp refresh_dials do
-    %{ttl_multiplier: "1"}
+    Eljiffy.decode!(File.read!(@dials_location))
   end
 end
