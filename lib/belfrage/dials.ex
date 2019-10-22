@@ -19,10 +19,13 @@ defmodule Belfrage.Dials do
   end
 
   @impl GenServer
-  def handle_info(:refresh, _old_dials) do
+  def handle_info(:refresh, old_dials) do
     schedule_work()
 
-    {:noreply, refresh_dials()}
+    case refresh_dials() do
+      {:ok, dials} -> {:noreply, dials}
+      {:error, _reason} -> {:noreply, old_dials}
+    end
   end
 
   # Catch all to handle unexpected messages
@@ -42,6 +45,9 @@ defmodule Belfrage.Dials do
   end
 
   defp refresh_dials do
-    Eljiffy.decode!(File.read!(@dials_location))
+    case File.read(@dials_location) do
+      {:ok, dials_file_contents} -> Eljiffy.decode(dials_file_contents)
+      {:error, reason} -> {:error, reason}
+    end
   end
 end
