@@ -23,7 +23,6 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   def call(struct), do: struct
 
   defp dial_multiply(max_age) do
-    Belfrage.Dials.ttl_multiplier()
-    |> Kernel.*(max_age)
+    Belfrage.Dials.ttl_multiplier() * max_age
   end
 end
