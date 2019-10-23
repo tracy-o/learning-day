@@ -41,4 +41,28 @@ defmodule Belfrage.DialsTest do
     Dials.refresh_now()
     assert Dials.state() == %{"ttl_multiplier" => "1"}
   end
+
+  test "A missing file at initialisation returns an empty hash" do
+    Supervisor.which_children(Belfrage.Supervisor)
+    |> List.keyfind(Belfrage.Dials, 0)
+    |> elem(1)
+    |> Process.exit(:testing)
+
+    File.rm(@dials_location)
+
+    Dials.init(nil)
+    assert Dials.state() == %{}
+  end
+
+  test "Invalid JSON file at initialisation returns an empty hash" do
+    Supervisor.which_children(Belfrage.Supervisor)
+    |> List.keyfind(Belfrage.Dials, 0)
+    |> elem(1)
+    |> Process.exit(:testing)
+
+    File.write!(@dials_location, "{}}}}\\inva\"id: \nJSON!!</what?>}")
+
+    Dials.init(nil)
+    assert Dials.state() == %{}
+  end
 end

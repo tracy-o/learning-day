@@ -35,13 +35,18 @@ defmodule Belfrage.Dials do
   # Catch all to handle unexpected messages
   # https://elixir-lang.org/getting-started/mix-otp/genserver.html#call-cast-or-info
   @impl GenServer
-  def handle_info(_any_message, state) do
-    {:noreply, state}
+  def handle_info(_any_message, dials) do
+    {:noreply, dials}
   end
 
   @impl GenServer
-  def handle_call(:state, _from, dials) do
+  def handle_call(:state, _from, dials) when is_map(dials) do
     {:reply, dials, dials}
+  end
+
+  @impl GenServer
+  def handle_call(:state, _from, _state) do
+    {:reply, %{}, %{}}
   end
 
   defp schedule_work do
