@@ -2,6 +2,7 @@ defmodule Belfrage.Dials do
   use GenServer
 
   @dials_location Application.get_env(:belfrage, :dials_location)
+  @json_codec Application.get_env(:belfrage, :json_codec)
   @refresh_rate 60_000
 
   def start_link(opts) do
@@ -66,7 +67,7 @@ defmodule Belfrage.Dials do
 
   defp refresh_dials do
     case File.read(@dials_location) do
-      {:ok, dials_file_contents} -> Eljiffy.decode(dials_file_contents)
+      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end
   end

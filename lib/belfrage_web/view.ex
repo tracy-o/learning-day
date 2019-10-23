@@ -4,6 +4,7 @@ defmodule BelfrageWeb.View do
   alias Belfrage.Struct
 
   @default_headers [BelfrageWeb.ResponseHeaders.Vary, BelfrageWeb.ResponseHeaders.CacheControl]
+  @json_codec Application.get_env(:belfrage, :json_codec)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -18,7 +19,7 @@ defmodule BelfrageWeb.View do
   def put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
-    |> put_response(status, Eljiffy.encode!(content))
+    |> put_response(status, @json_codec.encode!(content))
   end
 
   def put_response(conn, status, content) when is_binary(content),

@@ -4,6 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   use ExUnit.Case
 
   @dials_location Application.get_env(:belfrage, :dials_location)
+  @json_codec Application.get_env(:belfrage, :json_codec)
 
   describe "&call/1" do
     setup do
@@ -32,7 +33,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, and a multiplier, this multiplied cache directive is returned in the response" do
-      File.write!(@dials_location, Eljiffy.encode!(%{ttl_multiplier: "2"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "2"}))
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
@@ -45,7 +46,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, but no multiplier, the cache directive with the original max_age is returned in the response" do
-      File.write!(@dials_location, Eljiffy.encode!(%{something: "else"}))
+      File.write!(@dials_location, @json_codec.encode!(%{something: "else"}))
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{

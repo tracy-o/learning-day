@@ -4,6 +4,7 @@ defmodule Belfrage.DialsTest do
   alias Belfrage.Dials
 
   @dials_location Application.get_env(:belfrage, :dials_location)
+  @json_codec Application.get_env(:belfrage, :json_codec)
 
   setup do
     Dials.refresh_now()
@@ -22,7 +23,7 @@ defmodule Belfrage.DialsTest do
   end
 
   test "Changing the file and refreshing gives the new dials value" do
-    File.write!(@dials_location, Eljiffy.encode!(%{ttl_multiplier: "2"}))
+    File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "2"}))
 
     Dials.refresh_now()
     assert Dials.state() == %{"ttl_multiplier" => "2"}
