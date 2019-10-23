@@ -22,6 +22,16 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       assert CacheDirective.call(%Struct{}) == %Struct{}
     end
 
+    test "Given a cache control with no max age, the max age stays at 0" do
+      assert CacheDirective.call(%Struct{
+               response: %Struct.Response{
+                 headers: %{
+                   "cache-control" => "private"
+                 }
+               }
+             }).response.cache_directive.max_age == 0
+    end
+
     test "Given a max age, this cache directive is returned in the response" do
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -43,6 +53,19 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
                  }
                }
              }).response.cache_directive.max_age == 2000
+    end
+
+    test "Given no max age, and a multiplier, the max age stays at 0" do
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "2"}))
+      Belfrage.Dials.refresh_now()
+
+      assert CacheDirective.call(%Struct{
+               response: %Struct.Response{
+                 headers: %{
+                   "cache-control" => "private"
+                 }
+               }
+             }).response.cache_directive.max_age == 0
     end
 
     test "Given a max age, but no multiplier, the cache directive with the original max_age is returned in the response" do
