@@ -22,7 +22,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   @impl true
   def call(struct), do: struct
 
-  defp dial_multiply(max_age) when is_integer(max_age) do
+  defp dial_multiply(max_age) do
     Belfrage.Dials.state()["ttl_multiplier"]
     |> Kernel.||("1")
     |> Integer.parse()
