@@ -22,6 +22,7 @@ Requires: amazon-cloudwatch-agent
 Requires: cfn-signal
 Requires: component-logger
 Requires: belfrage-performance-tuning
+Requires: dial-agent
 
 %description
 Belfrage is a proxy pass translating incoming web requests
