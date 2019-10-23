@@ -27,8 +27,19 @@ defmodule Belfrage.Dials do
     schedule_work()
 
     case refresh_dials() do
-      {:ok, dials} -> {:noreply, dials}
-      {:error, _reason} -> {:noreply, old_dials}
+      {:ok, dials} ->
+        {:noreply, dials}
+
+      {:error, reason} ->
+        Stump.log(
+          :error,
+          %{
+            msg: "Unable to read dials",
+            reason: reason
+          }
+        )
+
+        {:noreply, old_dials}
     end
   end
 
