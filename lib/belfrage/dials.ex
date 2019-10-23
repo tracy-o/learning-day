@@ -9,6 +9,13 @@ defmodule Belfrage.Dials do
     GenServer.start_link(__MODULE__, opts, name: :dials)
   end
 
+  def ttl_multiplier() do
+    state()["ttl_multiplier"]
+    |> Kernel.||("1")
+    |> Integer.parse()
+    |> elem(0)
+  end
+
   def state() do
     GenServer.call(:dials, :state)
   end
