@@ -36,6 +36,10 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
+  handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
