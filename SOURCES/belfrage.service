@@ -1,6 +1,6 @@
 [Unit]
 Description=Start the belfrage service
-After=network.target network-online.target
+After=network.target network-online.target dial-agent.service
 [Service]
 Environment=HOME=/home/component
 Environment=PORT=7080

@@ -1,0 +1,29 @@
+[
+  {
+    "name": "ttl_multiplier",
+    "description": "This dial sets the value by which we multiply the max-age part of the cache-control response header",
+    "default-value": "1",
+    "values": [
+      {
+        "value": "0.5",
+        "description": "use this to half the max-age value"
+      },
+      {
+        "value": "1",
+        "description": "Use this to pass through the max-age value unchanged"
+      },
+      {
+        "value": "2",
+        "description": "Use this to double the max-age value"
+      },
+      {
+        "value": "3",
+        "description": "Use this to triple the max-age value"
+      },
+      {
+        "value": "4",
+        "description": "Use this to quadruple the max-age value"
+      }
+    ]
+  }
+]
