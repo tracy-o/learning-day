@@ -8,13 +8,11 @@ defmodule Belfrage.Clients.HTTP.Error do
   defstruct [:reason]
 
   @type t :: %__MODULE__{
-    reason: :timeout | :pool_timeout | :bad_url | :bad_url_scheme | nil
-  }
+          reason: :timeout | :pool_timeout | :bad_url | :bad_url_scheme | nil
+        }
 
-  @doc """
-  Map the 3rd party http library error reasons, to
-  the Belfrage HTTP.Error reasons
-  """
+  # Map the 3rd party http library error reasons, to
+  # the Belfrage HTTP.Error reasons
   @map_reason_codes [
     request_timeout: :timeout,
     pool_timeout: :pool_timeout,

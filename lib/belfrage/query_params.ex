@@ -1,6 +1,6 @@
 defmodule Belfrage.QueryParams do
   alias Belfrage.Struct
-  alias Struct.{Request, Private}
+  alias Struct.Private
 
   def allowlist(struct = %Struct{private: %Private{query_params_allowlist: "*"}}) do
     struct

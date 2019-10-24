@@ -10,7 +10,7 @@ defmodule Belfrage.Clients.Lambda do
   @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
-  def request(method, url, body \\ "", headers \\ [], http_opts \\ []) do
+  def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
     %HTTP.Request{
       method: method,
       url: url,
