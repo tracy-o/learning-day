@@ -10,10 +10,9 @@ defmodule Belfrage.Dials do
   end
 
   def ttl_multiplier() do
-    state()["ttl_multiplier"]
-    |> Kernel.||("1")
-    |> Integer.parse()
-    |> elem(0)
+    state()
+    |> Map.get("ttl_multiplier", "1")
+    |> String.to_integer()
   end
 
   def state() do
