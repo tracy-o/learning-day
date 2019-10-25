@@ -22,6 +22,14 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
 
+  handle "/newsround/beta/article/:id", using: "NewsroundArticlePage", examples: ["/newsround/beta/article/49081103"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  end
+
+  handle "/sport/beta/article/:id", using: "SportArticlePage", examples: ["/sport/beta/article/rugby-union%2F49590345"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  end
+
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
 
