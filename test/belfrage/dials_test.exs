@@ -20,28 +20,28 @@ defmodule Belfrage.DialsTest do
 
   describe "&state/0" do
     test "state returns ttl_multiplier dial value" do
-      assert Dials.state() == %{"ttl_multiplier" => "1"}
+      assert Dials.state() == %{"ttl_multiplier" => "default"}
     end
 
     test "Changing the file and refreshing gives the new dials value" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "2"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
 
       Dials.refresh_now()
-      assert Dials.state() == %{"ttl_multiplier" => "2"}
+      assert Dials.state() == %{"ttl_multiplier" => "double"}
     end
 
     test "Writing unparsable JSON to the file returns the initial dials values" do
       File.write!(@dials_location, "{}}}}\\inva\"id: \nJSON!!</what?>}")
 
       Dials.refresh_now()
-      assert Dials.state() == %{"ttl_multiplier" => "1"}
+      assert Dials.state() == %{"ttl_multiplier" => "default"}
     end
 
     test "A missing file returns the initial dials values" do
       File.rm(@dials_location)
 
       Dials.refresh_now()
-      assert Dials.state() == %{"ttl_multiplier" => "1"}
+      assert Dials.state() == %{"ttl_multiplier" => "default"}
     end
 
     test "A missing file at initialisation returns an empty hash" do
@@ -75,7 +75,7 @@ defmodule Belfrage.DialsTest do
     end
 
     test "Changing the file and gives the new ttl multiplier value" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "2"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
 
       Dials.refresh_now()
       assert Dials.ttl_multiplier() == 2

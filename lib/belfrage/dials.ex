@@ -11,8 +11,8 @@ defmodule Belfrage.Dials do
 
   def ttl_multiplier() do
     state()
-    |> Map.get("ttl_multiplier", "1")
-    |> String.to_integer()
+    |> Map.get("ttl_multiplier", "default")
+    |> dial_value_to_int()
   end
 
   def state() do
@@ -76,5 +76,17 @@ defmodule Belfrage.Dials do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  @ttl_modifier_comparison %{
+    "half" => 0.5,
+    "default" => 1,
+    "double" => 2,
+    "triple" => 3,
+    "quadruple" => 4
+  }
+
+  defp dial_value_to_int(dial_value) do
+    Map.get(@ttl_modifier_comparison, dial_value, 1)
   end
 end
