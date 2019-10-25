@@ -3,7 +3,7 @@ defmodule Belfrage.Dials do
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @refresh_rate 60_000
+  @refresh_rate 30_000
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :dials)
