@@ -3,6 +3,7 @@ use Mix.Config
 config :belfrage,
   aws_client: ExAwsMock,
   circuit_breaker_reset_interval: 100,
+  dials_location: "test/support/resources/dials.json",
   errors_threshold: 20,
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,

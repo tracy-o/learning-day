@@ -1,4 +1,4 @@
-defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
+defmodule Belfrage.CacheControlParserTest do
   alias Belfrage.CacheControlParser
   use ExUnit.Case
 

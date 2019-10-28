@@ -5,6 +5,8 @@ defmodule BelfrageWeb.ViewTest do
   alias BelfrageWeb.View
   alias Test.Support.StructHelper
 
+  @json_codec Application.get_env(:belfrage, :json_codec)
+
   doctest View
 
   defp build_struct_and_render(body) do
@@ -24,7 +26,7 @@ defmodule BelfrageWeb.ViewTest do
     {status, _headers, body} = build_struct_and_render(%{some: "json data"})
 
     assert status == 200
-    assert body == Eljiffy.encode!(%{some: "json data"})
+    assert body == @json_codec.encode!(%{some: "json data"})
   end
 
   test "Rendering response from a struct with a 200 and a nil response" do
