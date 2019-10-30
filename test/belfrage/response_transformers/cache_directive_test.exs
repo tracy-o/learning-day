@@ -55,6 +55,19 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
              }).response.cache_directive.max_age == 2000
     end
 
+    test "Given an odd number max age, and a multiplier, this multiplied cache directive is returned and rounded in the response" do
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "half"}))
+      Belfrage.Dials.refresh_now()
+
+      assert CacheDirective.call(%Struct{
+               response: %Struct.Response{
+                 headers: %{
+                   "cache-control" => "public, max-age=25"
+                 }
+               }
+             }).response.cache_directive.max_age == 13
+    end
+
     test "Given no max age, and a multiplier, the max age stays at 0" do
       File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
       Belfrage.Dials.refresh_now()
