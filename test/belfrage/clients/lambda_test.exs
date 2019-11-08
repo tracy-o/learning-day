@@ -45,7 +45,7 @@ defmodule Belfrage.Clients.LambdaTest do
                                method: :post,
                                url: "https://www.example.com/foo",
                                payload: ~s({"some": "data"}),
-                               headers: [],
+                               headers: %{},
                                timeout: @lambda_timeout
                              } ->
         @generic_response
@@ -60,7 +60,7 @@ defmodule Belfrage.Clients.LambdaTest do
                                method: :post,
                                url: "https://www.example.com/foo?some-qs=hello",
                                payload: ~s({"some": "data"}),
-                               headers: [],
+                               headers: %{},
                                timeout: @lambda_timeout
                              } ->
         @generic_response
@@ -75,7 +75,7 @@ defmodule Belfrage.Clients.LambdaTest do
                                method: :get,
                                url: "https://www.example.com/foo?some-qs=hello",
                                payload: "",
-                               headers: [],
+                               headers: %{},
                                timeout: @lambda_timeout
                              } ->
         @generic_response

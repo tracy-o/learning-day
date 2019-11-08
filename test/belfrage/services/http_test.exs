@@ -37,7 +37,7 @@ defmodule Belfrage.Services.HTTPTest do
     :ok,
     %Belfrage.Clients.HTTP.Response{
       status_code: 200,
-      headers: [{"content-type", "application/json"}],
+      headers: %{"content-type" => "application/json"},
       body: ~s({"some": "body"})
     }
   }
@@ -51,7 +51,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: []
+             headers: %{}
            } ->
           @ok_response
         end
@@ -60,7 +60,8 @@ defmodule Belfrage.Services.HTTPTest do
       assert %Struct{
                response: %Struct.Response{
                  http_status: 200,
-                 body: "{\"some\": \"body\"}"
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
                }
              } = HTTP.dispatch(@get_struct)
     end
@@ -73,7 +74,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :post,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: ~s({"some": "data"}),
-             headers: []
+             headers: %{}
            } ->
           @ok_response
         end
@@ -82,7 +83,8 @@ defmodule Belfrage.Services.HTTPTest do
       assert %Struct{
                response: %Struct.Response{
                  http_status: 200,
-                 body: "{\"some\": \"body\"}"
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
                }
              } = HTTP.dispatch(@post_struct)
     end
@@ -93,12 +95,12 @@ defmodule Belfrage.Services.HTTPTest do
                                method: :get,
                                url: "https://www.bbc.co.uk/_web_core?foo=bar",
                                payload: "",
-                               headers: []
+                               headers: %{}
                              } ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
            status_code: 500,
-           headers: [{"content-type", "text/plain"}],
+           headers: %{"content-type" => "text/plain"},
            body: "500 - Internal Server Error"
          }}
       end)
@@ -119,7 +121,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: []
+             headers: %{}
            } ->
           {
             :error,
@@ -133,7 +135,8 @@ defmodule Belfrage.Services.HTTPTest do
       assert %Struct{
                response: %Struct.Response{
                  http_status: 500,
-                 body: ""
+                 body: "",
+                 headers: %{}
                }
              } = HTTP.dispatch(@get_struct)
     end
@@ -146,7 +149,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: []
+             headers: %{}
            } ->
           {
             :error,

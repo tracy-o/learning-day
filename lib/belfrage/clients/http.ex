@@ -12,8 +12,13 @@ defmodule Belfrage.Clients.HTTP do
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
 
   def execute(request = %HTTP.Request{}) do
-    @machine_gun.request(request.method, request.url, request.payload, request.headers, build_options(request))
+    @machine_gun.request(request.method, request.url, request.payload, machine_gun_headers(request.headers), build_options(request))
     |> format_response()
+  end
+
+  defp machine_gun_headers(headers) do
+    headers
+    |> Enum.into([])
   end
 
   @doc """
@@ -26,11 +31,11 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   defp format_response({:ok, machine_response = %MachineGun.Response{}}) do
-    {:ok, %HTTP.Response{
+    {:ok, HTTP.Response.new(%{
       status_code: machine_response.status_code,
       body: machine_response.body,
       headers: machine_response.headers
-    }}
+    })}
   end
 
   defp format_response({:error, %MachineGun.Error{reason: reason}}) do
