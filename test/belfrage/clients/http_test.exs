@@ -23,7 +23,7 @@ defmodule Belfrage.Clients.HTTPTest do
          %MachineGun.Response{
            status_code: 200,
            body: ~s(<p>done something</p>),
-           headers: [{"accept-encoding", "application/json"}]
+           headers: %{"accept-encoding" => "application/json"}
          }}
       end)
 
@@ -31,7 +31,7 @@ defmodule Belfrage.Clients.HTTPTest do
         HTTP.execute(%HTTP.Request{
           method: :post,
           url: "http://example.com/do-something",
-          headers: [{"content-length", "0"}],
+          headers: %{"content-length" => "0"},
           timeout: 500,
           payload: ~s({"comment": "Hello"})
         })
@@ -41,7 +41,7 @@ defmodule Belfrage.Clients.HTTPTest do
                 %HTTP.Response{
                   status_code: 200,
                   body: ~s(<p>done something</p>),
-                  headers: [{"accept-encoding", "application/json"}]
+                  headers: %{"accept-encoding" => "application/json"}
                 }}
     end
 
@@ -68,7 +68,7 @@ defmodule Belfrage.Clients.HTTPTest do
                 %HTTP.Response{
                   status_code: 200,
                   body: ~s(<p>some content</p>),
-                  headers: []
+                  headers: %{}
                 }}
     end
   end

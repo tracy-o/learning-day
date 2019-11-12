@@ -11,14 +11,13 @@ defmodule Belfrage.Clients.Lambda do
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
-    %HTTP.Request{
+    HTTP.Request.new(%{
       method: method,
       url: url,
       payload: body,
       timeout: @lambda_timeout,
       headers: headers
-    }
-    |> HTTP.Request.downcase_headers()
+    })
     |> @http_client.execute()
   end
 

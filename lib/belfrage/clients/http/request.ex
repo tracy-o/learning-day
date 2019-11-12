@@ -1,9 +1,11 @@
 defmodule Belfrage.Clients.HTTP.Request do
+  alias Belfrage.Clients.HTTP
+
   defstruct [
     :method,
     :url,
     payload: "",
-    headers: [],
+    headers: %{},
     timeout: Application.get_env(:belfrage, :default_timeout)
   ]
 
@@ -11,28 +13,17 @@ defmodule Belfrage.Clients.HTTP.Request do
     method: :get | :post,
     url: String.t(),
     payload: String.t() | map(),
-    headers: list(),
+    headers: map(),
     timeout: integer()
   }
 
-  @doc ~S"""
-  Adds headers to the request struct, after downcasing them
-
-  ## Examples
-      iex> downcase_headers(%Belfrage.Clients.HTTP.Request{headers: [{"content-length", "0"}]})
-      %Belfrage.Clients.HTTP.Request{headers: [{"content-length", "0"}]}
-
-      iex> downcase_headers(%Belfrage.Clients.HTTP.Request{headers: [{"coNteNt-LenGth", "0"}]})
-      %Belfrage.Clients.HTTP.Request{headers: [{"content-length", "0"}]}
-
-      iex> downcase_headers(%Belfrage.Clients.HTTP.Request{headers: [{"coNteNt-tyPE", "apPlicaTion/JSON"}]})
-      %Belfrage.Clients.HTTP.Request{headers: [{"content-type", "apPlicaTion/JSON"}]}
-  """
-  def downcase_headers(request = %__MODULE__{}) do
-    Map.put(request, :headers, downcase(request.headers))
-  end
-
-  defp downcase(headers) do
-    Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
+  def new(params) do
+    %__MODULE__{
+      url: params.url,
+      method: params.method,
+      headers: HTTP.Headers.as_map(params.headers),
+      payload: params.payload || "",
+      timeout: params.timeout
+    }
   end
 end
