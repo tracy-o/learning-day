@@ -16,12 +16,6 @@ defmodule Belfrage.Clients.HTTP.Headers do
       %{"content-type" => "apPlicaTion/JSON"}
   """
   def as_map(headers) do
-    headers
-    |> downcase_headers()
-    |> Enum.into(%{})
-  end
-
-  defp downcase_headers(headers) do
-    Enum.map(headers, fn {k, v} -> {String.downcase(k), v} end)
+    Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
   end
 end
