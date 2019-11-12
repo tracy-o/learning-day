@@ -3,7 +3,7 @@ defmodule Belfrage.Clients.HTTP.ResponseTest do
 
   alias Belfrage.Clients.HTTP
 
-  test "builds an HTTP.Response" do
+  test "builds an %HTTP.Response{} struct, with headers as a map" do
     assert %HTTP.Response{
              headers: %{"cache-control" => "public, max-age=10"},
              body: "<p>hello</p>",
