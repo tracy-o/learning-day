@@ -45,7 +45,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/topics/:id/:pageNumber", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt/1"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) and !pageNumber <= 0
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !pageNumber <= 0
   end
 
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
@@ -53,7 +53,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/sport/topics/:id/:pageNumber", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt/1"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) and !pageNumber <= 0
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !pageNumber <= 0
   end
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
