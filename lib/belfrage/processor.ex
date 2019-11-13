@@ -50,6 +50,7 @@ defmodule Belfrage.Processor do
   def response_pipeline(struct = %Struct{}) do
     struct
     |> ResponseTransformers.CacheDirective.call()
+    |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> Cache.store_if_successful()
     |> Cache.fallback_if_required()
   end
