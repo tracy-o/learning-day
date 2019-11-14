@@ -12,7 +12,7 @@ defmodule Belfrage.Services.Webcore do
     Struct.add(
       struct,
       :response,
-      Webcore.Response.build(@lambda_client.call(arn(struct), private.origin, Webcore.Request.build(struct)))
+      build_webcore_response(struct)
     )
   end
 

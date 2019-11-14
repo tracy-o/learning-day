@@ -104,7 +104,8 @@ defmodule Belfrage.BelfrageCacheTest do
         :call,
         fn "webcore-lambda-role-arn",
            "pwa-lambda-function:test",
-           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
+           _ ->
           @web_core_lambda_response
         end
       )
@@ -120,7 +121,8 @@ defmodule Belfrage.BelfrageCacheTest do
         :call,
         fn "webcore-lambda-role-arn",
            "pwa-lambda-function:test",
-           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
+           _ ->
           @failed_web_core_lambda_response
         end
       )

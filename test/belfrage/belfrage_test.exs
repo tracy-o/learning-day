@@ -37,7 +37,8 @@ defmodule BelfrageTest do
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
                         "pwa-lambda-function:test",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
+                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _ ->
       @web_core_lambda_response
     end)
 
@@ -50,7 +51,8 @@ defmodule BelfrageTest do
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
                         "preview-pwa-lambda-function:example-branch",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
+                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _ ->
       @web_core_lambda_response
     end)
 
@@ -63,7 +65,8 @@ defmodule BelfrageTest do
     LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
                         "preview-pwa-lambda-function:example-branch",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"} ->
+                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _ ->
       @web_core_404_lambda_response
     end)
 
@@ -81,7 +84,8 @@ defmodule BelfrageTest do
                           body: ~s({"some": "data please"}),
                           headers: %{country: "gb"},
                           httpMethod: "POST"
-                        } ->
+                        },
+                        _ ->
       @web_core_lambda_response
     end)
 
@@ -103,7 +107,7 @@ defmodule BelfrageTest do
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock
-    |> expect(:call, 0, fn _, _, _ -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _, _, _, _ -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 

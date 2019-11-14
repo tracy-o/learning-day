@@ -27,7 +27,7 @@ defmodule Belfrage.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :cachex, :os_mon],
+      extra_applications: [:aws_ex_ray, :logger, :cachex, :os_mon],
       mod: {Belfrage.Application, [env: Mix.env()]}
     ]
   end
@@ -44,6 +44,8 @@ defmodule Belfrage.MixProject do
       {:ex_aws_lambda, "~> 2.0"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
+      {:aws_ex_ray, "~> 0.1.15"},
+      {:aws_ex_ray_plug, "~> 0.1.2"},
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
       {:machine_gun, "~> 0.1.6"},

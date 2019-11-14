@@ -11,6 +11,7 @@ defmodule Belfrage.Struct.Request do
     :request_hash,
     :scheme,
     :host,
+    :xray_trace_id,
     varnish?: false,
     edge_cache?: false,
     has_been_replayed?: nil,

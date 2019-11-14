@@ -9,6 +9,7 @@ defmodule BelfrageWeb.Router do
   @routefile Application.get_env(:belfrage, :routefile)
 
   plug(ExMetrics.Plug.PageMetrics)
+  plug(BelfrageWeb.Plugs.XRay)
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)

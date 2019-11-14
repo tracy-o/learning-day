@@ -32,7 +32,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:ok, @lambda_response}
       end)
 
@@ -52,7 +53,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:ok, @lambda_response}
       end)
 
@@ -85,7 +87,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:ok, @lambda_response_internal_fail}
       end)
 
@@ -105,7 +108,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:error, :failed_to_invoke_lambda}
       end)
 
@@ -125,7 +129,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:error, :function_not_found}
       end)
 
@@ -145,7 +150,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
-                                           } ->
+                                           },
+                                           _ ->
         {:error, :timeout}
       end)
 

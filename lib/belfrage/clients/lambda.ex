@@ -8,7 +8,7 @@ defmodule Belfrage.Clients.Lambda do
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @behaviour ExAws.Request.HttpClient
-  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
+  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), List.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
@@ -22,17 +22,17 @@ defmodule Belfrage.Clients.Lambda do
     |> @http_client.execute()
   end
 
-  def call(arn, function, payload) do
+  def call(arn, function, payload, opts \\ []) do
     with {:ok, credentials} <- Belfrage.Credentials.Refresh.fetch(arn) do
-      invoke_lambda(function, payload, credentials)
+      invoke_lambda(function, payload, credentials, opts)
     else
       error -> error
     end
   end
 
-  defp invoke_lambda(function, payload, credentials) do
+  defp invoke_lambda(function, payload, credentials, opts) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      case @aws_lambda.invoke(function, payload, %{})
+      case @aws_lambda.invoke(function, payload, %{}, opts)
            |> @aws.request(
              security_token: credentials.session_token,
              access_key_id: credentials.access_key_id,
