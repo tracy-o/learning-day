@@ -89,4 +89,21 @@ defmodule Belfrage.ProcessorTest do
               }} = Belfrage.Loop.state(@resp_struct)
     end
   end
+
+  describe "Processor.response_pipeline/1" do
+    @resp_struct StructHelper.build(
+                   response: %{
+                     http_status: 501,
+                     headers: %{
+                       "connection" => "close"
+                     }
+                   }
+                 )
+
+    test "calls the ResponseHeaderGuardian response transformer" do
+      result = Processor.response_pipeline(@resp_struct)
+
+      refute Map.has_key?(result.response.headers, "connection")
+    end
+  end
 end
