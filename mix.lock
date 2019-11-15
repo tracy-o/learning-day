@@ -16,7 +16,7 @@
   "eternal": {:hex, :eternal, "1.2.1", "d5b6b2499ba876c57be2581b5b999ee9bdf861c647401066d3eeed111d096bc4", [:mix], [], "hexpm"},
   "ets_cleaner": {:git, "git://github.com/bbc/ets_cleaner.git", "e94fbc6c0465e1467253e63a5c373eb724147ee8", []},
   "ex_aws": {:hex, :ex_aws, "2.1.1", "1e4de2106cfbf4e837de41be41cd15813eabc722315e388f0d6bb3732cec47cd", [:mix], [{:configparser_ex, "~> 4.0", [hex: :configparser_ex, repo: "hexpm", optional: true]}, {:hackney, "1.6.3 or 1.6.5 or 1.7.1 or 1.8.6 or ~> 1.9", [hex: :hackney, repo: "hexpm", optional: true]}, {:jsx, "~> 2.8", [hex: :jsx, repo: "hexpm", optional: true]}, {:poison, ">= 1.2.0", [hex: :poison, repo: "hexpm", optional: true]}, {:sweet_xml, "~> 0.6", [hex: :sweet_xml, repo: "hexpm", optional: true]}], "hexpm"},
-  "ex_aws_lambda": {:hex, :ex_aws_lambda, "2.0.1", "d1904b9705244f2c56ab6284ac00af802b8b0b5531559ab58f64c1a9710f3c22", [:mix], [{:ex_aws, "~> 2.0", [hex: :ex_aws, repo: "hexpm", optional: false]}], "hexpm"},
+  "ex_aws_lambda": {:git, "https://github.com/james-bowers/ex_aws_lambda.git", "34cfca6e3b30fcc02b0764cbfbb6b3ad2bbb2f42", [branch: "x_ray_trace_id"]},
   "ex_aws_sts": {:git, "https://github.com/ex-aws/ex_aws_sts.git", "329d8a859ec6944bddb191a1467c1ad2a5bf8552", []},
   "ex_metrics": {:git, "https://github.com/bbc/ExMetrics.git", "02aa81015a2673b82e70317b36d18fe817f443c0", []},
   "gun": {:hex, :gun, "1.3.0", "18e5d269649c987af95aec309f68a27ffc3930531dd227a6eaa0884d6684286e", [:rebar3], [{:cowlib, "~> 2.6.0", [hex: :cowlib, repo: "hexpm", optional: false]}], "hexpm"},
