@@ -80,13 +80,13 @@ defmodule Belfrage.BelfrageCacheTest do
       assert %Belfrage.Struct{response: @response} = Belfrage.handle(@fresh_cache_get_request_struct)
     end
 
-    test "served early from cache still increments loop" do
+    test "served early from cache still increments loop, but with belfrage_cache as origin" do
       Belfrage.handle(@fresh_cache_get_request_struct)
 
       assert {:ok,
               %{
                 counter: %{
-                  "pwa-lambda-function" => %{
+                  :belfrage_cache => %{
                     200 => 1,
                     :errors => 0
                   }
