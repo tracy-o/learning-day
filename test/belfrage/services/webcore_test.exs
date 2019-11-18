@@ -13,7 +13,8 @@ defmodule Belfrage.Services.WebcoreTest do
     request: %Struct.Request{
       method: "GET",
       path: "/_web_core",
-      query_params: %{"id" => "1234"}
+      query_params: %{"id" => "1234"},
+      xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
     }
   }
 
@@ -43,6 +44,22 @@ defmodule Belfrage.Services.WebcoreTest do
                  body: "<h1>Hello from the Lambda!</h1>"
                }
              } = Webcore.dispatch(@struct)
+    end
+
+    test "it invokes the origin lambda with the xray_trace_id" do
+      expect(Clients.LambdaMock, :call, fn @arn,
+                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           %{
+                                             headers: %{country: nil},
+                                             httpMethod: "GET",
+                                             path: "/_web_core",
+                                             queryStringParameters: %{"id" => "1234"}
+                                           },
+                                           [xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"] ->
+        {:ok, @lambda_response}
+      end)
+
+      Webcore.dispatch(@struct)
     end
 
     test "given an origin with an alias, it invokes the origin lambda with that alias" do

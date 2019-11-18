@@ -31,6 +31,15 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     conn = Plugs.XRay.call(conn, [])
   end
 
+  test "it adds trace_id to the conn" do
+    conn = conn(:get, "/")
+    conn = Plugs.XRay.call(conn, [])
+
+    assert %Plug.Conn{
+             private: %{xray_trace_id: "1-5dd274e2-00644696c03ec16a784a2e43"}
+           } = conn
+  end
+
   test "registers a before_send callback that finishes tracing" do
     Belfrage.XrayMock
     |> expect(

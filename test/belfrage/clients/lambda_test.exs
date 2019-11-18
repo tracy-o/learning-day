@@ -60,6 +60,15 @@ defmodule Belfrage.Clients.LambdaTest do
     end
   end
 
+  describe "Belfrage.Clients.Lambda.call/4" do
+    test "Given a trace_id option, it invokes a lambda" do
+      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"},
+               xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
+             ) ==
+               {:ok, "<h1>trace_id option provided</h1>"}
+    end
+  end
+
   describe "ExAWS request callback" do
     @generic_response {:ok,
                        %Belfrage.Clients.HTTP.Response{
