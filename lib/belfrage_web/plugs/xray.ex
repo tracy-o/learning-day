@@ -14,10 +14,12 @@ defmodule BelfrageWeb.Plugs.XRay do
 
     conn
     |> Plug.Conn.put_private(:xray_trace_id, segment.trace.root)
-    |> register_before_send(fn conn ->
-      @xray.finish_tracing(segment)
-      conn
-    end)
+    |> register_before_send(&on_request_completed(&1, segment))
+  end
+
+  defp on_request_completed(conn, segment) do
+    @xray.finish_tracing(segment)
+    conn
   end
 
   @impl true

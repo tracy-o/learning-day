@@ -2,7 +2,11 @@ defmodule Belfrage.XrayStub do
   @behaviour Belfrage.Xray
 
   def new_trace do
-    AwsExRay.Trace.new()
+    %AwsExRay.Trace{
+      parent: "",
+      root: "1-5dd274e2-00644696c03ec16a784a2e43",
+      sampled: false
+    }
   end
 
   def start_tracing(trace, _app_name) do
