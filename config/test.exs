@@ -18,7 +18,8 @@ config :belfrage,
   aws_sts: Belfrage.AWS.STSMock,
   aws_lambda: Belfrage.AWS.LambdaMock,
   file_io: Belfrage.Helpers.FileIOMock,
-  routefile: Routes.RoutefileMock
+  routefile: Routes.RoutefileMock,
+  xray: Belfrage.XrayMock
 
 config :ex_metrics,
   send_metrics: false

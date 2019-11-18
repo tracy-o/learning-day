@@ -3,18 +3,19 @@ defmodule BelfrageWeb.Plugs.XRay do
   import Plug.Conn, only: [register_before_send: 2]
 
   @skip_paths ["/status"]
+  @xray Application.get_env(:belfrage, :xray)
 
   def init(opts), do: opts
 
   @impl true
   def call(conn = %Plug.Conn{request_path: request_path}, _) when request_path not in @skip_paths do
-    trace = AwsExRay.Trace.new()
-    segment = AwsExRay.start_tracing(trace, "Belfrage")
+    trace = @xray.new_trace()
+    segment = @xray.start_tracing(trace, "Belfrage")
 
     conn
     |> Plug.Conn.put_private(:xray_trace_id, segment.trace.root)
     |> register_before_send(fn conn ->
-      AwsExRay.finish_tracing(segment)
+      @xray.finish_tracing(segment)
       conn
     end)
   end

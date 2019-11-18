@@ -20,6 +20,7 @@ defmodule Test.Support.Helper do
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
     Mox.stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
     Mox.stub_with(Belfrage.AWS.LambdaMock, Belfrage.AWS.LambdaStub)
+    Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
   end
 
   def mox do
