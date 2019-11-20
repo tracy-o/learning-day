@@ -80,7 +80,7 @@ defmodule Belfrage.Clients.Lambda do
     Stump.log(:error, %{
       message: "Failed to Invoke Lambda",
       status: status_code,
-      response: response.body
+      response: inspect(response)
     })
 
     ExMetrics.increment("clients.lambda.invoke_failure")
