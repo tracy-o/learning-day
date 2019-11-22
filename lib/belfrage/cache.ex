@@ -47,8 +47,8 @@ defmodule Belfrage.Cache do
       :stale ->
         Struct.add(struct, :response, response) |> Struct.add(:response, %{fallback: true})
 
-      _ ->
-        Struct.add(struct, :response, response)
+      :fresh ->
+        Struct.add(struct, :response, response) |> Struct.add(:private, %{origin: :belfrage_cache})
     end
   end
 
