@@ -34,7 +34,7 @@ defmodule BelfrageWeb.HeadersTest do
 
     def make_500_call(_body, _headers = %{}, path) do
       BelfrageMock
-      |> expect(:handle, fn _ ->
+      |> expect(:handle, fn _struct ->
         raise("Something broke")
       end)
 

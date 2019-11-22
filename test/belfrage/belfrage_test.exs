@@ -35,10 +35,10 @@ defmodule BelfrageTest do
 
   test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _ ->
+    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+                        _lambda_func = "pwa-lambda-function:test",
+                        _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _opts = [] ->
       @web_core_lambda_response
     end)
 
@@ -49,10 +49,10 @@ defmodule BelfrageTest do
     struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
 
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
-                        "preview-pwa-lambda-function:example-branch",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _ ->
+    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+                        _lambda_func = "preview-pwa-lambda-function:example-branch",
+                        _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _opts = [] ->
       @web_core_lambda_response
     end)
 
@@ -63,10 +63,10 @@ defmodule BelfrageTest do
     struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
 
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
-                        "preview-pwa-lambda-function:example-branch",
-                        %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _ ->
+    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+                        _lambda_func = "preview-pwa-lambda-function:example-branch",
+                        _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _opts = [] ->
       @web_core_404_lambda_response
     end)
 
@@ -78,14 +78,14 @@ defmodule BelfrageTest do
 
   test "POST request invokes lambda service with Lambda transformer" do
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
-                        %{
+    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+                        _lambda_func = "pwa-lambda-function:test",
+                        _payload = %{
                           body: ~s({"some": "data please"}),
                           headers: %{country: "gb"},
                           httpMethod: "POST"
                         },
-                        _ ->
+                        _opts = [] ->
       @web_core_lambda_response
     end)
 
@@ -107,7 +107,7 @@ defmodule BelfrageTest do
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock
-    |> expect(:call, 0, fn _, _, _, _ -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _role_arn, _func_name, _payload, _opts -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 

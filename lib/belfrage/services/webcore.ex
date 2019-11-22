@@ -19,4 +19,12 @@ defmodule Belfrage.Services.Webcore do
   defp arn(_) do
     Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end
+
+  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: nil}}) do
+    []
+  end
+
+  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: xray_trace_id}}) do
+    [xray_trace_id: xray_trace_id]
+  end
 end

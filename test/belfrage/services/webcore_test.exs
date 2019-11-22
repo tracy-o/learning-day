@@ -26,15 +26,15 @@ defmodule Belfrage.Services.WebcoreTest do
 
   describe "Webcore lambda service" do
     test "given a struct it invokes the origin lambda" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:ok, @lambda_response}
       end)
 
@@ -47,15 +47,10 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "it invokes the origin lambda with the xray_trace_id" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
-                                             headers: %{country: nil},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           [xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"] ->
+      expect(Clients.LambdaMock, :call, fn _role_arn,
+                                           _func_name,
+                                           _payload,
+                                           _opts = [xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"] ->
         {:ok, @lambda_response}
       end)
 
@@ -63,15 +58,16 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "given an origin with an alias, it invokes the origin lambda with that alias" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func =
+                                             "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:ok, @lambda_response}
       end)
 
@@ -97,15 +93,15 @@ defmodule Belfrage.Services.WebcoreTest do
 
   describe "Failures from Webcore services" do
     test "The origin Lambda is invoked, but it returns an error" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:ok, @lambda_response_internal_fail}
       end)
 
@@ -118,15 +114,15 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "cannot invoke a lambda it serves a generic 500" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:error, :failed_to_invoke_lambda}
       end)
 
@@ -139,15 +135,15 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "When the alias cannot be found, we serve a 404" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:error, :function_not_found}
       end)
 
@@ -160,15 +156,15 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "When the client times out" do
-      expect(Clients.LambdaMock, :call, fn @arn,
-                                           "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           %{
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
-                                           _ ->
+                                           _opts ->
         {:error, :timeout}
       end)
 
