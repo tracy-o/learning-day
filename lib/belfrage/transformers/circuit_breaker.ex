@@ -19,10 +19,12 @@ defmodule Belfrage.Transformers.CircuitBreaker do
     error_count >= threshold
   end
 
-  # @todo: no default when errors key does not exist so have to set 0
   defp error_count(%Struct{private: %{origin: origin, counter: counts}} = struct) do
-    get_in(counts, [origin, :errors]) || 0
+    parse_count(get_in(counts, [origin, :errors]))
   end
+
+  defp parse_count(nil), do: 0
+  defp parse_count(x), do: x
 
   # @todo: use threshold from struct
   defp threshold(_struct) do
