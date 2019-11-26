@@ -16,7 +16,7 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   end
 
   defp threshold_exceeded?(error_count, threshold) do
-    error_count >= threshold
+    error_count > threshold
   end
 
   defp error_count(%Struct{private: %{origin: origin, counter: counts}} = struct) do
@@ -26,8 +26,5 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   defp parse_count(nil), do: 0
   defp parse_count(x), do: x
 
-  # @todo: use threshold from struct
-  defp threshold(_struct) do
-    2
-  end
+  defp threshold(%Struct{private: %{circuit_breaker_error_threshold: threshold}} = struct), do: threshold
 end

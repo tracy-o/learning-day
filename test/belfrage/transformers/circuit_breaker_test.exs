@@ -11,7 +11,8 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{"https://origin.bbc.co.uk/" => %{}},
-        pipeline: []
+        pipeline: ["CircuitBreaker"],
+        circuit_breaker_error_threshold: 5
       }
     }
 
@@ -30,8 +31,9 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
       private: %{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        counter: %{"https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1}},
-        pipeline: []
+        counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, :errors => 4}},
+        pipeline: ["CircuitBreaker"],
+        circuit_breaker_error_threshold: 5
       }
     }
 
@@ -50,8 +52,9 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
       private: %{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        counter: %{"https://origin.bbc.co.uk/" => %{501 => 2, :errors => 2}},
-        pipeline: []
+        counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
+        pipeline: ["CircuitBreaker"],
+        circuit_breaker_error_threshold: 5
       }
     }
 
