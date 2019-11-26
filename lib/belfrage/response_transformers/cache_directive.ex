@@ -28,6 +28,6 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
     |> to_integer()
   end
 
-  defp to_integer(max_age) when is_float(max_age), do: Float.round(max_age)
+  defp to_integer(max_age) when is_float(max_age), do: round(max_age)
   defp to_integer(max_age), do: max_age
 end

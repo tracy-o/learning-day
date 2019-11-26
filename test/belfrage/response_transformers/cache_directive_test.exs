@@ -65,7 +65,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
                    "cache-control" => "public, max-age=25"
                  }
                }
-             }).response.cache_directive.max_age == 13
+             }).response.cache_directive.max_age === 13
     end
 
     test "Given no max age, and a multiplier, the max age stays at 0" do
