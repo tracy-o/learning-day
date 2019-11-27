@@ -81,6 +81,13 @@ defmodule Belfrage.DialsTest do
       assert Dials.ttl_multiplier() == 2
     end
 
+    test "when the ttl_multiplier returns zero, the ttl multiplier returns zero" do
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "zero"}))
+
+      Dials.refresh_now()
+      assert Dials.ttl_multiplier() == 0
+    end
+
     test "Dials file doesn't contain ttl_multiplier it returns the default ttl value of 1" do
       File.write!(@dials_location, @json_codec.encode!(%{something: "else"}))
 
