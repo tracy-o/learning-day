@@ -66,24 +66,4 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
              }
            } = CircuitBreaker.call([], struct)
   end
-
-  test "no circuit breaker threshold specified will return same struct" do
-    struct = %Struct{
-      private: %{
-        loop_id: "SportVideos",
-        origin: "https://origin.bbc.co.uk/",
-        counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
-        pipeline: ["CircuitBreaker"]
-      }
-    }
-
-    assert {
-             :ok,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 http_status: nil
-               }
-             }
-           } = CircuitBreaker.call([], struct)
-  end
 end
