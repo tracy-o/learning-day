@@ -35,15 +35,11 @@ defmodule Belfrage.CacheControlParserTest do
   end
 
   describe "&parse_cacheability/1" do
-    test "format the cache control header" do
+    test "formats cahcebility when cache control header is private" do
       assert "private" == CacheControlParser.parse_cacheability(["private"])
     end
 
-    test "returns max age when no quotes are used" do
-      assert "public" == CacheControlParser.parse_cacheability(["public", "max-age=31536000"])
-    end
-
-    test "returns max age when quotes are used" do
+    test "formats cacheability when max-age included in cache control header" do
       assert "public" == CacheControlParser.parse_cacheability(["public", "max-age=31536000"])
     end
   end
@@ -54,10 +50,6 @@ defmodule Belfrage.CacheControlParserTest do
     end
 
     test "returns max age when no quotes are used" do
-      assert 31_536_000 == CacheControlParser.parse_max_age(["public", "max-age=31536000"])
-    end
-
-    test "returns max age when quotes are used" do
       assert 31_536_000 == CacheControlParser.parse_max_age(["public", "max-age=31536000"])
     end
   end
