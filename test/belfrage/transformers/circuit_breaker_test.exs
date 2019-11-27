@@ -25,6 +25,27 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
+  test "counter with no information at all will return same struct" do
+    struct = %Struct{
+      private: %{
+        loop_id: "SportVideos",
+        origin: "https://origin.bbc.co.uk/",
+        counter: %{},
+        pipeline: ["CircuitBreaker"],
+        circuit_breaker_error_threshold: 5
+      }
+    }
+
+    assert {
+             :ok,
+             %Struct{
+               response: %{
+                 http_status: nil
+               }
+             }
+           } = CircuitBreaker.call([], struct)
+  end
+
   test "counter containing errors under threshold will return same struct" do
     struct = %Struct{
       private: %{

@@ -6,7 +6,7 @@ defmodule Routes.Specs.ProxyPass do
       platform: :origin_simulator,
       pipeline: ["CircuitBreaker"],
       resp_pipeline: [],
-      circuit_breaker_error_threshold: 2
+      circuit_breaker_error_threshold: 100
     }
   end
 end
