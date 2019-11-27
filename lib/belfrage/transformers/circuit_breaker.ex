@@ -9,7 +9,6 @@ defmodule Belfrage.Transformers.CircuitBreaker do
         Struct.add(struct, :response, %Belfrage.Struct.Response{http_status: 500})
       else
         false ->
-          log_invalid_config(struct)
           struct
       end
 
@@ -17,7 +16,11 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   end
 
   defp circuit_breaker_config_valid?(%Struct{private: %{circuit_breaker_error_threshold: _threshold}}), do: true
-  defp circuit_breaker_config_valid?(_), do: false
+
+  defp circuit_breaker_config_valid?(struct) do
+    log_invalid_config(struct)
+    false
+  end
 
   defp threshold_exceeded?(error_count, threshold) do
     error_count > threshold
