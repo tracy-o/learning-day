@@ -2,7 +2,7 @@ defmodule Belfrage.Cache.STS do
   use GenServer
 
   @aws_client Application.get_env(:belfrage, :aws_client)
-  @refresh_rate 3_000
+  @refresh_rate 600_000
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :sts_cache_refresh)
