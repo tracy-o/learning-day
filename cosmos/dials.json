@@ -7,7 +7,7 @@
       {
         "value": "zero",
         "description": "Use this set the max-age to zero"
-      }
+      },
       {
         "value": "half",
         "description": "Use this to half the max-age value"
