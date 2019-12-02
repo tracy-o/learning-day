@@ -79,6 +79,7 @@ defmodule Belfrage.Dials do
   end
 
   @ttl_modifier_comparison %{
+    "zero" => 0,
     "half" => 0.5,
     "default" => 1,
     "double" => 2,

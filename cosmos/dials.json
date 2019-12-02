@@ -5,8 +5,12 @@
     "default-value": "default",
     "values": [
       {
+        "value": "zero",
+        "description": "Use this set the max-age to zero"
+      }
+      {
         "value": "half",
-        "description": "use this to half the max-age value"
+        "description": "Use this to half the max-age value"
       },
       {
         "value": "default",
