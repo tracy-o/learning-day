@@ -34,7 +34,7 @@ node {
   }
 
   stage('Set Cosmos config') {
-    BBCNews.uploadCosmosConfig(cosmosService, params.ENVIRONMENT, "belfrage-build/cosmos_config/${params.ENVIRONMENT}-belfrage.json", params.FORCE_RELEASE)
+    sh 'cp belfrage-build/cosmos_config/release-configuration.json cosmos/release-configuration.json'
   }
 
   if (params.ENVIRONMENT == 'test') {
