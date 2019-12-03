@@ -12,7 +12,7 @@ defmodule Belfrage.Clients.LambdaTest do
 
     test "Given a role we cannot assume we return the :failed_to_assume_role error" do
       assert Lambda.call("the-wrong-role", "pwa-lambda-function", %{some: "data"}) ==
-               {:error, :credentials_not_found_in_cache}
+               {:error, :credentials_not_found}
     end
 
     test "Given a working role, but an incorrect function name we return the :failed_to_invoke_lambda error" do
