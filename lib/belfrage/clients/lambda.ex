@@ -22,7 +22,7 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   def call(arn, function, payload) do
-    with {:ok, credentials} <- Belfrage.Cache.STS.fetch(arn) do
+    with {:ok, credentials} <- Belfrage.Credentials.Refresh.fetch(arn) do
       invoke_lambda(function, payload, credentials)
     else
       error -> error

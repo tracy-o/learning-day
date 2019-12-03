@@ -10,7 +10,8 @@ config :belfrage,
   preview_api_lambda_function: "preview-api-lambda-function",
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
   playground_lambda_role_arn: "playground-lambda-role-arn",
-  production_environment: "test"
+  production_environment: "test",
+  credential_fetcher: Belfrage.Credentials.LocalDev
 
 config :ex_metrics,
   send_metrics: false
