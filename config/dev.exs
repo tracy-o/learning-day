@@ -11,7 +11,7 @@ config :belfrage,
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
   playground_lambda_role_arn: "playground-lambda-role-arn",
   production_environment: "test",
-  credential_fetcher: Belfrage.Credentials.LocalDev
+  credential_strategy: Belfrage.Credentials.LocalDev
 
 config :ex_metrics,
   send_metrics: false

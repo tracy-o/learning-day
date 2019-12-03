@@ -1,5 +1,5 @@
 defmodule Belfrage.Credentials.LocalDev do
-  @behaviour Belfrage.Behaviours.CredentialFetcher
+  @behaviour Belfrage.Behaviours.CredentialStrategy
 
   @impl true
   def refresh_credential(arn, session_name) do

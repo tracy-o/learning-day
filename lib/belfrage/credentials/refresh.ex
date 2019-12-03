@@ -1,6 +1,6 @@
 defmodule Belfrage.Credentials.Refresh do
   use GenServer
-  @credential_fetcher Application.get_env(:belfrage, :credential_fetcher)
+  @credential_strategy Application.get_env(:belfrage, :credential_strategy)
 
   @refresh_rate 600_000
 
@@ -41,11 +41,11 @@ defmodule Belfrage.Credentials.Refresh do
   defp refresh_credentials do
     playground_lambda_role_arn = Application.get_env(:belfrage, :playground_lambda_role_arn)
     if !!playground_lambda_role_arn do
-      @credential_fetcher.refresh_credential(playground_lambda_role_arn, "playground_session")
+      @credential_strategy.refresh_credential(playground_lambda_role_arn, "playground_session")
       |> store_credentials()
     end
 
-    @credential_fetcher.refresh_credential(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
+    @credential_strategy.refresh_credential(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
     |> store_credentials()
   end
 

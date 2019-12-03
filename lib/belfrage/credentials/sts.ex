@@ -1,5 +1,5 @@
 defmodule Belfrage.Credentials.STS do
-  @behaviour Belfrage.Behaviours.CredentialFetcher
+  @behaviour Belfrage.Behaviours.CredentialStrategy
   @aws_client Application.get_env(:belfrage, :aws_client)
 
   @impl true

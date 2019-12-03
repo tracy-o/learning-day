@@ -28,7 +28,7 @@ config :belfrage,
   lambda_timeout: 5_000,
   default_timeout: 6_000,
   machine_gun: Belfrage.Clients.HTTP.MachineGun,
-  credential_fetcher: Belfrage.Credentials.STS
+  credential_strategy: Belfrage.Credentials.STS
 
 config :ex_aws,
   region: "eu-west-1",
