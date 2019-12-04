@@ -42,6 +42,7 @@ defmodule Belfrage.LoopTest do
              {:ok,
               %{
                 counter: %{},
+                long_counter: %{},
                 origin: "http://origin.bbc.com",
                 owner: "belfrage-team@bbc.co.uk",
                 runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
@@ -116,7 +117,7 @@ defmodule Belfrage.LoopTest do
     end
   end
 
-  test "resets after a specific time" do
+  test "resets counter after a specific time" do
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.origin == "http://origin.bbc.com"
 
@@ -128,6 +129,20 @@ defmodule Belfrage.LoopTest do
 
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert false == Map.has_key?(state.counter, :error), "Loop should have reset"
+  end
+
+  test "resets long_counter after a specific time" do
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert state.origin == "http://origin.bbc.com"
+
+    for _ <- 1..30, do: Loop.inc(@resp_struct)
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert state.counter.errors == 30
+
+    Process.sleep(Application.get_env(:belfrage, :long_counter_reset_interval) + 1)
+
+    {:ok, state} = Loop.state(@legacy_request_struct)
+    assert false == Map.has_key?(state.long_counter, :error), "Loop should have reset"
   end
 
   test "decides the origin based on the loop_id" do
