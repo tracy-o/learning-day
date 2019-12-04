@@ -124,7 +124,7 @@ defmodule Belfrage.LoopTest do
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.counter.errors == 30
 
-    Process.sleep(Application.get_env(:belfrage, :circuit_breaker_reset_interval) + 1)
+    Process.sleep(Application.get_env(:belfrage, :short_counter_reset_interval) + 1)
 
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert false == Map.has_key?(state.counter, :error), "Loop should have reset"

@@ -3,7 +3,7 @@ defmodule Belfrage.Loop do
 
   alias Belfrage.{Counter, LoopsRegistry, Struct}
 
-  @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
+ @interval Application.get_env(:belfrage, :short_counter_reset_interval)
   def start_link(name) do
     GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
   end

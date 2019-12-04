@@ -20,7 +20,7 @@ config :ex_aws, :retries,
 
 config :belfrage,
   aws_client: ExAws,
-  circuit_breaker_reset_interval: 5_000,
+  short_counter_reset_interval: 5_000,
   dials_location: "/etc/cosmos-dials/dials.json",
   errors_threshold: 100,
   json_codec: Eljiffy,
