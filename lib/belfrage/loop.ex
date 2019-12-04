@@ -69,7 +69,7 @@ defmodule Belfrage.Loop do
     {:noreply, state}
   end
 
-  # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
+  # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
 
   defp origin_pointer("ContainerData", :webcore) do
     Application.get_env(:belfrage, :api_lambda_function)
