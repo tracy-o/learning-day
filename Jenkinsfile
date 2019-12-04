@@ -33,11 +33,11 @@ node {
     }
   }
 
-  stage('Set Cosmos config') {
-    sh 'cp belfrage-build/cosmos_config/release-configuration.json cosmos/release-configuration.json'
-  }
-
   if (params.ENVIRONMENT == 'test') {
+    stage('Get Cosmos config from build repo') {
+      sh 'cp belfrage-build/cosmos_config/release-configuration.json cosmos/release-configuration.json'
+    }
+
     stage('Run tests') {
       docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
         sh 'mix deps.get'
