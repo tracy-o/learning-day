@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "long_counter with no errors will not add circuit breaker response" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{}},
@@ -27,7 +27,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "long_counter with no information at all will not add circuit breaker response" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{},
@@ -48,7 +48,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "long_counter containing errors under threshold will not add circuit breaker response" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, :errors => 4}},
@@ -69,7 +69,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "long_counter containing errors over threshold will return struct with response section with 500 status" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
@@ -90,7 +90,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "multiple origins will not add circuit breaker response when no errors for current origin" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
         long_counter: %{
@@ -106,7 +106,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     assert {
              :ok,
              %Struct{
-               response: %{
+               response: %Struct.Response{
                  http_status: nil
                }
              }
@@ -115,7 +115,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
   test "multiple origins will return struct with http 500 response when no errors for current origin" do
     struct = %Struct{
-      private: %{
+      private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
         long_counter: %{
@@ -131,7 +131,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     assert {
              :ok,
              %Struct{
-               response: %{
+               response: %Struct.Response{
                  http_status: 500
                }
              }
