@@ -33,7 +33,6 @@ defmodule Routes.Routefile do
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
   
-  handle "/news/videos/service-worker.js", using: "NewsVideos", examples: ["/news/videos/service-worker.js"]
   handle "/news/videos/:id", using: "NewsVideos", examples: ["/news/videos/50653614"] do
     return_404 if: String.length(id) != 8
   end
