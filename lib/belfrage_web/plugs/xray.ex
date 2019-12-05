@@ -13,7 +13,7 @@ defmodule BelfrageWeb.Plugs.XRay do
     segment = @xray.start_tracing(trace, "Belfrage")
 
     conn
-    |> Plug.Conn.put_private(:xray_trace_id, "Root=" <> segment.trace.root)
+    |> Plug.Conn.put_private(:xray_trace_id, "Root=" <> segment.trace.root <> ";Parent=" <> segment.id)
     |> register_before_send(&on_request_completed(&1, segment))
   end
 
