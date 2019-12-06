@@ -3,7 +3,8 @@ defmodule Belfrage.Loop do
 
   alias Belfrage.{Counter, LoopsRegistry, Struct}
 
-  @interval Application.get_env(:belfrage, :circuit_breaker_reset_interval)
+  @short_interval Application.get_env(:belfrage, :short_counter_reset_interval)
+  @long_interval Application.get_env(:belfrage, :long_counter_reset_interval)
   def start_link(name) do
     GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
   end
@@ -32,9 +33,14 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def init(specs) do
-    Process.send_after(self(), :reset, @interval)
+    Process.send_after(self(), :short_reset, @short_interval)
+    Process.send_after(self(), :long_reset, @long_interval)
 
-    {:ok, Map.put(specs, :counter, Counter.init())}
+    {:ok,
+     Map.merge(specs, %{
+       counter: Counter.init(),
+       long_counter: Counter.init()
+     })}
   end
 
   @impl GenServer
@@ -46,6 +52,8 @@ defmodule Belfrage.Loop do
   def handle_cast({:inc, http_status, origin, true}, state) do
     state = %{state | counter: Counter.inc(state.counter, :fallback, origin)}
     state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
+    state = %{state | long_counter: Counter.inc(state.long_counter, :fallback, origin)}
+    state = %{state | long_counter: Counter.inc(state.long_counter, http_status, origin)}
 
     {:noreply, state}
   end
@@ -53,6 +61,7 @@ defmodule Belfrage.Loop do
   @impl GenServer
   def handle_cast({:inc, http_status, origin, _fallback}, state) do
     state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
+    state = %{state | long_counter: Counter.inc(state.long_counter, http_status, origin)}
 
     {:noreply, state}
   end
@@ -61,15 +70,22 @@ defmodule Belfrage.Loop do
   # TODO: Before resetting it should send
   # the counter to the Controller app.
   @impl GenServer
-  def handle_info(:reset, state) do
+  def handle_info(:short_reset, state) do
     Belfrage.Monitor.record_loop(state)
-    Process.send_after(self(), :reset, @interval)
+    Process.send_after(self(), :short_reset, @short_interval)
     state = %{state | counter: Counter.init()}
 
     {:noreply, state}
   end
 
-  # TODO: discuss is these belong to the loop or to a trnsformer or to the service domain.
+  @impl GenServer
+  def handle_info(:long_reset, state) do
+    Process.send_after(self(), :long_reset, @long_interval)
+    state = %{state | long_counter: Counter.init()}
+    {:noreply, state}
+  end
+
+  # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
 
   defp origin_pointer("ContainerData", :webcore) do
     Application.get_env(:belfrage, :api_lambda_function)

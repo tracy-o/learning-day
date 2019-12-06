@@ -16,9 +16,9 @@ defmodule Belfrage.Transformers.CircuitBreaker do
     error_count > threshold
   end
 
-  # The origin defined in private is used to fetch :errors inside counter
+  # The origin defined in private is used to fetch :errors inside long_counter
   # This is used to match the :errors map origin key
-  defp error_count(%Struct{private: %{origin: origin, counter: counts}}) do
+  defp error_count(%Struct{private: %{origin: origin, long_counter: counts}}) do
     parse_count(get_in(counts, [origin, :errors]))
   end
 
