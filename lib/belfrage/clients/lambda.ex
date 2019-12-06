@@ -1,6 +1,7 @@
 defmodule Belfrage.Clients.Lambda do
   use ExMetrics
   alias Belfrage.Clients.HTTP
+  require Belfrage.Xray
 
   @aws Application.get_env(:belfrage, :aws)
   @aws_lambda Application.get_env(:belfrage, :aws_lambda)
@@ -32,12 +33,17 @@ defmodule Belfrage.Clients.Lambda do
 
   defp invoke_lambda(function, payload, credentials, opts) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      case @aws_lambda.invoke(function, payload, %{}, opts)
-           |> @aws.request(
-             security_token: credentials.session_token,
-             access_key_id: credentials.access_key_id,
-             secret_access_key: credentials.secret_access_key
-           ) do
+      lambda_response =
+        Belfrage.Xray.trace_subsegment("invoke-lambda-call") do
+          @aws_lambda.invoke(function, payload, %{}, opts)
+          |> @aws.request(
+            security_token: credentials.session_token,
+            access_key_id: credentials.access_key_id,
+            secret_access_key: credentials.secret_access_key
+          )
+        end
+
+      case lambda_response do
         {:ok, body} -> {:ok, body}
         {:error, {:http_error, 404, response}} -> function_not_found(response)
         {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)

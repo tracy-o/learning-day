@@ -18,4 +18,12 @@ defmodule Belfrage.XrayStub do
   def finish_tracing(_segment) do
     :ok
   end
+
+  def start_subsegment(_segment_name) do
+    {:ok, :segment}
+  end
+
+  def finish_subsegment(_segment_name) do
+    :ok
+  end
 end
