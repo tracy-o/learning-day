@@ -17,18 +17,6 @@ defmodule Belfrage.Transformers.DevelopmentRequestsTest do
     assert [] == DevelopmentRequests.development_transformers(struct)
   end
 
-  test "when request is for the playground, and has not been replayed" do
-    struct = %Struct{request: %Struct.Request{playground?: true, has_been_replayed?: nil}}
-
-    assert ["PlaygroundLambda"] == DevelopmentRequests.development_transformers(struct)
-  end
-
-  test "when request is for the playground, and has been replayed" do
-    struct = %Struct{request: %Struct.Request{playground?: true, has_been_replayed?: true}}
-
-    assert ["ReplayedTraffic"] == DevelopmentRequests.development_transformers(struct)
-  end
-
   test "when request is on a www subdomain" do
     struct = %Struct{request: %Struct.Request{subdomain: "www"}}
 
@@ -46,12 +34,6 @@ defmodule Belfrage.Transformers.DevelopmentRequestsTest do
       struct = %Struct{request: %Struct.Request{subdomain: "my-commit-hash", has_been_replayed?: true}}
 
       assert ["ReplayedTraffic"] == DevelopmentRequests.development_transformers(struct)
-    end
-
-    test "when request is not on a www subdomain, and is playground" do
-      struct = %Struct{request: %Struct.Request{subdomain: "my-commit-hash", playground?: true}}
-
-      assert ["PlaygroundLambda"] == DevelopmentRequests.development_transformers(struct)
     end
   end
 end

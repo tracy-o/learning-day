@@ -14,7 +14,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         host: "www.belfrage.com",
         country: "gb",
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -32,7 +31,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         host: "test-branch.belfrage.com",
         country: "gb",
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -50,7 +48,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         host: "www",
         country: "gb",
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -68,7 +65,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         host: "www",
         country: "gb",
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -87,7 +83,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         query_string: %{foo: "ba"},
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -106,7 +101,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
@@ -125,104 +119,11 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
-        playground: nil,
         varnish: 1,
         cache: 0
       })
       |> Map.put(:path_params, %{"id" => "article-1234"})
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
-  end
-
-  describe "when playground config values are all setup" do
-    test "when the request is for the playground" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
-
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{},
-          replayed_traffic: nil,
-          playground: true,
-          varnish: 1,
-          cache: 0
-        })
-
-      assert StructAdapter.adapt(conn, id).request.playground? == true
-    end
-
-    test "when the request is not for the playground" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
-
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{},
-          replayed_traffic: nil,
-          playground: nil,
-          varnish: 1,
-          cache: 0
-        })
-
-      assert StructAdapter.adapt(conn, id).request.playground? == nil
-    end
-
-    test "when request is for playground" do
-      assert StructAdapter.playground(true) == true
-    end
-
-    test "when request is not for playground" do
-      assert StructAdapter.playground(false) == nil
-    end
-  end
-
-  describe "when playground config values are not setup" do
-    setup do
-      saved_api = Application.get_env(:belfrage, :playground_api_lambda_function)
-      saved_pwa = Application.get_env(:belfrage, :playground_pwa_lambda_function)
-
-      Application.put_env(:belfrage, :playground_api_lambda_function, nil)
-      Application.put_env(:belfrage, :playground_pwa_lambda_function, nil)
-
-      on_exit(fn ->
-        Application.put_env(:belfrage, :playground_api_lambda_function, saved_api)
-        Application.put_env(:belfrage, :playground_pwa_lambda_function, saved_pwa)
-      end)
-
-      :ok
-    end
-
-    test "playground request is rejected" do
-      id = "12345678"
-      conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
-
-      conn =
-        put_private(conn, :bbc_headers, %{
-          scheme: :https,
-          host: "test-branch.belfrage.com",
-          country: "gb",
-          query_string: %{},
-          replayed_traffic: nil,
-          playground: true,
-          varnish: 1,
-          cache: 0
-        })
-
-      assert StructAdapter.adapt(conn, id).request.playground? == nil
-    end
-
-    test "when request is for playground" do
-      assert StructAdapter.playground(true) == nil
-    end
-
-    test "when request is not for playground" do
-      assert StructAdapter.playground(false) == nil
-    end
   end
 end
