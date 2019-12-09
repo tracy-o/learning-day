@@ -18,8 +18,7 @@ defmodule BelfrageWeb.StructAdapter do
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
-
-        edge_cache?: bbc_headers.cache
+        edge_cache?: bbc_headers.cache,
         xray_trace_id: xray_trace_id
       },
       private: %Private{

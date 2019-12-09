@@ -16,6 +16,11 @@ defmodule Belfrage.Services.Webcore do
     )
   end
 
+  defp build_webcore_response(struct) do
+    @lambda_client.call(arn(struct), struct.private.origin, Webcore.Request.build(struct), invoke_lambda_options(struct))
+    |> Webcore.Response.build()
+  end
+
   defp arn(_) do
     Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end
