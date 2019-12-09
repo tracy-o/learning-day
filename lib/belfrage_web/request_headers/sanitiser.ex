@@ -29,9 +29,6 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def replayed_traffic(%{replayed_traffic: "true"}, _), do: true
   def replayed_traffic(_, _), do: nil
 
-  def playground(%{playground: "true"}, _), do: true
-  def playground(_, _), do: nil
-
   def varnish(%{varnish: nil}, _), do: false
   def varnish(_, _), do: true
 

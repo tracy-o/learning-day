@@ -16,10 +16,6 @@ defmodule Belfrage.Services.Webcore do
     )
   end
 
-  defp arn(%Struct{request: %Struct.Request{playground?: true}}) do
-    Application.fetch_env!(:belfrage, :playground_lambda_role_arn)
-  end
-
   defp arn(_) do
     Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
   end

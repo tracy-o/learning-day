@@ -39,12 +39,6 @@ defmodule Belfrage.Credentials.Refresh do
   end
 
   defp refresh_credentials do
-    playground_lambda_role_arn = Application.get_env(:belfrage, :playground_lambda_role_arn)
-    if !!playground_lambda_role_arn do
-      @credential_strategy.refresh_credential(playground_lambda_role_arn, "playground_session")
-      |> store_credentials()
-    end
-
     @credential_strategy.refresh_credential(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
     |> store_credentials()
   end
