@@ -15,7 +15,7 @@ defmodule Routes.Routefile do
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
-  handle "/wc-data/page-compostion", using: "PageComposition", examples: ["/wc-data/page-composition?path=/:service/videos/:id"]
+  handle "/wc-data/page-compostion", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
