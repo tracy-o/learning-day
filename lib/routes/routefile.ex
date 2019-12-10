@@ -15,6 +15,7 @@ defmodule Routes.Routefile do
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
+  handle "/wc-data/page-compostion", using: "PageComposition", examples: ["/wc-data/page-composition?path=/:service/videos/:id"]
   handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
@@ -32,7 +33,7 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
-  
+
   handle "/news/videos/:id", using: "NewsVideos", examples: ["/news/videos/50653614"] do
     return_404 if: String.length(id) != 8
   end
