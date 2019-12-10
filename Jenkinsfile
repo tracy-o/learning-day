@@ -42,6 +42,7 @@ node {
       docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
         sh 'mix deps.get'
         sh 'mix test'
+        sh 'mix test_e2e'
         sh 'mix format --check-formatted'
       }
     }
