@@ -15,7 +15,7 @@ defmodule Belfrage.Transformers.PreviewLambdaTest do
   end
 
   test "when request is for a ContainerData route" do
-    assert {:ok, %Struct{private: %Struct.Private{origin: "preview-api-lambda-function"}}} =
+    assert {:ok, %Struct{private: %Struct.Private{origin: "preview-pwa-lambda-function"}}} =
              PreviewLambda.call([], @container_data_struct)
   end
 end

@@ -88,7 +88,7 @@ defmodule Belfrage.Loop do
   # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
 
   defp origin_pointer("ContainerData", :webcore) do
-    Application.get_env(:belfrage, :api_lambda_function)
+    Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
   defp origin_pointer(_, :webcore) do

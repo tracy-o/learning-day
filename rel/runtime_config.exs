@@ -3,9 +3,7 @@ use Mix.Config
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :required},
   {"PWA_LAMBDA_FUNCTION", :required},
-  {"API_LAMBDA_FUNCTION", :required},
   {"PREVIEW_PWA_LAMBDA_FUNCTION", :required},
-  {"PREVIEW_API_LAMBDA_FUNCTION", :required},
   {"PRODUCTION_ENVIRONMENT", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->

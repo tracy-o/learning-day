@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.PreviewLambda do
   end
 
   defp preview_origin_override("ContainerData") do
-    Application.get_env(:belfrage, :preview_api_lambda_function)
+    Application.get_env(:belfrage, :preview_pwa_lambda_function)
   end
 
   defp preview_origin_override(_) do
