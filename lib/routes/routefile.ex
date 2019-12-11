@@ -15,7 +15,6 @@ defmodule Routes.Routefile do
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
-  handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
