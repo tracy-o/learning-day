@@ -13,11 +13,12 @@ defmodule Belfrage.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(mix_env) when mix_env in [:test, :end_to_end], do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp aliases do
     [
+      test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
       t: ["format", "cmd mix test --force --color"]
     ]
   end
@@ -45,7 +46,7 @@ defmodule Belfrage.MixProject do
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
       {:machine_gun, "~> 0.1.6"},
-      {:mox, "~> 0.5", only: :test},
+      {:mox, "~> 0.5", only: [:test, :end_to_end]},
       {:plug_cowboy, "~> 2.0"},
       {:stump, "~> 1.0"},
       {:sweet_xml, "~> 0.6"},
