@@ -6,7 +6,7 @@ defmodule Routes.Specs.PageComposition do
       platform: :webcore,
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias"],
       resp_pipeline: [],
-      query_params_allowlist: "*"
+      query_params_allowlist: ["path"]
     }
   end
 end
