@@ -24,10 +24,10 @@ defmodule Belfrage.DialsTest do
     end
 
     test "Changing the file and refreshing gives the new dials value" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
 
       Dials.refresh_now()
-      assert Dials.state() == %{"ttl_multiplier" => "double"}
+      assert Dials.state() == %{"ttl_multiplier" => "long"}
     end
 
     test "Writing unparsable JSON to the file returns the initial dials values" do
@@ -75,14 +75,14 @@ defmodule Belfrage.DialsTest do
     end
 
     test "Changing the file and gives the new ttl multiplier value" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
 
       Dials.refresh_now()
-      assert Dials.ttl_multiplier() == 2
+      assert Dials.ttl_multiplier() == 3
     end
 
-    test "when the ttl_multiplier dial is `zero`, the ttl multiplier returns `0`" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "zero"}))
+    test "when the ttl_multiplier dial is `private`, the ttl multiplier returns `0`" do
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "private"}))
 
       Dials.refresh_now()
       assert Dials.ttl_multiplier() == 0

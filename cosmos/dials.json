@@ -5,28 +5,20 @@
     "default-value": "default",
     "values": [
       {
-        "value": "zero",
-        "description": "Use this set the max-age to zero"
-      },
-      {
-        "value": "half",
-        "description": "Use this to half the max-age value"
+        "value": "private",
+        "description": "Use this to simulate a world with fully personalised pages, bypassing the Varnish caching"
       },
       {
         "value": "default",
         "description": "Use this to pass through the max-age value unchanged"
       },
       {
-        "value": "double",
-        "description": "Use this to double the max-age value"
+        "value": "long",
+        "description": "Use this to triple the max-age to alleviate excessive load, such as when recovering from a complete failure"
       },
       {
-        "value": "triple",
-        "description": "Use this to triple the max-age value"
-      },
-      {
-        "value": "quadruple",
-        "description": "Use this to quadruple the max-age value"
+        "value": "super_long",
+        "description": "Use this to 5x the max-age in case of extreme instability of the platform"
       }
     ]
   }

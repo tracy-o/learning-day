@@ -79,12 +79,10 @@ defmodule Belfrage.Dials do
   end
 
   @ttl_modifier_comparison %{
-    "zero" => 0,
-    "half" => 0.5,
+    "private" => 0,
     "default" => 1,
-    "double" => 2,
-    "triple" => 3,
-    "quadruple" => 4
+    "long" => 3,
+    "super-long" => 5
   }
 
   defp dial_value_to_int(dial_value) do
