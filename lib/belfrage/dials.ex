@@ -82,7 +82,7 @@ defmodule Belfrage.Dials do
     "private" => 0,
     "default" => 1,
     "long" => 3,
-    "super-long" => 5
+    "super_long" => 5
   }
 
   defp dial_value_to_int(dial_value) do
