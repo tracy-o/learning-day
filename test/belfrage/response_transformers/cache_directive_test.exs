@@ -43,7 +43,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, and a multiplier, this multiplied cache directive is returned in the response" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
@@ -52,37 +52,24 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
                    "cache-control" => "public, max-age=1000"
                  }
                }
-             }).response.cache_directive.max_age == 2000
+             }).response.cache_directive.max_age == 3000
     end
 
-    test "Given an odd number max age, and a multiplier, this multiplied cache directive is returned and rounded in the response" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "half"}))
+    test "Given a max age and a multiplier of zero, the max-age is set to 0 and the cacheability is set to private" do
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "private"}))
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
                  headers: %{
-                   "cache-control" => "public, max-age=25"
-                 }
-               }
-             }).response.cache_directive.max_age === 13
-    end
-
-    test "Given a max age and a multiplier of zero, the max-age is set to 0" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "zero"}))
-      Belfrage.Dials.refresh_now()
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=1000"
+                   "cache-control" => "private, max-age=0"
                  }
                }
              }).response.cache_directive.max_age == 0
     end
 
     test "Given no max age, and a multiplier, the max age stays at 0" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "double"}))
+      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{

@@ -12,22 +12,30 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   def call(struct = %Struct{response: %Struct.Response{headers: %{"cache-control" => cache_control}}}) do
     response_headers = Map.delete(struct.response.headers, "cache-control")
 
-    cache_directive = CacheControlParser.parse(cache_control)
-    cache_directive = %{cache_directive | max_age: dial_multiply(cache_directive[:max_age])}
-
     struct
-    |> Struct.add(:response, %{cache_directive: cache_directive, headers: response_headers})
+    |> Struct.add(:response, %{
+      cache_directive: cache_directive(CacheControlParser.parse(cache_control), Belfrage.Dials.ttl_multiplier()),
+      headers: response_headers
+    })
   end
 
   @impl true
   def call(struct), do: struct
 
-  defp dial_multiply(max_age) do
+  defp dial_multiply(max_age, ttl_multiplier) do
     max_age
-    |> Kernel.*(Belfrage.Dials.ttl_multiplier())
+    |> Kernel.*(ttl_multiplier)
     |> to_integer()
   end
 
   defp to_integer(max_age) when is_float(max_age), do: round(max_age)
   defp to_integer(max_age), do: max_age
+
+  defp cache_directive(cache_directive, ttl_multiplier) when ttl_multiplier == 0 do
+    %{cache_directive | cacheability: "private", max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+  end
+
+  defp cache_directive(cache_directive, ttl_multiplier) do
+    %{cache_directive | max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+  end
 end
