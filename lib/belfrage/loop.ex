@@ -45,7 +45,7 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_call({:state, loop_id}, _from, state) do
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(loop_id, state.platform)})}, state}
+    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(state.platform)})}, state}
   end
 
   @impl GenServer
@@ -87,15 +87,11 @@ defmodule Belfrage.Loop do
 
   # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
 
-  defp origin_pointer("ContainerData", :webcore) do
+  defp origin_pointer(:webcore) do
     Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
-  defp origin_pointer(_, :webcore) do
-    Application.get_env(:belfrage, :pwa_lambda_function)
-  end
-
-  defp origin_pointer(_, :origin_simulator) do
+  defp origin_pointer(:origin_simulator) do
     Application.get_env(:belfrage, :origin_simulator)
   end
 end
