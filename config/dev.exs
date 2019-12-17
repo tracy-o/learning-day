@@ -6,7 +6,8 @@ config :belfrage,
   preview_pwa_lambda_function: "preview-pwa-lambda-function",
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
   production_environment: "test",
-  credential_strategy: Belfrage.Credentials.LocalDev
+  credential_strategy: Belfrage.Credentials.LocalDev,
+  dials_location: "test/support/resources/dials.json"
 
 config :ex_metrics,
   send_metrics: false

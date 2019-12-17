@@ -15,6 +15,10 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 200, "I'm ok thanks")
   end
 
+  get "/favicon.ico" do
+    send_resp(conn, 200, "favicon.ico")
+  end
+
   options _ do
     send_resp(conn, 405, "")
   end
