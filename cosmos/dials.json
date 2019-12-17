@@ -18,7 +18,7 @@
       },
       {
         "value": "super_long",
-        "description": "Use this to 5x the max-age in case of extreme instability of the platform"
+        "description": "Use this to 10x the max-age in case of extreme instability of the platform"
       }
     ]
   }
