@@ -21,7 +21,7 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
     assert Map.has_key?(result.response.headers, "content-type")
   end
 
-  test "does not affect any other values in the response" do
+  test "does not affect any other response headers" do
     result =
       ResponseHeaderGuardian.call(%Struct{
         response: %Struct.Response{
@@ -33,12 +33,14 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
         }
       })
 
-    assert result = %Struct.Response{
-             body: "<p>some content</p>",
-             http_status: 200,
-             headers: %{
-               "content-type" => "application/json"
+    assert %Struct{
+             response: %Struct.Response{
+               body: "<p>some content</p>",
+               http_status: 200,
+               headers: %{
+                 "content-type" => "application/json"
+               }
              }
-           }
+           } = result
   end
 end
