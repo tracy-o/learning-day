@@ -18,6 +18,7 @@ node {
   checkout scm
 
   properties([
+    buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
     disableConcurrentBuilds(),
     parameters([
         choice(choices: ['test', 'live'], description: 'The Cosmos environment to deploy to', name: 'ENVIRONMENT'),
