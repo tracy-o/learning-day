@@ -16,7 +16,6 @@ defmodule Routes.Routefile do
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
-  handle "/graphql", using: "ContainerData", examples: ["/graphql"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
