@@ -7,6 +7,7 @@ http_response_code_metrics = Enum.map(200..599, fn status -> "service.HTTP.respo
 config :ex_metrics,
   metrics:
     [
+      "circuit_breaker.active",
       "cache.fallback_item_does_not_exist",
       "cache.stale_response_added_to_struct",
       "clients.lambda.invoke_failure",
