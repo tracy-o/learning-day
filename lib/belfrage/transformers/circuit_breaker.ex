@@ -5,11 +5,20 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   def call(rest, struct) do
     struct =
       case threshold_exceeded?(error_count(struct), threshold(struct)) do
-        true -> Struct.add(struct, :response, %Belfrage.Struct.Response{http_status: 500})
+        true -> 
+          circuit_breaker_active(struct)
         false -> struct
       end
 
     then(rest, struct)
+  end
+
+  defp circuit_breaker_active(struct = %Belfrage.Struct{}) do
+    ExMetrics.increment("circuit_breaker.active")
+
+    struct
+    |> Struct.add(:response, %{http_status: 500})
+    |> Struct.add(:private, %{origin: :belfrage_circuit_breaker})
   end
 
   defp threshold_exceeded?(error_count, threshold) do
