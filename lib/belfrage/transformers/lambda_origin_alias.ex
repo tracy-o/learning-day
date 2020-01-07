@@ -13,12 +13,19 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
-    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{subdomain}"})
+    struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{lambda_alias(subdomain)}"})
 
     then(rest, struct)
   end
 
   defp production_environment do
     Application.get_env(:belfrage, :production_environment)
+  end
+
+  defp lambda_alias(subdomain) do
+    case production_environment() do
+      "live" -> "live"
+      _ -> subdomain
+    end
   end
 end
