@@ -2,7 +2,7 @@ use Mix.Config
 
 config :belfrage,
   origin_simulator: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com",
-  pwa_lambda_function: "arn:aws:lambda:eu-west-1:134209033928:function:webcore-playground-test-webcore-playground-pwa",
+  pwa_lambda_function: "pwa-lambda-function",
   preview_pwa_lambda_function:
     "arn:aws:lambda:eu-west-1:134209033928:function:webcore-playground-test-webcore-playground-pwa",
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
