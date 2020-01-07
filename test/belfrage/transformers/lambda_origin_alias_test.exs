@@ -11,6 +11,11 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
     private: %Struct.Private{loop_id: "SportVideos", origin: "lambda-function"}
   }
 
+  @struct_with_live_production_environment %Struct{
+    request: %Struct.Request{production_environment: "live", subdomain: "example"},
+    private: %Struct.Private{origin: "lambda-function"}
+  }
+
   test "The default www subdomain will add the production env as the alias" do
     production_env = Application.get_env(:belfrage, :production_environment)
 
@@ -32,5 +37,12 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
     {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], api_struct)
 
     assert origin == "lambda-function:example-branch"
+  end
+
+  test "live production_environment on a subdomain invokes the live alias" do
+    {:ok, %Struct{private: %Struct.Private{origin: origin}}} =
+      LambdaOriginAlias.call([], @struct_with_live_production_environment)
+
+    assert origin == "lambda-function:live"
   end
 end

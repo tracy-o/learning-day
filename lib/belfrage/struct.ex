@@ -16,7 +16,8 @@ defmodule Belfrage.Struct.Request do
     has_been_replayed?: nil,
     subdomain: "www",
     query_params: %{},
-    path_params: %{}
+    path_params: %{},
+    production_environment: "test"
   ]
 end
 
