@@ -126,4 +126,21 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
   end
+
+  test "Adds the production_environment to the struct" do
+    id = "12345678"
+    conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
+
+    conn =
+      put_private(conn, :bbc_headers, %{
+        scheme: :https,
+        host: "www.belfrage.com",
+        country: "gb",
+        replayed_traffic: nil,
+        varnish: 1,
+        cache: 0
+      })
+
+    assert "test" == StructAdapter.adapt(conn, id).request.production_environment
+  end
 end
