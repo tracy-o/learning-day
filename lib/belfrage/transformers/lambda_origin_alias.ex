@@ -5,7 +5,7 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
   use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{subdomain: "www", production_environment: "test"}, private: private}) do
+  def call(rest, struct = %Struct{request: %Struct.Request{subdomain: "www"}, private: private}) do
     struct = Struct.add(struct, :private, %{origin: "#{private.origin}:#{struct.request.production_environment}"})
 
     then(rest, struct)
