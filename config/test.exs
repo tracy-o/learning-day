@@ -15,7 +15,8 @@ config :belfrage,
   production_environment: "test",
   lambda_timeout: 1_000,
   origin_simulator: "http://origin.bbc.com",
-  machine_gun: Belfrage.Clients.HTTP.MachineGunMock
+  machine_gun: Belfrage.Clients.HTTP.MachineGunMock,
+  aws_sts: Belfrage.AWS.STSMock
 
 config :ex_metrics,
   send_metrics: false

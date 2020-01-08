@@ -19,6 +19,12 @@ defmodule Test.Support.Helper do
       import Mox
       setup :verify_on_exit!
       setup :set_mox_global
+
+      setup do
+        stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
+
+        :ok
+      end
     end
   end
 
