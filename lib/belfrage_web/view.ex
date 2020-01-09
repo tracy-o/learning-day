@@ -46,9 +46,18 @@ defmodule BelfrageWeb.View do
 
   defp add_response_headers(conn, struct) do
     struct.response.headers
-    |> Enum.reduce(conn, fn {header_key, header_value}, conn ->
-      conn
-      |> put_resp_header(header_key, header_value)
+    |> Enum.reduce(conn, fn
+      {header_key, header_value}, conn when is_binary(header_value) ->
+        put_resp_header(conn, header_key, header_value)
+
+      {header_key, invalid_header_value}, conn ->
+        Stump.log(:warn, %{
+          msg: "Not adding non-string header value to response",
+          header_key: header_key,
+          header_value: invalid_header_value
+        })
+
+        conn
     end)
     |> add_default_headers(struct)
   end
