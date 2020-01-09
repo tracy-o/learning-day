@@ -1,7 +1,10 @@
 defmodule Belfrage.AWS.STSStub do
   @behaviour Belfrage.AWS.STS
 
-  def assume_role(_role_arn, _role_name) do
-    :ok
+  @doc """
+  Build a real STS assume role ExAws operation
+  """
+  def assume_role(role_arn, role_name) do
+    ExAws.STS.assume_role(role_arn, role_name)
   end
 end
