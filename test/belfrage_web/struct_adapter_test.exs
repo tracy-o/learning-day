@@ -141,6 +141,6 @@ defmodule BelfrageWeb.StructAdapterTest do
         cache: 0
       })
 
-    assert "test" == StructAdapter.adapt(conn, id).request.production_environment
+    assert "test" == StructAdapter.adapt(conn, id).private.production_environment
   end
 end

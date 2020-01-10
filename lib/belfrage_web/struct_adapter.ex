@@ -18,11 +18,11 @@ defmodule BelfrageWeb.StructAdapter do
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
-        edge_cache?: bbc_headers.cache,
-        production_environment: production_environment()
+        edge_cache?: bbc_headers.cache
       },
       private: %Private{
-        loop_id: loop_id
+        loop_id: loop_id,
+        production_environment: production_environment()
       }
     }
   end

@@ -4,16 +4,16 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
   alias Belfrage.Transformers.LambdaOriginAlias
   alias Belfrage.Struct
 
-  @struct_with_default_subdomain %Struct{private: %Struct.Private{origin: "lambda-function"}}
+  @struct_with_default_subdomain %Struct{private: %Struct.Private{origin: "lambda-function", production_environment: "test"}}
 
   @struct_with_custom_subdomain %Struct{
     request: %Struct.Request{subdomain: "example-branch"},
-    private: %Struct.Private{loop_id: "SportVideos", origin: "lambda-function"}
+    private: %Struct.Private{loop_id: "SportVideos", origin: "lambda-function", production_environment: "test"}
   }
 
   @struct_with_live_production_environment %Struct{
-    request: %Struct.Request{production_environment: "live", subdomain: "example"},
-    private: %Struct.Private{origin: "lambda-function"}
+    request: %Struct.Request{subdomain: "example"},
+    private: %Struct.Private{origin: "lambda-function", production_environment: "live"}
   }
 
   test "The default www subdomain will add the production env as the alias" do

@@ -16,8 +16,7 @@ defmodule Belfrage.Struct.Request do
     has_been_replayed?: nil,
     subdomain: "www",
     query_params: %{},
-    path_params: %{},
-    production_environment: "test"
+    path_params: %{}
   ]
 end
 
@@ -39,7 +38,8 @@ defmodule Belfrage.Struct.Private do
             long_counter: %{},
             circuit_breaker_error_threshold: nil,
             pipeline: [],
-            query_params_allowlist: []
+            query_params_allowlist: [],
+            production_environment: "live"
 end
 
 defmodule Belfrage.Struct do
