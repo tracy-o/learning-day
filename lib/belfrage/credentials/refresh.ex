@@ -42,6 +42,7 @@ defmodule Belfrage.Credentials.Refresh do
   defp refresh_credentials do
     @credential_strategy.refresh_credential(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
     |> store_credentials()
+    |> IO.inspect(label: "store credentials result")
   end
 
   defp store_credentials({:ok, arn, session_name, credentials}) do

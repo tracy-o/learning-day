@@ -30,6 +30,7 @@ config :belfrage,
   default_timeout: 6_000,
   machine_gun: Belfrage.Clients.HTTP.MachineGun,
   credential_strategy: Belfrage.Credentials.STS,
+  aws: Belfrage.AWS,
   aws_sts: Belfrage.AWS.STS,
   worker_process_init_pause_time: 0
 
