@@ -4,7 +4,9 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
   alias Belfrage.Transformers.LambdaOriginAlias
   alias Belfrage.Struct
 
-  @struct_with_default_subdomain %Struct{private: %Struct.Private{origin: "lambda-function", production_environment: "test"}}
+  @struct_with_default_subdomain %Struct{
+    private: %Struct.Private{origin: "lambda-function", production_environment: "test"}
+  }
 
   @struct_with_custom_subdomain %Struct{
     request: %Struct.Request{subdomain: "example-branch"},
