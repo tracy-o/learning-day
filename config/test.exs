@@ -24,5 +24,4 @@ config :belfrage,
 config :ex_metrics,
   send_metrics: false
 
-# config :logger,
-# backends: []
+config :logger, backends: []

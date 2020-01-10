@@ -27,9 +27,6 @@ defmodule Test.Support.Helper do
       setup :set_mox_global
 
       setup do
-        # stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
-        # stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
-        # stub_with(Belfrage.AWS.LambdaMock, Belfrage.AWS.LambdaStub)
         Test.Support.Helper.setup_stubs()
 
         :ok
