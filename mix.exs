@@ -19,7 +19,8 @@ defmodule Belfrage.MixProject do
   defp aliases do
     [
       test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
-      t: ["format", "cmd mix test --force --color"]
+      t: ["format", "cmd mix test --force --color"],
+      test: ["test --no-start"]
     ]
   end
 
