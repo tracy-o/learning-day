@@ -21,7 +21,8 @@ defmodule BelfrageWeb.StructAdapter do
         edge_cache?: bbc_headers.cache
       },
       private: %Private{
-        loop_id: loop_id
+        loop_id: loop_id,
+        production_environment: production_environment()
       }
     }
   end
@@ -44,4 +45,8 @@ defmodule BelfrageWeb.StructAdapter do
   end
 
   defp subdomain(_conn), do: "www"
+
+  defp production_environment do
+    Application.get_env(:belfrage, :production_environment)
+  end
 end
