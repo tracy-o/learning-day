@@ -1,7 +1,6 @@
 use Mix.Config
 
 config :belfrage,
-  aws_client: ExAwsMock,
   short_counter_reset_interval: 100,
   long_counter_reset_interval: 100,
   dials_location: "test/support/resources/dials.json",
@@ -18,8 +17,7 @@ config :belfrage,
   machine_gun: Belfrage.Clients.HTTP.MachineGunMock,
   aws: Belfrage.AWSMock,
   aws_sts: Belfrage.AWS.STSMock,
-  aws_lambda: Belfrage.AWS.LambdaMock,
-  worker_process_init_pause_time: 100
+  aws_lambda: Belfrage.AWS.LambdaMock
 
 config :ex_metrics,
   send_metrics: false

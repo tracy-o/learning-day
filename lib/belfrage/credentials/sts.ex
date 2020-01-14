@@ -8,7 +8,6 @@ defmodule Belfrage.Credentials.STS do
     assume_result = @aws_sts.assume_role(arn, session_name)
       |> @aws.request()
       |> format_response()
-      |> IO.inspect(label: "aws request response")
 
     case assume_result do
       {:ok, credentials} -> {:ok, arn, session_name, credentials}

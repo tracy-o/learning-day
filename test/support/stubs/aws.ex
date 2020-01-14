@@ -4,7 +4,7 @@ defmodule Belfrage.AWSStub do
   def request(_operation, _options \\ [])
 
   def request(%ExAws.Operation.JSON{service: :lambda}, options) do
-    response_body = %{}
+    response_body = "some response"
 
     {:ok, %{body: response_body}}
   end

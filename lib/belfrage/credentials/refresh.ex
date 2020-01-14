@@ -1,7 +1,6 @@
 defmodule Belfrage.Credentials.Refresh do
   use GenServer
   @credential_strategy Application.get_env(:belfrage, :credential_strategy)
-  @worker_process_init_pause_time Application.get_env(:belfrage, :worker_process_init_pause_time)
 
   @refresh_rate 600_000
 
@@ -11,7 +10,7 @@ defmodule Belfrage.Credentials.Refresh do
 
   def init(initial_state) do
     :ets.new(:sts_cache, [:set, :protected, :named_table, read_concurrency: true])
-    Process.send_after(self(), :refresh, @worker_process_init_pause_time)
+    send(self(), :refresh)
     {:ok, initial_state}
   end
 
@@ -42,7 +41,6 @@ defmodule Belfrage.Credentials.Refresh do
   defp refresh_credentials do
     @credential_strategy.refresh_credential(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
     |> store_credentials()
-    |> IO.inspect(label: "store credentials result")
   end
 
   defp store_credentials({:ok, arn, session_name, credentials}) do
