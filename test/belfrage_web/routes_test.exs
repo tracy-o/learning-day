@@ -27,13 +27,13 @@ defmodule BelfrageWeb.LegacyTest do
     test "200 GET" do
       BelfrageMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: "SportVideos"},
-                              request: %Request{path: "/sport/videos/12345678"}
+                              private: %Private{loop_id: "SomeLoop"},
+                              request: %Request{path: "/i-exist"}
                             } ->
         @struct_with_html_response
       end)
 
-      conn = conn(:get, "/sport/videos/12345678") |> Router.call([])
+      conn = conn(:get, "/i-exist") |> Router.call([])
 
       assert conn.status == 200
       assert conn.resp_body == "<p>Basic HTML response</p>"
@@ -42,37 +42,37 @@ defmodule BelfrageWeb.LegacyTest do
     test "404 downstream GET" do
       BelfrageMock
       |> expect(:handle, fn %Struct{
-                              private: %Private{loop_id: "SportVideos"},
-                              request: %Request{path: "/sport/videos/12345678"}
+                              private: %Private{loop_id: "SomeLoop"},
+                              request: %Request{path: "/downstream-not-found"}
                             } ->
         @struct_with_404_response
       end)
 
-      conn = conn(:get, "/sport/videos/12345678") |> Router.call([])
+      conn = conn(:get, "/downstream-not-found") |> Router.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "Downstream not found"
     end
 
     test "404 invalid GET" do
-      conn = conn(:get, "/sport/videos/123456789123456789") |> Router.call([])
+      conn = conn(:get, "/not-found") |> Router.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "404 Not Found"
     end
 
     test "301 redirect" do
-      conn = conn(:get, "/example/weather/0") |> Router.call([])
+      conn = conn(:get, "/permantent-redirect") |> Router.call([])
 
       assert conn.status == 301
-      assert get_resp_header(conn, "location") == ["/weather"]
+      assert get_resp_header(conn, "location") == ["/new-location"]
     end
 
     test "302 redirect" do
-      conn = conn(:get, "/example/news/0") |> Router.call([])
+      conn = conn(:get, "/temp-redirect") |> Router.call([])
 
       assert conn.status == 302
-      assert get_resp_header(conn, "location") == ["/news"]
+      assert get_resp_header(conn, "location") == ["/temp-location"]
     end
   end
 end

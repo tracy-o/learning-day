@@ -84,7 +84,7 @@ defmodule BelfrageWeb.HeadersTest do
     end
 
     test "with a 404 path default response_headers are added" do
-      conn = make_404_call("<p>some html content</p>", %{}, "/sport/videos/1234567890123456789")
+      conn = make_404_call("<p>some html content</p>", %{}, "/not-found")
 
       assert {404,
               [

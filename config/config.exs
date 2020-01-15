@@ -32,7 +32,8 @@ config :belfrage,
   aws: Belfrage.AWS,
   aws_sts: Belfrage.AWS.STS,
   aws_lambda: Belfrage.AWS.Lambda,
-  file_io: Belfrage.Helpers.FileIO
+  file_io: Belfrage.Helpers.FileIO,
+  routefile: Routes.Routefile
 
 config :ex_aws,
   region: "eu-west-1",
