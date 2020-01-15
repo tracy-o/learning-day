@@ -5,3 +5,4 @@ Mox.defmock(Belfrage.Clients.HTTP.MachineGunMock, for: Belfrage.Clients.HTTP.Mac
 Mox.defmock(Belfrage.AWS.STSMock, for: Belfrage.AWS.STS)
 Mox.defmock(Belfrage.AWS.LambdaMock, for: Belfrage.AWS.Lambda)
 Mox.defmock(Belfrage.AWSMock, for: Belfrage.AWS)
+Mox.defmock(Belfrage.Helpers.FileIOMock, for: Belfrage.Helpers.FileIO)

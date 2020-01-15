@@ -3,6 +3,7 @@ defmodule Belfrage.Dials do
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
+  @file_io Application.get_env(:belfrage, :file_io)
   @refresh_rate 30_000
 
   def start_link(opts) do
@@ -19,14 +20,18 @@ defmodule Belfrage.Dials do
     GenServer.call(:dials, :state)
   end
 
+  def clear() do
+    GenServer.call(:dials, :clear)
+  end
+
   def refresh_now() do
     Process.send(:dials, :refresh, [])
   end
 
   @impl GenServer
-  def init(initial_state) do
+  def init(_opts) do
     send(self(), :refresh)
-    {:ok, initial_state}
+    {:ok, %{}}
   end
 
   @impl GenServer
@@ -63,7 +68,7 @@ defmodule Belfrage.Dials do
   end
 
   @impl GenServer
-  def handle_call(:state, _from, _state) do
+  def handle_call(:clear, _from, _state) do
     {:reply, %{}, %{}}
   end
 
@@ -72,7 +77,7 @@ defmodule Belfrage.Dials do
   end
 
   defp refresh_dials do
-    case File.read(@dials_location) do
+    case @file_io.read(@dials_location) do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end

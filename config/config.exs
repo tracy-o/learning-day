@@ -31,7 +31,8 @@ config :belfrage,
   credential_strategy: Belfrage.Credentials.STS,
   aws: Belfrage.AWS,
   aws_sts: Belfrage.AWS.STS,
-  aws_lambda: Belfrage.AWS.Lambda
+  aws_lambda: Belfrage.AWS.Lambda,
+  file_io: Belfrage.Helpers.FileIO
 
 config :ex_aws,
   region: "eu-west-1",
