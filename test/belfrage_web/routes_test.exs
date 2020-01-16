@@ -28,12 +28,12 @@ defmodule BelfrageWeb.LegacyTest do
       BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Private{loop_id: "SomeLoop"},
-                              request: %Request{path: "/i-exist"}
+                              request: %Request{path: "/200-ok-response"}
                             } ->
         @struct_with_html_response
       end)
 
-      conn = conn(:get, "/i-exist") |> Router.call([])
+      conn = conn(:get, "/200-ok-response") |> Router.call([])
 
       assert conn.status == 200
       assert conn.resp_body == "<p>Basic HTML response</p>"

@@ -20,7 +20,6 @@ config :belfrage,
   file_io: Belfrage.Helpers.FileIOMock,
   routefile: Routes.RoutefileMock
 
-
 config :ex_metrics,
   send_metrics: false
 
