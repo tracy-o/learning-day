@@ -4,12 +4,14 @@ defmodule BelfrageWeb.Router do
   use ExMetrics
 
   alias BelfrageWeb.RequestHeaders
+  alias BelfrageWeb.ProductionEnvironment
 
   @routefile Application.get_env(:belfrage, :routefile)
 
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
+  plug(ProductionEnvironment)
   plug(:match)
   plug(:dispatch)
 
