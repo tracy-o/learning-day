@@ -2,16 +2,15 @@ defmodule Belfrage.Transformers.ReplayedTrafficTest do
   use ExUnit.Case
 
   alias Belfrage.Transformers.ReplayedTraffic
-  alias Test.Support.StructHelper
   alias Belfrage.Struct
 
-  @replayed_request_struct StructHelper.build(
-                             request: %{has_been_replayed?: true},
-                             private: %{
-                               origin: "an-origin-set-by-the-loop",
-                               pipeline: ["ReplayedTraffic"]
-                             }
-                           )
+  @replayed_request_struct %Struct{
+    request: %Struct.Request{has_been_replayed?: true, path: "/_web_core"},
+    private: %Struct.Private{
+      origin: "an-origin-set-by-the-loop",
+      pipeline: ["ReplayedTraffic"]
+    }
+  }
 
   @non_replayed_request_struct Struct.add(@replayed_request_struct, :request, %{
                                  has_been_replayed?: nil

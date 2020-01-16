@@ -2,10 +2,9 @@ defmodule Belfrage.Transformers.PreviewLambdaTest do
   use ExUnit.Case
 
   alias Belfrage.Transformers.PreviewLambda
-  alias Test.Support.StructHelper
   alias Belfrage.Struct
 
-  @non_container_data_struct StructHelper.build(private: %{loop_id: "WebCore"})
+  @non_container_data_struct %Struct{private: %Struct.Private{loop_id: "WebCore"}}
 
   @container_data_struct Struct.add(@non_container_data_struct, :private, %{loop_id: "ContainerData"})
 

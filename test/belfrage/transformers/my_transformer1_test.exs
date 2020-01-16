@@ -2,13 +2,13 @@ defmodule Belfrage.Transformers.MyTransformer1Test do
   use ExUnit.Case
 
   alias Belfrage.Transformers.MyTransformer1, as: Subject
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
-  @original_struct StructHelper.build(
-                     private: %{
-                       pipeline: ["MyTransformer1"]
-                     }
-                   )
+  @original_struct %Struct{
+    private: %{
+      pipeline: ["MyTransformer1"]
+    }
+  }
 
   test 'call with no remaining transformers' do
     pipeline = ["MyTransformer1"]

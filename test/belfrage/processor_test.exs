@@ -2,10 +2,10 @@ defmodule Belfrage.ProcessorTest do
   use ExUnit.Case
 
   alias Belfrage.{Processor, Struct}
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   describe "Processor.get_loop/1" do
-    @struct StructHelper.build(private: %{loop_id: "SportVideos"})
+    @struct %Struct{private: %Struct.Private{loop_id: "SportVideos"}}
 
     test "adds loop information to Struct.private" do
       assert %Struct{
@@ -34,14 +34,14 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.request_pipeline/1" do
-    @struct StructHelper.build(
-              private: %{
-                loop_id: "SportVideos",
-                origin: "https://origin.bbc.co.uk/",
-                counter: %{},
-                pipeline: ["MyTransformer1"]
-              }
-            )
+    @struct %Struct{
+      private: %Struct.Private{
+        loop_id: "SportVideos",
+        origin: "https://origin.bbc.co.uk/",
+        counter: %{},
+        pipeline: ["MyTransformer1"]
+      }
+    }
 
     test "runs struct through transformers" do
       assert %{
@@ -53,14 +53,14 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.request_pipeline/1 with empty pipeline" do
-    @struct StructHelper.build(
-              private: %{
-                loop_id: "SportVideos",
-                origin: "https://origin.bbc.co.uk/",
-                counter: %{},
-                pipeline: []
-              }
-            )
+    @struct %Struct{
+      private: %Struct.Private{
+        loop_id: "SportVideos",
+        origin: "https://origin.bbc.co.uk/",
+        counter: %{},
+        pipeline: []
+      }
+    }
 
     test "returns the unmodified struct" do
       assert %{
@@ -71,13 +71,13 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.init_post_response_side_effects/1" do
-    @resp_struct StructHelper.build(
-                   private: %{
-                     loop_id: "SportVideos",
-                     origin: "https://origin.bbc.co.uk/"
-                   },
-                   response: %{http_status: 501}
-                 )
+    @resp_struct %Struct{
+      private: %Struct.Private{
+        loop_id: "SportVideos",
+        origin: "https://origin.bbc.co.uk/"
+      },
+      response: %Struct.Response{http_status: 501}
+    }
 
     test "increments status" do
       Belfrage.LoopsRegistry.find_or_start(@resp_struct)
@@ -91,14 +91,14 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.response_pipeline/1" do
-    @resp_struct StructHelper.build(
-                   response: %{
-                     http_status: 501,
-                     headers: %{
-                       "connection" => "close"
-                     }
-                   }
-                 )
+    @resp_struct %Struct{
+      response: %Struct.Response{
+        http_status: 501,
+        headers: %{
+          "connection" => "close"
+        }
+      }
+    }
 
     test "calls the ResponseHeaderGuardian response transformer" do
       result = Processor.response_pipeline(@resp_struct)

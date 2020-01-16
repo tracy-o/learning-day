@@ -6,24 +6,23 @@ defmodule BelfrageWeb.LegacyTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Private, Request}
   alias BelfrageWeb.Router
-  alias Test.Support.StructHelper
 
   describe "Routefile routes" do
-    @struct_with_html_response StructHelper.build(
-                                 response: %{
-                                   body: "<p>Basic HTML response</p>",
-                                   headers: %{"content-type" => "text/html; charset=utf-8"},
-                                   http_status: 200
-                                 }
-                               )
+    @struct_with_html_response %Struct{
+      response: %Struct.Response{
+        body: "<p>Basic HTML response</p>",
+        headers: %{"content-type" => "text/html; charset=utf-8"},
+        http_status: 200
+      }
+    }
 
-    @struct_with_404_response StructHelper.build(
-                                response: %{
-                                  body: "Downstream not found",
-                                  headers: %{"content-type" => "text/html; charset=utf-8"},
-                                  http_status: 404
-                                }
-                              )
+    @struct_with_404_response %Struct{
+      response: %Struct.Response{
+        body: "Downstream not found",
+        headers: %{"content-type" => "text/html; charset=utf-8"},
+        http_status: 404
+      }
+    }
 
     test "200 GET" do
       BelfrageMock

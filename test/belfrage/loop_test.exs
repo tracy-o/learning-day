@@ -2,7 +2,7 @@ defmodule Belfrage.LoopTest do
   use ExUnit.Case, async: true
 
   alias Belfrage.{Loop, LoopsSupervisor}
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   setup do
     LoopsSupervisor.start_loop("ProxyPass")
@@ -12,30 +12,30 @@ defmodule Belfrage.LoopTest do
 
   @failure_status_code Enum.random(500..504)
 
-  @legacy_request_struct StructHelper.build(private: %{loop_id: "ProxyPass"})
-  @webcore_request_struct StructHelper.build(private: %{loop_id: "SportVideos"})
+  @legacy_request_struct %Struct{private: %Struct.Private{loop_id: "ProxyPass"}}
+  @webcore_request_struct %Struct{private: %Struct.Private{loop_id: "SportVideos"}}
 
-  @resp_struct StructHelper.build(
-                 private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
-                 response: %{http_status: @failure_status_code, fallback: nil}
-               )
-  @resp_struct_2 StructHelper.build(
-                   private: %{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
-                   response: %{http_status: @failure_status_code, fallback: nil}
-                 )
-  @non_error_resp_struct StructHelper.build(
-                           private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
-                           response: %{http_status: 200, fallback: nil}
-                         )
-  @non_error_resp_struct_2 StructHelper.build(
-                             private: %{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
-                             response: %{http_status: 200, fallback: nil}
-                           )
+  @resp_struct %Struct{
+    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
+  }
+  @resp_struct_2 %Struct{
+    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
+    response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
+  }
+  @non_error_resp_struct %Struct{
+    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    response: %Struct.Response{http_status: 200, fallback: nil}
+  }
+  @non_error_resp_struct_2 %Struct{
+    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
+    response: %Struct.Response{http_status: 200, fallback: nil}
+  }
 
-  @fallback_resp_struct StructHelper.build(
-                          private: %{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
-                          response: %{http_status: 200, fallback: true}
-                        )
+  @fallback_resp_struct %Struct{
+    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    response: %Struct.Response{http_status: 200, fallback: true}
+  }
 
   test "returns a state pointer" do
     assert Loop.state(@legacy_request_struct) ==

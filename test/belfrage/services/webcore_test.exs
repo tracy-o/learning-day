@@ -1,21 +1,21 @@
 defmodule Belfrage.Services.WebcoreTest do
   alias Belfrage.{Clients, Struct}
   alias Belfrage.Services.Webcore
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
   @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
 
-  @struct StructHelper.build(
-            private: %{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
-            request: %{
-              method: "GET",
-              path: "/_web_core",
-              query_params: %{"id" => "1234"}
-            }
-          )
+  @struct %Struct{
+    private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
+    request: %Struct.Request{
+      method: "GET",
+      path: "/_web_core",
+      query_params: %{"id" => "1234"}
+    }
+  }
 
   @lambda_response %{
     "headers" => %{},

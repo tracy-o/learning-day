@@ -3,31 +3,31 @@ defmodule Belfrage.BelfrageCacheTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestHash
-  alias Test.Support.StructHelper
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Cache
+  alias Belfrage.Struct
 
-  @fresh_cache_get_request_struct StructHelper.build(
-                                    request: %{
-                                      country: "variant-1",
-                                      method: "GET"
-                                    },
-                                    private: %{
-                                      loop_id: "SportVideos",
-                                      production_environment: "test"
-                                    }
-                                  )
+  @fresh_cache_get_request_struct %Struct{
+    request: %Struct.Request{
+      country: "variant-1",
+      method: "GET"
+    },
+    private: %Struct.Private{
+      loop_id: "SportVideos",
+      production_environment: "test"
+    }
+  }
 
-  @stale_cache_get_request_struct StructHelper.build(
-                                    request: %{
-                                      country: "variant-2",
-                                      method: "GET"
-                                    },
-                                    private: %{
-                                      loop_id: "SportVideos",
-                                      production_environment: "test"
-                                    }
-                                  )
+  @stale_cache_get_request_struct %Struct{
+    request: %Struct.Request{
+      country: "variant-2",
+      method: "GET"
+    },
+    private: %Struct.Private{
+      loop_id: "SportVideos",
+      production_environment: "test"
+    }
+  }
 
   @web_core_lambda_response {:ok,
                              %{

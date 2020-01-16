@@ -2,26 +2,26 @@ defmodule Belfrage.RequestHashTest do
   use ExUnit.Case
 
   alias Belfrage.RequestHash
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
-  @struct StructHelper.build(
-            request: %{path: "/news/clips/abc123", country: "gb", method: "GET", has_been_replayed?: false}
-          )
+  @struct %Struct{
+    request: %Struct.Request{path: "/news/clips/abc123", country: "gb", method: "GET", has_been_replayed?: false}
+  }
 
-  @struct_with_different_country StructHelper.build(
-                                   request: %{
-                                     path: "/news/clips/abc123",
-                                     country: "usa",
-                                     method: "GET"
-                                   }
-                                 )
-  @struct_with_different_path StructHelper.build(
-                                request: %{
-                                  path: "/sport/football/abc123",
-                                  country: "gb",
-                                  method: "GET"
-                                }
-                              )
+  @struct_with_different_country %Struct{
+    request: %Struct.Request{
+      path: "/news/clips/abc123",
+      country: "usa",
+      method: "GET"
+    }
+  }
+  @struct_with_different_path %Struct{
+    request: %Struct.Request{
+      path: "/sport/football/abc123",
+      country: "gb",
+      method: "GET"
+    }
+  }
 
   describe "Belfrage.RequestHash.generate/1" do
     test "when given a valid path and country" do
