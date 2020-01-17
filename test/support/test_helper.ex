@@ -14,11 +14,24 @@ defmodule Test.Support.Helper do
     )
   end
 
+  def setup_stubs do
+    Mox.set_mox_global()
+    Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
+    Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
+    Mox.stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
+    Mox.stub_with(Belfrage.AWS.LambdaMock, Belfrage.AWS.LambdaStub)
+  end
+
   def mox do
     quote do
       import Mox
       setup :verify_on_exit!
-      setup :set_mox_global
+
+      setup do
+        Test.Support.Helper.setup_stubs()
+
+        :ok
+      end
     end
   end
 

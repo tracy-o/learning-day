@@ -1,10 +1,8 @@
 use Mix.Config
 
 config :belfrage,
-  aws_client: ExAwsMock,
   short_counter_reset_interval: 100,
   long_counter_reset_interval: 100,
-  dials_location: "test/support/resources/dials.json",
   errors_threshold: 20,
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,
@@ -15,10 +13,13 @@ config :belfrage,
   production_environment: "test",
   lambda_timeout: 1_000,
   origin_simulator: "http://origin.bbc.com",
-  machine_gun: Belfrage.Clients.HTTP.MachineGunMock
+  machine_gun: Belfrage.Clients.HTTP.MachineGunMock,
+  aws: Belfrage.AWSMock,
+  aws_sts: Belfrage.AWS.STSMock,
+  aws_lambda: Belfrage.AWS.LambdaMock,
+  file_io: Belfrage.Helpers.FileIOMock
 
 config :ex_metrics,
   send_metrics: false
 
-config :logger,
-  backends: []
+config :logger, backends: []

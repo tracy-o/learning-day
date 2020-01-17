@@ -19,7 +19,6 @@ config :ex_aws, :retries,
   max_backoff_in_ms: 200
 
 config :belfrage,
-  aws_client: ExAws,
   short_counter_reset_interval: 5_000,
   long_counter_reset_interval: 60_000,
   dials_location: "/etc/cosmos-dials/dials.json",
@@ -29,7 +28,11 @@ config :belfrage,
   lambda_timeout: 5_000,
   default_timeout: 6_000,
   machine_gun: Belfrage.Clients.HTTP.MachineGun,
-  credential_strategy: Belfrage.Credentials.STS
+  credential_strategy: Belfrage.Credentials.STS,
+  aws: Belfrage.AWS,
+  aws_sts: Belfrage.AWS.STS,
+  aws_lambda: Belfrage.AWS.Lambda,
+  file_io: Belfrage.Helpers.FileIO
 
 config :ex_aws,
   region: "eu-west-1",

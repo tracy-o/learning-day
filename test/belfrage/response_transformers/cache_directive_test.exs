@@ -2,17 +2,15 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Struct
   use ExUnit.Case
-
-  @dials_location Application.get_env(:belfrage, :dials_location)
-  @json_codec Application.get_env(:belfrage, :json_codec)
+  use Test.Support.Helper, :mox
 
   describe "&call/1" do
     setup do
-      original_dials = File.read!(@dials_location)
+      Belfrage.Dials.clear()
 
       on_exit(fn ->
-        File.write!(@dials_location, original_dials)
-        Belfrage.Dials.refresh_now()
+        Belfrage.Dials.clear()
+        :ok
       end)
 
       :ok
@@ -43,7 +41,9 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, and a multiplier, this multiplied cache directive is returned in the response" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "long"})} end)
+
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
@@ -56,7 +56,9 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age and a multiplier of zero, the max-age is set to 0 and the cacheability is set to private" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "private"}))
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "private"})} end)
+
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
@@ -69,7 +71,9 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given no max age, and a multiplier, the max age stays at 0" do
-      File.write!(@dials_location, @json_codec.encode!(%{ttl_multiplier: "long"}))
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "long"})} end)
+
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
@@ -82,7 +86,9 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, but no multiplier, the cache directive with the original max_age is returned in the response" do
-      File.write!(@dials_location, @json_codec.encode!(%{something: "else"}))
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "else"})} end)
+
       Belfrage.Dials.refresh_now()
 
       assert CacheDirective.call(%Struct{
