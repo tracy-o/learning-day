@@ -3,21 +3,20 @@ defmodule BelfrageWeb.HeadersTest do
   use Plug.Test
 
   alias BelfrageWeb.Router
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   use Test.Support.Helper, :mox
 
   describe "content type response_headers" do
     def make_call(body, headers = %{}, path) do
-      struct_with_response =
-        StructHelper.build(
-          response: %{
-            body: body,
-            headers: headers,
-            http_status: 200,
-            cache_directive: %{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
-          }
-        )
+      struct_with_response = %Struct{
+        response: %Struct.Response{
+          body: body,
+          headers: headers,
+          http_status: 200,
+          cache_directive: %{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
+        }
+      }
 
       BelfrageMock
       |> expect(:handle, fn _struct ->

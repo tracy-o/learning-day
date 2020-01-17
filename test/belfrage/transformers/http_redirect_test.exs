@@ -2,41 +2,43 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
   use ExUnit.Case
 
   alias Belfrage.Transformers.HTTPredirect
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
-  @http_request_struct StructHelper.build(
-                         private: %{origin: "http://www.bbc.co.uk"},
-                         request: %{
-                           scheme: :http,
-                           host: "www.bbc.co.uk",
-                           query_params: %{}
-                         }
-                       )
+  @http_request_struct %Struct{
+    private: %Struct.Private{origin: "http://www.bbc.co.uk"},
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      query_params: %{}
+    }
+  }
 
-  @https_request_struct StructHelper.build(
-                          private: %{origin: "https://www.bbc.co.uk"},
-                          request: %{
-                            scheme: :https,
-                            query_params: %{}
-                          }
-                        )
+  @https_request_struct %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.co.uk"},
+    request: %Struct.Request{
+      scheme: :https,
+      query_params: %{}
+    }
+  }
 
-  @http_request_struct_with_qs StructHelper.build(
-                                 private: %{origin: "http://www.bbc.co.uk"},
-                                 request: %{
-                                   scheme: :http,
-                                   host: "www.bbc.co.uk",
-                                   query_params: %{"foo" => "bar"}
-                                 }
-                               )
+  @http_request_struct_with_qs %Struct{
+    private: %Struct.Private{origin: "http://www.bbc.co.uk"},
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      query_params: %{"foo" => "bar"}
+    }
+  }
 
-  @https_request_struct_with_qs StructHelper.build(
-                                  private: %{origin: "https://www.bbc.co.uk"},
-                                  request: %{
-                                    scheme: :https,
-                                    query_params: %{"foo" => "bar"}
-                                  }
-                                )
+  @https_request_struct_with_qs %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.co.uk"},
+    request: %Struct.Request{
+      scheme: :https,
+      query_params: %{"foo" => "bar"}
+    }
+  }
 
   test "http request without a query string will be redirected to https" do
     assert {

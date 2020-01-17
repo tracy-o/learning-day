@@ -3,14 +3,14 @@ defmodule BelfrageWeb.ViewTest do
   use Plug.Test
 
   alias BelfrageWeb.View
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   @json_codec Application.get_env(:belfrage, :json_codec)
 
   doctest View
 
   defp build_struct_and_render(body) do
-    StructHelper.build(response: %{body: body, http_status: 200})
+    %Struct{response: %Struct.Response{body: body, http_status: 200}}
     |> View.render(conn(:get, "/_web_core"))
     |> sent_resp()
   end

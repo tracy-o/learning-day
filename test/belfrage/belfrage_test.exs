@@ -4,31 +4,31 @@ defmodule BelfrageTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Clients.LambdaMock
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
-  @get_request_struct StructHelper.build(
-                        private: %{
-                          loop_id: "SportVideos",
-                          production_environment: "test"
-                        },
-                        request: %{
-                          path: "/_web_core",
-                          method: "GET",
-                          country: "gb"
-                        }
-                      )
+  @get_request_struct %Struct{
+    private: %Struct.Private{
+      loop_id: "SportVideos",
+      production_environment: "test"
+    },
+    request: %Struct.Request{
+      path: "/_web_core",
+      method: "GET",
+      country: "gb"
+    }
+  }
 
-  @post_request_struct StructHelper.build(
-                         request: %{
-                           method: "POST",
-                           payload: ~s({"some": "data please"}),
-                           country: "gb"
-                         },
-                         private: %{
-                           loop_id: "SportVideos",
-                           production_environment: "test"
-                         }
-                       )
+  @post_request_struct %Struct{
+    request: %Struct.Request{
+      method: "POST",
+      payload: ~s({"some": "data please"}),
+      country: "gb"
+    },
+    private: %Struct.Private{
+      loop_id: "SportVideos",
+      production_environment: "test"
+    }
+  }
 
   @web_core_lambda_response {:ok, %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
   @web_core_404_lambda_response {:ok, %{"body" => "404 - not found", "headers" => %{}, "statusCode" => 404}}
@@ -88,18 +88,18 @@ defmodule BelfrageTest do
     Belfrage.handle(@post_request_struct)
   end
 
-  @redirect_request_struct StructHelper.build(
-                             private: %{
-                               loop_id: "SportVideos"
-                             },
-                             request: %{
-                               path: "/_web_core",
-                               method: "GET",
-                               country: "gb",
-                               host: "www.bbc.com",
-                               scheme: :http
-                             }
-                           )
+  @redirect_request_struct %Struct{
+    private: %Struct.Private{
+      loop_id: "SportVideos"
+    },
+    request: %Struct.Request{
+      path: "/_web_core",
+      method: "GET",
+      country: "gb",
+      host: "www.bbc.com",
+      scheme: :http
+    }
+  }
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock

@@ -4,7 +4,6 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
 
   alias BelfrageWeb.ResponseHeaders.CacheControl
   alias Belfrage.Struct
-  alias Test.Support.StructHelper
 
   doctest CacheControl
 
@@ -13,10 +12,9 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
 
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
-        response:
-          StructHelper.response_struct(
-            cache_directive: %{cacheability: "private", max_age: 0, stale_while_revalidate: 0}
-          )
+        response: %Struct.Response{
+          cache_directive: %{cacheability: "private", max_age: 0, stale_while_revalidate: 0}
+        }
       })
 
     assert ["private, stale-while-revalidate=0, max-age=0"] ==
@@ -28,10 +26,9 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
 
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
-        response:
-          StructHelper.response_struct(
-            cache_directive: %{cacheability: "public", max_age: 30, stale_while_revalidate: 10}
-          )
+        response: %Struct.Response{
+          cache_directive: %{cacheability: "public", max_age: 30, stale_while_revalidate: 10}
+        }
       })
 
     assert ["public, stale-while-revalidate=10, max-age=30"] ==

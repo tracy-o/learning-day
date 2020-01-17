@@ -3,12 +3,12 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   use Plug.Test
 
   alias BelfrageWeb.ResponseHeaders.Vary
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
-  @with_varnish_and_cache StructHelper.build(request: %{varnish?: true, edge_cache?: true})
-  @non_varnish_with_cache StructHelper.build(request: %{varnish?: false, edge_cache?: true})
-  @with_varnish_no_cache StructHelper.build(request: %{varnish?: true, edge_cache?: false})
-  @no_varnish_or_cache StructHelper.build(request: %{varnish?: false, edge_cache?: false})
+  @with_varnish_and_cache %Struct{request: %Struct.Request{varnish?: true, edge_cache?: true}}
+  @non_varnish_with_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: true}}
+  @with_varnish_no_cache %Struct{request: %Struct.Request{varnish?: true, edge_cache?: false}}
+  @no_varnish_or_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: false}}
 
   doctest Vary
 

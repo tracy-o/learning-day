@@ -1,7 +1,7 @@
 defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case
   alias Belfrage.Cache
-  alias Test.Support.StructHelper
+  alias Belfrage.Struct
 
   @response %Belfrage.Struct.Response{
     body: "hello!",
@@ -39,16 +39,15 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "storing responses" do
     test "a new response" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "abc123"},
-          response: %{
-            headers: %{"content-type" => "application/json"},
-            body: "hello!",
-            http_status: 200,
-            cache_directive: %{cacheability: "public", max_age: 30}
-          }
-        )
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "abc123"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %{cacheability: "public", max_age: 30}
+        }
+      }
 
       assert {:ok, true} == Cache.Local.store(struct)
 
@@ -64,43 +63,40 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "does not overwrite an existing fresh cache version" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "cache_fresh"},
-          response: %{
-            headers: %{"content-type" => "application/json"},
-            body: "hello!",
-            http_status: 200
-          }
-        )
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "cache_fresh"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200
+        }
+      }
 
       assert {:ok, false} == Cache.Local.store(struct)
     end
 
     test "updates an expired cached response" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "expired"},
-          response: %{
-            headers: %{"content-type" => "application/json"},
-            body: "hello!",
-            http_status: 200
-          }
-        )
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "expired"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200
+        }
+      }
 
       assert {:ok, true} == Cache.Local.store(struct)
     end
 
     test "updates a stale cached response" do
-      struct =
-        StructHelper.build(
-          request: %{request_hash: "stale_cache"},
-          response: %{
-            headers: %{"content-type" => "application/json"},
-            body: "hello!",
-            http_status: 200
-          }
-        )
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "stale_cache"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200
+        }
+      }
 
       assert {:ok, true} == Cache.Local.store(struct)
     end
@@ -108,7 +104,7 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "fetching a cached response" do
     test "fetches a fresh cache" do
-      struct = StructHelper.build(request: %{request_hash: "cache_fresh"})
+      struct = %Struct{request: %Struct.Request{request_hash: "cache_fresh"}}
 
       assert {:ok, :fresh,
               %Belfrage.Struct.Response{
@@ -119,7 +115,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "fetches a stale cache" do
-      struct = StructHelper.build(request: %{request_hash: "stale_cache"})
+      struct = %Struct{request: %Struct.Request{request_hash: "stale_cache"}}
 
       assert {:ok, :stale,
               %Belfrage.Struct.Response{
@@ -130,7 +126,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "does not fetch an expired cache" do
-      struct = StructHelper.build(request: %{request_hash: "expired"})
+      struct = %Struct{request: %Struct.Request{request_hash: "expired"}}
 
       assert {:ok, :content_not_found} = Cache.Local.fetch(struct)
     end
@@ -138,18 +134,17 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "cachex integration test" do
     test "stores and retrieves a response" do
-      struct_without_response = StructHelper.build(request: %{request_hash: "asdf567"})
+      struct_without_response = %Struct{request: %Struct.Request{request_hash: "asdf567"}}
 
-      struct_with_response =
-        StructHelper.build(
-          request: %{request_hash: "asdf567"},
-          response: %{
-            headers: %{"content-type" => "application/json"},
-            body: "hello!",
-            http_status: 200,
-            cache_directive: %{cacheability: "public", max_age: 30}
-          }
-        )
+      struct_with_response = %Struct{
+        request: %Struct.Request{request_hash: "asdf567"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %{cacheability: "public", max_age: 30}
+        }
+      }
 
       assert {:ok, true} == Cache.Local.store(struct_with_response)
 
