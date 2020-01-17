@@ -65,6 +65,6 @@ defmodule BelfrageWeb.ViewTest do
     conn = conn(:get, "/_web_core")
     {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
     assert {"string", "true"} in headers
-    refute {"string", true} in headers
+    refute {"non-string", true} in headers
   end
 end
