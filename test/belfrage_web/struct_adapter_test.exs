@@ -153,6 +153,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",

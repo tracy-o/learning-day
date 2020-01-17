@@ -62,6 +62,18 @@ defmodule Belfrage.Clients.LambdaTest do
 
   describe "Belfrage.Clients.Lambda.call/4" do
     test "Given a trace_id option, it invokes a lambda" do
+      Belfrage.AWSMock
+      |> expect(:request, fn %ExAws.Operation.JSON{
+                               service: :lambda,
+                               headers: [
+                                 {"content-type", "application/json"},
+                                 {"X-Amzn-Trace-Id", "1-xxxx-yyyyyyyyyyyyyyyy"}
+                               ]
+                             },
+                             _opts ->
+        {:ok, "<h1>trace_id option provided</h1>"}
+      end)
+
       assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"},
                xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
              ) ==
