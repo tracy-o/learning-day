@@ -57,10 +57,13 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   test "ignores non-string header values when building response headers for the conn" do
-    struct =
-      StructHelper.build(
-        response: %{body: "<p>hi</p>", http_status: 200, headers: %{"non-string" => true, "string" => "true"}}
-      )
+    struct = %Struct{
+      response: %Struct.Response{
+        body: "<p>hi</p>",
+        http_status: 200,
+        headers: %{"non-string" => true, "string" => "true"}
+      }
+    }
 
     conn = conn(:get, "/_web_core")
     {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
