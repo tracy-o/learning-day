@@ -21,8 +21,10 @@ defmodule Belfrage.DialsTest do
     end
 
     test "checks the correct path to the dials config" do
+      dials_location = Application.get_env(:belfrage, :dials_location)
+
       Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({})} end)
+      |> expect(:read, fn ^dials_location -> {:ok, ~s({})} end)
 
       Dials.refresh_now()
       Dials.state()
