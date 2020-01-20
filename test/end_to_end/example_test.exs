@@ -40,7 +40,8 @@ defmodule EndToEndTest do
     assert {200,
             [
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
-              {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"}
+              {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"},
+              {"server", "Belfrage"}
             ], @lambda_response["body"]} == sent_resp(conn)
   end
 
@@ -60,7 +61,8 @@ defmodule EndToEndTest do
     assert {500,
             [
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
-              {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"}
+              {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"},
+              {"server", "Belfrage"}
             ], @lambda_response["body"]} == sent_resp(conn)
   end
 end
