@@ -62,7 +62,7 @@ defmodule BelfrageWeb.LegacyTest do
     end
 
     test "301 redirect" do
-      conn = conn(:get, "/permantent-redirect") |> Router.call([])
+      conn = conn(:get, "/permanent-redirect") |> Router.call([])
 
       assert conn.status == 301
       assert get_resp_header(conn, "location") == ["/new-location"]
