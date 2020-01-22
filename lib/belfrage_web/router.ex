@@ -8,6 +8,8 @@ defmodule BelfrageWeb.Router do
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
+  plug(:fetch_query_params)
+  plug(BelfrageWeb.Plug.Overrides)
   plug(:match)
   plug(:dispatch)
 

@@ -17,6 +17,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -34,6 +35,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -51,6 +53,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -68,6 +71,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -86,6 +90,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -104,6 +109,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -122,6 +128,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
       |> Map.put(:path_params, %{"id" => "article-1234"})
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
@@ -140,6 +147,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
+      |> put_private(:overrides, %{})
 
     assert "test" == StructAdapter.adapt(conn, id).private.production_environment
   end
