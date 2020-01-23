@@ -55,7 +55,7 @@ defmodule BelfrageWeb.LegacyTest do
     end
 
     test "404 invalid GET" do
-      conn = conn(:get, "/not-found") |> Router.call([])
+      conn = conn(:get, "/premature-404") |> Router.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "404 Not Found"

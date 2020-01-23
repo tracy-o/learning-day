@@ -42,12 +42,12 @@ defmodule BelfrageWeb.RouteMasterTest do
     })
   end
 
-  describe "calling handle that uses a do block" do
-    test "only executes the do block" do
+  describe "calling handle with do block" do
+    test "when 404 check is truthy, route is not called" do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/not-found")
+        conn(:get, "/premature-404")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> RoutefileMock.call([])
@@ -56,11 +56,11 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == "404 Not Found"
     end
 
-    test "yeilds to the route" do
-      mock_handle_route("/never-not-found", "SomeLoop")
+    test "when 404 check is false, the request continues downstream" do
+      mock_handle_route("/sends-request-downstream", "SomeLoop")
 
       conn =
-        conn(:get, "/never-not-found")
+        conn(:get, "/sends-request-downstream")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> RoutefileMock.call([])
@@ -69,7 +69,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
   end
 
-  describe "calling handle when using the only_on option" do
+  describe "calling handle with only_on option" do
     test "when the environments dont match, it will return a 404" do
       expect_belfrage_not_called()
 

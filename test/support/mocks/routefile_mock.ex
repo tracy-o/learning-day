@@ -8,11 +8,11 @@ defmodule Routes.RoutefileMock do
 
   handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
 
-  handle "/not-found", using: "SomeLoop", examples: ["/not-found"] do
+  handle "/premature-404", using: "SomeLoop", examples: ["/premature-404"] do
     return_404(if: true)
   end
 
-  handle "/never-not-found", using: "SomeLoop", examples: ["/never-not-found"] do
+  handle "/sends-request-downstream", using: "SomeLoop", examples: ["/sends-request-downstream"] do
     return_404(if: false)
   end
 
