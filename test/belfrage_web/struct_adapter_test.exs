@@ -4,12 +4,17 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   alias BelfrageWeb.StructAdapter
 
+  defp put_test_production_environment(conn) do
+    put_private(conn, :production_environment, "test")
+  end
+
   test "Adds www as the subdomain to the struct" do
     id = "12345678"
-    conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://www.belfrage.com/sport/videos/12345678")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",
         country: "gb",
@@ -23,10 +28,11 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
     id = "12345678"
-    conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://test-branch.belfrage.com/_web_core")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
         country: "gb",
@@ -40,10 +46,12 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "when the host header is empty, we default to www" do
     id = "12345678"
-    conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, "")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://www.belfrage.com/_web_core")
+      |> Map.put(:host, "")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
         country: "gb",
@@ -57,10 +65,12 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "when the host header is not binary, we default to www" do
     id = "12345678"
-    conn = conn(:get, "https://www.belfrage.com/_web_core") |> Map.put(:host, nil)
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://www.belfrage.com/_web_core")
+      |> Map.put(:host, nil)
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
         country: "gb",
@@ -74,10 +84,11 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "When the request contains a query string it is added to the struct" do
     id = "12345678"
-    conn = conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
         country: "gb",
@@ -92,10 +103,11 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "When the request does not have a query string it adds an empty map to the struct" do
     id = "12345678"
-    conn = conn(:get, "https://test-branch.belfrage.com/_web_core")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://test-branch.belfrage.com/_web_core")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
         country: "gb",
@@ -110,10 +122,12 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   test "when the path has path parameters" do
     id = "12345678"
-    conn = conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
+      |> Map.put(:path_params, %{"id" => "article-1234"})
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
         country: "gb",
@@ -122,17 +136,17 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0
       })
-      |> Map.put(:path_params, %{"id" => "article-1234"})
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
   end
 
   test "Adds the production_environment to the struct" do
     id = "12345678"
-    conn = conn(:get, "https://www.belfrage.com/sport/videos/12345678")
 
     conn =
-      put_private(conn, :bbc_headers, %{
+      conn(:get, "https://www.belfrage.com/sport/videos/12345678")
+      |> put_test_production_environment()
+      |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",
         country: "gb",
