@@ -144,7 +144,6 @@ defmodule BelfrageWeb.StructAdapterTest do
       })
       |> put_private(:overrides, %{})
 
-
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
   end
 

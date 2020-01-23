@@ -63,6 +63,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/sends-request-downstream")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 200
@@ -90,6 +91,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/only-on")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 200
