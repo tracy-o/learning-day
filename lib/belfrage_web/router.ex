@@ -4,10 +4,14 @@ defmodule BelfrageWeb.Router do
   use ExMetrics
 
   alias BelfrageWeb.RequestHeaders
+  alias BelfrageWeb.ProductionEnvironment
+
+  @routefile Application.get_env(:belfrage, :routefile)
 
   plug(ExMetrics.Plug.PageMetrics)
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
+  plug(ProductionEnvironment)
   plug(:match)
   plug(:dispatch)
 
@@ -19,7 +23,7 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 405, "")
   end
 
-  match(_, to: Routes.Routefile)
+  match(_, to: @routefile)
 
   def child_spec(scheme: scheme, port: port) do
     Plug.Cowboy.child_spec(
