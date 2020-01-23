@@ -22,8 +22,8 @@ defmodule BelfrageWeb.StructAdapter do
       },
       private: %Private{
         loop_id: loop_id,
-        production_environment: production_environment(),
-        overrides: conn.private.overrides
+        overrides: conn.private.overrides,
+        production_environment: conn.private.production_environment
       }
     }
   end
@@ -43,7 +43,4 @@ defmodule BelfrageWeb.StructAdapter do
 
   defp subdomain(_conn), do: "www"
 
-  defp production_environment do
-    Application.get_env(:belfrage, :production_environment)
-  end
 end

@@ -5,6 +5,7 @@ defmodule Routes.Routefile do
   redirect "/example/weather/0", to: "/weather", status: 301
 
   handle "/", using: "HomePage", examples: ["/"]
+  handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
   handle "/news", using: "NewsFrontPage", examples: ["/news"]
   handle "/sport", using: "SportFrontPage", examples: ["/sport"]
   handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]

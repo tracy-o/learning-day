@@ -38,8 +38,11 @@ defmodule BelfrageWeb.RouteMaster do
 
       # TODO: use match here...
       get unquote(matcher) do
-        return_404(if: Application.get_env(:belfrage, :production_environment) != unquote(env))
-        yield(unquote(id), var!(conn))
+        if var!(conn).private[:production_environment] != unquote(env) do
+          View.not_found(var!(conn))
+        else
+          yield(unquote(id), var!(conn))
+        end
       end
     end
   end
