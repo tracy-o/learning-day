@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.Plug.Overrides do
+defmodule BelfrageWeb.Plugs.Overrides do
   @override_keys Belfrage.Overrides.keys()
 
   def init(opts), do: opts

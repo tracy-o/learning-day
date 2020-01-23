@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.Plug.OverridesTest do
+defmodule BelfrageWeb.Plugs.OverridesTest do
   use ExUnit.Case
   import Plug.Test, only: [conn: 2]
 
@@ -8,7 +8,7 @@ defmodule BelfrageWeb.Plug.OverridesTest do
       |> Plug.Conn.put_private(:production_environment, "live")
       |> Plug.Conn.fetch_query_params(_opts = [])
 
-    assert %Plug.Conn{private: %{overrides: overrides}} = BelfrageWeb.Plug.Overrides.call(conn, _opts = [])
+    assert %Plug.Conn{private: %{overrides: overrides}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
     assert overrides == %{}
   end
 
@@ -19,7 +19,7 @@ defmodule BelfrageWeb.Plug.OverridesTest do
       |> Plug.Conn.fetch_query_params(_opts = [])
 
     assert %Plug.Conn{private: %{overrides: %{"belfrage-cache-bust" => nil}}} =
-             BelfrageWeb.Plug.Overrides.call(conn, _opts = [])
+             BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
   end
 
   test "ignores non-override query string values" do
@@ -28,6 +28,6 @@ defmodule BelfrageWeb.Plug.OverridesTest do
       |> Plug.Conn.put_private(:production_environment, "test")
       |> Plug.Conn.fetch_query_params(_opts = [])
 
-    assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plug.Overrides.call(conn, _opts = [])
+    assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
   end
 end

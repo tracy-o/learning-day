@@ -9,7 +9,7 @@ defmodule BelfrageWeb.Router do
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
   plug(:fetch_query_params)
-  plug(BelfrageWeb.Plug.Overrides)
+  plug(BelfrageWeb.Plugs.Overrides)
   plug(:match)
   plug(:dispatch)
 
