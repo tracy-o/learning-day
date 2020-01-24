@@ -11,8 +11,8 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       Belfrage.XrayStub.new_trace()
     end)
 
-    conn = conn(:get, "/")
-    conn = Plugs.XRay.call(conn, [])
+    conn(:get, "/")
+    |> Plugs.XRay.call([])
   end
 
   test "starts tracing" do
@@ -27,8 +27,8 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       end
     )
 
-    conn = conn(:get, "/")
-    conn = Plugs.XRay.call(conn, [])
+    conn(:get, "/")
+    |> Plugs.XRay.call([])
   end
 
   test "it adds trace_id to the conn" do
@@ -44,7 +44,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     Belfrage.XrayMock
     |> expect(
       :finish_tracing,
-      fn trace = %AwsExRay.Segment{
+      fn _trace = %AwsExRay.Segment{
            trace: %AwsExRay.Trace{
              root: "1-5dd274e2-00644696c03ec16a784a2e43"
            }
@@ -71,7 +71,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       raise "Should not be called"
     end)
 
-    conn = conn(:get, "/status")
-    conn = Plugs.XRay.call(conn, [])
+    conn(:get, "/status")
+    |> Plugs.XRay.call([])
   end
 end
