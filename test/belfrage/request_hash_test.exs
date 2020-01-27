@@ -74,9 +74,22 @@ defmodule Belfrage.RequestHashTest do
                RequestHash.generate(custom_subdomain_struct).request.request_hash
     end
 
+    test "builds repeatable request hash" do
+      %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(@struct)
+      %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(@struct)
+
+      refute String.starts_with?(hash_one, "cache-bust.")
+      refute String.starts_with?(hash_two, "cache-bust.")
+
+      assert hash_one == hash_two
+    end
+
     test "when the request hash is used to cache bust" do
-      hash_one = RequestHash.generate(@struct_for_cache_bust_request)
-      hash_two = RequestHash.generate(@struct_for_cache_bust_request)
+      %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(@struct_for_cache_bust_request)
+      %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(@struct_for_cache_bust_request)
+
+      assert String.starts_with?(hash_one, "cache-bust.")
+      assert String.starts_with?(hash_two, "cache-bust.")
 
       refute hash_one == hash_two
     end
