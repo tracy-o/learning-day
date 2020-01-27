@@ -12,7 +12,6 @@ Source1: belfrage.service
 Source2: bake-scripts.tar.gz
 Source3: belfrage-status-cfn-signal.sh
 Source4: cloudformation-signal.service
-Source5: cfg.yaml
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -49,13 +48,10 @@ cp %{SOURCE3} %{buildroot}/home/component/belfrage-status-cfn-signal.sh
 cp %{SOURCE4} %{buildroot}/usr/lib/systemd/system/cloudformation-signal.service
 mkdir -p %{buildroot}/var/log/component
 touch %{buildroot}/var/log/component/app.log
-mkdir -p %{buildroot}%{_sysconfdir}/amazon/xray
-cp %{SOURCE5} %{buildroot}%{_sysconfdir}/amazon/xray/cfg.yaml
 
 %post
 systemctl enable belfrage
 systemctl enable cloudformation-signal
-systemctl enable xray
 /bin/chown -R component:component /home/component
 /bin/chown -R component:component /var/log/component
 
@@ -68,4 +64,3 @@ systemctl enable xray
 /etc/bake-scripts/%{name}
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
-/etc/amazon/xray/cfg.yaml

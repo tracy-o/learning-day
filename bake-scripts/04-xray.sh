@@ -1,3 +1,8 @@
+#!/bin/bash
+
+ARN=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["XRAY_ROLE_ARN"]')
+
+cat > /etc/amazon/xray/cfg.yaml <<EOF
 # Maximum buffer size in MB (minimum 3). Choose 0 to use 1% of host memory.
 TotalBufferSizeMB: 0
 # Maximum number of concurrent calls to AWS X-Ray to upload segment documents.
@@ -22,10 +27,13 @@ LocalMode: false
 # Amazon Resource Name (ARN) of the AWS resource running the daemon.
 ResourceARN: ""
 # Assume an IAM role to upload segments to a different account.
-RoleARN: "arn:aws:iam::997052946310:role/XRayDaemonWriteAccess"
+RoleARN: "${ARN}"
 # Disable TLS certificate verification.
 NoVerifySSL: false
 # Upload segments to AWS X-Ray through a proxy.
 ProxyAddress: ""
 # Daemon configuration file format version.
 Version: 2
+EOF
+
+systemctl enable xray
