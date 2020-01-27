@@ -84,7 +84,7 @@ defmodule Belfrage.RequestHashTest do
       assert hash_one == hash_two
     end
 
-    test "when the request hash is used to cache bust" do
+    test "when the request hash is used to cache bust requests should be unique" do
       %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(@struct_for_cache_bust_request)
       %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(@struct_for_cache_bust_request)
 
