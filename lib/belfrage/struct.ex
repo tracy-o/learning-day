@@ -38,6 +38,7 @@ defmodule Belfrage.Struct.Private do
             long_counter: %{},
             circuit_breaker_error_threshold: nil,
             pipeline: [],
+            overrides: %{},
             query_params_allowlist: [],
             production_environment: "live"
 end

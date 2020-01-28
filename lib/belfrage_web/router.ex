@@ -12,6 +12,8 @@ defmodule BelfrageWeb.Router do
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
+  plug(:fetch_query_params)
+  plug(BelfrageWeb.Plugs.Overrides)
   plug(:match)
   plug(:dispatch)
 

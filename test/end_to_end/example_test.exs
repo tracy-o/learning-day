@@ -45,6 +45,19 @@ defmodule EndToEndTest do
             ], @lambda_response["body"]} == sent_resp(conn)
   end
 
+  test "passes on query string parameters" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn _role_arn,
+                        _function_name,
+                        %{
+                          queryStringParameters: %{"query" => %{"hi" => "foo"}}
+                        } ->
+      {:ok, @lambda_response}
+    end)
+
+    conn(:get, "/wc-data/container/any-container?query[hi]=foo") |> Router.call([])
+  end
+
   test "a failed response from a lambda e2e" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn _role_arn, _function_name, _payload ->

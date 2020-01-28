@@ -3,8 +3,14 @@ defmodule Belfrage.RequestHash do
   @signature_keys [:path, :country, :method, :query_params, :has_been_replayed?, :subdomain]
 
   def generate(struct) do
-    extract_keys(struct.request)
-    |> Crimpex.signature()
+    case Belfrage.Overrides.should_cache_bust?(struct) do
+      true ->
+        cache_bust_request_hash()
+
+      false ->
+        extract_keys(struct.request)
+        |> Crimpex.signature()
+    end
     |> update_struct(struct)
   end
 
@@ -14,5 +20,9 @@ defmodule Belfrage.RequestHash do
 
   defp update_struct(request_hash, struct) do
     Struct.add(struct, :request, %{request_hash: request_hash})
+  end
+
+  defp cache_bust_request_hash do
+    "cache-bust." <> UUID.uuid4()
   end
 end

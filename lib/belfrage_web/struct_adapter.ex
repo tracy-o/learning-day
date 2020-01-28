@@ -12,7 +12,7 @@ defmodule BelfrageWeb.StructAdapter do
         method: conn.method,
         country: bbc_headers.country,
         path_params: conn.path_params,
-        query_params: query_string(conn),
+        query_params: conn.query_params,
         scheme: bbc_headers.scheme,
         host: bbc_headers.host,
         has_been_replayed?: bbc_headers.replayed_traffic,
@@ -22,13 +22,10 @@ defmodule BelfrageWeb.StructAdapter do
       },
       private: %Private{
         loop_id: loop_id,
+        overrides: conn.private.overrides,
         production_environment: conn.private.production_environment
       }
     }
-  end
-
-  defp query_string(conn) do
-    Plug.Conn.Query.decode(conn.query_string)
   end
 
   defp body(conn) do
