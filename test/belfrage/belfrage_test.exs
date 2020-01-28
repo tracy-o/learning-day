@@ -2,6 +2,7 @@ defmodule BelfrageTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [assert_gzipped: 2]
 
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Struct
@@ -73,7 +74,7 @@ defmodule BelfrageTest do
     thing = Belfrage.handle(struct)
 
     assert thing.response.http_status == 404
-    assert thing.response.body == "404 - not found"
+    assert_gzipped(thing.response.body, "404 - not found")
   end
 
   test "POST request invokes lambda service with Lambda transformer" do

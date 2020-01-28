@@ -23,6 +23,12 @@ defmodule Test.Support.Helper do
     Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
   end
 
+  defmacro assert_gzipped(compressed, should_be) do
+    quote do
+      assert :zlib.gunzip(unquote(compressed)) == unquote(should_be)
+    end
+  end
+
   def mox do
     quote do
       import Mox

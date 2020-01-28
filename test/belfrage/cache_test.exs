@@ -42,14 +42,14 @@ defmodule Belfrage.BelfrageCacheTest do
   @failed_web_core_lambda_response {:ok, %{"body" => "", "headers" => %{}, "statusCode" => 500}}
 
   @response %Belfrage.Struct.Response{
-    body: ~s({"hi": "bonjour"}),
+    body: :zlib.gzip(~s({"hi": "bonjour"})),
     headers: %{"content-type" => "application/json"},
     http_status: 200,
     cache_directive: %{cacheability: "public", max_age: 30}
   }
 
   @fallback_response %Belfrage.Struct.Response{
-    body: ~s({"hi": "bonjour"}),
+    body: :zlib.gzip(~s({"hi": "bonjour"})),
     cache_directive: %{cacheability: "public", max_age: 30},
     headers: %{"content-type" => "application/json"},
     http_status: 200,
