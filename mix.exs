@@ -52,7 +52,7 @@ defmodule Belfrage.MixProject do
       {:machine_gun, "~> 0.1.6"},
       {:mox, "~> 0.5", only: [:test, :end_to_end]},
       {:plug_cowboy, "~> 2.0"},
-      {:stump, "~> 1.0"},
+      {:stump, "~> 1.6"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
       {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"},
