@@ -11,7 +11,8 @@ defmodule Belfrage.XrayStub do
 
   def start_tracing(trace, _app_name) do
     %AwsExRay.Segment{
-      trace: trace
+      trace: trace,
+      id: "fake-xray-parent-id"
     }
   end
 

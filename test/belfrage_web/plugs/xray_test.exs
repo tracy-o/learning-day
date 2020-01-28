@@ -36,7 +36,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     conn = Plugs.XRay.call(conn, [])
 
     assert %Plug.Conn{
-             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent="}
+             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id"}
            } = conn
   end
 
