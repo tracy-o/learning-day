@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   belfrage internal cache.
   """
 
-  alias Belfrage.{CacheControlParser, Struct}
+  alias Belfrage.Struct
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -20,7 +20,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
       content_encoding: content_encoding
     })
 
-    Struct.add(struct, :response, %{body: "", http_status: 500})
+    Struct.add(struct, :response, %{body: "", http_status: 415})
   end
 
   @impl true
