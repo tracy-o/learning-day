@@ -8,6 +8,7 @@ config :belfrage,
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
   production_environment: "test",
   credential_strategy: Belfrage.Credentials.LocalDev,
+  dials_location: "test/support/resources/dials.json",
   session_token: System.get_env("AWS_SESSION_TOKEN"),
   access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
   secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY")
