@@ -49,11 +49,12 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequestedTest do
     test "when gzip is not accepted", %{struct_fixture: struct_fixture} do
       struct = Struct.add(struct_fixture, :request, %{accept_encoding: "br, deflate, compression"})
 
-      %Struct.Response{
-        body: "",
-        headers: %{},
-        http_status: 500
-      } == CompressionAsRequested.call(struct).response
+      assert %Struct.Response{
+               body: "<p>Hi. I am some content</p>",
+               headers: %{},
+               http_status: 200
+             } ==
+               CompressionAsRequested.call(struct_fixture).response
     end
   end
 end
