@@ -173,4 +173,43 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert "test" == StructAdapter.adapt(conn, id).private.production_environment
   end
+
+  describe "accept_encoding value" do
+    test "when an Accept-Encoding header is provided" do
+      id = "12345678"
+
+      conn =
+        conn(:get, "/")
+        |> put_test_production_environment()
+        |> put_private(:bbc_headers, %{
+          scheme: :https,
+          host: "www.belfrage.com",
+          country: "gb",
+          replayed_traffic: nil,
+          varnish: 1,
+          cache: 0
+        })
+        |> put_req_header("accept-encoding", "gzip, deflate, br")
+
+      assert "gzip, deflate, br" == StructAdapter.adapt(conn, id).request.accept_encoding
+    end
+
+    test "when an Accept-Encoding header is not provided" do
+      id = "12345678"
+
+      conn =
+        conn(:get, "/")
+        |> put_test_production_environment()
+        |> put_private(:bbc_headers, %{
+          scheme: :https,
+          host: "www.belfrage.com",
+          country: "gb",
+          replayed_traffic: nil,
+          varnish: 1,
+          cache: 0
+        })
+
+      assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
+    end
+  end
 end
