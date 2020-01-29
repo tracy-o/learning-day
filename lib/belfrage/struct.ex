@@ -12,6 +12,7 @@ defmodule Belfrage.Struct.Request do
     :scheme,
     :host,
     :xray_trace_id,
+    :accept_encoding,
     varnish?: false,
     edge_cache?: false,
     has_been_replayed?: nil,

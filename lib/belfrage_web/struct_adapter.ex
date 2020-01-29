@@ -19,7 +19,8 @@ defmodule BelfrageWeb.StructAdapter do
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
         edge_cache?: bbc_headers.cache,
-        xray_trace_id: xray_trace_id
+        xray_trace_id: xray_trace_id,
+        accept_encoding: accept_encoding(conn)
       },
       private: %Private{
         loop_id: loop_id,
@@ -44,4 +45,10 @@ defmodule BelfrageWeb.StructAdapter do
 
   defp subdomain(_conn), do: "www"
 
+  defp accept_encoding(conn) do
+    case Plug.Conn.get_req_header(conn, "accept-encoding") do
+      [accept_encoding] -> accept_encoding
+      [] -> nil
+    end
+  end
 end
