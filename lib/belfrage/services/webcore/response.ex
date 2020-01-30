@@ -31,6 +31,9 @@ defmodule Belfrage.Services.Webcore.Response do
         build({:ok, decoded_body_lambda_response})
 
       :error ->
+        Stump.log(:error, %{
+          msg: "Failed to base64 decode response body."
+        })
         build({:error, :failed_base_64_decode})
     end
   end
