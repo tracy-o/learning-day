@@ -12,11 +12,24 @@ defmodule Belfrage.Services.Webcore do
     Struct.add(
       struct,
       :response,
-      Webcore.Response.build(@lambda_client.call(arn(struct), private.origin, Webcore.Request.build(struct)))
+      build_webcore_response(struct)
     )
+  end
+
+  defp build_webcore_response(struct) do
+    @lambda_client.call(arn(struct), struct.private.origin, Webcore.Request.build(struct), invoke_lambda_options(struct))
+    |> Webcore.Response.build()
   end
 
   defp arn(_) do
     Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
+  end
+
+  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: nil}}) do
+    []
+  end
+
+  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: xray_trace_id}}) do
+    [xray_trace_id: xray_trace_id]
   end
 end

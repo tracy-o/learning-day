@@ -102,9 +102,10 @@ defmodule Belfrage.BelfrageCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "webcore-lambda-role-arn",
-           "pwa-lambda-function:test",
-           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+        fn _role_arn = "webcore-lambda-role-arn",
+           _lambda_func = "pwa-lambda-function:test",
+           _payload = %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
+           _opts = [] ->
           @web_core_lambda_response
         end
       )
@@ -118,9 +119,10 @@ defmodule Belfrage.BelfrageCacheTest do
       LambdaMock
       |> expect(
         :call,
-        fn "webcore-lambda-role-arn",
-           "pwa-lambda-function:test",
-           %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"} ->
+        fn _role_arn = "webcore-lambda-role-arn",
+           _lambda_func = "pwa-lambda-function:test",
+           _payload = %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
+           _opts = [] ->
           @failed_web_core_lambda_response
         end
       )

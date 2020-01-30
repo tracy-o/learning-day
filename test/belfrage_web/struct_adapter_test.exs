@@ -14,6 +14,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",
@@ -33,6 +34,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
@@ -53,6 +55,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://www.belfrage.com/_web_core")
       |> Map.put(:host, "")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
@@ -73,6 +76,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://www.belfrage.com/_web_core")
       |> Map.put(:host, nil)
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
@@ -92,6 +96,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
@@ -112,6 +117,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
@@ -133,6 +139,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
       |> Map.put(:path_params, %{"id" => "article-1234"})
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
@@ -153,6 +160,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
       |> put_test_production_environment()
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",

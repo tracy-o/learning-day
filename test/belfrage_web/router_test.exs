@@ -2,6 +2,8 @@ defmodule BelfrageWeb.RouterTest do
   use ExUnit.Case
   use Plug.Test
 
+  use Test.Support.Helper, :mox
+
   alias BelfrageWeb.Router
 
   describe "OPTIONS" do

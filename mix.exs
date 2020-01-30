@@ -27,7 +27,7 @@ defmodule Belfrage.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :cachex, :os_mon],
+      extra_applications: [:aws_ex_ray, :logger, :cachex, :os_mon],
       mod: {Belfrage.Application, [env: Mix.env()]}
     ]
   end
@@ -41,10 +41,12 @@ defmodule Belfrage.MixProject do
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
       {:eljiffy, "~> 1.3.0"},
-      {:ex_aws, "~> 2.0"},
-      {:ex_aws_lambda, "~> 2.0"},
+      {:ex_aws,
+       git: "https://github.com/james-bowers/ex_aws.git", branch: "allowlist-headers-for-signing", override: true},
+      {:ex_aws_lambda, git: "https://github.com/james-bowers/ex_aws_lambda.git", branch: "x_ray_trace_id"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
+      {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
       {:machine_gun, "~> 0.1.6"},
@@ -53,7 +55,9 @@ defmodule Belfrage.MixProject do
       {:stump, "~> 1.0"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
-      {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"}
+      {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"},
+      {:poison, "~> 3.1"},
+      {:secure_random, "~> 0.5.1"}
     ]
   end
 end

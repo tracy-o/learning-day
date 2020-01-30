@@ -1,6 +1,7 @@
 defmodule Belfrage.Clients.Lambda do
   use ExMetrics
   alias Belfrage.Clients.HTTP
+  require Belfrage.Xray
 
   @aws Application.get_env(:belfrage, :aws)
   @aws_lambda Application.get_env(:belfrage, :aws_lambda)
@@ -8,7 +9,7 @@ defmodule Belfrage.Clients.Lambda do
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @behaviour ExAws.Request.HttpClient
-  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t()) :: Tuple.t()
+  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), List.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
@@ -22,22 +23,27 @@ defmodule Belfrage.Clients.Lambda do
     |> @http_client.execute()
   end
 
-  def call(arn, function, payload) do
+  def call(arn, function, payload, opts \\ []) do
     with {:ok, credentials} <- Belfrage.Credentials.Refresh.fetch(arn) do
-      invoke_lambda(function, payload, credentials)
+      invoke_lambda(function, payload, credentials, opts)
     else
       error -> error
     end
   end
 
-  defp invoke_lambda(function, payload, credentials) do
+  defp invoke_lambda(function, payload, credentials, opts) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
-      case @aws_lambda.invoke(function, payload, %{})
-           |> @aws.request(
-             security_token: credentials.session_token,
-             access_key_id: credentials.access_key_id,
-             secret_access_key: credentials.secret_access_key
-           ) do
+      lambda_response =
+        Belfrage.Xray.trace_subsegment("invoke-lambda-call") do
+          @aws_lambda.invoke(function, payload, %{}, opts)
+          |> @aws.request(
+            security_token: credentials.session_token,
+            access_key_id: credentials.access_key_id,
+            secret_access_key: credentials.secret_access_key
+          )
+        end
+
+      case lambda_response do
         {:ok, body} -> {:ok, body}
         {:error, {:http_error, 404, response}} -> function_not_found(response)
         {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)

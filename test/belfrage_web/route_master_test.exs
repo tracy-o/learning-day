@@ -32,7 +32,9 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   defp put_bbc_headers(conn) do
-    put_private(conn, :bbc_headers, %{
+    conn
+    |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+    |> put_private(:bbc_headers, %{
       country: "gb",
       scheme: "",
       host: "",

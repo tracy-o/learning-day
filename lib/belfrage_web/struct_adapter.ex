@@ -4,7 +4,7 @@ defmodule BelfrageWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, loop_id) do
+  def adapt(conn = %Conn{private: %{xray_trace_id: xray_trace_id, bbc_headers: bbc_headers}}, loop_id) do
     %Struct{
       request: %Request{
         path: conn.request_path,
@@ -18,7 +18,8 @@ defmodule BelfrageWeb.StructAdapter do
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
-        edge_cache?: bbc_headers.cache
+        edge_cache?: bbc_headers.cache,
+        xray_trace_id: xray_trace_id
       },
       private: %Private{
         loop_id: loop_id,

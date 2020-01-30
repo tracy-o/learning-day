@@ -8,7 +8,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
   describe "Belfrage raising an exception" do
     test "Responds with 500 status code" do
       BelfrageMock
-      |> expect(:handle, fn _ ->
+      |> expect(:handle, fn _struct ->
         raise("Something broke")
       end)
 

@@ -23,6 +23,7 @@ Requires: cfn-signal
 Requires: component-logger
 Requires: belfrage-performance-tuning
 Requires: dial-agent
+Requires: xray
 
 %description
 Belfrage is a proxy pass translating incoming web requests
