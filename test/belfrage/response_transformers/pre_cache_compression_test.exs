@@ -41,7 +41,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
       assert %Struct{
                response: %Struct.Response{
                  body: "",
-                 http_status: 500
+                 http_status: 415
                }
              } = PreCacheCompression.call(struct)
     end
