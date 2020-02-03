@@ -16,8 +16,17 @@ defmodule Belfrage.LoopsSupervisor do
 
   def start_loop(name) do
     case start_child(name) do
-      {:ok, pid} -> pid
-      {:error, {:already_started, pid}} -> pid
+      {:ok, pid} ->
+        pid
+
+      {:error, {:already_started, pid}} ->
+        pid
+
+      {:error, {:undef, details}} ->
+        raise """
+        Seems like that route has not been registered, define it in routes/specs
+        more details: #{inspect(details)}
+        """
     end
   end
 
