@@ -52,7 +52,8 @@ defmodule EndToEndTest do
                         _function_name,
                         %{
                           queryStringParameters: %{"query" => %{"hi" => "foo"}}
-                        } ->
+                        },
+                        _opts ->
       {:ok, @lambda_response}
     end)
 

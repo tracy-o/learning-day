@@ -22,7 +22,7 @@ defmodule EndToEnd.CacheBustTest do
 
   test "only fetches from origin once when no cache bust override is set" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, 1, fn _role_arn, _lambda_function, _payload ->
+    |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _opts ->
       {:ok, @cacheable_lambda_response}
     end)
 
@@ -33,7 +33,7 @@ defmodule EndToEnd.CacheBustTest do
 
   test "always calls the origin when the cache bust override is set" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, 3, fn _role_arn, _lambda_function, _payload ->
+    |> expect(:call, 3, fn _role_arn, _lambda_function, _payload, _opts ->
       {:ok, @cacheable_lambda_response}
     end)
 
