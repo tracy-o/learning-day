@@ -5,7 +5,13 @@ defmodule Belfrage.RequestHashTest do
   alias Belfrage.Struct
 
   @struct %Struct{
-    request: %Struct.Request{path: "/news/clips/abc123", country: "gb", method: "GET", has_been_replayed?: false}
+    request: %Struct.Request{
+      scheme: :https,
+      path: "/news/clips/abc123",
+      country: "gb",
+      method: "GET",
+      has_been_replayed?: false
+    }
   }
 
   @struct_with_different_country %Struct{
@@ -90,6 +96,16 @@ defmodule Belfrage.RequestHashTest do
 
       assert String.starts_with?(hash_one, "cache-bust.")
       assert String.starts_with?(hash_two, "cache-bust.")
+
+      refute hash_one == hash_two
+    end
+
+    test "varies on scheme" do
+      https_struct = @struct
+      http_struct = @struct |> Belfrage.Struct.add(:request, %{scheme: :http})
+
+      %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(https_struct)
+      %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(http_struct)
 
       refute hash_one == hash_two
     end
