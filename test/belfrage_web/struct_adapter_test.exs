@@ -180,6 +180,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
+        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+        |> put_private(:overrides, %{})
         |> put_test_production_environment()
         |> put_private(:bbc_headers, %{
           scheme: :https,
@@ -199,6 +201,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
+        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+        |> put_private(:overrides, %{})
         |> put_test_production_environment()
         |> put_private(:bbc_headers, %{
           scheme: :https,

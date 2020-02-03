@@ -89,7 +89,8 @@ defmodule Belfrage.Services.WebcoreTest do
                                            _lambda_function_name,
                                            %{
                                              headers: %{"accept-encoding": "gzip"}
-                                           } ->
+                                           },
+                                           _opts ->
         {:ok, @lambda_response}
       end)
 
