@@ -26,7 +26,7 @@ defmodule ContentEncodingTest do
     assert_gzipped(compressed_body, "<p>gzipped content</p>")
   end
 
-  test "when client does not accept gzip" do
+  test "when client does not accept gzip the response is not gzipped" do
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
       {:ok,
@@ -44,7 +44,7 @@ defmodule ContentEncodingTest do
     assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
   end
 
-  test "when no accept-encoding header is sent" do
+  test "when no accept-encoding header is sent the response is not encoded" do
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
       {:ok,

@@ -15,7 +15,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              )
   end
 
-  test "when body is base64 encoded, but missing other keys" do
+  test "when body is base64 encoded, but missing other keys a 500 is returned" do
     assert %Struct.Response{
              http_status: 500,
              headers: %{},
@@ -23,7 +23,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
            } = Response.build({:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200}})
   end
 
-  test "when fails to decode base64 response" do
+  test "when fails to decode base64 response a 500 is returned" do
     assert %Struct.Response{
              http_status: 500,
              headers: %{},

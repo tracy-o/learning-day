@@ -28,7 +28,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
              } = PreCacheCompression.call(struct)
     end
 
-    test "when encoding is not supported" do
+    test "when encoding is not supported it should return a 415" do
       struct = %Struct{
         response: %Struct.Response{
           body: :zlib.compress("<p>compress</p>"),

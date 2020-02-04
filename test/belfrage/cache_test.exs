@@ -147,7 +147,7 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
 
-    test "when response is public, but max age is 0, so should not be saved to the cache", %{
+    test "when response is public, but max age is 0, it should not be saved to the cache", %{
       cacheable_struct: cacheable_struct
     } do
       non_cacheable_struct =
