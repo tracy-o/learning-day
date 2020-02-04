@@ -1,59 +1,18 @@
 defmodule Belfrage.BelfrageCacheTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [assert_gzipped: 2]
 
   alias Belfrage.RequestHash
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Cache
   alias Belfrage.Struct
 
-  @fresh_cache_get_request_struct %Struct{
-    request: %Struct.Request{
-      country: "variant-1",
-      method: "GET"
-    },
-    private: %Struct.Private{
-      loop_id: "SportVideos",
-      production_environment: "test"
-    }
-  }
-
-  @stale_cache_get_request_struct %Struct{
-    request: %Struct.Request{
-      country: "variant-2",
-      method: "GET"
-    },
-    private: %Struct.Private{
-      loop_id: "SportVideos",
-      production_environment: "test"
-    }
-  }
-
-  @web_core_lambda_response {:ok,
-                             %{
-                               "body" => ~s({"hi": "bonjour"}),
-                               "headers" => %{
-                                 "content-type" => "application/json",
-                                 "cache-control" => "public, max-age=30"
-                               },
-                               "statusCode" => 200
-                             }}
-
-  @failed_web_core_lambda_response {:ok, %{"body" => "", "headers" => %{}, "statusCode" => 500}}
-
-  @response %Belfrage.Struct.Response{
-    body: ~s({"hi": "bonjour"}),
-    headers: %{"content-type" => "application/json"},
+  @cache_seeded_response %Belfrage.Struct.Response{
+    body: :zlib.gzip(~s({"hi": "bonjour"})),
+    headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
     http_status: 200,
     cache_directive: %{cacheability: "public", max_age: 30}
-  }
-
-  @fallback_response %Belfrage.Struct.Response{
-    body: ~s({"hi": "bonjour"}),
-    cache_directive: %{cacheability: "public", max_age: 30},
-    headers: %{"content-type" => "application/json"},
-    http_status: 200,
-    fallback: true
   }
 
   setup do
@@ -61,15 +20,15 @@ defmodule Belfrage.BelfrageCacheTest do
     Belfrage.LoopsSupervisor.kill_all()
 
     Test.Support.Helper.insert_cache_seed(
-      id: RequestHash.generate(@fresh_cache_get_request_struct).request.request_hash,
-      response: @response,
+      id: "fresh-cache-item",
+      response: @cache_seeded_response,
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms()
     )
 
     Test.Support.Helper.insert_cache_seed(
-      id: RequestHash.generate(@stale_cache_get_request_struct).request.request_hash,
-      response: @response,
+      id: "stale-cache-item",
+      response: @cache_seeded_response,
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
@@ -79,55 +38,124 @@ defmodule Belfrage.BelfrageCacheTest do
 
   describe "a fresh cache" do
     test "serves a cached response" do
-      assert %Belfrage.Struct{response: @response} = Belfrage.handle(@fresh_cache_get_request_struct)
+      struct = %Struct{
+        request: %Struct.Request{
+          request_hash: "fresh-cache-item"
+        }
+      }
+
+      assert %Belfrage.Struct{response: @cache_seeded_response} =
+               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
     end
 
-    test "served early from cache still increments loop, but with belfrage_cache as origin" do
-      Belfrage.handle(@fresh_cache_get_request_struct)
+    test "served early from cache sets origin to :belfrage_cache" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "fresh-cache-item"
+        }
+      }
 
-      assert {:ok,
-              %{
-                counter: %{
-                  :belfrage_cache => %{
-                    200 => 1,
-                    :errors => 0
-                  }
-                }
-              }} = Belfrage.Loop.state(@fresh_cache_get_request_struct)
+      assert %Struct{private: %Struct.Private{origin: :belfrage_cache}} =
+               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
     end
   end
 
   describe "a stale cache" do
-    test "calls the service when a request for a page in the stale cache is made" do
-      LambdaMock
-      |> expect(
-        :call,
-        fn _role_arn = "webcore-lambda-role-arn",
-           _lambda_func = "pwa-lambda-function:test",
-           _payload = %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
-           _opts = [] ->
-          @web_core_lambda_response
-        end
-      )
+    test "does not add a stale response when requesting a fresh response" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        }
+      }
 
-      assert struct = %Belfrage.Struct{response: @response} = Belfrage.handle(@stale_cache_get_request_struct)
-
-      assert {:ok, :fresh, _} = Cache.Local.fetch(struct)
+      assert %Struct{response: %Struct.Response{http_status: nil}} =
+               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
     end
 
-    test "uses fallback when service fails" do
-      LambdaMock
-      |> expect(
-        :call,
-        fn _role_arn = "webcore-lambda-role-arn",
-           _lambda_func = "pwa-lambda-function:test",
-           _payload = %{body: nil, headers: %{country: "variant-2"}, httpMethod: "GET"},
-           _opts = [] ->
-          @failed_web_core_lambda_response
-        end
-      )
+    test "fetches cached stale response when requesting fresh or stale" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        }
+      }
 
-      assert %Belfrage.Struct{response: @fallback_response} = Belfrage.handle(@stale_cache_get_request_struct)
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.add_response_from_cache(struct, [:fresh, :stale])
+    end
+  end
+
+  describe "saving to cache" do
+    setup do
+      %{
+        cacheable_struct: %Struct{
+          private: %Struct.Private{
+            loop_id: "ALoop"
+          },
+          request: %Struct.Request{
+            request_hash: "req-hash",
+            method: "GET"
+          },
+          response: %Struct.Response{
+            http_status: 200,
+            cache_directive: %{cacheability: "public", max_age: 30}
+          }
+        }
+      }
+    end
+
+    test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
+      Belfrage.Cache.store_if_successful(cacheable_struct)
+
+      assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
+    end
+
+    test "when response is for a POST request it should not be saved to the cache", %{
+      cacheable_struct: cacheable_struct
+    } do
+      non_cacheable_struct = Struct.add(cacheable_struct, :request, %{method: "POST"})
+
+      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+
+      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+    end
+
+    test "when response is not successful it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
+      non_cacheable_struct = Struct.add(cacheable_struct, :response, %{http_status: 500})
+
+      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+
+      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+    end
+
+    test "when response is not publicly cacheable it should not be saved to the cache", %{
+      cacheable_struct: cacheable_struct
+    } do
+      non_cacheable_struct =
+        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "private", max_age: 30}})
+
+      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+
+      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+    end
+
+    test "when response is public, but max age is 0, it should not be saved to the cache", %{
+      cacheable_struct: cacheable_struct
+    } do
+      non_cacheable_struct =
+        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: 0}})
+
+      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+
+      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
   end
 end

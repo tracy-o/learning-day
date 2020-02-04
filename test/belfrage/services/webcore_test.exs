@@ -83,6 +83,19 @@ defmodule Belfrage.Services.WebcoreTest do
                }
              } = Webcore.dispatch(struct)
     end
+
+    test "it will invoke lambda with the accept-encoding header" do
+      expect(Clients.LambdaMock, :call, fn _lambda_role_arn,
+                                           _lambda_function_name,
+                                           %{
+                                             headers: %{"accept-encoding": "gzip"}
+                                           },
+                                           _opts ->
+        {:ok, @lambda_response}
+      end)
+
+      Webcore.dispatch(@struct)
+    end
   end
 
   @lambda_response_internal_fail %{

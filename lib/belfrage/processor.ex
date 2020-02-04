@@ -51,8 +51,10 @@ defmodule Belfrage.Processor do
     struct
     |> ResponseTransformers.CacheDirective.call()
     |> ResponseTransformers.ResponseHeaderGuardian.call()
+    |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store_if_successful()
     |> Cache.fallback_if_required()
+    |> ResponseTransformers.CompressionAsRequested.call()
   end
 
   def init_post_response_side_effects(struct = %Struct{}) do

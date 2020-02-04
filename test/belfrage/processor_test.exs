@@ -94,6 +94,7 @@ defmodule Belfrage.ProcessorTest do
     @resp_struct %Struct{
       response: %Struct.Response{
         http_status: 501,
+        body: "",
         headers: %{
           "connection" => "close"
         }
