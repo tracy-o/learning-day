@@ -7,7 +7,7 @@ defmodule ContentEncodingTest do
 
   @moduletag :end_to_end
 
-  test "when the client accepts gzip" do
+  test "when the client accepts gzip the response should be gzipped" do
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
       {:ok,
