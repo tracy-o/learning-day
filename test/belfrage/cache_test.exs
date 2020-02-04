@@ -118,7 +118,7 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
     end
 
-    test "when response is for a POST request, so should not be saved to the cache", %{
+    test "when response is for a POST request it should not be saved to the cache", %{
       cacheable_struct: cacheable_struct
     } do
       non_cacheable_struct = Struct.add(cacheable_struct, :request, %{method: "POST"})
