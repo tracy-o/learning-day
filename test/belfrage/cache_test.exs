@@ -128,7 +128,7 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
 
-    test "when response is not successful, so should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
+    test "when response is not successful it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
       non_cacheable_struct = Struct.add(cacheable_struct, :response, %{http_status: 500})
 
       Belfrage.Cache.store_if_successful(non_cacheable_struct)
