@@ -112,7 +112,7 @@ defmodule Belfrage.BelfrageCacheTest do
       }
     end
 
-    test "when response should be saved to the cache", %{cacheable_struct: cacheable_struct} do
+    test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
       Belfrage.Cache.store_if_successful(cacheable_struct)
 
       assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
