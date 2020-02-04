@@ -175,7 +175,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   describe "accept_encoding value" do
-    test "when an Accept-Encoding header is provided" do
+    test "when an Accept-Encoding header is provided, the value is stored in struct.request" do
       id = "12345678"
 
       conn =

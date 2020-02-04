@@ -4,7 +4,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
 
   use ExUnit.Case
 
-  test "when content is base64 encoded response" do
+  test "when content is base64 encoded response, the response is base64 decoded" do
     assert %Struct.Response{
              http_status: 200,
              headers: %{},
