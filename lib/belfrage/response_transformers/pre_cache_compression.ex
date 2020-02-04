@@ -20,6 +20,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
       content_encoding: content_encoding
     })
 
+    ExMetrics.increment("invalid_content_encoding_from_origin")
+
     Struct.add(struct, :response, %{body: "", http_status: 415})
   end
 
