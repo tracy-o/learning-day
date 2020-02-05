@@ -154,9 +154,12 @@ defmodule BelfrageTest do
     test "serves plain text from compressed cache when gzip is not accepted", %{request: request_struct} do
       assert %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 body: ~s({"hi": "bonjour"})
+                 body: ~s({"hi": "bonjour"}),
+                 headers: headers
                }
              } = Belfrage.handle(request_struct)
+
+      refute Map.has_key?(headers, "content-encoding")
     end
 
     test "serves gzip content from compressed cache when gzip is accepted", %{request: request_struct} do
@@ -164,7 +167,10 @@ defmodule BelfrageTest do
 
       assert %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 body: compressed_body
+                 body: compressed_body,
+                 headers: %{
+                   "content-encoding" => "gzip"
+                 }
                }
              } = Belfrage.handle(struct_accepts_gzip)
 
