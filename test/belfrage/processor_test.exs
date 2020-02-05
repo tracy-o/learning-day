@@ -70,18 +70,18 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Processor.init_post_response_side_effects/1" do
+  describe "Processor.init_post_response_pipeline/1" do
     @resp_struct %Struct{
       private: %Struct.Private{
         loop_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/"
       },
-      response: %Struct.Response{http_status: 501}
+      response: %Struct.Response{body: :zlib.gzip("a response"), http_status: 501}
     }
 
     test "increments status" do
       Belfrage.LoopsRegistry.find_or_start(@resp_struct)
-      Processor.init_post_response_side_effects(@resp_struct)
+      Processor.init_post_response_pipeline(@resp_struct)
 
       assert {:ok,
               %{

@@ -6,6 +6,8 @@ defmodule BelfrageTest do
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Struct
 
+  import Test.Support.Helper, only: [assert_gzipped: 2]
+
   @get_request_struct %Struct{
     private: %Struct.Private{
       loop_id: "SportVideos",
@@ -112,5 +114,61 @@ defmodule BelfrageTest do
     response_struct = Belfrage.handle(@redirect_request_struct)
 
     assert response_struct.response.http_status == 302
+  end
+
+  describe "with seeded cache" do
+    setup do
+      :ets.delete_all_objects(:cache)
+
+      request_for_seeded_response = %Struct{
+        private: %Struct.Private{
+          loop_id: "SportVideos",
+          production_environment: "test"
+        },
+        request: %Struct.Request{
+          path: "/_seeded_request",
+          method: "GET",
+          country: "gb"
+        }
+      }
+
+      seeded_response = %Belfrage.Struct.Response{
+        body: :zlib.gzip(~s({"hi": "bonjour"})),
+        headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+        http_status: 200,
+        cache_directive: %{cacheability: "public", max_age: 30}
+      }
+
+      Test.Support.Helper.insert_cache_seed(
+        id: Belfrage.RequestHash.generate(request_for_seeded_response).request.request_hash,
+        response: seeded_response,
+        expires_in: :timer.hours(6),
+        last_updated: Belfrage.Timer.now_ms()
+      )
+
+      %{
+        request: request_for_seeded_response
+      }
+    end
+
+    test "serves plain text from compressed cache when gzip is not accepted", %{request: request_struct} do
+      assert %Belfrage.Struct{
+               response: %Belfrage.Struct.Response{
+                 body: ~s({"hi": "bonjour"})
+               }
+             } = Belfrage.handle(request_struct)
+    end
+
+    test "serves gzip content from compressed cache when gzip is accepted", %{request: request_struct} do
+      struct_accepts_gzip = request_struct |> Struct.add(:request, %{accept_encoding: "gzip, br, deflate"})
+
+      assert %Belfrage.Struct{
+               response: %Belfrage.Struct.Response{
+                 body: compressed_body
+               }
+             } = Belfrage.handle(struct_accepts_gzip)
+
+      assert_gzipped(compressed_body, ~s({"hi": "bonjour"}))
+    end
   end
 end
