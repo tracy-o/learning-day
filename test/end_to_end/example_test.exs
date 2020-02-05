@@ -27,7 +27,7 @@ defmodule EndToEndTest do
                           body: "",
                           headers: %{country: "gb"},
                           httpMethod: "GET",
-                          path: "/weather",
+                          path: "/200-ok-response",
                           pathParameters: %{},
                           queryStringParameters: %{}
                         },
@@ -35,7 +35,7 @@ defmodule EndToEndTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, "/weather")
+    conn = conn(:get, "/200-ok-response")
     conn = Router.call(conn, [])
 
     assert {200,
@@ -57,7 +57,7 @@ defmodule EndToEndTest do
       {:ok, @lambda_response}
     end)
 
-    conn(:get, "/wc-data/container/any-container?query[hi]=foo") |> Router.call([])
+    conn(:get, "/200-ok-response?query[hi]=foo") |> Router.call([])
   end
 
   test "a failed response from a lambda e2e" do
@@ -70,7 +70,7 @@ defmodule EndToEndTest do
       {:ok, response}
     end)
 
-    conn = conn(:get, "/weather")
+    conn = conn(:get, "/downstream-broken")
     conn = Router.call(conn, [])
 
     assert {500,
