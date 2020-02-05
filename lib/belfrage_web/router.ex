@@ -5,6 +5,7 @@ defmodule BelfrageWeb.Router do
 
   alias BelfrageWeb.RequestHeaders
   alias BelfrageWeb.ProductionEnvironment
+  alias BelfrageWeb.Plugs
 
   @routefile Application.get_env(:belfrage, :routefile)
 
@@ -15,6 +16,7 @@ defmodule BelfrageWeb.Router do
   plug(ProductionEnvironment)
   plug(:fetch_query_params)
   plug(BelfrageWeb.Plugs.Overrides)
+  plug(Plugs.PathLogger)
   plug(:match)
   plug(:dispatch)
 
