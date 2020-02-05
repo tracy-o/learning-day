@@ -6,6 +6,7 @@ defmodule Routes.Routefile do
 
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
+  handle "/homepage/test", using: "TestHomePage", only_on: "test", examples: ["/homepage/test"]
   handle "/news", using: "NewsFrontPage", examples: ["/news"]
   handle "/sport", using: "SportFrontPage", examples: ["/sport"]
   handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]
