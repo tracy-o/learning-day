@@ -18,7 +18,7 @@ defmodule ContentEncodingTest do
        }}
     end)
 
-    conn = conn(:get, "/_proxy_pass") |> put_req_header("accept-encoding", "gzip, deflate, br")
+    conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "gzip, deflate, br")
     conn = Router.call(conn, [])
 
     assert {200, headers, compressed_body} = sent_resp(conn)
@@ -37,7 +37,7 @@ defmodule ContentEncodingTest do
        }}
     end)
 
-    conn = conn(:get, "/_proxy_pass") |> put_req_header("accept-encoding", "deflate, br")
+    conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "deflate, br")
     conn = Router.call(conn, [])
 
     assert {200, headers, "<p>content</p>"} = sent_resp(conn)
@@ -55,7 +55,7 @@ defmodule ContentEncodingTest do
        }}
     end)
 
-    conn = conn(:get, "/_proxy_pass")
+    conn = conn(:get, "/proxy-pass")
     conn = Router.call(conn, [])
 
     assert {200, headers, "<p>content</p>"} = sent_resp(conn)
