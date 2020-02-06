@@ -22,7 +22,7 @@ defmodule Belfrage do
   defp generate_response(struct = %Struct{response: %Struct.Response{http_status: http_status}})
        when http_status != nil do
     struct
-    |> Processor.init_post_response_side_effects()
+    |> Processor.init_post_response_pipeline()
   end
 
   defp generate_response(struct) do
@@ -30,6 +30,6 @@ defmodule Belfrage do
     |> Processor.request_pipeline()
     |> Processor.perform_call()
     |> Processor.response_pipeline()
-    |> Processor.init_post_response_side_effects()
+    |> Processor.init_post_response_pipeline()
   end
 end

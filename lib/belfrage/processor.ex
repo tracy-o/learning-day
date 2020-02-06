@@ -54,12 +54,13 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store_if_successful()
     |> Cache.fallback_if_required()
-    |> ResponseTransformers.CompressionAsRequested.call()
   end
 
-  def init_post_response_side_effects(struct = %Struct{}) do
+  def init_post_response_pipeline(struct = %Struct{}) do
     Loop.inc(struct)
+
     struct
+    |> ResponseTransformers.CompressionAsRequested.call()
   end
 
   defp loop_state_failure do
