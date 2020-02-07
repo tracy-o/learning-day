@@ -1,11 +1,6 @@
 defmodule Belfrage.BelfrageCacheTest do
   use ExUnit.Case
-  use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  alias Belfrage.RequestHash
-  alias Belfrage.Clients.LambdaMock
-  alias Belfrage.Cache
   alias Belfrage.Struct
 
   @cache_seeded_response %Belfrage.Struct.Response{

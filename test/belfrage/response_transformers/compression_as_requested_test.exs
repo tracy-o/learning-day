@@ -54,7 +54,7 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequestedTest do
                headers: %{},
                http_status: 200
              } ==
-               CompressionAsRequested.call(struct_fixture).response
+               CompressionAsRequested.call(struct).response
     end
   end
 end
