@@ -99,4 +99,18 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 200
     end
   end
+
+  describe "calling redirect" do
+    test "when the redirect matches will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:redirect, "/permanent-redirect")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 301
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location"]
+    end
+  end
 end
