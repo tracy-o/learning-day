@@ -113,4 +113,30 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location"]
     end
   end
+
+  describe "calling redirect with host" do
+    test "when the redirect matches without a subdomain will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:redirect, "https://bbcarabic.com/")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/arabic"]
+    end
+
+    test "when the redirect matches with a subdomain will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:redirect, "https://www.bbcarabic.com/")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/arabic"]
+    end
+  end
 end
