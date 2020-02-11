@@ -91,7 +91,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro redirect(path, to: location, status: status, host: host) do
+  defmacro redirect(path, to: location, status: status, from_host: from_host, to_host: to_host) do
     quote do
       if unquote(status) not in [301, 302] do
         raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
@@ -99,10 +99,17 @@ defmodule BelfrageWeb.RouteMaster do
 
       @redirects [{unquote(path), []} | @redirects]
 
-      match(unquote(path), host: unquote(host)) do
+      match(unquote(path), host: unquote(from_host)) do
+        new_location =
+          (unquote(to_host) <> unquote(location))
+          |> String.split("/*")
+          |> hd
+          |> Kernel.<>(var!(conn).request_path)
+          |> String.trim_trailing("/")
+
         var!(conn)
         |> resp(unquote(status), "")
-        |> put_resp_header("location", unquote(location))
+        |> put_resp_header("location", new_location)
       end
     end
   end

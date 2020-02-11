@@ -124,7 +124,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/arabic"]
+      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic"]
     end
 
     test "when the redirect matches with a subdomain will return the location and status" do
@@ -136,7 +136,19 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/arabic"]
+      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches with a path will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:redirect, "https://www.bbcarabic.com/middleeast-51412901")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic/middleeast-51412901"]
     end
   end
 end
