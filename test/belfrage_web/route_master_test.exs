@@ -124,7 +124,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic"]
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
     end
 
     test "when the redirect matches with a subdomain will return the location and status" do
@@ -136,7 +136,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic"]
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
     end
 
     test "when the redirect matches with a path will return the location and status" do
@@ -148,7 +148,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["www.bbc.com/arabic/middleeast-51412901"]
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic/middleeast-51412901"]
     end
   end
 end

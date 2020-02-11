@@ -75,41 +75,27 @@ defmodule BelfrageWeb.RouteMaster do
   # something like:
   # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)
   # plus the port etc.
-  defmacro redirect(path, to: location, status: status) do
+  defmacro redirect(from, to: location, status: status) do
     quote do
       if unquote(status) not in [301, 302] do
         raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
       end
 
-      @redirects [{unquote(path), []} | @redirects]
+      uri_from = URI.parse(unquote(from))
 
-      match(unquote(path)) do
-        var!(conn)
-        |> resp(unquote(status), "")
-        |> put_resp_header("location", unquote(location))
-      end
-    end
-  end
+      @redirects [{uri_from.path, []} | @redirects]
 
-  defmacro redirect(path, to: location, status: status, from_host: from_host, to_host: to_host) do
-    quote do
-      if unquote(status) not in [301, 302] do
-        raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
-      end
-
-      @redirects [{unquote(path), []} | @redirects]
-
-      match(unquote(path), host: unquote(from_host)) do
+      match(uri_from.path, host: uri_from.host) do
         new_location =
-          (unquote(to_host) <> unquote(location))
-          |> String.split("/*")
-          |> hd
-          |> Kernel.<>(var!(conn).request_path)
+          unquote(location)
+          |> String.replace("/*", var!(conn).request_path)
           |> String.trim_trailing("/")
 
+        uri_to = URI.parse(new_location)
+
         var!(conn)
         |> resp(unquote(status), "")
-        |> put_resp_header("location", new_location)
+        |> put_resp_header("location", URI.to_string(uri_to))
       end
     end
   end
