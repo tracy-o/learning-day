@@ -13,14 +13,9 @@ defmodule Belfrage.Services.HTTP do
   def dispatch(struct = %Struct{}) do
     ExMetrics.timeframe "function.timing.service.HTTP.request" do
       struct
-      |> build_headers()
       |> execute_request()
       |> handle_response()
     end
-  end
-
-  defp build_headers(struct) do
-    Struct.add(struct, :request, %{headers: %{"accept-encoding" => "gzip"}})
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
@@ -63,7 +58,7 @@ defmodule Belfrage.Services.HTTP do
        method: :post,
        url: private.origin <> request.path <> QueryParams.parse(request.query_params),
        payload: request.payload,
-       headers: request.headers
+       headers: build_headers(request)
      }), struct}
   end
 
@@ -71,7 +66,11 @@ defmodule Belfrage.Services.HTTP do
     {@http_client.execute(%Clients.HTTP.Request{
        method: :get,
        url: private.origin <> request.path <> QueryParams.parse(request.query_params),
-       headers: request.headers
+       headers: build_headers(request)
      }), struct}
+  end
+
+  defp build_headers(request) do
+    %{"accept-encoding" => "gzip", "country" => "#{request.country}"}
   end
 end

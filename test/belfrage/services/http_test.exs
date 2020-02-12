@@ -13,6 +13,7 @@ defmodule Belfrage.Services.HTTPTest do
     request: %Struct.Request{
       method: "GET",
       path: "/_web_core",
+      country: "gb",
       query_params: %{
         "foo" => "bar"
       }
@@ -27,6 +28,7 @@ defmodule Belfrage.Services.HTTPTest do
       payload: ~s({"some": "data"}),
       path: "/_web_core",
       method: "POST",
+      country: "gb",
       query_params: %{
         "foo" => "bar"
       }
@@ -51,7 +53,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
            } ->
           @ok_response
         end
@@ -74,7 +76,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :post,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: ~s({"some": "data"}),
-             headers: %{"accept-encoding" => "gzip"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
            } ->
           @ok_response
         end
@@ -95,7 +97,7 @@ defmodule Belfrage.Services.HTTPTest do
                                method: :get,
                                url: "https://www.bbc.co.uk/_web_core?foo=bar",
                                payload: "",
-                               headers: %{"accept-encoding" => "gzip"}
+                               headers: %{"accept-encoding" => "gzip", "country" => "gb"}
                              } ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
@@ -121,7 +123,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
            } ->
           {
             :error,
@@ -149,7 +151,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
            } ->
           {
             :error,
