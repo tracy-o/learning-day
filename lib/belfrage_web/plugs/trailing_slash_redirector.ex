@@ -1,0 +1,53 @@
+defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
+  import Plug.Conn
+
+  @moduledoc """
+  Redirects a request with a trailing slash to one
+  without a trailing slash
+  """
+
+  def init(opts), do: opts
+
+  def call(conn, _opts) do
+    if trailing_slash?(conn) do
+      redirect(conn)
+    else
+      conn
+    end
+  end
+
+  defp redirect(conn) do
+    conn
+    |> put_location()
+    |> put_resp_content_type("text/plain")
+    |> resp(301, "Redirecting")
+  end
+
+  defp put_location(conn) do
+    conn
+    |> put_resp_header("location", build_uri(conn))
+  end
+
+  defp build_uri(%{ scheme: scheme, host: host, request_path: path, query_string: "" }) do
+    %URI{
+      host: host,
+      path: String.replace_trailing(path, "/", ""),
+      scheme: to_string(scheme)
+    }
+    |> to_string()
+  end
+
+  defp build_uri(%{ scheme: scheme, host: host, request_path: path, query_string: query }) do
+    %URI{
+      host: host,
+      path: String.replace_trailing(path, "/", ""),
+      scheme: to_string(scheme),
+      query: String.replace_trailing(query, "/", "")
+    }
+    |> to_string()
+  end
+
+  defp trailing_slash?(%{ request_path: path, query_string: query }) do
+    String.last(path <> query) == "/"
+  end
+end
