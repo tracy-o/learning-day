@@ -1,9 +1,9 @@
 defmodule Belfrage.Cache do
   alias Belfrage.Struct
-  alias Belfrage.Cache.Local
+  alias Belfrage.Cache.{Local, CCP}
 
   def store_if_successful(struct) do
-    if is_cacheable?(struct), do: Local.store(struct)
+    if is_cacheable?(struct), do: write_to_cache_stores(struct)
 
     struct
   end
@@ -23,6 +23,13 @@ defmodule Belfrage.Cache do
     else
       _ -> metric_fallback_miss(accepted_freshness, struct)
     end
+  end
+
+  defp write_to_cache_stores(struct) do
+    Local.store(struct)
+    CCP.store(struct)
+
+    :ok
   end
 
   defp metric_stale_response(:stale, _struct) do
