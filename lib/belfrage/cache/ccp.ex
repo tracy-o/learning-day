@@ -12,7 +12,6 @@ defmodule Belfrage.Cache.CCP do
   @impl CredentialStrategy
   def store(struct = %Belfrage.Struct{}) do
     Node.list()
-    |> pick_ccp_nodes()
     |> List.first()
     |> send_to_ccp(struct)
   end
@@ -32,9 +31,5 @@ defmodule Belfrage.Cache.CCP do
     GenServer.cast({BelfrageCcp, node}, {:store, request_hash, response})
 
     {:ok, true}
-  end
-
-  defp pick_ccp_nodes(node_list) do
-    Enum.filter(node_list, &String.starts_with?(&1, "belfrage_ccp"))
   end
 end
