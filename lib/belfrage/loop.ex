@@ -94,4 +94,8 @@ defmodule Belfrage.Loop do
   defp origin_pointer(:origin_simulator) do
     Application.get_env(:belfrage, :origin_simulator)
   end
+
+  defp origin_pointer(:mozart) do
+    Application.get_env(:belfrage, :mozart_endpoint)
+  end
 end

@@ -12,9 +12,15 @@ defmodule Belfrage.Services.HTTP do
   @impl Service
   def dispatch(struct = %Struct{}) do
     ExMetrics.timeframe "function.timing.service.HTTP.request" do
-      execute_request(struct)
+      struct
+      |> build_headers()
+      |> execute_request()
       |> handle_response()
     end
+  end
+
+  defp build_headers(struct) do
+    Struct.add(struct, :request, %{headers: %{"accept-encoding" => "gzip"}})
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
@@ -53,20 +59,19 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
-    {@http_client.execute(
-      %Clients.HTTP.Request{
-        method: :post,
-        url: private.origin <> request.path <> QueryParams.parse(request.query_params),
-        payload: request.payload
-      }
-     ), struct}
+    {@http_client.execute(%Clients.HTTP.Request{
+       method: :post,
+       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       payload: request.payload,
+       headers: request.headers
+     }), struct}
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
-    {@http_client.execute(
-      %Clients.HTTP.Request{
-        method: :get,
-        url: private.origin <> request.path <> QueryParams.parse(request.query_params)
-      }), struct}
+    {@http_client.execute(%Clients.HTTP.Request{
+       method: :get,
+       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       headers: request.headers
+     }), struct}
   end
 end

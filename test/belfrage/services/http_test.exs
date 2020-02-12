@@ -51,7 +51,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{}
+             headers: %{"accept-encoding" => "gzip"}
            } ->
           @ok_response
         end
@@ -74,7 +74,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :post,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: ~s({"some": "data"}),
-             headers: %{}
+             headers: %{"accept-encoding" => "gzip"}
            } ->
           @ok_response
         end
@@ -95,7 +95,7 @@ defmodule Belfrage.Services.HTTPTest do
                                method: :get,
                                url: "https://www.bbc.co.uk/_web_core?foo=bar",
                                payload: "",
-                               headers: %{}
+                               headers: %{"accept-encoding" => "gzip"}
                              } ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
@@ -121,7 +121,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{}
+             headers: %{"accept-encoding" => "gzip"}
            } ->
           {
             :error,
@@ -149,7 +149,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{}
+             headers: %{"accept-encoding" => "gzip"}
            } ->
           {
             :error,
