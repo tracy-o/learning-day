@@ -29,6 +29,12 @@ defmodule Test.Support.Helper do
     end
   end
 
+  defmacro assert_valid_request_hash(request_hash) do
+    quote do
+      assert byte_size(unquote(request_hash)) > 0
+    end
+  end
+
   def mox do
     quote do
       import Mox
