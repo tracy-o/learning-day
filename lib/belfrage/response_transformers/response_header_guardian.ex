@@ -9,8 +9,8 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   @impl true
   def call(struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
     Map.put(struct, :response, %Struct.Response{
-      response | 
-      headers: clean_headers(response_headers)
+      response
+      | headers: clean_headers(response_headers)
     })
   end
 
@@ -30,5 +30,6 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   def clean_headers(response_headers) do
     response_headers
     |> Map.delete("connection")
+    |> Map.delete("transfer-encoding")
   end
 end
