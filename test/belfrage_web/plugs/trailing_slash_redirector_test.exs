@@ -9,7 +9,17 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     |> resp(200, "not being redirected")
   end
 
-  test "does not redirect when path doesn't have trailing slash" do
+  test "no redirect when top level '/' in path " do
+    conn =
+      incoming_request("/")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 200
+    assert conn.resp_body == "not being redirected"
+    assert get_resp_header(conn, "location") == ["unchanged"]
+  end
+
+  test "no redirect when no trailing slash on path" do
     conn =
       incoming_request("/a-page")
       |> TrailingSlashRedirector.call([])
@@ -19,7 +29,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == ["unchanged"]
   end
 
-  test "does not redirect when path has a query string without a trailing slash" do
+  test "no redirect when no trailing slash on path or query string" do
     conn =
       incoming_request("/a-page?a-query")
       |> TrailingSlashRedirector.call([])
@@ -29,7 +39,17 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == ["unchanged"]
   end
 
-  test "does redirect when path has a trailing slash" do
+  test "no redirect when no trailing slash on path, but a trailing slash on query string" do
+    conn =
+      incoming_request("/a-page?a-query/")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 200
+    assert conn.resp_body == "not being redirected"
+    assert get_resp_header(conn, "location") == ["unchanged"]
+  end
+
+  test "redirect when path has trailing slash" do
     conn =
       incoming_request("/a-page/")
       |> TrailingSlashRedirector.call([])
@@ -39,9 +59,9 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == ["http://www.example.com/a-page"]
   end
 
-  test "does redirect when path has a query string and a trailing slash" do
+  test "redirect when path has trailing slash and query string with no trailing slash" do
     conn =
-      incoming_request("/a-page?a-query/")
+      incoming_request("/a-page/?a-query")
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
@@ -49,23 +69,13 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == ["http://www.example.com/a-page?a-query"]
   end
 
-  test "does redirect when path has a trailing slash and the query has a trailing slash" do
+  test "redirect when path has trailing slash and query string also with a trailing slash" do
     conn =
       incoming_request("/a-page/?a-query/")
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
     assert conn.resp_body == "Redirecting"
-    assert get_resp_header(conn, "location") == ["http://www.example.com/a-page?a-query"]
-  end
-
-  test "does redirect when path has more than one trailing slash" do
-    conn =
-      incoming_request("/a-page///")
-      |> TrailingSlashRedirector.call([])
-
-    assert conn.status == 301
-    assert conn.resp_body == "Redirecting"
-    assert get_resp_header(conn, "location") == ["http://www.example.com/a-page"]
+    assert get_resp_header(conn, "location") == ["http://www.example.com/a-page?a-query/"]
   end
 end

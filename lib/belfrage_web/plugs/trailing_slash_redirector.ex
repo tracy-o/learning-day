@@ -2,8 +2,10 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   import Plug.Conn
 
   @moduledoc """
-  Redirects a request with a trailing slash to one
-  without a trailing slash
+  Redirects a request with
+  a request path and a trailing slash
+  to one without a trailing slash.
+  NOTE : This doesn't take into account query strings
   """
 
   def init(opts), do: opts
@@ -42,12 +44,12 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
       host: host,
       path: String.replace_trailing(path, "/", ""),
       scheme: to_string(scheme),
-      query: String.replace_trailing(query, "/", "")
+      query: query
     }
     |> to_string()
   end
 
-  defp trailing_slash?(%{ request_path: path, query_string: query }) do
-    String.last(path <> query) == "/"
+  defp trailing_slash?(%{ request_path: path }) do
+    path != "/" and String.ends_with?(path, "/")
   end
 end
