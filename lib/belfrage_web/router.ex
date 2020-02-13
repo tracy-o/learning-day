@@ -24,6 +24,14 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 200, "I'm ok thanks")
   end
 
+  get "/robots.txt" do
+    robots_txt_path = Application.app_dir(:belfrage, "priv/static/robots.txt")
+
+    conn
+    |> put_resp_header("cache-control", "max-age=30, public")
+    |> send_file( 200, robots_txt_path)
+  end
+
   options _ do
     send_resp(conn, 405, "")
   end
