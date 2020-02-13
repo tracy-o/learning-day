@@ -6,6 +6,7 @@ config :belfrage,
   preview_pwa_lambda_function:
     "arn:aws:lambda:eu-west-1:134209033928:function:webcore-playground-test-webcore-playground-pwa",
   webcore_lambda_role_arn: "webcore-lambda-role-arn",
+  mozart_endpoint: "https://www.mozart-routing.test.api.bbci.co.uk",
   production_environment: "test",
   credential_strategy: Belfrage.Credentials.LocalDev,
   dials_location: "test/support/resources/dials.json",
