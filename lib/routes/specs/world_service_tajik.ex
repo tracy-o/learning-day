@@ -1,4 +1,4 @@
-defmodule Routes.Specs.TajikPage do
+defmodule Routes.Specs.WorldServiceTajik do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",

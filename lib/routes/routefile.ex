@@ -46,8 +46,8 @@ defmodule Routes.Routefile do
 
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
-  handle "/tajik", using: "TajikPage", examples: ["/tajik"]
-  handle "/tajik/*_any", using: "TajikPage", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
+  handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
+  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
