@@ -53,7 +53,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
            } ->
           @ok_response
         end
@@ -76,7 +76,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :post,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: ~s({"some": "data"}),
-             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
            } ->
           @ok_response
         end
@@ -97,7 +97,7 @@ defmodule Belfrage.Services.HTTPTest do
                                method: :get,
                                url: "https://www.bbc.co.uk/_web_core?foo=bar",
                                payload: "",
-                               headers: %{"accept-encoding" => "gzip", "country" => "gb"}
+                               headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
                              } ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
@@ -123,7 +123,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
            } ->
           {
             :error,
@@ -151,7 +151,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb"}
+             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
            } ->
           {
             :error,
