@@ -12,7 +12,8 @@ defmodule Belfrage.Services.HTTP do
   @impl Service
   def dispatch(struct = %Struct{}) do
     ExMetrics.timeframe "function.timing.service.HTTP.request" do
-      execute_request(struct)
+      struct
+      |> execute_request()
       |> handle_response()
     end
   end
@@ -53,20 +54,23 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
-    {@http_client.execute(
-      %Clients.HTTP.Request{
-        method: :post,
-        url: private.origin <> request.path <> QueryParams.parse(request.query_params),
-        payload: request.payload
-      }
-     ), struct}
+    {@http_client.execute(%Clients.HTTP.Request{
+       method: :post,
+       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       payload: request.payload,
+       headers: build_headers(request)
+     }), struct}
   end
 
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
-    {@http_client.execute(
-      %Clients.HTTP.Request{
-        method: :get,
-        url: private.origin <> request.path <> QueryParams.parse(request.query_params)
-      }), struct}
+    {@http_client.execute(%Clients.HTTP.Request{
+       method: :get,
+       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       headers: build_headers(request)
+     }), struct}
+  end
+
+  defp build_headers(request) do
+    %{"accept-encoding" => "gzip", "country" => "#{request.country}", "user-agent" => "Belfrage"}
   end
 end
