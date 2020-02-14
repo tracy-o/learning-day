@@ -38,6 +38,16 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == []
   end
 
+  test "redirect when root path has trailing slashes" do
+    conn =
+      incoming_request("/a-page///")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == "Redirecting"
+    assert get_resp_header(conn, "location") == ["http://www.example.com/a-page"]
+  end
+
   test "no redirect when no trailing slash on path, but a trailing slash on query string" do
     conn =
       incoming_request("/a-page?a-query/")
