@@ -41,4 +41,16 @@ defmodule EndToEnd.CacheBustTest do
     conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
     conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
   end
+
+  test "request hash is in cache bust format when cache bust override is set" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn _role_arn, _lambda_function, _payload, _opts ->
+      {:ok, @cacheable_lambda_response}
+    end)
+
+    conn = conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
+
+    assert [request_hash] = get_resp_header(conn, "bsig")
+    assert String.starts_with?(request_hash, "cache-bust.")
+  end
 end

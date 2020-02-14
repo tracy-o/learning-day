@@ -4,6 +4,8 @@ defmodule EndToEndTest do
   alias BelfrageWeb.Router
   use Test.Support.Helper, :mox
 
+  import Test.Support.Helper, only: [assert_valid_request_hash: 1]
+
   @moduletag :end_to_end
 
   @lambda_response %{
@@ -42,8 +44,12 @@ defmodule EndToEndTest do
             [
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"},
-              {"server", "Belfrage"}
-            ], @lambda_response["body"]} == sent_resp(conn)
+              {"server", "Belfrage"},
+              {"bsig", request_hash}
+            ], response_body} = sent_resp(conn)
+
+    assert response_body == @lambda_response["body"]
+    assert_valid_request_hash(request_hash)
   end
 
   test "passes on query string parameters" do
@@ -77,7 +83,11 @@ defmodule EndToEndTest do
             [
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"},
-              {"server", "Belfrage"}
-            ], @lambda_response["body"]} == sent_resp(conn)
+              {"server", "Belfrage"},
+              {"bsig", request_hash}
+            ], response_body} = sent_resp(conn)
+
+    assert @lambda_response["body"] == response_body
+    assert_valid_request_hash(request_hash)
   end
 end
