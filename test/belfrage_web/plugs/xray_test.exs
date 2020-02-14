@@ -31,6 +31,16 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     |> Plugs.XRay.call([])
   end
 
+  test "adds request information" do
+    Belfrage.XrayMock
+    |> expect(:set_http_request, fn segment, %{method: "GET", path: "/"} ->
+      segment
+    end)
+
+    conn(:get, "/")
+    |> Plugs.XRay.call([])
+  end
+
   test "it adds trace_id to the conn" do
     conn = conn(:get, "/")
     conn = Plugs.XRay.call(conn, [])
@@ -57,6 +67,23 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     conn = Plugs.XRay.call(conn, [])
 
     assert length(conn.before_send) == 1
+
+    callback =
+      conn.before_send
+      |> List.first()
+
+    callback.(conn)
+  end
+
+  test "adds response information in plug callback" do
+    Belfrage.XrayMock
+    |> expect(:set_http_response, fn segment, %{status: _status} ->
+      segment
+    end)
+
+    conn =
+      conn(:get, "/")
+      |> Plugs.XRay.call([])
 
     callback =
       conn.before_send
