@@ -79,6 +79,10 @@ defmodule Routes.Routefile do
     return_404 if: Enum.member?(existing_topic_ids, discipline)
   end
 
+  handle "/sport/:discipline/:pageNumber", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt/1"] do
+    return_404 if: Enum.member?(existing_topic_ids, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+  end
+
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
