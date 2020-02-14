@@ -21,5 +21,6 @@ config :ex_metrics,
       "error.service.HTTP.timeout",
       "function.timing.service.HTTP.request",
       "function.timing.service.lambda.invoke",
-      "invalid_content_encoding_from_origin"
+      "invalid_content_encoding_from_origin",
+      "service.lambda.response.invalid_web_core_contract"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics
