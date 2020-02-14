@@ -5,7 +5,6 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
   defp incoming_request(path) do
     conn(:get, path)
-    |> put_resp_header("location", "unchanged")
     |> resp(200, "not being redirected")
   end
 
@@ -16,7 +15,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
     assert conn.status == 200
     assert conn.resp_body == "not being redirected"
-    assert get_resp_header(conn, "location") == ["unchanged"]
+    assert get_resp_header(conn, "location") == []
   end
 
   test "no redirect when no trailing slash on path" do
@@ -26,7 +25,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
     assert conn.status == 200
     assert conn.resp_body == "not being redirected"
-    assert get_resp_header(conn, "location") == ["unchanged"]
+    assert get_resp_header(conn, "location") == []
   end
 
   test "no redirect when no trailing slash on path or query string" do
@@ -36,7 +35,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
     assert conn.status == 200
     assert conn.resp_body == "not being redirected"
-    assert get_resp_header(conn, "location") == ["unchanged"]
+    assert get_resp_header(conn, "location") == []
   end
 
   test "no redirect when no trailing slash on path, but a trailing slash on query string" do
@@ -46,7 +45,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
     assert conn.status == 200
     assert conn.resp_body == "not being redirected"
-    assert get_resp_header(conn, "location") == ["unchanged"]
+    assert get_resp_header(conn, "location") == []
   end
 
   test "redirect when path has trailing slash" do
