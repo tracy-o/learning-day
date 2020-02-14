@@ -30,23 +30,10 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_resp_header("location", build_uri(conn))
   end
 
-  defp build_uri(%{ scheme: scheme, host: host, request_path: path, query_string: "" }) do
-    %URI{
-      host: host,
-      path: String.replace_trailing(path, "/", ""),
-      scheme: to_string(scheme)
-    }
-    |> to_string()
-  end
-
-  defp build_uri(%{ scheme: scheme, host: host, request_path: path, query_string: query }) do
-    %URI{
-      host: host,
-      path: String.replace_trailing(path, "/", ""),
-      scheme: to_string(scheme),
-      query: query
-    }
-    |> to_string()
+  defp build_uri(conn) do
+    conn
+    |> Map.replace!(:request_path, String.replace_trailing(conn.request_path, "/", ""))
+    |> request_url()
   end
 
   defp trailing_slash?(%{ request_path: path }) do
