@@ -1,5 +1,6 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
+  alias Routes.Specs.TopicPage
 
   redirect "/example/news/0", to: "/news", status: 302
   redirect "/example/weather/0", to: "/weather", status: 301
@@ -55,6 +56,14 @@ defmodule Routes.Routefile do
 
   handle "/topics/:id/:pageNumber", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt/1"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+  end
+
+  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"] do
+    return_404 if: Enum.member?(TopicPage.sports_topics_routes, discipline)
+  end
+
+  handle "/sport/:discipline/:pageNumber", using: "TopicPage", examples: ["/sport/snowboarding/1"] do
+    return_404 if: Enum.member?(TopicPage.sports_topics_routes, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
   end
 
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
