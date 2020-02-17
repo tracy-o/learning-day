@@ -59,11 +59,11 @@ defmodule Routes.Routefile do
   end
 
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/cpzrw9qgwelt"] do
-    return_404 if: Enum.member?(TopicPage.existing_topic_ids, discipline)
+    return_404 if: Enum.member?(TopicPage.sports_topics_id, discipline)
   end
 
   handle "/sport/:discipline/:pageNumber", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt/1"] do
-    return_404 if: Enum.member?(TopicPage.existing_topic_ids, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+    return_404 if: Enum.member?(TopicPage.sports_topics_id, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
   end
 
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do

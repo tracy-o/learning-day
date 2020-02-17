@@ -10,7 +10,7 @@ defmodule Routes.Specs.TopicPage do
     }
   end
 
-  def existing_topics_ids do
+  def sports_topics_id do
     [
       "c7gj2g87ez8t",  # Alpine Skiing
       "c9em2e59y83t",  # Biathlon
