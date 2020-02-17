@@ -31,7 +31,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     |> Plugs.XRay.call([])
   end
 
-  test "adds request information" do
+  test "adds the request method and path" do
     Belfrage.XrayMock
     |> expect(:set_http_request, fn segment, %{method: "GET", path: "/"} ->
       segment
