@@ -50,28 +50,28 @@ defmodule Routes.Routefile do
   handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
 
-  handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
-  end
-
   handle "/topics/:id/:pageNumber", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt/1"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
   end
 
-  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"] do
-    return_404 if: Enum.member?(TopicPage.sports_topics_routes, discipline)
+  handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport/:discipline/:pageNumber", using: "TopicPage", examples: ["/sport/snowboarding/1"] do
-    return_404 if: Enum.member?(TopicPage.sports_topics_routes, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+  handle "/sport/topics/:id/:pageNumber", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt/1"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
   end
 
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport/topics/:id/:pageNumber", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt/1"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+  handle "/sport/:discipline/:pageNumber", using: "TopicPage", examples: ["/sport/snowboarding/1"] do
+    return_404 if: !Enum.member?(TopicPage.sports_topics_routes, discipline) or !String.match?(pageNumber , ~r/^[1-9][0-9]*$/)
+  end
+
+  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"] do
+    return_404 if: !Enum.member?(TopicPage.sports_topics_routes, discipline)
   end
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
