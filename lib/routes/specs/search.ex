@@ -6,7 +6,8 @@ defmodule Routes.Specs.Search do
       platform: :webcore,
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
       resp_pipeline: [],
-      circuit_breaker_error_threshold: 100
+      circuit_breaker_error_threshold: 100,
+      query_params_allowlist: ["q"]
     }
   end
 end
