@@ -21,6 +21,8 @@ defmodule Routes.Routefile do
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
+  handle "/mundo/noticias-51503412", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412"]
+
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
