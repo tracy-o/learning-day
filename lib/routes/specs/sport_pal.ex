@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportFrontPage do
+defmodule Routes.Specs.SportPal do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
