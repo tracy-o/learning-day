@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Benchmark do
   use Mix.Task
+  import Fixtures.Struct
   alias Belfrage.{Struct, Processor}
 
   def run(_) do
@@ -40,6 +41,7 @@ defmodule Mix.Tasks.Benchmark do
     struct = %Struct{
       private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "ProxyPass"}
     }
+    |> struct_with_gzip_resp()
 
     Benchee.run(
       %{

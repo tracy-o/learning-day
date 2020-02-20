@@ -14,6 +14,10 @@ defmodule Belfrage.MixProject do
   end
 
   defp elixirc_paths(mix_env) when mix_env in [:test, :end_to_end], do: ["lib", "test/support"]
+
+  defp elixirc_paths(mix_env) when mix_env == :dev,
+    do: ["lib", "test/support/fixtures", "test/support/transformer_examples"]
+
   defp elixirc_paths(_), do: ["lib"]
 
   defp aliases do
