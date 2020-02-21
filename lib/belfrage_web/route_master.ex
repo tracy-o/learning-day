@@ -85,10 +85,10 @@ defmodule BelfrageWeb.RouteMaster do
 
       @redirects [{uri_from.path, []} | @redirects]
 
-      match(uri_from.path, host: uri_from.host) do
+      match(to_string(uri_from.path), host: uri_from.host) do
         new_location =
           unquote(location)
-          |> String.replace("/*", var!(conn).request_path)
+          |> String.replace("/*", to_string(var!(conn).request_path))
           |> String.trim_trailing("/")
 
         uri_to = URI.parse(new_location)

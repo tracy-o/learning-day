@@ -119,6 +119,18 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
+        conn(:redirect, "http://www.bbcarabic.com")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches without a subdomain and a trailing slash will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
         conn(:redirect, "https://bbcarabic.com/")
         |> RoutefileMock.call([])
 
