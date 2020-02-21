@@ -21,6 +21,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   defp redirect(conn) do
     conn
     |> put_location()
+    |> put_resp_header("cache-control", "max-age=60, public, must-revalidate")
     |> put_resp_content_type("text/plain")
     |> send_resp(301, "Redirecting")
     |> halt()

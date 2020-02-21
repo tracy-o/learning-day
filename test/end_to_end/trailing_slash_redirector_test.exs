@@ -12,7 +12,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
     assert {301,
             [
-              {"cache-control", "max-age=0, private, must-revalidate"},
+              {"cache-control", "max-age=60, public, must-revalidate"},
               {"location", "http://www.example.com/200-ok-response"},
               {"content-type", "text/plain; charset=utf-8"}
             ], "Redirecting"} == sent_resp(conn)
