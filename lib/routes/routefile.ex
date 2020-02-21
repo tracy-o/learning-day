@@ -22,6 +22,7 @@ defmodule Routes.Routefile do
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/mundo/noticias-51503412", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412"]
+  handle "/mundo/components", using: "WorldServiceMundoComponent", examples: ["/mundo/components"]
 
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
