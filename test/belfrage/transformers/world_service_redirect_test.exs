@@ -29,6 +29,34 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
            } = WorldServiceRedirect.call([], @http_uk_request_struct)
   end
 
+  @http_uk_with_qs_request_struct %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.co.uk"},
+    request: %Struct.Request{
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      query_params: %{
+        "override" => "true"
+      },
+      scheme: :https
+    }
+  }
+
+  test ".co.uk http with a query string request will be uplifted to http and redirected to .com and the query string remains" do
+    assert {
+             :redirect,
+             %Belfrage.Struct{
+               response: %Belfrage.Struct.Response{
+                 http_status: 302,
+                 body: "Redirecting",
+                 headers: %{
+                   "location" => "https://www.bbc.com/_web_core?override=true",
+                   "X-BBC-No-Scheme-Rewrite" => "1"
+                 }
+               }
+             }
+           } = WorldServiceRedirect.call([], @http_uk_with_qs_request_struct)
+  end
+
   @http_com_request_struct %Struct{
     private: %Struct.Private{origin: "http://www.bbc.com"},
     request: %Struct.Request{
@@ -54,6 +82,34 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
            } = WorldServiceRedirect.call([], @http_com_request_struct)
   end
 
+  @http_com_with_qs_request_struct %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.com"},
+    request: %Struct.Request{
+      host: "www.bbc.com",
+      path: "/_web_core",
+      query_params: %{
+        "override" => "true"
+      },
+      scheme: :https
+    }
+  }
+
+  test ".com http request with qs will be uplifted to http and redirected to .com and the query string remain" do
+    assert {
+             :redirect,
+             %Belfrage.Struct{
+               response: %Belfrage.Struct.Response{
+                 http_status: 302,
+                 body: "Redirecting",
+                 headers: %{
+                   "location" => "https://www.bbc.com/_web_core?override=true",
+                   "X-BBC-No-Scheme-Rewrite" => "1"
+                 }
+               }
+             }
+           } = WorldServiceRedirect.call([], @http_uk_with_qs_request_struct)
+  end
+
   @https_com_request_struct %Struct{
     private: %Struct.Private{origin: "https://www.bbc.com"},
     request: %Struct.Request{
@@ -65,5 +121,21 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
 
   test ".com https request will not redirect" do
     assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call([], @https_com_request_struct)
+  end
+
+  @https_com_with_qs_request_struct %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.com"},
+    request: %Struct.Request{
+      host: "www.bbc.com",
+      path: "/_web_core",
+      query_params: %{
+        "override" => "true"
+      },
+      scheme: :https
+    }
+  }
+
+  test ".com https request with a query string will not redirect" do
+    assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call([], @https_com_with_qs_request_struct)
   end
 end
