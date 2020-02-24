@@ -8,7 +8,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
   end
 
   def call(rest, struct) do
-    case String.contains?(struct.request.host, ".co.uk") do
+    case String.ends_with?(struct.request.host, ".co.uk") do
       true -> redirect(redirect_url(struct.request), struct)
       _    -> then(rest, struct)
     end
