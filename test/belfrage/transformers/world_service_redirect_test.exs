@@ -13,15 +13,6 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
     }
   }
 
-  @http_com_request_struct %Struct{
-    private: %Struct.Private{origin: "http://www.bbc.com"},
-    request: %Struct.Request{
-      host: "www.bbc.com",
-      path: "/_web_core",
-      scheme: :http
-    }
-  }
-
   test ".co.uk http request will be uplifted to http and redirected to .com" do
     assert {
              :redirect,
@@ -38,6 +29,15 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
            } = WorldServiceRedirect.call([], @http_uk_request_struct)
   end
 
+  @http_com_request_struct %Struct{
+    private: %Struct.Private{origin: "http://www.bbc.com"},
+    request: %Struct.Request{
+      host: "www.bbc.com",
+      path: "/_web_core",
+      scheme: :http
+    }
+  }
+
   test ".com http request will still be uplifted to https" do
     assert {
              :redirect,
@@ -52,5 +52,18 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
                }
              }
            } = WorldServiceRedirect.call([], @http_com_request_struct)
+  end
+
+  @https_com_request_struct %Struct{
+    private: %Struct.Private{origin: "https://www.bbc.com"},
+    request: %Struct.Request{
+      host: "www.bbc.com",
+      path: "/_web_core",
+      scheme: :https
+    }
+  }
+
+  test ".com https request will not redirect" do
+    assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call([], @https_com_request_struct)
   end
 end
