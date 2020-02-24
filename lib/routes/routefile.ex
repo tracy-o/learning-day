@@ -33,7 +33,6 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
 
-
   handle "/search", using: "Search", examples: ["/search"]
   handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
