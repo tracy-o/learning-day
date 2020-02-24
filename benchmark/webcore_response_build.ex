@@ -13,13 +13,13 @@ defmodule Benchmark.WebcoreResponseBuild do
   ```
 
   ### Expected outcomes
-  - The extent of performance cost for building (decoding) response with base64 content from Webcore Lambda
+  - performance implication of building (decoding) response with base64 content from Webcore Lambda
   """
 
   import Fixtures.Lambda
   alias Belfrage.Services.Webcore.Response
 
-  # TODO: create a behaviour via template method design
+  # TODO: create a behaviour via template method design pattern
   def run([iteration]), do: experiment(iteration |> String.to_integer())
   def run([iteration, step_size]), do: experiment(iteration |> String.to_integer(), step_size |> String.to_integer())
 
@@ -29,8 +29,8 @@ defmodule Benchmark.WebcoreResponseBuild do
   end
 
   # TODO: cf. the use  Benchee of `before_scenario` hook
-  def setup(iter \\ 1, step_size_kb \\ 1) do
-    for i <- 1..iter, into: %{} do
+  def setup(iteration \\ 1, step_size_kb \\ 1) do
+    for i <- 1..iteration, into: %{} do
       size_kb = i * step_size_kb
 
       {
