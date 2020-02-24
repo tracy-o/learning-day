@@ -12,9 +12,7 @@ defmodule Routes.Routefile do
   handle "/sport", using: "SportFrontPage", examples: ["/sport"]
   handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]
   handle "/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"]
-  handle "/cbbc/search", using: "CbbcSearch", examples: ["/cbbc/search"]
   handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
-  handle "/cbeebies/search", using: "CBeebiesSearch", examples: ["/cbeebies/search"]
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
@@ -35,9 +33,11 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
 
-  handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/search", using: "Search", examples: ["/search"]
+  handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
+  handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
 
+  handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/news/videos/:id", using: "NewsVideos", examples: ["/news/videos/50653614"] do
     return_404 if: String.length(id) != 8
   end
