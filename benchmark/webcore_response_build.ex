@@ -28,7 +28,7 @@ defmodule Benchmark.WebcoreResponseBuild do
     experiment()
   end
 
-  # TODO: cf. the use  Benchee of `before_scenario` hook
+  # TODO: cf. the use of Benchee `before_scenario` hook
   def setup(iteration \\ 1, step_size_kb \\ 1) do
     for i <- 1..iteration, into: %{} do
       size_kb = i * step_size_kb
