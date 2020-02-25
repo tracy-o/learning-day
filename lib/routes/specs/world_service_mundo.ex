@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceMundo do
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
       platform: :pal,
-      pipeline: ["HTTPredirect", "CircuitBreaker"],
+      pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       resp_pipeline: [],
       circuit_breaker_error_threshold: 100
     }
