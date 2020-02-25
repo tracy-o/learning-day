@@ -48,7 +48,7 @@ defmodule Fixtures.Lambda do
       |> binary_part(0, size_kb * @kb)
 
     %{
-      "headers" => %{},
+      "headers" => %{"content-encoding" => "gzip"},
       "isBase64Encoded" => true,
       "statusCode" => 200,
       "body" => body
