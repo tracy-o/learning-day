@@ -10,13 +10,12 @@ defmodule Belfrage.Transformers.Transformer do
   end
 
   def then([next | rest], struct) do
-    next_transformer = String.to_existing_atom(@namespace <> "." <> next)
-    struct = update_in(struct.debug.pipeline_trail, &[next | &1])
-
-    apply(next_transformer, :call, [rest, struct])
+    apply(
+      String.to_existing_atom(@namespace <> "." <> next),
+      :call,
+      [rest, update_in(struct.debug.pipeline_trail, &[next | &1])]
+    )
   end
 
-  def then([], struct) do
-    {:ok, struct}
-  end
+  def then([], struct), do: {:ok, struct}
 end

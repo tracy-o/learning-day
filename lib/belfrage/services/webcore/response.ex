@@ -22,18 +22,19 @@ defmodule Belfrage.Services.Webcore.Response do
   def build({:ok, lambda_response = %{"body" => body, "isBase64Encoded" => true}}) do
     case Base.decode64(body) do
       {:ok, decoded_body} ->
-        decoded_body_lambda_response =
+        build({
+          :ok,
           Map.merge(lambda_response, %{
             "body" => decoded_body,
             "isBase64Encoded" => false
           })
-
-        build({:ok, decoded_body_lambda_response})
+        })
 
       :error ->
         Stump.log(:error, %{
           msg: "Failed to base64 decode response body."
         })
+
         build({:error, :failed_base_64_decode})
     end
   end

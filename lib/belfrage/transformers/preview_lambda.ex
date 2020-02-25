@@ -3,12 +3,8 @@ defmodule Belfrage.Transformers.PreviewLambda do
 
   @impl true
   def call(rest, struct) do
-    struct = Struct.add(struct, :private, %{origin: preview_lambda_origin})
-
-    then(rest, struct)
+    then(rest, Struct.add(struct, :private, %{origin: preview_lambda_origin()}))
   end
 
-  defp preview_lambda_origin do
-    Application.get_env(:belfrage, :preview_pwa_lambda_function)
-  end
+  defp preview_lambda_origin, do: Application.get_env(:belfrage, :preview_pwa_lambda_function)
 end

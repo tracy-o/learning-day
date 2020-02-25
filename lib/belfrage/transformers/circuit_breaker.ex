@@ -3,14 +3,13 @@ defmodule Belfrage.Transformers.CircuitBreaker do
 
   @impl true
   def call(rest, struct) do
-    struct =
+    then(
+      rest,
       case threshold_exceeded?(error_count(struct), threshold(struct)) do
-        true -> 
-          circuit_breaker_active(struct)
+        true -> circuit_breaker_active(struct)
         false -> struct
       end
-
-    then(rest, struct)
+    )
   end
 
   defp circuit_breaker_active(struct = %Belfrage.Struct{}) do
@@ -21,9 +20,7 @@ defmodule Belfrage.Transformers.CircuitBreaker do
     |> Struct.add(:private, %{origin: :belfrage_circuit_breaker})
   end
 
-  defp threshold_exceeded?(error_count, threshold) do
-    error_count > threshold
-  end
+  defp threshold_exceeded?(error_count, threshold), do: error_count > threshold
 
   # The origin defined in private is used to fetch :errors inside long_counter
   # This is used to match the :errors map origin key

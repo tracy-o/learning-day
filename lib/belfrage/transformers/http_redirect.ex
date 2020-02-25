@@ -7,7 +7,8 @@ defmodule Belfrage.Transformers.HTTPredirect do
     redirect_url =
       "https://" <> struct.request.host <> struct.request.path <> QueryParams.parse(struct.request.query_params)
 
-    struct =
+    {
+      :redirect,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{
@@ -16,12 +17,9 @@ defmodule Belfrage.Transformers.HTTPredirect do
         },
         body: "Redirecting"
       })
-
-    {:redirect, struct}
+    }
   end
 
   @impl true
-  def call(rest, struct) do
-    then(rest, struct)
-  end
+  def call(rest, struct), do: then(rest, struct)
 end
