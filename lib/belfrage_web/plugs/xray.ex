@@ -15,7 +15,14 @@ defmodule BelfrageWeb.Plugs.XRay do
   @impl true
   def call(conn = %Plug.Conn{request_path: request_path}, _) when request_path not in @skip_paths do
     trace = @xray.new_trace()
-    segment = @xray.start_tracing(trace, "Belfrage")
+
+    segment =
+      trace
+      |> @xray.start_tracing("Belfrage")
+      |> @xray.set_http_request(%{
+        method: conn.method,
+        path: request_path
+      })
 
     conn
     |> Plug.Conn.put_private(:xray_trace_id, build_trace_id_header(segment.trace.root, segment.id))
@@ -28,7 +35,12 @@ defmodule BelfrageWeb.Plugs.XRay do
   end
 
   defp on_request_completed(conn, segment) do
-    @xray.finish_tracing(segment)
+    segment
+    |> @xray.set_http_response(%{
+      status: conn.status
+    })
+    |> @xray.finish_tracing()
+
     conn
   end
 end

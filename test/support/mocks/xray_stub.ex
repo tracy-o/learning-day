@@ -16,6 +16,9 @@ defmodule Belfrage.XrayStub do
     }
   end
 
+  def set_http_request(segment, _http_request), do: segment
+  def set_http_response(segment, _http_response), do: segment
+
   def finish_tracing(_segment) do
     :ok
   end
