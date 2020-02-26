@@ -5,6 +5,7 @@ use Mix.Config
   {"PWA_LAMBDA_FUNCTION", :required},
   {"PREVIEW_PWA_LAMBDA_FUNCTION", :required},
   {"MOZART_ENDPOINT", :required},
+  {"PAL_ENDPOINT", :required},
   {"PRODUCTION_ENVIRONMENT", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->

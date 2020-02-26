@@ -14,6 +14,7 @@ defmodule BelfrageWeb.Router do
   plug(Plug.Head)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
+  plug(Plugs.TrailingSlashRedirector)
   plug(:fetch_query_params)
   plug(BelfrageWeb.Plugs.Overrides)
   plug(Plugs.PathLogger)

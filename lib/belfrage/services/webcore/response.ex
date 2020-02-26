@@ -54,6 +54,8 @@ defmodule Belfrage.Services.Webcore.Response do
       web_core_response: invalid_response_from_web_core
     })
 
+    ExMetrics.increment("service.lambda.response.invalid_web_core_contract")
+
     %Struct.Response{
       http_status: 500,
       headers: %{},

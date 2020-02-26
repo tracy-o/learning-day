@@ -1,78 +1,32 @@
 defmodule Mix.Tasks.Benchmark do
   use Mix.Task
-  alias Belfrage.{Struct, Processor}
 
-  def run(_) do
-    {:ok, _started} = Application.ensure_all_started(:belfrage)
-    benchmark_get_loop()
-    benchmark_request_pipeline()
-    benchmark_response_pipeline()
-    benchmark_memory_check()
+  @dir Application.get_env(:belfrage, :benchmark)[:dir]
+  @namespace Application.get_env(:belfrage, :benchmark)[:namespace]
+
+  def run([suite | args]) do
+    test_module = Module.concat(@namespace, Macro.camelize(suite))
+
+    test_module
+    |> Code.ensure_compiled?()
+    |> run({test_module, args})
   end
 
-  defp benchmark_get_loop do
-    struct = %Struct{private: %Struct.Private{loop_id: "ProxyPass"}}
+  def run([]), do: run([], @dir)
 
-    Benchee.run(
-      %{
-        "Processor.get_loop" => fn -> Processor.get_loop(struct) end
-      },
-      time: 10,
-      memory_time: 2
-    )
+  def run([], dir) when dir != nil do
+    File.ls!(dir)
+    |> Enum.map(&(String.split(&1, ".") |> hd))
+    |> Enum.each(&run([&1 | []]))
   end
 
-  defp benchmark_request_pipeline do
-    struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "ProxyPass"}
-    }
+  def run([], _), do: IO.puts(test_not_available_message())
 
-    Benchee.run(
-      %{
-        "Processor.request_pipeline" => fn -> Processor.request_pipeline(struct) end
-      },
-      time: 10,
-      memory_time: 2
-    )
+  def run(false, _), do: IO.puts(test_not_available_message())
+
+  def run(true, {module, args}) do
+    module.run(args)
   end
 
-  defp benchmark_response_pipeline do
-    struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "ProxyPass"}
-    }
-
-    Benchee.run(
-      %{
-        "Processor.response_pipeline" => fn -> Processor.response_pipeline(struct) end
-      },
-      time: 10,
-      memory_time: 2
-    )
-  end
-
-  defp benchmark_memory_check do
-    :ets.new(:benchmark_table, [:set, :protected, :named_table, read_concurrency: true])
-
-    Enum.each(1..5_000, fn i -> :ets.insert(:benchmark_table, {i, random_string()}) end)
-
-    Benchee.run(
-      %{
-        "memsup" => fn -> :memsup.get_system_memory_data() end,
-        # Sadly the memory used by ets only includes pointers to the Strings, so is much smaller than the "real" memory usage
-        "ets.info" => fn -> :ets.info(:benchmark_table) end,
-        ":erlang.memory" => fn -> :erlang.memory() end
-      },
-      time: 10,
-      memory_time: 2
-    )
-  end
-
-  defp random_string do
-    # between 1kb and 2mb
-    size_in_bytes = (:rand.uniform(2_047) + 1) * 1024
-
-    :crypto.strong_rand_bytes(size_in_bytes)
-    |> Base.encode64()
-    |> binary_part(0, size_in_bytes)
-  end
+  def test_not_available_message(), do: "Test suite not available"
 end
