@@ -10,16 +10,18 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
   def call(rest, struct) do
     case String.ends_with?(struct.request.host, ".co.uk") do
       true -> redirect(redirect_url(struct.request), struct)
-      _    -> then(rest, struct)
+      _ -> then(rest, struct)
     end
   end
 
   def redirect_url(request) do
-    "https://" <> String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.parse(request.query_params)
+    "https://" <>
+      String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.parse(request.query_params)
   end
 
   def redirect(redirect_url, struct) do
-    struct =
+    {
+      :redirect,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{
@@ -28,7 +30,6 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
         },
         body: "Redirecting"
       })
-
-    {:redirect, struct}
+    }
   end
 end
