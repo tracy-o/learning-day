@@ -11,6 +11,21 @@ config :machine_gun,
     pool_timeout: 6_000,
     # Gun connection options
     conn_opts: %{}
+  },
+  fabl: %{
+    # Poolboy size
+    pool_size: 512,
+    # Poolboy max_overflow
+    pool_max_overflow: 256,
+    pool_timeout: 6_000,
+    # Gun connection options
+    conn_opts: %{
+      transport_opts: [
+        {:cacertfile, System.get_env("CA_FILE_PATH")},
+        {:certfile, System.get_env("CERT_FILE_PATH")},
+        {:keyfile, System.get_env("KEY_FILE_PATH")}
+      ]
+    }
   }
 
 config :ex_aws, :retries,

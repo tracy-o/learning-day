@@ -3,10 +3,11 @@ defmodule Belfrage.Clients.HTTPTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  describe "&build_options/1" do
-    test "builds options with timeout value" do
-      assert HTTP.build_options(%HTTP.Request{timeout: 1_000}) == %{
-               request_timeout: 1_000
+  describe "&build_options/2" do
+    test "builds options with timeout value and a pool group" do
+      assert HTTP.build_options(%HTTP.Request{timeout: 1_000}, :fabl) == %{
+               request_timeout: 1_000,
+               pool_group: :fabl
              }
     end
   end
