@@ -15,6 +15,9 @@ defmodule Routes.Routefile do
   handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
 
+  handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/example-module"]
+  handle "/fd/:name", using: "FablData", examples: ["/fd/example-module"]
+
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]

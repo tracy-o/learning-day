@@ -102,4 +102,8 @@ defmodule Belfrage.Loop do
   defp origin_pointer(:pal) do
     Application.get_env(:belfrage, :pal_endpoint)
   end
+
+  defp origin_pointer(:fabl) do
+    Application.get_env(:belfrage, :fabl_endpoint)
+  end
 end

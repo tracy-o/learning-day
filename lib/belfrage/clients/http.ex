@@ -10,9 +10,20 @@ defmodule Belfrage.Clients.HTTP do
 
   @type request_type :: :get | :post
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
+  @callback execute(HTTP.Request.t(), Atom) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
 
   def execute(request = %HTTP.Request{}) do
-    @machine_gun.request(request.method, request.url, request.payload, machine_gun_headers(request.headers), build_options(request))
+    execute(request, :default)
+  end
+
+  def execute(request = %HTTP.Request{}, pool_group) do
+    @machine_gun.request(
+      request.method,
+      request.url,
+      request.payload,
+      machine_gun_headers(request.headers),
+      build_options(request, pool_group)
+    )
     |> format_response()
   end
 
@@ -26,16 +37,17 @@ defmodule Belfrage.Clients.HTTP do
   Most of the options are configured in the application
   config, rather than for each request.
   """
-  def build_options(request) do
-    %{request_timeout: request.timeout}
+  def build_options(request, pool_group) do
+    %{request_timeout: request.timeout, pool_group: pool_group}
   end
 
   defp format_response({:ok, machine_response = %MachineGun.Response{}}) do
-    {:ok, HTTP.Response.new(%{
-      status_code: machine_response.status_code,
-      body: machine_response.body,
-      headers: machine_response.headers
-    })}
+    {:ok,
+     HTTP.Response.new(%{
+       status_code: machine_response.status_code,
+       body: machine_response.body,
+       headers: machine_response.headers
+     })}
   end
 
   defp format_response({:error, %MachineGun.Error{reason: reason}}) do
