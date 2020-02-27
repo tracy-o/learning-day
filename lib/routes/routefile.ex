@@ -35,6 +35,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/search", using: "Search", examples: ["/search"]
+  handle "/chwilio", using: "Search", examples: ["/chwilio"]
   handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
 
