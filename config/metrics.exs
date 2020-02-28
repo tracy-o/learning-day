@@ -4,6 +4,8 @@ lambda_response_code_metrics = Enum.map(200..599, fn status -> "service.lambda.r
 
 http_response_code_metrics = Enum.map(200..599, fn status -> "service.HTTP.response.#{status}" end)
 
+fabl_response_code_metrics = Enum.map(200..599, fn status -> "service.FABL.response.#{status}" end)
+
 config :ex_metrics,
   metrics:
     [
@@ -22,5 +24,7 @@ config :ex_metrics,
       "function.timing.service.HTTP.request",
       "function.timing.service.lambda.invoke",
       "invalid_content_encoding_from_origin",
-      "service.lambda.response.invalid_web_core_contract"
-    ] ++ lambda_response_code_metrics ++ http_response_code_metrics
+      "service.lambda.response.invalid_web_core_contract",
+      "error.service.Fabl.request",
+      "function.timing.service.Fabl.request"
+    ] ++ lambda_response_code_metrics ++ http_response_code_metrics ++ fabl_response_code_metrics

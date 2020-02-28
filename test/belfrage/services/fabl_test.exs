@@ -12,7 +12,10 @@ defmodule Belfrage.Services.FablTest do
     },
     request: %Struct.Request{
       method: "GET",
-      path: "/module/example-module"
+      path: "/fd/example-module",
+      path_params: %{
+        "name" => "example-module"
+      }
     }
   }
 
