@@ -1,21 +1,12 @@
 defmodule Belfrage.Transformers.FablData do
   use Belfrage.Transformers.Transformer
 
-  @anchor_matcher ~r/#.*$/
-
   @impl true
   def call(rest, struct) do
-    cond do
-      String.match?(struct.request.path, @anchor_matcher) ->
-        then(rest, clean_url(struct, struct.request.path))
-
-      true ->
-        then(rest, struct)
-    end
+    then(rest, build_fabl_path(struct))
   end
 
-  defp clean_url(struct, path) do
-    new_path = String.replace(path, @anchor_matcher, "")
-    Struct.add(struct, :request, %{path: new_path})
+  defp build_fabl_path(struct) do
+    Struct.add(struct, :request, %{path: "/module/" <> struct.request.path_params["name"]})
   end
 end
