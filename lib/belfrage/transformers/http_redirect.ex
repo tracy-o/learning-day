@@ -5,7 +5,7 @@ defmodule Belfrage.Transformers.HTTPredirect do
   @impl true
   def call(_rest, struct = %Struct{request: %Struct.Request{scheme: :http}}) do
     redirect_url =
-      "https://" <> struct.request.host <> struct.request.path <> QueryParams.parse(struct.request.query_params)
+      "https://" <> struct.request.host <> struct.request.path <> QueryParams.encode(struct.request.query_params)
 
     {
       :redirect,

@@ -1,6 +1,6 @@
 defmodule Belfrage.Helpers.QueryParams do
   alias Plug.Conn.Query
-  def parse(map) when map == %{}, do: ""
+  def encode(map) when map == %{}, do: ""
 
-  def parse(map), do: "?" <> Query.encode(map)
+  def encode(map), do: "?" <> Query.encode(map)
 end
