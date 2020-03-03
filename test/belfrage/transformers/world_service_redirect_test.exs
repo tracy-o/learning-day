@@ -14,7 +14,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".co.uk http request will be uplifted to http and redirected to .com" do
+    test ".co.uk will be uplifted to https and redirected to .com" do
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -42,7 +42,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".co.uk http with a query string request will be uplifted to http and redirected to .com and the query string remains" do
+    test ".co.uk with a query string will be uplifted to https and redirected to .com with the query string remains" do
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -67,7 +67,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".com http request will still be uplifted to https" do
+    test ".com will be uplifted to https" do
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -95,7 +95,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".com http request with qs will be uplifted to https and redirected to .com and the query string remain" do
+    test ".com request with qs will be uplifted to https and redirected to .com and the query string remain" do
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -122,7 +122,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".com https request will not redirect" do
+    test ".com request will not redirect" do
       assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call([], @https_com_request_struct)
     end
 
@@ -138,7 +138,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       }
     }
 
-    test ".com https request with a query string will not redirect" do
+    test ".com request with a query string will not redirect" do
       assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call([], @https_com_with_qs_request_struct)
     end
   end
