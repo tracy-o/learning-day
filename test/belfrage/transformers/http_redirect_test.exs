@@ -49,7 +49,7 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
                  body: "Redirecting",
                  headers: %{
                    "location" => "https://www.bbc.co.uk/_web_core",
-                   "X-BBC-No-Scheme-Rewrite" => "1"
+                   "x-bbc-no-scheme-rewrite" => "1"
                  }
                }
              }
@@ -72,7 +72,7 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
                  body: "Redirecting",
                  headers: %{
                    "location" => "https://www.bbc.co.uk/_web_core?foo=bar",
-                   "X-BBC-No-Scheme-Rewrite" => "1"
+                   "x-bbc-no-scheme-rewrite" => "1"
                  }
                }
              }
