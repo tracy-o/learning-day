@@ -55,6 +55,7 @@ defmodule Routes.Routefile do
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
   handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
+  handle "/tajik/components", using: "WorldServiceTajikComponent", examples: ["/tajik/components"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
 
   handle "/topics/:id/:pageNumber", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt/1"] do
