@@ -44,7 +44,7 @@ defmodule Belfrage.Loop do
   end
 
   @impl GenServer
-  def handle_call({:state, loop_id}, _from, state) do
+  def handle_call({:state, _loop_id}, _from, state) do
     {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(state.platform)})}, state}
   end
 
