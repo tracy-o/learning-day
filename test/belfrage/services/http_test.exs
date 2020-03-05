@@ -14,6 +14,7 @@ defmodule Belfrage.Services.HTTPTest do
       method: "GET",
       path: "/_web_core",
       country: "gb",
+      host: "www.bbc.co.uk",
       query_params: %{
         "foo" => "bar"
       }
@@ -53,7 +54,12 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
+             headers: %{
+               "accept-encoding" => "gzip",
+               "country" => "gb",
+               "user-agent" => "Belfrage",
+               "x-forwarded-host" => "www.bbc.co.uk"
+             }
            } ->
           @ok_response
         end
