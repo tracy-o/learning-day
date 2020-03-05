@@ -16,7 +16,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
 
   def redirect_url(request) do
     "https://" <>
-      String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.parse(request.query_params)
+      String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.encode(request.query_params)
   end
 
   def redirect(redirect_url, struct) do

@@ -56,7 +56,7 @@ defmodule Belfrage.Services.HTTP do
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "POST"}, private: private}) do
     {@http_client.execute(%Clients.HTTP.Request{
        method: :post,
-       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       url: private.origin <> request.path <> QueryParams.encode(request.query_params),
        payload: request.payload,
        headers: build_headers(request)
      }), struct}
@@ -65,7 +65,7 @@ defmodule Belfrage.Services.HTTP do
   defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
     {@http_client.execute(%Clients.HTTP.Request{
        method: :get,
-       url: private.origin <> request.path <> QueryParams.parse(request.query_params),
+       url: private.origin <> request.path <> QueryParams.encode(request.query_params),
        headers: build_headers(request)
      }), struct}
   end

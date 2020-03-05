@@ -58,7 +58,7 @@ defmodule Belfrage.Services.Fabl do
        %Clients.HTTP.Request{
          method: :get,
          url:
-           private.origin <> "/module/" <> struct.request.path_params["name"] <> QueryParams.parse(request.query_params),
+           private.origin <> "/module/" <> struct.request.path_params["name"] <> QueryParams.encode(request.query_params),
          headers: build_headers()
        },
        :fabl
