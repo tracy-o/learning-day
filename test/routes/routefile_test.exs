@@ -10,14 +10,14 @@ defmodule Routes.RoutefileTest do
   @moduletag :routes_test
 
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
-    describe "#{route_matcher} pointing to #{loop_id}" do
+    describe "For route matcher: #{route_matcher}" do
       @loop_id loop_id
       @examples examples
 
       Enum.each(@examples, fn example ->
         @example example
 
-        test "#{example} points to #{loop_id}" do
+        test "The example: #{example} points to the #{loop_id} routespec" do
           BelfrageMock
           |> expect(
             :handle,
