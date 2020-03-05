@@ -14,6 +14,8 @@ defmodule Routes.Routefile do
   handle "/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"]
   handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
   handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
+  handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland"]
+  handle "/wales", using: "WalesHomePage", examples: ["/wales"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/example-module"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/example-module"]

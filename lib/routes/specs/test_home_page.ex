@@ -2,7 +2,7 @@ defmodule Routes.Specs.TestHomePage do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Runbook",
       platform: :webcore,
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
       resp_pipeline: [],

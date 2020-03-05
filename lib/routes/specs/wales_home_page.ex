@@ -1,4 +1,4 @@
-defmodule Routes.Specs.HomePage do
+defmodule Routes.Specs.WalesHomePage do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
