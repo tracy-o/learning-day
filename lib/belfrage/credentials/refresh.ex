@@ -43,7 +43,7 @@ defmodule Belfrage.Credentials.Refresh do
     |> store_credentials()
   end
 
-  defp store_credentials({:ok, arn, session_name, credentials}) do
+  defp store_credentials({:ok, arn, _session_name, credentials}) do
     :ets.insert(:sts_cache, {arn, credentials})
   end
 
