@@ -12,6 +12,9 @@ defmodule BelfrageWeb.RouteMaster do
       import BelfrageWeb.RouteMaster
 
       @routes []
+      @redirects []
+
+      @before_compile BelfrageWeb.RouteMaster
     end
   end
 
@@ -24,7 +27,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro handle(matcher, [using: id, examples: examples], do: block) do
     quote do
-      @routes [{unquote(matcher), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
 
       get unquote(matcher) do
         unquote(block) || yield(unquote(id), var!(conn))
@@ -34,7 +37,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro handle(matcher, using: id, only_on: env, examples: examples) do
     quote do
-      @routes [{unquote(matcher), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
 
       # TODO: use match here...
       get unquote(matcher) do
@@ -49,7 +52,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro handle(matcher, using: id, examples: examples) do
     quote do
-      @routes [{unquote(matcher), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
 
       # TODO: use match here...
       get unquote(matcher) do
@@ -78,13 +81,19 @@ defmodule BelfrageWeb.RouteMaster do
         raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
       end
 
-      @routes [{unquote(path), []} | @routes]
+      @redirects [{unquote(path), []} | @redirects]
 
       match(unquote(path)) do
         var!(conn)
         |> resp(unquote(status), "")
         |> put_resp_header("location", unquote(location))
       end
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      def routes, do: @routes
     end
   end
 end
