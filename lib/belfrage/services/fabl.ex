@@ -59,13 +59,13 @@ defmodule Belfrage.Services.Fabl do
          method: :get,
          url:
            private.origin <> "/module/" <> struct.request.path_params["name"] <> QueryParams.parse(request.query_params),
-         headers: build_headers(request)
+         headers: build_headers()
        },
        :fabl
      ), struct}
   end
 
-  defp build_headers(request) do
+  defp build_headers do
     %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
   end
 end

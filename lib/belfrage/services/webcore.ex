@@ -8,7 +8,7 @@ defmodule Belfrage.Services.Webcore do
   @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
 
   @impl Service
-  def dispatch(struct = %Struct{private: private}) do
+  def dispatch(struct) do
     Struct.add(
       struct,
       :response,
@@ -17,7 +17,12 @@ defmodule Belfrage.Services.Webcore do
   end
 
   defp build_webcore_response(struct) do
-    @lambda_client.call(arn(struct), struct.private.origin, Webcore.Request.build(struct), invoke_lambda_options(struct))
+    @lambda_client.call(
+      arn(struct),
+      struct.private.origin,
+      Webcore.Request.build(struct),
+      invoke_lambda_options(struct)
+    )
     |> Webcore.Response.build()
   end
 

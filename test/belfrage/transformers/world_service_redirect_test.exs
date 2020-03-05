@@ -91,7 +91,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
         query_params: %{
           "override" => "true"
         },
-        scheme: :https
+        scheme: :http
       }
     }
 
@@ -108,7 +108,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call([], @http_uk_with_qs_request_struct)
+             } = WorldServiceRedirect.call([], @http_com_with_qs_request_struct)
     end
   end
 
