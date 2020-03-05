@@ -12,9 +12,8 @@ defmodule Routes.RoutefileTest do
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
     describe "For route matcher: #{route_matcher}" do
       @loop_id loop_id
-      @examples examples
 
-      Enum.each(@examples, fn example ->
+      Enum.each(examples, fn example ->
         @example example
 
         test "The example: #{example} points to the #{loop_id} routespec" do
