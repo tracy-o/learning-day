@@ -1,9 +1,9 @@
-defmodule Routes.Specs.WorldServiceMundoComponent do
+defmodule Routes.Specs.WorldServiceTajikComponent do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
-      platform: :pal,
+      platform: :mozart,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       resp_pipeline: [],
       query_params_allowlist: ["alternativeJsLoading", "batch"],
