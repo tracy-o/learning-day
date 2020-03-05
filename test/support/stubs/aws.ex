@@ -3,13 +3,13 @@ defmodule Belfrage.AWSStub do
 
   def request(_operation, _options \\ [])
 
-  def request(%ExAws.Operation.JSON{service: :lambda}, options) do
+  def request(%ExAws.Operation.JSON{service: :lambda}, _options) do
     response_body = "some response"
 
     {:ok, %{body: response_body}}
   end
 
-  def request(%ExAws.Operation.Query{service: :sts}, options) do
+  def request(%ExAws.Operation.Query{service: :sts}, _options) do
     response_body = %{
       session_token: "stubbed session token",
       access_key_id: "stubbed access key id",
