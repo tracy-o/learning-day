@@ -1,8 +1,8 @@
 defmodule Routes.Specs.NewsArticlePage do
   def specs do
     %{
-      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      owner: "DENewsCardiff@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
       platform: :webcore,
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
       resp_pipeline: [],
