@@ -13,6 +13,10 @@ defmodule Routes.RoutefileTest do
     describe "For route matcher: #{route_matcher}" do
       @loop_id loop_id
 
+      test "There is a valid routespec for #{loop_id}" do
+        assert Code.ensure_compiled?(Module.concat([Routes, Specs, @loop_id]))
+      end
+
       Enum.each(examples, fn example ->
         @example example
 
