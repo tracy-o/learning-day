@@ -24,9 +24,6 @@ defmodule Routes.Routefile do
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
-  handle "/mundo/noticias-51503412", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412"]
-  handle "/mundo/components", using: "WorldServiceMundoComponent", examples: ["/mundo/components"]
-
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
@@ -56,15 +53,32 @@ defmodule Routes.Routefile do
 
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
+  handle "/azeri", using: "WorldServiceAzeri", examples: ["/azeri"]
+  handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri/magazine-51736698"]
+
   handle "/igbo", using: "WorldServiceIgbo", examples: ["/igbo"]
   handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo/afirika-51708561"]
+
+  handle "/japanese", using: "WorldServiceJapanese", examples: ["/japanese"]
+  handle "/japanese/*_any", using: "WorldServiceJapanese", examples: ["/japanese/51748582"]
+
+  handle "/kyrgyz", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
+  handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz/51748492"]
+
+  handle "/mundo", using: "WorldServiceMundo", examples: ["/mundo"]
+  handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412", "/mundo/components"]
 
   handle "/pidgin", using: "WorldServicePidgin", examples: ["/pidgin"]
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin/tori-51717056"]
 
+  handle "/punjabi", using: "WorldServicePunjabi", examples: ["/punjabi"]
+  handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi/india-51743542"]
+
   handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
-  handle "/tajik/components", using: "WorldServiceTajikComponent", examples: ["/tajik/components"]
-  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
+  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/components", "/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
+
+  handle "/thai", using: "WorldServiceThai", examples: ["/thai"]
+  handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai/thailand-51706739"]
 
   handle "/yoruba", using: "WorldServiceYoruba", examples: ["/yoruba"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba/awon-iroyin-miran-51716954"]
