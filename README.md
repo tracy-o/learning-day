@@ -90,6 +90,23 @@ mix run --no-halt
 
 The app runs on port 7080.
 
+### Testing
+
+To run unit tests use the standard `mix` command:
+```
+mix test
+```
+
+To run the end to end integration suite run:
+```
+mix test_e2e
+```
+
+To run the automatically generated route matcher tests use: 
+```
+mix routes_test
+```
+
 ### Run benchmark performance tests
 ```
 mix benchmark
