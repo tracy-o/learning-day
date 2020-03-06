@@ -16,7 +16,7 @@ defmodule Belfrage.Cache.CCP do
     |> send_to_ccp(struct)
   end
 
-  defp send_to_ccp(node = nil, _struct) do
+  defp send_to_ccp(_node = nil, _struct) do
     Stump.log(:error, %{
       msg: "Belfrage CCP is not connected to Belfrage."
     })
@@ -28,7 +28,7 @@ defmodule Belfrage.Cache.CCP do
          request: %{request_hash: request_hash},
          response: response
        }) do
-    GenServer.cast({BelfrageCcp, node}, {:store, request_hash, response})
+    GenServer.cast({BelfrageCcp, node}, {:put, request_hash, response})
 
     {:ok, true}
   end
