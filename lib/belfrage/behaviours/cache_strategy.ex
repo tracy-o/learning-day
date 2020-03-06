@@ -1,4 +1,4 @@
-defmodule Belfrage.Behaviours.CredentialStrategy do
+defmodule Belfrage.Behaviours.CacheStrategy do
   @type freshness :: :stale | :fresh
 
   @callback store(Belfrage.Struct.t()) :: {:ok, true} | {:ok, false}

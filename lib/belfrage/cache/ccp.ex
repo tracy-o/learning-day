@@ -1,15 +1,15 @@
 defmodule Belfrage.Cache.CCP do
-  alias Belfrage.Behaviours.CredentialStrategy
-  @behaviour CredentialStrategy
+  alias Belfrage.Behaviours.CacheStrategy
+  @behaviour CacheStrategy
 
-  @impl CredentialStrategy
+  @impl CacheStrategy
   def fetch(%Belfrage.Struct{
         request: %{request_hash: request_hash}
       }) do
     {:error, "Belfrage.Cache.CCP.fetch/1 not implemented."}
   end
 
-  @impl CredentialStrategy
+  @impl CacheStrategy
   def store(struct = %Belfrage.Struct{}) do
     Node.list()
     |> List.first()

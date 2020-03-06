@@ -1,4 +1,4 @@
-defmodule Belfrage.Behaviours.CacheStrategy do
+defmodule Belfrage.Behaviours.CredentialStrategy do
   @type arn :: String.t()
   @type session_name :: String.t()
   @type credentials :: %{

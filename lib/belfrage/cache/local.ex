@@ -1,8 +1,8 @@
 defmodule Belfrage.Cache.Local do
-  alias Belfrage.Behaviours.CredentialStrategy
-  @behaviour CredentialStrategy
+  alias Belfrage.Behaviours.CacheStrategy
+  @behaviour CacheStrategy
 
-  @impl CredentialStrategy
+  @impl CacheStrategy
   def fetch(%Belfrage.Struct{
         request: %{request_hash: request_hash}
       }) do
@@ -10,7 +10,7 @@ defmodule Belfrage.Cache.Local do
     |> format_cache_result()
   end
 
-  @impl CredentialStrategy
+  @impl CacheStrategy
   def store(struct = %Belfrage.Struct{}) do
     case stale?(struct) do
       true ->
