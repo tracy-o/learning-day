@@ -14,7 +14,12 @@ defmodule Routes.RoutefileTest do
       @loop_id loop_id
 
       test "There is a valid routespec for #{loop_id}" do
-        assert Code.ensure_compiled?(Module.concat([Routes, Specs, @loop_id]))
+        specs = Module.concat([Routes, Specs, @loop_id]).specs()
+
+        assert Map.has_key?(specs, :platform)
+        assert Map.has_key?(specs, :pipeline)
+        assert Map.has_key?(specs, :resp_pipeline)
+        assert Map.has_key?(specs, :circuit_breaker_error_threshold)
       end
 
       Enum.each(examples, fn example ->
