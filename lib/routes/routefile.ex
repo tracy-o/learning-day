@@ -24,9 +24,6 @@ defmodule Routes.Routefile do
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
-  handle "/mundo/noticias-51503412", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412"]
-  handle "/mundo/components", using: "WorldServiceMundoComponent", examples: ["/mundo/components"]
-
   handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
@@ -68,6 +65,9 @@ defmodule Routes.Routefile do
   handle "/kyrgyz", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz/51748492"]
 
+  handle "/mundo", using: "WorldServiceMundo", examples: ["/mundo"]
+  handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo/noticias-51503412", "/mundo/components"]
+
   handle "/pidgin", using: "WorldServicePidgin", examples: ["/pidgin"]
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin/tori-51717056"]
 
@@ -75,8 +75,7 @@ defmodule Routes.Routefile do
   handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi/india-51743542"]
 
   handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
-  handle "/tajik/components", using: "WorldServiceTajikComponent", examples: ["/tajik/components"]
-  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
+  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/components", "/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
 
   handle "/thai", using: "WorldServiceThai", examples: ["/thai"]
   handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai/thailand-51706739"]

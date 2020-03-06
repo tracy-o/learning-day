@@ -6,6 +6,7 @@ defmodule Routes.Specs.WorldServiceKyrgyz do
       platform: :mozart,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       resp_pipeline: [],
+      query_params_allowlist: ["alternativeJsLoading", "batch"],
       circuit_breaker_error_threshold: 100
     }
   end
