@@ -21,7 +21,16 @@ defmodule Belfrage.Cache do
       metric_stale_response(freshness, struct)
       add_response_to_struct(struct, freshness, response)
     else
-      _ -> metric_fallback_miss(accepted_freshness, struct)
+      _ -> t2_cache_fallback(struct, accepted_freshness)
+    end
+  end
+
+  defp t2_cache_fallback(struct, [:fresh]), do: metric_fallback_miss([:fresh], struct)
+
+  defp t2_cache_fallback(struct, accepted_freshness) do
+    case CCP.fetch(struct) do
+      {:ok, :content_not_found} -> metric_fallback_miss(accepted_freshness, struct)
+      {:ok, freshness, response} -> add_response_to_struct(struct, freshness, response)
     end
   end
 
