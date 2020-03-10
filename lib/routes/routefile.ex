@@ -53,6 +53,12 @@ defmodule Routes.Routefile do
 
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
 
+  handle "/afaanoromoo", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
+  handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo/oduu-51797939"]
+
+  handle "/amharic", using: "WorldServiceAmharic", examples: ["/amharic"]
+  handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic/news-51797888"]
+
   handle "/azeri", using: "WorldServiceAzeri", examples: ["/azeri"]
   handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri/magazine-51736698"]
 
@@ -76,6 +82,9 @@ defmodule Routes.Routefile do
 
   handle "/tajik", using: "WorldServiceTajik", examples: ["/tajik"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik/components", "/tajik/news/2015/03/150331_l16_bbc-tajik_closure"]
+
+  handle "/tigrinya", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
+  handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya/news-51799994"]
 
   handle "/thai", using: "WorldServiceThai", examples: ["/thai"]
   handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai/thailand-51706739"]
