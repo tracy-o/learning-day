@@ -1,6 +1,6 @@
 defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
-  @signature_keys [:path, :country, :method, :query_params, :has_been_replayed?, :subdomain, :scheme]
+  @signature_keys [:country, :has_been_replayed?, :host, :method, :path, :query_params, :subdomain, :scheme]
 
   def generate(struct) do
     case Belfrage.Overrides.should_cache_bust?(struct) do

@@ -109,5 +109,13 @@ defmodule Belfrage.RequestHashTest do
 
       refute hash_one == hash_two
     end
+
+    test "varies on host" do
+      co_uk_host_struct = Belfrage.Struct.add(@struct, :request, %{host: "www.bbc.co.uk"})
+      com_host_struct = Belfrage.Struct.add(@struct, :request, %{host: "www.bbc.com"})
+
+      refute RequestHash.generate(co_uk_host_struct).request.request_hash ==
+               RequestHash.generate(com_host_struct).request.request_hash
+    end
   end
 end
