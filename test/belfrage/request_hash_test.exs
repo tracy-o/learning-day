@@ -73,13 +73,6 @@ defmodule Belfrage.RequestHashTest do
                RequestHash.generate(@struct_with_different_path).request.request_hash
     end
 
-    test "varies on subdomain" do
-      custom_subdomain_struct = Belfrage.Struct.add(@struct, :request, %{subdomain: "example-branch"})
-
-      refute RequestHash.generate(@struct).request.request_hash ==
-               RequestHash.generate(custom_subdomain_struct).request.request_hash
-    end
-
     test "builds repeatable request hash" do
       %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(@struct)
       %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(@struct)
