@@ -26,7 +26,8 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
         http_status: 302,
         headers: %{
           "location" => redirect_url,
-          "x-bbc-no-scheme-rewrite" => "1"
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
         },
         body: "Redirecting"
       })

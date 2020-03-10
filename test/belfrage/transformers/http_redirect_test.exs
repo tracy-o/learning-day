@@ -49,7 +49,8 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
                  body: "Redirecting",
                  headers: %{
                    "location" => "https://www.bbc.co.uk/_web_core",
-                   "x-bbc-no-scheme-rewrite" => "1"
+                   "x-bbc-no-scheme-rewrite" => "1",
+                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
                }
              }
@@ -72,7 +73,8 @@ defmodule Belfrage.Transformers.HTTPredirectTest do
                  body: "Redirecting",
                  headers: %{
                    "location" => "https://www.bbc.co.uk/_web_core?foo=bar",
-                   "x-bbc-no-scheme-rewrite" => "1"
+                   "x-bbc-no-scheme-rewrite" => "1",
+                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
                }
              }
