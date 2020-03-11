@@ -30,7 +30,7 @@ defmodule NonUtf8QueryStringTest do
                           httpMethod: "GET",
                           path: "/200-ok-response",
                           pathParameters: %{},
-                          queryStringParameters: %{"query" => "%B3"}
+                          queryStringParameters: %{"query" => "�"}
                         },
                         _opts ->
       {:ok, @lambda_response}

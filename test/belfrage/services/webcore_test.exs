@@ -53,7 +53,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
-                                             queryStringParameters: %{"q" => %{"component" => "%B3"}}
+                                             queryStringParameters: %{"q" => %{"component" => "�"}}
                                            },
                                            _opts ->
         {:ok, @lambda_response}

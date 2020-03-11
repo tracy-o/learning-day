@@ -44,6 +44,7 @@ defmodule Belfrage.MixProject do
       {:benchee, "~> 1.0.1", only: :dev},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
+      {:codepagex, "~> 0.1.4"},
       {:distillery, "~> 2.0"},
       {:eljiffy, "~> 1.3.0"},
       {:ex_aws,
