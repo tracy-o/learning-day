@@ -73,6 +73,7 @@ defmodule Routes.Routefile do
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/noticias-51503412", "/mundo/components"]
   handle "/naidheachdan/*_any", using: "WorldServiceNaidheachdan", examples: ["/naidheachdan", "/naidheachdan/example-123"]
+  handle "/newyddion/*_any", using: "WorldServiceNewyddion", examples: ["/newyddion", "/newyddion/example-123"]
   handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali", "/nepali/example-123"]
   handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto", "/pashto/example-123"]
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian", "/persian/example-123"]
