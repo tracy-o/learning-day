@@ -7,7 +7,7 @@ defmodule Routes.Specs.Search do
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
       resp_pipeline: [],
       circuit_breaker_error_threshold: 100,
-      query_params_allowlist: ["q", "page"]
+      query_params_allowlist: ["q", "page", "scope", "filter"]
     }
   end
 end
