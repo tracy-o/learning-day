@@ -18,17 +18,8 @@ defmodule Belfrage.Services.Webcore.Request do
     |> Enum.into(%{})
   end
 
-  defp key_value_pair_to_utf8({key, value}) when is_map(value) do
-    {
-      Codepagex.from_string!(key, :iso_8859_1, Codepagex.use_utf_replacement()),
-      utf8_sanitise(value)
-    }
-  end
+  defp key_value_pair_to_utf8({key, value}) when is_map(value), do: {string_to_utf8(key), utf8_sanitise(value)}
+  defp key_value_pair_to_utf8({key, value}), do: {string_to_utf8(key), string_to_utf8(value)}
 
-  defp key_value_pair_to_utf8({key, value}) do
-    {
-      Codepagex.from_string!(key, :iso_8859_1, Codepagex.use_utf_replacement()),
-      Codepagex.from_string!(value, :iso_8859_1, Codepagex.use_utf_replacement())
-    }
-  end
+  defp string_to_utf8(s), do: Codepagex.from_string!(s, :iso_8859_1, Codepagex.use_utf_replacement())
 end
