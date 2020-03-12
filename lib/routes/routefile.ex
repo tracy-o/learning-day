@@ -24,10 +24,6 @@ defmodule Routes.Routefile do
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
-  handle "/news/beta/article/:id", using: "NewsArticlePage", examples: ["/news/beta/article/uk-politics-49336144"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
-  end
-
   handle "/newsround/beta/article/:id", using: "NewsroundArticlePage", examples: ["/newsround/beta/article/49081103"] do
     return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
@@ -44,6 +40,10 @@ defmodule Routes.Routefile do
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
   handle "/news/videos/:id", using: "NewsVideos", examples: ["/news/videos/50653614"] do
     return_404 if: String.length(id) != 8
+  end
+
+  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144"] do
+    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
   end
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
