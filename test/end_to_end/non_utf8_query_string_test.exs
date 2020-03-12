@@ -41,4 +41,48 @@ defmodule NonUtf8QueryStringTest do
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
+
+  test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn "webcore-lambda-role-arn",
+                        "pwa-lambda-function:test",
+                        %{
+                          body: "",
+                          headers: %{country: "gb"},
+                          httpMethod: "GET",
+                          path: "/200-ok-response",
+                          pathParameters: %{},
+                          queryStringParameters: %{"query" => "science café"}
+                        },
+                        _opts ->
+      {:ok, @lambda_response}
+    end)
+
+    conn = conn(:get, "/200-ok-response?query=science%20caf%C3%A9")
+    conn = Router.call(conn, [])
+
+    assert {200, _headers, _body} = sent_resp(conn)
+  end
+
+  test "Given a query string with a multi byte character, it still passes this on to the origin" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn "webcore-lambda-role-arn",
+                        "pwa-lambda-function:test",
+                        %{
+                          body: "",
+                          headers: %{country: "gb"},
+                          httpMethod: "GET",
+                          path: "/200-ok-response",
+                          pathParameters: %{},
+                          queryStringParameters: %{"query" => "€100"}
+                        },
+                        _opts ->
+      {:ok, @lambda_response}
+    end)
+
+    conn = conn(:get, "/200-ok-response?query=%E2%82%AC100")
+    conn = Router.call(conn, [])
+
+    assert {200, _headers, _body} = sent_resp(conn)
+  end
 end

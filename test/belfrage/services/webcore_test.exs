@@ -53,7 +53,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              headers: %{country: nil},
                                              httpMethod: "GET",
                                              path: "/_web_core",
-                                             queryStringParameters: %{"q" => %{"component" => "�"}}
+                                             queryStringParameters: %{"q" => %{"bad" => "�", "good" => "€100 café"}}
                                            },
                                            _opts ->
         {:ok, @lambda_response}
@@ -70,7 +70,7 @@ defmodule Belfrage.Services.WebcoreTest do
                  request: %Struct.Request{
                    method: "GET",
                    path: "/_web_core",
-                   query_params: %{"q" => %{"component" => <<179>>}},
+                   query_params: %{"q" => %{"bad" => <<179>>, "good" => "€100 café"}},
                    xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
                  }
                })
