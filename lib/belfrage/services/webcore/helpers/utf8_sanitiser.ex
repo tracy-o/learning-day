@@ -5,27 +5,13 @@ defmodule Belfrage.Services.Webcore.Helpers.Utf8Sanitiser do
   end
 
   defp key_value_pair_to_utf8({key, value}) when is_map(value),
-    do: {string_to_utf8(key), utf8_sanitise_query_params(value)}
+    do: {replace_invalid_bytes(key), utf8_sanitise_query_params(value)}
 
-  defp key_value_pair_to_utf8({key, value}), do: {string_to_utf8(key), string_to_utf8(value)}
+  defp key_value_pair_to_utf8({key, value}), do: {replace_invalid_bytes(key), replace_invalid_bytes(value)}
 
-  defp string_to_utf8(s) do
-    case String.valid?(s) do
-      true -> s
-      false -> deal_with_invalid_chars(s)
-    end
-  end
+  defp replace_invalid_bytes(input_string, sanitised_string_accumulator \\ [])
 
-  defp deal_with_invalid_chars(s) do
-    Enum.map(
-      :binary.bin_to_list(s),
-      fn char ->
-        case String.valid?(<<char>>) do
-          true -> <<char>>
-          false -> "�"
-        end
-      end
-    )
-    |> Enum.join()
-  end
+  defp replace_invalid_bytes(<<good::utf8, rest::binary>>, acc), do: replace_invalid_bytes(rest, [<<good::utf8>> | acc])
+  defp replace_invalid_bytes(<<_bad::size(8), rest::binary>>, acc), do: replace_invalid_bytes(rest, ["�" | acc])
+  defp replace_invalid_bytes(<<>>, acc), do: acc |> Enum.reverse() |> Enum.join()
 end
