@@ -75,18 +75,27 @@ defmodule BelfrageWeb.RouteMaster do
   # something like:
   # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)
   # plus the port etc.
-  defmacro redirect(path, to: location, status: status) do
+  defmacro redirect(from, to: location, status: status) do
     quote do
       if unquote(status) not in [301, 302] do
         raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
       end
 
-      @redirects [{unquote(path), []} | @redirects]
+      uri_from = URI.parse(unquote(from))
 
-      match(unquote(path)) do
+      @redirects [{uri_from.path, []} | @redirects]
+
+      match(to_string(uri_from.path), host: uri_from.host) do
+        new_location =
+          unquote(location)
+          |> String.replace("/*", to_string(var!(conn).request_path))
+          |> String.trim_trailing("/")
+
+        uri_to = URI.parse(new_location)
+
         var!(conn)
         |> resp(unquote(status), "")
-        |> put_resp_header("location", unquote(location))
+        |> put_resp_header("location", URI.to_string(uri_to))
       end
     end
   end

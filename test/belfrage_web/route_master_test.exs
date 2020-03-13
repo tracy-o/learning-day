@@ -99,4 +99,92 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 200
     end
   end
+
+  describe "calling redirect" do
+    test "when the redirect matches will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/permanent-redirect")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 301
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location"]
+    end
+  end
+
+  describe "calling redirect with host" do
+    test "when the redirect matches without a subdomain will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "http://www.bbcarabic.com")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches without a subdomain and a trailing slash will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://bbcarabic.com/")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches with a subdomain and without a trailing slash will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://www.bbcarabic.com")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches without a subdomain and without a trailing slash will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://bbcarabic.com")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches with a subdomain and trailing slash will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://www.bbcarabic.com/")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic"]
+    end
+
+    test "when the redirect matches with a path will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://www.bbcarabic.com/middleeast-51412901")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic/middleeast-51412901"]
+    end
+  end
 end

@@ -1,6 +1,9 @@
 defmodule Routes.RoutefileMock do
   use BelfrageWeb.RouteMaster
 
+  redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*", status: 302)
+  redirect("https://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*", status: 302)
+
   redirect("/permanent-redirect", to: "/new-location", status: 301)
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
