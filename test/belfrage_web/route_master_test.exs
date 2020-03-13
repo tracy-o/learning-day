@@ -105,7 +105,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "/permanent-redirect")
+        conn(:get, "/permanent-redirect")
         |> RoutefileMock.call([])
 
       assert conn.status == 301
@@ -119,7 +119,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "http://www.bbcarabic.com")
+        conn(:get, "http://www.bbcarabic.com")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -131,7 +131,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "https://bbcarabic.com/")
+        conn(:get, "https://bbcarabic.com/")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -143,7 +143,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "https://www.bbcarabic.com")
+        conn(:get, "https://www.bbcarabic.com")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -155,7 +155,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "https://bbcarabic.com")
+        conn(:get, "https://bbcarabic.com")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -167,7 +167,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "https://www.bbcarabic.com/")
+        conn(:get, "https://www.bbcarabic.com/")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -179,7 +179,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:redirect, "https://www.bbcarabic.com/middleeast-51412901")
+        conn(:get, "https://www.bbcarabic.com/middleeast-51412901")
         |> RoutefileMock.call([])
 
       assert conn.status == 302
