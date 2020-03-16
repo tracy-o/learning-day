@@ -42,7 +42,8 @@ defmodule Belfrage.Struct.Private do
             pipeline: [],
             overrides: %{},
             query_params_allowlist: [],
-            production_environment: "live"
+            production_environment: "live",
+            platform: nil
 end
 
 defmodule Belfrage.Struct do
