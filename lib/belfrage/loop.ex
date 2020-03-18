@@ -10,7 +10,7 @@ defmodule Belfrage.Loop do
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), {:state, name})
+    GenServer.call(via_tuple(name), :state)
   end
 
   def inc(%Struct{
@@ -47,7 +47,7 @@ defmodule Belfrage.Loop do
   end
 
   @impl GenServer
-  def handle_call({:state, _loop_id}, _from, state) do
+  def handle_call(:state, _from, state) do
     {:reply, {:ok, state}, state}
   end
 
@@ -69,9 +69,6 @@ defmodule Belfrage.Loop do
     {:noreply, state}
   end
 
-  # Resets the counter at every window.
-  # TODO: Before resetting it should send
-  # the counter to the Controller app.
   @impl GenServer
   def handle_info(:short_reset, state) do
     Belfrage.Monitor.record_loop(state)
