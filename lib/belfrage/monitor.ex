@@ -9,10 +9,14 @@ defmodule Belfrage.Monitor do
   end
 
   defp message_content(loop_state) do
-    {recorded_at(), node(), "first-belfrage-stack", loop_state}
+    {recorded_at(), node(), get_stack_name(), loop_state}
   end
 
   defp recorded_at do
     :os.system_time(:millisecond)
+  end
+
+  defp get_stack_name() do
+    Application.get_env(:belfrage, :stack_name)
   end
 end

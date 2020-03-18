@@ -7,7 +7,8 @@ use Mix.Config
   {"PAL_ENDPOINT", :required},
   {"FABL_ENDPOINT", :required},
   {"PRODUCTION_ENVIRONMENT", :required},
-  {"PREVIEW_MODE", :required}
+  {"PREVIEW_MODE", :required},
+  {"STACK_NAME", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do
