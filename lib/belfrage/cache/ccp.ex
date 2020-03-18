@@ -4,9 +4,20 @@ defmodule Belfrage.Cache.CCP do
 
   @impl CacheStrategy
   def fetch(%{request: %{request_hash: key}}) do
-    Node.list()
-    |> List.first()
+    ccp_node()
     |> fetch_from_ccp(key)
+  end
+
+  @impl CacheStrategy
+  def store(struct = %Belfrage.Struct{}) do
+    ccp_node()
+    |> send_to_ccp(struct)
+  end
+
+  defp ccp_node do
+    Belfrage.Nodes.ccp_nodes()
+    |> Enum.shuffle()
+    |> List.first()
   end
 
   defp fetch_from_ccp(_node = nil, _key) do
@@ -19,13 +30,6 @@ defmodule Belfrage.Cache.CCP do
       {:ok, response} -> {:ok, :stale, response}
       _ -> {:ok, :content_not_found}
     end
-  end
-
-  @impl CacheStrategy
-  def store(struct = %Belfrage.Struct{}) do
-    Node.list()
-    |> List.first()
-    |> send_to_ccp(struct)
   end
 
   defp send_to_ccp(_node = nil, _struct) do

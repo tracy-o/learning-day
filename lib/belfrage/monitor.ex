@@ -1,6 +1,6 @@
 defmodule Belfrage.Monitor do
   def record_loop(loop_state) do
-    Node.list()
+    Belfrage.Nodes.monitor_nodes()
     |> Enum.each(&send_to_monitor_node(&1, loop_state))
   end
 
