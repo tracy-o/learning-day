@@ -6,7 +6,7 @@ defmodule Routes.Specs.PageComposition do
       platform: :webcore,
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
       resp_pipeline: [],
-      query_params_allowlist: ["path"],
+      query_params_allowlist: ["path", "params"],
       circuit_breaker_error_threshold: 100
     }
   end
