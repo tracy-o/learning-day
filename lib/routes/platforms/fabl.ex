@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Fabl do
-  def specs do
+  def specs(_production_env) do
     %{
       origin: Application.get_env(:belfrage, :fabl_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",

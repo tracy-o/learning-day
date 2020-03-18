@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.OriginSimulator do
-  def specs do
+  def specs(_production_env) do
     %{
       origin: Application.get_env(:belfrage, :origin_simulator),
       owner: "belfrage-team@bbc.co.uk",

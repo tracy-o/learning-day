@@ -25,5 +25,7 @@ defmodule Routes.RoutefileMock do
 
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
+  handle("/moz", using: "Moz", examples: ["/moz"])
+
   handle("/*any", using: "SomeLoop", only_on: "test", examples: ["/foo/bar"])
 end

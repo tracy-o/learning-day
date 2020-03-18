@@ -22,27 +22,6 @@ defmodule Belfrage.QueryParamsTest do
            } == QueryParams.allowlist(struct).request.query_params
   end
 
-  test "allows all query strings when production env is test, and platform is mozart" do
-    struct =
-      %Struct{}
-      |> Struct.add(:request, %{
-        query_params: %{
-          "a" => "b",
-          "c" => "d"
-        }
-      })
-      |> Struct.add(:private, %{
-        platform: :mozart,
-        production_environment: "test",
-        query_params_allowlist: ["only_allow_this_normally"]
-      })
-
-    assert %{
-             "a" => "b",
-             "c" => "d"
-           } == QueryParams.allowlist(struct).request.query_params
-  end
-
   test "rejects all query strings when allowlist is empty" do
     struct =
       %Struct{}

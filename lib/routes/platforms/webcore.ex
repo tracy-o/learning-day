@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Webcore do
-  def specs do
+  def specs(_production_env) do
     %{
       origin: Application.get_env(:belfrage, :pwa_lambda_function),
       owner: "DENewsFrameworksTeam@bbc.co.uk",

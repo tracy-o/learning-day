@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Pal do
-  def specs do
+  def specs(_production_env) do
     %{
       origin: Application.get_env(:belfrage, :pal_endpoint),
       owner: "DENewsFrameworksTeam@bbc.co.uk",
