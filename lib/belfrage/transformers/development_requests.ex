@@ -6,7 +6,6 @@ defmodule Belfrage.Transformers.DevelopmentRequests do
   use Belfrage.Transformers.Transformer
 
   @request_type_to_transformer_mapping [
-    preview: ["PreviewLambda"],
     replayed: ["ReplayedTraffic"]
   ]
 
@@ -16,14 +15,10 @@ defmodule Belfrage.Transformers.DevelopmentRequests do
   end
 
   def development_transformers(struct) do
-    Keyword.get(@request_type_to_transformer_mapping, development_request_type(struct), [])
+    Keyword.get(@request_type_to_transformer_mapping, development_request_type(struct.request), [])
   end
 
-  def development_request_type(struct) do
-    case struct do
-      %Struct{request: %Struct.Request{has_been_replayed?: true}} -> :replayed
-      %Struct{request: %Struct.Request{subdomain: subdomain}} when subdomain != "www" -> :preview
-      _ -> :no_match
-    end
-  end
+  defp development_request_type(%{has_been_replayed?: true}), do: :replayed
+  defp development_request_type(_), do: :no_match
+
 end

@@ -25,7 +25,8 @@ defmodule BelfrageWeb.StructAdapter do
       private: %Private{
         loop_id: loop_id,
         overrides: conn.private.overrides,
-        production_environment: conn.private.production_environment
+        production_environment: conn.private.production_environment,
+        preview_mode: conn.private.preview_mode
       }
     }
   end

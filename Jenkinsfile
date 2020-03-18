@@ -2,8 +2,6 @@
 
 library 'BBCNews'
 
-String cosmosService = 'belfrage'
-
 String buildVariables() {
   def envFile = readFile 'belfrage-build/build.env'
   def envVars = ''
@@ -21,6 +19,7 @@ node {
     buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
     disableConcurrentBuilds(),
     parameters([
+        choice(choices: ['belfrage', 'bruce-belfrage', 'cedric-belfrage', 'belfrage-preview'], description: 'The Cosmos Service to deploy to', name: 'SERVICE'),
         choice(choices: ['test', 'live'], description: 'The Cosmos environment to deploy to', name: 'ENVIRONMENT'),
         booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
     ])
@@ -36,7 +35,7 @@ node {
 
   if (params.ENVIRONMENT == 'test') {
     stage('Get Cosmos config from build repo') {
-      sh 'cp belfrage-build/cosmos_config/release-configuration.json cosmos/release-configuration.json'
+      sh "cp belfrage-build/cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
     }
 
     stage('Run tests') {
@@ -58,9 +57,9 @@ node {
       sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
     }
     BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
-    BBCNews.buildRPMWithMock(cosmosService, 'belfrage.spec', params.FORCE_RELEASE)
-    BBCNews.setRepositories(cosmosService, 'belfrage-build/repositories.json')
-    BBCNews.cosmosRelease(cosmosService, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
+    BBCNews.buildRPMWithMock(params.SERVICE, 'belfrage.spec', params.FORCE_RELEASE)
+    BBCNews.setRepositories(params.SERVICE, 'belfrage-build/repositories.json')
+    BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
   }
   stage("clean up after ourselves") {
     cleanWs()

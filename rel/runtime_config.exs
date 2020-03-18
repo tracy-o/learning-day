@@ -3,11 +3,11 @@ use Mix.Config
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :required},
   {"PWA_LAMBDA_FUNCTION", :required},
-  {"PREVIEW_PWA_LAMBDA_FUNCTION", :required},
   {"MOZART_ENDPOINT", :required},
   {"PAL_ENDPOINT", :required},
   {"FABL_ENDPOINT", :required},
-  {"PRODUCTION_ENVIRONMENT", :required}
+  {"PRODUCTION_ENVIRONMENT", :required},
+  {"PREVIEW_MODE", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do

@@ -52,6 +52,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/premature-404")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
         |> RoutefileMock.call([])
 
       assert conn.status == 404
@@ -65,6 +66,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/sends-request-downstream")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
@@ -80,6 +82,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/only-on")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
         |> RoutefileMock.call([])
 
       assert conn.status == 404
@@ -93,6 +96,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:get, "/only-on")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 

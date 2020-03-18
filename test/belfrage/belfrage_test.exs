@@ -47,12 +47,13 @@ defmodule BelfrageTest do
     Belfrage.handle(@get_request_struct)
   end
 
-  test "GET request on a subdomain, invokes lambda with the lambda alias" do
+  test "GET request on a subdomain and preview_mode, invokes lambda with the lambda alias" do
     struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
+    struct = Belfrage.Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
-                        _lambda_func = "preview-pwa-lambda-function:example-branch",
+                        _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
                         _opts = [] ->
       @web_core_lambda_response
@@ -61,12 +62,13 @@ defmodule BelfrageTest do
     Belfrage.handle(struct)
   end
 
-  test "GET request on a subdomain with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
+  test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
     struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
+    struct = Belfrage.Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
-                        _lambda_func = "preview-pwa-lambda-function:example-branch",
+                        _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
                         _opts = [] ->
       @web_core_404_lambda_response

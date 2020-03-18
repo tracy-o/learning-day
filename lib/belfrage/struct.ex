@@ -43,7 +43,8 @@ defmodule Belfrage.Struct.Private do
             overrides: %{},
             query_params_allowlist: [],
             production_environment: "live",
-            platform: nil
+            platform: nil,
+            preview_mode: "off"
 end
 
 defmodule Belfrage.Struct do

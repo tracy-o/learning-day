@@ -5,21 +5,16 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
   use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{subdomain: "www"}, private: private}) do
-    then(rest, Struct.add(struct, :private, %{origin: "#{private.origin}:#{private.production_environment}"}))
-  end
-
-  @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
     then(
       rest,
       Struct.add(struct, :private, %{
-        origin: "#{private.origin}:#{lambda_alias(subdomain, private.production_environment)}"
+        origin: "#{private.origin}:#{lambda_alias(private.preview_mode, subdomain, private.production_environment)}"
       })
     )
   end
 
-  defp lambda_alias(_, "live"), do: "live"
+  defp lambda_alias("on", subdomain, _), do: subdomain
 
-  defp lambda_alias(subdomain, _), do: subdomain
+  defp lambda_alias("off", _, production_environment), do: production_environment
 end

@@ -24,13 +24,13 @@ defmodule EndToEndTest do
   test "a successful response from a lambda e2e" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
+                        "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test",
                         %{
                           body: "",
-                          headers: %{country: "gb"},
+                          headers: %{"accept-encoding": "gzip", country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",
-                          pathParameters: %{},
+                          pathParameters: %{"any" => ["200-ok-response"]},
                           queryStringParameters: %{}
                         },
                         _opts ->

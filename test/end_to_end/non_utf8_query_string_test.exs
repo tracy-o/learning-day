@@ -23,7 +23,7 @@ defmodule NonUtf8QueryStringTest do
   test "Given a query string with non utf8 characters, it still passes this on to the origin" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
+                        _lambda_function_name,
                         %{
                           body: "",
                           headers: %{country: "gb"},
@@ -45,7 +45,7 @@ defmodule NonUtf8QueryStringTest do
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
+                        _lambda_function_name,
                         %{
                           body: "",
                           headers: %{country: "gb"},
@@ -67,7 +67,7 @@ defmodule NonUtf8QueryStringTest do
   test "Given a query string with a multi byte character, it still passes this on to the origin" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",
-                        "pwa-lambda-function:test",
+                        _lambda_function_name,
                         %{
                           body: "",
                           headers: %{country: "gb"},
