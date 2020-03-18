@@ -48,7 +48,7 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_call({:state, _loop_id}, _from, state) do
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(state.platform)})}, state}
+    {:reply, {:ok, state}, state}
   end
 
   @impl GenServer
@@ -86,27 +86,5 @@ defmodule Belfrage.Loop do
     Process.send_after(self(), :long_reset, @long_interval)
     state = %{state | long_counter: Counter.init()}
     {:noreply, state}
-  end
-
-  # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
-
-  defp origin_pointer(Webcore) do
-    Application.get_env(:belfrage, :pwa_lambda_function)
-  end
-
-  defp origin_pointer(OriginSimulator) do
-    Application.get_env(:belfrage, :origin_simulator)
-  end
-
-  defp origin_pointer(Mozart) do
-    Application.get_env(:belfrage, :mozart_endpoint)
-  end
-
-  defp origin_pointer(Pal) do
-    Application.get_env(:belfrage, :pal_endpoint)
-  end
-
-  defp origin_pointer(Fabl) do
-    Application.get_env(:belfrage, :fabl_endpoint)
   end
 end

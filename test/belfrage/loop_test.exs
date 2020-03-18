@@ -13,7 +13,6 @@ defmodule Belfrage.LoopTest do
   @failure_status_code Enum.random(500..504)
 
   @legacy_request_struct %Struct{private: %Struct.Private{loop_id: "ProxyPass"}}
-  @webcore_request_struct %Struct{private: %Struct.Private{loop_id: "SportVideos"}}
 
   @resp_struct %Struct{
     private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
@@ -118,9 +117,6 @@ defmodule Belfrage.LoopTest do
   end
 
   test "resets counter after a specific time" do
-    {:ok, state} = Loop.state(@legacy_request_struct)
-    assert state.origin == "http://origin.bbc.com"
-
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.counter.errors == 30
@@ -132,9 +128,6 @@ defmodule Belfrage.LoopTest do
   end
 
   test "resets long_counter after a specific time" do
-    {:ok, state} = Loop.state(@legacy_request_struct)
-    assert state.origin == "http://origin.bbc.com"
-
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.counter.errors == 30
@@ -143,14 +136,6 @@ defmodule Belfrage.LoopTest do
 
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert false == Map.has_key?(state.long_counter, :error), "Loop should have reset"
-  end
-
-  test "decides the origin based on the loop_id" do
-    {:ok, state} = Loop.state(@legacy_request_struct)
-    assert state.origin == "http://origin.bbc.com"
-
-    {:ok, state} = Loop.state(@webcore_request_struct)
-    assert state.origin == Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
   describe "when in fallback" do
@@ -166,8 +151,6 @@ defmodule Belfrage.LoopTest do
                  }
                }
              } = state
-
-      assert state.origin == "http://origin.bbc.com"
     end
 
     test "it does not increment fallback for successful responses" do

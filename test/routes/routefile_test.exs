@@ -22,6 +22,7 @@ defmodule Routes.RoutefileTest do
         assert Map.has_key?(specs, :pipeline)
         assert Map.has_key?(specs, :resp_pipeline)
         assert Map.has_key?(specs, :circuit_breaker_error_threshold)
+        assert Map.has_key?(specs, :origin)
       end
 
       Enum.each(examples, fn example ->

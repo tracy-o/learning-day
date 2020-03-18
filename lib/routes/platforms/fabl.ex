@@ -1,6 +1,7 @@
 defmodule Routes.Platforms.Fabl do
   def specs do
     %{
+      origin: Application.get_env(:belfrage, :fabl_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/FABL+Run+Book",
       pipeline: ["HTTPredirect", "CircuitBreaker"],

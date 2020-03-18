@@ -1,6 +1,7 @@
 defmodule Routes.Platforms.Webcore do
   def specs do
     %{
+      origin: Application.get_env(:belfrage, :pwa_lambda_function),
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       pipeline: ["HTTPredirect", "DevelopmentRequests", "LambdaOriginAlias", "CircuitBreaker"],
