@@ -46,7 +46,7 @@ defmodule Belfrage.LoopTest do
                 origin: "http://origin.bbc.com",
                 owner: "belfrage-team@bbc.co.uk",
                 runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-                platform: :origin_simulator,
+                platform: OriginSimulator,
                 pipeline: ["CircuitBreaker"],
                 resp_pipeline: [],
                 circuit_breaker_error_threshold: 100,

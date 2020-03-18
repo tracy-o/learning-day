@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeLoop do
     %{
       owner: "Some guy",
       runbook: "Some runbook",
-      platform: :webcore,
+      platform: Webcore,
       pipeline: ["LambdaOriginAlias"],
       query_params_allowlist: ["query"],
       resp_pipeline: []

@@ -25,7 +25,10 @@ defmodule Belfrage.Loop do
   end
 
   defp specs_for(name) do
-    Module.concat([Routes, Specs, name]).specs()
+    specs = Module.concat([Routes, Specs, name]).specs()
+
+    Module.concat([Routes, Platforms, specs.platform]).specs()
+    |> Map.merge(specs)
     |> Map.put(:loop_id, name)
   end
 
@@ -87,23 +90,23 @@ defmodule Belfrage.Loop do
 
   # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
 
-  defp origin_pointer(:webcore) do
+  defp origin_pointer(Webcore) do
     Application.get_env(:belfrage, :pwa_lambda_function)
   end
 
-  defp origin_pointer(:origin_simulator) do
+  defp origin_pointer(OriginSimulator) do
     Application.get_env(:belfrage, :origin_simulator)
   end
 
-  defp origin_pointer(:mozart) do
+  defp origin_pointer(Mozart) do
     Application.get_env(:belfrage, :mozart_endpoint)
   end
 
-  defp origin_pointer(:pal) do
+  defp origin_pointer(Pal) do
     Application.get_env(:belfrage, :pal_endpoint)
   end
 
-  defp origin_pointer(:fabl) do
+  defp origin_pointer(Fabl) do
     Application.get_env(:belfrage, :fabl_endpoint)
   end
 end

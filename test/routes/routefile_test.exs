@@ -17,6 +17,8 @@ defmodule Routes.RoutefileTest do
         specs = Module.concat([Routes, Specs, @loop_id]).specs()
 
         assert Map.has_key?(specs, :platform)
+
+        specs = Map.merge(Module.concat([Routes, Platforms, specs.platform]).specs(), specs)
         assert Map.has_key?(specs, :pipeline)
         assert Map.has_key?(specs, :resp_pipeline)
         assert Map.has_key?(specs, :circuit_breaker_error_threshold)
