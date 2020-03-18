@@ -73,7 +73,7 @@ defmodule Belfrage.Services.HTTP do
   defp build_headers(request) do
     %{
       "accept-encoding" => "gzip",
-      "country" => "#{request.country}",
+      "x-country" => "#{request.country}",
       "user-agent" => "Belfrage",
       "x-forwarded-host" => request.host
     }

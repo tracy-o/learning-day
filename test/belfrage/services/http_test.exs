@@ -56,7 +56,7 @@ defmodule Belfrage.Services.HTTPTest do
              payload: "",
              headers: %{
                "accept-encoding" => "gzip",
-               "country" => "gb",
+               "x-country" => "gb",
                "user-agent" => "Belfrage",
                "x-forwarded-host" => "www.bbc.co.uk"
              }
@@ -82,7 +82,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :post,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: ~s({"some": "data"}),
-             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
            } ->
           @ok_response
         end
@@ -103,7 +103,7 @@ defmodule Belfrage.Services.HTTPTest do
                                method: :get,
                                url: "https://www.bbc.co.uk/_web_core?foo=bar",
                                payload: "",
-                               headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
+                               headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
                              } ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
@@ -129,7 +129,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
            } ->
           {
             :error,
@@ -157,7 +157,7 @@ defmodule Belfrage.Services.HTTPTest do
              method: :get,
              url: "https://www.bbc.co.uk/_web_core?foo=bar",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "country" => "gb", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
            } ->
           {
             :error,
