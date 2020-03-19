@@ -32,4 +32,23 @@ defmodule AllowAllQsOverrideTest do
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
+
+  test "Don't allow all query string for the Mozart platform routes on Live" do
+    Application.put_env(:belfrage, :production_environment, "live")
+
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
+                             method: :get,
+                             url: "https://www.mozart-routing.test.api.bbci.co.uk/moz?only_allow_this_on_live=123"
+                           } ->
+      {:ok, @http_response}
+    end)
+
+    conn = conn(:get, "/moz?a=bar&b=foo&only_allow_this_on_live=123")
+    conn = Router.call(conn, [])
+
+    assert {200, _headers, _body} = sent_resp(conn)
+
+    Application.put_env(:belfrage, :production_environment, "test")
+  end
 end
