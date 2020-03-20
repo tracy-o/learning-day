@@ -4,7 +4,7 @@ defmodule Routes.Platforms.Pal do
       origin: Application.get_env(:belfrage, :pal_endpoint),
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      pipeline: ["HTTPredirect", "CircuitBreaker"],
+      pipeline: ["HTTPredirect", "DevelopmentRequests", "CircuitBreaker"],
       resp_pipeline: [],
       circuit_breaker_error_threshold: 100
     }
