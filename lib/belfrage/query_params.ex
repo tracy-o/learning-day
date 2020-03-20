@@ -2,8 +2,6 @@ defmodule Belfrage.QueryParams do
   alias Belfrage.Struct
   alias Struct.Private
 
-  def allowlist(struct = %Struct{private: %Private{platform: :mozart, production_environment: "test"}}), do: struct
-
   def allowlist(struct = %Struct{private: %Private{query_params_allowlist: "*"}}), do: struct
 
   def allowlist(struct = %Struct{request: request, private: %Private{query_params_allowlist: allowlist}}) do

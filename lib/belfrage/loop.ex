@@ -5,12 +5,13 @@ defmodule Belfrage.Loop do
 
   @short_interval Application.get_env(:belfrage, :short_counter_reset_interval)
   @long_interval Application.get_env(:belfrage, :long_counter_reset_interval)
+
   def start_link(name) do
     GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), {:state, name})
+    GenServer.call(via_tuple(name), :state)
   end
 
   def inc(%Struct{
@@ -25,9 +26,18 @@ defmodule Belfrage.Loop do
   end
 
   defp specs_for(name) do
-    Module.concat([Routes, Specs, name]).specs()
+    specs = Module.concat([Routes, Specs, name]).specs()
+
+    Module.concat([Routes, Platforms, specs.platform]).specs(Application.get_env(:belfrage, :production_environment))
+    |> merge_specs(specs)
     |> Map.put(:loop_id, name)
   end
+
+  defp merge_specs(platform_specs = %{query_params_allowlist: "*"}, route_specs) do
+    Map.merge(platform_specs, %{route_specs | query_params_allowlist: "*"})
+  end
+
+  defp merge_specs(platform_specs, route_specs), do: Map.merge(platform_specs, route_specs)
 
   # callbacks
 
@@ -44,8 +54,8 @@ defmodule Belfrage.Loop do
   end
 
   @impl GenServer
-  def handle_call({:state, _loop_id}, _from, state) do
-    {:reply, {:ok, Map.merge(state, %{origin: origin_pointer(state.platform)})}, state}
+  def handle_call(:state, _from, state) do
+    {:reply, {:ok, state}, state}
   end
 
   @impl GenServer
@@ -66,9 +76,6 @@ defmodule Belfrage.Loop do
     {:noreply, state}
   end
 
-  # Resets the counter at every window.
-  # TODO: Before resetting it should send
-  # the counter to the Controller app.
   @impl GenServer
   def handle_info(:short_reset, state) do
     Belfrage.Monitor.record_loop(state)
@@ -83,27 +90,5 @@ defmodule Belfrage.Loop do
     Process.send_after(self(), :long_reset, @long_interval)
     state = %{state | long_counter: Counter.init()}
     {:noreply, state}
-  end
-
-  # TODO: discuss is these belong to the loop or to a transformer or to the service domain.
-
-  defp origin_pointer(:webcore) do
-    Application.get_env(:belfrage, :pwa_lambda_function)
-  end
-
-  defp origin_pointer(:origin_simulator) do
-    Application.get_env(:belfrage, :origin_simulator)
-  end
-
-  defp origin_pointer(:mozart) do
-    Application.get_env(:belfrage, :mozart_endpoint)
-  end
-
-  defp origin_pointer(:pal) do
-    Application.get_env(:belfrage, :pal_endpoint)
-  end
-
-  defp origin_pointer(:fabl) do
-    Application.get_env(:belfrage, :fabl_endpoint)
   end
 end
