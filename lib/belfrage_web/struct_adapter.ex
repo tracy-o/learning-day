@@ -20,7 +20,8 @@ defmodule BelfrageWeb.StructAdapter do
         varnish?: bbc_headers.varnish,
         edge_cache?: bbc_headers.cache,
         xray_trace_id: xray_trace_id,
-        accept_encoding: accept_encoding(conn)
+        accept_encoding: accept_encoding(conn),
+        is_uk: bbc_headers.is_uk
       },
       private: %Private{
         loop_id: loop_id,

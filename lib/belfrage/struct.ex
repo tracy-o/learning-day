@@ -11,6 +11,7 @@ defmodule Belfrage.Struct.Request do
     :request_hash,
     :scheme,
     :host,
+    :is_uk,
     :xray_trace_id,
     :accept_encoding,
     varnish?: false,

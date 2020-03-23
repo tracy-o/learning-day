@@ -23,6 +23,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",
+        is_uk: false,
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
@@ -44,6 +45,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
+        is_uk: false,
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
@@ -66,6 +68,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
+        is_uk: false,
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
@@ -88,6 +91,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www",
+        is_uk: false,
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
@@ -109,6 +113,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
+        is_uk: false,
         country: "gb",
         query_string: %{foo: "ba"},
         replayed_traffic: nil,
@@ -131,6 +136,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
+        is_uk: false,
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
@@ -154,6 +160,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "test-branch.belfrage.com",
+        is_uk: false,
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
@@ -176,6 +183,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:bbc_headers, %{
         scheme: :https,
         host: "www.belfrage.com",
+        is_uk: false,
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
@@ -199,6 +207,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         |> put_private(:bbc_headers, %{
           scheme: :https,
           host: "www.belfrage.com",
+          is_uk: false,
           country: "gb",
           replayed_traffic: nil,
           varnish: 1,
@@ -221,6 +230,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         |> put_private(:bbc_headers, %{
           scheme: :https,
           host: "www.belfrage.com",
+          is_uk: false,
           country: "gb",
           replayed_traffic: nil,
           varnish: 1,
@@ -229,5 +239,25 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
     end
+  end
+
+  test "when an Accept-Encoding header is not provided" do
+    conn =
+      conn(:get, "/")
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+      |> put_private(:overrides, %{})
+      |> put_test_production_environment()
+      |> put_preview_mode_off()
+      |> put_private(:bbc_headers, %{
+        scheme: :https,
+        host: "www.belfrage.com",
+        is_uk: true,
+        country: "gb",
+        replayed_traffic: nil,
+        varnish: 1,
+        cache: 0
+      })
+
+    assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
   end
 end
