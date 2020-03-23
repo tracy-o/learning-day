@@ -69,6 +69,26 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
     end
   end
 
+  describe "is_uk headers" do
+    test "uses edge host when set to yes" do
+      assert Sanitiser.is_uk(%{edge: "yes", varnish: nil}, nil) == true
+    end
+
+    test "uses varnish host when edge host is not set" do
+      assert Sanitiser.is_uk(%{edge: nil, varnish: "yes"}, nil) == true
+    end
+
+    test "uses edge host when both edge and varnish are set" do
+      assert Sanitiser.is_uk(%{edge: "yes", varnish: "no"}, nil) == true
+
+      assert Sanitiser.is_uk(%{edge: "no", varnish: "yes"}, nil) == false
+    end
+
+    test "is false when neither headers are set" do
+      assert Sanitiser.is_uk(%{edge: nil, varnish: nil}, nil) == false
+    end
+  end
+
   describe "scheme headers" do
     test "uses edge scheme when set" do
       assert Sanitiser.scheme(%{edge: "https"}, false) == :https

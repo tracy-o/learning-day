@@ -3,7 +3,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
   use Plug.Test
 
   alias BelfrageWeb.RequestHeaders.Mapper
-
+  #                  is_uk:  %{ edge: "HTTP_X_BBC_EDGE_ISUK", varnish: "HTTP_X_IP_IS_UK_COMBINED" },
   describe "headers mapper" do
     test "returns headers map when no request headers are set" do
       assert Mapper.map([{}]) ==
@@ -11,6 +11,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
+                 is_uk: %{edge: nil, varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}
@@ -21,6 +22,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
       req_headers = [
         {"x-bbc-edge-cache", "1"},
         {"x-bbc-edge-country", "**"},
+        {"x-bbc-edge-isuk", "yes"},
         {"x-country", "gb"},
         {"replayed-traffic", "true"},
         {"varnish", ""}
@@ -31,6 +33,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: "1"},
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
+                 is_uk: %{edge: "yes", varnish: nil},
                  replayed_traffic: %{replayed_traffic: "true"},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}
@@ -41,6 +44,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
       req_headers = [
         {"x-bbc-edge-cache", ""},
         {"x-bbc-edge-country", ""},
+        {"x-bbx-edge-isuk", ""},
         {"x-country", ""},
         {"replayed-traffic", ""},
         {"varnish", ""}
@@ -51,6 +55,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: nil},
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
+                 is_uk: %{edge: nil, varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}

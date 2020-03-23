@@ -18,6 +18,10 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
     |> String.replace(~r{\A\.}, "")
   end
 
+  def is_uk(%{edge: "yes"}, _cache), do: true
+  def is_uk(%{edge: nil, varnish: "yes"}, _cache), do: true
+  def is_uk(_headers, _cache), do: false
+
   def scheme(headers, _cache) do
     headers[:edge]
     |> to_string()
