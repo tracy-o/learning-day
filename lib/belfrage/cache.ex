@@ -1,9 +1,9 @@
 defmodule Belfrage.Cache do
   alias Belfrage.Struct
-  alias Belfrage.Cache.{Local, CCP}
+  alias Belfrage.Cache.MultiStrategy
 
   def store_if_successful(struct) do
-    if is_cacheable?(struct), do: write_to_cache_stores(struct)
+    if is_cacheable?(struct), do: MultiStrategy.store(struct)
 
     struct
   end
@@ -16,47 +16,22 @@ defmodule Belfrage.Cache do
   end
 
   def add_response_from_cache(struct, accepted_freshness) do
-    with {:ok, freshness, response} <- Local.fetch(struct),
-         true <- freshness in accepted_freshness do
-      metric_stale_response(freshness, struct)
-      add_response_to_struct(struct, freshness, response)
-    else
-      _ -> t2_cache_fallback(struct, accepted_freshness)
+    Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
+    |> case do
+      {:ok, freshness, response} ->
+        metric_if_stale_response(freshness)
+        add_response_to_struct(struct, freshness, response)
+
+      {:ok, :content_not_found} ->
+        struct
     end
   end
 
-  defp t2_cache_fallback(struct, [:fresh]), do: metric_fallback_miss([:fresh], struct)
-
-  defp t2_cache_fallback(struct, accepted_freshness) do
-    case CCP.fetch(struct) do
-      {:ok, :content_not_found} -> metric_fallback_miss(accepted_freshness, struct)
-      {:ok, freshness, response} -> add_response_to_struct(struct, freshness, response)
-    end
-  end
-
-  defp write_to_cache_stores(struct) do
-    Local.store(struct)
-    CCP.store(struct)
-
-    :ok
-  end
-
-  defp metric_stale_response(:stale, _struct) do
+  defp metric_if_stale_response(:stale) do
     ExMetrics.increment("cache.stale_response_added_to_struct")
   end
 
-  defp metric_stale_response(_freshness, _struct), do: :ok
-
-  defp metric_fallback_miss(accepted_freshness, struct) do
-    case Enum.member?(accepted_freshness, :stale) do
-      true ->
-        ExMetrics.increment("cache.fallback_item_does_not_exist")
-        struct
-
-      false ->
-        struct
-    end
-  end
+  defp metric_if_stale_response(_freshness), do: :ok
 
   defp add_response_to_struct(struct, freshness, response) do
     case freshness do
