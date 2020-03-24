@@ -17,7 +17,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @with_varnish_and_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -25,7 +25,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @with_varnish_no_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -33,7 +33,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @non_varnish_with_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -41,8 +41,28 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @no_varnish_or_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
+    end
+  end
+
+  describe "is_uk" do
+    test "when the request is from the edge then it varies on x-bbc-edge-isuk" do
+      conn =
+        conn(:get, "/page")
+        |> Vary.add_header(%Struct{request: %Struct.Request{edge_cache?: true}})
+
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
+               get_resp_header(conn, "vary")
+    end
+
+    test "when the request is not from the edge then it varies on x-ip_is_uk_combined" do
+      conn =
+        conn(:get, "/page")
+        |> Vary.add_header(%Struct{request: %Struct.Request{edge_cache?: false}})
+
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+               get_resp_header(conn, "vary")
     end
   end
 end
