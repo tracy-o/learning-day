@@ -11,7 +11,6 @@ defmodule Belfrage.CCPTest do
 
     assert :ok == CCP.put(struct, self())
 
-    expected_message = {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}
-    assert_receive({:"$gen_cast", expected_message})
+    assert_receive({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
   end
 end

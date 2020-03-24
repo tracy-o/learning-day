@@ -17,6 +17,6 @@ defmodule Belfrage.Cache.DistributedFallbackTest do
 
     DistributedFallback.store(struct)
 
-    assert Test.Support.FakeBelfrageCcp.received_message?("distributed-cache-test", struct.response)
+    assert Test.Support.FakeBelfrageCcp.received_put?("distributed-cache-test", struct.response)
   end
 end

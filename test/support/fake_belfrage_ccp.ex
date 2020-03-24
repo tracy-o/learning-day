@@ -25,7 +25,7 @@ defmodule Test.Support.FakeBelfrageCcp do
     GenServer.call({:global, :belfrage_ccp}, :messages)
   end
 
-  def received_message?(key) do
+  def received_put?(key) do
     GenServer.call(:fake_belfrage_ccp, :messages)
     |> Enum.find(fn
       {:put, ^key, _payload} -> true
@@ -35,7 +35,7 @@ defmodule Test.Support.FakeBelfrageCcp do
     |> Kernel.!()
   end
 
-  def received_message?(key, payload) do
+  def received_put?(key, payload) do
     GenServer.call(:fake_belfrage_ccp, :messages)
     |> Enum.find(fn
       {:put, ^key, ^payload} -> true
@@ -56,7 +56,7 @@ defmodule Test.Support.FakeBelfrageCcp do
   end
 
   @impl true
-  def handle_cast({:put, key, payload} = message, state) do
+  def handle_cast({:put, _key, _payload} = message, state) do
     {:noreply, [message | state]}
   end
 end
