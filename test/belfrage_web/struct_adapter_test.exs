@@ -241,7 +241,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     end
   end
 
-  test "when an Accept-Encoding header is not provided" do
+  test "when is_uk header is true, is_uk in the struct is set to true" do
     conn =
       conn(:get, "/")
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
