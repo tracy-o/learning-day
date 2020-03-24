@@ -23,6 +23,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-cache", "1"},
         {"x-bbc-edge-country", "**"},
         {"x-bbc-edge-isuk", "yes"},
+        {"x-ip_is_uk_combined", "yes"},
         {"x-country", "gb"},
         {"replayed-traffic", "true"},
         {"varnish", ""}
@@ -33,7 +34,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cache: %{edge: "1"},
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
-                 is_uk: %{edge: "yes", varnish: nil},
+                 is_uk: %{edge: "yes", varnish: "yes"},
                  replayed_traffic: %{replayed_traffic: "true"},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}
