@@ -1,7 +1,7 @@
 defmodule Test.Support.FakeBelfrageCcp do
   @moduledoc """
-  A fake Belfrage CCP started in the test suits, which registers itself globally
-  to receive messages that would be sent to the Belfrage CCP in production.
+  A fake Belfrage CCP started by start/0, which registers the started process
+  globally to receive messages that would otherwise be sent to the Belfrage CCP in production.
   """
   use GenServer
 

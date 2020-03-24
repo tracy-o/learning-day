@@ -4,15 +4,13 @@ defmodule Belfrage.CCP do
   """
   alias Belfrage.{Struct, Struct.Request}
 
-  @spec put(Struct.t(), Pid.t()) :: :ok
-  @spec put(Struct.t(), {:global, Atom.t()}) :: :ok
+  @spec put(Struct.t()) :: :ok
   def put(
         struct = %Struct{
           request: %Request{request_hash: request_hash},
           response: response
-        },
-        target \\ {:global, :belfrage_ccp}
+        }
       ) do
-    GenServer.cast(target, {:put, request_hash, response})
+    GenServer.cast({:global, :belfrage_ccp}, {:put, request_hash, response})
   end
 end
