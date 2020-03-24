@@ -44,7 +44,7 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
       req_headers = [
         {"x-bbc-edge-cache", ""},
         {"x-bbc-edge-country", ""},
-        {"x-bbx-edge-isuk", ""},
+        {"x-bbc-edge-isuk", ""},
         {"x-country", ""},
         {"replayed-traffic", ""},
         {"varnish", ""}

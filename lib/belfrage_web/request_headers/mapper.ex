@@ -3,7 +3,7 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     cache: %{edge: "x-bbc-edge-cache"},
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},
     host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
-    is_uk: %{edge: "x-bbc-edge-isuk", varnish: "x-ip-is-uk-combined"},
+    is_uk: %{edge: "x-bbc-edge-isuk", varnish: "x-ip_is_uk_combined"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
     varnish: %{varnish: "x-varnish"}
