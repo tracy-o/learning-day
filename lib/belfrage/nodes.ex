@@ -1,8 +1,6 @@
 defmodule Belfrage.Nodes do
   def monitor_nodes, do: filter_by_node_name(Node.list(), "monitor")
 
-  def ccp_nodes, do: filter_by_node_name(Node.list(), "belfrage_ccp")
-
   @doc ~S"""
   Selects nodes by name.
 
