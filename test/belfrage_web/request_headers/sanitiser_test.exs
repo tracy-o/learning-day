@@ -70,22 +70,19 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
   end
 
   describe "is_uk headers" do
-    test "uses edge header when set to yes" do
-      assert Sanitiser.is_uk(%{edge: "yes", varnish: nil}, nil) == true
+    test "uses edge header when edge_cache is true" do
+      assert Sanitiser.is_uk(%{edge: "yes", varnish: nil}, true) == true
+      assert Sanitiser.is_uk(%{edge: "no", varnish: "yes"}, true) == false
     end
 
-    test "uses varnish header when edge header is not set" do
-      assert Sanitiser.is_uk(%{edge: nil, varnish: "yes"}, nil) == true
-    end
-
-    test "uses edge header when both edge and varnish are set" do
-      assert Sanitiser.is_uk(%{edge: "yes", varnish: "no"}, nil) == true
-
-      assert Sanitiser.is_uk(%{edge: "no", varnish: "yes"}, nil) == false
+    test "uses varnish header when edge cache is false" do
+      assert Sanitiser.is_uk(%{edge: "no", varnish: "yes"}, false) == true
+      assert Sanitiser.is_uk(%{edge: "yes", varnish: "no"}, false) == false
     end
 
     test "is false when neither headers are set" do
-      assert Sanitiser.is_uk(%{edge: nil, varnish: nil}, nil) == false
+      assert Sanitiser.is_uk(%{edge: nil, varnish: nil}, true) == false
+      assert Sanitiser.is_uk(%{edge: nil, varnish: nil}, false) == false
     end
   end
 
