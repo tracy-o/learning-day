@@ -15,10 +15,19 @@ defmodule Belfrage.Cache.MultiStrategy do
 
   @default_result {:ok, :content_not_found}
 
+  @doc """
+  Tries the Local and DistributedFallback strategies
+  and returns early if they return a cached response
+  which matches the accepted_freshness range provided.
+  """
   def fetch(struct, accepted_freshness) do
-    accepted_freshness
-    |> valid_strategies_for_freshness()
-    |> Enum.reduce_while(@default_result, fn  strategy, _result ->
+    strategies = accepted_freshness |> valid_strategies_for_freshness()
+    do_fetch(struct, strategies, accepted_freshness)
+  end
+
+  def do_fetch(struct, strategies, accepted_freshness) do
+    strategies
+    |> Enum.reduce_while(@default_result, fn strategy, _result ->
       execute_fetch(strategy, struct, accepted_freshness)
     end)
   end
@@ -30,6 +39,13 @@ defmodule Belfrage.Cache.MultiStrategy do
     :ok
   end
 
+  def valid_strategies_for_freshness(accepted_freshness) do
+    case :stale in accepted_freshness do
+      true -> [Local, DistributedFallback]
+      false -> [Local]
+    end
+  end
+
   defp execute_fetch(cache_strategy, struct, accepted_freshness) do
     with {:ok, freshness, response} <- cache_strategy.fetch(struct),
          true <- freshness in accepted_freshness do
@@ -37,13 +53,6 @@ defmodule Belfrage.Cache.MultiStrategy do
     else
       _content_not_found_or_not_accepted_freshness ->
         {:cont, {:ok, :content_not_found}}
-    end
-  end
-
-  defp valid_strategies_for_freshness(accepted_freshness) do
-    case :stale in accepted_freshness do
-      true -> [Local]
-      false -> [Local, DistributedFallback]
     end
   end
 end
