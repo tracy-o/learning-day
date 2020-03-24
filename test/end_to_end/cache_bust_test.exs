@@ -26,9 +26,9 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn(:get, "/weather") |> Router.call([])
-    conn(:get, "/weather") |> Router.call([])
-    conn(:get, "/weather") |> Router.call([])
+    conn(:get, "/_some_page") |> Router.call([])
+    conn(:get, "/_some_page") |> Router.call([])
+    conn(:get, "/_some_page") |> Router.call([])
   end
 
   test "always calls the origin when the cache bust override is set" do
@@ -37,9 +37,9 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
-    conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
-    conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
+    conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
+    conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
+    conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
   end
 
   test "request hash is in cache bust format when cache bust override is set" do
@@ -48,7 +48,7 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn = conn(:get, "/weather?belfrage-cache-bust") |> Router.call([])
+    conn = conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
 
     assert [request_hash] = get_resp_header(conn, "bsig")
     assert String.starts_with?(request_hash, "cache-bust.")
