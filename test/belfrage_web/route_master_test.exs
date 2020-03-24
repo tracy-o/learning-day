@@ -38,6 +38,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       country: "gb",
       scheme: "",
       host: "",
+      is_uk: false,
       replayed_traffic: "",
       varnish: "",
       cache: ""

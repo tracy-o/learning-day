@@ -14,7 +14,8 @@ defmodule Belfrage.Services.WebcoreTest do
       method: "GET",
       path: "/_web_core",
       query_params: %{"id" => "1234"},
-      xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
+      xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy",
+      is_uk: false
     }
   }
 
@@ -29,7 +30,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
@@ -50,7 +51,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn,
                                            _lambda_func,
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"q" => %{"bad" => "�", "good" => "€100 café"}}
@@ -70,6 +71,7 @@ defmodule Belfrage.Services.WebcoreTest do
                  request: %Struct.Request{
                    method: "GET",
                    path: "/_web_core",
+                   is_uk: false,
                    query_params: %{"q" => %{"bad" => <<179>>, "good" => "€100 café"}},
                    xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
                  }
@@ -92,7 +94,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                            _lambda_func =
                                              "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
@@ -139,7 +141,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
@@ -160,7 +162,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
@@ -181,7 +183,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
@@ -202,7 +204,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
-                                             headers: %{country: nil},
+                                             headers: %{country: nil, is_uk: false},
                                              httpMethod: "GET",
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}

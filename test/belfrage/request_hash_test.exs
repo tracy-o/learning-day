@@ -110,5 +110,13 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(co_uk_host_struct).request.request_hash ==
                RequestHash.generate(com_host_struct).request.request_hash
     end
+
+    test "varies on is_uk" do
+      is_uk_struct = @struct |> Belfrage.Struct.add(:request, %{is_uk: true})
+      is_not_uk_struct = @struct |> Belfrage.Struct.add(:request, %{is_uk: false})
+
+      refute RequestHash.generate(is_uk_struct).request.request_hash ==
+               RequestHash.generate(is_not_uk_struct).request.request_hash
+    end
   end
 end
