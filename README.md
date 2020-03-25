@@ -76,11 +76,7 @@ mix deps.get
 
 ### Set your credentials
 
-Running locally, Belfrage will connect to the Playground Lambdas in the mozart_dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
-
-To select which Playground Lambda that your local Belfrage invokes you can manage them in the same way as we do with AdHocs. By default if visiting the localhost url `localost:7080` this will invoke the `localhost` alias. This points to the version which also has the alias `pres-27-11-19` (a version of the Pres Lambda from the 27th November).
-
-To switch to other Lambdas simply set a sub domain in your host file to use i.e. `http://empty-response.belfrage.bbc.co.uk:7080/`. This will invoke the `empty-response` Lambda function.
+Running locally, Belfrage will connect to the Test Lambda in the webcore-sre-dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
 
 ### Run the app
 
@@ -119,3 +115,9 @@ We use the `mix format` to apply code style and formatting rules automatically. 
 Want `mix format` to run automatically? Consider getting your IDE to do this on file changes, or alternatively run `git config core.hooksPath .githooks` from this directory to add a pre-commit hook that will run `mix format` for you before allowing you to commit.
 
 Got an opinion on how `mix format` could do a better job? Edit `.formatter.exs`
+
+## Deployment pipeline
+
+Belfrage is deployed using Jenkins and Cosmos. The [Belfrage job](https://ci.news.tools.bbc.co.uk/job/bbc/job/belfrage/) on Jenkins runs the tests for all branches that are pushed up to Github.
+
+If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk/job/belfrage-multi-stack/) is run in order to build the RPMs for `belfrage` and `belfrage-preview`. If the job is run for the master branch then a release is also created for both stacks.

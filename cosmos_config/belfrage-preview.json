@@ -1,0 +1,97 @@
+[
+  {
+    "values": {
+      "test": "test-belfrage-main-BelfrageRole-1Q4QY4M0VBPZX",
+      "live": "test-belfrage-main-BelfrageRole-33JVCDF81H6W"
+    },
+    "name": "INSTANCE_ROLE_NAME"
+  },
+  {
+    "values": {
+      "test": "on",
+      "live": "on"
+    },
+    "name": "PREVIEW_MODE"
+  },
+  {
+    "values": {
+      "test": "arn:aws:lambda:eu-west-1:997052946310:function:int-presentation-layer-dev-preview-lambda",
+      "live": "arn:aws:lambda:eu-west-1:997052946310:function:int-presentation-layer-dev-preview-lambda"
+    },
+    "name": "PWA_LAMBDA_FUNCTION"
+  },
+  {
+    "values": {
+      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageLambdaExecRole",
+      "live": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageLambdaExecRole"
+    },
+    "name": "WEBCORE_LAMBDA_ROLE_ARN"
+  },
+  {
+    "values": {
+      "test": "https://fabl.api.bbci.co.uk",
+      "live": "https://fabl.api.bbci.co.uk"
+    },
+    "name": "FABL_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://www.mozart-routing.test.api.bbci.co.uk",
+      "live": "https://www.mozart-routing.test.api.bbci.co.uk"
+    },
+    "name": "MOZART_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://pal.test.bbc.co.uk",
+      "live": "https://pal.test.bbc.co.uk"
+    },
+    "name": "PAL_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
+      "live": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole"
+    },
+    "name": "XRAY_ROLE_ARN"
+  },
+  {
+    "noecho": true,
+    "name": "ERLANG_COOKIE"
+  },
+  {
+    "values": {
+      "test": "eu-west-1",
+      "live": "eu-west-1"
+    },
+    "name": "aws_region"
+  },
+  {
+    "values": {
+      "test": "dev-mozart-logs-eu-west-1",
+      "live": "dev-mozart-logs-eu-west-1"
+    },
+    "name": "td_ingest_bucket"
+  },
+  {
+    "values": {
+      "test": "eu-west-1",
+      "live": "eu-west-1"
+    },
+    "name": "td_ingest_bucket_region"
+  },
+  {
+    "values": {
+      "test": "/var/log/component/app.log",
+      "live": "/var/log/component/app.log"
+    },
+    "name": "td_logs_to_ship"
+  },
+  {
+    "values": {
+      "test": "preview-belfrage-stack",
+      "live": "preview-belfrage-stack"
+    },
+    "name": "STACK_NAME"
+  }
+]

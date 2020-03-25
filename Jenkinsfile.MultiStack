@@ -1,0 +1,54 @@
+#!/usr/bin/env groovy
+
+library 'BBCNews'
+
+String buildVariables() {
+  def envFile = readFile 'build.env'
+  def envVars = ''
+  envFile.split('\n').each { env ->
+    envVars = "$envVars -e $env"
+  }
+  envVars
+}
+
+node {
+  cleanWs()
+  checkout scm
+
+  properties([
+    buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
+    disableConcurrentBuilds(),
+    parameters([
+        choice(choices: ['belfrage', 'belfrage-preview', 'cedric-belfrage', 'bruce-belfrage'], description: 'The Cosmos Service to create a release for', name: 'SERVICE'),
+        booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
+    ])
+  ])
+
+  stage('Run tests') {
+    docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
+      sh 'mix deps.get'
+    }
+  }
+
+  stage('Build RPM') {
+    sh "cp cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
+    sh 'mkdir -p SOURCES'
+    String vars = buildVariables()
+    docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
+      sh 'mix distillery.release'
+    }
+    sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
+  }
+
+  BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
+  BBCNews.buildRPMWithMock(params.SERVICE, 'belfrage.spec', params.FORCE_RELEASE)
+  BBCNews.setRepositories(params.SERVICE, 'belfrage-build/repositories.json')
+  BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
+
+  stage("clean up after ourselves") {
+    cleanWs()
+    dir("${env.WORKSPACE}@libs") {
+      deleteDir()
+    }
+  }
+}

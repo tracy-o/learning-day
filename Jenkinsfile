@@ -11,6 +11,17 @@ String buildVariables() {
   envVars
 }
 
+def buildStack(branch, stack_name, force_release) {
+  build(
+    job: "belfrage-multi-stack/$branch",
+    parameters: [
+      [$class: 'StringParameterValue', name: 'SERVICE', value: stack_name],
+      [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: force_release]
+    ],
+    propagate: true
+  )
+}
+
 node {
   cleanWs()
   checkout scm
@@ -19,48 +30,29 @@ node {
     buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
     disableConcurrentBuilds(),
     parameters([
-        choice(choices: ['belfrage', 'bruce-belfrage', 'cedric-belfrage', 'belfrage-preview'], description: 'The Cosmos Service to deploy to', name: 'SERVICE'),
-        choice(choices: ['test', 'live'], description: 'The Cosmos environment to deploy to', name: 'ENVIRONMENT'),
         booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
     ])
   ])
 
-  stage('Checkout build variables from belfrage-build') {
-    sh 'rm -rf belfrage-build'
-    sh 'mkdir -p belfrage-build'
-    dir('belfrage-build') {
-      git url: 'https://github.com/bbc/belfrage-build', credentialsId: 'github', branch: 'master'
+  stage('Run tests') {
+    docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
+      sh 'mix deps.get'
+      sh 'mix test'
+      sh 'mix test_e2e'
+      sh 'mix routes_test'
+      sh 'mix format --check-formatted'
     }
   }
 
-  if (params.ENVIRONMENT == 'test') {
-    stage('Get Cosmos config from build repo') {
-      sh "cp belfrage-build/cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
+  stage ('Deploy Multi Stacks') {
+    def jobNameList = env.JOB_NAME.tokenize('/') as String[];
+    def branchName = jobNameList[2];
+    node {
+      buildStack(branchName, "belfrage", params.FORCE_RELEASE)
+      buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
     }
-
-    stage('Run tests') {
-      docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
-        sh 'mix deps.get'
-        sh 'mix test'
-        sh 'mix test_e2e'
-        sh 'mix routes_test'
-        sh 'mix format --check-formatted'
-      }
-    }
-
-    stage('Build RPM') {
-      sh 'mkdir -p SOURCES'
-      String vars = buildVariables()
-      docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
-        sh 'mix distillery.release'
-      }
-      sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
-    }
-    BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
-    BBCNews.buildRPMWithMock(params.SERVICE, 'belfrage.spec', params.FORCE_RELEASE)
-    BBCNews.setRepositories(params.SERVICE, 'belfrage-build/repositories.json')
-    BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
   }
+
   stage("clean up after ourselves") {
     cleanWs()
     dir("${env.WORKSPACE}@libs") {
