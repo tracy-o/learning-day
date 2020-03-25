@@ -1,13 +1,13 @@
 defmodule Belfrage.Loop do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, LoopsRegistry, Struct}
+  alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec}
 
   @short_interval Application.get_env(:belfrage, :short_counter_reset_interval)
   @long_interval Application.get_env(:belfrage, :long_counter_reset_interval)
 
   def start_link(name) do
-    GenServer.start_link(__MODULE__, specs_for(name), name: via_tuple(name))
+    GenServer.start_link(__MODULE__, RouteSpec.specs_for(name), name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
@@ -24,20 +24,6 @@ defmodule Belfrage.Loop do
   defp via_tuple(name) do
     LoopsRegistry.via_tuple({__MODULE__, name})
   end
-
-  defp specs_for(name) do
-    specs = Module.concat([Routes, Specs, name]).specs()
-
-    Module.concat([Routes, Platforms, specs.platform]).specs(Application.get_env(:belfrage, :production_environment))
-    |> merge_specs(specs)
-    |> Map.put(:loop_id, name)
-  end
-
-  defp merge_specs(platform_specs = %{query_params_allowlist: "*"}, route_specs) do
-    Map.merge(platform_specs, %{route_specs | query_params_allowlist: "*"})
-  end
-
-  defp merge_specs(platform_specs, route_specs), do: Map.merge(platform_specs, route_specs)
 
   # callbacks
 
