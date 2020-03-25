@@ -42,7 +42,7 @@ node {
 
   BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
   BBCNews.buildRPMWithMock(params.SERVICE, 'belfrage.spec', params.FORCE_RELEASE)
-  BBCNews.setRepositories(params.SERVICE, 'belfrage-build/repositories.json')
+  BBCNews.setRepositories(params.SERVICE, 'repositories.json')
   BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
 
   stage("clean up after ourselves") {
