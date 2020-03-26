@@ -49,7 +49,8 @@ config :belfrage,
   aws_lambda: Belfrage.AWS.Lambda,
   file_io: Belfrage.Helpers.FileIO,
   routefile: Routes.Routefile,
-  xray: Belfrage.Xray
+  xray: Belfrage.Xray,
+  stack_name: "local-dev-belfrage-stack"
 
 config :ex_aws,
   region: "eu-west-1",
