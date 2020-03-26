@@ -1,4 +1,4 @@
-defmodule EndToEndTest do
+defmodule EndToEnd.LambdaTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
@@ -45,7 +45,8 @@ defmodule EndToEndTest do
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
-              {"bsig", request_hash}
+              {"bsig", request_hash},
+              {"bid", "belfrage-stack"}
             ], response_body} = sent_resp(conn)
 
     assert response_body == @lambda_response["body"]
@@ -84,7 +85,8 @@ defmodule EndToEndTest do
               {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
-              {"bsig", request_hash}
+              {"bsig", request_hash},
+              {"bid", "belfrage-stack"}
             ], response_body} = sent_resp(conn)
 
     assert @lambda_response["body"] == response_body
