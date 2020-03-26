@@ -50,7 +50,7 @@ config :belfrage,
   file_io: Belfrage.Helpers.FileIO,
   routefile: Routes.Routefile,
   xray: Belfrage.Xray,
-  stack_name: "local-dev-belfrage-stack"
+  stack_name: "belfrage-stack"
 
 config :ex_aws,
   region: "eu-west-1",

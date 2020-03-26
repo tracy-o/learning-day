@@ -46,7 +46,7 @@ defmodule EndToEnd.LambdaTest do
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
-              {"bid", "local-dev-belfrage-stack"}
+              {"bid", "belfrage-stack"}
             ], response_body} = sent_resp(conn)
 
     assert response_body == @lambda_response["body"]
@@ -86,7 +86,7 @@ defmodule EndToEnd.LambdaTest do
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
-              {"bid", "local-dev-belfrage-stack"}
+              {"bid", "belfrage-stack"}
             ], response_body} = sent_resp(conn)
 
     assert @lambda_response["body"] == response_body
