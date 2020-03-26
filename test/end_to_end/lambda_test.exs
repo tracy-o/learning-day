@@ -1,4 +1,4 @@
-defmodule EndToEndTest do
+defmodule EndToEnd.LambdaTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
