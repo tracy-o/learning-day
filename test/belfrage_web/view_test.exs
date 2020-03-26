@@ -70,4 +70,36 @@ defmodule BelfrageWeb.ViewTest do
     assert {"string", "true"} in headers
     refute {"non-string", true} in headers
   end
+
+  describe "fallback page response header" do
+    test "when response is a fallback page" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "<p>hi</p>",
+          http_status: 200,
+          headers: %{},
+          fallback: true
+        }
+      }
+
+      conn = conn(:get, "/_web_core")
+      {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
+      assert {"bfa", "1"} in headers
+    end
+
+    test "when response is not a fallback page" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "<p>hi</p>",
+          http_status: 200,
+          headers: %{},
+          fallback: false
+        }
+      }
+
+      conn = conn(:get, "/_web_core")
+      {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
+      refute {"bfa", "1"} in headers
+    end
+  end
 end
