@@ -4,7 +4,7 @@ defmodule BelfrageWeb.View do
   alias Belfrage.Struct
   alias BelfrageWeb.ResponseHeaders
 
-  @default_headers [ResponseHeaders.Vary, ResponseHeaders.CacheControl, ResponseHeaders.Server, ResponseHeaders.Signature]
+  @default_headers [ResponseHeaders.Vary, ResponseHeaders.CacheControl, ResponseHeaders.Server, ResponseHeaders.Signature, ResponseHeaders.Fallback]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
