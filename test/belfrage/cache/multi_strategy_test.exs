@@ -9,7 +9,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches_for_freshness([:fresh])
     end
 
-    test "when fresh and stale pages are allowed" do
+    test "when fresh and stale pages are allowed the local and distributed strategies are returned in correct order" do
       assert [Belfrage.Cache.Local, Belfrage.Cache.Distributed] ==
                MultiStrategy.valid_caches_for_freshness([:fresh, :stale])
     end
