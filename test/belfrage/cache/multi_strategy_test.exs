@@ -6,12 +6,12 @@ defmodule Belfrage.Cache.MultiStrategyTest do
 
   describe "correct cache strategies to match the requested freshness" do
     test "when only fresh pages are allowed" do
-      assert [Belfrage.Cache.Local] == MultiStrategy.valid_strategies_for_freshness([:fresh])
+      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches_for_freshness([:fresh])
     end
 
     test "when fresh and stale pages are allowed" do
       assert [Belfrage.Cache.Local, Belfrage.Cache.Distributed] ==
-               MultiStrategy.valid_strategies_for_freshness([:fresh, :stale])
+               MultiStrategy.valid_caches_for_freshness([:fresh, :stale])
     end
   end
 
