@@ -10,12 +10,12 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.Cache.{Local, DistributedFallback}
+  alias Belfrage.Cache.{Local, Distributed}
 
   @default_result {:ok, :content_not_found}
 
   @doc """
-  Tries the Local and DistributedFallback strategies
+  Tries the Local and Distributed strategies
   and returns early if they return a cached response
   which matches the accepted_freshness range provided.
   """
@@ -33,14 +33,14 @@ defmodule Belfrage.Cache.MultiStrategy do
 
   def store(struct) do
     Local.store(struct)
-    DistributedFallback.store(struct)
+    Distributed.store(struct)
 
     :ok
   end
 
   def valid_strategies_for_freshness(accepted_freshness) do
     case :stale in accepted_freshness do
-      true -> [Local, DistributedFallback]
+      true -> [Local, Distributed]
       false -> [Local]
     end
   end

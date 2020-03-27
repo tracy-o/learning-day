@@ -1,4 +1,4 @@
-defmodule EndToEnd.DistributedFallbackTest do
+defmodule EndToEnd.DistributedTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router

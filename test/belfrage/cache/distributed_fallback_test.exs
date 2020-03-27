@@ -1,7 +1,7 @@
-defmodule Belfrage.Cache.DistributedFallbackTest do
+defmodule Belfrage.Cache.DistributedTest do
   use ExUnit.Case
   alias Belfrage.Struct
-  alias Belfrage.Cache.DistributedFallback
+  alias Belfrage.Cache.Distributed
 
   setup do
     Test.Support.FakeBelfrageCcp.start()
@@ -15,7 +15,7 @@ defmodule Belfrage.Cache.DistributedFallbackTest do
       response: %Struct.Response{body: "<p>Hello</p>"}
     }
 
-    DistributedFallback.store(struct)
+    Distributed.store(struct)
 
     assert Test.Support.FakeBelfrageCcp.received_put?("distributed-cache-test", struct.response)
   end

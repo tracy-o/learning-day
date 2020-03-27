@@ -1,4 +1,4 @@
-defmodule Belfrage.Cache.DistributedFallback do
+defmodule Belfrage.Cache.Distributed do
   alias Belfrage.{Struct, Struct.Request}
   alias Belfrage.Behaviours.CacheStrategy
   @behaviour CacheStrategy
