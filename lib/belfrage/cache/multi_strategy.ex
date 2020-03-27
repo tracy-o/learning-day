@@ -10,7 +10,6 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.Behaviours.CacheStrategy
   alias Belfrage.Cache.{Local, DistributedFallback}
 
   @default_result {:ok, :content_not_found}
@@ -47,11 +46,14 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   defp execute_fetch(cache_strategy, struct, accepted_freshness) do
+    cache_metric = cache_strategy.metric_identifier()
     with {:ok, freshness, response} <- cache_strategy.fetch(struct),
          true <- freshness in accepted_freshness do
+      ExMetrics.increment("cache.#{cache_metric}.#{freshness}.hit")
       {:halt, {:ok, freshness, response}}
     else
       _content_not_found_or_not_accepted_freshness ->
+        ExMetrics.increment("cache.#{cache_metric}.miss")
         {:cont, {:ok, :content_not_found}}
     end
   end

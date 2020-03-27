@@ -19,19 +19,12 @@ defmodule Belfrage.Cache do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
       {:ok, freshness, response} ->
-        metric_if_stale_response(freshness)
         add_response_to_struct(struct, freshness, response)
 
       {:ok, :content_not_found} ->
         struct
     end
   end
-
-  defp metric_if_stale_response(:stale) do
-    ExMetrics.increment("cache.stale_response_added_to_struct")
-  end
-
-  defp metric_if_stale_response(_freshness), do: :ok
 
   defp add_response_to_struct(struct, freshness, response) do
     case freshness do

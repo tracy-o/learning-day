@@ -1,5 +1,6 @@
 defmodule Belfrage.Cache.DistributedFallback do
   alias Belfrage.{Struct, Struct.Request}
+  alias Belfrage.Behaviours.CacheStrategy
   @behaviour CacheStrategy
 
   @impl CacheStrategy
@@ -8,24 +9,15 @@ defmodule Belfrage.Cache.DistributedFallback do
     result = {:ok, :content_not_found}
 
     result
-    |> metric_if_misses()
   end
 
   @impl CacheStrategy
-  def store(struct = %Struct{
-    request: %Request{request_hash: request_hash},
-    response: response
-    }) do
+  def store(struct) do
     Belfrage.CCP.put(struct)
 
     {:ok, true}
   end
 
-  defp metric_if_misses(result = {:ok, :content_not_found}) do
-    ExMetrics.increment("cache.distributed.fallback_item_does_not_exist")
-
-    result
-  end
-
-  defp metric_if_misses(result), do: result
+  @impl CacheStrategy
+  def metric_identifier, do: "distributed"
 end

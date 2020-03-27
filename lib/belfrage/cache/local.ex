@@ -26,6 +26,9 @@ defmodule Belfrage.Cache.Local do
     end
   end
 
+  @impl CacheStrategy
+  def metric_identifier, do: "local"
+
   defp format_cache_result({:ok, {response, last_updated}}) do
     %{max_age: max_age} = response.cache_directive
 
@@ -36,7 +39,6 @@ defmodule Belfrage.Cache.Local do
   end
 
   defp format_cache_result({:ok, nil}) do
-    ExMetrics.increment("cache.local.fallback_item_does_not_exist")
     {:ok, :content_not_found}
   end
 
