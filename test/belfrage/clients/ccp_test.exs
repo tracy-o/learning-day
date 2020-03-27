@@ -1,6 +1,6 @@
-defmodule Belfrage.CCPTest do
+defmodule Belfrage.Clients.CCPTest do
   use ExUnit.Case
-  alias Belfrage.CCP
+  alias Belfrage.Clients.CCP
   alias Belfrage.{Struct, Struct.Request, Struct.Response}
 
   setup do

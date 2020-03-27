@@ -13,7 +13,7 @@ defmodule Belfrage.Cache.Distributed do
 
   @impl CacheStrategy
   def store(struct) do
-    Belfrage.CCP.put(struct)
+    Belfrage.Clients.CCP.put(struct)
 
     {:ok, true}
   end

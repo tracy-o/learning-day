@@ -1,4 +1,4 @@
-defmodule Belfrage.CCP do
+defmodule Belfrage.Clients.CCP do
   @moduledoc """
   The interface to the Belfrage Central Cache Processor (CCP)
   """
