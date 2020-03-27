@@ -2,8 +2,10 @@ defmodule Belfrage.Cache.MultiStrategy do
   @moduledoc """
   Calls multiple modules that implement the `CacheStrategy` behaviour.
 
-  fetch/2 returns the first cached response which meets the accepted_freshness
-  criteria.
+  fetch/2 returns cached response which meets the accepted_freshness
+  criteria. The valid_caches_for_freshness/1 function ensures we check the
+  Local cache first, before checking the distributed cache, and that we only
+  check the distributed cache when a `:stale` freshness is acceptable.
 
   store/1 calls all the cache strategies (caches) to store the struct.
 
