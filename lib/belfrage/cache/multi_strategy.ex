@@ -52,6 +52,10 @@ defmodule Belfrage.Cache.MultiStrategy do
       ExMetrics.increment("cache.#{cache_metric}.#{freshness}.hit")
       {:halt, {:ok, freshness, response}}
     else
+      # TODO? we could match here on `false` and record a metric that
+      # shows when we asked for a `fresh` response, but only a
+      # stale one exists.
+
       _content_not_found_or_not_accepted_freshness ->
         ExMetrics.increment("cache.#{cache_metric}.miss")
         {:cont, {:ok, :content_not_found}}
