@@ -20,11 +20,12 @@ defmodule Belfrage.Cache.MultiStrategy do
   which matches the accepted_freshness range provided.
   """
   def fetch(struct, accepted_freshness) do
-    caches = accepted_freshness |> valid_caches_for_freshness()
-    do_fetch(struct, caches, accepted_freshness)
+    accepted_freshness
+    |> valid_caches_for_freshness()
+    |> fetch(struct, accepted_freshness)
   end
 
-  def do_fetch(struct, caches, accepted_freshness) do
+  def fetch(caches, struct, accepted_freshness) do
     caches
     |> Enum.reduce_while(@default_result, fn cache, _result ->
       execute_fetch(cache, struct, accepted_freshness)

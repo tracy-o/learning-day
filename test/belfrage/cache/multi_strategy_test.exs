@@ -15,13 +15,13 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     end
   end
 
-  describe "do_fetch/3" do
+  describe "fetch/3" do
     test "when no strategies are provided" do
       struct = %Struct{}
       strategies = []
       accepted_freshness = [:fresh, :stale]
 
-      assert {:ok, :content_not_found} == MultiStrategy.do_fetch(struct, strategies, accepted_freshness)
+      assert {:ok, :content_not_found} == MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
     test "strategy finds response within accepted freshness" do
@@ -35,7 +35,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       end)
 
       assert {:ok, :fresh, %Struct.Response{body: "<h1>Hello</h1>"}} ==
-               MultiStrategy.do_fetch(struct, strategies, accepted_freshness)
+               MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
     test "one strategy finds response but NOT within accepted freshness" do
@@ -49,7 +49,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       end)
 
       assert {:ok, :content_not_found} ==
-               MultiStrategy.do_fetch(struct, strategies, accepted_freshness)
+               MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
     test "when all strategies cannot find a cached page" do
@@ -62,7 +62,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
         {:ok, :content_not_found}
       end)
 
-      assert {:ok, :content_not_found} == MultiStrategy.do_fetch(struct, strategies, accepted_freshness)
+      assert {:ok, :content_not_found} == MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
     test "when the last stategy finds a cached response" do
@@ -81,7 +81,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       end)
 
       assert {:ok, :stale, %Struct.Response{body: "<h1>Hello</h1>"}} ==
-               MultiStrategy.do_fetch(struct, strategies, accepted_freshness)
+               MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
   end
 end
