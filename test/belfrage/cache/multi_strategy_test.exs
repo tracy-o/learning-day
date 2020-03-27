@@ -16,7 +16,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
   end
 
   describe "fetch/3" do
-    test "when no strategies are provided" do
+    test "when no strategies are provided :content_not_found is returned" do
       struct = %Struct{}
       strategies = []
       accepted_freshness = [:fresh, :stale]
@@ -27,7 +27,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     test "strategy finds response within accepted freshness" do
       struct = %Struct{}
       strategies = [CacheStrategyMock]
-      accepted_freshness = [:fresh, :stale]
+      accepted_freshness = [:fresh]
 
       CacheStrategyMock
       |> expect(:fetch, fn ^struct ->
