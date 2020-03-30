@@ -8,12 +8,6 @@ defmodule Routes.Routefile do
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
   handle "/homepage/test", using: "TestHomePage", only_on: "test", examples: ["/homepage/test"]
-  handle "/news", using: "NewsFrontPage", examples: ["/news"]
-  handle "/sport", using: "SportFrontPage", examples: ["/sport"]
-  handle "/weather", using: "WeatherFrontPage", examples: ["/weather"]
-  handle "/bitesize", using: "BitesizeFrontPage", examples: ["/bitesize"]
-  handle "/cbeebies", using: "CBeebiesFrontPage", examples: ["/cbeebies"]
-  handle "/dynasties", using: "DynastiesFrontPage", examples: ["/dynasties"]
   handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland"]
   handle "/wales", using: "WalesHomePage", examples: ["/wales"]
 
