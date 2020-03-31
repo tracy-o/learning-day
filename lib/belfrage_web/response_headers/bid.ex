@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.ResponseHeaders.BelfrageID do
+defmodule BelfrageWeb.ResponseHeaders.BID do
   import Plug.Conn
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
