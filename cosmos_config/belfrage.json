@@ -93,5 +93,12 @@
       "live": "first-belfrage-stack"
     },
     "name": "STACK_NAME"
+  },
+  {
+    "values": {
+      "test": "www",
+      "live": "www"
+    },
+    "name": "STACK_ID"
   }
 ]
