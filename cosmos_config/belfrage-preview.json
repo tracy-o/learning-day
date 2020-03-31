@@ -93,5 +93,12 @@
       "live": "preview-belfrage-stack"
     },
     "name": "STACK_NAME"
+  },
+  {
+    "values": {
+      "test": "preview",
+      "live": "preview"
+    },
+    "name": "STACK_ID"
   }
 ]

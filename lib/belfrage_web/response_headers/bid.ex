@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.ResponseHeaders.StackName do
+defmodule BelfrageWeb.ResponseHeaders.BID do
   import Plug.Conn
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
@@ -7,10 +7,10 @@ defmodule BelfrageWeb.ResponseHeaders.StackName do
 
   @impl ResponseHeaders
   def add_header(conn, _struct) do
-    put_resp_header(conn, "bid", stack_name())
+    put_resp_header(conn, "bid", bid_value())
   end
 
-  defp stack_name do
-    Application.get_env(:belfrage, :stack_name)
+  defp bid_value do
+    Application.get_env(:belfrage, :stack_id)
   end
 end

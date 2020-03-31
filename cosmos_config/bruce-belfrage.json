@@ -93,5 +93,12 @@
       "live": "bruce-belfrage-stack"
     },
     "name": "STACK_NAME"
+  },
+  {
+    "values": {
+      "test": "bruce",
+      "live": "bruce"
+    },
+    "name": "STACK_ID"
   }
 ]

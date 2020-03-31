@@ -93,5 +93,12 @@
       "live": "cedric-belfrage-stack"
     },
     "name": "STACK_NAME"
+  },
+  {
+    "values": {
+      "test": "cedric",
+      "live": "cedric"
+    },
+    "name": "STACK_ID"
   }
 ]

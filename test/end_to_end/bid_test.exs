@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.ResponseHeaders.StackNameTest do
+defmodule BelfrageWeb.ResponseHeaders.BIDTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
@@ -23,6 +23,6 @@ defmodule BelfrageWeb.ResponseHeaders.StackNameTest do
     response_conn = conn(:get, "/") |> Router.call([])
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
-    assert {"bid", "belfrage-stack"} in resp_headers
+    assert {"bid", Application.get_env(:belfrage, :stack_id)} in resp_headers
   end
 end
