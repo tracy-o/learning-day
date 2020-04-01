@@ -1,4 +1,8 @@
 defmodule Belfrage.Cache.Local do
+  alias Belfrage.Behaviours.CacheStrategy
+  @behaviour CacheStrategy
+
+  @impl CacheStrategy
   def fetch(%Belfrage.Struct{
         request: %{request_hash: request_hash}
       }) do
@@ -6,6 +10,7 @@ defmodule Belfrage.Cache.Local do
     |> format_cache_result()
   end
 
+  @impl CacheStrategy
   def store(struct = %Belfrage.Struct{}) do
     case stale?(struct) do
       true ->
@@ -20,6 +25,9 @@ defmodule Belfrage.Cache.Local do
         {:ok, false}
     end
   end
+
+  @impl CacheStrategy
+  def metric_identifier, do: "local"
 
   defp format_cache_result({:ok, {response, last_updated}}) do
     %{max_age: max_age} = response.cache_directive

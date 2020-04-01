@@ -1,9 +1,9 @@
 defmodule Belfrage.Cache do
   alias Belfrage.Struct
-  alias Belfrage.Cache.Local
+  alias Belfrage.Cache.MultiStrategy
 
   def store_if_successful(struct) do
-    if is_cacheable?(struct), do: Local.store(struct)
+    if is_cacheable?(struct), do: MultiStrategy.store(struct)
 
     struct
   end
@@ -16,28 +16,12 @@ defmodule Belfrage.Cache do
   end
 
   def add_response_from_cache(struct, accepted_freshness) do
-    with {:ok, freshness, response} <- Local.fetch(struct),
-         true <- freshness in accepted_freshness do
-      metric_stale_response(freshness, struct)
-      add_response_to_struct(struct, freshness, response)
-    else
-      _ -> metric_fallback_miss(accepted_freshness, struct)
-    end
-  end
+    Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
+    |> case do
+      {:ok, freshness, response} ->
+        add_response_to_struct(struct, freshness, response)
 
-  defp metric_stale_response(:stale, _struct) do
-    ExMetrics.increment("cache.stale_response_added_to_struct")
-  end
-
-  defp metric_stale_response(_freshness, _struct), do: :ok
-
-  defp metric_fallback_miss(accepted_freshness, struct) do
-    case Enum.member?(accepted_freshness, :stale) do
-      true ->
-        ExMetrics.increment("cache.fallback_item_does_not_exist")
-        struct
-
-      false ->
+      {:ok, :content_not_found} ->
         struct
     end
   end
