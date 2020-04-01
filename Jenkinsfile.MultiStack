@@ -24,17 +24,12 @@ node {
     ])
   ])
 
-  stage('Run tests') {
-    docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=test") {
-      sh 'mix deps.get'
-    }
-  }
-
   stage('Build RPM') {
     sh "cp cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
     sh 'mkdir -p SOURCES'
     String vars = buildVariables()
     docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
+      sh 'mix deps.get'
       sh 'mix distillery.release'
     }
     sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
