@@ -24,9 +24,9 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       assert {:ok, :content_not_found} == MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
-    test "strategy finds response within accepted freshness" do
+    test "first strategy finds response within accepted freshness, does not call second strategy" do
       struct = %Struct{}
-      strategies = [CacheStrategyMock]
+      strategies = [CacheStrategyMock, CacheStrategyTwoMock]
       accepted_freshness = [:fresh]
 
       CacheStrategyMock
@@ -65,7 +65,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       assert {:ok, :content_not_found} == MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
-    test "when the last stategy finds a cached response" do
+    test "when first strategy does not find any content, and the second stategy finds a cached response" do
       struct = %Struct{}
       strategies = [CacheStrategyMock, CacheStrategyTwoMock]
       accepted_freshness = [:fresh, :stale]
