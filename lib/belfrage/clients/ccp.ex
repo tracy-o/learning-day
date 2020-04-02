@@ -12,7 +12,7 @@ defmodule Belfrage.Clients.CCP do
   @callback put(Struct.t()) :: :ok
   @callback put(Struct.t(), target) :: :ok
 
-  @spec put(Struct.t()) :: :ok
+  @spec fetch(String.t()) :: {:ok, :content_not_found} | {:ok, :stale, Struct.Response.t()}
   def fetch(request_hash) do
     # TODO Investigate using ExAws.S3 to fetch fallbacks securely.
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
