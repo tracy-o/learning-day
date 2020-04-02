@@ -4,6 +4,7 @@ defmodule Belfrage.Clients.CCP do
   """
   alias Belfrage.{Clients, Struct, Struct.Request}
 
+  @s3_not_found_response_code 403
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
   @type target :: Pid.t() | {:global, Atom.t()}
@@ -24,7 +25,7 @@ defmodule Belfrage.Clients.CCP do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
         {:ok, :stale, cached_body |> :erlang.binary_to_term()}
 
-      {:ok, %Clients.HTTP.Response{status_code: 404}} ->
+      {:ok, %Clients.HTTP.Response{status_code: @s3_not_found_response_code}} ->
         {:ok, :content_not_found}
 
       {:ok, response} ->
