@@ -7,18 +7,35 @@ defmodule Belfrage.Clients.CCP do
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
   @type target :: Pid.t() | {:global, Atom.t()}
-  @callback fetch(String.t()) :: {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
+  @callback fetch(String.t()) ::
+              {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
   @callback put(Struct.t()) :: :ok
   @callback put(Struct.t(), target) :: :ok
 
   @spec put(Struct.t()) :: :ok
   def fetch(request_hash) do
+    # TODO Investigate using ExAws.S3 to fetch fallbacks securely.
     @http_client.execute(%Clients.HTTP.Request{
-       method: :get,
-       url: "s3://" <> s3_bucket() <> request_hash,
-     })
+      method: :get,
+      url: ~s(https://#{s3_bucket()}.s3-eu-west-1.amazonaws.com/#{request_hash})
+    })
+    |> case do
+      {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
+        {:ok, :stale, cached_body |> :erlang.binary_to_term()}
 
-    # {:ok, :content_not_found}
+      {:ok, %Clients.HTTP.Response{status_code: 404}} ->
+        {:ok, :content_not_found}
+
+      {:ok, response} ->
+        ExMetrics.increment("ccp.fetch_error")
+        Stump.log(:error, %{
+          msg: "Failed to fetch from S3.",
+          response: response
+        })
+
+
+        {:ok, :content_not_found}
+    end
   end
 
   @spec put(Struct.t()) :: :ok
@@ -34,6 +51,6 @@ defmodule Belfrage.Clients.CCP do
   end
 
   defp s3_bucket do
-    # TODO fetch runtime config var
+    Application.get_env(:belfrage, :ccp_s3_bucket, "belfrage-t2-cache")
   end
 end

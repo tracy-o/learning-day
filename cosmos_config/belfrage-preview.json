@@ -100,5 +100,12 @@
       "live": "preview"
     },
     "name": "STACK_ID"
+  },
+  {
+    "values": {
+      "test": "belfrage-t2-cache-test",
+      "live": "belfrage-t2-cache-live"
+    },
+    "name": "CCP_S3_BUCKET"
   }
 ]

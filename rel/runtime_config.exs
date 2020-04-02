@@ -9,7 +9,8 @@ use Mix.Config
   {"PRODUCTION_ENVIRONMENT", :required},
   {"PREVIEW_MODE", :required},
   {"STACK_NAME", :required},
-  {"STACK_ID", :required}
+  {"STACK_ID", :required},
+  {"CCP_S3_BUCKET", :required},
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do
