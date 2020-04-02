@@ -1,5 +1,6 @@
 defmodule Belfrage.ProcessorTest do
   use ExUnit.Case
+  use Test.Support.Helper, :mox
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct

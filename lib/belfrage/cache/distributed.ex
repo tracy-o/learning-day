@@ -3,17 +3,16 @@ defmodule Belfrage.Cache.Distributed do
   alias Belfrage.Behaviours.CacheStrategy
   @behaviour CacheStrategy
 
-  @impl CacheStrategy
-  def fetch(%Struct{request: %Request{request_hash: key}}) do
-    # TODO fetch from S3 here (RESFRAME-3355)
-    result = {:ok, :content_not_found}
+  @ccp_client Application.get_env(:belfrage, :ccp_client)
 
-    result
+  @impl CacheStrategy
+  def fetch(%Struct{request: %Request{request_hash: request_hash}}) do
+    @ccp_client.fetch(request_hash)
   end
 
   @impl CacheStrategy
   def store(struct) do
-    Belfrage.Clients.CCP.put(struct)
+    @ccp_client.put(struct)
 
     {:ok, true}
   end

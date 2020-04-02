@@ -21,6 +21,8 @@ defmodule Belfrage.Struct.Request do
     query_params: %{},
     path_params: %{}
   ]
+
+  @type t :: %__MODULE__{}
 end
 
 defmodule Belfrage.Struct.Response do
@@ -29,6 +31,8 @@ defmodule Belfrage.Struct.Response do
             headers: %{},
             body: nil,
             cache_directive: %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0}
+
+  @type t :: %__MODULE__{}
 end
 
 defmodule Belfrage.Struct.Private do
@@ -44,6 +48,8 @@ defmodule Belfrage.Struct.Private do
             production_environment: "live",
             platform: nil,
             preview_mode: "off"
+
+  @type t :: %__MODULE__{}
 end
 
 defmodule Belfrage.Struct do
@@ -51,6 +57,8 @@ defmodule Belfrage.Struct do
             private: %Belfrage.Struct.Private{},
             response: %Belfrage.Struct.Response{},
             debug: %Belfrage.Struct.Debug{}
+
+  @type t :: %__MODULE__{}
 
   def add(struct, key, values) do
     Map.put(struct, key, Map.merge(Map.get(struct, key), values))

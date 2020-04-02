@@ -23,6 +23,7 @@ defmodule Test.Support.Helper do
     Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
     Mox.stub_with(CacheStrategyMock, CacheStrategyStub)
     Mox.stub_with(CacheStrategyTwoMock, CacheStrategyStub)
+    Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
   end
 
   defmacro assert_gzipped(compressed, should_be) do

@@ -1,5 +1,6 @@
 defmodule Belfrage.BelfrageCacheTest do
   use ExUnit.Case
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
 
