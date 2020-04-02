@@ -15,6 +15,7 @@ defmodule Belfrage.Clients.CCP do
   @spec put(Struct.t()) :: :ok
   def fetch(request_hash) do
     # TODO Investigate using ExAws.S3 to fetch fallbacks securely.
+    # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
     @http_client.execute(%Clients.HTTP.Request{
       method: :get,
       url: ~s(https://#{s3_bucket()}.s3-eu-west-1.amazonaws.com/#{request_hash})
@@ -32,7 +33,6 @@ defmodule Belfrage.Clients.CCP do
           msg: "Failed to fetch from S3.",
           response: response
         })
-
 
         {:ok, :content_not_found}
     end
