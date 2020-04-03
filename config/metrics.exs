@@ -9,6 +9,7 @@ fabl_response_code_metrics = Enum.map(200..599, fn status -> "service.FABL.respo
 config :ex_metrics,
   metrics:
     [
+      "ccp.fetch_error",
       "circuit_breaker.active",
       "cache.local.fresh.hit",
       "cache.local.stale.hit",

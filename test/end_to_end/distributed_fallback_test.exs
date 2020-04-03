@@ -8,7 +8,6 @@ defmodule EndToEnd.DistributedTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Test.Support.FakeBelfrageCcp.start()
 
     %{
       cacheable_lambda_response: %{
@@ -37,15 +36,24 @@ defmodule EndToEnd.DistributedTest do
 
   describe "public responses" do
     test "saves page to belfrage-ccp", %{cacheable_lambda_response: cacheable_lambda_response} do
+      test_pid = self()
+
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _role_arn, _lambda_function, _payload, _opts ->
         {:ok, cacheable_lambda_response}
       end)
 
+      Belfrage.Clients.CCPMock
+      |> expect(:put, fn %Belfrage.Struct{} = struct ->
+        send(test_pid, {:ccp_request_hash_stored, struct.request.request_hash})
+
+        :ok
+      end)
+
       conn = conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
       assert [request_hash] = get_resp_header(conn, "bsig")
 
-      assert Test.Support.FakeBelfrageCcp.received_put?(request_hash)
+      assert_received({:ccp_request_hash_stored, ^request_hash})
     end
   end
 
@@ -56,10 +64,12 @@ defmodule EndToEnd.DistributedTest do
         {:ok, un_cacheable_lambda_response}
       end)
 
-      conn = conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
-      assert [request_hash] = get_resp_header(conn, "bsig")
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 0, fn _struct ->
+        flunk("Should not call the ccp.")
+      end)
 
-      refute Test.Support.FakeBelfrageCcp.received_put?(request_hash)
+      conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
     end
   end
 
@@ -70,10 +80,12 @@ defmodule EndToEnd.DistributedTest do
         {:ok, failed_lambda_response}
       end)
 
-      conn = conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
-      assert [request_hash] = get_resp_header(conn, "bsig")
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 0, fn _struct ->
+        flunk("Should not call the ccp.")
+      end)
 
-      refute Test.Support.FakeBelfrageCcp.received_put?(request_hash)
+      conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
     end
   end
 end

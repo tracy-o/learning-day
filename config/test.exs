@@ -19,7 +19,8 @@ config :belfrage,
   aws_lambda: Belfrage.AWS.LambdaMock,
   file_io: Belfrage.Helpers.FileIOMock,
   routefile: Routes.RoutefileMock,
-  xray: Belfrage.XrayMock
+  xray: Belfrage.XrayMock,
+  ccp_client: Belfrage.Clients.CCPMock
 
 config :ex_metrics,
   send_metrics: false

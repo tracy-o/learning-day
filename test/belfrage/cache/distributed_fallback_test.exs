@@ -1,13 +1,9 @@
 defmodule Belfrage.Cache.DistributedTest do
   use ExUnit.Case
+  use Test.Support.Helper, :mox
+
   alias Belfrage.Struct
   alias Belfrage.Cache.Distributed
-
-  setup do
-    Test.Support.FakeBelfrageCcp.start()
-
-    :ok
-  end
 
   test "store/1" do
     struct = %Struct{
@@ -15,8 +11,9 @@ defmodule Belfrage.Cache.DistributedTest do
       response: %Struct.Response{body: "<p>Hello</p>"}
     }
 
-    Distributed.store(struct)
+    Belfrage.Clients.CCPMock
+    |> expect(:put, fn ^struct -> :ok end)
 
-    assert Test.Support.FakeBelfrageCcp.received_put?("distributed-cache-test", struct.response)
+    Distributed.store(struct)
   end
 end

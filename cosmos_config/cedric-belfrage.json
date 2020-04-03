@@ -100,5 +100,12 @@
       "live": "cedric"
     },
     "name": "STACK_ID"
+  },
+  {
+    "values": {
+      "test": "belfrage-distributed-cache-test",
+      "live": "belfrage-distributed-cache-live"
+    },
+    "name": "CCP_S3_BUCKET"
   }
 ]
