@@ -81,15 +81,24 @@ defmodule Belfrage.Clients.CCPTest do
     assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
   end
 
-  test "error fetching from S3" do
+  test "S3 returns unexpected status code" do
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn _request ->
       {:ok,
        Belfrage.Clients.HTTP.Response.new(%{
-         status_code: 408,
+         status_code: 202,
          body: "",
          headers: []
        })}
+    end)
+
+    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+  end
+
+  test "when HTTP client returns an error" do
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request ->
+      {:error, %Belfrage.Clients.HTTP.Error{reason: :timeout}}
     end)
 
     assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
