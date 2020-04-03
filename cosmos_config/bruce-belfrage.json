@@ -103,8 +103,8 @@
   },
   {
     "values": {
-      "test": "belfrage-t2-cache-test",
-      "live": "belfrage-t2-cache-live"
+      "test": "belfrage-distributed-cache-test",
+      "live": "belfrage-distributed-cache-live"
     },
     "name": "CCP_S3_BUCKET"
   }

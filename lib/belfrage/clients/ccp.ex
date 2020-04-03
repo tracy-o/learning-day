@@ -7,7 +7,7 @@ defmodule Belfrage.Clients.CCP do
   @s3_not_found_response_code 403
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
-  @type target :: Pid.t() | {:global, Atom.t()}
+  @type target :: pid() | {:global, atom()}
   @callback fetch(String.t()) ::
               {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
   @callback put(Struct.t()) :: :ok
@@ -19,7 +19,7 @@ defmodule Belfrage.Clients.CCP do
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
     @http_client.execute(%Clients.HTTP.Request{
       method: :get,
-      url: ~s(https://#{s3_bucket()}.s3-eu-west-1.amazonaws.com/#{request_hash})
+      url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash})
     })
     |> case do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
@@ -53,7 +53,7 @@ defmodule Belfrage.Clients.CCP do
   @spec put(Struct.t()) :: :ok
   @spec put(Struct.t(), target) :: :ok
   def put(
-        struct = %Struct{
+        %Struct{
           request: %Request{request_hash: request_hash},
           response: response
         },
@@ -64,5 +64,9 @@ defmodule Belfrage.Clients.CCP do
 
   defp s3_bucket do
     Application.get_env(:belfrage, :ccp_s3_bucket, "belfrage-t2-cache")
+  end
+
+  defp s3_region do
+    Application.get_env(:ex_aws, :region)
   end
 end
