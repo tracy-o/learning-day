@@ -11,6 +11,10 @@ defmodule Belfrage.RouteSpec do
     Map.merge(platform_specs, route_specs, &merge_key/3)
   end
 
+  def spec_exists?(name) do
+    Module.concat([Routes, Specs, name]) |> Code.ensure_loaded?()
+  end
+
   defp merge_key(:query_params_allowlist, _platform_value = "*", _route_value) do
     "*"
   end
