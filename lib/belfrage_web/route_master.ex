@@ -15,6 +15,7 @@ defmodule BelfrageWeb.RouteMaster do
       @redirects []
 
       @before_compile BelfrageWeb.RouteMaster
+      @after_compile BelfrageWeb.RouteMaster
     end
   end
 
@@ -104,5 +105,18 @@ defmodule BelfrageWeb.RouteMaster do
     quote do
       def routes, do: @routes
     end
+  end
+
+  @doc """
+  After compiled, verify that the route spec modules exist.
+  """
+  def __after_compile__(env, _bytecode) do
+    env.module.routes()
+    |> Enum.each(fn {_route, spec_name, _parts} ->
+      case Belfrage.RouteSpec.spec_exists?(spec_name) do
+        true -> :ok
+        false -> raise(~s(\n\nThe route spec '#{spec_name}' does not exist.\nFor information about how to setup a route. Refer to:\nhttps://github.com/bbc/belfrage/wiki/Routing-in-Belfrage\n\n))
+      end
+    end)
   end
 end
