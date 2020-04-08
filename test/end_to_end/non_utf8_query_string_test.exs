@@ -85,4 +85,26 @@ defmodule NonUtf8QueryStringTest do
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
+
+  test "Given a query string with no value, it still passes this on to the origin" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn "webcore-lambda-role-arn",
+                        _lambda_function_name,
+                        %{
+                          body: "",
+                          headers: %{country: "gb"},
+                          httpMethod: "GET",
+                          path: "/200-ok-response",
+                          pathParameters: %{},
+                          queryStringParameters: %{"query" => nil}
+                        },
+                        _opts ->
+      {:ok, @lambda_response}
+    end)
+
+    conn = conn(:get, "/200-ok-response?query")
+    conn = Router.call(conn, [])
+
+    assert {200, _headers, _body} = sent_resp(conn)
+  end
 end
