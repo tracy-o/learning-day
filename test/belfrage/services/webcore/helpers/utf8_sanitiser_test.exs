@@ -21,7 +21,7 @@ defmodule Belfrage.Services.Webcore.Helpers.Utf8SanitiserTest do
              Utf8Sanitiser.utf8_sanitise_query_params(%{"foo" => "abc123" <> <<179>> <> "321cba"})
   end
 
-  test "When value is nill it remains as nil" do
+  test "When value is nil it remains as nil" do
     assert %{"foo" => nil} == Utf8Sanitiser.utf8_sanitise_query_params(%{"foo" => nil})
   end
 end
