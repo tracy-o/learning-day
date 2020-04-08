@@ -11,6 +11,7 @@ defmodule Belfrage.Services.Webcore.Helpers.Utf8Sanitiser do
 
   defp replace_invalid_bytes(input_string, sanitised_string_accumulator \\ [])
 
+  defp replace_invalid_bytes(nil, _acc), do: nil
   defp replace_invalid_bytes(<<good::utf8, rest::binary>>, acc), do: replace_invalid_bytes(rest, [<<good::utf8>> | acc])
   defp replace_invalid_bytes(<<_bad::size(8), rest::binary>>, acc), do: replace_invalid_bytes(rest, ["�" | acc])
   defp replace_invalid_bytes(<<>>, acc), do: acc |> Enum.reverse() |> Enum.join()
