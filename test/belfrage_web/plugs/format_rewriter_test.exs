@@ -54,4 +54,22 @@ defmodule BelfrageWeb.Plugs.FormatRewriterTest do
       assert conn.path_params == %{}
     end
   end
+
+  describe "root path" do
+    test "does not modify the request_path" do
+      conn =
+        conn(:get, "/")
+        |> FormatRewriter.call([])
+
+      assert conn.request_path == "/"
+    end
+
+    test "does not modify the path_info" do
+      conn =
+        conn(:get, "/")
+        |> FormatRewriter.call([])
+
+      assert conn.path_info == []
+    end
+  end
 end
