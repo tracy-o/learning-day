@@ -28,6 +28,11 @@ defmodule BelfrageWeb.Plugs.FormatRewriter do
 
   def init(opts), do: opts
 
+  # for the root path `/`
+  def call(conn = %Plug.Conn{path_info: []}, _opts) do
+    conn
+  end
+
   def call(conn = %Plug.Conn{path_info: path_info}, _opts) do
     path_info
     |> List.last()
