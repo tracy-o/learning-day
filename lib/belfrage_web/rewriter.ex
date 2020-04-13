@@ -12,15 +12,15 @@ defmodule BelfrageWeb.Rewriter do
       "/foo/:bar/:id/.json"
 
       iex> BelfrageWeb.Rewriter.rewrite("/foo/:bar/sitemap.xml")
-      "/foo/:bar/sitemap.xml"
+      "/foo/:bar/sitemap/.xml"
 
       iex> BelfrageWeb.Rewriter.rewrite("/sport/alpine-skiing.app")
-      "/sport/alpine-skiing.app"
+      "/sport/alpine-skiing/.app"
 
       iex> BelfrageWeb.Rewriter.rewrite("/foo/:bar/:id")
       "/foo/:bar/:id"
   """
   def rewrite(matcher) do
-    String.replace(matcher,  ~r/(:\w*)\.(\w*)/, "\\1/.\\2")
+    String.replace(matcher,  ~r/\.(\w*)$/, "/.\\1")
   end
 end

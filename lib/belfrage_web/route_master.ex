@@ -7,6 +7,7 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro __using__(_opts) do
     quote do
       use Plug.Router
+      plug(BelfrageWeb.Plugs.FormatRewriter)
       plug(:match)
       plug(:dispatch)
 
