@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.RouteMaster do
   alias BelfrageWeb.{View, StructAdapter}
+  import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
   @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 
