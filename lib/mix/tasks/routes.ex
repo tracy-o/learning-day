@@ -1,7 +1,7 @@
-defmodule Mix.Tasks.Matchers do
+defmodule Mix.Tasks.Routes do
   use Mix.Task
 
-  @shortdoc "Lists all matchers."
+  @shortdoc "Lists all route matchers."
   def run(_) do
     Enum.map(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
       spec = Module.concat([Routes, Specs, loop_id]).specs()

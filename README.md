@@ -105,10 +105,10 @@ mix routes_test
 
 ### See all the defined route matchers
 
-will produce a markdown table with all the defined routes.
+will produce a markdown table with all the defined route matchers.
 ```
-mix matchers
-    ```
+mix routes
+```
 
 ### Run benchmark performance tests
 ```
