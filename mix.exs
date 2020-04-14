@@ -26,6 +26,7 @@ defmodule Belfrage.MixProject do
       test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
       routes_test: ["cmd MIX_ENV=routes_test mix test --color --trace test/routes/routefile_test.exs"],
       t: ["format", "cmd mix test --force --color"]
+      # matchers: ["cmd mix matchers"]
     ]
   end
 
@@ -62,7 +63,8 @@ defmodule Belfrage.MixProject do
       {:cachex, "~> 3.1"},
       {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"},
       {:poison, "~> 3.1"},
-      {:secure_random, "~> 0.5.1"}
+      {:secure_random, "~> 0.5.1"},
+      {:tabula, "~> 2.1.1", only: [:dev]}
     ]
   end
 end

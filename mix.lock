@@ -39,6 +39,7 @@
   "statix": {:hex, :statix, "1.2.1", "4f23c8cc2477ea0de89fed5e34f08c54b0d28b838f7b8f26613155f2221bb31e", [:mix], [], "hexpm", "7f988988fddcce19ae376bb8e47aa5ea5dabf8d4ba78d34d1ae61eb537daf72e"},
   "stump": {:hex, :stump, "1.6.0", "39834a127de431cfa56d4446a334a5be89e41725a21abdf502025c19df027399", [:mix], [{:jason, "~> 1.1", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm", "e8ab7085ef388b5c264e0b19f9922d06ee6f9dd019233aabf2edd34afa375be8"},
   "sweet_xml": {:hex, :sweet_xml, "0.6.6", "fc3e91ec5dd7c787b6195757fbcf0abc670cee1e4172687b45183032221b66b8", [:mix], [], "hexpm", "2e1ec458f892ffa81f9f8386e3f35a1af6db7a7a37748a64478f13163a1f3573"},
+  "tabula": {:hex, :tabula, "2.1.1", "a04f908bddd596282e95e6469b0ac0fc163eb7c446db8ee6dbea106e5b2f7096", [:mix], [], "hexpm", "b7cc4a69180696a7870eab299402d9764737a0e89bb3cf7edc153fe40460ff3f"},
   "unsafe": {:hex, :unsafe, "1.0.1", "a27e1874f72ee49312e0a9ec2e0b27924214a05e3ddac90e91727bc76f8613d8", [:mix], [], "hexpm", "6c7729a2d214806450d29766abc2afaa7a2cbecf415be64f36a6691afebb50e5"},
   "uuid": {:hex, :uuid, "1.1.8", "e22fc04499de0de3ed1116b770c7737779f226ceefa0badb3592e64d5cfb4eb9", [:mix], [], "hexpm", "c790593b4c3b601f5dc2378baae7efaf5b3d73c4c6456ba85759905be792f2ac"},
 }
