@@ -1,8 +1,12 @@
 defmodule Belfrage.RouteSpec do
   def specs_for(name) do
+    specs_for(name, Application.get_env(:belfrage, :production_environment))
+  end
+
+  def specs_for(name, env) do
     specs = Module.concat([Routes, Specs, name]).specs()
 
-    Module.concat([Routes, Platforms, specs.platform]).specs(Application.get_env(:belfrage, :production_environment))
+    Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
     |> Map.put(:loop_id, name)
   end
