@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Routes do
   use Mix.Task
 
-  @shortdoc "Lists all route matchers."
+  @shortdoc "Lists all route matchers. Optional environment [test|live], defaults to live"
   def run([]) do
     run(["live"])
   end
