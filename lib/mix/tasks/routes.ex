@@ -2,10 +2,10 @@ defmodule Mix.Tasks.Routes do
   use Mix.Task
 
   @shortdoc "Lists all route matchers."
-  def run(_) do
+  def run(env \\ "live") do
     Enum.map(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
       spec = Module.concat([Routes, Specs, loop_id]).specs()
-      spec = Map.merge(Module.concat([Routes, Platforms, spec.platform]).specs("live"), spec)
+      spec = Map.merge(Module.concat([Routes, Platforms, spec.platform]).specs(env), spec)
 
       %{
         "Route Matcher" => route_matcher,
