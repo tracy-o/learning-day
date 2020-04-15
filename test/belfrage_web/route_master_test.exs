@@ -57,7 +57,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h4>\n<!-- Belfrage -->"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "when 404 check is false, the request continues downstream" do
@@ -87,7 +87,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h4>\n<!-- Belfrage -->"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "when the environments match, it will continue with the request" do

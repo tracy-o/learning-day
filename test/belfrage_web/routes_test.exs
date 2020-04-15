@@ -58,7 +58,7 @@ defmodule BelfrageWeb.LegacyTest do
       conn = conn(:get, "/premature-404") |> Router.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h4>\n<!-- Belfrage -->"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "301 redirect" do

@@ -95,7 +95,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"content-type", "text/html; charset=utf-8"}
-              ], "<h1>404 Error Page</h4>\n<!-- Belfrage -->"} = sent_resp(conn)
+              ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
@@ -108,7 +108,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"content-type", "text/html; charset=utf-8"}
-              ], "<h1>500 Error Page</h4>\n<!-- Belfrage -->"} = sent_resp(conn)
+              ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
 end
