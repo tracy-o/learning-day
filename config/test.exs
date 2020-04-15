@@ -21,6 +21,8 @@ config :belfrage,
   routefile: Routes.RoutefileMock,
   xray: Belfrage.XrayMock,
   ccp_client: Belfrage.Clients.CCPMock
+  not_found_page: "test/support/resources/not-found.html",
+  internal_error_page: "test/support/resources/internal-error.html"
 
 config :ex_metrics,
   send_metrics: false

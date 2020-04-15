@@ -19,7 +19,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
       end
 
       assert_received {:plug_conn, :sent}
-      assert {500, _headers, "500 Internal Server Error"} = sent_resp(conn)
+      assert {500, _headers, "<h1>500 Error Page</h4>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
 end

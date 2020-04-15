@@ -94,8 +94,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"content-type", "text/plain; charset=utf-8"}
-              ], "404 Not Found"} = sent_resp(conn)
+                {"content-type", "text/html; charset=utf-8"}
+              ], "<h1>404 Error Page</h4>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
@@ -107,8 +107,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"content-type", "text/plain; charset=utf-8"}
-              ], "500 Internal Server Error"} = sent_resp(conn)
+                {"content-type", "text/html; charset=utf-8"}
+              ], "<h1>500 Error Page</h4>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
 end

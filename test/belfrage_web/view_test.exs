@@ -33,7 +33,7 @@ defmodule BelfrageWeb.ViewTest do
     {status, _headers, body} = build_struct_and_render(nil)
 
     assert status == 500
-    assert body == "500 Internal Server Error"
+    assert body == "<h1>500 Error Page</h4>\n<!-- Belfrage -->"
   end
 
   test "Rendering a generic 500" do
@@ -43,7 +43,7 @@ defmodule BelfrageWeb.ViewTest do
       |> sent_resp()
 
     assert status == 500
-    assert body == "500 Internal Server Error"
+    assert body == "<h1>500 Error Page</h4>\n<!-- Belfrage -->"
   end
 
   test "Rendering a generic 404" do
@@ -53,7 +53,7 @@ defmodule BelfrageWeb.ViewTest do
       |> sent_resp()
 
     assert status == 404
-    assert body == "404 Not Found"
+    assert body == "<h1>404 Error Page</h4>\n<!-- Belfrage -->"
   end
 
   test "ignores non-string header values when building response headers for the conn" do

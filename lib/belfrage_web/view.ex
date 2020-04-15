@@ -13,8 +13,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @not_found_page Path.absname("test/support/resources/404-data-ssl.html")
-  @internal_error_page Path.absname("test/support/resources/500-data-ssl.html")
+  @not_found_page Path.absname(Application.get_env(:belfrage, :not_found_page))
+  @internal_error_page Path.absname(Application.get_env(:belfrage, :internal_error_page))
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -55,7 +55,6 @@ defmodule BelfrageWeb.View do
 
   defp error_page(404) do
     case File.read(@not_found_page) do
-      # Can i append comment another way so its applied to all without duplication?
       {:ok, body} -> body <> "<!-- Belfrage -->"
       {:error, _} -> "<h1>404 Page Not Found<h1>" <> "<!-- Belfrage -->"
     end
