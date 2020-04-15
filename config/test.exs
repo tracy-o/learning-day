@@ -20,7 +20,7 @@ config :belfrage,
   file_io: Belfrage.Helpers.FileIOMock,
   routefile: Routes.RoutefileMock,
   xray: Belfrage.XrayMock,
-  ccp_client: Belfrage.Clients.CCPMock
+  ccp_client: Belfrage.Clients.CCPMock,
   not_found_page: Path.absname("test/support/resources/not-found.html"),
   internal_error_page: Path.absname("test/support/resources/internal-error.html")
 
