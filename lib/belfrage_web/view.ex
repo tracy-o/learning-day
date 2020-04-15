@@ -13,6 +13,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
+  @not_found_page Path.absname("test/support/resources/404-data-ssl.html")
+  @internal_error_page Path.absname("test/support/resources/500-data-ssl.html")
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -20,9 +22,8 @@ defmodule BelfrageWeb.View do
     |> put_response(response.http_status, response.body)
   end
 
-  def not_found(conn), do: error(conn, 404, "404 Not Found")
-
-  def internal_server_error(conn), do: error(conn, 500, "500 Internal Server Error")
+  def not_found(conn), do: error(conn, 404, error_page(404))
+  def internal_server_error(conn), do: error(conn, 500, error_page(500))
 
   def put_response(conn, status, content) when is_map(content) do
     conn
@@ -48,8 +49,23 @@ defmodule BelfrageWeb.View do
   defp error(conn, status, content) do
     conn
     |> add_default_headers(%Struct{response: %Struct.Response{http_status: status}})
-    |> put_resp_content_type("text/plain")
+    |> put_resp_content_type("text/html")
     |> put_response(status, content)
+  end
+
+  defp error_page(404) do
+    case File.read(@not_found_page) do
+      # Can i append comment another way so its applied to all without duplication?
+      {:ok, body} -> body <> "<!-- Belfrage -->"
+      {:error, _} -> "<h1>404 Page Not Found<h1>" <> "<!-- Belfrage -->"
+    end
+  end
+
+  defp error_page(500) do
+    case File.read(@internal_error_page) do
+      {:ok, body} -> body <> "<!-- Belfrage -->"
+      {:error, _} -> "<h1>500 Internal Server Error<h1>" <> "<!-- Belfrage -->"
+    end
   end
 
   defp add_response_headers(conn, struct) do
