@@ -29,14 +29,29 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
 
   defp put_location(conn) do
     conn
-    |> put_resp_header("location", build_uri(conn))
+    |> put_resp_header("location", relative_url(conn))
   end
 
-  defp build_uri(conn) do
+  defp remove_trailing_slash(conn) do
     conn
     |> Map.replace!(:request_path, String.replace_trailing(conn.request_path, "/", ""))
     |> request_url()
   end
+
+  defp relative_url(%Plug.Conn{request_path: path, query_string: query}) do
+    build_relative_uri(
+      String.replace_trailing(path, "/", ""),
+      query
+      )
+  end
+
+  defp build_relative_uri(path, query) do
+    IO.iodata_to_binary([
+      if(path != "", do: path, else: []),
+      if(query != "", do: ["?" | query], else: [])
+    ])
+  end
+
 
   defp trailing_slash?(%{ request_path: path }) do
     path != "/" and String.ends_with?(path, "/")
