@@ -18,6 +18,7 @@ BuildArch: x86_64
 
 Requires: cosmos-ca-chains cosmos-ca-tools
 Requires: bbc-statsd-cloudwatch
+Requires: bbc-error-pages
 Requires: amazon-cloudwatch-agent
 Requires: cfn-signal
 Requires: component-logger
@@ -38,8 +39,6 @@ from browsers to the lambda web renderers of web-core
 mkdir -p %{buildroot}/home/component
 mkdir -p %{buildroot}/home/component/belfrage
 tar -C %{buildroot}/home/component/belfrage -xzf %{SOURCE0}
-mv /var/www/html/errors/404-data-ssl.html %{buildroot}/home/component/belfrage/priv/static/not-found.html
-mv /var/www/html/errors/500-data-ssl.html %{buildroot}/home/component/belfrage/priv/static/internal-error.html
 mkdir -p %{buildroot}/usr/lib/systemd/system
 cp %{SOURCE1} %{buildroot}/usr/lib/systemd/system/belfrage.service
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system/belfrage.service.d

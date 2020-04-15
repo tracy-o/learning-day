@@ -13,8 +13,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @not_found_page Path.absname(Application.get_env(:belfrage, :not_found_page))
-  @internal_error_page Path.absname(Application.get_env(:belfrage, :internal_error_page))
+  @not_found_page Application.get_env(:belfrage, :not_found_page)
+  @internal_error_page Application.get_env(:belfrage, :internal_error_page)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn

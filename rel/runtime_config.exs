@@ -10,11 +10,7 @@ use Mix.Config
   {"PREVIEW_MODE", :required},
   {"STACK_NAME", :required},
   {"STACK_ID", :required},
-<<<<<<< HEAD
   {"CCP_S3_BUCKET", :required},
-=======
-  {"NOT_FOUND_CLANGER", :required}
->>>>>>> 4d6be9d... Vary error page location on env
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do

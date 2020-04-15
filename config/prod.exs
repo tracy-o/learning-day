@@ -4,8 +4,8 @@ config :belfrage,
   http_cert: System.get_env("HTTP_CERT"),
   http_cert_key: System.get_env("HTTP_CERT_KEY"),
   http_cert_ca: System.get_env("HTTP_CERT_CA"),
-  not_found_page: "priv/static/not-found.html",
-  internal_error_page: "priv/static/internal-error.html"
+  not_found_page: "/var/www/html/errors/404-data-ssl.html",
+  internal_error_page: "/var/www/html/errors/500-data-ssl.html"
 
 config :ex_metrics,
   send_metrics: true
