@@ -22,8 +22,8 @@ defmodule BelfrageWeb.View do
     |> put_response(response.http_status, response.body)
   end
 
-  def not_found(conn), do: error(conn, 404, error_page(404))
-  def internal_server_error(conn), do: error(conn, 500, error_page(500))
+  def not_found(conn), do: error(conn, 404, error_page(@not_found_page, 404))
+  def internal_server_error(conn), do: error(conn, 500, error_page(@internal_error_page, 500))
 
   def put_response(conn, status, content) when is_map(content) do
     conn
@@ -53,19 +53,15 @@ defmodule BelfrageWeb.View do
     |> put_response(status, content)
   end
 
-  defp error_page(404) do
-    case File.read(@not_found_page) do
+  defp error_page(path, status) do
+    case File.read(path) do
       {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> "<h1>404 Page Not Found<h1>" <> "<!-- Belfrage -->"
+      {:error, _} -> default_error_page(status)
     end
   end
 
-  defp error_page(500) do
-    case File.read(@internal_error_page) do
-      {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> "<h1>500 Internal Server Error<h1>" <> "<!-- Belfrage -->"
-    end
-  end
+  defp default_error_page(500), do: "<h1>500 Internal Server Error<h1><!-- Belfrage -->"
+  defp default_error_page(404), do: "<h1>404 Page Not Found<h1><!-- Belfrage -->"
 
   defp add_response_headers(conn, struct) do
     struct.response.headers
