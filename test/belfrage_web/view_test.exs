@@ -84,7 +84,7 @@ defmodule BelfrageWeb.ViewTest do
       assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
     end
 
-    test "Rendering a generic 500" do
+    test "serving the BBC standard error page for a 500 status" do
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.internal_server_error()
@@ -94,7 +94,7 @@ defmodule BelfrageWeb.ViewTest do
       assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
     end
 
-    test "Rendering a generic 404" do
+    test "serving the BBC standard error page for a 404 status" do
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.not_found()
@@ -104,7 +104,7 @@ defmodule BelfrageWeb.ViewTest do
       assert body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
-    test "when the default 404 page does not exist" do
+    test "when the BBC standard error page for a 404 does not exist it serves a default error body" do
       config_location = Application.get_env(:belfrage, :not_found_page)
       Application.put_env(:belfrage, :not_found_page, "thisisnotthepagelocation")
 
@@ -119,7 +119,7 @@ defmodule BelfrageWeb.ViewTest do
       Application.put_env(:belfrage, :not_found_page, config_location)
     end
 
-    test "when the default 500 page does not exist" do
+    test "when the BBC standard error page for a 500 does not exist it serves a default error body" do
       config_location = Application.get_env(:belfrage, :internal_error_page)
       Application.put_env(:belfrage, :internal_error_page, "thisisnotthepagelocation")
 

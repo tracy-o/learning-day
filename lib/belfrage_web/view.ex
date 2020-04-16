@@ -57,12 +57,12 @@ defmodule BelfrageWeb.View do
   defp error_page(path, status) do
     case File.read(path) do
       {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> default_error_page(status)
+      {:error, _} -> default_error_body(status)
     end
   end
 
-  defp default_error_page(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-  defp default_error_page(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
+  defp default_error_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+  defp default_error_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
   defp add_response_headers(conn, struct) do
     struct.response.headers
