@@ -29,33 +29,6 @@ defmodule BelfrageWeb.ViewTest do
     assert body == @json_codec.encode!(%{some: "json data"})
   end
 
-  test "Rendering response from a struct with a 200 and a nil response" do
-    {status, _headers, body} = build_struct_and_render(nil)
-
-    assert status == 500
-    assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
-  end
-
-  test "Rendering a generic 500" do
-    {status, _headers, body} =
-      conn(:get, "/_web_core")
-      |> View.internal_server_error()
-      |> sent_resp()
-
-    assert status == 500
-    assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
-  end
-
-  test "Rendering a generic 404" do
-    {status, _headers, body} =
-      conn(:get, "/_web_core")
-      |> View.not_found()
-      |> sent_resp()
-
-    assert status == 404
-    assert body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
-  end
-
   test "ignores non-string header values when building response headers for the conn" do
     struct = %Struct{
       response: %Struct.Response{
@@ -100,6 +73,64 @@ defmodule BelfrageWeb.ViewTest do
       conn = conn(:get, "/_web_core")
       {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
       refute {"bfa", "1"} in headers
+    end
+  end
+
+  describe "error pages" do
+    test "Rendering response from a struct with a 200 and a nil response" do
+      {status, _headers, body} = build_struct_and_render(nil)
+
+      assert status == 500
+      assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
+    end
+
+    test "Rendering a generic 500" do
+      {status, _headers, body} =
+        conn(:get, "/_web_core")
+        |> View.internal_server_error()
+        |> sent_resp()
+
+      assert status == 500
+      assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
+    end
+
+    test "Rendering a generic 404" do
+      {status, _headers, body} =
+        conn(:get, "/_web_core")
+        |> View.not_found()
+        |> sent_resp()
+
+      assert status == 404
+      assert body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+    end
+
+    test "when the default 404 page does not exist" do
+      config_location = Application.get_env(:belfrage, :not_found_page)
+      Application.put_env(:belfrage, :not_found_page, "thisisnotthepagelocation")
+
+      {status, _headers, body} =
+        conn(:get, "/_web_core")
+        |> View.not_found()
+        |> sent_resp()
+
+      assert status == 404
+      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
+
+      Application.put_env(:belfrage, :not_found_page, config_location)
+    end
+
+    test "when the default 500 page does not exist" do
+      config_location = Application.get_env(:belfrage, :internal_error_page)
+      Application.put_env(:belfrage, :internal_error_page, "thisisnotthepagelocation")
+
+      {status, _headers, body} =
+        conn(:get, "/_web_core")
+        |> View.internal_server_error()
+        |> sent_resp()
+
+      assert status == 500
+      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+      Application.put_env(:belfrage, :internal_error_page, config_location)
     end
   end
 end
