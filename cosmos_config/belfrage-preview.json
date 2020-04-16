@@ -1,8 +1,8 @@
 [
   {
     "values": {
-      "test": "test-belfrage-main-BelfrageRole-1Q4QY4M0VBPZX",
-      "live": "test-belfrage-main-BelfrageRole-33JVCDF81H6W"
+      "test": "test-belfrage-preview-main-BelfrageRole-5MFVZ6HT1T1L",
+      "live": "test-belfrage-preview-main-BelfrageRole-5MFVZ6HT1T1L"
     },
     "name": "INSTANCE_ROLE_NAME"
   },
@@ -22,8 +22,8 @@
   },
   {
     "values": {
-      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageLambdaExecRole",
-      "live": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageLambdaExecRole"
+      "test": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageLambdaExecRole",
+      "live": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageLambdaExecRole"
     },
     "name": "WEBCORE_LAMBDA_ROLE_ARN"
   },
@@ -50,8 +50,8 @@
   },
   {
     "values": {
-      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
-      "live": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole"
+      "test": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole",
+      "live": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole"
     },
     "name": "XRAY_ROLE_ARN"
   },
