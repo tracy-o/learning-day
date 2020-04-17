@@ -62,7 +62,8 @@ defmodule Belfrage.MixProject do
       {:cachex, "~> 3.1"},
       {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"},
       {:poison, "~> 3.1"},
-      {:secure_random, "~> 0.5.1"}
+      {:secure_random, "~> 0.5.1"},
+      {:tabula, "~> 2.1.1", only: [:dev]}
     ]
   end
 end
