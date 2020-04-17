@@ -13,6 +13,7 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
+  @file_io Application.get_env(:belfrage, :file_io)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -20,9 +21,8 @@ defmodule BelfrageWeb.View do
     |> put_response(response.http_status, response.body)
   end
 
-  def not_found(conn), do: error(conn, 404, "404 Not Found")
-
-  def internal_server_error(conn), do: error(conn, 500, "500 Internal Server Error")
+  def not_found(conn), do: error(conn, 404, error_page(404))
+  def internal_server_error(conn), do: error(conn, 500, error_page(500))
 
   def put_response(conn, status, content) when is_map(content) do
     conn
@@ -48,9 +48,22 @@ defmodule BelfrageWeb.View do
   defp error(conn, status, content) do
     conn
     |> add_default_headers(%Struct{response: %Struct.Response{http_status: status}})
-    |> put_resp_content_type("text/plain")
+    |> put_resp_content_type("text/html")
     |> put_response(status, content)
   end
+
+  defp error_page(404), do: error_page(Application.get_env(:belfrage, :not_found_page), 404)
+  defp error_page(500), do: error_page(Application.get_env(:belfrage, :internal_error_page), 500)
+
+  defp error_page(path, status) do
+    case @file_io.read(path) do
+      {:ok, body} -> body <> "<!-- Belfrage -->"
+      {:error, _} -> default_error_body(status)
+    end
+  end
+
+  defp default_error_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+  defp default_error_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
   defp add_response_headers(conn, struct) do
     struct.response.headers

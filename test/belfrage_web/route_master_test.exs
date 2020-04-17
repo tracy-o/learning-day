@@ -48,6 +48,10 @@ defmodule BelfrageWeb.RouteMasterTest do
   describe "calling handle with do block" do
     test "when 404 check is truthy, route is not called" do
       expect_belfrage_not_called()
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
 
       conn =
         conn(:get, "/premature-404")
@@ -57,7 +61,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "404 Not Found"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "when 404 check is false, the request continues downstream" do
@@ -78,6 +82,10 @@ defmodule BelfrageWeb.RouteMasterTest do
   describe "calling handle with only_on option" do
     test "when the environments dont match, it will return a 404" do
       expect_belfrage_not_called()
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
 
       conn =
         conn(:get, "/only-on")
@@ -87,7 +95,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "404 Not Found"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "when the environments match, it will continue with the request" do

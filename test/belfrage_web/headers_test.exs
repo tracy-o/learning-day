@@ -86,6 +86,11 @@ defmodule BelfrageWeb.HeadersTest do
     end
 
     test "with a 404 path default response_headers are added" do
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
       conn = make_404_call("<p>some html content</p>", %{}, "/premature-404")
 
       assert {404,
@@ -94,11 +99,16 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"content-type", "text/plain; charset=utf-8"}
-              ], "404 Not Found"} = sent_resp(conn)
+                {"content-type", "text/html; charset=utf-8"}
+              ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
+      internal_error_page = Application.get_env(:belfrage, :internal_error_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
+
       conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
 
       assert {500,
@@ -107,8 +117,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"content-type", "text/plain; charset=utf-8"}
-              ], "500 Internal Server Error"} = sent_resp(conn)
+                {"content-type", "text/html; charset=utf-8"}
+              ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
 end

@@ -55,10 +55,15 @@ defmodule BelfrageWeb.LegacyTest do
     end
 
     test "404 invalid GET" do
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
       conn = conn(:get, "/premature-404") |> Router.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "404 Not Found"
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
     test "301 redirect" do
