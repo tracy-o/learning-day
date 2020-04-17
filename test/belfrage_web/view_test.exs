@@ -1,6 +1,7 @@
 defmodule BelfrageWeb.ViewTest do
   use ExUnit.Case
   use Plug.Test
+  use Test.Support.Helper, :mox
 
   alias BelfrageWeb.View
   alias Belfrage.Struct
@@ -77,7 +78,13 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   describe "error pages" do
+    @not_found_page Application.get_env(:belfrage, :not_found_page)
+    @internal_error_page Application.get_env(:belfrage, :internal_error_page)
+
     test "Rendering response from a struct with a 200 and a nil response" do
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn @internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
+
       {status, _headers, body} = build_struct_and_render(nil)
 
       assert status == 500
@@ -85,6 +92,9 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     test "serving the BBC standard error page for a 500 status" do
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn @internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
+
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.internal_server_error()
@@ -95,6 +105,9 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     test "serving the BBC standard error page for a 404 status" do
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn @not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.not_found()
@@ -105,8 +118,8 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     test "when the BBC standard error page for a 404 does not exist it serves a default error body" do
-      config_location = Application.get_env(:belfrage, :not_found_page)
-      Application.put_env(:belfrage, :not_found_page, "thisisnotthepagelocation")
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn @not_found_page -> {:error, ~s()} end)
 
       {status, _headers, body} =
         conn(:get, "/_web_core")
@@ -115,13 +128,11 @@ defmodule BelfrageWeb.ViewTest do
 
       assert status == 404
       assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-
-      Application.put_env(:belfrage, :not_found_page, config_location)
     end
 
     test "when the BBC standard error page for a 500 does not exist it serves a default error body" do
-      config_location = Application.get_env(:belfrage, :internal_error_page)
-      Application.put_env(:belfrage, :internal_error_page, "thisisnotthepagelocation")
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn @internal_error_page -> {:error, ~s()} end)
 
       {status, _headers, body} =
         conn(:get, "/_web_core")
@@ -130,7 +141,6 @@ defmodule BelfrageWeb.ViewTest do
 
       assert status == 500
       assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-      Application.put_env(:belfrage, :internal_error_page, config_location)
     end
   end
 end

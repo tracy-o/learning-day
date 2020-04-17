@@ -13,6 +13,7 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
+  @file_io Application.get_env(:belfrage, :file_io)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -55,7 +56,7 @@ defmodule BelfrageWeb.View do
   defp error_page(500), do: error_page(Application.get_env(:belfrage, :internal_error_page), 500)
 
   defp error_page(path, status) do
-    case File.read(path) do
+    case @file_io.read(path) do
       {:ok, body} -> body <> "<!-- Belfrage -->"
       {:error, _} -> default_error_body(status)
     end

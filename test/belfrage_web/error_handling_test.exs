@@ -7,6 +7,11 @@ defmodule BelfrageWeb.ErrorHandlingTest do
 
   describe "Belfrage raising an exception" do
     test "Responds with 500 status code" do
+      internal_error_page = Application.get_env(:belfrage, :internal_error_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
+
       BelfrageMock
       |> expect(:handle, fn _struct ->
         raise("Something broke")
