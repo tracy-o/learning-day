@@ -260,4 +260,24 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
   end
+
+  test "when the bbc_headers host is nil, uses host from the conn" do
+    conn =
+      conn(:get, "/")
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+      |> put_private(:overrides, %{})
+      |> put_test_production_environment()
+      |> put_preview_mode_off()
+      |> put_private(:bbc_headers, %{
+        scheme: :https,
+        host: nil,
+        is_uk: true,
+        country: "gb",
+        replayed_traffic: nil,
+        varnish: 1,
+        cache: 0
+      })
+
+    assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
+  end
 end
