@@ -16,9 +16,7 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
     case (headers[:edge] || headers[:forwarded] || headers[:http]) do
       nil -> nil
       bbc_host ->
-        bbc_host
-        |> to_string()
-        |> String.replace(~r{\A\.}, "")
+        bbc_host |> String.replace(~r{\A\.}, "")
     end
   end
 
