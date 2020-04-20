@@ -113,4 +113,18 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
       assert Sanitiser.varnish(%{varnish: nil}, false) == false
     end
   end
+
+  describe "cdn headers" do
+    test "returns true when cdn is set" do
+      assert Sanitiser.cdn(%{http: "1"}, false) == true
+    end
+
+    test "returns false when the cdn is nil" do
+      assert Sanitiser.cdn(%{cdn: nil}, false) == false
+    end
+
+    test "returns false when the cdn is empty" do
+      assert Sanitiser.cdn(%{cdn: ""}, false) == false
+    end
+  end
 end
