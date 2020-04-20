@@ -32,12 +32,6 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_resp_header("location", relative_url(conn))
   end
 
-  defp remove_trailing_slash(conn) do
-    conn
-    |> Map.replace!(:request_path, String.replace_trailing(conn.request_path, "/", ""))
-    |> request_url()
-  end
-
   defp relative_url(%Plug.Conn{request_path: path, query_string: query}) do
     build_relative_uri(
       String.replace_trailing(path, "/", ""),
@@ -47,7 +41,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
 
   defp build_relative_uri(path, query) do
     IO.iodata_to_binary([
-      if(path != "", do: path, else: []),
+      path,
       if(query != "", do: ["?" | query], else: [])
     ])
   end
