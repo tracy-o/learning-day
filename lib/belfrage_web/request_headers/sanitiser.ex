@@ -13,9 +13,11 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   end
 
   def host(headers, _cache) do
-    (headers[:edge] || headers[:forwarded] || headers[:http])
-    |> to_string()
-    |> String.replace(~r{\A\.}, "")
+    case (headers[:edge] || headers[:forwarded] || headers[:http]) do
+      nil -> nil
+      bbc_host ->
+        bbc_host |> String.replace(~r{\A\.}, "")
+    end
   end
 
   def is_uk(%{edge: "yes"}, true), do: true

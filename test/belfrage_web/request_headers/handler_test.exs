@@ -9,7 +9,7 @@ defmodule BelfrageWeb.RequestHeaders.HandlerTest do
       conn = conn("get", "/", "") |> put_req_header("x-bbc-edge-country", "gb")
 
       assert %{
-               bbc_headers: %{cache: false, country: "gb", host: ""}
+               bbc_headers: %{cache: false, country: "gb"}
              } = Handler.call(conn, []).private
     end
 
@@ -27,6 +27,12 @@ defmodule BelfrageWeb.RequestHeaders.HandlerTest do
       assert %{
                bbc_headers: %{replayed_traffic: nil}
              } = Handler.call(conn, []).private
+    end
+
+    test "when there are no host headers, host is nil in bbc_headers map" do
+      conn = conn("get", "/")
+
+      assert %{bbc_headers: %{host: nil}} = Handler.call(conn, []).private
     end
   end
 end

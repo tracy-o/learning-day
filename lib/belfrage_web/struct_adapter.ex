@@ -14,7 +14,7 @@ defmodule BelfrageWeb.StructAdapter do
         path_params: conn.path_params,
         query_params: conn.query_params,
         scheme: bbc_headers.scheme,
-        host: bbc_headers.host,
+        host: bbc_headers.host || conn.host,
         has_been_replayed?: bbc_headers.replayed_traffic,
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
