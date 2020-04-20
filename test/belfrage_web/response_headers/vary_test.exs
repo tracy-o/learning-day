@@ -9,6 +9,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   @non_varnish_with_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: true}}
   @with_varnish_no_cache %Struct{request: %Struct.Request{varnish?: true, edge_cache?: false}}
   @no_varnish_or_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: false}}
+  @with_cdn %Struct{request: %Struct.Request{cdn?: true}}
 
   doctest Vary
 
@@ -42,6 +43,16 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       output_conn = Vary.add_header(input_conn, @no_varnish_or_cache)
 
       assert ["Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+               get_resp_header(output_conn, "vary")
+    end
+  end
+
+  describe "Reduced Vary Header - when serving through CDN" do
+    test "When the request is from a CDN it only varies on Accept-Encoding" do
+      input_conn = conn(:get, "/sport")
+      output_conn = Vary.add_header(input_conn, @with_cdn)
+
+      assert ["Accept-Encoding"] ==
                get_resp_header(output_conn, "vary")
     end
   end
