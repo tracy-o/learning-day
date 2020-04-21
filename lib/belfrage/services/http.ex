@@ -20,7 +20,6 @@ defmodule Belfrage.Services.HTTP do
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
     ExMetrics.increment("service.HTTP.response.#{status}")
-    if status > 200, do: log(status, body, struct)
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
@@ -40,15 +39,6 @@ defmodule Belfrage.Services.HTTP do
     Stump.log(:error, %{
       msg: "HTTP Service request error",
       reason: reason,
-      struct: Map.from_struct(struct)
-    })
-  end
-
-  defp log(status, body, struct) do
-    Stump.log(:error, %{
-      msg: "Non 200 response from HTTP Service request",
-      status: status,
-      body: body,
       struct: Map.from_struct(struct)
     })
   end
