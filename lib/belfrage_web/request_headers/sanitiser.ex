@@ -8,13 +8,18 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
     |> String.equivalent?("1")
   end
 
+  def cdn(%{http: "1"}, _cache), do: true
+  def cdn(_headers, _cache), do: false
+
   def country(headers, cache) do
     edge(headers, cache) || headers[:varnish] || "gb"
   end
 
   def host(headers, _cache) do
-    case (headers[:edge] || headers[:forwarded] || headers[:http]) do
-      nil -> nil
+    case headers[:edge] || headers[:forwarded] || headers[:http] do
+      nil ->
+        nil
+
       bbc_host ->
         bbc_host |> String.replace(~r{\A\.}, "")
     end

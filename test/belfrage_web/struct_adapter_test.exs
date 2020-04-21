@@ -27,7 +27,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -49,7 +50,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -72,7 +74,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -95,7 +98,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -118,7 +122,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         query_string: %{foo: "ba"},
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -141,7 +146,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         query_string: %{},
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -165,7 +171,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         query_string: %{},
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -187,7 +194,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
       |> put_private(:overrides, %{})
 
@@ -211,7 +219,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           country: "gb",
           replayed_traffic: nil,
           varnish: 1,
-          cache: 0
+          cache: 0,
+          cdn: false
         })
         |> put_req_header("accept-encoding", "gzip, deflate, br")
 
@@ -234,7 +243,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           country: "gb",
           replayed_traffic: nil,
           varnish: 1,
-          cache: 0
+          cache: 0,
+          cdn: false
         })
 
       assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
@@ -255,7 +265,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
@@ -275,7 +286,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         country: "gb",
         replayed_traffic: nil,
         varnish: 1,
-        cache: 0
+        cache: 0,
+        cdn: false
       })
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"

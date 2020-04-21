@@ -16,6 +16,7 @@ defmodule Belfrage.Struct.Request do
     :accept_encoding,
     varnish?: false,
     edge_cache?: false,
+    cdn?: false,
     has_been_replayed?: nil,
     subdomain: "www",
     query_params: %{},

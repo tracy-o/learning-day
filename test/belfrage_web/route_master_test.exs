@@ -41,7 +41,8 @@ defmodule BelfrageWeb.RouteMasterTest do
       is_uk: false,
       replayed_traffic: "",
       varnish: "",
-      cache: ""
+      cache: "",
+      cdn: nil
     })
   end
 

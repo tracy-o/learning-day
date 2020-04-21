@@ -11,11 +11,11 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     put_resp_header(
       conn,
       "vary",
-      vary_headers(request)
+      vary_headers(request, request.cdn?)
     )
   end
 
-  def vary_headers(request) do
+  def vary_headers(request, false) do
     [
       "Accept-Encoding",
       "X-BBC-Edge-Cache",
@@ -24,6 +24,13 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       "X-BBC-Edge-Scheme"
     ]
     |> Enum.reject(&is_nil/1)
+    |> Enum.join(", ")
+  end
+
+  def vary_headers(_, true) do
+    [
+      "Accept-Encoding"
+    ]
     |> Enum.join(", ")
   end
 
