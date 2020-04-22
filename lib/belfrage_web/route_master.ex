@@ -71,6 +71,12 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  defmacro return_404 do
+    quote do
+      View.not_found(var!(conn))
+    end
+  end
+
   # TODO: needs better handling of the host
   # something like:
   # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)

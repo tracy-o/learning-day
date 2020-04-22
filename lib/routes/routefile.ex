@@ -222,4 +222,8 @@ defmodule Routes.Routefile do
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
+  
+  match _ do
+    return_404
+  end
 end

@@ -200,4 +200,24 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic/middleeast-51412901"]
     end
   end
+
+  describe "matching undefined routes" do
+    test "an early 404 is returned" do
+      expect_belfrage_not_called()
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
+      conn =
+        conn(:post, "/a_route_that_will_not_match")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+    end
+  end
 end

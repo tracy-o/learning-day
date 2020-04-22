@@ -28,4 +28,8 @@ defmodule Routes.RoutefileMock do
   handle("/moz", using: "Moz", examples: ["/moz"])
 
   handle("/*any", using: "SomeLoop", only_on: "test", examples: ["/foo/bar"])
+
+  match(_) do
+    return_404
+  end
 end
