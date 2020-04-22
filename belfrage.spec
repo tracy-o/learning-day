@@ -55,6 +55,7 @@ systemctl enable belfrage
 systemctl enable cloudformation-signal
 /bin/chown -R component:component /home/component
 /bin/chown -R component:component /var/log/component
+cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
