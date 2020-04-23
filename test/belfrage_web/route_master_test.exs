@@ -219,12 +219,12 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
-    test "405 is returned with 404 page for unsupported methods" do
+    test "405 is returned with 405 page for unsupported methods" do
       expect_belfrage_not_called()
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
+      not_supported_page = Application.get_env(:belfrage, :not_supported_page)
 
       Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+      |> expect(:read, fn ^not_supported_page -> {:ok, "<h1>405 Error Page</h1>\n"} end)
 
       conn =
         conn(:post, "/a_route_that_will_not_match")
@@ -233,7 +233,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert conn.status == 405
-      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      assert conn.resp_body == "<h1>405 Error Page</h1>\n<!-- Belfrage -->"
     end
   end
 end
