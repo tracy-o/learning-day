@@ -29,7 +29,5 @@ defmodule Routes.RoutefileMock do
 
   handle("/*any", using: "SomeLoop", only_on: "test", examples: ["/foo/bar"])
 
-  match(_) do
-    return_404
-  end
+  no_match()
 end

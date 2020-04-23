@@ -23,6 +23,7 @@ defmodule BelfrageWeb.View do
 
   def not_found(conn), do: error(conn, 404, error_page(404))
   def internal_server_error(conn), do: error(conn, 500, error_page(500))
+  def unsupported_method(conn), do: error(conn, 405, error_page(404))
 
   def put_response(conn, status, content) when is_map(content) do
     conn

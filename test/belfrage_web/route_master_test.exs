@@ -202,7 +202,24 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "matching undefined routes" do
-    test "an early 404 is returned" do
+    test "404 is returned for non-matching GET requests" do
+      expect_belfrage_not_called()
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
+      conn =
+        conn(:get, "/a_route_that_will_not_match")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+    end
+
+    test "405 is returned with 404 page for unsupported methods" do
       expect_belfrage_not_called()
       not_found_page = Application.get_env(:belfrage, :not_found_page)
 
@@ -213,10 +230,9 @@ defmodule BelfrageWeb.RouteMasterTest do
         conn(:post, "/a_route_that_will_not_match")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
         |> RoutefileMock.call([])
 
-      assert conn.status == 404
+      assert conn.status == 405
       assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
   end

@@ -71,9 +71,15 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro return_404 do
+  defmacro no_match do
     quote do
-      View.not_found(var!(conn))
+      get _ do
+        View.not_found(var!(conn))
+      end
+
+      match _ do
+        View.unsupported_method(var!(conn))
+      end
     end
   end
 
