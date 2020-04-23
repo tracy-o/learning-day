@@ -54,4 +54,35 @@ defmodule Routes.RoutefileTest do
       end)
     end
   end)
+
+  describe "for routes that arent supported" do
+    defp expect_belfrage_not_called() do
+      BelfrageMock
+      |> expect(:handle, 0, fn _struct ->
+        raise "this should never run"
+      end)
+    end
+
+    test "when the request is a GET request" do
+      Application.put_env(:belfrage, :production_environment, "live")
+
+      conn = conn(:get, "/a_route_that_will_not_match")
+      conn = Router.call(conn, [])
+
+      assert conn.status == 404
+      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+
+      Application.put_env(:belfrage, :production_environment, "test")
+    end
+
+    test "when the request is a POST request" do
+      expect_belfrage_not_called()
+
+      conn = conn(:post, "/a_route_that_will_not_match")
+      conn = Router.call(conn, [])
+
+      assert conn.status == 405
+      assert conn.resp_body == "content for file test/support/resources/not-supported.html<!-- Belfrage -->"
+    end
+  end
 end

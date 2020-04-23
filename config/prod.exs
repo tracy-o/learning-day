@@ -5,6 +5,7 @@ config :belfrage,
   http_cert_key: System.get_env("HTTP_CERT_KEY"),
   http_cert_ca: System.get_env("HTTP_CERT_CA"),
   not_found_page: "/var/www/html/errors/404-data-ssl.html",
+  not_supported_page: "/var/www/html/errors/405-data-ssl.html",
   internal_error_page: "/var/www/html/errors/500-data-ssl.html"
 
 config :ex_metrics,

@@ -23,6 +23,7 @@ defmodule BelfrageWeb.View do
 
   def not_found(conn), do: error(conn, 404, error_page(404))
   def internal_server_error(conn), do: error(conn, 500, error_page(500))
+  def unsupported_method(conn), do: error(conn, 405, error_page(405))
 
   def put_response(conn, status, content) when is_map(content) do
     conn
@@ -53,6 +54,7 @@ defmodule BelfrageWeb.View do
   end
 
   defp error_page(404), do: error_page(Application.get_env(:belfrage, :not_found_page), 404)
+  defp error_page(405), do: error_page(Application.get_env(:belfrage, :not_supported_page), 405)
   defp error_page(500), do: error_page(Application.get_env(:belfrage, :internal_error_page), 500)
 
   defp error_page(path, status) do
