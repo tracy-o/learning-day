@@ -35,12 +35,18 @@ node {
     sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
   }
 
-  Boolean addShaToVersion=true
-
   BBCNews.archiveDirectoryAsPackageSource('bake-scripts', 'bake-scripts.tar.gz')
-  BBCNews.buildRPMWithMock(params.SERVICE, 'belfrage.spec', params.FORCE_RELEASE, env.BRANCH_NAME, addShaToVersion)
+  String version
+
+  stage('Get release version') {
+    Boolean addShaToVersion=true
+    version = BBCNews.getNextPackageVersionFromCosmos(params.SERVICE, params.FORCE_RELEASE, env.BRANCH_NAME, false, addShaToVersion)
+  }
+
+  BBCNews.buildRPMWithMockAndVersion(params.SERVICE, 'belfrage.spec', version)
   BBCNews.setRepositories(params.SERVICE, 'repositories.json')
   BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
+  BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE)
 
   stage("clean up after ourselves") {
     cleanWs()
