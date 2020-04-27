@@ -12,6 +12,7 @@ defmodule Routes.RoutefileTest do
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
     describe "For route matcher: #{route_matcher}" do
       @loop_id loop_id
+      @route_matcher route_matcher
 
       test "There is a valid routespec for #{loop_id}" do
         specs = Module.concat([Routes, Specs, @loop_id]).specs()
@@ -23,10 +24,16 @@ defmodule Routes.RoutefileTest do
         assert Map.has_key?(specs, :resp_pipeline)
         assert Map.has_key?(specs, :circuit_breaker_error_threshold)
         assert Map.has_key?(specs, :origin)
+        assert String.starts_with?(@route_matcher, "/"), "Route matcher #{@route_matcher} must be prefixed with a `/`."
       end
 
       Enum.each(examples, fn example ->
         @example example
+
+        test "Route example #{@example} is prefixed with `/`" do
+          assert String.starts_with?(@example, "/"),
+                 "Route example `#{@example}`, for matcher `#{@route_matcher}`, must be prefixed with a `/`."
+        end
 
         test "The example: #{example} points to the #{loop_id} routespec" do
           BelfrageMock
