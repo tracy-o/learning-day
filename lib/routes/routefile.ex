@@ -1,3 +1,9 @@
+#
+# How to add a route:
+# https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#how-to-add-a-route
+# What types of route matcher you can  use:
+# https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
+#
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
   alias Routes.Specs.TopicPage
