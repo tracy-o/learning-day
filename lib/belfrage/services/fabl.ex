@@ -40,7 +40,7 @@ defmodule Belfrage.Services.Fabl do
     Stump.log(:error, %{
       msg: "Fabl Service request error",
       reason: reason,
-      struct: Map.from_struct(struct)
+      struct: Struct.loggable(struct)
     })
   end
 
@@ -49,7 +49,7 @@ defmodule Belfrage.Services.Fabl do
       msg: "Non 200 response from Fabl Service request",
       status: status,
       body: body,
-      struct: Map.from_struct(struct)
+      struct: Struct.loggable(struct)
     })
   end
 
