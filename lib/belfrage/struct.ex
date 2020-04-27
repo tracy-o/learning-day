@@ -64,4 +64,10 @@ defmodule Belfrage.Struct do
   def add(struct, key, values) do
     Map.put(struct, key, Map.merge(Map.get(struct, key), values))
   end
+
+  def loggable(struct) do
+    struct
+    |> get_and_update_in([Access.key(:response), Access.key(:body)], &{&1, "REMOVED"})
+    |> elem(1)
+  end
 end
