@@ -25,6 +25,12 @@ config :belfrage,
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html"
 
+config :cachex, :limit,
+  size: 6,
+  policy: Cachex.Policy.LRW,
+  reclaim: 0.5,
+  options: []
+
 config :ex_metrics,
   send_metrics: false
 
