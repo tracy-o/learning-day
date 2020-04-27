@@ -2,6 +2,7 @@ defmodule Belfrage.Xray do
   @type segment :: AwsExRay.Segment.t()
   @type trace :: AwsExRay.Trace.t()
   @type app_name :: String.t()
+  @type segment_name :: String.t()
 
   @callback new_trace() :: trace
   @callback start_tracing(trace, app_name) :: segment
@@ -16,6 +17,8 @@ defmodule Belfrage.Xray do
               status: pos_integer()
             }) :: segment
 
+  @callback subsegment_with_struct_annotations(segment_name, Belfrage.Struct.t(), (-> any)) :: any()
+
   alias AwsExRay.Record.{HTTPResponse, HTTPRequest}
 
   defdelegate new_trace, to: AwsExRay.Trace, as: :new
@@ -23,6 +26,7 @@ defmodule Belfrage.Xray do
   defdelegate finish_tracing(segment), to: AwsExRay, as: :finish_tracing
   defdelegate start_subsegment(segment), to: AwsExRay, as: :start_subsegment
   defdelegate finish_subsegment(segment), to: AwsExRay, as: :finish_subsegment
+  defdelegate record_subsegment(name, annotations, opts, func), to: AwsExRay, as: :subsegment
 
   def set_http_request(segment, %{method: method, path: path}) do
     segment
@@ -38,6 +42,17 @@ defmodule Belfrage.Xray do
     |> AwsExRay.Segment.set_http_response(%HTTPResponse{
       status: status
     })
+  end
+
+  def subsegment_with_struct_annotations(subsegment_name, struct = %Belfrage.Struct{}, func) do
+    opts = [namespace: :none]
+    record_subsegment(subsegment_name, %{
+      "owner" => struct.private.owner,
+      "loop_id" => struct.private.loop_id,
+      "preview_mode" => struct.private.preview_mode,
+      "production_environment" => struct.private.production_environment,
+      "runbook" => struct.private.runbook
+    }, opts, fn _trace_value -> func.() end)
   end
 
   defmacro trace_subsegment(segment_name, do: yield) do
