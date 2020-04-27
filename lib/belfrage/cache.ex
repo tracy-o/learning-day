@@ -9,9 +9,9 @@ defmodule Belfrage.Cache do
   end
 
   def fallback_if_required(struct = %Belfrage.Struct{}) do
-    case is_successful_response?(struct) do
-      true -> struct
-      false -> add_response_from_cache(struct, [:fresh, :stale])
+    case is_fallback_response?(struct) do
+      true -> add_response_from_cache(struct, [:fresh, :stale])
+      false -> struct
     end
   end
 
@@ -49,6 +49,10 @@ defmodule Belfrage.Cache do
 
   defp is_successful_response?(struct) do
     struct.response.http_status == 200
+  end
+
+  defp is_fallback_response?(struct) do
+    struct.response.http_status == 408 or struct.response.http_status >= 500
   end
 
   defp is_get_request?(struct) do

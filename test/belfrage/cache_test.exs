@@ -154,4 +154,56 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
   end
+
+  describe "fetching from cache in fallback mode" do
+    test "when request status is 408 , add cached response to request hash" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        },
+        response: %Struct.Response{
+          http_status: 408
+        }
+      }
+
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fallback_if_required(struct)
+    end
+
+    test "when request status is greater than 499, add cached response to request hash" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        },
+        response: %Struct.Response{
+          http_status: 500
+        }
+      }
+
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fallback_if_required(struct)
+    end
+
+    test "when a request status is anything else, return the struct" do
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        },
+        response: %Struct.Response{
+          http_status: 200
+        }
+      }
+
+      assert struct == Belfrage.Cache.fallback_if_required(struct)
+    end
+  end
 end
