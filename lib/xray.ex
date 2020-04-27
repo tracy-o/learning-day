@@ -52,7 +52,7 @@ defmodule Belfrage.Xray do
       "preview_mode" => struct.private.preview_mode,
       "production_environment" => struct.private.production_environment,
       "runbook" => struct.private.runbook
-    }, opts, func)
+    }, opts, fn _trace_value -> func.() end)
   end
 
   defmacro trace_subsegment(segment_name, do: yield) do
