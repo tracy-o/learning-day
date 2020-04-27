@@ -7,6 +7,7 @@ defmodule Belfrage.Processor do
     RequestHash,
     ServiceProvider,
     Cache,
+    Fallback,
     ResponseTransformers
   }
 
@@ -53,7 +54,7 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store_if_successful()
-    |> Cache.fallback_if_required()
+    |> Fallback.fallback_if_required()
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do
