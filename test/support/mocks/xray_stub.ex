@@ -19,6 +19,8 @@ defmodule Belfrage.XrayStub do
   def set_http_request(segment, _http_request), do: segment
   def set_http_response(segment, _http_response), do: segment
 
+  def subsegment_with_struct_annotations(_segment_name, _struct, func), do: func.()
+
   def finish_tracing(_segment) do
     :ok
   end

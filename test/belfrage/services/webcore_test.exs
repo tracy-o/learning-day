@@ -130,6 +130,22 @@ defmodule Belfrage.Services.WebcoreTest do
 
       Webcore.dispatch(@struct)
     end
+
+    test "it adds webcore subsegment with struct information" do
+      expect(Clients.LambdaMock, :call, fn _lambda_role_arn, _lambda_function_name, _headers, _opts ->
+        {:ok, @lambda_response}
+      end)
+
+      Belfrage.XrayMock
+      |> expect(
+        :subsegment_with_struct_annotations,
+        fn "webcore-service", _struct, func ->
+          func.()
+        end
+      )
+
+      Webcore.dispatch(@struct)
+    end
   end
 
   @lambda_response_internal_fail %{
