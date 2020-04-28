@@ -10,7 +10,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.Server,
     ResponseHeaders.Signature,
     ResponseHeaders.Fallback,
-    ResponseHeaders.BID
+    ResponseHeaders.BID,
+    ResponseHeaders.Via
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
   @file_io Application.get_env(:belfrage, :file_io)
