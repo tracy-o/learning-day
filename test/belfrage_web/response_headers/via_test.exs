@@ -20,6 +20,6 @@ defmodule BelfrageWeb.ResponseHeaders.ViaTest do
 
     output_conn = Via.add_header(input_conn, struct)
 
-    assert ["HTTP/1.1 Belfrage, Upstream"] == get_resp_header(output_conn, "via")
+    assert ["Upstream, HTTP/1.1 Belfrage"] == get_resp_header(output_conn, "via")
   end
 end

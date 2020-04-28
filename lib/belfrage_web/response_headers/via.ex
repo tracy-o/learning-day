@@ -17,6 +17,6 @@ defmodule BelfrageWeb.ResponseHeaders.Via do
   defp append_to_via(belfrage_via, _existing_via = nil), do: belfrage_via
 
   defp append_to_via(belfrage_via, existing_via) do
-    belfrage_via <> ", " <> existing_via
+    existing_via <> ", " <> belfrage_via
   end
 end
