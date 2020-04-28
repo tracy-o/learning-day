@@ -8,6 +8,13 @@ defmodule Belfrage.Cache do
     struct
   end
 
+  def get_fallback_on_error(struct = %Struct{}) do
+    case server_error?(struct) or request_timeout_error?(struct) do
+      true -> get(struct, [:fresh, :stale])
+      false -> struct
+    end
+  end
+
   def get(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
@@ -42,6 +49,14 @@ defmodule Belfrage.Cache do
 
   defp is_successful_response?(struct) do
     struct.response.http_status == 200
+  end
+
+  defp server_error?(struct) do
+    struct.response.http_status >= 500
+  end
+
+  defp request_timeout_error?(struct) do
+    struct.response.http_status == 408
   end
 
   defp is_get_request?(struct) do
