@@ -2,7 +2,7 @@ defmodule Belfrage.Fallback do
   alias Belfrage.Struct
   alias Belfrage.Cache
 
-  def fallback_if_required(struct = %Struct{}) do
+  def get_on_error(struct = %Struct{}) do
     case server_error?(struct) or request_timeout_error?(struct) do
       true -> Cache.get(struct, [:fresh, :stale])
       false -> struct

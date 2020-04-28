@@ -54,7 +54,7 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.put_on_success()
-    |> Fallback.fallback_if_required()
+    |> Fallback.get_on_error()
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do
