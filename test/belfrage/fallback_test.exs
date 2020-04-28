@@ -43,16 +43,16 @@ defmodule Belfrage.FallbackTest do
   describe "fetching from cache in fallback mode" do
     test "when request status is 408 , add cached response to request hash" do
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Fallback.fallback_if_required(struct_with_status_code(408))
+               Fallback.get_on_error(struct_with_status_code(408))
     end
 
     test "when request status is greater than 499, add cached response to request hash" do
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Fallback.fallback_if_required(struct_with_status_code(500))
+               Fallback.get_on_error(struct_with_status_code(500))
     end
 
     test "when a request status is anything else, return the struct" do
-      assert struct_with_status_code(200 == Fallback.fallback_if_required(struct_with_status_code(200)))
+      assert struct_with_status_code(200) == Fallback.get_on_error(struct_with_status_code(200))
     end
   end
 end
