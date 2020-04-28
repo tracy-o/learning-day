@@ -4,7 +4,7 @@ defmodule Belfrage.Fallback do
 
   def fallback_if_required(struct = %Struct{}) do
     case server_error?(struct) or request_timeout_error?(struct) do
-      true -> Cache.add_response_from_cache(struct, [:fresh, :stale])
+      true -> Cache.get(struct, [:fresh, :stale])
       false -> struct
     end
   end

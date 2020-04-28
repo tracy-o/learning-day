@@ -8,7 +8,7 @@ defmodule Belfrage.Cache do
     struct
   end
 
-  def add_response_from_cache(struct, accepted_freshness) do
+  def get(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
       {:ok, freshness, response} ->

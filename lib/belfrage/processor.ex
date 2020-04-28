@@ -29,7 +29,7 @@ defmodule Belfrage.Processor do
   end
 
   def query_cache_for_early_response(struct = %Struct{}) do
-    Cache.add_response_from_cache(struct, [:fresh])
+    Cache.get(struct, [:fresh])
   end
 
   def request_pipeline(struct = %Struct{}) do
