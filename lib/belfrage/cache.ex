@@ -8,13 +8,6 @@ defmodule Belfrage.Cache do
     struct
   end
 
-  def get_fallback_on_error(struct = %Struct{}) do
-    case server_error?(struct) or request_timeout_error?(struct) do
-      true -> get(struct, [:fresh, :stale])
-      false -> struct
-    end
-  end
-
   def get(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
@@ -23,6 +16,13 @@ defmodule Belfrage.Cache do
 
       {:ok, :content_not_found} ->
         struct
+    end
+  end
+
+  def fallback_on_error(struct = %Struct{}) do
+    case server_error?(struct) or request_timeout_error?(struct) do
+      true -> get(struct, [:fresh, :stale])
+      false -> struct
     end
   end
 
