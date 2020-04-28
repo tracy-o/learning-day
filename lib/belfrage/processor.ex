@@ -53,7 +53,7 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.CacheDirective.call()
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
-    |> Cache.store_if_successful()
+    |> Cache.put_on_success()
     |> Fallback.fallback_if_required()
   end
 
