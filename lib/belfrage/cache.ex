@@ -2,7 +2,7 @@ defmodule Belfrage.Cache do
   alias Belfrage.Struct
   alias Belfrage.Cache.MultiStrategy
 
-  def put_on_success(struct) do
+  def put(struct) do
     if is_cacheable?(struct), do: MultiStrategy.store(struct)
 
     struct

@@ -109,7 +109,7 @@ defmodule Belfrage.BelfrageCacheTest do
     end
 
     test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
-      Belfrage.Cache.put_on_success(cacheable_struct)
+      Belfrage.Cache.put(cacheable_struct)
 
       assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
     end
@@ -119,7 +119,7 @@ defmodule Belfrage.BelfrageCacheTest do
     } do
       non_cacheable_struct = Struct.add(cacheable_struct, :request, %{method: "POST"})
 
-      Belfrage.Cache.put_on_success(non_cacheable_struct)
+      Belfrage.Cache.put(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -127,7 +127,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "when response is not successful it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
       non_cacheable_struct = Struct.add(cacheable_struct, :response, %{http_status: 500})
 
-      Belfrage.Cache.put_on_success(non_cacheable_struct)
+      Belfrage.Cache.put(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -138,7 +138,7 @@ defmodule Belfrage.BelfrageCacheTest do
       non_cacheable_struct =
         Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "private", max_age: 30}})
 
-      Belfrage.Cache.put_on_success(non_cacheable_struct)
+      Belfrage.Cache.put(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -149,7 +149,7 @@ defmodule Belfrage.BelfrageCacheTest do
       non_cacheable_struct =
         Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: 0}})
 
-      Belfrage.Cache.put_on_success(non_cacheable_struct)
+      Belfrage.Cache.put(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
