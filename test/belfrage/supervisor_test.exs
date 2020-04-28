@@ -42,19 +42,21 @@ defmodule Belfrage.SupervisorTest do
     end
 
     # least-recently used (LRU) reclaim policy configured
-    test "reclaim policy: post-eviction size", %{conf: conf} do
+    test "reclaim policy: correct amount of cache entries evicted", %{conf: conf} do
       {:ok, post_eviction_size} = Cachex.count(@test_cache)
-
-      assert post_eviction_size < conf[:size]
       assert post_eviction_size / conf[:size] == conf[:reclaim]
     end
 
-    test "reclaim policy: post-eviction cache content", %{overflow_size: overflow_size} do
+    test "reclaim policy: evicted cache entries should not exist in cache", %{overflow_size: overflow_size} do
       {:ok, post_eviction_size} = Cachex.count(@test_cache)
 
       for evicted_cache_key <- Enum.take(1..overflow_size, overflow_size - post_eviction_size) do
         assert {:ok, false} = Cachex.exists?(@test_cache, evicted_cache_key)
       end
+    end
+
+    test "reclaim policy: only latest entries exist in cache after a reclaim", %{overflow_size: overflow_size} do
+      {:ok, post_eviction_size} = Cachex.count(@test_cache)
 
       for remaining_cache_key <- Enum.take(1..overflow_size, -post_eviction_size) do
         assert {:ok, true} = Cachex.exists?(@test_cache, remaining_cache_key)

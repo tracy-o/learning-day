@@ -26,7 +26,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.LoopsSupervisor,
       Belfrage.Credentials.Refresh,
       Belfrage.Dials,
-      worker(Cachex, [:cache, [limit: cachex_limit(Application.get_env(:cachex, :limit))]]),
+      worker(Cachex, [:cache, [limit: cachex_limit()]]),
       {EtsCleaner, cleaner_module: Belfrage.Cache.Cleaner, check_interval: 60_000}
     ]
   end
@@ -35,6 +35,8 @@ defmodule Belfrage.Supervisor do
   def init(args) do
     Supervisor.init(children(args), strategy: :one_for_one)
   end
+
+  defp cachex_limit(conf \\ Application.get_env(:cachex, :limit))
 
   defp cachex_limit(size: size, policy: policy, reclaim: reclaim, options: options) do
     {:limit, size, policy, reclaim, options}
