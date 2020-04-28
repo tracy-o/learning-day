@@ -22,7 +22,7 @@ defmodule Belfrage.Pipeline do
 
     Stump.log(:error, %{
       msg: "Transformer returned an early error",
-      struct: Map.from_struct(struct)
+      struct: Struct.loggable(struct)
     })
 
     {:error, struct, msg}
@@ -35,7 +35,7 @@ defmodule Belfrage.Pipeline do
 
     Stump.log(:error, %{
       msg: "Transformer did not return a valid response tuple",
-      struct: Map.from_struct(struct)
+      struct: Struct.loggable(struct)
     })
 
     {:error, struct, "Transformer did not return a valid response tuple"}

@@ -39,7 +39,7 @@ defmodule Belfrage.Services.HTTP do
     Stump.log(:error, %{
       msg: "HTTP Service request error",
       reason: reason,
-      struct: Map.from_struct(struct)
+      struct: Struct.loggable(struct)
     })
   end
 
