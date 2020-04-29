@@ -14,7 +14,6 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.Via
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @file_io Application.get_env(:belfrage, :file_io)
 
   def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
     conn
@@ -22,20 +21,16 @@ defmodule BelfrageWeb.View do
     |> put_response(response.http_status, response.body)
   end
 
-  def not_found(conn), do: error(conn, 404, error_page(404))
-  def internal_server_error(conn), do: error(conn, 500, error_page(500))
-  def unsupported_method(conn), do: error(conn, 405, error_page(405))
-
-  def put_response(conn, status, content) when is_map(content) do
+  defp put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
     |> put_response(status, @json_codec.encode!(content))
   end
 
-  def put_response(conn, status, content) when is_binary(content),
+  defp put_response(conn, status, content) when is_binary(content),
     do: send_resp(conn, status, content)
 
-  def put_response(conn, _, content) do
+  defp put_response(conn, _status, content) do
     ExMetrics.increment("error.view.render.unhandled_content_type")
 
     Stump.log(:error, %{
@@ -46,27 +41,16 @@ defmodule BelfrageWeb.View do
     internal_server_error(conn)
   end
 
-  # TODO: Should we set the content type to be relating to the original request, as per this discussion: https://github.com/bbc/belfrage/pull/41#discussion_r281946726
-  defp error(conn, status, content) do
-    conn
-    |> add_default_headers(%Struct{response: %Struct.Response{http_status: status}})
-    |> put_resp_content_type("text/html")
-    |> put_response(status, content)
+  def not_found(conn), do: early_response(conn, 404)
+  def internal_server_error(conn), do: early_response(conn, 500)
+  def unsupported_method(conn), do: early_response(conn, 405)
+
+  defp early_response(conn, status) do
+    struct = %Struct{response: BelfrageWeb.View.EarlyResponse.new(conn, status)}
+
+    conn = conn |> add_default_headers(struct)
+    render(struct, conn)
   end
-
-  defp error_page(404), do: error_page(Application.get_env(:belfrage, :not_found_page), 404)
-  defp error_page(405), do: error_page(Application.get_env(:belfrage, :not_supported_page), 405)
-  defp error_page(500), do: error_page(Application.get_env(:belfrage, :internal_error_page), 500)
-
-  defp error_page(path, status) do
-    case @file_io.read(path) do
-      {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> default_error_body(status)
-    end
-  end
-
-  defp default_error_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-  defp default_error_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
   defp add_response_headers(conn, struct) do
     struct.response.headers
