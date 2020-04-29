@@ -59,5 +59,11 @@ config :ex_aws,
   http_client: Belfrage.Clients.Lambda,
   json_codec: Eljiffy
 
+config :cachex, :limit,
+  size: 36_000,
+  policy: Cachex.Policy.LRW,
+  reclaim: 0.3,
+  options: []
+
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"
