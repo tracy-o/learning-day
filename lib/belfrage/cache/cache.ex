@@ -2,11 +2,7 @@ defmodule Belfrage.Cache do
   alias Belfrage.Struct
   alias Belfrage.Cache.MultiStrategy
 
-  def put(struct) do
-    if is_cacheable?(struct), do: MultiStrategy.store(struct)
-
-    struct
-  end
+  defdelegate store(struct), to: Belfrage.Cache.Store
 
   def get(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
