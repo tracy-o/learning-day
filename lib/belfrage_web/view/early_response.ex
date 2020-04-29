@@ -53,22 +53,22 @@ defmodule BelfrageWeb.View.EarlyResponse do
   end
 
   defp put_body(response = %Response{headers: %{"content-type" => @html_content_type}}) do
-    Map.put(response, :body, error_body(response.http_status))
+    Map.put(response, :body, html_error_body(response.http_status))
   end
 
-  defp error_body(404), do: error_body(Application.get_env(:belfrage, :not_found_page), 404)
-  defp error_body(405), do: error_body(Application.get_env(:belfrage, :not_supported_page), 405)
-  defp error_body(500), do: error_body(Application.get_env(:belfrage, :internal_error_page), 500)
-  defp error_body(status_code), do: default_error_body(status_code)
+  defp html_error_body(404), do: html_error_body(Application.get_env(:belfrage, :not_found_page), 404)
+  defp html_error_body(405), do: html_error_body(Application.get_env(:belfrage, :not_supported_page), 405)
+  defp html_error_body(500), do: html_error_body(Application.get_env(:belfrage, :internal_error_page), 500)
+  defp html_error_body(status_code), do: default_html_error_body(status_code)
 
-  defp error_body(path, status) do
+  defp html_error_body(path, status) do
     case @file_io.read(path) do
       {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> default_error_body(status)
+      {:error, _} -> default_html_error_body(status)
     end
   end
 
-  defp default_error_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-  defp default_error_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-  defp default_error_body(http_status), do: "<h1>#{http_status}</h1>\n<!-- Belfrage -->"
+  defp default_html_error_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+  defp default_html_error_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
+  defp default_html_error_body(http_status), do: "<h1>#{http_status}</h1>\n<!-- Belfrage -->"
 end
