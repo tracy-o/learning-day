@@ -12,8 +12,8 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
       assert %Belfrage.Struct.Response{
                body: "content for file test/support/resources/not-found.html<!-- Belfrage -->",
                cache_directive: %{
-                 cacheability: "private",
-                 max_age: 0,
+                 cacheability: "public",
+                 max_age: 30,
                  stale_if_error: 0,
                  stale_while_revalidate: 0
                },
@@ -48,8 +48,8 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
       assert %Belfrage.Struct.Response{
                body: "{\"status\":#{status}}",
                cache_directive: %{
-                 cacheability: "private",
-                 max_age: 0,
+                 cacheability: "public",
+                 max_age: 30,
                  stale_if_error: 0,
                  stale_while_revalidate: 0
                },
@@ -66,8 +66,8 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
       assert %Belfrage.Struct.Response{
                body: "#{status}, Belfrage",
                cache_directive: %{
-                 cacheability: "private",
-                 max_age: 0,
+                 cacheability: "public",
+                 max_age: 30,
                  stale_if_error: 0,
                  stale_while_revalidate: 0
                },

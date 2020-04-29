@@ -96,7 +96,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {404,
               [
-                {"cache-control", "private, stale-while-revalidate=0, max-age=0"},
+                {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
