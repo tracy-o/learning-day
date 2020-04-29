@@ -7,7 +7,6 @@ defmodule Belfrage.Processor do
     RequestHash,
     ServiceProvider,
     Cache,
-    Fallback,
     ResponseTransformers
   }
 
@@ -29,7 +28,7 @@ defmodule Belfrage.Processor do
   end
 
   def query_cache_for_early_response(struct = %Struct{}) do
-    Cache.get(struct, [:fresh])
+    Cache.fetch(struct, [:fresh])
   end
 
   def request_pipeline(struct = %Struct{}) do
@@ -54,7 +53,7 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store()
-    |> Cache.fallback_on_error()
+    |> Cache.fetch_fallback()
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do

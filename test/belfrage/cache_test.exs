@@ -40,7 +40,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Belfrage.Struct{response: @cache_seeded_response} = Belfrage.Cache.get(struct, [:fresh])
+      assert %Belfrage.Struct{response: @cache_seeded_response} = Belfrage.Cache.fetch(struct, [:fresh])
     end
 
     test "served early from cache sets origin to :belfrage_cache" do
@@ -53,7 +53,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Struct{private: %Struct.Private{origin: :belfrage_cache}} = Belfrage.Cache.get(struct, [:fresh])
+      assert %Struct{private: %Struct.Private{origin: :belfrage_cache}} = Belfrage.Cache.fetch(struct, [:fresh])
     end
   end
 
@@ -68,7 +68,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Struct{response: %Struct.Response{http_status: nil}} = Belfrage.Cache.get(struct, [:fresh])
+      assert %Struct{response: %Struct.Response{http_status: nil}} = Belfrage.Cache.fetch(struct, [:fresh])
     end
 
     test "fetches cached stale response when requesting fresh or stale" do
@@ -82,7 +82,7 @@ defmodule Belfrage.BelfrageCacheTest do
       }
 
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Belfrage.Cache.get(struct, [:fresh, :stale])
+               Belfrage.Cache.fetch(struct, [:fresh, :stale])
     end
   end
 
@@ -169,16 +169,16 @@ defmodule Belfrage.BelfrageCacheTest do
 
     test "when request status is 408 , add cached response to request hash" do
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Belfrage.Cache.fallback_on_error(struct_with_status_code(408))
+               Belfrage.Cache.fetch_fallback(struct_with_status_code(408))
     end
 
     test "when request status is greater than 499, add cached response to request hash" do
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Belfrage.Cache.fallback_on_error(struct_with_status_code(500))
+               Belfrage.Cache.fetch_fallback(struct_with_status_code(500))
     end
 
     test "when a request status is anything else, return the struct" do
-      assert struct_with_status_code(200) == Belfrage.Cache.fallback_on_error(struct_with_status_code(200))
+      assert struct_with_status_code(200) == Belfrage.Cache.fetch_fallback(struct_with_status_code(200))
     end
   end
 end
