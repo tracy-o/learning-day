@@ -26,11 +26,11 @@ defmodule Routes.Routefile do
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/newsround/beta/article/:id", using: "NewsroundArticlePage", examples: ["/newsround/beta/article/49081103"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
   handle "/sport/beta/article/:id", using: "SportArticlePage", examples: ["/sport/beta/article/rugby-union%2F49590345"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
   handle "/search", using: "Search", examples: ["/search"]
@@ -49,7 +49,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
