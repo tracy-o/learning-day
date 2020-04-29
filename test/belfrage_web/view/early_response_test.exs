@@ -18,7 +18,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8"},
+               headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
                http_status: status
              } == EarlyResponse.new(conn, status)
     end
@@ -36,7 +36,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8"},
+               headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
                http_status: status
              } == EarlyResponse.new(conn, status)
     end
@@ -54,7 +54,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "application/json"},
+               headers: %{"content-type" => "application/json", "b-early" => "1"},
                http_status: status
              } == EarlyResponse.new(conn, status)
     end
@@ -72,7 +72,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/plain"},
+               headers: %{"content-type" => "text/plain", "b-early" => "1"},
                http_status: status
              } == EarlyResponse.new(conn, status)
     end

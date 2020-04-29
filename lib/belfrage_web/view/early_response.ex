@@ -9,7 +9,7 @@ defmodule BelfrageWeb.View.EarlyResponse do
   def new(conn, status) do
     %Response{http_status: status}
     |> put_cache_directive()
-    |> put_resp_content_type(conn)
+    |> put_early_response_headers(conn)
     |> put_body()
   end
 
@@ -21,8 +21,11 @@ defmodule BelfrageWeb.View.EarlyResponse do
     Map.put(response, :cache_directive, %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0})
   end
 
-  defp put_resp_content_type(response, conn) do
-    Response.add_headers(response, %{"content-type" => content_type(conn)})
+  defp put_early_response_headers(response, conn) do
+    Response.add_headers(response, %{
+      "content-type" => content_type(conn),
+      "b-early" => "1"
+    })
   end
 
   defp content_type(conn) do

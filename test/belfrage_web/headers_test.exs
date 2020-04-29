@@ -101,6 +101,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "HTTP/1.1 Belfrage"},
+                {"b-early", "1"},
                 {"content-type", "text/html; charset=utf-8"}
               ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
@@ -120,6 +121,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "HTTP/1.1 Belfrage"},
+                {"b-early", "1"},
                 {"content-type", "text/html; charset=utf-8"}
               ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
