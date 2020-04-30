@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.View.EarlyResponse do
+defmodule BelfrageWeb.View.InternalResponse do
   @file_io Application.get_env(:belfrage, :file_io)
   alias Belfrage.Struct.Response
 

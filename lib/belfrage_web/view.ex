@@ -46,7 +46,7 @@ defmodule BelfrageWeb.View do
   def unsupported_method(conn), do: early_response(conn, 405)
 
   defp early_response(conn, status) do
-    struct = %Struct{response: BelfrageWeb.View.EarlyResponse.new(conn, status)}
+    struct = %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)}
 
     conn = conn |> add_default_headers(struct)
     render(struct, conn)

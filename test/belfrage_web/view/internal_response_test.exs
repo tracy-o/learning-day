@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.View.EarlyResponseTest do
+defmodule BelfrageWeb.View.InternalResponseTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  alias BelfrageWeb.View.EarlyResponse
+  alias BelfrageWeb.View.InternalResponse
 
   describe "content-type" do
     test "when accept is not set" do
@@ -20,7 +20,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
                http_status: status
-             } == EarlyResponse.new(conn, status)
+             } == InternalResponse.new(conn, status)
     end
 
     test "when accept not set, and status code does not have a BBC error page" do
@@ -38,7 +38,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
                http_status: status
-             } == EarlyResponse.new(conn, status)
+             } == InternalResponse.new(conn, status)
     end
 
     test "when accept is application/json" do
@@ -56,7 +56,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                fallback: false,
                headers: %{"content-type" => "application/json", "b-early" => "1"},
                http_status: status
-             } == EarlyResponse.new(conn, status)
+             } == InternalResponse.new(conn, status)
     end
 
     test "when accept is text/plain" do
@@ -74,7 +74,7 @@ defmodule BelfrageWeb.View.EarlyResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/plain", "b-early" => "1"},
                http_status: status
-             } == EarlyResponse.new(conn, status)
+             } == InternalResponse.new(conn, status)
     end
   end
 end
