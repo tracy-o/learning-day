@@ -97,12 +97,12 @@ defmodule BelfrageWeb.HeadersTest do
       assert {404,
               [
                 {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
+                {"b-early", "1"},
+                {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"via", "HTTP/1.1 Belfrage"},
-                {"b-early", "1"},
-                {"content-type", "text/html; charset=utf-8"}
+                {"via", "HTTP/1.1 Belfrage"}
               ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
@@ -117,12 +117,12 @@ defmodule BelfrageWeb.HeadersTest do
       assert {500,
               [
                 {"cache-control", "private, stale-while-revalidate=0, max-age=0"},
+                {"b-early", "1"},
+                {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"via", "HTTP/1.1 Belfrage"},
-                {"b-early", "1"},
-                {"content-type", "text/html; charset=utf-8"}
+                {"via", "HTTP/1.1 Belfrage"}
               ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end

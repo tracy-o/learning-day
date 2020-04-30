@@ -46,10 +46,10 @@ defmodule BelfrageWeb.View do
   def unsupported_method(conn), do: early_response(conn, 405)
 
   defp early_response(conn, status) do
-    struct = %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)}
-
-    conn = conn |> add_default_headers(struct)
-    render(struct, conn)
+    render(
+      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)},
+      conn
+    )
   end
 
   defp add_response_headers(conn, struct) do
@@ -69,9 +69,6 @@ defmodule BelfrageWeb.View do
     end)
     |> add_default_headers(struct)
   end
-
-  # TODO: handle default headers for 404s/500 as they not called with a struct.
-  # They might need to be called with the struct
 
   defp add_default_headers(conn, struct) do
     Enum.reduce(@default_headers, conn, fn headers_module, output_conn ->
