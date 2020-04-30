@@ -25,14 +25,6 @@ defmodule Routes.Routefile do
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
-  handle "/newsround/beta/article/:id", using: "NewsroundArticlePage", examples: ["/newsround/beta/article/49081103"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
-  end
-
-  handle "/sport/beta/article/:id", using: "SportArticlePage", examples: ["/sport/beta/article/rugby-union%2F49590345"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
-  end
-
   handle "/search", using: "Search", examples: ["/search"]
   handle "/chwilio", using: "Search", examples: ["/chwilio"]
   handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
@@ -48,8 +40,8 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144"] do
-    return_404 if: !String.match?(id, ~r/[a-zA-Z0-9\/-]*$/)
+  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865"] do
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
