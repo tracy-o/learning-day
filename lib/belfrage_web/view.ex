@@ -41,11 +41,11 @@ defmodule BelfrageWeb.View do
     internal_server_error(conn)
   end
 
-  def not_found(conn), do: early_response(conn, 404)
-  def internal_server_error(conn), do: early_response(conn, 500)
-  def unsupported_method(conn), do: early_response(conn, 405)
+  def not_found(conn), do: internal_response(conn, 404)
+  def internal_server_error(conn), do: internal_response(conn, 500)
+  def unsupported_method(conn), do: internal_response(conn, 405)
 
-  defp early_response(conn, status) do
+  defp internal_response(conn, status) do
     render(
       %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)},
       conn
