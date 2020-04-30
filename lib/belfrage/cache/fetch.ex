@@ -1,21 +1,18 @@
 defmodule Belfrage.Cache.Fetch do
   alias Belfrage.Struct
 
-  def fetch(struct, accepted_freshness) do
-    case :stale in accepted_freshness do
-      true -> fetch_fallback(struct, accepted_freshness)
-      false -> add_response_to_struct(struct, accepted_freshness)
-    end
-  end
+  def fetch(struct, [:fresh]), do: fetch_response(struct, [:fresh])
+  def fetch(struct, [:fresh, :stale]), do: fetch_fallback(struct, [:fresh, :stale])
+  def fetch(struct, _accepted_freshness), do: struct
 
   defp fetch_fallback(struct, accepted_freshness) do
     case allow_fallback?(struct) do
-      true -> add_response_to_struct(struct, accepted_freshness)
+      true -> fetch_response(struct, accepted_freshness)
       false -> struct
     end
   end
 
-  defp add_response_to_struct(struct, accepted_freshness) do
+  defp fetch_response(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
       {:ok, :fresh, response} ->
