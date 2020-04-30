@@ -2,6 +2,20 @@ defmodule Belfrage.Cache.Fetch do
   alias Belfrage.Struct
 
   def fetch(struct, accepted_freshness) do
+    case :stale in accepted_freshness do
+      true -> fetch_fallback(struct, accepted_freshness)
+      false -> fetch_response(struct, accepted_freshness)
+    end
+  end
+
+  defp fetch_fallback(struct, accepted_freshness) do
+    case allow_fallback?(struct) do
+      true -> fetch_response(struct, accepted_freshness)
+      false -> struct
+    end
+  end
+
+  defp fetch_response(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
       {:ok, freshness, response} ->
@@ -22,4 +36,15 @@ defmodule Belfrage.Cache.Fetch do
     end
   end
 
+  defp allow_fallback?(struct) do
+    server_error?(struct) or request_timeout_error?(struct)
+  end
+
+  defp server_error?(struct) do
+    struct.response.http_status >= 500
+  end
+
+  defp request_timeout_error?(struct) do
+    struct.response.http_status == 408
+  end
 end
