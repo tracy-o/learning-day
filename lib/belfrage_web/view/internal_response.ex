@@ -9,7 +9,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   def new(conn, status) do
     %Response{http_status: status}
     |> put_cache_directive()
-    |> put_early_response_headers(conn)
+    |> put_internal_response_headers(conn)
     |> put_body()
   end
 
@@ -21,7 +21,7 @@ defmodule BelfrageWeb.View.InternalResponse do
     Map.put(response, :cache_directive, %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0})
   end
 
-  defp put_early_response_headers(response, conn) do
+  defp put_internal_response_headers(response, conn) do
     Response.add_headers(response, %{
       "content-type" => content_type(conn),
       "binternal" => "1"
