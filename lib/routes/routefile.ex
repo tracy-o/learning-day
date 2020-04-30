@@ -40,7 +40,7 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144"] do
+  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865"] do
     return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
