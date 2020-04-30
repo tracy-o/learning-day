@@ -3,5 +3,5 @@ defmodule Belfrage.Cache do
 
   defdelegate fetch(struct, accepted_freshness), to: Belfrage.Cache.Fetch
 
-  def fetch_fallback(struct), do: fetch(struct, [:fresh, :stale])
+  def fetch_fallback_on_error(struct), do: fetch(struct, [:fresh, :stale])
 end
