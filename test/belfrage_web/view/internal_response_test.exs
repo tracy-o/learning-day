@@ -18,7 +18,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
+               headers: %{"content-type" => "text/html; charset=utf-8", "binternal" => "1"},
                http_status: status
              } == InternalResponse.new(conn, status)
     end
@@ -36,7 +36,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8", "b-early" => "1"},
+               headers: %{"content-type" => "text/html; charset=utf-8", "binternal" => "1"},
                http_status: status
              } == InternalResponse.new(conn, status)
     end
@@ -54,7 +54,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "application/json", "b-early" => "1"},
+               headers: %{"content-type" => "application/json", "binternal" => "1"},
                http_status: status
              } == InternalResponse.new(conn, status)
     end
@@ -72,7 +72,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_while_revalidate: 0
                },
                fallback: false,
-               headers: %{"content-type" => "text/plain", "b-early" => "1"},
+               headers: %{"content-type" => "text/plain", "binternal" => "1"},
                http_status: status
              } == InternalResponse.new(conn, status)
     end

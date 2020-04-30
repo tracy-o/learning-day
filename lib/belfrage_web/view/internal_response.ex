@@ -24,7 +24,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   defp put_early_response_headers(response, conn) do
     Response.add_headers(response, %{
       "content-type" => content_type(conn),
-      "b-early" => "1"
+      "binternal" => "1"
     })
   end
 
