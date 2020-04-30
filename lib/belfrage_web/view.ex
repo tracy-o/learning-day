@@ -21,6 +21,10 @@ defmodule BelfrageWeb.View do
     |> put_response(response.http_status, response.body)
   end
 
+  def not_found(conn), do: internal_response(conn, 404)
+  def internal_server_error(conn), do: internal_response(conn, 500)
+  def unsupported_method(conn), do: internal_response(conn, 405)
+
   defp put_response(conn, status, content) when is_map(content) do
     conn
     |> put_resp_content_type("application/json")
@@ -40,10 +44,6 @@ defmodule BelfrageWeb.View do
 
     internal_server_error(conn)
   end
-
-  def not_found(conn), do: internal_response(conn, 404)
-  def internal_server_error(conn), do: internal_response(conn, 500)
-  def unsupported_method(conn), do: internal_response(conn, 405)
 
   defp internal_response(conn, status) do
     render(
