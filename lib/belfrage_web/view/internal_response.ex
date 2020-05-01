@@ -18,7 +18,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response) do
-    Map.put(response, :cache_directive, %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0})
+    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 5, stale_if_error: 0, stale_while_revalidate: 0})
   end
 
   defp put_internal_response_headers(response, conn) do

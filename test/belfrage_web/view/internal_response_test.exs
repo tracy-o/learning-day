@@ -30,8 +30,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
       assert %Belfrage.Struct.Response{
                body: "<h1>#{status}</h1>\n<!-- Belfrage -->",
                cache_directive: %{
-                 cacheability: "private",
-                 max_age: 0,
+                 cacheability: "public",
+                 max_age: 5,
                  stale_if_error: 0,
                  stale_while_revalidate: 0
                },
