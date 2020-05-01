@@ -45,35 +45,39 @@ defmodule Belfrage.CacheControlParserTest do
   end
 
   describe "&parse_cacheability/1" do
-    test "formats cacheability when cache control header is private" do
+    test "when directive is public with 0 max age" do
+      assert "public" == CacheControlParser.parse_cacheability(0, ["public", "max-age=0"])
+    end
+
+    test "when directive is private" do
       assert "private" == CacheControlParser.parse_cacheability(30, ["private", "max-age=30"])
     end
 
-    test "formats cacheability when max-age included in cache control header" do
+    test "when max-age & directive forms the cache control header" do
       assert "public" == CacheControlParser.parse_cacheability(31_536_000, ["public", "max-age=31536000"])
     end
 
-    test "formats cacheability when only max-age included is in cache control header" do
+    test "when only max-age included is in cache control header" do
       assert "public" == CacheControlParser.parse_cacheability(31_536_000, ["max-age=31536000"])
     end
   end
 
   describe "&parse_max_age/1" do
-    test "format the cache control header, when directive is private" do
+    test "when directive is private" do
       assert 0 == CacheControlParser.parse_max_age(["private"])
     end
 
-    test "format the cache control header, when directive is public" do
+    test "when directive is public" do
       assert 0 == CacheControlParser.parse_max_age(["public"])
     end
 
-    test "returns max age when no quotes are used" do
+    test "when no quotes are used" do
       assert 31_536_000 == CacheControlParser.parse_max_age(["public", "max-age=31536000"])
     end
   end
 
   describe "&parse_stale_if_error/1" do
-    test "get state if error value" do
+    test "returns stale if error value" do
       assert 500_000 == CacheControlParser.parse_stale_if_error(["public", "max-age=31536000", "stale-if-error=500000"])
     end
   end
