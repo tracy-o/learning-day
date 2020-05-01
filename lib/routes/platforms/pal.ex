@@ -15,6 +15,6 @@ defmodule Routes.Platforms.Pal do
   end
 
   defp pipeline(_production_env) do
-    ["DevelopmentRequests"] ++ pipeline("live")
+    pipeline("live") ++ ["DevelopmentRequests"]
   end
 end

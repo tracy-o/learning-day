@@ -15,6 +15,5 @@ defmodule Routes.Platforms.Mozart do
   defp query_params_allowlist(_production_env), do: "*"
 
   defp pipeline("live"), do: ["CircuitBreaker"]
-
-  defp pipeline(_production_env), do: ["DevelopmentRequests"] ++ pipeline("live")
+  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

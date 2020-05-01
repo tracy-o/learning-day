@@ -19,6 +19,6 @@ defmodule Routes.Platforms.Webcore do
   end
 
   defp pipeline(_production_env) do
-    ["DevelopmentRequests"] ++ pipeline("live")
+    pipeline("live") ++ ["DevelopmentRequests"]
   end
 end
