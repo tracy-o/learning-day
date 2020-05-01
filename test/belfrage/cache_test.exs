@@ -40,8 +40,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Belfrage.Struct{response: @cache_seeded_response} =
-               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
+      assert %Belfrage.Struct{response: @cache_seeded_response} = Belfrage.Cache.fetch(struct, [:fresh])
     end
 
     test "served early from cache sets origin to :belfrage_cache" do
@@ -54,8 +53,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Struct{private: %Struct.Private{origin: :belfrage_cache}} =
-               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
+      assert %Struct{private: %Struct.Private{origin: :belfrage_cache}} = Belfrage.Cache.fetch(struct, [:fresh])
     end
   end
 
@@ -70,8 +68,7 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Struct{response: %Struct.Response{http_status: nil}} =
-               Belfrage.Cache.add_response_from_cache(struct, [:fresh])
+      assert %Struct{response: %Struct.Response{http_status: nil}} = Belfrage.Cache.fetch(struct, [:fresh])
     end
 
     test "fetches cached stale response when requesting fresh or stale" do
@@ -85,7 +82,7 @@ defmodule Belfrage.BelfrageCacheTest do
       }
 
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
-               Belfrage.Cache.add_response_from_cache(struct, [:fresh, :stale])
+               Belfrage.Cache.fetch(struct, [:fresh, :stale])
     end
   end
 
@@ -109,7 +106,7 @@ defmodule Belfrage.BelfrageCacheTest do
     end
 
     test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
-      Belfrage.Cache.store_if_successful(cacheable_struct)
+      Belfrage.Cache.store(cacheable_struct)
 
       assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
     end
@@ -119,7 +116,7 @@ defmodule Belfrage.BelfrageCacheTest do
     } do
       non_cacheable_struct = Struct.add(cacheable_struct, :request, %{method: "POST"})
 
-      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+      Belfrage.Cache.store(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -127,7 +124,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "when response is not successful it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
       non_cacheable_struct = Struct.add(cacheable_struct, :response, %{http_status: 500})
 
-      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+      Belfrage.Cache.store(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -138,7 +135,7 @@ defmodule Belfrage.BelfrageCacheTest do
       non_cacheable_struct =
         Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "private", max_age: 30}})
 
-      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+      Belfrage.Cache.store(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
@@ -149,9 +146,39 @@ defmodule Belfrage.BelfrageCacheTest do
       non_cacheable_struct =
         Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: 0}})
 
-      Belfrage.Cache.store_if_successful(non_cacheable_struct)
+      Belfrage.Cache.store(non_cacheable_struct)
 
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+    end
+  end
+
+  describe "fetching from cache in fallback mode" do
+    def struct_with_status_code(status_code) do
+      %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: "stale-cache-item"
+        },
+        response: %Struct.Response{
+          http_status: status_code
+        }
+      }
+    end
+
+    test "when request status is 408 , add cached response to request hash" do
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(408))
+    end
+
+    test "when request status is greater than 499, add cached response to request hash" do
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(500))
+    end
+
+    test "when a request status is anything else, return the struct" do
+      assert struct_with_status_code(200) == Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(200))
     end
   end
 end
