@@ -26,16 +26,21 @@ defmodule Belfrage.CacheControlParser do
 
   def parse(cache_control_header) do
     cache_control_header = standardise_cache_control_header(cache_control_header)
+    max_age = parse_max_age(cache_control_header)
 
     %{
-      cacheability: parse_cacheability(cache_control_header),
-      max_age: parse_max_age(cache_control_header),
+      cacheability: parse_cacheability(max_age, cache_control_header),
+      max_age: max_age,
       stale_if_error: parse_stale_if_error(cache_control_header),
       stale_while_revalidate: parse_stale_while_revalidate(cache_control_header)
     }
   end
 
-  def parse_cacheability(cache_control_header) do
+  def parse_cacheability(max_age, cache_control_header) when max_age > 0 do
+    if Enum.member?(cache_control_header, "private"), do: "private", else: "public"
+  end
+
+  def parse_cacheability(_max_age, cache_control_header) do
     if Enum.member?(cache_control_header, "public"), do: "public", else: "private"
   end
 
