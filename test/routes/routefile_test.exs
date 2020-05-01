@@ -14,16 +14,30 @@ defmodule Routes.RoutefileTest do
       @loop_id loop_id
       @route_matcher route_matcher
 
-      test "There is a valid routespec for #{loop_id}" do
-        specs = Module.concat([Routes, Specs, @loop_id]).specs()
+      for env <- ["test", "live"] do
+        @env env
+        test "There is a valid routespec for #{@loop_id} (#{@env})" do
+          specs = Belfrage.RouteSpec.specs_for(@loop_id, @env)
 
-        assert Map.has_key?(specs, :platform)
+          assert Map.has_key?(specs, :platform)
+          assert Map.has_key?(specs, :pipeline)
+          assert Map.has_key?(specs, :resp_pipeline)
+          assert Map.has_key?(specs, :circuit_breaker_error_threshold)
+          assert Map.has_key?(specs, :origin)
 
-        specs = Map.merge(Module.concat([Routes, Platforms, specs.platform]).specs("live"), specs)
-        assert Map.has_key?(specs, :pipeline)
-        assert Map.has_key?(specs, :resp_pipeline)
-        assert Map.has_key?(specs, :circuit_breaker_error_threshold)
-        assert Map.has_key?(specs, :origin)
+          for transformer <- specs.pipeline do
+            assert Code.ensure_compiled?(Module.concat([Belfrage, Transformers, transformer])),
+                   "`#{transformer}` is not a valid request transformer."
+          end
+
+          if @env == "live" do
+            assert "DevelopmentRequests" not in specs.pipeline,
+                   "Sorry, the `DevelopmentRequests` transformer cannot be used on live."
+          end
+        end
+      end
+
+      test "Route matcher #{@route_matcher} is prefixed with a `/`" do
         assert String.starts_with?(@route_matcher, "/"), "Route matcher #{@route_matcher} must be prefixed with a `/`."
       end
 
