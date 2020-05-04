@@ -127,7 +127,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location"]
     end
 
-    test "redirect is publicly cachable" do
+    test "redirect is publicly cachable, with max-age set" do
       expect_belfrage_not_called()
 
       conn =
@@ -139,7 +139,7 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "calling redirect with host" do
-    test "redirect is publicly cachable" do
+    test "redirect is publicly cachable, with max-age set" do
       expect_belfrage_not_called()
 
       conn =

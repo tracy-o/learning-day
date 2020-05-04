@@ -6,7 +6,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   @json_content_type "application/json"
   @plain_content_type "text/plain"
 
-  @redirect_http_status [301, 302]
+  @redirect_http_status Application.get_env(:belfrage, :redirect_statuses)
 
   def new(conn, status) do
     %Response{http_status: status}

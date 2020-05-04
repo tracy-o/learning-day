@@ -89,8 +89,10 @@ defmodule BelfrageWeb.RouteMaster do
   # plus the port etc.
   defmacro redirect(from, to: location, status: status) do
     quote do
-      if unquote(status) not in [301, 302] do
-        raise ArgumentError, message: "only 301 and 302 are accepted for redirects"
+      redirect_statuses = Application.get_env(:belfrage, :redirect_statuses)
+
+      if unquote(status) not in redirect_statuses do
+        raise ArgumentError, message: "only #{Enum.join(redirect_statuses, ", ")} are accepted for redirects"
       end
 
       uri_from = URI.parse(unquote(from))
