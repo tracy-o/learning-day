@@ -40,14 +40,14 @@ defmodule Belfrage.CacheControlParser do
     cond do
       "public" in cache_control_header -> "public"
       "private" in cache_control_header -> "private"
-      max_age > 0 -> "public"
+      not is_nil(max_age) -> "public"
       true -> "private"
     end
   end
 
   def parse_max_age(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :max_age, default: 0)
+    |> FindValue.find(key: :max_age, default: nil)
   end
 
   def parse_stale_while_revalidate(cache_control_header) do

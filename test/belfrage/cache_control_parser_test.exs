@@ -4,12 +4,12 @@ defmodule Belfrage.CacheControlParserTest do
 
   describe "&parse/1" do
     test "no cache control header" do
-      assert %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0} ==
+      assert %{cacheability: "private", max_age: nil, stale_if_error: 0, stale_while_revalidate: 0} ==
                CacheControlParser.parse("")
     end
 
     test "parse basic private cache control header" do
-      assert %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0} ==
+      assert %{cacheability: "private", max_age: nil, stale_if_error: 0, stale_while_revalidate: 0} ==
                CacheControlParser.parse("private")
     end
 
@@ -24,7 +24,7 @@ defmodule Belfrage.CacheControlParserTest do
     end
 
     test "parse cache control header with stale-if-error" do
-      assert %{cacheability: "public", max_age: 0, stale_if_error: 500_000, stale_while_revalidate: 0} ==
+      assert %{cacheability: "public", max_age: nil, stale_if_error: 500_000, stale_while_revalidate: 0} ==
                CacheControlParser.parse("public, stale-if-error=500000")
     end
 
@@ -64,11 +64,11 @@ defmodule Belfrage.CacheControlParserTest do
 
   describe "&parse_max_age/1" do
     test "when directive is private" do
-      assert 0 == CacheControlParser.parse_max_age(["private"])
+      assert nil == CacheControlParser.parse_max_age(["private"])
     end
 
     test "when directive is public" do
-      assert 0 == CacheControlParser.parse_max_age(["public"])
+      assert nil == CacheControlParser.parse_max_age(["public"])
     end
 
     test "when no quotes are used" do
