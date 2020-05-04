@@ -21,6 +21,7 @@ config :belfrage,
   routefile: Routes.RoutefileMock,
   xray: Belfrage.XrayMock,
   ccp_client: Belfrage.Clients.CCPMock,
+  ccp_s3_bucket: "belfrage-distributed-cache-test",
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html"

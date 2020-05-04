@@ -35,7 +35,7 @@ defmodule Belfrage.Clients.CCPTest do
         method: :get,
         payload: "",
         timeout: 6000,
-        url: "https://belfrage-t2-cache.s3-eu-west-1.amazonaws.com/request-hash-123"
+        url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
       }
 
       Belfrage.Clients.HTTPMock
