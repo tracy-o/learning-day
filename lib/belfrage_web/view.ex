@@ -24,6 +24,11 @@ defmodule BelfrageWeb.View do
   def not_found(conn), do: internal_response(conn, 404)
   def internal_server_error(conn), do: internal_response(conn, 500)
   def unsupported_method(conn), do: internal_response(conn, 405)
+  def redirect(conn, status, new_location) do
+    conn
+    |> put_resp_header("location", new_location)
+    |> internal_response(status)
+  end
 
   defp put_response(conn, status, content) when is_map(content) do
     conn

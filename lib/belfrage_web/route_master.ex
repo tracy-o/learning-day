@@ -103,11 +103,7 @@ defmodule BelfrageWeb.RouteMaster do
           |> String.replace("/*", to_string(var!(conn).request_path))
           |> String.trim_trailing("/")
 
-        uri_to = URI.parse(new_location)
-
-        var!(conn)
-        |> resp(unquote(status), "")
-        |> put_resp_header("location", URI.to_string(uri_to))
+        View.redirect(var!(conn), unquote(status), new_location)
       end
     end
   end

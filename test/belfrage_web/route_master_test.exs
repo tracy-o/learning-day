@@ -126,9 +126,29 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["/new-location"]
     end
+
+    test "redirect is publicly cachable" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/permanent-redirect")
+        |> RoutefileMock.call([])
+
+      assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
+    end
   end
 
   describe "calling redirect with host" do
+    test "redirect is publicly cachable" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "http://www.bbcarabic.com")
+        |> RoutefileMock.call([])
+
+      assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
+    end
+
     test "when the redirect matches without a subdomain will return the location and status" do
       expect_belfrage_not_called()
 

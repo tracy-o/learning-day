@@ -6,6 +6,8 @@ defmodule BelfrageWeb.View.InternalResponse do
   @json_content_type "application/json"
   @plain_content_type "text/plain"
 
+  @redirect_http_status [301, 302]
+
   def new(conn, status) do
     %Response{http_status: status}
     |> put_cache_directive()
@@ -15,6 +17,10 @@ defmodule BelfrageWeb.View.InternalResponse do
 
   defp put_cache_directive(response = %Response{http_status: 404}) do
     Map.put(response, :cache_directive, %{cacheability: "public", max_age: 30, stale_if_error: 0, stale_while_revalidate: 0})
+  end
+
+  defp put_cache_directive(response = %Response{http_status: http_status}) when http_status in @redirect_http_status do
+    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 60, stale_if_error: nil, stale_while_revalidate: nil})
   end
 
   defp put_cache_directive(response) do
@@ -55,6 +61,8 @@ defmodule BelfrageWeb.View.InternalResponse do
     Map.put(response, :body, html_error_body(response.http_status))
   end
 
+  defp html_error_body(301), do: ""
+  defp html_error_body(302), do: ""
   defp html_error_body(404), do: html_error_body(Application.get_env(:belfrage, :not_found_page), 404)
   defp html_error_body(405), do: html_error_body(Application.get_env(:belfrage, :not_supported_page), 405)
   defp html_error_body(500), do: html_error_body(Application.get_env(:belfrage, :internal_error_page), 500)
