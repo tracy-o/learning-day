@@ -26,32 +26,38 @@ defmodule Belfrage.CacheControlParser do
 
   def parse(cache_control_header) do
     cache_control_header = standardise_cache_control_header(cache_control_header)
+    max_age = parse_max_age(cache_control_header)
 
     %{
-      cacheability: parse_cacheability(cache_control_header),
-      max_age: parse_max_age(cache_control_header),
+      cacheability: parse_cacheability(max_age, cache_control_header),
+      max_age: max_age,
       stale_if_error: parse_stale_if_error(cache_control_header),
       stale_while_revalidate: parse_stale_while_revalidate(cache_control_header)
     }
   end
 
-  def parse_cacheability(cache_control_header) do
-    if Enum.member?(cache_control_header, "public"), do: "public", else: "private"
+  def parse_cacheability(max_age, cache_control_header) do
+    cond do
+      "public" in cache_control_header -> "public"
+      "private" in cache_control_header -> "private"
+      not is_nil(max_age) -> "public"
+      true -> "private"
+    end
   end
 
   def parse_max_age(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :max_age, default: 0)
+    |> FindValue.find(key: :max_age, default: nil)
   end
 
   def parse_stale_while_revalidate(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :stale_while_revalidate, default: 0)
+    |> FindValue.find(key: :stale_while_revalidate, default: nil)
   end
 
   def parse_stale_if_error(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :stale_if_error, default: 0)
+    |> FindValue.find(key: :stale_if_error, default: nil)
   end
 
   defp standardise_cache_control_header(cache_control_header) do

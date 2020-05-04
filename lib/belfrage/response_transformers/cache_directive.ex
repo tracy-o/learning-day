@@ -22,6 +22,8 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   @impl true
   def call(struct), do: struct
 
+  defp dial_multiply(nil, _ttl_multiplier), do: nil
+
   defp dial_multiply(max_age, ttl_multiplier) do
     max_age
     |> Kernel.*(ttl_multiplier)

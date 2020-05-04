@@ -111,6 +111,15 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
     end
 
+    test "when max-age is nil, it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
+      non_cacheable_struct =
+        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: nil}})
+
+      Belfrage.Cache.store(non_cacheable_struct)
+
+      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+    end
+
     test "when response is for a POST request it should not be saved to the cache", %{
       cacheable_struct: cacheable_struct
     } do
@@ -140,15 +149,16 @@ defmodule Belfrage.BelfrageCacheTest do
       assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
     end
 
-    test "when response is public, but max age is 0, it should not be saved to the cache", %{
+    test "when response is public, but max age is 0, it should be saved to the cache", %{
       cacheable_struct: cacheable_struct
     } do
-      non_cacheable_struct =
+      cacheable_struct =
         Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: 0}})
 
-      Belfrage.Cache.store(non_cacheable_struct)
+      Belfrage.Cache.store(cacheable_struct)
+      :timer.sleep(1)
 
-      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(non_cacheable_struct)
+      assert {:ok, :stale, _struct} = Belfrage.Cache.Local.fetch(cacheable_struct)
     end
   end
 

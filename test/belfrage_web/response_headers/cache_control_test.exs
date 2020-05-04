@@ -34,4 +34,18 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
     assert ["public, stale-while-revalidate=10, max-age=30"] ==
              get_resp_header(output_conn, "cache-control")
   end
+
+  test "when max-age is nil" do
+    input_conn = conn(:get, "/_web_core")
+
+    output_conn =
+      CacheControl.add_header(input_conn, %Struct{
+        response: %Struct.Response{
+          cache_directive: %{cacheability: "public", max_age: nil, stale_while_revalidate: 10}
+        }
+      })
+
+    assert ["public, stale-while-revalidate=10"] ==
+             get_resp_header(output_conn, "cache-control")
+  end
 end
