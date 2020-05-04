@@ -13,7 +13,7 @@ defmodule Belfrage.Cache.Store do
 
   defp is_public_cacheable_response?(struct) do
     case struct.response.cache_directive do
-      %{cacheability: "public", max_age: max_age} when max_age > 0 -> true
+      %{cacheability: "public", max_age: max_age} when is_integer(max_age) -> true
       _ -> false
     end
   end
