@@ -42,7 +42,7 @@ defmodule EndToEnd.LambdaTest do
 
     assert {200,
             [
-              {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
+              {"cache-control", "public, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
@@ -83,7 +83,7 @@ defmodule EndToEnd.LambdaTest do
 
     assert {500,
             [
-              {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
+              {"cache-control", "public, max-age=30"},
               {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},

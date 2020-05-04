@@ -18,6 +18,9 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControl do
     %{cacheability: cacheability, max_age: max_age, stale_while_revalidate: stale_while_revalidate} =
       struct.response.cache_directive
 
-    "#{cacheability}, stale-while-revalidate=#{stale_while_revalidate}, max-age=#{max_age}"
+    cacheability <> key("stale-while-revalidate", stale_while_revalidate) <> key("max-age", max_age)
   end
+
+  defp key(_key_name, nil), do: ""
+  defp key(key_name, value), do: ", #{key_name}=#{value}"
 end
