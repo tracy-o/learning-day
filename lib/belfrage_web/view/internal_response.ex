@@ -23,8 +23,7 @@ defmodule BelfrageWeb.View.InternalResponse do
 
   defp put_internal_response_headers(response, conn) do
     Response.add_headers(response, %{
-      "content-type" => content_type(conn),
-      "binternal" => "1"
+      "content-type" => content_type(conn)
     })
   end
 
