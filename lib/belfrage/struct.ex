@@ -34,6 +34,10 @@ defmodule Belfrage.Struct.Response do
             cache_directive: %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0}
 
   @type t :: %__MODULE__{}
+
+  def add_headers(response = %__MODULE__{}, headers) do
+    Map.put(response, :headers, Map.merge(Map.get(response, :headers), headers))
+  end
 end
 
 defmodule Belfrage.Struct.Private do

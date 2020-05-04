@@ -11,7 +11,7 @@ defmodule Belfrage.Clients.HTTP.Headers do
 
       iex> as_map([{"coNteNt-tyPE", "apPlicaTion/JSON"}])
       %{"content-type" => "apPlicaTion/JSON"}
-      
+
       iex> as_map(%{"coNteNt-tyPE" => "apPlicaTion/JSON"})
       %{"content-type" => "apPlicaTion/JSON"}
   """
