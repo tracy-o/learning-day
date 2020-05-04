@@ -52,12 +52,12 @@ defmodule Belfrage.CacheControlParser do
 
   def parse_stale_while_revalidate(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :stale_while_revalidate, default: 0)
+    |> FindValue.find(key: :stale_while_revalidate, default: nil)
   end
 
   def parse_stale_if_error(cache_control_header) do
     cache_control_header
-    |> FindValue.find(key: :stale_if_error, default: 0)
+    |> FindValue.find(key: :stale_if_error, default: nil)
   end
 
   defp standardise_cache_control_header(cache_control_header) do
