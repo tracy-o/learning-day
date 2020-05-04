@@ -57,7 +57,7 @@ defmodule Belfrage.CacheControlParserTest do
       assert "public" == CacheControlParser.parse_cacheability(31_536_000, ["public", "max-age=31536000"])
     end
 
-    test "when only max-age included is in cache control header" do
+    test "when only max-age is set in the cache control header" do
       assert "public" == CacheControlParser.parse_cacheability(31_536_000, ["max-age=31536000"])
     end
   end
