@@ -13,6 +13,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: nil, varnish: nil},
+                 language: %{varnish: nil},
+                 language_chinese: %{varnish: nil},
+                 language_serbian: %{varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}
@@ -25,8 +28,11 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-cdn", "1"},
         {"x-bbc-edge-country", "**"},
         {"x-bbc-edge-isuk", "yes"},
-        {"x-ip_is_uk_combined", "yes"},
         {"x-country", "gb"},
+        {"x-ip_is_uk_combined", "yes"},
+        {"x-cookie-ckps_language", "en"},
+        {"x-cookie-ckps_chinese", "trad"},
+        {"x-cookie-ckps_serbian", "lat"},
         {"replayed-traffic", "true"},
         {"varnish", ""}
       ]
@@ -38,6 +44,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: "yes", varnish: "yes"},
+                 language: %{varnish: "en"},
+                 language_chinese: %{varnish: "trad"},
+                 language_serbian: %{varnish: "lat"},
                  replayed_traffic: %{replayed_traffic: "true"},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}
@@ -49,8 +58,11 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-cache", ""},
         {"x-bbc-edge-cdn", ""},
         {"x-bbc-edge-country", ""},
-        {"x-bbc-edge-isuk", ""},
         {"x-country", ""},
+        {"x-bbc-edge-isuk", ""},
+        {"x-cookie-ckps_language", ""},
+        {"x-cookie-ckps_chinese", ""},
+        {"x-cookie-ckps_serbian", ""},
         {"replayed-traffic", ""},
         {"varnish", ""}
       ]
@@ -62,6 +74,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: nil, varnish: nil},
+                 language: %{varnish: nil},
+                 language_chinese: %{varnish: nil},
+                 language_serbian: %{varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
                  varnish: %{varnish: nil}

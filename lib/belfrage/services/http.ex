@@ -60,6 +60,7 @@ defmodule Belfrage.Services.HTTP do
      }), struct}
   end
 
+  # TODO: Move this to a Mozart/PAL bespoke service
   defp build_headers(request) do
     %{
       "accept-encoding" => "gzip",
