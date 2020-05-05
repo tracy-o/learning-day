@@ -4,42 +4,82 @@ defmodule Belfrage.CacheControl.ParserTest do
 
   describe "&parse/1" do
     test "no cache control header" do
-      assert %{cacheability: "private", max_age: nil, stale_if_error: nil, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "private",
+               max_age: nil,
+               stale_if_error: nil,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("")
     end
 
     test "parse basic private cache control header" do
-      assert %{cacheability: "private", max_age: nil, stale_if_error: nil, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "private",
+               max_age: nil,
+               stale_if_error: nil,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("private")
     end
 
     test "parse cache control header with max-age" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: nil, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: 31_536_000,
+               stale_if_error: nil,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("public, max-age=31536000")
     end
 
     test "only max-age" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: nil, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: 31_536_000,
+               stale_if_error: nil,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("max-age=31536000")
     end
 
     test "parse cache control header with stale-if-error" do
-      assert %{cacheability: "public", max_age: nil, stale_if_error: 500_000, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: nil,
+               stale_if_error: 500_000,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("public, stale-if-error=500000")
     end
 
     test "parse cache control header with max-age and stale-if-error" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: nil} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: 31_536_000,
+               stale_if_error: 500_000,
+               stale_while_revalidate: nil
+             } ==
                CacheControl.Parser.parse("public, max-age='31536000', stale-if-error=500000")
     end
 
     test "parse cache control header with max-age, stale-if-error and stale-while-revalidate" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 10} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: 31_536_000,
+               stale_if_error: 500_000,
+               stale_while_revalidate: 10
+             } ==
                CacheControl.Parser.parse("public, max-age='31536000', stale-if-error=500000, stale-while-revalidate=10")
     end
 
     test "is case in-sensitive" do
-      assert %{cacheability: "public", max_age: 31_536_000, stale_if_error: 500_000, stale_while_revalidate: 10} ==
+      assert %Belfrage.CacheControl{
+               cacheability: "public",
+               max_age: 31_536_000,
+               stale_if_error: 500_000,
+               stale_while_revalidate: 10
+             } ==
                CacheControl.Parser.parse("pubLic, mAx-aGe='31536000', stAle-if-errOr=500000, stale-whiLe-revaliDate=10")
     end
   end
@@ -78,7 +118,8 @@ defmodule Belfrage.CacheControl.ParserTest do
 
   describe "&parse_stale_if_error/1" do
     test "returns stale if error value" do
-      assert 500_000 == CacheControl.Parser.parse_stale_if_error(["public", "max-age=31536000", "stale-if-error=500000"])
+      assert 500_000 ==
+               CacheControl.Parser.parse_stale_if_error(["public", "max-age=31536000", "stale-if-error=500000"])
     end
   end
 end

@@ -34,10 +34,10 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   defp to_integer(max_age), do: max_age
 
   defp cache_directive(cache_directive, ttl_multiplier) when ttl_multiplier == 0 do
-    %{cache_directive | cacheability: "private", max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+    %Belfrage.CacheControl{cache_directive | cacheability: "private", max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
   end
 
   defp cache_directive(cache_directive, ttl_multiplier) do
-    %{cache_directive | max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+    %Belfrage.CacheControl{cache_directive | max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
   end
 end

@@ -5,7 +5,7 @@ defmodule Belfrage.CacheControl.Parser do
     cache_control_header = standardise_cache_control_header(cache_control_header)
     max_age = parse_max_age(cache_control_header)
 
-    %{
+    %Belfrage.CacheControl{
       cacheability: parse_cacheability(max_age, cache_control_header),
       max_age: max_age,
       stale_if_error: parse_stale_if_error(cache_control_header),

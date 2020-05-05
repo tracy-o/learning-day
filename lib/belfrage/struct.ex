@@ -31,7 +31,7 @@ defmodule Belfrage.Struct.Response do
             http_status: nil,
             headers: %{},
             body: nil,
-            cache_directive: %{cacheability: "private", max_age: 0, stale_if_error: 0, stale_while_revalidate: 0}
+            cache_directive: %Belfrage.CacheControl{cacheability: "private"}
 
   @type t :: %__MODULE__{}
 

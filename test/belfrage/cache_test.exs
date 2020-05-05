@@ -8,7 +8,7 @@ defmodule Belfrage.BelfrageCacheTest do
     body: :zlib.gzip(~s({"hi": "bonjour"})),
     headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
     http_status: 200,
-    cache_directive: %{cacheability: "public", max_age: 30}
+    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
   }
 
   setup do
@@ -99,7 +99,7 @@ defmodule Belfrage.BelfrageCacheTest do
           },
           response: %Struct.Response{
             http_status: 200,
-            cache_directive: %{cacheability: "public", max_age: 30}
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
           }
         }
       }
@@ -113,7 +113,7 @@ defmodule Belfrage.BelfrageCacheTest do
 
     test "when max-age is nil, it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do
       non_cacheable_struct =
-        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: nil}})
+        Struct.add(cacheable_struct, :response, %{cache_directive: %Belfrage.CacheControl{cacheability: "public"}})
 
       Belfrage.Cache.store(non_cacheable_struct)
 
@@ -142,7 +142,9 @@ defmodule Belfrage.BelfrageCacheTest do
       cacheable_struct: cacheable_struct
     } do
       non_cacheable_struct =
-        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "private", max_age: 30}})
+        Struct.add(cacheable_struct, :response, %{
+          cache_directive: %Belfrage.CacheControl{cacheability: "private", max_age: 30}
+        })
 
       Belfrage.Cache.store(non_cacheable_struct)
 
@@ -153,7 +155,9 @@ defmodule Belfrage.BelfrageCacheTest do
       cacheable_struct: cacheable_struct
     } do
       cacheable_struct =
-        Struct.add(cacheable_struct, :response, %{cache_directive: %{cacheability: "public", max_age: 0}})
+        Struct.add(cacheable_struct, :response, %{
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 0}
+        })
 
       Belfrage.Cache.store(cacheable_struct)
       :timer.sleep(1)

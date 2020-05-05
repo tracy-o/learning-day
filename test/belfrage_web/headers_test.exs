@@ -14,7 +14,7 @@ defmodule BelfrageWeb.HeadersTest do
           body: body,
           headers: headers,
           http_status: 200,
-          cache_directive: %{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
+          cache_directive: %Belfrage.CacheControl{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
         }
       }
 

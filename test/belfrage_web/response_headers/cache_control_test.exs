@@ -13,7 +13,7 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
         response: %Struct.Response{
-          cache_directive: %{cacheability: "private", max_age: 0, stale_while_revalidate: 0}
+          cache_directive: %Belfrage.CacheControl{cacheability: "private", max_age: 0, stale_while_revalidate: 0}
         }
       })
 
@@ -27,7 +27,7 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
         response: %Struct.Response{
-          cache_directive: %{cacheability: "public", max_age: 30, stale_while_revalidate: 10}
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30, stale_while_revalidate: 10}
         }
       })
 
@@ -41,7 +41,7 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
     output_conn =
       CacheControl.add_header(input_conn, %Struct{
         response: %Struct.Response{
-          cache_directive: %{cacheability: "public", max_age: nil, stale_while_revalidate: 10}
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: nil, stale_while_revalidate: 10}
         }
       })
 
