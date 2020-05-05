@@ -42,6 +42,11 @@ defmodule Belfrage.Xray do
     |> AwsExRay.Segment.set_http_response(%HTTPResponse{
       status: status
     })
+    |> AwsExRay.Segment.set_error(%AwsExRay.Record.Error{
+      error: status in [400..499],
+      fault: status >= 500,
+      throttle: status == 429
+    })
   end
 
   def subsegment_with_struct_annotations(subsegment_name, struct = %Belfrage.Struct{}, func) do
