@@ -11,11 +11,9 @@ defmodule BelfrageWeb.View.InternalResponseTest do
 
       assert %Belfrage.Struct.Response{
                body: "content for file test/support/resources/not-found.html<!-- Belfrage -->",
-               cache_directive: %{
+               cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 max_age: 30
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -29,11 +27,9 @@ defmodule BelfrageWeb.View.InternalResponseTest do
 
       assert %Belfrage.Struct.Response{
                body: "<h1>#{status}</h1>\n<!-- Belfrage -->",
-               cache_directive: %{
+               cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 5,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 max_age: 5
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -47,11 +43,9 @@ defmodule BelfrageWeb.View.InternalResponseTest do
 
       assert %Belfrage.Struct.Response{
                body: "{\"status\":#{status}}",
-               cache_directive: %{
+               cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 max_age: 30
                },
                fallback: false,
                headers: %{"content-type" => "application/json"},
@@ -65,11 +59,9 @@ defmodule BelfrageWeb.View.InternalResponseTest do
 
       assert %Belfrage.Struct.Response{
                body: "#{status}, Belfrage",
-               cache_directive: %{
+               cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 max_age: 30
                },
                fallback: false,
                headers: %{"content-type" => "text/plain"},

@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
 
-  alias Belfrage.{CacheControlParser, Struct}
+  alias Belfrage.{CacheControl, Struct}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -14,7 +14,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControlParser.parse(cache_control), Belfrage.Dials.ttl_multiplier()),
+      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), Belfrage.Dials.ttl_multiplier()),
       headers: response_headers
     })
   end
@@ -33,11 +33,11 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   defp to_integer(max_age) when is_float(max_age), do: round(max_age)
   defp to_integer(max_age), do: max_age
 
-  defp cache_directive(cache_directive, ttl_multiplier) when ttl_multiplier == 0 do
-    %{cache_directive | cacheability: "private", max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+  defp cache_directive(cache_directive = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier) when ttl_multiplier == 0 do
+    %Belfrage.CacheControl{cache_directive | cacheability: "private", max_age: dial_multiply(max_age, ttl_multiplier)}
   end
 
-  defp cache_directive(cache_directive, ttl_multiplier) do
-    %{cache_directive | max_age: dial_multiply(cache_directive[:max_age], ttl_multiplier)}
+  defp cache_directive(cache_directive = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier) do
+    %Belfrage.CacheControl{cache_directive | max_age: dial_multiply(max_age, ttl_multiplier)}
   end
 end

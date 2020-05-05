@@ -23,7 +23,7 @@ defmodule Belfrage.Clients.CCPTest do
             body: :zlib.gzip(~s({"hi": "bonjour"})),
             headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
             http_status: 200,
-            cache_directive: %{cacheability: "public", max_age: 30}
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
           }
           |> :erlang.term_to_binary()
       }

@@ -1,34 +1,11 @@
-defmodule Belfrage.CacheControlParser do
-  defmodule FindValue do
-    def find(["stale-if-error=" <> value | _rest], key: :stale_if_error, default: _) do
-      {num, _string} = Integer.parse(value)
-      num
-    end
-
-    def find(["stale-while-revalidate=" <> value | _rest], key: :stale_while_revalidate, default: _) do
-      {num, _string} = Integer.parse(value)
-      num
-    end
-
-    def find(["max-age=" <> value | _rest], key: :max_age, default: _) do
-      {num, _string} = Integer.parse(value)
-      num
-    end
-
-    def find(header_values, opts) when length(header_values) > 0 do
-      header_values
-      |> List.delete_at(0)
-      |> find(opts)
-    end
-
-    def find(_, key: _, default: default), do: default
-  end
+defmodule Belfrage.CacheControl.Parser do
+  alias Belfrage.CacheControl.FindValue
 
   def parse(cache_control_header) do
     cache_control_header = standardise_cache_control_header(cache_control_header)
     max_age = parse_max_age(cache_control_header)
 
-    %{
+    %Belfrage.CacheControl{
       cacheability: parse_cacheability(max_age, cache_control_header),
       max_age: max_age,
       stale_if_error: parse_stale_if_error(cache_control_header),

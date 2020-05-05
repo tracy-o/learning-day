@@ -14,7 +14,7 @@ defmodule BelfrageWeb.HeadersTest do
           body: body,
           headers: headers,
           http_status: 200,
-          cache_directive: %{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
+          cache_directive: %Belfrage.CacheControl{cacheability: "private", max_age: 25, stale_while_revalidate: 0}
         }
       }
 
@@ -96,7 +96,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {404,
               [
-                {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
+                {"cache-control", "public, max-age=30"},
                 {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
@@ -115,7 +115,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {500,
               [
-                {"cache-control", "public, stale-while-revalidate=0, max-age=5"},
+                {"cache-control", "public, max-age=5"},
                 {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},

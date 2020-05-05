@@ -7,7 +7,7 @@ defmodule Belfrage.Cache.LocalTest do
     body: "hello!",
     headers: %{"content-type" => "application/json"},
     http_status: 200,
-    cache_directive: %{cacheability: "public", max_age: 30}
+    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
   }
 
   setup do
@@ -45,7 +45,7 @@ defmodule Belfrage.Cache.LocalTest do
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
-          cache_directive: %{cacheability: "public", max_age: 30}
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
         }
       }
 
@@ -57,7 +57,7 @@ defmodule Belfrage.Cache.LocalTest do
                    body: "hello!",
                    headers: %{"content-type" => "application/json"},
                    http_status: 200,
-                   cache_directive: %{cacheability: "public", max_age: 30}
+                   cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
                  }, _belfrage_determined_last_updated}}
              ] = :ets.lookup(:cache, "abc123")
     end
@@ -142,7 +142,7 @@ defmodule Belfrage.Cache.LocalTest do
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
-          cache_directive: %{cacheability: "public", max_age: 30}
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
         }
       }
 
