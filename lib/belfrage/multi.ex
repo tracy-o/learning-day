@@ -17,6 +17,7 @@ defmodule Belfrage.Multi do
   For all structs, run
   """
   def concurrently(structs, cb) do
+    # does async_stream affect order of structs here?
     structs
     |> Task.async_stream(cb)
     |> Stream.map(&elem(&1, 1))

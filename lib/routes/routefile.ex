@@ -12,6 +12,8 @@ defmodule Routes.Routefile do
   redirect "/ni", to: "/northernireland", status: 302
 
   handle "/cascade", using: ["WorldServiceTajik", "WorldServiceTajik", "ProxyPass"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
