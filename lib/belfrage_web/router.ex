@@ -70,13 +70,27 @@ defmodule BelfrageWeb.Router do
   end
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
-    Stump.log(:error, %{
-      msg: "Router Service returned a 500 status",
-      kind: kind,
-      reason: reason,
-      stack: Exception.format_stacktrace(stack)
-    })
+    status = router_status reason
 
-    BelfrageWeb.View.internal_server_error(conn)
+    case status do
+      400 -> BelfrageWeb.View.not_found(conn)
+      _ ->
+        Stump.log(:error, %{
+          msg: "Router Service returned a #{status} status",
+          kind: kind,
+          reason: reason,
+          stack: Exception.format_stacktrace(stack)
+        })
+
+        BelfrageWeb.View.internal_server_error(conn)
+    end
+  end
+
+  defp router_status (%{ plug_status: plug_status }) do
+    plug_status
+  end
+
+  defp router_status (_) do
+    500
   end
 end

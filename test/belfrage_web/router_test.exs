@@ -25,4 +25,22 @@ defmodule BelfrageWeb.RouterTest do
       assert conn.resp_body == "I'm ok thanks"
     end
   end
+
+  describe "handle_errors" do
+    test "will set the status as 404 when the plug status code is 400" do
+      reason = %{message: "Some error", plug_status: 400}
+      conn = conn(:get, "/%")
+      conn = Router.handle_errors(conn, %{kind: "err", reason: reason, stack: %{}})
+
+      assert conn.status == 404
+    end
+
+    test "will set the status as 500 when the plug status code is not a 400" do
+      reason = %{message: "Some error", plug_status: 500}
+      conn = conn(:get, "/")
+      conn = Router.handle_errors(conn, %{kind: "err", reason: reason, stack: %{}})
+
+      assert conn.status == 500
+    end
+  end
 end

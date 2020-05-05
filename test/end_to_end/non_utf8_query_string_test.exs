@@ -19,29 +19,6 @@ defmodule NonUtf8QueryStringTest do
     Belfrage.LoopsSupervisor.kill_all()
   end
 
-  # Is this test failing for you? It was fixed in Crimpex 0.1.1, try deleting your deps folder and running mix deps.get
-  test "Given a query string with non utf8 characters, it still passes this on to the origin" do
-    Belfrage.Clients.LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
-                        _lambda_function_name,
-                        %{
-                          body: "",
-                          headers: %{country: "gb"},
-                          httpMethod: "GET",
-                          path: "/200-ok-response",
-                          pathParameters: %{},
-                          queryStringParameters: %{"query" => "�"}
-                        },
-                        _opts ->
-      {:ok, @lambda_response}
-    end)
-
-    conn = conn(:get, "/200-ok-response?query=%B3")
-    conn = Router.call(conn, [])
-
-    assert {200, _headers, _body} = sent_resp(conn)
-  end
-
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn "webcore-lambda-role-arn",

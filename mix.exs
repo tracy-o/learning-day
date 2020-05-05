@@ -60,7 +60,7 @@ defmodule Belfrage.MixProject do
       {:stump, "~> 1.6"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
-      {:ets_cleaner, git: "git://github.com/bbc/ets_cleaner.git"},
+      {:ets_cleaner, git: "https://github.com/bbc/ets_cleaner.git"},
       {:poison, "~> 3.1"},
       {:secure_random, "~> 0.5.1"},
       {:tabula, "~> 2.1.1", only: [:dev]}
