@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
 
-  alias Belfrage.{CacheControlParser, Struct}
+  alias Belfrage.{CacheControl, Struct}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -14,7 +14,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControlParser.parse(cache_control), Belfrage.Dials.ttl_multiplier()),
+      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), Belfrage.Dials.ttl_multiplier()),
       headers: response_headers
     })
   end
