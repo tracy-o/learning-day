@@ -46,7 +46,7 @@ defmodule Belfrage.Services.Fabl do
 
   defp log(status, body, struct) do
     Stump.log(:error, %{
-      msg: "400 or 500 response from Fabl Service request",
+      msg: "4xx or 5xx response from Fabl Service request",
       status: status,
       body: body,
       struct: Struct.loggable(struct)
