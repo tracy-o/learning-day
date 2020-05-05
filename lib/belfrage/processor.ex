@@ -45,7 +45,13 @@ defmodule Belfrage.Processor do
     struct
   end
 
-  def perform_call(struct = %Struct{private: %Struct.Private{origin: origin}}) do
+  # when only one struct
+  def perform_call([struct = %Struct{private: %Struct.Private{origin: origin}}]) do
+    ServiceProvider.service_for(origin).dispatch(struct)
+  end
+
+  # when only one struct
+  def perform_call([struct = %Struct{private: %Struct.Private{origin: origin}}]) do
     ServiceProvider.service_for(origin).dispatch(struct)
   end
 
