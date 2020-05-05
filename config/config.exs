@@ -52,7 +52,8 @@ config :belfrage,
   routefile: Routes.Routefile,
   xray: Belfrage.Xray,
   stack_name: "belfrage-stack",
-  stack_id: "local"
+  stack_id: "local",
+  redirect_statuses: [301, 302, 307, 308]
 
 config :ex_aws,
   region: "eu-west-1",
