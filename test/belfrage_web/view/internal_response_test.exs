@@ -14,8 +14,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %{
                  cacheability: "public",
                  max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 stale_if_error: nil,
+                 stale_while_revalidate: nil
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -32,8 +32,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %{
                  cacheability: "public",
                  max_age: 5,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 stale_if_error: nil,
+                 stale_while_revalidate: nil
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -50,8 +50,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %{
                  cacheability: "public",
                  max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 stale_if_error: nil,
+                 stale_while_revalidate: nil
                },
                fallback: false,
                headers: %{"content-type" => "application/json"},
@@ -68,8 +68,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %{
                  cacheability: "public",
                  max_age: 30,
-                 stale_if_error: 0,
-                 stale_while_revalidate: 0
+                 stale_if_error: nil,
+                 stale_while_revalidate: nil
                },
                fallback: false,
                headers: %{"content-type" => "text/plain"},

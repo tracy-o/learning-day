@@ -16,7 +16,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response = %Response{http_status: 404}) do
-    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 30, stale_if_error: 0, stale_while_revalidate: 0})
+    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 30, stale_if_error: nil, stale_while_revalidate: nil})
   end
 
   defp put_cache_directive(response = %Response{http_status: http_status}) when http_status in @redirect_http_status do
@@ -24,7 +24,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response) do
-    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 5, stale_if_error: 0, stale_while_revalidate: 0})
+    Map.put(response, :cache_directive, %{cacheability: "public", max_age: 5, stale_if_error: nil, stale_while_revalidate: nil})
   end
 
   defp put_internal_response_headers(response, conn) do

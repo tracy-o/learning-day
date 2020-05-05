@@ -96,7 +96,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {404,
               [
-                {"cache-control", "public, stale-while-revalidate=0, max-age=30"},
+                {"cache-control", "public, max-age=30"},
                 {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
@@ -115,7 +115,7 @@ defmodule BelfrageWeb.HeadersTest do
 
       assert {500,
               [
-                {"cache-control", "public, stale-while-revalidate=0, max-age=5"},
+                {"cache-control", "public, max-age=5"},
                 {"content-type", "text/html; charset=utf-8"},
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
