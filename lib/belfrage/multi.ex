@@ -1,6 +1,10 @@
 defmodule Belfrage.Multi do
   alias Belfrage.Struct
 
+  @doc """
+  Order of the loop_ids affect which platform gets called
+  first.
+  """
   def duplicate_struct(struct = %Struct{}) do
     loop_ids = List.wrap(struct.private.loop_id)
 
