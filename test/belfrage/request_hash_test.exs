@@ -118,5 +118,13 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(is_uk_struct).request.request_hash ==
                RequestHash.generate(is_not_uk_struct).request.request_hash
     end
+
+    test "varies on cdn?" do
+      struct_with_cdn = @struct |> Belfrage.Struct.add(:request, %{cdn?: true})
+      struct_without_cdn = @struct |> Belfrage.Struct.add(:request, %{cdn?: false})
+
+      refute RequestHash.generate(struct_with_cdn).request.request_hash ==
+               RequestHash.generate(struct_without_cdn).request.request_hash
+    end
   end
 end
