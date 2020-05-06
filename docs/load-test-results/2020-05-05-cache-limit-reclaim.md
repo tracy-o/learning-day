@@ -10,7 +10,8 @@ To prevent local (tier-1) cache from consuming all available VM memory and causi
 - cache limit and reclaim mechanism is performant at higher request rates (425rps)
 
 ## Setup
-- Vegeta Runner on EC2, Repeater, Requests to Belfrage playground
+- Vegeta Runner on EC2, Repeater
+- Requests to Belfrage playground: c5.2xlarge, 8-core CPU, 16GB memory
 - Cache: 36k max size, LRW reclaim policy, reclaim ratio: 0.3 (30%)
 
 ## Tests
@@ -27,10 +28,10 @@ Run the following tests (0ms simulated latency) on Belfrage playground with Orig
 
 - 30-minute 50% Repeater traffics (~500rps), OriginSimulator returning 100kb gzip payload
 
-During the tests, the following BEAM VM stats was sampled at 1s frequency (30s for Repeater test) by running [this script]() in IEx remote console:
+During all the tests, the following BEAM VM stats was sampled at 1s frequency or every 30s (for the Repeater test) by running [this script]() in IEx remote console:
 
 - memory usage
-- CPU usage
+- %CPU util
 - cache table (ETS) size
 - cache table memory usage
 
@@ -41,9 +42,25 @@ $ export KERL_CONFIGURE_OPTIONS="--with-microstate-accounting=extra"
 $ asdf install erlang  22.3.3
 ```
 
+A one-minite microstate accounting statistic sample was generated through the following steps in remote console:
+
+```
+iex(belfrage@10.114.166.240)1> :msacc.start 60000
+iex(belfrage@10.114.166.240)2> :msacc.print
+```
+
 ## Results
 
 Analysis to follow
+
+#### VM average and max stats
+
+| Tests | memory usage MB (avg) | memory usage MB (max) | %CPU util (avg) | %CPU util (max) |
+|-------|--------------------|--------------------|-----------------|-----------------|
+| 1200s, 1kb | 130.38 | 151.27 | 14.09% | 39.62% |
+| 240s, 100kb | 1986.43 | 2914.34 | 23.19% | 39.54% |
+| 130s, 300kb | 5135.95 | 8096.94 | 39.56% | 53.84% |
+| 30m repeater | 2365.89 | 2905.91 | 68.78% | 87.6% |
 
 #### Vegeta
 
