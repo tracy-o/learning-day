@@ -18,6 +18,9 @@ defmodule Belfrage.SupervisorTest do
     Supervisor.start_link([worker(Cachex, [@test_cache, [limit: limit]])], strategy: :one_for_one)
     seed_test_cache(1..overflow_size, @test_cache)
 
+    Cachex.purge(@test_cache)
+    Process.sleep(30)
+
     %{conf: conf, overflow_size: overflow_size}
   end
 
@@ -77,8 +80,5 @@ defmodule Belfrage.SupervisorTest do
 
       :timer.sleep(1)
     end)
-
-    # allow time for cache eviction
-    Process.sleep(20)
   end
 end

@@ -63,7 +63,7 @@ defmodule Belfrage.Clients.CCP do
   end
 
   defp s3_bucket do
-    Application.get_env(:belfrage, :ccp_s3_bucket, "belfrage-t2-cache")
+    Application.get_env(:belfrage, :ccp_s3_bucket)
   end
 
   defp s3_region do
