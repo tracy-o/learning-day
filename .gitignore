@@ -25,3 +25,5 @@ belfrage-*.tar
 .elixir_ls
 
 .DS_Store
+
+priv/cert/*

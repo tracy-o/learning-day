@@ -121,6 +121,10 @@ mix routes test
 mix benchmark
 ```
 
+### Generate a self signed certificate
+`mix x509.gen.selfsigned`
+
+
 ## Code style
 
 We use the `mix format` to apply code style and formatting rules automatically. Our CI will fail if you do not run `mix format`

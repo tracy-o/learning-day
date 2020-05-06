@@ -41,4 +41,5 @@
   "tabula": {:hex, :tabula, "2.1.1", "a04f908bddd596282e95e6469b0ac0fc163eb7c446db8ee6dbea106e5b2f7096", [:mix], [], "hexpm", "b7cc4a69180696a7870eab299402d9764737a0e89bb3cf7edc153fe40460ff3f"},
   "unsafe": {:hex, :unsafe, "1.0.1", "a27e1874f72ee49312e0a9ec2e0b27924214a05e3ddac90e91727bc76f8613d8", [:mix], [], "hexpm", "6c7729a2d214806450d29766abc2afaa7a2cbecf415be64f36a6691afebb50e5"},
   "uuid": {:hex, :uuid, "1.1.8", "e22fc04499de0de3ed1116b770c7737779f226ceefa0badb3592e64d5cfb4eb9", [:mix], [], "hexpm", "c790593b4c3b601f5dc2378baae7efaf5b3d73c4c6456ba85759905be792f2ac"},
+  "x509": {:hex, :x509, "0.8.1", "901a72cb715aeb2f21739425cc0cff97ce975b6267811acb1fcee4ff10e7799c", [:mix], [], "hexpm"},
 }
