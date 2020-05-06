@@ -16,8 +16,8 @@ defmodule Belfrage.Supervisor do
       end
 
     [
-      {BelfrageWeb.Router, router_options}
-    ] ++ default_children()
+      BelfrageWeb.Router.child_spec(router_options)
+    ] ++ http_router(env) ++ default_children()
   end
 
   def default_children do
@@ -41,4 +41,7 @@ defmodule Belfrage.Supervisor do
   defp cachex_limit(size: size, policy: policy, reclaim: reclaim, options: options) do
     {:limit, size, policy, reclaim, options}
   end
+
+  defp http_router(:prod), do: [BelfrageWeb.Router.child_spec(scheme: :http, port: 7080)]
+  defp http_router(_env), do: []
 end
