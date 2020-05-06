@@ -8,8 +8,13 @@ defmodule Belfrage.Multi do
   def duplicate_struct(struct = %Struct{}) do
     loop_ids = List.wrap(struct.private.loop_id)
 
-    Enum.map(loop_ids, fn loop_id ->
-      Struct.add(struct, :private, %{loop_id: loop_id})
+    loop_ids
+    |> Stream.map(&Struct.add(struct, :private, %{loop_id: &1}))
+    # as we are before the Processor.get_loop, we don't have the platform in the struct
+    |> Stream.chunk_by(fn struct -> Belfrage.RouteSpec.specs_for(struct.private.loop_id).platform end)
+    |> Stream.map(&Enum.random(&1))
+    |> Stream.each(fn struct ->
+      IO.inspect(struct.private.loop_id)
     end)
   end
 
