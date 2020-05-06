@@ -43,7 +43,7 @@ $ asdf install erlang  22.3.3
 
 ## Results
 
-Summary to follow
+Analysis to follow
 
 #### Vegeta
 
@@ -108,3 +108,30 @@ No further Vegeta results due to incomplete reporting from load test instance (r
 ![plot](img/2020-05-05/130s_425rps_300kb_cpu.png)
 
 ![plot](img/2020-05-05/130s_425rps_300kb_cache_size.png)
+
+#### Repeater: 30-minutes 50% traffics
+
+*CloudWatch metrics*
+
+- Number of requests: ~900k
+- 200 status response time: 8.9ms - 18.9ms
+- Cache hit ratio: 34%
+
+![plot](img/2020-05-05/30min_50percent_repeater_100kb_stats.png)
+
+*VM stats*
+
+![plot](img/2020-05-05/30min_50percent_repeater_100kb_mem.png)
+
+![plot](img/2020-05-05/30min_50percent_repeater_100kb_cpu.png)
+
+![plot](img/2020-05-05/30min_50percent_repeater_100kb_cache_size.png)
+
+*BEAM microstate accounting stats: 1-minute sample*
+
+|     Thread     | alloc |  aux  |  bif  | busy_wait | check_io | emulator | ets | gc | gc_full | nif | other | port | send | sleep | timers |
+|----------------|-------|-------|-------|-----------|----------|----------|-----|----|---------|-----|-------|------|------|-------|--------|
+| dirty_cpu_sche | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 100.00% | 0.00% |
+| dirty_io_sched | 0.00% | 0.00% | 0.00% | 0.07% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 99.92% | 0.00% |
+| poll | 0.09% | 0.00% | 0.00% | 0.00% | 1.62% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% | 98.29% | 0.00% |
+| scheduler | 4.83% | 0.46% | 4.32% | 5.55% | 0.96% | 13.79% | 2.53% | 4.24% | 0.61% | 51.74% | 0.87% | 2.18% | 1.04% | 6.83% | 0.03% |
