@@ -11,7 +11,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.Signature,
     ResponseHeaders.Fallback,
     ResponseHeaders.BID,
-    ResponseHeaders.Via
+    ResponseHeaders.Via,
+    ResponseHeaders.AccessControlAllowOrigin
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
