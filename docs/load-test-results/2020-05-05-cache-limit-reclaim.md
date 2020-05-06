@@ -51,7 +51,17 @@ iex(belfrage@10.114.166.240)2> :msacc.print
 
 ## Results
 
-Analysis to follow
+The cache limit and reclaim mechanism stabilises memory usage at higher request rates. In all the tests, memory usage plateaued at levels corresponding to max cache size when the local cache was filled up. Memory usage was up to ~5GB (30%) on average and ~8GB (50%) max when larger payload (300kb). The reclaim or cache eviction mechanism is evident from the sawtooth memory usage and cache size plots. In the longer-duration Repeater test (~500rps, 100kb payload), memory usage was stable at 2-3GB. This provides ample spare memory for other Belfrage processes and perhaps a larger-size cache if this improves cache hit ratio (34% from the Repeater test).
+
+With memory usage stabilising, Belfrage traffic throughput is now CPU-bound as indicated by the result from the Repeater test: 68.78% (average) and 87.6% (maximum) %CPU utilisation.
+
+Cache limiting is performant according to the latencies results which are in acceptable ranges including 8.9ms - 18.9ms for the Repeater test. All requests were 200-status successful. According the one-minute microstate accounting stats, the VM spent majority of time (65.53%) in processing requests (`emulator`, `NIF`) while the `busy_wait` time was healthy at 5.55%.
+
+Suggestion: 
+
+- ~500rps max production traffic load per c5.2xlarge EC instance
+- investigate implication of various cache limit settings (size, reclaim ratio) w.r.t. throughput and hit ratio
+- VM behaviour when cache limit mechanism fails: reclaim ratio is ineffective (too slow) against higher request rates (spikes)
 
 #### VM average and max stats
 
@@ -77,7 +87,7 @@ Success       [ratio]                    100.00%
 Status Codes  [code:count]               200:510000  
 ```
 
-[Results](https://broxy.tools.bbc.co.uk/belfrage-loadtest-results/vegeta-1200s-425rps-1588631134357)
+[Vegeta results](https://broxy.tools.bbc.co.uk/belfrage-loadtest-results/vegeta-1200s-425rps-1588631134357)
 
 ![plot](img/2020-05-05/1200s_425rps_1kb_mem.png)
 
