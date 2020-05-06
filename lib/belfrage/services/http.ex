@@ -60,38 +60,40 @@ defmodule Belfrage.Services.HTTP do
      }), struct}
   end
 
-  defp build_headers(request = %Struct.Request{edge_cache?: true}) do
+  defp build_headers(request) do
+    edge_headers(request)
+    |> Map.merge(default_headers(request))
+    |> Enum.reject(fn {_k, v} -> is_nil(v) end)
+    |> Map.new()
+  end
+
+  defp edge_headers(request = %Struct.Request{edge_cache?: true}) do
     %{
-      "accept-encoding" => "gzip",
       "x-bbc-edge-cache" => "1",
       "x-bbc-edge-country" => request.country,
       "x-bbc-edge-host" => request.host,
       "x-bbc-edge-isuk" => is_uk(request.is_uk),
-      "x-cookie-ckps_language" => request.language,
-      "x-cookie-ckps_chinese" => request.language_chinese,
-      "x-cookie-ckps_serbian" => request.language_serbian,
-      "x-bbc-edge-scheme" => request.scheme,
-      "x-varnish" => varnish(request.varnish?),
-      "user-agent" => "Belfrage"
+      "x-bbc-edge-scheme" => request.scheme
     }
-    |> Enum.reject(fn {_k, v} -> is_nil(v) || v == "" end)
-    |> Map.new()
   end
 
-  defp build_headers(request) do
+  defp edge_headers(request) do
     %{
-      "accept-encoding" => "gzip",
       "x-country" => request.country,
       "x-forwarded-host" => request.host,
-      "x-ip_is_uk_combined" => is_uk(request.is_uk),
+      "x-ip_is_uk_combined" => is_uk(request.is_uk)
+    }
+  end
+
+  defp default_headers(request) do
+    %{
+      "accept-encoding" => "gzip",
       "x-cookie-ckps_language" => request.language,
       "x-cookie-ckps_chinese" => request.language_chinese,
       "x-cookie-ckps_serbian" => request.language_serbian,
       "x-varnish" => varnish(request.varnish?),
       "user-agent" => "Belfrage"
     }
-    |> Enum.reject(fn {_k, v} -> is_nil(v) end)
-    |> Map.new()
   end
 
   defp is_uk(true), do: "yes"
