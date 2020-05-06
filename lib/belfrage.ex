@@ -12,6 +12,7 @@ defmodule Belfrage do
       |> prepare_request()
       |> check_cache()
     end)
+    |> Belfrage.Multi.random_dedup_platform()
     |> Belfrage.Multi.pick_early_response()
     |> generate_response()
   end

@@ -10,12 +10,13 @@ defmodule Belfrage.Multi do
 
     loop_ids
     |> Stream.map(&Struct.add(struct, :private, %{loop_id: &1}))
-    # as we are before the Processor.get_loop, we don't have the platform in the struct
-    |> Stream.chunk_by(fn struct -> Belfrage.RouteSpec.specs_for(struct.private.loop_id).platform end)
+  end
+
+  def random_dedup_platform(structs) do
+    structs
+    |> Stream.chunk_by(&(&1.private.platform))
     |> Stream.map(&Enum.random(&1))
-    |> Stream.each(fn struct ->
-      IO.inspect(struct.private.loop_id)
-    end)
+    |> Stream.each(&IO.inspect(&1.private.loop_id))
   end
 
   @doc """
