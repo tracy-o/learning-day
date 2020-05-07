@@ -85,7 +85,7 @@ Memory usage, %CPU, cache table size, cache table memory size:
 Microstate accounting: one-minute sample, Repeater test:
 
 - [Statistic per CPU threads](data/2020-05-05/30min_50percent_repeater_100kb_msacc_threads.csv)
-- [Statistic per type](data/2020-05-05/30min_50percent_repeater_100kb_msacc_type.csv.csv)
+- [Statistic per type](data/2020-05-05/30min_50percent_repeater_100kb_msacc_type.csv)
 
 #### Vegeta
 
