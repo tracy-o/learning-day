@@ -18,7 +18,7 @@ To prevent local (tier-1) cache from consuming all available VM memory and causi
 
 Run the following tests (0ms simulated latency) on Belfrage playground with OriginSimulator returning gzip payload (e.g. [single-route recipe](data/2020-05-05/recipe.json)):
 
-#### Vegata
+#### Vegeta
 
 - 1200s/20min 425rps 1kb payload: on a single-route with `cache-bust`, so that all requests are cached
 - 240s 425rps 100kb payload: on a single-route with `cache-bust`, so that all requests are cached
@@ -42,7 +42,7 @@ $ export KERL_CONFIGURE_OPTIONS="--with-microstate-accounting=extra"
 $ asdf install erlang  22.3.3
 ```
 
-A one-minite microstate accounting statistic sample was generated through the following steps in remote console:
+A one-minute microstate accounting statistic sample was generated through the following steps in remote console:
 
 ```
 iex(belfrage@10.114.166.240)1> :msacc.start 60000
