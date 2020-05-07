@@ -173,5 +173,139 @@ defmodule Belfrage.Services.HTTPTest do
                }
              } = HTTP.dispatch(@get_struct)
     end
+
+    test "when varnish is set, the varnish header is used" do
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.co.uk"
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_web_core",
+          country: "gb",
+          host: "www.bbc.co.uk",
+          varnish?: true
+        }
+      }
+
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core",
+             payload: "",
+             headers: %{
+               "accept-encoding" => "gzip",
+               "x-country" => "gb",
+               "user-agent" => "Belfrage",
+               "x-forwarded-host" => "www.bbc.co.uk",
+               "x-varnish" => "1"
+             }
+           } ->
+          @ok_response
+        end
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
+
+    test "when the language is set, the language headers are used" do
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.co.uk"
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_web_core",
+          country: "gb",
+          host: "www.bbc.co.uk",
+          language: "gb",
+          language_chinese: "trad",
+          language_serbian: "lat"
+        }
+      }
+
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core",
+             payload: "",
+             headers: %{
+               "accept-encoding" => "gzip",
+               "x-country" => "gb",
+               "user-agent" => "Belfrage",
+               "x-forwarded-host" => "www.bbc.co.uk",
+               "x-cookie-ckps_language" => "gb",
+               "x-cookie-ckps_chinese" => "trad",
+               "x-cookie-ckps_serbian" => "lat"
+             }
+           } ->
+          @ok_response
+        end
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
+
+    test "when edge cache is set, the edge cache request headers are used" do
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.co.uk"
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_web_core",
+          country: "gb",
+          host: "www.bbc.co.uk",
+          edge_cache?: true,
+          scheme: "https",
+          is_uk: true
+        }
+      }
+
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://www.bbc.co.uk/_web_core",
+             payload: "",
+             headers: %{
+               "accept-encoding" => "gzip",
+               "x-bbc-edge-cache" => "1",
+               "x-bbc-edge-country" => "gb",
+               "x-bbc-edge-host" => "www.bbc.co.uk",
+               "x-bbc-edge-isuk" => "yes",
+               "x-bbc-edge-scheme" => "https",
+               "user-agent" => "Belfrage"
+             }
+           } ->
+          @ok_response
+        end
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
   end
 end

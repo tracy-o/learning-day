@@ -5,6 +5,9 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},
     host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
     is_uk: %{edge: "x-bbc-edge-isuk", varnish: "x-ip_is_uk_combined"},
+    language: %{varnish: "x-cookie-ckps_language"},
+    language_chinese: %{varnish: "x-cookie-ckps_chinese"},
+    language_serbian: %{varnish: "x-cookie-ckps_serbian"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
     varnish: %{varnish: "x-varnish"}

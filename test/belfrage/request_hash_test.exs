@@ -126,5 +126,29 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(struct_with_cdn).request.request_hash ==
                RequestHash.generate(struct_without_cdn).request.request_hash
     end
+
+    test "varies on language" do
+      en_struct = @struct |> Belfrage.Struct.add(:request, %{language: "en"})
+      fr_struct = @struct |> Belfrage.Struct.add(:request, %{language: "fr"})
+
+      refute RequestHash.generate(en_struct).request.request_hash ==
+               RequestHash.generate(fr_struct).request.request_hash
+    end
+
+    test "varies on language_chinese" do
+      trad_struct = @struct |> Belfrage.Struct.add(:request, %{language_chinese: "trad"})
+      simp_struct = @struct |> Belfrage.Struct.add(:request, %{language_chinese: "simp"})
+
+      refute RequestHash.generate(trad_struct).request.request_hash ==
+               RequestHash.generate(simp_struct).request.request_hash
+    end
+
+    test "varies on language_serbian" do
+      cyr_struct = @struct |> Belfrage.Struct.add(:request, %{language_serbian: "cyr"})
+      lat_struct = @struct |> Belfrage.Struct.add(:request, %{language_serbian: "lat"})
+
+      refute RequestHash.generate(cyr_struct).request.request_hash ==
+               RequestHash.generate(lat_struct).request.request_hash
+    end
   end
 end

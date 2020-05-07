@@ -127,4 +127,18 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
       assert Sanitiser.cdn(%{cdn: ""}, false) == false
     end
   end
+
+  describe "language headers" do
+    test "returns the language when set" do
+      assert Sanitiser.language(%{varnish: "en"}, nil) == "en"
+    end
+
+    test "returns the language_chinese when set" do
+      assert Sanitiser.language_chinese(%{varnish: "trad"}, nil) == "trad"
+    end
+
+    test "returns the language_serbian when set" do
+      assert Sanitiser.language_serbian(%{varnish: "lat"}, nil) == "lat"
+    end
+  end
 end
