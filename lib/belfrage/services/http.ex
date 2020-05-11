@@ -73,7 +73,7 @@ defmodule Belfrage.Services.HTTP do
       "x-bbc-edge-country" => request.country,
       "x-bbc-edge-host" => request.host,
       "x-bbc-edge-isuk" => is_uk(request.is_uk),
-      "x-bbc-edge-scheme" => request.scheme
+      "x-bbc-edge-scheme" => scheme(request.scheme)
     }
   end
 
@@ -95,6 +95,9 @@ defmodule Belfrage.Services.HTTP do
       "user-agent" => "Belfrage"
     }
   end
+
+  defp scheme(:https), do: "https"
+  defp scheme(:http), do: "http"
 
   defp is_uk(true), do: "yes"
   defp is_uk(_), do: nil
