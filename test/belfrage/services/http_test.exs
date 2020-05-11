@@ -273,7 +273,7 @@ defmodule Belfrage.Services.HTTPTest do
           country: "gb",
           host: "www.bbc.co.uk",
           edge_cache?: true,
-          scheme: "https",
+          scheme: :https,
           is_uk: true
         }
       }
