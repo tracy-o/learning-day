@@ -149,6 +149,32 @@ defmodule Belfrage.RequestHashTest do
 
       refute RequestHash.generate(cyr_struct).request.request_hash ==
                RequestHash.generate(lat_struct).request.request_hash
+
+    test "when a key is removed the request hash doesn't vary on it" do
+      uk_struct = @struct |> Belfrage.Struct.add(:private, %{remove_signature_keys: [:country]})
+
+      kr_struct =
+        @struct
+        |> Belfrage.Struct.add(:request, %{country: "kr"})
+        |> Belfrage.Struct.add(:private, %{remove_signature_keys: [:country]})
+
+      assert RequestHash.generate(uk_struct).request.request_hash ==
+               RequestHash.generate(kr_struct).request.request_hash
+    end
+
+    test "when a key is added the request hash does vary on it" do
+      hash_one =
+        @struct
+        |> Belfrage.Struct.add(:request, %{payload: "one"})
+        |> Belfrage.Struct.add(:private, %{add_signature_keys: [:payload]})
+
+      hash_two =
+        @struct
+        |> Belfrage.Struct.add(:request, %{payload: "two"})
+        |> Belfrage.Struct.add(:private, %{add_signature_keys: [:payload]})
+
+      refute RequestHash.generate(hash_one).request.request_hash ==
+               RequestHash.generate(hash_two).request.request_hash
     end
   end
 end
