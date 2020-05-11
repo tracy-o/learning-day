@@ -6,8 +6,7 @@ defmodule Routes.Platforms.Pal do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       pipeline: pipeline(production_env),
       resp_pipeline: [],
-      circuit_breaker_error_threshold: 100,
-      platform_signature_keys: []
+      circuit_breaker_error_threshold: 100
     }
   end
 

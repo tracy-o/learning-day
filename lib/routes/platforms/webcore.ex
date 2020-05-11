@@ -7,8 +7,7 @@ defmodule Routes.Platforms.Webcore do
       pipeline: pipeline(production_env),
       resp_pipeline: [],
       circuit_breaker_error_threshold: 100,
-      query_params_allowlist: query_params_allowlist(production_env),
-      platform_signature_keys: []
+      query_params_allowlist: query_params_allowlist(production_env)
     }
   end
 
