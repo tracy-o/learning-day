@@ -28,9 +28,14 @@ defmodule Belfrage.RequestHash do
     |> update_struct(struct)
   end
 
-  defp extract_keys(%Struct{private: private, request: request}) do
-    signature_keys = Enum.uniq(private.platform_signature_keys ++ @default_signature_keys)
-    Map.take(request, signature_keys)
+  defp extract_keys(struct) do
+    Map.take(struct.request, create_signature(struct))
+  end
+
+  defp create_signature(%Struct{
+         private: %Struct.Private{add_signature_keys: add_keys, remove_signature_keys: remove_keys}
+       }) do
+    (@default_signature_keys ++ add_keys) -- remove_keys
   end
 
   defp update_struct(request_hash, struct) do
