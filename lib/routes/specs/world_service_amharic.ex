@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceAmharic do
   def specs do
     %{
-      platform: Mozart,
+      platform: Simorgh,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       query_params_allowlist: ["alternativeJsLoading", "batch"]
     }
