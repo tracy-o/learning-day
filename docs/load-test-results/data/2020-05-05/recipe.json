@@ -1,0 +1,17 @@
+[
+	{
+		"random_content": "1kb",
+		"route": "//cache_reclaim",
+		"stages": [
+			{
+				"at": 0,
+				"status": 200,
+				"latency": 0
+			}
+		],
+		"headers": {
+			"cache-control": "public, max-age=30",
+			"content-encoding": "gzip"
+		}
+	}
+]
