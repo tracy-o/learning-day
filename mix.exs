@@ -63,7 +63,8 @@ defmodule Belfrage.MixProject do
       {:ets_cleaner, git: "https://github.com/bbc/ets_cleaner.git"},
       {:poison, "~> 3.1"},
       {:secure_random, "~> 0.5.1"},
-      {:tabula, "~> 2.1.1", only: [:dev]}
+      {:tabula, "~> 2.1.1", only: [:dev]},
+      {:x509, "~> 0.8", only: :dev}
     ]
   end
 end
