@@ -29,10 +29,10 @@ defmodule Belfrage.RequestHash do
   end
 
   defp extract_keys(struct) do
-    Map.take(struct.request, create_signature(struct))
+    Map.take(struct.request, build_signature_keys(struct))
   end
 
-  defp create_signature(%Struct{
+  defp build_signature_keys(%Struct{
          private: %Struct.Private{add_signature_keys: add_keys, remove_signature_keys: remove_keys}
        }) do
     (@default_signature_keys ++ add_keys) -- remove_keys
