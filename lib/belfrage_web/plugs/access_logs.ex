@@ -22,7 +22,7 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
 
   defp clear_cookies(headers) do
     headers |> Enum.map(fn {key, value} ->
-      case String.contains?(key, "cookie") do
+      case String.contains?(key, ["cookie", "ssl"]) do
         true -> {key, "REDACTED"}
         false -> {key, value}
       end
