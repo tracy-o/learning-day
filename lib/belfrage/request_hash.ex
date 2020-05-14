@@ -33,9 +33,9 @@ defmodule Belfrage.RequestHash do
   end
 
   defp build_signature_keys(%Struct{
-         private: %Struct.Private{add_signature_keys: add_keys, remove_signature_keys: remove_keys}
+         private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
        }) do
-    (@default_signature_keys ++ add_keys) -- remove_keys
+    (@default_signature_keys ++ add_keys) -- skip_keys
   end
 
   defp update_struct(request_hash, struct) do

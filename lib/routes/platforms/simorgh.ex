@@ -3,7 +3,7 @@ defmodule Routes.Platforms.Simorgh do
   def specs(production_env) do
     Map.merge(Mozart.specs(production_env),
     %{
-      remove_signature_keys: [:country]
+      signature_keys: %{add: [], skip: [:country]}
     })
   end
 end
