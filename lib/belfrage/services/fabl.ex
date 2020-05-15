@@ -43,17 +43,24 @@ defmodule Belfrage.Services.Fabl do
     })
   end
 
-  defp execute_request(struct = %Struct{request: request = %Struct.Request{method: "GET"}, private: private}) do
+  defp execute_request(
+         struct = %Struct{
+           request: request = %Struct.Request{method: "GET", path: path, path_params: params},
+           private: private
+         }
+       ) do
     {@http_client.execute(
        %Clients.HTTP.Request{
          method: :get,
-         url:
-           private.origin <> "/module/" <> struct.request.path_params["name"] <> QueryParams.encode(request.query_params),
+         url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
          headers: build_headers()
        },
        :fabl
      ), struct}
   end
+
+  defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
+  defp module_path(_path), do: "/module/"
 
   defp build_headers do
     %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
