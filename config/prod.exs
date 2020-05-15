@@ -9,7 +9,8 @@ config :belfrage,
   internal_error_page: "/var/www/html/errors/500-data-ssl.html"
 
 config :ex_metrics,
-  send_metrics: true
+  send_metrics: true,
+  pool_size: 3
 
 config :logger,
   backends: [{LoggerFileBackend, :file}]
