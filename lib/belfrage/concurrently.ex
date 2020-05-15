@@ -1,11 +1,7 @@
-defmodule Belfrage.Multi do
+defmodule Belfrage.Concurrently do
   alias Belfrage.Struct
 
-  @doc """
-  Order of the loop_ids affect which platform gets called
-  first.
-  """
-  def duplicate_struct(struct = %Struct{}) do
+  def start(struct = %Struct{}) do
     loop_ids = List.wrap(struct.private.loop_id)
 
     loop_ids
@@ -14,15 +10,14 @@ defmodule Belfrage.Multi do
 
   def random_dedup_platform(structs) do
     structs
-    |> Stream.chunk_by(&(&1.private.platform))
+    |> Stream.chunk_by(& &1.private.platform)
     |> Stream.map(&Enum.random(&1))
-    |> Stream.each(&IO.inspect(&1.private.loop_id))
   end
 
   @doc """
   For all structs, run
   """
-  def concurrently(structs, cb) do
+  def run(structs, cb) do
     # does async_stream affect order of structs here?
     structs
     |> Task.async_stream(cb)

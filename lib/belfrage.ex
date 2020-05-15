@@ -4,16 +4,15 @@ defmodule Belfrage do
   @callback handle(Struct.t()) :: Struct.t()
 
   def handle(struct = %Struct{}) do
-
-    structs = Belfrage.Multi.duplicate_struct(struct)
-
-    Belfrage.Multi.concurrently(structs, fn struct ->
+    struct
+    |> Belfrage.Concurrently.start()
+    |> Belfrage.Concurrently.run(fn struct ->
       struct
       |> prepare_request()
       |> check_cache()
     end)
-    |> Belfrage.Multi.random_dedup_platform()
-    |> Belfrage.Multi.pick_early_response()
+    |> Belfrage.Concurrently.random_dedup_platform()
+    |> Belfrage.Concurrently.pick_early_response()
     |> generate_response()
   end
 
@@ -34,8 +33,8 @@ defmodule Belfrage do
 
   defp generate_response(structs) do
     structs
-    |> Belfrage.Multi.concurrently(&Processor.request_pipeline/1)
-    |> Belfrage.Multi.pick_early_response()
+    |> Belfrage.Concurrently.run(&Processor.request_pipeline/1)
+    |> Belfrage.Concurrently.pick_early_response()
     |> Processor.perform_call()
     |> Processor.response_pipeline()
     |> Processor.init_post_response_pipeline()
