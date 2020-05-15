@@ -142,7 +142,7 @@ defmodule Belfrage.Services.FablTest do
       },
       request: %Struct.Request{
         method: "GET",
-        path: "/fd/preview/example-module",
+        path: "/fd/preview/example-preview-module",
         path_params: %{
           "name" => "example-preview-module"
         }
@@ -179,9 +179,12 @@ defmodule Belfrage.Services.FablTest do
       },
       request: %Struct.Request{
         method: "GET",
-        path: "/fd/preview/example-module?subText=readable",
+        path: "/fd/preview/example-preview-module?subText=readable",
         path_params: %{
           "name" => "example-preview-module"
+        },
+        query_params: %{
+          "subText" => "readable"
         }
       }
     }
@@ -192,7 +195,7 @@ defmodule Belfrage.Services.FablTest do
         :execute,
         fn %Belfrage.Clients.HTTP.Request{
              method: :get,
-             url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module",
+             url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module?subText=readable",
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
            },
