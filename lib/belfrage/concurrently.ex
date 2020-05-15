@@ -2,9 +2,8 @@ defmodule Belfrage.Concurrently do
   alias Belfrage.Struct
 
   def start(struct = %Struct{}) do
-    loop_ids = List.wrap(struct.private.loop_id)
-
-    loop_ids
+    struct.private.loop_id
+    |> List.wrap()
     |> Stream.map(&Struct.add(struct, :private, %{loop_id: &1}))
   end
 
@@ -14,11 +13,7 @@ defmodule Belfrage.Concurrently do
     |> Stream.map(&Enum.random(&1))
   end
 
-  @doc """
-  For all structs, run
-  """
   def run(structs, cb) do
-    # does async_stream affect order of structs here?
     structs
     |> Task.async_stream(cb)
     |> Stream.map(&elem(&1, 1))
@@ -31,7 +26,7 @@ defmodule Belfrage.Concurrently do
         {:halt, struct}
 
       struct, acc ->
-        {:cont, [struct | acc]}
+        {:cont, acc ++ [struct]}
     end)
   end
 end
