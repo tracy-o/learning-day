@@ -52,20 +52,15 @@ defmodule Belfrage.Services.Fabl do
     {@http_client.execute(
        %Clients.HTTP.Request{
          method: :get,
-         url: private.origin <> module_path(path, params) <> params["name"] <> QueryParams.encode(request.query_params),
+         url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
          headers: build_headers()
        },
        :fabl
      ), struct}
   end
 
-  defp module_path(path, path_parts) do
-    if String.match?(path, ~r/^\/fd\/preview\/.*/) do
-      "/preview/module/"
-    else
-      "/module/"
-    end
-  end
+  defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
+  defp module_path(_path), do: "/module/"
 
   defp build_headers do
     %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
