@@ -28,7 +28,7 @@ defmodule Belfrage.Services.FablTest do
     }
   }
 
-  describe "HTTP service" do
+  describe "Fabl service" do
     test "get returns a response" do
       Clients.HTTPMock
       |> expect(
@@ -134,6 +134,80 @@ defmodule Belfrage.Services.FablTest do
                  body: ""
                }
              } = Fabl.dispatch(@get_struct)
+    end
+
+    @get_preview_struct %Struct{
+      private: %Struct.Private{
+        origin: "https://fabl.test.api.bbci.co.uk"
+      },
+      request: %Struct.Request{
+        method: "GET",
+        path: "/fd/preview/example-module",
+        path_params: %{
+          "name" => "example-preview-module"
+        }
+      }
+    }
+
+    test "when requesting a preview module it returns a response" do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module",
+             payload: "",
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+           },
+           :fabl ->
+          @ok_response
+        end
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = Fabl.dispatch(@get_preview_struct)
+    end
+
+    @get_preview_with_query_struct %Struct{
+      private: %Struct.Private{
+        origin: "https://fabl.test.api.bbci.co.uk"
+      },
+      request: %Struct.Request{
+        method: "GET",
+        path: "/fd/preview/example-module?subText=readable",
+        path_params: %{
+          "name" => "example-preview-module"
+        }
+      }
+    }
+
+    test "when requesting a preview module with a query string it returns a response" do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module",
+             payload: "",
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+           },
+           :fabl ->
+          @ok_response
+        end
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = Fabl.dispatch(@get_preview_with_query_struct)
     end
   end
 end
