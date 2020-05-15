@@ -55,6 +55,7 @@ defmodule Belfrage.Struct.Private do
             query_params_allowlist: [],
             production_environment: "live",
             platform: nil,
+            signature_keys: %{skip: [], add: []},
             preview_mode: "off"
 
   @type t :: %__MODULE__{}
