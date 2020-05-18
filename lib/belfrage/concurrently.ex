@@ -26,6 +26,10 @@ defmodule Belfrage.Concurrently do
         {:halt, struct}
 
       struct, acc ->
+        # maybe FIXME Depending on outcome of RESFRAME-3478, we can change this to
+        # [struct | acc] which is faster, but will reverse the list of structs.
+        # It depends if order of the structs matters when prioritising internal
+        # responses such as redirects from the request pipeline.
         {:cont, acc ++ [struct]}
     end)
   end
