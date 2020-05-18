@@ -16,13 +16,12 @@ if Mix.env() == :prod do
     def disable, do: set_level(:error)
 
     defp set_level(debug_level) do
-      debug_opts = Keyword.put(debug_opts(), :level, debug_level)
-
-      Logger.configure_backend({LoggerFileBackend, :file}, debug_opts)
+      Logger.configure_backend({LoggerFileBackend, :file}, logger_opts(debug_level))
     end
 
-    defp debug_opts do
+    defp logger_opts(debug_level) do
       Application.get_env(:logger, :file)
+      |> Keyword.put(:level, debug_level)
     end
   end
 end
