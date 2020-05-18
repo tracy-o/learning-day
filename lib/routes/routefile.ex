@@ -11,7 +11,11 @@ defmodule Routes.Routefile do
   redirect "/example/weather/0", to: "/weather", status: 301
   redirect "/ni", to: "/northernireland", status: 302
 
-  handle "/cascade", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], examples: ["/cascade"]
+  # TODO this GET "/cascade" route is an example of how cascade routes are
+  # defined for the spike. This might change as per RESFRAME-3478.
+  # handle "/cascade", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], examples: ["/cascade"]
+
+  # More examples of cascade routes
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
