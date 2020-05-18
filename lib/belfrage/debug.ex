@@ -1,7 +1,19 @@
 if Mix.env() == :prod do
   defmodule Belfrage.Debug do
-    def enable_debug_mode, do: set_level(:debug)
-    def disable_debug_mode, do: set_level(:error)
+    @moduledoc """
+    Enable and disable debug mode in production builds.
+
+    This is to be ran via an `rpc` call. For example:
+
+    To enable:
+    _build/prod/rel/belfrage/bin/belfrage rpc "Elixir.Belfrage.Debug.enable()"
+
+    To disable:
+    _build/prod/rel/belfrage/bin/belfrage rpc "Elixir.Belfrage.Debug.disable()"
+    """
+
+    def enable, do: set_level(:debug)
+    def disable, do: set_level(:error)
 
     defp set_level(debug_level) do
       debug_opts = Keyword.put(debug_opts(), :level, debug_level)
