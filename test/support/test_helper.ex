@@ -54,4 +54,12 @@ defmodule Test.Support.Helper do
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
+  def get_route(endpoint, path) do
+    MachineGun.get!("#{endpoint}#{path}", [], %{})
+  end
+
+  def header_item_exists(headers, header_id) do
+    Enum.any?(headers, fn {id, value} -> id == header_id.id and value == header_id.value end)
+  end
 end

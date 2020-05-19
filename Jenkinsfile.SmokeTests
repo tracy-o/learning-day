@@ -1,0 +1,55 @@
+#!/usr/bin/env groovy
+
+library 'BBCNews'
+
+def result = 'PASSED'
+
+def cronlist = BRANCH_NAME == 'master' ? '''
+30 09 * * 1-5 % ENVIRONMENT=test;
+00 16 * * 1-5 % ENVIRONMENT=test;
+''' : ''
+
+node {
+  cleanWs()
+  checkout scm
+
+  properties([
+    buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '2', artifactNumToKeepStr: '5', artifactDaysToKeepStr: '2')),
+    disableConcurrentBuilds(),
+    pipelineTriggers([parameterizedCron(cronlist)]),
+    parameters([
+        choice(choices: ['test'], description: 'The environment to run the tests against', name: 'ENVIRONMENT')
+    ])
+  ])
+
+  stage('Run Smoke tests') {
+    docker.image('qixxit/elixir-centos').inside("-u root") {
+      sh 'mix deps.get'
+
+      try {
+        ansiColor('xterm') {
+          sh 'mix smoke_test'
+        }
+      } catch (err) {
+        result = 'FAILED'
+      }
+    }
+  }
+
+  if (result == 'FAILED') {
+    stage('Report result to slack') {
+      currentBuild.description = "${params.ENVIRONMENT} ${result}"
+      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests ${result} on ${params.ENVIRONMENT}: ${env.RUN_DISPLAY_URL}"
+    }
+  }
+
+  stage("clean up after ourselves") {
+    cleanWs()
+    dir("${env.WORKSPACE}@libs") {
+      deleteDir()
+    }
+    if (exception != null) {
+      throw exception
+    }
+  }
+}
