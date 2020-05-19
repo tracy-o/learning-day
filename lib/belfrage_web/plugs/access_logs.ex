@@ -9,7 +9,7 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
   end
 
   defp write_access_log(conn) do
-    Stump.log(:debug, %{
+    Stump.log(:info, %{
       path: conn.request_path,
       status: conn.status,
       method: conn.method,
