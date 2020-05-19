@@ -47,7 +47,7 @@ defmodule Belfrage.ConcurrentlyTest do
   end
 
   describe "picks struct which contains an early response" do
-    test "accepts a stream, and returns a list so the functions on the stream are executed" do
+    test "accepts a stream, and evaluates it to return a list" do
       struct_stream = to_stream(@structs)
       assert @structs == Concurrently.pick_early_response(struct_stream)
     end
@@ -56,29 +56,29 @@ defmodule Belfrage.ConcurrentlyTest do
       assert @structs == Concurrently.pick_early_response(@structs)
     end
 
-    test "when 1 struct has a 200 (internal) response" do
+    test "when struct stream contains a 200 response, we return only that struct" do
       struct_with_response = %Struct{
         private: %Struct.Private{loop_id: "InjectedLoop"},
         response: %Struct.Response{http_status: 200}
       }
 
-      structs = List.insert_at(@structs, 1, struct_with_response)
+      structs = List.insert_at(@structs, 1, struct_with_response) |> to_stream()
 
       assert struct_with_response == Concurrently.pick_early_response(structs)
     end
 
-    test "when 1 struct has an (internal) redirect response" do
+    test "when struct stream contains a redirect response, we return only that struct" do
       struct_with_response = %Struct{
         private: %Struct.Private{loop_id: "InjectedLoop"},
         response: %Struct.Response{http_status: 302}
       }
 
-      structs = List.insert_at(@structs, 1, struct_with_response)
+      structs = List.insert_at(@structs, 1, struct_with_response) |> to_stream()
 
       assert struct_with_response == Concurrently.pick_early_response(structs)
     end
 
-    test "2 of the structs have an early response" do
+    test "2 responses found in stream of structs" do
       first_struct_with_response = %Struct{
         private: %Struct.Private{loop_id: "InjectedLoop"},
         response: %Struct.Response{http_status: 200}
@@ -90,7 +90,7 @@ defmodule Belfrage.ConcurrentlyTest do
       }
 
       structs = List.insert_at(@structs, 2, first_struct_with_response)
-      structs = List.insert_at(structs, 3, second_struct_with_response)
+      structs = List.insert_at(structs, 3, second_struct_with_response) |> to_stream()
 
       assert first_struct_with_response == Concurrently.pick_early_response(structs)
     end
@@ -104,12 +104,12 @@ defmodule Belfrage.ConcurrentlyTest do
       assert result.__struct__ == Stream
     end
 
-    test "when every struct has a different platform" do
+    test "when every struct has a different platform, the same list is returned" do
       struct_stream = to_stream(@structs)
       assert @structs == Concurrently.random_dedup_platform(struct_stream) |> Enum.to_list()
     end
 
-    test "when a struct shares a platform" do
+    test "when a struct shares a platform, the list returned is de-duped by platform" do
       second_struct_for_platform_one = %Struct{
         private: %Struct.Private{loop_id: "AnotherPlatformTwoLoop", platform: :one}
       }
