@@ -38,7 +38,7 @@ defmodule Belfrage.ConcurrentlyTest do
       %Struct{private: %Struct.Private{loop_id: "ThirdLoop", platform: :three}}
     ]
 
-    test "returns callback results, and does order is maintained" do
+    test "the callback returns results in the same order" do
       struct_stream = to_stream(@structs)
 
       assert ["SomeLoop", "AnotherLoop", "ThirdLoop"] ==
