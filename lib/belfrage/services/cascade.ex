@@ -1,10 +1,13 @@
 defmodule Belfrage.Services.Cascade do
   use ExMetrics
-  @behaviour Service
+
+  alias Belfrage.Behaviours.Service
   alias Belfrage.{ServiceProvider, Struct}
   require Logger
 
   @default_response %Struct.Response{http_status: 404, body: ""}
+
+  @behaviour Service
 
   @impl Service
   def dispatch(structs) do
