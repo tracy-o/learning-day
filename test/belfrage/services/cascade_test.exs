@@ -1,4 +1,4 @@
-defmodule Belfrage.Service.CascadeTest do
+defmodule Belfrage.Services.CascadeTest do
   alias Belfrage.Clients
   alias Belfrage.Services.Cascade
   alias Belfrage.Struct
