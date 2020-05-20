@@ -13,6 +13,7 @@ defmodule BelfrageWeb.Router do
   plug(ExMetrics.Plug.PageMetrics)
   plug(BelfrageWeb.Plugs.XRay)
   plug(Plug.Head)
+  plug(BelfrageWeb.Plugs.AccessLogs)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
   plug(PreviewMode)
