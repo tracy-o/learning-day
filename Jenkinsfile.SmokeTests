@@ -3,6 +3,7 @@
 library 'BBCNews'
 
 def result = 'PASSED'
+def exception
 
 def cronlist = BRANCH_NAME == 'master' ? '''
 30 09 * * 1-5 % ENVIRONMENT=test;
@@ -32,6 +33,7 @@ node {
         }
       } catch (err) {
         result = 'FAILED'
+        exception = err
       }
     }
   }
