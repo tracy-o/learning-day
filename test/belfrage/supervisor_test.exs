@@ -16,6 +16,7 @@ defmodule Belfrage.SupervisorTest do
     limit = limit(size: conf[:size], policy: conf[:policy], reclaim: conf[:reclaim], options: conf[:options])
 
     Supervisor.start_link([worker(Cachex, [@test_cache, [limit: limit]])], strategy: :one_for_one)
+    Cachex.clear(@test_cache)
     seed_test_cache(1..overflow_size, @test_cache)
 
     Cachex.purge(@test_cache)
@@ -68,14 +69,14 @@ defmodule Belfrage.SupervisorTest do
   end
 
   defp seed_test_cache(test_key_range, cache) do
-    Enum.each(test_key_range, fn key ->
-      struct = struct_with_gzip_resp()
+    struct = struct_with_gzip_resp()
 
+    Enum.each(test_key_range, fn key ->
       Cachex.put(
         cache,
         key,
         {struct.response, Belfrage.Timer.now_ms()},
-        ttl: struct.private.fallback_ttl
+        ttl: 15000
       )
 
       :timer.sleep(1)
