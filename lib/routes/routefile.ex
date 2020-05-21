@@ -17,6 +17,8 @@ defmodule Routes.Routefile do
   handle "/homepage/automation", using: "AutomationHomePage", only_on: "test", examples: ["/homepage/automation"]
   handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland"]
   handle "/wales", using: "WalesHomePage", examples: ["/wales"]
+  handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
+  handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/example-module"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/example-module"]
