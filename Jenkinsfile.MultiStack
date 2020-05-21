@@ -17,7 +17,6 @@ node {
 
   properties([
     buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
-    disableConcurrentBuilds(),
     parameters([
         choice(choices: ['belfrage', 'belfrage-preview', 'cedric-belfrage', 'bruce-belfrage'], description: 'The Cosmos Service to create a release for', name: 'SERVICE'),
         booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
