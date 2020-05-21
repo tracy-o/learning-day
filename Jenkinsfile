@@ -50,6 +50,8 @@ node {
     node {
       buildStack(branchName, "belfrage", params.FORCE_RELEASE)
       buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
+      buildStack(branchName, "bruce-belfrage", params.FORCE_RELEASE)
+      buildStack(branchName, "cedric-belfrage", params.FORCE_RELEASE)
     }
   }
 
