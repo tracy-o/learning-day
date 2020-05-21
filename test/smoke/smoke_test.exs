@@ -1,8 +1,9 @@
 defmodule BelfrageSmokeTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Test.Support.Helper
 
   @moduletag :smoke_test
+  @moduletag :sanity
 
   setup do
     smoke_env = if System.get_env("SMOKE_ENV"), do: System.get_env("SMOKE_ENV"), else: "test"
