@@ -1,9 +1,9 @@
-defmodule Belfrage.SmokeTest.Simorgh.Cedric do
+defmodule Belfrage.SmokeTest.Simorgh.Bruce do
   use ExUnit.Case, async: true
   alias Test.Support.Helper
 
   @platform Simorgh
-  @stack "cedric-belfrage"
+  @stack "bruce-belfrage"
 
   @moduletag :smoke_test
   @moduletag platform: @platform
@@ -25,9 +25,14 @@ defmodule Belfrage.SmokeTest.Simorgh.Cedric do
       for example <- examples, loop_id not in @ignore_specs do
         @example example
 
-        test "spec: #{loop_id}, path: #{example}", %{endpoint_cedric: endpoint} do
+        @tag route: route_matcher
+        test "spec: #{loop_id}, path: #{example}", %{endpoint_bruce: endpoint, header_bruce: header_id} do
           resp = Helper.get_route(endpoint, @example)
+          redirect_endpoint = endpoint |> String.replace(".co.uk", ".com")
+
           assert resp.status_code == 302
+          assert Helper.header_item_exists(resp.headers, header_id)
+          assert Helper.header_item_exists(resp.headers, %{id: "location", value: redirect_endpoint <> @example})
         end
       end
     end

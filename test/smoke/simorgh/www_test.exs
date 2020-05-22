@@ -25,9 +25,14 @@ defmodule Belfrage.SmokeTest.Simorgh.Www do
       for example <- examples, loop_id not in @ignore_specs do
         @example example
 
-        test "spec: #{loop_id}, path: #{example}", %{endpoint_belfrage: endpoint} do
+        @tag route: route_matcher
+        test "spec: #{loop_id}, path: #{example}", %{endpoint_belfrage: endpoint, header_belfrage: header_id} do
           resp = Helper.get_route(endpoint, @example)
+          redirect_endpoint = endpoint |> String.replace(".co.uk", ".com")
+
           assert resp.status_code == 302
+          assert Helper.header_item_exists(resp.headers, header_id)
+          assert Helper.header_item_exists(resp.headers, %{id: "location", value: redirect_endpoint <> @example})
         end
       end
     end
