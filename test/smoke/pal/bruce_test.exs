@@ -30,6 +30,7 @@ defmodule Belfrage.SmokeTest.Pal.Bruce do
         @example example
         @loop_id loop_id
 
+        @tag route: route_matcher
         test "spec: #{loop_id}, path: #{example}", %{
           endpoint_bruce: endpoint,
           header_bruce: header_id,

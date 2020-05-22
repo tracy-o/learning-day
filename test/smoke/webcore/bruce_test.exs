@@ -25,6 +25,7 @@ defmodule Belfrage.SmokeTest.Webcore.Bruce do
       for example <- examples, loop_id not in @ignore_specs do
         @example example
 
+        @tag route: route_matcher
         test "spec: #{loop_id}, path: #{example}", %{endpoint_bruce: endpoint, header_bruce: header_id} do
           resp = Helper.get_route(endpoint, @example)
 

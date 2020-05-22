@@ -30,6 +30,7 @@ defmodule Belfrage.SmokeTest.Pal.Cedric do
         @example example
         @loop_id loop_id
 
+        @tag route: route_matcher
         test "spec: #{loop_id}, path: #{example}", %{
           endpoint_cedric: endpoint,
           header_cedric: header_id,
