@@ -12,7 +12,7 @@ defmodule Belfrage.SmokeTest.Simorgh.Www do
   @ignore_specs []
 
   setup do
-    smoke_env = if System.get_env("SMOKE_ENV"), do: System.get_env("SMOKE_ENV"), else: "test"
+    smoke_env = System.get_env("SMOKE_ENV") || "test"
     Map.merge(Application.get_env(:smoke, String.to_atom(smoke_env)), Application.get_env(:smoke, :header))
   end
 
