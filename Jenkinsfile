@@ -18,7 +18,8 @@ def buildStack(branch, stack_name, force_release) {
       [$class: 'StringParameterValue', name: 'SERVICE', value: stack_name],
       [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: force_release]
     ],
-    propagate: true
+    propagate: false,
+    wait: false
   )
 }
 
@@ -47,6 +48,7 @@ node {
   stage ('Deploy Multi Stacks') {
     def jobNameList = env.JOB_NAME.tokenize('/') as String[];
     def branchName = jobNameList[2];
+
     node {
       buildStack(branchName, "belfrage", params.FORCE_RELEASE)
       buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
