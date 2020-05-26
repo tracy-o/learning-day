@@ -48,19 +48,11 @@ node {
     def jobNameList = env.JOB_NAME.tokenize('/') as String[];
     def branchName = jobNameList[2];
 
-    parallel {
-        stage('Deploy Belfrage') {
-            buildStack(branchName, "belfrage", params.FORCE_RELEASE)
-        }
-        stage('Deploy Belfrage Preview') {
-            buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
-        }
-        stage('Deploy Bruce Belfrage') {
-            buildStack(branchName, "bruce-belfrage", params.FORCE_RELEASE)
-        }
-        stage('Deploy Cedric Belfrage') {
-            buildStack(branchName, "cedric-belfrage", params.FORCE_RELEASE)
-        }
+    node {
+      buildStack(branchName, "belfrage", params.FORCE_RELEASE)
+      buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
+      buildStack(branchName, "bruce-belfrage", params.FORCE_RELEASE)
+      buildStack(branchName, "cedric-belfrage", params.FORCE_RELEASE)
     }
   }
 
