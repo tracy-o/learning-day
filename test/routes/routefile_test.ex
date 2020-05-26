@@ -9,7 +9,7 @@ defmodule Routes.RoutefileTest do
 
   @moduletag :routes_test
 
-  Enum.each(Routes.Routefile.routes(), fn {route_matcher, loop_id, examples} ->
+  Enum.each(Routes.Routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
     describe "For route matcher: #{route_matcher}" do
       @loop_id loop_id
       @route_matcher route_matcher

@@ -25,9 +25,9 @@ defmodule BelfrageWeb.RouteMaster do
     |> View.render(conn)
   end
 
-  defmacro handle(matcher, [using: id, examples: examples], do: block) do
+  defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do
     quote do
-      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
       get unquote(matcher) do
         unquote(block) || yield(unquote(id), var!(conn))
@@ -35,9 +35,9 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, using: id, only_on: env, examples: examples) do
+  defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args) do
     quote do
-      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
       # TODO: use match here...
       get unquote(matcher) do
@@ -50,9 +50,9 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, using: id, examples: examples) do
+  defmacro handle(matcher, [using: id, examples: _examples] = args) do
     quote do
-      @routes [{unquote(matcher), unquote(id), unquote(examples)} | @routes]
+      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
       # TODO: use match here...
       get unquote(matcher) do
