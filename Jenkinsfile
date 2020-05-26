@@ -18,7 +18,8 @@ def buildStack(branch, stack_name, force_release) {
       [$class: 'StringParameterValue', name: 'SERVICE', value: stack_name],
       [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: force_release]
     ],
-    propagate: true
+    propagate: true,
+    wait: false
   )
 }
 
