@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceTajik do
   def specs do
     %{
-      platform: Simorgh,
+      platform: Mozart,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       query_params_allowlist: ["alternativeJsLoading", "batch"]
     }
