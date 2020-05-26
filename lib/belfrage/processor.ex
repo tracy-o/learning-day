@@ -19,8 +19,10 @@ defmodule Belfrage.Processor do
     end
   end
 
-  def query_params_allowlist(struct) do
-    Belfrage.QueryParams.allowlist(struct)
+  def allowlists(struct) do
+    struct
+    |> Belfrage.QueryParams.allowlist()
+    |> Belfrage.Headers.allowlist()
   end
 
   def generate_request_hash(struct = %Struct{}) do

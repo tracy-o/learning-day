@@ -9,6 +9,7 @@ defmodule BelfrageWeb.StructAdapter do
       request: %Request{
         path: conn.request_path,
         payload: body(conn),
+        raw_headers: raw_headers(conn),
         method: conn.method,
         country: bbc_headers.country,
         path_params: conn.path_params,
@@ -39,6 +40,8 @@ defmodule BelfrageWeb.StructAdapter do
       _ -> nil
     end
   end
+
+  defp raw_headers(conn), do: Enum.into(conn.req_headers, %{})
 
   defp subdomain(%Plug.Conn{host: host}) when bit_size(host) > 0 do
     host
