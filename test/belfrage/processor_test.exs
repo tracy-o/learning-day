@@ -99,4 +99,28 @@ defmodule Belfrage.ProcessorTest do
       refute Map.has_key?(result.response.headers, "connection")
     end
   end
+
+  describe "Process.allowlists/1" do
+    test "filters out query params not in the allowlist" do
+      struct = %Struct{
+        request: %Struct.Request{query_params: %{"allowed" => "yes", "not-allowed" => "yes"}},
+        private: %Struct.Private{query_params_allowlist: ["allowed"]}
+      }
+
+      struct = Processor.allowlists(struct)
+      assert Map.has_key?(struct.request.query_params, "allowed")
+      refute Map.has_key?(struct.request.query_params, "not-allowed")
+    end
+
+    test "filters out headers not in the allowlist" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"allowed" => "yes", "not-allowed" => "yes"}},
+        private: %Struct.Private{headers_allowlist: ["allowed"]}
+      }
+
+      struct = Processor.allowlists(struct)
+      assert Map.has_key?(struct.request.raw_headers, "allowed")
+      refute Map.has_key?(struct.request.raw_headers, "not-allowed")
+    end
+  end
 end
