@@ -1,4 +1,6 @@
 defmodule Belfrage.RouteSpec do
+  @allow_all_keys [:headers_allowlist, :query_params_allowlist]
+
   def specs_for(name) do
     specs_for(name, Application.get_env(:belfrage, :production_environment))
   end
@@ -15,7 +17,7 @@ defmodule Belfrage.RouteSpec do
     Map.merge(platform_specs, route_specs, &merge_key/3)
   end
 
-  defp merge_key(:query_params_allowlist, _platform_value = "*", _route_value) do
+  defp merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
     "*"
   end
 

@@ -12,6 +12,24 @@ defmodule Belfrage.RouteSpecTest do
       assert result == %{a: ["one", "two"]}
     end
 
+    test "platform's allow all '*' does not always override routespec value" do
+      platform_specs = %{some_key: "*"}
+      route_specs = %{some_key: "a-value"}
+
+      result = RouteSpec.merge_specs(platform_specs, route_specs)
+
+      assert result == %{some_key: "a-value"}
+    end
+
+    test "when platform allows all headers" do
+      platform_specs = %{headers_allowlist: "*"}
+      route_specs = %{headers_allowlist: ["a-header"]}
+
+      result = RouteSpec.merge_specs(platform_specs, route_specs)
+
+      assert result == %{headers_allowlist: "*"}
+    end
+
     test "when platform allows all query params" do
       platform_specs = %{query_params_allowlist: "*"}
       route_specs = %{query_params_allowlist: ["a-param"]}
