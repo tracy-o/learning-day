@@ -7,7 +7,8 @@ defmodule Belfrage.Processor do
     RequestHash,
     ServiceProvider,
     Cache,
-    ResponseTransformers
+    ResponseTransformers,
+    Allowlist
   }
 
   def get_loop(struct = %Struct{}) do
@@ -21,8 +22,8 @@ defmodule Belfrage.Processor do
 
   def allowlists(struct) do
     struct
-    |> Belfrage.QueryParams.allowlist()
-    |> Belfrage.Headers.allowlist()
+    |> Allowlist.QueryParams.filter()
+    |> Allowlist.Headers.filter()
   end
 
   def generate_request_hash(struct = %Struct{}) do
