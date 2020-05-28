@@ -6,6 +6,7 @@ config :belfrage,
   routefile: Routes.RoutefileMock
 
 config :smoke,
+  ignore_specs: ["Hcraes", "ContainerData", "PageComposition", "PresTest"],
   header: %{
     header_belfrage: %{:id => "bid", :value => "www"},
     header_bruce: %{:id => "bid", :value => "bruce"},

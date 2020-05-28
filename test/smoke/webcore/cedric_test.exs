@@ -6,14 +6,13 @@ defmodule Belfrage.SmokeTest.Webcore.Cedric do
   @platform Webcore
   @stack "cedric-belfrage"
   @smoke_env System.get_env("SMOKE_ENV") || "test"
+  @ignore_specs Application.get_env(:smoke, :ignore_specs, [])
 
   @moduletag :smoke_test
   @moduletag platform: @platform
   @moduletag stack: @stack
 
-  @ignore_specs ["Hcraes", "ContainerData", "PageComposition", "PresTest"]
-
-  setup do
+  setup_all do
     Map.merge(
       Application.get_env(:smoke, String.to_atom(@smoke_env)),
       Application.get_env(:smoke, :header)
