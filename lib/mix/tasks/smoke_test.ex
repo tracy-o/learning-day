@@ -57,7 +57,7 @@ defmodule Mix.Tasks.SmokeTest do
       mix smoke_test --only route:/news/videos/:id
       mix smoke_test --only route:/topics/:id
 
-  ## Specify Cosmos production environment via `--bbc-env`
+  ## Specify Cosmos environment via `--bbc-env`
 
   "test" (default)
     
