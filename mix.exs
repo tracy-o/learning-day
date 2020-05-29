@@ -9,7 +9,9 @@ defmodule Belfrage.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
-      aliases: aliases()
+      aliases: aliases(),
+      test_pattern: test_pattern(Mix.env()),
+      warn_test_pattern: test_pattern(Mix.env())
     ]
   end
 
@@ -24,8 +26,8 @@ defmodule Belfrage.MixProject do
   defp aliases do
     [
       test: ["test --no-start"],
-      test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
-      routes_test: ["cmd MIX_ENV=routes_test mix test --color --trace test/routes/routefile_test.ex"],
+      test_e2e: ["cmd MIX_ENV=end_to_end mix test --color test/end_to_end/"],
+      routes_test: ["cmd MIX_ENV=routes_test mix test --color --trace test/routes/"],
       t: ["format", "cmd mix test --force --color"]
     ]
   end
@@ -68,4 +70,7 @@ defmodule Belfrage.MixProject do
       {:x509, "~> 0.8", only: :dev}
     ]
   end
+
+  defp test_pattern(mix_env) when mix_env == :test, do: "*_test.exs"
+  defp test_pattern(_mix_env), do: "*_test.ex"
 end
