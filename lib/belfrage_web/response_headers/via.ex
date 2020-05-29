@@ -11,12 +11,19 @@ defmodule BelfrageWeb.ResponseHeaders.Via do
   end
 
   defp build_via(conn) do
-    "#{Plug.Conn.get_http_protocol(conn)} Belfrage"
+    "#{protocol_version(conn)} Belfrage"
   end
 
   defp append_to_via(belfrage_via, _existing_via = nil), do: belfrage_via
 
   defp append_to_via(belfrage_via, existing_via) do
     existing_via <> ", " <> belfrage_via
+  end
+
+  defp protocol_version(conn) do
+    conn
+    |> Plug.Conn.get_http_protocol()
+    |> Atom.to_string()
+    |> String.replace_prefix("HTTP/", "")
   end
 end

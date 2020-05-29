@@ -82,7 +82,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"via", "HTTP/1.1 Belfrage"}
+                {"via", "1.1 Belfrage"}
               ], "<p>some html content</p>"} == sent_resp(conn)
     end
 
@@ -101,7 +101,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"via", "HTTP/1.1 Belfrage"}
+                {"via", "1.1 Belfrage"}
               ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
@@ -120,7 +120,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
-                {"via", "HTTP/1.1 Belfrage"}
+                {"via", "1.1 Belfrage"}
               ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
