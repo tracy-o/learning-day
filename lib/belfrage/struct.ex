@@ -22,6 +22,7 @@ defmodule Belfrage.Struct.Request do
     cdn?: false,
     has_been_replayed?: nil,
     subdomain: "www",
+    raw_headers: %{},
     query_params: %{},
     path_params: %{}
   ]
@@ -53,6 +54,7 @@ defmodule Belfrage.Struct.Private do
             pipeline: [],
             overrides: %{},
             query_params_allowlist: [],
+            headers_allowlist: [],
             production_environment: "live",
             platform: nil,
             signature_keys: %{skip: [], add: []},

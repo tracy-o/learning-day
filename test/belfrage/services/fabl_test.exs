@@ -15,6 +15,9 @@ defmodule Belfrage.Services.FablTest do
       path: "/fd/example-module",
       path_params: %{
         "name" => "example-module"
+      },
+      raw_headers: %{
+        "a-header" => "a value"
       }
     }
   }
@@ -211,6 +214,24 @@ defmodule Belfrage.Services.FablTest do
                  headers: %{"content-type" => "application/json"}
                }
              } = Fabl.dispatch(@get_preview_with_query_struct)
+    end
+
+    test "sends raw_header values" do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: _method,
+             url: _url,
+             payload: _payload,
+             headers: %{"a-header" => "a value", "accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+           },
+           :fabl ->
+          @ok_response
+        end
+      )
+
+      Fabl.dispatch(@get_struct)
     end
   end
 end

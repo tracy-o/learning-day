@@ -292,4 +292,28 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
   end
+
+  test "adds raw_headers to the struct.request" do
+    conn =
+      conn(:get, "/")
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+      |> put_private(:overrides, %{})
+      |> put_test_production_environment()
+      |> put_preview_mode_off()
+      |> put_private(:bbc_headers, %{
+        scheme: :https,
+        host: nil,
+        is_uk: true,
+        country: "gb",
+        replayed_traffic: nil,
+        varnish: 1,
+        cache: 0,
+        cdn: false
+      })
+      |> put_req_header("a-custom-header", "with this value")
+
+    assert StructAdapter.adapt(conn, SomeLoop).request.raw_headers == %{
+             "a-custom-header" => "with this value"
+           }
+  end
 end

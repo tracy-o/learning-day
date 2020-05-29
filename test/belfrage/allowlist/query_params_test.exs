@@ -1,7 +1,7 @@
-defmodule Belfrage.QueryParamsTest do
+defmodule Belfrage.Allowlist.QueryParamsTest do
   use ExUnit.Case
   alias Belfrage.Struct
-  alias Belfrage.QueryParams
+  alias Belfrage.Allowlist.QueryParams
 
   test "allows all query strings when allowlist is *" do
     struct =
@@ -19,7 +19,7 @@ defmodule Belfrage.QueryParamsTest do
     assert %{
              "a" => "b",
              "c" => "d"
-           } == QueryParams.allowlist(struct).request.query_params
+           } == QueryParams.filter(struct).request.query_params
   end
 
   test "rejects all query strings when allowlist is empty" do
@@ -35,7 +35,7 @@ defmodule Belfrage.QueryParamsTest do
         query_params_allowlist: []
       })
 
-    assert %{} == QueryParams.allowlist(struct).request.query_params
+    assert %{} == QueryParams.filter(struct).request.query_params
   end
 
   test "filters query strings when allowlist is not empty" do
@@ -53,7 +53,7 @@ defmodule Belfrage.QueryParamsTest do
 
     assert %{
              "a" => "b"
-           } == QueryParams.allowlist(struct).request.query_params
+           } == QueryParams.filter(struct).request.query_params
   end
 
   test "allowlist in struct defaults to empty" do

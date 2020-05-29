@@ -13,7 +13,7 @@ defmodule Belfrage do
   defp prepare_request(struct) do
     struct
     |> Processor.get_loop()
-    |> Processor.query_params_allowlist()
+    |> Processor.allowlists()
     |> Processor.generate_request_hash()
   end
 
