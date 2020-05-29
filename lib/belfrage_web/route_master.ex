@@ -113,6 +113,13 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro __before_compile__(_env) do
     quote do
       def routes, do: @routes
+
+      def routes_with_env do
+        @routes
+        |> Enum.map(fn {route, args} ->
+          {route, Map.put_new(args, :only_on, nil)}
+        end)
+      end
     end
   end
 end

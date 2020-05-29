@@ -26,8 +26,7 @@ defmodule Belfrage.MixProject do
       test: ["test --no-start"],
       test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
       routes_test: ["cmd MIX_ENV=routes_test mix test --color --trace test/routes/routefile_test.ex"],
-      t: ["format", "cmd mix test --force --color"],
-      smoke_test: ["cmd MIX_ENV=smoke_test mix test --color --trace test/smoke/"]
+      t: ["format", "cmd mix test --force --color"]
     ]
   end
 

@@ -11,11 +11,8 @@ case Mix.env() do
   :end_to_end ->
     ExUnit.configure(include: [:end_to_end], exclude: [:test, :routes_test, :smoke_test])
 
-  :routes_test ->
-    ExUnit.configure(include: [:routes_test], exclude: [:test, :end_to_end, :smoke_test])
-
-  :smoke_test ->
-    ExUnit.configure(include: [:smoke_test], exclude: [:test, :end_to_end, :routes_test])
+  _ ->
+    ExUnit.configure([])
 end
 
 ExUnit.start()

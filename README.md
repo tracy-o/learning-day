@@ -103,6 +103,27 @@ To run the automatically generated route matcher tests use:
 mix routes_test
 ```
 
+To run smoke tests on the example routes in the router:
+```elixir
+  # test all example routes
+  mix smoke_test
+
+  # test a subset of routes
+  mix smoke_test --only platform:Webcore
+  mix smoke_test --only spec:Search
+  mix smoke_test --only stack:bruce-belfrage
+
+  # test a single route
+  mix smoke_test --only route:/wales
+  mix smoke_test --only route:/topics/:id
+
+  # choose Cosmos environment with --bbc-env
+  mix smoke_test --bbc-env live --only route:/topics/:id
+
+  # for further information
+  mix help smoke_test
+```
+
 ### See all the defined route matchers
 
 Will produce a markdown table with all the defined route matchers:
