@@ -7,7 +7,8 @@ defmodule Belfrage.Pipeline do
 
     case apply(root_transformer, :call, [rest, struct]) do
       {:ok, struct} -> {:ok, struct}
-      {:redirect, struct} -> call_redirect(struct)
+      {:redirect, struct} -> {:ok, struct}
+      {:stop_pipeline, struct} -> {:ok, struct}
       {:error, struct, msg} -> call_500(struct, msg)
       _ -> handle_error(struct)
     end
@@ -27,8 +28,6 @@ defmodule Belfrage.Pipeline do
 
     {:error, struct, msg}
   end
-
-  defp call_redirect(struct), do: {:redirect, struct}
 
   def handle_error(struct) do
     ExMetrics.increment("error.pipeline.process.unhandled")

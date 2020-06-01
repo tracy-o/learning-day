@@ -79,7 +79,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     }
 
     assert {
-             :ok,
+             :stop_pipeline,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 500
@@ -100,7 +100,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     }
 
     assert {
-             :ok,
+             :stop_pipeline,
              %Belfrage.Struct{
                private: %Belfrage.Struct.Private{
                  origin: :belfrage_circuit_breaker
@@ -150,7 +150,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     }
 
     assert {
-             :ok,
+             :stop_pipeline,
              %Struct{
                response: %Struct.Response{
                  http_status: 500
