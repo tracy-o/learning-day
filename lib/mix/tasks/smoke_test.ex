@@ -1,10 +1,8 @@
 defmodule Mix.Tasks.SmokeTest do
   use Mix.Task
 
-  @shortdoc "Smoke tests mix task for Belfrage example routes"
-
-  @test_directory "test/smoke/"
   @env_opt "--bbc-env"
+  @shortdoc "Smoke tests mix task for Belfrage example routes"
 
   @moduledoc """
   Runs sanity and smoke tests on Belfrage example routes.
@@ -75,13 +73,13 @@ defmodule Mix.Tasks.SmokeTest do
     cmd =
       case parse(args) do
         {[], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{@test_directory} #{Enum.join(parsed_args, " ")}"
+          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
 
         {[@env_opt], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{@test_directory} #{Enum.join(parsed_args, " ")}"
+          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
 
         {[@env_opt, env], parsed_args} ->
-          "SMOKE_ENV=#{env} MIX_ENV=smoke_test mix test #{@test_directory} #{Enum.join(parsed_args, " ")}"
+          "SMOKE_ENV=#{env} MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
       end
 
     run(cmd)

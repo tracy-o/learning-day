@@ -9,7 +9,9 @@ defmodule Belfrage.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
-      aliases: aliases()
+      aliases: aliases(),
+      test_pattern: test_pattern(Mix.env()),
+      warn_test_pattern: test_pattern(Mix.env())
     ]
   end
 
@@ -25,10 +27,16 @@ defmodule Belfrage.MixProject do
     [
       test: ["test --no-start"],
       test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
-      routes_test: ["cmd MIX_ENV=routes_test mix test --color --trace test/routes/routefile_test.ex"],
+      routes_test: ["cmd MIX_ENV=routes_test mix test --color"],
+      # for smoke_test, see lib/mix/tasks/smoke_test.ex
       t: ["format", "cmd mix test --force --color"]
     ]
   end
+
+  defp test_pattern(mix_env) when mix_env == :end_to_end, do: "end_to_end/*_test.ex"
+  defp test_pattern(mix_env) when mix_env == :routes_test, do: "routes/*_test.ex"
+  defp test_pattern(mix_env) when mix_env == :smoke_test, do: "smoke/**/*_test.ex"
+  defp test_pattern(_mix_env), do: "*_test.exs"
 
   # Run "mix help compile.app" to learn about applications.
   def application do

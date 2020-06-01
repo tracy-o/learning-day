@@ -93,17 +93,19 @@ To run unit tests use the standard `mix` command:
 mix test
 ```
 
-To run the end to end integration suite run:
+In addition to unit tests, Belfrage provides other test suites. These can be executed via dedicated mix tasks that run corresponding tests contained in specific subdirectories (see below) in [`./test`](./test/). When a particular suite is being run, the other test suites are excluded to provide faster test duration and clearer results summary. The mechanism is based on `mix test`'s [:test_pattern configuration](https://hexdocs.pm/mix/Mix.Tasks.Test.html#module-configuration) that uses file path extension (`_test.ex`) to select related tests - see https://github.com/bbc/belfrage/pull/415.
+
+To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
 ```
 mix test_e2e
 ```
 
-To run the automatically generated route matcher tests use:
+To run the automatically generated route matcher tests in [./test/routes/](./test/routes/):
 ```
 mix routes_test
 ```
 
-To run smoke tests on the example routes in the router:
+To run the automatically generated smoke tests on the example routes in the router [./test/smoke/](./test/smoke/):
 ```elixir
   # test all example routes
   mix smoke_test
