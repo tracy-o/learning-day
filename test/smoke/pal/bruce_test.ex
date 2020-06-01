@@ -21,12 +21,13 @@ defmodule Belfrage.SmokeTest.Pal.Bruce do
 
   Routes.Routefile.routes_with_env()
   |> Enum.filter(fn {_, %{using: loop_id}} -> RouteSpec.specs_for(loop_id)[:platform] == @platform end)
-  |> Enum.each(fn {route_matcher, %{using: loop_id, examples: examples, only_on: _env}} ->
+  |> Enum.each(fn {route_matcher, %{using: loop_id, examples: examples, only_on: env}} ->
     describe "#{@stack} (#{@smoke_env}) route: #{route_matcher}," do
       @describetag spec: loop_id
 
       for example <- examples, loop_id not in @ignore_specs do
         @example example
+        @only_on env
 
         @tag route: route_matcher
         test "spec: #{loop_id}, path: #{example}", %{
@@ -35,10 +36,17 @@ defmodule Belfrage.SmokeTest.Pal.Bruce do
         } do
           resp = Helper.get_route(endpoint, @example, :pal)
 
-          assert resp.status_code == 200
-          assert Helper.header_item_exists(resp.headers, header_id)
-          assert not is_nil(resp.body) and String.length(resp.body) > 32
-          refute Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"})
+          cond do
+            @smoke_env == "live" and @only_on == "test" ->
+              assert resp.status_code == 404
+              assert Helper.header_item_exists(resp.headers, header_id)
+
+            true ->
+              assert resp.status_code == 200
+              assert Helper.header_item_exists(resp.headers, header_id)
+              assert not is_nil(resp.body) and String.length(resp.body) > 32
+              refute Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"})
+          end
         end
       end
     end
