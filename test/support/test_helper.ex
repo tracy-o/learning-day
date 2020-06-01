@@ -55,6 +55,10 @@ defmodule Test.Support.Helper do
     apply(__MODULE__, which, [])
   end
 
+  def get_route(endpoint, path, :pal) do
+    MachineGun.get!("#{endpoint}#{path}", [{"x-bbc-edge-scheme", "https"}, {"x-bbc-edge-cache", "1"}], %{})
+  end
+
   def get_route(endpoint, path) do
     MachineGun.get!("#{endpoint}#{path}", [], %{})
   end
