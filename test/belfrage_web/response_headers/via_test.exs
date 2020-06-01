@@ -23,7 +23,7 @@ defmodule BelfrageWeb.ResponseHeaders.ViaTest do
     assert ["Upstream, 1.1 Belfrage"] == get_resp_header(output_conn, "via")
   end
 
-  test "when http protocol isn't recognised" do
+  test "when http protocol isn't recognised, the protocol prefix is still removed" do
     input_conn = conn(:get, "/") |> Plug.Test.put_http_protocol(:"HTTP/3.7")
     struct = %Struct{}
 
