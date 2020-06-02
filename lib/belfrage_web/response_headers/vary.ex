@@ -22,17 +22,15 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       country(edge_cache: request.edge_cache?, varnish: request.varnish?),
       is_uk(request.edge_cache?),
       "X-BBC-Edge-Scheme",
-      language_cookie(request.path)
+      language_cookie(request.path),
+      raw_headers(request.raw_headers)
     ]
     |> Enum.reject(&is_nil/1)
     |> Enum.join(", ")
   end
 
   def vary_headers(_, true) do
-    [
-      "Accept-Encoding"
-    ]
-    |> Enum.join(", ")
+    "Accept-Encoding"
   end
 
   def country(edge_cache: true, varnish: _), do: "X-BBC-Edge-Country"
@@ -47,4 +45,11 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   defp language_cookie("/zhongwen" <> _rest), do: "X-Cookie-ckps_chinese"
   defp language_cookie("/serbian" <> _rest), do: "X-Cookie-ckps_serbian"
   defp language_cookie(_path), do: nil
+
+  defp raw_headers(raw_headers) when raw_headers == %{}, do: nil
+  defp raw_headers(raw_headers) do
+    raw_headers
+    |> Map.keys()
+    |> Enum.join(", ")
+  end
 end

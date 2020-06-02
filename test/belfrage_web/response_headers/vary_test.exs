@@ -110,4 +110,14 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       assert List.first(get_resp_header(conn, "vary")) =~ "X-Cookie-ckps_serbian"
     end
   end
+
+  describe "raw_headers" do
+    test "varies on provided raw headers" do
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{request: %Struct.Request{raw_headers: %{"one" => "header", "another" => "header 2"}}})
+
+      assert List.first(get_resp_header(conn, "vary")) =~ ", another, one"
+    end
+  end
 end
