@@ -180,6 +180,8 @@ defmodule Routes.Routefile do
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba", "/yoruba/example-123", "/yoruba/example-123.amp", "/yoruba/example-123.json"]
 
+ handle "/topics", using: "TopicPage", examples: ["/topics]
+
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
