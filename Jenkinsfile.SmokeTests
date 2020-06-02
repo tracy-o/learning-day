@@ -17,7 +17,7 @@ node {
   checkout scm
 
   properties([
-    buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '2', artifactNumToKeepStr: '5', artifactDaysToKeepStr: '2')),
+    buildDiscarder(logRotator(numToKeepStr: '30', daysToKeepStr: '3', artifactNumToKeepStr: '30', artifactDaysToKeepStr: '3')),
     disableConcurrentBuilds(),
     pipelineTriggers([parameterizedCron(cronlist)]),
     parameters([
