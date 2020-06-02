@@ -42,7 +42,8 @@ defmodule BelfrageWeb.RouteMasterTest do
       replayed_traffic: "",
       varnish: "",
       cache: "",
-      cdn: nil
+      cdn: nil,
+      req_svc_chain: "BELFRAGE"
     })
   end
 

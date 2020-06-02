@@ -18,7 +18,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  language_serbian: %{varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil}
+                 varnish: %{varnish: nil},
+                 req_svc_chain: %{req_svc_chain: nil}
                }
     end
 
@@ -34,7 +35,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-cookie-ckps_chinese", "trad"},
         {"x-cookie-ckps_serbian", "lat"},
         {"replayed-traffic", "true"},
-        {"varnish", ""}
+        {"varnish", ""},
+        {"req-svc-chain", "SomeTrafficManager"}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -49,7 +51,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  language_serbian: %{varnish: "lat"},
                  replayed_traffic: %{replayed_traffic: "true"},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil}
+                 varnish: %{varnish: nil},
+                 req_svc_chain: %{req_svc_chain: "SomeTrafficManager"}
                }
     end
 
@@ -64,7 +67,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-cookie-ckps_chinese", ""},
         {"x-cookie-ckps_serbian", ""},
         {"replayed-traffic", ""},
-        {"varnish", ""}
+        {"varnish", ""},
+        {"req-svc-chain", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -79,7 +83,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  language_serbian: %{varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil}
+                 varnish: %{varnish: nil},
+                 req_svc_chain: %{req_svc_chain: nil}
                }
     end
   end

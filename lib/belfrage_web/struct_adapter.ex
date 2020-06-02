@@ -23,7 +23,8 @@ defmodule BelfrageWeb.StructAdapter do
         cdn?: bbc_headers.cdn,
         xray_trace_id: xray_trace_id,
         accept_encoding: accept_encoding(conn),
-        is_uk: bbc_headers.is_uk
+        is_uk: bbc_headers.is_uk,
+        req_svc_chain: bbc_headers.req_svc_chain
       },
       private: %Private{
         loop_id: loop_id,

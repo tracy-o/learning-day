@@ -10,7 +10,8 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     language_serbian: %{varnish: "x-cookie-ckps_serbian"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
-    varnish: %{varnish: "x-varnish"}
+    varnish: %{varnish: "x-varnish"},
+    req_svc_chain: %{req_svc_chain: "req-svc-chain"}
   }
 
   def map(req_headers) do

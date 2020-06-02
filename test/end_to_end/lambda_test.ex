@@ -47,7 +47,8 @@ defmodule EndToEnd.LambdaTest do
               {"server", "Belfrage"},
               {"bsig", request_hash},
               {"bid", "local"},
-              {"via", "1.1 Belfrage"}
+              {"via", "1.1 Belfrage"},
+              {"req-svc-chain", "BELFRAGE"}
             ], response_body} = sent_resp(conn)
 
     assert response_body == @lambda_response["body"]
@@ -88,7 +89,8 @@ defmodule EndToEnd.LambdaTest do
               {"server", "Belfrage"},
               {"bsig", request_hash},
               {"bid", "local"},
-              {"via", "1.1 Belfrage"}
+              {"via", "1.1 Belfrage"},
+              {"req-svc-chain", "BELFRAGE"}
             ], response_body} = sent_resp(conn)
 
     assert @lambda_response["body"] == response_body

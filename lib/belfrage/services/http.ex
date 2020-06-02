@@ -92,7 +92,8 @@ defmodule Belfrage.Services.HTTP do
       "x-cookie-ckps_chinese" => request.language_chinese,
       "x-cookie-ckps_serbian" => request.language_serbian,
       "x-varnish" => varnish(request.varnish?),
-      "user-agent" => "Belfrage"
+      "user-agent" => "Belfrage",
+      "req-svc-chain" => request.req_svc_chain
     }
   end
 

@@ -45,7 +45,7 @@ defmodule Belfrage.Services.Fabl do
 
   defp execute_request(
          struct = %Struct{
-           request: request = %Struct.Request{method: "GET", raw_headers: raw_headers, path: path, path_params: params},
+           request: request = %Struct.Request{method: "GET", path: path, path_params: params},
            private: private
          }
        ) do
@@ -53,7 +53,7 @@ defmodule Belfrage.Services.Fabl do
        %Clients.HTTP.Request{
          method: :get,
          url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
-         headers: build_headers(raw_headers)
+         headers: build_headers(request)
        },
        :fabl
      ), struct}
@@ -62,7 +62,11 @@ defmodule Belfrage.Services.Fabl do
   defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
   defp module_path(_path), do: "/module/"
 
-  defp build_headers(raw_headers) do
-    Map.merge(raw_headers, %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"})
+  defp build_headers(%Struct.Request{raw_headers: raw_headers, req_svc_chain: req_svc_chain}) do
+    Map.merge(raw_headers, %{
+      "accept-encoding" => "gzip",
+      "user-agent" => "Belfrage",
+      "req-svc-chain" => req_svc_chain
+    })
   end
 end

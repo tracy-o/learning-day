@@ -17,6 +17,7 @@ defmodule Belfrage.Struct.Request do
     :language_serbian,
     :xray_trace_id,
     :accept_encoding,
+    :req_svc_chain,
     varnish?: false,
     edge_cache?: false,
     cdn?: false,

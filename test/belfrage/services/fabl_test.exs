@@ -18,7 +18,8 @@ defmodule Belfrage.Services.FablTest do
       },
       raw_headers: %{
         "a-header" => "a value"
-      }
+      },
+      req_svc_chain: "BELFRAGE"
     }
   }
 
@@ -40,7 +41,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           @ok_response
@@ -64,7 +65,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           {:ok,
@@ -92,7 +93,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           {
@@ -121,7 +122,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           {
@@ -148,7 +149,8 @@ defmodule Belfrage.Services.FablTest do
         path: "/fd/preview/example-preview-module",
         path_params: %{
           "name" => "example-preview-module"
-        }
+        },
+        req_svc_chain: "BELFRAGE"
       }
     }
 
@@ -160,7 +162,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           @ok_response
@@ -188,7 +190,8 @@ defmodule Belfrage.Services.FablTest do
         },
         query_params: %{
           "subText" => "readable"
-        }
+        },
+        req_svc_chain: "BELFRAGE"
       }
     }
 
@@ -200,7 +203,7 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/preview/module/example-preview-module?subText=readable",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
            :fabl ->
           @ok_response
@@ -224,7 +227,12 @@ defmodule Belfrage.Services.FablTest do
              method: _method,
              url: _url,
              payload: _payload,
-             headers: %{"a-header" => "a value", "accept-encoding" => "gzip", "user-agent" => "Belfrage"}
+             headers: %{
+               "a-header" => "a value",
+               "accept-encoding" => "gzip",
+               "user-agent" => "Belfrage",
+               "req-svc-chain" => "BELFRAGE"
+             }
            },
            :fabl ->
           @ok_response

@@ -47,6 +47,16 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def varnish(%{varnish: nil}, _), do: false
   def varnish(_, _), do: true
 
+  def req_svc_chain(%{req_svc_chain: req_svc_chain}, _) do
+    append_req_svc("BELFRAGE", req_svc_chain)
+  end
+
+  defp append_req_svc(belfrage_req_svc, _existing_req_svc = nil), do: belfrage_req_svc
+
+  defp append_req_svc(belfrage_req_svc, existing_req_svc) do
+    existing_req_svc <> "," <> belfrage_req_svc
+  end
+
   defp edge(headers, true), do: headers[:edge]
   defp edge(_headers, false), do: nil
 end

@@ -33,7 +33,7 @@ defmodule BelfrageWeb.Router do
 
     conn
     |> put_resp_header("cache-control", "max-age=30, public")
-    |> send_file( 200, robots_txt_path)
+    |> send_file(200, robots_txt_path)
   end
 
   options _ do
@@ -71,10 +71,12 @@ defmodule BelfrageWeb.Router do
   end
 
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
-    status = router_status reason
+    status = router_status(reason)
 
     case status do
-      400 -> BelfrageWeb.View.not_found(conn)
+      400 ->
+        BelfrageWeb.View.not_found(conn)
+
       _ ->
         Stump.log(:error, %{
           msg: "Router Service returned a #{status} status",
@@ -87,11 +89,11 @@ defmodule BelfrageWeb.Router do
     end
   end
 
-  defp router_status (%{ plug_status: plug_status }) do
+  defp router_status(%{plug_status: plug_status}) do
     plug_status
   end
 
-  defp router_status (_) do
+  defp router_status(_) do
     500
   end
 end

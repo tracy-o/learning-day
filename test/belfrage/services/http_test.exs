@@ -17,7 +17,8 @@ defmodule Belfrage.Services.HTTPTest do
       host: "www.bbc.co.uk",
       query_params: %{
         "foo" => "bar"
-      }
+      },
+      req_svc_chain: "BELFRAGE"
     }
   }
 
@@ -58,7 +59,8 @@ defmodule Belfrage.Services.HTTPTest do
                "accept-encoding" => "gzip",
                "x-country" => "gb",
                "user-agent" => "Belfrage",
-               "x-forwarded-host" => "www.bbc.co.uk"
+               "x-forwarded-host" => "www.bbc.co.uk",
+               "req-svc-chain" => "BELFRAGE"
              }
            } ->
           @ok_response

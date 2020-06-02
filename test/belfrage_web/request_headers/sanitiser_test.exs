@@ -141,4 +141,14 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
       assert Sanitiser.language_serbian(%{varnish: "lat"}, nil) == "lat"
     end
   end
+
+  describe "req_svc_chain headers" do
+    test "returns the req_svc_chain with BELFRAGE appended" do
+      assert Sanitiser.req_svc_chain(%{req_svc_chain: "GTM"}, nil) == "GTM,BELFRAGE"
+    end
+
+    test "returns the req_svc_chain with BELFRAGE when not the header is nil" do
+      assert Sanitiser.req_svc_chain(%{req_svc_chain: nil}, nil) == "BELFRAGE"
+    end
+  end
 end

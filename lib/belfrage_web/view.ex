@@ -12,6 +12,7 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.Fallback,
     ResponseHeaders.BID,
     ResponseHeaders.Via,
+    ResponseHeaders.ReqSvcChain,
     ResponseHeaders.AccessControlAllowOrigin
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
@@ -25,6 +26,7 @@ defmodule BelfrageWeb.View do
   def not_found(conn), do: internal_response(conn, 404)
   def internal_server_error(conn), do: internal_response(conn, 500)
   def unsupported_method(conn), do: internal_response(conn, 405)
+
   def redirect(conn, status, new_location) do
     conn
     |> put_resp_header("location", new_location)
