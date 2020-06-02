@@ -184,22 +184,6 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport/alpine-skiing.app", using: "SportPal", examples: ["/sport/alpine-skiing.app"]
-  handle "/sport/biathlon.app", using: "SportPal", examples: ["/sport/biathlon.app"]
-  handle "/sport/bobsleigh.app", using: "SportPal", examples: ["/sport/bobsleigh.app"]
-  handle "/sport/cross-country-skiing.app", using: "SportPal", examples: ["/sport/cross-country-skiing.app"]
-  handle "/sport/curling.app", using: "SportPal", examples: ["/sport/curling.app"]
-  handle "/sport/figure-skating.app", using: "SportPal", examples: ["/sport/figure-skating.app"]
-  handle "/sport/freestyle-skiing.app", using: "SportPal", examples: ["/sport/freestyle-skiing.app"]
-  handle "/sport/luge.app", using: "SportPal", examples: ["/sport/luge.app"]
-  handle "/sport/nordic-combined.app", using: "SportPal", examples: ["/sport/nordic-combined.app"]
-  handle "/sport/short-track-skating.app", using: "SportPal", examples: ["/sport/short-track-skating.app"]
-  handle "/sport/skeleton.app", using: "SportPal", examples: ["/sport/skeleton.app"]
-  handle "/sport/ski-jumping.app", using: "SportPal", examples: ["/sport/ski-jumping.app"]
-  handle "/sport/snowboarding.app", using: "SportPal", examples: ["/sport/snowboarding.app"]
-  handle "/sport/speed-skating.app", using: "SportPal", examples: ["/sport/speed-skating.app"]
-  handle "/sport/rugby-sevens.app", using: "SportPal", examples: ["/sport/rugby-sevens.app"]
-
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
