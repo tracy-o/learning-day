@@ -109,6 +109,27 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
+  test "when circuit breaker is active, the response body is returned as an empty string" do
+    struct = %Struct{
+      private: %Struct.Private{
+        loop_id: "SportVideos",
+        origin: "https://origin.bbc.co.uk/",
+        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
+        pipeline: ["CircuitBreaker"],
+        circuit_breaker_error_threshold: 5
+      }
+    }
+
+    assert {
+             :ok,
+             %Belfrage.Struct{
+               response: %Belfrage.Struct.Response{
+                 body: ""
+               }
+             }
+           } = CircuitBreaker.call([], struct)
+  end
+
   test "multiple origins will not add circuit breaker response when no errors for current origin" do
     struct = %Struct{
       private: %Struct.Private{
