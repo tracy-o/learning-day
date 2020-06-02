@@ -9,6 +9,7 @@ defmodule Belfrage.RequestHash do
     :language,
     :language_chinese,
     :language_serbian,
+    :raw_headers,
     :method,
     :path,
     :query_params,

@@ -177,5 +177,25 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(hash_one).request.request_hash ==
                RequestHash.generate(hash_two).request.request_hash
     end
+
+    test "varies on raw_headers, when matches" do
+      struct_one = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
+      struct_two = struct_one
+
+      %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(struct_one)
+      %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(struct_two)
+
+      assert hash_one == hash_two
+    end
+
+    test "varies on raw_headers, when differs" do
+      struct_one = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
+      struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
+
+      %Struct{request: %Struct.Request{request_hash: hash_one}} = RequestHash.generate(struct_one)
+      %Struct{request: %Struct.Request{request_hash: hash_two}} = RequestHash.generate(struct_two)
+
+      refute hash_one == hash_two
+    end
   end
 end
