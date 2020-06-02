@@ -11,12 +11,23 @@ defmodule BelfrageWeb.ResponseHeaders.Via do
   end
 
   defp build_via(conn) do
-    "#{Plug.Conn.get_http_protocol(conn)} Belfrage"
+    "#{protocol_version(Plug.Conn.get_http_protocol(conn))} Belfrage"
   end
 
   defp append_to_via(belfrage_via, _existing_via = nil), do: belfrage_via
 
   defp append_to_via(belfrage_via, existing_via) do
     existing_via <> ", " <> belfrage_via
+  end
+
+  defp protocol_version(:"HTTP/1"), do: "1"
+  defp protocol_version(:"HTTP/1.1"), do: "1.1"
+  defp protocol_version(:"HTTP/2"), do: "2"
+  defp protocol_version(protocol) do
+    Stump.log(:info, "No match for #{protocol} protocol. Match to increase performance.")
+
+    protocol
+    |> Atom.to_string()
+    |> String.replace_prefix("HTTP/", "")
   end
 end
