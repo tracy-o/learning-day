@@ -11,7 +11,7 @@ defmodule Routes.Routefile do
   redirect "/example/weather/0", to: "/weather", status: 301
   redirect "/ni", to: "/northernireland", status: 302
 
-  # handle "/cascade", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], examples: ["/cascade"]
+  handle "/cascade", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], examples: ["/cascade"]
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
