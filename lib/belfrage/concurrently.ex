@@ -2,9 +2,15 @@ defmodule Belfrage.Concurrently do
   alias Belfrage.Struct
 
   def start(struct = %Struct{}) do
-    struct.private.loop_id
-    |> List.wrap()
-    |> Stream.map(&Struct.add(struct, :private, %{loop_id: &1}))
+    all_loop_ids = struct.private.loop_id |> List.wrap()
+
+    all_loop_ids
+    |> Stream.map(
+      &Struct.add(struct, :private, %{
+        loop_id: &1,
+        all_loop_ids: all_loop_ids
+      })
+    )
   end
 
   def random_dedup_platform(structs) do
