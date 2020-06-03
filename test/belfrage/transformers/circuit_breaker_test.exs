@@ -121,7 +121,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     }
 
     assert {
-             :ok,
+             :stop_pipeline,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  body: ""
