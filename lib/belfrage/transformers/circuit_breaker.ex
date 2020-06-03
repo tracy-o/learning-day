@@ -3,13 +3,11 @@ defmodule Belfrage.Transformers.CircuitBreaker do
 
   @impl true
   def call(rest, struct) do
-    then(
-      rest,
       case threshold_exceeded?(error_count(struct), threshold(struct)) do
-        true -> circuit_breaker_active(struct)
-        false -> struct
+        true ->
+          {:stop_pipeline, circuit_breaker_active(struct)}
+        false -> then(rest, struct)
       end
-    )
   end
 
   defp circuit_breaker_active(struct = %Belfrage.Struct{}) do
