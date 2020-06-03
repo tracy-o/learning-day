@@ -8,8 +8,10 @@ defmodule BelfrageWeb.Plugs.XRay do
   @impl true
   def init(opts), do: opts
 
-  def build_trace_id_header(root, parent) do
-    "Root=" <> root <> ";Parent=" <> parent
+  def build_trace_id_header(segment) do
+    sampled_value = if @xray.sampled?(segment), do: '1', else: '0'
+
+    "Root=" <> segment.trace.root <> ";Parent=" <> segment.id <> ";Sampled=#{sampled_value}"
   end
 
   @impl true
@@ -25,7 +27,7 @@ defmodule BelfrageWeb.Plugs.XRay do
       })
 
     conn
-    |> Plug.Conn.put_private(:xray_trace_id, build_trace_id_header(segment.trace.root, segment.id))
+    |> Plug.Conn.put_private(:xray_trace_id, build_trace_id_header(segment))
     |> register_before_send(&on_request_completed(&1, segment))
   end
 

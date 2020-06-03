@@ -16,6 +16,8 @@ defmodule Belfrage.XrayStub do
     }
   end
 
+  def sampled?(_segment), do: true
+
   def set_http_request(segment, _http_request), do: segment
   def set_http_response(segment, _http_response), do: segment
 

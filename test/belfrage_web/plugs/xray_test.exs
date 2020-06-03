@@ -41,12 +41,24 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     |> Plugs.XRay.call([])
   end
 
-  test "it adds trace_id to the conn" do
+  test "when request is sampled, it sets xray trace ID, with 'Sampled' to 1" do
     conn = conn(:get, "/")
     conn = Plugs.XRay.call(conn, [])
 
     assert %Plug.Conn{
-             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id"}
+             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=1"}
+           } = conn
+  end
+
+  test "when request is not sampled, it sets xray trace ID, with 'Sampled' to 0" do
+    Belfrage.XrayMock
+    |> expect(:sampled?, fn _segment -> false end)
+
+    conn = conn(:get, "/")
+    conn = Plugs.XRay.call(conn, [])
+
+    assert %Plug.Conn{
+             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=0"}
            } = conn
   end
 
