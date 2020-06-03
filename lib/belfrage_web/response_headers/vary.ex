@@ -29,13 +29,8 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     |> Enum.join(", ")
   end
 
-  def vary_headers(request, true) do
-    [
-      "Accept-Encoding",
-      raw_headers(request.raw_headers)
-    ]
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join(", ")
+  def vary_headers(_request, true) do
+    "Accept-Encoding"
   end
 
   def country(edge_cache: true, varnish: _), do: "X-BBC-Edge-Country"
