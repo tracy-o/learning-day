@@ -2,6 +2,8 @@ defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
 
   @default_signature_keys [
+    :raw_headers,
+    :query_params,
     :country,
     :has_been_replayed?,
     :host,
@@ -9,10 +11,8 @@ defmodule Belfrage.RequestHash do
     :language,
     :language_chinese,
     :language_serbian,
-    :raw_headers,
     :method,
     :path,
-    :query_params,
     :scheme,
     :cdn?
   ]
