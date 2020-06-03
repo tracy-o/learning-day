@@ -190,9 +190,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"] do
-    return_404 if: !Enum.member?(TopicPage.sports_topics_routes, discipline)
-  end
+  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
