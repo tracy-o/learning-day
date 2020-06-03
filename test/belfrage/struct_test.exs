@@ -16,5 +16,15 @@ defmodule Belfrage.StructTest do
       struct = %Struct{response: %Struct.Response{headers: %{"set-cookie" => "abc123"}}}
       assert %Struct{response: %Struct.Response{headers: [{"set-cookie", "REDACTED"}]}} = Struct.loggable(struct)
     end
+
+    test "keeps non-PII request headers" do
+      struct = %Struct{request: %Struct.Request{raw_headers: %{"foo" => "bar"}}}
+      assert %Struct{request: %Struct.Request{raw_headers: [{"foo", "bar"}]}} = Struct.loggable(struct)
+    end
+
+    test "keeps non-PII response headers" do
+      struct = %Struct{response: %Struct.Response{headers: %{"foo" => "bar"}}}
+      assert %Struct{response: %Struct.Response{headers: [{"foo", "bar"}]}} = Struct.loggable(struct)
+    end
   end
 end
