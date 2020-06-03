@@ -78,7 +78,14 @@ defmodule Belfrage.Struct do
 
   def loggable(struct) do
     struct
-    |> get_and_update_in([Access.key(:response), Access.key(:body)], &{&1, "REMOVED"})
+    |> redact(:response, :body, fn _value -> "REMOVED" end)
+    |> redact(:request, :raw_headers, &Belfrage.PII.clean/1)
+    |> redact(:response, :headers, &Belfrage.PII.clean/1)
+  end
+
+  defp redact(struct, top_level, key, clean_func) do
+    struct
+    |> get_and_update_in([Access.key(top_level), Access.key(key)], &{&1, clean_func.(&1)})
     |> elem(1)
   end
 end

@@ -6,5 +6,15 @@ defmodule Belfrage.StructTest do
     test "removes response body" do
       assert "REMOVED" == Struct.loggable(%Struct{}).response.body
     end
+
+    test "removes request header PII" do
+      struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => "abc123"}}}
+      assert %Struct{request: %Struct.Request{raw_headers: [{"cookie", "REDACTED"}]}} = Struct.loggable(struct)
+    end
+
+    test "removes response header PII" do
+      struct = %Struct{response: %Struct.Response{headers: %{"set-cookie" => "abc123"}}}
+      assert %Struct{response: %Struct.Response{headers: [{"set-cookie", "REDACTED"}]}} = Struct.loggable(struct)
+    end
   end
 end

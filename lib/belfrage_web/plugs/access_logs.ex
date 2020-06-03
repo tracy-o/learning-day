@@ -13,23 +13,10 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
       path: conn.request_path,
       status: conn.status,
       method: conn.method,
-      req_headers: clear_cookies(conn.req_headers),
-      resp_headers: clear_cookies(conn.resp_headers)
+      req_headers: Belfrage.PII.clean(conn.req_headers),
+      resp_headers: Belfrage.PII.clean(conn.resp_headers)
     })
 
     conn
-  end
-
-  defp clear_cookies(headers, acc \\ [])
-  defp clear_cookies([], acc), do: acc
-  defp clear_cookies([header | rest], acc) do
-    clear_cookies(rest, [maybe_redact(header) | acc])
-  end
-
-  defp maybe_redact({key, value}) do
-    case String.contains?(key, ["cookie", "ssl"]) do
-      true -> {key, "REDACTED"}
-      false -> {key, value}
-    end
   end
 end
