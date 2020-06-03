@@ -13,18 +13,18 @@ config :smoke,
     header_cedric: %{:id => "bid", :value => "cedric"}
   },
   test: %{
-    endpoint_belfrage: "https://www.belfrage.test.api.bbc.co.uk",
-    endpoint_gtm: "https://www.test.bbc.co.uk",
-    endpoint_gtm_com: "https://www.test.bbc.com",
-    endpoint_bruce: "https://bruce.belfrage.test.api.bbc.co.uk",
-    endpoint_cedric: "https://cedric.belfrage.test.api.bbc.co.uk",
-    endpoint_pal: "https://pal.test.bbc.co.uk"
+    endpoint_belfrage: "www.belfrage.test.api.bbc.co.uk",
+    endpoint_gtm: "www.test.bbc.co.uk",
+    endpoint_gtm_com: "www.test.bbc.com",
+    endpoint_bruce: "bruce.belfrage.test.api.bbc.co.uk",
+    endpoint_cedric: "cedric.belfrage.test.api.bbc.co.uk",
+    endpoint_pal: "pal.test.bbc.co.uk"
   },
   live: %{
-    endpoint_belfrage: "https://www.belfrage.api.bbc.co.uk",
-    endpoint_gtm: "https://www.bbc.co.uk",
-    endpoint_gtm_com: "https://www.bbc.com",
-    endpoint_bruce: "https://bruce.belfrage.api.bbc.co.uk",
-    endpoint_cedric: "https://cedric.belfrage.api.bbc.co.uk",
-    endpoint_pal: "https://pal.live.bbc.co.uk"
+    endpoint_belfrage: "www.belfrage.api.bbc.co.uk",
+    endpoint_gtm: "www.bbc.co.uk",
+    endpoint_gtm_com: "www.bbc.com",
+    endpoint_bruce: "bruce.belfrage.api.bbc.co.uk",
+    endpoint_cedric: "cedric.belfrage.api.bbc.co.uk",
+    endpoint_pal: "pal.live.bbc.co.uk"
   }

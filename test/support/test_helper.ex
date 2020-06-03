@@ -56,11 +56,11 @@ defmodule Test.Support.Helper do
   end
 
   def get_route(endpoint, path, :pal) do
-    MachineGun.get!("#{endpoint}#{path}", [{"x-bbc-edge-scheme", "https"}, {"x-bbc-edge-cache", "1"}], %{})
+    MachineGun.get!("https://#{endpoint}#{path}", [{"x-bbc-edge-scheme", "https"}, {"x-bbc-edge-cache", "1"}], %{})
   end
 
   def get_route(endpoint, path) do
-    MachineGun.get!("#{endpoint}#{path}", [], %{})
+    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", endpoint}], %{})
   end
 
   def header_item_exists(headers, header_id) do
