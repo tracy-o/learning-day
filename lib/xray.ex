@@ -5,6 +5,7 @@ defmodule Belfrage.Xray do
   @type segment_name :: String.t()
 
   @callback new_trace() :: trace
+  @callback sampled?(segment) :: boolean()
   @callback start_tracing(trace, app_name) :: segment
   @callback finish_tracing(segment) :: any()
   @callback start_subsegment(String.t()) :: {:ok, segment} | {:error, String.t()}
@@ -22,6 +23,7 @@ defmodule Belfrage.Xray do
   alias AwsExRay.Record.{HTTPResponse, HTTPRequest}
 
   defdelegate new_trace, to: AwsExRay.Trace, as: :new
+  defdelegate sampled?(segment), to: AwsExRay.Segment, as: :sampled?
   defdelegate start_tracing(trace, app_name), to: AwsExRay, as: :start_tracing
   defdelegate finish_tracing(segment), to: AwsExRay, as: :finish_tracing
   defdelegate start_subsegment(segment), to: AwsExRay, as: :start_subsegment
