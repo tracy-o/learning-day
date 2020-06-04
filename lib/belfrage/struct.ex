@@ -12,9 +12,6 @@ defmodule Belfrage.Struct.Request do
     :scheme,
     :host,
     :is_uk,
-    :language,
-    :language_chinese,
-    :language_serbian,
     :xray_trace_id,
     :accept_encoding,
     :req_svc_chain,
@@ -59,7 +56,8 @@ defmodule Belfrage.Struct.Private do
             production_environment: "live",
             platform: nil,
             signature_keys: %{skip: [], add: []},
-            preview_mode: "off"
+            preview_mode: "off",
+            default_language: "en-gb"
 
   @type t :: %__MODULE__{}
 end

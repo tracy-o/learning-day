@@ -128,20 +128,6 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
     end
   end
 
-  describe "language headers" do
-    test "returns the language when set" do
-      assert Sanitiser.language(%{varnish: "en"}, nil) == "en"
-    end
-
-    test "returns the language_chinese when set" do
-      assert Sanitiser.language_chinese(%{varnish: "trad"}, nil) == "trad"
-    end
-
-    test "returns the language_serbian when set" do
-      assert Sanitiser.language_serbian(%{varnish: "lat"}, nil) == "lat"
-    end
-  end
-
   describe "req_svc_chain headers" do
     test "returns the req_svc_chain with BELFRAGE appended" do
       assert Sanitiser.req_svc_chain(%{req_svc_chain: "GTM"}, nil) == "GTM,BELFRAGE"
