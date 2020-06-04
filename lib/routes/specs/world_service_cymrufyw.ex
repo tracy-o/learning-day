@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceCymrufyw do
     %{
       platform: Simorgh,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
-      query_params_allowlist: ["alternativeJsLoading", "batch"]
+      query_params_allowlist: ["alternativeJsLoading", "batch"],
+      default_language: "cy"
     }
   end
 end

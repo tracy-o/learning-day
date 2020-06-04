@@ -12,6 +12,7 @@ defmodule Belfrage.Struct.Request do
     :scheme,
     :host,
     :is_uk,
+    :language,
     :xray_trace_id,
     :accept_encoding,
     :req_svc_chain,
