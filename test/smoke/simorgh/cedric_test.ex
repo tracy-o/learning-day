@@ -19,7 +19,7 @@ defmodule Belfrage.SmokeTest.Simorgh.Cedric do
   Routes.Routefile.routes_with_env()
   |> Enum.filter(fn {_, %{using: loop_id}} -> RouteSpec.specs_for(loop_id)[:platform] == @platform end)
   |> Enum.each(fn {route_matcher, %{using: loop_id, examples: examples, only_on: env}} ->
-    describe "#{@stack} route: #{route_matcher}," do
+    describe "#{@stack} (#{@smoke_env}) route: #{route_matcher}," do
       @describetag spec: loop_id
 
       for example <- examples, loop_id not in @ignore_specs do
