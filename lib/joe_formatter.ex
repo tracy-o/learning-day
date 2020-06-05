@@ -5,10 +5,15 @@ defmodule JoeFormatter do
   only: [format_time: 2, format_filters: 2, format_test_failure: 5, format_test_all_failure: 5]
 
   def init(opts) do
-    ExUnit.CLIFormatter.init(opts)
+    {:ok, state} = ExUnit.CLIFormatter.init(opts)
+    {:ok, Map.put(state, :failure_output, [])}
   end
 
   def handle_cast(args = {:suite_started, _load_us}, state) do
+    {:noreply, state}
+  end
+
+  def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:excluded, _reason}}}, state) do
     {:noreply, state}
   end
 
@@ -17,9 +22,10 @@ defmodule JoeFormatter do
 
     counter = state.failure_counter + 1
     #format_test_failure(test, failures, counter, width, formatter) 
-    IO.puts  IO.ANSI.red() <> "[🦑] #{test.name}" <>  IO.ANSI.reset()
+    line = IO.ANSI.red() <> "[🦑] #{test.name}" <>  IO.ANSI.reset()
+    IO.puts line
 
-    {:noreply, %{state|failure_counter: counter}}
+    {:noreply, %{state|failure_counter: counter, failure_output: [line | state.failure_output]}}
   end
 
   def handle_cast(arg = {:test_finished, test}, state) do
@@ -34,6 +40,14 @@ defmodule JoeFormatter do
   def handle_cast({:suite_finished, _run_us , _load_us}, state) do
     #IO.inspect state
     IO.puts "Joes has finished"
+    if (state.failure_output == []) do
+      IO.puts "YOU PASSED"
+    else
+      IO.puts "YOU FAILED"
+      IO.puts Enum.join(state.failure_output, "\n")
+    end
+
+
     {:noreply, state}
   end
 
