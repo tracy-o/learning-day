@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.LanguageTest do
   alias Belfrage.Transformers.Language
   alias Belfrage.Struct
 
-  test "uses struct's default en-GB language" do
+  test "the struct's default_language is en-GB" do
     struct = %Struct{}
 
     assert {
@@ -17,7 +17,7 @@ defmodule Belfrage.Transformers.LanguageTest do
            } = Language.call([], struct)
   end
 
-  test "uses default_language if it has been changed from the default" do
+  test "uses default_language specified in struct.private" do
     struct = %Struct{
       private: %Struct.Private{
         default_language: "cy"
