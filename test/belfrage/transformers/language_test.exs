@@ -4,14 +4,14 @@ defmodule Belfrage.Transformers.LanguageTest do
   alias Belfrage.Transformers.Language
   alias Belfrage.Struct
 
-  test "uses struct's default en-gb language" do
+  test "uses struct's default en-GB language" do
     struct = %Struct{}
 
     assert {
              :ok,
              %Struct{
                request: %{
-                 language: "en-gb"
+                 language: "en-GB"
                }
              }
            } = Language.call([], struct)
