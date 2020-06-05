@@ -6,7 +6,6 @@
 #
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
-  alias Routes.Specs.TopicPage
 
   redirect "/example/news/0", to: "/news", status: 302
   redirect "/example/weather/0", to: "/weather", status: 301
