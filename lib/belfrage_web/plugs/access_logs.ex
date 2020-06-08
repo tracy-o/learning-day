@@ -1,6 +1,5 @@
 defmodule BelfrageWeb.Plugs.AccessLogs do
   import Plug.Conn, only: [register_before_send: 2]
-  alias BelfrageWeb.RequestHeaders.Mapper
 
   def init(opts), do: opts
 

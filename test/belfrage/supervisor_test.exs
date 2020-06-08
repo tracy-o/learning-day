@@ -45,12 +45,6 @@ defmodule Belfrage.SupervisorTest do
                |> Enum.filter(fn x -> is_tuple(x) and elem(x, 0) == :limit end)
     end
 
-    # least-recently used (LRU) reclaim policy configured
-    test "reclaim policy: correct amount of cache entries evicted", %{conf: conf} do
-      {:ok, post_eviction_size} = Cachex.count(@test_cache)
-      assert post_eviction_size / conf[:size] == conf[:reclaim]
-    end
-
     test "reclaim policy: evicted cache entries should not exist in cache", %{overflow_size: overflow_size} do
       {:ok, post_eviction_size} = Cachex.count(@test_cache)
 

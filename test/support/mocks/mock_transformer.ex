@@ -12,7 +12,7 @@ defmodule Belfrage.Transformers.MockTransformerStop do
   use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(rest, struct) do
+  def call(_rest, struct) do
     send(self(), :mock_transformer_stop_called)
     {:stop_pipeline, struct}
   end
@@ -22,7 +22,7 @@ defmodule Belfrage.Transformers.MockTransformerRedirect do
   use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(rest, struct) do
+  def call(_rest, struct) do
     send(self(), :mock_transformer_redirect_called)
     {:redirect, struct}
   end
