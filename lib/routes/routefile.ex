@@ -187,6 +187,10 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
+  handle "/topics-internal/:id", using: "TopicPage", examples: ["/topics-internal/cmj34zmwm1zt"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cpzrw9qgwelt"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
