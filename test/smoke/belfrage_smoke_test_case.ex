@@ -39,8 +39,9 @@ defmodule Belfrage.SmokeTestCase do
                   assert Helper.header_item_exists(resp.headers, header_id)
 
                 true ->
-                  assert resp.status_code == 200
-                  assert not is_nil(resp.body) and String.length(resp.body) > 32
+                  test_properties = %{using: @matcher_spec.using, smoke_env: @smoke_env, target: @target}
+
+                  assert Belfrage.Smoke.Rules.valid_response?(test_properties, resp)
                   assert Helper.header_item_exists(resp.headers, header_id)
                   refute Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"})
               end
