@@ -2,13 +2,13 @@ defmodule Belfrage.Concurrently do
   alias Belfrage.Struct
 
   def start(struct = %Struct{}) do
-    all_loop_ids = struct.private.loop_id |> List.wrap()
+    candidate_loop_ids = struct.private.loop_id |> List.wrap()
 
-    all_loop_ids
+    candidate_loop_ids
     |> Stream.map(
       &Struct.add(struct, :private, %{
         loop_id: &1,
-        all_loop_ids: all_loop_ids
+        candidate_loop_ids: candidate_loop_ids
       })
     )
   end

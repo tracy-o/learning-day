@@ -16,7 +16,9 @@ defmodule Belfrage.ConcurrentlyTest do
       struct = %Struct{private: %Struct.Private{loop_id: "SomeLoop"}}
       result_as_list = struct |> Concurrently.start() |> Enum.to_list()
 
-      assert result_as_list == [%Struct{private: %Struct.Private{loop_id: "SomeLoop", all_loop_ids: ["SomeLoop"]}}]
+      assert result_as_list == [
+               %Struct{private: %Struct.Private{loop_id: "SomeLoop", candidate_loop_ids: ["SomeLoop"]}}
+             ]
     end
 
     test "when given a struct with a list of strings for loop_id value, order is maintained" do
@@ -25,16 +27,22 @@ defmodule Belfrage.ConcurrentlyTest do
 
       assert result_as_list == [
                %Struct{
-                 private: %Struct.Private{loop_id: "SomeLoop", all_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]}
+                 private: %Struct.Private{
+                   loop_id: "SomeLoop",
+                   candidate_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]
+                 }
                },
                %Struct{
                  private: %Struct.Private{
                    loop_id: "AnotherLoop",
-                   all_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]
+                   candidate_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]
                  }
                },
                %Struct{
-                 private: %Struct.Private{loop_id: "ThirdLoop", all_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]}
+                 private: %Struct.Private{
+                   loop_id: "ThirdLoop",
+                   candidate_loop_ids: ["SomeLoop", "AnotherLoop", "ThirdLoop"]
+                 }
                }
              ]
     end
