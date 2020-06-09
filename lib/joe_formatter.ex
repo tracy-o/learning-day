@@ -9,10 +9,6 @@ defmodule JoeFormatter do
     {:ok, Map.put(state, :failure_output, [])}
   end
 
-  def handle_cast(args = {:suite_started, _load_us}, state) do
-    {:noreply, state}
-  end
-
   def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:excluded, _reason}}}, state) do
     {:noreply, state}
   end
@@ -51,9 +47,7 @@ defmodule JoeFormatter do
     {:noreply, state}
   end
 
-  def handle_cast(anything, state) do
-    {:noreply, state}
-  end
+  defdelegate handle_cast(event, state), to: ExUnit.CLIFormatter
 
   defp update_test_counter(test_counter, %{tags: %{test_type: test_type}}) do
     Map.update(test_counter, test_type, 1, &(&1 + 1))
