@@ -182,7 +182,7 @@ defmodule Routes.Routefile do
 
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
-  handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do
+  handle "/topics/:id", using: "TopicPage", examples: ["/topics/c583y7zk042t"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
