@@ -4,12 +4,13 @@ defmodule Belfrage.SmokeTest do
   alias Belfrage.RouteSpec
 
   @targets Application.get_env(:smoke, :test) |> Map.keys()
-  @environments System.get_env("SMOKE_ENV", "test,live") |> String.split(",")
+  @environments (System.get_env("SMOKE_ENV") || "test,live") |> String.split(",")
+  @ignore_specs Application.get_env(:smoke, :ignore_specs)
 
   @moduletag :smoke_test
 
-  # TODO filter out app config `:ignore_specs` list
   Routes.Routefile.routes_with_env()
+  |> Enum.filter(fn {_route_matcher, %{using: loop_id}} -> not (loop_id in @ignore_specs) end)
   |> Enum.sort_by(fn {_route_matcher, %{using: loop_id}} -> loop_id end)
   |> Enum.chunk_by(fn {_route_matcher, %{using: loop_id}} -> loop_id end)
   |> Enum.each(fn route_matcher_specs ->

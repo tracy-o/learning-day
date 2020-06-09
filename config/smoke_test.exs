@@ -13,19 +13,16 @@ config :smoke,
     "cedric" => %{:id => "bid", :value => "cedric"},
     "preview" => %{:id => "bid", :value => "preview"},
     "gtm" => %{:id => "bid", :value => "www"},
-    "gtm_com" => %{:id => "bid", :value => "www"},
-    "pal" => %{:id => "bid", :value => "www"}
+    "gtm_com" => %{:id => "bid", :value => "www"}
   },
   test: %{
     "belfrage" => "www.belfrage.test.api.bbc.co.uk",
     "bruce" => "bruce.belfrage.test.api.bbc.co.uk",
     "cedric" => "cedric.belfrage.test.api.bbc.co.uk",
-    "pal" => "pal.test.bbc.co.uk",
     "preview" => "int.belfrage-preview.test.api.bbc.co.uk"
   },
   live: %{
     "belfrage" => "www.belfrage.api.bbc.co.uk",
     "bruce" => "bruce.belfrage.api.bbc.co.uk",
-    "cedric" => "cedric.belfrage.api.bbc.co.uk",
-    "pal" => "pal.live.bbc.co.uk"
+    "cedric" => "cedric.belfrage.api.bbc.co.uk"
   }

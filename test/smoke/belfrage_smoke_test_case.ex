@@ -1,4 +1,21 @@
 defmodule Belfrage.SmokeTestCase do
+  def test_properties(matcher_spec, smoke_env, target, host) do
+    %{
+      using: matcher_spec.using,
+      smoke_env: smoke_env,
+      target: target,
+      host: host,
+      tld: tld(host)
+    }
+  end
+
+  def tld(host) do
+    cond do
+      String.ends_with?(host, ".com") -> ".com"
+      String.ends_with?(host, ".co.uk") -> ".co.uk"
+    end
+  end
+
   defmacro __using__(
              opts = [
                route_matcher: route_matcher,
@@ -39,10 +56,9 @@ defmodule Belfrage.SmokeTestCase do
                   assert Helper.header_item_exists(resp.headers, header_id)
 
                 true ->
-                  test_properties = %{using: @matcher_spec.using, smoke_env: @smoke_env, target: @target}
+                  test_properties = Belfrage.SmokeTestCase.test_properties(@matcher_spec, @smoke_env, @target, @host)
 
-                  assert Belfrage.Smoke.Rules.valid_response?(test_properties, resp)
-                  assert Helper.header_item_exists(resp.headers, header_id)
+                  Belfrage.Smoke.Rules.assert_valid_response(test_properties, resp)
                   refute Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"})
               end
             end

@@ -11,7 +11,7 @@ defmodule Belfrage.Supervisor do
         :test -> [scheme: :http, port: 7081]
         :end_to_end -> [scheme: :http, port: 7082]
         :routes_test -> [scheme: :http, port: 7083]
-        :smoke_test -> [scheme: :http, port: 7099]
+        :smoke_test -> [scheme: :http, port: 7084]
         :dev -> [scheme: :http, port: 7080]
         :prod -> [scheme: :https, port: 7443]
       end
