@@ -28,7 +28,7 @@ defmodule Routes.Routefile do
   handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
 
   handle "/search", using: "Search", examples: ["/search"]
-  handle "/chwilio", using: "Search", examples: ["/chwilio"]
+  handle "/chwilio", using: "WelshSearch", examples: ["/chwilio"]
   handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
@@ -179,7 +179,7 @@ defmodule Routes.Routefile do
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba", "/yoruba/example-123", "/yoruba/example-123.amp", "/yoruba/example-123.json"]
-  
+
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/cmj34zmwm1zt"] do

@@ -63,6 +63,7 @@ defmodule Belfrage.Services.HTTP do
   defp build_headers(request) do
     edge_headers(request)
     |> Map.merge(default_headers(request))
+    |> Map.merge(request.raw_headers)
     |> Enum.reject(fn {_k, v} -> is_nil(v) end)
     |> Map.new()
   end
@@ -88,9 +89,6 @@ defmodule Belfrage.Services.HTTP do
   defp default_headers(request) do
     %{
       "accept-encoding" => "gzip",
-      "x-cookie-ckps_language" => request.language,
-      "x-cookie-ckps_chinese" => request.language_chinese,
-      "x-cookie-ckps_serbian" => request.language_serbian,
       "x-varnish" => varnish(request.varnish?),
       "user-agent" => "Belfrage",
       "req-svc-chain" => request.req_svc_chain

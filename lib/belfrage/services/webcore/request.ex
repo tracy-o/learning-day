@@ -5,6 +5,7 @@ defmodule Belfrage.Services.Webcore.Request do
     %{
       headers: %{
         country: struct.request.country,
+        language: struct.request.language,
         "accept-encoding": "gzip",
         is_uk: struct.request.is_uk,
         host: struct.request.host

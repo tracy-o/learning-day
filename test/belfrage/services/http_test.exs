@@ -218,7 +218,7 @@ defmodule Belfrage.Services.HTTPTest do
              } = HTTP.dispatch(struct)
     end
 
-    test "when the language is set, the language headers are used" do
+    test "when the raw headers are set, the raw headers are used" do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk"
@@ -228,9 +228,9 @@ defmodule Belfrage.Services.HTTPTest do
           path: "/_web_core",
           country: "gb",
           host: "www.bbc.co.uk",
-          language: "gb",
-          language_chinese: "trad",
-          language_serbian: "lat"
+          raw_headers: %{
+            "raw-header" => "val"
+          }
         }
       }
 
@@ -246,9 +246,7 @@ defmodule Belfrage.Services.HTTPTest do
                "x-country" => "gb",
                "user-agent" => "Belfrage",
                "x-forwarded-host" => "www.bbc.co.uk",
-               "x-cookie-ckps_language" => "gb",
-               "x-cookie-ckps_chinese" => "trad",
-               "x-cookie-ckps_serbian" => "lat"
+               "raw-header" => "val"
              }
            } ->
           @ok_response

@@ -77,40 +77,6 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
     end
   end
 
-  describe "language cookie" do
-    test "When the request is for weather" do
-      conn =
-        conn(:get, "/weather")
-        |> Vary.add_header(%Struct{request: %Struct.Request{path: "/weather"}})
-
-      assert List.first(get_resp_header(conn, "vary")) =~ "X-Cookie-ckps_language"
-    end
-
-    test "When the request is for ukchina" do
-      conn =
-        conn(:get, "/ukchina")
-        |> Vary.add_header(%Struct{request: %Struct.Request{path: "/ukchina"}})
-
-      assert List.first(get_resp_header(conn, "vary")) =~ "X-Cookie-ckps_chinese"
-    end
-
-    test "When the request is for zhongwen" do
-      conn =
-        conn(:get, "/zhongwen")
-        |> Vary.add_header(%Struct{request: %Struct.Request{path: "/zhongwen"}})
-
-      assert List.first(get_resp_header(conn, "vary")) =~ "X-Cookie-ckps_chinese"
-    end
-
-    test "When the request is for serbian" do
-      conn =
-        conn(:get, "/serbian")
-        |> Vary.add_header(%Struct{request: %Struct.Request{path: "/serbian"}})
-
-      assert List.first(get_resp_header(conn, "vary")) =~ "X-Cookie-ckps_serbian"
-    end
-  end
-
   describe "raw_headers" do
     test "varies on provided raw headers, when cdn is false" do
       conn =

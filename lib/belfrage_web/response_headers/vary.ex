@@ -22,7 +22,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       country(edge_cache: request.edge_cache?, varnish: request.varnish?),
       is_uk(request.edge_cache?),
       "X-BBC-Edge-Scheme",
-      language_cookie(request.path),
       raw_headers(request.raw_headers)
     ]
     |> Enum.reject(&is_nil/1)
@@ -39,12 +38,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def is_uk(true), do: "X-BBC-Edge-IsUK"
   def is_uk(false), do: "X-IP_Is_UK_Combined"
-
-  defp language_cookie("/weather" <> _rest), do: "X-Cookie-ckps_language"
-  defp language_cookie("/ukchina" <> _rest), do: "X-Cookie-ckps_chinese"
-  defp language_cookie("/zhongwen" <> _rest), do: "X-Cookie-ckps_chinese"
-  defp language_cookie("/serbian" <> _rest), do: "X-Cookie-ckps_serbian"
-  defp language_cookie(_path), do: nil
 
   defp raw_headers(raw_headers) when raw_headers == %{}, do: nil
   defp raw_headers(raw_headers) do
