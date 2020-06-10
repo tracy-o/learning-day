@@ -6,5 +6,5 @@ defmodule Belfrage.Smoke.RuleLibrary do
     ]
   end
 
-  def rules_for_pipeline(_transformer, _test_properties), do: []
+  def rules_for_pipeline(_transformer, _test_properties), do: :no_rules
 end

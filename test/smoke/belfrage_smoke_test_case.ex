@@ -54,7 +54,9 @@ defmodule Belfrage.SmokeTestCase do
                     tld: Belfrage.SmokeTestCase.tld(@host)
                   }
 
-                  Belfrage.Smoke.Rules.assert_valid_response(test_properties, resp)
+                  results = Belfrage.Smoke.Rules.run_assertions(test_properties, resp)
+
+                  assert Belfrage.Smoke.Rules.passed?(results), Belfrage.Smoke.Rules.format_failures(results)
               end
             end
           end
