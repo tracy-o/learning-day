@@ -1,6 +1,7 @@
 defmodule JoeFormatter do
   @moduledoc false
   use GenServer
+  alias ExUnit.Test
 
   def init(opts) do
     {:ok, config} = ExUnit.CLIFormatter.init(opts)
@@ -13,11 +14,11 @@ defmodule JoeFormatter do
   end
 
   # Do not count excluded/skipped/invalid tests to provide precise total tests executed (compared to ExUnit.CLIFormatter)
-  def handle_cast({:test_finished, %ExUnit.Test{state: {:excluded, _}}}, %{trace: false} = config), do: {:noreply, config}
-  def handle_cast({:test_finished, %ExUnit.Test{state: {:skipped, _}}}, %{trace: false} = config), do: {:noreply, config}
-  def handle_cast({:test_finished, %ExUnit.Test{state: {:invalid, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:excluded, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:skipped, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:invalid, _}}}, %{trace: false} = config), do: {:noreply, config}
 
-  def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:failed, failures}}}, %{trace: false} = config) do
+  def handle_cast({:test_finished, %Test{state: {:failed, _}} = test}, %{trace: false} = config) do
     line = "[🦑] #{test.name}"
     print(line, :failed, config.colors[:enabled])
 
@@ -32,18 +33,20 @@ defmodule JoeFormatter do
     }
   end
 
-  def handle_cast(arg = {:test_finished, test}, %{trace: false} = config) do
+  def handle_cast({:test_finished, test}, %{trace: false} = config) do
     print("[🐸] #{test.name}", :success, config.colors[:enabled])
     {:noreply, %{config | test_counter: update_test_counter(config.test_counter, test)}}
   end
 
-  def handle_cast({:suite_finished, _run_us, _load_us} = args, %{trace: false} = config) do
+  def handle_cast({:suite_finished, _run_us, _load_us} = event, %{trace: false} = config) do
     if config.failure_output == [] do
       IO.puts("YOU PASSED")
     else
       IO.puts("YOU FAILED")
       IO.puts(Enum.join(config.failure_output, "\n"))
     end
+
+    ExUnit.CLIFormatter.handle_cast(event, config)
 
     {:noreply, config}
   end
