@@ -192,6 +192,8 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
 
+  handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
+
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   no_match()
