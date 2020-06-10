@@ -16,7 +16,12 @@ defmodule JoeFormatter do
 
     {
       :noreply,
-      %{config | failure_counter: config.failure_counter + 1, failure_output: [line | config.failure_output]}
+      %{
+        config
+        | test_counter: update_test_counter(config.test_counter, test),
+          failure_counter: config.failure_counter + 1,
+          failure_output: [line | config.failure_output]
+      }
     }
   end
 
