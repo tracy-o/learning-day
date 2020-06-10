@@ -5,7 +5,8 @@ defmodule Belfrage.Credentials.STS do
 
   @impl true
   def refresh_credential(arn, session_name) do
-    assume_result = @aws_sts.assume_role(arn, session_name)
+    assume_result =
+      @aws_sts.assume_role(arn, session_name)
       |> @aws.request()
       |> format_response()
 

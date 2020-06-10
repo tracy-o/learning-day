@@ -50,6 +50,7 @@ defmodule Belfrage.Cache.MultiStrategy do
 
   defp execute_fetch(cache, struct, accepted_freshness) do
     cache_metric = cache.metric_identifier()
+
     with {:ok, freshness, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
       ExMetrics.increment("cache.#{cache_metric}.#{freshness}.hit")

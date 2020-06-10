@@ -24,9 +24,8 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   def call(arn, function, payload, opts \\ []) do
-    with {:ok, credentials} <- Belfrage.Credentials.Refresh.fetch(arn) do
-      invoke_lambda(function, payload, credentials, opts)
-    else
+    case Belfrage.Credentials.Refresh.fetch(arn) do
+      {:ok, credentials} -> invoke_lambda(function, payload, credentials, opts)
       error -> error
     end
   end
@@ -34,7 +33,7 @@ defmodule Belfrage.Clients.Lambda do
   defp invoke_lambda(function, payload, credentials, opts) do
     ExMetrics.timeframe "function.timing.service.lambda.invoke" do
       lambda_response =
-        Belfrage.Xray.trace_subsegment("invoke-lambda-call") do
+        Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
           @aws_lambda.invoke(function, payload, %{}, opts)
           |> @aws.request(
             security_token: credentials.session_token,

@@ -70,7 +70,7 @@ defmodule Belfrage.SupervisorTest do
         cache,
         key,
         {struct.response, Belfrage.Timer.now_ms()},
-        ttl: 15000
+        ttl: 15_000
       )
 
       :timer.sleep(1)

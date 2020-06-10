@@ -10,12 +10,12 @@ defmodule Belfrage.Clients.HTTP.Request do
   ]
 
   @type t :: %__MODULE__{
-    method: :get | :post,
-    url: String.t(),
-    payload: String.t() | map(),
-    headers: map(),
-    timeout: integer()
-  }
+          method: :get | :post,
+          url: String.t(),
+          payload: String.t() | map(),
+          headers: map(),
+          timeout: integer()
+        }
 
   def new(params) do
     %__MODULE__{

@@ -36,7 +36,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     build_relative_uri(
       String.replace_trailing(path, "/", ""),
       query
-      )
+    )
   end
 
   defp build_relative_uri(path, query) do
@@ -46,8 +46,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     ])
   end
 
-
-  defp trailing_slash?(%{ request_path: path }) do
+  defp trailing_slash?(%{request_path: path}) do
     path != "/" and String.ends_with?(path, "/")
   end
 end

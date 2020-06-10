@@ -20,5 +20,4 @@ defmodule Belfrage.Transformers.DevelopmentRequests do
 
   defp development_request_type(%{has_been_replayed?: true}), do: :replayed
   defp development_request_type(_), do: :no_match
-
 end

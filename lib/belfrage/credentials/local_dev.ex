@@ -13,7 +13,9 @@ defmodule Belfrage.Credentials.LocalDev do
       nil ->
         Stump.log(:error, %{msg: "Local credentials not found"})
         {:error, :failed_to_fetch_credentials}
-      _ -> {:ok, arn, session_name, credentials}
+
+      _ ->
+        {:ok, arn, session_name, credentials}
     end
   end
 end
