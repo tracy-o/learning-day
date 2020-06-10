@@ -1,4 +1,5 @@
 defmodule JoeFormatter do
+  @moduledoc false
   use GenServer
 
   def init(opts) do
@@ -6,11 +7,17 @@ defmodule JoeFormatter do
     {:ok, Map.put(config, :failure_output, [])}
   end
 
-  def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:excluded, _reason}}}, config) do
+  def handle_cast({:test_started, _} = event, %{trace: true} = config) do
+    ExUnit.CLIFormatter.handle_cast(event, config)
     {:noreply, config}
   end
 
-  def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:failed, failures}}}, config) do
+  # Do not count excluded/skipped/invalid tests to provide precise total tests executed (compared to ExUnit.CLIFormatter)
+  def handle_cast({:test_finished, %ExUnit.Test{state: {:excluded, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %ExUnit.Test{state: {:skipped, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %ExUnit.Test{state: {:invalid, _}}}, %{trace: false} = config), do: {:noreply, config}
+
+  def handle_cast(arg = {:test_finished, test = %ExUnit.Test{state: {:failed, failures}}}, %{trace: false} = config) do
     line = "[🦑] #{test.name}"
     print(line, :failed, config.colors[:enabled])
 
@@ -25,14 +32,12 @@ defmodule JoeFormatter do
     }
   end
 
-  def handle_cast(arg = {:test_finished, test}, config) do
+  def handle_cast(arg = {:test_finished, test}, %{trace: false} = config) do
     print("[🐸] #{test.name}", :success, config.colors[:enabled])
     {:noreply, %{config | test_counter: update_test_counter(config.test_counter, test)}}
   end
 
-  def handle_cast({:suite_finished, _run_us, _load_us}, config) do
-    IO.puts("Joes has finished")
-
+  def handle_cast({:suite_finished, _run_us, _load_us} = args, %{trace: false} = config) do
     if config.failure_output == [] do
       IO.puts("YOU PASSED")
     else
