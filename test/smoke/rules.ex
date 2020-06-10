@@ -14,4 +14,8 @@ defmodule Belfrage.Smoke.Rules do
   defp run_assertion({check_func, expectation}, resp) do
     apply(Belfrage.Smoke.Assertions, check_func, [resp, expectation])
   end
+
+  defp run_assertion(check_func, resp) do
+    apply(Belfrage.Smoke.Assertions, check_func, [resp])
+  end
 end

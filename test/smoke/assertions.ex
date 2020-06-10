@@ -15,4 +15,8 @@ defmodule Belfrage.Smoke.Assertions do
   def has_status(resp, expected_status) do
     assert resp.status_code == expected_status
   end
+
+  def not_a_fallback(resp) do
+    refute Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"})
+  end
 end
