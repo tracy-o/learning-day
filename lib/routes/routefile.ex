@@ -46,6 +46,14 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
   end
 
+  handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/52965272"] do
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
+  end
+
+  handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
+    return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\/-]+$/)
+  end
+
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
@@ -74,9 +82,6 @@ defmodule Routes.Routefile do
   handle "/burmese.amp", using: "WorldServiceBurmese", examples: ["/burmese.amp"]
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese", "/burmese/example-123", "/burmese/example-123.amp", "/burmese/example-123.json"]
-  handle "/cymrufyw.amp", using: "WorldServiceCymrufyw", examples: ["/cymrufyw.amp"]
-  handle "/cymrufyw.json", using: "WorldServiceCymrufyw", examples: ["/cymrufyw.json"]
-  handle "/cymrufyw/*_any", using: "WorldServiceCymrufyw", examples: ["/cymrufyw", "/cymrufyw/example-123", "/cymrufyw/example-123.amp", "/cymrufyw/example-123.json"]
   handle "/gahuza.amp", using: "WorldServiceGahuza", examples: ["/gahuza.amp"]
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
   handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza", "/gahuza/example-123", "/gahuza/example-123.amp", "/gahuza/example-123.json"]
@@ -110,9 +115,6 @@ defmodule Routes.Routefile do
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
-  handle "/naidheachdan.amp", using: "WorldServiceNaidheachdan", examples: ["/naidheachdan.amp"]
-  handle "/naidheachdan.json", using: "WorldServiceNaidheachdan", examples: ["/naidheachdan.json"]
-  handle "/naidheachdan/*_any", using: "WorldServiceNaidheachdan", examples: ["/naidheachdan", "/naidheachdan/example-123", "/naidheachdan/example-123.amp", "/naidheachdan/example-123.json"]
   handle "/newyddion.amp", using: "WorldServiceNewyddion", examples: ["/newyddion.amp"]
   handle "/newyddion.json", using: "WorldServiceNewyddion", examples: ["/newyddion.json"]
   handle "/newyddion/*_any", using: "WorldServiceNewyddion", examples: ["/newyddion", "/newyddion/example-123", "/newyddion/example-123.amp", "/newyddion/example-123.json"]
