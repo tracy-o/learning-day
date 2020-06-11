@@ -1,4 +1,4 @@
-defmodule Belfrage.Smoke.RuleLibrary do
+defmodule Support.Smoke.RuleLibrary do
   def rules_for_pipeline("WorldServiceRedirect", %{tld: ".co.uk"}) do
     [
       {:has_status, 302},

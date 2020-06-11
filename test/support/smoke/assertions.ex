@@ -1,4 +1,4 @@
-defmodule Belfrage.Smoke.Assertions do
+defmodule Support.Smoke.Assertions do
   alias Test.Support.Helper
 
   @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)

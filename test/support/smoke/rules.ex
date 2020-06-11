@@ -1,5 +1,5 @@
-defmodule Belfrage.Smoke.Rules do
-  alias Belfrage.Smoke.RuleCollector
+defmodule Support.Smoke.Rules do
+  alias Support.Smoke.RuleCollector
 
   def run_assertions(test_properties = %{using: loop_id, smoke_env: smoke_env, target: _target}, resp) do
     RuleCollector.rules_for(loop_id, smoke_env, test_properties)
@@ -35,10 +35,10 @@ defmodule Belfrage.Smoke.Rules do
   end
 
   defp run_assertion({check_func, expectation}, resp, test_properties) do
-    apply(Belfrage.Smoke.Assertions, check_func, [resp, expectation, test_properties])
+    apply(Support.Smoke.Assertions, check_func, [resp, expectation, test_properties])
   end
 
   defp run_assertion(check_func, resp, test_properties) do
-    apply(Belfrage.Smoke.Assertions, check_func, [resp, test_properties])
+    apply(Support.Smoke.Assertions, check_func, [resp, test_properties])
   end
 end

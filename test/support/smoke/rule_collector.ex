@@ -1,5 +1,5 @@
-defmodule Belfrage.Smoke.RuleCollector do
-  alias Belfrage.Smoke.RuleLibrary
+defmodule Support.Smoke.RuleCollector do
+  alias Support.Smoke.RuleLibrary
 
   @compulsory_rules [
     :not_a_fallback,
