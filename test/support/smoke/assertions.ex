@@ -11,7 +11,7 @@ defmodule Support.Smoke.Assertions do
       location ->
         expect(
           location =~ expected_location,
-          error("Redirect location header failed") <> expected(expected_location) <> actual(location)
+          ["Redirect location header failed", expected_location, location]
         )
     end
   end
@@ -19,16 +19,14 @@ defmodule Support.Smoke.Assertions do
   def has_content_length_over(resp, expected_min_content_length, _test_properties) do
     expect(
       not is_nil(resp.body) and String.length(resp.body) > expected_min_content_length,
-      red("Small response body.") <>
-        expected(Integer.to_string(expected_min_content_length)) <> actual(inspect(resp.body))
+      ["Small response body.", Integer.to_string(expected_min_content_length), inspect(resp.body)]
     )
   end
 
   def has_status(resp, expected_status, _test_properties) do
     expect(
       resp.status_code == expected_status,
-      error("Wrong status code.") <>
-        expected(Integer.to_string(expected_status)) <> actual(Integer.to_string(resp.status_code))
+      ["Wrong status code.", Integer.to_string(expected_status), Integer.to_string(resp.status_code)]
     )
   end
 
@@ -45,12 +43,12 @@ defmodule Support.Smoke.Assertions do
 
     expect(
       found_stack_id_header?,
-      error("Did not find stack id in response headers. ") <>
-        expected(inspect(expected_stack_id_header)) <> actual(inspect(resp.headers))
+      ["Did not find stack id in response headers.", inspect(expected_stack_id_header), inspect(resp.headers)]
     )
   end
 
   defp expect(true, _msg), do: :ok
+  defp expect(false, [msg, expected, actual]), do: error(msg) <> expected(expected) <> actual(actual)
   defp expect(false, msg), do: msg
 
   defp error(msg), do: red(msg)
