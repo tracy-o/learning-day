@@ -23,9 +23,8 @@ defmodule Routes.Routefile do
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/example-module"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/example-module"]
 
-  handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/promo-group"]
-  handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/sport"]
-  handle "/hcraes", using: "Hcraes", examples: ["/hcraes"]
+  handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
+  handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/scotland&params=%7B%7D"]
 
   handle "/search", using: "Search", examples: ["/search"]
   handle "/chwilio", using: "WelshSearch", examples: ["/chwilio"]
@@ -51,7 +50,7 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
-  handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader", "/pres-test/hcraes"]
+  handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
