@@ -18,7 +18,7 @@ defmodule BelfrageSanitySmokeTest do
   describe "GTM sanity tests" do
     @describetag stack: "belfrage"
     test "GTM /sport/videos/48521428", %{smoke_env: smoke_env} do
-      endpoint = gtm_host(smoke_env)
+      endpoint = Helper.gtm_host(smoke_env)
 
       resp = Helper.get_route(endpoint, "/sport/videos/48521428")
 
@@ -28,7 +28,7 @@ defmodule BelfrageSanitySmokeTest do
     end
 
     test "GTM .com /tajik", %{smoke_env: smoke_env} do
-      endpoint = gtm_host_com(smoke_env)
+      endpoint = Helper.gtm_host_com(smoke_env)
       resp = Helper.get_route(endpoint, "/tajik")
 
       assert resp.status_code == 200
@@ -36,10 +36,4 @@ defmodule BelfrageSanitySmokeTest do
       assert resp.body =~ "Сафҳаи аслӣ - BBC Tajik/Persian"
     end
   end
-
-  defp gtm_host("test"), do: "www.test.bbc.co.uk"
-  defp gtm_host_com("test"), do: "www.test.bbc.com"
-
-  defp gtm_host("live"), do: "www.bbc.co.uk"
-  defp gtm_host_com("live"), do: "www.bbc.com"
 end
