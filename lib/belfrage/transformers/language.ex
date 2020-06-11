@@ -11,7 +11,8 @@ defmodule Belfrage.Transformers.Language do
     # The logic to use a cookie/header language instead of the default, will be done in this
     # request transformer.
 
-    then(rest,
+    then(
+      rest,
       Belfrage.Struct.add(struct, :request, %{language: struct.private.default_language})
     )
   end
