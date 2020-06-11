@@ -10,11 +10,6 @@ defmodule JoeFormatter do
     {:ok, Map.put(config, :failed_tests, [])}
   end
 
-  def handle_cast(event = {:test_started, _}, config = %{trace: true}) do
-    ExUnit.CLIFormatter.handle_cast(event, config)
-    {:noreply, config}
-  end
-
   # Do not count excluded/skipped/invalid tests to provide precise total tests executed (compared to ExUnit.CLIFormatter)
   def handle_cast({:test_finished, %Test{state: {:excluded, _}}}, config = %{trace: false}), do: {:noreply, config}
   def handle_cast({:test_finished, %Test{state: {:skipped, _}}}, config = %{trace: false}), do: {:noreply, config}
