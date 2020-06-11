@@ -10,17 +10,17 @@ defmodule JoeFormatter do
     {:ok, Map.put(config, :failed_tests, [])}
   end
 
-  def handle_cast({:test_started, _} = event, %{trace: true} = config) do
+  def handle_cast(event = {:test_started, _}, config = %{trace: true}) do
     ExUnit.CLIFormatter.handle_cast(event, config)
     {:noreply, config}
   end
 
   # Do not count excluded/skipped/invalid tests to provide precise total tests executed (compared to ExUnit.CLIFormatter)
-  def handle_cast({:test_finished, %Test{state: {:excluded, _}}}, %{trace: false} = config), do: {:noreply, config}
-  def handle_cast({:test_finished, %Test{state: {:skipped, _}}}, %{trace: false} = config), do: {:noreply, config}
-  def handle_cast({:test_finished, %Test{state: {:invalid, _}}}, %{trace: false} = config), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:excluded, _}}}, config = %{trace: false}), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:skipped, _}}}, config = %{trace: false}), do: {:noreply, config}
+  def handle_cast({:test_finished, %Test{state: {:invalid, _}}}, config = %{trace: false}), do: {:noreply, config}
 
-  def handle_cast({:test_finished, %Test{state: {:failed, _}} = test}, %{trace: false} = config) do
+  def handle_cast({:test_finished, test = %Test{state: {:failed, _}}}, config = %{trace: false}) do
     print("[🦑] #{test.name}", :failed, config.colors[:enabled])
 
     {
@@ -34,12 +34,12 @@ defmodule JoeFormatter do
     }
   end
 
-  def handle_cast({:test_finished, test}, %{trace: false} = config) do
+  def handle_cast({:test_finished, test}, config = %{trace: false}) do
     print("[🐸] #{test.name}", :success, config.colors[:enabled])
     {:noreply, %{config | test_counter: update_test_counter(config.test_counter, test)}}
   end
 
-  def handle_cast({:suite_finished, _run_us, _load_us} = event, %{trace: false} = config) do
+  def handle_cast(event = {:suite_finished, _run_us, _load_us}, config = %{trace: false}) do
     config.failed_tests
     |> Enum.with_index()
     |> Enum.each(&print_failure(&1, config))
@@ -59,7 +59,7 @@ defmodule JoeFormatter do
   defp print(line, :failed, true), do: IO.puts(IO.ANSI.red() <> line <> IO.ANSI.reset())
   defp print(line, _outcome, false), do: IO.puts(line)
 
-  defp print_failure({%Test{state: {:failed, reason}} = test, index}, config) do
+  defp print_failure({test = %Test{state: {:failed, reason}}, index}, config) do
     IO.puts("")
     IO.puts(format_test_failure(test, reason, index + 1, config.width, &formatter(&1, &2, config)))
   end
