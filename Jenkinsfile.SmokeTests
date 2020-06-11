@@ -42,9 +42,9 @@ node {
       try {
         ansiColor('xterm') {
           if (params.TARGET == 'all') {
-            sh "SMOKE_ENV=${params.ENVIRONMENT} MIX_ENV=smoke_test mix test --color"
+            sh "SMOKE_ENV=${params.ENVIRONMENT} MIX_ENV=smoke_test mix test --color --formatter JoeFormatter"
           } else {
-            sh "SMOKE_ENV=${params.ENVIRONMENT} MIX_ENV=smoke_test mix test --color --only stack:${params.TARGET}"
+            sh "SMOKE_ENV=${params.ENVIRONMENT} MIX_ENV=smoke_test mix test --color --only stack:${params.TARGET} --formatter JoeFormatter"
           }
         }
       } catch (err) {

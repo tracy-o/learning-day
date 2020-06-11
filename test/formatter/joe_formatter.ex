@@ -1,3 +1,4 @@
+# custom test formatter, named after Joe's 2yr work anniversary
 defmodule JoeFormatter do
   @moduledoc false
   use GenServer
@@ -66,5 +67,5 @@ defmodule JoeFormatter do
   # TODO: format failure / stacktrace with color schemes
   # based on message type :test_info, :location_info,
   # :diff_enabled?, :error_info, stacktrace_info
-  defp formatter(type, msg, _config), do: msg
+  defp formatter(_type, msg, _config), do: msg
 end
