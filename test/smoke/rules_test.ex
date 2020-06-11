@@ -2,6 +2,29 @@ defmodule Support.Smoke.RulesTest do
   use ExUnit.Case
   alias Support.Smoke.Rules
 
+  describe "run_assertions/2" do
+    test "When response passes checks" do
+      test_properties = %{using: "SomeWorldServiceLoop", smoke_env: "test", target: "belfrage", tld: ".co.uk"}
+      response = %{status_code: 302, headers: [{"location", "bbc.com"}, {"bid", "www"}], body: ""}
+
+      assert %{
+               "WorldServiceRedirect" => [:ok, :ok, :ok, :ok]
+             } == Rules.run_assertions(test_properties, response)
+    end
+
+    test "When response fails checks" do
+      test_properties = %{using: "SomeWorldServiceLoop", smoke_env: "test", target: "belfrage", tld: ".co.uk"}
+      response = %{status_code: 200, headers: [{"bid", "www"}], body: ""}
+
+      assert %{
+               "WorldServiceRedirect" => [status_code_msg, location_header_msg, :ok, :ok]
+             } = Rules.run_assertions(test_properties, response)
+
+      assert status_code_msg =~ "Wrong status code."
+      assert location_header_msg =~ "Redirect location header not set"
+    end
+  end
+
   describe "passed?/1" do
     test "When all checks passed" do
       results = %{

@@ -4,9 +4,16 @@ defmodule Support.Smoke.Assertions do
   @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)
 
   def redirects_to(resp, expected_location, _test_properties) do
-    location = Helper.get_header(resp.headers, "location")
+    case Helper.get_header(resp.headers, "location") do
+      nil ->
+        error("Redirect location header not set")
 
-    expect(location =~ expected_location, "Redirect location failed, #{cyan(location)} =~ #{yellow(expected_location)}")
+      location ->
+        expect(
+          location =~ expected_location,
+          error("Redirect location header failed") <> expected(expected_location) <> actual(location)
+        )
+    end
   end
 
   def has_content_length_over(resp, expected_min_content_length, _test_properties) do
