@@ -6,26 +6,29 @@ defmodule Belfrage.SmokeTestCase do
     end
   end
 
+  def targets_for(environment) do
+    Application.get_env(:smoke, String.to_atom(environment))
+  end
+
   defmacro __using__(
              opts = [
                route_matcher: route_matcher,
                matcher_spec: matcher_spec,
-               targets: targets,
                environments: environments
              ]
            ) do
     quote do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
+      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1]
       @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
       @environments unquote(environments)
-      @targets unquote(targets)
 
-      for target <- @targets, environment <- @environments do
+      for smoke_env <- @environments, {target, host} <- targets_for(smoke_env) do
         @target target
-        @smoke_env environment
-        @host Application.get_env(:smoke, String.to_atom(@smoke_env))[@target]
+        @smoke_env smoke_env
+        @host host
 
         describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{@target}" do
           @describetag spec: @matcher_spec.using
@@ -36,7 +39,7 @@ defmodule Belfrage.SmokeTestCase do
             @tag route: @route_matcher
             @tag stack: @target
             test "#{example}" do
-              header_id = Application.get_env(:smoke, :header)[@target]
+              header_id = Application.get_env(:smoke, :endpoint_to_stack_id_mapping)[@target]
 
               resp = Helper.get_route(@host, @example)
 
@@ -51,7 +54,7 @@ defmodule Belfrage.SmokeTestCase do
                     smoke_env: @smoke_env,
                     target: @target,
                     host: @host,
-                    tld: Belfrage.SmokeTestCase.tld(@host)
+                    tld: tld(@host)
                   }
 
                   results = Support.Smoke.Rules.run_assertions(test_properties, resp)

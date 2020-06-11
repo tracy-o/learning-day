@@ -3,7 +3,6 @@ defmodule Belfrage.SmokeTest do
   alias Test.Support.Helper
   alias Belfrage.RouteSpec
 
-  @targets Application.get_env(:smoke, :test) |> Map.keys()
   @environments (System.get_env("SMOKE_ENV") || "test,live") |> String.split(",")
   @ignore_specs Application.get_env(:smoke, :ignore_specs)
 
@@ -22,7 +21,6 @@ defmodule Belfrage.SmokeTest do
           use Belfrage.SmokeTestCase,
             route_matcher: unquote(route_matcher),
             matcher_spec: unquote(@matcher_spec),
-            targets: unquote(@targets),
             environments: unquote(@environments)
         end
 
