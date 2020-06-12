@@ -8,7 +8,7 @@ defmodule BelfrageSanitySmokeTest do
   @moduletag :smoke_test
   @moduletag :sanity
 
-  @belfrage_header %{id: "bid", value: "www"}
+  @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
 
   setup do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
