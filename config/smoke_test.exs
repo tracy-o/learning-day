@@ -11,9 +11,7 @@ config :smoke,
     "belfrage" => %{:id => "bid", :value => "www"},
     "bruce" => %{:id => "bid", :value => "bruce"},
     "cedric" => %{:id => "bid", :value => "cedric"},
-    "preview" => %{:id => "bid", :value => "preview"},
-    "gtm" => %{:id => "bid", :value => "www"},
-    "gtm_com" => %{:id => "bid", :value => "www"}
+    "preview" => %{:id => "bid", :value => "preview"}
   },
   test: %{
     "belfrage" => "www.belfrage.test.api.bbc.co.uk",

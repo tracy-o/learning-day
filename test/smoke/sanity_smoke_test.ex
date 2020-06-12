@@ -1,7 +1,6 @@
 defmodule BelfrageSanitySmokeTest do
   @moduledoc """
-  Tests for routes via the GTM, until `gtm` and `gtm_com`
-  auto smoke tests are supported, by being added back in config/smoke_test.
+  A couple of sanity smoke tests for routes via the GTM
   """
   use ExUnit.Case, async: true
   alias Test.Support.Helper
