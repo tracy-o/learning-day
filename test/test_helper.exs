@@ -1,3 +1,5 @@
+Code.require_file("formatter/joe_formatter.ex", __DIR__)
+
 :ok = Application.start(:mox)
 
 Test.Support.Helper.setup_stubs()
