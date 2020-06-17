@@ -16,6 +16,12 @@ defmodule Belfrage.Dials do
     |> dial_value_to_int()
   end
 
+  def logging_level() do
+    state()
+    |> Map.get("logging_level", "default")
+    |> set_level()
+  end
+
   def state() do
     GenServer.call(:dials, :state)
   end
@@ -92,5 +98,15 @@ defmodule Belfrage.Dials do
 
   defp dial_value_to_int(dial_value) do
     Map.get(@ttl_modifier_comparison, dial_value, 1)
+  end
+
+  defp set_level(dial_value) do
+    dial = String.to_atom(dial_value)
+
+    if dial in [:debug, :info, :warn, :error] do
+      Logger.configure(level: dial)
+    end
+
+    Logger.level()
   end
 end

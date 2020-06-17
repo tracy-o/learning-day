@@ -21,5 +21,32 @@
         "description": "Use this to 10x the max-age in case of extreme instability of the platform"
       }
     ]
+  },
+  {
+    "name": "logging_level",
+    "description": "This sets the logging level of the application",
+    "default-value": "default",
+    "values": [
+      {
+        "value": "default",
+        "description": "Leaves the logging level unchanged"
+      },
+      {
+        "value": "debug",
+        "description": "Sets the logging level to debug"
+      },
+      {
+        "value": "info",
+        "description": "Sets the logging level to info"
+      },
+      {
+        "value": "warn",
+        "description": "Sets the logging level to warn"
+      },
+      {
+        "value": "error",
+        "description": "Sets the logging level to error"
+      }
+    ]
   }
 ]
