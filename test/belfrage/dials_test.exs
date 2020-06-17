@@ -60,32 +60,6 @@ defmodule Belfrage.DialsTest do
     end
   end
 
-  describe "&ttl_multiplier/" do
-    test "Changing the file gives the new ttl multiplier value" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "long"})} end)
-
-      Dials.refresh_now()
-      assert Dials.ttl_multiplier() == 3
-    end
-
-    test "when the ttl_multiplier dial is `private`, the ttl multiplier returns `0`" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "private"})} end)
-
-      Dials.refresh_now()
-      assert Dials.ttl_multiplier() == 0
-    end
-
-    test "returns the default ttl value of 1" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"foo": "bar"})} end)
-
-      Dials.refresh_now()
-      assert Dials.ttl_multiplier() == 1
-    end
-  end
-
   describe "logging_level/0" do
     test "When the dial is is set to default, the Logging level remains unchanged" do
       inital_level = Logger.level()
@@ -99,7 +73,6 @@ defmodule Belfrage.DialsTest do
 
     test "When the dial is set to something unexpected, the logging level remains unchanged" do
       inital_level = Logger.level()
-      IO.inspect(Logger.level())
 
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn _ -> {:ok, ~s({"logging_level": "something unexpected"})} end)
