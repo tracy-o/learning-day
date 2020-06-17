@@ -28,7 +28,7 @@ defmodule Support.Smoke.Rules do
   defp format_pipeline_failures({pipeline, failures}) do
     case Enum.filter(failures, fn failure -> failure != :ok end) do
       [] -> "#{pipeline} passed.\n"
-      failures -> "Rules for #{pipeline} failed:\n#{Enum.join(failures, "\n\nw")}"
+      failures -> "Rules for #{pipeline} failed:\n#{Enum.join(failures, "\n\n")}"
     end
   end
 
