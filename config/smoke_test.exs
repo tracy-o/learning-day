@@ -7,7 +7,7 @@ config :belfrage,
 
 config :smoke,
   ignore_specs: ["WorldServiceMundo"],
-  header: %{
+  endpoint_to_stack_id_mapping: %{
     "belfrage" => %{:id => "bid", :value => "www"},
     "bruce" => %{:id => "bid", :value => "bruce"},
     "cedric" => %{:id => "bid", :value => "cedric"},
