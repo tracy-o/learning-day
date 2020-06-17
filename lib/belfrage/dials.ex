@@ -10,12 +10,6 @@ defmodule Belfrage.Dials do
     GenServer.start_link(__MODULE__, opts, name: :dials)
   end
 
-  def logging_level() do
-    state()
-    |> Map.get("logging_level", "default")
-    |> set_level()
-  end
-
   def state() do
     GenServer.call(:dials, :state)
   end
@@ -81,15 +75,5 @@ defmodule Belfrage.Dials do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end
-  end
-
-  defp set_level(dial_value) do
-    dial = String.to_atom(dial_value)
-
-    if dial in [:debug, :info, :warn, :error] do
-      Logger.configure(level: dial)
-    end
-
-    Logger.level()
   end
 end
