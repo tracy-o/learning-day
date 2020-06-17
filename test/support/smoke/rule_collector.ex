@@ -1,7 +1,7 @@
 defmodule Support.Smoke.RuleCollector do
   alias Support.Smoke.RuleLibrary
 
-  @compulsory_rules [
+  @compulsory_assertions [
     :not_a_fallback,
     :correct_stack_id
   ]
@@ -17,7 +17,7 @@ defmodule Support.Smoke.RuleCollector do
 
   defp default(rules) when rules == %{} do
     %{
-      "DefaultChecks" => [{:has_status, 200}, {:has_content_length_over, 30}] ++ @compulsory_rules
+      "DefaultChecks" => [{:has_status, 200}, {:has_content_length_over, 30}] ++ @compulsory_assertions
     }
   end
 
@@ -26,7 +26,7 @@ defmodule Support.Smoke.RuleCollector do
   defp get_pipeline_rules(pipeline, test_properties, acc) do
     case RuleLibrary.rules_for_pipeline(pipeline, test_properties) do
       :no_rules -> acc
-      rules -> acc ++ [{pipeline, rules ++ @compulsory_rules}]
+      rules -> acc ++ [{pipeline, rules ++ @compulsory_assertions}]
     end
   end
 end
