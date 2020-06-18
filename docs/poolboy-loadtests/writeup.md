@@ -10,7 +10,7 @@ Latencies     [mean, 50, 95, 99, max]    59.289158ms, 2.954208ms, 4.70963ms, 24.
 
 Meaning that something was happening in Belfrage for 5 seconds. The goal of this investigation is to find out why this is happening and how to solve it.
 
-We're looking in Poolboy because its our poolworker and our client for connections to downstream services.
+We're looking in Poolboy because it manages HTTP connections to downstream services in Belfrage.
 
 ## Replicating the Issue
 
@@ -218,5 +218,4 @@ After analysing all the data I believe this is what's happening (the data is fro
 This diagram explains it clearly:
 
 ![](./img/explaination_diagram.png)
-
 
