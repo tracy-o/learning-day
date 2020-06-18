@@ -19,7 +19,7 @@ I managed to replicate the issue using this configuration of instances.
 ```
 loadtest-instance -> belfrage-playground -> origin_simulator
 ```
-The loadtest instance was configured for 180rps for 60 seconds using the vegta loadtest tool.
+The loadtest instance was configured for 180rps for 60 seconds using the vegeta loadtest tool.
 
 The origin_simulator was configured to give a response in 5s with the news frontpage.
 
@@ -218,4 +218,3 @@ After analysing all the data I believe this is what's happening (the data is fro
 This diagram explains it clearly:
 
 ![](./img/explaination_diagram.png)
-
