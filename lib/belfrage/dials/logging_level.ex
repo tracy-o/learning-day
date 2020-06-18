@@ -1,8 +1,6 @@
 defmodule Belfrage.Dials.LoggingLevel do
-  alias Belfrage.Dials
-
-  def value() do
-    Dials.state()
+  def on_refresh(dials) do
+    dials
     |> Map.get("logging_level", "default")
     |> set_level()
   end

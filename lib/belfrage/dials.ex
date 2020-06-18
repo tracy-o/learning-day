@@ -34,6 +34,7 @@ defmodule Belfrage.Dials do
 
     case refresh_dials() do
       {:ok, dials} ->
+        on_refresh(dials)
         {:noreply, dials}
 
       {:error, reason} ->
@@ -75,5 +76,10 @@ defmodule Belfrage.Dials do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  defp on_refresh(dials) do
+    Belfrage.Dials.LoggingLevel.on_refresh(dials)
+    :ok
   end
 end
