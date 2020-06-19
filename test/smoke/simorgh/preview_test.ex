@@ -16,7 +16,7 @@ defmodule Belfrage.SmokeTest.Simorgh.Preview do
     Map.merge(Application.get_env(:smoke, String.to_atom(@smoke_env)), Application.get_env(:smoke, :header))
   end
 
-  Routes.Routefile.routes_with_env()
+  Routes.Routefile.routes()
   |> Enum.filter(fn {_, %{using: loop_id}} -> RouteSpec.specs_for(loop_id)[:platform] == @platform end)
   |> Enum.each(fn {route_matcher, %{using: loop_id, examples: examples}} ->
     describe "#{@stack} (#{@smoke_env}) route: #{route_matcher}," do
