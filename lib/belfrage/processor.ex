@@ -45,8 +45,16 @@ defmodule Belfrage.Processor do
     struct
   end
 
-  def perform_call(struct = %Struct{private: %Struct.Private{origin: origin}}) do
+  # when only one struct
+  def perform_call([struct = %Struct{private: %Struct.Private{origin: origin}}]) do
     ServiceProvider.service_for(origin).dispatch(struct)
+  end
+
+  @doc """
+  When a list of structs, call the cascade service
+  """
+  def perform_call(structs) do
+    Belfrage.Services.Cascade.dispatch(structs)
   end
 
   def response_pipeline(struct = %Struct{}) do

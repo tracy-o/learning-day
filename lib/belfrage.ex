@@ -5,8 +5,14 @@ defmodule Belfrage do
 
   def handle(struct = %Struct{}) do
     struct
-    |> prepare_request()
-    |> check_cache()
+    |> Belfrage.Concurrently.start()
+    |> Belfrage.Concurrently.run(fn struct ->
+      struct
+      |> prepare_request()
+      |> check_cache()
+    end)
+    |> Belfrage.Concurrently.random_dedup_platform()
+    |> Belfrage.Concurrently.pick_early_response()
     |> generate_response()
   end
 
@@ -25,9 +31,10 @@ defmodule Belfrage do
     |> Processor.init_post_response_pipeline()
   end
 
-  defp generate_response(struct) do
-    struct
-    |> Processor.request_pipeline()
+  defp generate_response(structs) do
+    structs
+    |> Belfrage.Concurrently.run(&Processor.request_pipeline/1)
+    |> Belfrage.Concurrently.pick_early_response()
     |> Processor.perform_call()
     |> Processor.response_pipeline()
     |> Processor.init_post_response_pipeline()

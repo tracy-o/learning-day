@@ -11,6 +11,10 @@ defmodule Routes.Routefile do
   redirect "/example/weather/0", to: "/weather", status: 301
   redirect "/ni", to: "/northernireland", status: 302
 
+  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: ["/_private/belfrage-cascade-test"]
+  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
+
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
   handle "/homepage/test", using: "TestHomePage", only_on: "test", examples: ["/homepage/test"]

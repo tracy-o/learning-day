@@ -10,7 +10,7 @@ defmodule Routes.RoutefileTest do
   @moduletag :routes_test
 
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
-    describe "For route matcher: #{route_matcher}" do
+    describe "For route matcher: #{route_matcher} (#{loop_id})" do
       @loop_id loop_id
       @route_matcher route_matcher
 
@@ -56,9 +56,11 @@ defmodule Routes.RoutefileTest do
               :handle,
               fn struct = %Struct{
                    private: %Struct.Private{
-                     loop_id: @loop_id
+                     loop_id: loop_id
                    }
                  } ->
+                assert @loop_id == loop_id || @loop_id in loop_id
+
                 Struct.add(
                   struct,
                   :response,

@@ -19,7 +19,7 @@ defmodule Belfrage.SmokeTest.Pal.Cedric do
     )
   end
 
-  Routes.Routefile.routes_with_env()
+  Routes.Routefile.routes()
   |> Enum.filter(fn {_, %{using: loop_id}} -> RouteSpec.specs_for(loop_id)[:platform] == @platform end)
   |> Enum.each(fn {route_matcher, %{using: loop_id, examples: examples, only_on: env}} ->
     describe "#{@stack} (#{@smoke_env}) route: #{route_matcher}," do
