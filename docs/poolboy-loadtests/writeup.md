@@ -153,7 +153,7 @@ All these tests are run with 512 pool size with 256 pool overflow, with of cours
 
 ![](./img/100rps_pool.png)
 
-This is more of a control you can see that in this test not all of the pool workers are used, so the overflow is never used. You can also see that while the load test only lasts for 30 seconds the workers take a little longer to fall back to 0.
+This test was a control, a way of giving a baseline to compare the other results. In this test not all of the workers in the pool are used, so the pool never overflows. You can also see that while the load test only lasts for 30 seconds the workers take a little longer to fall back to 0.
 
 ### 150 RPS
 
