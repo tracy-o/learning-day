@@ -94,7 +94,7 @@ However there is a clear theory as to what is causing the steps. The poolboy has
 300 * 2.5 = 750
 ```
 
-This can't be a coincidence so the increase in latency is probably caused by the pool reaching its limit of workers.
+This suggests a potential relationship between the latency observed and the pool boy configuration. The increase in latency may be caused by the pool reaching its limit of workers.
 
 The following work in this was derived from Boon's insight, [click to see in more detail](https://github.com/bbc/belfrage/pull/451#discussion_r440995039)
 
