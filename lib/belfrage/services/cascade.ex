@@ -3,7 +3,6 @@ defmodule Belfrage.Services.Cascade do
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{ServiceProvider, Struct}
-  require Logger
 
   @default_response %Struct.Response{http_status: 404, body: ""}
 
@@ -16,7 +15,6 @@ defmodule Belfrage.Services.Cascade do
   end
 
   def try_service(struct = %Struct{}, _nothing) do
-    Logger.error("Trying service...")
     default_response = Struct.add(struct, :response, @default_response)
 
     ServiceProvider.service_for(struct.private.origin).dispatch(struct)
