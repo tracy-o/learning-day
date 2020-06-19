@@ -247,7 +247,7 @@ After analysing all the data I believe this is what's happening (the data is fro
 - In the first step none of the workers are is use so the poolboy checkout time is 0s
 - But remember **each request takes 5s** and the **pool has become saturated in 3**
 - **There is a two second deficit** , now every request has to wait 2 seconds to get the worker and 5s to complete the request meaning the overall latency will be 7s
-- this latency doesn't go away but is build upon.
+- this latency doesn't go away but is built upon.
 
 This diagram explains it clearly:
 
