@@ -6,6 +6,7 @@ defmodule Belfrage.RequestHash do
     :query_params,
     :country,
     :has_been_replayed?,
+    :origin_simulator?,
     :host,
     :is_uk,
     :method,

@@ -37,10 +37,10 @@ defmodule BelfrageWeb.Plugs.AccessLogsTest do
 
     captured_log =
       capture_log(fn ->
-        conn(:get, "/a-req-path") |> put_req_header("access-log-req-header", "yes") |> BelfrageWeb.Router.call([])
+        conn(:get, "/200-ok-response") |> put_req_header("access-log-req-header", "yes") |> BelfrageWeb.Router.call([])
       end)
 
-    assert captured_log =~ "/a-req-path", "Failed to log request path"
+    assert captured_log =~ "/200-ok-response", "Failed to log request path"
     assert captured_log =~ "200", "Failed to log response status code"
     assert captured_log =~ "GET", "Failed to log request method"
     assert captured_log =~ "access-log-res-header", "Failed to log response headers"

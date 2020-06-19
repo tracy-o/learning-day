@@ -50,27 +50,34 @@ defmodule Routes.RoutefileTest do
         end
 
         test "The example: #{example} points to the #{loop_id} routespec" do
-          BelfrageMock
-          |> expect(
-            :handle,
-            fn struct = %Struct{
-                 private: %Struct.Private{
-                   loop_id: @loop_id
-                 }
-               } ->
-              Struct.add(
-                struct,
-                :response,
-                %Struct.Response{http_status: 200, body: "The example uses the correct loop"}
-              )
-            end
-          )
+          unless @route_matcher == "/*any" do
+            BelfrageMock
+            |> expect(
+              :handle,
+              fn struct = %Struct{
+                   private: %Struct.Private{
+                     loop_id: @loop_id
+                   }
+                 } ->
+                Struct.add(
+                  struct,
+                  :response,
+                  %Struct.Response{http_status: 200, body: "The example uses the correct loop"}
+                )
+              end
+            )
+          end
 
           conn = conn(:get, @example)
           conn = Router.call(conn, [])
 
-          assert conn.status == 200
-          assert conn.resp_body == "The example uses the correct loop"
+          if @route_matcher == "/*any" do
+            assert conn.status == 404
+            assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+          else
+            assert conn.status == 200
+            assert conn.resp_body == "The example uses the correct loop"
+          end
         end
       end)
     end

@@ -17,6 +17,7 @@ defmodule BelfrageWeb.StructAdapter do
         scheme: bbc_headers.scheme,
         host: bbc_headers.host || conn.host,
         has_been_replayed?: bbc_headers.replayed_traffic,
+        origin_simulator?: bbc_headers.origin_simulator,
         subdomain: subdomain(conn),
         varnish?: bbc_headers.varnish,
         edge_cache?: bbc_headers.cache,

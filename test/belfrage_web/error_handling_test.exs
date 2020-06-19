@@ -17,7 +17,7 @@ defmodule BelfrageWeb.ErrorHandlingTest do
         raise("Something broke")
       end)
 
-      conn = conn(:get, "/_web_core")
+      conn = conn(:get, "/200-ok-response")
 
       assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Something broke", fn ->
         Router.call(conn, [])

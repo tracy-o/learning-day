@@ -104,6 +104,16 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
     end
   end
 
+  describe "origin simulator headers" do
+    test "returns true when origin_simulator is set" do
+      assert Sanitiser.origin_simulator(%{origin_simulator: "true"}, false) == true
+    end
+
+    test "returns nil when the origin_simulator is nil" do
+      assert Sanitiser.origin_simulator(%{origin_simulator: nil}, false) == nil
+    end
+  end
+
   describe "varnish headers" do
     test "returns true when varnish id is set" do
       assert Sanitiser.varnish(%{varnish: "12345354"}, false) == true

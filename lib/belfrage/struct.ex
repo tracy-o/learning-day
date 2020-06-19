@@ -20,6 +20,7 @@ defmodule Belfrage.Struct.Request do
     edge_cache?: false,
     cdn?: false,
     has_been_replayed?: nil,
+    origin_simulator?: nil,
     subdomain: "www",
     raw_headers: %{},
     query_params: %{},

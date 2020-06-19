@@ -31,7 +31,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end)
   end
 
-  defp put_bbc_headers(conn) do
+  defp put_bbc_headers(conn, origin_simulator \\ nil) do
     conn
     |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
     |> put_private(:bbc_headers, %{
@@ -39,7 +39,8 @@ defmodule BelfrageWeb.RouteMasterTest do
       scheme: "",
       host: "",
       is_uk: false,
-      replayed_traffic: "",
+      replayed_traffic: nil,
+      origin_simulator: origin_simulator,
       varnish: "",
       cache: "",
       cdn: nil,
@@ -220,6 +221,127 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 302
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic/middleeast-51412901"]
+    end
+  end
+
+  describe "matching proxy_pass routes" do
+    test "200 is returned when on the test env and origin_simulator header is set" do
+      origin_simulator_header = "true"
+      route = "/some-route-for-proxy-pass"
+
+      BelfrageMock
+      |> expect(:handle, fn %Struct{
+                              private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
+                              request: %Struct.Request{path: route, origin_simulator?: origin_simulator_header}
+                            } ->
+        @struct_with_html_response
+      end)
+
+      conn =
+        conn(:get, route)
+        |> put_bbc_headers(origin_simulator_header)
+        |> put_private(:production_environment, "test")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 200
+    end
+
+    test "200 is returned when on the test env and replayed_header header is set" do
+      replayed_traffic_header = "true"
+      route = "/some-route-for-proxy-pass"
+
+      BelfrageMock
+      |> expect(:handle, fn %Struct{
+                              private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
+                              request: %Struct.Request{path: route, has_been_replayed?: replayed_traffic_header}
+                            } ->
+        @struct_with_html_response
+      end)
+
+      conn =
+        conn(:get, route)
+        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+        |> put_private(:bbc_headers, %{
+          country: "gb",
+          scheme: "",
+          host: "",
+          is_uk: false,
+          replayed_traffic: "true",
+          origin_simulator: nil,
+          varnish: "",
+          cache: "",
+          cdn: nil,
+          req_svc_chain: "BELFRAGE"
+        })
+        |> put_private(:production_environment, "test")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 200
+    end
+
+    test "404 is returned when on test and origin_simulator header is not set" do
+      route = "/some-route-for-proxy-pass"
+
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, route)
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "test")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
+    end
+
+    test "404 is returned when origin_simulator is set but env is not test" do
+      origin_simulator_header = "true"
+      route = "/some-route-for-proxy-pass"
+
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, route)
+        |> put_bbc_headers(origin_simulator_header)
+        |> put_private(:production_environment, "live")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
+    end
+
+    test "404 is returned when replayed_header is set but env is not test" do
+      origin_simulator_header = "true"
+      route = "/some-route-for-proxy-pass"
+
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, route)
+        |> put_private(:bbc_headers, %{
+          country: "gb",
+          scheme: "",
+          host: "",
+          is_uk: false,
+          replayed_traffic: "true",
+          origin_simulator: nil,
+          varnish: "",
+          cache: "",
+          cdn: nil,
+          req_svc_chain: "BELFRAGE"
+        })
+        |> put_private(:production_environment, "live")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
     end
   end
 

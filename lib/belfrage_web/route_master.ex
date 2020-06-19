@@ -50,6 +50,23 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  defmacro handle_proxy_pass(matcher, [using: id, only_on: env, examples: _examples] = args) do
+    quote do
+      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
+      get unquote(matcher) do
+        matched_env = var!(conn).private[:production_environment] == unquote(env)
+        origin_simulator = (var!(conn).private.bbc_headers.origin_simulator)
+        replayed_traffic = (var!(conn).private.bbc_headers.replayed_traffic)
+
+        cond do
+          matched_env and origin_simulator -> yield(unquote(id), var!(conn))
+          matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
+          true -> View.not_found(var!(conn))
+        end
+      end
+    end
+  end
+
   defmacro handle(matcher, [using: id, examples: _examples] = args) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]

@@ -48,7 +48,7 @@ defmodule BelfrageWeb.HeadersTest do
     end
 
     def test_content_type!(body, content_type) do
-      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/_web_core")
+      conn = make_call(body, %{"content-type" => "#{content_type}; charset=utf-8"}, "/200-ok-response")
 
       assert ["#{content_type}; charset=utf-8"] == get_resp_header(conn, "content-type")
     end
@@ -72,7 +72,7 @@ defmodule BelfrageWeb.HeadersTest do
         make_call(
           "<p>some html content</p>",
           %{"content-type" => "text/html; charset=utf-8"},
-          "/_web_core"
+          "/200-ok-response"
         )
 
       assert {200,
@@ -113,7 +113,7 @@ defmodule BelfrageWeb.HeadersTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn ^internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
 
-      conn = make_500_call("<p>some html content</p>", %{}, "/_web_core")
+      conn = make_500_call("<p>some html content</p>", %{}, "/200-ok-response")
 
       assert {500,
               [

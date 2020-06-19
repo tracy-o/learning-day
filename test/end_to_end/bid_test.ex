@@ -20,7 +20,7 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
       {:ok, @lambda_response}
     end)
 
-    response_conn = conn(:get, "/") |> Router.call([])
+    response_conn = conn(:get, "/200-ok-response") |> Router.call([])
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
     assert {"bid", Application.get_env(:belfrage, :stack_id)} in resp_headers

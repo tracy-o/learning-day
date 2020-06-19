@@ -24,10 +24,10 @@ defmodule VaryCacheByHost do
     end)
 
     %{
-      no_host_header: conn(:get, "/") |> Map.put(:host, "belfrage.com"),
-      no_host_header_on_preview: conn(:get, "/") |> Map.put(:host, "preview.com"),
-      edge_host: conn(:get, "/") |> put_req_header("x-forwarded-host", "forwarded.com"),
-      forwarded_host: conn(:get, "/") |> put_req_header("host", "host.com")
+      no_host_header: conn(:get, "/200-ok-response") |> Map.put(:host, "belfrage.com"),
+      no_host_header_on_preview: conn(:get, "/200-ok-response") |> Map.put(:host, "preview.com"),
+      edge_host: conn(:get, "/200-ok-response") |> put_req_header("x-forwarded-host", "forwarded.com"),
+      forwarded_host: conn(:get, "/200-ok-response") |> put_req_header("host", "host.com")
     }
   end
 

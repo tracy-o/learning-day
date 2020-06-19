@@ -63,6 +63,13 @@ defmodule Belfrage.RequestHashTest do
                RequestHash.generate(replayed_struct).request.request_hash
     end
 
+    test "varies for origin simulator traffic" do
+      replayed_struct = Belfrage.Struct.add(@struct, :request, %{origin_simulator?: true})
+
+      refute RequestHash.generate(@struct).request.request_hash ==
+               RequestHash.generate(replayed_struct).request.request_hash
+    end
+
     test "given the path is the same, when the country is not the same assert the request_hashes are different" do
       refute RequestHash.generate(@struct).request.request_hash ==
                RequestHash.generate(@struct_with_different_country).request.request_hash

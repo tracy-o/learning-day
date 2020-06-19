@@ -7,6 +7,7 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     is_uk: %{edge: "x-bbc-edge-isuk", varnish: "x-ip_is_uk_combined"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
+    origin_simulator: %{origin_simulator: "origin-simulator"},
     varnish: %{varnish: "x-varnish"},
     req_svc_chain: %{req_svc_chain: "req-svc-chain"}
   }

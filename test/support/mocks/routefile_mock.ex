@@ -7,7 +7,7 @@ defmodule Routes.RoutefileMock do
   redirect("/permanent-redirect", to: "/new-location", status: 301)
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
-  handle("/200-ok-reponse", using: "SomeLoop", examples: ["/200-ok-response"])
+  handle("/200-ok-response", using: "SomeLoop", examples: ["/200-ok-response"])
 
   handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
 
@@ -23,11 +23,11 @@ defmodule Routes.RoutefileMock do
 
   handle("/only-on", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
 
-  handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
-
   handle("/moz", using: "Moz", examples: ["/moz"])
 
-  handle("/*any", using: "SomeLoop", only_on: "test", examples: ["/foo/bar"])
+  handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
+
+  handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
 end

@@ -193,5 +193,7 @@ defmodule Routes.Routefile do
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
+  handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
+
   no_match()
 end

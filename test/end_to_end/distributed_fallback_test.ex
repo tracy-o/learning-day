@@ -50,7 +50,7 @@ defmodule EndToEnd.DistributedTest do
         :ok
       end)
 
-      conn = conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
+      conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
       assert [request_hash] = get_resp_header(conn, "bsig")
 
       assert_received({:ccp_request_hash_stored, ^request_hash})
@@ -69,7 +69,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
+      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
     end
   end
 
@@ -85,7 +85,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, "/_some_page?belfrage-cache-bust") |> Router.call([])
+      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
     end
   end
 end

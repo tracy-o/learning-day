@@ -27,10 +27,16 @@ defmodule EndToEnd.LambdaTest do
                         "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test",
                         %{
                           body: "",
-                          headers: %{"accept-encoding": "gzip", country: "gb"},
+                          headers: %{
+                            "accept-encoding": "gzip",
+                            country: "gb",
+                            host: "www.example.com",
+                            is_uk: false,
+                            language: "en-GB"
+                          },
                           httpMethod: "GET",
                           path: "/200-ok-response",
-                          pathParameters: %{"any" => ["200-ok-response"]},
+                          pathParameters: %{},
                           queryStringParameters: %{}
                         },
                         _opts ->
