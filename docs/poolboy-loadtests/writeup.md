@@ -23,6 +23,23 @@ The loadtest instance was configured for 180rps for 60 seconds using the vegeta 
 
 The origin_simulator was configured to give a response in 5s with the news frontpage.
 
+This is the recipe I used in the origin simulator:
+```
+{
+    "origin": "https://www.bbc.co.uk/news",
+    "stages": [
+        {
+            "at": 0,
+            "latency": "5000ms",
+            "status": 200
+        }
+    ]
+}
+```
+At the time of writing the news front page has a file size of 588Kb.
+
+
+
 ### First Load test
 
 ![initial load test](./img/180rps_5l_60d.png)
@@ -79,6 +96,23 @@ However there is a clear theory as to what is causing the steps. The poolboy has
 
 This can't be a coincidence so the increase in latency is probably caused by the pool reaching its limit of workers.
 
+The following work in this was derived from Boon's insight, [click to see in more detail](https://github.com/bbc/belfrage/pull/451#discussion_r440995039)
+
+What the 768 really represents in this context is waiting workers. Knowing this we can say:
+```
+pool_size - waiting_workers = available workers
+```
+as in this situation we know we know that no workers are available the substituted values would look like this:
+```
+768 - 768 = 0
+```
+
+From this we can see that `waiting_workers = (rate * latency)` which means we can make a new equation to link latency rate and available workers:
+```
+pool_size - (rate * latency) = available_workers
+```
+
+
 ## Varying by Latency
 
 How slow do responses need to get before they show this behaviour?
@@ -113,7 +147,7 @@ One thing we know very little about in all of this is how many workers are avail
 
 Another thing we may want to consider is the elasticity of the pool. How quickly can it stretch to accommodate load, and is this fixed or does it scale with rps?
 
-All these tests are run with 512 pool size with 256 pool overflow.
+All these tests are run with 512 pool size with 256 pool overflow, with of course 5s latency.
 
 ### 100 RPS
 
