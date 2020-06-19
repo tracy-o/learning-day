@@ -218,7 +218,7 @@ To make things more clear:
 
 ![](./img/poolboy_flow_final.png)
 
-Its in the 'do work' that the http request and waits for a response there.
+The HTTP request waits for a response in the 'do work' segment.
 
 ### Testing
 
