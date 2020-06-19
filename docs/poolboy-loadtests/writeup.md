@@ -212,7 +212,7 @@ Maybe an easier way to think of this is 1.55 request per worker the reciprocal o
 
 ## Poolboy Timeout
 
-Poolboy timeout it a little ambiguous in what it could mean but having dug into the source code of poolboy I can confirm its **the amount of time to take a worker out of the pool** to use. This explains the 11s time out as the poolboy timeout is 6s and the http timeout is 5 seconds, meaning that in a worst case it could take 11s to get a response from a slow response and a saturated pool.
+Poolboy timeout is a little ambiguous in what it could mean but having dug into the source code of poolboy I can confirm its **the amount of time to take a worker out of the pool** to use. This explains the 11s time out as the poolboy timeout is 6s and the http timeout is 5 seconds, meaning that in a worst case it could take 11s to get a response from a slow response and a saturated pool.
 
 To make things more clear:
 
