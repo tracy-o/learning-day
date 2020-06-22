@@ -36,13 +36,11 @@ defmodule Mix.Tasks.SmokeTest do
   Platform:
 
       mix smoke_test --only platform:Webcore
-      mix smoke_test --only platform:Pal
 
   Spec:
 
       mix smoke_test --only spec:Search
       mix smoke_test --only spec:TopicPage
-      mix smoke_test --only spec:SportPal
 
   Belfrage stack:
 
@@ -73,13 +71,13 @@ defmodule Mix.Tasks.SmokeTest do
     cmd =
       case parse(args) do
         {[], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
+          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
 
         {[@env_opt], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
+          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
 
         {[@env_opt, env], parsed_args} ->
-          "SMOKE_ENV=#{env} MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")}"
+          "SMOKE_ENV=#{env} MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
       end
 
     run(cmd)
