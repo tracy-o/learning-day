@@ -25,12 +25,8 @@
   {
     "name": "logging_level",
     "description": "This sets the logging level of the application",
-    "default-value": "default",
+    "default-value": "error",
     "values": [
-      {
-        "value": "default",
-        "description": "Leaves the logging level unchanged"
-      },
       {
         "value": "debug",
         "description": "Sets the logging level to debug"
@@ -45,7 +41,7 @@
       },
       {
         "value": "error",
-        "description": "Sets the logging level to error"
+        "description": "Sets the logging level to error (this is the default value)"
       }
     ]
   }
