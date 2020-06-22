@@ -24,8 +24,8 @@ defmodule Routes.Routefile do
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
-  handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/example-module"]
-  handle "/fd/:name", using: "FablData", examples: ["/fd/example-module"]
+  handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
+  handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/scotland&params=%7B%7D"]

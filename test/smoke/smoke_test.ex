@@ -8,7 +8,7 @@ defmodule Belfrage.SmokeTest do
 
   @moduletag :smoke_test
 
-  Routes.Routefile.routes_with_env()
+  Routes.Routefile.routes()
   |> Enum.filter(fn {_route_matcher, %{using: loop_id}} -> not (loop_id in @ignore_specs) end)
   |> Enum.sort_by(fn {_route_matcher, %{using: loop_id}} -> loop_id end)
   |> Enum.chunk_by(fn {_route_matcher, %{using: loop_id}} -> loop_id end)
