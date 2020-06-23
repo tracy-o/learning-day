@@ -67,6 +67,13 @@ defmodule Test.Support.Helper do
     Enum.any?(headers, fn {id, value} -> id == header_id.id and value == header_id.value end)
   end
 
+  def get_header(headers, find_name) do
+    Enum.find_value(headers, fn
+      {^find_name, value} -> value
+      _header -> nil
+    end)
+  end
+
   def gtm_host("test"), do: "www.test.bbc.co.uk"
   def gtm_host("live"), do: "www.bbc.co.uk"
 
