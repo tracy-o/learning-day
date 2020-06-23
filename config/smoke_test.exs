@@ -6,7 +6,7 @@ config :belfrage,
   routefile: Routes.RoutefileMock
 
 config :smoke,
-  ignore_specs: ["WorldServiceMundo", "ProxyPass"],
+  ignore_specs: ["WorldServiceMundo", "ProxyPass", "NaidheachdanArticlePage", "CymrufywArticlePage"],
   endpoint_to_stack_id_mapping: %{
     "belfrage" => %{:id => "bid", :value => "www"},
     "bruce" => %{:id => "bid", :value => "bruce"},
