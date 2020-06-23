@@ -1,5 +1,6 @@
 defmodule Belfrage.Dials do
   use GenServer
+  alias Belfrage.DialsManager
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
@@ -25,20 +26,29 @@ defmodule Belfrage.Dials do
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
-    {:ok, %{}}
+
+    manager =
+      case DialsManager.start_link() do
+        {:ok, pid} -> pid
+        {:error, {:already_started, pid}} -> pid
+      end
+
+    {:ok, %{manager: manager, dials: %{}}}
   end
 
   @impl GenServer
-  def handle_info(:refresh, old_dials) do
+  def handle_info(:refresh, state) do
     schedule_work()
+
+    old_dials = state.dials
 
     case refresh_dials() do
       {:ok, dials} when dials != old_dials ->
         on_refresh(dials)
-        {:noreply, dials}
+        {:noreply, %{state | dials: dials}}
 
       {:ok, dials} when dials == old_dials ->
-        {:noreply, old_dials}
+        {:noreply, state}
 
       {:error, reason} ->
         Stump.log(
@@ -49,25 +59,25 @@ defmodule Belfrage.Dials do
           }
         )
 
-        {:noreply, old_dials}
+        {:noreply, state}
     end
   end
 
   # Catch all to handle unexpected messages
   # https://elixir-lang.org/getting-started/mix-otp/genserver.html#call-cast-or-info
   @impl GenServer
-  def handle_info(_any_message, dials) do
-    {:noreply, dials}
+  def handle_info(_any_message, state) do
+    {:noreply, state}
   end
 
   @impl GenServer
-  def handle_call(:state, _from, dials) when is_map(dials) do
-    {:reply, dials, dials}
+  def handle_call(:state, _from, %{dials: dials} = state) when is_map(dials) do
+    {:reply, dials, state}
   end
 
   @impl GenServer
-  def handle_call(:clear, _from, _state) do
-    {:reply, %{}, %{}}
+  def handle_call(:clear, _from, state) do
+    {:reply, %{state | dials: %{}}, %{state | dials: %{}}}
   end
 
   defp schedule_work do
