@@ -1,11 +1,16 @@
 defmodule Belfrage.Dials do
   use GenServer
+
+  alias Belfrage.Dials
   alias Belfrage.DialsManager
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
   @file_io Application.get_env(:belfrage, :file_io)
   @refresh_rate 30_000
+
+  # dial GenServers that observe and react to dials change event
+  @dials [Dials.CircuitBreaker]
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :dials)
@@ -27,13 +32,21 @@ defmodule Belfrage.Dials do
   def init(_opts) do
     send(self(), :refresh)
 
-    manager =
-      case DialsManager.start_link() do
-        {:ok, pid} -> pid
-        {:error, {:already_started, pid}} -> pid
-      end
+    manager = start_manager()
+    register_dials(manager)
 
     {:ok, %{manager: manager, dials: %{}}}
+  end
+
+  defp start_manager() do
+    case DialsManager.start_link() do
+      {:ok, pid} -> pid
+      {:error, {:already_started, pid}} -> pid
+    end
+  end
+
+  defp register_dials(manager) do
+    Enum.each(@dials, &DialsManager.add_handler(manager, &1, []))
   end
 
   @impl GenServer

@@ -13,4 +13,16 @@ defmodule Belfrage.DialsManager do
   def start_link() do
     DynamicSupervisor.start_link(name: __MODULE__, strategy: :one_for_one)
   end
+
+  @doc """
+  Adds a dial observer to the dials manager supervision tree.
+
+  A dial observer is a GenServer that represents a Cosmos dial in Belfrage.
+  It receives/handles event notification, keeps a formatted
+  dial state and provide a dedicated message queue.
+  """
+  @spec add_handler(pid, module, list) :: DynamicSupervisor.on_start_child()
+  def add_handler(manager, handler, opts) do
+    DynamicSupervisor.start_child(manager, {handler, opts})
+  end
 end
