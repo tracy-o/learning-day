@@ -57,7 +57,7 @@ node {
   if (result == 'FAILED') {
     stage('Report result to slack') {
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
-      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests ${result}: ${env.RUN_DISPLAY_URL}. ${params.SLACK_MESSAGE}"
+      slackSend channel: "#temp", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}: ${env.RUN_DISPLAY_URL}. ${params.SLACK_MESSAGE}"
     }
   }
 
