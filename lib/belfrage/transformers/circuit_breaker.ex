@@ -5,10 +5,17 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   def call(rest, struct) do
     case threshold_exceeded?(error_count(struct), threshold(struct)) do
       true ->
-        {:stop_pipeline, circuit_breaker_active(struct)}
+        maybe_apply_circuit_breaker(rest, struct, Belfrage.Dials.CircuitBreaker.state())
 
       false ->
         then(rest, struct)
+    end
+  end
+
+  defp maybe_apply_circuit_breaker(rest, struct, dial_enabled?) do
+    case dial_enabled? do
+      true -> {:stop_pipeline, circuit_breaker_active(struct)}
+      false -> then(rest, struct)
     end
   end
 
