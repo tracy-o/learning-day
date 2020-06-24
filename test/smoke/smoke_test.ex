@@ -21,7 +21,7 @@ defmodule Belfrage.SmokeTest do
           environments: unquote(@environments)
       end
 
-    module = Module.concat(["Belfrage.SmokeTest", matcher_spec.using, UUID.uuid4(:hex)])
-    Module.create(module, contents, Macro.Env.location(__ENV__))
+    unique_module_name = Module.concat(["Belfrage.SmokeTest", matcher_spec.using, UUID.uuid4(:hex)])
+    Module.create(unique_module_name, contents, Macro.Env.location(__ENV__))
   end)
 end
