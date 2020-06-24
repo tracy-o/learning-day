@@ -1,61 +1,37 @@
 defmodule Support.Smoke.Assertions do
   alias Test.Support.Helper
+  import ExUnit.Assertions
 
   @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)
+  @expected_minimum_content_length 30
 
-  def redirects_to(resp, expected_location, _test_properties) do
-    case Helper.get_header(resp.headers, "location") do
-      nil ->
-        error("Redirect location header not set")
+  def assert_smoke_response!(test_properties, route_spec, response) do
+    cond do
+      expect_world_service_redirect?(test_properties, route_spec) ->
+        assert_world_service_redirect!(response)
 
-      location ->
-        expect(
-          location =~ expected_location,
-          ["Redirect location header failed", expected_location, location]
-        )
+      true ->
+        assert_basic_response!(response)
     end
+
+    refute Helper.get_header(response.headers, "bfa")
+
+    expected_stack_id_header = Map.get(@stack_ids, test_properties.target)
+    assert Helper.header_item_exists(response.headers, expected_stack_id_header)
   end
 
-  def has_content_length_over(resp, expected_min_content_length, _test_properties) do
-    expect(
-      not is_nil(resp.body) and String.length(resp.body) > expected_min_content_length,
-      ["Small response body.", Integer.to_string(expected_min_content_length), inspect(resp.body)]
-    )
+  defp assert_basic_response!(response) do
+    assert response.status_code == 200
+
+    assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
   end
 
-  def has_status(resp, expected_status, _test_properties) do
-    expect(
-      resp.status_code == expected_status,
-      ["Wrong status code.", Integer.to_string(expected_status), Integer.to_string(resp.status_code)]
-    )
+  defp assert_world_service_redirect!(response) do
+    location = Helper.get_header(response.headers, "location")
+    assert location =~ ".com"
   end
 
-  def not_a_fallback(resp, _test_properties) do
-    expect(
-      not Helper.header_item_exists(resp.headers, %{id: "bfa", value: "1"}),
-      error("Received a Belfrage fallback.")
-    )
+  defp expect_world_service_redirect?(test_properties, %{pipeline: pipeline}) do
+    test_properties.tld === ".co.uk" && "WorldServiceRedirect" in pipeline
   end
-
-  def correct_stack_id(resp, %{target: target}) do
-    expected_stack_id_header = Map.get(@stack_ids, target)
-    found_stack_id_header? = Helper.header_item_exists(resp.headers, expected_stack_id_header)
-
-    expect(
-      found_stack_id_header?,
-      ["Did not find stack id in response headers.", inspect(expected_stack_id_header), inspect(resp.headers)]
-    )
-  end
-
-  defp expect(true, _msg), do: :ok
-  defp expect(false, [msg, expected, actual]), do: error(msg) <> expected(expected) <> actual(actual)
-  defp expect(false, msg), do: msg
-
-  defp error(msg), do: red(msg)
-  defp expected(msg), do: cyan("\nExpected: " <> msg)
-  defp actual(msg), do: yellow("\nActual: " <> msg)
-
-  defp cyan(msg), do: IO.ANSI.cyan() <> msg <> IO.ANSI.default_color()
-  defp red(msg), do: IO.ANSI.red() <> msg <> IO.ANSI.default_color()
-  defp yellow(msg), do: IO.ANSI.yellow() <> msg <> IO.ANSI.default_color()
 end

@@ -21,6 +21,7 @@ defmodule Belfrage.SmokeTestCase do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
       import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1]
+
       @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
       @environments unquote(environments)
@@ -58,9 +59,8 @@ defmodule Belfrage.SmokeTestCase do
                     tld: tld(@host)
                   }
 
-                  results = Support.Smoke.Rules.run_assertions(test_properties, resp)
-
-                  assert Support.Smoke.Rules.passed?(results), Support.Smoke.Rules.format_failures(results)
+                  route_specs = Belfrage.RouteSpec.specs_for(test_properties.using, test_properties.smoke_env)
+                  Support.Smoke.Assertions.assert_smoke_response!(test_properties, route_specs, resp)
               end
             end
           end
