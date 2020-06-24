@@ -6,12 +6,10 @@ defmodule Support.Smoke.Assertions do
   @expected_minimum_content_length 30
 
   def assert_smoke_response!(test_properties, route_spec, response) do
-    cond do
-      expect_world_service_redirect?(test_properties, route_spec) ->
-        assert_world_service_redirect!(response)
-
-      true ->
-        assert_basic_response!(response)
+    if expect_world_service_redirect?(test_properties, route_spec) do
+      assert_world_service_redirect!(response)
+    else
+      assert_basic_response!(response)
     end
 
     refute Helper.get_header(response.headers, "bfa")
