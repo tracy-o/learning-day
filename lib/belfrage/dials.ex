@@ -28,6 +28,13 @@ defmodule Belfrage.Dials do
     Process.send(:dials, :refresh, [])
   end
 
+  def read_dials() do
+    case @file_io.read(@dials_location) do
+      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
@@ -55,7 +62,7 @@ defmodule Belfrage.Dials do
 
     old_dials = state.dials
 
-    case refresh_dials() do
+    case read_dials() do
       {:ok, dials} when dials != old_dials ->
         on_refresh(dials)
         {:noreply, %{state | dials: dials}}
@@ -95,13 +102,6 @@ defmodule Belfrage.Dials do
 
   defp schedule_work do
     Process.send_after(:dials, :refresh, @refresh_rate)
-  end
-
-  defp refresh_dials do
-    case @file_io.read(@dials_location) do
-      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
-      {:error, reason} -> {:error, reason}
-    end
   end
 
   defp on_refresh(dials) do
