@@ -1,6 +1,9 @@
 defmodule Belfrage.DialsManager do
   @moduledoc false
 
+  # dial GenServers that observe and react to dials change event
+  @dials [Belfrage.Dials.CircuitBreaker]
+
   @doc """
   Starts a dials event manager.
 
@@ -24,5 +27,9 @@ defmodule Belfrage.DialsManager do
   @spec add_handler(pid, module, list) :: DynamicSupervisor.on_start_child()
   def add_handler(manager, handler, opts) do
     DynamicSupervisor.start_child(manager, {handler, opts})
+  end
+
+  def register_dials(manager) do
+    Enum.each(@dials, &add_handler(manager, &1, []))
   end
 end

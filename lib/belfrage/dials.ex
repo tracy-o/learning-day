@@ -9,9 +9,6 @@ defmodule Belfrage.Dials do
   @file_io Application.get_env(:belfrage, :file_io)
   @refresh_rate 30_000
 
-  # dial GenServers that observe and react to dials change event
-  @dials [Dials.CircuitBreaker]
-
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :dials)
   end
@@ -40,7 +37,7 @@ defmodule Belfrage.Dials do
     send(self(), :refresh)
 
     manager = start_manager()
-    register_dials(manager)
+    DialsManager.register_dials(manager)
 
     {:ok, %{manager: manager, dials: %{}}}
   end
@@ -50,10 +47,6 @@ defmodule Belfrage.Dials do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
     end
-  end
-
-  defp register_dials(manager) do
-    Enum.each(@dials, &DialsManager.add_handler(manager, &1, []))
   end
 
   @impl GenServer
