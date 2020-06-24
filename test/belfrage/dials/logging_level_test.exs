@@ -11,6 +11,13 @@ defmodule Belfrage.Dials.LoggingLevelTest do
   end
 
   describe "on_refresh/1" do
+    test "When the dial returns an empty map, the logging level remains unchanged" do
+      initial_level = Logger.level()
+
+      assert LoggingLevel.on_refresh(%{}) == initial_level
+      assert Logger.level() == initial_level
+    end
+
     test "When the dial is set to something unexpected, the logging level remains unchanged" do
       initial_level = Logger.level()
 

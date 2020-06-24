@@ -33,9 +33,12 @@ defmodule Belfrage.Dials do
     schedule_work()
 
     case refresh_dials() do
-      {:ok, dials} ->
+      {:ok, dials} when dials != old_dials ->
         on_refresh(dials)
         {:noreply, dials}
+
+      {:ok, dials} when dials == old_dials ->
+        {:noreply, old_dials}
 
       {:error, reason} ->
         Stump.log(
