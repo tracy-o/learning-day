@@ -44,5 +44,20 @@
         "description": "Sets the logging level to error (this is the default value)"
       }
     ]
+  },
+  {
+    "name": "circuit_breaker",
+    "description": "This enables or disables circuit breaker usage",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "Enable circuit breaker usage"
+      },
+      {
+        "value": "false",
+        "description": "Disable circuit breaker usage"
+      }
+    ]
   }
 ]
