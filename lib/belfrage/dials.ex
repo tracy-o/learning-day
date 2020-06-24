@@ -1,7 +1,6 @@
 defmodule Belfrage.Dials do
   use GenServer
 
-  alias Belfrage.Dials
   alias Belfrage.DialsManager
 
   @dials_location Application.get_env(:belfrage, :dials_location)
@@ -57,7 +56,10 @@ defmodule Belfrage.Dials do
 
     case read_dials() do
       {:ok, dials} when dials != old_dials ->
+        # TODO: to be removed when TTL, log level dials are updated
         on_refresh(dials)
+        DialsManager.dials_changed(state.manager, dials)
+
         {:noreply, %{state | dials: dials}}
 
       {:ok, dials} when dials == old_dials ->

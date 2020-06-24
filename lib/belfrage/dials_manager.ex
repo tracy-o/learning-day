@@ -32,4 +32,10 @@ defmodule Belfrage.DialsManager do
   def register_dials(manager) do
     Enum.each(@dials, &add_handler(manager, &1, []))
   end
+
+  def dials_changed(manager, dials) do
+    for {_, pid, _, _} <- Supervisor.which_children(manager) do
+      GenServer.cast(pid, {:dials_changed, dials})
+    end
+  end
 end

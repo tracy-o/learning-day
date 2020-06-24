@@ -1,1 +1,2 @@
-{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"true"}
+{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false"}
+

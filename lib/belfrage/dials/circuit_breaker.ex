@@ -14,6 +14,8 @@ defmodule Belfrage.Dials.CircuitBreaker do
   @spec state() :: state
   def state(), do: GenServer.call(__MODULE__, :state)
 
+  # Callbacks
+
   @impl GenServer
   @spec init(list) :: {:ok, state} | {:stop, term}
   def init(_opts) do
@@ -26,4 +28,9 @@ defmodule Belfrage.Dials.CircuitBreaker do
 
   @impl GenServer
   def handle_call(:state, _from, state), do: {:reply, state, state}
+
+  @impl GenServer
+  def handle_cast({:dials_changed, %{@dial_key => "true"}}, state), do: {:noreply, true}
+  def handle_cast({:dials_changed, %{@dial_key => "false"}}, state), do: {:noreply, false}
+  def handle_cast(_, state), do: {:noreply, state}
 end
