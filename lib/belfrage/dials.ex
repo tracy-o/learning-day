@@ -10,12 +10,6 @@ defmodule Belfrage.Dials do
     GenServer.start_link(__MODULE__, opts, name: :dials)
   end
 
-  def ttl_multiplier() do
-    state()
-    |> Map.get("ttl_multiplier", "default")
-    |> dial_value_to_int()
-  end
-
   def state() do
     GenServer.call(:dials, :state)
   end
@@ -39,8 +33,12 @@ defmodule Belfrage.Dials do
     schedule_work()
 
     case refresh_dials() do
-      {:ok, dials} ->
+      {:ok, dials} when dials != old_dials ->
+        on_refresh(dials)
         {:noreply, dials}
+
+      {:ok, dials} when dials == old_dials ->
+        {:noreply, old_dials}
 
       {:error, reason} ->
         Stump.log(
@@ -83,14 +81,8 @@ defmodule Belfrage.Dials do
     end
   end
 
-  @ttl_modifier_comparison %{
-    "private" => 0,
-    "default" => 1,
-    "long" => 3,
-    "super_long" => 10
-  }
-
-  defp dial_value_to_int(dial_value) do
-    Map.get(@ttl_modifier_comparison, dial_value, 1)
+  defp on_refresh(dials) do
+    Belfrage.Dials.LoggingLevel.on_refresh(dials)
+    :ok
   end
 end
