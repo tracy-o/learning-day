@@ -30,3 +30,4 @@ priv/cert/*
 
 #log when running tests
 local.log
+
