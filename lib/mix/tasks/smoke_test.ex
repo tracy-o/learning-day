@@ -5,14 +5,14 @@ defmodule Mix.Tasks.SmokeTest do
   @shortdoc "Smoke tests mix task for Belfrage example routes"
 
   @moduledoc """
-  Runs sanity and smoke tests on Belfrage example routes.
+  Runs smoke tests on Belfrage example routes.
 
-  This task runs the smoke tests in test/smoke/ directory for all 
+  This task runs the smoke tests in test/smoke/ directory for all
   or subsets of Belfage example routes via a list `mix test` options.
 
   ## Command line options
-    
-    * `--bbc-env` - specify the Cosmos production environment to run the tests on, either `test` or `live` 
+
+    * `--bbc-env` - specify the Cosmos production environment to run the tests on, either `test` or `live`
     * `--only` - runs only tests that match the filter. See "Test route subset with `--only`" below
     * all other [`mix test` options](https://hexdocs.pm/mix/Mix.Tasks.Test.html#module-command-line-options)
 
@@ -22,9 +22,9 @@ defmodule Mix.Tasks.SmokeTest do
 
       mix smoke_test
 
-  Perform sanity check (5 tests)
-    
-      mix smoke_test --only sanity
+  Perform chimney check (5 tests)
+
+      mix smoke_test --only chimney
 
   Using other `mix test` options, e.g. increase verbosity and outputs all test
   details with timing, as well as identify the slowest (3) tests
@@ -56,11 +56,11 @@ defmodule Mix.Tasks.SmokeTest do
   ## Specify Cosmos environment via `--bbc-env`
 
   "test" (default)
-    
+
        mix smoke_test
        mix smoke_test --bbc-env test
 
-  "live" 
+  "live"
 
        mix smoke_test --bbc-env live
 

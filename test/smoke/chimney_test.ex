@@ -1,12 +1,12 @@
-defmodule BelfrageSanitySmokeTest do
+defmodule BelfrageChimneySmokeTest do
   @moduledoc """
-  A couple of sanity smoke tests for routes via the GTM
+  A couple of smoke tests for ensuring all endpoints are covered.
   """
   use ExUnit.Case, async: true
   alias Test.Support.Helper
 
   @moduletag :smoke_test
-  @moduletag :sanity
+  @moduletag :chimney
 
   @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
   @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric"]
@@ -15,7 +15,7 @@ defmodule BelfrageSanitySmokeTest do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
   end
 
-  describe "GTM sanity tests" do
+  describe "GTM tests" do
     @describetag stack: "gtm"
     test "GTM /sport/videos/48521428", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host(smoke_env)
