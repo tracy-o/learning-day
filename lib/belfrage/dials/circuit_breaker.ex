@@ -17,20 +17,19 @@ defmodule Belfrage.Dials.CircuitBreaker do
   # Callbacks
 
   @impl GenServer
-  @spec init(list) :: {:ok, state} | {:stop, term}
+  @spec init(list) :: {:ok, state}
   def init(_opts) do
-    case Belfrage.Dials.read_dials() do
-      {:ok, %{@dial_key => "true"}} -> {:ok, true}
-      {:ok, %{@dial_key => "false"}} -> {:ok, false}
-      {:error, reason} -> {:stop, reason}
-    end
+    # initial state 'true' to be
+    # overriden by the value in dials.json
+    # immediately via "dials_change" event
+    {:ok, true}
   end
 
   @impl GenServer
   def handle_call(:state, _from, state), do: {:reply, state, state}
 
   @impl GenServer
-  def handle_cast({:dials_changed, %{@dial_key => "true"}}, state), do: {:noreply, true}
-  def handle_cast({:dials_changed, %{@dial_key => "false"}}, state), do: {:noreply, false}
+  def handle_cast({:dials_changed, %{@dial_key => "true"}}, _state), do: {:noreply, true}
+  def handle_cast({:dials_changed, %{@dial_key => "false"}}, _state), do: {:noreply, false}
   def handle_cast(_, state), do: {:noreply, state}
 end

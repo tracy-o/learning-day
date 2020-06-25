@@ -1,22 +1,17 @@
 defmodule Belfrage.Transformers.CircuitBreakerTest do
-  use ExUnit.Case
-  use Test.Support.Helper, :mox
+  use ExUnit.Case, async: true
 
   alias Belfrage.Transformers.CircuitBreaker
   alias Belfrage.Struct
 
-  def circuit_breaker_dial_enabled_mock do
-    Belfrage.Helpers.FileIOMock
-    |> expect(:read, fn _ -> {:ok, ~s({"circuit_breaker":"true"})} end)
-
-    Belfrage.Dials.CircuitBreaker.start_link([])
+  def enable_circuit_breaker_dial() do
+    GenServer.whereis(Belfrage.Dials.CircuitBreaker)
+    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "true"}})
   end
 
-  def circuit_breaker_dial_disabled_mock do
-    Belfrage.Helpers.FileIOMock
-    |> expect(:read, fn _ -> {:ok, ~s({"circuit_breaker":"false"})} end)
-
-    Belfrage.Dials.CircuitBreaker.start_link([])
+  def disable_circuit_breaker_dial() do
+    GenServer.whereis(Belfrage.Dials.CircuitBreaker)
+    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "false"}})
   end
 
   test "long_counter with no errors will not add circuit breaker response" do
@@ -83,7 +78,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "long_counter containing errors over threshold will return struct with response section with 500 status" do
-    circuit_breaker_dial_enabled_mock()
+    enable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -106,7 +101,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "when circuit breaker is active, the origin represents this" do
-    circuit_breaker_dial_enabled_mock()
+    enable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -129,7 +124,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "when circuit breaker is active, the response body is returned as an empty string" do
-    circuit_breaker_dial_enabled_mock()
+    enable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -152,7 +147,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "multiple origins will not add circuit breaker response when no errors for current origin" do
-    circuit_breaker_dial_enabled_mock()
+    enable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -179,7 +174,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "multiple origins will return struct with http 500 response when no errors for current origin" do
-    circuit_breaker_dial_enabled_mock()
+    enable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -206,7 +201,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "when circuit breaker is active but disabled in dial, no circuit breaker response should be returned" do
-    circuit_breaker_dial_disabled_mock()
+    disable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{
@@ -235,7 +230,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "when circuit breaker is active but disabled in dial, no circuit breaker response should be returned for multiple origins route" do
-    circuit_breaker_dial_disabled_mock()
+    disable_circuit_breaker_dial()
 
     struct = %Struct{
       private: %Struct.Private{

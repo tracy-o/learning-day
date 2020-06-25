@@ -1,25 +1,17 @@
 defmodule Belfrage.Dials.CircuitBreakerTest do
-  use ExUnit.Case
-  use Test.Support.Helper, :mox
-
+  use ExUnit.Case, async: true
   alias Belfrage.Dials
-  @initial_state false
 
   test "state/0 returns dial state" do
-    Belfrage.Helpers.FileIOMock
-    |> expect(:read, fn _ -> {:ok, ~s({"circuit_breaker": "#{@initial_state}"})} end)
-
-    Dials.CircuitBreaker.start_link([])
-    assert Dials.CircuitBreaker.state() == @initial_state
+    assert Dials.CircuitBreaker.state() |> is_boolean()
   end
 
   test "dial handles dials changed event" do
-    Belfrage.Helpers.FileIOMock
-    |> expect(:read, fn _ -> {:ok, ~s({"circuit_breaker": "#{@initial_state}"})} end)
+    dial_state = Dials.CircuitBreaker.state()
 
-    {:ok, pid} = Dials.CircuitBreaker.start_link([])
+    GenServer.whereis(Dials.CircuitBreaker)
+    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "#{!dial_state}"}})
 
-    GenServer.cast(pid, {:dials_changed, %{"circuit_breaker" => "#{!@initial_state}"}})
-    assert Dials.CircuitBreaker.state() == !@initial_state
+    assert Dials.CircuitBreaker.state() == !dial_state
   end
 end
