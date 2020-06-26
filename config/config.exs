@@ -66,5 +66,13 @@ config :cachex, :limit,
   reclaim: 0.3,
   options: []
 
+config :logger,
+  backends: [{LoggerFileBackend, :file}]
+
+config :logger, :file,
+  path: "local.log",
+  format: "$message\n",
+  level: :debug
+
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"
