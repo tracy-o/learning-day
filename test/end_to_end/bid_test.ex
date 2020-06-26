@@ -14,6 +14,12 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
+  setup do
+    :ets.delete_all_objects(:cache)
+
+    :ok
+  end
+
   test "returns the bid header" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
