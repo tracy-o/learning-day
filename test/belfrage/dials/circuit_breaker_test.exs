@@ -1,12 +1,39 @@
 defmodule Belfrage.Dials.CircuitBreakerTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
+
   alias Belfrage.Dials
 
-  test "state/0 returns dial state" do
-    assert Dials.CircuitBreaker.state() |> is_boolean()
+  describe "state/0" do
+    setup do
+      Dials.clear()
+    end
+
+    test "returns a default boolean state on init" do
+      assert Dials.state() == %{}
+      assert Dials.CircuitBreaker.state() |> is_boolean()
+    end
+
+    test "returns a default boolean state when dials.json is malformed" do
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn _ -> {:ok, ~s(malformed json)} end)
+
+      Dials.refresh_now()
+      assert Dials.state() == %{}
+      assert Dials.CircuitBreaker.state() |> is_boolean()
+    end
+
+    test "returns a state corresponds to dials.json" do
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn _ -> {:ok, ~s({"circuit_breaker": "false"})} end)
+
+      Dials.refresh_now()
+      assert Dials.state() == %{"circuit_breaker" => "false"}
+      assert Dials.CircuitBreaker.state() == false
+    end
   end
 
-  test "dial handles dials changed event" do
+  test "dial correctly handles changed event in which the dial boolean state is flipped" do
     dial_state = Dials.CircuitBreaker.state()
 
     GenServer.whereis(Dials.CircuitBreaker)

@@ -200,59 +200,58 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
-  test "when circuit breaker is active but disabled in dial, no circuit breaker response should be returned" do
-    disable_circuit_breaker_dial()
+  describe "when circuit breaker is active but disabled in dial" do
+    test "no circuit breaker response should be returned" do
+      disable_circuit_breaker_dial()
 
-    struct = %Struct{
-      private: %Struct.Private{
-        loop_id: "SportVideos",
-        origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
-      }
-    }
-
-    {
-      status,
-      %Belfrage.Struct{
-        private: %Belfrage.Struct.Private{
-          origin: origin
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "SportVideos",
+          origin: "https://origin.bbc.co.uk/",
+          long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
+          pipeline: ["CircuitBreaker"],
+          circuit_breaker_error_threshold: 5
         }
       }
-    } = CircuitBreaker.call([], struct)
 
-    assert status == :ok
-    assert origin == "https://origin.bbc.co.uk/"
+      {
+        status,
+        %Belfrage.Struct{
+          private: %Belfrage.Struct.Private{
+            origin: origin
+          }
+        }
+      } = CircuitBreaker.call([], struct)
 
-    refute status == :stop_pipline
-    refute origin == :belfrage_circuit_breaker
-  end
+      refute status == :stop_pipline
+      refute origin == :belfrage_circuit_breaker
+    end
 
-  test "when circuit breaker is active but disabled in dial, no circuit breaker response should be returned for multiple origins route" do
-    disable_circuit_breaker_dial()
+    test "no circuit breaker response should be returned for multiple origins route" do
+      disable_circuit_breaker_dial()
 
-    struct = %Struct{
-      private: %Struct.Private{
-        loop_id: "SportVideos",
-        origin: "https://origin2.bbc.co.uk/",
-        long_counter: %{
-          "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
-          "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
-          "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}
-        },
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "SportVideos",
+          origin: "https://origin2.bbc.co.uk/",
+          long_counter: %{
+            "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
+            "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
+            "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}
+          },
+          pipeline: ["CircuitBreaker"],
+          circuit_breaker_error_threshold: 5
+        }
       }
-    }
 
-    assert {
-             :ok,
-             %Struct{
-               response: %Struct.Response{
-                 http_status: nil
+      assert {
+               :ok,
+               %Struct{
+                 response: %Struct.Response{
+                   http_status: nil
+                 }
                }
-             }
-           } = CircuitBreaker.call([], struct)
+             } = CircuitBreaker.call([], struct)
+    end
   end
 end
