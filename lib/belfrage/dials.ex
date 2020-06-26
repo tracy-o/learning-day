@@ -1,7 +1,13 @@
 defmodule Belfrage.Dials do
+  @module_doc """
+  This module is responsible for adding dials to the dials supervisor,
+  polling/reading Cosmos dials.json and invokes dials changed event via
+  the supervisor.
+  """
+
   use GenServer
 
-  alias Belfrage.DialsManager
+  alias Belfrage.DialsSupervisor
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
@@ -24,25 +30,18 @@ defmodule Belfrage.Dials do
     Process.send(:dials, :refresh, [])
   end
 
-  def read_dials() do
-    case @file_io.read(@dials_location) do
-      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
-      {:error, reason} -> {:error, reason}
-    end
-  end
-
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
 
-    manager = start_manager()
-    DialsManager.register_dials(manager)
+    sup = start_supervisor()
+    DialsSupervisor.add_dials(sup)
 
-    {:ok, %{manager: manager, dials: %{}}}
+    {:ok, %{manager: sup, dials: %{}}}
   end
 
-  defp start_manager() do
-    case DialsManager.start_link() do
+  defp start_supervisor() do
+    case DialsSupervisor.start_link() do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
     end
@@ -58,7 +57,7 @@ defmodule Belfrage.Dials do
       {:ok, dials} when dials != old_dials ->
         # TODO: to be removed when TTL, log level dials are updated
         on_refresh(dials)
-        DialsManager.dials_changed(state.manager, dials)
+        DialsSupervisor.notify(state.manager, :dials_changed, dials)
 
         {:noreply, %{state | dials: dials}}
 
@@ -97,6 +96,13 @@ defmodule Belfrage.Dials do
 
   defp schedule_work do
     Process.send_after(:dials, :refresh, @refresh_rate)
+  end
+
+  defp read_dials() do
+    case @file_io.read(@dials_location) do
+      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   defp on_refresh(dials) do
