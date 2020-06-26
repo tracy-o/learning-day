@@ -35,7 +35,7 @@ defmodule Belfrage.MixProject do
 
   defp test_pattern(mix_env) when mix_env == :end_to_end, do: "end_to_end/*_test.ex"
   defp test_pattern(mix_env) when mix_env == :routes_test, do: "routes/*_test.ex"
-  defp test_pattern(mix_env) when mix_env == :smoke_test, do: "smoke/**/*_test.ex"
+  defp test_pattern(mix_env) when mix_env == :smoke_test, do: "smoke/**/*.ex"
   defp test_pattern(_mix_env), do: "*_test.exs"
 
   # Run "mix help compile.app" to learn about applications.
