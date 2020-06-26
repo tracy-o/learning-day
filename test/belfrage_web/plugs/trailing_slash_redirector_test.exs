@@ -44,7 +44,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
-    assert conn.resp_body == "Redirecting"
+    assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["/a-page"]
   end
 
@@ -64,7 +64,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
-    assert conn.resp_body == "Redirecting"
+    assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["/a-page"]
   end
 
@@ -74,7 +74,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
-    assert conn.resp_body == "Redirecting"
+    assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["/a-page?a-query"]
   end
 
@@ -84,7 +84,16 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
       |> TrailingSlashRedirector.call([])
 
     assert conn.status == 301
-    assert conn.resp_body == "Redirecting"
+    assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["/a-page?a-query/"]
+  end
+
+  test "keeps belfrage default headers" do
+    conn =
+      incoming_request("/a-page/")
+      |> TrailingSlashRedirector.call([])
+
+    assert get_resp_header(conn, "req-svc-chain") == ["BELFRAGE"]
+    assert get_resp_header(conn, "via") == ["1.1 Belfrage"]
   end
 end

@@ -12,9 +12,14 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
     assert {301,
             [
-              {"cache-control", "max-age=60, public, must-revalidate"},
+              {"cache-control", "public, max-age=60"},
               {"location", "/200-ok-response"},
-              {"content-type", "text/plain; charset=utf-8"}
-            ], "Redirecting"} == sent_resp(conn)
+              {"content-type", "text/html; charset=utf-8"},
+              {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
+              {"server", "Belfrage"},
+              {"bid", "local"},
+              {"via", "1.1 Belfrage"},
+              {"req-svc-chain", "BELFRAGE"}
+            ], ""} == sent_resp(conn)
   end
 end
