@@ -1,6 +1,10 @@
 defmodule BelfrageChimneySmokeTest do
   @moduledoc """
-  A couple of smoke tests for ensuring all endpoints are covered.
+  GTM & CDN smoke tests for ensuring all endpoints are covered.
+
+   We don't automate those tests currently, because this will rely
+   on the routes being added to the GTM. It's easier to pick a couple
+   of routes that we know exist, and smoke test those for these endpoints.
   """
   use ExUnit.Case, async: true
   alias Test.Support.Helper
