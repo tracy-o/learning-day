@@ -60,7 +60,7 @@ defmodule Belfrage.SmokeTestCase do
                   }
 
                   route_specs = Belfrage.RouteSpec.specs_for(test_properties.using, test_properties.smoke_env)
-                  Support.Smoke.Assertions.assert_smoke_response!(test_properties, route_specs, resp)
+                  Support.Smoke.Assertions.assert_smoke_response(test_properties, route_specs, resp)
               end
             end
           end

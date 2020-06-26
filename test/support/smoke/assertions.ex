@@ -5,11 +5,11 @@ defmodule Support.Smoke.Assertions do
   @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)
   @expected_minimum_content_length 30
 
-  def assert_smoke_response!(test_properties, route_spec, response) do
+  def assert_smoke_response(test_properties, route_spec, response) do
     if expect_world_service_redirect?(test_properties, route_spec) do
-      assert_world_service_redirect!(response)
+      assert_world_service_redirect(response)
     else
-      assert_basic_response!(response)
+      assert_basic_response(response)
     end
 
     refute Helper.get_header(response.headers, "bfa")
@@ -18,13 +18,13 @@ defmodule Support.Smoke.Assertions do
     assert Helper.header_item_exists(response.headers, expected_stack_id_header)
   end
 
-  defp assert_basic_response!(response) do
+  defp assert_basic_response(response) do
     assert response.status_code == 200
 
     assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
   end
 
-  defp assert_world_service_redirect!(response) do
+  defp assert_world_service_redirect(response) do
     location = Helper.get_header(response.headers, "location")
     assert location =~ ".com"
   end
