@@ -13,7 +13,7 @@ defmodule BelfrageChimneySmokeTest do
   @moduletag :chimney
 
   @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
-  @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric"]
+  @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric-belfrage"]
 
   setup do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
