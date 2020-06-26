@@ -34,17 +34,10 @@ defmodule Belfrage.Dials do
   def init(_opts) do
     send(self(), :refresh)
 
-    sup = start_supervisor()
+    sup = Process.whereis(Belfrage.DialsSupervisor)
     DialsSupervisor.add_dials(sup)
 
-    {:ok, %{manager: sup, dials: %{}}}
-  end
-
-  defp start_supervisor() do
-    case DialsSupervisor.start_link() do
-      {:ok, pid} -> pid
-      {:error, {:already_started, pid}} -> pid
-    end
+    {:ok, %{supervisor: sup, dials: %{}}}
   end
 
   @impl GenServer
@@ -57,7 +50,7 @@ defmodule Belfrage.Dials do
       {:ok, dials} when dials != old_dials ->
         # TODO: to be removed when TTL, log level dials are updated
         on_refresh(dials)
-        DialsSupervisor.notify(state.manager, :dials_changed, dials)
+        DialsSupervisor.notify(state.supervisor, :dials_changed, dials)
 
         {:noreply, %{state | dials: dials}}
 
