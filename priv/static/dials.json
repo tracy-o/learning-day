@@ -1,0 +1,63 @@
+[
+  {
+    "name": "ttl_multiplier",
+    "description": "This dial sets the value by which we multiply the max-age part of the cache-control response header",
+    "default-value": "default",
+    "values": [
+      {
+        "value": "private",
+        "description": "Use this to simulate a world with fully personalised pages, bypassing the Varnish caching"
+      },
+      {
+        "value": "default",
+        "description": "Use this to pass through the max-age value unchanged"
+      },
+      {
+        "value": "long",
+        "description": "Use this to triple the max-age to alleviate excessive load, such as when recovering from a complete failure"
+      },
+      {
+        "value": "super_long",
+        "description": "Use this to 10x the max-age in case of extreme instability of the platform"
+      }
+    ]
+  },
+  {
+    "name": "logging_level",
+    "description": "This sets the logging level of the application",
+    "default-value": "error",
+    "values": [
+      {
+        "value": "debug",
+        "description": "Sets the logging level to debug"
+      },
+      {
+        "value": "info",
+        "description": "Sets the logging level to info"
+      },
+      {
+        "value": "warn",
+        "description": "Sets the logging level to warn"
+      },
+      {
+        "value": "error",
+        "description": "Sets the logging level to error (this is the default value)"
+      }
+    ]
+  },
+  {
+    "name": "circuit_breaker",
+    "description": "This enables or disables circuit breaker usage",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "Enable circuit breaker usage"
+      },
+      {
+        "value": "false",
+        "description": "Disable circuit breaker usage"
+      }
+    ]
+  }
+]

@@ -1,5 +1,5 @@
 defmodule Belfrage.Dials do
-  @module_doc """
+  @moduledoc """
   This module is responsible for adding dials to the dials supervisor,
   polling/reading Cosmos dials.json and invokes dials changed event via
   the supervisor.

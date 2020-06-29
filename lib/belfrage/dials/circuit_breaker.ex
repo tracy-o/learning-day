@@ -2,10 +2,9 @@ defmodule Belfrage.Dials.CircuitBreaker do
   @moduledoc false
 
   use GenServer
+  use Belfrage.Dials.Defaults, dial: "circuit_breaker"
 
   @type state :: boolean
-
-  @dial_key "circuit_breaker"
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -19,17 +18,17 @@ defmodule Belfrage.Dials.CircuitBreaker do
   @impl GenServer
   @spec init(list) :: {:ok, state}
   def init(_opts) do
-    # initial state 'true' to be
-    # overriden by the value in dials.json
-    # immediately via "dials_change" event
-    {:ok, true}
+    # initial state inferred from Cosmos dials.json
+    # via default() injected from Belfrage.Dials.Defaults
+    # the state is to be overriden by the current dial value
+    # immediately by "dials_changed" event
+    {:ok, default()}
   end
 
   @impl GenServer
   def handle_call(:state, _from, state), do: {:reply, state, state}
 
   @impl GenServer
-  def handle_cast({:dials_changed, %{@dial_key => "true"}}, _state), do: {:noreply, true}
-  def handle_cast({:dials_changed, %{@dial_key => "false"}}, _state), do: {:noreply, false}
+  def handle_cast({:dials_changed, %{@dial => value}}, _state), do: {:noreply, transform(value, @dial)}
   def handle_cast(_, state), do: {:noreply, state}
 end
