@@ -19,17 +19,8 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   end
 
   defp redirect(conn) do
-    conn
-    |> put_location()
-    |> put_resp_header("cache-control", "max-age=60, public, must-revalidate")
-    |> put_resp_content_type("text/plain")
-    |> send_resp(301, "Redirecting")
+    BelfrageWeb.View.redirect(conn, 301, relative_url(conn))
     |> halt()
-  end
-
-  defp put_location(conn) do
-    conn
-    |> put_resp_header("location", relative_url(conn))
   end
 
   defp relative_url(%Plug.Conn{request_path: path, query_string: query}) do
