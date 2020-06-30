@@ -64,6 +64,7 @@ node {
         if (matcher.find()) {
           test_figures = matcher[0]
         }
+        sh 'rm smoke_test_output.txt'
       }
 
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
