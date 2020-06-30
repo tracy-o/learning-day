@@ -34,25 +34,25 @@ defmodule Belfrage.DialsSupervisor do
   It receives/handles event notification, keeps a formatted
   dial state and provides a dedicated message queue.
   """
-  @spec add_dial(pid, module, list) :: DynamicSupervisor.on_start_child()
-  def add_dial(supervisor, dial, opts) do
-    DynamicSupervisor.start_child(supervisor, {dial, opts})
+  @spec add_dial(module, list) :: DynamicSupervisor.on_start_child()
+  def add_dial(dial, opts) do
+    DynamicSupervisor.start_child(__MODULE__, {dial, opts})
   end
 
   @doc """
   Add dials to the supervision tree.
   """
-  @spec add_dials(pid, list) :: no_return()
-  def add_dials(supervisor, dials \\ @dials) do
-    Enum.each(dials, &add_dial(supervisor, &1, []))
+  @spec add_dials(list) :: no_return()
+  def add_dials(dials \\ @dials) do
+    Enum.each(dials, &add_dial(&1, []))
   end
 
   @doc """
   Notify dials of an dial update event.
   """
-  @spec notify(pid, dials_event, map) :: :ok
-  def notify(supervisor, :dials_changed, dials_data) do
-    for {_, dial, _, _} <- Supervisor.which_children(supervisor) do
+  @spec notify(dials_event, map) :: :ok
+  def notify(:dials_changed, dials_data) do
+    for {_, dial, _, _} <- Supervisor.which_children(__MODULE__) do
       GenServer.cast(dial, {:dials_changed, dials_data})
     end
   end

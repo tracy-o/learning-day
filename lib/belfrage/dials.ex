@@ -33,29 +33,26 @@ defmodule Belfrage.Dials do
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
+    # TODO: remove this in https://jira.dev.bbc.co.uk/browse/RESFRAME-3592
+    DialsSupervisor.add_dials()
 
-    sup = Process.whereis(Belfrage.DialsSupervisor)
-    DialsSupervisor.add_dials(sup)
-
-    {:ok, %{supervisor: sup, dials: %{}}}
+    {:ok, %{}}
   end
 
   @impl GenServer
-  def handle_info(:refresh, state) do
+  def handle_info(:refresh, old_dials) do
     schedule_work()
-
-    old_dials = state.dials
 
     case read_dials() do
       {:ok, dials} when dials != old_dials ->
-        # TODO: to be removed when TTL, log level dials are updated
+        # TODO: to be removed when TTL, log level dials are updated: RESFRAME-3594, RESFRAME-3596
         on_refresh(dials)
-        DialsSupervisor.notify(state.supervisor, :dials_changed, dials)
+        DialsSupervisor.notify(:dials_changed, dials)
 
-        {:noreply, %{state | dials: dials}}
+        {:noreply, dials}
 
       {:ok, dials} when dials == old_dials ->
-        {:noreply, state}
+        {:noreply, old_dials}
 
       {:error, reason} ->
         Stump.log(
@@ -66,7 +63,7 @@ defmodule Belfrage.Dials do
           }
         )
 
-        {:noreply, state}
+        {:noreply, old_dials}
     end
   end
 
@@ -78,13 +75,13 @@ defmodule Belfrage.Dials do
   end
 
   @impl GenServer
-  def handle_call(:state, _from, %{dials: dials} = state) when is_map(dials) do
-    {:reply, dials, state}
+  def handle_call(:state, _from, dials) when is_map(dials) do
+    {:reply, dials, dials}
   end
 
   @impl GenServer
-  def handle_call(:clear, _from, state) do
-    {:reply, %{state | dials: %{}}, %{state | dials: %{}}}
+  def handle_call(:clear, _from, _state) do
+    {:reply, %{}, %{}}
   end
 
   defp schedule_work do
