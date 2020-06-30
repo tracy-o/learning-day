@@ -83,7 +83,10 @@ defmodule Mix.Tasks.SmokeTest do
     run(cmd)
   end
 
-  def run(cmd) when is_binary(cmd), do: Mix.shell().cmd(cmd)
+  def run(cmd) when is_binary(cmd) do
+    exit_code = Mix.shell().cmd(cmd)
+    exit({:shutdown, exit_code})
+  end
 
   defp parse(args, env \\ [], acc \\ [])
 
