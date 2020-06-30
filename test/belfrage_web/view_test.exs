@@ -45,6 +45,88 @@ defmodule BelfrageWeb.ViewTest do
     refute {"non-string", true} in headers
   end
 
+  describe "when content-length is 0" do
+    test "returns HTML 500 page" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "",
+          http_status: 500,
+          headers: %{"content-length" => "0"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 500
+      assert body == "content for file test/support/resources/internal-error.html<!-- Belfrage -->"
+      assert {"content-type", "text/html; charset=utf-8"} in headers
+    end
+
+    test "returns HTML 404 page" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "",
+          http_status: 404,
+          headers: %{"content-length" => "0"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 404
+      assert body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+      assert {"content-type", "text/html; charset=utf-8"} in headers
+    end
+
+    test "returns JSON error content" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "",
+          http_status: 500,
+          headers: %{"content-length" => "0"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "application/json")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 500
+      assert body == ~s({"status":500})
+      assert {"content-type", "application/json"} in headers
+    end
+
+    test "returns plain text error content" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "",
+          http_status: 500,
+          headers: %{"content-length" => "0"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/plain")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 500
+      assert body == "500, Belfrage"
+      assert {"content-type", "text/plain"} in headers
+    end
+
+    test "continue rendering response struct, when status code is bellow 400" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "",
+          http_status: 302,
+          headers: %{"content-length" => "0", "content-type" => "text/plain"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/plain")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 302
+      assert body == ""
+      assert {"content-type", "text/plain"} in headers
+    end
+  end
+
   describe "fallback page response header" do
     test "when response is a fallback page" do
       struct = %Struct{
