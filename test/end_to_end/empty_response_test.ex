@@ -6,22 +6,39 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
 
   @moduletag :end_to_end
 
-  @lambda_response %{
-    "headers" => %{
-      "content-length" => "0"
-    },
-    "statusCode" => 404,
-    "body" => ""
-  }
+  setup do
+    %{
+      lambda_response: %{
+        "headers" => %{
+          "content-length" => "0"
+        },
+        "statusCode" => 200,
+        "body" => ""
+      }
+    }
+  end
 
-  test "returns a Belfrage internal response" do
-    Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
-      {:ok, @lambda_response}
-    end)
+  describe "returns a Belfrage internal response" do
+    test "when response status code is 404", %{lambda_response: lambda_response} do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+        {:ok, Map.put(lambda_response, "statusCode", 404)}
+      end)
 
-    response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
 
-    assert {404, resp_headers, "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+      assert {404, resp_headers, "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+    end
+
+    test "when response status code is 400", %{lambda_response: lambda_response} do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+        {:ok, Map.put(lambda_response, "statusCode", 400)}
+      end)
+
+      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+
+      assert {400, resp_headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+    end
   end
 end
