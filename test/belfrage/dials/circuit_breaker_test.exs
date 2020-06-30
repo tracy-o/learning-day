@@ -39,9 +39,7 @@ defmodule Belfrage.Dials.CircuitBreakerTest do
 
   test "dial correctly handles changed event in which the dial boolean state is flipped" do
     dial_state = Dials.CircuitBreaker.state()
-
-    GenServer.whereis(Dials.CircuitBreaker)
-    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "#{!dial_state}"}})
+    GenServer.cast(Dials.CircuitBreaker, {:dials_changed, %{"circuit_breaker" => "#{!dial_state}"}})
 
     assert Dials.CircuitBreaker.state() == !dial_state
   end

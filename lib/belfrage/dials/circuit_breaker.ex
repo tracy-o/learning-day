@@ -2,6 +2,8 @@ defmodule Belfrage.Dials.CircuitBreaker do
   @moduledoc false
 
   use GenServer
+
+  # TODO: update to Belfrage.Dials.Dial in https://jira.dev.bbc.co.uk/browse/RESFRAME-3592
   use Belfrage.Dials.Defaults, dial: "circuit_breaker"
 
   @type state :: boolean

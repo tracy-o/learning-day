@@ -16,6 +16,7 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec start_link() :: Supervisor.on_start()
   def start_link() do
+    # TODO: use `Supervisor` in https://jira.dev.bbc.co.uk/browse/RESFRAME-3592
     DynamicSupervisor.start_link(name: __MODULE__, strategy: :one_for_one)
   end
 
@@ -52,7 +53,7 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec notify(dials_event, map) :: :ok
   def notify(:dials_changed, dials_data) do
-    for {_, dial, _, _} <- Supervisor.which_children(__MODULE__) do
+    for dial <- @dials do
       GenServer.cast(dial, {:dials_changed, dials_data})
     end
   end
