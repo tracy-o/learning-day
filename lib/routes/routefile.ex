@@ -195,6 +195,8 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
 
+  handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
+
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
