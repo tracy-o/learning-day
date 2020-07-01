@@ -26,6 +26,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.LoopsRegistry,
       Belfrage.LoopsSupervisor,
       Belfrage.Credentials.Refresh,
+      Belfrage.DialsSupervisor,
       Belfrage.Dials,
       worker(Cachex, [:cache, [limit: cachex_limit()]]),
       {EtsCleaner, cleaner_module: Belfrage.Cache.Cleaner, check_interval: 60_000}

@@ -1,5 +1,13 @@
 defmodule Belfrage.Dials do
+  @moduledoc """
+  This module is responsible for adding dials to the dials supervisor,
+  polling/reading Cosmos dials.json and invokes dials changed event via
+  the supervisor.
+  """
+
   use GenServer
+
+  alias Belfrage.DialsSupervisor
 
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
@@ -25,6 +33,9 @@ defmodule Belfrage.Dials do
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
+    # TODO: remove this in https://jira.dev.bbc.co.uk/browse/RESFRAME-3592
+    DialsSupervisor.add_dials()
+
     {:ok, %{}}
   end
 
@@ -32,9 +43,12 @@ defmodule Belfrage.Dials do
   def handle_info(:refresh, old_dials) do
     schedule_work()
 
-    case refresh_dials() do
+    case read_dials() do
       {:ok, dials} when dials != old_dials ->
+        # TODO: to be removed when TTL, log level dials are updated: RESFRAME-3594, RESFRAME-3596
         on_refresh(dials)
+        DialsSupervisor.notify(:dials_changed, dials)
+
         {:noreply, dials}
 
       {:ok, dials} when dials == old_dials ->
@@ -56,8 +70,8 @@ defmodule Belfrage.Dials do
   # Catch all to handle unexpected messages
   # https://elixir-lang.org/getting-started/mix-otp/genserver.html#call-cast-or-info
   @impl GenServer
-  def handle_info(_any_message, dials) do
-    {:noreply, dials}
+  def handle_info(_any_message, state) do
+    {:noreply, state}
   end
 
   @impl GenServer
@@ -74,7 +88,7 @@ defmodule Belfrage.Dials do
     Process.send_after(:dials, :refresh, @refresh_rate)
   end
 
-  defp refresh_dials do
+  defp read_dials() do
     case @file_io.read(@dials_location) do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}

@@ -32,7 +32,7 @@ defmodule Belfrage.DialsTest do
 
     test "init/1 sets initial state of dials to an empty map" do
       options = []
-      assert {:ok, %{}} == Dials.init(options)
+      assert {:ok, %{}} = Dials.init(options)
     end
 
     test "Changing the file and refreshing gives the new dials value" do
