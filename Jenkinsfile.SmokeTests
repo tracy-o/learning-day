@@ -61,7 +61,7 @@ node {
 
       try {
         if (fileExists('smoke_test_output.txt')) {
-          test_figures = sh(script: "grep -E '\d+ tests, \d+ failures' smoke_test_output.txt", returnStdout:true).trim()
+          test_figures = sh(script: "grep -E '\\d+ tests, \\d+ failures' smoke_test_output.txt", returnStdout:true).trim()
           sh 'rm smoke_test_output.txt'
         }
       } catch (err) {
