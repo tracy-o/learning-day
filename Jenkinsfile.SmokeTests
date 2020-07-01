@@ -46,6 +46,7 @@ node {
           } else {
             sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} > smoke_test_output.txt"
           }
+          sh "cat smoke_test_output.txt"
         }
       } catch (err) {
         result = 'FAILED'
