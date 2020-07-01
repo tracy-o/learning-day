@@ -19,8 +19,8 @@ node {
     disableConcurrentBuilds(),
     pipelineTriggers([parameterizedCron(cronlist)]),
     parameters([
-        choice(choices: ['test', 'live'], description: 'The environment to run the tests against', name: 'ENVIRONMENT'),
-        choice(choices: ['all', 'belfrage', 'cedric-belfrage', 'bruce-belfrage', 'belfrage-preview'], description: 'The target to run the tests against.', name: 'TARGET'),
+        choice(name: 'ENVIRONMENT', choices: ['test', 'live'], description: 'The environment to run the tests against'),
+        choice(name: 'TARGET', choices: ['all', 'belfrage', 'cedric-belfrage', 'bruce-belfrage', 'belfrage-preview'], description: 'The target to run the tests against.'),
         string(name: 'SLACK_MESSAGE', defaultValue: '', description: 'Optionally enter a value to send the result along with this message to the Belfrage slack channel.'),
         string(name: 'DEPLOYMENT_ID', defaultValue: '', description: 'Optionally enter the cosmos deployment ID to report the status of this smoke test to.'),
         string(name: 'REVISION', defaultValue: '', description: 'Optionally enter the short sha of the git commit to run the tests from.')
@@ -42,9 +42,9 @@ node {
       try {
         ansiColor('xterm') {
           if (params.TARGET == 'all') {
-            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT}"
+            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} > smoke_test_ouput.txt"
           } else {
-            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET}"
+            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} > smoke_test_output.txt"
           }
         }
       } catch (err) {
@@ -56,8 +56,19 @@ node {
 
   if (result == 'FAILED') {
     stage('Report result to slack') {
+      def test_figures = "? tests, ? failures"
+
+      if (fileExists('smoke_test_output.txt')) {
+        def matcher = readFile('smoke_test_output.txt').trim() ~= /\d+ tests, \d+ failures/
+        
+        if (matcher.find()) {
+          test_figures = matcher[0]
+        }
+        sh 'rm smoke_test_output.txt'
+      }
+
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
-      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}: ${env.RUN_DISPLAY_URL}. ${params.SLACK_MESSAGE}"
+      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}\nSUMMARY: ${test_figures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
     }
   }
 
