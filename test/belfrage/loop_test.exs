@@ -46,7 +46,7 @@ defmodule Belfrage.LoopTest do
                 owner: "belfrage-team@bbc.co.uk",
                 runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
                 platform: OriginSimulator,
-                pipeline: ["CircuitBreaker"],
+                pipeline: ["TrailingSlashRedirector", "CircuitBreaker"],
                 resp_pipeline: [],
                 circuit_breaker_error_threshold: 100,
                 loop_id: "ProxyPass"

@@ -22,6 +22,7 @@ defmodule BelfrageTest do
 
   @post_request_struct %Struct{
     request: %Struct.Request{
+      path: "/",
       method: "POST",
       payload: ~s({"some": "data please"}),
       country: "gb"
