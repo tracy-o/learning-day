@@ -59,7 +59,7 @@ node {
       def test_figures = "? tests, ? failures"
 
       if (fileExists('smoke_test_output.txt')) {
-        def matcher = readFile('smoke_test_output.txt').trim() ~= /\d+ tests, \d+ failures/
+        def matcher = readFile('smoke_test_output.txt').trim() =~ /\d+ tests, \d+ failures/
         
         if (matcher.find()) {
           test_figures = matcher[0]
