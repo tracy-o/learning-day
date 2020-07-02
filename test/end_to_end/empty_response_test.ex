@@ -10,7 +10,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
     %{
       lambda_response: %{
         "headers" => %{
-          "content-length" => "0"
+          "content-length" => 0
         },
         "statusCode" => 200,
         "body" => ""

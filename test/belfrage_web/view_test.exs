@@ -51,7 +51,7 @@ defmodule BelfrageWeb.ViewTest do
         response: %Struct.Response{
           body: "",
           http_status: 500,
-          headers: %{"content-length" => "0"}
+          headers: %{"content-length" => 0}
         }
       }
 
@@ -67,7 +67,7 @@ defmodule BelfrageWeb.ViewTest do
         response: %Struct.Response{
           body: "",
           http_status: 404,
-          headers: %{"content-length" => "0"}
+          headers: %{"content-length" => 0}
         }
       }
 
@@ -83,7 +83,7 @@ defmodule BelfrageWeb.ViewTest do
         response: %Struct.Response{
           body: "",
           http_status: 500,
-          headers: %{"content-length" => "0"}
+          headers: %{"content-length" => 0}
         }
       }
 
@@ -99,7 +99,7 @@ defmodule BelfrageWeb.ViewTest do
         response: %Struct.Response{
           body: "",
           http_status: 500,
-          headers: %{"content-length" => "0"}
+          headers: %{"content-length" => 0}
         }
       }
 
@@ -115,7 +115,7 @@ defmodule BelfrageWeb.ViewTest do
         response: %Struct.Response{
           body: "",
           http_status: 302,
-          headers: %{"content-length" => "0", "content-type" => "text/plain"}
+          headers: %{"content-length" => 0, "content-type" => "text/plain"}
         }
       }
 
