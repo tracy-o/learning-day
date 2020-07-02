@@ -33,9 +33,6 @@ defmodule Belfrage.Dials do
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
-    # TODO: remove this in https://jira.dev.bbc.co.uk/browse/RESFRAME-3592
-    DialsSupervisor.add_dials()
-
     {:ok, %{}}
   end
 
