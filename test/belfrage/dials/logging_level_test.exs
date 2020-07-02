@@ -3,10 +3,9 @@ defmodule Belfrage.Dials.LoggingLevelTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Dials.LoggingLevel
-  alias Belfrage.Dials
 
   setup do
-    Dials.clear()
+    Belfrage.Dials.Poller.clear()
     :ok
   end
 

@@ -1,5 +1,5 @@
 defmodule Belfrage.Dials.TtlMultiplier do
-  alias Belfrage.Dials
+  alias Belfrage.Dials.Poller
 
   @ttl_modifier_comparison %{
     "private" => 0,
@@ -9,7 +9,7 @@ defmodule Belfrage.Dials.TtlMultiplier do
   }
 
   def value() do
-    Dials.state()
+    Poller.state()
     |> Map.get("ttl_multiplier", "default")
     |> dial_value_to_int()
   end
