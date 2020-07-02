@@ -10,6 +10,7 @@ defmodule Routes.Routefile do
   redirect "/example/news/0", to: "/news", status: 302
   redirect "/example/weather/0", to: "/weather", status: 301
   redirect "/ni", to: "/northernireland", status: 302
+  redirect "/newyddion/*any", to: "/cymrufyw/*", status: 302
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
@@ -118,9 +119,6 @@ defmodule Routes.Routefile do
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
-  handle "/newyddion.amp", using: "WorldServiceNewyddion", examples: ["/newyddion.amp"]
-  handle "/newyddion.json", using: "WorldServiceNewyddion", examples: ["/newyddion.json"]
-  handle "/newyddion/*_any", using: "WorldServiceNewyddion", examples: ["/newyddion", "/newyddion/example-123", "/newyddion/example-123.amp", "/newyddion/example-123.json"]
   handle "/nepali.amp", using: "WorldServiceNepali", examples: ["/nepali.amp"]
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali", "/nepali/example-123", "/nepali/example-123.amp", "/nepali/example-123.json"]

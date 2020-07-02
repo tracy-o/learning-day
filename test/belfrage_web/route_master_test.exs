@@ -222,6 +222,18 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["https://www.bbc.com/arabic/middleeast-51412901"]
     end
+
+    test "when the redirect matches a multi-segment path it will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/redirect-with-path/abc")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location-with-path/abc"]
+    end
   end
 
   describe "matching proxy_pass routes" do

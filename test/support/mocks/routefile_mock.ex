@@ -7,6 +7,8 @@ defmodule Routes.RoutefileMock do
   redirect("/permanent-redirect", to: "/new-location", status: 301)
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
+  redirect("/redirect-with-path/*any", to: "/new-location-with-path/*", status: 302)
+
   handle("/200-ok-response", using: "SomeLoop", examples: ["/200-ok-response"])
 
   handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
