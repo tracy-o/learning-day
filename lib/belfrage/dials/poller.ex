@@ -6,7 +6,7 @@ defmodule Belfrage.Dials.Poller do
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
   @file_io Application.get_env(:belfrage, :file_io)
-  @refresh_rate 30_000
+  @refresh_rate 5_000
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
