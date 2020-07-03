@@ -30,4 +30,31 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              body: ""
            } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}})
   end
+
+  describe "response headers" do
+    test "values are converted to strings" do
+      assert %Struct.Response{
+               headers: %{
+                 "content-length" => "0",
+                 "a-header" => "true",
+                 "another-header" => "false",
+                 "a-nil-header" => ""
+               }
+             } =
+               Response.build(
+                 {:ok,
+                  %{
+                    "body" => "",
+                    "isBase64Encoded" => false,
+                    "statusCode" => 404,
+                    "headers" => %{
+                      "content-length" => 0,
+                      "a-header" => true,
+                      "another-header" => false,
+                      "a-nil-header" => nil
+                    }
+                  }}
+               )
+    end
+  end
 end
