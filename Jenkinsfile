@@ -59,6 +59,9 @@ node {
   }
 
   stage("clean up after ourselves") {
+    docker.image('qixxit/elixir-centos').inside("-u root") {
+        sh "rm -rf ${env.WORKSPACE}/{deps,_build,local.log}"
+    }
     cleanWs()
     dir("${env.WORKSPACE}@libs") {
       deleteDir()
