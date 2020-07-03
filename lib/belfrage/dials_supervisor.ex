@@ -29,7 +29,8 @@ defmodule Belfrage.DialsSupervisor do
   """
   @impl true
   def init(_init_arg) do
-    Supervisor.init(@dials ++ [Belfrage.Dials.Poller], strategy: :one_for_one)
+    children = @dials ++ [Belfrage.Dials.Poller]
+    Supervisor.init(children, strategy: :one_for_one)
   end
 
   @doc """
