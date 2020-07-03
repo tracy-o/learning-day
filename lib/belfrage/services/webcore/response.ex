@@ -44,7 +44,7 @@ defmodule Belfrage.Services.Webcore.Response do
 
     %Struct.Response{
       http_status: http_status,
-      headers: headers,
+      headers: stringify(headers),
       body: body
     }
   end
@@ -62,5 +62,12 @@ defmodule Belfrage.Services.Webcore.Response do
       headers: %{},
       body: ""
     }
+  end
+
+  defp stringify(headers) do
+    Enum.map(headers, fn {key, value} ->
+      {key, to_string(value)}
+    end)
+    |> Enum.into(%{})
   end
 end
