@@ -3,13 +3,13 @@ defmodule Belfrage.Dials.TtlMultiplierTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Dials.TtlMultiplier
-  alias Belfrage.Dials
+  alias Belfrage.Dials.Poller
 
   setup do
-    Dials.clear()
+    Poller.clear()
 
     on_exit(fn ->
-      Dials.clear()
+      Poller.clear()
       :ok
     end)
 
@@ -21,7 +21,7 @@ defmodule Belfrage.Dials.TtlMultiplierTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "long"})} end)
 
-      Dials.refresh_now()
+      Poller.refresh_now()
       assert TtlMultiplier.value() == 3
     end
 
@@ -29,7 +29,7 @@ defmodule Belfrage.Dials.TtlMultiplierTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "private"})} end)
 
-      Dials.refresh_now()
+      Poller.refresh_now()
       assert TtlMultiplier.value() == 0
     end
 
@@ -37,7 +37,7 @@ defmodule Belfrage.Dials.TtlMultiplierTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn _ -> {:ok, ~s({"foo": "bar"})} end)
 
-      Dials.refresh_now()
+      Poller.refresh_now()
       assert TtlMultiplier.value() == 1
     end
   end

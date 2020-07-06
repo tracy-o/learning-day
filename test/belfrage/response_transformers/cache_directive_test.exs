@@ -1,15 +1,16 @@
 defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
-  alias Belfrage.ResponseTransformers.CacheDirective
-  alias Belfrage.Struct
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
+  alias Belfrage.ResponseTransformers.CacheDirective
+  alias Belfrage.Struct
+
   describe "&call/1" do
     setup do
-      Belfrage.Dials.clear()
+      Belfrage.Dials.Poller.clear()
 
       on_exit(fn ->
-        Belfrage.Dials.clear()
+        Belfrage.Dials.Poller.clear()
         :ok
       end)
 
@@ -44,7 +45,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "long"})} end)
 
-      Belfrage.Dials.refresh_now()
+      Belfrage.Dials.Poller.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -59,7 +60,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "private"})} end)
 
-      Belfrage.Dials.refresh_now()
+      Belfrage.Dials.Poller.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -74,7 +75,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "long"})} end)
 
-      Belfrage.Dials.refresh_now()
+      Belfrage.Dials.Poller.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -89,7 +90,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       Belfrage.Helpers.FileIOMock
       |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "else"})} end)
 
-      Belfrage.Dials.refresh_now()
+      Belfrage.Dials.Poller.refresh_now()
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
