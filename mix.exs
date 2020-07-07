@@ -73,7 +73,11 @@ defmodule Belfrage.MixProject do
       {:poison, "~> 3.1"},
       {:secure_random, "~> 0.5.1"},
       {:tabula, "~> 2.1.1", only: [:dev]},
-      {:x509, "~> 0.8", only: :dev}
+      {:x509, "~> 0.8", only: :dev},
+      {:telemetry, "~> 0.4.2"},
+      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.5"},
+      {:telemetry_metrics_statsd, "~> 0.4"}
     ]
   end
 end
