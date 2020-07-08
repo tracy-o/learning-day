@@ -51,10 +51,10 @@ The following fault-tolerant **OK** states were sought:
 
 #### Circuit breaker dial
 
-The circuit breaker dial works as expected - see below. When it was enabled, HTTP request rate (to origin) was limited to 100 per minute, a threshold set for the ProxyPass route (OriginSimulator platform). Belfrage was responding at a rate of > 10k (max) per minute with the translated status 500 responses while OriginSimulator was returning 503. When the dial was disabled, > 10k requests were all sent to the origin.
+The circuit breaker dial works as expected - see below. When it was enabled, the request rate of malfunctioning origin was limited to 100 per minute, a threshold set for the ProxyPass route. Belfrage was responding at a rate of > 10k (max) per minute with the translated status 500 responses while OriginSimulator was returning 503. When the dial was disabled, thousands of requests were routed to the malfunctioning origin (no throttling).
 
 ![plot](img/2020-07-06-dials-fault-tolerance/circuit_breaker_enabled_disabled.png)
-*Plot 1: Belfrage responses for 503 origin when circuit breaker dial enabled / disabled*
+*Plot 1: Belfrage responses for origin (status 503) when circuit breaker dial enabled between 16:14-16:17*
 
 #### Belfrage dials fault-tolerance
 
