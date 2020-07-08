@@ -42,9 +42,9 @@ node {
       try {
         ansiColor('xterm') {
           if (params.TARGET == 'all') {
-            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} | tee smoke_test_ouput.txt"
+            sh "set -o pipefail ; mix smoke_test --color --bbc-env ${params.ENVIRONMENT} | tee smoke_test_ouput.txt"
           } else {
-            sh "mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} | tee smoke_test_output.txt"
+            sh "set -o pipefail ; mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} | tee smoke_test_output.txt"
           }
         }
       } catch (err) {
@@ -56,19 +56,22 @@ node {
 
   if (result == 'FAILED') {
     stage('Report result to slack') {
-      def test_figures = "? tests, ? failures"
+      def testFigures = "? tests, ? failures"
 
       try {
         if (fileExists('smoke_test_output.txt')) {
-          test_figures = sh(script: "grep -E '\\d+ tests, \\d+ failures' smoke_test_output.txt", returnStdout:true).trim()
+          sh 'cat smoke_test_output.txt | tail -n 5 | head -n 1'
+          // testFigures = sh(script: "cat smoke_test_output.txt | tail -5 | head -1", returnStdout:true).trim()
           sh 'rm smoke_test_output.txt'
         }
       } catch (err) {
         println("Couldn't find test results")
+        println(err)
       }
 
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
-      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}\nSUMMARY: ${test_figures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
+      sh "${testFigures}"
+      // slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}\nSUMMARY: ${test_figures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
     }
   }
 
