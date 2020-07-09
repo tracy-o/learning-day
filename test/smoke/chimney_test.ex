@@ -84,9 +84,5 @@ defmodule BelfrageChimneySmokeTest do
       assert Helper.header_item_exists(resp.headers, @cedric_header)
       assert Helper.get_header(resp.headers, "content-type") == "application/json; charset=utf-8"
     end
-
-    test "a failing test, to test slack smoke test messaging" do
-      assert false
-    end
   end
 end

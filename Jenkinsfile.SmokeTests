@@ -42,9 +42,9 @@ node {
       try {
         ansiColor('xterm') {
           if (params.TARGET == 'all') {
-            sh "set -o pipefail ; mix smoke_test --color --bbc-env ${params.ENVIRONMENT} | tee smoke_test_ouput.txt"
+            sh "set -o pipefail ; mix smoke_test --bbc-env ${params.ENVIRONMENT} | tee smoke_test_output.txt"
           } else {
-            sh "set -o pipefail ; mix smoke_test --color --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} | tee smoke_test_output.txt"
+            sh "set -o pipefail ; mix smoke_test --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} | tee smoke_test_output.txt"
           }
         }
       } catch (err) {
@@ -60,8 +60,11 @@ node {
 
       try {
         if (fileExists('smoke_test_output.txt')) {
-          sh 'cat smoke_test_output.txt | tail -n 5 | head -n 1'
-          // testFigures = sh(script: "cat smoke_test_output.txt | tail -5 | head -1", returnStdout:true).trim()
+          testFigures = sh(script: "cat smoke_test_output.txt | tail -n 5 | head -n 1", returnStdout:true).trim()
+          if (!(testFigures ==~ /\d+ tests, \d+ failures?/)) {
+              println("Test figures don't match regex")
+              testFigures = "? tests, ? failures"
+          }
           sh 'rm smoke_test_output.txt'
         }
       } catch (err) {
@@ -70,8 +73,7 @@ node {
       }
 
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
-      sh "${testFigures}"
-      // slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on ${params.ENVIRONMENT} ${result}\nSUMMARY: ${test_figures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
+      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on *${params.ENVIRONMENT}* ${result}\nSUMMARY: ${testFigures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
     }
   }
 
