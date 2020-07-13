@@ -1,9 +1,6 @@
-defmodule Belfrage.Dials.CircuitBreaker do
-  @moduledoc false
-
+defmodule Belfrage.Dials.GenericDial do
   @behaviour Belfrage.Dial
-
-  use Belfrage.Dial, dial: "circuit_breaker"
+  use Belfrage.Dial, dial: "a-generic-dial"
 
   @impl Belfrage.Dial
   def transform("true"), do: true
