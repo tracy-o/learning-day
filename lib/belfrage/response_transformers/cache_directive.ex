@@ -14,7 +14,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), Belfrage.Dials.TtlMultiplier.value()),
+      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), Belfrage.Dials.TtlMultiplier.state()),
       headers: response_headers
     })
   end

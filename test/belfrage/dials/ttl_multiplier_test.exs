@@ -1,44 +1,22 @@
 defmodule Belfrage.Dials.TtlMultiplierTest do
   use ExUnit.Case
-  use Test.Support.Helper, :mox
-
   alias Belfrage.Dials.TtlMultiplier
-  alias Belfrage.Dials.Poller
 
-  setup do
-    Poller.clear()
-
-    on_exit(fn ->
-      Poller.clear()
-      :ok
-    end)
-
-    :ok
-  end
-
-  describe "value/0" do
-    test "Changing the file gives the new ttl multiplier value" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "long"})} end)
-
-      Poller.refresh_now()
-      assert TtlMultiplier.value() == 3
+  describe "transform/1" do
+    test "when values is long" do
+      assert TtlMultiplier.transform("long") == 3
     end
 
-    test "when the ttl_multiplier dial is `private`, the ttl multiplier returns `0`" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"ttl_multiplier": "private"})} end)
-
-      Poller.refresh_now()
-      assert TtlMultiplier.value() == 0
+    test "when values is private" do
+      assert TtlMultiplier.transform("private") == 0
     end
 
-    test "returns the default ttl value of 1" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"foo": "bar"})} end)
+    test "when values is default" do
+      assert TtlMultiplier.transform("default") == 1
+    end
 
-      Poller.refresh_now()
-      assert TtlMultiplier.value() == 1
+    test "when values is super_long" do
+      assert TtlMultiplier.transform("super_long") == 10
     end
   end
 end

@@ -2,8 +2,9 @@ defmodule Belfrage.DialsSupervisor do
   @moduledoc false
 
   use Supervisor
+  alias Belfrage.Dials
 
-  @dials [Belfrage.Dials.CircuitBreaker]
+  @dials [Dials.CircuitBreaker, Dials.TtlMultiplier]
 
   @type dials_event :: :dials_changed
 
