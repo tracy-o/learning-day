@@ -1,8 +1,6 @@
 defmodule Belfrage.Dials.CircuitBreaker do
   @moduledoc false
 
-  @behaviour Belfrage.Dial
-
   use Belfrage.Dial, dial: "circuit_breaker"
 
   @impl Belfrage.Dial

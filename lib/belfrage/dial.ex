@@ -16,6 +16,8 @@ defmodule Belfrage.Dial do
 
       use GenServer
       import Belfrage.Dial
+      import Logger
+      @behaviour Belfrage.Dial
 
       @dial Keyword.get(unquote(opts), :dial)
 

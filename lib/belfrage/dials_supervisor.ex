@@ -43,4 +43,7 @@ defmodule Belfrage.DialsSupervisor do
       GenServer.cast(dial, {:dials_changed, dials_data})
     end
   end
+
+  @spec dials() :: [atom()]
+  def dials, do: @dials
 end

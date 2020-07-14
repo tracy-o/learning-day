@@ -1,8 +1,6 @@
 defmodule Belfrage.Dials.TtlMultiplier do
   @moduledoc false
 
-  @behaviour Belfrage.Dial
-
   use Belfrage.Dial, dial: "ttl_multiplier"
 
   @impl Belfrage.Dial

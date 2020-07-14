@@ -32,13 +32,13 @@ defmodule Belfrage.DialTest do
     assert GenericDial.default() == GenericDial.transform(dial["default-value"])
   end
 
-  test "all dial values in Cosmos dials.json are transformed into booleans", %{dial: dial} do
+  test "all dial values in Cosmos dials.json are transformed", %{dial: dial} do
     for d <- dial["values"] do
       assert d["value"] |> GenericDial.transform() |> is_boolean()
     end
   end
 
-  test "default/0  returns a boolean state" do
+  test "default/0 returns a boolean state" do
     assert GenericDial.default() |> is_boolean()
   end
 
