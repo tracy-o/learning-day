@@ -1,7 +1,10 @@
 defmodule Belfrage.Dials.TtlMultiplier do
   @moduledoc false
 
-  use Belfrage.Dial, dial: "ttl_multiplier"
+  @behaviour Belfrage.Dial
+
+  @impl Belfrage.Dial
+  def name, do: "ttl_multiplier"
 
   @impl Belfrage.Dial
   def transform("private"), do: 0

@@ -15,7 +15,8 @@ defmodule Belfrage.DialTest do
       @codec.encode!(dial_config)
     end)
 
-    {:ok, _pid} = GenericDial.start_link([])
+    name = String.to_atom(GenericDial.name())
+    {:ok, _pid} = Belfrage.Dial.start_link(dial: GenericDial, name: name)
 
     %{
       dial_config: dial_config,
@@ -29,7 +30,7 @@ defmodule Belfrage.DialTest do
   end
 
   test "default/0 transforms and returns the string default state in Cosmos dials.json", %{dial: dial} do
-    assert GenericDial.default() == GenericDial.transform(dial["default-value"])
+    assert Dial.default(GenericDial) == GenericDial.transform(dial["default-value"])
   end
 
   test "all dial values in Cosmos dials.json are transformed", %{dial: dial} do
@@ -39,14 +40,14 @@ defmodule Belfrage.DialTest do
   end
 
   test "default/0 returns a boolean state" do
-    assert GenericDial.default() |> is_boolean()
+    assert Dial.default(GenericDial) |> is_boolean()
   end
 
   test "dial correctly handles changed event in which the dial boolean state is flipped" do
-    dial_state = GenericDial.state()
-    GenServer.cast(GenericDial, {:dials_changed, %{"a-generic-dial" => "#{!dial_state}"}})
+    dial_state = Dial.state(:"a-generic-dial")
+    GenServer.cast(:"a-generic-dial", {:dials_changed, %{"a-generic-dial" => "#{!dial_state}"}})
 
-    assert GenericDial.state() == !dial_state
+    assert Dial.state(:"a-generic-dial") == !dial_state
   end
 
   describe "state/0" do
@@ -56,7 +57,7 @@ defmodule Belfrage.DialTest do
 
     test "returns a default boolean state on init" do
       assert Poller.state() == %{}
-      assert GenericDial.state() |> is_boolean()
+      assert Dial.state(:"a-generic-dial") |> is_boolean()
     end
 
     test "returns a default boolean state when dials.json is malformed" do
@@ -65,7 +66,7 @@ defmodule Belfrage.DialTest do
 
       Poller.refresh_now()
       assert Poller.state() == %{}
-      assert GenericDial.state() |> is_boolean()
+      assert Dial.state(:"a-generic-dial") |> is_boolean()
     end
 
     test "returns a state which corresponds to the dials.json" do
@@ -74,7 +75,7 @@ defmodule Belfrage.DialTest do
 
       Poller.refresh_now()
       assert Poller.state() == %{"a-generic-dial" => "false"}
-      assert GenericDial.state() == false
+      assert Dial.state(:"a-generic-dial") == false
     end
   end
 end

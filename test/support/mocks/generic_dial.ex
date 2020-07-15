@@ -1,6 +1,8 @@
 defmodule Belfrage.Dials.GenericDial do
   @behaviour Belfrage.Dial
-  use Belfrage.Dial, dial: "a-generic-dial"
+
+  @impl Belfrage.Dial
+  def name, do: "a-generic-dial"
 
   @impl Belfrage.Dial
   def transform("true"), do: true

@@ -24,10 +24,9 @@ defmodule Belfrage.DialsSupervisorTest do
   test "dials are up and running from the dials supervision tree" do
     children =
       Supervisor.which_children(@dials_supervisor)
-      |> Enum.filter(fn {id, _, _, _} -> id in @dials end)
       |> Enum.map(&elem(&1, 0))
 
-    assert @dials == Enum.reverse(children)
+    assert [Belfrage.Dials.Poller, "ttl_multiplier", "circuit_breaker"] == children
   end
 
   test "when dial crashes, error is logged and dial is restarted" do
@@ -35,11 +34,11 @@ defmodule Belfrage.DialsSupervisorTest do
     pid = Process.whereis(supervised_dial)
 
     assert capture_log(fn ->
-             GenServer.cast(supervised_dial, {:dials_changed, %{"circuit_breaker" => "bar"}})
+             GenServer.cast(:"circuit_breaker", {:dials_changed, %{"circuit_breaker" => "bar"}})
              :timer.sleep(100)
            end) =~ "no function clause matching"
 
-    new_pid = GenServer.whereis(supervised_dial)
+    new_pid = GenServer.whereis(:"circuit_breaker")
     refute is_nil(new_pid)
     refute new_pid == pid, "Dial did not crash, so this test is invalid."
   end

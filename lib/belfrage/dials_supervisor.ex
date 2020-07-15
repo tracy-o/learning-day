@@ -30,7 +30,7 @@ defmodule Belfrage.DialsSupervisor do
   """
   @impl true
   def init(_init_arg) do
-    children = @dials ++ [Belfrage.Dials.Poller]
+    children = dial_children() ++ [Belfrage.Dials.Poller]
     Supervisor.init(children, strategy: :one_for_one)
   end
 
@@ -46,4 +46,11 @@ defmodule Belfrage.DialsSupervisor do
 
   @spec dials() :: [atom()]
   def dials, do: @dials
+
+  defp dial_children do
+    Enum.map(@dials, fn dial_mod ->
+      opts = [dial: dial_mod, name: String.to_atom(dial_mod.name())]
+      Supervisor.child_spec({Belfrage.Dial, opts}, id: dial_mod.name())
+    end)
+  end
 end

@@ -1,7 +1,10 @@
 defmodule Belfrage.Dials.CircuitBreaker do
   @moduledoc false
 
-  use Belfrage.Dial, dial: "circuit_breaker"
+  @behaviour Belfrage.Dial
+
+  @impl Belfrage.Dial
+  def name, do: "circuit_breaker"
 
   @impl Belfrage.Dial
   def transform("true"), do: true
