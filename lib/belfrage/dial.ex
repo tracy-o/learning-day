@@ -29,6 +29,19 @@ defmodule Belfrage.Dial do
   @impl GenServer
   @spec init(list) :: {:ok, state}
   def init(dial: dial_logic_mod, name: _name) do
+    ########################################
+    ########################################
+    ########################################
+    ########################################
+    # This makes the tests always fail.
+    # Without this line, the test pass 80%
+    # of the time.
+    :timer.sleep(1000)
+    ########################################
+    ########################################
+    ########################################
+    ########################################
+
     # initial state inferred from Cosmos dials.json
     # via default() injected from Belfrage.Dials.Defaults
     # the state is to be overriden by the current dial value
