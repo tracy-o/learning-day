@@ -6,6 +6,8 @@ defmodule Belfrage.DialsSupervisorTest do
   @dials Belfrage.DialsSupervisor.dials()
   import ExUnit.CaptureLog
 
+  use Test.Support.Helper, :mox
+
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
