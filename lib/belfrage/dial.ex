@@ -1,5 +1,7 @@
 defmodule Belfrage.Dial do
   @callback transform(any()) :: any()
+  @callback on_change(any()) :: :ok
+  @optional_callbacks on_change: 1
 
   @codec Application.get_env(:belfrage, :json_codec)
   @file_io Application.get_env(:belfrage, :file_io)
@@ -34,10 +36,19 @@ defmodule Belfrage.Dial do
   def handle_cast({:dials_changed, changes}, state = {dial_logic_mod, dial_name, _old_value}) do
     case changes do
       %{^dial_name => value} ->
-        {:noreply, {dial_logic_mod, dial_name, dial_logic_mod.transform(value)}}
+        transformed_value = dial_logic_mod.transform(value)
+        maybe_call_on_change(dial_logic_mod, transformed_value)
+
+        {:noreply, {dial_logic_mod, dial_name, transformed_value}}
 
       _other ->
         {:noreply, state}
+    end
+  end
+
+  defp maybe_call_on_change(dial_logic_mod, transformed_value) do
+    if function_exported?(dial_logic_mod, :on_change, 1) do
+      apply(dial_logic_mod, :on_change, [transformed_value])
     end
   end
 end

@@ -23,7 +23,7 @@ defmodule Belfrage.DialsSupervisorTest do
       Supervisor.which_children(@dials_supervisor)
       |> Enum.map(&elem(&1, 0))
 
-    assert [Belfrage.Dials.Poller, "ttl_multiplier", "circuit_breaker"] == children
+    assert [Belfrage.Dials.Poller, "ttl_multiplier", "logging_level", "circuit_breaker"] == children
   end
 
   test "when dial crashes, error is logged and dial is restarted with default state" do

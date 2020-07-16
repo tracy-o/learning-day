@@ -36,8 +36,6 @@ defmodule Belfrage.Dials.Poller do
 
     case read_dials() do
       {:ok, dials} when dials != old_dials ->
-        # TODO: to be removed when TTL, log level dials are updated: RESFRAME-3594, RESFRAME-3596
-        on_refresh(dials)
         Belfrage.DialsSupervisor.notify(:dials_changed, dials)
 
         {:noreply, dials}
@@ -84,10 +82,5 @@ defmodule Belfrage.Dials.Poller do
       {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
       {:error, reason} -> {:error, reason}
     end
-  end
-
-  defp on_refresh(dials) do
-    Belfrage.Dials.LoggingLevel.on_refresh(dials)
-    :ok
   end
 end

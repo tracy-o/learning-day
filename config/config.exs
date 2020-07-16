@@ -56,7 +56,8 @@ config :belfrage,
   redirect_statuses: [301, 302, 307, 308],
   dial_handlers: %{
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
-    "ttl_multiplier" => Belfrage.Dials.TtlMultiplier
+    "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
+    "logging_level" => Belfrage.Dials.LoggingLevel
   }
 
 config :ex_aws,
