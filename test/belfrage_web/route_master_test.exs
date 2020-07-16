@@ -244,7 +244,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
-                              request: %Struct.Request{path: route, origin_simulator?: origin_simulator_header}
+                              request: %Struct.Request{path: _route, origin_simulator?: _origin_simulator_header}
                             } ->
         @struct_with_html_response
       end)
@@ -261,13 +261,12 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "200 is returned when on the test env and replayed_header header is set" do
-      replayed_traffic_header = "true"
       route = "/some-route-for-proxy-pass"
 
       BelfrageMock
       |> expect(:handle, fn %Struct{
                               private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
-                              request: %Struct.Request{path: route, has_been_replayed?: replayed_traffic_header}
+                              request: %Struct.Request{path: _route, has_been_replayed?: _replayed_traffic_header}
                             } ->
         @struct_with_html_response
       end)
@@ -329,7 +328,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "404 is returned when replayed_header is set but env is not test" do
-      origin_simulator_header = "true"
       route = "/some-route-for-proxy-pass"
 
       expect_belfrage_not_called()

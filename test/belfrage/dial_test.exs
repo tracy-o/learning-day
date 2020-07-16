@@ -2,10 +2,7 @@ defmodule Belfrage.DialTest do
   use ExUnit.Case, async: true
 
   alias Belfrage.Dial
-  alias Belfrage.Dials.Poller
   alias Belfrage.Dials.GenericDial
-
-  @codec Application.get_env(:belfrage, :json_codec)
 
   setup do
     default_value = "true"

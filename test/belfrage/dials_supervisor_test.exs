@@ -3,7 +3,6 @@ defmodule Belfrage.DialsSupervisorTest do
 
   @dials_supervisor Belfrage.DialsSupervisor
   @dials_poller Belfrage.Dials.Poller
-  @dials Belfrage.DialsSupervisor.dials()
   import ExUnit.CaptureLog
 
   test "dials supervisor is alive" do
