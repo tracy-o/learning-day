@@ -1,7 +1,6 @@
 defmodule Belfrage.PoolMetrics do
   use GenServer
 
-  @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :pool_observer)
   end
@@ -15,51 +14,49 @@ defmodule Belfrage.PoolMetrics do
 
   @impl true
   def handle_info(:loop, state) do
-    send_metrics()
+    send()
 
     loop()
     {:noreply, state}
   end
 
-  defp loop() do
-    Process.send_after(self(), :loop, 10_000)
-  end
-
-  def send_metrics() do
+  def send() do
     supervisor = Supervisor.which_children(MachineGun.Supervisor)
-    Stump.log(:error, metrics(supervisor))
+
+    supervisor
+    |> engaged_workers()
+    |> send_metrics("machinegun.pools.engaged_workers")
+
+    supervisor
+    |> all_workers()
+    |> send_metrics("machinegun.pools.all_workers")
   end
 
-  def metrics(supervisor_children) do
-    supervisor_children
-    |> Enum.map(&pool_map/1)
+  def send_metrics(metrics, metric_name) do
+    Enum.each(metrics, fn metric -> ExMetrics.increment(metric_name, metric) end)
   end
 
-  defp pool_map(pool) do
-    case pool do
-      {_, pid, _, _} ->
-        %{name: pool_name(pid), all_workers: all_workers(pid), active_workers: active_workers(pid)}
-
-      _ ->
-        :error
-    end
+  def all_workers(pools) do
+    call_pools(pools, :get_all_workers)
+    |> Enum.map(&Enum.count/1)
   end
 
-  defp all_workers(pool) do
-    GenServer.call(pool, :get_all_workers)
-    |> Enum.count()
+  def engaged_workers(pools) do
+    Enum.zip(all_workers(pools), available_workers(pools))
+    |> Enum.map(fn {all, avail} -> all - avail end)
   end
 
-  defp available_workers(pool) do
-    GenServer.call(pool, :get_avail_workers)
-    |> Enum.count()
+  defp available_workers(pools) do
+    call_pools(pools, :get_avail_workers)
+    |> Enum.map(&Enum.count/1)
   end
 
-  defp active_workers(pool) do
-    all_workers(pool) - available_workers(pool)
+  defp loop() do
+    Process.send_after(self(), :loop, 1_000)
   end
 
-  defp pool_name(pid) do
-    Process.info(pid)[:registered_name]
+  defp call_pools(pools, generver_term) do
+    pools
+    |> Enum.map(fn {_, pool_pid, _, _} -> GenServer.call(pool_pid, generver_term) end)
   end
 end

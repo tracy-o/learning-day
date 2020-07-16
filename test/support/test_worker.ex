@@ -1,6 +1,5 @@
 defmodule Belfrage.PoolMetricsTest.TestWorker do
   use GenServer
-  alias Belfrage.PoolMetricsTest
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], [])
@@ -12,7 +11,7 @@ defmodule Belfrage.PoolMetricsTest.TestWorker do
   end
 
   @impl true
-  def handle_call(:work, from, state) do
+  def handle_call(:work, _from, state) do
     :timer.sleep(2000)
     {:reply, [], state}
   end

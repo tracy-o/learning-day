@@ -24,41 +24,64 @@ defmodule Belfrage.PoolMetricsTest do
     :poolboy.checkout(pool_name, fn pid -> TestWorker.work(pid) end)
   end
 
-  describe "metrics/1" do
-    test "when supervisor returns no children, metrics returns nothing" do
-      assert PoolMetrics.metrics([]) == []
+  describe "all_workers/1" do
+    test "when there are no pools, return empty list" do
+      assert PoolMetrics.all_workers([]) == []
     end
 
-    test "when supervisor has a child pool, a map of its name, all_workers and active workers are given" do
-      supervisor_children = supervisor([new_pool(:a_pool, 2, 0)])
+    test "when there is one pool, returns the number of total workers" do
+      supervisor_children = supervisor([new_pool(:a_pool, 10, 0)])
 
-      assert PoolMetrics.metrics(supervisor_children) == [%{name: :a_pool, all_workers: 2, active_workers: 0}]
+      assert PoolMetrics.all_workers(supervisor_children) == [10]
     end
 
-    test "when a child pool has 1 active worker, the map has an active worker" do
-      supervisor_children = supervisor([new_pool(:a_pool, 2, 0)])
-      do_work(:a_pool)
+    test "when there a multiple pools, returns a list of total workers for each pool" do
+      supervisor_children = supervisor([new_pool(:a_pool, 10, 0), new_pool(:b_pool, 5, 0)])
 
-      assert PoolMetrics.metrics(supervisor_children) == [%{name: :a_pool, all_workers: 2, active_workers: 1}]
+      assert PoolMetrics.all_workers(supervisor_children) == [10, 5]
     end
 
-    test "when there is a pool overflow, all_workers includes overflow workers" do
+    test "when overflow pools are created, total workers increase to reflect additional workers" do
       supervisor_children = supervisor([new_pool(:a_pool, 2, 2)])
       do_work(:a_pool)
       do_work(:a_pool)
       do_work(:a_pool)
       do_work(:a_pool)
 
-      assert PoolMetrics.metrics(supervisor_children) == [%{name: :a_pool, all_workers: 4, active_workers: 4}]
+      assert PoolMetrics.all_workers(supervisor_children) == [4]
+    end
+  end
+
+  describe "engaged_workers/1" do
+    test "when there are no pools, return empty list" do
+      assert PoolMetrics.engaged_workers([]) == []
     end
 
-    test "when multiple pools are being supervised more than one metric map is given" do
-      supervisor_children = supervisor([new_pool(:a_pool, 2, 0), new_pool(:b_pool, 1, 1)])
+    test "when there is one pool, return the amount of workers being used" do
+      supervisor_children = supervisor([new_pool(:a_pool, 2, 0)])
+      do_work(:a_pool)
 
-      assert PoolMetrics.metrics(supervisor_children) == [
-               %{name: :a_pool, all_workers: 2, active_workers: 0},
-               %{name: :b_pool, all_workers: 1, active_workers: 0}
-             ]
+      assert PoolMetrics.engaged_workers(supervisor_children) == [1]
+    end
+
+    test "when there a multiple pools, returns a list of workers in use for each pool" do
+      supervisor_children = supervisor([new_pool(:a_pool, 4, 0), new_pool(:b_pool, 5, 0)])
+      do_work(:a_pool)
+      do_work(:b_pool)
+      do_work(:b_pool)
+
+      assert PoolMetrics.engaged_workers(supervisor_children) == [1, 2]
+    end
+
+    test "when overflow pools are created, engaged workers increase to reflect additional workers" do
+      supervisor_children = supervisor([new_pool(:a_pool, 2, 2)])
+
+      do_work(:a_pool)
+      do_work(:a_pool)
+      do_work(:a_pool)
+      do_work(:a_pool)
+
+      assert PoolMetrics.engaged_workers(supervisor_children) == [4]
     end
   end
 end
