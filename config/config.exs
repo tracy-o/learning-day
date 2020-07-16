@@ -53,7 +53,11 @@ config :belfrage,
   xray: Belfrage.Xray,
   stack_name: "belfrage-stack",
   stack_id: "local",
-  redirect_statuses: [301, 302, 307, 308]
+  redirect_statuses: [301, 302, 307, 308],
+  dial_handlers: %{
+    "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
+    "ttl_multiplier" => Belfrage.Dials.TtlMultiplier
+  }
 
 config :ex_aws,
   region: "eu-west-1",

@@ -6,8 +6,6 @@ defmodule Belfrage.DialsSupervisorTest do
   @dials Belfrage.DialsSupervisor.dials()
   import ExUnit.CaptureLog
 
-  use Test.Support.Helper, :mox
-
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
@@ -29,17 +27,18 @@ defmodule Belfrage.DialsSupervisorTest do
     assert [Belfrage.Dials.Poller, "ttl_multiplier", "circuit_breaker"] == children
   end
 
-  test "when dial crashes, error is logged and dial is restarted" do
+  test "when dial crashes, error is logged and dial is restarted with default state" do
     supervised_dial = Belfrage.Dials.CircuitBreaker
     pid = Process.whereis(supervised_dial)
 
     assert capture_log(fn ->
-             GenServer.cast(:"circuit_breaker", {:dials_changed, %{"circuit_breaker" => "bar"}})
+             GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "bar"}})
              :timer.sleep(100)
            end) =~ "no function clause matching"
 
-    new_pid = GenServer.whereis(:"circuit_breaker")
+    new_pid = GenServer.whereis(:circuit_breaker)
     refute is_nil(new_pid)
     refute new_pid == pid, "Dial did not crash, so this test is invalid."
+    assert {Belfrage.Dials.CircuitBreaker, "circuit_breaker", true} == :sys.get_state(:circuit_breaker)
   end
 end

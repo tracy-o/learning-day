@@ -6,7 +6,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   alias Belfrage.{Dials, Struct}
 
   def set_ttl_multiplier(value) do
-    GenServer.cast(:"ttl_multiplier", {:dials_changed, %{"ttl_multiplier" => value}})
+    GenServer.cast(:ttl_multiplier, {:dials_changed, %{"ttl_multiplier" => value}})
   end
 
   describe "&call/1" do

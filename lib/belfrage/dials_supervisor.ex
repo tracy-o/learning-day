@@ -2,10 +2,7 @@ defmodule Belfrage.DialsSupervisor do
   @moduledoc false
 
   use Supervisor
-  alias Belfrage.Dials
-
-  @dials [Dials.CircuitBreaker, Dials.TtlMultiplier]
-
+  use Belfrage.DialConfig
   @type dials_event :: :dials_changed
 
   @doc """
@@ -39,18 +36,20 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec notify(dials_event, map) :: :ok
   def notify(:dials_changed, dials_data) do
-    for dial <- @dials do
+    for dial <- dials() do
       GenServer.cast(dial, {:dials_changed, dials_data})
     end
   end
 
   @spec dials() :: [atom()]
-  def dials, do: @dials
+  def dials do
+    dial_config()
+    |> Enum.map(&elem(&1, 0))
+  end
 
   defp dial_children do
-    Enum.map(@dials, fn dial_mod ->
-      opts = [dial: dial_mod, name: String.to_atom(dial_mod.name())]
-      Supervisor.child_spec({Belfrage.Dial, opts}, id: dial_mod.name())
+    Enum.map(dial_config(), fn dial_info = {_dial_mod, dial_name, _default_value} ->
+      Supervisor.child_spec({Belfrage.Dial, dial_info}, id: dial_name)
     end)
   end
 end

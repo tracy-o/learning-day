@@ -4,9 +4,6 @@ defmodule Belfrage.Dials.TtlMultiplier do
   @behaviour Belfrage.Dial
 
   @impl Belfrage.Dial
-  def name, do: "ttl_multiplier"
-
-  @impl Belfrage.Dial
   def transform("private"), do: 0
 
   @impl Belfrage.Dial
