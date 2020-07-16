@@ -24,8 +24,8 @@ defmodule Belfrage.PoolMetrics do
     supervisor = Supervisor.which_children(MachineGun.Supervisor)
 
     supervisor
-    |> engaged_workers()
-    |> send_metrics("machinegun.pools.engaged_workers")
+    |> active_workers()
+    |> send_metrics("machinegun.pools.active_workers")
 
     supervisor
     |> all_workers()
@@ -41,7 +41,7 @@ defmodule Belfrage.PoolMetrics do
     |> Enum.map(&Enum.count/1)
   end
 
-  def engaged_workers(pools) do
+  def active_workers(pools) do
     Enum.zip(all_workers(pools), available_workers(pools))
     |> Enum.map(fn {all, avail} -> all - avail end)
   end

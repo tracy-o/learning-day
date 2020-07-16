@@ -32,6 +32,6 @@ config :ex_metrics,
       "service.lambda.response.invalid_web_core_contract",
       "error.service.Fabl.request",
       "function.timing.service.Fabl.request",
-      "machinegun.pools.engaged_workers",
+      "machinegun.pools.active_workers",
       "machinegun.pools.all_workers"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics ++ fabl_response_code_metrics
