@@ -9,6 +9,14 @@ defmodule Belfrage.DialsSupervisorTest do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
 
+  test "provides the dial_config/0 function" do
+    assert [
+             {Belfrage.Dials.CircuitBreaker, "circuit_breaker", _circuit_breaker_default},
+             {Belfrage.Dials.LoggingLevel, "logging_level", _log_level_default},
+             {Belfrage.Dials.TtlMultiplier, "ttl_multiplier", _ttl_multiplier_default}
+           ] = Belfrage.DialsSupervisor.dial_config()
+  end
+
   test "dials poller is up and running from the dials supervision tree" do
     child =
       Supervisor.which_children(@dials_supervisor)

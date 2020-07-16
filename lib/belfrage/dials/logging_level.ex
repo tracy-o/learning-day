@@ -9,6 +9,7 @@ defmodule Belfrage.Dials.LoggingLevel do
   @impl Belfrage.Dial
   def transform(level) when level in @valid_dial_values, do: String.to_atom(level)
 
+  @impl Belfrage.Dial
   def on_change(dial_value) when dial_value in @valid_levels do
     Logger.configure_backend({LoggerFileBackend, :file}, logger_opts(dial_value))
     :ok
