@@ -1,8 +1,8 @@
-defmodule Belfrage.PoolMetricsTest do
+defmodule Belfrage.Metrics.PoolTest do
   use ExUnit.Case
-  alias Belfrage.PoolMetrics
+  alias Belfrage.Metrics.Pool
 
-  alias Belfrage.PoolMetricsTest.TestWorker
+  alias Belfrage.Metrics.PoolTest.TestWorker
 
   def new_pool(name, size, max_overflow) do
     case :poolboy.start_link([

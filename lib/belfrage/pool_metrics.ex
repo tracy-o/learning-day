@@ -1,4 +1,4 @@
-defmodule Belfrage.PoolMetrics do
+defmodule Belfrage.Metrics.Pool do
   use GenServer
 
   def start_link(opts) do

@@ -1,4 +1,4 @@
-defmodule Belfrage.PoolMetricsTest.TestWorker do
+defmodule Belfrage.Metrics.PoolTest.TestWorker do
   use GenServer
 
   def start_link(_opts) do
