@@ -33,4 +33,21 @@ defmodule Belfrage.Transformers.LanguageTest do
              }
            } = Language.call([], struct)
   end
+
+  test "when language is already set, the language is not modified" do
+    struct = %Struct{
+      request: %Struct.Request{
+        language: "fr"
+      }
+    }
+
+    assert {
+             :ok,
+             %Struct{
+               request: %{
+                 language: "fr"
+               }
+             }
+           } = Language.call([], struct)
+  end
 end
