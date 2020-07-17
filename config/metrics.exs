@@ -28,10 +28,10 @@ config :ex_metrics,
       "error.service.HTTP.timeout",
       "function.timing.service.HTTP.request",
       "function.timing.service.lambda.invoke",
+      "http.pools.active_workers",
+      "http.pool.all_worekrs",
       "invalid_content_encoding_from_origin",
       "service.lambda.response.invalid_web_core_contract",
       "error.service.Fabl.request",
-      "function.timing.service.Fabl.request",
-      "machinegun.pools.active_workers",
-      "machinegun.pools.all_workers"
+      "function.timing.service.Fabl.request"
     ] ++ lambda_response_code_metrics ++ http_response_code_metrics ++ fabl_response_code_metrics

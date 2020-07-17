@@ -25,11 +25,11 @@ defmodule Belfrage.PoolMetrics do
 
     supervisor
     |> active_workers()
-    |> send_metrics("machinegun.pools.active_workers")
+    |> send_metrics("http.pools.active_workers")
 
     supervisor
     |> all_workers()
-    |> send_metrics("machinegun.pools.all_workers")
+    |> send_metrics("http.pools.all_workers")
   end
 
   def send_metrics(metrics, metric_name) do
