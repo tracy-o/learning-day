@@ -43,7 +43,7 @@ node {
       echo "waiting ${params.DELAY} seconds"
       sleep(params.DELAY.toInteger())
     } catch (err) {
-      echo "error trying to wait before tests, so starting tests immediately"
+      echo "Error while attempting to stall tests, starting tests immediately"
     }
 
     docker.image('qixxit/elixir-centos').inside("-u root") {
