@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.EnLangOnDotCom do
     )
   end
 
-  def default_language(struct) do
+  defp default_language(struct) do
     case String.ends_with?(struct.request.host, ".com") do
       true ->
         "en"
