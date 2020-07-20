@@ -16,7 +16,8 @@ defmodule BelfrageTest do
     request: %Struct.Request{
       path: "/_web_core",
       method: "GET",
-      country: "gb"
+      country: "gb",
+      host: "bbc.co.uk"
     }
   }
 
@@ -25,7 +26,8 @@ defmodule BelfrageTest do
       path: "/",
       method: "POST",
       payload: ~s({"some": "data please"}),
-      country: "gb"
+      country: "gb",
+      host: "bbc.co.uk"
     },
     private: %Struct.Private{
       loop_id: "SportVideos",
