@@ -52,7 +52,8 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   defp loop() do
-    Process.send_after(self(), :loop, 1_000)
+    rate = Application.get_env(:belfrage, :pool_metric_rate)
+    Process.send_after(self(), :loop, rate)
   end
 
   defp call_pools(pools, generver_term) do
