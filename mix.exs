@@ -64,7 +64,6 @@ defmodule Belfrage.MixProject do
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
       {:machine_gun, "~> 0.1.6"},
-      {:poolboy, "~> 1.5"},
       {:mox, "~> 0.5", only: [:test, :end_to_end, :routes_test, :smoke_test]},
       {:plug_cowboy, "~> 2.0"},
       {:stump, "~> 1.6"},
