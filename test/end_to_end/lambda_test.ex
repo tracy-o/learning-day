@@ -32,7 +32,7 @@ defmodule EndToEnd.LambdaTest do
                             country: "gb",
                             host: "www.example.com",
                             is_uk: false,
-                            language: "en-GB"
+                            language: "en"
                           },
                           httpMethod: "GET",
                           path: "/200-ok-response",
