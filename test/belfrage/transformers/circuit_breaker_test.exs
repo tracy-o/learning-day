@@ -5,13 +5,11 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   alias Belfrage.Struct
 
   def enable_circuit_breaker_dial() do
-    GenServer.whereis(Belfrage.Dials.CircuitBreaker)
-    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "true"}})
+    GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "true"}})
   end
 
   def disable_circuit_breaker_dial() do
-    GenServer.whereis(Belfrage.Dials.CircuitBreaker)
-    |> GenServer.cast({:dials_changed, %{"circuit_breaker" => "false"}})
+    GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "false"}})
   end
 
   test "long_counter with no errors will not add circuit breaker response" do

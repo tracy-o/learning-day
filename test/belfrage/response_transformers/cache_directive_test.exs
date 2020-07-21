@@ -5,14 +5,13 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Struct
 
+  def set_ttl_multiplier(value) do
+    GenServer.cast(:ttl_multiplier, {:dials_changed, %{"ttl_multiplier" => value}})
+  end
+
   describe "&call/1" do
     setup do
-      Belfrage.Dials.Poller.clear()
-
-      on_exit(fn ->
-        Belfrage.Dials.Poller.clear()
-        :ok
-      end)
+      set_ttl_multiplier("default")
 
       :ok
     end
@@ -42,10 +41,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, and a multiplier, this multiplied cache directive is returned in the response" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "long"})} end)
-
-      Belfrage.Dials.Poller.refresh_now()
+      set_ttl_multiplier("long")
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -57,10 +53,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age and a multiplier of zero, the max-age is set to 0 and the cacheability is set to private" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"ttl_multiplier": "private"})} end)
-
-      Belfrage.Dials.Poller.refresh_now()
+      set_ttl_multiplier("private")
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -72,10 +65,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given no max age, and a multiplier, the max age stays unprovided" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "long"})} end)
-
-      Belfrage.Dials.Poller.refresh_now()
+      set_ttl_multiplier("long")
 
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
@@ -87,11 +77,6 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
     end
 
     test "Given a max age, but no multiplier, the cache directive with the original max_age is returned in the response" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn "/etc/cosmos-dials/dials.json" -> {:ok, ~s({"something": "else"})} end)
-
-      Belfrage.Dials.Poller.refresh_now()
-
       assert CacheDirective.call(%Struct{
                response: %Struct.Response{
                  headers: %{

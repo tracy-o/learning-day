@@ -64,7 +64,11 @@ defmodule Belfrage.MixProject do
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},
       {:machine_gun, "~> 0.1.6"},
-      {:mox, "~> 0.5", only: [:test, :end_to_end, :routes_test, :smoke_test]},
+      # Use latest of mox, as requires https://github.com/plataformatec/mox/commit/4dd4c9bed572c9ec8e9dd992b1079a895ceeacc2
+      {:mox,
+       git: "https://github.com/plataformatec/mox",
+       ref: "4dd4c9bed572c9ec8e9dd992b1079a895ceeacc2",
+       only: [:test, :end_to_end, :routes_test, :smoke_test]},
       {:plug_cowboy, "~> 2.0"},
       {:stump, "~> 1.6"},
       {:sweet_xml, "~> 0.6"},

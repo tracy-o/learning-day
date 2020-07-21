@@ -1,20 +1,17 @@
 defmodule Belfrage.Dials.TtlMultiplier do
-  alias Belfrage.Dials.Poller
+  @moduledoc false
 
-  @ttl_modifier_comparison %{
-    "private" => 0,
-    "default" => 1,
-    "long" => 3,
-    "super_long" => 10
-  }
+  @behaviour Belfrage.Dial
 
-  def value() do
-    Poller.state()
-    |> Map.get("ttl_multiplier", "default")
-    |> dial_value_to_int()
-  end
+  @impl Belfrage.Dial
+  def transform("private"), do: 0
 
-  defp dial_value_to_int(dial_value) do
-    Map.get(@ttl_modifier_comparison, dial_value, 1)
-  end
+  @impl Belfrage.Dial
+  def transform("default"), do: 1
+
+  @impl Belfrage.Dial
+  def transform("long"), do: 3
+
+  @impl Belfrage.Dial
+  def transform("super_long"), do: 10
 end

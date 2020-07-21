@@ -2,9 +2,7 @@ defmodule Belfrage.DialsSupervisor do
   @moduledoc false
 
   use Supervisor
-
-  @dials [Belfrage.Dials.CircuitBreaker]
-
+  use Belfrage.DialConfig
   @type dials_event :: :dials_changed
 
   @doc """
@@ -29,7 +27,7 @@ defmodule Belfrage.DialsSupervisor do
   """
   @impl true
   def init(_init_arg) do
-    children = @dials ++ [Belfrage.Dials.Poller]
+    children = dial_children() ++ [Belfrage.Dials.Poller]
     Supervisor.init(children, strategy: :one_for_one)
   end
 
@@ -38,8 +36,20 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec notify(dials_event, map) :: :ok
   def notify(:dials_changed, dials_data) do
-    for dial <- @dials do
+    for dial <- dials() do
       GenServer.cast(dial, {:dials_changed, dials_data})
     end
+  end
+
+  @spec dials() :: [atom()]
+  def dials do
+    dial_config()
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  defp dial_children do
+    Enum.map(dial_config(), fn dial_info = {_dial_mod, dial_name, _default_value} ->
+      Supervisor.child_spec({Belfrage.Dial, dial_info}, id: dial_name)
+    end)
   end
 end

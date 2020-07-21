@@ -54,6 +54,11 @@ config :belfrage,
   stack_name: "belfrage-stack",
   stack_id: "local",
   redirect_statuses: [301, 302, 307, 308],
+  dial_handlers: %{
+    "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
+    "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
+    "logging_level" => Belfrage.Dials.LoggingLevel
+  },
   pool_metric_rate: 10_000
 
 config :ex_aws,
