@@ -2,7 +2,7 @@ defmodule Belfrage.DialTest do
   use ExUnit.Case, async: true
 
   alias Belfrage.Dial
-  alias Belfrage.Dials.{DialMockWithCallback, DialMock}
+  alias Belfrage.Dials.{DialMockWithOptionalCallback, DialMock}
 
   use Test.Support.Helper, :mox
 
@@ -57,12 +57,12 @@ defmodule Belfrage.DialTest do
     end
 
     test "when dial has on_change/1 callback logic, it is called" do
-      DialMockWithCallback
+      DialMockWithOptionalCallback
       |> expect(:on_change, fn false -> :ok end)
 
-      state = {DialMockWithCallback, "a-test-dial", true}
+      state = {DialMockWithOptionalCallback, "a-test-dial", true}
 
-      assert {:noreply, {DialMockWithCallback, "a-test-dial", false}} ==
+      assert {:noreply, {DialMockWithOptionalCallback, "a-test-dial", false}} ==
                Dial.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
     end
   end
