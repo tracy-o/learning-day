@@ -21,9 +21,9 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   def send() do
-    supervisor = Supervisor.which_children(MachineGun.Supervisor)
+    pools = Supervisor.which_children(MachineGun.Supervisor)
 
-    supervisor
+    pools
     |> active_workers()
     |> send_metrics("http.pools.active_workers")
 
