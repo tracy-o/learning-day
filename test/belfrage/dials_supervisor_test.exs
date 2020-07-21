@@ -5,6 +5,16 @@ defmodule Belfrage.DialsSupervisorTest do
   @dials_poller Belfrage.Dials.Poller
   import ExUnit.CaptureLog
 
+  defp expected_dial_default(dial_name) do
+    Enum.find_value(Belfrage.DialsSupervisor.dial_config(), fn
+      {dial_mod, ^dial_name, default_value} ->
+        apply(dial_mod, :transform, [default_value])
+
+      _other ->
+        nil
+    end)
+  end
+
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
@@ -37,6 +47,7 @@ defmodule Belfrage.DialsSupervisorTest do
   test "when dial crashes, error is logged and dial is restarted with default state" do
     supervised_dial = Belfrage.Dials.CircuitBreaker
     pid = Process.whereis(supervised_dial)
+    expected_default_value = expected_dial_default("circuit_breaker")
 
     assert capture_log(fn ->
              GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "bar"}})
@@ -46,6 +57,8 @@ defmodule Belfrage.DialsSupervisorTest do
     new_pid = GenServer.whereis(:circuit_breaker)
     refute is_nil(new_pid)
     refute new_pid == pid, "Dial did not crash, so this test is invalid."
-    assert {Belfrage.Dials.CircuitBreaker, "circuit_breaker", true} == :sys.get_state(:circuit_breaker)
+
+    assert {Belfrage.Dials.CircuitBreaker, "circuit_breaker", expected_default_value} ==
+             :sys.get_state(:circuit_breaker)
   end
 end
