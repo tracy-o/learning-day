@@ -61,7 +61,6 @@ config :belfrage,
   },
   pool_metric_rate: 10_000
 
-
 config :ex_aws,
   region: "eu-west-1",
   http_client: Belfrage.Clients.Lambda,
