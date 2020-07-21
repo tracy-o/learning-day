@@ -53,7 +53,8 @@ config :belfrage,
   xray: Belfrage.Xray,
   stack_name: "belfrage-stack",
   stack_id: "local",
-  redirect_statuses: [301, 302, 307, 308]
+  redirect_statuses: [301, 302, 307, 308],
+  pool_metric_rate: 10_000
 
 config :ex_aws,
   region: "eu-west-1",
