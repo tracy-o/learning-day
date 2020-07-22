@@ -61,4 +61,14 @@ defmodule Belfrage.DialsSupervisorTest do
     assert {Belfrage.Dials.CircuitBreaker, "circuit_breaker", expected_default_value} ==
              :sys.get_state(:circuit_breaker)
   end
+
+  test "notifies dials of new dial data" do
+    dials_data = %{
+      "circuit_breaker" => "false"
+    }
+
+    Belfrage.DialsSupervisor.notify(:dials_changed, dials_data)
+
+    assert false == Belfrage.Dial.state(:circuit_breaker)
+  end
 end

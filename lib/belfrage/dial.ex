@@ -13,8 +13,10 @@ defmodule Belfrage.Dial do
 
   def start_link(opts) do
     {_dial_logic_mod, dial_name, _init_value} = opts
-    GenServer.start_link(__MODULE__, opts, name: String.to_atom(dial_name))
+    GenServer.start_link(__MODULE__, opts, name: process_name(dial_name))
   end
+
+  def process_name(dial_name), do: String.to_atom(dial_name)
 
   @spec state(atom()) :: state
   def state(dial), do: GenServer.call(dial, :state)
