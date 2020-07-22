@@ -8,7 +8,7 @@ defmodule Belfrage.DialTest do
 
   setup do
     default_value = "true"
-    dial_name = "a-test-dial"
+    dial_name = :"a-test-dial"
 
     {:ok, _pid} = Belfrage.Dial.start_link({DialMock, dial_name, default_value})
 

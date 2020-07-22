@@ -11,7 +11,12 @@ defmodule Belfrage.DialConfig do
       dial_logic_mod = @dial_name_handler_mapping[dial["name"]]
 
       unless is_nil(dial_logic_mod),
-        do: Module.put_attribute(env.module, :dial_defaults, {dial_logic_mod, dial["name"], dial["default-value"]})
+        do:
+          Module.put_attribute(
+            env.module,
+            :dial_defaults,
+            {dial_logic_mod, String.to_atom(dial["name"]), dial["default-value"]}
+          )
     end)
 
     quote do

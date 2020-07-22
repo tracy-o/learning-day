@@ -21,9 +21,9 @@ defmodule Belfrage.DialsSupervisorTest do
 
   test "provides the dial_config/0 function" do
     assert [
-             {Belfrage.Dials.CircuitBreaker, "circuit_breaker", _circuit_breaker_default},
-             {Belfrage.Dials.LoggingLevel, "logging_level", _log_level_default},
-             {Belfrage.Dials.TtlMultiplier, "ttl_multiplier", _ttl_multiplier_default}
+             {Belfrage.Dials.CircuitBreaker, :circuit_breaker, _circuit_breaker_default},
+             {Belfrage.Dials.LoggingLevel, :logging_level, _log_level_default},
+             {Belfrage.Dials.TtlMultiplier, :ttl_multiplier, _ttl_multiplier_default}
            ] = Belfrage.DialsSupervisor.dial_config()
   end
 
@@ -41,13 +41,13 @@ defmodule Belfrage.DialsSupervisorTest do
       Supervisor.which_children(@dials_supervisor)
       |> Enum.map(&elem(&1, 0))
 
-    assert [Belfrage.Dials.Poller, "ttl_multiplier", "logging_level", "circuit_breaker"] == children
+    assert [Belfrage.Dials.Poller, :ttl_multiplier, :logging_level, :circuit_breaker] == children
   end
 
   test "when dial crashes, error is logged and dial is restarted with default state" do
     supervised_dial = Belfrage.Dials.CircuitBreaker
     pid = Process.whereis(supervised_dial)
-    expected_default_value = expected_dial_default("circuit_breaker")
+    expected_default_value = expected_dial_default(:circuit_breaker)
 
     assert capture_log(fn ->
              GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "bar"}})

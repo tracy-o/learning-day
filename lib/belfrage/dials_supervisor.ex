@@ -37,7 +37,7 @@ defmodule Belfrage.DialsSupervisor do
   @spec notify(dials_event, map) :: :ok
   def notify(:dials_changed, dials_data) do
     for {_dial_mod, dial_name, _default} <- dial_config() do
-      GenServer.cast(Belfrage.Dial.process_name(dial_name), {:dials_changed, dials_data})
+      GenServer.cast(dial_name, {:dials_changed, dials_data})
     end
   end
 
