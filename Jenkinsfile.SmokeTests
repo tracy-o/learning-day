@@ -23,7 +23,8 @@ node {
         choice(name: 'TARGET', choices: ['all', 'belfrage', 'cedric-belfrage', 'bruce-belfrage', 'belfrage-preview'], description: 'The target to run the tests against.'),
         string(name: 'SLACK_MESSAGE', defaultValue: '', description: 'Optionally enter a value to send the result along with this message to the Belfrage slack channel.'),
         string(name: 'DEPLOYMENT_ID', defaultValue: '', description: 'Optionally enter the cosmos deployment ID to report the status of this smoke test to.'),
-        string(name: 'REVISION', defaultValue: '', description: 'Optionally enter the short sha of the git commit to run the tests from.')
+        string(name: 'REVISION', defaultValue: '', description: 'Optionally enter the short sha of the git commit to run the tests from.'),
+        string(name: 'DELAY', defaultValue: '0', description: 'Optionally delays the start of the smoke test for the amount of seconds given in the parameter.')
       ])
   ])
 
@@ -36,6 +37,15 @@ node {
   }
 
   stage('Run Smoke tests') {
+
+    // waiting for as many seconds specified in DELAY parameter
+    try {
+      echo "waiting ${params.DELAY} seconds"
+      sleep(params.DELAY.toInteger())
+    } catch (err) {
+      echo "Error while attempting to stall tests, starting tests immediately"
+    }
+
     docker.image('qixxit/elixir-centos').inside("-u root") {
       sh 'mix deps.get'
 
