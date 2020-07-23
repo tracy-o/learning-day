@@ -26,19 +26,19 @@ defmodule Belfrage.Metrics.PoolTest do
 
   describe "all_workers/1" do
     test "when there are no pools, return empty list" do
-      assert Pool.all_workers([]) == []
+      assert Pool.all_workers([]) == 0
     end
 
     test "when there is one pool, returns the number of total workers" do
       supervisor_children = supervisor([new_pool(:a_pool, 10, 0)])
 
-      assert Pool.all_workers(supervisor_children) == [10]
+      assert Pool.all_workers(supervisor_children) == 10
     end
 
-    test "when there a multiple pools, returns a list of total workers for each pool" do
+    test "when there are multiple pools, returns the the workers of the pool with the most workers" do
       supervisor_children = supervisor([new_pool(:a_pool, 10, 0), new_pool(:b_pool, 5, 0)])
 
-      assert Pool.all_workers(supervisor_children) == [10, 5]
+      assert Pool.all_workers(supervisor_children) == 10
     end
 
     test "when overflow pools are created, total workers increase to reflect additional workers" do
@@ -48,29 +48,29 @@ defmodule Belfrage.Metrics.PoolTest do
       do_work(:a_pool)
       do_work(:a_pool)
 
-      assert Pool.all_workers(supervisor_children) == [4]
+      assert Pool.all_workers(supervisor_children) == 4
     end
   end
 
   describe "active_workers/1" do
     test "when there are no pools, return empty list" do
-      assert Pool.active_workers([]) == []
+      assert Pool.active_workers([]) == 0
     end
 
     test "when there is one pool, return the amount of workers being used" do
       supervisor_children = supervisor([new_pool(:a_pool, 2, 0)])
       do_work(:a_pool)
 
-      assert Pool.active_workers(supervisor_children) == [1]
+      assert Pool.active_workers(supervisor_children) == 1
     end
 
-    test "when there a multiple pools, returns a list of workers in use for each pool" do
+    test "when there a multiple pools, returns the value from the pool with the most active workers" do
       supervisor_children = supervisor([new_pool(:a_pool, 4, 0), new_pool(:b_pool, 5, 0)])
       do_work(:a_pool)
       do_work(:b_pool)
       do_work(:b_pool)
 
-      assert Pool.active_workers(supervisor_children) == [1, 2]
+      assert Pool.active_workers(supervisor_children) == 2
     end
 
     test "when overflow pools are created, active workers increase to reflect additional workers" do
@@ -81,7 +81,7 @@ defmodule Belfrage.Metrics.PoolTest do
       do_work(:a_pool)
       do_work(:a_pool)
 
-      assert Pool.active_workers(supervisor_children) == [4]
+      assert Pool.active_workers(supervisor_children) == 4
     end
   end
 end
