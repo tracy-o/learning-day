@@ -18,10 +18,11 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   def send_metric(metric, metric_name) do
-    ExMetrics.increment(metric_name, metric)
+    ExMetrics.gauge(metric_name, metric)
   end
 
   def all_workers([]), do: 0
+
   def all_workers(pools) do
     call_pools(pools, :status)
     |> Enum.map(fn {_, free_workers, _, active_workers} -> free_workers + active_workers end)
@@ -29,6 +30,7 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   def active_workers([]), do: 0
+
   def active_workers(pools) do
     call_pools(pools, :status)
     |> Enum.map(fn {_, _, _, active_workers} -> active_workers end)
