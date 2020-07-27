@@ -5,7 +5,7 @@ We are considering a layer that receives many, small cast messages from Belfrage
 
 ## Hypothesis
 
-- The performance implication of sending varying numbe of 2_000 byte messages (GenServer cast) from Belfrage to Monitor app is negligible. This is comparing the `RESFRAME-3629` branch, to `master`.
+- The performance implication of sending varying numbers of 2_000 byte messages (GenServer cast) from Belfrage to Monitor app is negligible. This is comparing the `RESFRAME-3629` branch, to `master`.
 
 NOTE: 2_000 was picked because an empty %Belfrage.Struct{} is 1_300 bytes in length when stringified.
 
