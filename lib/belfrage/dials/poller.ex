@@ -44,13 +44,10 @@ defmodule Belfrage.Dials.Poller do
         {:noreply, old_dials}
 
       {:error, reason} ->
-        Stump.log(
-          :error,
-          %{
-            msg: "Unable to read dials",
-            reason: reason
-          }
-        )
+        Belfrage.Event.record(:log, :error, %{
+          msg: "Unable to read dials",
+          reason: reason
+        })
 
         {:noreply, old_dials}
     end

@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.Webcore.Response do
-  use ExMetrics
+  require Belfrage.Event
 
   alias Belfrage.Struct
 
@@ -31,7 +31,7 @@ defmodule Belfrage.Services.Webcore.Response do
         })
 
       :error ->
-        Stump.log(:error, %{
+        Belfrage.Event.record(:log, :error, %{
           msg: "Failed to base64 decode response body."
         })
 
@@ -40,7 +40,7 @@ defmodule Belfrage.Services.Webcore.Response do
   end
 
   def build({:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}) do
-    ExMetrics.increment("service.lambda.response.#{http_status}")
+    Belfrage.Event.record(:metric, :increment, "service.lambda.response.#{http_status}")
 
     %Struct.Response{
       http_status: http_status,
@@ -50,12 +50,12 @@ defmodule Belfrage.Services.Webcore.Response do
   end
 
   def build({:ok, invalid_response_from_web_core}) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "Received an invalid response from web core",
       web_core_response: invalid_response_from_web_core
     })
 
-    ExMetrics.increment("service.lambda.response.invalid_web_core_contract")
+    Belfrage.Event.record(:metric, :increment, "service.lambda.response.invalid_web_core_contract")
 
     %Struct.Response{
       http_status: 500,

@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.Cascade do
-  use ExMetrics
+  require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{ServiceProvider, Struct}

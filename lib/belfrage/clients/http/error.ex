@@ -42,7 +42,7 @@ defmodule Belfrage.Clients.HTTP.Error do
   def new(reason) do
     belfrage_http_reason = standardise_error_reason(reason)
 
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       info: "Http error",
       third_party_reason: reason,
       belfrage_http_reason: belfrage_http_reason
