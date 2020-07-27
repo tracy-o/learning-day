@@ -35,13 +35,10 @@ defmodule Belfrage.Dials.Poller do
     schedule_work()
 
     case read_dials() do
-      {:ok, dials} when dials != old_dials ->
+      {:ok, dials} ->
         Belfrage.DialsSupervisor.notify(:dials_changed, dials)
 
         {:noreply, dials}
-
-      {:ok, dials} when dials == old_dials ->
-        {:noreply, old_dials}
 
       {:error, reason} ->
         Stump.log(
