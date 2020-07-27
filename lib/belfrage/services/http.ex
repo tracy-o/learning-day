@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.HTTP do
-  use ExMetrics
+  require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
@@ -11,7 +11,7 @@ defmodule Belfrage.Services.HTTP do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    ExMetrics.timeframe "function.timing.service.HTTP.request" do
+    Belfrage.Event.record "function.timing.service.HTTP.request" do
       struct
       |> execute_request()
       |> handle_response()
@@ -19,24 +19,24 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
-    ExMetrics.increment("service.HTTP.response.#{status}")
+    Belfrage.Event.record(:metric, :increment, "service.HTTP.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
-    ExMetrics.increment("error.service.HTTP.timeout")
+    Belfrage.Event.record(:metric, :increment, "error.service.HTTP.timeout")
     log(:timeout, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
-    ExMetrics.increment("error.service.HTTP.request")
+    Belfrage.Event.record(:metric, :increment, "error.service.HTTP.request")
     log(error, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp log(reason, struct) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "HTTP Service request error",
       reason: reason,
       struct: Struct.loggable(struct)

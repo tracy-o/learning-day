@@ -74,8 +74,10 @@ defmodule Belfrage.Processor do
   end
 
   defp loop_state_failure do
-    ExMetrics.increment("error.loop.state")
-    Stump.log(:error, "Error retrieving loop state")
+    Belfrage.Event.record(:metric, :increment, "error.loop.state")
+
+    Belfrage.Event.record(:log, :error, "Error retrieving loop state")
+
     raise "Failed to load loop state."
   end
 end

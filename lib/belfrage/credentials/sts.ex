@@ -30,13 +30,13 @@ defmodule Belfrage.Credentials.STS do
   end
 
   defp failed_to_assume_role(status_code, response) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       message: "Failed to assume role",
       status: status_code,
       response: response
     })
 
-    ExMetrics.increment("clients.lambda.assume_role_failure")
+    Belfrage.Event.record(:metric, :increment, "clients.lambda.assume_role_failure")
     {:error, :failed_to_assume_role}
   end
 end

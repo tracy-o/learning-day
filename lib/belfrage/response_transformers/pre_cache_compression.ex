@@ -15,12 +15,12 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
 
   @impl true
   def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => content_encoding}}}) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "Cannot handle compression type",
       content_encoding: content_encoding
     })
 
-    ExMetrics.increment("invalid_content_encoding_from_origin")
+    Belfrage.Event.record(:metric, :increment, "invalid_content_encoding_from_origin")
 
     Struct.add(struct, :response, %{body: "", http_status: 415})
   end

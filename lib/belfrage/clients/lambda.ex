@@ -1,5 +1,5 @@
 defmodule Belfrage.Clients.Lambda do
-  use ExMetrics
+  require Belfrage.Event
   alias Belfrage.Clients.HTTP
   require Belfrage.Xray
 
@@ -31,7 +31,7 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp invoke_lambda(function, payload, credentials, opts) do
-    ExMetrics.timeframe "function.timing.service.lambda.invoke" do
+    Belfrage.Event.record "function.timing.service.lambda.invoke" do
       lambda_response =
         Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
           @aws_lambda.invoke(function, payload, %{}, opts)
@@ -53,43 +53,43 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp function_not_found(response) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       message: "Function not found",
       status: 404,
       response: response.body
     })
 
-    ExMetrics.increment("clients.lambda.function_not_found")
+    Belfrage.Event.record(:metric, :increment, "clients.lambda.function_not_found")
     {:error, :function_not_found}
   end
 
   defp failed_to_invoke_lambda(nil, nil) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       message: "Failed to Invoke Lambda"
     })
 
-    ExMetrics.increment("clients.lambda.invoke_failure")
+    Belfrage.Event.record(:metric, :increment, "clients.lambda.invoke_failure")
     {:error, :failed_to_invoke_lambda}
   end
 
   defp failed_to_invoke_lambda(status_code, :timeout) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       message: "The Lambda Invokation timed out",
       status: status_code
     })
 
-    ExMetrics.increment("clients.lambda.invoke_timeout")
+    Belfrage.Event.record(:metric, :increment, "clients.lambda.invoke_timeout")
     {:error, :failed_to_invoke_lambda}
   end
 
   defp failed_to_invoke_lambda(status_code, response) do
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       message: "Failed to Invoke Lambda",
       status: status_code,
       response: inspect(response)
     })
 
-    ExMetrics.increment("clients.lambda.invoke_failure")
+    Belfrage.Event.record(:metric, :increment, "clients.lambda.invoke_failure")
     {:error, :failed_to_invoke_lambda}
   end
 end

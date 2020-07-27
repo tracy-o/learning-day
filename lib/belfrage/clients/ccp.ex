@@ -29,9 +29,9 @@ defmodule Belfrage.Clients.CCP do
         {:ok, :content_not_found}
 
       {:ok, response} ->
-        ExMetrics.increment("ccp.unexpected_response")
+        Belfrage.Event.record(:metric, :increment, "ccp.unexpected_response")
 
-        Stump.log(:error, %{
+        Belfrage.Event.record(:log, :error, %{
           msg: "Received an unexpected response from S3.",
           response: response
         })
@@ -39,9 +39,9 @@ defmodule Belfrage.Clients.CCP do
         {:ok, :content_not_found}
 
       {:error, http_error} ->
-        ExMetrics.increment("ccp.fetch_error")
+        Belfrage.Event.record(:metric, :increment, "ccp.fetch_error")
 
-        Stump.log(:error, %{
+        Belfrage.Event.record(:log, :error, %{
           msg: "Failed to fetch from S3.",
           error: http_error
         })

@@ -19,9 +19,9 @@ defmodule Belfrage.Pipeline do
   end
 
   defp call_500(struct, msg) do
-    ExMetrics.increment("error.pipeline.process")
+    Belfrage.Event.record(:metric, :increment, "error.pipeline.process")
 
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "Transformer returned an early error",
       struct: Struct.loggable(struct)
     })
@@ -30,9 +30,9 @@ defmodule Belfrage.Pipeline do
   end
 
   def handle_error(struct) do
-    ExMetrics.increment("error.pipeline.process.unhandled")
+    Belfrage.Event.record(:metric, :increment, "error.pipeline.process.unhandled")
 
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "Transformer did not return a valid response tuple",
       struct: Struct.loggable(struct)
     })

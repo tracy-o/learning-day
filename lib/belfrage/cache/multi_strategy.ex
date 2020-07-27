@@ -53,7 +53,7 @@ defmodule Belfrage.Cache.MultiStrategy do
 
     with {:ok, freshness, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
-      ExMetrics.increment("cache.#{cache_metric}.#{freshness}.hit")
+      Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
       {:halt, {:ok, freshness, response}}
     else
       # TODO? we could match here on `false` and record a metric that
@@ -61,7 +61,7 @@ defmodule Belfrage.Cache.MultiStrategy do
       # stale one exists.
 
       _content_not_found_or_not_accepted_freshness ->
-        ExMetrics.increment("cache.#{cache_metric}.miss")
+        Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.miss")
         {:cont, {:ok, :content_not_found}}
     end
   end

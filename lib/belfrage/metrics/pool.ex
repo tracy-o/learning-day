@@ -18,7 +18,7 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   def send_metric(metric, metric_name) do
-    ExMetrics.gauge(metric_name, metric)
+    Belfrage.Event.record(:metric, :gauge, metric_name, metric)
   end
 
   def all_workers([]), do: 0

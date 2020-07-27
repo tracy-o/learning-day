@@ -20,7 +20,7 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   end
 
   defp circuit_breaker_active(struct = %Belfrage.Struct{}) do
-    ExMetrics.increment("circuit_breaker.active")
+    Belfrage.Event.record(:metric, :increment, "circuit_breaker.active")
 
     struct
     |> Struct.add(:response, %{http_status: 500})

@@ -11,7 +11,8 @@ defmodule Belfrage.Credentials.LocalDev do
 
     case credentials.session_token do
       nil ->
-        Stump.log(:error, %{msg: "Local credentials not found"})
+        Belfrage.Event.record(:log, :error, %{msg: "Local credentials not found"})
+
         {:error, :failed_to_fetch_credentials}
 
       _ ->
