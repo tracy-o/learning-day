@@ -101,9 +101,6 @@ Error Set:
 
 [Results](https://broxy.tools.bbc.co.uk/belfrage-loadtest-results/vegeta-60s-200rps-1595503308237)
 
-## Comparison
-
-HDR plots
 
 ## Notes:
 
