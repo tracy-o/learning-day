@@ -15,6 +15,32 @@ defmodule Belfrage.Dials.PollerTest do
     :ok
   end
 
+  describe "handle_info/2" do
+    test "when are no dial changes" do
+      old_dials = %{"a-dial" => "yes"}
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
+
+      assert {:noreply,
+              %{
+                "a-dial" => "yes"
+              }} == Poller.handle_info(:refresh, old_dials)
+    end
+
+    test "when there are dial changes" do
+      old_dials = %{"a-dial" => "no"}
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
+
+      assert {:noreply,
+              %{
+                "a-dial" => "yes"
+              }} == Poller.handle_info(:refresh, old_dials)
+    end
+  end
+
   describe "&state/0" do
     test "state returns initial dial config" do
       assert Poller.state() == %{}
