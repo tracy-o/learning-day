@@ -7,7 +7,7 @@ defmodule Belfrage.Monitor do
   def record_event(event) do
     Belfrage.Nodes.monitor_nodes()
     |> Enum.each(fn node ->
-      :rpc.cast(node, BelfrageMonitor.EventStore, :record, [event])
+      :rpc.cast(node, BelfrageMonitor.Events, :record, [event])
     end)
   end
 
