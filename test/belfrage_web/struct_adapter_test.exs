@@ -12,12 +12,17 @@ defmodule BelfrageWeb.StructAdapterTest do
     put_private(conn, :preview_mode, "off")
   end
 
+  defp put_request_id(conn) do
+    put_private(conn, :request_id, "req-123456")
+  end
+
   test "Adds www as the subdomain to the struct" do
     id = "12345678"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -43,6 +48,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -69,6 +75,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://www.belfrage.com/_web_core")
       |> Map.put(:host, "")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -95,6 +102,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://www.belfrage.com/_web_core")
       |> Map.put(:host, nil)
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -120,6 +128,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -146,6 +155,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -173,6 +183,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
       |> Map.put(:path_params, %{"id" => "article-1234"})
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -199,6 +210,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:bbc_headers, %{
@@ -227,6 +239,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
         |> put_private(:overrides, %{})
         |> put_test_production_environment()
+        |> put_request_id()
         |> put_preview_mode_off()
         |> put_private(:bbc_headers, %{
           scheme: :https,
@@ -253,6 +266,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
         |> put_private(:overrides, %{})
         |> put_test_production_environment()
+        |> put_request_id()
         |> put_preview_mode_off()
         |> put_private(:bbc_headers, %{
           scheme: :https,
@@ -277,6 +291,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:overrides, %{})
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:bbc_headers, %{
         scheme: :https,
@@ -300,6 +315,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:overrides, %{})
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:bbc_headers, %{
         scheme: :https,
@@ -323,6 +339,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
       |> put_private(:overrides, %{})
       |> put_test_production_environment()
+      |> put_request_id()
       |> put_preview_mode_off()
       |> put_private(:bbc_headers, %{
         scheme: :https,
@@ -341,5 +358,30 @@ defmodule BelfrageWeb.StructAdapterTest do
     assert StructAdapter.adapt(conn, SomeLoop).request.raw_headers == %{
              "a-custom-header" => "with this value"
            }
+  end
+
+  test "adds request_id to the struct.request" do
+    conn =
+      conn(:get, "/")
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+      |> put_private(:overrides, %{})
+      |> put_test_production_environment()
+      |> put_request_id()
+      |> put_preview_mode_off()
+      |> put_private(:bbc_headers, %{
+        scheme: :https,
+        host: nil,
+        is_uk: true,
+        country: "gb",
+        replayed_traffic: nil,
+        origin_simulator: nil,
+        varnish: 1,
+        cache: 0,
+        cdn: false,
+        req_svc_chain: "BELFRAGE"
+      })
+      |> put_req_header("a-custom-header", "with this value")
+
+    assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
   end
 end
