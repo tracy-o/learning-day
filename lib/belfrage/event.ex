@@ -24,7 +24,7 @@ defmodule Belfrage.Event do
 
   def build_metric_event(type, metric, opts) do
     %Event{
-      req_id: Keyword.get(opts, :req_id),
+      req_id: req_id(opts),
       type: {:metric, type},
       data: {metric, value(opts)},
       timestamp: DateTime.utc_now()
@@ -33,7 +33,7 @@ defmodule Belfrage.Event do
 
   def build_log_event(level, msg, opts) do
     %Event{
-      req_id: Keyword.get(opts, :req_id),
+      req_id: req_id(opts),
       type: {:log, level},
       data: msg,
       timestamp: DateTime.utc_now()
@@ -41,6 +41,8 @@ defmodule Belfrage.Event do
   end
 
   defp value(opts), do: Keyword.get(opts, :value, 1)
+
+  defp req_id(opts), do: Keyword.get(opts, :req_id, Process.get(:req_id))
 
   defmacro record(key, do: yield) do
     quote do

@@ -18,13 +18,25 @@ defmodule Belfrage.EventTest do
       assert timestamp.__struct__ == DateTime
     end
 
-    test "when req_id is given" do
+    test "when req_id is given explicitly" do
       level = :debug
       msg = %{msg: "a log message", reason: :for_the_tests}
       opts = [req_id: "req-12345"]
 
       assert %Belfrage.Event{
                req_id: "req-12345"
+             } = Event.build_log_event(level, msg, opts)
+    end
+
+    test "when req_id is attached to the process info" do
+      Process.put(:req_id, "req-6789")
+
+      level = :debug
+      msg = %{msg: "a log message", reason: :for_the_tests}
+      opts = []
+
+      assert %Belfrage.Event{
+               req_id: "req-6789"
              } = Event.build_log_event(level, msg, opts)
     end
   end
@@ -55,13 +67,25 @@ defmodule Belfrage.EventTest do
              } = Event.build_metric_event(type, metric, opts)
     end
 
-    test "when req_id is given" do
+    test "when req_id is given explicitly" do
       type = :increment
       metric = "web.request.200"
       opts = [req_id: "req-12345"]
 
       assert %Belfrage.Event{
                req_id: "req-12345"
+             } = Event.build_metric_event(type, metric, opts)
+    end
+
+    test "when req_id is attached to the process info" do
+      Process.put(:req_id, "req-6789")
+
+      type = :increment
+      metric = "web.request.200"
+      opts = []
+
+      assert %Belfrage.Event{
+               req_id: "req-6789"
              } = Event.build_metric_event(type, metric, opts)
     end
   end

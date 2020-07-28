@@ -6,6 +6,9 @@ defmodule BelfrageWeb.Plugs.RequestId do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    Plug.Conn.put_private(conn, :request_id, UUID.uuid4(:hex))
+    request_id = UUID.uuid4(:hex)
+    Process.put(:request_id, request_id)
+
+    Plug.Conn.put_private(conn, :request_id, request_id)
   end
 end
