@@ -50,7 +50,7 @@ defmodule Belfrage.Services.Webcore.Response do
   end
 
   def build({:ok, invalid_response_from_web_core}) do
-    Belfrage.Event.record(:log, :error, %{
+    Belfrage.Event.record(:log, :debug, %{
       msg: "Received an invalid response from web core",
       web_core_response: invalid_response_from_web_core
     })
