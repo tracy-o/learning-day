@@ -1,9 +1,9 @@
 defmodule Belfrage.DialsSupervisorTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
 
   @dials_supervisor Belfrage.DialsSupervisor
   @dials_poller Belfrage.Dials.Poller
-  import ExUnit.CaptureLog
 
   defp expected_dial_default(dial_name) do
     Enum.find_value(Belfrage.DialsSupervisor.dial_config(), fn
@@ -27,13 +27,9 @@ defmodule Belfrage.DialsSupervisorTest do
            ] = Belfrage.DialsSupervisor.dial_config()
   end
 
-  test "dials poller is up and running from the dials supervision tree" do
-    child =
-      Supervisor.which_children(@dials_supervisor)
-      |> Enum.filter(fn {id, _, _, _} -> id == @dials_poller end)
-      |> Enum.map(&elem(&1, 0))
-
-    assert [@dials_poller] == child
+  test "dials poller is running as part of the dials supervision tree" do
+    children = Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0))
+    assert @dials_poller in children
   end
 
   test "dials are up and running from the dials supervision tree" do
