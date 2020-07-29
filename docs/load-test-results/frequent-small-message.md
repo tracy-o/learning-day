@@ -28,7 +28,7 @@ NOTE: 2_000 was picked because an empty %Belfrage.Struct{} is 1_300 bytes in len
 ```
 
 ## Tests
-Run the following tests with and without messaging () between Belfrage and CPP
+Run the following tests with and without messaging between Belfrage and Monitor app.
 
 1. 60s, 200rps - 0 messages per request
 2. 60s, 200rps - 10 messages per request
