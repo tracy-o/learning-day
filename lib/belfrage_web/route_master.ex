@@ -124,7 +124,8 @@ defmodule BelfrageWeb.RouteMaster do
           |> String.replace("/*", request_path)
           |> String.trim_trailing("/")
 
-        View.redirect(var!(conn), unquote(status), new_location)
+        StructAdapter.adapt(var!(conn), "redirect")
+        |> View.redirect(var!(conn), unquote(status), new_location)
       end
     end
   end
