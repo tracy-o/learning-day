@@ -4,7 +4,7 @@ defmodule Belfrage.Event do
   """
 
   alias Belfrage.{Event, Monitor}
-  defstruct [:req_id, :type, :data, :timestamp]
+  defstruct [:request_id, :type, :data, :timestamp]
 
   def record(type, level, msg, opts \\ [])
 
@@ -24,7 +24,7 @@ defmodule Belfrage.Event do
 
   def build_metric_event(type, metric, opts) do
     %Event{
-      req_id: req_id(opts),
+      request_id: request_id(opts),
       type: {:metric, type},
       data: {metric, value(opts)},
       timestamp: DateTime.utc_now()
@@ -33,7 +33,7 @@ defmodule Belfrage.Event do
 
   def build_log_event(level, msg, opts) do
     %Event{
-      req_id: req_id(opts),
+      request_id: request_id(opts),
       type: {:log, level},
       data: msg,
       timestamp: DateTime.utc_now()
@@ -42,7 +42,7 @@ defmodule Belfrage.Event do
 
   defp value(opts), do: Keyword.get(opts, :value, 1)
 
-  defp req_id(opts), do: Keyword.get(opts, :req_id, Process.get(:req_id))
+  defp request_id(opts), do: Keyword.get(opts, :request_id, Process.get(:request_id))
 
   defmacro record(key, do: yield) do
     quote do
