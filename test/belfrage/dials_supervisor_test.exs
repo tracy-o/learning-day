@@ -1,12 +1,13 @@
 defmodule Belfrage.DialsSupervisorTest do
   use ExUnit.Case, async: true
   import ExUnit.CaptureLog
+  import Belfrage.DialsSupervisor
 
   @dials_supervisor Belfrage.DialsSupervisor
   @dials_poller Belfrage.Dials.Poller
 
   defp expected_dial_default(dial_name) do
-    Enum.find_value(Belfrage.DialsSupervisor.dial_config(), fn
+    Enum.find_value(dial_config(), fn
       {dial_mod, ^dial_name, default_value} ->
         apply(dial_mod, :transform, [default_value])
 
@@ -19,12 +20,20 @@ defmodule Belfrage.DialsSupervisorTest do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
 
-  test "provides the dial_config/0 function" do
-    assert [
-             {Belfrage.Dials.CircuitBreaker, :circuit_breaker, _circuit_breaker_default},
-             {Belfrage.Dials.LoggingLevel, :logging_level, _log_level_default},
-             {Belfrage.Dials.TtlMultiplier, :ttl_multiplier, _ttl_multiplier_default}
-           ] = Belfrage.DialsSupervisor.dial_config()
+  test "dial_config/0 returns expected dials data" do
+    dials_json =
+      Application.app_dir(:belfrage, "priv/static/dials.json")
+      |> File.read!()
+      |> Jason.decode!()
+
+    expected_dials_data =
+      Application.get_env(:belfrage, :dial_handlers)
+      |> Enum.map(fn {name, module} ->
+        default = Enum.find(dials_json, fn dial -> dial["name"] == name end)["default-value"]
+        {module, String.to_atom(name), default}
+      end)
+
+    assert expected_dials_data == dial_config()
   end
 
   test "dials poller is running as part of the dials supervision tree" do
@@ -32,12 +41,14 @@ defmodule Belfrage.DialsSupervisorTest do
     assert @dials_poller in children
   end
 
-  test "dials are up and running from the dials supervision tree" do
+  test "dials are running as part of the dials supervision tree" do
     children =
       Supervisor.which_children(@dials_supervisor)
       |> Enum.map(&elem(&1, 0))
 
-    assert [Belfrage.Dials.Poller, :ttl_multiplier, :logging_level, :circuit_breaker] == children
+    for {_module, name, _default} <- dial_config() do
+      assert name in children
+    end
   end
 
   test "when dial crashes, error is logged and dial is restarted with default state" do
