@@ -77,13 +77,22 @@ defmodule Belfrage.DialsSupervisorTest do
     end
   end)
 
-  test "notifies dials of new dial data" do
-    dials_data = %{
-      "circuit_breaker" => "false"
-    }
+  describe "when dials changed, dials supervisor notifies" do
+    Enum.each(dial_config(), fn {module, name, default} ->
+      @name name
+      @module module
+      @default default
 
-    Belfrage.DialsSupervisor.notify(:dials_changed, dials_data)
+      test "#{@name} dial of new dial value" do
+        new_state_value = other_dial_state(to_string(@name), @default)
+        new_state = apply(@module, :transform, [new_state_value])
+        current_state = Belfrage.Dial.state(@name)
 
-    assert false == Belfrage.Dial.state(:circuit_breaker)
+        Belfrage.DialsSupervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
+
+        assert new_state != current_state
+        assert new_state == Belfrage.Dial.state(@name)
+      end
+    end)
   end
 end
