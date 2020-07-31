@@ -1,39 +1,35 @@
 defmodule Belfrage.DialsSupervisorTest do
   use ExUnit.Case, async: true
+
   import ExUnit.CaptureLog
   import Belfrage.DialsSupervisor
   import Fixtures.Dials
 
-  @dials_supervisor Belfrage.DialsSupervisor
   @dials_poller Belfrage.Dials.Poller
+  @dials_supervisor Belfrage.DialsSupervisor
 
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
 
-  test "dial_config/0 returns expected dials data" do
-    expected_dials_data =
+  test "dial_config/0 returns expected dials config data" do
+    expected_data =
       Application.get_env(:belfrage, :dial_handlers)
       |> Enum.map(fn {name, module} ->
         default = Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]
         {module, String.to_atom(name), default}
       end)
 
-    assert expected_dials_data == dial_config()
+    assert expected_data == dial_config()
   end
 
   test "dials poller is running as part of the dials supervision tree" do
-    children = Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0))
-    assert @dials_poller in children
+    assert @dials_poller in (Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0)))
   end
 
   test "dials are running as part of the dials supervision tree" do
-    children =
-      Supervisor.which_children(@dials_supervisor)
-      |> Enum.map(&elem(&1, 0))
-
     for {_module, name, _default} <- dial_config() do
-      assert name in children
+      assert name in (Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0)))
     end
   end
 
