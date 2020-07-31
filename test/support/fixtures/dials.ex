@@ -1,21 +1,7 @@
-defmodule Fixtures.DialConfig do
-  def dial_config(dial_name) do
-    [
-      %{
-        "name" => dial_name,
-        "description" => "A generic dial in a stubbed dial config",
-        "default-value" => "false",
-        "values" => [
-          %{
-            "value" => "true",
-            "description" => "does something"
-          },
-          %{
-            "value" => "false",
-            "description" => "does not do something"
-          }
-        ]
-      }
-    ]
+defmodule Fixtures.Dials do
+  def cosmos_dials_data() do
+    Application.app_dir(:belfrage, "priv/static/dials.json")
+    |> File.read!()
+    |> Jason.decode!()
   end
 end

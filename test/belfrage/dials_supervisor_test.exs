@@ -2,6 +2,7 @@ defmodule Belfrage.DialsSupervisorTest do
   use ExUnit.Case, async: true
   import ExUnit.CaptureLog
   import Belfrage.DialsSupervisor
+  import Fixtures.Dials
 
   @dials_supervisor Belfrage.DialsSupervisor
   @dials_poller Belfrage.Dials.Poller
@@ -11,15 +12,10 @@ defmodule Belfrage.DialsSupervisorTest do
   end
 
   test "dial_config/0 returns expected dials data" do
-    dials_json =
-      Application.app_dir(:belfrage, "priv/static/dials.json")
-      |> File.read!()
-      |> Jason.decode!()
-
     expected_dials_data =
       Application.get_env(:belfrage, :dial_handlers)
       |> Enum.map(fn {name, module} ->
-        default = Enum.find(dials_json, fn dial -> dial["name"] == name end)["default-value"]
+        default = Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]
         {module, String.to_atom(name), default}
       end)
 
