@@ -9,20 +9,20 @@ defmodule Belfrage.Event do
   def record(type, level, msg, opts \\ [])
 
   def record(:log, level, msg, opts) do
-    build_log_event(level, msg, opts)
+    new(:log, level, msg, opts)
     |> Monitor.record_event()
 
     Stump.log(level, msg)
   end
 
   def record(:metric, type, metric, opts) do
-    build_metric_event(type, metric, opts)
+    new(:metric, type, metric, opts)
     |> Monitor.record_event()
 
     apply(ExMetrics, type, [metric, value(opts)])
   end
 
-  def build_metric_event(type, metric, opts) do
+  def new(:metric, type, metric, opts) do
     %Event{
       request_id: request_id(opts),
       type: {:metric, type},
@@ -31,7 +31,7 @@ defmodule Belfrage.Event do
     }
   end
 
-  def build_log_event(level, msg, opts) do
+  def new(:log, level, msg, opts) do
     %Event{
       request_id: request_id(opts),
       type: {:log, level},

@@ -2,7 +2,7 @@ defmodule Belfrage.EventTest do
   use ExUnit.Case
   alias Belfrage.Event
 
-  describe "build_log_event/3" do
+  describe "new/4 (log)" do
     test "builds event struct" do
       level = :debug
       msg = %{msg: "a log message", reason: :for_the_tests}
@@ -13,7 +13,7 @@ defmodule Belfrage.EventTest do
                data: ^msg,
                timestamp: timestamp,
                type: {:log, :debug}
-             } = Event.build_log_event(level, msg, opts)
+             } = Event.new(:log, level, msg, opts)
 
       assert timestamp.__struct__ == DateTime
     end
@@ -25,7 +25,7 @@ defmodule Belfrage.EventTest do
 
       assert %Belfrage.Event{
                request_id: "req-12345"
-             } = Event.build_log_event(level, msg, opts)
+             } = Event.new(:log, level, msg, opts)
     end
 
     test "when request_id is attached to the process info" do
@@ -37,11 +37,11 @@ defmodule Belfrage.EventTest do
 
       assert %Belfrage.Event{
                request_id: "req-6789"
-             } = Event.build_log_event(level, msg, opts)
+             } = Event.new(:log, level, msg, opts)
     end
   end
 
-  describe "build_metric_event/3" do
+  describe "new/4 (metric)" do
     test "builds an event struct" do
       type = :increment
       metric = "web.request.200"
@@ -52,7 +52,7 @@ defmodule Belfrage.EventTest do
                data: {"web.request.200", 1},
                timestamp: timestamp,
                type: {:metric, :increment}
-             } = Event.build_metric_event(type, metric, opts)
+             } = Event.new(:metric, type, metric, opts)
 
       assert timestamp.__struct__ == DateTime
     end
@@ -64,7 +64,7 @@ defmodule Belfrage.EventTest do
 
       assert %Belfrage.Event{
                data: {"web.request.200", 4_000}
-             } = Event.build_metric_event(type, metric, opts)
+             } = Event.new(:metric, type, metric, opts)
     end
 
     test "when request_id is given explicitly" do
@@ -74,7 +74,7 @@ defmodule Belfrage.EventTest do
 
       assert %Belfrage.Event{
                request_id: "req-12345"
-             } = Event.build_metric_event(type, metric, opts)
+             } = Event.new(:metric, type, metric, opts)
     end
 
     test "when request_id is attached to the process info" do
@@ -86,7 +86,7 @@ defmodule Belfrage.EventTest do
 
       assert %Belfrage.Event{
                request_id: "req-6789"
-             } = Event.build_metric_event(type, metric, opts)
+             } = Event.new(:metric, type, metric, opts)
     end
   end
 end
