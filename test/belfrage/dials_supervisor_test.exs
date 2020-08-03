@@ -29,12 +29,20 @@ defmodule Belfrage.DialsSupervisorTest do
   end
 
   test "dials poller is running as part of the dials supervision tree" do
-    assert @dials_poller in (Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0)))
+    children =
+      Supervisor.which_children(@dials_supervisor)
+      |> Enum.map(&elem(&1, 0))
+
+    assert @dials_poller in children
   end
 
   test "dials are running as part of the dials supervision tree" do
+    children =
+      Supervisor.which_children(@dials_supervisor)
+      |> Enum.map(&elem(&1, 0))
+
     for {_module, name, _default} <- dial_config() do
-      assert name in (Supervisor.which_children(@dials_supervisor) |> Enum.map(&elem(&1, 0)))
+      assert name in children
     end
   end
 
