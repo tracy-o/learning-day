@@ -43,7 +43,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       origin_simulator: origin_simulator,
       varnish: "",
       cache: "",
-      cdn: nil,
+      cdn: true,
       req_svc_chain: "GTM,BELFRAGE"
     })
   end
@@ -337,7 +337,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           origin_simulator: nil,
           varnish: "",
           cache: "",
-          cdn: nil,
+          cdn: false,
           req_svc_chain: "BELFRAGE"
         })
         |> put_private(:production_environment, "test")
@@ -397,7 +397,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           origin_simulator: nil,
           varnish: "",
           cache: "",
-          cdn: nil,
+          cdn: false,
           req_svc_chain: "BELFRAGE"
         })
         |> put_private(:production_environment, "live")

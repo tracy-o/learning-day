@@ -66,11 +66,7 @@ defmodule BelfrageWeb.View do
 
   defp redirect_response(conn, status, struct) do
     response = BelfrageWeb.View.InternalResponse.new(conn, status)
-
-    conn
-    |> add_response_headers(%Struct{response: response})
-    |> ResponseHeaders.ReqSvcChain.add_header(struct)
-    |> put_response(response.http_status, response.body)
+    render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
   defp add_response_headers(conn, struct) do
