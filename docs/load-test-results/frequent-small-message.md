@@ -9,6 +9,11 @@ We are considering a layer that receives many, small cast messages from Belfrage
 
 NOTE: 2_000 was picked because an empty %Belfrage.Struct{} is 1_300 bytes in length when stringified.
 
+## Conclusion
+The performance impact of casting messages to the monitor node is negligible. It might be worth running another test to check this is still
+the case with a higher RPS. I imagine that increasing RPS, we will eventually reach a point where this message casting is shown to have a performance impact,
+so we should still consider this in the future.
+
 ## Setup
 - Vegeta Runner on EC2
 - Requests to Belfrage playground: cache-bust on
