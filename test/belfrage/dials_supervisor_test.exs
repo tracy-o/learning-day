@@ -12,13 +12,18 @@ defmodule Belfrage.DialsSupervisorTest do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
 
-  test "dial_config/0 returns expected dials config data" do
+  test "dial_config/0 returns dials config data in {module, atom name, default value} tuple format" do
+    dial_handlers_config = Application.get_env(:belfrage, :dial_handlers)
+
+    cosmos_file_defaults =
+      for {name, module} <- dial_handlers_config do
+        {module, Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]}
+      end
+
     expected_data =
-      Application.get_env(:belfrage, :dial_handlers)
-      |> Enum.map(fn {name, module} ->
-        default = Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]
-        {module, String.to_atom(name), default}
-      end)
+      for {name, module} <- dial_handlers_config do
+        {module, String.to_atom(name), cosmos_file_defaults[module]}
+      end
 
     assert expected_data == dial_config()
   end
