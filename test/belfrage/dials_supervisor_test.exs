@@ -38,13 +38,13 @@ defmodule Belfrage.DialsSupervisorTest do
     end
   end
 
-  Enum.each(dial_config(), fn {module, name, default} ->
+  for {module, name, default} <- [dial_config() |> hd] do
     @name name
     @module module
     @default default
     @test_dial :"test_#{to_string(name)}"
 
-    describe "when #{@name} dial crashes" do
+    describe "when a dial crashes" do
       setup do
         start_supervised({Belfrage.Dial, {@module, @test_dial, @default}})
         :ok
@@ -76,15 +76,15 @@ defmodule Belfrage.DialsSupervisorTest do
         assert expected_default == :sys.get_state(@test_dial) |> elem(2)
       end
     end
-  end)
+  end
 
   describe "when dials changed, dials supervisor notifies" do
-    Enum.each(dial_config(), fn {module, name, default} ->
+    for {module, name, default} <- [dial_config() |> hd] do
       @name name
       @module module
       @default default
 
-      test "#{@name} dial of new dial value" do
+      test "a dial of new dial value" do
         new_state_value = other_dial_state(to_string(@name), @default)
         new_state = apply(@module, :transform, [new_state_value])
         current_state = Belfrage.Dial.state(@name)
@@ -94,6 +94,6 @@ defmodule Belfrage.DialsSupervisorTest do
         assert new_state != current_state
         assert new_state == Belfrage.Dial.state(@name)
       end
-    end)
+    end
   end
 end
