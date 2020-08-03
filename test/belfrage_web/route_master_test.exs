@@ -34,6 +34,7 @@ defmodule BelfrageWeb.RouteMasterTest do
   defp put_bbc_headers(conn, origin_simulator \\ nil) do
     conn
     |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+    |> put_private(:request_id, "req-12345678")
     |> put_private(:bbc_headers, %{
       country: "gb",
       scheme: "",
@@ -274,6 +275,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, route)
         |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+        |> put_private(:request_id, "req-12345678")
         |> put_private(:bbc_headers, %{
           country: "gb",
           scheme: "",
