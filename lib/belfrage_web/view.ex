@@ -31,10 +31,10 @@ defmodule BelfrageWeb.View do
   def internal_server_error(conn), do: internal_response(conn, 500)
   def unsupported_method(conn), do: internal_response(conn, 405)
 
-  def redirect(conn, status, new_location) do
+  def redirect(struct, conn, status, new_location) do
     conn
     |> put_resp_header("location", new_location)
-    |> internal_response(status)
+    |> internal_response(status, struct)
   end
 
   defp put_response(conn, status, content) when is_map(content) do
@@ -62,6 +62,11 @@ defmodule BelfrageWeb.View do
       %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)},
       conn
     )
+  end
+
+  defp internal_response(conn, status, struct) do
+    response = BelfrageWeb.View.InternalResponse.new(conn, status)
+    render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
   defp add_response_headers(conn, struct) do

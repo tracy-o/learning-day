@@ -44,8 +44,8 @@ defmodule BelfrageWeb.RouteMasterTest do
       origin_simulator: origin_simulator,
       varnish: "",
       cache: "",
-      cdn: nil,
-      req_svc_chain: "BELFRAGE"
+      cdn: true,
+      req_svc_chain: "GTM,BELFRAGE"
     })
   end
 
@@ -123,6 +123,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "/permanent-redirect")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 301
@@ -135,9 +139,27 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "/permanent-redirect")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
+    end
+
+    test "redirect retains the req-svc-chain header" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/permanent-redirect")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert get_resp_header(conn, "req-svc-chain") == ["GTM,BELFRAGE"]
     end
   end
 
@@ -147,6 +169,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "http://www.bbcarabic.com")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
@@ -157,6 +183,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "http://www.bbcarabic.com")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -169,6 +199,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "https://bbcarabic.com/")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -181,6 +215,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "https://www.bbcarabic.com")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -193,6 +231,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "https://bbcarabic.com")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -205,6 +247,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "https://www.bbcarabic.com/")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -217,6 +263,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "https://www.bbcarabic.com/middleeast-51412901")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -229,6 +279,10 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       conn =
         conn(:get, "/redirect-with-path/abc")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
       assert conn.status == 302
@@ -285,7 +339,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           origin_simulator: nil,
           varnish: "",
           cache: "",
-          cdn: nil,
+          cdn: false,
           req_svc_chain: "BELFRAGE"
         })
         |> put_private(:production_environment, "test")
@@ -345,7 +399,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           origin_simulator: nil,
           varnish: "",
           cache: "",
-          cdn: nil,
+          cdn: false,
           req_svc_chain: "BELFRAGE"
         })
         |> put_private(:production_environment, "live")
