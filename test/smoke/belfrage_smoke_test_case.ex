@@ -11,11 +11,9 @@ defmodule Belfrage.SmokeTestCase do
   end
 
   defmacro __using__(
-             opts = [
-               route_matcher: route_matcher,
-               matcher_spec: matcher_spec,
-               environments: environments
-             ]
+             route_matcher: route_matcher,
+             matcher_spec: matcher_spec,
+             environments: environments
            ) do
     quote do
       use ExUnit.Case, async: true
