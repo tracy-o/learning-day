@@ -1,74 +1,107 @@
 defmodule Belfrage.DialsSupervisorTest do
   use ExUnit.Case, async: true
 
-  @dials_supervisor Belfrage.DialsSupervisor
-  @dials_poller Belfrage.Dials.Poller
   import ExUnit.CaptureLog
+  import Belfrage.DialsSupervisor
+  import Fixtures.Dials
 
-  defp expected_dial_default(dial_name) do
-    Enum.find_value(Belfrage.DialsSupervisor.dial_config(), fn
-      {dial_mod, ^dial_name, default_value} ->
-        apply(dial_mod, :transform, [default_value])
-
-      _other ->
-        nil
-    end)
-  end
+  @dials_poller Belfrage.Dials.Poller
+  @dials_supervisor Belfrage.DialsSupervisor
 
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
   end
 
-  test "provides the dial_config/0 function" do
-    assert [
-             {Belfrage.Dials.CircuitBreaker, :circuit_breaker, _circuit_breaker_default},
-             {Belfrage.Dials.LoggingLevel, :logging_level, _log_level_default},
-             {Belfrage.Dials.TtlMultiplier, :ttl_multiplier, _ttl_multiplier_default}
-           ] = Belfrage.DialsSupervisor.dial_config()
+  test "dial_config/0 returns dials config data in {module, atom name, default value} tuple format" do
+    dial_handlers_config = Application.get_env(:belfrage, :dial_handlers)
+
+    cosmos_file_defaults =
+      for {name, module} <- dial_handlers_config do
+        {module, Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]}
+      end
+
+    expected_data =
+      for {name, module} <- dial_handlers_config do
+        {module, String.to_atom(name), cosmos_file_defaults[module]}
+      end
+
+    assert expected_data == dial_config()
   end
 
-  test "dials poller is up and running from the dials supervision tree" do
-    child =
-      Supervisor.which_children(@dials_supervisor)
-      |> Enum.filter(fn {id, _, _, _} -> id == @dials_poller end)
-      |> Enum.map(&elem(&1, 0))
-
-    assert [@dials_poller] == child
-  end
-
-  test "dials are up and running from the dials supervision tree" do
+  test "dials poller is running as part of the dials supervision tree" do
     children =
       Supervisor.which_children(@dials_supervisor)
       |> Enum.map(&elem(&1, 0))
 
-    assert [Belfrage.Dials.Poller, :ttl_multiplier, :logging_level, :circuit_breaker] == children
+    assert @dials_poller in children
   end
 
-  test "when dial crashes, error is logged and dial is restarted with default state" do
-    supervised_dial = Belfrage.Dials.CircuitBreaker
-    pid = Process.whereis(supervised_dial)
-    expected_default_value = expected_dial_default(:circuit_breaker)
+  test "dials are running as part of the dials supervision tree" do
+    children =
+      Supervisor.which_children(@dials_supervisor)
+      |> Enum.map(&elem(&1, 0))
 
-    assert capture_log(fn ->
-             GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "bar"}})
-             :timer.sleep(100)
-           end) =~ "no function clause matching"
-
-    new_pid = GenServer.whereis(:circuit_breaker)
-    refute is_nil(new_pid)
-    refute new_pid == pid, "Dial did not crash, so this test is invalid."
-
-    assert {Belfrage.Dials.CircuitBreaker, "circuit_breaker", expected_default_value} ==
-             :sys.get_state(:circuit_breaker)
+    for {_module, name, _default} <- dial_config() do
+      assert name in children
+    end
   end
 
-  test "notifies dials of new dial data" do
-    dials_data = %{
-      "circuit_breaker" => "false"
-    }
+  for {module, name, default} <- [dial_config() |> hd] do
+    @name name
+    @module module
+    @default default
+    @test_dial :"test_#{to_string(name)}"
 
-    Belfrage.DialsSupervisor.notify(:dials_changed, dials_data)
+    describe "when a dial crashes" do
+      setup do
+        start_supervised({Belfrage.Dial, {@module, @test_dial, @default}})
+        :ok
+      end
 
-    assert false == Belfrage.Dial.state(:circuit_breaker)
+      test "it should restart" do
+        pid = Process.whereis(@test_dial)
+        Process.exit(pid, :kill)
+        Process.sleep(10)
+
+        new_pid = Process.whereis(@test_dial)
+
+        refute is_nil(new_pid)
+        refute new_pid == pid, "Dial did not crash, so this test is invalid."
+      end
+
+      test "it should log error" do
+        assert capture_log(fn ->
+                 GenServer.cast(@test_dial, {:dials_changed, %{to_string(@test_dial) => "this crashes the dial"}})
+                 :timer.sleep(50)
+               end) =~ "terminating\n** (FunctionClauseError) no function clause matching"
+      end
+
+      test "it should restart with default state" do
+        Process.whereis(@test_dial) |> Process.exit(:kill)
+        Process.sleep(10)
+
+        expected_default = apply(@module, :transform, [@default])
+        assert expected_default == :sys.get_state(@test_dial) |> elem(2)
+      end
+    end
+  end
+
+  describe "when dials changed, dials supervisor notifies" do
+    for {module, name, default} <- [dial_config() |> hd] do
+      @name name
+      @module module
+      @default default
+
+      test "a dial of new dial value" do
+        new_state_value = other_dial_state(to_string(@name), @default)
+        new_state = apply(@module, :transform, [new_state_value])
+        current_state = Belfrage.Dial.state(@name)
+
+        Belfrage.DialsSupervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
+
+        assert new_state != current_state
+        assert new_state == Belfrage.Dial.state(@name)
+      end
+    end
   end
 end
