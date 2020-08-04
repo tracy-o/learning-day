@@ -34,7 +34,7 @@ defmodule BelfrageWeb.View do
   def redirect(struct, conn, status, new_location) do
     conn
     |> put_resp_header("location", new_location)
-    |> redirect_response(status, struct)
+    |> internal_response(status, struct)
   end
 
   defp put_response(conn, status, content) when is_map(content) do
@@ -64,7 +64,7 @@ defmodule BelfrageWeb.View do
     )
   end
 
-  defp redirect_response(conn, status, struct) do
+  defp internal_response(conn, status, struct) do
     response = BelfrageWeb.View.InternalResponse.new(conn, status)
     render(Belfrage.Struct.add(struct, :response, response), conn)
   end
