@@ -78,7 +78,7 @@ defmodule BelfrageWeb.Router do
         BelfrageWeb.View.not_found(conn)
 
       _ ->
-        Stump.log(:error, %{
+        Belfrage.Event.record(:log, :error, %{
           msg: "Router Service returned a #{status} status",
           kind: kind,
           reason: reason,
