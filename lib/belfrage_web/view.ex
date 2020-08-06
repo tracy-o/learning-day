@@ -13,7 +13,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.BID,
     ResponseHeaders.Via,
     ResponseHeaders.ReqSvcChain,
-    ResponseHeaders.AccessControlAllowOrigin
+    ResponseHeaders.AccessControlAllowOrigin,
+    ResponseHeaders.RequestId
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
