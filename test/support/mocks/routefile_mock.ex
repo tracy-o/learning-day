@@ -27,6 +27,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/moz", using: "Moz", examples: ["/moz"])
 
+  handle("/com-to-uk-redirect", using: "SomeLoopComToUK", examples: ["/com-to-uk-redirect"])
+
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
