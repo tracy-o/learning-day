@@ -17,4 +17,15 @@ defmodule Fixtures.Struct do
   end
 
   def struct_with_resp(struct, lambda) when is_map(lambda), do: Struct.add(struct, :response, lambda)
+
+  def request_struct(scheme, host, path, query \\ %{}) do
+    %Struct{
+      request: %Struct.Request{
+        scheme: scheme,
+        host: host,
+        path: path,
+        query_params: query
+      }
+    }
+  end
 end
