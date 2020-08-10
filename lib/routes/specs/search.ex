@@ -3,7 +3,7 @@ defmodule Routes.Specs.Search do
     %{
       owner: "D+ESearchAndNavigationDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
-      pipeline: [ComToUKRedirect],
+      pipeline: ["ComToUKRedirect"],
       platform: Webcore,
       query_params_allowlist: ["q", "page", "scope", "filter"]
     }
