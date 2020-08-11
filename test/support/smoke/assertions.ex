@@ -6,10 +6,10 @@ defmodule Support.Smoke.Assertions do
   @expected_minimum_content_length 30
 
   def assert_smoke_response(test_properties, route_spec, response) do
-    if expect_world_service_redirect?(test_properties, route_spec) do
-      assert_world_service_redirect(response)
-    else
-      assert_basic_response(response)
+    case {expect_redirect?(route_spec), test_properties.tld} do
+      {true, ".co.uk"} -> assert_world_service_redirect(response)
+      {true, ".com"} -> assert_com_to_uk_redirect(response)
+      _ -> assert_basic_response(response)
     end
 
     refute Helper.get_header(response.headers, "bfa")
@@ -29,7 +29,13 @@ defmodule Support.Smoke.Assertions do
     assert location =~ ".com"
   end
 
-  defp expect_world_service_redirect?(test_properties, %{pipeline: pipeline}) do
-    test_properties.tld === ".co.uk" && "WorldServiceRedirect" in pipeline
+  defp assert_com_to_uk_redirect(response) do
+    location = Helper.get_header(response.headers, "location")
+    assert location =~ ".co.uk"
+    assert response.status_code == 302
+  end
+
+  defp expect_redirect?(%{pipeline: pipeline}) do
+    "ComToUKRedirect" in pipeline || "WorldServiceRedirect" in pipeline
   end
 end
