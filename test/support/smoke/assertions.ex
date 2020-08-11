@@ -6,9 +6,9 @@ defmodule Support.Smoke.Assertions do
   @expected_minimum_content_length 30
 
   def assert_smoke_response(test_properties, route_spec, response) do
-    case {expect_redirect?(route_spec), test_properties.tld} do
-      {true, ".co.uk"} -> assert_world_service_redirect(response)
-      {true, ".com"} -> assert_com_to_uk_redirect(response)
+    case {world_service_redirect?(route_spec), com_to_uk_redirect?(route_spec), test_properties.tld} do
+      {true, false, ".co.uk"} -> assert_world_service_redirect(response)
+      {false, true, ".com"} -> assert_com_to_uk_redirect(response)
       _ -> assert_basic_response(response)
     end
 
@@ -35,7 +35,11 @@ defmodule Support.Smoke.Assertions do
     assert response.status_code == 302
   end
 
-  defp expect_redirect?(%{pipeline: pipeline}) do
-    "ComToUKRedirect" in pipeline || "WorldServiceRedirect" in pipeline
+  defp world_service_redirect?(%{pipeline: pipeline}) do
+    "WorldServiceRedirect" in pipeline
+  end
+
+  defp com_to_uk_redirect?(%{pipeline: pipeline}) do
+    "ComToUKRedirect" in pipeline
   end
 end
