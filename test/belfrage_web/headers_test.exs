@@ -83,7 +83,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},
-                {"req-svc-chain", "BELFRAGE"}
+                {"req-svc-chain", "BELFRAGE"},
+                {"belfrage-cache-status", "MISS"}
               ], "<p>some html content</p>"} == sent_resp(conn)
     end
 
@@ -103,7 +104,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},
-                {"req-svc-chain", "BELFRAGE"}
+                {"req-svc-chain", "BELFRAGE"},
+                {"belfrage-cache-status", "MISS"}
               ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
@@ -123,7 +125,8 @@ defmodule BelfrageWeb.HeadersTest do
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},
-                {"req-svc-chain", "BELFRAGE"}
+                {"req-svc-chain", "BELFRAGE"},
+                {"belfrage-cache-status", "MISS"}
               ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
