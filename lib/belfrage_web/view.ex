@@ -51,7 +51,7 @@ defmodule BelfrageWeb.View do
   defp put_response(conn, _status, content) do
     Belfrage.Event.record(:metric, :increment, "error.view.render.unhandled_content_type")
 
-    Stump.log(:error, %{
+    Belfrage.Event.record(:log, :error, %{
       msg: "Unhandled content type in the response. Expects a String or Map.",
       content: content
     })
@@ -78,7 +78,7 @@ defmodule BelfrageWeb.View do
         put_resp_header(conn, header_key, header_value)
 
       {header_key, invalid_header_value}, conn ->
-        Stump.log(:warn, %{
+        Belfrage.Event.record(:log, :warn, %{
           msg: "Not adding non-string header value to response",
           header_key: header_key,
           header_value: invalid_header_value
