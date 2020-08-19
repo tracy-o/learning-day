@@ -205,7 +205,15 @@ defmodule Routes.Routefile do
 
   handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cnmey0x98r9t"]
   
-  handle "/news/topics/:id", using: "TopicPage", examples: ["/news/topics/cnmey0x98r9t"]
+  handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cnmey0x98r9t"] do
+  return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
+  handle "/news/topics/:id", using: "TopicPage", examples: ["/news/topics/cyz0z8w0ydwt"]
+
+  handle "/news/topics/:id", using: "TopicPage", examples: ["/news/topics/cyz0z8w0ydwt"] do
+  return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
