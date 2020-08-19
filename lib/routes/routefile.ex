@@ -203,6 +203,10 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
 
+  handle "/sport/topics/:id", using: "TopicPage", examples: ["/sport/topics/cnmey0x98r9t"]
+  
+  handle "/news/topics/:id", using: "TopicPage", examples: ["/news/topics/cnmey0x98r9t"]
+
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
