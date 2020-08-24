@@ -23,7 +23,7 @@ defmodule Routes.Routefile do
   handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland"]
   handle "/wales", using: "WalesHomePage", examples: ["/wales"]
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
-  handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
+  handle "/alba", using: "AlbaHomePage", examples: ["/alba?mode=testData"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
