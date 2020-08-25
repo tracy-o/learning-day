@@ -140,7 +140,7 @@ defmodule BelfrageWeb.ViewTest do
 
       conn = conn(:get, "/_web_core")
       {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
-      assert {"bfa", "1"} in headers
+      assert {"belfrage-cache-status", "STALE"} in headers
     end
 
     test "when response is not a fallback page" do
