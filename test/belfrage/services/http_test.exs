@@ -185,8 +185,7 @@ defmodule Belfrage.Services.HTTPTest do
           method: "GET",
           path: "/_web_core",
           country: "gb",
-          host: "www.bbc.co.uk",
-          varnish?: true
+          host: "www.bbc.co.uk"
         }
       }
 
@@ -201,8 +200,7 @@ defmodule Belfrage.Services.HTTPTest do
                "accept-encoding" => "gzip",
                "x-country" => "gb",
                "user-agent" => "Belfrage",
-               "x-forwarded-host" => "www.bbc.co.uk",
-               "x-varnish" => "1"
+               "x-forwarded-host" => "www.bbc.co.uk"
              }
            } ->
           @ok_response

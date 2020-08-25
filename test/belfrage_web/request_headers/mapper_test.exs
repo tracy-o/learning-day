@@ -16,7 +16,6 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  replayed_traffic: %{replayed_traffic: nil},
                  origin_simulator: %{origin_simulator: nil},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil},
                  req_svc_chain: %{req_svc_chain: nil}
                }
     end
@@ -31,7 +30,6 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-ip_is_uk_combined", "yes"},
         {"replayed-traffic", "true"},
         {"origin-simulator", "true"},
-        {"varnish", ""},
         {"req-svc-chain", "SomeTrafficManager"}
       ]
 
@@ -45,7 +43,6 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  replayed_traffic: %{replayed_traffic: "true"},
                  origin_simulator: %{origin_simulator: "true"},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil},
                  req_svc_chain: %{req_svc_chain: "SomeTrafficManager"}
                }
     end
@@ -59,7 +56,6 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-isuk", ""},
         {"replayed-traffic", ""},
         {"origin-simulator", ""},
-        {"varnish", ""},
         {"req-svc-chain", ""}
       ]
 
@@ -73,7 +69,6 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  replayed_traffic: %{replayed_traffic: nil},
                  origin_simulator: %{origin_simulator: nil},
                  scheme: %{edge: nil},
-                 varnish: %{varnish: nil},
                  req_svc_chain: %{req_svc_chain: nil}
                }
     end

@@ -114,16 +114,6 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
     end
   end
 
-  describe "varnish headers" do
-    test "returns true when varnish id is set" do
-      assert Sanitiser.varnish(%{varnish: "12345354"}, false) == true
-    end
-
-    test "returns false when the varnish id is nil" do
-      assert Sanitiser.varnish(%{varnish: nil}, false) == false
-    end
-  end
-
   describe "cdn headers" do
     test "returns true when cdn is set" do
       assert Sanitiser.cdn(%{http: "1"}, false) == true

@@ -19,7 +19,6 @@ defmodule BelfrageWeb.StructAdapter do
         has_been_replayed?: bbc_headers.replayed_traffic,
         origin_simulator?: bbc_headers.origin_simulator,
         subdomain: subdomain(conn),
-        varnish?: bbc_headers.varnish,
         edge_cache?: bbc_headers.cache,
         cdn?: bbc_headers.cdn,
         xray_trace_id: xray_trace_id,

@@ -8,7 +8,6 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
     origin_simulator: %{origin_simulator: "origin-simulator"},
-    varnish: %{varnish: "x-varnish"},
     req_svc_chain: %{req_svc_chain: "req-svc-chain"}
   }
 

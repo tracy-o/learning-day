@@ -5,10 +5,8 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   alias BelfrageWeb.ResponseHeaders.Vary
   alias Belfrage.Struct
 
-  @with_varnish_and_cache %Struct{request: %Struct.Request{varnish?: true, edge_cache?: true}}
-  @non_varnish_with_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: true}}
-  @with_varnish_no_cache %Struct{request: %Struct.Request{varnish?: true, edge_cache?: false}}
-  @no_varnish_or_cache %Struct{request: %Struct.Request{varnish?: false, edge_cache?: false}}
+  @with_cache %Struct{request: %Struct.Request{edge_cache?: true}}
+  @no_cache %Struct{request: %Struct.Request{edge_cache?: false}}
   @with_cdn %Struct{request: %Struct.Request{cdn?: true}}
 
   doctest Vary
@@ -16,7 +14,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   describe "Country Header" do
     test "When the request is from varnish and the cache header is set it varies on X-BBC-Edge-Country" do
       input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @with_varnish_and_cache)
+      output_conn = Vary.add_header(input_conn, @with_cache)
 
       assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
@@ -24,7 +22,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
     test "When the request is from varnish and the cache header isnt set it varies on X-Country" do
       input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @with_varnish_no_cache)
+      output_conn = Vary.add_header(input_conn, @no_cache)
 
       assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
@@ -32,7 +30,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
     test "When the cache header is set it varies on X-BBC-Edge-Country" do
       input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @non_varnish_with_cache)
+      output_conn = Vary.add_header(input_conn, @with_cache)
 
       assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
@@ -40,9 +38,9 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
     test "When the request is not from varnish and the cache header isnt set it doesnt vary on a country header" do
       input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @no_varnish_or_cache)
+      output_conn = Vary.add_header(input_conn, @no_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
   end
@@ -72,7 +70,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
         conn(:get, "/page")
         |> Vary.add_header(%Struct{request: %Struct.Request{edge_cache?: false}})
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
                get_resp_header(conn, "vary")
     end
   end
