@@ -12,22 +12,6 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   doctest Vary
 
   describe "Country Header" do
-    test "When the request is from varnish and the cache header is set it varies on X-BBC-Edge-Country" do
-      input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @with_cache)
-
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
-               get_resp_header(output_conn, "vary")
-    end
-
-    test "When the request is from varnish and the cache header isnt set it varies on X-Country" do
-      input_conn = conn(:get, "/sport")
-      output_conn = Vary.add_header(input_conn, @no_cache)
-
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
-               get_resp_header(output_conn, "vary")
-    end
-
     test "When the cache header is set it varies on X-BBC-Edge-Country" do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @with_cache)
@@ -36,7 +20,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
                get_resp_header(output_conn, "vary")
     end
 
-    test "When the request is not from varnish and the cache header isnt set it doesnt vary on a country header" do
+    test "When the cache header isnt set it varies on X-Country" do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @no_cache)
 
