@@ -89,7 +89,6 @@ defmodule Belfrage.Services.HTTP do
   defp default_headers(request) do
     %{
       "accept-encoding" => "gzip",
-      "x-varnish" => varnish(request.varnish?),
       "user-agent" => "Belfrage",
       "req-svc-chain" => request.req_svc_chain
     }
@@ -100,8 +99,4 @@ defmodule Belfrage.Services.HTTP do
 
   defp is_uk(true), do: "yes"
   defp is_uk(_), do: nil
-
-  # Note, this value should be a varnish request ID, but Mozart only needs it as a truthy value if it's set
-  defp varnish(true), do: "1"
-  defp varnish(_), do: nil
 end

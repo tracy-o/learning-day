@@ -19,7 +19,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     [
       "Accept-Encoding",
       "X-BBC-Edge-Cache",
-      country(edge_cache: request.edge_cache?, varnish: request.varnish?),
+      country(edge_cache: request.edge_cache?),
       is_uk(request.edge_cache?),
       "X-BBC-Edge-Scheme",
       raw_headers(request.raw_headers)
@@ -32,9 +32,8 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     "Accept-Encoding"
   end
 
-  def country(edge_cache: true, varnish: _), do: "X-BBC-Edge-Country"
-  def country(edge_cache: false, varnish: true), do: "X-Country"
-  def country(edge_cache: false, varnish: false), do: nil
+  def country(edge_cache: true), do: "X-BBC-Edge-Country"
+  def country(edge_cache: false), do: "X-Country"
 
   def is_uk(true), do: "X-BBC-Edge-IsUK"
   def is_uk(false), do: "X-IP_Is_UK_Combined"

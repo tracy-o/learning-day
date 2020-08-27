@@ -43,9 +43,6 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def origin_simulator(%{origin_simulator: "true"}, _), do: true
   def origin_simulator(_, _), do: nil
 
-  def varnish(%{varnish: nil}, _), do: false
-  def varnish(_, _), do: true
-
   def req_svc_chain(%{req_svc_chain: req_svc_chain}, _) do
     append_req_svc("BELFRAGE", req_svc_chain)
   end
