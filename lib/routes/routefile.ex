@@ -29,7 +29,7 @@ defmodule Routes.Routefile do
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
-  handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/scotland&params=%7B%7D"]
+  handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/search&params=%7B%7D"]
 
   handle "/search", using: "Search", examples: ["/search"]
   handle "/chwilio", using: "WelshSearch", examples: ["/chwilio"]
