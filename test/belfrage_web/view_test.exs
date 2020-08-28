@@ -155,7 +155,7 @@ defmodule BelfrageWeb.ViewTest do
 
       conn = conn(:get, "/_web_core")
       {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
-      refute {"bfa", "1"} in headers
+      refute {"belfrage-cache-status", "STALE"} in headers
     end
   end
 
