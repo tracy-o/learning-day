@@ -9,7 +9,6 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.CacheControl,
     ResponseHeaders.Server,
     ResponseHeaders.Signature,
-    ResponseHeaders.Fallback,
     ResponseHeaders.BID,
     ResponseHeaders.Via,
     ResponseHeaders.ReqSvcChain,
