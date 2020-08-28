@@ -12,7 +12,7 @@ defmodule Support.Smoke.Assertions do
       _ -> assert_basic_response(response)
     end
 
-    refute Helper.get_header(response.headers, "bfa")
+    refute {"belfrage-cache-status", "STALE"} in response.headers
 
     expected_stack_id_header = Map.get(@stack_ids, test_properties.target)
     assert Helper.header_item_exists(response.headers, expected_stack_id_header)
