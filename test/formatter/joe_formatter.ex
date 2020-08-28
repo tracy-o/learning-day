@@ -123,7 +123,7 @@ defmodule JoeFormatter do
     end)
   end
 
-  defp fallback?(%ExUnit.AssertionError{args: [_, "bfa"]}) do
+  defp fallback?(%ExUnit.AssertionError{left: {"belfrage-cache-status", "STALE"}}) do
     true
   end
 
