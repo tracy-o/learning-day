@@ -197,11 +197,19 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
+  handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cnmey0x98r9t"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
 
   handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
+
+  handle "/news/topics/:id", using: "NewsTopicPage", examples: ["/news/topics/cyz0z8w0ydwt"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
