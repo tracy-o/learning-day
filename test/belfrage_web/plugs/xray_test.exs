@@ -87,21 +87,41 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     callback.(conn)
   end
 
-  test "adds response information in plug callback" do
-    Belfrage.XrayMock
-    |> expect(:set_http_response, fn segment, %{status: _status} ->
-      segment
-    end)
+  describe "adds response information in plug callback" do
+    test "when content-length response header is given" do
+      Belfrage.XrayMock
+      |> expect(:set_http_response, fn segment, %{status: _status, content_length: "34758435"} ->
+        segment
+      end)
 
-    conn =
-      conn(:get, "/")
-      |> Plugs.XRay.call([])
+      conn =
+        conn(:get, "/")
+        |> Plug.Conn.put_resp_header("content-length", "34758435")
+        |> Plugs.XRay.call([])
 
-    callback =
-      conn.before_send
-      |> List.first()
+      callback =
+        conn.before_send
+        |> List.first()
 
-    callback.(conn)
+      callback.(conn)
+    end
+
+    test "when content-length response header is not set" do
+      Belfrage.XrayMock
+      |> expect(:set_http_response, fn segment, %{status: _status, content_length: "not-reporting"} ->
+        segment
+      end)
+
+      conn =
+        conn(:get, "/")
+        |> Plugs.XRay.call([])
+
+      callback =
+        conn.before_send
+        |> List.first()
+
+      callback.(conn)
+    end
   end
 
   test "skips status route" do
