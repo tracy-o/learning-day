@@ -1,8 +1,8 @@
 defmodule Benchmark.BodySize do
   def run(_) do
     {:ok, _started} = Application.ensure_all_started(:belfrage)
-		benchmark_body_check()
-	end
+    benchmark_body_check()
+  end
 
   defp benchmark_body_check do
     IO.puts("Setting up\n")
