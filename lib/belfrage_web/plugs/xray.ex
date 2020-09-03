@@ -39,10 +39,18 @@ defmodule BelfrageWeb.Plugs.XRay do
   defp on_request_completed(conn, segment) do
     segment
     |> @xray.set_http_response(%{
-      status: conn.status
+      status: conn.status,
+      content_length: content_length(conn)
     })
     |> @xray.finish_tracing()
 
     conn
+  end
+
+  defp content_length(conn) do
+    case Plug.Conn.get_resp_header(conn, "content-length") do
+      [content_length] -> content_length
+      _other -> "not-reporting"
+    end
   end
 end

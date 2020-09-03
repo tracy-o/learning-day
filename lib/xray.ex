@@ -39,10 +39,11 @@ defmodule Belfrage.Xray do
     })
   end
 
-  def set_http_response(segment, %{status: status}) do
+  def set_http_response(segment, %{status: status, content_length: content_length}) do
     segment
     |> AwsExRay.Segment.set_http_response(%HTTPResponse{
-      status: status
+      status: status,
+      length: content_length
     })
     |> AwsExRay.Segment.set_error(%AwsExRay.Record.Error{
       error: status in [400..499],
