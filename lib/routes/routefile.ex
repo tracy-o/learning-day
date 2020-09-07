@@ -24,7 +24,7 @@ defmodule Routes.Routefile do
   handle "/wales", using: "WalesHomePage", examples: ["/wales?mode=testData"]
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru?mode=testData"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba?mode=testData"]
-  handle "/homepage/uktipo", using: "homePageUkTipo", examples: ["/homepage/uktipo?mode=testData"]
+  handle "/homepage/uktipo", using: "HomePageUkTipo", examples: ["/homepage/uktipo?mode=testData"]
 
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
