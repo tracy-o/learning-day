@@ -37,6 +37,7 @@ defmodule Routes.Routefile do
   handle "/chwilio", using: "WelshSearch", examples: ["/chwilio"]
   handle "/cbeebies/search", using: "Search", examples: ["/cbeebies/search"]
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
+  handle "/bitesize/search", using: "Search", examples: ["/bitesize/search"]
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
