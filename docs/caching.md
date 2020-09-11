@@ -36,3 +36,4 @@ The Fallback TTL is currently configured as 6h.
 
 ![belfrage-cache](img/belfrage-cache.svg)
 
+[Diagram source](source/belfrage-cache.drawio)
