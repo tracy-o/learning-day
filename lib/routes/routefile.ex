@@ -62,11 +62,11 @@ defmodule Routes.Routefile do
   end
 
   handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
