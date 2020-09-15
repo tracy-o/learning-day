@@ -45,8 +45,8 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
-  handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218"] do
-      return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
+  handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
+      return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865"] do
@@ -62,11 +62,11 @@ defmodule Routes.Routefile do
   end
 
   handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9]+-)*[0-9]{8}$/)
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
