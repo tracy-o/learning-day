@@ -3,7 +3,7 @@ defmodule Routes.Specs.CommentsEmbed do
     %{
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Run+Book+for+Comments+on+WebCore",
-      platform: :mozart,
+      platform: Mozart,
       pipeline: [],
       resp_pipeline: [],
       query_params_allowlist: "*"
