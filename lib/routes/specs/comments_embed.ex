@@ -6,7 +6,7 @@ defmodule Routes.Specs.CommentsEmbed do
       platform: Mozart,
       pipeline: [],
       resp_pipeline: [],
-      query_params_allowlist: "*"
+      query_params_allowlist: ["embeddingPageUri", "embeddingPageTitle"]
     }
   end
 end
