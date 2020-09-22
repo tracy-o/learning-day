@@ -21,6 +21,22 @@ defmodule Belfrage.Transformers.TrailingSlashRedirectorTest do
     assert {:ok, struct} == TrailingSlashRedirector.call(@rest, struct)
   end
 
+  test "redirect top level `/` when multiple forward slashes in path " do
+    struct = incoming_request("////")
+
+    assert {:redirect, struct} = TrailingSlashRedirector.call(@rest, struct)
+
+    assert %Struct.Response{
+             http_status: 301,
+             body: "",
+             headers: %{
+               "cache-control" => "public, max-age=60",
+               "location" => "/",
+               "x-bbc-no-scheme-rewrite" => "1"
+             }
+           } = struct.response
+  end
+
   test "no redirect when no trailing slash on path" do
     struct = incoming_request("/a-page")
 

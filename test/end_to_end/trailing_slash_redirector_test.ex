@@ -6,6 +6,14 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
   @moduletag :end_to_end
 
+  test "a succesful redirect if there is multiple trailing slashes at the top level" do
+    conn = conn(:get, "///") |> Map.put(:request_path, "///")
+    conn = Router.call(conn, [])
+
+    assert {301, headers, ""} = sent_resp(conn)
+    assert {"location", "/"} in headers
+  end
+
   test "a succesful redirect if there is a trailing slash" do
     conn = conn(:get, "/200-ok-response///")
     conn = Router.call(conn, [])

@@ -9,6 +9,8 @@ defmodule Routes.RoutefileMock do
 
   redirect("/redirect-with-path/*any", to: "/new-location-with-path/*", status: 302)
 
+  handle("/", using: "SomeLoop", examples: ["/"])
+
   handle("/200-ok-response", using: "SomeLoop", examples: ["/200-ok-response"])
 
   handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
