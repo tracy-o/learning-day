@@ -27,7 +27,15 @@ defmodule Belfrage.Transformers.TrailingSlashRedirector do
   end
 
   defp relative_url(%Struct.Request{path: path, query_params: query_params}) do
-    String.replace_trailing(path, "/", "") <> QueryParams.encode(query_params)
+    remove_trailing(path) <> QueryParams.encode(query_params)
+  end
+
+  defp remove_trailing(path) do
+    String.replace_trailing(path, "/", "")
+    |> case do
+      "" -> "/"
+      path -> path
+    end
   end
 
   defp trailing_slash?(path) do
