@@ -289,6 +289,20 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["/new-location-with-path/abc"]
     end
+
+    test "when the request is a POST it should not redirect" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:post, "/redirect-with-path/abc")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 405
+    end
   end
 
   describe "matching proxy_pass routes" do

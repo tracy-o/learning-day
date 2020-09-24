@@ -116,7 +116,7 @@ defmodule BelfrageWeb.RouteMaster do
 
       @redirects [{uri_from.path, []} | @redirects]
 
-      match(to_string(uri_from.path), host: uri_from.host) do
+      get(to_string(uri_from.path), host: uri_from.host) do
         request_path = join_path_params(Map.get(var!(conn).path_params, "any"))
 
         new_location =
