@@ -51,7 +51,8 @@ defmodule JoeFormatter do
       " ",
       "#{config.failure_counter}",
       " ",
-      "#{pluralize(config.failure_counter, "failure", "failures")}"
+      "#{pluralize(config.failure_counter, "failure", "failures")}",
+      "\n#{group_by_failure_count(config.failed_tests)}"
     ]
 
     error_digest =
@@ -128,4 +129,26 @@ defmodule JoeFormatter do
   end
 
   defp fallback?(_error), do: false
+
+  defp group_by_failure_count(test_failures) do
+    case System.get_env("GROUP_BY") do
+      nil ->
+        %{}
+
+      tag_key ->
+        group_by_key = String.to_atom(tag_key)
+
+        Enum.reduce(test_failures, %{}, fn failure, acc ->
+          value = get_in(failure, [Access.key(:tags), Access.key(group_by_key)])
+
+          acc
+          |> update_in([value], fn
+            nil -> 1
+            v -> v + 1
+          end)
+        end)
+    end
+    |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
+    |> Enum.join(", ")
+  end
 end
