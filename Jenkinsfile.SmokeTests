@@ -84,7 +84,7 @@ node {
       }
 
       currentBuild.description = "${params.ENVIRONMENT} ${result}"
-      slackSend channel: "#team-belfrage", message: "Belfrage Smoke tests on *${params.ENVIRONMENT}* ${result}\n${testFigures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
+      slackSend channel: "#help-belfrage", message: "Belfrage Smoke tests on *${params.ENVIRONMENT}* ${result}\n${testFigures}\n<${env.RUN_DISPLAY_URL}|more info>\n${params.SLACK_MESSAGE}"
     }
   }
 
