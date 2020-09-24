@@ -2,7 +2,11 @@ defmodule Mix.Tasks.SmokeTest do
   use Mix.Task
 
   @env_opt "--bbc-env"
+  @group_by_opt "--group-by"
+  @custom_opts [@env_opt, @group_by_opt]
   @shortdoc "Smoke tests mix task for Belfrage example routes"
+
+
 
   @moduledoc """
   Runs smoke tests on Belfrage example routes.
@@ -66,21 +70,26 @@ defmodule Mix.Tasks.SmokeTest do
 
   """
 
+  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}]
+  @standard_mix_test_parse_rules [{:color, :boolean}, {:only, :string}, {:slowest, :string}]
+
+
   @impl Mix.Task
   def run(args) when is_list(args) do
-    cmd =
-      case parse(args) do
-        {[], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
+    {parsed_args, _, _} = OptionParser.parse(args, strict: @custom_opts_parse_rules ++ @standard_mix_test_parse_rules)
 
-        {[@env_opt], parsed_args} ->
-          "MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
 
-        {[@env_opt, env], parsed_args} ->
-          "SMOKE_ENV=#{env} MIX_ENV=smoke_test mix test #{Enum.join(parsed_args, " ")} --formatter JoeFormatter"
-      end
+    {group_by, rest} = Keyword.pop(parsed_args, :group_by)
+    {bbc_env, rest} = Keyword.pop(rest, :bbc_env)
 
-    run(cmd)
+    case {group_by, bbc_env} do
+      {nil, nil} -> "MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
+      {nil, bbc_env} -> "SMOKE_ENV=#{bbc_env} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
+      {group_by, nil} -> "GROUP_BY=#{group_by} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
+      {group_by, bbc_env} -> "GROUP_BY=#{group_by} SMOKE_ENV=#{bbc_env} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
+    end
+    |> run()
+
   end
 
   def run(cmd) when is_binary(cmd) do
@@ -92,13 +101,19 @@ defmodule Mix.Tasks.SmokeTest do
 
   defp parse([], env, acc), do: {env, acc}
 
-  defp parse([h | t], [@env_opt], acc) do
+  defp parse([h | t], [opt], acc) when opt in @custom_opts do
     case String.starts_with?(h, "--") do
       true -> parse(t, [], acc ++ [h])
-      false -> parse(t, [@env_opt, h], acc)
+      false -> parse(t, [opt, h], acc)
     end
   end
 
-  defp parse([h | t], _env, acc) when h == @env_opt, do: parse(t, [@env_opt], acc)
+  defp parse([h | t], env, acc) when h in @custom_opts, do: parse(t, env ++ [h], acc)
   defp parse([h | t], env, acc), do: parse(t, env, acc ++ [h])
+
+  defp join_params(keyword_list) do
+    Enum.reduce(keyword_list, "", fn {k, v}, acc ->
+      acc <> " --#{k} #{v}"
+    end)
+  end
 end
