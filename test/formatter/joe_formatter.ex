@@ -138,17 +138,19 @@ defmodule JoeFormatter do
       tag_key ->
         group_by_key = String.to_atom(tag_key)
 
-        Enum.reduce(test_failures, %{}, fn failure, acc ->
-          value = get_in(failure, [Access.key(:tags), Access.key(group_by_key)])
-
-          acc
-          |> update_in([value], fn
-            nil -> 1
-            v -> v + 1
-          end)
-        end)
+        Enum.reduce(test_failures, %{}, &inc_grouped_failures(&1, &2, group_by_key))
     end
     |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
     |> Enum.join(", ")
+  end
+
+  defp inc_grouped_failures(failure, acc, group_by_key) do
+    value = get_in(failure, [Access.key(:tags), Access.key(group_by_key)])
+
+    acc
+    |> update_in([value], fn
+      nil -> 1
+      v -> v + 1
+    end)
   end
 end
