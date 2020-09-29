@@ -32,7 +32,6 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     assert {"cache-control", "private, stale-while-revalidate=30, max-age=60"} in headers
   end
 
-
   test "when belfrage 404s, stale-while-revalidate is added to cache-control" do
     conn = conn(:get, "/this-is-a-404")
     conn = Router.call(conn, [])

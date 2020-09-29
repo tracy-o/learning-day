@@ -66,7 +66,6 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  cacheability: "public",
                  max_age: 30,
                  stale_while_revalidate: 60
-
                },
                fallback: false,
                headers: %{"content-type" => "text/plain"},
@@ -75,10 +74,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
     end
   end
 
-
   describe "cache-control" do
     test "404 cacheability" do
-
       conn = conn(:get, "/")
       status = 404
 
@@ -89,8 +86,6 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_while_revalidate: 60
                }
              } = InternalResponse.new(conn, status)
-      
-
-    end 
+    end
   end
 end
