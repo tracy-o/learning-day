@@ -78,7 +78,7 @@ defmodule JoeFormatter do
             " ",
             "#{config.failure_counter - config.fallback_count}",
             " ",
-            "#{pluralize(config.failure_counter - config.fallback_count, "other", "others")}",
+            "#{pluralize(config.failure_counter - config.fallback_count, "other failure", "other failures")}",
             ?)
           ]
 

@@ -7,7 +7,6 @@ def exception
 
 def cronlist = BRANCH_NAME == 'master' ? '''
 30 09 * * 1-5 % ENVIRONMENT=test;
-00 16 * * 1-5 % ENVIRONMENT=test;
 ''' : ''
 
 node {
