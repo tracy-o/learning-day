@@ -1,4 +1,4 @@
-defmodule Routes.Specs.NorthernIrelandHomePage do
+defmodule Routes.Specs.NorthernIrelandTipoHomePage do
   def specs do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",

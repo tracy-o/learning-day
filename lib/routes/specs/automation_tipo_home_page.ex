@@ -1,4 +1,4 @@
-defmodule Routes.Specs.AutomationTipoPage do
+defmodule Routes.Specs.AutomationTipoHomePage do
   def specs do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
