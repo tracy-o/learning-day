@@ -16,8 +16,8 @@ defmodule Routes.Routefile do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
-  handle "/", using: "HomePage", examples: ["/?mode=testData"]
-  handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland?mode=testData"]
+  handle "/", using: "HomePage", examples: ["/"]
+  handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
   handle "/homepage/test", using: "TestHomePage", only_on: "test", examples: ["/homepage/test"]
   handle "/homepage/automation", using: "AutomationHomePage", only_on: "test", examples: ["/homepage/automation"]
   handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland?mode=testData"]
