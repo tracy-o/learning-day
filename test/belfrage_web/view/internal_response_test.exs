@@ -87,5 +87,31 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                }
              } = InternalResponse.new(conn, status)
     end
+
+    test "server error cacheability" do
+      conn = conn(:get, "/")
+      status = 500
+
+      assert %Belfrage.Struct.Response{
+               cache_directive: %Belfrage.CacheControl{
+                 cacheability: "public",
+                 max_age: 5,
+                 stale_while_revalidate: 15
+               }
+             } = InternalResponse.new(conn, status)
+    end
+
+    test "redirect cacheability" do
+      conn = conn(:get, "/")
+      status = 301
+
+      assert %Belfrage.Struct.Response{
+               cache_directive: %Belfrage.CacheControl{
+                 cacheability: "public",
+                 max_age: 60,
+                 stale_while_revalidate: 60
+               }
+             } = InternalResponse.new(conn, status)
+    end
   end
 end
