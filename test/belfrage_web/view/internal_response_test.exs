@@ -13,7 +13,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                body: "content for file test/support/resources/not-found.html<!-- Belfrage -->",
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30
+                 max_age: 30,
+                 stale_while_revalidate: 60
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -29,7 +30,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                body: "<h1>#{status}</h1>\n<!-- Belfrage -->",
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 5
+                 max_age: 5,
+                 stale_while_revalidate: 15
                },
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
@@ -45,7 +47,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                body: "{\"status\":#{status}}",
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30
+                 max_age: 30,
+                 stale_while_revalidate: 60
                },
                fallback: false,
                headers: %{"content-type" => "application/json"},
@@ -61,12 +64,33 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                body: "#{status}, Belfrage",
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
-                 max_age: 30
+                 max_age: 30,
+                 stale_while_revalidate: 60
+
                },
                fallback: false,
                headers: %{"content-type" => "text/plain"},
                http_status: status
              } == InternalResponse.new(conn, status)
     end
+  end
+
+
+  describe "cache-control" do
+    test "404 cacheability" do
+
+      conn = conn(:get, "/")
+      status = 404
+
+      assert %Belfrage.Struct.Response{
+               cache_directive: %Belfrage.CacheControl{
+                 cacheability: "public",
+                 max_age: 30,
+                 stale_while_revalidate: 60
+               }
+             } = InternalResponse.new(conn, status)
+      
+
+    end 
   end
 end

@@ -1,4 +1,4 @@
-defmodule EndToEndTest.PrivateCacheTest do
+defmodule EndToEndTest.PrivateCacheControlTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
@@ -19,7 +19,7 @@ defmodule EndToEndTest.PrivateCacheTest do
     Belfrage.LoopsSupervisor.kill_all()
   end
 
-  test "cache header is private" do
+  test "when cache header is private from lambda origin, stale-while-revalidate is added to cache-control" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn _role_arn, _function, _payload, _opts ->
       {:ok, @lambda_response}
@@ -30,5 +30,14 @@ defmodule EndToEndTest.PrivateCacheTest do
 
     assert {200, headers, _body} = sent_resp(conn)
     assert {"cache-control", "private, stale-while-revalidate=30, max-age=60"} in headers
+  end
+
+
+  test "when belfrage 404s, stale-while-revalidate is added to cache-control" do
+    conn = conn(:get, "/this-is-a-404")
+    conn = Router.call(conn, [])
+
+    assert {404, headers, _body} = sent_resp(conn)
+    assert {"cache-control", "public, stale-while-revalidate=60, max-age=30"} in headers
   end
 end
