@@ -24,8 +24,16 @@ defmodule Routes.Routefile do
   handle "/wales", using: "WalesHomePage", examples: ["/wales?mode=testData"]
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru?mode=testData"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba?mode=testData"]
-  handle "/homepage/uktipo", using: "HomePageUkTipo", examples: ["/homepage/uktipo?mode=testData"]
 
+  handle "/homepage/uktipo", using: "HomePageUkTipo", examples: ["/homepage/uktipo?mode=testData"]
+  handle "/homepage/scotlandtipo", using: "ScotlandTipoHomePage", examples: ["/homepage/scotlandtipo?mode=testData"]
+  handle "/homepage/walestipo", using: "WalesTipoHomePage", examples: ["/homepage/walestipo?mode=testData"]
+  handle "/homepage/northernirelandtipo", using: "NorthernIrelandTipoHomePage", examples: ["/homepage/northernirelandtipo?mode=testData"]
+  handle "/homepage/cymrutipo", using: "CymruTipoHomePage", examples: ["/homepage/cymrutipo?mode=testData"]
+  handle "/homepage/albatipo", using: "AlbaTipoHomePage", examples: ["/homepage/albatipo?mode=testData"]
+
+  handle "/homepage/testtipo", using: "TestTipoHomePage", only_on: "test", examples: ["/homepage/testtipo"]
+  handle "/homepage/automationtipo", using: "AutomationTipoHomePage", only_on: "test", examples: ["/homepage/automationtipo"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
