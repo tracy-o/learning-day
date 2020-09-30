@@ -38,7 +38,10 @@ Various tests have been conducted to gauge Belfrage fault-tolerance in unexpecte
 
 - see ["Dials fault tolerance" report](https://github.com/bbc/belfrage/blob/master/docs/load-test-results/2020-07-06-dials-fault-tolerance.md)
 
-There is a pending task to [improve dials behaviour post-restart](https://jira.dev.bbc.co.uk/browse/RESFRAME-3663).
+These are the pending tests to further improve resiliency of Belfrage dials:
+
+- [dials behaviour post-restart](https://jira.dev.bbc.co.uk/browse/RESFRAME-3663)
+- [GenServer/Supervisor: multiple crashes](https://jira.dev.bbc.co.uk/browse/RESFRAME-3685)
 
 ## How to create a dial
 
