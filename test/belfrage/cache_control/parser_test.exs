@@ -7,8 +7,8 @@ defmodule Belfrage.CacheControl.ParserTest do
       assert %Belfrage.CacheControl{
                cacheability: "private",
                max_age: nil,
-               stale_if_error: nil,
-               stale_while_revalidate: nil
+               stale_if_error: 90,
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("")
     end
@@ -17,8 +17,8 @@ defmodule Belfrage.CacheControl.ParserTest do
       assert %Belfrage.CacheControl{
                cacheability: "private",
                max_age: nil,
-               stale_if_error: nil,
-               stale_while_revalidate: nil
+               stale_if_error: 90,
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("private")
     end
@@ -27,8 +27,8 @@ defmodule Belfrage.CacheControl.ParserTest do
       assert %Belfrage.CacheControl{
                cacheability: "public",
                max_age: 31_536_000,
-               stale_if_error: nil,
-               stale_while_revalidate: nil
+               stale_if_error: 90,
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("public, max-age=31536000")
     end
@@ -37,8 +37,8 @@ defmodule Belfrage.CacheControl.ParserTest do
       assert %Belfrage.CacheControl{
                cacheability: "public",
                max_age: 31_536_000,
-               stale_if_error: nil,
-               stale_while_revalidate: nil
+               stale_if_error: 90,
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("max-age=31536000")
     end
@@ -48,7 +48,7 @@ defmodule Belfrage.CacheControl.ParserTest do
                cacheability: "public",
                max_age: nil,
                stale_if_error: 500_000,
-               stale_while_revalidate: nil
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("public, stale-if-error=500000")
     end
@@ -58,7 +58,7 @@ defmodule Belfrage.CacheControl.ParserTest do
                cacheability: "public",
                max_age: 31_536_000,
                stale_if_error: 500_000,
-               stale_while_revalidate: nil
+               stale_while_revalidate: 30
              } ==
                CacheControl.Parser.parse("public, max-age='31536000', stale-if-error=500000")
     end

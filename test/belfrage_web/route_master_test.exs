@@ -145,7 +145,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
-      assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
+      assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=60, max-age=60"]
     end
 
     test "redirect retains the req-svc-chain header" do
@@ -175,7 +175,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:overrides, %{})
         |> RoutefileMock.call([])
 
-      assert get_resp_header(conn, "cache-control") == ["public, max-age=60"]
+      assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=60, max-age=60"]
     end
 
     test "when the redirect matches without a subdomain will return the location and status" do

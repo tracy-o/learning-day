@@ -46,6 +46,6 @@ defmodule EndToEndTest.ComToUKRedirectTest do
       |> Router.call([])
 
     assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    assert {"cache-control", "public, max-age=60"} in headers
+    assert {"cache-control", "public, stale-while-revalidate=30, max-age=60"} in headers
   end
 end
