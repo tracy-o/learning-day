@@ -81,7 +81,8 @@ defmodule Belfrage.MixProject do
       {:telemetry, "~> 0.4.2"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics, "~> 0.5"},
-      {:telemetry_metrics_statsd, "~> 0.4"}
+      {:telemetry_metrics_statsd, "~> 0.4"},
+      {:observer_cli, "~> 1.5", only: :dev}
     ]
   end
 end
