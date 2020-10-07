@@ -5,6 +5,8 @@ defmodule Belfrage.Event do
 
   @dimension_keys [:request_id, :spec_id]
 
+  @monitor_api Application.get_env(:belfrage, :monitor_api)
+
   alias Belfrage.{Event, Monitor}
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
@@ -12,14 +14,14 @@ defmodule Belfrage.Event do
 
   def record(:log, level, msg, opts) do
     new(:log, level, msg, opts)
-    |> Monitor.record_event()
+    |> @monitor_api.record_event()
 
     Stump.log(level, msg)
   end
 
   def record(:metric, type, metric, opts) do
     new(:metric, type, metric, opts)
-    |> Monitor.record_event()
+    |> @monitor_api.record_event()
 
     apply(ExMetrics, type, [metric, value(opts)])
   end

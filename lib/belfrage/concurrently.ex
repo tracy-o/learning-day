@@ -20,8 +20,13 @@ defmodule Belfrage.Concurrently do
   end
 
   def run(structs, cb) do
+    m = Stump.metadata() |> Enum.into([])
+
     structs
-    |> Task.async_stream(cb)
+    |> Task.async_stream(fn struct ->
+      Stump.metadata(m)
+      cb.(struct)
+    end)
     |> Stream.map(&elem(&1, 1))
     |> Enum.to_list()
   end

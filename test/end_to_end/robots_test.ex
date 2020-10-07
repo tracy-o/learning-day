@@ -1,6 +1,7 @@
 defmodule EndToEnd.RobotsTest do
   use ExUnit.Case
   use Plug.Test
+  use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
 
   @moduletag :end_to_end

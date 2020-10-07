@@ -1,4 +1,6 @@
 defmodule Belfrage.Monitor do
+  @callback record_event(Belfrage.Event.t()) :: :ok
+
   def record_loop(loop_state) do
     Belfrage.Nodes.monitor_nodes()
     |> Enum.each(&send_to_monitor_node(&1, loop_state))
