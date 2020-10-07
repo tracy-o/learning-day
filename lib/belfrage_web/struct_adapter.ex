@@ -5,6 +5,8 @@ defmodule BelfrageWeb.StructAdapter do
   import Plug.Conn
 
   def adapt(conn = %Conn{private: %{xray_trace_id: xray_trace_id, bbc_headers: bbc_headers}}, loop_id) do
+    Stump.metadata(loop_id: loop_id)
+
     %Struct{
       request: %Request{
         path: conn.request_path,

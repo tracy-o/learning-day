@@ -30,7 +30,8 @@ defmodule EndToEnd.MonitorEventsTest do
         data: %{method: "GET", path: "/200-ok-response"},
         dimensions: %{
           request_id: request_id,
-          path: "/200-ok-response"
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
         },
         request_id: request_id,
         type: {:log, :info}
@@ -39,7 +40,11 @@ defmodule EndToEnd.MonitorEventsTest do
 
       %Belfrage.Event{
         data: {"service.lambda.response.200", 1},
-        dimensions: %{},
+        dimensions: %{
+          request_id: request_id,
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
+        },
         request_id: request_id,
         type: {:metric, :increment}
       } ->
@@ -47,7 +52,11 @@ defmodule EndToEnd.MonitorEventsTest do
 
       %Belfrage.Event{
         data: {"cache.local.miss", 1},
-        dimensions: %{},
+        dimensions: %{
+          request_id: request_id,
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
+        },
         request_id: request_id,
         type: {:metric, :increment}
       } ->
@@ -56,7 +65,5 @@ defmodule EndToEnd.MonitorEventsTest do
 
     conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
     conn = Router.call(conn, [])
-
-    :timer.sleep(1_000)
   end
 end

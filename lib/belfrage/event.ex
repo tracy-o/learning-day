@@ -3,7 +3,7 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
-  @dimension_keys [:request_id, :spec_id]
+  @dimension_keys [:request_id, :loop_id]
 
   @monitor_api Application.get_env(:belfrage, :monitor_api)
 
