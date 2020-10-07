@@ -3,8 +3,10 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
+  @dimension_keys [:request_id, :spec_id]
+
   alias Belfrage.{Event, Monitor}
-  defstruct [:request_id, :type, :data, :timestamp]
+  defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
   def record(type, level, msg, opts \\ [])
 
@@ -23,8 +25,11 @@ defmodule Belfrage.Event do
   end
 
   def new(:metric, type, metric, opts) do
+    dimensions = build_dimensions(opts)
+
     %Event{
-      request_id: request_id(opts),
+      request_id: Map.get(dimensions, :request_id, nil),
+      dimensions: dimensions,
       type: {:metric, type},
       data: {metric, value(opts)},
       timestamp: DateTime.utc_now()
@@ -32,8 +37,11 @@ defmodule Belfrage.Event do
   end
 
   def new(:log, level, msg, opts) do
+    dimensions = build_dimensions(opts)
+
     %Event{
-      request_id: request_id(opts),
+      request_id: Map.get(dimensions, :request_id, nil),
+      dimensions: dimensions,
       type: {:log, level},
       data: msg,
       timestamp: DateTime.utc_now()
@@ -42,7 +50,11 @@ defmodule Belfrage.Event do
 
   defp value(opts), do: Keyword.get(opts, :value, 1)
 
-  defp request_id(opts), do: Keyword.get(opts, :request_id, Process.get(:request_id))
+  defp build_dimensions(opts) do
+    opts
+    |> Keyword.take(@dimension_keys)
+    |> Enum.into(Stump.metadata())
+  end
 
   defmacro record(key, do: yield) do
     quote do
