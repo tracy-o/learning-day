@@ -8,6 +8,8 @@ defmodule EndToEnd.MonitorEventsTest do
   @moduletag :end_to_end
 
   setup do
+    :ets.delete_all_objects(:cache)
+
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _role_arn, _function, _payload, _opts ->
       {:ok,
@@ -108,10 +110,8 @@ defmodule EndToEnd.MonitorEventsTest do
     end
   end
 
-  describe "when a fallback is served" do
+  describe "when a local fallback is served" do
     setup do
-      :ets.delete_all_objects(:cache)
-
       seeded_response = %Belfrage.Struct.Response{
         body: :zlib.gzip(~s({"hi": "bonjour"})),
         headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
@@ -125,6 +125,8 @@ defmodule EndToEnd.MonitorEventsTest do
         expires_in: :timer.hours(6),
         last_updated: Belfrage.Timer.now_ms()
       )
+
+      :timer.sleep(1)
 
       :ok
     end
@@ -194,6 +196,161 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/sends-request-downstream")
+      conn = Router.call(conn, [])
+    end
+  end
+
+  describe "when a distributed fallback can be served" do
+    setup do
+      Belfrage.Clients.CCPMock
+      |> expect(:fetch, fn _request_hash ->
+        {:ok, :stale,
+         %Belfrage.Struct.Response{
+           body: :zlib.gzip(~s({"hi": "bonjour"})),
+           headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+           http_status: 200,
+           cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+         }}
+      end)
+
+      :ok
+    end
+
+    test "sends events to the monitor app" do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public, max-age=5"
+           },
+           "statusCode" => 500,
+           "body" => "<h1>oh no, this broke!</h1>"
+         }}
+      end)
+
+      Belfrage.MonitorMock
+      |> expect(:record_event, 5, fn
+        %Belfrage.Event{
+          data: %{method: "GET", path: "/downstream-broken", req_headers: _, resp_headers: _, status: 200},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"service.lambda.response.500", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.local.miss", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.distributed.stale.hit", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+      end)
+
+      conn = conn(:get, "/downstream-broken?belfrage-cache-bust")
+      conn = Router.call(conn, [])
+    end
+  end
+
+  describe "when a distributed fallback cannot be served" do
+    test "sends events to the monitor app" do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public, max-age=5"
+           },
+           "statusCode" => 500,
+           "body" => "<h1>oh no, this broke!</h1>"
+         }}
+      end)
+
+      Belfrage.MonitorMock
+      |> expect(:record_event, 5, fn
+        %Belfrage.Event{
+          data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 500},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"service.lambda.response.500", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.local.miss", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.distributed.miss", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+      end)
+
+      conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
       conn = Router.call(conn, [])
     end
   end
