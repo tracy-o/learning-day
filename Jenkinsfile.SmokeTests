@@ -63,7 +63,7 @@ node {
     }
   }
 
-  if (result == 'FAILED') {
+  if (result == 'FAILED' && (params.DEPLOYMENT_ID == '' || params.TARGET == 'bruce-belfrage')) {
     stage('Report result to slack') {
       def testFigures = "smoke test output not available"
 
