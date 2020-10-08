@@ -107,4 +107,94 @@ defmodule EndToEnd.MonitorEventsTest do
       conn = Router.call(conn, [])
     end
   end
+
+  describe "when a fallback is served" do
+    setup do
+      :ets.delete_all_objects(:cache)
+
+      seeded_response = %Belfrage.Struct.Response{
+        body: :zlib.gzip(~s({"hi": "bonjour"})),
+        headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+        http_status: 200,
+        cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 0}
+      }
+
+      Test.Support.Helper.insert_cache_seed(
+        id: "ecd8bc630a0757b4ccd2b53a15639219",
+        response: seeded_response,
+        expires_in: :timer.hours(6),
+        last_updated: Belfrage.Timer.now_ms()
+      )
+
+      :ok
+    end
+
+    test "sends events to the monitor app" do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public, max-age=5"
+           },
+           "statusCode" => 500,
+           "body" => "<h1>oh no, this broke!</h1>"
+         }}
+      end)
+
+      Belfrage.MonitorMock
+      |> expect(:record_event, 4, fn
+        %Belfrage.Event{
+          data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 200},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"service.lambda.response.500", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.local.miss", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.local.stale.hit", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+      end)
+
+      conn = conn(:get, "/sends-request-downstream")
+      conn = Router.call(conn, [])
+    end
+  end
 end
