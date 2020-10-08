@@ -15,7 +15,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)
     assert {"location", "https://www.test.bbc.co.uk/com-to-uk-redirect"} in headers
-    assert {"cache-control", "public, stale-while-revalidate=10, max-age=60"} in headers
+    assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=10, max-age=60"} in headers
   end
 
   test "redirect to .co.uk with correct query params" do
@@ -26,7 +26,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)
     assert {"location", "https://www.test.bbc.co.uk/com-to-uk-redirect?page=3&q=ruby"} in headers
-    assert {"cache-control", "public, stale-while-revalidate=10, max-age=60"} in headers
+    assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=10, max-age=60"} in headers
   end
 
   test "does not redirect and call origin when host is not .com" do
@@ -46,6 +46,6 @@ defmodule EndToEndTest.ComToUKRedirectTest do
       |> Router.call([])
 
     assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    assert {"cache-control", "public, stale-while-revalidate=30, max-age=60"} in headers
+    assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers
   end
 end

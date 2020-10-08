@@ -14,6 +14,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
                  max_age: 30,
+                 stale_if_error: 90,
                  stale_while_revalidate: 60
                },
                fallback: false,
@@ -48,6 +49,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
                  max_age: 30,
+                 stale_if_error: 90,
                  stale_while_revalidate: 60
                },
                fallback: false,
@@ -65,6 +67,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
                  max_age: 30,
+                 stale_if_error: 90,
                  stale_while_revalidate: 60
                },
                fallback: false,
@@ -83,6 +86,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
                  max_age: 30,
+                 stale_if_error: 90,
                  stale_while_revalidate: 60
                }
              } = InternalResponse.new(conn, status)
