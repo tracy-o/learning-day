@@ -29,7 +29,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     conn = Router.call(conn, [])
 
     assert {200, headers, _body} = sent_resp(conn)
-    assert {"cache-control", "private, stale-while-revalidate=30, max-age=60"} in headers
+    assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers
   end
 
   test "when belfrage 404s, stale-while-revalidate is added to cache-control" do
@@ -37,6 +37,6 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     conn = Router.call(conn, [])
 
     assert {404, headers, _body} = sent_resp(conn)
-    assert {"cache-control", "public, stale-while-revalidate=60, max-age=30"} in headers
+    assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"} in headers
   end
 end

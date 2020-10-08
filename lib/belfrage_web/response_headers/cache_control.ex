@@ -15,10 +15,10 @@ defmodule BelfrageWeb.ResponseHeaders.CacheControl do
   end
 
   defp cache_directive(struct) do
-    %Belfrage.CacheControl{cacheability: cacheability, max_age: max_age, stale_while_revalidate: stale_while_revalidate} =
+    %Belfrage.CacheControl{cacheability: cacheability, max_age: max_age, stale_while_revalidate: stale_while_revalidate, stale_if_error: stale_if_error} =
       struct.response.cache_directive
 
-    cacheability <> key("stale-while-revalidate", stale_while_revalidate) <> key("max-age", max_age)
+    cacheability <> key("stale-if-error", stale_if_error) <> key("stale-while-revalidate", stale_while_revalidate) <> key("max-age", max_age)
   end
 
   defp key(_key_name, nil), do: ""
