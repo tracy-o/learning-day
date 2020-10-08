@@ -27,7 +27,7 @@ defmodule EndToEnd.MonitorEventsTest do
     Belfrage.MonitorMock
     |> expect(:record_event, 3, fn
       %Belfrage.Event{
-        data: %{method: "GET", path: "/200-ok-response"},
+        data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
@@ -65,5 +65,46 @@ defmodule EndToEnd.MonitorEventsTest do
 
     conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
     conn = Router.call(conn, [])
+  end
+
+  describe "a freshed cached response" do
+    setup do
+      conn = conn(:get, "/200-ok-response")
+      conn = Router.call(conn, [])
+
+      :ok
+    end
+
+    test "sends metrics and logs to monitor" do
+      Belfrage.MonitorMock
+      |> expect(:record_event, 2, fn
+        %Belfrage.Event{
+          data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
+          dimensions: %{
+            request_id: request_id,
+            path: "/200-ok-response",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"cache.local.fresh.hit", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/200-ok-response",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+      end)
+
+      conn = conn(:get, "/200-ok-response")
+      conn = Router.call(conn, [])
+    end
   end
 end
