@@ -28,8 +28,8 @@ defmodule Belfrage.EventTest do
              } = Event.new(:log, level, msg, opts)
     end
 
-    test "when request_id is attached to the process info" do
-      Process.put(:request_id, "req-6789")
+    test "when request_id is attached to the logger metadata" do
+      Stump.metadata(request_id: "req-6789")
 
       level = :debug
       msg = %{msg: "a log message", reason: :for_the_tests}
@@ -77,8 +77,8 @@ defmodule Belfrage.EventTest do
              } = Event.new(:metric, type, metric, opts)
     end
 
-    test "when request_id is attached to the process info" do
-      Process.put(:request_id, "req-6789")
+    test "when request_id is attached to the logger metadata" do
+      Stump.metadata(request_id: "req-6789")
 
       type = :increment
       metric = "web.request.200"

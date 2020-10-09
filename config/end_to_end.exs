@@ -7,4 +7,5 @@ config :belfrage,
   lambda_client: Belfrage.Clients.LambdaMock,
   ccp_client: Belfrage.Clients.CCPMock,
   routefile: Routes.RoutefileMock,
+  monitor_api: Belfrage.MonitorMock,
   production_environment: "test"
