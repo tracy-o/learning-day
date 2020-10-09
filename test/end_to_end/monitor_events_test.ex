@@ -69,7 +69,7 @@ defmodule EndToEnd.MonitorEventsTest do
     conn = Router.call(conn, [])
   end
 
-  describe "a freshed cached response" do
+  describe "a fresh cache response" do
     setup do
       conn = conn(:get, "/200-ok-response")
       conn = Router.call(conn, [])
