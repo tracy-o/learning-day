@@ -12,6 +12,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     end)
 
     conn(:get, "/")
+    |> Plugs.RequestId.call([])
     |> Plugs.XRay.call([])
   end
 
@@ -28,6 +29,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     )
 
     conn(:get, "/")
+    |> Plugs.RequestId.call([])
     |> Plugs.XRay.call([])
   end
 
@@ -38,12 +40,15 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     end)
 
     conn(:get, "/")
+    |> Plugs.RequestId.call([])
     |> Plugs.XRay.call([])
   end
 
   test "when request is sampled, it sets xray trace ID, with 'Sampled' to 1" do
-    conn = conn(:get, "/")
-    conn = Plugs.XRay.call(conn, [])
+    conn =
+      conn(:get, "/")
+      |> Plugs.RequestId.call([])
+      |> Plugs.XRay.call([])
 
     assert %Plug.Conn{
              private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=1"}
@@ -54,8 +59,10 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     Belfrage.XrayMock
     |> expect(:sampled?, fn _segment -> false end)
 
-    conn = conn(:get, "/")
-    conn = Plugs.XRay.call(conn, [])
+    conn =
+      conn(:get, "/")
+      |> Plugs.RequestId.call([])
+      |> Plugs.XRay.call([])
 
     assert %Plug.Conn{
              private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=0"}
@@ -75,8 +82,10 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       end
     )
 
-    conn = conn(:get, "/")
-    conn = Plugs.XRay.call(conn, [])
+    conn =
+      conn(:get, "/")
+      |> Plugs.RequestId.call([])
+      |> Plugs.XRay.call([])
 
     assert length(conn.before_send) == 1
 
@@ -97,6 +106,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       conn =
         conn(:get, "/")
         |> Plug.Conn.put_resp_header("content-length", "34758435")
+        |> Plugs.RequestId.call([])
         |> Plugs.XRay.call([])
 
       callback =
@@ -114,6 +124,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
 
       conn =
         conn(:get, "/")
+        |> Plugs.RequestId.call([])
         |> Plugs.XRay.call([])
 
       callback =
@@ -131,6 +142,19 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     end)
 
     conn(:get, "/status")
+    |> Plugs.RequestId.call([])
+    |> Plugs.XRay.call([])
+  end
+
+  test "adds request_id as an annotation" do
+    Belfrage.XrayMock
+    |> expect(:add_annotations, fn segment, %{request_id: request_id} ->
+      assert is_binary(request_id)
+      segment
+    end)
+
+    conn(:get, "/")
+    |> Plugs.RequestId.call([])
     |> Plugs.XRay.call([])
   end
 end

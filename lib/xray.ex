@@ -10,6 +10,7 @@ defmodule Belfrage.Xray do
   @callback finish_tracing(segment) :: any()
   @callback start_subsegment(String.t()) :: {:ok, segment} | {:error, String.t()}
   @callback finish_subsegment(segment) :: any()
+  @callback add_annotations(segment, map) :: segment
   @callback set_http_request(segment, %{
               method: String.t(),
               path: String.t()
@@ -29,6 +30,7 @@ defmodule Belfrage.Xray do
   defdelegate start_subsegment(segment), to: AwsExRay, as: :start_subsegment
   defdelegate finish_subsegment(segment), to: AwsExRay, as: :finish_subsegment
   defdelegate record_subsegment(name, annotations, opts, func), to: AwsExRay, as: :subsegment
+  defdelegate add_annotations(segment, map), to: AwsExRay.Segment, as: :add_annotations
 
   def set_http_request(segment, %{method: method, path: path}) do
     segment
