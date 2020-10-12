@@ -21,6 +21,9 @@ defmodule BelfrageWeb.Plugs.XRay do
     segment =
       trace
       |> @xray.start_tracing("Belfrage")
+      |> @xray.add_annotations(%{
+        request_id: conn.private.request_id
+      })
       |> @xray.set_http_request(%{
         method: conn.method,
         path: request_path
