@@ -49,9 +49,6 @@ defmodule Routes.Routefile do
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
-  handle "/news/videos/:id", using: "NewsVideos", examples: ["/news/videos/50653614"] do
-    return_404 if: String.length(id) != 8
-  end
 
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
