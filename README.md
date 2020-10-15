@@ -192,7 +192,7 @@ Increasing the log level in Belfrage using the dial will means much more noise i
 
 ### Debug logs
 
-Belfrage sends events to Monitor which then stores these as logs in Cloudwatch. These are always available up to a certain retention period. These logs are persisted in order to assist engineers debug an issue. They are not currently intended as a replacement to the error logs and so are more volatile and subject to changes in functionality.
+Belfrage sends events to Monitor which then stores these as logs in Cloudwatch. These are always available for the specified retention period. These logs are persisted in order to assist engineers debug an issue. They are not currently intended as a replacement to the error logs and so are more volatile and subject to changes in functionality.
 
 The events from Belfrage include all logging levels (from error to debug), however Monitor controls how they are stored. At the time of writing Monitor will persist error and warn logs i.e. it is set to `:warn`.
 
