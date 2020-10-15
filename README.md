@@ -176,7 +176,7 @@ In the first instance we should look to the error logs when there is an issue or
 
 To check the latest logs, first go to Sumologic here https://service.eu.sumologic.com/ui/. You will need an account to access this. You can also view the logs directly in the S3 bucket if you need to but it's not a great process.
 
-If there are any issues using Sumologic then you may wish to check the logs directly on the instance itself. You can do this view the Instances section on Cosmos where you can request access through the Bastions. Note, whilst this will give you a realtime view of the logs there are a few things to be aware of.
+If there are any issues using Sumologic then you may wish to check the logs directly on the instance itself. You can do this via the Instances section on Cosmos where you can request access through the Bastions. Note, whilst this will give you a realtime view of the logs there are a few things to be aware of.
 
 * There are multiple stacks
 * There are multiple instances per stack
