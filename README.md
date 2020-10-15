@@ -170,7 +170,7 @@ There are currently two logging solutions in place for Belfrage, each serving di
 
 The Belfrage error logs are a critical part of understanding the behaviour and resilience of the application. These are fundamental and should always be operational.
 
-The configuration is set so that each instance stores it error logs on the filesystem. The `td_agent` service then offloads these logs to an S3 bucket for storage. We then have a collector in [Sumologic](https://service.eu.sumologic.com/ui/) request all the logs for each Stack so that they can be easily viewed and queried.
+The configuration is set so that each instance stores its error logs on the filesystem. The `td_agent` service then offloads these logs to an S3 bucket for storage. We then have a collector in [Sumologic](https://service.eu.sumologic.com/ui/) request all the logs for each Stack so that they can be easily viewed and queried.
 
 In the first instance we should look to the error logs when there is an issue or for keeping an eye on the status of the platform.
 
@@ -188,7 +188,7 @@ The Belfrage error logs can also be adjusted via the use of a Dial. This allows 
 
 The Dial can be used if there are issues with Monitor or you need to clarify events in order to gain more information. In the first instance use the debug logs in Cloudwatch.
 
-Increasing the log level in Belfrage using the dial will means much more noise in the error logs and make it harder to spot actual errors.
+Increasing the log level in Belfrage using the dial will means much more noise in the error logs and make it harder to spot actual errors. It would mean an increase in costs so we need to be mindful of how long they are increased for.
 
 ### Debug logs
 
