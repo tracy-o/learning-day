@@ -7,11 +7,10 @@ defmodule Belfrage.Monitor do
   end
 
   def record_event(event) do
-    Belfrage.Nodes.monitor_nodes()
-    |> Enum.each(fn node ->
-      nil
-      # GenServer.cast({:event_interface, node}, {:event, event})
-    end)
+    # Belfrage.Nodes.monitor_nodes()
+    # |> Enum.each(fn node ->
+    # GenServer.cast({:event_interface, node}, {:event, event})
+    # end)
   end
 
   defp send_to_monitor_node(node, loop_state) do
