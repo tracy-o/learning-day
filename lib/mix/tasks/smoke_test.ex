@@ -49,7 +49,7 @@ defmodule Mix.Tasks.SmokeTest do
   Specific route:
 
       mix smoke_test --only route:/scotland
-      mix smoke_test --only route:/news/videos/:id
+      mix smoke_test --only route:/news/av/:id
       mix smoke_test --only route:/topics/:id
 
   ## Specify Cosmos environment via `--bbc-env`

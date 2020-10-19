@@ -7,14 +7,14 @@ defmodule Belfrage.Monitor do
   end
 
   def record_event(event) do
-    Belfrage.Nodes.monitor_nodes()
-    |> Enum.each(fn node ->
-      :rpc.cast(node, Monitor.Events, :record, [event])
-    end)
+    # Belfrage.Nodes.monitor_nodes()
+    # |> Enum.each(fn node ->
+    # GenServer.cast({:event_interface, node}, {:event, event})
+    # end)
   end
 
   defp send_to_monitor_node(node, loop_state) do
-    GenServer.cast({:message_interface, node}, {:store, message_content(loop_state)})
+    # GenServer.cast({:message_interface, node}, {:store, message_content(loop_state)})
   end
 
   defp message_content(loop_state) do
