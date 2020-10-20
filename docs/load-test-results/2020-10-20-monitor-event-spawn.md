@@ -26,20 +26,20 @@ Overall the results were as expected. At the repeaters peak we were replaying 15
 
 At this request rate the Erlang process count reached a peak of around 264 averaging around 254, this result makes sense as the processes which are being spawned by monitor are carrying out an ETS insert which is writing these messages to memory, meaning new processes are being created just as fast as old ones are being garbage collected.
 
-[Process count](img/process_count.png)
+![Process count](img/2020-10-20-monitor-event-spawn/process_count.png)
 
 When the traffic began to increase we observed that the memory allocated to the ETS table 'event_store_db' was continously increasing until it reached a maximum size at around 2.5 GB before crashing. 
 
-[Memory before crash](img/monitor_memory_before_crash.png)
+![Memory before crash](img/2020-10-20-monitor-event-spawn/monitor_memory_before_crash.png)
  
 This is suspected to be related to an ongoing Belfrage-Monitor issue rather than being related to this test. This value was then reset and again began to increase as traffic continued through Belfrage.
 
-[Memory after crash](img/monitor_memory_after_crash.png)
+![Memory after crash](img/2020-10-20-monitor-event-spawn/monitor_memory_after_crash.png)
 
 We also observed that on Grafana for both monitor and Belfrage the idle CPU decreased as traffic increased, this is expected and as the load high higher for Belfrage it began to scale up as is expected.
 
-[Monitor Grafana](img/monitor_grafana.png)
-[Belfrage Grafana](img/belfrage_grafana.png)
+![Monitor Grafana](img/2020-10-20-monitor-event-spawn/monitor_grafana.png)
+![Belfrage Grafana](img/2020-10-20-monitor-event-spawn/belfrage_grafana.png)
 
 
 
