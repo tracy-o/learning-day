@@ -7,7 +7,7 @@ defmodule Belfrage.TelemetrySupervisor do
   end
 
   @impl true
-  def init(args) do
+  def init(_args) do
     children = [
       {TelemetryMetricsStatsd, metrics: telemetry_metrics()}
     ]
