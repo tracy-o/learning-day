@@ -3,13 +3,9 @@ defmodule Belfrage.Dial do
   @callback on_change(any()) :: :ok
   @optional_callbacks on_change: 1
 
-  @codec Application.get_env(:belfrage, :json_codec)
-  @file_io Application.get_env(:belfrage, :file_io)
-
   @type state :: {atom(), any()}
 
   use GenServer
-  import Logger
 
   def start_link(opts) do
     {_dial_logic_mod, dial_name, _init_value} = opts

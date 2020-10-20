@@ -7,7 +7,7 @@ defmodule Belfrage.Event do
 
   @monitor_api Application.get_env(:belfrage, :monitor_api)
 
-  alias Belfrage.{Event, Monitor}
+  alias Belfrage.Event
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
   def record(type, level, msg, opts \\ [])

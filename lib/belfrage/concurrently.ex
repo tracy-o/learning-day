@@ -33,7 +33,7 @@ defmodule Belfrage.Concurrently do
 
   def pick_early_response(structs) do
     Enum.reduce_while(structs, [], fn
-      struct = %Struct{response: %Struct.Response{http_status: http_status}}, acc when not is_nil(http_status) ->
+      struct = %Struct{response: %Struct.Response{http_status: http_status}}, _acc when not is_nil(http_status) ->
         {:halt, struct}
 
       struct, acc ->
