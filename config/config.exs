@@ -79,7 +79,7 @@ config :logger,
 config :logger, :file,
   path: "local.log",
   format: {Belfrage.Logger.Formatter, :app},
-  level: :error,
+  level: :debug,
   metadata: :all
 
 config :logger, :cloudwatch,
