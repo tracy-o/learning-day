@@ -21,7 +21,7 @@ config :logger, :file,
   level: :error,
   metadata: :all
 
-config :logger, :file,
+config :logger, :cloudwatch,
   path: System.get_env("LOG_PATH_CLOUDWATCH"),
   format: {Belfrage.Logger.Formatter, :cloudwatch},
   level: :warn,
