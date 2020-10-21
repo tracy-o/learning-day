@@ -35,6 +35,13 @@ defmodule Routes.Routefile do
   handle "/homepage/testtipo", using: "TestTipoHomePage", only_on: "test", examples: ["/homepage/testtipo"]
   handle "/homepage/automationtipo", using: "AutomationTipoHomePage", only_on: "test", examples: ["/homepage/automationtipo"]
 
+  handle "/homepage/preview", using: "HomePagePreview", examples: ["/homepage/preview"]
+  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", examples: ["/homepage/preview/scotland"]
+  handle "/homepage/preview/wales", using: "HomePagePreviewWales", examples: ["/homepage/preview/wales"]
+  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", examples: ["/homepage/preview/northernireland"]
+  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", examples: ["/homepage/preview/cymru"]
+  handle "/homepage/preview/alba", using: "HomePagePreviewAlba", examples: ["/homepage/preview/alba"]
+
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
