@@ -54,6 +54,14 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio", examples: ["/news/video_and_audio/must_see/54327412/scientists-create-a-microscopic-robot-that-walks", "/news/video_and_audio/features/uk-36617915/36617915"] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/news/video_and_audio/*any", using: "NewsVideoAndAudio", examples: ["/news/video_and_audio/most_watched", "/news/video_and_audio/must_see.json", "/news/video_and_audio/news_front_page"] do
+    return_404 if: true
+  end
+
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^[a-zA-Z0-9\+\/-]+$/)
   end
