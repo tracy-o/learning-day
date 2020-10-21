@@ -1,12 +1,12 @@
 # Test results: Monitor Event Spawns
 
 ## Context
-Belfrage Monitor now [spawns a process](https://github.com/bbc/belfrage-monitor/blob/master/lib/message_interface/events.ex#L21-L28) when a cast call is received to record an event instead of handling it synchronously. This in turn will increase the levels of concurrency and reduce the bottleneck of storing events recieved from Belfrage. The tests described in this document verify that doing so will not create further bottlenecks or performance issues such as hitting Erlang's process count limit when Belfrage is under heavy load.
+Belfrage Monitor now [spawns a process](https://github.com/bbc/belfrage-monitor/blob/master/lib/message_interface/events.ex#L21-L28) when a cast call is received to record an event instead of handling it synchronously. This in turn will increase the levels of concurrency and reduce the bottleneck of storing events received from Belfrage. The tests described in this document verify that doing so will not create further bottlenecks or performance issues such as hitting Erlang's process count limit when Belfrage is under heavy load.
 
 
 ## Hypotheses
 
-- Monitor spawning processes to handle event data sent by Belfrage, which was done to reduce the bottleneck of recording events synchronously, does not produce further bottlenecks.
+- Monitor spawning processes to handle event data sent by Belfrage, which was done to reduce the bottleneck of recording events synchronously, does not produce further bottlenecks when Belfrage is around 70,000 requests per minute.
 
 ## Setup
 
