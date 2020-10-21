@@ -52,7 +52,7 @@ mkdir -p %{buildroot}/var/log/component
 touch %{buildroot}/var/log/component/app.log
 touch %{buildroot}/var/log/component/cloudwatch.log
 mkdir -p %{buildroot}/etc/logrotate.d
-cp -p %{SOURCE3} %{buildroot}/etc/logrotate.d/cloudwatch
+cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
 
 %post
 systemctl enable belfrage
