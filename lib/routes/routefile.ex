@@ -223,6 +223,8 @@ defmodule Routes.Routefile do
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
+  handle "/my/session", using: "MySession", only_on: "test", examples: []
+
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
   no_match()
