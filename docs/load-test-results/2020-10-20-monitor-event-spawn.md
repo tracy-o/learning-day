@@ -18,7 +18,7 @@ Belfrage Monitor now [spawns a process](https://github.com/bbc/belfrage-monitor/
 
 ## Tests
 
-To test the hypotheses we will begin to run belfrage repeater against test with reduced load and slowly increase the traffic keeping a close eye on valid metrics such as idle CPU, memory usage and Erland process count. 
+To test the hypothesis we will begin to run belfrage repeater against test with reduced load and slowly increase the traffic keeping a close eye on valid metrics such as idle CPU, memory usage and Erland process count in observer_cli. 
 
 ## Results
 
@@ -40,6 +40,5 @@ We also observed that on Grafana for both monitor and Belfrage the idle CPU decr
 
 ![Monitor Grafana](img/2020-10-20-monitor-event-spawn/monitor_grafana.png)
 ![Belfrage Grafana](img/2020-10-20-monitor-event-spawn/belfrage_grafana.png)
-
 
 
