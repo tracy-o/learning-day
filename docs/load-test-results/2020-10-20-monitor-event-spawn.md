@@ -1,7 +1,7 @@
 # Test results: Monitor Event Spawns
 
 ## Context
-Belfrage Monitor now [spawns a process](https://github.com/bbc/belfrage-monitor/blob/master/lib/message_interface/events.ex#L21-L28) when a cast call is recieved to record an event instead of handling it synchronously. This in turn will increase the levels of concurrency and reduce the bottleneck of storing events recieved from Belfrage. The tests described in this document verify that doing so will not create further bottlenecks or performance issues such as hitting Erlang's process count limit when Belfrage is under heavy load.
+Belfrage Monitor now [spawns a process](https://github.com/bbc/belfrage-monitor/blob/master/lib/message_interface/events.ex#L21-L28) when a cast call is received to record an event instead of handling it synchronously. This in turn will increase the levels of concurrency and reduce the bottleneck of storing events recieved from Belfrage. The tests described in this document verify that doing so will not create further bottlenecks or performance issues such as hitting Erlang's process count limit when Belfrage is under heavy load.
 
 
 ## Hypotheses
@@ -40,7 +40,6 @@ We also observed that on Grafana for both monitor and Belfrage the idle CPU decr
 
 ![Monitor Grafana](img/2020-10-20-monitor-event-spawn/monitor_grafana.png)
 ![Belfrage Grafana](img/2020-10-20-monitor-event-spawn/belfrage_grafana.png)
-
 
 
 
