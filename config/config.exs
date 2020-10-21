@@ -74,12 +74,20 @@ config :cachex, :limit,
   options: []
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
 
 config :logger, :file,
   path: "local.log",
-  format: "$message\n",
-  level: :debug
+  format: {Belfrage.Logger.Formatter, :app},
+  level: :error,
+  metadata: :all
+
+config :logger, :cloudwatch,
+  path: "cloudwatch.log",
+  format: {Belfrage.Logger.Formatter, :cloudwatch},
+  level: :warn,
+  metadata: :all,
+  metadata_filter: [cloudwatch: true]
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"
