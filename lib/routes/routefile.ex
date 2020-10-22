@@ -55,15 +55,15 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+\/-]*([0-9]{4,9}$))/)
+    return_404 if: !String.match?(id, ~r/^(([a-zA-Z0-9\+\/-]+-)*([0-9]{4,9}$))/)
   end
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+\/-]*([0-9]{4,9}$))/)
+    return_404 if: !String.match?(id, ~r/^(([a-zA-Z0-9\+\/-]+-)*([0-9]{4,9}$))/)
   end
 
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+\/-]*([0-9]{4,9}$))/)
+    return_404 if: !String.match?(id, ~r/^(([a-zA-Z0-9\+\/-]+-)*([0-9]{4,9}$))/)
   end
 
   handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
