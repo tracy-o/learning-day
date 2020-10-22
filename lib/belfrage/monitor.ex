@@ -7,14 +7,14 @@ defmodule Belfrage.Monitor do
   end
 
   def record_event(event) do
-    # Belfrage.Nodes.monitor_nodes()
-    # |> Enum.each(fn node ->
-    # GenServer.cast({:event_interface, node}, {:event, event})
-    # end)
+    Belfrage.Nodes.monitor_nodes()
+    |> Enum.each(fn node ->
+      :erlang.send_nosuspend({:event_interface, node}, cast_msg({:event, event}))
+    end)
   end
 
   defp send_to_monitor_node(node, loop_state) do
-    # GenServer.cast({:message_interface, node}, {:store, message_content(loop_state)})
+    :erlang.send_nosuspend({:message_interface, node}, cast_msg({:store, message_content(loop_state)}))
   end
 
   defp message_content(loop_state) do
@@ -28,4 +28,6 @@ defmodule Belfrage.Monitor do
   defp get_stack_name() do
     Application.get_env(:belfrage, :stack_name)
   end
+
+  defp cast_msg(req), do: {:"$gen_cast", req}
 end
