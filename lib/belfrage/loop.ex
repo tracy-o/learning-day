@@ -5,13 +5,14 @@ defmodule Belfrage.Loop do
 
   @short_interval Application.get_env(:belfrage, :short_counter_reset_interval)
   @long_interval Application.get_env(:belfrage, :long_counter_reset_interval)
+  @fetch_loop_timeout Application.get_env(:belfrage, :fetch_loop_timeout)
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, RouteSpec.specs_for(name), name: via_tuple(name))
   end
 
   def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), :state)
+    GenServer.call(via_tuple(name), :state, @fetch_loop_timeout)
   end
 
   def inc(%Struct{
