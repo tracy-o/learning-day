@@ -11,6 +11,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/", using: "SomeLoop", examples: ["/"])
 
+  handle("/fabl/:name", using: "SomeFablLoop", examples: ["/fabl/xray"])
+
   handle("/200-ok-response", using: "SomeLoop", examples: ["/200-ok-response"])
 
   handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
