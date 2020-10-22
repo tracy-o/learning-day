@@ -163,6 +163,38 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert get_resp_header(conn, "req-svc-chain") == ["GTM,BELFRAGE"]
     end
+
+    test "redirect has a simple vary header" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/permanent-redirect")
+        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+        |> put_private(:request_id, "req-12345678")
+        |> put_private(:bbc_headers, %{
+          country: "gb",
+          scheme: "",
+          host: "",
+          is_uk: false,
+          replayed_traffic: nil,
+          origin_simulator: nil,
+          varnish: "",
+          cache: false,
+          cdn: false,
+          req_svc_chain: "GTM,BELFRAGE"
+        })
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> put_req_header("x-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("cookie", "foo=bar")
+        |> RoutefileMock.call([])
+
+      assert get_resp_header(conn, "vary") == [
+               "Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"
+             ]
+    end
   end
 
   describe "calling redirect with host" do
