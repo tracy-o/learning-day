@@ -25,7 +25,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       additional_headers(private.headers_allowlist)
     ]
     |> Enum.reject(&is_nil/1)
-    |> Enum.join(", ")
+    |> Enum.join(",")
   end
 
   def vary_headers(_request, _private, true) do
@@ -42,6 +42,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   defp additional_headers(allowed_headers) do
     allowed_headers
-    |> Enum.join(", ")
+    |> Enum.join(",")
   end
 end

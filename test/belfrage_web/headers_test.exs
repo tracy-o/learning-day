@@ -79,7 +79,7 @@ defmodule BelfrageWeb.HeadersTest do
               [
                 {"cache-control", "private, stale-while-revalidate=0, max-age=25"},
                 {"content-type", "text/html; charset=utf-8"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
+                {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},
@@ -100,7 +100,7 @@ defmodule BelfrageWeb.HeadersTest do
               [
                 {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"},
                 {"content-type", "text/html; charset=utf-8"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
+                {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},
@@ -121,7 +121,7 @@ defmodule BelfrageWeb.HeadersTest do
               [
                 {"cache-control", "public, stale-while-revalidate=15, max-age=5"},
                 {"content-type", "text/html; charset=utf-8"},
-                {"vary", "Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"},
+                {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
                 {"server", "Belfrage"},
                 {"bid", "local"},
                 {"via", "1.1 Belfrage"},

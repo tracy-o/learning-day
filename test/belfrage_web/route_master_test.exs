@@ -192,7 +192,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileMock.call([])
 
       assert get_resp_header(conn, "vary") == [
-               "Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"
+               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
              ]
     end
   end
