@@ -27,6 +27,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.LoopsSupervisor,
       Belfrage.Credentials.Refresh,
       Belfrage.DialsSupervisor,
+      Belfrage.Authentication.Jwk,
       Belfrage.Metrics.Pool,
       Belfrage.TelemetrySupervisor,
       worker(Cachex, [:cache, [limit: cachex_limit()]]),
