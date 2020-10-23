@@ -19,6 +19,7 @@ defmodule Belfrage.Services.FablTest do
       raw_headers: %{
         "a-header" => "a value"
       },
+      xray_trace_id: "xxxx-yyyyyyyyyy-1",
       req_svc_chain: "BELFRAGE"
     }
   }
@@ -240,6 +241,66 @@ defmodule Belfrage.Services.FablTest do
       )
 
       Fabl.dispatch(@get_struct)
+    end
+
+    test "passes non nil xray-trace-id" do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: _method,
+             url: _url,
+             payload: _payload,
+             headers: %{
+               "x-amzn-trace-id" => "xxxx-yyyyyyyyyy-1",
+               "accept-encoding" => "gzip",
+               "user-agent" => "Belfrage",
+               "req-svc-chain" => "BELFRAGE"
+             }
+           },
+           :fabl ->
+          @ok_response
+        end
+      )
+
+      Fabl.dispatch(@get_struct)
+    end
+
+    @get_nil_xray_struct %Struct{
+      private: %Struct.Private{
+        origin: "https://fabl.test.api.bbci.co.uk"
+      },
+      request: %Struct.Request{
+        method: "GET",
+        path: "/fd/example-module",
+        path_params: %{
+          "name" => "example-module"
+        },
+        raw_headers: %{
+          "a-header" => "a value"
+        },
+        xray_trace_id: nil,
+        req_svc_chain: "BELFRAGE"
+      }
+    }
+
+    test "does not pass nil xray-trace-id " do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: _method,
+             url: _url,
+             payload: _payload,
+             headers: headers
+           },
+           :fabl ->
+          assert Map.has_key?(headers, "x-amzn-trace-id") == false
+          @ok_response
+        end
+      )
+
+      Fabl.dispatch(@get_nil_xray_struct)
     end
   end
 end
