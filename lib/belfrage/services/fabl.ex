@@ -71,7 +71,7 @@ defmodule Belfrage.Services.Fabl do
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
       "req-svc-chain" => req_svc_chain,
-      "X-Amzn-Trace-Id" => xray_trace_id
+      "x-amzn-trace-id" => xray_trace_id
     })
   end
 end

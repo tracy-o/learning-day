@@ -12,13 +12,13 @@ defmodule EndToEndTest.FablTest do
     Belfrage.LoopsSupervisor.kill_all()
   end
 
-  test "Fabl headers contain X-Amzn-Trace-Id" do
+  test "Fabl headers contain x-amzn-trace-id" do
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %HTTP.Request{headers: headers}, :fabl ->
-      assert Map.has_key?(headers, "X-Amzn-Trace-Id")
-      assert String.contains?(headers["X-Amzn-Trace-Id"], "Sampled=")
-      assert String.contains?(headers["X-Amzn-Trace-Id"], "Root=")
-      assert String.contains?(headers["X-Amzn-Trace-Id"], "Parent=")
+      assert Map.has_key?(headers, "x-amzn-trace-id")
+      assert String.contains?(headers["x-amzn-trace-id"], "Sampled=")
+      assert String.contains?(headers["x-amzn-trace-id"], "Root=")
+      assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
 
       {:ok,
        %HTTP.Response{
