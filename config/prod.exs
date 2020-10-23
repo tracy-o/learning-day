@@ -13,9 +13,17 @@ config :ex_metrics,
   pool_size: 3
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
 
 config :logger, :file,
   path: System.get_env("LOG_PATH"),
-  format: "$message\n",
-  level: :error
+  format: {Belfrage.Logger.Formatter, :app},
+  level: :error,
+  metadata: :all
+
+config :logger, :cloudwatch,
+  path: System.get_env("LOG_PATH_CLOUDWATCH"),
+  format: {Belfrage.Logger.Formatter, :cloudwatch},
+  level: :warn,
+  metadata: :all,
+  metadata_filter: [cloudwatch: true]

@@ -17,6 +17,7 @@ defmodule Belfrage.Event do
     |> @monitor_api.record_event()
 
     Stump.log(level, msg)
+    Stump.log(level, msg, cloudwatch: true)
   end
 
   def record(:metric, type, metric, opts) do

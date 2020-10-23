@@ -74,6 +74,21 @@ cat > /etc/cloudwatch-agent-config.json <<EOF
     "aggregation_dimensions" : [
       ["BBCEnvironment"]
     ]
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/component/cloudwatch.log",
+            "log_group_name": "/aws/ec2/$COMPONENT_NAME",
+            "log_stream_name": "$ENVIRONMENT",
+            "timezone": "UTC"
+          }
+        ]
+      }
+    },
+    "force_flush_interval" : 15
   }
 }
 EOF

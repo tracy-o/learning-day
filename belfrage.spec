@@ -12,6 +12,7 @@ Source1: belfrage.service
 Source2: bake-scripts.tar.gz
 Source3: belfrage-status-cfn-signal.sh
 Source4: cloudformation-signal.service
+Source5: cloudwatch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -49,6 +50,9 @@ cp %{SOURCE3} %{buildroot}/home/component/belfrage-status-cfn-signal.sh
 cp %{SOURCE4} %{buildroot}/usr/lib/systemd/system/cloudformation-signal.service
 mkdir -p %{buildroot}/var/log/component
 touch %{buildroot}/var/log/component/app.log
+touch %{buildroot}/var/log/component/cloudwatch.log
+mkdir -p %{buildroot}/etc/logrotate.d
+cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
 
 %post
 systemctl enable belfrage
@@ -60,9 +64,11 @@ cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
+%attr(0644, root, root) /etc/logrotate.d/cloudwatch
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service
 /etc/bake-scripts/%{name}
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
+/var/log/component/cloudwatch.log

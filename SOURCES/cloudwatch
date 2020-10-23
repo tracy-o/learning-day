@@ -1,0 +1,11 @@
+/var/log/component/cloudwatch.log {
+    copytruncate
+    missingok
+    nodateext
+    notifempty
+    maxsize 1G
+    daily
+    compress
+    rotate 1
+    create 0644 component component
+}
