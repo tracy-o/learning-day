@@ -20,7 +20,7 @@ defmodule Support.Smoke.Assertions do
   end
 
   defp assert_basic_response(response, expected_status_code) when expected_status_code in @redirects_statuses do
-    assert response.status_code == 301
+    assert response.status_code == expected_status_code
 
     location_header = Helper.get_header(response.headers, "location")
     assert not is_nil(location_header) and String.length(location_header) > 0
