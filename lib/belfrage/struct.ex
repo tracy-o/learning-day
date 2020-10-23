@@ -60,7 +60,8 @@ defmodule Belfrage.Struct.Private do
             platform: nil,
             signature_keys: %{skip: [], add: []},
             preview_mode: "off",
-            default_language: "en-GB"
+            default_language: "en-GB",
+            authenticated: false
 
   @type t :: %__MODULE__{}
 end

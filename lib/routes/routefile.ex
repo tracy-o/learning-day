@@ -35,6 +35,13 @@ defmodule Routes.Routefile do
   handle "/homepage/testtipo", using: "TestTipoHomePage", only_on: "test", examples: ["/homepage/testtipo"]
   handle "/homepage/automationtipo", using: "AutomationTipoHomePage", only_on: "test", examples: ["/homepage/automationtipo"]
 
+  handle "/homepage/preview", using: "HomePagePreview", only_on: "test", examples: ["/homepage/preview"]
+  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", only_on: "test", examples: ["/homepage/preview/scotland"]
+  handle "/homepage/preview/wales", using: "HomePagePreviewWales", only_on: "test", examples: ["/homepage/preview/wales"]
+  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", only_on: "test", examples: ["/homepage/preview/northernireland"]
+  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
+  handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
+
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
@@ -52,6 +59,10 @@ defmodule Routes.Routefile do
 
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio", examples: ["/news/video_and_audio/must_see/54327412/scientists-create-a-microscopic-robot-that-walks", "/news/video_and_audio/features/uk-36617915/36617915"] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
@@ -222,6 +233,8 @@ defmodule Routes.Routefile do
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: ["/comments/embed/news/business-1234567"]
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
+
+  handle "/my/session", using: "MySession", only_on: "test", examples: []
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 

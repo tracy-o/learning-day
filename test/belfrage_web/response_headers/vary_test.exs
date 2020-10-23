@@ -16,7 +16,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @with_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
 
@@ -24,7 +24,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       input_conn = conn(:get, "/sport")
       output_conn = Vary.add_header(input_conn, @no_cache)
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"] ==
                get_resp_header(output_conn, "vary")
     end
   end
@@ -45,7 +45,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
         conn(:get, "/page")
         |> Vary.add_header(%Struct{request: %Struct.Request{edge_cache?: true}})
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-BBC-Edge-Country, X-BBC-Edge-IsUK, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme"] ==
                get_resp_header(conn, "vary")
     end
 
@@ -54,26 +54,26 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
         conn(:get, "/page")
         |> Vary.add_header(%Struct{request: %Struct.Request{edge_cache?: false}})
 
-      assert ["Accept-Encoding, X-BBC-Edge-Cache, X-Country, X-IP_Is_UK_Combined, X-BBC-Edge-Scheme"] ==
+      assert ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"] ==
                get_resp_header(conn, "vary")
     end
   end
 
-  describe "raw_headers" do
-    test "varies on provided raw headers, when cdn is false" do
+  describe "allowed_headers" do
+    test "varies on provided allowed headers, when cdn is false" do
       conn =
         conn(:get, "/")
-        |> Vary.add_header(%Struct{request: %Struct.Request{raw_headers: %{"one" => "header", "another" => "header 2"}}})
+        |> Vary.add_header(%Struct{private: %Struct.Private{headers_allowlist: ["one_header", "another_header"]}})
 
-      assert List.first(get_resp_header(conn, "vary")) =~ ", another, one"
+      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header,another_header"
     end
 
-    test "does not vary on provided raw headers, when cdn is true" do
+    test "does not vary on allowed headers, when cdn is true" do
       input_conn = conn(:get, "/")
-      struct = @with_cdn |> Struct.add(:request, %{raw_headers: %{"one" => "header", "another" => "header 2"}})
+      struct = @with_cdn |> Struct.add(:private, %{headers_allowlist: ["one_header", "another_header"]})
       output_conn = Vary.add_header(input_conn, struct)
 
-      refute List.first(get_resp_header(output_conn, "vary")) =~ ", another, one"
+      refute List.first(get_resp_header(output_conn, "vary")) =~ ",another,one"
     end
   end
 end
