@@ -41,15 +41,20 @@ defmodule Routes.RoutefileTest do
         assert String.starts_with?(@route_matcher, "/"), "Route matcher #{@route_matcher} must be prefixed with a `/`."
       end
 
-      Enum.each(examples, fn example ->
-        @example example
+      examples
+      |> Enum.map(fn
+        {path, _expected_status_code} -> path
+        path -> path
+      end)
+      |> Enum.each(fn path ->
+        @path path
 
-        test "Route example #{@example} is prefixed with `/`" do
-          assert String.starts_with?(@example, "/"),
-                 "Route example `#{@example}`, for matcher `#{@route_matcher}`, must be prefixed with a `/`."
+        test "Route example #{@path} is prefixed with `/`" do
+          assert String.starts_with?(@path, "/"),
+                 "Route example `#{@path}`, for matcher `#{@route_matcher}`, must be prefixed with a `/`."
         end
 
-        test "The example: #{example} points to the #{loop_id} routespec" do
+        test "The example: #{@path} points to the #{loop_id} routespec" do
           unless @route_matcher == "/*any" do
             BelfrageMock
             |> expect(
@@ -70,7 +75,7 @@ defmodule Routes.RoutefileTest do
             )
           end
 
-          conn = conn(:get, @example)
+          conn = conn(:get, @path)
           conn = Router.call(conn, [])
 
           if @route_matcher == "/*any" do

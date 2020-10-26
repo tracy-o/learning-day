@@ -10,6 +10,10 @@ defmodule Belfrage.SmokeTestCase do
     Application.get_env(:smoke, String.to_atom(environment))
   end
 
+  def normalise_example(path) when is_binary(path), do: {path, 200}
+
+  def normalise_example({path, status_code}) when is_binary(path) and is_integer(status_code), do: {path, status_code}
+
   defmacro __using__(
              route_matcher: route_matcher,
              matcher_spec: matcher_spec,
@@ -18,7 +22,7 @@ defmodule Belfrage.SmokeTestCase do
     quote do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
-      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1]
+      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1, normalise_example: 1]
 
       @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
@@ -36,12 +40,14 @@ defmodule Belfrage.SmokeTestCase do
           @tag stack: @target
 
           for example <- @matcher_spec.examples do
-            @example example
+            {path, expected_status_code} = normalise_example(example)
+            @path path
+            @expected_status_code expected_status_code
 
-            test "#{example}" do
+            test "#{path}" do
               header_id = Application.get_env(:smoke, :endpoint_to_stack_id_mapping)[@target]
 
-              resp = Helper.get_route(@host, @example)
+              resp = Helper.get_route(@host, @path)
 
               cond do
                 @smoke_env == "live" and @matcher_spec.only_on == "test" ->
@@ -58,7 +64,13 @@ defmodule Belfrage.SmokeTestCase do
                   }
 
                   route_specs = Belfrage.RouteSpec.specs_for(test_properties.using, test_properties.smoke_env)
-                  Support.Smoke.Assertions.assert_smoke_response(test_properties, route_specs, resp)
+
+                  Support.Smoke.Assertions.assert_smoke_response(
+                    test_properties,
+                    route_specs,
+                    resp,
+                    @expected_status_code
+                  )
               end
             end
           end

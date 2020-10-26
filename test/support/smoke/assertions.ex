@@ -4,12 +4,13 @@ defmodule Support.Smoke.Assertions do
 
   @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)
   @expected_minimum_content_length 30
+  @redirects_statuses Application.get_env(:belfrage, :redirect_statuses)
 
-  def assert_smoke_response(test_properties, route_spec, response) do
+  def assert_smoke_response(test_properties, route_spec, response, expected_status_code) do
     case {world_service_redirect?(route_spec), com_to_uk_redirect?(route_spec), test_properties.tld} do
       {true, false, ".co.uk"} -> assert_world_service_redirect(response)
       {false, true, ".com"} -> assert_com_to_uk_redirect(response)
-      _ -> assert_basic_response(response)
+      _ -> assert_basic_response(response, expected_status_code)
     end
 
     refute {"belfrage-cache-status", "STALE"} in response.headers
@@ -18,8 +19,15 @@ defmodule Support.Smoke.Assertions do
     assert Helper.header_item_exists(response.headers, expected_stack_id_header)
   end
 
-  defp assert_basic_response(response) do
-    assert response.status_code == 200
+  defp assert_basic_response(response, expected_status_code) when expected_status_code in @redirects_statuses do
+    assert response.status_code == expected_status_code
+
+    location_header = Helper.get_header(response.headers, "location")
+    assert not is_nil(location_header) and String.length(location_header) > 0
+  end
+
+  defp assert_basic_response(response, expected_status_code) do
+    assert response.status_code == expected_status_code
 
     assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
   end
