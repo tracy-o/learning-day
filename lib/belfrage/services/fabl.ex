@@ -62,11 +62,28 @@ defmodule Belfrage.Services.Fabl do
   defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
   defp module_path(_path), do: "/module/"
 
-  defp build_headers(%Struct.Request{raw_headers: raw_headers, req_svc_chain: req_svc_chain}) do
+  defp build_headers(%Struct.Request{
+         raw_headers: raw_headers,
+         req_svc_chain: req_svc_chain,
+         xray_trace_id: nil
+       }) do
     Map.merge(raw_headers, %{
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
       "req-svc-chain" => req_svc_chain
+    })
+  end
+
+  defp build_headers(%Struct.Request{
+         raw_headers: raw_headers,
+         req_svc_chain: req_svc_chain,
+         xray_trace_id: xray_trace_id
+       }) do
+    Map.merge(raw_headers, %{
+      "accept-encoding" => "gzip",
+      "user-agent" => "Belfrage",
+      "req-svc-chain" => req_svc_chain,
+      "x-amzn-trace-id" => xray_trace_id
     })
   end
 end
