@@ -1,7 +1,7 @@
 defmodule Belfrage.Authentication.Jwk do
   use GenServer
 
-  @refresh_rate 60_000
+  @refresh_rate 3_600_000
   @jwk_keys %{
     "keys" => [
       %{
