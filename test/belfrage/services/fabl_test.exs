@@ -295,7 +295,7 @@ defmodule Belfrage.Services.FablTest do
              headers: headers
            },
            :fabl ->
-          assert Map.has_key?(headers, "x-amzn-trace-id") == false
+          refute Map.has_key?(headers, "x-amzn-trace-id") 
           @ok_response
         end
       )
