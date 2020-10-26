@@ -216,7 +216,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cnmey0x98r9t"] do
+  handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
@@ -226,7 +226,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
 
-  handle "/news/topics/:id", using: "NewsTopicPage", examples: ["/news/topics/cyz0z8w0ydwt"] do
+  handle "/news/topics/:id", using: "NewsTopicPage", examples: ["/news/topics/cr3pkx7vy68t"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
