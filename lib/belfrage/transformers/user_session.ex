@@ -1,5 +1,8 @@
 defmodule Belfrage.Transformers.UserSession do
   use Belfrage.Transformers.Transformer
+
+  # note: `Plug.Conn.Cookies.decode` benchmark
+  # https://github.com/bbc/belfrage/pull/574#issuecomment-715417312
   import Plug.Conn.Cookies, only: [decode: 1]
 
   @impl true

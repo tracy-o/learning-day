@@ -65,7 +65,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
            } = UserSession.call([], struct)
   end
 
-  test "cookie for 'ckns_atkn' only will not be authenticated and return nil session token" do
+  test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be authenticated and return nil session token" do
     struct = %Struct{
       request: %Struct.Request{raw_headers: %{"cookie" => "ckns_atkn=1234"}}
     }
