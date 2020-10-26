@@ -11,8 +11,8 @@ defmodule Belfrage.Transformers.UserSession do
 
   defp handle_cookies(decoded_cookies, private_struct)
 
-  defp handle_cookies(%{"ckns_id" => _, "ckns_atkn" => _}, struct) do
-    %{struct | authenticated: true, session_token: true}
+  defp handle_cookies(%{"ckns_id" => _, "ckns_atkn" => token}, struct) do
+    %{struct | authenticated: true, session_token: token}
   end
 
   defp handle_cookies(%{"ckns_id" => _}, struct), do: %{struct | authenticated: true}

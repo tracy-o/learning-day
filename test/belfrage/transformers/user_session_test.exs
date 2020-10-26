@@ -49,9 +49,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
            } = UserSession.call([], struct)
   end
 
-  test "cookie for 'ckns_id' and `ckns_atkn` keys will be authenticated and have session token set" do
+  test "cookie for 'ckns_id' and `ckns_atkn` keys will be authenticated and store session token" do
     struct = %Struct{
-      request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=abcd;ckns_id=1234;foo=bar"}}
+      request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=token_abcd;ckns_id=1234;foo=bar"}}
     }
 
     assert {
@@ -59,7 +59,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              %Belfrage.Struct{
                private: %Belfrage.Struct.Private{
                  authenticated: true,
-                 session_token: true
+                 session_token: "token_abcd"
                }
              }
            } = UserSession.call([], struct)
@@ -165,7 +165,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              :ok,
              %Belfrage.Struct{
                private: %Belfrage.Struct.Private{
-                 session_token: nilm
+                 session_token: nil
                }
              }
            } = UserSession.call([], struct)
