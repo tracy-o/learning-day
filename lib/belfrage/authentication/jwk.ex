@@ -18,7 +18,7 @@ defmodule Belfrage.Authentication.Jwk do
   }
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: :jwk)
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   def get_keys() do
