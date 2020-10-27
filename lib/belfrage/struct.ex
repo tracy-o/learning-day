@@ -61,7 +61,8 @@ defmodule Belfrage.Struct.Private do
             signature_keys: %{skip: [], add: []},
             preview_mode: "off",
             default_language: "en-GB",
-            authenticated: false
+            authenticated: false,
+            session_token: nil
 
   @type t :: %__MODULE__{}
 end
