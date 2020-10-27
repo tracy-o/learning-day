@@ -14,16 +14,14 @@ defmodule Belfrage.Authentication.VerifyHook do
   end
 
   defp fetch_key(kid, alg) do
-    # Get the keys from the GenServer and then filter to get the matching key
     keys = Belfrage.Authentication.Jwk.get_keys()
+    # todo: check typ is JWT
     key = get_matching_key(keys, kid, alg)
 
     {:ok, alg, key}
   end
 
-  defp get_matching_key(%{"keys" => keys}, _kid, _alg) do
-    # @todo get the key using the kid + alg
-    [key | rest] = keys
-    key
+  defp get_matching_key(%{"keys" => keys}, kid, alg) do
+    Enum.find(keys, fn key -> key["kid"] == kid && key["alg"] == alg end)
   end
 end
