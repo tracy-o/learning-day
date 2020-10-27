@@ -22,11 +22,11 @@ defmodule Belfrage.Authentication.Jwk do
   end
 
   def get_keys() do
-    GenServer.call(:jwk, :state)
+    GenServer.call(__MODULE__, :state)
   end
 
   def refresh_now() do
-    Process.send(:jwk, :refresh, [])
+    Process.send(__MODULE__, :refresh, [])
   end
 
   @impl GenServer
@@ -54,7 +54,7 @@ defmodule Belfrage.Authentication.Jwk do
   end
 
   defp schedule_work do
-    Process.send_after(:jwk, :refresh, @refresh_rate)
+    Process.send_after(__MODULE__, :refresh, @refresh_rate)
   end
 
   defp fetch_jwk_keys do
