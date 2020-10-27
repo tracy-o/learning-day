@@ -1,33 +1,15 @@
 defmodule Belfrage.Authentication.Validator do
-  def valid?(token) do
-    # @todo: Get the JDK data
-    %{header: header} = decode(token)
-    public_key = get_matching_key(header)
-    validated_token = verify(token, header)
-  end
+  use Joken.Config, default_signer: nil
 
-  def token(token) do
-  end
+  add_hook(Belfrage.Authentication.VerifyHook)
 
-  def jwk_data do
-    # @todo: get keys and return one
-    Belfrage.Authentication.Jwk.get_keys()
-  end
+  @authentication Application.get_env(:belfrage, :authentication)
 
-  defp get_matching_key(%{alg: alg, kid: id}) do
-    # @todo: filter jwk data and select matching key algorithm
-  end
-
-  defp decode(token) do
-    token
-    |> Joken.token
-    # |> Joken.with_validation("exp", &(&1 > Joken.current_time()))
-  end
-
-  defp verify(token, public_key) do
-    token
-    |> Joken.with_validation("exp", &(&1 > Joken.current_time()))
-    |> Joken.with_signer(signer(public_key))
-    |> Joken.verify
+  @impl Joken.Config
+  def token_config do
+    default_claims(skip: [:aud, :iss])
+    |> add_claim("iss", nil, &(&1 == @authentication["iss"]))
+    |> add_claim("aud", nil, &(&1 == @authentication["aud"]))
+    |> add_claim("tokenName", nil, &(&1 == "access_token"))
   end
 end

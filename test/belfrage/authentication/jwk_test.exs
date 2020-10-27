@@ -6,14 +6,13 @@ defmodule Belfrage.Authentication.JwkTest do
   @expected_jwk %{
     "keys" => [
       %{
-        "alg" => "RS384",
-        "e" => "AQAB",
-        "kid" => "kid",
-        "kty" => "RSA",
-        "n" => "lkjljxbcLSJHSL",
-        "use" => "enc",
-        "x5c" => ["AAA"],
-        "x5t" => "dskjhfkjh"
+        "alg" => "ES256",
+        "kid" => "SOME_EC_KEY_ID",
+        "kty" => "EC",
+        "use" => "sig",
+        "crv" => "P-256",
+        "x" => "EVs_o5-uQbTjL3chynL4wXgUg2R9q9UU8I5mEovUf84",
+        "y" => "kGe5DgSIycKp8w9aJmoHhB1sB3QTugfnRWm5nU_TzsY"
       }
     ]
   }

@@ -61,7 +61,11 @@ config :belfrage,
     "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
     "logging_level" => Belfrage.Dials.LoggingLevel
   },
-  pool_metric_rate: 10_000
+  pool_metric_rate: 10_000,
+  authentication: %{
+    "iss" => "https://access.int.api.bbc.com/bbcidv5/oauth2",
+    "aud" => "Account"
+  }
 
 config :ex_aws,
   region: "eu-west-1",
