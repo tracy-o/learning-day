@@ -62,7 +62,8 @@ defmodule Belfrage.Struct.Private do
             preview_mode: "off",
             default_language: "en-GB",
             authenticated: false,
-            session_token: nil
+            session_token: nil,
+            valid_session: false
 
   @type t :: %__MODULE__{}
 end
