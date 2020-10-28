@@ -14,11 +14,11 @@ defmodule Belfrage.Transformers.UserSession do
 
   def call(rest, struct), do: then(rest, struct)
 
-  defp valid?(%Struct.Private{session_token: nil} = struct) do
+  defp valid?(struct = %Struct.Private{session_token: nil}) do
     %{struct | valid_session: false}
   end
 
-  defp valid?(%Struct.Private{authenticated: true, session_token: token} = struct) do
+  defp valid?(struct = %Struct.Private{authenticated: true, session_token: token}) do
     case Belfrage.Authentication.Validator.verify_and_validate(token) do
       {:ok, _decoded_token} -> %{struct | valid_session: true}
       {_, _} -> %{struct | valid_session: false}
