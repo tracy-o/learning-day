@@ -12,6 +12,8 @@ defmodule Routes.Routefile do
   redirect "/ni", to: "/northernireland", status: 302
   redirect "/newyddion/*any", to: "/cymrufyw/*", status: 302
 
+  redirect("http://www.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*", status: 302)
+
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
