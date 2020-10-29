@@ -7,8 +7,7 @@ defmodule Belfrage.Transformers.UserSession do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
-    struct = %{struct | private: handle_cookies(decode(cookie), struct.private)}
-    struct = %{struct | private: valid?(struct.private)}
+    struct = %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
     then(rest, struct)
   end
 
