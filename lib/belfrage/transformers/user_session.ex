@@ -14,25 +14,25 @@ defmodule Belfrage.Transformers.UserSession do
 
   def call(rest, struct), do: then(rest, struct)
 
-  defp valid?(struct = %Struct.Private{session_token: nil}) do
-    %{struct | valid_session: false}
+  defp valid?(private_struct = %Struct.Private{session_token: nil}) do
+    %{private_struct | valid_session: false}
   end
 
-  defp valid?(struct = %Struct.Private{authenticated: true, session_token: token}) do
+  defp valid?(private_struct = %Struct.Private{authenticated: true, session_token: token}) do
     case Belfrage.Authentication.Validator.verify_and_validate(token) do
-      {:ok, _decoded_token} -> %{struct | valid_session: true}
-      {_, _} -> %{struct | valid_session: false}
+      {:ok, _decoded_token} -> %{private_struct | valid_session: true}
+      {_, _} -> %{private_struct | valid_session: false}
     end
   end
 
-  defp valid?(struct), do: struct
+  defp valid?(private_struct), do: private_struct
 
   defp handle_cookies(decoded_cookies, private_struct)
 
-  defp handle_cookies(%{"ckns_id" => _, "ckns_atkn" => token}, struct) do
-    %{struct | authenticated: true, session_token: token}
+  defp handle_cookies(%{"ckns_id" => _, "ckns_atkn" => token}, private_struct) do
+    %{private_struct | authenticated: true, session_token: token}
   end
 
-  defp handle_cookies(%{"ckns_id" => _}, struct), do: %{struct | authenticated: true}
-  defp handle_cookies(_cookies, struct), do: struct
+  defp handle_cookies(%{"ckns_id" => _}, private_struct), do: %{private_struct | authenticated: true}
+  defp handle_cookies(_cookies, private_struct), do: private_struct
 end
