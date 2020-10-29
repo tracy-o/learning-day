@@ -21,7 +21,7 @@ defmodule Belfrage.Cache.StoreTest do
     }
   end
 
-  describe "non-cacheable responses are not written to local or distributed cache" do
+  describe "non-cacheable responses are not written to multi-strategy cache" do
     setup %{struct: struct} do
       expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
 
@@ -59,14 +59,14 @@ defmodule Belfrage.Cache.StoreTest do
       Belfrage.Cache.Store.store(struct)
     end
 
-    test "public witout a max age", %{struct: struct} do
+    test "public without a max age", %{struct: struct} do
       struct = Struct.add(struct, :response, %{cache_directive: CacheControl.Parser.parse("public")})
 
       Belfrage.Cache.Store.store(struct)
     end
   end
 
-  describe "cacheable content is written to local and distributed cache" do
+  describe "cacheable content is written to multi-strategy cache" do
     setup %{struct: struct} do
       expect(Belfrage.Clients.CCPMock, :put, fn _struct -> :ok end)
 
