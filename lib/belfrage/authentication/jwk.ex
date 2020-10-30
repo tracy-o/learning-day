@@ -25,11 +25,13 @@ defmodule Belfrage.Authentication.Jwk do
   end
 
   @impl GenServer
-  def handle_info(:refresh, _existing_state) do
+  def handle_info(:refresh, existing_state) do
     schedule_work()
 
-    {:ok, jwk_keys} = @account_client.get_jwk_keys()
-    {:noreply, jwk_keys}
+    case @account_client.get_jwk_keys() do
+      {:ok, jwk_keys} -> {:noreply, jwk_keys}
+      {:error, _reason} -> {:noreply, existing_state}
+    end
   end
 
   @impl GenServer
