@@ -20,3 +20,9 @@ use Mix.Config
   config :belfrage,
          Keyword.new([{String.to_atom(String.downcase(config_key)), System.get_env(config_key)}])
 end)
+
+config :belfrage, authentication: %{
+  "iss" => System.get_env!("ACCOUNT_ISS"),
+  "aud" => "Account",
+  "account_jwk_uri" => System.get_env!("ACCOUNT_JWK_URI")
+}

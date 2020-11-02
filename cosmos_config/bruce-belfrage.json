@@ -107,5 +107,35 @@
       "live": "belfrage-distributed-cache-live"
     },
     "name": "CCP_S3_BUCKET"
+  },
+  {
+    "name": "ACCOUNT_JWK_URI",
+    "default-value": "https://access.api.bbc.com/v1/oauth/connect/jwk_uri",
+    "options": [
+      {
+        "value": "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"
+      },
+      {
+        "value": "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"
+      },
+      {
+        "value": "https://access.api.bbc.com/v1/oauth/connect/jwk_uri"
+      }
+    ]
+  },
+  {
+    "name": "ACCOUNT_ISS",
+    "default-value": "https://access.api.bbc.com/bbcidv5/oauth2",
+    "options": [
+      {
+        "value": "https://access.int.api.bbc.com/bbcidv5/oauth2"
+      },
+      {
+        "value": "https://access.test.api.bbc.com/bbcidv5/oauth2"
+      },
+      {
+        "value": "https://access.api.bbc.com/bbcidv5/oauth2"
+      }
+    ]
   }
 ]
