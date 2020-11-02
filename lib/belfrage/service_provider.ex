@@ -6,6 +6,7 @@ defmodule Belfrage.ServiceProvider do
   @impl ServiceProvider
   def service_for(origin) do
     cond do
+      origin == :stubbed_session_origin -> Services.StubbedSession
       origin =~ ~r[^http(s)?://fabl] -> Services.Fabl
       origin =~ ~r[^http(s)?://] -> Services.HTTP
       true -> Services.Webcore

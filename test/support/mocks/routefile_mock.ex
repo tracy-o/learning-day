@@ -33,6 +33,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/com-to-uk-redirect", using: "SomeLoopComToUK", examples: ["/com-to-uk-redirect"])
 
+  handle("/my/session", using: "MySession", examples: [])
+
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
