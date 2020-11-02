@@ -189,4 +189,75 @@ defmodule Belfrage.Transformers.UserSessionTest do
              }
            } = UserSession.call([], struct)
   end
+
+  describe "unhappy paths" do
+    setup do
+      %{
+        expired_access_token: Fixtures.AuthToken.expired_access_token(),
+        invalid_access_token: Fixtures.AuthToken.invalid_access_token(),
+        invalid_payload_access_token: Fixtures.AuthToken.invalid_payload_access_token(),
+        invalid_scope_access_token: Fixtures.AuthToken.invalid_scope_access_token()
+      }
+    end
+
+    test "invalid scope access token", %{invalid_scope_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "invalid payload access token", %{invalid_payload_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "invalid access token", %{invalid_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "expired access token", %{expired_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
 end
