@@ -85,6 +85,9 @@ defmodule Belfrage.Struct do
     |> update_in([Access.key(:response), Access.key(:body)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:request), Access.key(:raw_headers)], &Belfrage.PII.clean/1)
     |> update_in([Access.key(:response), Access.key(:headers)], &Belfrage.PII.clean/1)
-    |> update_in([Access.key(:private), Access.key(:session_token)], fn _value -> "REDACTED" end)
+    |> update_in([Access.key(:private), Access.key(:session_token)], fn
+      nil -> nil
+      _value -> "REDACTED"
+    end)
   end
 end

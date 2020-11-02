@@ -22,6 +22,11 @@ defmodule Belfrage.StructTest do
       assert %Struct{private: %Struct.Private{:session_token => "REDACTED"}} = Struct.loggable(struct)
     end
 
+    test "keeps nil session_token values" do
+      struct = %Struct{private: %Struct.Private{:session_token => nil}}
+      assert %Struct{private: %Struct.Private{:session_token => nil}} = Struct.loggable(struct)
+    end
+
     test "keeps non-PII request headers" do
       struct = %Struct{request: %Struct.Request{raw_headers: %{"foo" => "bar"}}}
       assert %Struct{request: %Struct.Request{raw_headers: [{"foo", "bar"}]}} = Struct.loggable(struct)
