@@ -20,7 +20,7 @@ defmodule Belfrage.Transformers.UserSession do
   defp valid?(private_struct = %Struct.Private{authenticated: true, session_token: token}) do
     case Belfrage.Authentication.Validator.verify_and_validate(token) do
       {:ok, _decoded_token} -> %{private_struct | valid_session: true}
-      {_, _} -> %{private_struct | valid_session: false}
+      {:error, :signature_error} -> %{private_struct | valid_session: false}
     end
   end
 

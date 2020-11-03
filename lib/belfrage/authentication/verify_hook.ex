@@ -7,17 +7,29 @@ defmodule Belfrage.Authentication.VerifyHook do
          {:ok, algorithm, key} <- public_key(header) do
       {:cont, {jwt, Joken.Signer.create(algorithm, key)}}
     else
-      :error -> {:halt, {:error, :no_signer}}
+      {:error, :token_malformed} ->
+        Belfrage.Event.record(:log, :error, "Malformed JWT")
+        {:halt, {:error, :token_malformed}}
+
+      {:error, :public_key_not_found} ->
+        Belfrage.Event.record(:log, :error, "Public key not found.")
+        {:halt, {:error, :public_key_not_found}}
+
+      {:error, :invalid_token_header} ->
+        Belfrage.Event.record(:log, :error, "Invalid token header.")
+        {:halt, {:error, :invalid_token_header}}
     end
   end
 
   defp public_key(%{"kid" => kid, "alg" => alg, "typ" => "JWT"}) do
-    {:ok, alg, Belfrage.Authentication.Jwk.get_keys() |> key(kid, alg)}
+    Belfrage.Authentication.Jwk.get_keys() |> key(kid, alg)
   end
 
-  defp public_key(_header), do: {:error, nil}
+  defp public_key(_header), do: {:error, :invalid_token_header}
 
   defp key(%{"keys" => keys}, kid, alg) do
-    Enum.find(keys, fn key -> key["kid"] == kid && key["alg"] == alg end)
+    Enum.find_value(keys, {:error, :public_key_not_found}, fn key ->
+      key["kid"] == kid && key["alg"] == alg && {:ok, alg, key}
+    end)
   end
 end
