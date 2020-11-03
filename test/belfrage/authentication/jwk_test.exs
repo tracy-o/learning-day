@@ -5,21 +5,16 @@ defmodule Belfrage.Authentication.JwkTest do
   alias Belfrage.Clients.AccountMock
   alias Belfrage.Authentication.Jwk
 
-  @expected_jwk %{
+  @expected_jwk_response %{
     "keys" => Fixtures.AuthToken.keys()
-  }
-
-  @ok_response {
-    :ok,
-    @expected_jwk_keys
   }
 
   test "get_keys/0 requests the keys from the account client" do
     AccountMock
-    |> expect(:get_jwk_keys, fn -> @ok_response end)
+    |> expect(:get_jwk_keys, fn -> {:ok, @expected_jwk_response} end)
 
     Jwk.refresh_now()
 
-    assert @expected_jwk_keys == Jwk.get_keys()
+    assert @expected_jwk_response == Jwk.get_keys()
   end
 end

@@ -22,7 +22,7 @@ defmodule Belfrage.Clients.Account do
     })
     |> case do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: body}} ->
-        Stump.log(:warn, "JWK keys fetched successfully", cloudwatch: true)
+        Stump.log(:info, "JWK keys fetched successfully", cloudwatch: true)
         {:ok, body}
 
       {:ok, %Clients.HTTP.Response{status_code: status_code}} ->
