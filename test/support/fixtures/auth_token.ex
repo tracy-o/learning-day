@@ -46,6 +46,11 @@ defmodule Fixtures.AuthToken do
     do:
       "eyJ0eXAiOiJKV1QiLCJraWQiOiJ3dVUzaWZJSWFMT1VBUmVSQi9GRzZlTTFQMVFNPSIsImFsZyI6IkhTMjU2In0.eyJhdF9oYXNoIjoiYmJpdlUyc3IzZ0Z3VjdoWFYtemNlZyIsInN1YiI6IjA4NGJiNjhkLTg2NjQtNGM1ZS1hMjNiLTZmNDMxYjU3ZDViMyIsImFiIjoibzE4IiwiYXVkaXRUcmFja2luZ0lkIjoiZDg2NmNlZGQtNmU0Zi00ZjUwLTk0MDEtZjYwMzNkOGE1Mjg4LTIxNiIsImlzcyI6Imh0dHBzOi8vYWNjZXNzLmludC5hcGkuYmJjLmNvbS9iYmNpZHY1L29hdXRoMiIsInRva2VuTmFtZSI6ImlkX3Rva2VuIiwiYXVkIjoidGVzdGNsaWVudDEiLCJjX2hhc2giOiJqbkM0YldiaWQ3UFFfLVJPNmN2ZEVRIiwiYWNyIjoiMCIsImF6cCI6InRlc3RjbGllbnQxIiwiYXV0aF90aW1lIjoxNTQxNTA2NTQ5LCJyZWFsbSI6Ii8iLCJleHAiOjE5MDE1MDY1NjksInRva2VuVHlwZSI6IkpXVFRva2VuIiwiaWF0IjoxNTQxNTA2NTY5fQ.g93JSqUecqVtyzzzZWK116WmdKjKZ1stIMQxx-Y4JXI"
 
+  def invalid_access_token_header,
+    do: Joken.Signer.sign(%{"name" => "John Doe"}, Joken.Signer.create("HS256", "secret")) |> elem(1)
+
+  def malformed_access_token, do: "abcdef"
+
   def keys,
     do: [
       %{
