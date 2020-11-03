@@ -6,7 +6,7 @@ defmodule Belfrage.Authentication.VerifyHookTest do
   setup do
     %{
       valid_access_token: Fixtures.AuthToken.valid_access_token(),
-      malformed_jwt: Fixtures.AuthToken.malformed_access_token(),
+      malformed_access_token: Fixtures.AuthToken.malformed_access_token(),
       invalid_access_token_header: Fixtures.AuthToken.invalid_access_token_header()
     }
   end
@@ -18,7 +18,7 @@ defmodule Belfrage.Authentication.VerifyHookTest do
       assert {:cont, {^jwt, %Joken.Signer{}}} = VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
 
-    test "malformed token", %{malformed_jwt: jwt} do
+    test "malformed token", %{malformed_access_token: jwt} do
       opts = []
 
       assert {:halt, {:error, :token_malformed}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})

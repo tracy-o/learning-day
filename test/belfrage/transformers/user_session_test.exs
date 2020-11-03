@@ -190,13 +190,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
            } = UserSession.call([], struct)
   end
 
-  describe "unhappy paths" do
+  describe "unhappy access token paths (when public keys exist)" do
     setup do
       %{
         expired_access_token: Fixtures.AuthToken.expired_access_token(),
         invalid_access_token: Fixtures.AuthToken.invalid_access_token(),
         invalid_payload_access_token: Fixtures.AuthToken.invalid_payload_access_token(),
-        invalid_scope_access_token: Fixtures.AuthToken.invalid_scope_access_token()
+        invalid_scope_access_token: Fixtures.AuthToken.invalid_scope_access_token(),
+        malformed_access_token: Fixtures.AuthToken.malformed_access_token(),
+        invalid_access_token_header: Fixtures.AuthToken.invalid_access_token_header()
       }
     end
 
@@ -247,6 +249,63 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "expired access token", %{expired_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "a malformed access token", %{malformed_access_token: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "an invalid token header", %{invalid_access_token_header: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      assert {
+               :ok,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
+  describe "no public keys" do
+    setup do
+      :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => []} end)
+
+      on_exit(fn ->
+        :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => Fixtures.AuthToken.keys()} end)
+      end)
+    end
+
+    test "when public key not found, but the access token is valid" do
+      access_token = Fixtures.AuthToken.valid_access_token()
+
       struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
       assert {
