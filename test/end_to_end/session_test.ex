@@ -37,5 +37,5 @@ defmodule EndToEnd.SessionTest do
              Jason.decode!(resp_body)
   end
 
-  # TODO When RESFRAME-3905 is completed, add tests for the un-happy path here.
+  # TODO Add tests for the un-happy path tests here (ticket RESFRAME-3873).
 end
