@@ -45,4 +45,43 @@ defmodule Fixtures.AuthToken do
   def invalid_key_token,
     do:
       "eyJ0eXAiOiJKV1QiLCJraWQiOiJ3dVUzaWZJSWFMT1VBUmVSQi9GRzZlTTFQMVFNPSIsImFsZyI6IkhTMjU2In0.eyJhdF9oYXNoIjoiYmJpdlUyc3IzZ0Z3VjdoWFYtemNlZyIsInN1YiI6IjA4NGJiNjhkLTg2NjQtNGM1ZS1hMjNiLTZmNDMxYjU3ZDViMyIsImFiIjoibzE4IiwiYXVkaXRUcmFja2luZ0lkIjoiZDg2NmNlZGQtNmU0Zi00ZjUwLTk0MDEtZjYwMzNkOGE1Mjg4LTIxNiIsImlzcyI6Imh0dHBzOi8vYWNjZXNzLmludC5hcGkuYmJjLmNvbS9iYmNpZHY1L29hdXRoMiIsInRva2VuTmFtZSI6ImlkX3Rva2VuIiwiYXVkIjoidGVzdGNsaWVudDEiLCJjX2hhc2giOiJqbkM0YldiaWQ3UFFfLVJPNmN2ZEVRIiwiYWNyIjoiMCIsImF6cCI6InRlc3RjbGllbnQxIiwiYXV0aF90aW1lIjoxNTQxNTA2NTQ5LCJyZWFsbSI6Ii8iLCJleHAiOjE5MDE1MDY1NjksInRva2VuVHlwZSI6IkpXVFRva2VuIiwiaWF0IjoxNTQxNTA2NTY5fQ.g93JSqUecqVtyzzzZWK116WmdKjKZ1stIMQxx-Y4JXI"
+
+  def keys,
+    do: [
+      %{
+        "kty" => "EC",
+        "kid" => "SOME_EC_KEY_ID",
+        "crv" => "P-256",
+        "x" => "EVs_o5-uQbTjL3chynL4wXgUg2R9q9UU8I5mEovUf84",
+        "y" => "kGe5DgSIycKp8w9aJmoHhB1sB3QTugfnRWm5nU_TzsY",
+        "alg" => "ES256",
+        "use" => "sig"
+      },
+      %{
+        "kty" => "RSA",
+        "kid" => "SOMERANDOM",
+        "n" =>
+          "sgftzuGUjJ16GhgOwKMTos5AaFyj_7-nMmqF0m2zJWtYTpOmn8sCDM3RT4bLAVE2GMbaPvldDZdsbGO0VdWWfDrviLzKWUX_mi9PfSjdNmEbyzcGSv7FI3vdYcRjxhYogPK1ngMwM-UKDVgJAv478UIg80e7LRiIRT5H5Qk_jJ8",
+        "e" => "AQAB"
+      },
+      %{
+        "kty" => "RSA",
+        "kid" => "0ccd7c65-ff20-4500-8742-5da72ef4af67",
+        "alg" => "RS256",
+        "use" => "enc"
+      },
+      %{
+        "kty" => "RSA",
+        "kid" => "wU3ifIIaLOUAReRB/FG6eM1P1QM=",
+        "use" => "sig",
+        "x5t" => "5eOfy1Nn2MMIKVRRkq0OgFAw348",
+        "x5c" => [
+          "MIIDdzCCAl+gAwIBAgIES3eb+zANBgkqhkiG9w0BAQsFADBsMRAwDgYDVQQGEwdVbmtub3duMRAwDgYDVQQIEwdVbmtub3duMRAwDgYDVQQHEwdVbmtub3duMRAwDgYDVQQKEwdVbmtub3duMRAwDgYDVQQLEwdVbmtub3duMRAwDgYDVQQDEwdVbmtub3duMB4XDTE2MDUyNDEzNDEzN1oXDTI2MDUyMjEzNDEzN1owbDEQMA4GA1UEBhMHVW5rbm93bjEQMA4GA1UECBMHVW5rbm93bjEQMA4GA1UEBxMHVW5rbm93bjEQMA4GA1UEChMHVW5rbm93bjEQMA4GA1UECxMHVW5rbm93bjEQMA4GA1UEAxMHVW5rbm93bjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANdIhkOZeSHagT9ZecG+QQwWaUsi7OMv1JvpBr/7HtAZEZMDGWrxg/zao6vMd/nyjSOOZ1OxOwjgIfII5+iwl37oOexEH4tIDoCoToVXC5iqiBFz5qnmoLzJ3bF1iMupPFjz8Ac0pDeTwyygVyhv19QcFbzhPdu+p68epSatwoDW5ohIoaLzbf+oOaQsYkmqyJNrmht091XuoVCazNFt+UJqqzTPay95Wj4F7Qrs+LCSTd6xp0Kv9uWG1GsFvS9TE1W6isVosjeVm16FlIPLaNQ4aEJ18w8piDIRWuOTUy4cbXR/Qg6a11l1gWls6PJiBXrOciOACVuGUoNTzztlCUkCAwEAAaMhMB8wHQYDVR0OBBYEFMm4/1hF4WEPYS5gMXRmmH0gs6XjMA0GCSqGSIb3DQEBCwUAA4IBAQDVH/Md9lCQWxbSbie5lPdPLB72F4831glHlaqms7kzAM6IhRjXmd0QTYq3Ey1J88KSDf8A0HUZefhudnFaHmtxFv0SF5VdMUY14bJ9UsxJ5f4oP4CVh57fHK0w+EaKGGIw6TQEkL5L/+5QZZAywKgPz67A3o+uk45aKpF3GaNWjGRWEPqcGkyQ0sIC2o7FUTV+MV1KHDRuBgreRCEpqMoY5XGXe/IJc1EJLFDnsjIOQU1rrUzfM+WP/DigEQTPpkKWHJpouP+LLrGRj2ziYVbBDveP8KtHvLFsnexA/TidjOOxChKSLT9LYFyQqsvUyCagBb4aLs009kbW6inN8zA6"
+        ],
+        "n" =>
+          "10iGQ5l5IdqBP1l5wb5BDBZpSyLs4y_Um-kGv_se0BkRkwMZavGD_Nqjq8x3-fKNI45nU7E7COAh8gjn6LCXfug57EQfi0gOgKhOhVcLmKqIEXPmqeagvMndsXWIy6k8WPPwBzSkN5PDLKBXKG_X1BwVvOE9276nrx6lJq3CgNbmiEihovNt_6g5pCxiSarIk2uaG3T3Ve6hUJrM0W35QmqrNM9rL3laPgXtCuz4sJJN3rGnQq_25YbUawW9L1MTVbqKxWiyN5WbXoWUg8to1DhoQnXzDymIMhFa45NTLhxtdH9CDprXWXWBaWzo8mIFes5yI4AJW4ZSg1PPO2UJSQ",
+        "e" => "AQAB",
+        "alg" => "RS256"
+      }
+    ]
 end

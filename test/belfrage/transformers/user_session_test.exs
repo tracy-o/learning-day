@@ -200,7 +200,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       }
     end
 
-    test "invalid scope access token", %{invalid_scope_access_token: access_token} do
+    # This behviour to be confirmed with account team.
+    test "accepts an invalid scope access token as valid", %{invalid_scope_access_token: access_token} do
       struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
       assert {
@@ -209,7 +210,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  private: %Belfrage.Struct.Private{
                    authenticated: true,
                    session_token: ^access_token,
-                   valid_session: false
+                   valid_session: true
                  }
                }
              } = UserSession.call([], struct)
