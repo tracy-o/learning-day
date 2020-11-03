@@ -6,6 +6,8 @@ defmodule Belfrage.Services.StubbedSession do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
+    Belfrage.Event.record(:log, :debug, Struct.loggable(struct))
+
     Struct.add(struct, :response, %Struct.Response{
       http_status: 200,
       body: :zlib.gzip(response_body(struct.private)),
