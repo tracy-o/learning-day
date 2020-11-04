@@ -1,5 +1,5 @@
 defmodule BelfrageWeb.ResponseHeaders.VaryTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
 
   alias BelfrageWeb.ResponseHeaders.Vary
@@ -60,12 +60,22 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   end
 
   describe "allowed_headers" do
+    test "varies on a provided allowed header, when cdn is false" do
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{private: %Struct.Private{headers_allowlist: ["one_header"]}})
+
+      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header"
+    end
+
     test "varies on provided allowed headers, when cdn is false" do
       conn =
         conn(:get, "/")
-        |> Vary.add_header(%Struct{private: %Struct.Private{headers_allowlist: ["one_header", "another_header"]}})
+        |> Vary.add_header(%Struct{
+          private: %Struct.Private{headers_allowlist: ["one_header", "another_header", "more_header"]}
+        })
 
-      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header,another_header"
+      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header,another_header,more_header"
     end
 
     test "does not vary on allowed headers, when cdn is true" do
@@ -73,7 +83,41 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       struct = @with_cdn |> Struct.add(:private, %{headers_allowlist: ["one_header", "another_header"]})
       output_conn = Vary.add_header(input_conn, struct)
 
-      refute List.first(get_resp_header(output_conn, "vary")) =~ ",another,one"
+      refute List.first(get_resp_header(output_conn, "vary")) =~ ",one_header,another_header"
+    end
+
+    test "never vary on cookie" do
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{
+          private: %Struct.Private{headers_allowlist: ["cookie"]}
+        })
+
+      refute List.first(get_resp_header(conn, "vary")) =~ ",cookie"
+    end
+
+    test "never vary on disallowed headers" do
+      disallow_headers = Vary.disallow_headers()
+
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{private: %Struct.Private{headers_allowlist: disallow_headers}})
+
+      refute List.first(get_resp_header(conn, "vary")) =~ ",#{disallow_headers |> Enum.join(",")}"
+    end
+
+    test "never vary on disallowed headers but allow other headers" do
+      disallow_headers = Vary.disallow_headers()
+
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{
+          private: %Struct.Private{
+            headers_allowlist: ["one_header"] ++ disallow_headers ++ ["another_header", "more_header"]
+          }
+        })
+
+      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header,another_header,more_header"
     end
   end
 end
