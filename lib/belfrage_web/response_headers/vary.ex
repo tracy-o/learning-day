@@ -3,6 +3,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
+  alias Belfrage.Struct.Private
 
   @behaviour ResponseHeaders
 
@@ -15,33 +16,31 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     )
   end
 
-  def vary_headers(request, private, false) do
+  def vary_headers(request, private, cdn?)
+
+  def vary_headers(request, %Private{headers_allowlist: []}, false) do
+    base_headers(request) |> Enum.join(",")
+  end
+
+  def vary_headers(request, %Private{headers_allowlist: allowlist}, false) do
+    (base_headers(request) ++ allowlist) |> Enum.join(",")
+  end
+
+  def vary_headers(_request, _private, true), do: "Accept-Encoding"
+
+  defp base_headers(request) do
     [
       "Accept-Encoding",
       "X-BBC-Edge-Cache",
       country(edge_cache: request.edge_cache?),
       is_uk(request.edge_cache?),
-      "X-BBC-Edge-Scheme",
-      additional_headers(private.headers_allowlist)
+      "X-BBC-Edge-Scheme"
     ]
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join(",")
   end
 
-  def vary_headers(_request, _private, true) do
-    "Accept-Encoding"
-  end
+  defp country(edge_cache: true), do: "X-BBC-Edge-Country"
+  defp country(edge_cache: false), do: "X-Country"
 
-  def country(edge_cache: true), do: "X-BBC-Edge-Country"
-  def country(edge_cache: false), do: "X-Country"
-
-  def is_uk(true), do: "X-BBC-Edge-IsUK"
-  def is_uk(false), do: "X-IP_Is_UK_Combined"
-
-  defp additional_headers(allowed_headers) when allowed_headers == [], do: nil
-
-  defp additional_headers(allowed_headers) do
-    allowed_headers
-    |> Enum.join(",")
-  end
+  defp is_uk(true), do: "X-BBC-Edge-IsUK"
+  defp is_uk(false), do: "X-IP_Is_UK_Combined"
 end
