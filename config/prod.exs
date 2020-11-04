@@ -10,7 +10,7 @@ config :belfrage,
 
 config :ex_metrics,
   send_metrics: true,
-  pool_size: 3
+  pool_size: 6
 
 config :logger,
   backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
