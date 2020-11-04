@@ -1,5 +1,6 @@
 defmodule Belfrage.Transformers.UserSessionTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
 
   alias Belfrage.Transformers.UserSession
   alias Belfrage.Struct
@@ -198,7 +199,10 @@ defmodule Belfrage.Transformers.UserSessionTest do
         invalid_payload_access_token: Fixtures.AuthToken.invalid_payload_access_token(),
         invalid_scope_access_token: Fixtures.AuthToken.invalid_scope_access_token(),
         malformed_access_token: Fixtures.AuthToken.malformed_access_token(),
-        invalid_access_token_header: Fixtures.AuthToken.invalid_access_token_header()
+        invalid_access_token_header: Fixtures.AuthToken.invalid_access_token_header(),
+        invalid_token_issuer: Fixtures.AuthToken.invalid_token_issuer(),
+        invalid_token_aud: Fixtures.AuthToken.invalid_token_aud(),
+        invalid_token_name: Fixtures.AuthToken.invalid_token_name()
       }
     end
 
@@ -291,6 +295,66 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  }
                }
              } = UserSession.call([], struct)
+    end
+
+    test "an invalid token issuer", %{invalid_token_issuer: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
+                 }
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s("claim":"iss")
+      assert capture_log(run_fn) =~ ~s(Claim validation failed)
+    end
+
+    test "invalid token aud", %{invalid_token_aud: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
+                 }
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s("claim":"aud")
+      assert capture_log(run_fn) =~ ~s(Claim validation failed)
+    end
+
+    test "invalid token tokenName claim", %{invalid_token_name: access_token} do
+      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
+                 }
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s("claim":"tokenName")
+      assert capture_log(run_fn) =~ ~s(Claim validation failed)
     end
   end
 
