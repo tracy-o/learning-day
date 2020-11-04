@@ -19,5 +19,4 @@ defmodule BelfrageWeb.ResponseHeaders.CacheStatus do
   def add_header(conn, _struct) do
     put_resp_header(conn, "belfrage-cache-status", "MISS")
   end
-
 end

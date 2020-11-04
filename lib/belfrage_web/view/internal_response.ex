@@ -16,15 +16,29 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response = %Response{http_status: 404}) do
-    Map.put(response, :cache_directive, %Belfrage.CacheControl{cacheability: "public", max_age: 30, stale_while_revalidate: 60, stale_if_error: 90})
+    Map.put(response, :cache_directive, %Belfrage.CacheControl{
+      cacheability: "public",
+      max_age: 30,
+      stale_while_revalidate: 60,
+      stale_if_error: 90
+    })
   end
 
   defp put_cache_directive(response = %Response{http_status: http_status}) when http_status in @redirect_http_status do
-    Map.put(response, :cache_directive, %Belfrage.CacheControl{cacheability: "public", max_age: 60, stale_while_revalidate: 60, stale_if_error: 90})
+    Map.put(response, :cache_directive, %Belfrage.CacheControl{
+      cacheability: "public",
+      max_age: 60,
+      stale_while_revalidate: 60,
+      stale_if_error: 90
+    })
   end
 
   defp put_cache_directive(response) do
-    Map.put(response, :cache_directive, %Belfrage.CacheControl{cacheability: "public", max_age: 5, stale_while_revalidate: 15})
+    Map.put(response, :cache_directive, %Belfrage.CacheControl{
+      cacheability: "public",
+      max_age: 5,
+      stale_while_revalidate: 15
+    })
   end
 
   defp put_internal_response_headers(response, conn) do
@@ -35,6 +49,7 @@ defmodule BelfrageWeb.View.InternalResponse do
 
   defp content_type(conn) do
     accept = accept_content_type(conn)
+
     cond do
       String.contains?(accept, "html") -> @html_content_type
       String.contains?(accept, "json") -> @json_content_type

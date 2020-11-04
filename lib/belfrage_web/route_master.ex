@@ -55,8 +55,8 @@ defmodule BelfrageWeb.RouteMaster do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
       get unquote(matcher) do
         matched_env = var!(conn).private[:production_environment] == unquote(env)
-        origin_simulator = (var!(conn).private.bbc_headers.origin_simulator)
-        replayed_traffic = (var!(conn).private.bbc_headers.replayed_traffic)
+        origin_simulator = var!(conn).private.bbc_headers.origin_simulator
+        replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
 
         cond do
           matched_env and origin_simulator -> yield(unquote(id), var!(conn))
@@ -137,14 +137,16 @@ defmodule BelfrageWeb.RouteMaster do
         |> Enum.flat_map(fn
           {matcher, args = %{using: using}} when is_list(using) ->
             Enum.map(using, fn loop_id ->
-              args = args
+              args =
+                args
                 |> Map.put_new(:only_on, nil)
                 |> Map.put(:using, loop_id)
 
               {matcher, args}
             end)
 
-          {route, args} -> [{route, Map.put_new(args, :only_on, nil)}]
+          {route, args} ->
+            [{route, Map.put_new(args, :only_on, nil)}]
         end)
       end
     end
