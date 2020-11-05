@@ -46,6 +46,10 @@ defmodule Belfrage.Transformers.UserSession do
 
       {:error, :signature_error} ->
         %{private_struct | valid_session: false}
+
+      {:error, _} ->
+        Belfrage.Event.record(:log, :error, "Unexpected token error.")
+        %{private_struct | valid_session: false}
     end
   end
 
