@@ -22,21 +22,13 @@ defmodule Belfrage.Authentication.VerifyHookTest do
     test "malformed token", %{malformed_access_token: jwt} do
       opts = []
 
-      run_fn = fn ->
-        assert {:halt, {:error, :token_malformed}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
-      end
-
-      assert capture_log(run_fn) =~ ~s(Malformed JWT)
+      assert {:halt, {:error, :token_malformed}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
 
-    test "an unexpected header", %{invalid_access_token_header: jwt} do
+    test "an invalid token header", %{invalid_access_token_header: jwt} do
       opts = []
 
-      run_fn = fn ->
-        assert {:halt, {:error, :invalid_token_header}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
-      end
-
-      assert capture_log(run_fn) =~ ~s(Invalid token header)
+      assert {:halt, {:error, :invalid_token_header}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
   end
 
@@ -52,11 +44,7 @@ defmodule Belfrage.Authentication.VerifyHookTest do
     test "when public key not found", %{valid_access_token: jwt} do
       opts = []
 
-      run_fn = fn ->
-        assert {:halt, {:error, :public_key_not_found}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
-      end
-
-      assert capture_log(run_fn) =~ ~s(Public key not found.)
+      assert {:halt, {:error, :public_key_not_found}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
   end
 end

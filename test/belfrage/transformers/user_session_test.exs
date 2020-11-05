@@ -270,31 +270,39 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "a malformed access token", %{malformed_access_token: access_token} do
       struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :ok,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
                  }
-               }
-             } = UserSession.call([], struct)
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s(Malformed JWT)
     end
 
     test "an invalid token header", %{invalid_access_token_header: access_token} do
       struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :ok,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
                  }
-               }
-             } = UserSession.call([], struct)
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s(Invalid token header)
     end
 
     test "an invalid token issuer", %{invalid_token_issuer: access_token} do
@@ -372,16 +380,20 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
       struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :ok,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
+      run_fn = fn ->
+        assert {
+                 :ok,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
                  }
-               }
-             } = UserSession.call([], struct)
+               } = UserSession.call([], struct)
+      end
+
+      assert capture_log(run_fn) =~ ~s(Public key not found)
     end
   end
 end

@@ -33,12 +33,15 @@ defmodule Belfrage.Transformers.UserSession do
         %{private_struct | valid_session: false}
 
       {:error, :token_malformed} ->
+        Belfrage.Event.record(:log, :error, "Malformed JWT")
         %{private_struct | valid_session: false}
 
       {:error, :public_key_not_found} ->
+        Belfrage.Event.record(:log, :error, "Public key not found")
         %{private_struct | valid_session: false}
 
       {:error, :invalid_token_header} ->
+        Belfrage.Event.record(:log, :error, "Invalid token header")
         %{private_struct | valid_session: false}
 
       {:error, :signature_error} ->

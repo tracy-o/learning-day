@@ -8,15 +8,12 @@ defmodule Belfrage.Authentication.VerifyHook do
       {:cont, {jwt, Joken.Signer.create(algorithm, key)}}
     else
       {:error, :token_malformed} ->
-        Belfrage.Event.record(:log, :error, "Malformed JWT")
         {:halt, {:error, :token_malformed}}
 
       {:error, :public_key_not_found} ->
-        Belfrage.Event.record(:log, :error, "Public key not found.")
         {:halt, {:error, :public_key_not_found}}
 
       {:error, :invalid_token_header} ->
-        Belfrage.Event.record(:log, :error, "Invalid token header.")
         {:halt, {:error, :invalid_token_header}}
     end
   end
