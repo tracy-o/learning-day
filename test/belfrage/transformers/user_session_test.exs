@@ -394,6 +394,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       end
 
       assert capture_log(run_fn) =~ ~s(Public key not found)
+      assert capture_log(run_fn) =~ ~s("key_id":"SOME_EC_KEY_ID")
     end
   end
 end

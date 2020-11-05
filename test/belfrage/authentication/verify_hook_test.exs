@@ -44,7 +44,8 @@ defmodule Belfrage.Authentication.VerifyHookTest do
     test "when public key not found", %{valid_access_token: jwt} do
       opts = []
 
-      assert {:halt, {:error, :public_key_not_found}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
+      assert {:halt, {:error, {:public_key_not_found, "SOME_EC_KEY_ID"}}} ==
+               VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
   end
 end
