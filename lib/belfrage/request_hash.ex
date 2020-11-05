@@ -1,5 +1,6 @@
 defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
+  alias BelfrageWeb.ResponseHeaders.Vary
 
   @default_signature_keys [
     :raw_headers,
@@ -22,9 +23,17 @@ defmodule Belfrage.RequestHash do
 
       false ->
         extract_keys(struct)
+        |> remove_disallow_vary_headers()
         |> Crimpex.signature()
     end
     |> update_struct(struct)
+  end
+
+  defp remove_disallow_vary_headers(keys)
+  defp remove_disallow_vary_headers(keys = %{raw_headers: headers}) when headers == %{}, do: keys
+
+  defp remove_disallow_vary_headers(keys = %{raw_headers: headers}) do
+    %{keys | raw_headers: Map.split(headers, Vary.disallow_headers()) |> elem(1)}
   end
 
   defp extract_keys(struct) do
