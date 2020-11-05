@@ -33,9 +33,7 @@ The following diagram shows the flow in Belfrage when requesting fresh cache con
 
 ### Caching in depth
 
-*WIP*
-
-The following diagram shows both the detailed flow of cache content.
+The following diagram shows the detailed flow of cache content for fresh and stale content.
 
 1. Check for "fresh" content in the local cache.
 2. Check for "fresh" or "stale" content in the local or distributed cache (applicable when an origin has returned a 500 response).
