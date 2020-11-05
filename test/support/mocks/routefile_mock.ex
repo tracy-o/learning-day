@@ -35,6 +35,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/my/session", using: "MySession", examples: [])
 
+  handle("/route-allow-headers", using: "SomeLoopAllowHeaders", examples: [])
+
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
