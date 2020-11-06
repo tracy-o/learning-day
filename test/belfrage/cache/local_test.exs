@@ -1,8 +1,12 @@
 defmodule Belfrage.Cache.LocalTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+
+  import Cachex.Spec, only: [{:limit, 1}]
+
   alias Belfrage.Cache
   alias Belfrage.Struct
 
+  @cache :cache_local_test
   @response %Belfrage.Struct.Response{
     body: "hello!",
     headers: %{"content-type" => "application/json"},
@@ -11,9 +15,11 @@ defmodule Belfrage.Cache.LocalTest do
   }
 
   setup do
-    :ets.delete_all_objects(:cache)
+    limit = limit(size: 10, policy: Cachex.Policy.LRW, reclaim: 0.3, options: [])
+    {:ok, _pid} = start_supervised(%{id: @cache, start: {Cachex, :start_link, [@cache, [limit: limit]]}})
 
     Test.Support.Helper.insert_cache_seed(
+      @cache,
       id: "cache_fresh",
       response: @response,
       expires_in: :timer.hours(6),
@@ -21,6 +27,7 @@ defmodule Belfrage.Cache.LocalTest do
     )
 
     Test.Support.Helper.insert_cache_seed(
+      @cache,
       id: "stale_cache",
       response: @response,
       expires_in: :timer.hours(6),
@@ -28,6 +35,7 @@ defmodule Belfrage.Cache.LocalTest do
     )
 
     Test.Support.Helper.insert_cache_seed(
+      @cache,
       id: "expired",
       response: @response,
       expires_in: :timer.hours(6),
@@ -49,7 +57,7 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct)
+      assert {:ok, true} == Cache.Local.store(struct, @cache)
 
       assert [
                {:entry, "abc123", _cachex_determined_last_update, _cachex_expires_in,
@@ -59,7 +67,7 @@ defmodule Belfrage.Cache.LocalTest do
                    http_status: 200,
                    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
                  }, _belfrage_determined_last_updated}}
-             ] = :ets.lookup(:cache, "abc123")
+             ] = :ets.lookup(@cache, "abc123")
     end
 
     test "does not overwrite an existing fresh cache version" do
@@ -72,7 +80,7 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, false} == Cache.Local.store(struct)
+      assert {:ok, false} == Cache.Local.store(struct, @cache)
     end
 
     test "updates an expired cached response" do
@@ -85,7 +93,7 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct)
+      assert {:ok, true} == Cache.Local.store(struct, @cache)
     end
 
     test "updates a stale cached response" do
@@ -98,7 +106,7 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct)
+      assert {:ok, true} == Cache.Local.store(struct, @cache)
     end
   end
 
@@ -111,7 +119,7 @@ defmodule Belfrage.Cache.LocalTest do
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct)
+              }} = Cache.Local.fetch(struct, @cache)
     end
 
     test "fetches a stale cache" do
@@ -122,13 +130,13 @@ defmodule Belfrage.Cache.LocalTest do
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct)
+              }} = Cache.Local.fetch(struct, @cache)
     end
 
     test "does not fetch an expired cache" do
       struct = %Struct{request: %Struct.Request{request_hash: "expired"}}
 
-      assert {:ok, :content_not_found} = Cache.Local.fetch(struct)
+      assert {:ok, :content_not_found} = Cache.Local.fetch(struct, @cache)
     end
   end
 
@@ -146,14 +154,14 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct_with_response)
+      assert {:ok, true} == Cache.Local.store(struct_with_response, @cache)
 
       assert {:ok, :fresh,
               %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct_without_response)
+              }} = Cache.Local.fetch(struct_without_response, @cache)
     end
   end
 end
