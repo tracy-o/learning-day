@@ -1,5 +1,5 @@
 defmodule Belfrage.Allowlist.QueryParamsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.Struct
   alias Belfrage.Allowlist.QueryParams
 

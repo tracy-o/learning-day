@@ -1,5 +1,5 @@
 defmodule Belfrage.Allowlist.HeadersTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.Struct
   alias Belfrage.Allowlist.Headers
 
