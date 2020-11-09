@@ -67,7 +67,8 @@ config :belfrage,
     "iss" => "https://access.int.api.bbc.com/bbcidv5/oauth2",
     "aud" => "Account",
     "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"
-  }
+  },
+  account_url: "https://session.bbc.co.uk"
 
 config :ex_aws,
   region: "eu-west-1",

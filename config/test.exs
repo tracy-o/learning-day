@@ -25,7 +25,8 @@ config :belfrage,
   account_client: Belfrage.Clients.AccountMock,
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
-  internal_error_page: "test/support/resources/internal-error.html"
+  internal_error_page: "test/support/resources/internal-error.html",
+  account_url: "https://session.test.bbc.co.uk"
 
 config :cachex, :limit,
   size: 6,

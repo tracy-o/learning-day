@@ -11,6 +11,7 @@ use Mix.Config
   {"STACK_NAME", :required},
   {"STACK_ID", :required},
   {"CCP_S3_BUCKET", :required},
+  {"ACCOUNT_URL", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do

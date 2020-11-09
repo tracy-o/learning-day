@@ -4,12 +4,33 @@ defmodule Belfrage.Transformers.UserSession do
   # note: `Plug.Conn.Cookies.decode` benchmark
   # https://github.com/bbc/belfrage/pull/574#issuecomment-715417312
   import Plug.Conn.Cookies, only: [decode: 1]
+  @encoded_questionmark "%3F"
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
     struct = %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
-    then(rest, struct)
+
+    case struct do
+      %Struct{private: %Struct.Private{valid_session: true}} ->
+        then(rest, struct)
+
+      %Struct{private: %Struct.Private{valid_session: false}} ->
+        {
+          :redirect,
+          Struct.add(struct, :response, %{
+            http_status: 302,
+            headers: %{
+              "location" => redirect_url(struct.request),
+              "x-bbc-no-scheme-rewrite" => "1",
+              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+            },
+            body: "Redirecting"
+          })
+        }
+    end
   end
+
+  defp account_url, do: Application.get_env(:belfrage, :account_url)
 
   def call(rest, struct), do: then(rest, struct)
 
@@ -56,6 +77,21 @@ defmodule Belfrage.Transformers.UserSession do
         Belfrage.Event.record(:log, :error, "Unexpected token error.")
         %{private_struct | valid_session: false}
     end
+  end
+
+  defp redirect_url(request) do
+    "#{account_url}/account?ptrt=#{ptrt(request)}"
+  end
+
+  defp ptrt(request) do
+    IO.iodata_to_binary([
+      to_string(request.scheme),
+      "://",
+      request.host,
+      request.path
+    ])
+    |> URI.encode_www_form()
+    |> Kernel.<>(Belfrage.Helpers.QueryParams.encode(request.query_params, @encoded_questionmark))
   end
 
   defp valid?(private_struct), do: private_struct
