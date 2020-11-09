@@ -22,7 +22,7 @@ use Mix.Config
 end)
 
 config :belfrage, authentication: %{
-  "iss" => System.get_env!("ACCOUNT_ISS"),
+  "iss" => System.get_env("ACCOUNT_ISS"),
   "aud" => "Account",
-  "account_jwk_uri" => System.get_env!("ACCOUNT_JWK_URI")
+  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI")
 }
