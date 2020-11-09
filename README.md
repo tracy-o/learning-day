@@ -36,6 +36,8 @@ It's the responsibility of the web interface to transform the struct into the fi
 ### Caching
 Belfrage currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
 
+[More details on caching](./docs/caching.md)
+
 ### Resiliency
 
 #### Fallback
