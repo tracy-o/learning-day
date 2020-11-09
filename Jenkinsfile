@@ -11,12 +11,12 @@ String buildVariables() {
   envVars
 }
 
-def buildStack(branch, stack_name, force_release) {
+def buildStack(branch, stack_name) {
   build(
     job: "belfrage-multi-stack/$branch",
     parameters: [
       [$class: 'StringParameterValue', name: 'SERVICE', value: stack_name],
-      [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: force_release]
+      [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: false]
     ],
     propagate: false,
     wait: false
@@ -29,10 +29,7 @@ node {
 
   properties([
     buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
-    disableConcurrentBuilds(),
-    parameters([
-        booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
-    ])
+    disableConcurrentBuilds()
   ])
 
   stage('Run tests') {
@@ -51,10 +48,10 @@ node {
     def branchName = jobNameList[2];
 
     node {
-      buildStack(branchName, "belfrage", params.FORCE_RELEASE)
-      buildStack(branchName, "belfrage-preview", params.FORCE_RELEASE)
-      buildStack(branchName, "bruce-belfrage", params.FORCE_RELEASE)
-      buildStack(branchName, "cedric-belfrage", params.FORCE_RELEASE)
+      buildStack(branchName, "belfrage")
+      buildStack(branchName, "belfrage-preview")
+      buildStack(branchName, "bruce-belfrage")
+      buildStack(branchName, "cedric-belfrage")
     }
   }
 
