@@ -36,13 +36,7 @@ defmodule Belfrage.Transformers.UserSession do
         Belfrage.Event.record(:log, :error, "Malformed JWT")
         %{private_struct | valid_session: false}
 
-      {:error, {:public_key_not_found, key_id, alg}} ->
-        Belfrage.Event.record(:log, :error, %{
-          msg: "Public key not found",
-          key_id: key_id,
-          alg: alg
-        })
-
+      {:error, :public_key_not_found} ->
         %{private_struct | valid_session: false}
 
       {:error, :invalid_token_header} ->

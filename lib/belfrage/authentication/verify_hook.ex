@@ -10,23 +10,17 @@ defmodule Belfrage.Authentication.VerifyHook do
       {:error, :token_malformed} ->
         {:halt, {:error, :token_malformed}}
 
-      {:error, {:public_key_not_found, key_id, alg}} ->
-        {:halt, {:error, {:public_key_not_found, key_id, alg}}}
-
       {:error, :invalid_token_header} ->
         {:halt, {:error, :invalid_token_header}}
+
+      {:error, :public_key_not_found} ->
+        {:halt, {:error, :public_key_not_found}}
     end
   end
 
   defp public_key(%{"kid" => kid, "alg" => alg, "typ" => "JWT"}) do
-    Belfrage.Authentication.Jwk.get_keys() |> key(kid, alg)
+    Belfrage.Authentication.Jwk.get_key(alg, kid)
   end
 
   defp public_key(_header), do: {:error, :invalid_token_header}
-
-  defp key(%{"keys" => keys}, kid, alg) do
-    Enum.find_value(keys, {:error, {:public_key_not_found, kid, alg}}, fn key ->
-      key["kid"] == kid && key["alg"] == alg && {:ok, alg, key}
-    end)
-  end
 end
