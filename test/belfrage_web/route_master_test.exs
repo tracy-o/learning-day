@@ -195,6 +195,38 @@ defmodule BelfrageWeb.RouteMasterTest do
                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
              ]
     end
+
+    test "with a simple path rewrite" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/rewrite-redirect/resource-id-123345/media")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location/resource-id-123345/video"]
+    end
+
+    test "with a complex path rewrite" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/rewrite-redirect/12345/section")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location/section-12345/video"]
+    end
   end
 
   describe "calling redirect with host" do

@@ -105,6 +105,8 @@ defmodule BelfrageWeb.RouteMaster do
   # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)
   # plus the port etc.
   defmacro redirect(from, to: location, status: status) do
+    matcher = BelfrageWeb.ReWrite.prepare(location) |> Macro.escape()
+
     quote do
       redirect_statuses = Application.get_env(:belfrage, :redirect_statuses)
 
@@ -119,10 +121,7 @@ defmodule BelfrageWeb.RouteMaster do
       get(to_string(uri_from.path), host: uri_from.host) do
         request_path = join_path_params(Map.get(var!(conn).path_params, "any"))
 
-        new_location =
-          unquote(location)
-          |> String.replace("/*", request_path)
-          |> String.trim_trailing("/")
+        new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
 
         StructAdapter.adapt(var!(conn), "redirect")
         |> View.redirect(var!(conn), unquote(status), new_location)

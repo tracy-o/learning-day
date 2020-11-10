@@ -1,13 +1,16 @@
 defmodule Routes.RoutefileMock do
   use BelfrageWeb.RouteMaster
 
-  redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*", status: 302)
-  redirect("https://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*", status: 302)
+  redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
+  redirect("https://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
 
   redirect("/permanent-redirect", to: "/new-location", status: 301)
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
-  redirect("/redirect-with-path/*any", to: "/new-location-with-path/*", status: 302)
+  redirect("/rewrite-redirect/:id/media", to: "/new-location/:id/video", status: 302)
+  redirect("/rewrite-redirect/:id/section", to: ["/new-location/section-", ":id", "/video"], status: 302)
+
+  redirect("/redirect-with-path/*any", to: "/new-location-with-path/*any", status: 302)
 
   handle("/", using: "SomeLoop", examples: ["/"])
 
