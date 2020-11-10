@@ -1,26 +1,15 @@
 defmodule Belfrage.Authentication.Jwk do
   use GenServer
 
+  @account_client Application.get_env(:belfrage, :account_client)
+
   @refresh_rate 3_600_000
-  @jwk_keys %{
-    "keys" => [
-      %{
-        "alg" => "RS384",
-        "e" => "AQAB",
-        "kid" => "kid",
-        "kty" => "RSA",
-        "n" => "lkjljxbcLSJHSL",
-        "use" => "enc",
-        "x5c" => ["AAA"],
-        "x5t" => "dskjhfkjh"
-      }
-    ]
-  }
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
+  @spec get_keys :: any
   def get_keys() do
     GenServer.call(__MODULE__, :state)
   end
@@ -30,34 +19,27 @@ defmodule Belfrage.Authentication.Jwk do
   end
 
   @impl GenServer
-  def init(initial_state) do
+  def init(_opts) do
     send(self(), :refresh)
-    {:ok, initial_state}
+    {:ok, %{}}
   end
 
   @impl GenServer
-  def handle_info(:refresh, _existing_state) do
+  def handle_info(:refresh, existing_state) do
     schedule_work()
 
-    {:ok, jwk_keys} = fetch_jwk_keys()
-    {:noreply, jwk_keys}
+    case @account_client.get_jwk_keys() do
+      {:ok, jwk_keys} -> {:noreply, jwk_keys}
+      {:error, _reason} -> {:noreply, existing_state}
+    end
   end
 
   @impl GenServer
-  def handle_call(:state, _from, jwk_keys) when is_map(jwk_keys) do
+  def handle_call(:state, _from, jwk_keys) do
     {:reply, jwk_keys, jwk_keys}
-  end
-
-  @impl GenServer
-  def handle_call(:state, _from, _state) do
-    {:reply, %{}, %{}}
   end
 
   defp schedule_work do
     Process.send_after(__MODULE__, :refresh, @refresh_rate)
-  end
-
-  defp fetch_jwk_keys do
-    {:ok, @jwk_keys}
   end
 end

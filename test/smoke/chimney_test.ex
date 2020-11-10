@@ -14,6 +14,7 @@ defmodule BelfrageChimneySmokeTest do
 
   @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
   @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric-belfrage"]
+  @bruce_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["bruce-belfrage"]
 
   setup do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
@@ -27,7 +28,7 @@ defmodule BelfrageChimneySmokeTest do
       resp = Helper.get_route(endpoint, "/sport/videos/48521428")
 
       assert resp.status_code == 200
-      assert Helper.header_item_exists(resp.headers, @belfrage_header)
+      assert Helper.header_item_exists(resp.headers, @bruce_header)
       assert resp.body =~ "Bowlers star as Sri Lanka edge Afghanistan"
     end
 

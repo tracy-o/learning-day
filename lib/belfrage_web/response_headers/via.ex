@@ -23,6 +23,7 @@ defmodule BelfrageWeb.ResponseHeaders.Via do
   defp protocol_version(:"HTTP/1"), do: "1"
   defp protocol_version(:"HTTP/1.1"), do: "1.1"
   defp protocol_version(:"HTTP/2"), do: "2"
+
   defp protocol_version(protocol) do
     Belfrage.Event.record(:log, :info, "No match for #{protocol} protocol. Match to increase performance.")
 

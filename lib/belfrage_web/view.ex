@@ -18,7 +18,8 @@ defmodule BelfrageWeb.View do
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  def render(%Struct{response: %Struct.Response{http_status: status, headers: %{"content-length" => "0"}}}, conn) when status > 399 do
+  def render(%Struct{response: %Struct.Response{http_status: status, headers: %{"content-length" => "0"}}}, conn)
+      when status > 399 do
     internal_response(conn, status)
   end
 
