@@ -315,28 +315,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
     test "invalid payload access token", %{struct: struct, invalid_payload_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
-=======
->>>>>>> aeef47e2... formatting
-  test "invalid access token", %{struct: struct, invalid_access_token: access_token} do
-    struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-=======
-    test "invalid payload access token", %{struct: struct, invalid_payload_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
->>>>>>> 9953de70... formatting
 
       assert {
                :redirect,
@@ -350,47 +330,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "invalid payload access token will be redirected", %{
-      struct: struct,
-      invalid_payload_access_token: access_token
-    } do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
-    assert {
-             :redirect,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 headers: %{
-                   "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                   "x-bbc-no-scheme-rewrite" => "1",
-                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-<<<<<<< HEAD
-=======
->>>>>>> c0fa8764... Added redirect for invalid or expired token
-=======
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
->>>>>>> 9953de70... formatting
->>>>>>> aeef47e2... formatting
-                 }
-               }
-             } = UserSession.call([], struct)
-    end
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
     test "invalid payload access token will be redirected", %{
       struct: struct,
       invalid_payload_access_token: access_token
@@ -422,65 +361,11 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    authenticated: true,
                    session_token: ^access_token,
                    valid_session: false
-=======
->>>>>>> aeef47e2... formatting
-  test "expired access token", %{struct: struct, expired_access_token: access_token} do
-    struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-=======
-    test "invalid access token", %{struct: struct, invalid_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
->>>>>>> 9953de70... formatting
-
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
                  }
                }
              } = UserSession.call([], struct)
     end
 
-    test "invalid access token will be redirected", %{struct: struct, invalid_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
-    assert {
-             :redirect,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 headers: %{
-                   "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                   "x-bbc-no-scheme-rewrite" => "1",
-                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-<<<<<<< HEAD
-=======
->>>>>>> c0fa8764... Added redirect for invalid or expired token
-=======
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
->>>>>>> 9953de70... formatting
->>>>>>> aeef47e2... formatting
-                 }
-               }
-             } = UserSession.call([], struct)
-    end
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
     test "invalid access token will be redirected", %{struct: struct, invalid_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
@@ -509,22 +394,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    authenticated: true,
                    session_token: ^access_token,
                    valid_session: false
-=======
->>>>>>> aeef47e2... formatting
-  test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
-    struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-=======
-    test "expired access token", %{struct: struct, expired_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
->>>>>>> 9953de70... formatting
-
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
                  }
                }
              } = UserSession.call([], struct)
@@ -533,48 +402,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "expired access token will be redirected", %{struct: struct, expired_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-<<<<<<< HEAD
-    assert {
-             :redirect,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 headers: %{
-                   "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                   "x-bbc-no-scheme-rewrite" => "1",
-                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-<<<<<<< HEAD
-=======
->>>>>>> c0fa8764... Added redirect for invalid or expired token
-=======
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
->>>>>>> 9953de70... formatting
->>>>>>> aeef47e2... formatting
-                 }
-               }
-             } = UserSession.call([], struct)
-    end
-
-<<<<<<< HEAD
-  test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
-    struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-    test "expired access token will be redirected", %{struct: struct, expired_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -593,79 +420,23 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
-=======
-=======
-  test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
-    struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
->>>>>>> c0fa8764... Added redirect for invalid or expired token
-=======
-    test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9953de70... formatting
       run_fn = fn ->
         assert {
-                 :ok,
+                 :redirect,
                  %Belfrage.Struct{
                    private: %Belfrage.Struct.Private{
                      authenticated: true,
                      session_token: ^access_token,
                      valid_session: false
                    }
->>>>>>> b69423d0... move token error logging to user_session transformer
                  }
                } = UserSession.call([], struct)
       end
-
-      assert capture_log(run_fn) =~ ~s(Malformed JWT)
-    end
-=======
->>>>>>> aeef47e2... formatting
-    assert {
-             :redirect,
-             %Belfrage.Struct{
-               private: %Belfrage.Struct.Private{
-                 authenticated: true,
-                 session_token: ^access_token,
-                 valid_session: false
-=======
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
-                 }
->>>>>>> a0f1428f... formatting
-               }
-             } = UserSession.call([], struct)
     end
 
     test "a malformed access token will be redirected", %{struct: struct, malformed_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-    test "a malformed access token will be redirected", %{struct: struct, malformed_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
-=======
->>>>>>> 9953de70... formatting
       assert {
                :redirect,
                %Belfrage.Struct{
@@ -676,7 +447,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
-<<<<<<< HEAD
                  }
                }
              } = UserSession.call([], struct)
@@ -685,77 +455,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
-=======
-=======
->>>>>>> aeef47e2... formatting
-    assert {
-             :redirect,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 headers: %{
-                   "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                   "x-bbc-no-scheme-rewrite" => "1",
-                   "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-=======
->>>>>>> 9953de70... formatting
-                 }
-               }
-<<<<<<< HEAD
-             }
-           } = UserSession.call([], struct)
-  end
-<<<<<<< HEAD
-=======
->>>>>>> 250b0a2b... Added redirect for invalid or expired token
-=======
-             } = UserSession.call([], struct)
-    end
->>>>>>> a0f1428f... formatting
->>>>>>> aeef47e2... formatting
-
-    test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
-
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> c0fa8764... Added redirect for invalid or expired token
-=======
-<<<<<<< HEAD
->>>>>>> 9953de70... formatting
       run_fn = fn ->
         assert {
-                 :ok,
+                 :redirect,
                  %Belfrage.Struct{
                    private: %Belfrage.Struct.Private{
                      authenticated: true,
                      session_token: ^access_token,
                      valid_session: false
                    }
-<<<<<<< HEAD
->>>>>>> b69423d0... move token error logging to user_session transformer
-=======
-=======
->>>>>>> aeef47e2... formatting
-    run_fn = fn ->
-=======
->>>>>>> a0f1428f... formatting
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
                  }
                } = UserSession.call([], struct)
       end
@@ -763,12 +471,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert capture_log(run_fn) =~ ~s(Invalid token header)
     end
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9953de70... formatting
     test "an invalid token header will be redirected", %{struct: struct, invalid_access_token_header: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
@@ -788,9 +490,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "an invalid token issuer", %{struct: struct, invalid_token_issuer: access_token} do
-<<<<<<< HEAD
-=======
-=======
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
       run_fn = fn ->
@@ -810,8 +509,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert capture_log(run_fn) =~ ~s(Claim validation failed)
     end
 
->>>>>>> 9953de70... formatting
->>>>>>> aeef47e2... formatting
     test "an invalid token issuer will be redirected", %{struct: struct, invalid_token_issuer: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
@@ -927,7 +624,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
       :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => []} end)
 
       on_exit(fn ->
-        :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => Fixtures.AuthToken.keys()} end)
+        :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state ->
+          %{"keys" => Fixtures.AuthToken.keys()}
+        end)
       end)
     end
 
@@ -936,13 +635,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      assert {
-               :redirect,
-               %Belfrage.Struct{
-                 private: %Belfrage.Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
+      run_fn = fn ->
+        assert {
+                 :redirect,
+                 %Belfrage.Struct{
+                   private: %Belfrage.Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
                  }
                } = UserSession.call([], struct)
       end
