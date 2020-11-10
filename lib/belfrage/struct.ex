@@ -46,7 +46,7 @@ defmodule Belfrage.Struct.Response do
 end
 
 defmodule Belfrage.Struct.Private do
-  @derive {Inspect, except: [:signature_keys, :authenticated, :session_token]}
+  @derive {Inspect, except: [:session_token]}
   defstruct fallback_ttl: :timer.hours(6),
             loop_id: nil,
             candidate_loop_ids: [],
