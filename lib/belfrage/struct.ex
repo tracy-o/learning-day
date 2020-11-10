@@ -3,6 +3,7 @@ defmodule Belfrage.Struct.Debug do
 end
 
 defmodule Belfrage.Struct.Request do
+  @derive {Inspect, except: [:raw_headers]}
   defstruct [
     :path,
     :payload,
@@ -45,6 +46,7 @@ defmodule Belfrage.Struct.Response do
 end
 
 defmodule Belfrage.Struct.Private do
+  @derive {Inspect, except: [:session_token]}
   defstruct fallback_ttl: :timer.hours(6),
             loop_id: nil,
             candidate_loop_ids: [],
