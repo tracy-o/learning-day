@@ -3,7 +3,7 @@ defmodule Belfrage.Struct.Debug do
 end
 
 defmodule Belfrage.Struct.Request do
-  @derive {Inspect, except: [:xray_trace_id, :raw_headers]}
+  @derive {Inspect, except: [:raw_headers]}
   defstruct [
     :path,
     :payload,
