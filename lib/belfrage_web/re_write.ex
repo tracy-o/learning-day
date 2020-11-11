@@ -1,49 +1,49 @@
 defmodule BelfrageWeb.ReWrite do
   alias BelfrageWeb.ReWrite
 
-  def prepare(matcher) when is_list(matcher), do: {matcher, %URI{}, ""}
-  def prepare(matcher) when is_binary(matcher) do
-    uri = URI.parse(matcher)
-
-    {String.split(String.replace_prefix(uri.path, "/", ""), "/"), uri, "/"}
-  end
-
   @doc ~S"""
-  Interpolates path parameters into a string.
+  Prepares a matcher for use with the interpolate/2 function.
 
-      iex> interpolate(prepare("/another-page/:id/a-different-slug"), %{"id" => "12345"})
-      "/another-page/12345/a-different-slug"
+      iex> prepare("/foo/bar-:id/page/:type/*any")
+      ["/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
 
-      iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "separated"]})
-      "/another-page/forward/slash/separated"
-
-      iex> interpolate(prepare(["/another-page/something-", ":id"]), %{"id" => "54321", "any" => ["slash", "separated"]})
-      "/another-page/something-54321"
-
-      iex> interpolate(prepare(["/another-page/"]), %{})
-      "/another-page"
+      # iex> prepare("https://bbc.co.uk/foo/bar-:id/page/:type/*any")
+      # ["https://bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, ":type"}, {:var, "any"}]
   """
 
-  def interpolate({to, uri, joiner}, params) do
-    do_interpolation(to, params, "", joiner)
-    |> finalise(uri)
+  @var_signs [":", "*"]
+  @end_of_var_signs ["/", "-"]
+
+  def prepare(matcher) do
+    chunk(matcher)
+    |> Enum.map(fn
+      [char | rest] when char in @var_signs -> {:var, Enum.join(rest)}
+      chars -> Enum.join(chars, "")
+    end)
+    |> Enum.chunk_by(&is_binary/1)
+    |> Enum.map(fn chunk ->
+      case Enum.all?(chunk, &is_binary/1) do
+        true -> Enum.join(chunk, "")
+        false -> Enum.at(chunk, 0)
+      end
+    end)
   end
 
-  defp do_interpolation([], _params, return, _joiner), do: return
 
-  defp do_interpolation([":" <> key | rest], params, return, joiner) do
-    do_interpolation(rest, params, return <> "#{joiner}#{Map.fetch!(params, key)}", joiner)
-  end
+  defp chunk(matcher) do
+    chunk_fun = fn element, acc ->
+      if element in @var_signs ++ @end_of_var_signs do
+        {:cont, acc, [element]}
+      else
+        {:cont, acc ++ [element]}
+      end
+    end
 
-  defp do_interpolation(["*" <> key | rest], params, return, joiner) do
-    do_interpolation(rest, params, return <> "#{joiner}#{Enum.join(Map.fetch!(params, key), "/")}", joiner)
-  end
+    after_fun = fn
+      # [] -> {:cont, []}
+      acc -> {:cont, acc, []}
+    end
 
-  defp do_interpolation([value | rest], params, return, joiner) do
-    do_interpolation(rest, params, return <> "#{joiner}#{value}", joiner)
-  end
-
-  defp finalise(result, uri) do
-    %URI{uri | path: result} |> URI.to_string() |> String.trim_trailing("/")
+      Enum.chunk_while(String.graphemes(matcher), [], chunk_fun, after_fun)
   end
 end
