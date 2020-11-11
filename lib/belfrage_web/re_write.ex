@@ -1,6 +1,9 @@
 defmodule BelfrageWeb.ReWrite do
   alias BelfrageWeb.ReWrite
 
+  @var_signs [":", "*"]
+  @end_of_var_signs ["/", "-"]
+
   @doc ~S"""
   Prepares a matcher for use with the interpolate/2 function.
 
@@ -19,10 +22,6 @@ defmodule BelfrageWeb.ReWrite do
       iex> prepare("/:one:two:three")
       ["/", {:var, "one"}, {:var, "two"}, {:var, "three"}]
   """
-
-  @var_signs [":", "*"]
-  @end_of_var_signs ["/", "-"]
-
   def prepare(matcher) do
     chunk(matcher)
     |> Enum.map(fn
@@ -47,12 +46,9 @@ defmodule BelfrageWeb.ReWrite do
       end
     end
 
-    after_fun = fn
-      # [] -> {:cont, []}
-      acc -> {:cont, acc, []}
-    end
+    after_fun = fn acc -> {:cont, acc, []} end
 
-      Enum.chunk_while(String.graphemes(matcher), [], chunk_fun, after_fun)
+    Enum.chunk_while(String.graphemes(matcher), [], chunk_fun, after_fun)
   end
 
   @doc ~S"""
