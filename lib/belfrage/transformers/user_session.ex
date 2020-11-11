@@ -30,7 +30,7 @@ defmodule Belfrage.Transformers.UserSession do
     end
   end
 
-  defp account_url, do: Application.get_env(:belfrage, :account_url)
+  defp account_url, do: Application.get_env(:belfrage, :authentication)["account_url"]
 
   def call(rest, struct), do: then(rest, struct)
 
