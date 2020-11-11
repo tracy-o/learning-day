@@ -9,6 +9,9 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> prepare("https://bbc.co.uk/foo/bar-:id/page/:type/*any")
       ["https://bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
+
+      iex> prepare("bbc.co.uk/foo/bar-:id/page/:type/*any")
+      ["bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
   """
 
   @var_signs [":", "*"]
@@ -21,14 +24,11 @@ defmodule BelfrageWeb.ReWrite do
       chars -> Enum.join(chars, "")
     end)
     |> Enum.chunk_by(&is_binary/1)
-    |> Enum.map(fn chunk ->
-      case Enum.all?(chunk, &is_binary/1) do
-        true -> Enum.join(chunk, "")
-        false -> Enum.at(chunk, 0)
-      end
+    |> Enum.map(fn
+      [elem = {:var, _var}] -> elem
+      chunk -> Enum.join(chunk, "")
     end)
   end
-
 
   defp chunk(matcher) do
     chunk_fun = fn element, acc ->
@@ -46,4 +46,26 @@ defmodule BelfrageWeb.ReWrite do
 
       Enum.chunk_while(String.graphemes(matcher), [], chunk_fun, after_fun)
   end
+
+  @doc ~S"""
+  Interpolates path parameters into a string.
+      iex> interpolate(prepare("/another-page/:id/a-different-slug"), %{"id" => "12345"})
+      "/another-page/12345/a-different-slug"
+      iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "separated"]})
+      "/another-page/forward/slash/separated"
+      iex> interpolate(prepare("/another-page/something-:id"), %{"id" => "54321", "any" => ["slash", "separated"]})
+      "/another-page/something-54321"
+      iex> interpolate(prepare("/another-page/"), %{})
+      "/another-page"
+  """
+  def interpolate(matcher, params) do
+    Enum.map_join(matcher, fn
+      {:var, key} -> path_value(Map.fetch!(params, key))
+      char -> char
+    end)
+    |> String.replace_trailing("/", "")
+  end
+
+  defp path_value(values) when is_list(values), do: Enum.join(values, "/")
+  defp path_value(value), do: value
 end
