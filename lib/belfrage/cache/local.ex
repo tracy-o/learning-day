@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache.Local do
-  @behaviour CacheStrategy
+  @behaviour Belfrage.Behaviours.CacheStrategy
 
   alias Belfrage.Behaviours.CacheStrategy
 
