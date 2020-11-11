@@ -2,7 +2,6 @@ defmodule Belfrage.Authentication.VerifyHookTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   alias Belfrage.Authentication.VerifyHook
-  import ExUnit.CaptureLog
 
   setup do
     %{
