@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-11-11T14:39:13.786Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="F0G6yaf1rINh6CVQforH" version="13.6.5">
+<mxfile host="65bd71144e" modified="2020-11-11T16:11:25.459Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="YftygdBbSd0kyCkFgEnI" version="13.6.5">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
         <mxGraphModel dx="1402" dy="1243" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -159,7 +159,7 @@
                 <mxCell id="89" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;fetches cached content from&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="782" y="860" width="152" height="31" as="geometry"/>
                 </mxCell>
-                <mxCell id="90" value="Presenation Layer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
+                <mxCell id="90" value="Presentation Layer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
                     <mxGeometry x="20" y="647" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="91" value="FABL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
@@ -378,6 +378,15 @@
                 </mxCell>
                 <mxCell id="164" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;uses credentials from&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
                     <mxGeometry x="342.5" y="738" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="171" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="170" target="48">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="170" value="Sumo Logic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="1160" y="627" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="172" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;requests logs from&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1129" y="707" width="123" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
