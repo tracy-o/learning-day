@@ -200,7 +200,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/rewrite-redirect/resource-id-123345/media")
+        conn(:get, "/rewrite-redirect/resource-id-123345")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -209,7 +209,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location/resource-id-123345/video"]
+      assert get_resp_header(conn, "location") == ["/new-location/resource-id-123345/somewhere"]
     end
 
     test "with a complex path rewrite" do
@@ -225,7 +225,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location/section-12345/video"]
+      assert get_resp_header(conn, "location") == ["/new-location/section-12345"]
     end
   end
 

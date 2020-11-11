@@ -12,6 +12,12 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> prepare("bbc.co.uk/foo/bar-:id/page/:type/*any")
       ["bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
+
+      iex> prepare("/:one-:two-:three")
+      ["/", {:var, "one"}, "-", {:var, "two"}, "-", {:var, "three"}]
+
+      iex> prepare("/:one:two:three")
+      ["/", {:var, "one"}, {:var, "two"}, {:var, "three"}]
   """
 
   @var_signs [":", "*"]
@@ -24,9 +30,11 @@ defmodule BelfrageWeb.ReWrite do
       chars -> Enum.join(chars, "")
     end)
     |> Enum.chunk_by(&is_binary/1)
-    |> Enum.map(fn
-      [elem = {:var, _var}] -> elem
-      chunk -> Enum.join(chunk, "")
+    |> Enum.flat_map(fn chunk ->
+      case Enum.all?(chunk, &is_binary/1) do
+        false -> chunk
+        true -> [Enum.join(chunk, "")]
+      end
     end)
   end
 
@@ -57,6 +65,8 @@ defmodule BelfrageWeb.ReWrite do
       "/another-page/something-54321"
       iex> interpolate(prepare("/another-page/"), %{})
       "/another-page"
+      iex> interpolate(prepare("/:one:two:three"), %{"one" => "1", "two" => "2", "three" => "3"})
+      "/123"
   """
   def interpolate(matcher, params) do
     Enum.map_join(matcher, fn
