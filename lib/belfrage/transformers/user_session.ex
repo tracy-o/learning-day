@@ -8,31 +8,29 @@ defmodule Belfrage.Transformers.UserSession do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
-    struct = %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
-
-    case struct do
-      %Struct{private: %Struct.Private{valid_session: true}} ->
-        then(rest, struct)
-
-      %Struct{private: %Struct.Private{valid_session: false}} ->
-        {
-          :redirect,
-          Struct.add(struct, :response, %{
-            http_status: 302,
-            headers: %{
-              "location" => redirect_url(struct.request),
-              "x-bbc-no-scheme-rewrite" => "1",
-              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-            },
-            body: "Redirecting"
-          })
-        }
-    end
+    struct =
+      %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
+      |> maybe_redirect(rest)
   end
 
-  defp account_url, do: Application.get_env(:belfrage, :authentication)["account_url"]
-
   def call(rest, struct), do: then(rest, struct)
+
+  defp maybe_redirect(struct = %Struct{private: %Struct.Private{valid_session: false}}, _rest) do
+    {
+      :redirect,
+      Struct.add(struct, :response, %{
+        http_status: 302,
+        headers: %{
+          "location" => redirect_url(struct.request),
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+        },
+        body: "Redirecting"
+      })
+    }
+  end
+
+  defp maybe_redirect(struct = %Struct{private: %Struct.Private{valid_session: true}}, rest), do: then(rest, struct)
 
   defp valid?(private_struct = %Struct.Private{session_token: nil}) do
     %{private_struct | valid_session: false}
@@ -79,6 +77,10 @@ defmodule Belfrage.Transformers.UserSession do
     end
   end
 
+  defp valid?(private_struct), do: private_struct
+
+  defp account_url, do: Application.get_env(:belfrage, :authentication)["account_url"]
+
   defp redirect_url(request) do
     "#{account_url}/account?ptrt=#{ptrt(request)}"
   end
@@ -93,8 +95,6 @@ defmodule Belfrage.Transformers.UserSession do
     |> URI.encode_www_form()
     |> Kernel.<>(Belfrage.Helpers.QueryParams.encode(request.query_params, @encoded_questionmark))
   end
-
-  defp valid?(private_struct), do: private_struct
 
   defp handle_cookies(decoded_cookies, private_struct)
 
