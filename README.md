@@ -8,6 +8,10 @@ Belfrage looks after the resiliency of the page, it monitors in real-time the st
 
 Belfrage is simple and fast, with a number of ancillary apps outside of the traffic flow to add additional features and functionality.
 
+### Architecture
+
+[More details on the Belfrage architecture](./docs/architecture.md)
+
 ## Key features of Belfrage
 
 ### Layers

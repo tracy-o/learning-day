@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2020-11-09T16:49:57.407Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.50.1 Chrome/83.0.4103.122 Electron/9.2.1 Safari/537.36" etag="y7yg9T_5_dAg80SQUszv" version="13.6.5">
+<mxfile host="65bd71144e" modified="2020-11-11T12:19:01.156Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="bcg-Lc4xCplF6TlzlBLy" version="13.6.5">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
-        <mxGraphModel dx="1294" dy="1199" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1402" dy="1243" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -13,7 +13,7 @@
                 <mxCell id="31" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
                     <mxGeometry x="200" y="350" width="580" height="400" as="geometry"/>
                 </mxCell>
-                <mxCell id="16" value="&lt;h1&gt;Container Diagram for CCP&lt;/h1&gt;&lt;p&gt;CCP is deployed to an Auto Scaling Group of EC2 instances.&lt;br&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+                <mxCell id="16" value="&lt;h1&gt;Container Diagram for CCP&lt;/h1&gt;&lt;p&gt;CCP (Central Cache Processor) is deployed to an Auto Scaling Group of EC2 instances.&lt;br&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="10" y="10" width="560" height="90" as="geometry"/>
                 </mxCell>
                 <mxCell id="37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="21" target="34" edge="1">
@@ -22,7 +22,7 @@
                 <mxCell id="21" value="&lt;b&gt;Logger&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;Records log entries" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="395" y="436" width="135" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" parent="1" vertex="1">
+                <mxCell id="24" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
                     <mxGeometry x="950" y="400" width="200" height="320" as="geometry"/>
                 </mxCell>
                 <mxCell id="26" value="&lt;b&gt;AWS S3&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
@@ -63,7 +63,7 @@
                 <mxCell id="35" value="&lt;b&gt;Reverse Proxy&lt;/b&gt;&lt;br&gt;[Apache]&lt;br&gt;&lt;br&gt;Provides SSL termination/authorisation by mutual TLS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="210" y="436" width="170" height="94" as="geometry"/>
                 </mxCell>
-                <mxCell id="180" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" parent="1" source="36" target="27">
+                <mxCell id="180" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="36" target="27" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="830" y="420"/>
@@ -77,7 +77,7 @@
                 <mxCell id="38" value="&lt;b&gt;Virtual Private Cloud&lt;/b&gt;&lt;br&gt;[AWS]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="280" y="290" width="470" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="182" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#CC0000;" edge="1" parent="1" source="43" target="26">
+                <mxCell id="182" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" source="43" target="26" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="820" y="590"/>
@@ -103,7 +103,7 @@
                 <mxCell id="103" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;writes error logs&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="463" y="510" width="110" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="106" value="&lt;i&gt;&lt;font color=&quot;#cc0000&quot;&gt;&lt;b&gt;publishes logs to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;/font&gt;&lt;br&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="106" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes logs to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;/font&gt;&lt;br&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="840" y="631" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="111" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes EC2 metrics to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -142,7 +142,7 @@
                     <mxGeometry x="855" y="230" width="196" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="130" value="&lt;b&gt;ETS&lt;/b&gt;&lt;br&gt;Erlang Term Storage" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="940" y="825" width="120" height="30" as="geometry"/>
+                    <mxGeometry x="940" y="785" width="120" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="151" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="131" target="118" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -162,7 +162,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="147" value="&lt;b&gt;GenServer&lt;/b&gt;&lt;br&gt;Elixir Process running in memory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="940" y="868" width="120" height="57" as="geometry"/>
+                    <mxGeometry x="940" y="828" width="120" height="57" as="geometry"/>
                 </mxCell>
                 <mxCell id="152" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes logs&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="500" y="570" width="110" height="20" as="geometry"/>
@@ -174,9 +174,9 @@
                     <mxGeometry x="293" y="550" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="161" value="&lt;b&gt;Cowboy&lt;/b&gt;&lt;br&gt;Elixir HTTP server" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="940" y="935" width="120" height="30" as="geometry"/>
+                    <mxGeometry x="940" y="895" width="120" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="181" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" parent="1" source="162" target="27">
+                <mxCell id="181" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="162" target="27" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="820" y="500"/>
@@ -190,13 +190,7 @@
                 <mxCell id="164" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes custom metrics to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="840" y="587" width="110" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="166" value="" style="endArrow=classic;html=1;strokeColor=#CC0000;" edge="1" parent="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="960" y="805" as="sourcePoint"/>
-                        <mxPoint x="1040" y="805" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="183" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;" edge="1" parent="1" source="170" target="26">
+                <mxCell id="183" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;" parent="1" source="170" target="26" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="920" y="680"/>
@@ -204,20 +198,20 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="170" value="&lt;b&gt;Cache Publisher&lt;/b&gt;&lt;br&gt;[GenServer]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                <mxCell id="170" value="&lt;b&gt;Cache Publisher&lt;/b&gt;&lt;br&gt;[GenServer]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="612.5" y="650" width="135" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="172" value="&lt;b&gt;Belfrage&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" vertex="1" parent="1">
+                <mxCell id="172" value="&lt;b&gt;Belfrage&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" parent="1" vertex="1">
                     <mxGeometry x="400" y="792" width="125" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="174" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" edge="1" parent="1" source="173" target="172">
+                <mxCell id="174" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;" parent="1" source="173" target="172" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="463" y="700"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="176" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;" edge="1" parent="1" source="173" target="170">
+                <mxCell id="176" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;" parent="1" source="173" target="170" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="420" y="680"/>
@@ -225,23 +219,20 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="173" value="&lt;b&gt;Node Connector&lt;/b&gt;&lt;br&gt;[Elixir AWS SDK]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                <mxCell id="173" value="&lt;b&gt;Node Connector&lt;/b&gt;&lt;br&gt;[Elixir AWS SDK]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="235" y="660" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="177" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                <mxCell id="177" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="830" y="687" width="110" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="178" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                <mxCell id="178" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="420" y="654" width="110" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="179" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;connects nodes&lt;br&gt;&lt;/b&gt;[TCP]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                <mxCell id="179" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;connects nodes&lt;br&gt;&lt;/b&gt;[TCP]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="465" y="720" width="95" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="184" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                <mxCell id="184" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="1080" y="760" width="70" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="186" value="&lt;i&gt;&lt;b&gt;&lt;font color=&quot;#cc0000&quot;&gt;connection broken&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="941" y="782" width="110" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
