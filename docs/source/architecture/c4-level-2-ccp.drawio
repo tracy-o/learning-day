@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-11-11T12:19:01.156Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="bcg-Lc4xCplF6TlzlBLy" version="13.6.5">
+<mxfile host="65bd71144e" modified="2020-11-11T16:17:14.462Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="qVSJHs9sbNl1HoaqNBMg" version="13.6.5">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
         <mxGraphModel dx="1402" dy="1243" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -133,10 +133,10 @@
                     <mxGeometry x="590" y="122" width="170" height="90" as="geometry"/>
                 </mxCell>
                 <mxCell id="123" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;SSH access&lt;/b&gt;&lt;br&gt;[SSH]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="760" y="140" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="790" y="139" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="124" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;SSH access&lt;/b&gt;&lt;br&gt;[SSH]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="710" y="240" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="660" y="230" width="90" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="127" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;alerts when alarms are fired&lt;/b&gt;&lt;br&gt;[Slack]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="855" y="230" width="196" height="20" as="geometry"/>
