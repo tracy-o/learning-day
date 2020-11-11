@@ -3,7 +3,6 @@ defmodule Belfrage.Clients.Account do
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @authentication Application.get_env(:belfrage, :authentication)
 
   @callback get_jwk_keys() :: Struct.t()
 
@@ -18,7 +17,7 @@ defmodule Belfrage.Clients.Account do
   defp get_keys_from_api do
     @http_client.execute(%Clients.HTTP.Request{
       method: :get,
-      url: @authentication["account_jwk_uri"]
+      url: auth_config()["account_jwk_uri"]
     })
     |> case do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: body}} ->
@@ -39,5 +38,9 @@ defmodule Belfrage.Clients.Account do
 
         {:error, http_error}
     end
+  end
+
+  defp auth_config do
+    Application.get_env(:belfrage, :authentication)
   end
 end

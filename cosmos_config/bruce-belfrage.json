@@ -125,7 +125,7 @@
     "default-value": "https://access.api.bbc.com/bbcidv5/oauth2",
     "options": [
       {
-        "value": "https://access.test.api.bbc.com/bbcidv5/oauth2"
+        "value": "https://access.test.api.bbc.com/bbcidv5/oauth2/bbc"
       },
       {
         "value": "https://access.api.bbc.com/bbcidv5/oauth2"
