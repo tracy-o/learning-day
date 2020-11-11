@@ -10,14 +10,11 @@ defmodule Benchmark.StringReplacement do
 
     status_code_2xx = 202
 
-    matcher = BelfrageWeb.ReWrite.prepare(["/page/section-", ":id", "/video"])
+    matcher = BelfrageWeb.ReWrite.prepare("/page/section-:id/video")
 
     Benchee.run(
       %{
         "eex function from string" => fn -> "/page/section-12345/video" = rewrite_func("12345") end,
-        "eex eval string" => fn ->
-          "/page/section-12345/video" = EEx.eval_string("/page/section-<%= @id %>/video", assigns: [id: "12345"])
-        end,
         "belfrage rewrite" => fn -> "/page/section-12345/video" = BelfrageWeb.ReWrite.interpolate(matcher, %{"id" => "12345"})  end
       },
       time: 10,
