@@ -137,6 +137,6 @@
       "test": "https://session.test.bbc.co.uk",
       "live": "https://session.bbc.co.uk"
     },
-    "name": "ACCOUNT_URL"
+    "name": "SESSION_URL"
   }
 ]

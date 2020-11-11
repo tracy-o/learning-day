@@ -43,7 +43,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                response: %Belfrage.Struct.Response{
                  headers: %{
                    "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                    "x-bbc-no-scheme-rewrite" => "1",
                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
@@ -87,7 +87,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                response: %Belfrage.Struct.Response{
                  headers: %{
                    "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                    "x-bbc-no-scheme-rewrite" => "1",
                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
@@ -124,7 +124,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                response: %Belfrage.Struct.Response{
                  headers: %{
                    "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                    "x-bbc-no-scheme-rewrite" => "1",
                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
@@ -155,7 +155,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                response: %Belfrage.Struct.Response{
                  headers: %{
                    "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                    "x-bbc-no-scheme-rewrite" => "1",
                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
@@ -199,7 +199,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                response: %Belfrage.Struct.Response{
                  headers: %{
                    "location" =>
-                     "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                    "x-bbc-no-scheme-rewrite" => "1",
                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                  }
@@ -342,7 +342,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
@@ -375,7 +375,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
@@ -408,7 +408,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
@@ -443,7 +443,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
@@ -480,7 +480,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }
@@ -519,7 +519,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Belfrage.Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                      }
@@ -562,7 +562,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Belfrage.Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                      }
@@ -605,7 +605,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Belfrage.Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                      }
@@ -664,7 +664,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Belfrage.Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/account?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }

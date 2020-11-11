@@ -25,5 +25,5 @@ config :belfrage, authentication: %{
   "iss" => System.get_env("ACCOUNT_ISS"),
   "aud" => "Account",
   "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
-  "account_url" => System.get_env("ACCOUNT_URL")
+  "session_url" => System.get_env("SESSION_URL")
 }

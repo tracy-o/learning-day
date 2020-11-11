@@ -79,10 +79,10 @@ defmodule Belfrage.Transformers.UserSession do
 
   defp valid?(private_struct), do: private_struct
 
-  defp account_url, do: Application.get_env(:belfrage, :authentication)["account_url"]
+  defp session_url, do: Application.get_env(:belfrage, :authentication)["session_url"]
 
   defp redirect_url(request) do
-    "#{account_url}/account?ptrt=#{ptrt(request)}"
+    "#{session_url}/session?ptrt=#{ptrt(request)}"
   end
 
   defp ptrt(request) do
