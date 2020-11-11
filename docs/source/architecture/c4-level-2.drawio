@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-11-11T14:15:23.639Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="DE_6-n1b6_fQTchXuo6_" version="13.6.5">
+<mxfile host="65bd71144e" modified="2020-11-11T14:39:13.786Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.0 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="F0G6yaf1rINh6CVQforH" version="13.6.5">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
         <mxGraphModel dx="1402" dy="1243" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -70,13 +70,13 @@
                 <mxCell id="51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="34" target="49" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="520" y="700"/>
-                            <mxPoint x="520" y="734"/>
+                            <mxPoint x="530" y="734"/>
+                            <mxPoint x="530" y="734"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="34" value="&lt;br&gt;Local disk&lt;br&gt;(EBS)" style="shape=cylinder2;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="450" y="664" width="57.5" height="80" as="geometry"/>
+                    <mxGeometry x="450" y="694" width="57.5" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="35" value="&lt;b&gt;Application Server&lt;/b&gt;&lt;br&gt;[Cowboy]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="220" y="546" width="120" height="60" as="geometry"/>
@@ -111,14 +111,6 @@
                 </mxCell>
                 <mxCell id="43" value="&lt;b&gt;Logs Publisher&lt;/b&gt;&lt;br&gt;[CloudWatch Agent]&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="612.5" y="780" width="135" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="48" target="59" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="930" y="750"/>
-                            <mxPoint x="930" y="900"/>
-                        </Array>
-                    </mxGeometry>
                 </mxCell>
                 <mxCell id="48" value="&lt;b&gt;AWS S3&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
                     <mxGeometry x="980" y="707" width="120" height="60" as="geometry"/>
@@ -164,8 +156,8 @@
                 <mxCell id="86" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;proxies TCP data&lt;/b&gt;&lt;br&gt;[TCP]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="318" y="480" width="110" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="89" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;retrieves distributed cached content&lt;/b&gt;&lt;br&gt;[TCP]&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="788" y="864" width="152" height="20" as="geometry"/>
+                <mxCell id="89" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;fetches cached content from&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="782" y="860" width="152" height="31" as="geometry"/>
                 </mxCell>
                 <mxCell id="90" value="Presenation Layer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
                     <mxGeometry x="20" y="647" width="120" height="60" as="geometry"/>
@@ -179,6 +171,13 @@
                 <mxCell id="94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="93" target="90" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
+                <mxCell id="165" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.629;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="93" target="156">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="418" y="677"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
                 <mxCell id="93" value="&lt;b&gt;Client&lt;/b&gt;&lt;br&gt;[Lamba]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="220" y="647" width="120" height="60" as="geometry"/>
                 </mxCell>
@@ -191,7 +190,7 @@
                 <mxCell id="129" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" parent="1" source="97" target="92" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="280" y="847"/>
+                            <mxPoint x="280" y="845"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
@@ -202,7 +201,7 @@
                     <mxGeometry x="130" y="724" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="102" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;executes&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="130" y="819" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="130" y="814" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="103" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;writes logs&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="388" y="620" width="110" height="20" as="geometry"/>
@@ -223,13 +222,13 @@
                     <mxGeometry x="810" y="460" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="112" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes logs&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="491.25" y="736" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="502.5" y="710" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="113" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="66" target="20" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="114" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;requests data from&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="318" y="250" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="311" y="248" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="116" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;monitors metrics&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="1040" y="480" width="110" height="20" as="geometry"/>
@@ -311,6 +310,14 @@
                 <mxCell id="140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="59" target="23" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
+                <mxCell id="169" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="59" target="48">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="930" y="900"/>
+                            <mxPoint x="930" y="750"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
                 <mxCell id="59" value="&lt;b&gt;Cache&lt;/b&gt;&lt;br&gt;[ETS]&lt;br&gt;&lt;br&gt;In-Memory cache" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="627.5" y="870" width="120" height="60" as="geometry"/>
                 </mxCell>
@@ -354,25 +361,14 @@
                 <mxCell id="162" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="155" target="156">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
+                <mxCell id="166" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="155" target="157">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
                 <mxCell id="155" value="&lt;b&gt;Credentials Fetcher&lt;/b&gt;&lt;br&gt;[GenServer]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
                     <mxGeometry x="357.5" y="942" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="163" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="156" target="93">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="420" y="677"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="156" value="&lt;b&gt;Credentials Store&lt;/b&gt;&lt;br&gt;[ETS]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
                     <mxGeometry x="357.5" y="844" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="159" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="157" target="155">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="1040" y="972"/>
-                        </Array>
-                    </mxGeometry>
                 </mxCell>
                 <mxCell id="157" value="&lt;b&gt;AWS IAM&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" vertex="1" parent="1">
                     <mxGeometry x="980" y="870" width="120" height="60" as="geometry"/>
@@ -381,7 +377,7 @@
                     <mxGeometry x="800" y="943" width="147" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="164" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;uses credentials from&lt;/b&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="346" y="738" width="80" height="30" as="geometry"/>
+                    <mxGeometry x="342.5" y="738" width="80" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
