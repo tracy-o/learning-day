@@ -7,8 +7,8 @@ defmodule BelfrageWeb.ReWrite do
       iex> prepare("/foo/bar-:id/page/:type/*any")
       ["/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
 
-      # iex> prepare("https://bbc.co.uk/foo/bar-:id/page/:type/*any")
-      # ["https://bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, ":type"}, {:var, "any"}]
+      iex> prepare("https://bbc.co.uk/foo/bar-:id/page/:type/*any")
+      ["https://bbc.co.uk/foo/bar-", {:var, "id"}, "/page/", {:var, "type"}, "/", {:var, "any"}]
   """
 
   @var_signs [":", "*"]
@@ -17,7 +17,7 @@ defmodule BelfrageWeb.ReWrite do
   def prepare(matcher) do
     chunk(matcher)
     |> Enum.map(fn
-      [char | rest] when char in @var_signs -> {:var, Enum.join(rest)}
+      [char | rest] when char in @var_signs and length(rest) > 0 -> {:var, Enum.join(rest)}
       chars -> Enum.join(chars, "")
     end)
     |> Enum.chunk_by(&is_binary/1)
