@@ -1,21 +1,20 @@
 defmodule Belfrage.Cache.Local do
-  alias Belfrage.Behaviours.CacheStrategy
   @behaviour CacheStrategy
 
+  alias Belfrage.Behaviours.CacheStrategy
+
   @impl CacheStrategy
-  def fetch(%Belfrage.Struct{
-        request: %{request_hash: request_hash}
-      }) do
-    Cachex.get(:cache, request_hash)
+  def fetch(%Belfrage.Struct{request: %{request_hash: request_hash}}, cache \\ :cache) do
+    Cachex.get(cache, request_hash)
     |> format_cache_result()
   end
 
   @impl CacheStrategy
-  def store(struct = %Belfrage.Struct{}) do
-    case stale?(struct) do
+  def store(struct = %Belfrage.Struct{}, cache \\ :cache) do
+    case stale?(struct, cache) do
       true ->
         Cachex.put(
-          :cache,
+          cache,
           struct.request.request_hash,
           {struct.response, Belfrage.Timer.now_ms()},
           ttl: struct.private.fallback_ttl
@@ -42,8 +41,8 @@ defmodule Belfrage.Cache.Local do
     {:ok, :content_not_found}
   end
 
-  defp stale?(struct) do
-    case fetch(struct) do
+  defp stale?(struct, cache) do
+    case fetch(struct, cache) do
       {:ok, :fresh, _fetched} -> false
       _ -> true
     end
