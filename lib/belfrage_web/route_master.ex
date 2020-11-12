@@ -116,7 +116,7 @@ defmodule BelfrageWeb.RouteMaster do
 
       uri_from = URI.parse(unquote(from))
 
-      @redirects [{uri_from.path, []} | @redirects]
+      @redirects [{unquote(from), unquote(location), unquote(status)} | @redirects]
 
       get(to_string(uri_from.path), host: uri_from.host) do
         request_path = join_path_params(Map.get(var!(conn).path_params, "any"))
@@ -131,6 +131,8 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro __before_compile__(_env) do
     quote do
+      def redirects, do: @redirects
+
       def routes do
         @routes
         |> Enum.flat_map(fn

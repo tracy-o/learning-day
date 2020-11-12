@@ -53,14 +53,19 @@ defmodule BelfrageWeb.ReWrite do
 
   @doc ~S"""
   Interpolates path parameters into a string.
+
       iex> interpolate(prepare("/another-page/:id/a-different-slug"), %{"id" => "12345"})
       "/another-page/12345/a-different-slug"
+
       iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "separated"]})
       "/another-page/forward/slash/separated"
+
       iex> interpolate(prepare("/another-page/something-:id"), %{"id" => "54321", "any" => ["slash", "separated"]})
       "/another-page/something-54321"
-      iex> interpolate(prepare("/another-page/"), %{})
-      "/another-page"
+
+      iex> interpolate(prepare("/trailing-slash/"), %{})
+      "/trailing-slash"
+
       iex> interpolate(prepare("/:one:two:three"), %{"one" => "1", "two" => "2", "three" => "3"})
       "/123"
   """

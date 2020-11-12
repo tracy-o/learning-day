@@ -341,7 +341,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
 
-  # Route for testing only, disabling examples to avoid smoke test failures, 
+  # Route for testing only, disabling examples to avoid smoke test failures,
   # example route: "/comments/embed/news/business-1234567"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
 
