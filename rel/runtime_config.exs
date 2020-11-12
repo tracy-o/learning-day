@@ -13,7 +13,8 @@ use Mix.Config
   {"CCP_S3_BUCKET", :default},
   {"ACCOUNT_ISS", :custom},
   {"ACCOUNT_JWK_URI", :custom},
-  {"SESSION_URL", :custom}
+  {"SESSION_URL", :custom},
+  {"ACCOUNT_IDCTA_URI", :custom}  
 ]
 |> Enum.each(fn {config_key, set_type} ->
   if System.get_env(config_key) == nil do
@@ -26,10 +27,10 @@ use Mix.Config
   end
 end)
 
-config :belfrage,
-  authentication: %{
-    "iss" => System.get_env("ACCOUNT_ISS"),
-    "aud" => "Account",
-    "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
-    "session_url" => System.get_env("SESSION_URL")
-  }
+config :belfrage, authentication: %{
+  "iss" => System.get_env("ACCOUNT_ISS"),
+  "aud" => "Account",
+  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
+  "session_url" => System.get_env("SESSION_URL"),
+  "account_idcta_uri" => System.get_env("ACCOUNT_IDCTA_URI")
+}
