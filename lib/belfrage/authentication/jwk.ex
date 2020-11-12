@@ -20,7 +20,7 @@ defmodule Belfrage.Authentication.Jwk do
     end)
     |> case do
       {:ok, alg, key} ->
-        Belfrage.Event.record(:log, :info, %{
+        Belfrage.Event.record(:log, :debug, %{
           msg: "Public key found",
           kid: kid,
           alg: alg
