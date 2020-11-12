@@ -3,9 +3,11 @@ defmodule Belfrage.Clients.AccountStub do
 
   @impl true
   def get_jwk_keys() do
-    {:ok,
-     %{
-       "keys" => Fixtures.AuthToken.keys()
-     }}
+    {:ok, %{"keys" => Fixtures.AuthToken.keys()}}
+  end
+
+  @impl true
+  def get_idcta_config() do
+    {:ok, %{"id-availability" => "GREEN"}}
   end
 end

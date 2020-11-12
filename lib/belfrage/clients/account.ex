@@ -5,15 +5,24 @@ defmodule Belfrage.Clients.Account do
   @json_codec Application.get_env(:belfrage, :json_codec)
 
   @callback get_jwk_keys() :: {:ok, map()} | {:error, term()}
+  @callback get_idcta_config() :: {:ok, map()} | {:error, term()}
 
   defp auth_config do
     Application.get_env(:belfrage, :authentication)
   end
 
   def get_jwk_keys do
-    # @todo handle json decode errors
+    # TODO: handle json decode errors
     case get_from_api(auth_config()["account_jwk_uri"]) do
       {:ok, keys} -> @json_codec.decode(keys)
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def get_idcta_config do
+    # TODO: handle json decode errors
+    case get_from_api(auth_config()["account_idcta_uri"], "IDCTA") do
+      {:ok, config} -> @json_codec.decode(config)
       {:error, reason} -> {:error, reason}
     end
   end
@@ -33,6 +42,11 @@ defmodule Belfrage.Clients.Account do
     {:ok, body}
   end
 
+  defp handle_response({:ok, %Clients.HTTP.Response{status_code: 200, body: body}}, "IDCTA") do
+    Stump.log(:info, "IDCTA config fetched successfully", cloudwatch: true)
+    {:ok, body}
+  end
+
   defp handle_response({:ok, %Clients.HTTP.Response{status_code: status_code}}, api) do
     Stump.log(:warn, "Non 200 Status Code (#{status_code}) from the #{api} API", cloudwatch: true)
     {:error, status_code}
@@ -43,10 +57,13 @@ defmodule Belfrage.Clients.Account do
     {:error, "unknown response"}
   end
 
-  # TODO: note #{http_error} a potential issue since http_error is unknown type
-  # i.e. to_string(http_error) not guaranteed
+  defp handle_response({:error, %Clients.HTTP.Error{reason: reason}}, api) do
+    Stump.log(:warn, "Error received from the #{api} API: #{reason}", cloudwatch: true)
+    {:error, reason}
+  end
+
   defp handle_response({:error, http_error}, api) do
-    Stump.log(:warn, "Error received from the #{api} API: #{http_error}", cloudwatch: true)
-    {:error, http_error}
+    Stump.log(:warn, "Unknown error received from the #{api} API", cloudwatch: true)
+    {:error, "unknown http error"}
   end
 end
