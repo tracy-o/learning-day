@@ -11,7 +11,32 @@ defmodule Belfrage.Authentication.Jwk do
 
   @spec get_keys :: any
   def get_keys() do
-    GenServer.call(__MODULE__, :state)
+    GenServer.call(__MODULE__, :state) |> Map.get("keys", [])
+  end
+
+  def get_key(alg, kid) do
+    Enum.find_value(get_keys(), {:error, :public_key_not_found}, fn key ->
+      key["kid"] == kid && key["alg"] == alg && {:ok, alg, key}
+    end)
+    |> case do
+      {:ok, alg, key} ->
+        Belfrage.Event.record(:log, :debug, %{
+          msg: "Public key found",
+          kid: kid,
+          alg: alg
+        })
+
+        {:ok, alg, key}
+
+      {:error, :public_key_not_found} ->
+        Belfrage.Event.record(:log, :error, %{
+          msg: "Public key not found",
+          kid: kid,
+          alg: alg
+        })
+
+        {:error, :public_key_not_found}
+    end
   end
 
   def refresh_now() do
