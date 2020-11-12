@@ -71,7 +71,7 @@ node {
         if (fileExists('smoke_test_output.txt')) {
           testFigures = sh(script: "cat smoke_test_output.txt | tail -n 6 | head -n 2", returnStdout:true).trim()
 
-          if (!(testFigures =~ /\d+ tests, \d+ failures/)) {
+          if (!(testFigures =~ /\d+ tests, \d+ failures?/)) {
               println("Test figures don't match regex")
               testFigures = "failed to get results from test output"
           }
