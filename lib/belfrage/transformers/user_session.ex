@@ -93,7 +93,7 @@ defmodule Belfrage.Transformers.UserSession do
       request.path
     ])
     |> URI.encode_www_form()
-    |> Kernel.<>(Belfrage.Helpers.QueryParams.encode(request.query_params, @encoded_questionmark))
+    |> Kernel.<>(Belfrage.Helpers.QueryParams.encode(request.query_params, :encoded))
   end
 
   defp handle_cookies(decoded_cookies, private_struct)
