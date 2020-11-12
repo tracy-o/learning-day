@@ -2,7 +2,7 @@ defmodule BelfrageWeb.ReWrite do
   alias BelfrageWeb.ReWrite
 
   @var_signs [":", "*"]
-  @end_of_var_signs ["/", "-"]
+  @end_of_var_signs ["/", "-", "."]
 
   @doc ~S"""
   Prepares a matcher for use with the interpolate/2 function.
@@ -24,6 +24,9 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> prepare("/supports-custom-catch-all/*catch")
       ["/supports-custom-catch-all/", {:var, "catch"}]
+
+      iex> prepare("https://:id.bbc.co.uk/page")
+      ["https://", {:var, "id"}, ".bbc.co.uk/page"]
   """
   def prepare(matcher) do
     chunk(matcher)

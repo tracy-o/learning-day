@@ -16,6 +16,11 @@ defmodule Routes.RoutefileMock do
     status: 302
   )
 
+  redirect("https://example.net/rewrite-redirect/:id/*any",
+    to: "https://:id.bbc.com/new-location/*any",
+    status: 302
+  )
+
   redirect("/redirect-with-path/*any", to: "/new-location-with-path/*any", status: 302)
 
   handle("/", using: "SomeLoop", examples: ["/"])
