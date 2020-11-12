@@ -8,7 +8,7 @@ defmodule Routes.RoutefileMock do
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
   redirect("/rewrite-redirect/:id", to: "/new-location/:id/somewhere", status: 302)
-  redirect("/rewrite-redirect/:id/:type", to: "/new-location/:type-:id", status: 302)
+  redirect("/rewrite-redirect/:id/:type/catch-all/*any", to: "/new-location/:type-:id/*any", status: 302)
 
   redirect("/redirect-with-path/*any", to: "/new-location-with-path/*any", status: 302)
 

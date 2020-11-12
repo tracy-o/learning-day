@@ -216,7 +216,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/rewrite-redirect/12345/section")
+        conn(:get, "/rewrite-redirect/12345/section/catch-all/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -225,7 +225,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location/section-12345"]
+      assert get_resp_header(conn, "location") == ["/new-location/section-12345/i-am-a-url-slug-for-SEO"]
     end
   end
 

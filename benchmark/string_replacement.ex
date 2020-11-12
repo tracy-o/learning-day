@@ -7,9 +7,6 @@ defmodule Benchmark.StringReplacement do
   EEx.function_from_string(:def, :rewrite_func, "/page/section-<%= id %>/video", [:id])
 
   defp benchmark_string_replacement do
-
-    status_code_2xx = 202
-
     matcher = BelfrageWeb.ReWrite.prepare("/page/section-:id/video")
 
     Benchee.run(
