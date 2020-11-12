@@ -21,6 +21,9 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> prepare("/:one:two:three")
       ["/", {:var, "one"}, {:var, "two"}, {:var, "three"}]
+
+      iex> prepare("/supports-custom-catch-all/*catch")
+      ["/supports-custom-catch-all/", {:var, "catch"}]
   """
   def prepare(matcher) do
     chunk(matcher)
@@ -68,6 +71,9 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> interpolate(prepare("/:one:two:three"), %{"one" => "1", "two" => "2", "three" => "3"})
       "/123"
+
+      iex> interpolate(prepare("https://bbc.co.uk/supports-custom-catch-all/*catch"), %{"catch" => ["some", "seo", "slug"]})
+      "https://bbc.co.uk/supports-custom-catch-all/some/seo/slug"
   """
   def interpolate(matcher, params) do
     Enum.map_join(matcher, fn
