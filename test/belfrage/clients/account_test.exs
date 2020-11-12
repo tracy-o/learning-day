@@ -8,7 +8,10 @@ defmodule Belfrage.Client.AccountTest do
   alias Belfrage.Clients.Account
 
   @authentication Application.get_env(:belfrage, :authentication)
-  @error_response {:error, %Clients.HTTP.Error{reason: :timeout}}
+  @error_response {:error, :einval}
+  @not_200_response {:ok, %Clients.HTTP.Response{status_code: 500, body: ""}}
+  @unknown_response {:ok, :unknown_response}
+
   @ok_response {
     :ok,
     %Clients.HTTP.Response{
@@ -32,13 +35,23 @@ defmodule Belfrage.Client.AccountTest do
     assert Belfrage.Clients.AccountStub.get_jwk_keys() == Account.get_jwk_keys()
   end
 
-  test "logs error response" do
-    Clients.HTTPMock |> expect(:execute, fn _ -> @error_response end)
-    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Error received from the JWK API: timeout"
+  test "logs 200-status JWK response" do
+    Clients.HTTPMock |> expect(:execute, fn _ -> @ok_response end)
+    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "JWK keys fetched successfully"
   end
 
-  test "logs unknown error response" do
-    Clients.HTTPMock |> expect(:execute, fn _ -> {:error, nil} end)
-    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown error received from the JWK API"
+  test "logs non 200-status JWK response" do
+    Clients.HTTPMock |> expect(:execute, fn _ -> @not_200_response end)
+    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Non 200 Status Code (500) from the JWK API"
+  end
+
+  test "logs unknown JWK response" do
+    Clients.HTTPMock |> expect(:execute, fn _ -> @unknown_response end)
+    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown response from the JWK API"
+  end
+
+  test "logs error JWK response" do
+    Clients.HTTPMock |> expect(:execute, fn _ -> @error_response end)
+    assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Error received from the JWK API"
   end
 end
