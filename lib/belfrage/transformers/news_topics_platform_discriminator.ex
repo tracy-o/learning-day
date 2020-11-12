@@ -1,5 +1,6 @@
-defmodule Belfrage.Transformers.NewsTopicsOriginDiscriminator do
+defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   @moduledoc """
+  Alters the Platform and Origin for a subset of News Topics IDs that need to be served by Webcore.
   """
   use Belfrage.Transformers.Transformer
 
@@ -89,9 +90,18 @@ defmodule Belfrage.Transformers.NewsTopicsOriginDiscriminator do
 
   @impl true
   def call(rest, struct) do
-    case Enum.member?(@webcore_ids, struct.request.path_params[:id]) do
-      true -> Struct.add(struct, :private, %{platform: Webcore})
-      false -> then(rest, struct)
+    case Enum.member?(@webcore_ids, struct.request.path_params["id"]) do
+      true ->
+        then(
+          rest,
+          Struct.add(struct, :private, %{
+            platform: Webcore,
+            origin: Application.get_env(:belfrage, :pwa_lambda_function)
+          })
+        )
+
+      false ->
+        then(rest, struct)
     end
   end
 end
