@@ -50,6 +50,23 @@ defmodule Test.Support.Helper do
     apply(__MODULE__, which, [])
   end
 
+  @doc """
+  This helper starts a new local cache and links it to
+  the test process. It will terminate when the calling
+  process (test case or test module) ends.
+  """
+  defmacro start_test_cache(cache, config \\ []) do
+    quote do
+      default = %{size: 100, policy: Cachex.Policy.LRW, reclaim: 0.3, options: []}
+
+      %{options: opts, policy: policy, reclaim: reclaim, size: size} =
+        Map.merge(default, unquote(config) |> Enum.into(%{}))
+
+      limit = {:limit, size, policy, reclaim, opts}
+      start_supervised(%{id: unquote(cache), start: {Cachex, :start_link, [unquote(cache), [limit: limit]]}})
+    end
+  end
+
   def get_route(endpoint, path, :pal) do
     MachineGun.get!("https://#{endpoint}#{path}", [{"x-bbc-edge-scheme", "https"}, {"x-bbc-edge-cache", "1"}], %{})
   end
