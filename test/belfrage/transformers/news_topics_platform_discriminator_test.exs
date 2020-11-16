@@ -31,6 +31,8 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   }
 
   test "if the Topic ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
+
     assert {
              :ok,
              %Struct{
@@ -38,7 +40,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                  pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias"]
                },
                private: %Struct.Private{
-                 origin: "pwa-lambda-function:live",
+                 origin: ^lambda_function,
                  platform: Webcore
                },
                request: %Struct.Request{
