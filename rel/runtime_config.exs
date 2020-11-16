@@ -10,7 +10,7 @@ use Mix.Config
   {"PREVIEW_MODE", :required},
   {"STACK_NAME", :required},
   {"STACK_ID", :required},
-  {"CCP_S3_BUCKET", :required},
+  {"CCP_S3_BUCKET", :required}
 ]
 |> Enum.each(fn {config_key, importance} ->
   if System.get_env(config_key) == nil and importance != :optional do
@@ -24,5 +24,6 @@ end)
 config :belfrage, authentication: %{
   "iss" => System.get_env("ACCOUNT_ISS"),
   "aud" => "Account",
-  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI")
+  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
+  "session_url" => System.get_env("SESSION_URL")
 }

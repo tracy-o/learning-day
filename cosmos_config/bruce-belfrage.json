@@ -131,5 +131,12 @@
         "value": "https://access.api.bbc.com/bbcidv5/oauth2"
       }
     ]
+  },
+  {
+    "values":{
+      "test": "https://session.test.bbc.co.uk",
+      "live": "https://session.bbc.co.uk"
+    },
+    "name": "SESSION_URL"
   }
 ]

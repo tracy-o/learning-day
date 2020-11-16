@@ -66,7 +66,8 @@ config :belfrage,
   authentication: %{
     "iss" => "https://access.int.api.bbc.com/bbcidv5/oauth2",
     "aud" => "Account",
-    "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"
+    "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
+    "session_url" => "https://session.test.bbc.co.uk"
   }
 
 config :ex_aws,
