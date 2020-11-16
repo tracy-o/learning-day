@@ -93,7 +93,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     case Enum.member?(@webcore_ids, struct.request.path_params["id"]) do
       true ->
         then(
-          rest,
+          ["LambdaOriginAlias", "CircuitBreaker", "Language"],
           Struct.add(struct, :private, %{
             platform: Webcore,
             origin: Application.get_env(:belfrage, :pwa_lambda_function)
@@ -101,7 +101,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
         )
 
       false ->
-        then(rest, struct)
+        then(["CircuitBreaker"], struct)
     end
   end
 end

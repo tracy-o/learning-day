@@ -34,8 +34,11 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias"]
+               },
                private: %Struct.Private{
-                 origin: "pwa-lambda-function",
+                 origin: "pwa-lambda-function:live",
                  platform: Webcore
                },
                request: %Struct.Request{
@@ -49,9 +52,25 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   end
 
   test "if the Topic ID is not in the Webcore allow list, the origin and platform will remain the same" do
+    mozart_endpoint = Application.get_env(:belfrage, :mozart_endpoint)
+
     assert {
              :ok,
-             @mozart_topic_id
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: ["CircuitBreaker"]
+               },
+               private: %Struct.Private{
+                 origin: ^mozart_endpoint,
+                 platform: Mozart
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"id" => "abc123xyz789"}
+               }
+             }
            } = NewsTopicsPlatformDiscriminator.call([], @mozart_topic_id)
   end
 end
