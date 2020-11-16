@@ -1,29 +1,35 @@
 use Mix.Config
 
 [
-  {"WEBCORE_LAMBDA_ROLE_ARN", :required},
-  {"PWA_LAMBDA_FUNCTION", :required},
-  {"MOZART_ENDPOINT", :required},
-  {"PAL_ENDPOINT", :required},
-  {"FABL_ENDPOINT", :required},
-  {"PRODUCTION_ENVIRONMENT", :required},
-  {"PREVIEW_MODE", :required},
-  {"STACK_NAME", :required},
-  {"STACK_ID", :required},
-  {"CCP_S3_BUCKET", :required}
+  {"WEBCORE_LAMBDA_ROLE_ARN", :default},
+  {"PWA_LAMBDA_FUNCTION", :default},
+  {"MOZART_ENDPOINT", :default},
+  {"PAL_ENDPOINT", :default},
+  {"FABL_ENDPOINT", :default},
+  {"PRODUCTION_ENVIRONMENT", :default},
+  {"PREVIEW_MODE", :default},
+  {"STACK_NAME", :default},
+  {"STACK_ID", :default},
+  {"CCP_S3_BUCKET", :default},
+  {"ACCOUNT_ISS", :custom},
+  {"ACCOUNT_JWK_URI", :custom},
+  {"SESSION_URL", :custom}
 ]
-|> Enum.each(fn {config_key, importance} ->
-  if System.get_env(config_key) == nil and importance != :optional do
+|> Enum.each(fn {config_key, set_type} ->
+  if System.get_env(config_key) == nil do
     raise "Config not set in environment: #{config_key}"
   end
 
-  config :belfrage,
-         Keyword.new([{String.to_atom(String.downcase(config_key)), System.get_env(config_key)}])
+  if set_type == :default do
+    config :belfrage,
+           Keyword.new([{String.to_atom(String.downcase(config_key)), System.get_env(config_key)}])
+  end
 end)
 
-config :belfrage, authentication: %{
-  "iss" => System.get_env("ACCOUNT_ISS"),
-  "aud" => "Account",
-  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
-  "session_url" => System.get_env("SESSION_URL")
-}
+config :belfrage,
+  authentication: %{
+    "iss" => System.get_env("ACCOUNT_ISS"),
+    "aud" => "Account",
+    "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
+    "session_url" => System.get_env("SESSION_URL")
+  }
