@@ -33,10 +33,15 @@ defmodule Belfrage.Clients.Account do
 
         {:error, "unknown response"}
 
-      {:error, http_error} ->
-        Stump.log(:warn, "Error received from the JWK API: #{http_error}", cloudwatch: true)
+      {:error, %Clients.HTTP.Error{reason: reason}} ->
+        Stump.log(:warn, "Error received from the JWK API: #{reason}", cloudwatch: true)
 
-        {:error, http_error}
+        {:error, reason}
+
+      {:error, _http_error} ->
+        Stump.log(:warn, "Unknown error received from the JWK API", cloudwatch: true)
+
+        {:error, :unknown}
     end
   end
 
