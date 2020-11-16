@@ -89,7 +89,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   ]
 
   @impl true
-  def call(rest, struct) do
+  def call(_rest, struct) do
     case Enum.member?(@webcore_ids, struct.request.path_params["id"]) do
       true ->
         then(
