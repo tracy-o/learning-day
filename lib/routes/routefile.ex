@@ -174,6 +174,14 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
+  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: ["/news/topics/cl1gj7nz0l0t/ben-hunte-lgbt-correspondent"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
+  handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/cr3pkx7vy68t"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
@@ -342,10 +350,6 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
-
-  handle "/news/topics/:id", using: "NewsTopicPage", examples: ["/news/topics/cr3pkx7vy68t"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
-  end
 
   # Route for testing only, disabling examples to avoid smoke test failures, 
   # example route: "/comments/embed/news/business-1234567"
