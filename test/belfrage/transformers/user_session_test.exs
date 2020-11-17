@@ -420,18 +420,16 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
 
-      run_fn = fn ->
-        assert {
-                 :redirect,
-                 %Belfrage.Struct{
-                   private: %Belfrage.Struct.Private{
-                     authenticated: true,
-                     session_token: ^access_token,
-                     valid_session: false
-                   }
+      assert {
+               :redirect,
+               %Belfrage.Struct{
+                 private: %Belfrage.Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
                  }
-               } = UserSession.call([], struct)
-      end
+               }
+             } = UserSession.call([], struct)
     end
 
     test "a malformed access token will be redirected", %{struct: struct, malformed_access_token: access_token} do

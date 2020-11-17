@@ -4,13 +4,11 @@ defmodule Belfrage.Transformers.UserSession do
   # note: `Plug.Conn.Cookies.decode` benchmark
   # https://github.com/bbc/belfrage/pull/574#issuecomment-715417312
   import Plug.Conn.Cookies, only: [decode: 1]
-  @encoded_questionmark "%3F"
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
-    struct =
-      %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
-      |> maybe_redirect(rest)
+    %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
+    |> maybe_redirect(rest)
   end
 
   def call(rest, struct), do: then(rest, struct)
@@ -76,7 +74,7 @@ defmodule Belfrage.Transformers.UserSession do
   defp session_url, do: Application.get_env(:belfrage, :authentication)["session_url"]
 
   defp redirect_url(request) do
-    "#{session_url}/session?ptrt=#{ptrt(request)}"
+    "#{session_url()}/session?ptrt=#{ptrt(request)}"
   end
 
   defp ptrt(request) do
