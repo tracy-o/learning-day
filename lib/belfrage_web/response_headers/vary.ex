@@ -3,8 +3,12 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
+  alias Belfrage.Struct.Private
 
   @behaviour ResponseHeaders
+
+  # TODO: to be removed and made explicit via DSL in RESFRAME-3924
+  @disallow_headers ["cookie"]
 
   @impl ResponseHeaders
   def add_header(conn, %Struct{request: request, private: private}) do
@@ -15,33 +19,42 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     )
   end
 
-  def vary_headers(request, private, false) do
+  def vary_headers(request, private, cdn?)
+
+  def vary_headers(request, %Private{headers_allowlist: []}, false) do
+    base_headers(request) |> IO.iodata_to_binary()
+  end
+
+  def vary_headers(request, %Private{headers_allowlist: list}, false) do
+    [base_headers(request), allow_headers(list)] |> IO.iodata_to_binary()
+  end
+
+  def vary_headers(_request, _private, true), do: "Accept-Encoding"
+
+  def disallow_headers(), do: @disallow_headers
+
+  defp base_headers(request) do
     [
       "Accept-Encoding",
+      ?,,
       "X-BBC-Edge-Cache",
+      ?,,
       country(edge_cache: request.edge_cache?),
+      ?,,
       is_uk(request.edge_cache?),
-      "X-BBC-Edge-Scheme",
-      additional_headers(private.headers_allowlist)
+      ?,,
+      "X-BBC-Edge-Scheme"
     ]
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join(",")
   end
 
-  def vary_headers(_request, _private, true) do
-    "Accept-Encoding"
-  end
+  defp allow_headers(headers)
+  defp allow_headers([]), do: []
+  defp allow_headers([header | rest]) when header in @disallow_headers, do: allow_headers(rest)
+  defp allow_headers([header | rest]), do: [?,, header, allow_headers(rest)]
 
-  def country(edge_cache: true), do: "X-BBC-Edge-Country"
-  def country(edge_cache: false), do: "X-Country"
+  defp country(edge_cache: true), do: "X-BBC-Edge-Country"
+  defp country(edge_cache: false), do: "X-Country"
 
-  def is_uk(true), do: "X-BBC-Edge-IsUK"
-  def is_uk(false), do: "X-IP_Is_UK_Combined"
-
-  defp additional_headers(allowed_headers) when allowed_headers == [], do: nil
-
-  defp additional_headers(allowed_headers) do
-    allowed_headers
-    |> Enum.join(",")
-  end
+  defp is_uk(true), do: "X-BBC-Edge-IsUK"
+  defp is_uk(false), do: "X-IP_Is_UK_Combined"
 end
