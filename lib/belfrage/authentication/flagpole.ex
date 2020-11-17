@@ -1,25 +1,60 @@
 defmodule Belfrage.Authentication.Flagpole do
   use GenServer
 
-  @initial_state true
-  @poll_rate 10_000
+  @account_client Application.get_env(:belfrage, :account_client)
+
+  @default_poll_rate 10_000
+
+  @states %{"GREEN" => true, "RED" => false}
+  @idcta_state_key "id-availability"
+  @idcta_states Map.keys(@states)
+
+  @initial_state @states["GREEN"]
 
   def start_link(opts) do
     GenServer.start_link(
       __MODULE__,
-      %{poll_rate: Keyword.get(opts, :poll_rate, @poll_rate)},
+      %{poll_rate: Keyword.get(opts, :poll_rate, @default_poll_rate)},
       name: Keyword.get(opts, :name, __MODULE__)
     )
   end
 
-  @spec state(GenServer.server()) :: boolean()
+  @spec state(GenServer.server()) :: boolean
   def state(server \\ __MODULE__), do: GenServer.call(server, :state)
+
+  @spec poll(GenServer.server()) :: any
+  def poll(server \\ __MODULE__), do: send(server, :poll)
 
   # Server callbacks
 
   @impl true
   def init(%{poll_rate: _rate}), do: {:ok, @initial_state}
 
-  @impl GenServer
+  @impl true
   def handle_call(:state, _from, state), do: {:reply, state, state}
+
+  @impl true
+  def handle_info(:poll, state) do
+    case @account_client.get_idcta_config() do
+      {:ok, config} -> {:noreply, availability(config, state)}
+      {:error, _reason} -> {:noreply, state}
+    end
+  end
+
+  # Catch all to handle unexpected messages for now
+  def handle_info(_any_message, state), do: {:noreply, state}
+
+  defp availability(%{@idcta_state_key => new_state}, _state) when new_state in @idcta_states do
+    @states[new_state]
+  end
+
+  defp availability(%{@idcta_state_key => new_state}, state) do
+    Stump.log(:warn, "Unknown state: #{new_state}", cloudwatch: true)
+    state
+  end
+
+  defp availability(_, state) do
+    Stump.log(:warn, "idcta state unavailable in config", cloudwatch: true)
+    state
+  end
 end

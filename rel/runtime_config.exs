@@ -14,7 +14,7 @@ use Mix.Config
   {"ACCOUNT_ISS", :custom},
   {"ACCOUNT_JWK_URI", :custom},
   {"SESSION_URL", :custom},
-  {"ACCOUNT_IDCTA_URI", :custom}  
+  {"ACCOUNT_IDCTA_CONFIG_URI", :custom}  
 ]
 |> Enum.each(fn {config_key, set_type} ->
   if System.get_env(config_key) == nil do
@@ -32,5 +32,5 @@ config :belfrage, authentication: %{
   "aud" => "Account",
   "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
   "session_url" => System.get_env("SESSION_URL"),
-  "account_idcta_uri" => System.get_env("ACCOUNT_IDCTA_URI")
+  "account_idcta_config_uri" => System.get_env("ACCOUNT_IDCTA_CONFIG_URI")
 }

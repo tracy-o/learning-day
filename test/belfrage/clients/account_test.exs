@@ -69,7 +69,7 @@ defmodule Belfrage.Client.AccountTest do
         method: :get,
         payload: "",
         timeout: 6000,
-        url: @authentication["account_idcta_uri"]
+        url: @authentication["account_idcta_config_uri"]
       }
 
       Clients.HTTPMock

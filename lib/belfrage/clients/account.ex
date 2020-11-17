@@ -21,7 +21,7 @@ defmodule Belfrage.Clients.Account do
 
   def get_idcta_config do
     # TODO: handle json decode errors
-    case get_from_api(auth_config()["account_idcta_uri"], "IDCTA") do
+    case get_from_api(auth_config()["account_idcta_config_uri"], "IDCTA") do
       {:ok, config} -> @json_codec.decode(config)
       {:error, reason} -> {:error, reason}
     end
