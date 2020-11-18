@@ -142,16 +142,6 @@ defmodule Routes.Routefile do
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
-  handle "/homepage/uktipo", using: "HomePageUkTipo", examples: ["/homepage/uktipo"]
-  handle "/homepage/scotlandtipo", using: "ScotlandTipoHomePage", examples: ["/homepage/scotlandtipo"]
-  handle "/homepage/walestipo", using: "WalesTipoHomePage", examples: ["/homepage/walestipo"]
-  handle "/homepage/northernirelandtipo", using: "NorthernIrelandTipoHomePage", examples: ["/homepage/northernirelandtipo"]
-  handle "/homepage/cymrutipo", using: "CymruTipoHomePage", examples: ["/homepage/cymrutipo"]
-  handle "/homepage/albatipo", using: "AlbaTipoHomePage", examples: ["/homepage/albatipo"]
-
-  handle "/homepage/testtipo", using: "TestTipoHomePage", only_on: "test", examples: ["/homepage/testtipo"]
-  handle "/homepage/automationtipo", using: "AutomationTipoHomePage", only_on: "test", examples: ["/homepage/automationtipo"]
-
   handle "/homepage/preview", using: "HomePagePreview", only_on: "test", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", only_on: "test", examples: ["/homepage/preview/scotland"]
   handle "/homepage/preview/wales", using: "HomePagePreviewWales", only_on: "test", examples: ["/homepage/preview/wales"]
