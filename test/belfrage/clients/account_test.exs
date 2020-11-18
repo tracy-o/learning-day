@@ -74,7 +74,7 @@ defmodule Belfrage.Client.AccountTest do
 
       Clients.HTTPMock
       |> expect(:execute, fn ^expected_request ->
-        {:ok, %Clients.HTTP.Response{status_code: 200, body: Jason.encode!(%{"id-availability": "GREEN"})}}
+        {:ok, %Clients.HTTP.Response{status_code: 200, body: Jason.encode!(%{"id-availability": "RED"})}}
       end)
 
       assert Belfrage.Clients.AccountStub.get_idcta_config() == Account.get_idcta_config()

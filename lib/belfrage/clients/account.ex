@@ -62,7 +62,7 @@ defmodule Belfrage.Clients.Account do
     {:error, reason}
   end
 
-  defp handle_response({:error, http_error}, api) do
+  defp handle_response({:error, _http_error}, api) do
     Stump.log(:warn, "Unknown error received from the #{api} API", cloudwatch: true)
     {:error, "unknown http error"}
   end

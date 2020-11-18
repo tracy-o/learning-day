@@ -8,6 +8,6 @@ defmodule Belfrage.Clients.AccountStub do
 
   @impl true
   def get_idcta_config() do
-    {:ok, %{"id-availability" => "GREEN"}}
+    {:ok, %{"id-availability" => "RED"}}
   end
 end

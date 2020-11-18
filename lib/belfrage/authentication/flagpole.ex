@@ -28,16 +28,21 @@ defmodule Belfrage.Authentication.Flagpole do
   # Server callbacks
 
   @impl true
-  def init(%{poll_rate: _rate}), do: {:ok, @initial_state}
+  def init(%{poll_rate: rate}) do
+    schedule_work(self(), rate)
+    {:ok, {rate, @initial_state}}
+  end
 
   @impl true
-  def handle_call(:state, _from, state), do: {:reply, state, state}
+  def handle_call(:state, _from, {rate, state}), do: {:reply, state, {rate, state}}
 
   @impl true
-  def handle_info(:poll, state) do
+  def handle_info(:poll, {rate, state}) do
+    schedule_work(self(), rate)
+
     case @account_client.get_idcta_config() do
-      {:ok, config} -> {:noreply, availability(config, state)}
-      {:error, _reason} -> {:noreply, state}
+      {:ok, config} -> {:noreply, {rate, availability(config, state)}}
+      {:error, _reason} -> {:noreply, {rate, state}}
     end
   end
 
@@ -57,4 +62,6 @@ defmodule Belfrage.Authentication.Flagpole do
     Stump.log(:warn, "idcta state unavailable in config", cloudwatch: true)
     state
   end
+
+  defp schedule_work(server, rate), do: Process.send_after(server, :poll, rate)
 end

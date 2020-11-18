@@ -10,7 +10,7 @@ defmodule Belfrage.Authentication.FlagpoleTest do
   @server :flagpole_test
 
   setup do
-    {:ok, _pid} = start_supervised({Flagpole, [name: @server]})
+    {:ok, _pid} = start_supervised(%{id: @server, start: {Flagpole, :start_link, [[name: @server]]}})
     :ok
   end
 
@@ -48,24 +48,50 @@ defmodule Belfrage.Authentication.FlagpoleTest do
   end
 
   describe "GenServer" do
-    test "default state is true after startup" do
-      assert true = Flagpole.state(@server)
+    test "default state is true" do
+      assert Flagpole.state(@server) == true
+    end
+
+    test "restart with default state after crash" do
+      previous_pid = Process.whereis(@server)
+      Process.exit(previous_pid, :kill)
+
+      refute Process.alive?(previous_pid)
+      Process.sleep(30)
+
+      new_pid = Process.whereis(@server)
+      assert Process.alive?(new_pid)
+      refute previous_pid == new_pid
+
+      assert Flagpole.state(@server) == true
+    end
+
+    test "polling as scheduled" do
+      # restart GenServer with 20ms poll rate for test
+      :ok = stop_supervised(@server)
+      {:ok, _pid} = start_supervised({Flagpole, [name: @server, poll_rate: 20]})
+
+      assert Flagpole.state(@server) == true
+
+      # wait for polling, the RED state from stub
+      Process.sleep(50)
+      assert Flagpole.state(@server) == false
     end
 
     test "handle_info/2 handles unknown state" do
-      state = true
+      state = {10_000, true}
       AccountMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "BLUE"}} end)
       assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "Unknown state: BLUE"
     end
 
     test "handle_info/2 handles unavailable state" do
-      state = true
+      state = {10_000, true}
       AccountMock |> expect(:get_idcta_config, fn -> {:ok, %{}} end)
       assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "idcta state unavailable in config"
     end
 
     test "handle_info/2 handles malformed state" do
-      state = true
+      state = {10_000, true}
       AccountMock |> expect(:get_idcta_config, fn -> {:ok, "malformed idcta config"} end)
       assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "idcta state unavailable in config"
     end
