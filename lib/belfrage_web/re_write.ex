@@ -43,7 +43,7 @@ defmodule BelfrageWeb.ReWrite do
 
   defp chunk(matcher) do
     chunk_fun = fn element, acc ->
-      if element in @identifier_prefixes ++ @segment_delimiters do
+      if element in (@identifier_prefixes ++ @segment_delimiters) do
         {:cont, acc, [element]}
       else
         {:cont, acc ++ [element]}
