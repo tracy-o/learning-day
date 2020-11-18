@@ -195,6 +195,70 @@ defmodule BelfrageWeb.RouteMasterTest do
                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
              ]
     end
+
+    test "with a simple path rewrite" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/rewrite-redirect/resource-id-123345")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location/resource-id-123345/somewhere"]
+    end
+
+    test "with a complex path rewrite" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/rewrite-redirect/12345/section/catch-all/i-am-a-url-slug-for-SEO")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location/section-12345/i-am-a-url-slug-for-SEO"]
+    end
+
+    test "with a host redirect" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://example.net/rewrite-redirect/12345/catch-all/i-am-a-url-slug-for-SEO")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://bbc.com/new-location/12345-i-am-a-url-slug-for-SEO"]
+    end
+
+    test "re-writes path variable into host" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "https://example.net/rewrite-redirect/12345/i-am-a-url-slug-for-SEO")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["https://12345.bbc.com/new-location/i-am-a-url-slug-for-SEO"]
+    end
   end
 
   describe "calling redirect with host" do

@@ -72,7 +72,7 @@ defmodule Belfrage.DialsSupervisorTest do
       test "it should log error" do
         assert capture_log(fn ->
                  GenServer.cast(@test_dial, {:dials_changed, %{to_string(@test_dial) => "this crashes the dial"}})
-                 :timer.sleep(50)
+                 :timer.sleep(75)
                end) =~ "terminating\n** (FunctionClauseError) no function clause matching"
       end
 

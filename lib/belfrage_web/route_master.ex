@@ -105,6 +105,8 @@ defmodule BelfrageWeb.RouteMaster do
   # location = to_string(var!(conn).scheme) <> "://" <> var!(conn).host <> unquote(location)
   # plus the port etc.
   defmacro redirect(from, to: location, status: status) do
+    matcher = BelfrageWeb.ReWrite.prepare(location) |> Macro.escape()
+
     quote do
       redirect_statuses = Application.get_env(:belfrage, :redirect_statuses)
 
@@ -114,15 +116,10 @@ defmodule BelfrageWeb.RouteMaster do
 
       uri_from = URI.parse(unquote(from))
 
-      @redirects [{uri_from.path, []} | @redirects]
+      @redirects [{unquote(from), unquote(location), unquote(status)} | @redirects]
 
       get(to_string(uri_from.path), host: uri_from.host) do
-        request_path = join_path_params(Map.get(var!(conn).path_params, "any"))
-
-        new_location =
-          unquote(location)
-          |> String.replace("/*", request_path)
-          |> String.trim_trailing("/")
+        new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
 
         StructAdapter.adapt(var!(conn), "redirect")
         |> View.redirect(var!(conn), unquote(status), new_location)
@@ -132,6 +129,8 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro __before_compile__(_env) do
     quote do
+      def redirects, do: @redirects
+
       def routes do
         @routes
         |> Enum.flat_map(fn
@@ -150,13 +149,5 @@ defmodule BelfrageWeb.RouteMaster do
         end)
       end
     end
-  end
-
-  def join_path_params(_params = nil) do
-    ""
-  end
-
-  def join_path_params(params) do
-    "/" <> Enum.join(params, "/")
   end
 end

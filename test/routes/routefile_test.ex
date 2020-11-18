@@ -7,6 +7,8 @@ defmodule Routes.RoutefileTest do
   alias BelfrageWeb.Router
   alias Belfrage.Struct
 
+  @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
+
   @moduletag :routes_test
 
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
@@ -87,6 +89,21 @@ defmodule Routes.RoutefileTest do
           end
         end
       end)
+    end
+  end)
+
+  Enum.each(Routes.Routefile.redirects(), fn {from, to, status} ->
+    @to to
+    @status status
+
+    describe "Redirect #{from} to #{to}" do
+      test "location does not end with a *" do
+        refute String.ends_with?(@to, "*")
+      end
+
+      test "status is a redirect" do
+        assert @status in @redirect_statuses
+      end
     end
   end)
 
