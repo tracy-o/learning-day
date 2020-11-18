@@ -1,8 +1,6 @@
 defmodule BelfrageWeb.ReWrite do
-  alias BelfrageWeb.ReWrite
-
-  @var_signs [":", "*"]
-  @end_of_var_signs ["/", "-", "."]
+  @identifier_prefixes [":", "*"]
+  @segment_delimiters ["/", "-", "."]
 
   @doc ~S"""
   Prepares a matcher for use with the interpolate/2 function.
@@ -31,7 +29,7 @@ defmodule BelfrageWeb.ReWrite do
   def prepare(matcher) do
     chunk(matcher)
     |> Enum.map(fn
-      [char | rest] when char in @var_signs and length(rest) > 0 -> {:var, Enum.join(rest)}
+      [char | rest] when char in @identifier_prefixes and length(rest) > 0 -> {:var, Enum.join(rest)}
       chars -> Enum.join(chars, "")
     end)
     |> Enum.chunk_by(&is_binary/1)
@@ -45,7 +43,7 @@ defmodule BelfrageWeb.ReWrite do
 
   defp chunk(matcher) do
     chunk_fun = fn element, acc ->
-      if element in @var_signs ++ @end_of_var_signs do
+      if element in @identifier_prefixes ++ @segment_delimiters do
         {:cont, acc, [element]}
       else
         {:cont, acc ++ [element]}
