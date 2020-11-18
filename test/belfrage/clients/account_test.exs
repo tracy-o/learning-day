@@ -8,9 +8,12 @@ defmodule Belfrage.Client.AccountTest do
   alias Belfrage.Clients.Account
 
   @authentication Application.get_env(:belfrage, :authentication)
+
   @error_response {:error, %Clients.HTTP.Error{reason: :timeout}}
   @error_unknown_response {:error, :einval}
+
   @not_200_response {:ok, %Clients.HTTP.Response{status_code: 500, body: ""}}
+  @malformed_json_response {:ok, %Clients.HTTP.Response{status_code: 200, body: "malformed json"}}
   @unknown_response {:ok, :unknown_response}
   @ok_response {
     :ok,
@@ -20,8 +23,11 @@ defmodule Belfrage.Client.AccountTest do
     }
   }
 
-  describe "Jwk" do
-    test "get_jwk_keys/0 returns the keys from the account api" do
+  @idcta_api_config_key "account_idcta_config_uri"
+  @jwk_api_config_key "account_jwk_uri"
+
+  describe "get_jwk_keys/0" do
+    test "returns the keys from the account api" do
       expected_request = %Belfrage.Clients.HTTP.Request{
         headers: %{},
         method: :get,
@@ -43,27 +49,32 @@ defmodule Belfrage.Client.AccountTest do
 
     test "logs non 200-status response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @not_200_response end)
-      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Non 200 Status Code (500) from the JWK API"
+      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Non 200 Status Code (500) from #{@jwk_api_config_key}"
     end
 
     test "logs unknown response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @unknown_response end)
-      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown response from the JWK API"
+      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown response from #{@jwk_api_config_key}"
     end
 
     test "logs error response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @error_response end)
-      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Error received from the JWK API: timeout"
+      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Error received from #{@jwk_api_config_key}: timeout"
     end
 
-    test "logs unknown http error " do
+    test "logs unknown http error" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @error_unknown_response end)
-      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown error received from the JWK API"
+      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Unknown error received from #{@jwk_api_config_key}"
+    end
+
+    test "handles malformed JSON" do
+      Clients.HTTPMock |> expect(:execute, fn _ -> @malformed_json_response end)
+      assert capture_log(fn -> Account.get_jwk_keys() end) =~ "Error while decoding data from #{@jwk_api_config_key}"
     end
   end
 
-  describe "IDCTA" do
-    test "get_idcta_config/0 returns data from the api" do
+  describe "get_idcta_config/0" do
+    test "returns data from the api" do
       expected_request = %Belfrage.Clients.HTTP.Request{
         headers: %{},
         method: :get,
@@ -91,22 +102,33 @@ defmodule Belfrage.Client.AccountTest do
 
     test "logs non 200-status response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @not_200_response end)
-      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Non 200 Status Code (500) from the IDCTA API"
+
+      assert capture_log(fn -> Account.get_idcta_config() end) =~
+               "Non 200 Status Code (500) from #{@idcta_api_config_key}"
     end
 
     test "logs unknown response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @unknown_response end)
-      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Unknown response from the IDCTA API"
+      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Unknown response from #{@idcta_api_config_key}"
     end
 
     test "logs error response" do
       Clients.HTTPMock |> expect(:execute, fn _ -> @error_response end)
-      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Error received from the IDCTA API: timeout"
+
+      assert capture_log(fn -> Account.get_idcta_config() end) =~
+               "Error received from #{@idcta_api_config_key}: timeout"
     end
 
     test "logs unknown http error " do
       Clients.HTTPMock |> expect(:execute, fn _ -> @error_unknown_response end)
-      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Unknown error received from the IDCTA API"
+      assert capture_log(fn -> Account.get_idcta_config() end) =~ "Unknown error received from #{@idcta_api_config_key}"
+    end
+
+    test "handles malformed JSON" do
+      Clients.HTTPMock |> expect(:execute, fn _ -> @malformed_json_response end)
+
+      assert capture_log(fn -> Account.get_idcta_config() end) =~
+               "Error while decoding data from #{@idcta_api_config_key}"
     end
   end
 end

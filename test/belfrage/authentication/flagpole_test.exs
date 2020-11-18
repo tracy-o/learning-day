@@ -66,7 +66,7 @@ defmodule Belfrage.Authentication.FlagpoleTest do
       assert Flagpole.state(@server) == true
     end
 
-    test "polling as scheduled" do
+    test "polling happens as scheduled" do
       # restart GenServer with 20ms poll rate for test
       :ok = stop_supervised(@server)
       {:ok, _pid} = start_supervised({Flagpole, [name: @server, poll_rate: 20]})
