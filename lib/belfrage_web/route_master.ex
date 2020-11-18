@@ -119,8 +119,6 @@ defmodule BelfrageWeb.RouteMaster do
       @redirects [{unquote(from), unquote(location), unquote(status)} | @redirects]
 
       get(to_string(uri_from.path), host: uri_from.host) do
-        request_path = join_path_params(Map.get(var!(conn).path_params, "any"))
-
         new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
 
         StructAdapter.adapt(var!(conn), "redirect")
@@ -151,13 +149,5 @@ defmodule BelfrageWeb.RouteMaster do
         end)
       end
     end
-  end
-
-  def join_path_params(_params = nil) do
-    ""
-  end
-
-  def join_path_params(params) do
-    "/" <> Enum.join(params, "/")
   end
 end
