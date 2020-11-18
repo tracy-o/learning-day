@@ -122,12 +122,12 @@ defmodule Routes.Routefile do
   redirect("http://www.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*", status: 302)
   redirect("http://m.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*", status: 302)
   redirect("http://bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*", status: 302)
-  redirect("http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia_pacific/*", status: 302)
-  redirect("http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia_pacific/*", status: 302)
-  redirect("http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia_pacific/*", status: 302)
-  redirect("http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/south_asia/*", status: 302)
-  redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/south_asia/*", status: 302)
-  redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/south_asia/*", status: 302)
+  redirect("http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
+  redirect("http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
+  redirect("http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
+  redirect("http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
+  redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
+  redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*", status: 302)
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
