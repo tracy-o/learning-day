@@ -54,8 +54,10 @@ defmodule BelfrageWeb.ReWrite do
 
     after_fun = fn acc -> {:cont, acc, []} end
 
-    Enum.chunk_while(String.graphemes(matcher), [], chunk_fun, after_fun)
+    Enum.chunk_while(split_chars(matcher), [], chunk_fun, after_fun)
   end
+
+  defp split_chars(str), do: String.split(str, "", trim: true)
 
   @doc ~S"""
   Interpolates path parameters into a string.
