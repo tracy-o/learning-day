@@ -8,9 +8,15 @@ Belfrage looks after the resiliency of the page, it monitors in real-time the st
 
 Belfrage is simple and fast, with a number of ancillary apps outside of the traffic flow to add additional features and functionality.
 
-### Architecture
+## Architecture
 
 [More details on the Belfrage architecture](./docs/architecture.md)
+
+## Personalisation
+
+Belfrage supports requests for personalised content.
+
+[More details on personalisation in Belfrage](./docs/personalisation.md)
 
 ## Key features of Belfrage
 
