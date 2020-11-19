@@ -23,7 +23,7 @@ defmodule Belfrage.Client.AccountTest do
     }
   }
 
-  @idcta_api_config_key "account_idcta_config_uri"
+  @idcta_api_config_key "idcta_config_uri"
   @jwk_api_config_key "account_jwk_uri"
 
   describe "get_jwk_keys/0" do
@@ -80,7 +80,7 @@ defmodule Belfrage.Client.AccountTest do
         method: :get,
         payload: "",
         timeout: 6000,
-        url: @authentication["account_idcta_config_uri"]
+        url: @authentication["idcta_config_uri"]
       }
 
       Clients.HTTPMock

@@ -140,15 +140,10 @@
     "name": "SESSION_URL"
   },
   {
-    "name": "ACCOUNT_IDCTA_CONFIG_URI",
-    "default-value": "https://idcta.api.bbc.co.uk/idcta/config",
-    "options": [
-      {
-        "value": "https://idcta.test.api.bbc.co.uk/idcta/config"
-      },
-      {
-        "value": "https://idcta.api.bbc.co.uk/idcta/config"
-      }
-    ]
+    "values": {
+      "test": "https://idcta.test.api.bbc.co.uk/idcta/config",
+      "live": "https://idcta.api.bbc.co.uk/idcta/config"
+    },
+    "name": "IDCTA_CONFIG_URI"
   }
 ]

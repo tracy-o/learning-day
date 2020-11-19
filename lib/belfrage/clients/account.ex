@@ -4,7 +4,7 @@ defmodule Belfrage.Clients.Account do
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  @idcta_api_config_key "account_idcta_config_uri"
+  @idcta_api_config_key "idcta_config_uri"
   @jwk_api_config_key "account_jwk_uri"
 
   @callback get_jwk_keys() :: {:ok, map()} | {:error, term()}
