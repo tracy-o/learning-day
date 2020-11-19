@@ -1,4 +1,4 @@
-defmodule Belfrage.Clients.Account do
+defmodule Belfrage.Clients.Authentication do
   alias Belfrage.Clients
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)

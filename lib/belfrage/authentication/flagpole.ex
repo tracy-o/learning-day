@@ -1,7 +1,7 @@
 defmodule Belfrage.Authentication.Flagpole do
   use GenServer
 
-  @account_client Application.get_env(:belfrage, :account_client)
+  @authentication_client Application.get_env(:belfrage, :authentication_client)
 
   @default_poll_rate 10_000
 
@@ -40,7 +40,7 @@ defmodule Belfrage.Authentication.Flagpole do
   def handle_info(:poll, {rate, state}) do
     schedule_work(self(), rate)
 
-    case @account_client.get_idcta_config() do
+    case @authentication_client.get_idcta_config() do
       {:ok, config} -> {:noreply, {rate, availability(config, state)}}
       {:error, _reason} -> {:noreply, {rate, state}}
     end

@@ -2,7 +2,7 @@ defmodule Belfrage.Authentication.JwkTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Clients.AccountMock
+  alias Belfrage.Clients.AuthenticationMock
   alias Belfrage.Authentication.Jwk
 
   import ExUnit.CaptureLog
@@ -12,7 +12,7 @@ defmodule Belfrage.Authentication.JwkTest do
   }
 
   setup do
-    AccountMock
+    AuthenticationMock
     |> expect(:get_jwk_keys, fn -> {:ok, @expected_jwk_response} end)
 
     :ok

@@ -1,5 +1,5 @@
-defmodule Belfrage.Clients.AccountStub do
-  @behaviour Belfrage.Clients.Account
+defmodule Belfrage.Clients.AuthenticationStub do
+  @behaviour Belfrage.Clients.Authentication
 
   @impl true
   def get_jwk_keys() do
