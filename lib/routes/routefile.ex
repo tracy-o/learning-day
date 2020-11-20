@@ -131,6 +131,7 @@ defmodule Routes.Routefile do
 
   redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 302)
   redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 302)
+  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
