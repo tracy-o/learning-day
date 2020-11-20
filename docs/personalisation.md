@@ -55,7 +55,7 @@ The following claims are validated
 * aud = Account
 * tokenName = access_token
 
-The token is also verified as well as validated. To verify a token Belfrage uses the BBC Account key to ensure that the token was signed by the BBC. For performance reasons Belfrage keeps the available account keys in memory with a GenServer process perdiocially running in the background to refresh the list.
+The token is also verified as well as validated. To verify a token Belfrage uses the BBC Account key to ensure that the token was signed by the BBC. For performance reasons Belfrage keeps the available account keys in memory with a GenServer process periodically running in the background to refresh the list.
 
 Each user is token is signed using a specific key. The header of the users access token (`ckns_atkn`) specifies which key was used to sign it
 
