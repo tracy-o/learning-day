@@ -10,6 +10,19 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
   @token Fixtures.AuthToken.valid_access_token()
 
+  @empty_response_private_cache_control %Struct.Response{
+    body: "",
+    cache_directive: %Belfrage.CacheControl{
+      cacheability: "private",
+      max_age: nil,
+      stale_if_error: nil,
+      stale_while_revalidate: nil
+    },
+    fallback: false,
+    headers: %{},
+    http_status: nil
+  }
+
   setup do
     %{
       struct: %Struct{
@@ -288,6 +301,179 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    authenticated: true,
                    session_token: @token,
                    valid_session: true
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
+  describe "when flagpole is false" do
+    setup do
+      expect(FlagpoleMock, :state, fn -> false end)
+      :ok
+    end
+
+    test "cookie for 'ckns_id' only will not be authenticated", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' only will not be redirected", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' only will return nil session token", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   session_token: nil
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' and other keys will not be authenticated", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' and other keys will not be redirected", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be authenticated and return nil session token", %{
+      struct: struct
+    } do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be redirected", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
+      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+    end
+
+    test "cookie without 'ckns_id' will not be authenticated", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie without 'ckns_atkn' will not be redirected", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+    end
+
+    test "cookie without 'ckns_atkn' will return nil session token", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   session_token: nil
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "empty cookie will not be authenticated", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "empty cookie will not be redirected", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
+      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+    end
+
+    test "empty cookie will return nil session token", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   session_token: nil
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' and `ckns_atkn` keys will neither be authenticated nor have session token stored" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "cookie for 'ckns_id' and `ckns_atkn` keys will neither be authenticated nor have valid session set" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil,
+                   valid_session: false
                  }
                }
              } = UserSession.call([], struct)
