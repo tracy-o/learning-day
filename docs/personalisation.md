@@ -41,7 +41,7 @@ Belfrage only supports v5 of the BBC Account.
 
 A periodic request is made to he IDCTA config which contains the BBC ID flagpole status. Belfrage looks for the `id-availability` key for the values `GREEN` or `RED` applying the fallback of `GREEN` should there be an issue retrieving the config.
 
-The config is retrieved from the API at https://idcta.api.bbc.co.uk/idcta/config every 10 seconds currently (check the GenServer module in case it changes).
+The config is retrieved from the API at https://idcta.api.bbc.co.uk/idcta/config every 10 seconds currently and stored in-memory. The config flagpole state is available for continuous polling by other personalisation components, i.e. the user session transformer.
 
 ## Verify user access tokens
 
