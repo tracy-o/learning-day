@@ -167,7 +167,7 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
-  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: ["/news/topics/cl1gj7nz0l0t/ben-hunte-lgbt-correspondent"] do
+  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
