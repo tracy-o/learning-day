@@ -23,6 +23,7 @@ config :belfrage,
   ccp_client: Belfrage.Clients.CCPMock,
   ccp_s3_bucket: "belfrage-distributed-cache-test",
   authentication_client: Belfrage.Clients.AuthenticationMock,
+  flagpole: Belfrage.Authentication.FlagpoleMock,
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html"
