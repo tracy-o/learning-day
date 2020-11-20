@@ -11,6 +11,8 @@ defmodule Belfrage.Authentication.Flagpole do
 
   @initial_state @states["GREEN"]
 
+  @callback state() :: boolean
+
   def start_link(opts) do
     GenServer.start_link(
       __MODULE__,
@@ -19,8 +21,11 @@ defmodule Belfrage.Authentication.Flagpole do
     )
   end
 
+  @spec state() :: boolean
+  def state(), do: state(__MODULE__)
+
   @spec state(GenServer.server()) :: boolean
-  def state(server \\ __MODULE__), do: GenServer.call(server, :state)
+  def state(server), do: GenServer.call(server, :state)
 
   @spec refresh(GenServer.server()) :: any
   def refresh(server \\ __MODULE__), do: send(server, :refresh)
