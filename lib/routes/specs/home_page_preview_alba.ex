@@ -3,7 +3,8 @@ defmodule Routes.Specs.HomePagePreviewAlba do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Runbook",
-      platform: Webcore
+      platform: Webcore,
+      default_language: "gd"
     }
   end
 end
