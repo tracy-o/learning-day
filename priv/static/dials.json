@@ -59,5 +59,20 @@
         "description": "Disable circuit breaker usage"
       }
     ]
+  },
+  {
+    "name": "personalisation",
+    "description": "This enables or disables personalisation at a global level.",
+    "default-value": "on",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enable personalisation"
+      },
+      {
+        "value": "off",
+        "description": "Disable personalisation"
+      }
+    ]
   }
 ]
