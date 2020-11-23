@@ -18,7 +18,7 @@ defmodule Belfrage.Authentication.JwkTest do
     :ok
   end
 
-  test "get_keys/0 requests the keys from the account client" do
+  test "get_keys/0 requests the keys from the authentication client" do
     Jwk.refresh_now()
 
     assert Fixtures.AuthToken.keys() == Jwk.get_keys()

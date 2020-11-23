@@ -3,7 +3,7 @@ defmodule Belfrage.Authentication.Flagpole do
 
   @authentication_client Application.get_env(:belfrage, :authentication_client)
 
-  @default_poll_rate 10_000
+  @default_refresh_rate 10_000
 
   @states %{"GREEN" => true, "RED" => false}
   @idcta_state_key "id-availability"
@@ -14,7 +14,7 @@ defmodule Belfrage.Authentication.Flagpole do
   def start_link(opts) do
     GenServer.start_link(
       __MODULE__,
-      %{poll_rate: Keyword.get(opts, :poll_rate, @default_poll_rate)},
+      %{refresh_rate: Keyword.get(opts, :refresh_rate, @default_refresh_rate)},
       name: Keyword.get(opts, :name, __MODULE__)
     )
   end
@@ -22,13 +22,13 @@ defmodule Belfrage.Authentication.Flagpole do
   @spec state(GenServer.server()) :: boolean
   def state(server \\ __MODULE__), do: GenServer.call(server, :state)
 
-  @spec poll(GenServer.server()) :: any
-  def poll(server \\ __MODULE__), do: send(server, :poll)
+  @spec refresh(GenServer.server()) :: any
+  def refresh(server \\ __MODULE__), do: send(server, :refresh)
 
   # Server callbacks
 
   @impl true
-  def init(%{poll_rate: rate}) do
+  def init(%{refresh_rate: rate}) do
     schedule_work(self(), rate)
     {:ok, {rate, @initial_state}}
   end
@@ -37,7 +37,7 @@ defmodule Belfrage.Authentication.Flagpole do
   def handle_call(:state, _from, {rate, state}), do: {:reply, state, {rate, state}}
 
   @impl true
-  def handle_info(:poll, {rate, state}) do
+  def handle_info(:refresh, {rate, state}) do
     schedule_work(self(), rate)
 
     case @authentication_client.get_idcta_config() do
@@ -63,5 +63,5 @@ defmodule Belfrage.Authentication.Flagpole do
     state
   end
 
-  defp schedule_work(server, rate), do: Process.send_after(server, :poll, rate)
+  defp schedule_work(server, rate), do: Process.send_after(server, :refresh, rate)
 end

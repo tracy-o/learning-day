@@ -18,29 +18,27 @@ defmodule Belfrage.Authentication.FlagpoleTest do
     assert is_boolean(Flagpole.state(@server))
   end
 
-  describe "poll/1" do
-    test "triggers account client call for IDCTA config" do
+  describe "refresh/1" do
+    test "triggers authentication client call for IDCTA config" do
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "GREEN"}} end)
-      Flagpole.poll(@server)
+      Flagpole.refresh(@server)
       Process.sleep(10)
     end
 
     test "fetches new state" do
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "GREEN"}} end)
-      Flagpole.poll(@server)
-      current_state = Flagpole.state(@server)
-      assert current_state == true
+      Flagpole.refresh(@server)
+      assert Flagpole.state(@server) == true
 
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "RED"}} end)
-      Flagpole.poll(@server)
-      new_state = Flagpole.state(@server)
-      assert new_state == false
+      Flagpole.refresh(@server)
+      assert Flagpole.state(@server) == false
     end
 
     test "handles unknown state and fallbacks to current state" do
       current_state = Flagpole.state(@server)
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "BLUE"}} end)
-      Flagpole.poll(@server)
+      Flagpole.refresh(@server)
 
       new_state = Flagpole.state(@server)
       assert current_state == new_state
@@ -66,14 +64,14 @@ defmodule Belfrage.Authentication.FlagpoleTest do
       assert Flagpole.state(@server) == true
     end
 
-    test "polling happens as scheduled" do
-      # restart GenServer with 20ms poll rate for test
+    test "refreshing happens as scheduled" do
+      # restart GenServer with 20ms refresh rate for test
       :ok = stop_supervised(@server)
-      {:ok, _pid} = start_supervised({Flagpole, [name: @server, poll_rate: 20]})
+      {:ok, _pid} = start_supervised({Flagpole, [name: @server, refresh_rate: 20]})
 
       assert Flagpole.state(@server) == true
 
-      # wait for polling, the RED state from stub
+      # wait for refreshing, the RED state from stub
       Process.sleep(50)
       assert Flagpole.state(@server) == false
     end
@@ -81,19 +79,19 @@ defmodule Belfrage.Authentication.FlagpoleTest do
     test "handle_info/2 handles unknown state" do
       state = {10_000, true}
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "BLUE"}} end)
-      assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "Unknown state: BLUE"
+      assert capture_log(fn -> Flagpole.handle_info(:refresh, state) end) =~ "Unknown state: BLUE"
     end
 
     test "handle_info/2 handles unavailable state" do
       state = {10_000, true}
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{}} end)
-      assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "idcta state unavailable in config"
+      assert capture_log(fn -> Flagpole.handle_info(:refresh, state) end) =~ "idcta state unavailable in config"
     end
 
     test "handle_info/2 handles malformed state" do
       state = {10_000, true}
       AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, "malformed idcta config"} end)
-      assert capture_log(fn -> Flagpole.handle_info(:poll, state) end) =~ "idcta state unavailable in config"
+      assert capture_log(fn -> Flagpole.handle_info(:refresh, state) end) =~ "idcta state unavailable in config"
     end
   end
 end
