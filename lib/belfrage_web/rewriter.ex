@@ -21,6 +21,6 @@ defmodule BelfrageWeb.Rewriter do
       "/foo/:bar/:id"
   """
   def rewrite(matcher) do
-    String.replace(matcher,  ~r/\.(\w*)$/, "/.\\1")
+    String.replace(matcher, ~r/\.(\w*)$/, "/.\\1")
   end
 end

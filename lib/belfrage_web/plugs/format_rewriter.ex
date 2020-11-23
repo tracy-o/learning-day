@@ -43,14 +43,15 @@ defmodule BelfrageWeb.Plugs.FormatRewriter do
   defp rewrite_format([_], conn), do: conn
 
   defp rewrite_format([segment, format], conn = %Plug.Conn{path_info: path_info}) do
-    rewritten_path_info = path_info
-    |> List.replace_at(-1, segment)
-    |> List.insert_at(-1, "." <> format)
+    rewritten_path_info =
+      path_info
+      |> List.replace_at(-1, segment)
+      |> List.insert_at(-1, "." <> format)
 
     %{
-      conn |
-      path_info: rewritten_path_info,
-      path_params: Map.merge(conn.path_params, %{"format" => format})
+      conn
+      | path_info: rewritten_path_info,
+        path_params: Map.merge(conn.path_params, %{"format" => format})
     }
   end
 end
