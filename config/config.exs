@@ -49,7 +49,7 @@ config :belfrage,
   aws_sts: Belfrage.AWS.STS,
   aws_lambda: Belfrage.AWS.Lambda,
   ccp_client: Belfrage.Clients.CCP,
-  account_client: Belfrage.Clients.Account,
+  authentication_client: Belfrage.Clients.Authentication,
   file_io: Belfrage.Helpers.FileIO,
   routefile: Routes.Routefile,
   xray: Belfrage.Xray,
@@ -67,7 +67,8 @@ config :belfrage,
     "iss" => "https://access.int.api.bbc.com/bbcidv5/oauth2",
     "aud" => "Account",
     "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
-    "session_url" => "https://session.test.bbc.co.uk"
+    "session_url" => "https://session.test.bbc.co.uk",
+    "idcta_config_uri" => "https://idcta.int.api.bbc.co.uk/idcta/config"
   }
 
 config :ex_aws,

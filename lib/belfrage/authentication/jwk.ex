@@ -1,7 +1,7 @@
 defmodule Belfrage.Authentication.Jwk do
   use GenServer
 
-  @account_client Application.get_env(:belfrage, :account_client)
+  @authentication_client Application.get_env(:belfrage, :authentication_client)
 
   @refresh_rate 3_600_000
 
@@ -53,7 +53,7 @@ defmodule Belfrage.Authentication.Jwk do
   def handle_info(:refresh, existing_state) do
     schedule_work()
 
-    case @account_client.get_jwk_keys() do
+    case @authentication_client.get_jwk_keys() do
       {:ok, jwk_keys} -> {:noreply, jwk_keys}
       {:error, _reason} -> {:noreply, existing_state}
     end

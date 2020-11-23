@@ -133,10 +133,17 @@
     ]
   },
   {
-    "values":{
+    "values": {
       "test": "https://session.test.bbc.co.uk",
       "live": "https://session.bbc.co.uk"
     },
     "name": "SESSION_URL"
+  },
+  {
+    "values": {
+      "test": "https://idcta.test.api.bbc.co.uk/idcta/config",
+      "live": "https://idcta.api.bbc.co.uk/idcta/config"
+    },
+    "name": "IDCTA_CONFIG_URI"
   }
 ]
