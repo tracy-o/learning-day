@@ -7,8 +7,7 @@ defmodule Routes.Platforms.Mozart do
       pipeline: pipeline(production_env),
       resp_pipeline: [],
       query_params_allowlist: query_params_allowlist(production_env),
-      circuit_breaker_error_threshold: 100,
-      headers_allowlist: ["cookie-ckps_language", "cookie-ckps_chinese", "cookie-ckps_serbian"]
+      circuit_breaker_error_threshold: 100
     }
   end
 
