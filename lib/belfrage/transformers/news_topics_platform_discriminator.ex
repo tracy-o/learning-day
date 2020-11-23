@@ -86,10 +86,10 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "cl1gj7nz0l0t",
     "cl1gj7x2986t",
     "ck7l4e11g49t",
-    "cme72mv58q4t", // BBC Trending
-    "cpml2v678pxt", // The Papers
-    "cn7qzpd3gzgt", // Scottish Newspaper Review
-    "c4mr5v9znzqt"  // NI Newspaper Review
+    "cme72mv58q4t",
+    "cpml2v678pxt",
+    "cn7qzpd3gzgt",
+    "c4mr5v9znzqt"
   ]
 
   @impl true
