@@ -85,7 +85,11 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "cqypkzl0n79t",
     "cl1gj7nz0l0t",
     "cl1gj7x2986t",
-    "ck7l4e11g49t"
+    "ck7l4e11g49t",
+    "cme72mv58q4t",
+    "cpml2v678pxt",
+    "cn7qzpd3gzgt",
+    "c4mr5v9znzqt"
   ]
 
   @impl true
