@@ -23,7 +23,17 @@ defmodule Belfrage.Transformers.UserSessionTest do
     http_status: nil
   }
 
+  def enable_personalisation_dial() do
+    GenServer.cast(:personalisation, {:dials_changed, %{"personalisation" => "on"}})
+  end
+
+  def disable_personalisation_dial() do
+    GenServer.cast(:personalisation, {:dials_changed, %{"personalisation" => "off"}})
+  end
+
   setup do
+    enable_personalisation_dial()
+
     %{
       struct: %Struct{
         request: %Struct.Request{
@@ -463,6 +473,41 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' and `ckns_atkn` keys will neither be authenticated nor have valid session set" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
+  describe "when personalisation dial is in 'off' state" do
+    setup do
+      disable_personalisation_dial()
+
+      :ok
+    end
+
+    test "does not call flagpole state" do
+      expect(FlagpoleMock, :state, 0, fn -> flunk("Should not be called") end)
+
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+      }
+
+      UserSession.call([], struct)
+    end
+
+    test "request remains unauthenticated, despite a valid cookie" do
       struct = %Struct{
         request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
       }
