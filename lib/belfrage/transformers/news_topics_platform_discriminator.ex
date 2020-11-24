@@ -93,6 +93,23 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   ]
 
   @impl true
+  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: path_params = %{"id" => id, "slug" => _slug}}})
+      when id in @webcore_ids do
+    {
+      :redirect,
+      Struct.add(struct, :response, %{
+        http_status: 302,
+        headers: %{
+          "location" => "/news/topics/#{id}",
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+        },
+        body: "Redirecting"
+      })
+    }
+  end
+
+  @impl true
   def call(_rest, struct) do
     case Enum.member?(@webcore_ids, struct.request.path_params["id"]) do
       true ->
