@@ -46,6 +46,26 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   describe "when content-length is 0" do
+    test "keeps request information" do
+      struct = %Struct{
+        request: %Struct.Request{
+          request_id: "request-id-12345",
+          request_hash: "#request-hash"
+        },
+        response: %Struct.Response{
+          body: "",
+          http_status: 500,
+          headers: %{"content-length" => "0"}
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 500
+      assert {"brequestid", "request-id-12345"} in headers
+      assert {"bsig", "#request-hash"} in headers
+    end
+
     test "returns HTML 500 page" do
       struct = %Struct{
         response: %Struct.Response{
