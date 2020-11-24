@@ -92,36 +92,34 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "c4mr5v9znzqt"
   ]
 
-  @webcore_ids
-  |> Enum.each(fn webcore_id ->
-    def call(
-          _rest,
-          struct = %Struct{request: %Struct.Request{path_params: %{"id" => unquote(webcore_id), "slug" => _slug}}}
-        ) do
-      {
-        :redirect,
-        Struct.add(struct, :response, %{
-          http_status: 302,
-          headers: %{
-            "location" => "/news/topics/#{unquote(webcore_id)}",
-            "x-bbc-no-scheme-rewrite" => "1",
-            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-          },
-          body: "Redirecting"
-        })
-      }
-    end
-
-    def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => unquote(webcore_id)}}}) do
-      then(
-        ["LambdaOriginAlias", "CircuitBreaker", "Language"],
-        Struct.add(struct, :private, %{
-          platform: Webcore,
-          origin: Application.get_env(:belfrage, :pwa_lambda_function)
-        })
+  def call(
+        _rest,
+        struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "slug" => _slug}}}
       )
-    end
-  end)
+      when id in @webcore_ids do
+    {
+      :redirect,
+      Struct.add(struct, :response, %{
+        http_status: 302,
+        headers: %{
+          "location" => "/news/topics/#{id}",
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+        },
+        body: "Redirecting"
+      })
+    }
+  end
+
+  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id in @webcore_ids do
+    then(
+      ["LambdaOriginAlias", "CircuitBreaker", "Language"],
+      Struct.add(struct, :private, %{
+        platform: Webcore,
+        origin: Application.get_env(:belfrage, :pwa_lambda_function)
+      })
+    )
+  end
 
   def call(_rest, struct), do: then(["CircuitBreaker"], struct)
 end
