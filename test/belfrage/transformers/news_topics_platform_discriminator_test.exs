@@ -86,9 +86,9 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
       }
     end
 
-    test "Topic ID in webcore allowlist, a redirect will be issued", %{webcore_topic_id: webcore_topic_id} do
-      mozart_endpoint = Application.get_env(:belfrage, :mozart_endpoint)
-
+    test "Topic ID in webcore allowlist, a redirect will be issued without the slug", %{
+      webcore_topic_id: webcore_topic_id
+    } do
       assert {:redirect,
               %Struct{
                 response: %Struct.Response{

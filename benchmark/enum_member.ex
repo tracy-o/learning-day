@@ -1,10 +1,5 @@
-defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
-  @moduledoc """
-  Alters the Platform and Origin for a subset of News Topics IDs that need to be served by Webcore.
-  """
-  use Belfrage.Transformers.Transformer
-
-  @webcore_ids [
+defmodule Benchmark.EnumMember do
+  @ids [
     "cl16knzkz9yt",
     "cl16knz07e2t",
     "c8qx38n5jzlt",
@@ -92,36 +87,30 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "c4mr5v9znzqt"
   ]
 
-  @webcore_ids
-  |> Enum.each(fn webcore_id ->
-    def call(
-          _rest,
-          struct = %Struct{request: %Struct.Request{path_params: %{"id" => unquote(webcore_id), "slug" => _slug}}}
-        ) do
-      {
-        :redirect,
-        Struct.add(struct, :response, %{
-          http_status: 302,
-          headers: %{
-            "location" => "/news/topics/#{unquote(webcore_id)}",
-            "x-bbc-no-scheme-rewrite" => "1",
-            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-          },
-          body: "Redirecting"
-        })
-      }
-    end
+  def run(_), do: benchmark_enum_member()
 
-    def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => unquote(webcore_id)}}}) do
-      then(
-        ["LambdaOriginAlias", "CircuitBreaker", "Language"],
-        Struct.add(struct, :private, %{
-          platform: Webcore,
-          origin: Application.get_env(:belfrage, :pwa_lambda_function)
-        })
-      )
-    end
+  defp benchmark_enum_member do
+    Benchee.run(
+      %{
+        "Enum.member?/2 (value at the start)" => fn -> true = Enum.member?(@ids, "cl16knzkz9yt") end,
+        "Enum.member?/2 (value in the middle)" => fn -> true = Enum.member?(@ids, "c8qx38nqx4qt") end,
+        "Enum.member?/2 (value at end)" => fn -> true = Enum.member?(@ids, "c4mr5v9znzqt") end,
+        "Enum.member?/2 (value not found)" => fn -> false = Enum.member?(@ids, "foo bar") end,
+
+        "func pattern matching (value at the start)" => fn -> true = func_pattern_match("cl16knzkz9yt") end,
+        "func pattern matching (value in the middle)" => fn -> true = func_pattern_match("c8qx38nqx4qt") end,
+        "func pattern matching (value at end)" => fn -> true = func_pattern_match("c4mr5v9znzqt") end,
+        "func pattern matching (value not found)" => fn -> false = func_pattern_match("foo bar") end,
+      },
+      time: 10,
+      memory_time: 2
+    )
+  end
+
+
+  Enum.each(@ids, fn id ->
+    defp func_pattern_match(unquote(id)), do: true
   end)
 
-  def call(_rest, struct), do: then(["CircuitBreaker"], struct)
+  defp func_pattern_match(_id), do: false
 end
