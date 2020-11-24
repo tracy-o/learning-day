@@ -5,10 +5,18 @@ defmodule Belfrage.Transformers.UserSession do
   # https://github.com/bbc/belfrage/pull/574#issuecomment-715417312
   import Plug.Conn.Cookies, only: [decode: 1]
 
+  @flagpole Application.get_env(:belfrage, :flagpole)
+
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
-    %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
-    |> maybe_redirect(rest)
+    case @flagpole.state() do
+      true ->
+        %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
+        |> maybe_redirect(rest)
+
+      false ->
+        then(rest, struct)
+    end
   end
 
   def call(rest, struct), do: then(rest, struct)
