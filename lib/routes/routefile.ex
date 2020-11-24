@@ -172,7 +172,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/cr3pkx7vy68t"] do
+  handle "/news/topics/:id", using: "NewsTopics", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
