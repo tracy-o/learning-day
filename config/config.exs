@@ -61,7 +61,8 @@ config :belfrage,
   dial_handlers: %{
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
     "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
-    "logging_level" => Belfrage.Dials.LoggingLevel
+    "logging_level" => Belfrage.Dials.LoggingLevel,
+    "personalisation" => Belfrage.Dials.Personalisation
   },
   pool_metric_rate: 10_000,
   authentication: %{
