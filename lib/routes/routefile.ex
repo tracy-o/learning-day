@@ -168,12 +168,13 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
-  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: ["/news/topics/4c0ccb99-7042-49e5-bb44-338b540441eb/buckinghamshire-county-council"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+    return_404 if: !String.match?(slug, ~r/^([a-z0-9-]+)$/)
   end
 
-  handle "/news/topics/:id", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  handle "/news/topics/:id", using: "NewsTopics", examples: ["/news/topics/4c0ccb99-7042-49e5-bb44-338b540441eb"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
