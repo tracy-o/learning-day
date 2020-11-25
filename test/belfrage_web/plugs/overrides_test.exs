@@ -30,4 +30,33 @@ defmodule BelfrageWeb.Plugs.OverridesTest do
 
     assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
   end
+
+  describe "ignores non-map query params" do
+    test "on a test environment, when param is encoded" do
+      conn =
+        conn(:get, "/?%5D")
+        |> Plug.Conn.put_private(:production_environment, "test")
+        |> Plug.Conn.fetch_query_params(_opts = [])
+
+      assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
+    end
+
+    test "on a test environment, when param is not encoded" do
+      conn =
+        conn(:get, "/?]")
+        |> Plug.Conn.put_private(:production_environment, "test")
+        |> Plug.Conn.fetch_query_params(_opts = [])
+
+      assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
+    end
+
+    test "on a live environment, overrides are still ignored" do
+      conn =
+        conn(:get, "/?%5D")
+        |> Plug.Conn.put_private(:production_environment, "live")
+        |> Plug.Conn.fetch_query_params(_opts = [])
+
+      assert %Plug.Conn{private: %{overrides: %{}}} = BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
+    end
+  end
 end

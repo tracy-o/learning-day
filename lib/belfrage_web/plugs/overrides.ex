@@ -8,6 +8,12 @@ defmodule BelfrageWeb.Plugs.Overrides do
   end
 
   def call(conn, _opts) do
-    Plug.Conn.put_private(conn, :overrides, Map.take(conn.query_params, @override_keys))
+    Plug.Conn.put_private(conn, :overrides, get_overrides(conn.query_params))
   end
+
+  defp get_overrides(query_params) when is_map(query_params) do
+    Map.take(query_params, @override_keys)
+  end
+
+  defp get_overrides(_query_params), do: %{}
 end
