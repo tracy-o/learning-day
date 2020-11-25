@@ -25,7 +25,7 @@ defmodule Belfrage.DialsSupervisorTest do
         {module, String.to_atom(name), cosmos_file_defaults[module]}
       end
 
-    assert expected_data == dial_config()
+    assert expected_data -- dial_config() == []
   end
 
   test "dials poller is running as part of the dials supervision tree" do
