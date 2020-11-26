@@ -10,19 +10,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
   @token Fixtures.AuthToken.valid_access_token()
 
-  @empty_response_private_cache_control %Struct.Response{
-    body: "",
-    cache_directive: %Belfrage.CacheControl{
-      cacheability: "private",
-      max_age: nil,
-      stale_if_error: nil,
-      stale_while_revalidate: nil
-    },
-    fallback: false,
-    headers: %{},
-    http_status: nil
-  }
-
   def enable_personalisation_dial() do
     GenServer.cast(:personalisation, {:dials_changed, %{"personalisation" => "on"}})
   end
@@ -46,36 +33,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
     }
   end
 
-  test "no cookie will not be authenticated" do
-    struct = %Struct{
-      request: %Struct.Request{raw_headers: %{}}
-    }
-
-    assert {
-             :ok,
-             %Struct{
-               private: %Struct.Private{
-                 authenticated: false
-               }
-             }
-           } = UserSession.call([], struct)
-  end
-
-  test "no cookie will return nil session token" do
-    struct = %Struct{
-      request: %Struct.Request{raw_headers: %{}}
-    }
-
-    assert {
-             :ok,
-             %Struct{
-               private: %Struct.Private{
-                 session_token: nil
-               }
-             }
-           } = UserSession.call([], struct)
-  end
-
   describe "when flagpole is true" do
     setup do
       expect(FlagpoleMock, :state, fn -> true end)
@@ -83,7 +40,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' only will be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -97,7 +54,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' only will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -115,7 +72,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' only will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -128,7 +85,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' and other keys will be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
 
       assert {
                :redirect,
@@ -141,7 +98,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' and other keys will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
 
       assert {
                :redirect,
@@ -161,7 +118,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be authenticated and return nil session token", %{
       struct: struct
     } do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
 
       assert {
                :redirect,
@@ -178,7 +135,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
          %{
            struct: struct
          } do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
 
       assert {
                :redirect,
@@ -196,7 +153,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie without 'ckns_id' will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
                :redirect,
@@ -209,7 +166,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie without 'ckns_atkn' will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
                :redirect,
@@ -227,7 +184,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie without 'ckns_atkn' will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
                :redirect,
@@ -240,7 +197,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "empty cookie will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
+      struct = Struct.add(struct, :request, %{cookies: %{}})
 
       assert {
                :redirect,
@@ -253,7 +210,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "empty cookie will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
+      struct = Struct.add(struct, :request, %{cookies: %{}})
 
       assert {
                :redirect,
@@ -271,7 +228,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "empty cookie will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
 
       assert {
                :redirect,
@@ -285,7 +242,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "cookie for 'ckns_id' and `ckns_atkn` keys will be authenticated and store session token" do
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       assert {
@@ -301,7 +260,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "cookie for 'ckns_id' and `ckns_atkn` keys will be authenticated and set valid session" do
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       assert {
@@ -324,7 +285,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' only will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
 
       assert {
                :ok,
@@ -338,12 +299,19 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' only will not be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
-      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
+
+      assert {:ok,
+              %Struct{
+                private: %Struct.Private{
+                  authenticated: false,
+                  valid_session: false
+                }
+              }} = UserSession.call([], struct)
     end
 
     test "cookie for 'ckns_id' only will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_id=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_id" => "1234"}})
 
       assert {
                :ok,
@@ -356,7 +324,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' and other keys will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
 
       assert {
                :ok,
@@ -369,14 +337,14 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_id' and other keys will not be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
-      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
+      assert {:ok, %Struct{}} = UserSession.call([], struct)
     end
 
     test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be authenticated and return nil session token", %{
       struct: struct
     } do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
 
       assert {
                :ok,
@@ -390,12 +358,12 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie for 'ckns_atkn' only and 'ckns_id' not set will not be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=1234"}})
-      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
+      assert {:ok, %Struct{}} = UserSession.call([], struct)
     end
 
     test "cookie without 'ckns_id' will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
                :ok,
@@ -408,12 +376,12 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "cookie without 'ckns_atkn' will not be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
-      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
+      assert {:ok, %Struct{}} = UserSession.call([], struct)
     end
 
     test "cookie without 'ckns_atkn' will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
                :ok,
@@ -426,7 +394,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "empty cookie will not be authenticated", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
+      struct = Struct.add(struct, :request, %{cookies: %{}})
 
       assert {
                :ok,
@@ -439,12 +407,12 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "empty cookie will not be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => ""}})
-      assert {:ok, %Struct{response: @empty_response_private_cache_control}} = UserSession.call([], struct)
+      struct = Struct.add(struct, :request, %{cookies: %{}})
+      assert {:ok, %Struct{}} = UserSession.call([], struct)
     end
 
     test "empty cookie will return nil session token", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_abc=def;ckns_id=1234;foo=bar"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "ckns_id" => "1234", "foo" => "bar"}})
 
       assert {
                :ok,
@@ -458,7 +426,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "cookie for 'ckns_id' and `ckns_atkn` keys will neither be authenticated nor have session token stored" do
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       assert {
@@ -474,7 +444,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "cookie for 'ckns_id' and `ckns_atkn` keys will neither be authenticated nor have valid session set" do
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       assert {
@@ -501,7 +473,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
       expect(FlagpoleMock, :state, 0, fn -> flunk("Should not be called") end)
 
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       UserSession.call([], struct)
@@ -509,7 +483,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "request remains unauthenticated, despite a valid cookie" do
       struct = %Struct{
-        request: %Struct.Request{raw_headers: %{"cookie" => "ckns_abc=def;ckns_atkn=#{@token};ckns_id=1234;foo=bar"}}
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "ckns_id" => "1234", "foo" => "bar"}
+        }
       }
 
       assert {
@@ -544,7 +520,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     # This behviour to be confirmed with account team.
     test "accepts an invalid scope access token as valid", %{invalid_scope_access_token: access_token} do
-      struct = Struct.add(%Struct{}, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(%Struct{}, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :ok,
@@ -559,7 +535,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "invalid payload access token", %{struct: struct, invalid_payload_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -577,7 +553,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct: struct,
       invalid_payload_access_token: access_token
     } do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -595,7 +571,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "invalid access token", %{struct: struct, invalid_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -610,7 +586,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "invalid access token will be redirected", %{struct: struct, invalid_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -628,7 +604,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "expired access token", %{struct: struct, expired_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -643,7 +619,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "expired access token will be redirected", %{struct: struct, expired_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -661,7 +637,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -676,7 +652,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "a malformed access token will be redirected", %{struct: struct, malformed_access_token: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -694,7 +670,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -713,7 +689,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "an invalid token header will be redirected", %{struct: struct, invalid_access_token_header: access_token} do
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,
@@ -732,7 +708,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "an invalid token issuer", %{struct: struct, invalid_token_issuer: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -753,7 +729,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "an invalid token issuer will be redirected", %{struct: struct, invalid_token_issuer: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -777,7 +753,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "invalid token aud", %{struct: struct, invalid_token_aud: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -798,7 +774,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "invalid token aud will be redirected", %{struct: struct, invalid_token_aud: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -822,7 +798,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "invalid token tokenName claim", %{struct: struct, invalid_token_name: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -843,7 +819,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
     test "invalid token tokenName claim will be redirected", %{struct: struct, invalid_token_name: access_token} do
       FlagpoleMock |> expect(:state, fn -> true end)
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -881,7 +857,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "when public key not found, but the access token is valid", %{struct: struct} do
       access_token = Fixtures.AuthToken.valid_access_token()
 
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       run_fn = fn ->
         assert {
@@ -902,7 +878,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     test "when public key not found, but the access token is valid will be redirected", %{struct: struct} do
       access_token = Fixtures.AuthToken.valid_access_token()
 
-      struct = Struct.add(struct, :request, %{raw_headers: %{"cookie" => "ckns_atkn=#{access_token};ckns_id=1234;"}})
+      struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => access_token, "ckns_id" => "1234"}})
 
       assert {
                :redirect,

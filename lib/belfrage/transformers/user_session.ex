@@ -8,10 +8,10 @@ defmodule Belfrage.Transformers.UserSession do
   @flagpole Application.get_env(:belfrage, :flagpole)
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
+  def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
     with true <- Belfrage.Dial.state(:personalisation),
          true <- @flagpole.state() do
-      %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
+      %{struct | private: handle_cookies(cookies, struct.private) |> valid?()}
       |> maybe_redirect(rest)
     else
       false ->
