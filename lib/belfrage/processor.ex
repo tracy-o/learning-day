@@ -24,6 +24,7 @@ defmodule Belfrage.Processor do
   def allowlists(struct) do
     struct
     |> Allowlist.QueryParams.filter()
+    |> Allowlist.Cookies.filter()
     |> Allowlist.Headers.filter()
   end
 

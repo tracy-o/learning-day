@@ -145,5 +145,14 @@ defmodule Belfrage.ProcessorTest do
       assert Map.has_key?(struct.request.raw_headers, "allowed")
       refute Map.has_key?(struct.request.raw_headers, "not-allowed")
     end
+
+    test "filters out cookies not in the allowlist" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "best=bourbon;worst=custard-cream"}},
+        private: %Struct.Private{cookie_allowlist: ["best"]}
+      }
+
+      assert %{"best" => "bourbon"} == Processor.allowlists(struct).request.cookies
+    end
   end
 end

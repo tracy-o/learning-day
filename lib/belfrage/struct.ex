@@ -25,7 +25,8 @@ defmodule Belfrage.Struct.Request do
     subdomain: "www",
     raw_headers: %{},
     query_params: %{},
-    path_params: %{}
+    path_params: %{},
+    cookies: %{}
   ]
 
   @type t :: %__MODULE__{}
@@ -58,6 +59,7 @@ defmodule Belfrage.Struct.Private do
             overrides: %{},
             query_params_allowlist: [],
             headers_allowlist: [],
+            cookie_allowlist: [],
             production_environment: "live",
             platform: nil,
             signature_keys: %{skip: [], add: []},
