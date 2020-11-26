@@ -3,7 +3,7 @@ defmodule Belfrage.Struct.Debug do
 end
 
 defmodule Belfrage.Struct.Request do
-  @derive {Inspect, except: [:raw_headers]}
+  @derive {Inspect, except: [:raw_headers, :cookies]}
   defstruct [
     :path,
     :payload,
@@ -88,6 +88,7 @@ defmodule Belfrage.Struct do
     struct
     |> update_in([Access.key(:response), Access.key(:body)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:request), Access.key(:raw_headers)], &Belfrage.PII.clean/1)
+    |> update_in([Access.key(:request), Access.key(:cookies)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:response), Access.key(:headers)], &Belfrage.PII.clean/1)
     |> update_in([Access.key(:private), Access.key(:session_token)], fn
       nil -> nil
