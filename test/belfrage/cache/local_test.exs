@@ -1,7 +1,7 @@
 defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case, async: true
 
-  import Cachex.Spec, only: [{:limit, 1}]
+  import Test.Support.Helper, only: [start_test_cache: 2]
 
   alias Belfrage.Cache
   alias Belfrage.Struct
@@ -15,8 +15,7 @@ defmodule Belfrage.Cache.LocalTest do
   }
 
   setup do
-    limit = limit(size: 10, policy: Cachex.Policy.LRW, reclaim: 0.3, options: [])
-    {:ok, _pid} = start_supervised(%{id: @cache, start: {Cachex, :start_link, [@cache, [limit: limit]]}})
+    {:ok, _pid} = start_test_cache(@cache, size: 10)
 
     Test.Support.Helper.insert_cache_seed(
       @cache,
