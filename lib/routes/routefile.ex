@@ -44,6 +44,8 @@ defmodule Routes.Routefile do
   redirect("http://bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
   redirect("http://www.bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
   redirect("http://bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
+  redirect("http://www.bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
+  redirect("http://bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
   redirect("http://www.bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
   redirect("http://bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
   redirect("http://www.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
