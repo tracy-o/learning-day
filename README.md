@@ -68,8 +68,11 @@ This feature is only available for non-personalised responses.
 
 Get Elixir 1.8 on your Mac.
 
+You can [install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf), and then install and set your elixir version:
+
 ```
-brew install elixir
+asdf install elixir 1.8.2
+asdf global elixir 1.8.2
 ```
 
 ### Install Hex
@@ -89,6 +92,12 @@ mix deps.get
 ### Set your credentials
 
 Running locally, Belfrage will connect to the Test Lambda in the webcore-sre-dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
+
+### Generate a self signed certificate
+
+```
+mix x509.gen.selfsigned
+```
 
 ### Run the app
 
@@ -155,10 +164,6 @@ mix routes test
 ```
 mix benchmark
 ```
-
-### Generate a self signed certificate
-`mix x509.gen.selfsigned`
-
 
 ## Code style
 
