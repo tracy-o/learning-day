@@ -50,6 +50,13 @@ defmodule Routes.RoutefileMock do
 
   handle("/route-allow-headers", using: "SomeLoopAllowHeaders", examples: [])
 
+  handle("/format/rewrite/:discipline/av/:team.app", using: "SomeMozartLoop", examples: [])
+  handle("/format/rewrite/:discipline/av/:team", using: "SomeLoop", examples: [])
+
+  handle("/format/rewrite/:discipline.app", using: "SomeMozartLoop", examples: [])
+  handle("/format/rewrite/:discipline", using: "SomeLoop", examples: [])
+  handle("/format/rewrite/:discipline/av", using: "SomeLoop", examples: [])
+
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
