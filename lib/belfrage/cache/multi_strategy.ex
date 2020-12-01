@@ -54,6 +54,8 @@ defmodule Belfrage.Cache.MultiStrategy do
     with {:ok, freshness, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
       Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
+
+      metric_on_stale_routespec(struct, cache_metric, freshness)
       {:halt, {:ok, freshness, response}}
     else
       # TODO? we could match here on `false` and record a metric that
@@ -65,4 +67,10 @@ defmodule Belfrage.Cache.MultiStrategy do
         {:cont, {:ok, :content_not_found}}
     end
   end
+
+  defp metric_on_stale_routespec(%Belfrage.Struct{private: %{loop_id: loop_id}}, cache_metric, :stale) do
+    ExMetrics.increment("cache.#{loop_id}.#{cache_metric}.stale.hit")
+  end
+
+  defp metric_on_stale_routespec(_struct, _cache_metric, _freshness), do: nil
 end
