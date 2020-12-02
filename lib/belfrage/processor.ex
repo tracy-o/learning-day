@@ -59,6 +59,7 @@ defmodule Belfrage.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     struct
+    |> maybe_log_response_status()
     |> ResponseTransformers.CacheDirective.call()
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
@@ -80,4 +81,18 @@ defmodule Belfrage.Processor do
 
     raise "Failed to load loop state."
   end
+
+  defp maybe_log_response_status(struct = %Struct{response: %Struct.Response{http_status: http_status}})
+       when http_status in [404, 408] do
+    Stump.log(:warn, "#{http_status} error from origin", cloudwatch: true)
+    struct
+  end
+
+  defp maybe_log_response_status(struct = %Struct{response: %Struct.Response{http_status: http_status}})
+       when http_status > 499 do
+    Stump.log(:warn, "#{http_status} error from origin", cloudwatch: true)
+    struct
+  end
+
+  defp maybe_log_response_status(struct), do: struct
 end

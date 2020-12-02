@@ -2,6 +2,8 @@ defmodule Belfrage.ProcessorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
+  import ExUnit.CaptureLog
+
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct
 
@@ -97,6 +99,27 @@ defmodule Belfrage.ProcessorTest do
       result = Processor.response_pipeline(@resp_struct)
 
       refute Map.has_key?(result.response.headers, "connection")
+    end
+  end
+
+  describe "Processor.response_pipeline/1 on 404 response" do
+    @resp_struct %Struct{
+      response: %Struct.Response{
+        http_status: 404,
+        body: "",
+        headers: %{
+          "connection" => "close"
+        }
+      }
+    }
+
+    test "it should log a 404 error" do
+      log_message =
+        capture_log(fn ->
+          Processor.response_pipeline(@resp_struct)
+        end)
+
+      assert String.contains?(log_message, "404 error from origin")
     end
   end
 
