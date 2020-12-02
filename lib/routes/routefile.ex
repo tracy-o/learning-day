@@ -131,9 +131,9 @@ defmodule Routes.Routefile do
   redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
   redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
 
-  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 302)
-  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 302)
-  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 302)
+  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
