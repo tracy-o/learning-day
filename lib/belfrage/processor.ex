@@ -8,7 +8,8 @@ defmodule Belfrage.Processor do
     ServiceProvider,
     Cache,
     ResponseTransformers,
-    Allowlist
+    Allowlist,
+    Event
   }
 
   def get_loop(struct = %Struct{}) do
@@ -84,7 +85,7 @@ defmodule Belfrage.Processor do
 
   defp maybe_log_response_status(struct = %Struct{response: %Struct.Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
-    Stump.log(:warn, "#{http_status} error from origin", cloudwatch: true)
+    Event.record(:log, :warn, "#{http_status} error from origin", cloudwatch: true)
     struct
   end
 
