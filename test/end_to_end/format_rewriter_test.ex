@@ -1,5 +1,5 @@
 defmodule EndToEndTest.FormatRewriterTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
 
@@ -96,6 +96,42 @@ defmodule EndToEndTest.FormatRewriterTest do
 
       assert ["format", "rewrite", "cricket", "av", "india", ".app"] == resp_conn.path_info
       assert %{"discipline" => "cricket", "format" => "app", "team" => "india"} == resp_conn.path_params
+      assert String.ends_with?(matched_route, "/format/rewrite/:discipline/av/:team/.app")
+    end
+  end
+
+  describe "when path has multiple formats" do
+    setup do
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn _ ->
+        {:ok,
+         %Belfrage.Clients.HTTP.Response{
+           status_code: 200,
+           body: "some stuff from mozart",
+           headers: %{}
+         }}
+      end)
+
+      :ok
+    end
+
+    test "router handles identifier segment" do
+      # /format/rewrite/:discipline.app route
+      resp_conn = conn(:get, "/format/rewrite/athletics.200m.app") |> Router.call([])
+      {matched_route, _matched_fun} = resp_conn.private.plug_route
+
+      assert ["format", "rewrite", "athletics.200m", ".app"] == resp_conn.path_info
+      assert %{"discipline" => "athletics.200m", "format" => "app"} == resp_conn.path_params
+      assert String.ends_with?(matched_route, "/format/rewrite/:discipline/.app")
+    end
+
+    test "router handles multiple identifier segments" do
+      # /format/rewrite/:discipline/av/:team.app route
+      resp_conn = conn(:get, "/format/rewrite/athletics.200m/av/india.delhi.app") |> Router.call([])
+      {matched_route, _matched_fun} = resp_conn.private.plug_route
+
+      assert ["format", "rewrite", "athletics.200m", "av", "india.delhi", ".app"] == resp_conn.path_info
+      assert %{"discipline" => "athletics.200m", "format" => "app", "team" => "india.delhi"} == resp_conn.path_params
       assert String.ends_with?(matched_route, "/format/rewrite/:discipline/av/:team/.app")
     end
   end

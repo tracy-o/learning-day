@@ -43,6 +43,14 @@ defmodule BelfrageWeb.Plugs.FormatRewriter do
   defp rewrite_format([_], conn), do: conn
 
   defp rewrite_format([segment, format], conn = %Plug.Conn{path_info: path_info}) do
+    rewrite_format({segment, format, path_info}, conn)
+  end
+
+  defp rewrite_format(segments, conn = %Plug.Conn{path_info: path_info}) when is_list(segments) do
+    rewrite_format({Enum.drop(segments, -1) |> Enum.join("."), List.last(segments), path_info}, conn)
+  end
+
+  defp rewrite_format({segment, format, path_info}, conn) do
     rewritten_path_info =
       path_info
       |> List.replace_at(-1, segment)
