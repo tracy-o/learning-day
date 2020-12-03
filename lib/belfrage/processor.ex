@@ -88,11 +88,5 @@ defmodule Belfrage.Processor do
     struct
   end
 
-  defp maybe_log_response_status(struct = %Struct{response: %Struct.Response{http_status: http_status}})
-       when http_status > 499 do
-    Stump.log(:warn, "#{http_status} error from origin", cloudwatch: true)
-    struct
-  end
-
   defp maybe_log_response_status(struct), do: struct
 end
