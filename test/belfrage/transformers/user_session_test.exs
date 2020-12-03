@@ -156,28 +156,10 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
-               :redirect,
+               :ok,
                %Struct{
                  private: %Struct.Private{
                    authenticated: false
-                 }
-               }
-             } = UserSession.call([], struct)
-    end
-
-    test "cookie without 'ckns_atkn' will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
-
-      assert {
-               :redirect,
-               %Struct{
-                 response: %Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
                  }
                }
              } = UserSession.call([], struct)
@@ -187,7 +169,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
 
       assert {
-               :redirect,
+               :ok,
                %Struct{
                  private: %Struct.Private{
                    session_token: nil
@@ -200,28 +182,10 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = Struct.add(struct, :request, %{cookies: %{}})
 
       assert {
-               :redirect,
+               :ok,
                %Struct{
                  private: %Struct.Private{
                    authenticated: false
-                 }
-               }
-             } = UserSession.call([], struct)
-    end
-
-    test "empty cookie will be redirected", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{cookies: %{}})
-
-      assert {
-               :redirect,
-               %Struct{
-                 response: %Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
                  }
                }
              } = UserSession.call([], struct)

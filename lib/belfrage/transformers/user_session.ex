@@ -44,9 +44,7 @@ defmodule Belfrage.Transformers.UserSession do
         )
 
       :no_auth_provided ->
-        redirect(struct)
-
-      # should be this? then(rest, struct)
+        then(rest, struct)
 
       :personalisation_disabled ->
         then(rest, struct)
