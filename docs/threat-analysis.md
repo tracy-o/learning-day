@@ -27,7 +27,7 @@ Total DREAD score is sum / 5.
 
 ## Threat targets
 
-### Belfrage (S, T, R, I, D, E)
+### (Target 1) Belfrage (S, T, R, I, D, E)
 **Trust:** 5 **Value:** 5
 
 #### Spoofing identity of a user (S)
@@ -201,7 +201,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Monitor (I)
+### (Target 2) Monitor (I)
 **Trust:** 5 **Value:** 5
 
 #### Personal information disclosure (I)
@@ -226,7 +226,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Cache Control Processor - CCP (T)
+### (Target 3) Central Cache Processor - CCP (T)
 **Trust:** 5 **Value:** 5
 
 #### Modified distributed cache (T)
@@ -249,7 +249,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Communication with Presentation Layer (D)
+### (Target 4) Communication with Presentation Layer (D)
 **Trust:** 4 **Value:** 5
 
 #### Revoked invocation role (D)
@@ -270,7 +270,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Communication with FABL Layer (T, I)
+### (Target 5) Communication with FABL Layer (T, I)
 **Trust:** 4 **Value:** 5
 
 #### Compromised client certificate (T, I)
@@ -291,7 +291,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Communication with Mozart Layer (T, I)
+### (Target 6) Communication with Mozart Layer (T, I)
 **Trust:** 4 **Value:** 5
 
 #### Compromised SSL certificate (T, I)
@@ -312,7 +312,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### IDCTA Flagpole (D)
+### (Target 7) IDCTA Flagpole (D)
 **Trust:** 4 **Value:** 4
 
 #### Private content denial of service (D)
@@ -333,7 +333,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### Account (D)
+### (Target 8) Account (D)
 **Trust:** 4 **Value:** 5
 
 #### Private content denial of service (D)
@@ -356,7 +356,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### AWS Logs (R, I)
+### (Target 9) AWS Logs (R, I)
 **Trust:** 3 **Value:** 4
 
 #### Altering the logs (R)
@@ -401,7 +401,7 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### AWS Metrics (I)
+### (Target 10) AWS Metrics (I)
 **Trust:** 3 **Value:** 4
 
 #### System state (I)
