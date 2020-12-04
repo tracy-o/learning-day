@@ -19,6 +19,9 @@ defmodule BelfrageWeb.Rewriter do
 
       iex> BelfrageWeb.Rewriter.rewrite("/foo/:bar/:id")
       "/foo/:bar/:id"
+
+      iex> BelfrageWeb.Rewriter.rewrite("/news/bundle.js.map")
+      "/news/bundle.js/.map"
   """
   def rewrite(matcher) do
     String.replace(matcher, ~r/\.(\w*)$/, "/.\\1")
