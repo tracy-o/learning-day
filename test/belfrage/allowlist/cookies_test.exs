@@ -118,4 +118,17 @@ defmodule Belfrage.Allowlist.CookiesTest do
       assert %{} == Cookies.filter(struct).request.cookies
     end
   end
+
+  test "when no cookies allowlist is provided" do
+    struct = %Struct{
+      request: %Struct.Request{
+        raw_headers: %{"cookie" => "best=bourbon;worst=custard-creams"}
+      },
+      private: %Struct.Private{
+        cookie_allowlist: []
+      }
+    }
+
+    assert %{} == Cookies.filter(struct).request.cookies
+  end
 end
