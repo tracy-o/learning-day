@@ -12,6 +12,10 @@ defmodule Belfrage.Event do
 
   def record(type, level, msg, opts \\ [])
 
+  def record(:log, level, msg, cloudwatch: true) do
+    Stump.log(level, msg, cloudwatch: true)
+  end
+
   def record(:log, level, msg, opts) do
     new(:log, level, msg, opts)
     |> @monitor_api.record_event()
