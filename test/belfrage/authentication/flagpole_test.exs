@@ -72,7 +72,7 @@ defmodule Belfrage.Authentication.FlagpoleTest do
       assert Flagpole.state(@server) == true
 
       # wait for refreshing, the RED state from stub
-      Process.sleep(50)
+      Process.sleep(100)
       assert Flagpole.state(@server) == false
     end
 
