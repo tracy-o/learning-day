@@ -291,6 +291,26 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
+#### Presentation layer unavailable (D)
+The Presentation layer is relied upon to serve content to the user. If this goes down or suffers an elevated error rate, then Belfrage will
+not be able to serve a portion of the traffic.
+
+##### Mitigation
+- Use Belfrage's fallback cache to serve stale-if-error in-case of Presentation layer downtime.
+- Store an alternative version to be served from Belfrage, if the content is typically personalised
+
+##### DREAD
+```
+Damage            = 3/10
+Reproducibility   = 1/10
+Exploitability    = 1/10
+Affected users    = 50%
+Discoverability   = 3/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
 ### (Target 5) Communication with FABL Layer (T, I)
 **Trust:** 4 **Value:** 5
 
@@ -312,7 +332,27 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
-### (Target 6) Communication with Mozart Layer (T, I)
+#### FABL unavailable (D)
+FABL is relied upon to serve content to the user. If this goes down or suffers an elevated error rate, then Belfrage will
+not be able to serve a portion of the traffic.
+
+##### Mitigation
+- Use Belfrage's fallback cache to serve stale-if-error in-case of FABL downtime.
+- Store an alternative version to be served from Belfrage, if the content is typically personalised
+
+##### DREAD
+```
+Damage            = 3/10
+Reproducibility   = 1/10
+Exploitability    = 1/10
+Affected users    = 50%
+Discoverability   = 3/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
+### (Target 6) Communication with Mozart Layer (T, I, D)
 **Trust:** 4 **Value:** 5
 
 #### Compromised SSL certificate (T, I)
@@ -328,6 +368,26 @@ Reproducibility   = 2/10
 Exploitability    = 2/10
 Affected users    = 60%
 Discoverability   = 2/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
+#### Mozart unavailable (D)
+Mozart is relied upon to serve content to the user. If this goes down or suffers an elevated error rate, then Belfrage will
+not be able to serve a portion of the traffic.
+
+##### Mitigation
+- Use Belfrage's fallback cache to serve stale-if-error in-case of Mozart downtime.
+- Store an alternative version to be served from Belfrage, if the content is typically personalised
+
+##### DREAD
+```
+Damage            = 3/10
+Reproducibility   = 1/10
+Exploitability    = 1/10
+Affected users    = 50%
+Discoverability   = 3/10
 Total Score       = (N/A until confirmed scores)
 ```
 
