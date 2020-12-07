@@ -1,11 +1,13 @@
 defmodule BelfrageWeb.RouteMaster do
   alias BelfrageWeb.{View, StructAdapter}
+  import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
   @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 
   defmacro __using__(_opts) do
     quote do
       use Plug.Router
+      plug(BelfrageWeb.Plugs.FormatRewriter)
       plug(:match)
       plug(:dispatch)
 
@@ -29,7 +31,7 @@ defmodule BelfrageWeb.RouteMaster do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
-      get unquote(matcher) do
+      get rewrite(unquote(matcher)) do
         unquote(block) || yield(unquote(id), var!(conn))
       end
     end
@@ -40,7 +42,7 @@ defmodule BelfrageWeb.RouteMaster do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
       # TODO: use match here...
-      get unquote(matcher) do
+      get rewrite(unquote(matcher)) do
         if var!(conn).private[:production_environment] != unquote(env) do
           View.not_found(var!(conn))
         else
@@ -53,7 +55,7 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro handle_proxy_pass(matcher, [using: id, only_on: env, examples: _examples] = args) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
-      get unquote(matcher) do
+      get rewrite(unquote(matcher)) do
         matched_env = var!(conn).private[:production_environment] == unquote(env)
         origin_simulator = var!(conn).private.bbc_headers.origin_simulator
         replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
@@ -72,7 +74,7 @@ defmodule BelfrageWeb.RouteMaster do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
 
       # TODO: use match here...
-      get unquote(matcher) do
+      get rewrite(unquote(matcher)) do
         yield(unquote(id), var!(conn))
       end
     end
