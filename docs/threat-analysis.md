@@ -48,6 +48,27 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
+#### Spoofing identity of EC2 user (S)
+All developers with SSH access, have sudo access. This means developers can switch
+to the "component" user that we have created, that runs the application.
+
+##### Mitigation
+- Cosmos SSH logs
+- Additional logging software to detect user changes.
+- Limit "component" user's permissions, as much as possible to limit damage area.
+
+##### DREAD
+```
+Damage            = 2/10
+Reproducibility   = 4/10
+Exploitability    = 4/10
+Affected users    = 10%
+Discoverability   = 5/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
 #### Tampering with page content (T)
 A developer alter the content on the page, before it is served to the user.
 
