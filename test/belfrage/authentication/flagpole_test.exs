@@ -1,5 +1,5 @@
 defmodule Belfrage.Authentication.FlagpoleTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog

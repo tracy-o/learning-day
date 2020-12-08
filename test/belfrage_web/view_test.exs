@@ -60,7 +60,7 @@ defmodule BelfrageWeb.ViewTest do
       }
 
       conn = conn(:get, "/") |> put_req_header("accept", "text/html")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      {status, headers, _body} = View.render(struct, conn) |> sent_resp()
       assert status == 500
       assert {"brequestid", "request-id-12345"} in headers
       assert {"bsig", "#request-hash"} in headers
