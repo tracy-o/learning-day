@@ -379,7 +379,6 @@ not be able to serve a portion of the traffic.
 
 ##### Mitigation
 - Use Belfrage's fallback cache to serve stale-if-error in-case of Mozart downtime.
-- Store an alternative version to be served from Belfrage, if the content is typically personalised
 
 ##### DREAD
 ```
@@ -448,6 +447,7 @@ A developer has the opportunity to modify the logs on the instance, before they 
 ##### Mitigation
 - Cosmos SSH access logs.
 - Record log stream in Monitor, which isn't written to disk.
+- Restrict access to the log files on the instance, to the 'component' user running the application.
 
 ##### DREAD
 ```
