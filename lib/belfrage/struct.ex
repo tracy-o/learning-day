@@ -70,6 +70,20 @@ defmodule Belfrage.Struct.Private do
             valid_session: false
 
   @type t :: %__MODULE__{}
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_atkn" => ckns_atkn, "ckns_id" => _ckns_id}, valid_session?) do
+    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+  end
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_atkn" => ckns_atkn}, _valid_session?) do
+    %{private | session_token: ckns_atkn, authenticated: false, valid_session: false}
+  end
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_id" => _ckns_id}, _valid_session?) do
+    %{private | session_token: nil, authenticated: true, valid_session: false}
+  end
+
+  def set_session_state(private = %__MODULE__{}, _cookies, _valid_session?), do: private
 end
 
 defmodule Belfrage.Struct do

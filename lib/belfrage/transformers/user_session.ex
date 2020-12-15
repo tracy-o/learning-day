@@ -1,53 +1,38 @@
 defmodule Belfrage.Transformers.UserSession do
   use Belfrage.Transformers.Transformer
 
-  alias __MODULE__.SessionState
+  alias Belfrage.Struct
+  alias Belfrage.Struct.Private
+  @idcta_flagpole Application.get_env(:belfrage, :flagpole)
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
-    with :auth_provided <- SessionState.category(cookies),
-         {:ok, :valid_session} <- valid?(cookies["ckns_atkn"]) do
-      then(
-        rest,
-        Struct.add(struct, :private, %{
-          session_token: cookies["ckns_atkn"],
-          authenticated: true,
-          valid_session: true
-        })
-      )
-    else
-      {:warn, :invalid_session} ->
-        redirect(
-          Struct.add(struct, :private, %{
-            session_token: cookies["ckns_atkn"],
-            authenticated: true,
-            valid_session: false
-          })
-        )
+    private = Struct.Private.set_session_state(struct.private, cookies, valid?(cookies["ckns_atkn"]))
+    struct_with_session_state = Struct.add(struct, :private, private)
 
-      :only_auth_token ->
-        redirect(
-          Struct.add(struct, :private, %{
-            session_token: nil,
-            authenticated: false,
-            valid_session: false
-          })
-        )
-
-      :only_identity_token ->
-        redirect(
-          Struct.add(struct, :private, %{
-            session_token: nil,
-            authenticated: true,
-            valid_session: false
-          })
-        )
-
-      :no_auth_provided ->
+    cond do
+      !personalisation_available?() ->
         then(rest, struct)
 
-      :personalisation_disabled ->
-        then(rest, struct)
+      match?(%Private{authenticated: true, valid_session: true}, private) ->
+        then(rest, struct_with_session_state)
+
+      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
+        then(rest, struct_with_session_state)
+
+      match?(%Private{authenticated: true, valid_session: false}, private) ->
+        redirect(struct_with_session_state)
+
+      match?(%Private{authenticated: false, valid_session: false}, private) ->
+        redirect(struct_with_session_state)
+    end
+  end
+
+  defp personalisation_available? do
+    cond do
+      not Belfrage.Dial.state(:personalisation) -> false
+      not @idcta_flagpole.state() -> false
+      true -> true
     end
   end
 
@@ -66,10 +51,12 @@ defmodule Belfrage.Transformers.UserSession do
     }
   end
 
+  defp valid?(_session_token = nil), do: false
+
   defp valid?(session_token) do
     case Belfrage.Authentication.Validator.verify_and_validate(session_token) do
       {:ok, _decoded_token} ->
-        {:ok, :valid_session}
+        true
 
       {:error, [message: message, claim: claim, claim_val: claim_val]} ->
         Belfrage.Event.record(:log, :warn, %{
@@ -79,28 +66,28 @@ defmodule Belfrage.Transformers.UserSession do
           claim: claim
         })
 
-        {:warn, :invalid_session}
+        false
 
       {:error, :token_malformed} ->
         Belfrage.Event.record(:log, :error, "Malformed JWT")
 
-        {:warn, :invalid_session}
+        false
 
       {:error, :public_key_not_found} ->
-        {:warn, :invalid_session}
+        false
 
       {:error, :invalid_token_header} ->
         Belfrage.Event.record(:log, :error, "Invalid token header")
 
-        {:warn, :invalid_session}
+        false
 
       {:error, :signature_error} ->
-        {:warn, :invalid_session}
+        false
 
       {:error, _} ->
         Belfrage.Event.record(:log, :error, "Unexpected token error.")
 
-        {:warn, :invalid_session}
+        false
     end
   end
 
