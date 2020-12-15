@@ -1,28 +1,28 @@
 defmodule Belfrage.LoopsSupervisor do
-  def start_link() do
+  def start_link(opts) do
     DynamicSupervisor.start_link(
-      name: __MODULE__,
+      name: Keyword.get(opts, :name, __MODULE__),
       strategy: :one_for_one
     )
   end
 
-  def child_spec(_arg) do
+  def child_spec(opts) do
     %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, []},
+      id: Keyword.get(opts, :id, __MODULE__),
+      start: {__MODULE__, :start_link, [opts]},
       type: :supervisor
     }
   end
 
-  def start_loop(name) do
-    case start_child(name) do
+  def start_loop(supervisor \\ __MODULE__, name) do
+    case start_child(supervisor, name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
     end
   end
 
-  def kill_all do
-    DynamicSupervisor.which_children(__MODULE__)
+  def kill_all(name \\ __MODULE__) do
+    DynamicSupervisor.which_children(name)
     |> Enum.each(&kill_child/1)
   end
 
@@ -30,9 +30,9 @@ defmodule Belfrage.LoopsSupervisor do
     Process.exit(pid, :stop)
   end
 
-  defp start_child(name) do
+  defp start_child(supervisor, name) do
     DynamicSupervisor.start_child(
-      __MODULE__,
+      supervisor,
       {Belfrage.Loop, name}
     )
   end

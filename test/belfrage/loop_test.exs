@@ -4,10 +4,15 @@ defmodule Belfrage.LoopTest do
   alias Belfrage.{Loop, LoopsSupervisor}
   alias Belfrage.Struct
 
+  @loop_supervisor :test_loop_supervisor
+
   setup do
-    LoopsSupervisor.start_loop("ProxyPass")
-    LoopsSupervisor.start_loop("SportVideos")
-    on_exit(fn -> LoopsSupervisor.kill_all() end)
+    start_supervised!(LoopsSupervisor.child_spec(name: @loop_supervisor, id: @loop_supervisor))
+
+    LoopsSupervisor.start_loop(@loop_supervisor, "ProxyPass")
+    LoopsSupervisor.start_loop(@loop_supervisor, "SportVideos")
+
+    :ok
   end
 
   @failure_status_code Enum.random(500..504)
