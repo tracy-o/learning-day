@@ -1,9 +1,10 @@
 defmodule Belfrage.SupervisorTest do
   use ExUnit.Case, async: true
 
+  import Test.Support.Helper, only: [start_test_cache: 2]
+
   import Cachex.Spec, only: [{:limit, 1}]
   import Fixtures.Struct
-  import Supervisor.Spec, only: [{:worker, 2}]
 
   @belfrage_local_cache :cache
   @test_cache :test_cache
@@ -15,7 +16,8 @@ defmodule Belfrage.SupervisorTest do
     overflow_size = conf[:size] + overflow
     limit = limit(size: conf[:size], policy: conf[:policy], reclaim: conf[:reclaim], options: conf[:options])
 
-    Supervisor.start_link([worker(Cachex, [@test_cache, [limit: limit]])], strategy: :one_for_one)
+    {:ok, _pid} = start_test_cache(@test_cache, size: 10, limit: limit)
+
     Cachex.clear(@test_cache)
     seed_test_cache(1..overflow_size, @test_cache)
 
