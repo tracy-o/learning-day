@@ -29,11 +29,7 @@ defmodule Belfrage.Transformers.UserSession do
   end
 
   defp personalisation_available? do
-    cond do
-      not Belfrage.Dial.state(:personalisation) -> false
-      not @idcta_flagpole.state() -> false
-      true -> true
-    end
+    Belfrage.Dial.state(:personalisation) && @idcta_flagpole.state() 
   end
 
   defp redirect(struct = %Struct{}) do
