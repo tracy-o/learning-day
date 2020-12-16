@@ -20,9 +20,19 @@ defmodule Belfrage.Authentication.FlagpoleTest do
 
   describe "refresh/1" do
     test "triggers authentication client call for IDCTA config" do
-      AuthenticationMock |> expect(:get_idcta_config, fn -> {:ok, %{"id-availability" => "GREEN"}} end)
+      parent = self()
+      ref = make_ref()
+
+      AuthenticationMock
+      |> expect(:get_idcta_config, fn ->
+        send(parent, {ref, :get_idcta_config})
+
+        {:ok, %{"id-availability" => "GREEN"}}
+      end)
+
       Flagpole.refresh(@server)
-      Process.sleep(10)
+
+      assert_receive {^ref, :get_idcta_config}
     end
 
     test "fetches new state" do
@@ -65,14 +75,22 @@ defmodule Belfrage.Authentication.FlagpoleTest do
     end
 
     test "refreshing happens as scheduled" do
-      # restart GenServer with 20ms refresh rate for test
+      parent = self()
+      ref = make_ref()
+
       :ok = stop_supervised(@server)
       {:ok, _pid} = start_supervised({Flagpole, [name: @server, refresh_rate: 20]})
 
       assert Flagpole.state(@server) == true
 
-      # wait for refreshing, the RED state from stub
-      Process.sleep(100)
+      expect(Belfrage.Clients.AuthenticationMock, :get_idcta_config, fn ->
+        send(parent, {ref, :get_idcta_config})
+
+        {:ok, %{"id-availability" => "RED"}}
+      end)
+
+      assert_receive {^ref, :get_idcta_config}
+
       assert Flagpole.state(@server) == false
     end
 
