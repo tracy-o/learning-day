@@ -29,7 +29,6 @@ defmodule BelfrageChimneySmokeTest do
 
       assert resp.status_code == 200
       assert Helper.header_item_exists(resp.headers, @bruce_header)
-      assert resp.body =~ "Bowlers star as Sri Lanka edge Afghanistan"
     end
 
     test "GTM .com /tajik", %{smoke_env: smoke_env} do
@@ -38,7 +37,6 @@ defmodule BelfrageChimneySmokeTest do
 
       assert resp.status_code == 200
       assert Helper.header_item_exists(resp.headers, @belfrage_header)
-      assert resp.body =~ "Сафҳаи аслӣ - BBC Tajik/Persian"
     end
   end
 
