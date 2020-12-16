@@ -20,21 +20,19 @@ defmodule Belfrage.Transformers.UserSession do
       # no cookies provided
       match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
         then(rest, struct_with_session_state)
-     
+
       # ckns_atkn only set
       match?(%Private{session_token: _value, authenticated: false, valid_session: false}, private) ->
         redirect(struct_with_session_state)
-         
+
       # ckns_id set
       match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
         redirect(struct_with_session_state)
-
-     
     end
   end
 
   defp personalisation_available? do
-    Belfrage.Dial.state(:personalisation) && @idcta_flagpole.state() 
+    Belfrage.Dial.state(:personalisation) && @idcta_flagpole.state()
   end
 
   defp redirect(struct = %Struct{}) do
