@@ -4,6 +4,14 @@ defmodule Belfrage.Clients.LambdaTest do
   use Test.Support.Helper, :mox
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
+  setup do
+    pid = start_supervised!(Belfrage.Credentials.Refresh)
+
+    :sys.get_state(pid)
+
+    :ok
+  end
+
   describe "Belfrage.Clients.Lambda.call/3" do
     test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
       Belfrage.AWSMock

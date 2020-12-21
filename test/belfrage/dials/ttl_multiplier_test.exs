@@ -1,5 +1,5 @@
 defmodule Belfrage.Dials.TtlMultiplierTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.Dials.TtlMultiplier
 
   describe "transform/1" do

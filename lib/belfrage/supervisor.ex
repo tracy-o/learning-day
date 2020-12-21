@@ -18,20 +18,27 @@ defmodule Belfrage.Supervisor do
 
     [
       BelfrageWeb.Router.child_spec(router_options)
-    ] ++ http_router(env) ++ default_children()
+    ] ++ http_router(env) ++ default_children() ++ background_children(env)
   end
 
   def default_children do
     [
       Belfrage.LoopsRegistry,
       Belfrage.LoopsSupervisor,
-      Belfrage.Credentials.Refresh,
-      Belfrage.DialsSupervisor,
-      Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole,
       Belfrage.Metrics.Pool,
       Belfrage.TelemetrySupervisor,
-      worker(Cachex, [:cache, [limit: cachex_limit()]]),
+      worker(Cachex, [:cache, [limit: cachex_limit()]])
+    ]
+  end
+
+  defp background_children(:test), do: []
+
+  defp background_children(_env) do
+    [
+      Belfrage.DialsSupervisor,
+      Belfrage.Credentials.Refresh,
+      Belfrage.Authentication.Jwk,
+      Belfrage.Authentication.Flagpole,
       {EtsCleaner, cleaner_module: Belfrage.Cache.Cleaner, check_interval: 60_000}
     ]
   end

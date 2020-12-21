@@ -15,7 +15,8 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec start_link(list) :: Supervisor.on_start()
   def start_link(init_arg) do
-    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
+    name = Keyword.get(init_arg, :name, __MODULE__)
+    Supervisor.start_link(__MODULE__, init_arg, name: name)
   end
 
   @doc """

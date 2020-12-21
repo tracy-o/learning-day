@@ -6,7 +6,6 @@ defmodule Test.Support.Helper do
   end
 
   def setup_stubs do
-    Mox.set_mox_global()
     Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
     Mox.stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
@@ -16,8 +15,9 @@ defmodule Test.Support.Helper do
     Mox.stub_with(CacheStrategyTwoMock, CacheStrategyStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
     Mox.stub_with(Belfrage.Clients.AuthenticationMock, Belfrage.Clients.AuthenticationStub)
-    Mox.stub_with(Belfrage.Dials.DialMock, Belfrage.Dials.DialStub)
-    Mox.stub_with(Belfrage.Dials.DialMockWithOptionalCallback, Belfrage.Dials.DialStub)
+    Mox.stub_with(Belfrage.DialMock, Belfrage.DialStub)
+    Mox.stub_with(Belfrage.Dial.ClientMock, Belfrage.Dial.ClientStub)
+    Mox.stub_with(Belfrage.Dial.ClientWithOptionalCallbackMock, Belfrage.Dial.ClientStub)
     Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
   end
 
@@ -36,6 +36,7 @@ defmodule Test.Support.Helper do
   def mox do
     quote do
       import Mox
+      setup :set_mox_from_context
       setup :verify_on_exit!
 
       setup do

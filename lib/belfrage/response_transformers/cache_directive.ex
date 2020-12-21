@@ -8,13 +8,15 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
+  @dial_client Application.get_env(:belfrage, :dial_client)
+
   @impl true
   def call(struct = %Struct{response: %Struct.Response{headers: %{"cache-control" => cache_control}}}) do
     response_headers = Map.delete(struct.response.headers, "cache-control")
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), Belfrage.Dial.state(:ttl_multiplier)),
+      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), @dial_client.state(:ttl_multiplier)),
       headers: response_headers
     })
   end

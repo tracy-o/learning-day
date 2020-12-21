@@ -1,5 +1,5 @@
 defmodule Belfrage.Helpers.QueryParamsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.Helpers.QueryParams
 
   # This is currently in alphabetical order, follow up PR will come to fix the QueryParams Helper ordering

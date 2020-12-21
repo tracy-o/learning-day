@@ -1,11 +1,16 @@
 defmodule Belfrage.Dial do
-  @callback transform(any()) :: any()
-  @callback on_change(any()) :: :ok
-  @optional_callbacks on_change: 1
-
+  @type dial :: atom()
   @type state :: {atom(), any()}
 
   use GenServer
+
+  defmodule Client do
+    @callback transform(any()) :: any()
+    @callback on_change(any()) :: :ok
+    @optional_callbacks on_change: 1
+  end
+
+  @callback state(dial) :: any()
 
   def start_link(opts) do
     {_dial_logic_mod, dial_name, _init_value} = opts

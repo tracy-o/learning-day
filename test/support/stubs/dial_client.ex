@@ -1,6 +1,4 @@
-defmodule Belfrage.Dials.CircuitBreaker do
-  @moduledoc false
-
+defmodule Belfrage.Dial.ClientStub do
   @behaviour Belfrage.Dial.Client
 
   @impl Belfrage.Dial.Client
@@ -8,4 +6,7 @@ defmodule Belfrage.Dials.CircuitBreaker do
 
   @impl Belfrage.Dial.Client
   def transform("false"), do: false
+
+  @impl Belfrage.Dial.Client
+  def on_change(_transformed_val), do: :ok
 end

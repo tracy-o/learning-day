@@ -1,15 +1,20 @@
 defmodule Belfrage.Transformers.CircuitBreakerTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Transformers.CircuitBreaker
   alias Belfrage.Struct
 
   def enable_circuit_breaker_dial() do
-    GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "true"}})
+    stub(Belfrage.DialMock, :state, fn :circuit_breaker ->
+      Belfrage.Dials.CircuitBreaker.transform("true")
+    end)
   end
 
   def disable_circuit_breaker_dial() do
-    GenServer.cast(:circuit_breaker, {:dials_changed, %{"circuit_breaker" => "false"}})
+    stub(Belfrage.DialMock, :state, fn :circuit_breaker ->
+      Belfrage.Dials.CircuitBreaker.transform("false")
+    end)
   end
 
   test "long_counter with no errors will not add circuit breaker response" do

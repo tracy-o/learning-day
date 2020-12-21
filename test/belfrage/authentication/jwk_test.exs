@@ -12,6 +12,8 @@ defmodule Belfrage.Authentication.JwkTest do
   }
 
   setup do
+    start_supervised!(Belfrage.Authentication.Jwk)
+
     AuthenticationMock
     |> expect(:get_jwk_keys, fn -> {:ok, @expected_jwk_response} end)
 

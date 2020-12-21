@@ -1,6 +1,6 @@
 defmodule Belfrage.Logger.FormatterTest do
   alias Belfrage.Logger.Formatter
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "core returns formatted log when metadata does not have :cloudwatch" do
     message = "my log"

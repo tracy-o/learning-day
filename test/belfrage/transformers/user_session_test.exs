@@ -1,5 +1,5 @@
 defmodule Belfrage.Transformers.UserSessionTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
@@ -11,15 +11,21 @@ defmodule Belfrage.Transformers.UserSessionTest do
   @token Fixtures.AuthToken.valid_access_token()
 
   def enable_personalisation_dial() do
-    GenServer.cast(:personalisation, {:dials_changed, %{"personalisation" => "on"}})
+    stub(Belfrage.DialMock, :state, fn :personalisation ->
+      Belfrage.Dials.Personalisation.transform("on")
+    end)
   end
 
   def disable_personalisation_dial() do
-    GenServer.cast(:personalisation, {:dials_changed, %{"personalisation" => "off"}})
+    stub(Belfrage.DialMock, :state, fn :personalisation ->
+      Belfrage.Dials.Personalisation.transform("off")
+    end)
   end
 
   setup do
     enable_personalisation_dial()
+
+    start_supervised!(Belfrage.Authentication.Jwk)
 
     %{
       struct: %Struct{
@@ -810,12 +816,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
     setup do
       FlagpoleMock |> expect(:state, fn -> true end)
       :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => []} end)
-
-      on_exit(fn ->
-        :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state ->
-          %{"keys" => Fixtures.AuthToken.keys()}
-        end)
-      end)
     end
 
     test "when public key not found, but the access token is valid", %{struct: struct} do

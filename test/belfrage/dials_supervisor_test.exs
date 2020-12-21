@@ -1,12 +1,19 @@
 defmodule Belfrage.DialsSupervisorTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
+  use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
   import Belfrage.DialsSupervisor
   import Fixtures.Dials
 
   @dials_poller Belfrage.Dials.Poller
-  @dials_supervisor Belfrage.DialsSupervisor
+  @dials_supervisor :test_dials_supervisor
+
+  setup do
+    start_supervised!({Belfrage.DialsSupervisor, name: @dials_supervisor})
+
+    :ok
+  end
 
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
