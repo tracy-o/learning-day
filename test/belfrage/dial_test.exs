@@ -2,7 +2,7 @@ defmodule Belfrage.DialTest do
   use ExUnit.Case, async: false
 
   alias Belfrage.Dial
-  alias Belfrage.Dial.{ClientMock,ClientWithOptionalCallbackMock}
+  alias Belfrage.Dial.{ClientMock, ClientWithOptionalCallbackMock}
 
   use Test.Support.Helper, :mox
 
