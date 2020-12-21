@@ -25,6 +25,17 @@ defmodule Belfrage.ProcessorTest do
       assert counter != nil, "Expected a counter value to be provided by the loop"
       assert pipeline != nil, "Expected a pipeline value to be provided by the loop"
     end
+
+    test "keeps Struct.Private default values when merging in routespec data" do
+      assert %Struct{
+               request: _request,
+               private: %Struct.Private{
+                 cookie_allowlist: cookie_allowlist
+               }
+             } = Processor.get_loop(@struct)
+
+      assert cookie_allowlist == []
+    end
   end
 
   describe "Processor.request_pipeline/1" do
@@ -144,6 +155,15 @@ defmodule Belfrage.ProcessorTest do
       struct = Processor.allowlists(struct)
       assert Map.has_key?(struct.request.raw_headers, "allowed")
       refute Map.has_key?(struct.request.raw_headers, "not-allowed")
+    end
+
+    test "filters out cookies not in the allowlist" do
+      struct = %Struct{
+        request: %Struct.Request{raw_headers: %{"cookie" => "best=bourbon;worst=custard-cream"}},
+        private: %Struct.Private{cookie_allowlist: ["best"]}
+      }
+
+      assert %{"best" => "bourbon"} == Processor.allowlists(struct).request.cookies
     end
   end
 end
