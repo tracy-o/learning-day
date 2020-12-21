@@ -270,12 +270,13 @@ Total Score       = (N/A until confirmed scores)
 **Trust:** 5 **Value:** 5
 
 #### Modified distributed cache (T)
-If an attacker gained write access to the distributed cache in S3, then they could alter the content of the page which would be seen by users.
+If an attacker gained write access to the distributed cache in S3, then they could alter the content of the page which would be seen by users, or delete them making Belfrage service less resilient.
 
 ##### Mitigation
 - [ ] Encrypt fallback pages in transit and at rest.
 - [X] Only authorise Belfrage EC2s to read from the S3 bucket.
-- [X] Only authorise CCP EC2s to write to the S3 bucket.
+- [X] Only authorise CCP EC2s & Belfrage Developers to write in the S3 bucket.
+- [X] Only authorise CCP EC2s & Belfrage Developers to delete files in the S3 bucket.
 
 ##### DREAD
 ```
