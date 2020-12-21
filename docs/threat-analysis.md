@@ -147,6 +147,25 @@ Total Score       = (N/A until confirmed scores)
 
 -------
 
+#### Belfrage signature bsig (I)
+The `bsig` response header is the cache-key value Belfrage uses internally, and therefore an attacker wishing to perform a DDOS
+attack can use this information to be most effective.
+
+##### Mitigation
+- [ ] Do not share the `bsig` value as a response header.
+
+##### DREAD
+```
+Damage            = 1/10
+Reproducibility   = 4/10
+Exploitability    = 2/10
+Affected users    = 1%
+Discoverability   = 5/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
 #### Denial of service attack (D)
 An attacker could target our public Belfrage DNS with a high number of requests per second.
 
