@@ -34,7 +34,7 @@ Total DREAD score is sum / 5.
 A developer with access to private account keys could spoof the identity of a user.
 
 ##### Mitigation
-Belfrage to only have access to public account keys to verify tokens.
+- [X] Belfrage to only have access to public account keys to verify tokens.
 
 ##### DREAD
 ```
@@ -53,9 +53,9 @@ All developers with SSH access, have sudo access. This means developers can swit
 to the "component" user that we have created, that runs the application.
 
 ##### Mitigation
-- Cosmos SSH logs
-- Additional logging software to detect user changes.
-- Limit "component" user's permissions, as much as possible to limit damage area.
+- [X] Cosmos SSH logs
+- [ ] Additional logging software to detect user changes.
+- [ ] Limit "component" user's permissions, as much as possible to limit damage area.
 
 ##### DREAD
 ```
@@ -73,7 +73,7 @@ Total Score       = (N/A until confirmed scores)
 A developer alter the content on the page, before it is served to the user.
 
 ##### Mitigation
-All code changes and deployments to require peer-review
+- [X] All code changes and deployments to require peer-review
 
 ##### DREAD
 ```
@@ -91,9 +91,9 @@ Total Score       = (N/A until confirmed scores)
 If an attacker gained access to Cosmos or AWS Amazon Certificate Manager (ACM), then they could replace the SSL certificate used to encrypt HTTPS traffic, and could therefore perform a packet sniffing attack and decrypt the traffic, containing personal information.
 
 ##### Mitigation
-- Limit access to ACM through the use of IAM policies.
-- Limit developer access to the Belfrage cosmos project.
-- Keep Belfrage in it's own AWS account.
+- [X] Limit access to ACM through the use of IAM policies.
+- [X] Limit developer access to the Belfrage cosmos project.
+- [X] Keep Belfrage in it's own AWS account.
 
 ##### DREAD
 ```
@@ -111,9 +111,9 @@ Total Score       = (N/A until confirmed scores)
 A developer could SSH onto a live instance, and make malicious changes to the instance, or AWS services the instance has permission to call.
 
 ##### Mitigation
-- Cosmos SSH audit log.
-- Limit cosmos project members.
-- Limit permissions available to each instance as much as possible.
+- [X] Cosmos SSH audit log.
+- [X] Limit cosmos project members.
+- [X] Limit permissions available to each instance as much as possible.
 
 ##### DREAD
 ```
@@ -133,7 +133,7 @@ A malicious, or accidental code change that leads to caching personally identifi
 Caching private information, could potentially mean sharing this personal information with other users viewing that same page.
 
 ##### Mitigation
-- Only cache public responses.
+- [X] Only cache public responses.
 
 ##### DREAD
 ```
@@ -170,8 +170,8 @@ Total Score       = (N/A until confirmed scores)
 A developer from another team could obtain elevated permissions to make malicious infrastructure changes to Belfrage.
 
 ##### Mitigation
-- Keep Belfrage infrastructure in a separate AWS account, and limit permissions to Belfrage engineers.
-- AWS cloud trail audit log.
+- [X] Keep Belfrage infrastructure in a separate AWS account, and limit permissions to Belfrage engineers.
+- [X] AWS cloud trail audit log.
 
 ##### DREAD
 ```
@@ -189,7 +189,7 @@ Total Score       = (N/A until confirmed scores)
 All developers that SSH onto an instance, have sudo access.
 
 ##### Mitigation
-- Limit the permissions of users on EC2 instances.
+- [ ] Limit the permissions of users on EC2 instances.
 
 ##### DREAD
 ```
@@ -207,8 +207,8 @@ Total Score       = (N/A until confirmed scores)
 An attacker with access to an EC2 would have access to the same AWS resources as that EC2.
 
 ##### Mitigation
-- Limit EC2 permissions using IAM as much as possible.
-- AWS CloudTrail to track the damage caused.
+- [X] Limit EC2 permissions using IAM as much as possible.
+- [X] AWS CloudTrail to track the damage caused.
 
 ##### DREAD
 ```
@@ -231,9 +231,9 @@ Logs and metrics are sent to the Monitor app, which are then made available to d
 An attack could be made to obtain user information by adding personal information to the logs.
 
 ##### Mitigation
-- Code & deployment review process.
-- Best-effort cleansing of personal information before logging in Belfrage.
-- Use of a public, and private log. The private log will have a strict permissions policy to only allow authorised staff to view it.
+- [X] Code & deployment review process.
+- [X] Best-effort cleansing of personal information before logging in Belfrage.
+- [ ] Use of a public, and private log. The private log will have a strict permissions policy to only allow authorised staff to view it.
 
 ##### DREAD
 ```
@@ -254,9 +254,9 @@ Total Score       = (N/A until confirmed scores)
 If an attacker gained write access to the distributed cache in S3, then they could alter the content of the page which would be seen by users.
 
 ##### Mitigation
-- Encrypt fallback pages in transit and at rest.
-- Only authorise Belfrage EC2s to read from the S3 bucket.
-- Only authorise CCP EC2s to write to the S3 bucket.
+- [ ] Encrypt fallback pages in transit and at rest.
+- [X] Only authorise Belfrage EC2s to read from the S3 bucket.
+- [X] Only authorise CCP EC2s to write to the S3 bucket.
 
 ##### DREAD
 ```
@@ -277,7 +277,7 @@ Total Score       = (N/A until confirmed scores)
 If the role is revoked by a malicious engineer in the Presentation layer account, then Belfrage won't be able to contact the presentation layer.
 
 ##### Mitigation
-- Fallback pages for public content
+- [X] Fallback pages for public content
 
 ##### DREAD
 ```
@@ -296,8 +296,8 @@ The Presentation layer is relied upon to serve content to the user. If this goes
 not be able to serve a portion of the traffic.
 
 ##### Mitigation
-- Use Belfrage's fallback cache to serve stale-if-error in-case of Presentation layer downtime.
-- Store an alternative version to be served from Belfrage, if the content is typically personalised
+- [X] Use Belfrage's fallback cache to serve stale-if-error in-case of Presentation layer downtime.
+- [ ] Store an alternative version to be served from Belfrage, if the content is typically personalised
 
 ##### DREAD
 ```
@@ -318,7 +318,7 @@ Total Score       = (N/A until confirmed scores)
 Belfrage uses a client certificate to call FABL. If this certificate is compromised then it would allow an attacker to tamper with the response to the user.
 
 ##### Mitigation
-- Verify using a checksum sent in response header, encoded with a second certificate.
+- [ ] Verify using a checksum sent in response header, encoded with a second certificate.
 
 ##### DREAD
 ```
@@ -337,8 +337,8 @@ FABL is relied upon to serve content to the user. If this goes down or suffers a
 not be able to serve a portion of the traffic.
 
 ##### Mitigation
-- Use Belfrage's fallback cache to serve stale-if-error in-case of FABL downtime.
-- Store an alternative version to be served from Belfrage, if the content is typically personalised
+- [X] Use Belfrage's fallback cache to serve stale-if-error in-case of FABL downtime.
+- [ ] Store an alternative version to be served from Belfrage, if the content is typically personalised
 
 ##### DREAD
 ```
@@ -359,7 +359,7 @@ Total Score       = (N/A until confirmed scores)
 Mozart doesn't require a client certificate to call it, although traffic is still SSL encrypted which could be compromised.
 
 ##### Mitigation
-- Verify using a checksum sent in response header, encoded with a second certificate.
+- [ ] Verify using a checksum sent in response header, encoded with a second certificate.
 
 ##### DREAD
 ```
@@ -378,7 +378,7 @@ Mozart is relied upon to serve content to the user. If this goes down or suffers
 not be able to serve a portion of the traffic.
 
 ##### Mitigation
-- Use Belfrage's fallback cache to serve stale-if-error in-case of Mozart downtime.
+- [X] Use Belfrage's fallback cache to serve stale-if-error in-case of Mozart downtime.
 
 ##### DREAD
 ```
@@ -399,7 +399,7 @@ Total Score       = (N/A until confirmed scores)
 Anyone with access to the IDCTA flagpole will be allowed to prevent Belfrage from serving private content.
 
 ##### Mitigation
-- Limit who has access to the IDCTA flagpole
+- [X] Limit who has access to the IDCTA flagpole
 
 ##### DREAD
 ```
@@ -422,7 +422,7 @@ If the public keys provided by the Account service is attacked, and becomes unre
 In addition to this, all users will be redirected to the account login page, potentially inflicting very high traffic on the account team.
 
 ##### Mitigation
-- Deploy belfrage with "fallback" certificates baked into the RPM to avoid network calls and dependency on the Account service.
+- [X] Deploy belfrage with "fallback" certificates baked into the RPM to avoid network calls and dependency on the Account service.
 
 ##### DREAD
 ```
@@ -445,9 +445,9 @@ Before logs are sent to AWS, there is a period of time where the logs are stored
 A developer has the opportunity to modify the logs on the instance, before they are sent to AWS.
 
 ##### Mitigation
-- Cosmos SSH access logs.
-- Record log stream in Monitor, which isn't written to disk.
-- Restrict access to the log files on the instance, to the 'component' user running the application.
+- [X] Cosmos SSH access logs.
+- [X] Record log stream in Monitor, which isn't written to disk.
+- [ ] Restrict access to the log files on the instance, to the 'component' user running the application.
 
 ##### DREAD
 ```
@@ -467,8 +467,8 @@ If we have accidentally logged personal information to AWS, then it is possible 
 (The AWS data privacy says we need to consent to allowing AWS access, but I'm not sure how this is enforced)
 
 ##### Mitigation
-- Best-effort to remove personal information from the logs.
-- Keep Belfrage in its own AWS account.
+- [X] Best-effort to remove personal information from the logs.
+- [X] Keep Belfrage in its own AWS account.
 
 ##### DREAD
 ```
@@ -491,9 +491,9 @@ If an attacker gains access to our metrics, then they can see what effect an att
 This would enable an attacker to deliberately exacerbate the issues they're causing.
 
 ##### Mitigation
-- Protect reading metrics using IAM roles.
-- Keep Belfrage in its own AWS account.
-- Cert-protected Grafana.
+- [X] Protect reading metrics using IAM roles.
+- [X] Keep Belfrage in its own AWS account.
+- [X] Cert-protected Grafana.
 
 ##### DREAD
 ```
