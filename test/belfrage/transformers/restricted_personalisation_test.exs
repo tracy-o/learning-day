@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.PersonalisationBetaTest do
+defmodule Belfrage.Transformers.RestrictedPersonalisationTest do
   use ExUnit.Case
   alias Belfrage.Struct
-  alias Belfrage.Transformers.PersonalisationBeta
+  alias Belfrage.Transformers.RestrictedPersonalisation
   alias Fixtures.AuthToken
 
   import ExUnit.CaptureLog
@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
               debug: %Belfrage.Struct.Debug{
                 pipeline_trail: ["MockTransformer"]
               }
-            }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_auth_user)
+            }} = RestrictedPersonalisation.call(["MockTransformer"], @struct_with_auth_user)
 
     assert_received(:mock_transformer_called)
   end
@@ -36,7 +36,7 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
               debug: %Belfrage.Struct.Debug{
                 pipeline_trail: []
               }
-            }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_non_auth_user)
+            }} = RestrictedPersonalisation.call(["MockTransformer"], @struct_with_non_auth_user)
 
     refute_received(:mock_transformer_called)
   end
@@ -48,10 +48,10 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
                 debug: %Belfrage.Struct.Debug{
                   pipeline_trail: []
                 }
-              }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_malformed_token)
+              }} = RestrictedPersonalisation.call(["MockTransformer"], @struct_with_malformed_token)
     end
 
-    assert capture_log(fun) =~ "Claims could not be peeked in Elixir.Belfrage.Transformers.PersonalisationBeta"
+    assert capture_log(fun) =~ "Claims could not be peeked in Elixir.Belfrage.Transformers.RestrictedPersonalisation"
     refute_received(:mock_transformer_called)
   end
 
@@ -61,7 +61,7 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
               debug: %Belfrage.Struct.Debug{
                 pipeline_trail: []
               }
-            }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_no_token)
+            }} = RestrictedPersonalisation.call(["MockTransformer"], @struct_with_no_token)
 
     refute_received(:mock_transformer_called)
   end

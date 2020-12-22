@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.PersonalisationBeta do
+defmodule Belfrage.Transformers.RestrictedPersonalisation do
   use Belfrage.Transformers.Transformer
   @authorised_users Application.get_env(:belfrage, :authorised_users)
 
