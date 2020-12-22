@@ -7,6 +7,7 @@ config :belfrage,
   not_found_page: "/var/www/html/errors/404-data-ssl.html",
   not_supported_page: "/var/www/html/errors/405-data-ssl.html",
   internal_error_page: "/var/www/html/errors/500-data-ssl.html"
+  authorised_users: ["a76ea475-1f67-4b23-95a2-452a364e1aa7", "1a1712e4-596a-4948-8ffb-da6921877a97"]
 
 config :ex_metrics,
   send_metrics: true,

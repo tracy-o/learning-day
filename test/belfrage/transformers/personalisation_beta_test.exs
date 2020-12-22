@@ -15,6 +15,9 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
   @struct_with_malformed_token %Struct{
     request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.malformed_access_token()}}
   }
+  @struct_with_no_token %Struct{
+    request: %Struct.Request{cookies: %{}}
+  }
 
   test "the pipline continues as user is on allow list" do
     assert {:ok,
@@ -49,6 +52,17 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
     end
 
     assert capture_log(fun) =~ "Claims could not be peeked in Elixir.Belfrage.Transformers.PersonalisationBeta"
+    refute_received(:mock_transformer_called)
+  end
+
+  test "the pipeline continues without validating session as token is not provided" do
+      assert {:ok,
+              %Belfrage.Struct{
+                debug: %Belfrage.Struct.Debug{
+                  pipeline_trail: []
+                }
+              }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_no_token)
+
     refute_received(:mock_transformer_called)
   end
 end

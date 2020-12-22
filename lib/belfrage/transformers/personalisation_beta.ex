@@ -1,6 +1,6 @@
 defmodule Belfrage.Transformers.PersonalisationBeta do
   use Belfrage.Transformers.Transformer
-  @authorised_users ["a76ea475-1f67-4b23-95a2-452a364e1aa7", "1a1712e4-596a-4948-8ffb-da6921877a97"]
+  @authorised_users Application.get_env(:belfrage, :authorised_users)
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
@@ -10,7 +10,7 @@ defmodule Belfrage.Transformers.PersonalisationBeta do
     end
   end
 
-  def is_authorised_user?(token) do
+  def is_authorised_user?(token) when is_binary(token) do
     case Joken.peek_claims(token) do
       {:ok, %{"sub" => uid}} when uid in @authorised_users ->
         true
@@ -23,4 +23,6 @@ defmodule Belfrage.Transformers.PersonalisationBeta do
         false
     end
   end
+
+  def is_authorised_user?(_), do: false
 end
