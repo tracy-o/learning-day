@@ -170,8 +170,8 @@ Total Score       = (N/A until confirmed scores)
 An attacker could target our public Belfrage DNS with a high number of requests per second.
 
 ##### Mitigation
-- Aggressive Belfrage scaling policy.
-- Protect Belfrage with a certificate
+- [X] Aggressive Belfrage scaling policy.
+- [ ] Protect Belfrage with an internal BBC certificate.
 
 ##### DREAD
 ```
