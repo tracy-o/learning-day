@@ -171,7 +171,7 @@ An attacker could target our public Belfrage DNS with a high number of requests 
 
 ##### Mitigation
 - [X] Aggressive Belfrage scaling policy.
-- [ ] Protect Belfrage with an internal BBC certificate.
+- [ ] Protect Belfrage with an internal BBC certificate on the network load balancer.
 
 ##### DREAD
 ```
@@ -180,6 +180,29 @@ Reproducibility   = 1/10
 Exploitability    = 1/10
 Affected users    = 100%
 Discoverability   = 3/10
+Total Score       = (N/A until confirmed scores)
+```
+
+-------
+
+#### AWS (S, T, R, I, D, E)
+An attacker could target our cloud infrastructure:
+- If AWS VPC features are attacked or modified maliciously (VPC, security groups)
+
+- If AWS EC2 features are attacked or modified maliciously (Load balancer, the amazon AMI store)
+
+- If AWS IAM features are attacked or modified maliciously (Lambda invoke permissions, fallback S3 storage permissions, cloudwatch permissions...)
+
+##### Mitigation
+- [ ] Provide cloud failover
+
+##### DREAD
+```
+Damage            = 10/10
+Reproducibility   = 1/10
+Exploitability    = 1/10
+Affected users    = 100%
+Discoverability   = 1/10
 Total Score       = (N/A until confirmed scores)
 ```
 
