@@ -2,11 +2,11 @@ defmodule Fixtures.AuthToken do
   # Example auth values from
   # https://github.com/bbc/api-management-mybbc-id/blob/8d14619c4072f5d16e521f0e74a060b5fb277c13/src/test/common.js
 
-  def authorised_beta_access_token,
+  def authorised_user_access_token,
     do:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNzZlYTQ3NS0xZjY3LTRiMjMtOTVhMi00NTJhMzY0ZTFhYTciLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.9GgmftJ-UzzU5WeJxN1YZ2c5ZAI708hlabt4yAgrAmk"
 
-  def unauthorised_for_beta_access_token,
+  def unauthorised_user_access_token,
     do:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 

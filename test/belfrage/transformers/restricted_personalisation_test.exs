@@ -7,10 +7,10 @@ defmodule Belfrage.Transformers.RestrictedPersonalisationTest do
   import ExUnit.CaptureLog
 
   @struct_with_auth_user %Struct{
-    request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.authorised_beta_access_token()}}
+    request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.authorised_user_access_token()}}
   }
   @struct_with_non_auth_user %Struct{
-    request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.unauthorised_for_beta_access_token()}}
+    request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.unauthorised_user_access_token()}}
   }
   @struct_with_malformed_token %Struct{
     request: %Struct.Request{cookies: %{"ckns_atkn" => AuthToken.malformed_access_token()}}
