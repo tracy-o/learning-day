@@ -57,7 +57,7 @@ defmodule Belfrage.MixProject do
       {:eljiffy, "~> 1.3.0"},
       {:ex_aws,
        git: "https://github.com/ex-aws/ex_aws", ref: "9dbb11ce5b9c0c2974b7c86ac32f1dbc983b08a2", override: true},
-      {:ex_aws_lambda, git: "https://github.com/james-bowers/ex_aws_lambda.git", branch: "x_ray_trace_id"},
+      {:ex_aws_lambda, "~> 2.0.2"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
       {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
       {:aws_ex_ray, "~> 0.1.15"},
