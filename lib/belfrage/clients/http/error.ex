@@ -59,3 +59,7 @@ defmodule Belfrage.Clients.HTTP.Error do
 
   defp standardise_error_reason(_), do: nil
 end
+
+defimpl String.Chars, for: Belfrage.Clients.HTTP.Error do
+  def to_string(error), do: inspect(error)
+end
