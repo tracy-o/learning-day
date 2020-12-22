@@ -56,12 +56,12 @@ defmodule Belfrage.Transformers.PersonalisationBetaTest do
   end
 
   test "the pipeline continues without validating session as token is not provided" do
-      assert {:ok,
-              %Belfrage.Struct{
-                debug: %Belfrage.Struct.Debug{
-                  pipeline_trail: []
-                }
-              }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_no_token)
+    assert {:ok,
+            %Belfrage.Struct{
+              debug: %Belfrage.Struct.Debug{
+                pipeline_trail: []
+              }
+            }} = PersonalisationBeta.call(["MockTransformer"], @struct_with_no_token)
 
     refute_received(:mock_transformer_called)
   end

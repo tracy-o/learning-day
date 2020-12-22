@@ -100,7 +100,6 @@ config :logger, :cloudwatch,
   level: :warn,
   metadata: :all,
   metadata_filter: [cloudwatch: true]
- 
 
 import_config "#{Mix.env()}.exs"
 import_config "metrics.exs"
