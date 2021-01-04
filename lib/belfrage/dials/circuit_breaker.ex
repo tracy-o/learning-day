@@ -1,11 +1,11 @@
 defmodule Belfrage.Dials.CircuitBreaker do
   @moduledoc false
 
-  @behaviour Belfrage.Dial.Client
+  @behaviour Belfrage.Dial
 
-  @impl Belfrage.Dial.Client
+  @impl Belfrage.Dial
   def transform("true"), do: true
 
-  @impl Belfrage.Dial.Client
+  @impl Belfrage.Dial
   def transform("false"), do: false
 end

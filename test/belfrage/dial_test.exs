@@ -1,8 +1,8 @@
 defmodule Belfrage.DialTest do
   use ExUnit.Case, async: false
 
-  alias Belfrage.Dial
-  alias Belfrage.Dial.{ClientMock, ClientWithOptionalCallbackMock}
+  alias Belfrage.Dials
+  alias Belfrage.{DialMock, DialWithOptionalCallbackMock}
 
   use Test.Support.Helper, :mox
 
@@ -10,60 +10,60 @@ defmodule Belfrage.DialTest do
     default_value = "true"
     dial_name = :"a-test-dial"
 
-    {:ok, _pid} = Belfrage.Dial.start_link({ClientMock, dial_name, default_value})
+    {:ok, _pid} = Belfrage.Dials.Server.start_link({DialMock, dial_name, default_value})
 
     :ok
   end
 
   test "dial correctly handles changed event in which the dial boolean state is flipped" do
-    ClientMock
+    DialMock
     |> expect(:transform, fn
       "false" -> false
       "true" -> true
     end)
 
-    dial_state = Dial.state(:"a-test-dial")
+    dial_state = Dials.Server.state(:"a-test-dial")
     GenServer.cast(:"a-test-dial", {:dials_changed, %{"a-test-dial" => "#{!dial_state}"}})
 
-    assert Dial.state(:"a-test-dial") == !dial_state
+    assert Dials.Server.state(:"a-test-dial") == !dial_state
   end
 
   describe "state/0" do
     test "returns transformed initial value after init" do
-      assert Dial.state(:"a-test-dial") == true
+      assert Dials.Server.state(:"a-test-dial") == true
     end
   end
 
   describe ":dials_changed logic" do
     test "when no changes are submitted" do
-      state = {ClientMock, "a-test-dial", true}
+      state = {DialMock, "a-test-dial", true}
 
-      assert {:noreply, {ClientMock, "a-test-dial", true}} ==
-               Dial.handle_cast({:dials_changed, %{}}, state)
+      assert {:noreply, {DialMock, "a-test-dial", true}} ==
+               Dials.Server.handle_cast({:dials_changed, %{}}, state)
     end
 
     test "when a change for a different dial is submitted" do
-      state = {ClientMock, "a-test-dial", true}
+      state = {DialMock, "a-test-dial", true}
 
-      assert {:noreply, {ClientMock, "a-test-dial", true}} ==
-               Dial.handle_cast({:dials_changed, %{"foo" => "bar"}}, state)
+      assert {:noreply, {DialMock, "a-test-dial", true}} ==
+               Dials.Server.handle_cast({:dials_changed, %{"foo" => "bar"}}, state)
     end
 
     test "when a valid change for the dial is submitted" do
-      state = {ClientMock, "a-test-dial", true}
+      state = {DialMock, "a-test-dial", true}
 
-      assert {:noreply, {ClientMock, "a-test-dial", false}} ==
-               Dial.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
+      assert {:noreply, {DialMock, "a-test-dial", false}} ==
+               Dials.Server.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
     end
 
     test "when dial has on_change/1 callback logic, it is called" do
-      ClientWithOptionalCallbackMock
+      DialWithOptionalCallbackMock
       |> expect(:on_change, fn false -> :ok end)
 
-      state = {ClientWithOptionalCallbackMock, "a-test-dial", true}
+      state = {DialWithOptionalCallbackMock, "a-test-dial", true}
 
-      assert {:noreply, {ClientWithOptionalCallbackMock, "a-test-dial", false}} ==
-               Dial.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
+      assert {:noreply, {DialWithOptionalCallbackMock, "a-test-dial", false}} ==
+               Dials.Server.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
     end
   end
 end

@@ -15,9 +15,9 @@ defmodule Test.Support.Helper do
     Mox.stub_with(CacheStrategyTwoMock, CacheStrategyStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
     Mox.stub_with(Belfrage.Clients.AuthenticationMock, Belfrage.Clients.AuthenticationStub)
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     Mox.stub_with(Belfrage.DialMock, Belfrage.DialStub)
-    Mox.stub_with(Belfrage.Dial.ClientMock, Belfrage.Dial.ClientStub)
-    Mox.stub_with(Belfrage.Dial.ClientWithOptionalCallbackMock, Belfrage.Dial.ClientStub)
+    Mox.stub_with(Belfrage.DialWithOptionalCallbackMock, Belfrage.DialStub)
     Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
   end
 

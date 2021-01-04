@@ -1,13 +1,13 @@
 defmodule Belfrage.Transformers.CircuitBreaker do
   use Belfrage.Transformers.Transformer
 
-  @dial_client Application.get_env(:belfrage, :dial_client)
+  @dial Application.get_env(:belfrage, :dial)
 
   @impl true
   def call(rest, struct) do
     case threshold_exceeded?(error_count(struct), threshold(struct)) do
       true ->
-        maybe_apply_circuit_breaker(rest, struct, @dial_client.state(:circuit_breaker))
+        maybe_apply_circuit_breaker(rest, struct, @dial.state(:circuit_breaker))
 
       false ->
         then(rest, struct)

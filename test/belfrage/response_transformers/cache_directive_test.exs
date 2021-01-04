@@ -6,7 +6,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   alias Belfrage.Struct
 
   def set_ttl_multiplier(value) do
-    stub(Belfrage.DialMock, :state, fn :ttl_multiplier ->
+    stub(Belfrage.Dials.ServerMock, :state, fn :ttl_multiplier ->
       Belfrage.Dials.TtlMultiplier.transform(value)
     end)
   end

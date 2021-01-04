@@ -11,13 +11,13 @@ defmodule Belfrage.Transformers.UserSessionTest do
   @token Fixtures.AuthToken.valid_access_token()
 
   def enable_personalisation_dial() do
-    stub(Belfrage.DialMock, :state, fn :personalisation ->
+    stub(Belfrage.Dials.ServerMock, :state, fn :personalisation ->
       Belfrage.Dials.Personalisation.transform("on")
     end)
   end
 
   def disable_personalisation_dial() do
-    stub(Belfrage.DialMock, :state, fn :personalisation ->
+    stub(Belfrage.Dials.ServerMock, :state, fn :personalisation ->
       Belfrage.Dials.Personalisation.transform("off")
     end)
   end

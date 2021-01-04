@@ -44,7 +44,7 @@ defmodule Belfrage.DialsSupervisor do
 
   defp dial_children do
     Enum.map(dial_config(), fn dial_info = {_dial_mod, dial_name, _default_value} ->
-      Supervisor.child_spec({Belfrage.Dial, dial_info}, id: dial_name)
+      Supervisor.child_spec({Belfrage.Dials.Server, dial_info}, id: dial_name)
     end)
   end
 end

@@ -6,13 +6,13 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   alias Belfrage.Struct
 
   def enable_circuit_breaker_dial() do
-    stub(Belfrage.DialMock, :state, fn :circuit_breaker ->
+    stub(Belfrage.Dials.ServerMock, :state, fn :circuit_breaker ->
       Belfrage.Dials.CircuitBreaker.transform("true")
     end)
   end
 
   def disable_circuit_breaker_dial() do
-    stub(Belfrage.DialMock, :state, fn :circuit_breaker ->
+    stub(Belfrage.Dials.ServerMock, :state, fn :circuit_breaker ->
       Belfrage.Dials.CircuitBreaker.transform("false")
     end)
   end
