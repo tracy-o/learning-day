@@ -36,7 +36,7 @@ defmodule Belfrage.Dials.Poller do
 
     case read_dials() do
       {:ok, dials} ->
-        Belfrage.DialsSupervisor.notify(:dials_changed, dials)
+        Belfrage.Dials.Supervisor.notify(:dials_changed, dials)
 
         {:noreply, dials}
 

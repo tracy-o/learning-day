@@ -1,4 +1,4 @@
-defmodule Belfrage.DialsSupervisor do
+defmodule Belfrage.Dials.Supervisor do
   @moduledoc false
 
   use Supervisor

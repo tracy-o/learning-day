@@ -1,16 +1,16 @@
-defmodule Belfrage.DialsSupervisorTest do
+defmodule Belfrage.Dials.SupervisorTest do
   use ExUnit.Case, async: false
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
-  import Belfrage.DialsSupervisor
+  import Belfrage.Dials.Supervisor
   import Fixtures.Dials
 
   @dials_poller Belfrage.Dials.Poller
   @dials_supervisor :test_dials_supervisor
 
   setup do
-    start_supervised!({Belfrage.DialsSupervisor, name: @dials_supervisor})
+    start_supervised!({Belfrage.Dials.Supervisor, name: @dials_supervisor})
 
     :ok
   end
@@ -104,7 +104,7 @@ defmodule Belfrage.DialsSupervisorTest do
         new_state = apply(@module, :transform, [new_state_value])
         current_state = Belfrage.Dials.Server.state(@name)
 
-        Belfrage.DialsSupervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
+        Belfrage.Dials.Supervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
 
         assert new_state != current_state
         assert new_state == Belfrage.Dials.Server.state(@name)

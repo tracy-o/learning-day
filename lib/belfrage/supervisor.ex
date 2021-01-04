@@ -43,13 +43,13 @@ defmodule Belfrage.Supervisor do
   independently in the test setup. For example:
   `start_supervised!(Poller)`
   or
-  `start_supervised!({Belfrage.DialsSupervisor, name: :test_dials_supervisor})`
+  `start_supervised!({Belfrage.Dials.Supervisor, name: :test_dials_supervisor})`
   https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html#start_supervised!/2
 
   For more help, see the testing best practices docs
   https://github.com/bbc/belfrage/wiki/Testing-best-practices
 
-  Belfrage.DialsSupervisor
+  Belfrage.Dials.Supervisor
   - Starts `Belfrage.Dials.Poller` process
     which periodically checks the dials file for dial changes.
 
@@ -70,7 +70,7 @@ defmodule Belfrage.Supervisor do
 
   defp background_children(_env) do
     [
-      Belfrage.DialsSupervisor,
+      Belfrage.Dials.Supervisor,
       Belfrage.Credentials.Refresh,
       Belfrage.Authentication.Jwk,
       Belfrage.Authentication.Flagpole,
