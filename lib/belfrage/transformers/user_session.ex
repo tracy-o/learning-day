@@ -1,27 +1,41 @@
 defmodule Belfrage.Transformers.UserSession do
   use Belfrage.Transformers.Transformer
 
-  # note: `Plug.Conn.Cookies.decode` benchmark
-  # https://github.com/bbc/belfrage/pull/574#issuecomment-715417312
-  import Plug.Conn.Cookies, only: [decode: 1]
-
-  @flagpole Application.get_env(:belfrage, :flagpole)
+  alias Belfrage.Struct
+  alias Belfrage.Struct.Private
+  @idcta_flagpole Application.get_env(:belfrage, :flagpole)
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: %{"cookie" => cookie}}}) do
-    with true <- Belfrage.Dial.state(:personalisation),
-         true <- @flagpole.state() do
-      %{struct | private: handle_cookies(decode(cookie), struct.private) |> valid?()}
-      |> maybe_redirect(rest)
-    else
-      false ->
+  def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
+    private = Struct.Private.set_session_state(struct.private, cookies, valid?(cookies["ckns_atkn"]))
+    struct_with_session_state = Struct.add(struct, :private, private)
+
+    cond do
+      !personalisation_available?() ->
         then(rest, struct)
+
+      match?(%Private{authenticated: true, valid_session: true}, private) ->
+        then(rest, struct_with_session_state)
+
+      # no cookies provided
+      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
+        then(rest, struct_with_session_state)
+
+      # ckns_atkn only set
+      match?(%Private{session_token: _value, authenticated: false, valid_session: false}, private) ->
+        redirect(struct_with_session_state)
+
+      # ckns_id set
+      match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
+        redirect(struct_with_session_state)
     end
   end
 
-  def call(rest, struct), do: then(rest, struct)
+  defp personalisation_available? do
+    Belfrage.Dial.state(:personalisation) && @idcta_flagpole.state()
+  end
 
-  defp maybe_redirect(struct = %Struct{private: %Struct.Private{valid_session: false}}, _rest) do
+  defp redirect(struct = %Struct{}) do
     {
       :redirect,
       Struct.add(struct, :response, %{
@@ -36,16 +50,12 @@ defmodule Belfrage.Transformers.UserSession do
     }
   end
 
-  defp maybe_redirect(struct = %Struct{private: %Struct.Private{valid_session: true}}, rest), do: then(rest, struct)
+  defp valid?(_session_token = nil), do: false
 
-  defp valid?(private_struct = %Struct.Private{session_token: nil}) do
-    %{private_struct | valid_session: false}
-  end
-
-  defp valid?(private_struct = %Struct.Private{authenticated: true, session_token: token}) do
-    case Belfrage.Authentication.Validator.verify_and_validate(token) do
+  defp valid?(session_token) do
+    case Belfrage.Authentication.Validator.verify_and_validate(session_token) do
       {:ok, _decoded_token} ->
-        %{private_struct | valid_session: true}
+        true
 
       {:error, [message: message, claim: claim, claim_val: claim_val]} ->
         Belfrage.Event.record(:log, :warn, %{
@@ -55,29 +65,30 @@ defmodule Belfrage.Transformers.UserSession do
           claim: claim
         })
 
-        %{private_struct | valid_session: false}
+        false
 
       {:error, :token_malformed} ->
         Belfrage.Event.record(:log, :error, "Malformed JWT")
-        %{private_struct | valid_session: false}
+
+        false
 
       {:error, :public_key_not_found} ->
-        %{private_struct | valid_session: false}
+        false
 
       {:error, :invalid_token_header} ->
         Belfrage.Event.record(:log, :error, "Invalid token header")
-        %{private_struct | valid_session: false}
+
+        false
 
       {:error, :signature_error} ->
-        %{private_struct | valid_session: false}
+        false
 
       {:error, _} ->
         Belfrage.Event.record(:log, :error, "Unexpected token error.")
-        %{private_struct | valid_session: false}
+
+        false
     end
   end
-
-  defp valid?(private_struct), do: private_struct
 
   defp session_url, do: Application.get_env(:belfrage, :authentication)["session_url"]
 
@@ -95,13 +106,4 @@ defmodule Belfrage.Transformers.UserSession do
     |> URI.encode_www_form()
     |> Kernel.<>(Belfrage.Helpers.QueryParams.encode(request.query_params, :encoded))
   end
-
-  defp handle_cookies(decoded_cookies, private_struct)
-
-  defp handle_cookies(%{"ckns_id" => _, "ckns_atkn" => token}, private_struct) do
-    %{private_struct | authenticated: true, session_token: token}
-  end
-
-  defp handle_cookies(%{"ckns_id" => _}, private_struct), do: %{private_struct | authenticated: true}
-  defp handle_cookies(_cookies, private_struct), do: private_struct
 end

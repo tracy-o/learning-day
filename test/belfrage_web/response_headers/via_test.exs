@@ -2,6 +2,7 @@ defmodule BelfrageWeb.ResponseHeaders.ViaTest do
   use ExUnit.Case
   use Plug.Test
 
+  import ExUnit.CaptureLog
   alias BelfrageWeb.ResponseHeaders.Via
   alias Belfrage.Struct
 
@@ -30,5 +31,16 @@ defmodule BelfrageWeb.ResponseHeaders.ViaTest do
     output_conn = Via.add_header(input_conn, struct)
 
     assert ["3.7 Belfrage"] == get_resp_header(output_conn, "via")
+  end
+
+  test "when http protocol is 1.0" do
+    fun = fn ->
+      input_conn = conn(:get, "/") |> Plug.Test.put_http_protocol(:"HTTP/1.0")
+      struct = %Struct{}
+      output_conn = Via.add_header(input_conn, struct)
+      assert ["1.0 Belfrage"] == get_resp_header(output_conn, "via")
+    end
+
+    assert capture_log(fun) =~ ""
   end
 end

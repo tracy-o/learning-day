@@ -21,6 +21,7 @@ defmodule BelfrageWeb.ResponseHeaders.Via do
   end
 
   defp protocol_version(:"HTTP/1"), do: "1"
+  defp protocol_version(:"HTTP/1.0"), do: "1.0"
   defp protocol_version(:"HTTP/1.1"), do: "1.1"
   defp protocol_version(:"HTTP/2"), do: "2"
 

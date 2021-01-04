@@ -3,7 +3,7 @@ defmodule Belfrage.Struct.Debug do
 end
 
 defmodule Belfrage.Struct.Request do
-  @derive {Inspect, except: [:raw_headers]}
+  @derive {Inspect, except: [:raw_headers, :cookies]}
   defstruct [
     :path,
     :payload,
@@ -25,7 +25,8 @@ defmodule Belfrage.Struct.Request do
     subdomain: "www",
     raw_headers: %{},
     query_params: %{},
-    path_params: %{}
+    path_params: %{},
+    cookies: %{}
   ]
 
   @type t :: %__MODULE__{}
@@ -58,6 +59,7 @@ defmodule Belfrage.Struct.Private do
             overrides: %{},
             query_params_allowlist: [],
             headers_allowlist: [],
+            cookie_allowlist: [],
             production_environment: "live",
             platform: nil,
             signature_keys: %{skip: [], add: []},
@@ -68,6 +70,20 @@ defmodule Belfrage.Struct.Private do
             valid_session: false
 
   @type t :: %__MODULE__{}
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_atkn" => ckns_atkn, "ckns_id" => _ckns_id}, valid_session?) do
+    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+  end
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_atkn" => ckns_atkn}, _valid_session?) do
+    %{private | session_token: ckns_atkn, authenticated: false, valid_session: false}
+  end
+
+  def set_session_state(private = %__MODULE__{}, %{"ckns_id" => _ckns_id}, _valid_session?) do
+    %{private | session_token: nil, authenticated: true, valid_session: false}
+  end
+
+  def set_session_state(private = %__MODULE__{}, _cookies, _valid_session?), do: private
 end
 
 defmodule Belfrage.Struct do
@@ -86,6 +102,7 @@ defmodule Belfrage.Struct do
     struct
     |> update_in([Access.key(:response), Access.key(:body)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:request), Access.key(:raw_headers)], &Belfrage.PII.clean/1)
+    |> update_in([Access.key(:request), Access.key(:cookies)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:response), Access.key(:headers)], &Belfrage.PII.clean/1)
     |> update_in([Access.key(:private), Access.key(:session_token)], fn
       nil -> nil

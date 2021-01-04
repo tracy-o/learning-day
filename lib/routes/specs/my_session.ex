@@ -5,8 +5,8 @@ defmodule Routes.Specs.MySession do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: OriginSimulator,
       origin: :stubbed_session_origin,
-      pipeline: ["UserSession"],
-      headers_allowlist: ["cookie"]
+      pipeline: ["RestrictedPersonalisation", "UserSession"],
+      cookie_allowlist: ["ckns_id", "ckns_atkn"]
     }
   end
 end

@@ -36,5 +36,11 @@ defmodule Belfrage.StructTest do
       struct = %Struct{response: %Struct.Response{headers: %{"foo" => "bar"}}}
       assert %Struct{response: %Struct.Response{headers: [{"foo", "bar"}]}} = Struct.loggable(struct)
     end
+
+    test "removes cookies section from struct.request" do
+      struct = %Struct{request: %Struct.Request{cookies: %{"foo" => "bar"}}}
+
+      assert %Struct{request: %Struct.Request{cookies: "REMOVED"}} = Struct.loggable(struct)
+    end
   end
 end
