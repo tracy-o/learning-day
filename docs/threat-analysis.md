@@ -171,7 +171,7 @@ An attacker could target our public Belfrage DNS with a high number of requests 
 
 ##### Mitigation
 - [X] Aggressive Belfrage scaling policy.
-- [ ] Protect Belfrage with an internal BBC certificate on the network load balancer.
+- [ ] Protect Belfrage stacks behind GTM with an internal BBC certificate on the network load balancer.
 
 ##### DREAD
 ```
@@ -489,7 +489,6 @@ A developer has the opportunity to modify the logs on the instance, before they 
 
 ##### Mitigation
 - [X] Cosmos SSH access logs.
-- [X] Record log stream in Monitor, which isn't written to disk.
 - [ ] Restrict access to the log files on the instance, to the 'component' user running the application.
 
 ##### DREAD
