@@ -29,7 +29,9 @@ defmodule Belfrage.Client.AuthenticationTest do
   describe "get_jwk_keys/0" do
     test "returns the keys from the account api" do
       expected_request = %Clients.HTTP.Request{
-        headers: %{},
+        headers: %{
+          "connection" => "close"
+        },
         method: :get,
         payload: "",
         timeout: 6000,
@@ -84,7 +86,9 @@ defmodule Belfrage.Client.AuthenticationTest do
   describe "get_idcta_config/0" do
     test "returns data from the api" do
       expected_request = %Clients.HTTP.Request{
-        headers: %{},
+        headers: %{
+          "connection" => "close"
+        },
         method: :get,
         payload: "",
         timeout: 6000,
