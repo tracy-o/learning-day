@@ -1,12 +1,19 @@
-defmodule Belfrage.DialsSupervisorTest do
-  use ExUnit.Case, async: true
+defmodule Belfrage.Dials.SupervisorTest do
+  use ExUnit.Case, async: false
+  use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
-  import Belfrage.DialsSupervisor
+  import Belfrage.Dials.Supervisor
   import Fixtures.Dials
 
   @dials_poller Belfrage.Dials.Poller
-  @dials_supervisor Belfrage.DialsSupervisor
+  @dials_supervisor :test_dials_supervisor
+
+  setup do
+    start_supervised!({Belfrage.Dials.Supervisor, name: @dials_supervisor})
+
+    :ok
+  end
 
   test "dials supervisor is alive" do
     assert Process.whereis(@dials_supervisor) |> Process.alive?()
@@ -54,7 +61,7 @@ defmodule Belfrage.DialsSupervisorTest do
 
     describe "when a dial crashes" do
       setup do
-        start_supervised({Belfrage.Dial, {@module, @test_dial, @default}})
+        start_supervised({Belfrage.Dials.Server, {@module, @test_dial, @default}})
         :ok
       end
 
@@ -95,12 +102,12 @@ defmodule Belfrage.DialsSupervisorTest do
       test "a dial of new dial value" do
         new_state_value = other_dial_state(to_string(@name), @default)
         new_state = apply(@module, :transform, [new_state_value])
-        current_state = Belfrage.Dial.state(@name)
+        current_state = Belfrage.Dials.Server.state(@name)
 
-        Belfrage.DialsSupervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
+        Belfrage.Dials.Supervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
 
         assert new_state != current_state
-        assert new_state == Belfrage.Dial.state(@name)
+        assert new_state == Belfrage.Dials.Server.state(@name)
       end
     end
   end

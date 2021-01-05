@@ -1,6 +1,6 @@
 defmodule Belfrage.CacheControl.ParserTest do
   alias Belfrage.CacheControl
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   describe "&parse/1" do
     test "no cache control header" do

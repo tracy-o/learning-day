@@ -1,11 +1,10 @@
 defmodule Belfrage.Dials.LoggingLevelTest do
   use ExUnit.Case
-  use Test.Support.Helper, :mox
-
   alias Belfrage.Dials.LoggingLevel
 
   setup do
-    Belfrage.Dials.Poller.clear()
+    start_supervised!(Belfrage.Dials.Poller)
+
     :ok
   end
 

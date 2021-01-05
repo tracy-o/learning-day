@@ -1,5 +1,5 @@
 defmodule Belfrage.ConcurrentlyTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.{Concurrently, Struct}
 
   defp to_stream(list), do: Stream.map(list, & &1)

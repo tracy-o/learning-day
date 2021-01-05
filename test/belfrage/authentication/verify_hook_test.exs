@@ -4,6 +4,8 @@ defmodule Belfrage.Authentication.VerifyHookTest do
   alias Belfrage.Authentication.VerifyHook
 
   setup do
+    start_supervised!(Belfrage.Authentication.Jwk)
+
     %{
       valid_access_token: Fixtures.AuthToken.valid_access_token(),
       malformed_access_token: Fixtures.AuthToken.malformed_access_token(),
@@ -34,10 +36,6 @@ defmodule Belfrage.Authentication.VerifyHookTest do
   describe "no public keys" do
     setup do
       :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => []} end)
-
-      on_exit(fn ->
-        :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => Fixtures.AuthToken.keys()} end)
-      end)
     end
 
     test "when public key not found", %{valid_access_token: jwt} do

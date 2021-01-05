@@ -1,6 +1,5 @@
 defmodule Belfrage.Transformers.DevelopmentRequestsTest do
-  use ExUnit.Case
-  use Test.Support.Helper, :mox
+  use ExUnit.Case, async: true
 
   alias Belfrage.Transformers.DevelopmentRequests
   alias Belfrage.Struct

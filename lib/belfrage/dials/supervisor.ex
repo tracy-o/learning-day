@@ -1,4 +1,4 @@
-defmodule Belfrage.DialsSupervisor do
+defmodule Belfrage.Dials.Supervisor do
   @moduledoc false
 
   use Supervisor
@@ -15,7 +15,8 @@ defmodule Belfrage.DialsSupervisor do
   """
   @spec start_link(list) :: Supervisor.on_start()
   def start_link(init_arg) do
-    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
+    name = Keyword.get(init_arg, :name, __MODULE__)
+    Supervisor.start_link(__MODULE__, init_arg, name: name)
   end
 
   @doc """
@@ -43,7 +44,7 @@ defmodule Belfrage.DialsSupervisor do
 
   defp dial_children do
     Enum.map(dial_config(), fn dial_info = {_dial_mod, dial_name, _default_value} ->
-      Supervisor.child_spec({Belfrage.Dial, dial_info}, id: dial_name)
+      Supervisor.child_spec({Belfrage.Dials.Server, dial_info}, id: dial_name)
     end)
   end
 end

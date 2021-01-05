@@ -1,4 +1,4 @@
-defmodule Belfrage.Dials.DialStub do
+defmodule Belfrage.DialStub do
   @behaviour Belfrage.Dial
 
   @impl Belfrage.Dial

@@ -5,12 +5,7 @@ defmodule Belfrage.Dials.PollerTest do
   alias Belfrage.Dials.Poller
 
   setup do
-    Poller.clear()
-
-    on_exit(fn ->
-      Poller.clear()
-      :ok
-    end)
+    start_supervised!(Poller)
 
     :ok
   end

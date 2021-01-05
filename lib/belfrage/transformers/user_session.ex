@@ -4,6 +4,7 @@ defmodule Belfrage.Transformers.UserSession do
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
+  @dial Application.get_env(:belfrage, :dial)
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
@@ -32,7 +33,7 @@ defmodule Belfrage.Transformers.UserSession do
   end
 
   defp personalisation_available? do
-    Belfrage.Dial.state(:personalisation) && @idcta_flagpole.state()
+    @dial.state(:personalisation) && @idcta_flagpole.state()
   end
 
   defp redirect(struct = %Struct{}) do
