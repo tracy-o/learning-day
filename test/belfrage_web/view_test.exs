@@ -45,6 +45,33 @@ defmodule BelfrageWeb.ViewTest do
     refute {"non-string", true} in headers
   end
 
+  test "redirect returns the header location" do
+    struct = %Struct{
+      response: %Struct.Response{
+        body: "<p>hi</p>",
+        http_status: 301
+      }
+    }
+
+    conn = conn(:get, "/_web_core")
+    {_status, headers, _body} = View.redirect(struct, conn, 301, "new_location") |> sent_resp()
+    assert {"location", "new_location"} in headers
+  end
+
+  test "redirect returns a 400 when the header location contains a newline char" do
+    struct = %Struct{
+      response: %Struct.Response{
+        body: "<p>hi</p>",
+        http_status: 301
+      }
+    }
+
+    conn = conn(:get, "/_web_core")
+    {status, headers, _body} = View.redirect(struct, conn, 301, "new_location/.\r/.") |> sent_resp()
+    refute {"location", "new_location"} in headers
+    assert 400 == status
+  end
+
   describe "when content-length is 0" do
     test "keeps request information" do
       struct = %Struct{
