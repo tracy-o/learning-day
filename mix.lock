@@ -16,7 +16,7 @@
   "ex_aws": {:git, "https://github.com/ex-aws/ex_aws", "9dbb11ce5b9c0c2974b7c86ac32f1dbc983b08a2", [ref: "9dbb11ce5b9c0c2974b7c86ac32f1dbc983b08a2"]},
   "ex_aws_lambda": {:hex, :ex_aws_lambda, "2.0.2", "77c749e4c4c36fb607639519a2e6b2037ec5986be52add632c1f5f5b9932089b", [:mix], [{:ex_aws, "~> 2.0", [hex: :ex_aws, repo: "hexpm", optional: false]}], "hexpm", "4e47a9b0bdd3ec993f812e6ef87ad8d1a652e4ffadb8d7c2632e90bd4a4d1fe2"},
   "ex_aws_sts": {:git, "https://github.com/ex-aws/ex_aws_sts.git", "b5393dc76a9105558466a89444f4c6afe338cc79", []},
-  "ex_metrics": {:git, "https://github.com/bbc/ExMetrics.git", "5ba049349737c009e8493afa22d917a86adfd094", []},
+  "ex_metrics": {:git, "https://github.com/bbc/ExMetrics.git", "f2ea011b859a0d2239872cccebfce74bc0af0fcc", []},
   "gun": {:hex, :gun, "1.3.0", "18e5d269649c987af95aec309f68a27ffc3930531dd227a6eaa0884d6684286e", [:rebar3], [{:cowlib, "~> 2.6.0", [hex: :cowlib, repo: "hexpm", optional: false]}], "hexpm", "279d089773be9886fc2ed0d0c25663cc36b8755356dfd27d63c206ab20b8329a"},
   "jason": {:hex, :jason, "1.2.2", "ba43e3f2709fd1aa1dce90aaabfd039d000469c05c56f0b8e31978e03fa39052", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "18a228f5f0058ee183f29f9eae0805c6e59d61c3b006760668d8d18ff0d12179"},
   "jiffy": {:hex, :jiffy, "1.0.5", "a69b58faf7123534c20e1b0b7ae97ac52079ca02ed4b6989b4b380179cd63a54", [:rebar3], [], "hexpm", "b617a53f46ae84f20d0c38951367dc947a2cf8cff922aa5c6ac6b64b8b052289"},
