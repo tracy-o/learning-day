@@ -31,7 +31,10 @@ defmodule Belfrage.Clients.Authentication do
   defp get_from_api(url, api_config_name) do
     @http_client.execute(%Clients.HTTP.Request{
       method: :get,
-      url: url
+      url: url,
+      headers: %{
+        "connection" => "close"
+      }
     })
     |> handle_response(api_config_name)
   end
