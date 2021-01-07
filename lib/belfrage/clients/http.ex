@@ -50,7 +50,7 @@ defmodule Belfrage.Clients.HTTP do
      })}
   end
 
-  defp format_response({:error, %MachineGun.Error{reason: reason}}) do
-    {:error, HTTP.Error.new(reason)}
+  defp format_response({:error, error = %MachineGun.Error{}}) do
+    {:error, HTTP.Error.new(error)}
   end
 end

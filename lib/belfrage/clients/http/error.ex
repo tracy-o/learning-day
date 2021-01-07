@@ -27,24 +27,24 @@ defmodule Belfrage.Clients.HTTP.Error do
 
   ## Examples
 
-      iex> Belfrage.Clients.HTTP.Error.new(:request_timeout)
+      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :request_timeout})
       %Belfrage.Clients.HTTP.Error{reason: :timeout}
 
-      iex> Belfrage.Clients.HTTP.Error.new(:pool_timeout)
+      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :pool_timeout})
       %Belfrage.Clients.HTTP.Error{reason: :pool_timeout}
 
-      iex> Belfrage.Clients.HTTP.Error.new(:unexpected_reason)
+      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :unexpected_reason})
       %Belfrage.Clients.HTTP.Error{reason: nil}
 
       iex> Belfrage.Clients.HTTP.Error.new(%{error: :unexpected_error_format})
       %Belfrage.Clients.HTTP.Error{reason: nil}
   """
-  def new(reason) do
+  def new(error = %MachineGun.Error{reason: reason}) do
     belfrage_http_reason = standardise_error_reason(reason)
 
     Belfrage.Event.record(:log, :error, %{
       info: "Http error",
-      third_party_reason: reason,
+      third_party_reason: MachineGun.Error.message(error),
       belfrage_http_reason: belfrage_http_reason
     })
 
@@ -52,6 +52,8 @@ defmodule Belfrage.Clients.HTTP.Error do
       reason: belfrage_http_reason
     }
   end
+
+  def new(_error), do: %__MODULE__{}
 
   defp standardise_error_reason(reason) when is_atom(reason) do
     Keyword.get(@map_reason_codes, reason, nil)
