@@ -26,7 +26,7 @@ defmodule Belfrage.Transformers.UserSession do
       match?(%Private{session_token: _value, authenticated: false, valid_session: false}, private) ->
         redirect(struct_with_session_state)
 
-      # ckns_id set
+      # x-id-oidc-signedin set
       match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
         redirect(struct_with_session_state)
     end

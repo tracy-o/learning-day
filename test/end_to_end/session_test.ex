@@ -8,8 +8,7 @@ defmodule EndToEnd.SessionTest do
 
   setup do
     %{
-      valid_access_token: Fixtures.AuthToken.valid_access_token(),
-      valid_identity_token: Fixtures.AuthToken.valid_identity_token()
+      valid_access_token: Fixtures.AuthToken.valid_access_token()
     }
   end
 
@@ -22,12 +21,11 @@ defmodule EndToEnd.SessionTest do
   end
 
   test "valid access and identity token", %{
-    valid_access_token: access_token,
-    valid_identity_token: identity_token
+    valid_access_token: access_token
   } do
     response_conn =
       conn(:get, "/my/session")
-      |> put_req_header("cookie", "ckns_atkn=#{access_token};ckns_id=#{identity_token}")
+      |> put_req_header("cookie", "ckns_atkn=#{access_token};x-id-oidc-signedin=yes")
       |> Router.call([])
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)
