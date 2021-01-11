@@ -73,8 +73,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.Dials.Supervisor,
       Belfrage.Credentials.Refresh,
       Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole,
-      {EtsCleaner, cleaner_module: Belfrage.Cache.Cleaner, check_interval: 60_000}
+      Belfrage.Authentication.Flagpole
     ]
   end
 
