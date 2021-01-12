@@ -25,7 +25,7 @@ defmodule EndToEnd.SessionTest do
   } do
     response_conn =
       conn(:get, "/my/session")
-      |> put_req_header("cookie", "ckns_atkn=#{access_token};x-id-oidc-signedin=yes")
+      |> put_req_header("cookie", "ckns_atkn=#{access_token};x-id-oidc-signedin=1")
       |> Router.call([])
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)
