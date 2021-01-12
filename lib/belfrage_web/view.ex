@@ -37,9 +37,15 @@ defmodule BelfrageWeb.View do
   def unsupported_method(conn), do: internal_response(conn, 405)
 
   def redirect(struct, conn, status, new_location) do
-    conn
-    |> put_resp_header("location", new_location)
-    |> internal_response(status, struct)
+    case :binary.match(new_location, ["\n", "\r"]) do
+      {_, _} ->
+        internal_response(conn, 400)
+
+      :nomatch ->
+        conn
+        |> put_resp_header("location", new_location)
+        |> internal_response(status, struct)
+    end
   end
 
   defp put_response(conn, status, content) when is_map(content) do
