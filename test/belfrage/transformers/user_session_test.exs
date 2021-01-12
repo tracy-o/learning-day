@@ -45,7 +45,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       :ok
     end
 
-    test "cookie for 'x-id-oidc-signedin' set to 'yes' only will be authenticated", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {
@@ -59,7 +59,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' only will be redirected", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will be redirected", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {
@@ -77,7 +77,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' only will return nil session token", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will return nil session token", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {
@@ -90,7 +90,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' and other keys will be authenticated", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' and other keys will be authenticated", %{struct: struct} do
       struct =
         Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "x-id-oidc-signedin" => "1", "foo" => "bar"}})
 
@@ -104,7 +104,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' and other keys will be redirected", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' and other keys will be redirected", %{struct: struct} do
       struct =
         Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "x-id-oidc-signedin" => "1", "foo" => "bar"}})
 
@@ -174,7 +174,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie with 'x-id-oidc-signedin' set to 'no' will not be authenticated", %{struct: struct} do
+    test "cookie with 'x-id-oidc-signedin' set to '0' will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def", "x-id-oidc-signedin" => "0"}})
 
       assert {
@@ -227,7 +227,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' and `ckns_atkn` keys will be authenticated and store session token" do
+    test "cookie for 'x-id-oidc-signedin' set to '1' and `ckns_atkn` keys will be authenticated and store session token" do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "x-id-oidc-signedin" => "1", "foo" => "bar"}
@@ -245,7 +245,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' and `ckns_atkn` keys will be authenticated and set valid session" do
+    test "cookie for 'x-id-oidc-signedin' set to '1' and `ckns_atkn` keys will be authenticated and set valid session" do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "x-id-oidc-signedin" => "1", "foo" => "bar"}
@@ -271,7 +271,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       :ok
     end
 
-    test "cookie for 'x-id-oidc-signedin' only will not be authenticated", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {
@@ -285,7 +285,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' only will not be redirected", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will not be redirected", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {:ok,
@@ -297,7 +297,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
               }} = UserSession.call([], struct)
     end
 
-    test "cookie for 'x-id-oidc-signedin' only will return nil session token", %{struct: struct} do
+    test "cookie for 'x-id-oidc-signedin' set to '1' only will return nil session token", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"x-id-oidc-signedin" => "1"}})
 
       assert {
