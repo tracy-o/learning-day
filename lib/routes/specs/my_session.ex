@@ -6,7 +6,6 @@ defmodule Routes.Specs.MySession do
       platform: OriginSimulator,
       origin: :stubbed_session_origin,
       pipeline: ["RestrictedPersonalisation", "UserSession"],
-      # pipeline: ["UserSession"],
       cookie_allowlist: ["ckns_atkn"],
       headers_allowlist: ["x-id-oidc-signedin"]
     }
