@@ -67,6 +67,20 @@ defmodule BelfrageWeb.ViewTest do
     }
 
     conn = conn(:get, "/_web_core")
+    {status, headers, _body} = View.redirect(struct, conn, 301, "new_location/.\n/.") |> sent_resp()
+    refute {"location", "new_location"} in headers
+    assert 400 == status
+  end
+
+  test "redirect returns a 400 when the header location contains a control feed char" do
+    struct = %Struct{
+      response: %Struct.Response{
+        body: "<p>hi</p>",
+        http_status: 301
+      }
+    }
+
+    conn = conn(:get, "/_web_core")
     {status, headers, _body} = View.redirect(struct, conn, 301, "new_location/.\r/.") |> sent_resp()
     refute {"location", "new_location"} in headers
     assert 400 == status
