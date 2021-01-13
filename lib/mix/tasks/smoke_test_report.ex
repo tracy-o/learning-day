@@ -51,8 +51,8 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 ```
 #{assertion}
 #{assertion_error.message}
-Left: #{assertion_error.left}
-Right: #{assertion_error.right}```)
+Left: #{inspect(assertion_error.left)}
+Right: #{inspect(assertion_error.right)}```)
     end)
   end
 
