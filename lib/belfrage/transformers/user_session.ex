@@ -7,8 +7,8 @@ defmodule Belfrage.Transformers.UserSession do
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies}}) do
-    private = Struct.Private.set_session_state(struct.private, cookies, valid?(cookies["ckns_atkn"]))
+  def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies, raw_headers: headers}}) do
+    private = Struct.Private.set_session_state(struct.private, cookies, headers, valid?(cookies["ckns_atkn"]))
     struct_with_session_state = Struct.add(struct, :private, private)
 
     cond do
@@ -26,7 +26,7 @@ defmodule Belfrage.Transformers.UserSession do
       match?(%Private{session_token: _value, authenticated: false, valid_session: false}, private) ->
         redirect(struct_with_session_state)
 
-      # ckns_id set
+      # x-id-oidc-signedin set
       match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
         redirect(struct_with_session_state)
     end
