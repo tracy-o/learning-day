@@ -58,10 +58,7 @@ Right: #{assertion_error.right}
   end
 
   defp send_slack_message({routespec, failure_messages}, slack_auth_token) do
-    # specs = Belfrage.RouteSpec.specs_for(routespec)
-    specs = %{
-      smoke_test_failure_channel: "team-belfrage"
-    }
+    specs = Belfrage.RouteSpec.specs_for(routespec)
 
     msg = Enum.join(failure_messages, "\n\n")
 
@@ -74,7 +71,8 @@ Right: #{assertion_error.right}
       },
       payload: %{
         text: "Smoke test failures",
-        channel: specs.smoke_test_failure_channel,
+        # TODO change team-belfrage to help-belfrage when this is ready to be used.
+        channel: Map.get(specs, :smoke_test_failure_channel, "team-belfrage"),
         attachments: [
           %{
             blocks: [
