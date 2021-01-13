@@ -76,8 +76,7 @@ Right: #{assertion_error.right}```)
       },
       payload: Jason.encode!(%{
         text: "*#{routespec} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
-        # TODO change team-belfrage to help-belfrage when this is ready to be used.
-        channel: Map.get(specs, :smoke_test_failure_channel, "temp"),
+        channel: Map.get(specs, :smoke_test_failure_channel, "help-belfrage"),
         attachments: [
           %{
             blocks: [
