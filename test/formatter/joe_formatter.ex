@@ -36,6 +36,8 @@ defmodule JoeFormatter do
   end
 
   def handle_cast(_event = {:suite_finished, run_us, load_us}, config = %{trace: false}) do
+    write_raw_output(System.get_env("RAW_OUTPUT"), config)
+
     config.failed_tests
     |> Enum.with_index()
     |> Enum.each(&print_failure(&1, config))
@@ -152,5 +154,12 @@ defmodule JoeFormatter do
       nil -> 1
       v -> v + 1
     end)
+  end
+
+  defp write_raw_output(nil, _test_results), do: :ok
+
+  defp write_raw_output(path, test_results) do
+    content = :erlang.term_to_binary(test_results)
+    File.write(path, content)
   end
 end

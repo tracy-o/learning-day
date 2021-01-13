@@ -13,6 +13,7 @@ defmodule Mix.Tasks.SmokeTest do
 
     * `--bbc-env` - specify the Cosmos production environment to run the tests on, either `test` or `live`
     * `--only` - runs only tests that match the filter. See "Test route subset with `--only`" below
+    * `--raw-output` - Writes the erlang term containing the result structure to the provided file path
     * all other [`mix test` options](https://hexdocs.pm/mix/Mix.Tasks.Test.html#module-command-line-options)
 
   ## Examples
@@ -65,22 +66,16 @@ defmodule Mix.Tasks.SmokeTest do
 
   """
 
-  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}]
+  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}, {:raw_output, :string}]
   @standard_mix_test_parse_rules [{:color, :boolean}, {:only, :string}, {:slowest, :string}]
 
   @impl Mix.Task
   def run(args) when is_list(args) do
     {parsed_args, _, _} = OptionParser.parse(args, strict: @custom_opts_parse_rules ++ @standard_mix_test_parse_rules)
 
-    {group_by, rest} = Keyword.pop(parsed_args, :group_by)
-    {bbc_env, rest} = Keyword.pop(rest, :bbc_env)
+    {env_args, cli_args} = parse_env_opts(parsed_args)
 
-    case {group_by, bbc_env} do
-      {nil, nil} -> "MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
-      {nil, bbc_env} -> "SMOKE_ENV=#{bbc_env} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
-      {group_by, nil} -> "GROUP_BY=#{group_by} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
-      {group_by, bbc_env} -> "GROUP_BY=#{group_by} SMOKE_ENV=#{bbc_env} MIX_ENV=smoke_test mix test #{join_params(rest)} --formatter JoeFormatter"
-    end
+    env_args <> "MIX_ENV=smoke_test mix test #{join_params(cli_args)} --formatter JoeFormatter"
     |> run()
   end
 
@@ -94,4 +89,24 @@ defmodule Mix.Tasks.SmokeTest do
       acc <> " --#{k} #{v}"
     end)
   end
+
+  defp parse_env_opts(_cli_args, _flag_args \\ [], result \\ "")
+
+  defp parse_env_opts([{:bbc_env, bbc_env} | rest], flag_args, result) do
+    parse_env_opts(rest, flag_args, "SMOKE_ENV=#{bbc_env} " <> result)
+  end
+
+  defp parse_env_opts([{:group_by, group_by} | rest], flag_args, result) do
+    parse_env_opts(rest, flag_args, "GROUP_BY=#{group_by} " <> result)
+  end
+
+  defp parse_env_opts([{:raw_output, raw_output} | rest], flag_args, result) do
+    parse_env_opts(rest, flag_args, "RAW_OUTPUT=#{raw_output} " <> result)
+  end
+
+  defp parse_env_opts([param | rest], flag_args, result) do
+    parse_env_opts(rest, [param | flag_args], result)
+  end
+
+  defp parse_env_opts([], flag_args, result), do: {result, flag_args}
 end
