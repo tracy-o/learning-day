@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2021-01-13T12:26:21.042Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="-34qpljBhBNsoG8MaVsM" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-13T16:39:59.823Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="fH4B7ubfAWXWV-ftu1ME" version="13.10.0" type="embed">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
-        <mxGraphModel dx="1290" dy="1356" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="846" dy="678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -86,7 +86,7 @@
                 <mxCell id="72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="65" target="26" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="65" value="&lt;b&gt;Cosmos&lt;/b&gt;&lt;br&gt;&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" parent="1" vertex="1">
+                <mxCell id="65" value="&lt;b&gt;Cosmos&lt;/b&gt;&lt;br&gt;&lt;br&gt;Belfrage Project" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" parent="1" vertex="1">
                     <mxGeometry x="354" y="476" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="73" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;creates a release for&lt;br&gt;&lt;/b&gt;[HTTPS]&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">

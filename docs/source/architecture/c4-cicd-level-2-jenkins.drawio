@@ -1,23 +1,23 @@
-<mxfile host="65bd71144e" modified="2021-01-13T12:34:16.574Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="r34-e0qB1hxvnxrAlKsG" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-13T16:53:20.163Z" agent="5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="34V34U75MIL5n9VGUXo2" version="13.10.0" type="embed">
     <diagram id="yKp5CQcjfNolYZbuaR4e" name="Page-1">
-        <mxGraphModel dx="1290" dy="1356" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1353" dy="1085" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="39" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
-                    <mxGeometry x="160" y="110" width="480" height="500" as="geometry"/>
+                    <mxGeometry x="160" y="110" width="480" height="570" as="geometry"/>
                 </mxCell>
                 <mxCell id="30" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
-                    <mxGeometry x="170" y="152" width="460" height="440" as="geometry"/>
+                    <mxGeometry x="170" y="152" width="460" height="518" as="geometry"/>
                 </mxCell>
                 <mxCell id="31" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
-                    <mxGeometry x="180" y="180" width="440" height="400" as="geometry"/>
+                    <mxGeometry x="180" y="180" width="440" height="480" as="geometry"/>
                 </mxCell>
                 <mxCell id="16" value="&lt;h1&gt;Container Diagram for Jenkins&lt;/h1&gt;&lt;p&gt;Jenkins is deployed to an Auto Scaling Group of EC2 instances.&lt;br&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="10" y="10" width="560" height="90" as="geometry"/>
                 </mxCell>
                 <mxCell id="24" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;" parent="1" vertex="1">
-                    <mxGeometry x="773" y="280" width="200" height="330" as="geometry"/>
+                    <mxGeometry x="773" y="260" width="200" height="420" as="geometry"/>
                 </mxCell>
                 <mxCell id="32" value="&lt;b&gt;EC2 AutoScaling Group &amp;amp; Security Group&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="153" width="450" height="20" as="geometry"/>
@@ -25,29 +25,29 @@
                 <mxCell id="33" value="&lt;b&gt;EC2&lt;/b&gt;&lt;br&gt;[CentOS 7]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="197.5" y="180" width="315" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="&lt;b&gt;Virtual Private Cloud&lt;/b&gt;&lt;br&gt;[AWS]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="120" y="120" width="470" height="20" as="geometry"/>
+                <mxCell id="38" value="&lt;b&gt;Jenkins&lt;/b&gt;&lt;br&gt;[AWS VPC]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="115" width="390" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="63" value="container" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="570" y="725" width="70" height="30" as="geometry"/>
+                    <mxGeometry x="570" y="785" width="70" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="64" value="system" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="570" y="685" width="70" height="30" as="geometry"/>
+                    <mxGeometry x="570" y="745" width="70" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="65" value="person" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="570" y="645" width="70" height="30" as="geometry"/>
+                    <mxGeometry x="570" y="705" width="70" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="68" value="external system" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
-                    <mxGeometry x="570" y="765" width="70" height="30" as="geometry"/>
+                    <mxGeometry x="570" y="825" width="70" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="117" value="" style="group" parent="1" vertex="1" connectable="0">
-                    <mxGeometry x="772.5" y="100" width="210" height="130" as="geometry"/>
+                    <mxGeometry x="772.5" y="70" width="197.5" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="118" value="&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Belfrage&lt;br&gt;Engineers&lt;/b&gt;&lt;br&gt;&lt;br&gt;Team supporting the Platform" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="117" vertex="1">
-                    <mxGeometry width="210" height="130" as="geometry"/>
+                    <mxGeometry x="1" width="197.5" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="119" value="" style="shape=actor;whiteSpace=wrap;html=1;" parent="117" vertex="1">
-                    <mxGeometry x="82.5" y="10" width="45" height="50" as="geometry"/>
+                    <mxGeometry x="77.58928571428571" y="10" width="42.32142857142857" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="207" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="121" target="31">
                     <mxGeometry relative="1" as="geometry">
@@ -58,46 +58,46 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="121" value="&lt;b&gt;Cosmos Bastions&lt;/b&gt;&lt;br&gt;&lt;br&gt;Allows&amp;nbsp;secure access to EC2 instances managed by Cosmos" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" parent="1" vertex="1">
-                    <mxGeometry x="792.5" y="308" width="170" height="90" as="geometry"/>
+                    <mxGeometry x="805" y="312" width="135" height="90" as="geometry"/>
                 </mxCell>
                 <mxCell id="123" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;SSH access&lt;/b&gt;&lt;br&gt;[SSH]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="863" y="250" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="863" y="220" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="124" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;SSH access&lt;/b&gt;&lt;br&gt;[SSH]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="660" y="325" width="90" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="172" value="&lt;b&gt;GitHub&lt;/b&gt;&lt;br&gt;&lt;br&gt;Source Control" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="20" y="500" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="20" y="402" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="200" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="173" target="172">
+                <mxCell id="234" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="173" target="172">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="173" value="&lt;b&gt;GitHub&lt;br&gt;&lt;/b&gt;&lt;i&gt;&lt;b&gt;[plugin]&lt;/b&gt;&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="280" y="500" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="280" y="463" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="178" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="650" y="503" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="650" y="513" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="184" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="570" y="620" width="70" height="20" as="geometry"/>
+                    <mxGeometry x="570" y="680" width="70" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="190" value="&lt;font color=&quot;#666666&quot;&gt;&lt;i&gt;&lt;b&gt;Downloads source files from&lt;/b&gt;&lt;br&gt;[SSH]&lt;br&gt;&lt;/i&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="147" y="496" width="130" height="20" as="geometry"/>
+                    <mxGeometry x="118" y="506" width="130" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="192" value="&lt;b&gt;Cosmos Repository&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#BAC8D3;" vertex="1" parent="1">
-                    <mxGeometry x="810" y="510" width="135" height="60" as="geometry"/>
+                    <mxGeometry x="803.75" y="510" width="135" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="199" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="196" target="197">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="196" value="&lt;b&gt;JWK Backup&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-                    <mxGeometry x="280" y="402" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="282" y="574" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="197" value="&lt;b&gt;Account&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" vertex="1" parent="1">
-                    <mxGeometry x="20" y="402" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="22" y="574" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="201" value="&lt;font color=&quot;#666666&quot;&gt;&lt;i&gt;&lt;b&gt;requests JWK keys from&lt;br&gt;&lt;/b&gt;[HTTPS]&lt;/i&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="140" y="398" width="130" height="20" as="geometry"/>
+                    <mxGeometry x="142" y="570" width="130" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="204" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="203" target="192">
                     <mxGeometry relative="1" as="geometry">
@@ -107,13 +107,21 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="203" value="&lt;b&gt;RPM Publisher&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-                    <mxGeometry x="450" y="500" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="450" y="506" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="208" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="118" target="121">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="214" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="210" target="212">
                     <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="233" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="210" target="172">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="240" y="350"/>
+                            <mxPoint x="240" y="432"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="210" value="&lt;b&gt;Mix Deps&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
                     <mxGeometry x="280" y="320" width="120" height="60" as="geometry"/>
@@ -147,6 +155,44 @@
                 </mxCell>
                 <mxCell id="222" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;publishes items to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
                     <mxGeometry x="650" y="422" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="227" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="225" target="226">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="225" value="&lt;b&gt;Cosmos releaser&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="450" y="590" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="226" value="&lt;b&gt;Cosmos API Deploy&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#BAC8D3;" vertex="1" parent="1">
+                    <mxGeometry x="805.5" y="590" width="135" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="228" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;releases to&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="650" y="593" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="229" value="&lt;b&gt;Cosmos&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="780" y="270" width="182.5" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="230" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.005;entryY=0.044;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="118" target="39">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="231" value="&lt;i&gt;&lt;font color=&quot;#666666&quot;&gt;&lt;b&gt;UI access&lt;/b&gt;&lt;br&gt;[HTTPS]&lt;br&gt;&lt;/font&gt;&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="660" y="108" width="90" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="237" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="235" target="236">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="426" y="372"/>
+                            <mxPoint x="426" y="733"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="235" value="&lt;b&gt;RPM Builder&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="450" y="342" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="236" value="&lt;b&gt;3rd Party RPM repositories&lt;/b&gt;&lt;br&gt;&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" vertex="1" parent="1">
+                    <mxGeometry x="282" y="700" width="120" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="238" value="&lt;font color=&quot;#666666&quot;&gt;&lt;i&gt;&lt;b&gt;gets RPMs from&lt;br&gt;&lt;/b&gt;[HTTPS]&lt;br&gt;&lt;/i&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="310" y="410" width="130" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
