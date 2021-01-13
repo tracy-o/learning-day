@@ -15,7 +15,6 @@ defmodule Fixtures.SmokeTestReportOutput do
                {:error,
                 %ExUnit.AssertionError{
                   args: :ex_unit_no_meaningful_value,
-                  doctest: :ex_unit_no_meaningful_value,
                   expr:
                     {:assert, [],
                      [
@@ -68,7 +67,6 @@ defmodule Fixtures.SmokeTestReportOutput do
                {:error,
                 %ExUnit.AssertionError{
                   args: :ex_unit_no_meaningful_value,
-                  doctest: :ex_unit_no_meaningful_value,
                   expr:
                     {:assert, [],
                      [
@@ -121,7 +119,6 @@ defmodule Fixtures.SmokeTestReportOutput do
                {:error,
                 %ExUnit.AssertionError{
                   args: :ex_unit_no_meaningful_value,
-                  doctest: :ex_unit_no_meaningful_value,
                   expr:
                     {:assert, [],
                      [
