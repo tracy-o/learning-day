@@ -9,9 +9,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @impl Mix.Task
   def run([path_to_raw_input]) do
-    # :ok = Application.start(:belfrage)
      Mix.Task.run("app.start")
-
 
     test_results = :erlang.binary_to_term(File.read!(path_to_raw_input))
 
@@ -96,9 +94,6 @@ Right: #{assertion_error.right}```)
   end
 
   defp do_send(http_requests) do
-    Enum.each(http_requests, fn req ->
-      @http_client.execute(req)
-      |> IO.inspect()
-    end)
+    Enum.each(http_requests, &@http_client.execute/1)
   end
 end
