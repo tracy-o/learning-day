@@ -25,9 +25,9 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
 
     expected = %{
       "SportHomePage" => [
-        "test SportHomePage /sport against test belfrage /sport\nassert(response.status_code() == expected_status_code)\nLeft: 404\nRight: 200\nAssertion with == failed",
-        "test SportHomePage /sport against test cedric-belfrage /sport\nassert(response.status_code() == expected_status_code)\nLeft: 404\nRight: 200\nAssertion with == failed",
-        "test SportHomePage /sport against test bruce-belfrage /sport\nassert(response.status_code() == expected_status_code)\nLeft: 404\nRight: 200\nAssertion with == failed"
+        "*test SportHomePage /sport against test belfrage /sport*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```",
+        "*test SportHomePage /sport against test cedric-belfrage /sport*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```",
+        "*test SportHomePage /sport against test bruce-belfrage /sport*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```"
       ]
     }
 
@@ -44,23 +44,10 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
 
     assert [
              %Belfrage.Clients.HTTP.Request{
-               headers: %{"Authorization" => "Bearer foobar", "Content-Type" => "application/json"},
+               headers: %{"authorization" => "Bearer foobar", "content-type" => "application/json"},
                method: :post,
-               payload: %{
-                 channel: "team-belfrage",
-                 text: "Smoke test failures",
-                 attachments: [
-                   %{
-                     blocks: [
-                       %{
-                         block_id: "smoke_test_failure_output",
-                         text: %{type: "mrkdwn", text: Enum.join(formatted_messages["SportHomePage"], "\n\n")},
-                         type: "section"
-                       }
-                     ]
-                   }
-                 ]
-               },
+               payload:
+                 "{\"attachments\":[{\"blocks\":[{\"block_id\":\"smoke_test_failure_output\",\"text\":{\"text\":\"*test SportHomePage /sport against test belfrage /sport*\\n```\\nassert(response.status_code() == expected_status_code)\\nAssertion with == failed\\nLeft: 404\\nRight: 200```\\n\\n*test SportHomePage /sport against test cedric-belfrage /sport*\\n```\\nassert(response.status_code() == expected_status_code)\\nAssertion with == failed\\nLeft: 404\\nRight: 200```\\n\\n*test SportHomePage /sport against test bruce-belfrage /sport*\\n```\\nassert(response.status_code() == expected_status_code)\\nAssertion with == failed\\nLeft: 404\\nRight: 200```\",\"type\":\"mrkdwn\"},\"type\":\"section\"}]}],\"channel\":\"temp\",\"text\":\"*SportHomePage - Belfrage Smoke Test Failures (3 total)*\"}",
                timeout: 6000,
                url: "https://slack.com/api/chat.postMessage"
              }

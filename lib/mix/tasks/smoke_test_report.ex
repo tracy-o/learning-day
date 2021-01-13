@@ -3,12 +3,16 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @shortdoc "Reports smoke test failures to route owner teams."
 
-  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
+  @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
   @slack_auth_token_env_var_name "SLACK_AUTH_TOKEN"
 
   @impl Mix.Task
   def run([path_to_raw_input]) do
+    # :ok = Application.start(:belfrage)
+     Mix.Task.run("app.start")
+
+
     test_results = :erlang.binary_to_term(File.read!(path_to_raw_input))
 
     slack_auth_token = System.fetch_env!(@slack_auth_token_env_var_name)
@@ -45,11 +49,12 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     Enum.map(errors, fn {:error, assertion_error = %ExUnit.AssertionError{}, _context} ->
       assertion = Macro.to_string(assertion_error.expr)
 
-      ~s(#{failure.name}
+      ~s(*#{failure.name}*
+```
 #{assertion}
+#{assertion_error.message}
 Left: #{assertion_error.left}
-Right: #{assertion_error.right}
-#{assertion_error.message})
+Right: #{assertion_error.right}```)
     end)
   end
 
@@ -66,13 +71,13 @@ Right: #{assertion_error.right}
       method: :post,
       url: "https://slack.com/api/chat.postMessage",
       headers: %{
-        "Content-Type" => "application/json",
-        "Authorization" => "Bearer #{slack_auth_token}"
+        "content-type" => "application/json",
+        "authorization" => "Bearer #{slack_auth_token}"
       },
-      payload: %{
-        text: "Smoke test failures",
+      payload: Jason.encode!(%{
+        text: "*#{routespec} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
         # TODO change team-belfrage to help-belfrage when this is ready to be used.
-        channel: Map.get(specs, :smoke_test_failure_channel, "team-belfrage"),
+        channel: Map.get(specs, :smoke_test_failure_channel, "temp"),
         attachments: [
           %{
             blocks: [
@@ -87,11 +92,14 @@ Right: #{assertion_error.right}
             ]
           }
         ]
-      }
+      })
     }
   end
 
   defp do_send(http_requests) do
-    Enum.each(http_requests, &@http_client.execute/1)
+    Enum.each(http_requests, fn req ->
+      @http_client.execute(req)
+      |> IO.inspect()
+    end)
   end
 end
