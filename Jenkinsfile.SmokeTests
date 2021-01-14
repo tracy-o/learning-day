@@ -65,10 +65,11 @@ node {
 
   if (result == 'FAILED' && (params.DEPLOYMENT_ID == '' || params.TARGET == 'bruce-belfrage')) {
     stage('Report result to slack') {
-      environment {
-        SLACK_AUTH_TOKEN = credentials('moz-slack-app-auth-token')
+      docker.image('qixxit/elixir-centos').inside("-u root") {
+        withCredentials([string(credentialsId: 'moz-slack-app-auth-token', variable: 'SLACK_AUTH_TOKEN')]){
+          sh 'mix report_smoke_test_results .smoke_test_output'
+        }
       }
-      sh 'mix report_smoke_test_results .smoke_test_output'
     }
   }
 

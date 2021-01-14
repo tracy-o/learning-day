@@ -13,12 +13,10 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
     test_results = :erlang.binary_to_term(File.read!(path_to_raw_input))
 
-    slack_auth_token = System.fetch_env!(@slack_auth_token_env_var_name)
-
     test_results
     |> failures_per_routespec()
     |> format_failure_messages()
-    |> broadcast_results_to_teams(slack_auth_token)
+    |> broadcast_results_to_teams(slack_auth_token!())
     |> do_send()
   end
 
@@ -95,5 +93,12 @@ Right: #{inspect(assertion_error.right)}```)
 
   defp do_send(http_requests) do
     Enum.each(http_requests, &@http_client.execute/1)
+  end
+
+  defp slack_auth_token! do
+    case System.get_env(@slack_auth_token_env_var_name) do
+       nil -> raise "Required environment variable `#{@slack_auth_token_env_var_name}` not set."
+       token -> token
+    end
   end
 end
