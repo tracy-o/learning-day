@@ -5,11 +5,13 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
+  @default_slack_channel "help-belfrage"
   @slack_auth_token_env_var_name "SLACK_AUTH_TOKEN"
+  @additional_slack_message_env_var_name "SLACK_MESSAGE"
 
   @impl Mix.Task
   def run([path_to_raw_input]) do
-     Mix.Task.run("app.start")
+    Mix.Task.run("app.start")
 
     test_results = :erlang.binary_to_term(File.read!(path_to_raw_input))
 
@@ -63,6 +65,8 @@ Right: #{inspect(assertion_error.right)}```)
 
     msg = Enum.join(failure_messages, "\n\n")
 
+    slack_channel = Map.get(specs, :smoke_test_failure_channel, @default_slack_channel)
+
     %Belfrage.Clients.HTTP.Request{
       method: :post,
       url: "https://slack.com/api/chat.postMessage",
@@ -70,24 +74,24 @@ Right: #{inspect(assertion_error.right)}```)
         "content-type" => "application/json",
         "authorization" => "Bearer #{slack_auth_token}"
       },
-      payload: Jason.encode!(%{
-        text: "*#{routespec} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
-        channel: Map.get(specs, :smoke_test_failure_channel, "help-belfrage"),
-        attachments: [
-          %{
-            blocks: [
+      payload:
+        Jason.encode!(%{
+          text: "*#{routespec} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
+          channel: slack_channel,
+          attachments:
+            [
               %{
-                type: "section",
-                text: %{
-                  type: "mrkdwn",
-                  text: msg
-                },
-                block_id: "smoke_test_failure_output"
+                blocks:
+                  [
+                    %{
+                      type: "section",
+                      text: %{type: "mrkdwn", text: msg},
+                      block_id: "smoke_test_failure_output"
+                    }
+                  ] ++ how_to_send_to_own_channel(slack_channel)
               }
-            ]
-          }
-        ]
-      })
+            ] ++ additional_slack_message()
+        })
     }
   end
 
@@ -97,8 +101,48 @@ Right: #{inspect(assertion_error.right)}```)
 
   defp slack_auth_token! do
     case System.get_env(@slack_auth_token_env_var_name) do
-       nil -> raise "Required environment variable `#{@slack_auth_token_env_var_name}` not set."
-       token -> token
+      nil -> raise "Required environment variable `#{@slack_auth_token_env_var_name}` not set."
+      token -> token
+    end
+  end
+
+  defp additional_slack_message do
+    case System.get_env(@additional_slack_message_env_var_name) do
+      nil ->
+        []
+
+      message ->
+        [
+          %{
+            text: message
+          }
+        ]
+    end
+  end
+
+  defp how_to_send_to_own_channel(channel) do
+    case channel do
+      @default_slack_channel ->
+        [
+          %{
+            type: "actions",
+            elements: [
+              %{
+                type: "button",
+                style: "primary",
+                text: %{
+                  type: "plain_text",
+                  text: "Customise slack channel",
+                  emoji: true
+                },
+                url: "https://github.com/bbc/belfrage/wiki/Direct-smoke-test-failures-to-your-own-slack-channels"
+              }
+            ]
+          }
+        ]
+
+      _other ->
+        []
     end
   end
 end
