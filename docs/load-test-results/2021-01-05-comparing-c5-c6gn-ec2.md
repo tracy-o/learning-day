@@ -9,12 +9,15 @@ The specific instances we will be testing are the c6gn instances which have 100 
 
 ## Hypotheses
 
-- The new c6gn.2xlarge EC2 has reduced latency and maintains correctness when compared to c5.2xlarge EC2
+- The new c6gn.2xlarge EC2 has reduced latency and maintains a high proportion of success status codes when compared to c5.2xlarge EC2
 
 ## Setup
 
 - To verify the performance of the c6gn instance we will use vegeta and Origin Simulator. Vegeta will allow us to send a consistent and accurate stream of requests to Belfrage which will then send requests upstream to Origin Simulator.
 - We will be varying the rate between 400 and 1200 requests per second using Vegeta 
+- We created a standalone c6gn EC2 instance on which we then installed belfrage
+- For the c5 EC2 we used bruce-belfrage test
+- All tests have been run once
 
 ### Origin Simulator Recipe
 
@@ -303,7 +306,7 @@ This is were the results start to differ rather a lot. The mean latency of th c6
     500 Internal Server Error
 
 ##### Test 9 summary
-Looking at the latencies you would believe the c5 outperformed the c6gn however looking at the statuc codes returned you can actually see that the c5 returned a lot of error status codes and on top of this alarms for HTTPRequestFailed, CircuitBreakerActive and HighCPUUsage whereas even though the c6gn did have reasonably slow latencies, it did not crash and all responses were 200s.
+Looking at the latencies you would believe the c5 outperformed the c6gn however looking at the status codes returned you can actually see that the c5 returned a lot of error status codes and on top of this alarms for HTTPRequestFailed, CircuitBreakerActive and HighCPUUsage whereas even though the c6gn did have reasonably slow latencies, it did not crash and all responses were 200s.
 
 ## Results
 I think the overall results are now very similar to what we saw in the first set of tests. In the mid to low ranges of request rate both the c6gn and c5 EC2 have the same performance however, as you begin to move to high request rates e.g. 1000+ the c5 EC2 performs better but has a lower ceiling meaning it will crash sooner compared to the c6gn as the request rate increases. 
