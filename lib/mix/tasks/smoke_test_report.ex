@@ -65,7 +65,7 @@ Right: #{inspect(assertion_error.right)}```)
 
     msg = Enum.join(failure_messages, "\n\n")
 
-    slack_channel = Map.get(specs, :smoke_test_failure_channel, @default_slack_channel)
+    slack_channel = Map.get(specs, :slack_channel, @default_slack_channel)
 
     %Belfrage.Clients.HTTP.Request{
       method: :post,
