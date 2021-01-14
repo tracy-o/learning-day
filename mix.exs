@@ -41,7 +41,7 @@ defmodule Belfrage.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:aws_ex_ray, :logger, :cachex, :os_mon],
+      extra_applications: [:aws_ex_ray, :logger, :cachex],
       mod: {Belfrage.Application, [env: Mix.env()]}
     ]
   end
@@ -73,7 +73,6 @@ defmodule Belfrage.MixProject do
       {:stump, "~> 1.7"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
-      {:ets_cleaner, git: "https://github.com/bbc/ets_cleaner.git"},
       {:poison, "~> 3.1"},
       {:secure_random, "~> 0.5.1"},
       {:tabula, "~> 2.1.1", only: [:dev]},
