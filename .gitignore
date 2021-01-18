@@ -31,3 +31,4 @@ priv/cert/*
 #log when running tests
 local.log
 cloudwatch.log
+priv/static/jwk_*.json

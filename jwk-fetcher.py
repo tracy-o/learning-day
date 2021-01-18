@@ -1,5 +1,4 @@
 #!/usr/bin/python
-from datetime import datetime
 from urllib.request import urlopen, Request
 import json
 import sys
