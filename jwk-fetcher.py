@@ -5,6 +5,15 @@ import json
 import sys
 import traceback
 
+def jwk_fetch(env):
+    if (env != "test." and env != ""):
+        print("invalid env value")
+        sys.exit()
+
+    endpoint = f"https://access.{env}api.bbc.com/v1/oauth/connect/jwk_uri"
+    request = Request(endpoint, None, {})
+    return json.load(urlopen(request))
+
 try:
     if sys.argv[1] == "test":
         env = "test."
@@ -17,18 +26,8 @@ except IndexError:
     print("No env specified")
     sys.exit()
 
-def jwk_fetch(env):
-    if (env != "test." and env != ""):
-        print("invalid env value")
-        sys.exit()
-
-    endpoint = f"https://access.{env}api.bbc.com/v1/oauth/connect/jwk_uri"
-    request = Request(endpoint, None, {})
-    return json.load(urlopen(request))
-
-jwk_data = jwk_fetch(env)
-
 try:
+    jwk_data = jwk_fetch(env)
     if jwk_data['keys']:
         print("keys found")
 except KeyError:
