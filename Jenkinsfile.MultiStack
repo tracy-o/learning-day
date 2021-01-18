@@ -24,6 +24,16 @@ node {
   ])
 
   try {
+    stage("Fetch JWK data") {
+      jwk_result = sh(script: "python3 ./jwk-fetcher.py test", returnStdout:true).trim()
+
+      if ((jwk_result =~ /success/)) {
+        println("JWK keys success")
+      } else {
+        println("JWK keys failed")
+      }
+    }
+
     stage('Build RPM') {
       sh "cp cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
       sh 'mkdir -p SOURCES'
