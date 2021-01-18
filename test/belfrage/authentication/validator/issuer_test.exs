@@ -36,6 +36,15 @@ defmodule Belfrage.Authentication.Validator.IssuerTest do
       refute Issuer.valid?(base_issuer, claims)
     end
 
+    test "when issuer in claim has trailing / but realm does not", %{base_issuer: base_issuer} do
+      claims = %{
+        "iss" => "#{base_issuer}/foo/",
+        "realm" => "/foo"
+      }
+
+      refute Issuer.valid?(base_issuer, claims)
+    end
+
     test "when issuers in claim and base issuer has trailing /", %{base_issuer: base_issuer} do
       claims = %{
         "iss" => "#{base_issuer}/",
