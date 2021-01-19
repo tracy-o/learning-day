@@ -375,6 +375,4 @@ When looking back at out Hypotheses,when compared to the current c5.2xlarge EC2:
 1. The use of c6g.2xlarge instance incurs less traffics latency
 2. The new c6g.2xlarge EC2 maintains a higher proportion of success status codes
 
-We can come to the conclusion that we disagree with our first hypothesis as for most of the tests both instances performed the same and as the request rates got close to the c5 EC2 ceiling (1000-1100) the c5 actually performed slightly better.
-
-We can also conclude that we agree with our second hypothesis as the c6g EC2 was able to maintain a higher proportion of success status codes when using higher request rates. The c6g was able to maintain correctness up to 1500 requests per second.
+The experiment results proved that the use of c6g.2xlarge instance does not necessarily incur less traffic latency (hypothesis 1) but it does entail a higher proportion of success status codes at much higher RPS (hypothesis 2).
