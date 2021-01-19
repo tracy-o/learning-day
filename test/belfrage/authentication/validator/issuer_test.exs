@@ -83,7 +83,6 @@ defmodule Belfrage.Authentication.Validator.IssuerTest do
 
     test "when iss claim is not provided", %{base_issuer: base_issuer} do
       claims = %{
-        "iss" => "#{base_issuer}/foo",
         "realm" => "bar"
       }
 
@@ -99,10 +98,7 @@ defmodule Belfrage.Authentication.Validator.IssuerTest do
     end
 
     test "when neither iss or realm claims are provided", %{base_issuer: base_issuer} do
-      claims = %{
-        "iss" => "#{base_issuer}/foo",
-        "realm" => "bar"
-      }
+      claims = %{}
 
       refute Issuer.valid?(base_issuer, claims)
     end
