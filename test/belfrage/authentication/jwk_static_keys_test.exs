@@ -1,10 +1,14 @@
 defmodule Belfrage.Authentication.JwkStaticKeysTest do
   use ExUnit.Case, async: true
 
-  @jwk_uri [
-    "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri",
-    "https://access.api.bbc.com/v1/oauth/connect/jwk_uri"
-  ]
+  #  grabs a list of JWK endpoints directly from Cosmos config, i.e.:
+  #  ["https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri",
+  #  "https://access.api.bbc.com/v1/oauth/connect/jwk_uri"]
+  @jwk_uri File.read!("cosmos_config/belfrage.json")
+           |> Jason.decode!()
+           |> Enum.find(fn config -> config["name"] == "ACCOUNT_JWK_URI" end)
+           |> Map.get("options")
+           |> Enum.map(fn uri -> uri["value"] end)
 
   describe "priv directory" do
     for uri <- @jwk_uri do
