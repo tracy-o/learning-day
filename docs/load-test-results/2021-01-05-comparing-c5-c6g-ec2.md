@@ -377,4 +377,4 @@ When looking back at out Hypotheses,when compared to the current c5.2xlarge EC2:
 
 We can come to the conclusion that we disagree with our first hypothesis as for most of the tests both instances performed the same and as the request rates got close to the c5 EC2 ceiling (1000-1100) the c5 actually performed slightly better.
 
-We can also conclude that we agree with our second hypothesis as the c6g EC2 was able to miantain a higher proportion of success status codes when using higher request rates. The c6g was able to miantain correctness up to 1500 requests per second.
+We can also conclude that we agree with our second hypothesis as the c6g EC2 was able to maintain a higher proportion of success status codes when using higher request rates. The c6g was able to maintain correctness up to 1500 requests per second.
