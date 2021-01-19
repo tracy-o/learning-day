@@ -190,7 +190,7 @@ When compared to the current c5.2xlarge EC2:
 
 The c6g performes the same on the lower end of the requests count and has a higher maximum load as it did not crash when the request count hit 1200 per second. However, on the upper end of that range e.g. 1000 and 1100 requests per second the c5 is able to out perform the c6g in almost every latency value. This would lead us to disagree with my first hypothesis as most latency values were the same for each test and agree with the second hypothesis as we can see that the c6g is able to withstand more load, maintaining a higher proportion of success status codes.
 
-As these results are not conclusive and only run for 60 secondsI will perform some more tests with a longer timeframe to see how each EC2 stands up.
+As these results are not conclusive and only run for 60 seconds I will perform some more tests with a longer timeframe to see how each EC2 stands up.
  
  ### Vegeta config
 
