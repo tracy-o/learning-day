@@ -84,11 +84,9 @@ defmodule Belfrage.Struct.Private do
     %{private | session_token: nil, authenticated: true, valid_session: false}
   end
 
-  def set_session_state(private = %__MODULE__{}, %{"ckns_atkn" => _ckns_atkn}, _headers, _valid_session?) do
+  def set_session_state(private = %__MODULE__{}, _cookies, _headers, _valid_session?) do
     %{private | session_token: nil, authenticated: false, valid_session: false}
   end
-
-  def set_session_state(private = %__MODULE__{}, _cookies, _headers, _valid_session?), do: private
 end
 
 defmodule Belfrage.Struct do

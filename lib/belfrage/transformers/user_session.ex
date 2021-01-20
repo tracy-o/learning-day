@@ -18,17 +18,13 @@ defmodule Belfrage.Transformers.UserSession do
       match?(%Private{authenticated: true, valid_session: true}, private) ->
         then(rest, struct_with_session_state)
 
-      # no cookies provided
-      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
-        then(rest, struct_with_session_state)
-
-      # ckns_atkn only set
-      match?(%Private{session_token: _value, authenticated: false, valid_session: false}, private) ->
-        redirect(struct_with_session_state)
-
-      # x-id-oidc-signedin set
+      # x-id-oidc-signedin set to 1
       match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
         redirect(struct_with_session_state)
+
+      # x-id-oidc-signedin not set
+      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
+        then(rest, struct_with_session_state)
     end
   end
 
