@@ -3,14 +3,15 @@ defmodule Belfrage.Authentication.JwkStaticKeys do
     quote do
       @before_compile Belfrage.Authentication.JwkStaticKeys
 
-      jwk_filename =
-        case Keyword.get(unquote(opts), :uri) do
-          uri when not is_nil(uri) -> uri
-          _ -> Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-        end
-        |> Crimpex.signature()
-
-      jwk_static_keys = File.read!("priv/static/#{jwk_filename}") |> Jason.decode!()
+      jwk_static_keys =
+        [
+          "priv/static/",
+          Keyword.get(unquote(opts), :uri, Application.get_env(:belfrage, :authentication)["account_jwk_uri"])
+          |> Crimpex.signature()
+        ]
+        |> IO.iodata_to_binary()
+        |> File.read!()
+        |> Jason.decode!()
 
       Module.put_attribute(__MODULE__, :jwk_static_keys, jwk_static_keys)
     end
