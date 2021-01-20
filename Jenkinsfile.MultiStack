@@ -30,7 +30,7 @@ node {
       if ((jwk_result =~ /success/)) {
         println("JWK keys success")
       } else {
-        println("JWK keys failed")
+        println("JWK error, getting the key data failed")
         error("JWK Error")
       }
     }
