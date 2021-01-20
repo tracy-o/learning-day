@@ -1,5 +1,6 @@
 defmodule Belfrage.Authentication.JwkStaticKeysTest do
   use ExUnit.Case, async: true
+  import Belfrage.Authentication.JwkStaticKeys
 
   #  grabs a list of JWK endpoints directly from Cosmos config, i.e.:
   #  ["https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri",
@@ -10,51 +11,21 @@ defmodule Belfrage.Authentication.JwkStaticKeysTest do
            |> Map.get("options")
            |> Enum.map(fn uri -> uri["value"] end)
 
-  describe "priv directory" do
-    for uri <- @jwk_uri do
-      @uri uri
-      test "contains static file for #{uri}" do
-        assert File.exists?("priv/static/#{@uri |> Crimpex.signature()}")
-      end
+  for uri <- @jwk_uri do
+    @uri uri
+    test "priv directory contains static file for #{uri}" do
+      assert File.exists?("priv/static/#{@uri |> get_filename()}")
     end
   end
 
-  describe "get_static_keys/0" do
-    test "returns keys of configured URI" do
-      defmodule TestJwk do
-        use Belfrage.Authentication.JwkStaticKeys
-      end
-
-      uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-      expected_keys = File.read!("priv/static/#{uri |> Crimpex.signature()}") |> Jason.decode!()
-
-      assert TestJwk.get_static_keys() == expected_keys
+  test "get_static_keys/0 returns keys of configured URI" do
+    defmodule TestJwk do
+      use Belfrage.Authentication.JwkStaticKeys
     end
 
-    for uri <- @jwk_uri do
-      @uri uri
-      test "returns keys for #{uri}" do
-        keys_filename = @uri |> Crimpex.signature()
-        expected_keys = File.read!("priv/static/#{keys_filename}") |> Jason.decode!()
+    uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
+    expected_keys = File.read!("priv/static/#{uri |> get_filename()}") |> Jason.decode!()
 
-        contents =
-          quote do
-            use Belfrage.Authentication.JwkStaticKeys, uri: unquote(@uri)
-          end
-
-        test_module = Module.concat(["TestJwk", keys_filename])
-        Module.create(test_module, contents, Macro.Env.location(__ENV__))
-
-        assert test_module.get_static_keys() == expected_keys
-      end
-    end
-
-    test "not compiled for unknown uri without corresponding static file" do
-      assert_raise File.Error, fn ->
-        defmodule TestJwkUnknownUri do
-          use Belfrage.Authentication.JwkStaticKeys, uri: "https://unknown_jwk_uri"
-        end
-      end
-    end
+    assert TestJwk.get_static_keys() == expected_keys
   end
 end

@@ -6,6 +6,7 @@ defmodule Belfrage.Authentication.JwkTest do
   alias Belfrage.Authentication.Jwk
 
   import ExUnit.CaptureLog
+  import Belfrage.Authentication.JwkStaticKeys
 
   @expected_jwk_response %{
     "keys" => Fixtures.AuthToken.keys()
@@ -13,7 +14,7 @@ defmodule Belfrage.Authentication.JwkTest do
 
   test "init/1" do
     jwk_uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-    expected_keys_data = File.read!("priv/static/#{jwk_uri |> Crimpex.signature()}") |> Jason.decode!()
+    expected_keys_data = File.read!("priv/static/#{jwk_uri |> get_filename()}") |> Jason.decode!()
 
     assert Jwk.init([]) == {:ok, expected_keys_data}
   end
@@ -23,7 +24,7 @@ defmodule Belfrage.Authentication.JwkTest do
     start_supervised!(Jwk)
 
     jwk_uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-    expected_keys_data = File.read!("priv/static/#{jwk_uri |> Crimpex.signature()}") |> Jason.decode!()
+    expected_keys_data = File.read!("priv/static/#{jwk_uri |> get_filename()}") |> Jason.decode!()
 
     assert Jwk.get_keys() == expected_keys_data["keys"]
   end
