@@ -4,44 +4,47 @@ import json
 import sys
 import traceback
 
-def get_jwk_data(env):
-    if (env != "test." and env != ""):
-        print("invalid env value")
+def get_jwk_data(endpoint):
+    try:
+        request = Request(endpoint, None, {})
+        jwk_data = json.load(urlopen(request))
+
+        if jwk_data['keys']:
+            return jwk_data
+    except KeyError:
+        print("No keys found in jwk_data file")
         sys.exit()
 
-    endpoint = f"https://access.{env}api.bbc.com/v1/oauth/connect/jwk_uri"
-    request = Request(endpoint, None, {})
-    jwk_data = json.load(urlopen(request))
-
-    if jwk_data['keys']:
-        print("keys found")
-        return jwk_data
-
 def write_jwk_data(jwk_data, env):
-    with open(f"priv/static/jwk_{env}.json", 'w+') as f:
-        json.dump(jwk_data, f)
-    print("success")
+    try:
+        with open(f"priv/static/jwk_{env}.json", 'w+') as f:
+            json.dump(jwk_data, f)
 
-try:
-    if sys.argv[1] == "test":
-        env = "test."
-    elif sys.argv[1] == "live":
-        env = ""
+    except Exception as e:
+        print(f"Failed to write jwk file")
+        sys.exit(traceback.format_exc())
+
+def get_jwk_for_env(env):
+    if env == "test":
+        endpoint_env = "test."
+    elif env == "live":
+        endpoint_env = ""
     else:
         print("Invalid env specified, accepted values: 'test' or 'live'")
         sys.exit()
+
+    jwk_data = get_jwk_data(f"https://access.{endpoint_env}api.bbc.com/v1/oauth/connect/jwk_uri")
+    write_jwk_data(jwk_data, env)
+
+    print(f"JWK data written for {env}")
+
+try:
+    args = sys.argv[1].split(",")
+
+    for env in args:
+        get_jwk_for_env(env)
+
+    print("success")
 except IndexError:
     print("No env specified")
     sys.exit()
-
-try:
-    jwk_data = get_jwk_data(env)
-except KeyError:
-    print("No keys found in jwk_data file")
-    sys.exit()
-
-try:
-    write_jwk_data(jwk_data, env)
-except Exception as e:
-    print(f"Failed to write jwk file")
-    sys.exit(traceback.format_exc())
