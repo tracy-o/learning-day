@@ -129,39 +129,35 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'ckns_atkn' only and header for 'x-id-oidc-signedin' not set will not be authenticated and return session token",
+    test "cookie for 'ckns_atkn' only and header for 'x-id-oidc-signedin' not set will not be authenticated and return nil session token",
          %{
            struct: struct
          } do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
 
       assert {
-               :redirect,
+               :ok,
                %Struct{
                  private: %Struct.Private{
                    authenticated: false,
-                   session_token: "1234"
+                   session_token: nil
                  }
                }
              } = UserSession.call([], struct)
     end
 
-    test "cookie for 'ckns_atkn' only and header for 'x-id-oidc-signedin' not set will be redirected",
+    test "cookie for 'ckns_atkn' and header for 'x-id-oidc-signedin' set to 0 will not be authenticated and return nil session token",
          %{
            struct: struct
          } do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
 
       assert {
-               :redirect,
+               :ok,
                %Struct{
-                 response: %Struct.Response{
-                   headers: %{
-                     "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
-                     "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                   }
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil
                  }
                }
              } = UserSession.call([], struct)
