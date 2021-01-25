@@ -69,7 +69,7 @@ config :belfrage,
   authentication: %{
     "iss" => "https://access.int.api.bbc.com/bbcidv5/oauth2",
     "aud" => "Account",
-    "account_jwk_uri" => "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri",
+    "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
     "session_url" => "https://session.test.bbc.co.uk",
     "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config"
   },
