@@ -11,7 +11,7 @@ defmodule Belfrage.Services.HTTP do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record "function.timing.service.HTTP.request" do
+    Belfrage.Event.record "function.timing.service.#{struct.private.platform}.request" do
       struct
       |> execute_request()
       |> handle_response()
