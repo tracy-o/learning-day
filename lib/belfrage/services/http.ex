@@ -19,18 +19,18 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "service.HTTP.response.#{status}")
+    Belfrage.Event.record(:metric, :increment, "service.#{struct.private.platform}.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.HTTP.timeout")
+    Belfrage.Event.record(:metric, :increment, "error.service.#{struct.private.platform}.timeout")
     log(:timeout, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.HTTP.request")
+    Belfrage.Event.record(:metric, :increment, "error.service.#{struct.private.platform}.request")
     log(error, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
