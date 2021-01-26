@@ -621,11 +621,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "when public key not found, but the access token is valid", %{struct: struct} do
-      access_token = Fixtures.AuthToken.valid_access_token()
-
       struct =
         Struct.add(struct, :request, %{
-          cookies: %{"ckns_atkn" => access_token},
+          cookies: %{"ckns_atkn" => @token},
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         })
 
@@ -635,7 +633,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  %Struct{
                    private: %Struct.Private{
                      authenticated: true,
-                     session_token: ^access_token,
+                     session_token: @token,
                      valid_session: false
                    }
                  }
@@ -646,11 +644,9 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
 
     test "when public key not found, but the access token is valid will be redirected", %{struct: struct} do
-      access_token = Fixtures.AuthToken.valid_access_token()
-
       struct =
         Struct.add(struct, :request, %{
-          cookies: %{"ckns_atkn" => access_token},
+          cookies: %{"ckns_atkn" => @token},
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         })
 
