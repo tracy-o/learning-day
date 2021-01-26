@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceMundo do
   def specs do
     %{
-      platform: Pal,
+      platform: Simorgh,
       pipeline: ["WorldServiceRedirect", "CircuitBreaker"],
       query_params_allowlist: ["alternativeJsLoading", "batch"]
     }

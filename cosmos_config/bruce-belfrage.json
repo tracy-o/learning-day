@@ -43,13 +43,6 @@
   },
   {
     "values": {
-      "test": "https://pal.test.bbc.co.uk",
-      "live": "https://pal.live.bbc.co.uk"
-    },
-    "name": "PAL_ENDPOINT"
-  },
-  {
-    "values": {
       "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
       "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
     },

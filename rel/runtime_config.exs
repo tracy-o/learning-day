@@ -4,7 +4,6 @@ use Mix.Config
   {"WEBCORE_LAMBDA_ROLE_ARN", :default},
   {"PWA_LAMBDA_FUNCTION", :default},
   {"MOZART_ENDPOINT", :default},
-  {"PAL_ENDPOINT", :default},
   {"FABL_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
@@ -14,7 +13,7 @@ use Mix.Config
   {"ACCOUNT_ISS", :custom},
   {"ACCOUNT_JWK_URI", :custom},
   {"SESSION_URL", :custom},
-  {"IDCTA_CONFIG_URI", :custom}  
+  {"IDCTA_CONFIG_URI", :custom}
 ]
 |> Enum.each(fn {config_key, set_type} ->
   if System.get_env(config_key) == nil do
