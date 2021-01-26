@@ -1,8 +1,8 @@
 defmodule Belfrage.Authentication.Jwk do
   use GenServer
+  use Belfrage.Authentication.JwkStaticKeys
 
   @authentication_client Application.get_env(:belfrage, :authentication_client)
-
   @refresh_rate 3_600_000
 
   def start_link(opts) do
@@ -46,7 +46,7 @@ defmodule Belfrage.Authentication.Jwk do
   @impl GenServer
   def init(_opts) do
     send(self(), :refresh)
-    {:ok, %{}}
+    {:ok, get_static_keys()}
   end
 
   @impl GenServer

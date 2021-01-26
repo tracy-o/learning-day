@@ -71,7 +71,7 @@ config :belfrage,
     "aud" => "Account",
     "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
     "session_url" => "https://session.test.bbc.co.uk",
-    "idcta_config_uri" => "https://idcta.int.api.bbc.co.uk/idcta/config"
+    "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config"
   },
   authorised_users: ["34ferr3-b46b-4986-8e3c-5af89dfbe03d", "a76ea475-1f67-4b23-95a2-452a364e1aa7"]
 
