@@ -11,7 +11,9 @@ defmodule Belfrage.Services.HTTP do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record "function.timing.service.#{struct.private.platform}.request" do
+    platform = Macro.to_string(struct.private.platform)
+
+    Belfrage.Event.record "function.timing.service.#{platform}.request" do
       struct
       |> execute_request()
       |> handle_response()
@@ -19,18 +21,21 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "service.#{struct.private.platform}.response.#{status}")
+    platform = Macro.to_string(struct.private.platform)
+    Belfrage.Event.record(:metric, :increment, "service.#{platform}.response.#{status}")
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.#{struct.private.platform}.timeout")
+    platform = Macro.to_string(struct.private.platform)
+    Belfrage.Event.record(:metric, :increment, "error.service.#{platform}.timeout")
     log(:timeout, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.#{struct.private.platform}.request")
+    platform = Macro.to_string(struct.private.platform)
+    Belfrage.Event.record(:metric, :increment, "error.service.#{platform}.request")
     log(error, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
