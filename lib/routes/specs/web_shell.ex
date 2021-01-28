@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WebShell do
   def specs do
     %{
-      owner: "simon.scarfe@bbc.co.uk",
+      owner: "D&EWebCorePresentationTeam@bbc.co.uk",
       platform: Webcore
     }
   end
