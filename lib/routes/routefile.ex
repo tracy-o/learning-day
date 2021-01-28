@@ -157,6 +157,7 @@ defmodule Routes.Routefile do
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
 
   handle "/sport", using: "SportHomePage", only_on: "test", examples: ["/sport"]
+  handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
