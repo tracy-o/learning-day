@@ -46,6 +46,7 @@ defmodule Mix.Tasks.SmokeTest do
 
       mix smoke_test --only stack:cedric-belfrage
       mix smoke_test --only stack:bruce-belfrage
+      mix smoke_test --only stack:sally-belfrage
 
   Specific route:
 

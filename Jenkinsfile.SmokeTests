@@ -19,7 +19,7 @@ node {
     pipelineTriggers([parameterizedCron(cronlist)]),
     parameters([
         choice(name: 'ENVIRONMENT', choices: ['test', 'live'], description: 'The environment to run the tests against'),
-        choice(name: 'TARGET', choices: ['all', 'belfrage', 'cedric-belfrage', 'bruce-belfrage'], description: 'The target to run the tests against.'),
+        choice(name: 'TARGET', choices: ['all', 'belfrage', 'cedric-belfrage', 'bruce-belfrage', 'sally-belfrage'], description: 'The target to run the tests against.'),
         string(name: 'SLACK_MESSAGE', defaultValue: '', description: 'Optionally enter a value to send the result along with this message to the Belfrage slack channel.'),
         string(name: 'DEPLOYMENT_ID', defaultValue: '', description: 'Optionally enter the cosmos deployment ID to report the status of this smoke test to.'),
         string(name: 'REVISION', defaultValue: '', description: 'Optionally enter the short sha of the git commit to run the tests from.'),
