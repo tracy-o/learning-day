@@ -42,8 +42,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     }
   end
 
-  # personalisation dial is 'on', idcta flagpole is true
-  describe "when personalisation is enabled" do
+  describe "when personalisation dial is 'on', idcta flagpole is true" do
     setup do
       expect(FlagpoleMock, :state, fn -> true end)
       :ok
@@ -134,7 +133,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
   end
 
-  describe "when personalisation dial is 'on', IDCTA flagpole is false" do
+  describe "when personalisation dial is 'on', idcta flagpole is false" do
     setup do
       expect(FlagpoleMock, :state, fn -> false end)
       :ok
