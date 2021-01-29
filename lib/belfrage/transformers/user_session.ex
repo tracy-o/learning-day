@@ -40,7 +40,7 @@ defmodule Belfrage.Transformers.UserSession do
         headers: %{
           "location" => redirect_url(struct.request),
           "x-bbc-no-scheme-rewrite" => "1",
-          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+          "cache-control" => "private"
         },
         body: "Redirecting"
       })
