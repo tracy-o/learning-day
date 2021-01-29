@@ -1,4 +1,4 @@
-defmodule EndToEnd.SessionTest do
+defmodule EndToEnd.StubbedOriginSessionTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
