@@ -1,0 +1,142 @@
+[
+  {
+    "values": {
+      "test": "test-belfrage-main-BelfrageRole-1Q4QY4M0VBPZX",
+      "live": "live-belfrage-main-BelfrageRole-33JVCDF81H6W"
+    },
+    "name": "INSTANCE_ROLE_NAME"
+  },
+  {
+    "values": {
+      "test": "off",
+      "live": "off"
+    },
+    "name": "PREVIEW_MODE"
+  },
+  {
+    "values": {
+      "test": "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda",
+      "live": "arn:aws:lambda:eu-west-1:561847100151:function:live-presentation-layer-lambda"
+    },
+    "name": "PWA_LAMBDA_FUNCTION"
+  },
+  {
+    "values": {
+      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageLambdaExecRole",
+      "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageLambdaExecRole"
+    },
+    "name": "WEBCORE_LAMBDA_ROLE_ARN"
+  },
+  {
+    "values": {
+      "test": "https://fabl.api.bbci.co.uk",
+      "live": "https://fabl.api.bbci.co.uk"
+    },
+    "name": "FABL_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://www.mozart-routing.test.api.bbci.co.uk",
+      "live": "https://www.mozart-routing.api.bbci.co.uk"
+    },
+    "name": "MOZART_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
+      "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
+    },
+    "name": "XRAY_ROLE_ARN"
+  },
+  {
+    "noecho": true,
+    "name": "ERLANG_COOKIE"
+  },
+  {
+    "values": {
+      "test": "eu-west-1",
+      "live": "eu-west-1"
+    },
+    "name": "aws_region"
+  },
+  {
+    "values": {
+      "test": "dev-mozart-logs-eu-west-1",
+      "live": "prod-mozart-logs-eu-west-1"
+    },
+    "name": "td_ingest_bucket"
+  },
+  {
+    "values": {
+      "test": "eu-west-1",
+      "live": "eu-west-1"
+    },
+    "name": "td_ingest_bucket_region"
+  },
+  {
+    "values": {
+      "test": "/var/log/component/app.log",
+      "live": "/var/log/component/app.log"
+    },
+    "name": "td_logs_to_ship"
+  },
+  {
+    "values": {
+      "test": "sally-belfrage-stack",
+      "live": "sally-belfrage-stack"
+    },
+    "name": "STACK_NAME"
+  },
+  {
+    "values": {
+      "test": "sally",
+      "live": "sally"
+    },
+    "name": "STACK_ID"
+  },
+  {
+    "values": {
+      "test": "belfrage-distributed-cache-test",
+      "live": "belfrage-distributed-cache-live"
+    },
+    "name": "CCP_S3_BUCKET"
+  },
+  {
+    "name": "ACCOUNT_JWK_URI",
+    "default-value": "https://access.api.bbc.com/v1/oauth/connect/jwk_uri",
+    "options": [
+      {
+        "value": "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"
+      },
+      {
+        "value": "https://access.api.bbc.com/v1/oauth/connect/jwk_uri"
+      }
+    ]
+  },
+  {
+    "name": "ACCOUNT_ISS",
+    "default-value": "https://access.api.bbc.com/bbcidv5/oauth2",
+    "options": [
+      {
+        "value": "https://access.test.api.bbc.com/bbcidv5/oauth2"
+      },
+      {
+        "value": "https://access.api.bbc.com/bbcidv5/oauth2"
+      }
+    ]
+  },
+  {
+    "values": {
+      "test": "https://session.test.bbc.co.uk",
+      "live": "https://session.bbc.co.uk"
+    },
+    "name": "SESSION_URL"
+  },
+  {
+    "values": {
+      "test": "https://idcta.test.api.bbc.co.uk/idcta/config",
+      "live": "https://idcta.api.bbc.co.uk/idcta/config"
+    },
+    "name": "IDCTA_CONFIG_URI"
+  }
+]
