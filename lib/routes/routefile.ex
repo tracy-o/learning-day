@@ -216,6 +216,12 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
+  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/29161006.app"]
+  
+  handle "/sport/av/:section/:id", using: "SportAvVideos", examples: ["/sport/av/football/29161006"] do
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
