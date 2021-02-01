@@ -25,6 +25,7 @@ defmodule EndToEnd.SessionTest do
   } do
     response_conn =
       conn(:get, "/my/session")
+      |> Map.put(:host, "www.bbc.co.uk")
       |> put_req_header("cookie", "ckns_atkn=#{access_token}")
       |> put_req_header("x-id-oidc-signedin", "1")
       |> Router.call([])
