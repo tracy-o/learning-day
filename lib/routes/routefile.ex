@@ -217,8 +217,8 @@ defmodule Routes.Routefile do
   end
 
   handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/29161006.app"]
-  
-  handle "/sport/av/:section/:id", using: "SportAvVideos", examples: ["/sport/av/football/29161006"] do
+
+  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/29161006", "/sport/av/sports-personality/50803843"] do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 

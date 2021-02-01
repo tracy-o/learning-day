@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportAvVideos do
+defmodule Routes.Specs.SportVideoAndAudio do
   def specs do
     %{
       owner: "sfv-team@bbc.co.uk",
