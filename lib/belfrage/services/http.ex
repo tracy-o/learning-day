@@ -87,7 +87,8 @@ defmodule Belfrage.Services.HTTP do
     %{
       "x-country" => request.country,
       "x-forwarded-host" => request.host,
-      "x-ip_is_uk_combined" => is_uk(request.is_uk)
+      "x-ip_is_uk_combined" => is_uk(request.is_uk),
+      "x-ip_is_advertise_combined" => is_uk(request.is_advertise)
     }
   end
 
@@ -95,7 +96,16 @@ defmodule Belfrage.Services.HTTP do
     %{
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
-      "req-svc-chain" => request.req_svc_chain
+      "req-svc-chain" => request.req_svc_chain,
+      "x-cdn" => request.x_cdn,
+      "x-candy-audience" => request.x_candy_audience,
+      "x-candy-override" => request.x_candy_override,
+      "x-candy-preview-guid" => request.x_candy_preview_guid,
+      "x-morph-env" => request.x_morph_env,
+      "x-use-fixture" => request.x_use_fixture,
+      "cookie-cps-language" => request.cookie_cps_language,
+      "cookie-cps-chinese" => request.cookie_cps_chinese,
+      "cookie-cps-serbian" => request.cookie_cps_serbian
     }
   end
 
