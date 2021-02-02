@@ -217,7 +217,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       :ok
     end
 
-    test "request remains unauthenticated" do
+    test "request remains unauthenticated, despite valid cookie and header" do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
