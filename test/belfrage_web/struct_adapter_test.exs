@@ -29,13 +29,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "www.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -55,13 +65,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "test-branch.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -82,13 +102,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "www",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -109,13 +139,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "www",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -135,6 +175,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "test-branch.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         query_string: %{foo: "ba"},
         replayed_traffic: nil,
@@ -142,7 +183,16 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -162,6 +212,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "test-branch.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
@@ -169,7 +220,16 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -190,6 +250,7 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "test-branch.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         query_string: %{},
         replayed_traffic: nil,
@@ -197,7 +258,16 @@ defmodule BelfrageWeb.StructAdapterTest do
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -217,13 +287,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "www.belfrage.com",
         is_uk: false,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_private(:overrides, %{})
 
@@ -245,13 +325,23 @@ defmodule BelfrageWeb.StructAdapterTest do
           scheme: :https,
           host: "www.belfrage.com",
           is_uk: false,
+          is_advertise: false,
           country: "gb",
           replayed_traffic: nil,
           origin_simulator: nil,
           varnish: 1,
           cache: 0,
           cdn: false,
-          req_svc_chain: "BELFRAGE"
+          req_svc_chain: "BELFRAGE",
+          x_cdn: 0,
+          x_candy_audience: nil,
+          x_candy_override: nil,
+          x_candy_preview_guid: nil,
+          x_morph_env: nil,
+          x_use_fixture: nil,
+          cookie_cps_language: nil,
+          cookie_cps_chinese: nil,
+          cookie_cps_serbian: nil
         })
         |> put_req_header("accept-encoding", "gzip, deflate, br")
 
@@ -307,13 +397,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: "www.belfrage.com",
         is_uk: true,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
@@ -331,13 +431,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: nil,
         is_uk: true,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
@@ -355,13 +465,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: nil,
         is_uk: true,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_req_header("a-custom-header", "with this value")
 
@@ -382,13 +502,23 @@ defmodule BelfrageWeb.StructAdapterTest do
         scheme: :https,
         host: nil,
         is_uk: true,
+        is_advertise: false,
         country: "gb",
         replayed_traffic: nil,
         origin_simulator: nil,
         varnish: 1,
         cache: 0,
         cdn: false,
-        req_svc_chain: "BELFRAGE"
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_cps_language: nil,
+        cookie_cps_chinese: nil,
+        cookie_cps_serbian: nil
       })
       |> put_req_header("a-custom-header", "with this value")
 
