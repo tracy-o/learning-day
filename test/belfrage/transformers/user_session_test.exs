@@ -116,7 +116,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -158,7 +159,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -179,7 +181,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -190,7 +193,36 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
+        }
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
+  describe "when host is .com" do
+    setup do
+      FlagpoleMock |> expect(:state, fn -> true end)
+      :ok
+    end
+
+    test "request remains unauthenticated, despite valid cookie and header" do
+      struct = %Struct{
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.com"
         }
       }
 
@@ -220,7 +252,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct =
         Struct.add(%Struct{}, :request, %{
           cookies: %{"ckns_atkn" => access_token},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         })
 
       assert {
@@ -239,7 +272,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct =
         Struct.add(struct, :request, %{
           cookies: %{"ckns_atkn" => access_token},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         })
 
       assert {
