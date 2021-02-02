@@ -29,10 +29,10 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "weightlifting"
   ]
 
-  @webcore_sections_prod []
+  @webcore_sections_live []
 
-  def call(_rest, struct = %Struct{request: %Struct.Request{:host => host, path_params: %{"section" => section}}}) do
-    case is_webcore(host, section) do
+  def call(_rest, struct) do
+    case is_webcore?(struct) do
       true ->
         then(
           ["LambdaOriginAlias", "CircuitBreaker", "Language"],
@@ -47,12 +47,22 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     end
   end
 
-  defp is_webcore(host, section) do
-    # Route everything to WebCore when host contains 'belfrage-preview'
-    # Route to WebCore when host contains 'test' and section name is in webcore_sections_test list
-    # Route to WebCore when section name is in webcore_sections_prod list
-    String.contains?(host, "belfrage-preview") or
-      (String.contains?(host, "test") and section in @webcore_sections_test) or
-      section in @webcore_sections_prod
+  defp is_webcore?(struct = %Struct{request: %Struct.Request{path_params: %{"section" => section}}}) do
+    cond do
+      is_preview_mode?(struct) -> true
+      test_production_environment?(struct) and (is_test_section?(section) or is_live_section?(section)) -> true
+      live_production_environment?(struct) and is_live_section?(section) -> true
+      true -> false
+    end
   end
+
+  defp test_production_environment?(struct), do: struct.private.production_environment == "test"
+
+  defp live_production_environment?(struct), do: struct.private.production_environment == "live"
+
+  defp is_preview_mode?(struct), do: struct.private.preview_mode == "on"
+
+  defp is_test_section?(section), do: section in @webcore_sections_test
+
+  defp is_live_section?(section), do: section in @webcore_sections_live
 end
