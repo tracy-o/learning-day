@@ -171,7 +171,7 @@ defmodule Routes.Routefile do
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
   handle "/bitesize/search", using: "Search", examples: ["/bitesize/search"]
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
-
+  handle "/pres-test/new-chwilio", using: "WelshNewSearch", examples: ["/pres-test/new-chwilio"]
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
