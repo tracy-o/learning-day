@@ -15,3 +15,10 @@ labels: 'Status: Unconfirmed'
   description of what your feature request is. Provide user
   stories to ensure the intention of the feature is clear.
 -->
+
+### Proposal
+_Write your proposal here_
+
+### Your Contact Info
+**Team name:** ...
+**Slack channel:** ...
