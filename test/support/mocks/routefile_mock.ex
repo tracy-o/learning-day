@@ -48,6 +48,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/my/session", using: "MySession", examples: [])
 
+  handle("/my/session/webcore-platform", using: "MySessionWebcorePlatform", examples: [])
+
   handle("/route-allow-headers", using: "SomeLoopAllowHeaders", examples: [])
 
   handle("/format/rewrite/:discipline/av/:team.app", using: "SomeMozartLoop", examples: [])
