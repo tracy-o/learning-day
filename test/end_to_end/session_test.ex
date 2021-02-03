@@ -28,7 +28,7 @@ defmodule EndToEnd.SessionTest do
                headers: %{
                  "accept-encoding": "gzip",
                  country: "gb",
-                 host: "www.example.com",
+                 host: "www.bbc.co.uk",
                  is_uk: false,
                  language: "en-GB"
                },
@@ -41,7 +41,7 @@ defmodule EndToEnd.SessionTest do
       {:ok, lambda_response}
     end)
 
-    response_conn = conn(:get, "/my/session/webcore-platform") |> Router.call([])
+    response_conn = conn(:get, "/my/session/webcore-platform") |> Map.put(:host, "www.bbc.co.uk") |> Router.call([])
 
     assert {200, headers, body} = sent_resp(response_conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in headers
@@ -61,7 +61,7 @@ defmodule EndToEnd.SessionTest do
                  authorization: "Bearer #{access_token}",
                  "x-authentication-provider": "idv5",
                  country: "gb",
-                 host: "www.example.com",
+                 host: "www.bbc.co.uk",
                  is_uk: false,
                  language: "en-GB"
                },
@@ -76,6 +76,7 @@ defmodule EndToEnd.SessionTest do
 
     response_conn =
       conn(:get, "/my/session/webcore-platform")
+      |> Map.put(:host, "www.bbc.co.uk")
       |> put_req_header("cookie", "ckns_atkn=#{access_token}")
       |> put_req_header("x-id-oidc-signedin", "1")
       |> Router.call([])
@@ -96,6 +97,7 @@ defmodule EndToEnd.SessionTest do
 
     response_conn =
       conn(:get, "/my/session/webcore-platform")
+      |> Map.put(:host, "www.bbc.co.uk")
       |> put_req_header("cookie", "ckns_atkn=#{access_token}")
       |> put_req_header("x-id-oidc-signedin", "1")
       |> Router.call([])
@@ -103,6 +105,6 @@ defmodule EndToEnd.SessionTest do
     assert {302, headers, _body} = sent_resp(response_conn)
 
     assert {"location",
-            "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.example.com%2Fmy%2Fsession%2Fwebcore-platform"} in headers
+            "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fmy%2Fsession%2Fwebcore-platform"} in headers
   end
 end
