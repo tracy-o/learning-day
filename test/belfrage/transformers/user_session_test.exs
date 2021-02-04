@@ -60,7 +60,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -83,7 +83,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -116,7 +116,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -158,7 +159,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -179,7 +181,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         }
       }
 
@@ -190,7 +193,36 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
+        }
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: false,
+                   session_token: nil,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
+  describe "when host is .com" do
+    setup do
+      FlagpoleMock |> expect(:state, fn -> true end)
+      :ok
+    end
+
+    test "request remains unauthenticated, despite valid cookie and header" do
+      struct = %Struct{
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.com"
         }
       }
 
@@ -220,7 +252,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct =
         Struct.add(%Struct{}, :request, %{
           cookies: %{"ckns_atkn" => access_token},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         })
 
       assert {
@@ -239,7 +272,8 @@ defmodule Belfrage.Transformers.UserSessionTest do
       struct =
         Struct.add(struct, :request, %{
           cookies: %{"ckns_atkn" => access_token},
-          raw_headers: %{"x-id-oidc-signedin" => "1"}
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          host: "bbc.co.uk"
         })
 
       assert {
@@ -272,7 +306,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -313,7 +347,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -354,7 +388,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -395,7 +429,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -440,7 +474,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
@@ -491,7 +525,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                        "location" =>
                          "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
-                       "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                       "cache-control" => "private"
                      }
                    }
                  }
@@ -546,7 +580,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                        "location" =>
                          "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
-                       "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                       "cache-control" => "private"
                      }
                    }
                  }
@@ -601,7 +635,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                        "location" =>
                          "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
-                       "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                       "cache-control" => "private"
                      }
                    }
                  }
@@ -657,7 +691,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      "location" =>
                        "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                     "cache-control" => "private"
                    }
                  }
                }
