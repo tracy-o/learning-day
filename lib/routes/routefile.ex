@@ -174,6 +174,15 @@ defmodule Routes.Routefile do
 
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
+  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
+    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+  end
+
+  handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
+    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+    return_404 if: !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+  end
+
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
     return_404 if: !String.match?(slug, ~r/^([a-z0-9-]+)$/)
