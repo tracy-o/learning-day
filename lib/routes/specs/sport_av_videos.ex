@@ -4,7 +4,7 @@ defmodule Routes.Specs.SportVideoAndAudio do
       owner: "sfv-team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
       platform: Mozart,
-      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "SportVideosPlatformDiscriminator"]
+      pipeline: ["HTTPredirect", "SportVideosPlatformDiscriminator"]
     }
   end
 end
