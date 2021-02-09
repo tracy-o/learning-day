@@ -383,7 +383,9 @@ defmodule Routes.Routefile do
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
   # newsrounds routes appear to be using morphRouter
-  handle "/newsround/*_any", using: "Newsround", examples: []
+  handle "/newsround.amp", using: "Newsround", examples: ["/newsround.amp"]
+  handle "/newsround.json", using: "Newsround", examples: ["/newsround.json"]
+  handle "/newsround/*_any", using: "Newsround", examples: ["/newsround", "/newsround/example-123", "/newsround/example-123.amp", "/newsround/example-123.json"]
   handle "/schoolreport/*_any", using: "Schoolreport", examples: ["/schoolreport", "/schoolreport/home"]
   handle "/wide/*_any", using: "Wide", examples: []
   handle "/archivist/*_any", using: "Archivist", examples: []
