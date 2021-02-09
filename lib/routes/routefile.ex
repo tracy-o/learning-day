@@ -367,8 +367,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
 
-  # Route for testing only, disabling examples to avoid smoke test failures,
-  # example route: "/comments/embed/news/business-1234567"
+  # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
@@ -387,7 +386,6 @@ defmodule Routes.Routefile do
   handle "/newsround/*_any", using: "Newsround", examples: []
   handle "/schoolreport/*_any", using: "Schoolreport", examples: ["/schoolreport", "/schoolreport/home"]
   handle "/wide/*_any", using: "Wide", examples: []
-  handle "/comments/*_any", using: "Comments", examples: []
   handle "/archivist/*_any", using: "Archivist", examples: []
   handle "/weather/*_any", using: "Weather", examples: ["/weather", "/weather/2650225"]
   handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
