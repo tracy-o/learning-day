@@ -11,7 +11,6 @@ defmodule Routes.Routefile do
   redirect "/example/weather/0", to: "/weather", status: 301
   redirect "/ni", to: "/northernireland", status: 302
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
-  redirect "/music", to: "/music/uk", status: 301
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
   redirect("http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
@@ -395,6 +394,7 @@ defmodule Routes.Routefile do
   # issues with /sport/23354875 being matched to the sport/:discipline matcher
   handle "/sport/*_any", using: "Sport", examples: []
   handle "/news/*_any", using: "News", examples: []
+  handle "/music", using: "Music", examples: []
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
