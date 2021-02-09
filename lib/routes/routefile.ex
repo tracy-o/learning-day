@@ -356,7 +356,11 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  # this causes issues for /sport/23354875
+  handle "/sport.amp", using: "SportSimorgh", examples: ["/sport.amp"]
+  handle "/sport.json", using: "SportSimorgh", examples: ["/sport.json"]
+  handle "/sport.app", using: "Sport", examples: ["/sport.json"]
+
+  # TODO this matcher picks up routes such as /sport/23354875 rather than being matched in the catchall
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
 
   handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
@@ -391,7 +395,7 @@ defmodule Routes.Routefile do
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
   # TODO /proms/extra
   handle "/proms/*_any", using: "Proms", examples: []
-  # issues with /sport/23354875 being matched to the sport/:discipline matcher
+  # TODO issue with routes such as /sport/23354875 being matched to the sport/:discipline matcher
   handle "/sport/*_any", using: "Sport", examples: []
   handle "/news/*_any", using: "News", examples: []
   handle "/music", using: "Music", examples: []
