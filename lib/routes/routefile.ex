@@ -358,7 +358,7 @@ defmodule Routes.Routefile do
 
   handle "/sport.amp", using: "SportSimorgh", examples: ["/sport.amp"]
   handle "/sport.json", using: "SportSimorgh", examples: ["/sport.json"]
-  handle "/sport.app", using: "Sport", examples: ["/sport.json"]
+  handle "/sport.app", using: "Sport", examples: ["/sport.app"]
 
   # TODO this matcher picks up routes such as /sport/23354875 rather than being matched in the catchall
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
