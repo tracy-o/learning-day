@@ -216,9 +216,11 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
-  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/29161006.app"]
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
-  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/29161006", "/sport/av/sports-personality/50803843"] do
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
