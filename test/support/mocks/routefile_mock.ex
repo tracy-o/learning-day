@@ -61,6 +61,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
+  handle("/personalisation-in-cascade", using: ["MySessionWebcorePlatform", "SomeMozartLoop"], examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
