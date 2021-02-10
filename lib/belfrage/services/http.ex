@@ -77,9 +77,7 @@ defmodule Belfrage.Services.HTTP do
     %{
       "x-bbc-edge-cache" => "1",
       "x-bbc-edge-country" => request.country,
-      "x-bbc-edge-host" => request.host,
-      "x-bbc-edge-isuk" => is_uk(request.is_uk),
-      "x-bbc-edge-scheme" => scheme(request.scheme)
+      "x-bbc-edge-isuk" => is_uk(request.is_uk)
     }
   end
 
@@ -97,6 +95,8 @@ defmodule Belfrage.Services.HTTP do
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
       "req-svc-chain" => request.req_svc_chain,
+      "x-bbc-edge-host" => request.host,
+      "x-bbc-edge-scheme" => scheme(request.scheme)
       "x-cdn" => request.x_cdn,
       "x-candy-audience" => request.x_candy_audience,
       "x-candy-override" => request.x_candy_override,
@@ -111,6 +111,7 @@ defmodule Belfrage.Services.HTTP do
 
   defp scheme(:https), do: "https"
   defp scheme(:http), do: "http"
+  defp scheme(_), do: "https"
 
   defp is_uk(true), do: "yes"
   defp is_uk(_), do: nil
