@@ -31,35 +31,19 @@ defmodule EndToEnd.PersonalisationInCascade do
   } do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn _role_arn, _function_arn, payload, _opts ->
-      assert %{
-               body: "",
-               headers: %{
-                 "accept-encoding": "gzip",
-                 authorization: "Bearer #{access_token}",
-                 country: "gb",
-                 host: "www.bbc.co.uk",
-                 is_uk: false,
-                 language: "en-GB",
-                 "x-authentication-provider": "idv5"
-               },
-               httpMethod: "GET",
-               path: "/personalisation-in-cascade",
-               pathParameters: %{},
-               queryStringParameters: %{}
-             } == payload
+      assert "Bearer #{access_token}" == get_in(payload, [:headers, :authorization])
+      assert "idv5" == get_in(payload, [:headers, :"x-authentication-provider"])
 
       {:ok, lambda_response}
     end)
 
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn request ->
-      assert %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "BELFRAGE",
-               "user-agent" => "Belfrage",
-               "x-country" => "gb",
-               "x-forwarded-host" => "www.bbc.co.uk"
-             } == request.headers
+      assert Enum.all?(request.headers, &is_binary(elem(&1, 0))),
+             "Expects all header keys to be binaries for following assertions."
+
+      refute Map.has_key?(request.headers, "authorization")
+      refute Map.has_key?(request.headers, "x-authentication-provider")
 
       {:ok, mozart_response}
     end)
