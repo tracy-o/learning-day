@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
   @webcore_section_test %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart,
+      platform: MozartNews,
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -21,7 +21,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
   @mozart_section_test %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart,
+      platform: MozartNews,
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -35,7 +35,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
   @mozart_section_live %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart
+      platform: MozartNews
     },
     request: %Struct.Request{
       scheme: :http,
@@ -48,7 +48,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
   @webcore_section_preview %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart,
+      platform: MozartNews,
       preview_mode: "on"
     },
     request: %Struct.Request{
@@ -93,7 +93,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
                },
                private: %Struct.Private{
                  origin: ^mozart_endpoint,
-                 platform: Mozart
+                 platform: MozartNews
                },
                request: %Struct.Request{
                  scheme: :http,
@@ -116,7 +116,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
                },
                private: %Struct.Private{
                  origin: ^mozart_endpoint,
-                 platform: Mozart
+                 platform: MozartNews
                },
                request: %Struct.Request{
                  scheme: :http,

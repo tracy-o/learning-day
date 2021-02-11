@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   @webcore_topic_id %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart
+      platform: MozartNews
     },
     request: %Struct.Request{
       scheme: :http,
@@ -20,7 +20,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   @mozart_topic_id %Struct{
     private: %Struct.Private{
       origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: Mozart
+      platform: MozartNews
     },
     request: %Struct.Request{
       scheme: :http,
@@ -64,7 +64,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                },
                private: %Struct.Private{
                  origin: ^mozart_endpoint,
-                 platform: Mozart
+                 platform: MozartNews
                },
                request: %Struct.Request{
                  scheme: :http,
@@ -114,7 +114,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                  },
                  private: %Struct.Private{
                    origin: ^mozart_endpoint,
-                   platform: Mozart
+                   platform: MozartNews
                  },
                  request: %Struct.Request{
                    scheme: :http,
