@@ -137,6 +137,7 @@ defmodule Routes.Routefile do
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
+  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
