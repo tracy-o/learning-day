@@ -1,7 +1,7 @@
-defmodule Routes.Platforms.Mozart do
+defmodule Routes.Platforms.MozartSport do
   def specs(production_env) do
     %{
-      origin: Application.get_env(:belfrage, :mozart_endpoint),
+      origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
       pipeline: pipeline(production_env),

@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeMozartLoop do
     %{
       owner: "An owner",
       runbook: "Some runbook",
-      platform: Mozart,
+      platform: MozartNews,
       pipeline: ["HTTPredirect", "TrailingSlashRedirector"],
       query_params_allowlist: ["page"]
     }

@@ -39,7 +39,21 @@
       "test": "https://www.mozart-routing.test.api.bbci.co.uk",
       "live": "https://www.mozart-routing.api.bbci.co.uk"
     },
-    "name": "MOZART_ENDPOINT"
+    "name": "MOZART_NEWS_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://www.mozart-routing-weather.test.api.bbci.co.uk",
+      "live": "https://www.mozart-routing-weather.api.bbci.co.uk"
+    },
+    "name": "MOZART_WEATHER_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://www.mozart-routing-sport.test.api.bbci.co.uk",
+      "live": "https://www.mozart-routing-sport.api.bbci.co.uk"
+    },
+    "name": "MOZART_SPORT_ENDPOINT"
   },
   {
     "values": {

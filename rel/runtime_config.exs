@@ -3,7 +3,9 @@ use Mix.Config
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :default},
   {"PWA_LAMBDA_FUNCTION", :default},
-  {"MOZART_ENDPOINT", :default},
+  {"MOZART_NEWS_ENDPOINT", :default},
+  {"MOZART_WEATHER_ENDPOINT", :default},
+  {"MOZART_SPORT_ENDPOINT", :default},
   {"FABL_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
