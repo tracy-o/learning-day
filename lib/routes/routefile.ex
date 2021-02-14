@@ -423,9 +423,9 @@ defmodule Routes.Routefile do
 
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportMorphLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
-  handle "/sport/live-guide/*_any", using: "SportMorphPage", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
   handle "/sport/live-guide.app", using: "SportMorphPage", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportMorphPage", examples: ["/sport/live-guide"]
+  handle "/sport/live-guide/*_any", using: "SportMorphPage", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
   handle "/sport/:discipline/video.app", using: "SportMorphVideos", examples: ["/sport/cricket/video.app"]
