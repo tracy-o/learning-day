@@ -592,6 +592,12 @@ defmodule Routes.Routefile do
   handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
   handle "/sport/formula1/drivers-world-championship/standings", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
+  ## Sport Golf Leaderboard
+  handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
+  handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
+  handle "/sport/golf/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/leaderboard.app"]
+  handle "/sport/golf/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/leaderboard"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
