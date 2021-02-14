@@ -423,6 +423,9 @@ defmodule Routes.Routefile do
 
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportMorphLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
+  handle "/sport/live-guide/*_any", using: "SportMorphPage", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+  handle "/sport/live-guide.app", using: "SportMorphPage", examples: ["/sport/live-guide.app"]
+  handle "/sport/live-guide", using: "SportMorphPage", examples: ["/sport/live-guide"]
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
