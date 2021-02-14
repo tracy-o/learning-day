@@ -556,7 +556,11 @@ defmodule Routes.Routefile do
   handle "/sport/winter-olympics", using: "SportMorphIndex", examples: ["/sport/winter-olympics"]
   handle "/sport/winter-sports.app", using: "SportMorphIndex", examples: ["/sport/winter-sports.app"]
   handle "/sport/winter-sports", using: "SportMorphIndex", examples: ["/sport/winter-sports"]
-  
+
+  ## Sport Calendars
+  handle "/sport/:discipline/calendar.app", using: "SportMorphDataPage", examples: ["/sport/formula1/calendar.app"]
+  handle "/sport/:discipline/calendar", using: "SportMorphDataPage", examples: ["/sport/formula1/calendar"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
