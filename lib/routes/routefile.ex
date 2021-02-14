@@ -421,6 +421,9 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
+  ## Sport BBC Live
+  handle "/sport/live/*_any", using: "SportMorphLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
