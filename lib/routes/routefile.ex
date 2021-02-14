@@ -609,7 +609,15 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results"]
   handle "/sport/:discipline/results.app", using: "SportMorphDataPage", examples: ["/sport/snooker/results.app"]
   handle "/sport/:discipline/results", using: "SportMorphDataPage", examples: ["/sport/snooker/results"]
-  
+
+  ## Sport Scores-Fixtures pages
+  handle "/sport/:discipline/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures.app"]
+  handle "/sport/:discipline/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures"]
+  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
