@@ -626,6 +626,16 @@ defmodule Routes.Routefile do
   handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
   handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
 
+  ## Sport Event Data Pages 
+  handle "/sport/cricket/scorecard/:id.app", using: "SportMorphDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
+  handle "/sport/cricket/scorecard/:id", using: "SportMorphDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
+  handle "/sport/horse-racing/race/:id.app", using: "SportMorphDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
+  handle "/sport/horse-racing/race/:id", using: "SportMorphDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
+  handle "/sport/rugby-league/match/:id.app", using: "SportMorphDataPage", examples: ["/sport/rugby-league/match/EVP3210786.app"]
+  handle "/sport/rugby-league/match/:id", using: "SportMorphDataPage", examples: ["/sport/rugby-league/match/EVP3210786"]
+  handle "/sport/rugby-union/match/:id.app", using: "SportMorphDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
+  handle "/sport/rugby-union/match/:id", using: "SportMorphDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
