@@ -433,6 +433,28 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video.app", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video"]
 
+  ## Sport Stories with Vanity Urls 
+  handle "/sport/all-sports.app", using: "SportMorphStoryPage", examples: ["/sport/all-sports.app"]
+  handle "/sport/all-sports", using: "SportMorphStoryPage", examples: ["/sport/all-sports"]
+  handle "/sport/cricket/teams.app", using: "SportMorphStoryPage", examples: ["/sport/cricket/teams.app"]
+  handle "/sport/cricket/teams", using: "SportMorphStoryPage", examples: ["/sport/cricket/teams"]
+  handle "/sport/football/gossip.app", using: "SportMorphStoryPage", examples: ["/sport/football/gossip.app"]
+  handle "/sport/football/gossip", using: "SportMorphStoryPage", examples: ["/sport/football/gossip"]
+  handle "/sport/football/leagues-cups.app", using: "SportMorphStoryPage", examples: ["/sport/football/leagues-cups.app"]
+  handle "/sport/football/leagues-cups", using: "SportMorphStoryPage", examples: ["/sport/football/leagues-cups"]
+  handle "/sport/football/scottish/gossip.app", using: "SportMorphStoryPage", examples: ["/sport/football/scottish/gossip.app"]
+  handle "/sport/football/scottish/gossip", using: "SportMorphStoryPage", examples: ["/sport/football/scottish/gossip"]
+  handle "/sport/football/teams.app", using: "SportMorphStoryPage", examples: ["/sport/football/teams.app"]
+  handle "/sport/football/teams", using: "SportMorphStoryPage", examples: ["/sport/football/teams"]
+  handle "/sport/football/transfers.app", using: "SportMorphStoryPage", examples: ["/sport/football/transfers.app"]
+  handle "/sport/football/transfers", using: "SportMorphStoryPage", examples: ["/sport/football/transfers"]
+  handle "/sport/my-sport.app", using: "SportMorphStoryPage", examples: ["/sport/my-sport.app"]
+  handle "/sport/my-sport", using: "SportMorphStoryPage", examples: ["/sport/my-sport"]
+  handle "/sport/rugby-league/teams.app", using: "SportMorphStoryPage", examples: ["/sport/rugby-league/teams.app"]
+  handle "/sport/rugby-league/teams", using: "SportMorphStoryPage", examples: ["/sport/rugby-league/teams"]
+  handle "/sport/rugby-union/teams.app", using: "SportMorphStoryPage", examples: ["/sport/rugby-union/teams.app"]
+  handle "/sport/rugby-union/teams", using: "SportMorphStoryPage", examples: ["/sport/rugby-union/teams"]
+
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportMorphIndex", examples: ["/sport.app"]
   # handle "/sport", using: "SportMorphIndex", examples: ["/sport"] # this one clashes with the SportHomePage handler
