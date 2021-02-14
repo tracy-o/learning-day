@@ -598,6 +598,18 @@ defmodule Routes.Routefile do
   handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
   handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
 
+  ## Sport Fixtures pages
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures"]
+  handle "/sport/:discipline/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
+  handle "/sport/:discipline/fixtures", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures"]
+
+  ## Sport Results pages
+  handle "/sport/:discipline/:tournament/results.app", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results.app"]
+  handle "/sport/:discipline/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results"]
+  handle "/sport/:discipline/results.app", using: "SportMorphDataPage", examples: ["/sport/snooker/results.app"]
+  handle "/sport/:discipline/results", using: "SportMorphDataPage", examples: ["/sport/snooker/results"]
+  
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
