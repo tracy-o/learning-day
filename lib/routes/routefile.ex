@@ -626,6 +626,17 @@ defmodule Routes.Routefile do
   handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
   handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
 
+  ## Sport Tennis Pages
+  handle "/sport/tennis/live-scores.app", using: "SportMorphDataPage", examples: ["/sport/tennis/live-scores.app"]
+  handle "/sport/tennis/live-scores", using: "SportMorphDataPage", examples: ["/sport/tennis/live-scores"]
+  handle "/sport/tennis/live-scores/*_any", using: "SportMorphDataPage", examples: ["/sport/tennis/live-scores/australian-open.app", "/sport/tennis/live-scores/australian-open"]
+  handle "/sport/tennis/order-of-play.app", using: "SportMorphDataPage", examples: ["/sport/tennis/order-of-play.app"]
+  handle "/sport/tennis/order-of-play", using: "SportMorphDataPage", examples: ["/sport/tennis/order-of-play"]
+  handle "/sport/tennis/order-of-play/*_any", using: "SportMorphDataPage", examples: ["/sport/tennis/order-of-play/australian-open.app", "/sport/tennis/order-of-play/australian-open"]
+  handle "/sport/tennis/results.app", using: "SportMorphDataPage", examples: ["/sport/tennis/results.app"]
+  handle "/sport/tennis/results", using: "SportMorphDataPage", examples: ["/sport/tennis/results"]
+  handle "/sport/tennis/results/*_any", using: "SportMorphDataPage", examples: ["/sport/tennis/results/australian-open/mens-singles.app", "/sport/tennis/results/australian-open/mens-singles"]
+
   ## Sport Event Data Pages 
   handle "/sport/cricket/scorecard/:id.app", using: "SportMorphDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
   handle "/sport/cricket/scorecard/:id", using: "SportMorphDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
