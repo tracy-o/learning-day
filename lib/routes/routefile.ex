@@ -562,41 +562,41 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/calendar", using: "SportMorphDataPage", examples: ["/sport/formula1/calendar"]
 
   ## Sport Cricket Averages
-  handle "/sport/cricket/teams/:team/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/teams/lancashire/averages.app"]
-  handle "/sport/cricket/teams/:team/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/teams/lancashire/averages"]
-  handle "/sport/cricket/:tournament/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/indian-premier-league/averages.app"]
-  handle "/sport/cricket/:tournament/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/indian-premier-league/averages"]
   handle "/sport/cricket/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/averages.app"]
   handle "/sport/cricket/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/averages"]
+  handle "/sport/cricket/:tournament/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/indian-premier-league/averages.app"]
+  handle "/sport/cricket/:tournament/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/indian-premier-league/averages"]
+  handle "/sport/cricket/teams/:team/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/teams/lancashire/averages.app"]
+  handle "/sport/cricket/teams/:team/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/teams/lancashire/averages"]
 
   ## Sport Football Top-Scorers
-  handle "/sport/football/teams/:team/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers.app"]
-  handle "/sport/football/teams/:team/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
-  handle "/sport/football/:tournament/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
-  handle "/sport/football/:tournament/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers"]
   handle "/sport/football/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers.app"]
   handle "/sport/football/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers"]
+  handle "/sport/football/:tournament/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
+  handle "/sport/football/:tournament/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers"]
+  handle "/sport/football/teams/:team/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers.app"]
+  handle "/sport/football/teams/:team/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
 
   ## Sport Formula 1 Pages
+  handle "/sport/formula1/latest.app", using: "SportMorphDataPage", examples: ["/sport/formula1/latest.app"]
+  handle "/sport/formula1/latest", using: "SportMorphDataPage", examples: ["/sport/formula1/latest"]
+  handle "/sport/formula1/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/results.app"]
+  handle "/sport/formula1/results", using: "SportMorphDataPage", examples: ["/sport/formula1/results"]
+  handle "/sport/formula1/:season/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results.app"]
+  handle "/sport/formula1/:season/results", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results"]
   handle "/sport/formula1/:season/:tournament/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
   handle "/sport/formula1/:season/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
   handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
-  handle "/sport/formula1/:season/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results.app"]
-  handle "/sport/formula1/:season/results", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results"]
-  handle "/sport/formula1/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/results.app"]
-  handle "/sport/formula1/results", using: "SportMorphDataPage", examples: ["/sport/formula1/results"]
-  handle "/sport/formula1/latest.app", using: "SportMorphDataPage", examples: ["/sport/formula1/latest.app"]
-  handle "/sport/formula1/latest", using: "SportMorphDataPage", examples: ["/sport/formula1/latest"]
   handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportMorphDataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
   handle "/sport/formula1/constructors-world-championship/standings", using: "SportMorphDataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
   handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
   handle "/sport/formula1/drivers-world-championship/standings", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
   ## Sport Golf Leaderboard
-  handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
-  handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
   handle "/sport/golf/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/leaderboard.app"]
   handle "/sport/golf/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/leaderboard"]
+  handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
+  handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
