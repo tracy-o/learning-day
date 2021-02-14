@@ -569,6 +569,14 @@ defmodule Routes.Routefile do
   handle "/sport/cricket/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/averages.app"]
   handle "/sport/cricket/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/averages"]
 
+  ## Sport Football Top-Scorers
+  handle "/sport/football/teams/:team/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers.app"]
+  handle "/sport/football/teams/:team/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
+  handle "/sport/football/:tournament/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
+  handle "/sport/football/:tournament/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/european-championship/top-scorers"]
+  handle "/sport/football/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers.app"]
+  handle "/sport/football/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
