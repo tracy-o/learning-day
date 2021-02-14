@@ -561,6 +561,34 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/calendar.app", using: "SportMorphDataPage", examples: ["/sport/formula1/calendar.app"]
   handle "/sport/:discipline/calendar", using: "SportMorphDataPage", examples: ["/sport/formula1/calendar"]
 
+  ## Sport Fixtures pages
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures"]
+  handle "/sport/:discipline/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
+  handle "/sport/:discipline/fixtures", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures"]
+
+  ## Sport Results pages
+  handle "/sport/:discipline/:tournament/results.app", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results.app"]
+  handle "/sport/:discipline/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results"]
+  handle "/sport/:discipline/results.app", using: "SportMorphDataPage", examples: ["/sport/snooker/results.app"]
+  handle "/sport/:discipline/results", using: "SportMorphDataPage", examples: ["/sport/snooker/results"]
+
+  ## Sport Scores-Fixtures pages
+  handle "/sport/:discipline/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures.app"]
+  handle "/sport/:discipline/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures"]
+  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
+
+  ## Sport Table pages
+  handle "/sport/:discipline/tables.app", using: "SportMorphDataPage", examples: ["/sport/football/tables.app"]
+  handle "/sport/:discipline/tables", using: "SportMorphDataPage", examples: ["/sport/football/tables"]
+  handle "/sport/:discipline/:tournament/table.app", using: "SportMorphDataPage", examples: ["/sport/football/championship/table.app"]
+  handle "/sport/:discipline/:tournament/table", using: "SportMorphDataPage", examples: ["/sport/football/championship/table"]
+  handle "/sport/:discipline/teams/:team/table.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table.app"]
+  handle "/sport/:discipline/teams/:team/table", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table"]
+
   ## Sport Cricket Averages
   handle "/sport/cricket/averages.app", using: "SportMorphDataPage", examples: ["/sport/cricket/averages.app"]
   handle "/sport/cricket/averages", using: "SportMorphDataPage", examples: ["/sport/cricket/averages"]
@@ -597,34 +625,6 @@ defmodule Routes.Routefile do
   handle "/sport/golf/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/leaderboard"]
   handle "/sport/golf/:tournament/leaderboard.app", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
   handle "/sport/golf/:tournament/leaderboard", using: "SportMorphDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
-
-  ## Sport Fixtures pages
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
-  handle "/sport/:discipline/:tournament/fixtures", using: "SportMorphDataPage", examples: ["/sport/basketball/nba/fixtures"]
-  handle "/sport/:discipline/fixtures.app", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
-  handle "/sport/:discipline/fixtures", using: "SportMorphDataPage", examples: ["/sport/ice-hockey/fixtures"]
-
-  ## Sport Results pages
-  handle "/sport/:discipline/:tournament/results.app", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results.app"]
-  handle "/sport/:discipline/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/athletics/british-championship/results"]
-  handle "/sport/:discipline/results.app", using: "SportMorphDataPage", examples: ["/sport/snooker/results.app"]
-  handle "/sport/:discipline/results", using: "SportMorphDataPage", examples: ["/sport/snooker/results"]
-
-  ## Sport Scores-Fixtures pages
-  handle "/sport/:discipline/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/scores-fixtures"]
-  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
-
-  ## Sport Table pages
-  handle "/sport/:discipline/tables.app", using: "SportMorphDataPage", examples: ["/sport/football/tables.app"]
-  handle "/sport/:discipline/tables", using: "SportMorphDataPage", examples: ["/sport/football/tables"]
-  handle "/sport/:discipline/:tournament/table.app", using: "SportMorphDataPage", examples: ["/sport/football/championship/table.app"]
-  handle "/sport/:discipline/:tournament/table", using: "SportMorphDataPage", examples: ["/sport/football/championship/table"]
-  handle "/sport/:discipline/teams/:team/table.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table.app"]
-  handle "/sport/:discipline/teams/:team/table", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table"]
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
