@@ -618,6 +618,14 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportMorphDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
 
+  ## Sport Table pages
+  handle "/sport/:discipline/tables.app", using: "SportMorphDataPage", examples: ["/sport/football/tables.app"]
+  handle "/sport/:discipline/tables", using: "SportMorphDataPage", examples: ["/sport/football/tables"]
+  handle "/sport/:discipline/:tournament/table.app", using: "SportMorphDataPage", examples: ["/sport/football/championship/table.app"]
+  handle "/sport/:discipline/:tournament/table", using: "SportMorphDataPage", examples: ["/sport/football/championship/table"]
+  handle "/sport/:discipline/teams/:team/table.app", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table.app"]
+  handle "/sport/:discipline/teams/:team/table", using: "SportMorphDataPage", examples: ["/sport/football/teams/arsenal/table"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
