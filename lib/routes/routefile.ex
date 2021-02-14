@@ -577,6 +577,21 @@ defmodule Routes.Routefile do
   handle "/sport/football/top-scorers.app", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers.app"]
   handle "/sport/football/top-scorers", using: "SportMorphDataPage", examples: ["/sport/football/top-scorers"]
 
+  ## Sport Formula 1 Pages
+  handle "/sport/formula1/:season/:tournament/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
+  handle "/sport/formula1/:season/:tournament/results", using: "SportMorphDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
+  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
+  handle "/sport/formula1/:season/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results.app"]
+  handle "/sport/formula1/:season/results", using: "SportMorphDataPage", examples: ["/sport/formula1/2020/results"]
+  handle "/sport/formula1/results.app", using: "SportMorphDataPage", examples: ["/sport/formula1/results.app"]
+  handle "/sport/formula1/results", using: "SportMorphDataPage", examples: ["/sport/formula1/results"]
+  handle "/sport/formula1/latest.app", using: "SportMorphDataPage", examples: ["/sport/formula1/latest.app"]
+  handle "/sport/formula1/latest", using: "SportMorphDataPage", examples: ["/sport/formula1/latest"]
+  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportMorphDataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
+  handle "/sport/formula1/constructors-world-championship/standings", using: "SportMorphDataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
+  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
+  handle "/sport/formula1/drivers-world-championship/standings", using: "SportMorphDataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
