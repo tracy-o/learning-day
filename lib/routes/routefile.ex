@@ -427,6 +427,12 @@ defmodule Routes.Routefile do
   handle "/sport/live-guide.app", using: "SportMorphPage", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportMorphPage", examples: ["/sport/live-guide"]
 
+  ## Sport Video Collections
+  handle "/sport/:discipline/video.app", using: "SportMorphVideos", examples: ["/sport/cricket/video.app"]
+  handle "/sport/:discipline/video", using: "SportMorphVideos", examples: ["/sport/cricket/video"]
+  handle "/sport/:discipline/:tournament/video.app", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video.app"]
+  handle "/sport/:discipline/:tournament/video", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video"]
+
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
