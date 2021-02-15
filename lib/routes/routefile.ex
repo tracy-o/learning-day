@@ -356,9 +356,9 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport.amp", using: "SportSimorgh", examples: ["/sport.amp"]
-  handle "/sport.json", using: "SportSimorgh", examples: ["/sport.json"]
-  handle "/sport.app", using: "Sport", examples: ["/sport.app"]
+  handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
+  handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
+  handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
 
   # TODO this matcher picks up routes such as /sport/23354875 rather than being matched in the catchall
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
