@@ -12,7 +12,7 @@ defmodule Belfrage.Transformers.UserSession do
     struct_with_session_state = Struct.add(struct, :private, private)
 
     cond do
-      !personalisation_available?() ->
+      !personalisation_available?(struct.request.host) ->
         then(rest, struct)
 
       match?(%Private{authenticated: true, valid_session: true}, private) ->
@@ -28,8 +28,12 @@ defmodule Belfrage.Transformers.UserSession do
     end
   end
 
-  defp personalisation_available? do
-    @dial.state(:personalisation) && @idcta_flagpole.state()
+  defp personalisation_available?(host) when is_binary(host) do
+    @dial.state(:personalisation) && @idcta_flagpole.state() && String.ends_with?(host, "bbc.co.uk")
+  end
+
+  defp personalisation_available?(_host) do
+    false
   end
 
   defp redirect(struct = %Struct{}) do

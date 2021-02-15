@@ -48,6 +48,8 @@ defmodule Routes.RoutefileMock do
 
   handle("/my/session", using: "MySession", examples: [])
 
+  handle("/my/session/webcore-platform", using: "MySessionWebcorePlatform", examples: [])
+
   handle("/route-allow-headers", using: "SomeLoopAllowHeaders", examples: [])
 
   handle("/format/rewrite/:discipline/av/:team.app", using: "SomeMozartLoop", examples: [])
@@ -58,6 +60,8 @@ defmodule Routes.RoutefileMock do
   handle("/format/rewrite/:discipline/av", using: "SomeLoop", examples: [])
 
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
+
+  handle("/personalisation-in-cascade", using: ["MySessionWebcorePlatform", "SomeMozartLoop"], examples: [])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 

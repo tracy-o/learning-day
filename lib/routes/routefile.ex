@@ -137,6 +137,7 @@ defmodule Routes.Routefile do
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
+  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
@@ -171,8 +172,17 @@ defmodule Routes.Routefile do
   handle "/cbbc/search", using: "Search", examples: ["/cbbc/search"]
   handle "/bitesize/search", using: "Search", examples: ["/bitesize/search"]
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
-
+  handle "/pres-test/new-chwilio", using: "WelshNewSearch", only_on: "test", examples: ["/pres-test/new-chwilio"]
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
+
+  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
+    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+  end
+
+  handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
+    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+    return_404 if: !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+  end
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
@@ -216,6 +226,15 @@ defmodule Routes.Routefile do
     return_404 if: String.length(id) != 8
   end
 
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
   handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-navigation/hasFetcher/true"]

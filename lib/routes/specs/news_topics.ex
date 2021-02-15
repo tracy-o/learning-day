@@ -3,7 +3,7 @@ defmodule Routes.Specs.NewsTopics do
     %{
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
-      platform: Mozart,
+      platform: MozartNews,
       pipeline: ["HTTPredirect", "TrailingSlashRedirector", "NewsTopicsPlatformDiscriminator"],
       query_params_allowlist: ["page"]
     }
