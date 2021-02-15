@@ -5,10 +5,10 @@ defmodule Fixtures.SmokeTestReportOutput do
       excluded_counter: 0,
       failed_tests: [
         %ExUnit.Test{
-          case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
           logs: "",
-          module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-          name: :"test SportHomePage /sport against test bruce-belfrage /sport",
+          module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          name: :"test ScotlandHomePage /scotland against test bruce-belfrage /scotland",
           state:
             {:failed,
              [
@@ -33,34 +33,34 @@ defmodule Fixtures.SmokeTestReportOutput do
                    [file: 'test/support/smoke/assertions.ex', line: 30]},
                   {Support.Smoke.Assertions, :assert_smoke_response, 4,
                    [file: 'test/support/smoke/assertions.ex', line: 13]},
-                  {:"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-                   :"test SportHomePage /sport against test bruce-belfrage /sport", 1,
+                  {:"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+                   :"test ScotlandHomePage /scotland against test bruce-belfrage /scotland", 1,
                    [file: 'test/smoke/smoke_test.ex', line: 25]}
                 ]}
              ]},
           tags: %{
             async: true,
-            case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-            describe: "SportHomePage /sport against test bruce-belfrage",
+            case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            describe: "ScotlandHomePage /scotland against test bruce-belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
-            module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
             platform: Webcore,
             registered: %{},
-            route: "/sport",
-            spec: "SportHomePage",
+            route: "/scotland",
+            spec: "ScotlandHomePage",
             stack: "bruce-belfrage",
-            test: :"test SportHomePage /sport against test bruce-belfrage /sport",
+            test: :"test ScotlandHomePage /scotland against test bruce-belfrage /scotland",
             test_type: :test
           },
           time: 340_896
         },
         %ExUnit.Test{
-          case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
           logs: "",
-          module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-          name: :"test SportHomePage /sport against test cedric-belfrage /sport",
+          module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          name: :"test ScotlandHomePage /scotland against test cedric-belfrage /scotland",
           state:
             {:failed,
              [
@@ -85,34 +85,34 @@ defmodule Fixtures.SmokeTestReportOutput do
                    [file: 'test/support/smoke/assertions.ex', line: 30]},
                   {Support.Smoke.Assertions, :assert_smoke_response, 4,
                    [file: 'test/support/smoke/assertions.ex', line: 13]},
-                  {:"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-                   :"test SportHomePage /sport against test cedric-belfrage /sport", 1,
+                  {:"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+                   :"test ScotlandHomePage /scotland against test cedric-belfrage /scotland", 1,
                    [file: 'test/smoke/smoke_test.ex', line: 25]}
                 ]}
              ]},
           tags: %{
             async: true,
-            case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-            describe: "SportHomePage /sport against test cedric-belfrage",
+            case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            describe: "ScotlandHomePage /scotland against test cedric-belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
-            module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
             platform: Webcore,
             registered: %{},
-            route: "/sport",
-            spec: "SportHomePage",
+            route: "/scotland",
+            spec: "ScotlandHomePage",
             stack: "cedric-belfrage",
-            test: :"test SportHomePage /sport against test cedric-belfrage /sport",
+            test: :"test ScotlandHomePage /scotland against test cedric-belfrage /scotland",
             test_type: :test
           },
           time: 343_589
         },
         %ExUnit.Test{
-          case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
           logs: "",
-          module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-          name: :"test SportHomePage /sport against test belfrage /sport",
+          module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+          name: :"test ScotlandHomePage /scotland against test belfrage /scotland",
           state:
             {:failed,
              [
@@ -137,25 +137,25 @@ defmodule Fixtures.SmokeTestReportOutput do
                    [file: 'test/support/smoke/assertions.ex', line: 30]},
                   {Support.Smoke.Assertions, :assert_smoke_response, 4,
                    [file: 'test/support/smoke/assertions.ex', line: 13]},
-                  {:"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-                   :"test SportHomePage /sport against test belfrage /sport", 1,
+                  {:"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+                   :"test ScotlandHomePage /scotland against test belfrage /scotland", 1,
                    [file: 'test/smoke/smoke_test.ex', line: 25]}
                 ]}
              ]},
           tags: %{
             async: true,
-            case: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
-            describe: "SportHomePage /sport against test belfrage",
+            case: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            describe: "ScotlandHomePage /scotland against test belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
-            module: :"Elixir.Belfrage.SmokeTest.SportHomePage.14cda76cea8443e89dd9c2be6cd73793",
+            module: :"Elixir.Belfrage.SmokeTest.ScotlandHomePage.14cda76cea8443e89dd9c2be6cd73793",
             platform: Webcore,
             registered: %{},
-            route: "/sport",
-            spec: "SportHomePage",
+            route: "/scotland",
+            spec: "ScotlandHomePage",
             stack: "belfrage",
-            test: :"test SportHomePage /sport against test belfrage /sport",
+            test: :"test ScotlandHomePage /scotland against test belfrage /scotland",
             test_type: :test
           },
           time: 482_501

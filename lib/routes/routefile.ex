@@ -157,7 +157,7 @@ defmodule Routes.Routefile do
   handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
 
-  handle "/sport", using: "SportHomePage", only_on: "test", examples: ["/sport"]
+  handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
@@ -314,6 +314,9 @@ defmodule Routes.Routefile do
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian", "/russian/example-123", "/russian/example-123.amp", "/russian/example-123.json"]
+  handle "/serbian.amp", using: "WorldServiceSerbian", examples: ["/serbian.amp"]
+  handle "/serbian.json", using: "WorldServiceSerbian", examples: ["/serbian.json"]
+  handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian", "/serbian/example-123", "/serbian/example-123.amp", "/serbian/example-123.json"]
   handle "/sinhala.amp", using: "WorldServiceSinhala", examples: ["/sinhala.amp"]
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala", "/sinhala/example-123", "/sinhala/example-123.amp", "/sinhala/example-123.json"]
@@ -341,6 +344,8 @@ defmodule Routes.Routefile do
   handle "/turkce.amp", using: "WorldServiceTurkce", examples: ["/turkce.amp"]
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce", "/turkce/example-123", "/turkce/example-123.amp", "/turkce/example-123.json"]
+  handle "/ukchina.amp", using: "WorldServiceUkChina", examples: [{"/ukchina.amp", 302}]
+  handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
   handle "/ukrainian.amp", using: "WorldServiceUkrainian", examples: ["/ukrainian.amp"]
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian", "/ukrainian/example-123", "/ukrainian/example-123.amp", "/ukrainian/example-123.json"]
@@ -356,6 +361,9 @@ defmodule Routes.Routefile do
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba", "/yoruba/example-123", "/yoruba/example-123.amp", "/yoruba/example-123.json"]
+  handle "/zhongwen.amp", using: "WorldServiceZhongwen", examples: [{"/zhongwen.amp", 302}]
+  handle "/zhongwen.json", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/simp.json", "/zhongwen/simp.amp"]
+  handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen", "/zhongwen/example-123", "/zhongwen/example-123.amp", "/zhongwen/example-123.json"]
 
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
@@ -367,19 +375,50 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
+  handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
+  handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
+  handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
+
+  # TODO this matcher picks up routes such as /sport/23354875 rather than being matched in the catchall
   handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
 
   handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
 
   handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
 
-  # Route for testing only, disabling examples to avoid smoke test failures,
-  # example route: "/comments/embed/news/business-1234567"
+  # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle "/my/session", using: "MySession", only_on: "test", examples: []
+
+  handle "/scotland/articles/*_any", using: "ScotlandArticles", examples: []
+  # TODO this may not be an actual required route
+  handle "/scotland/*_any", using: "Scotland", examples: []
+  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
+  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
+  handle "/archive/articles/*_any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
+  # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
+  handle "/archive/*_any", using: "Archive", examples: []
+  # newsrounds routes appear to be using morphRouter
+  handle "/newsround.amp", using: "Newsround", examples: []
+  handle "/newsround.json", using: "Newsround", examples: []
+  handle "/newsround/*_any", using: "Newsround", examples: []
+  handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
+  handle "/wide/*_any", using: "Wide", examples: []
+  handle "/archivist/*_any", using: "Archivist", examples: []
+  handle "/weather/*_any", using: "Weather", examples: ["/weather", "/weather/2650225"]
+  handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
+  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
+  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+  # TODO /proms/extra
+  handle "/proms/*_any", using: "Proms", examples: []
+  # TODO issue with routes such as /sport/cycling/19690053 being matched to the sport/:discipline matcher
+  handle "/sport/*_any", using: "Sport", examples: ["/sport"]
+  # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
+  handle "/news/*_any", using: "News", examples: ["/news"]
+  handle "/music", using: "Music", examples: []
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
