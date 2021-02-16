@@ -227,6 +227,10 @@ defmodule Routes.Routefile do
   end
 
   # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:id.app", using: "SportMorphVideos", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id", using: "SportMorphVideos", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
+
+  # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
