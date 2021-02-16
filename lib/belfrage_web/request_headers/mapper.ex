@@ -5,10 +5,20 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     country: %{edge: "x-bbc-edge-country", varnish: "x-country"},
     host: %{edge: "x-bbc-edge-host", forwarded: "x-forwarded-host", http: "host"},
     is_uk: %{edge: "x-bbc-edge-isuk", varnish: "x-ip_is_uk_combined"},
+    is_advertise: %{edge: "x-bbc-edge-isuk", varnish: "x-ip_is_advertise_combined"},
     scheme: %{edge: "x-bbc-edge-scheme"},
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
     origin_simulator: %{origin_simulator: "origin-simulator"},
-    req_svc_chain: %{req_svc_chain: "req-svc-chain"}
+    req_svc_chain: %{req_svc_chain: "req-svc-chain"},
+    x_cdn: %{x_cdn: "x-cdn"},
+    x_candy_audience: %{x_candy_audience: "x-candy-audience"},
+    x_candy_override: %{x_candy_override: "x-candy-override"},
+    x_candy_preview_guid: %{x_candy_preview_guid: "x-candy-preview-guid"},
+    x_morph_env: %{x_morph_env: "x-morph-env"},
+    x_use_fixture: %{x_use_fixture: "x-use-fixture"},
+    cookie_cps_language: %{cookie_cps_language: "cookie-cps-language"},
+    cookie_cps_chinese: %{cookie_cps_chinese: "cookie-cps-chinese"},
+    cookie_cps_serbian: %{cookie_cps_serbian: "cookie-cps-serbian"}
   }
 
   def map(req_headers) do

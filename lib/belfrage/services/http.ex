@@ -77,9 +77,7 @@ defmodule Belfrage.Services.HTTP do
     %{
       "x-bbc-edge-cache" => "1",
       "x-bbc-edge-country" => request.country,
-      "x-bbc-edge-host" => request.host,
-      "x-bbc-edge-isuk" => is_uk(request.is_uk),
-      "x-bbc-edge-scheme" => scheme(request.scheme)
+      "x-bbc-edge-isuk" => is_uk(request.is_uk)
     }
   end
 
@@ -87,7 +85,8 @@ defmodule Belfrage.Services.HTTP do
     %{
       "x-country" => request.country,
       "x-forwarded-host" => request.host,
-      "x-ip_is_uk_combined" => is_uk(request.is_uk)
+      "x-ip_is_uk_combined" => is_uk(request.is_uk),
+      "x-ip_is_advertise_combined" => is_uk(request.is_advertise)
     }
   end
 
@@ -95,12 +94,24 @@ defmodule Belfrage.Services.HTTP do
     %{
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
-      "req-svc-chain" => request.req_svc_chain
+      "req-svc-chain" => request.req_svc_chain,
+      "x-bbc-edge-host" => request.host,
+      "x-bbc-edge-scheme" => scheme(request.scheme),
+      "x-cdn" => request.x_cdn,
+      "x-candy-audience" => request.x_candy_audience,
+      "x-candy-override" => request.x_candy_override,
+      "x-candy-preview-guid" => request.x_candy_preview_guid,
+      "x-morph-env" => request.x_morph_env,
+      "x-use-fixture" => request.x_use_fixture,
+      "cookie-cps-language" => request.cookie_cps_language,
+      "cookie-cps-chinese" => request.cookie_cps_chinese,
+      "cookie-cps-serbian" => request.cookie_cps_serbian
     }
   end
 
   defp scheme(:https), do: "https"
   defp scheme(:http), do: "http"
+  defp scheme(_), do: "https"
 
   defp is_uk(true), do: "yes"
   defp is_uk(_), do: nil

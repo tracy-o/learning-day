@@ -13,6 +13,7 @@ defmodule Belfrage.Struct.Request do
     :scheme,
     :host,
     :is_uk,
+    :is_advertise,
     :language,
     :xray_trace_id,
     :accept_encoding,
@@ -26,7 +27,16 @@ defmodule Belfrage.Struct.Request do
     raw_headers: %{},
     query_params: %{},
     path_params: %{},
-    cookies: %{}
+    cookies: %{},
+    x_cdn: %{},
+    x_candy_audience: %{},
+    x_candy_override: %{},
+    x_candy_preview_guid: %{},
+    x_morph_env: %{},
+    x_use_fixture: %{},
+    cookie_cps_language: %{},
+    cookie_cps_chinese: %{},
+    cookie_cps_serbian: %{}
   ]
 
   @type t :: %__MODULE__{}

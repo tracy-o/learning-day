@@ -26,8 +26,18 @@ defmodule BelfrageWeb.StructAdapter do
         xray_trace_id: xray_trace_id,
         accept_encoding: accept_encoding(conn),
         is_uk: bbc_headers.is_uk,
+        is_advertise: bbc_headers.is_advertise,
         req_svc_chain: bbc_headers.req_svc_chain,
-        request_id: conn.private.request_id
+        request_id: conn.private.request_id,
+        x_cdn: bbc_headers.x_cdn,
+        x_candy_audience: bbc_headers.x_candy_audience,
+        x_candy_override: bbc_headers.x_candy_override,
+        x_candy_preview_guid: bbc_headers.x_candy_preview_guid,
+        x_morph_env: bbc_headers.x_morph_env,
+        x_use_fixture: bbc_headers.x_use_fixture,
+        cookie_cps_language: bbc_headers.cookie_cps_language,
+        cookie_cps_chinese: bbc_headers.cookie_cps_chinese,
+        cookie_cps_serbian: bbc_headers.cookie_cps_serbian
       },
       private: %Private{
         loop_id: loop_id,

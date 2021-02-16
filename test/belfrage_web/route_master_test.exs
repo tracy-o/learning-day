@@ -40,12 +40,22 @@ defmodule BelfrageWeb.RouteMasterTest do
       scheme: "",
       host: "",
       is_uk: false,
+      is_advertise: false,
       replayed_traffic: nil,
       origin_simulator: origin_simulator,
       varnish: "",
       cache: "",
       cdn: true,
-      req_svc_chain: "GTM,BELFRAGE"
+      req_svc_chain: "GTM,BELFRAGE",
+      x_cdn: nil,
+      x_candy_audience: nil,
+      x_candy_override: nil,
+      x_candy_preview_guid: nil,
+      x_morph_env: nil,
+      x_use_fixture: nil,
+      cookie_cps_language: nil,
+      cookie_cps_chinese: nil,
+      cookie_cps_serbian: nil
     })
   end
 
@@ -208,12 +218,22 @@ defmodule BelfrageWeb.RouteMasterTest do
           scheme: "",
           host: "",
           is_uk: false,
+          is_advertise: false,
           replayed_traffic: nil,
           origin_simulator: nil,
           varnish: "",
           cache: false,
           cdn: false,
-          req_svc_chain: "GTM,BELFRAGE"
+          req_svc_chain: "GTM,BELFRAGE",
+          x_cdn: nil,
+          x_candy_audience: nil,
+          x_candy_override: nil,
+          x_candy_preview_guid: nil,
+          x_morph_env: nil,
+          x_use_fixture: nil,
+          cookie_cps_language: nil,
+          cookie_cps_chinese: nil,
+          cookie_cps_serbian: nil
         })
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -481,12 +501,22 @@ defmodule BelfrageWeb.RouteMasterTest do
           scheme: "",
           host: "",
           is_uk: false,
+          is_advertise: false,
           replayed_traffic: "true",
           origin_simulator: nil,
           varnish: "",
           cache: "",
           cdn: false,
-          req_svc_chain: "BELFRAGE"
+          req_svc_chain: "BELFRAGE",
+          x_cdn: nil,
+          x_candy_audience: nil,
+          x_candy_override: nil,
+          x_candy_preview_guid: nil,
+          x_morph_env: nil,
+          x_use_fixture: nil,
+          cookie_cps_language: nil,
+          cookie_cps_chinese: nil,
+          cookie_cps_serbian: nil
         })
         |> put_private(:production_environment, "test")
         |> put_private(:preview_mode, "off")
@@ -541,12 +571,22 @@ defmodule BelfrageWeb.RouteMasterTest do
           scheme: "",
           host: "",
           is_uk: false,
+          is_advertise: false,
           replayed_traffic: "true",
           origin_simulator: nil,
           varnish: "",
           cache: "",
           cdn: false,
-          req_svc_chain: "BELFRAGE"
+          req_svc_chain: "BELFRAGE",
+          x_cdn: nil,
+          x_candy_audience: nil,
+          x_candy_override: nil,
+          x_candy_preview_guid: nil,
+          x_morph_env: nil,
+          x_use_fixture: nil,
+          cookie_cps_language: nil,
+          cookie_cps_chinese: nil,
+          cookie_cps_serbian: nil
         })
         |> put_private(:production_environment, "live")
         |> put_private(:preview_mode, "off")

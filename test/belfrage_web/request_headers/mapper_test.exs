@@ -13,10 +13,20 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: nil, varnish: nil},
+                 is_advertise: %{edge: nil, varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  origin_simulator: %{origin_simulator: nil},
                  scheme: %{edge: nil},
-                 req_svc_chain: %{req_svc_chain: nil}
+                 req_svc_chain: %{req_svc_chain: nil},
+                 x_cdn: %{x_cdn: nil},
+                 x_candy_audience: %{x_candy_audience: nil},
+                 x_candy_override: %{x_candy_override: nil},
+                 x_candy_preview_guid: %{x_candy_preview_guid: nil},
+                 x_morph_env: %{x_morph_env: nil},
+                 x_use_fixture: %{x_use_fixture: nil},
+                 cookie_cps_language: %{cookie_cps_language: nil},
+                 cookie_cps_chinese: %{cookie_cps_chinese: nil},
+                 cookie_cps_serbian: %{cookie_cps_serbian: nil}
                }
     end
 
@@ -28,9 +38,19 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-isuk", "yes"},
         {"x-country", "gb"},
         {"x-ip_is_uk_combined", "yes"},
+        {"x-ip_is_advertise_combined", "yes"},
         {"replayed-traffic", "true"},
         {"origin-simulator", "true"},
-        {"req-svc-chain", "SomeTrafficManager"}
+        {"req-svc-chain", "SomeTrafficManager"},
+        {"x-cdn", "1"},
+        {"x-candy-audience", "1"},
+        {"x-candy-override", "1"},
+        {"x-candy-preview-guid", "1"},
+        {"x-morph-env", "1"},
+        {"x-use-fixture", "1"},
+        {"cookie-cps-language", "1"},
+        {"cookie-cps-chinese", "1"},
+        {"cookie-cps-serbian", "1"}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -40,10 +60,20 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: "**", varnish: "gb"},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: "yes", varnish: "yes"},
+                 is_advertise: %{edge: "yes", varnish: "yes"},
                  replayed_traffic: %{replayed_traffic: "true"},
                  origin_simulator: %{origin_simulator: "true"},
                  scheme: %{edge: nil},
-                 req_svc_chain: %{req_svc_chain: "SomeTrafficManager"}
+                 req_svc_chain: %{req_svc_chain: "SomeTrafficManager"},
+                 x_cdn: %{x_cdn: "1"},
+                 x_candy_audience: %{x_candy_audience: "1"},
+                 x_candy_override: %{x_candy_override: "1"},
+                 x_candy_preview_guid: %{x_candy_preview_guid: "1"},
+                 x_morph_env: %{x_morph_env: "1"},
+                 x_use_fixture: %{x_use_fixture: "1"},
+                 cookie_cps_language: %{cookie_cps_language: "1"},
+                 cookie_cps_chinese: %{cookie_cps_chinese: "1"},
+                 cookie_cps_serbian: %{cookie_cps_serbian: "1"}
                }
     end
 
@@ -56,7 +86,16 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-bbc-edge-isuk", ""},
         {"replayed-traffic", ""},
         {"origin-simulator", ""},
-        {"req-svc-chain", ""}
+        {"req-svc-chain", ""},
+        {"x-cdn", ""},
+        {"x-candy-audience", ""},
+        {"x-candy-override", ""},
+        {"x-candy-preview-guid", ""},
+        {"x-morph-env", ""},
+        {"x-use-fixture", ""},
+        {"cookie-cps-language", ""},
+        {"cookie-cps-chinese", ""},
+        {"cookie-cps-serbian", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -66,10 +105,20 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  country: %{edge: nil, varnish: nil},
                  host: %{edge: nil, forwarded: nil, http: nil},
                  is_uk: %{edge: nil, varnish: nil},
+                 is_advertise: %{edge: nil, varnish: nil},
                  replayed_traffic: %{replayed_traffic: nil},
                  origin_simulator: %{origin_simulator: nil},
                  scheme: %{edge: nil},
-                 req_svc_chain: %{req_svc_chain: nil}
+                 req_svc_chain: %{req_svc_chain: nil},
+                 x_cdn: %{x_cdn: nil},
+                 x_candy_audience: %{x_candy_audience: nil},
+                 x_candy_override: %{x_candy_override: nil},
+                 x_candy_preview_guid: %{x_candy_preview_guid: nil},
+                 x_morph_env: %{x_morph_env: nil},
+                 x_use_fixture: %{x_use_fixture: nil},
+                 cookie_cps_language: %{cookie_cps_language: nil},
+                 cookie_cps_chinese: %{cookie_cps_chinese: nil},
+                 cookie_cps_serbian: %{cookie_cps_serbian: nil}
                }
     end
   end
