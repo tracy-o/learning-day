@@ -117,6 +117,38 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
   end
 
+  describe "calling handle with only_on option and do block" do
+    test "when the environments do not match it will return a 404" do
+      expect_belfrage_not_called()
+      not_found_page = Application.get_env(:belfrage, :not_found_page)
+
+      Belfrage.Helpers.FileIOMock
+      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+
+      conn =
+        conn(:get, "/only-on-with-block")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> RoutefileMock.call([])
+
+      assert conn.status == 404
+    end
+
+    test "when the only_on allows and a block is specified it will get used" do
+      conn =
+        conn(:get, "/only-on-with-block")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 200
+      assert conn.resp_body == "block run"
+    end
+  end
+
   describe "calling redirect" do
     test "when the redirect matches will return the location and status" do
       expect_belfrage_not_called()
