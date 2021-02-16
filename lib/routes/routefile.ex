@@ -422,14 +422,14 @@ defmodule Routes.Routefile do
   end
 
   ## Sport Top 4
-  handle "/sport/alpha/top-4", using: "SportMorphPage", examples: ["/sport/alpha/top-4"]
-  handle "/sport/top-4", using: "SportMorphPage", examples: ["/sport/top-4"]
+  handle "/sport/alpha/top-4", using: "Sport", examples: ["/sport/alpha/top-4"]
+  handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
 
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
-  handle "/sport/live-guide.app", using: "SportMorphPage", examples: ["/sport/live-guide.app"]
-  handle "/sport/live-guide", using: "SportMorphPage", examples: ["/sport/live-guide"]
-  handle "/sport/live-guide/*_any", using: "SportMorphPage", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+  handle "/sport/live-guide.app", using: "Sport", examples: ["/sport/live-guide.app"]
+  handle "/sport/live-guide", using: "Sport", examples: ["/sport/live-guide"]
+  handle "/sport/live-guide/*_any", using: "Sport", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
   handle "/sport/:discipline/video.app", using: "SportMorphVideos", examples: ["/sport/cricket/video.app"]
