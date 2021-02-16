@@ -26,7 +26,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_use_fixture: %{x_use_fixture: nil},
                  cookie_cps_language: %{cookie_cps_language: nil},
                  cookie_cps_chinese: %{cookie_cps_chinese: nil},
-                 cookie_cps_serbian: %{cookie_cps_serbian: nil}
+                 cookie_cps_serbian: %{cookie_cps_serbian: nil},
+                 origin: %{origin: nil}
                }
     end
 
@@ -73,7 +74,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_use_fixture: %{x_use_fixture: "1"},
                  cookie_cps_language: %{cookie_cps_language: "1"},
                  cookie_cps_chinese: %{cookie_cps_chinese: "1"},
-                 cookie_cps_serbian: %{cookie_cps_serbian: "1"}
+                 cookie_cps_serbian: %{cookie_cps_serbian: "1"},
+                 origin: %{origin: nil}
                }
     end
 
@@ -95,7 +97,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-use-fixture", ""},
         {"cookie-cps-language", ""},
         {"cookie-cps-chinese", ""},
-        {"cookie-cps-serbian", ""}
+        {"cookie-cps-serbian", ""},
+        {"origin", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -118,7 +121,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_use_fixture: %{x_use_fixture: nil},
                  cookie_cps_language: %{cookie_cps_language: nil},
                  cookie_cps_chinese: %{cookie_cps_chinese: nil},
-                 cookie_cps_serbian: %{cookie_cps_serbian: nil}
+                 cookie_cps_serbian: %{cookie_cps_serbian: nil},
+                 origin: %{origin: nil}
                }
     end
   end

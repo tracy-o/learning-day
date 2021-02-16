@@ -69,4 +69,5 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def cookie_cps_language(headers, _cache), do: headers[:cookie_cps_language]
   def cookie_cps_chinese(headers, _cache), do: headers[:cookie_cps_chinese]
   def cookie_cps_serbian(headers, _cache), do: headers[:cookie_cps_serbian]
+  def origin(headers, _cache), do: headers[:origin]
 end

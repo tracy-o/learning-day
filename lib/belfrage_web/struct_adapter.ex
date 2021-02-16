@@ -37,7 +37,8 @@ defmodule BelfrageWeb.StructAdapter do
         x_use_fixture: bbc_headers.x_use_fixture,
         cookie_cps_language: bbc_headers.cookie_cps_language,
         cookie_cps_chinese: bbc_headers.cookie_cps_chinese,
-        cookie_cps_serbian: bbc_headers.cookie_cps_serbian
+        cookie_cps_serbian: bbc_headers.cookie_cps_serbian,
+        origin: bbc_headers.origin
       },
       private: %Private{
         loop_id: loop_id,
