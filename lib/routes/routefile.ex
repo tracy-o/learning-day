@@ -410,15 +410,15 @@ defmodule Routes.Routefile do
   end
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:id.app", using: "SportMorphVideos", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportMorphVideos", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id", using: "SportMediaAssetPage", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
   ## Sport Top 4
@@ -432,10 +432,10 @@ defmodule Routes.Routefile do
   handle "/sport/live-guide/*_any", using: "Sport", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
-  handle "/sport/:discipline/video.app", using: "SportMorphVideos", examples: ["/sport/cricket/video.app"]
-  handle "/sport/:discipline/video", using: "SportMorphVideos", examples: ["/sport/cricket/video"]
-  handle "/sport/:discipline/:tournament/video.app", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video.app"]
-  handle "/sport/:discipline/:tournament/video", using: "SportMorphVideos", examples: ["/sport/football/fa-cup/video"]
+  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
+  handle "/sport/:discipline/video", using: "SportMediaAssetPage", examples: ["/sport/cricket/video"]
+  handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
+  handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
   ## Sport Stories with Vanity Urls 
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]

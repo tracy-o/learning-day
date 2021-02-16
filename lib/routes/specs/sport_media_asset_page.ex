@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportMorphVideos do
+defmodule Routes.Specs.SportMediaAssetPage do
   def specs do
     %{
       owner: "#help-sport",
