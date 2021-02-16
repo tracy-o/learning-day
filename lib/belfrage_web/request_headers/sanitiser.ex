@@ -29,6 +29,10 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def is_uk(%{varnish: "yes"}, false), do: true
   def is_uk(_headers, _cache), do: false
 
+  def is_advertise(%{edge: "yes"}, true), do: true
+  def is_advertise(%{varnish: "yes"}, false), do: true
+  def is_advertise(_headers, _cache), do: false
+
   def scheme(headers, _cache) do
     headers[:edge]
     |> to_string()
@@ -55,4 +59,14 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
 
   defp edge(headers, true), do: headers[:edge]
   defp edge(_headers, false), do: nil
+
+  def x_cdn(headers, _cache), do: headers[:x_cdn]
+  def x_candy_audience(headers, _cache), do: headers[:x_candy_audience]
+  def x_candy_override(headers, _cache), do: headers[:x_candy_override]
+  def x_candy_preview_guid(headers, _cache), do: headers[:x_candy_preview_guid]
+  def x_morph_env(headers, _cache), do: headers[:x_morph_env]
+  def x_use_fixture(headers, _cache), do: headers[:x_use_fixture]
+  def cookie_cps_language(headers, _cache), do: headers[:cookie_cps_language]
+  def cookie_cps_chinese(headers, _cache), do: headers[:cookie_cps_chinese]
+  def cookie_cps_serbian(headers, _cache), do: headers[:cookie_cps_serbian]
 end
