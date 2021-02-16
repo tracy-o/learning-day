@@ -19,7 +19,8 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     cookie_cps_language: %{cookie_cps_language: "cookie-cps-language"},
     cookie_cps_chinese: %{cookie_cps_chinese: "cookie-cps-chinese"},
     cookie_cps_serbian: %{cookie_cps_serbian: "cookie-cps-serbian"},
-    origin: %{origin: "origin"}
+    origin: %{origin: "origin"},
+    referer: %{referer: "referer"}
   }
 
   def map(req_headers) do

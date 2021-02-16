@@ -106,7 +106,8 @@ defmodule Belfrage.Services.HTTP do
       "cookie-cps-language" => request.cookie_cps_language,
       "cookie-cps-chinese" => request.cookie_cps_chinese,
       "cookie-cps-serbian" => request.cookie_cps_serbian,
-      "origin" => request.origin
+      "origin" => request.origin,
+      "referer" => request.referer
     }
   end
 

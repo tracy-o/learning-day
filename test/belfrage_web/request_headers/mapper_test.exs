@@ -27,7 +27,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_cps_language: %{cookie_cps_language: nil},
                  cookie_cps_chinese: %{cookie_cps_chinese: nil},
                  cookie_cps_serbian: %{cookie_cps_serbian: nil},
-                 origin: %{origin: nil}
+                 origin: %{origin: nil},
+                 referer: %{referer: nil}
                }
     end
 
@@ -51,7 +52,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-use-fixture", "1"},
         {"cookie-cps-language", "1"},
         {"cookie-cps-chinese", "1"},
-        {"cookie-cps-serbian", "1"}
+        {"cookie-cps-serbian", "1"},
+        {"origin", "https://www.test.bbc.co.uk"},
+        {"referer", "https://www.test.bbc.co.uk/page"}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -75,7 +78,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_cps_language: %{cookie_cps_language: "1"},
                  cookie_cps_chinese: %{cookie_cps_chinese: "1"},
                  cookie_cps_serbian: %{cookie_cps_serbian: "1"},
-                 origin: %{origin: nil}
+                 origin: %{origin: "https://www.test.bbc.co.uk"},
+                 referer: %{referer: "https://www.test.bbc.co.uk/page"}
                }
     end
 
@@ -98,7 +102,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"cookie-cps-language", ""},
         {"cookie-cps-chinese", ""},
         {"cookie-cps-serbian", ""},
-        {"origin", ""}
+        {"origin", ""},
+        {"referer", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -122,7 +127,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_cps_language: %{cookie_cps_language: nil},
                  cookie_cps_chinese: %{cookie_cps_chinese: nil},
                  cookie_cps_serbian: %{cookie_cps_serbian: nil},
-                 origin: %{origin: nil}
+                 origin: %{origin: nil},
+                 referer: %{referer: nil}
                }
     end
   end

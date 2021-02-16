@@ -37,7 +37,8 @@ defmodule Belfrage.Struct.Request do
     cookie_cps_language: %{},
     cookie_cps_chinese: %{},
     cookie_cps_serbian: %{},
-    origin: nil
+    origin: nil,
+    referer: nil
   ]
 
   @type t :: %__MODULE__{}
