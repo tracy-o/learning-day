@@ -206,7 +206,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/articles/:id", using: "StorytellingPage", examples: ["/news/articles/crkxdvxzwxko", "/news/articles/c3wmq4d1y3wo"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]+o$/)
   end
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
