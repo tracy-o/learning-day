@@ -460,8 +460,9 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/teams", using: "SportMorphStoryPage", examples: ["/sport/rugby-union/teams"]
 
   ## Sport Manual Indexes
+  # handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
   handle "/sport.app", using: "SportMorphIndex", examples: ["/sport.app"]
-  # handle "/sport", using: "SportMorphIndex", examples: ["/sport"] # this one clashes with the SportHomePage handler
+  handle "/sport", using: "SportMorphIndex", examples: ["/sport"]
   handle "/sport/africa.app", using: "SportMorphIndex", examples: ["/sport/africa.app"]
   handle "/sport/africa", using: "SportMorphIndex", examples: ["/sport/africa"]
   handle "/sport/american-football.app", using: "SportMorphIndex", examples: ["/sport/american-football.app"]
@@ -655,9 +656,9 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
-  handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
-  handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
+  # AMP/JSON are needed for stories
+  # handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
+  # handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
 
   handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
 
