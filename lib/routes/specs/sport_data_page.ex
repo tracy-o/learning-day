@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportMorphStoryPage do
+defmodule Routes.Specs.SportDataPage do
   def specs do
     %{
       owner: "#help-sport",
