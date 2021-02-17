@@ -421,6 +421,11 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
+  ## Sport Internal Tools
+  handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
+  handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
+  handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
+
   ## Sport Top 4
   handle "/sport/alpha/top-4", using: "Sport", examples: ["/sport/alpha/top-4"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
