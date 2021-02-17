@@ -421,6 +421,8 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
+  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
+
   ## Sport Internal Tools
   handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
   handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
