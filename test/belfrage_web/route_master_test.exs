@@ -55,7 +55,9 @@ defmodule BelfrageWeb.RouteMasterTest do
       x_use_fixture: nil,
       cookie_cps_language: nil,
       cookie_cps_chinese: nil,
-      cookie_cps_serbian: nil
+      cookie_cps_serbian: nil,
+      origin: nil,
+      referer: nil
     })
   end
 
@@ -233,7 +235,9 @@ defmodule BelfrageWeb.RouteMasterTest do
           x_use_fixture: nil,
           cookie_cps_language: nil,
           cookie_cps_chinese: nil,
-          cookie_cps_serbian: nil
+          cookie_cps_serbian: nil,
+          origin: nil,
+          referer: nil
         })
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -516,7 +520,9 @@ defmodule BelfrageWeb.RouteMasterTest do
           x_use_fixture: nil,
           cookie_cps_language: nil,
           cookie_cps_chinese: nil,
-          cookie_cps_serbian: nil
+          cookie_cps_serbian: nil,
+          origin: nil,
+          referer: nil
         })
         |> put_private(:production_environment, "test")
         |> put_private(:preview_mode, "off")
@@ -586,7 +592,9 @@ defmodule BelfrageWeb.RouteMasterTest do
           x_use_fixture: nil,
           cookie_cps_language: nil,
           cookie_cps_chinese: nil,
-          cookie_cps_serbian: nil
+          cookie_cps_serbian: nil,
+          origin: nil,
+          referer: nil
         })
         |> put_private(:production_environment, "live")
         |> put_private(:preview_mode, "off")

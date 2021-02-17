@@ -18,7 +18,9 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     x_use_fixture: %{x_use_fixture: "x-use-fixture"},
     cookie_cps_language: %{cookie_cps_language: "cookie-cps-language"},
     cookie_cps_chinese: %{cookie_cps_chinese: "cookie-cps-chinese"},
-    cookie_cps_serbian: %{cookie_cps_serbian: "cookie-cps-serbian"}
+    cookie_cps_serbian: %{cookie_cps_serbian: "cookie-cps-serbian"},
+    origin: %{origin: "origin"},
+    referer: %{referer: "referer"}
   }
 
   def map(req_headers) do
