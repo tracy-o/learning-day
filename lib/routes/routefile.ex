@@ -656,10 +656,6 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
-  # AMP/JSON are needed for stories
-  # handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
-  # handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
-
   handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
 
   handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"]
@@ -744,6 +740,34 @@ defmodule Routes.Routefile do
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
   # Catch all
+
+  ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id.json", using: "SportAmp", examples: ["/sport/50562296.json?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id.app", using: "SportStoryPage", examples: ["/sport/50562296.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id", using: "SportStoryPage", examples: ["/sport/50562296?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  ## Sport Stories (with discipline) - all use query string params in example URL to use live data in Mozart
+  handle "/sport/:discipline/:id.amp", using: "SportAmp", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id.json", using: "SportAmp", examples: ["/sport/football/56064289.json?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/football/56064289.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
 
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
