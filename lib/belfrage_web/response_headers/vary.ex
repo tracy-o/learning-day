@@ -21,19 +21,19 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def vary_headers(request, private, cdn?)
 
-  def vary_headers(request, %Private{headers_allowlist: []}, false) do
-    base_headers(request) |> IO.iodata_to_binary()
+  def vary_headers(request, %Private{headers_allowlist: [], platform: platform}, false) do
+    base_headers(request, platform) |> IO.iodata_to_binary()
   end
 
-  def vary_headers(request, %Private{headers_allowlist: list}, false) do
-    [base_headers(request), allow_headers(list)] |> IO.iodata_to_binary()
+  def vary_headers(request, %Private{headers_allowlist: list, platform: platform}, false) do
+    [base_headers(request, platform), allow_headers(list)] |> IO.iodata_to_binary()
   end
 
   def vary_headers(_request, _private, true), do: "Accept-Encoding"
 
   def disallow_headers(), do: @disallow_headers
 
-  defp base_headers(request) do
+  defp base_headers(request, platform) do
     [
       "Accept-Encoding",
       ?,,
@@ -43,7 +43,9 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
       ?,,
       is_uk(request.edge_cache?),
       ?,,
-      "X-BBC-Edge-Scheme"
+      "X-BBC-Edge-Scheme",
+      ?,,
+      adverts_conditional(request.edge_cache?, platform)
     ]
   end
 
@@ -57,4 +59,10 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   defp is_uk(true), do: "X-BBC-Edge-IsUK"
   defp is_uk(false), do: "X-IP_Is_UK_Combined"
+
+  # TODO Remove duplication of headers - so commenting out for now
+  # TODO Sort headers and also allow these to be specified as part of route/platform
+  # defp adverts_conditional(true, :"Elixir.Simorgh"), do: "X-BBC-Edge-IsUK"
+  defp adverts_conditional(false, :"Elixir.Simorgh"), do: "X-Ip_is_advertise_combined"
+  defp adverts_conditional(_, _), do: ""
 end
