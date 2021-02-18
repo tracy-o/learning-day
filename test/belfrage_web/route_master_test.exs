@@ -4,10 +4,7 @@ defmodule BelfrageWeb.RouteMasterTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
-  alias Routes.RoutefileMock
-  alias Routes.RoutefileOnlyOnMock
-
-  @only_on_routefile_location Application.get_env(:belfrage, :routefile_location)
+  alias Routes.{RoutefileMock, RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
 
   @struct_with_html_response %Struct{
     response: %Struct.Response{
@@ -98,17 +95,8 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
   end
 
-  describe "calling handle with only_on option when the environments match" do
-    setup do
-      production_environment = Application.get_env(:belfrage, :production_environment)
-
-      Application.put_env(:belfrage, :production_environment, "some_environment")
-      Code.compile_file(@only_on_routefile_location)
-
-      on_exit(fn -> Application.put_env(:belfrage, :production_environment, production_environment) end)
-    end
-
-    test "it will yield the request" do
+  describe "calling handle with only_on option" do
+    test "when the environments match, will yield request" do
       mock_handle_route("/only-on", "SomeLoop")
 
       conn =
@@ -122,7 +110,37 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 200
     end
 
-    test "with a block, it will yield request and the block will get used" do
+    test "when the environments do not match, without other matching route will return a 404" do
+      conn =
+        conn(:get, "/only-on")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileOnlyOnMultiEnvMock.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+    end
+
+    test "when the environments do not match, will match same route (if) from other environment" do
+      mock_handle_route("/only-on-multi-env", "SomeMozartLoop")
+
+      conn =
+        conn(:get, "/only-on-multi-env")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileOnlyOnMultiEnvMock.call([])
+
+      assert conn.status == 200
+      assert conn.resp_body == "<p>Basic HTML response</p>"
+    end
+  end
+
+  describe "calling handle with only_on option with a block" do
+    test "when the environments match, will yield request and execute block" do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
@@ -134,67 +152,27 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 200
       assert conn.resp_body == "block run"
     end
-  end
 
-  describe "calling handle with only_on option when the environment do not match" do
-    setup do
-      production_environment = Application.get_env(:belfrage, :production_environment)
-
-      Application.put_env(:belfrage, :production_environment, "some_other_environment")
-      Code.compiler_options(debug_info: false)
-      Code.compile_file(@only_on_routefile_location)
-
-      on_exit(fn -> Application.put_env(:belfrage, :production_environment, production_environment) end)
-    end
-
-    test "no other matching route will return a 404" do
-      conn =
-        conn(:get, "/only-on")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
-        |> RoutefileOnlyOnMock.call([])
-
-      assert conn.status == 404
-      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
-    end
-
-    test "with a do block and no other matching route will return a 404" do
+    test "when the environments do not match, without other matching route will return a 404" do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_other_environment")
         |> put_private(:preview_mode, "off")
-        |> RoutefileOnlyOnMock.call([])
+        |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
     end
 
-    test "it matches route (if) from other environment" do
-      mock_handle_route("/only-on-multi-env", "SomeMozartLoop")
-
-      conn =
-        conn(:get, "/only-on-multi-env")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
-        |> RoutefileOnlyOnMock.call([])
-
-      assert conn.status == 200
-      assert conn.resp_body == "<p>Basic HTML response</p>"
-    end
-
-    test "with a block, it matches route from other environment and yields the block" do
+    test "when the environments do not match, will match same route (if) from other environment ans execute block" do
       conn =
         conn(:get, "/only-on-with-block-multi-env")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_other_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileOnlyOnMock.call([])
+        |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 200
       assert conn.resp_body == "block run from loop on another env"
