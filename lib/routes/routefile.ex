@@ -201,7 +201,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/articles/:optimoId", using: "StorytellingPage", only_on: "test", examples: "/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
+  handle "/news/articles/:optimoId", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimoId, ~r/^c[a-zA-Z0-9]+o$/)
   end
   
