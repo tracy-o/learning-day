@@ -201,12 +201,12 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/news/articles/:optimoId", using: "StorytellingPage", only_on: "test", examples: "/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
+    return_404 if: !String.match?(optimoId, ~r/^c[a-zA-Z0-9]+o$/)
+  end
+  
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
-  end
-
-  handle "/news/articles/:id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko", "/news/articles/c3wmq4d1y3wo"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]+o$/)
   end
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
