@@ -110,7 +110,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 200
     end
 
-    test "when the environments do not match, without other matching route will return a 404" do
+    test "when the environments do not match and no other matching route will return a 404" do
       conn =
         conn(:get, "/only-on")
         |> put_bbc_headers()
@@ -123,7 +123,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
     end
 
-    test "when the environments do not match, will match same route (if) from other environment" do
+    test "when the environments do not match, will match similar route from other environment" do
       mock_handle_route("/only-on-multi-env", "SomeMozartLoop")
 
       conn =
@@ -153,7 +153,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == "block run"
     end
 
-    test "when the environments do not match, without other matching route will return a 404" do
+    test "when the environments do not match and no other matching route will return a 404" do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
@@ -165,7 +165,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
     end
 
-    test "when the environments do not match, will match same route (if) from other environment ans execute block" do
+    test "when the environments do not match, will match similar route from other environment ans execute block" do
       conn =
         conn(:get, "/only-on-with-block-multi-env")
         |> put_bbc_headers()
