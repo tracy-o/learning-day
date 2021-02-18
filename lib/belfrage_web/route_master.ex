@@ -40,14 +40,10 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
+      @production_environment Application.get_env(:belfrage, :production_environment)
 
-      # TODO: use match here...
-      get rewrite(unquote(matcher)) do
-        if var!(conn).private[:production_environment] != unquote(env) do
-          View.not_found(var!(conn))
-        else
-          yield(unquote(id), var!(conn))
-        end
+      get rewrite(unquote(matcher)) when unquote(env) == @production_environment do
+        yield(unquote(id), var!(conn))
       end
     end
   end
@@ -55,14 +51,10 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args, do: block) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
+      @production_environment Application.get_env(:belfrage, :production_environment)
 
-      # TODO: use match here...
-      get rewrite(unquote(matcher)) do
-        if var!(conn).private[:production_environment] != unquote(env) do
-          View.not_found(var!(conn))
-        else
-          unquote(block) || yield(unquote(id), var!(conn))
-        end
+      get rewrite(unquote(matcher)) when unquote(env) == @production_environment do
+        unquote(block) || yield(unquote(id), var!(conn))
       end
     end
   end

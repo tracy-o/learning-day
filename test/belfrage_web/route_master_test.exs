@@ -5,6 +5,9 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   alias Belfrage.Struct
   alias Routes.RoutefileMock
+  alias Routes.RoutefileOnlyOnMock
+
+  @only_on_routefile_location Application.get_env(:belfrage, :routefile_location)
 
   @struct_with_html_response %Struct{
     response: %Struct.Response{
@@ -95,26 +98,17 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
   end
 
-  describe "calling handle with only_on option" do
-    test "when the environments dont match, it will return a 404" do
-      expect_belfrage_not_called()
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
+  describe "calling handle with only_on option when the environments match" do
+    setup do
+      production_environment = Application.get_env(:belfrage, :production_environment)
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+      Application.put_env(:belfrage, :production_environment, "some_environment")
+      Code.compile_file(@only_on_routefile_location)
 
-      conn =
-        conn(:get, "/only-on")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> RoutefileMock.call([])
-
-      assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      on_exit(fn -> Application.put_env(:belfrage, :production_environment, production_environment) end)
     end
 
-    test "when the environments match, it will continue with the request" do
+    test "it will yield the request" do
       mock_handle_route("/only-on", "SomeLoop")
 
       conn =
@@ -123,41 +117,87 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> RoutefileOnlyOnMock.call([])
 
       assert conn.status == 200
     end
-  end
 
-  describe "calling handle with only_on option and do block" do
-    test "when the environments do not match it will return a 404" do
-      expect_belfrage_not_called()
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
-      conn =
-        conn(:get, "/only-on-with-block")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> RoutefileMock.call([])
-
-      assert conn.status == 404
-    end
-
-    test "when the only_on allows and a block is specified it will get used" do
+    test "with a block, it will yield request and the block will get used" do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> RoutefileOnlyOnMock.call([])
 
       assert conn.status == 200
       assert conn.resp_body == "block run"
+    end
+  end
+
+  describe "calling handle with only_on option when the environment do not match" do
+    setup do
+      production_environment = Application.get_env(:belfrage, :production_environment)
+
+      Application.put_env(:belfrage, :production_environment, "some_other_environment")
+      Code.compiler_options(debug_info: false)
+      Code.compile_file(@only_on_routefile_location)
+
+      on_exit(fn -> Application.put_env(:belfrage, :production_environment, production_environment) end)
+    end
+
+    test "no other matching route will return a 404" do
+      conn =
+        conn(:get, "/only-on")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileOnlyOnMock.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+    end
+
+    test "with a do block and no other matching route will return a 404" do
+      conn =
+        conn(:get, "/only-on-with-block")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> RoutefileOnlyOnMock.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+    end
+
+    test "it matches route (if) from other environment" do
+      mock_handle_route("/only-on-multi-env", "SomeMozartLoop")
+
+      conn =
+        conn(:get, "/only-on-multi-env")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileOnlyOnMock.call([])
+
+      assert conn.status == 200
+      assert conn.resp_body == "<p>Basic HTML response</p>"
+    end
+
+    test "with a block, it matches route from other environment and yields the block" do
+      conn =
+        conn(:get, "/only-on-with-block-multi-env")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_other_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileOnlyOnMock.call([])
+
+      assert conn.status == 200
+      assert conn.resp_body == "block run from loop on another env"
     end
   end
 
