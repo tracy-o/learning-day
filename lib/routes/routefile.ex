@@ -383,7 +383,6 @@ defmodule Routes.Routefile do
   handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
   handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
 
-  # Sport Topics (Discipline)
   handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"]
   handle "/sport/archery", using: "SportDisciplineTopic", examples: ["/sport/archery"]
   handle "/sport/badminton", using: "SportDisciplineTopic", examples: ["/sport/badminton"]
@@ -427,10 +426,8 @@ defmodule Routes.Routefile do
   handle "/sport/weightlifting", using: "SportDisciplineTopic", examples: ["/sport/weightlifting"]
   handle "/sport/wrestling", using: "SportDisciplineTopic", examples: ["/sport/wrestling"]
 
-  # Sport Topics (Team)
   handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
-  # Sport Topics (Competition)
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
   handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
