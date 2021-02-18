@@ -202,7 +202,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/articles/:optimoId", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
-    return_404 if: !String.match?(optimoId, ~r/^c[a-zA-Z0-9]+o$/)
+    return_404 if: !String.match?(optimoId, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
   
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
