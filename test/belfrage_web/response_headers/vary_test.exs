@@ -133,12 +133,34 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       assert List.first(get_resp_header(conn, "vary")) =~ ",X-Ip_is_advertise_combined"
     end
 
-    test "does not vary on_exit( X-Ip_is_advertise_combined when platform is Simorgh and request edge cache" do
+    test "does not vary on X-Ip_is_advertise_combined when platform is Simorgh and request edge cache" do
       conn =
         conn(:get, "/")
         |> Vary.add_header(%Struct{
           request: %Struct.Request{edge_cache?: true},
           private: %Struct.Private{platform: Simorgh}
+        })
+
+      refute List.first(get_resp_header(conn, "vary")) =~ ",X-Ip_is_advertise_combined"
+    end
+
+    test "does not vary on X-Ip_is_advertise_combined when platform is Webcore and request not edge cache" do
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{
+          request: %Struct.Request{edge_cache?: false},
+          private: %Struct.Private{platform: WebCore}
+        })
+
+      refute List.first(get_resp_header(conn, "vary")) =~ ",X-Ip_is_advertise_combined"
+    end
+
+    test "does not vary on X-Ip_is_advertise_combined when platform is Webcore and request edge cache" do
+      conn =
+        conn(:get, "/")
+        |> Vary.add_header(%Struct{
+          request: %Struct.Request{edge_cache?: true},
+          private: %Struct.Private{platform: WebCore}
         })
 
       refute List.first(get_resp_header(conn, "vary")) =~ ",X-Ip_is_advertise_combined"

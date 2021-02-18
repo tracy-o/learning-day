@@ -23,7 +23,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def vary_headers(request, %Private{headers_allowlist: [], platform: platform}, false) do
     [
-      base_headers(request, platform),
+      base_headers(request),
       adverts_headers(request.edge_cache?, platform)
     ]
     |> IO.iodata_to_binary()
@@ -31,7 +31,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def vary_headers(request, %Private{headers_allowlist: list, platform: platform}, false) do
     [
-      base_headers(request, platform),
+      base_headers(request),
       allow_headers(list),
       adverts_headers(request.edge_cache?, platform)
     ]
@@ -42,7 +42,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def disallow_headers(), do: @disallow_headers
 
-  defp base_headers(request, platform) do
+  defp base_headers(request) do
     [
       "Accept-Encoding",
       ?,,
