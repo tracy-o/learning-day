@@ -3,7 +3,7 @@ defmodule Routes.Platforms.Simorgh do
   def specs(production_env) do
     Map.merge(MozartNews.specs(production_env),
     %{
-      signature_keys: %{add: [], skip: [:country]}
+      signature_keys: %{add: [:is_advertise], skip: [:country]}
     })
   end
 end
