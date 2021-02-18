@@ -136,6 +136,8 @@ defmodule Routes.Routefile do
   redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
 
+  redirect("/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
@@ -205,6 +207,10 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
@@ -387,12 +393,74 @@ defmodule Routes.Routefile do
   handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
   handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
 
-  # TODO this matcher picks up routes such as /sport/23354875 rather than being matched in the catchall
-  handle "/sport/:discipline", using: "TopicPage", examples: ["/sport/snowboarding"]
+  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
+  
+  handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"]
+  handle "/sport/archery", using: "SportDisciplineTopic", examples: ["/sport/archery"]
+  handle "/sport/badminton", using: "SportDisciplineTopic", examples: ["/sport/badminton"]
+  handle "/sport/baseball", using: "SportDisciplineTopic", examples: ["/sport/baseball"]
+  handle "/sport/biathlon", using: "SportDisciplineTopic", examples: ["/sport/biathlon"]
+  handle "/sport/bobsleigh", using: "SportDisciplineTopic", examples: ["/sport/bobsleigh"]
+  handle "/sport/bowls", using: "SportDisciplineTopic", examples: ["/sport/bowls"]
+  handle "/sport/canoeing", using: "SportDisciplineTopic", examples: ["/sport/canoeing"]
+  handle "/sport/cross-country-skiing", using: "SportDisciplineTopic", examples: ["/sport/cross-country-skiing"]
+  handle "/sport/curling", using: "SportDisciplineTopic", examples: ["/sport/curling"]
+  handle "/sport/darts", using: "SportDisciplineTopic", examples: ["/sport/darts"]
+  handle "/sport/diving", using: "SportDisciplineTopic", examples: ["/sport/diving"]
+  handle "/sport/equestrian", using: "SportDisciplineTopic", examples: ["/sport/equestrian"]
+  handle "/sport/fencing", using: "SportDisciplineTopic", examples: ["/sport/fencing"]
+  handle "/sport/figure-skating", using: "SportDisciplineTopic", examples: ["/sport/figure-skating"]
+  handle "/sport/freestyle-skiing", using: "SportDisciplineTopic", examples: ["/sport/freestyle-skiing"]
+  handle "/sport/gymnastics", using: "SportDisciplineTopic", examples: ["/sport/gymnastics"]
+  handle "/sport/handball", using: "SportDisciplineTopic", examples: ["/sport/handball"]
+  handle "/sport/hockey", using: "SportDisciplineTopic", examples: ["/sport/hockey"]
+  handle "/sport/ice-hockey", using: "SportDisciplineTopic", examples: ["/sport/ice-hockey"]
+  handle "/sport/judo", using: "SportDisciplineTopic", examples: ["/sport/judo"]
+  handle "/sport/luge", using: "SportDisciplineTopic", examples: ["/sport/luge"]
+  handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", examples: ["/sport/modern-pentathlon"]
+  handle "/sport/nordic-combined", using: "SportDisciplineTopic", examples: ["/sport/nordic-combined"]
+  handle "/sport/rowing", using: "SportDisciplineTopic", examples: ["/sport/rowing"]
+  handle "/sport/rugby-sevens", using: "SportDisciplineTopic", examples: ["/sport/rugby-sevens"]
+  handle "/sport/sailing", using: "SportDisciplineTopic", examples: ["/sport/sailing"]
+  handle "/sport/shooting", using: "SportDisciplineTopic", examples: ["/sport/shooting"]
+  handle "/sport/short-track-skating", using: "SportDisciplineTopic", examples: ["/sport/short-track-skating"]
+  handle "/sport/skeleton", using: "SportDisciplineTopic", examples: ["/sport/skeleton"]
+  handle "/sport/ski-jumping", using: "SportDisciplineTopic", examples: ["/sport/ski-jumping"]
+  handle "/sport/snowboarding", using: "SportDisciplineTopic", examples: ["/sport/snowboarding"]
+  handle "/sport/speed-skating", using: "SportDisciplineTopic", examples: ["/sport/speed-skating"]
+  handle "/sport/squash", using: "SportDisciplineTopic", examples: ["/sport/squash"]
+  handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", examples: ["/sport/synchronised-swimming"]
+  handle "/sport/table-tennis", using: "SportDisciplineTopic", examples: ["/sport/table-tennis"]
+  handle "/sport/taekwondo", using: "SportDisciplineTopic", examples: ["/sport/taekwondo"]
+  handle "/sport/triathlon", using: "SportDisciplineTopic", examples: ["/sport/triathlon"]
+  handle "/sport/volleyball", using: "SportDisciplineTopic", examples: ["/sport/volleyball"]
+  handle "/sport/water-polo", using: "SportDisciplineTopic", examples: ["/sport/water-polo"]
+  handle "/sport/weightlifting", using: "SportDisciplineTopic", examples: ["/sport/weightlifting"]
+  handle "/sport/wrestling", using: "SportDisciplineTopic", examples: ["/sport/wrestling"]
 
-  handle "/sport/:discipline/teams/:team", using: "TopicPage", examples: ["/sport/rugby-league/teams/wigan"]
+  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
-  handle "/sport/:discipline/:competition", using: "TopicPage", examples: ["/sport/football/champions-league"]
+  handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
+  handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
+  handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
+  handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/french-ligue-one"]
+  handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/german-bundesliga"]
+  handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/italian-serie-a"]
+  handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-cup"]
+  handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-one"]
+  handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-two"]
+  handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/national-league"]
+  handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/portuguese-primeira-liga"]
+  handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-challenge-cup"]
+  handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-championship"]
+  handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-cup"]
+  handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-cup"]
+  handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-one"]
+  handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-two"]
+  handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-premiership"]
+  handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
+  handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
+  handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
 
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []

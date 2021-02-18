@@ -24,4 +24,4 @@ Code.compile_file("test/support/mocks/routefile_only_on_multi_env_mock.ex")
 
 Application.put_env(:belfrage, :production_environment, production_environment)
 
-ExUnit.start()
+ExUnit.start([{:case_load_timeout, 120_000}, {:timeout, 120_000}])
