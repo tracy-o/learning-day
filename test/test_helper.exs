@@ -11,4 +11,4 @@ end
 
 {:ok, _apps} = Application.ensure_all_started(:belfrage)
 
-ExUnit.start()
+ExUnit.start([{:case_load_timeout, 120_000}, {:timeout, 120_000}])
