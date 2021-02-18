@@ -383,6 +383,8 @@ defmodule Routes.Routefile do
   handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
   handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
 
+  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
+  
   handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"]
   handle "/sport/archery", using: "SportDisciplineTopic", examples: ["/sport/archery"]
   handle "/sport/badminton", using: "SportDisciplineTopic", examples: ["/sport/badminton"]
