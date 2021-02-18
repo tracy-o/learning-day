@@ -428,7 +428,7 @@ defmodule Routes.Routefile do
   handle "/sport/wrestling", using: "SportDisciplineTopic", examples: ["/sport/wrestling"]
 
   # Sport Topics (Team)
-  handle "/sport/:discipline/teams/:team", using: "SportTopicPage", examples: ["/sport/rugby-league/teams/wigan"]
+  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
   # Sport Topics (Competition)
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
