@@ -146,4 +146,20 @@ defmodule Belfrage.Transformers.WorldServiceRedirectTest do
       assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call([], @https_com_with_qs_request_struct)
     end
   end
+
+  @https_api_request_struct %Struct{
+    private: %Struct.Private{origin: "https://bruce.belfrage.api.bbc.co.uk"},
+    request: %Struct.Request{
+      host: "bruce.belfrage.api.bbc.co.uk",
+      path: "/_web_core",
+      query_params: %{
+        "override" => "true"
+      },
+      scheme: :https
+    }
+  }
+
+  test ".api hosts will not be redirected" do
+    assert {:ok, @https_api_request_struct} = WorldServiceRedirect.call([], @https_api_request_struct)
+  end
 end
