@@ -467,7 +467,6 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/teams", using: "SportStoryPage", examples: ["/sport/rugby-union/teams"]
 
   ## Sport Manual Indexes
-  # handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
   handle "/sport.app", using: "SportIndexPage", examples: ["/sport.app"]
   handle "/sport", using: "SportIndexPage", examples: ["/sport"]
   handle "/sport/africa.app", using: "SportIndexPage", examples: ["/sport/africa.app"]
