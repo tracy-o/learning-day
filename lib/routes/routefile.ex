@@ -248,6 +248,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
   # Naidheachdan
 
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: ["/naidheachdan/dachaigh"]
@@ -260,6 +261,8 @@ defmodule Routes.Routefile do
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
+
+  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
@@ -416,7 +419,7 @@ defmodule Routes.Routefile do
 
   # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
@@ -513,8 +516,7 @@ defmodule Routes.Routefile do
   handle "/scotland/articles/*_any", using: "ScotlandArticles", examples: []
   # TODO this may not be an actual required route
   handle "/scotland/*_any", using: "Scotland", examples: []
-  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
-  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
+
   handle "/archive/articles/*_any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
