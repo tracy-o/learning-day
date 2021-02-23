@@ -225,6 +225,7 @@ defmodule Routes.Routefile do
   handle "/cymrufyw/eisteddfod", using: "Cymrufyw", examples: ["/cymrufyw/eisteddfod"]
   handle "/cymrufyw/components", using: "Cymrufyw", examples: ["/cymrufyw/components"]
   handle "/cymrufyw/hafan", using: "Cymrufyw", examples: ["/cymrufyw/hafan"]
+  handle "/cymrufyw/etholiad", using: "Cymrufyw", examples: ["/cymrufyw/etholiad"]
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
