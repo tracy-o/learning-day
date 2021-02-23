@@ -14,6 +14,33 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
+      path_params: %{"section" => "weightlifting"}
+    }
+  }
+
+  @webcore_section_live %Struct{
+    private: %Struct.Private{
+      origin: Application.get_env(:belfrage, :mozart_endpoint),
+      platform: MozartNews
+    },
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      path_params: %{"section" => "sports-personality"}
+    }
+  }
+
+  @webcore_section_live_allow_list_test_env %Struct{
+    private: %Struct.Private{
+      origin: Application.get_env(:belfrage, :mozart_endpoint),
+      platform: MozartNews,
+      production_environment: "test"
+    },
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
       path_params: %{"section" => "sports-personality"}
     }
   }
@@ -76,10 +103,56 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
                  scheme: :http,
                  host: "www.bbc.co.uk",
                  path: "/_web_core",
-                 path_params: %{"section" => "sports-personality"}
+                 path_params: %{"section" => "weightlifting"}
                }
              }
            } = SportVideosPlatformDiscriminator.call([], @webcore_section_test)
+  end
+
+  test "if the section is in the WebCore live allow list and the environment is test, the origin and platform will be altered to the Lambda" do
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":test"
+
+    assert {
+             :ok,
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias"]
+               },
+               private: %Struct.Private{
+                 origin: ^lambda_function,
+                 platform: Webcore
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"section" => "sports-personality"}
+               }
+             }
+           } = SportVideosPlatformDiscriminator.call([], @webcore_section_live_allow_list_test_env)
+  end
+
+  test "if the section is in the WebCore live allow list and the environment is live, the origin and platform will be altered to the Lambda" do
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
+
+    assert {
+             :ok,
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias"]
+               },
+               private: %Struct.Private{
+                 origin: ^lambda_function,
+                 platform: Webcore
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"section" => "sports-personality"}
+               }
+             }
+           } = SportVideosPlatformDiscriminator.call([], @webcore_section_live)
   end
 
   test "if the section is not in the Webcore test allow list and the environment is test, the origin and platform will remain the same" do
