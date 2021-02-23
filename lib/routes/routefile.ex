@@ -227,7 +227,7 @@ defmodule Routes.Routefile do
   # Cymrufyw
 
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
-  redirect("/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+  redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
