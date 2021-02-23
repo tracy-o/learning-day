@@ -87,6 +87,16 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  defmacro serve_404(matcher, [examples: _examples] = args) do
+    quote do
+      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
+      @production_environment Application.get_env(:belfrage, :production_environment)
+      get unquote(matcher) do
+        View.not_found(var!(conn))
+      end
+    end
+  end
+
   # TODO: this is just an example, and could be replaced/expanded
   # in a validator library.
   defmacro return_404(if: check_pass) do
