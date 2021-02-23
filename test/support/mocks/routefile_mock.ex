@@ -40,12 +40,6 @@ defmodule Routes.RoutefileMock do
     return_404(if: false)
   end
 
-  handle("/only-on", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
-
-  handle("/only-on-with-block", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on-with-block"]) do
-    send_resp(conn, 200, "block run")
-  end
-
   handle("/moz", using: "Moz", examples: ["/moz"])
 
   handle("/com-to-uk-redirect", using: "SomeLoopComToUK", examples: ["/com-to-uk-redirect"])

@@ -152,6 +152,10 @@ defmodule Routes.Routefile do
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
+  # RESFRAME-4095 for only-on routing test
+  handle "/homepage/testing", using: "TestHomePage", only_on: "test", examples: ["/homepage/testing"]
+  handle "/homepage/testing", using: "HomePage", examples: []
+
   handle "/homepage/preview", using: "HomePagePreview", only_on: "test", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", only_on: "test", examples: ["/homepage/preview/scotland"]
   handle "/homepage/preview/wales", using: "HomePagePreviewWales", only_on: "test", examples: ["/homepage/preview/wales"]
