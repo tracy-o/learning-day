@@ -7,9 +7,6 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
-  redirect "/example/news/0", to: "/news", status: 302
-  redirect "/example/weather/0", to: "/weather", status: 301
-
   # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
