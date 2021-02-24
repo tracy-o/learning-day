@@ -112,34 +112,4 @@ defmodule Belfrage.ConcurrentlyTest do
       assert first_struct_with_response == Concurrently.pick_early_response(structs)
     end
   end
-
-  describe "random_dedup_platform/1" do
-    test "accepts and returns a stream" do
-      struct_stream = to_stream(@structs)
-      result = Concurrently.random_dedup_platform(struct_stream)
-
-      assert result.__struct__ == Stream
-    end
-
-    test "when every struct has a different platform, the same list is returned" do
-      struct_stream = to_stream(@structs)
-      assert @structs == Concurrently.random_dedup_platform(struct_stream) |> Enum.to_list()
-    end
-
-    test "when a struct shares a platform, the list returned is de-duped by platform" do
-      second_struct_for_platform_one = %Struct{
-        private: %Struct.Private{loop_id: "AnotherPlatformTwoLoop", platform: :one}
-      }
-
-      structs = [second_struct_for_platform_one | @structs]
-
-      struct_stream = to_stream(structs)
-
-      assert [
-               %Struct{private: %Struct.Private{platform: :one}},
-               %Struct{private: %Struct.Private{platform: :two}},
-               %Struct{private: %Struct.Private{platform: :three}}
-             ] = Concurrently.random_dedup_platform(struct_stream) |> Enum.to_list()
-    end
-  end
 end

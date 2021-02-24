@@ -11,7 +11,6 @@ defmodule Belfrage do
       |> prepare_request()
       |> check_cache()
     end)
-    |> Belfrage.Concurrently.random_dedup_platform()
     |> Belfrage.Concurrently.pick_early_response()
     |> generate_response()
   end
