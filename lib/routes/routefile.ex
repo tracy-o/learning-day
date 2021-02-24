@@ -7,10 +7,7 @@
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
 
-  redirect "/example/news/0", to: "/news", status: 302
-  redirect "/example/weather/0", to: "/weather", status: 301
-  redirect "/ni", to: "/northernireland", status: 302
-  redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
+  # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
   redirect("http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
@@ -131,17 +128,9 @@ defmodule Routes.Routefile do
   redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
   redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
 
-  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+  # Home Page
 
-  redirect("/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302)
-
-  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
-  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
-  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
-  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
+  redirect "/ni", to: "/northernireland", status: 302
 
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
@@ -166,11 +155,15 @@ defmodule Routes.Routefile do
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
 
+  # data endpoints
+
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/search&params=%7B%7D"]
+
+  # Search
 
   handle "/search", using: "Search", examples: ["/search"]
   handle "/chwilio", using: "WelshSearch", examples: ["/chwilio"]
@@ -180,6 +173,10 @@ defmodule Routes.Routefile do
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
   handle "/pres-test/new-chwilio", using: "WelshNewSearch", only_on: "test", examples: ["/pres-test/new-chwilio"]
   handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
+
+  # News
+
+  handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
     return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
@@ -215,6 +212,14 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
+  # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
+  handle "/news/*_any", using: "News", examples: ["/news/election/2019", "/news/contact-us/editorial"]
+
+  # Cymrufyw
+
+  redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
+  redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
+
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
   handle "/cymrufyw/gogledd-orllewin", using: "Cymrufyw", examples: ["/cymrufyw/gogledd-orllewin"]
@@ -231,6 +236,14 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
+  handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
+
+  # Naidheachdan
+
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: ["/naidheachdan/dachaigh"]
   handle "/naidheachdan/components", using: "Naidheachdan", examples: ["/naidheachdan/components"]
 
@@ -238,35 +251,18 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
-  handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
-  end
-
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
-  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
-    return_404 if: String.length(id) != 8
-  end
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:id.app", using: "SportMorphVideos", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportMorphVideos", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
-  end
+  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
   handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-navigation/hasFetcher/true"]
+
+  # World Service
 
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
@@ -394,10 +390,35 @@ defmodule Routes.Routefile do
   handle "/zhongwen.json", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/simp.json", "/zhongwen/simp.amp"]
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen", "/zhongwen/example-123", "/zhongwen/example-123.amp", "/zhongwen/example-123.json"]
 
+  handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
+  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
+  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+
+  # topics
+
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/c583y7zk042t"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
+  # Sport
+
+  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
+  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
+    return_404 if: String.length(id) != 8
+  end
+
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:id.app", using: "SportMorphVideos", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id", using: "SportMorphVideos", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
+
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+
+  # includes query string params in example URL to use live data in Mozart
+  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
@@ -476,6 +497,22 @@ defmodule Routes.Routefile do
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
+  # TODO issue with routes such as /sport/cycling/19690053 being matched to the sport/:discipline matcher
+  handle "/sport/*_any", using: "Sport", examples: ["/sport"]
+
+  # Weather
+
+  handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
+  handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
+
+  # News Beat
+
+  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+
+  # Catch all
 
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
@@ -487,29 +524,31 @@ defmodule Routes.Routefile do
   handle "/scotland/articles/*_any", using: "ScotlandArticles", examples: []
   # TODO this may not be an actual required route
   handle "/scotland/*_any", using: "Scotland", examples: []
-  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
-  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
+
   handle "/archive/articles/*_any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
+
   # newsrounds routes appear to be using morphRouter
   handle "/newsround.amp", using: "Newsround", examples: []
   handle "/newsround.json", using: "Newsround", examples: []
   handle "/newsround/*_any", using: "Newsround", examples: []
+
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
+
   handle "/wide/*_any", using: "Wide", examples: []
+
   handle "/archivist/*_any", using: "Archivist", examples: []
-  handle "/weather/*_any", using: "Weather", examples: ["/weather", "/weather/2650225"]
-  handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
-  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
-  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+
   # TODO /proms/extra
   handle "/proms/*_any", using: "Proms", examples: []
-  # TODO issue with routes such as /sport/cycling/19690053 being matched to the sport/:discipline matcher
-  handle "/sport/*_any", using: "Sport", examples: ["/sport"]
-  # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
-  handle "/news/*_any", using: "News", examples: ["/news"]
+
   handle "/music", using: "Music", examples: []
+
+  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
+  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
+  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
