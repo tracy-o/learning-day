@@ -758,9 +758,7 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  
-  handle "/sport/*_any", using: "Sport", examples: []
-  
+    
   # Weather
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
