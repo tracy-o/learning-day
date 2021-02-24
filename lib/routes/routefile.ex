@@ -730,22 +730,6 @@ defmodule Routes.Routefile do
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
-  # TODO issue with routes such as /sport/cycling/19690053 being matched to the sport/:discipline matcher
-  handle "/sport/*_any", using: "Sport", examples: ["/sport"]
-
-  # Weather
-
-  handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
-  handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
-
-  # News Beat
-
-  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
-
-  # Catch all
 
   ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
@@ -774,6 +758,22 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
+  
+  handle "/sport/*_any", using: "Sport", examples: []
+  
+  # Weather
+
+  handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
+  handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
+
+  # News Beat
+
+  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+
+  # Catch all
 
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
