@@ -68,10 +68,18 @@ This feature is only available for non-personalised responses.
 
 Get Elixir 1.8 on your Mac.
 
-You can [install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf), and then install and set your elixir version:
+You can [install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf) - the easiest way is by using [Homebrew](https://brew.sh/).
+
+Then install Erlang and Elixir and set your global versions:
 
 ```
+asdf plugin-add erlang
+asdf plugin-add elixir
+
+asdf install erlang 22.0.7
 asdf install elixir 1.8.2
+
+asdf global erlang 22.0.7
 asdf global elixir 1.8.2
 ```
 
