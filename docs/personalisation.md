@@ -1,7 +1,5 @@
 # Personalisation
 
-:construction: *__this feature is currently under construction and subject to change__* :construction:
-
 Belfrage supports requests for personalised content.
 
 ## What is personalised content in Belfrage
