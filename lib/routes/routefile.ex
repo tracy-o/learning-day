@@ -506,11 +506,10 @@ defmodule Routes.Routefile do
 
   # News Beat
 
-  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
+  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
-
 
   # Catch all
 
