@@ -4,7 +4,8 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
 
   setup do
     %{
-      output_with_failures: Fixtures.SmokeTestReportOutput.with_failures()
+      output_with_failures: Fixtures.SmokeTestReportOutput.with_failures(),
+      output_with_exceptions: Fixtures.SmokeTestReportOutput.with_exceptions()
     }
   end
 
@@ -20,7 +21,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
     assert expected == ReportSmokeTestResults.failures_per_routespec(output)
   end
 
-  test "format_failure_messages/1", %{output_with_failures: output} do
+  test "format_failure_messages/1 when smoke tests have detected errors", %{output_with_failures: output} do
     failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
 
     expected = %{
@@ -28,6 +29,21 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
         "*test ScotlandHomePage /scotland against test belfrage /scotland*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```",
         "*test ScotlandHomePage /scotland against test cedric-belfrage /scotland*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```",
         "*test ScotlandHomePage /scotland against test bruce-belfrage /scotland*\n```\nassert(response.status_code() == expected_status_code)\nAssertion with == failed\nLeft: 404\nRight: 200```"
+      ]
+    }
+
+    assert expected == ReportSmokeTestResults.format_failure_messages(failures_per_routespec)
+  end
+
+  test "format_failure_messages/1 when smoke test itself breaks", %{
+    output_with_exceptions: output
+  } do
+    failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
+
+    expected = %{
+      "Schoolreport" => ["Failed to send smoke test request. Contact us in #help-belfrage slack channel."],
+      "Weather" => [
+        "\"Unexpected error occured:\\n\\n{:error, %{reason: :everything_breaks}, [{FooBar, :request!, 5, [file: 'lib/foo_bar.ex', line: 79]}, {:\\\"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5\\\", :\\\"test Weather /weather/*_any against test bruce-belfrage /weather\\\", 1, [file: 'test/smoke/smoke_test.ex', line: 25]}]}\\n\\nContact us in #help-belfrage slack channel.\""
       ]
     }
 
