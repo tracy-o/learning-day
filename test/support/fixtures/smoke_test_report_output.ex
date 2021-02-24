@@ -260,4 +260,155 @@ defmodule Fixtures.SmokeTestReportOutput do
       width: 80
     }
   end
+
+  def with_ex_unit_no_meaningful_value do
+    %{
+      colors: [enabled: false],
+      excluded_counter: 0,
+      failed_tests: [
+        %ExUnit.Test{
+          case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
+          logs: "",
+          module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
+          name: :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik",
+          state:
+            {:failed,
+             [
+               {:error,
+                %ExUnit.AssertionError{
+                  args: :ex_unit_no_meaningful_value,
+                  expr: :ex_unit_no_meaningful_value,
+                  left: :ex_unit_no_meaningful_value,
+                  message: "Expected `location` response header to be set for world service redirect.",
+                  right: :ex_unit_no_meaningful_value
+                },
+                [
+                  {Support.Smoke.Assertions, :assert_world_service_redirect, 1,
+                   [file: 'test/support/smoke/assertions.ex', line: 37]},
+                  {Support.Smoke.Assertions, :assert_smoke_response, 4,
+                   [file: 'test/support/smoke/assertions.ex', line: 11]},
+                  {:"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
+                   :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik", 1,
+                   [file: 'test/smoke/smoke_test.ex', line: 25]}
+                ]}
+             ]},
+          tags: %{
+            async: true,
+            case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
+            describe: "WorldServiceTajik /tajik/*_any against test bruce-belfrage",
+            describe_line: 25,
+            file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
+            line: 25,
+            module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
+            platform: MozartNews,
+            registered: %{},
+            route: "/tajik/*_any",
+            spec: "WorldServiceTajik",
+            stack: "bruce-belfrage",
+            test: :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik",
+            test_type: :test
+          },
+          time: 715_236
+        },
+        %ExUnit.Test{
+          case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.ede12313852b4b5f8191f619a4a824d5",
+          logs: "",
+          module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.ede12313852b4b5f8191f619a4a824d5",
+          name: :"test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json",
+          state:
+            {:failed,
+             [
+               {:error,
+                %ExUnit.AssertionError{
+                  args: :ex_unit_no_meaningful_value,
+                  expr: :ex_unit_no_meaningful_value,
+                  left: :ex_unit_no_meaningful_value,
+                  message: "Expected `location` response header to be set for world service redirect.",
+                  right: :ex_unit_no_meaningful_value
+                },
+                [
+                  {Support.Smoke.Assertions, :assert_world_service_redirect, 1,
+                   [file: 'test/support/smoke/assertions.ex', line: 37]},
+                  {Support.Smoke.Assertions, :assert_smoke_response, 4,
+                   [file: 'test/support/smoke/assertions.ex', line: 11]},
+                  {:"Elixir.Belfrage.SmokeTest.WorldServiceTajik.ede12313852b4b5f8191f619a4a824d5",
+                   :"test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json", 1,
+                   [file: 'test/smoke/smoke_test.ex', line: 25]}
+                ]}
+             ]},
+          tags: %{
+            async: true,
+            case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.ede12313852b4b5f8191f619a4a824d5",
+            describe: "WorldServiceTajik /tajik.json against test bruce-belfrage",
+            describe_line: 25,
+            file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
+            line: 25,
+            module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.ede12313852b4b5f8191f619a4a824d5",
+            platform: MozartNews,
+            registered: %{},
+            route: "/tajik.json",
+            spec: "WorldServiceTajik",
+            stack: "bruce-belfrage",
+            test: :"test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json",
+            test_type: :test
+          },
+          time: 345_272
+        },
+        %ExUnit.Test{
+          case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.914278952621405f970ab754458796b3",
+          logs: "",
+          module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.914278952621405f970ab754458796b3",
+          name: :"test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp",
+          state:
+            {:failed,
+             [
+               {:error,
+                %ExUnit.AssertionError{
+                  args: :ex_unit_no_meaningful_value,
+                  expr: :ex_unit_no_meaningful_value,
+                  left: :ex_unit_no_meaningful_value,
+                  message: "Expected `location` response header to be set for world service redirect.",
+                  right: :ex_unit_no_meaningful_value
+                },
+                [
+                  {Support.Smoke.Assertions, :assert_world_service_redirect, 1,
+                   [file: 'test/support/smoke/assertions.ex', line: 37]},
+                  {Support.Smoke.Assertions, :assert_smoke_response, 4,
+                   [file: 'test/support/smoke/assertions.ex', line: 11]},
+                  {:"Elixir.Belfrage.SmokeTest.WorldServiceTajik.914278952621405f970ab754458796b3",
+                   :"test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp", 1,
+                   [file: 'test/smoke/smoke_test.ex', line: 25]}
+                ]}
+             ]},
+          tags: %{
+            async: true,
+            case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.914278952621405f970ab754458796b3",
+            describe: "WorldServiceTajik /tajik.amp against test bruce-belfrage",
+            describe_line: 25,
+            file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
+            line: 25,
+            module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.914278952621405f970ab754458796b3",
+            platform: MozartNews,
+            registered: %{},
+            route: "/tajik.amp",
+            spec: "WorldServiceTajik",
+            stack: "bruce-belfrage",
+            test: :"test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp",
+            test_type: :test
+          },
+          time: 266_170
+        }
+      ],
+      failure_counter: 3,
+      fallback_count: 0,
+      invalid_counter: 0,
+      seed: 774_314,
+      skipped_counter: 0,
+      slowest: 0,
+      test_counter: %{test: 4},
+      test_timings: [],
+      trace: false,
+      width: 80
+    }
+  end
 end
