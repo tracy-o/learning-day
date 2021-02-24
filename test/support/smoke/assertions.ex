@@ -34,11 +34,13 @@ defmodule Support.Smoke.Assertions do
 
   defp assert_world_service_redirect(response) do
     location = Helper.get_header(response.headers, "location")
+    refute is_nil(location), "`location` response header not set"
     assert location =~ ".com"
   end
 
   defp assert_com_to_uk_redirect(response) do
     location = Helper.get_header(response.headers, "location")
+    refute is_nil(location), "`location` response header not set"
     assert location =~ ".co.uk"
     assert response.status_code == 302
   end
