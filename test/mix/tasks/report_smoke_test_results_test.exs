@@ -42,9 +42,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
 
     expected = %{
       "Schoolreport" => ["Failed to send smoke test request. Contact us in #help-belfrage slack channel."],
-      "Weather" => [
-        "\"Unexpected error occured:\\n\\n{:error, %{reason: :everything_breaks}, [{FooBar, :request!, 5, [file: 'lib/foo_bar.ex', line: 79]}, {:\\\"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5\\\", :\\\"test Weather /weather/*_any against test bruce-belfrage /weather\\\", 1, [file: 'test/smoke/smoke_test.ex', line: 25]}]}\\n\\nContact us in #help-belfrage slack channel.\""
-      ]
+      "Weather" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."]
     }
 
     assert expected == ReportSmokeTestResults.format_failure_messages(failures_per_routespec)

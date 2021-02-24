@@ -58,7 +58,7 @@ Right: #{inspect(assertion_error.right)}```)
       {:error, %MachineGun.Error{}, _trace} ->
         "Failed to send smoke test request. Contact us in #help-belfrage slack channel."
 
-      error -> inspect("Unexpected error occured:\n\n#{inspect(error)}\n\nContact us in #help-belfrage slack channel.")
+      _error -> "Unexpected error occured. Contact us in #help-belfrage slack channel."
     end)
   end
 
