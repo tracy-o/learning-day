@@ -92,4 +92,4 @@ If a user does not have an Identity token (ckns_id) and they are on a personalis
 
 Personalised content is not cached in Belfrage. If the downstream returns a private cache control header, which would be the case when the content is personalised, the content will not be cached by Belfrage.
 
-If a route is personalisable but for whatever reason the downstream returns a public cache control header, the content will then follow the normal caching process. This may be in cases where there was an error getting the personalised content.
+If a route is personalisable but for whatever reason the downstream returns a public cache control header, the content will then follow the normal caching process. This may be in cases where there was an error getting the personalised content. The error response will also trigger Belfrage fallback mechanism for a non-personalised fallback or an error response if non-personalised fallback is not available in caches.
