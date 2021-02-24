@@ -20,13 +20,13 @@ In the context of Belfrage, personalisation is the existence of a BBC account to
 
 In order to enable personalisation in WebCore Belfrage performs several tasks
 
-* check if the route is personalisable
-* check if the user has an identity token (`ckns_id`)
-* check the account flagpole
+* check if the route is personalisable: personalisation is currently restricted to a specific route on test and limited to 2 users (IDs)
+* check the account IDCTA flagpole and a Cosmos dial that switch personalisation on or off entirely on Belfrage
+* check the GTM `X-ID-OIDC-SIGNEDIN` header for user authentication status
 * get the user's access token (`ckns_atkn`)
 * verify that the access token was signed by the BBC
 
-Then, if the token is correct it is sent in the request to the downstream layer, Pres or FABL.
+Then, if the user is authenticated and the token is correct, the token is sent in the request to the downstream layer, Pres or FABL.
 
 The following headers are set
 
