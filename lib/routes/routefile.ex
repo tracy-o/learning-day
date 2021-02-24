@@ -9,7 +9,8 @@ defmodule Routes.Routefile do
 
   redirect "/example/news/0", to: "/news", status: 302
   redirect "/example/weather/0", to: "/weather", status: 301
-  redirect "/ni", to: "/northernireland", status: 302
+
+  # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
   redirect("http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
@@ -130,16 +131,9 @@ defmodule Routes.Routefile do
   redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
   redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
 
-  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
-  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+  # Home Page
 
-
-  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
-  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
-  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
-  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
+  redirect "/ni", to: "/northernireland", status: 302
 
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
@@ -149,8 +143,6 @@ defmodule Routes.Routefile do
   handle "/wales", using: "WalesHomePage", examples: ["/wales"]
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
-
-  # Home Page
 
   # RESFRAME-4095 for only-on routing test
   handle "/homepage/testing", using: "TestHomePage", only_on: "test", examples: ["/homepage/testing"]
@@ -165,6 +157,8 @@ defmodule Routes.Routefile do
 
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
+
+  # data endpoints
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
@@ -249,6 +243,7 @@ defmodule Routes.Routefile do
   end
 
   handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
+
   # Naidheachdan
 
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: ["/naidheachdan/dachaigh"]
@@ -397,6 +392,12 @@ defmodule Routes.Routefile do
   handle "/zhongwen.json", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/simp.json", "/zhongwen/simp.amp"]
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen", "/zhongwen/example-123", "/zhongwen/example-123.amp", "/zhongwen/example-123.json"]
 
+  handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
+  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
+  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+
+  # topics
+
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/c583y7zk042t"] do
@@ -506,6 +507,16 @@ defmodule Routes.Routefile do
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
+  # News Beat
+
+  redirect("/newsbeat/:assetId", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat/articles/:assetId", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat/article/:assetId/:slug", to: "/news/newsbeat-:assetId", status: 301)
+  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+
+
+  # Catch all
+
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
 
@@ -520,19 +531,27 @@ defmodule Routes.Routefile do
   handle "/archive/articles/*_any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
+
   # newsrounds routes appear to be using morphRouter
   handle "/newsround.amp", using: "Newsround", examples: []
   handle "/newsround.json", using: "Newsround", examples: []
   handle "/newsround/*_any", using: "Newsround", examples: []
+
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
+
   handle "/wide/*_any", using: "Wide", examples: []
+
   handle "/archivist/*_any", using: "Archivist", examples: []
-  handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
-  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
-  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+
   # TODO /proms/extra
   handle "/proms/*_any", using: "Proms", examples: []
+
   handle "/music", using: "Music", examples: []
+
+  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
+  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
+  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
