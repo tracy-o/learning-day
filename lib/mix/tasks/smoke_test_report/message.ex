@@ -4,7 +4,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults.Message do
 
   @spec format(%ExUnit.Test{}, ex_unit_error) :: String.t()
   def format(failure, {:error, assertion_error = %ExUnit.AssertionError{}, _context}) do
-    "#{failure.name}\n\n" <> ExUnit.Formatter.format_assertion_error(assertion_error)
+    "#{failure.name}\n\n" <> "```#{ExUnit.Formatter.format_assertion_error(assertion_error)}```"
   end
 
   @spec format(%ExUnit.Test{}, ex_unit_error) :: String.t()

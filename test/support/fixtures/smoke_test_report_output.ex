@@ -245,7 +245,7 @@ defmodule Fixtures.SmokeTestReportOutput do
             test: :"test Weather /weather/*_any against test bruce-belfrage /weather",
             test_type: :test
           },
-          time: 56425
+          time: 56_425
         }
       ],
       failure_counter: 2,
