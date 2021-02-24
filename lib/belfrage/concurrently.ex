@@ -13,12 +13,6 @@ defmodule Belfrage.Concurrently do
     )
   end
 
-  def random_dedup_platform(structs) do
-    structs
-    |> Stream.chunk_by(& &1.private.platform)
-    |> Stream.map(&Enum.random(&1))
-  end
-
   def run(structs, cb) do
     m = Stump.metadata() |> Enum.into([])
 
