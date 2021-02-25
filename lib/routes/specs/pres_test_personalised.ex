@@ -4,7 +4,7 @@ defmodule Routes.Specs.PresTestPersonalised do
       owner: "D&EWebCorePresentationTeam@bbc.co.uk",
       platform: Webcore,
       query_params_allowlist: ["q", "page", "scope", "filter", "personalisationMode"],
-      pipeline: ["RestrictedPersonalisation", "UserSession"],
+      pipeline: ["UserSession"],
       cookie_allowlist: ["ckns_atkn", "ckns_id"],
       headers_allowlist: ["x-id-oidc-signedin"]
     }
