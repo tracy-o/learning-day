@@ -35,9 +35,9 @@ defmodule BelfrageWeb.StructAdapter do
         x_candy_preview_guid: bbc_headers.x_candy_preview_guid,
         x_morph_env: bbc_headers.x_morph_env,
         x_use_fixture: bbc_headers.x_use_fixture,
-        cookie_cps_language: bbc_headers.cookie_cps_language,
-        cookie_cps_chinese: bbc_headers.cookie_cps_chinese,
-        cookie_cps_serbian: bbc_headers.cookie_cps_serbian,
+        cookie_ckps_language: bbc_headers.cookie_ckps_language,
+        cookie_ckps_chinese: bbc_headers.cookie_ckps_chinese,
+        cookie_ckps_serbian: bbc_headers.cookie_ckps_serbian,
         origin: bbc_headers.origin,
         referer: bbc_headers.referer
       },

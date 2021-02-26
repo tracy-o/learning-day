@@ -66,9 +66,9 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def x_candy_preview_guid(headers, _cache), do: headers[:x_candy_preview_guid]
   def x_morph_env(headers, _cache), do: headers[:x_morph_env]
   def x_use_fixture(headers, _cache), do: headers[:x_use_fixture]
-  def cookie_cps_language(headers, _cache), do: headers[:cookie_cps_language]
-  def cookie_cps_chinese(headers, _cache), do: headers[:cookie_cps_chinese]
-  def cookie_cps_serbian(headers, _cache), do: headers[:cookie_cps_serbian]
+  def cookie_ckps_language(headers, _cache), do: headers[:cookie_ckps_language]
+  def cookie_ckps_chinese(headers, _cache), do: headers[:cookie_ckps_chinese]
+  def cookie_ckps_serbian(headers, _cache), do: headers[:cookie_ckps_serbian]
   def origin(headers, _cache), do: headers[:origin]
   def referer(headers, _cache), do: headers[:referer]
 end

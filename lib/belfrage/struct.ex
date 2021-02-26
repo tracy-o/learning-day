@@ -34,9 +34,9 @@ defmodule Belfrage.Struct.Request do
     x_candy_preview_guid: %{},
     x_morph_env: %{},
     x_use_fixture: %{},
-    cookie_cps_language: %{},
-    cookie_cps_chinese: %{},
-    cookie_cps_serbian: %{},
+    cookie_ckps_language: %{},
+    cookie_ckps_chinese: %{},
+    cookie_ckps_serbian: %{},
     origin: nil,
     referer: nil
   ]

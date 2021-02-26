@@ -24,9 +24,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_candy_preview_guid: %{x_candy_preview_guid: nil},
                  x_morph_env: %{x_morph_env: nil},
                  x_use_fixture: %{x_use_fixture: nil},
-                 cookie_cps_language: %{cookie_cps_language: nil},
-                 cookie_cps_chinese: %{cookie_cps_chinese: nil},
-                 cookie_cps_serbian: %{cookie_cps_serbian: nil},
+                 cookie_ckps_language: %{cookie_ckps_language: nil},
+                 cookie_ckps_chinese: %{cookie_ckps_chinese: nil},
+                 cookie_ckps_serbian: %{cookie_ckps_serbian: nil},
                  origin: %{origin: nil},
                  referer: %{referer: nil}
                }
@@ -75,9 +75,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_candy_preview_guid: %{x_candy_preview_guid: "1"},
                  x_morph_env: %{x_morph_env: "1"},
                  x_use_fixture: %{x_use_fixture: "1"},
-                 cookie_cps_language: %{cookie_cps_language: "1"},
-                 cookie_cps_chinese: %{cookie_cps_chinese: "1"},
-                 cookie_cps_serbian: %{cookie_cps_serbian: "1"},
+                 cookie_ckps_language: %{cookie_ckps_language: "1"},
+                 cookie_ckps_chinese: %{cookie_ckps_chinese: "1"},
+                 cookie_ckps_serbian: %{cookie_ckps_serbian: "1"},
                  origin: %{origin: "https://www.test.bbc.co.uk"},
                  referer: %{referer: "https://www.test.bbc.co.uk/page"}
                }
@@ -124,9 +124,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  x_candy_preview_guid: %{x_candy_preview_guid: nil},
                  x_morph_env: %{x_morph_env: nil},
                  x_use_fixture: %{x_use_fixture: nil},
-                 cookie_cps_language: %{cookie_cps_language: nil},
-                 cookie_cps_chinese: %{cookie_cps_chinese: nil},
-                 cookie_cps_serbian: %{cookie_cps_serbian: nil},
+                 cookie_ckps_language: %{cookie_ckps_language: nil},
+                 cookie_ckps_chinese: %{cookie_ckps_chinese: nil},
+                 cookie_ckps_serbian: %{cookie_ckps_serbian: nil},
                  origin: %{origin: nil},
                  referer: %{referer: nil}
                }
