@@ -135,7 +135,7 @@ defmodule Routes.Routefile do
 
   redirect("/news/video_and_audio/international", to: "/news/av/10462520", status: 302)
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
-  redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 301)
+  redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
 
   # Home Page
 
