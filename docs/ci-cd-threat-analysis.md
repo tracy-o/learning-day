@@ -26,6 +26,6 @@ R9 | Container images used for build | We use the latest public images. We could
 R10 | Resources outside of container during pipeline steps and could be effected by plugins | Some part of the pipeline are in containers. Other parts are run direclty on Jenkins. Plugins could have vulnerabilities. | No | Low
 R11 | Cosmos-release pushing something else | This would have to be done by someone with access to Jenkins | No | Low
 R12 | Third-party RPM dependency vulnerabilities | Automated vulnerability scanning. Most RPM dependencies are from the BBC. | No | Medium
-R13 | Tampering of repository service RPM dependencies | Ensure we use GPG keys on all of our included repositories. Most RPM dependencies are from the BBC. | No | Low
+R13 | Tampering of repository service RPM dependencies | Ensure we use GPG keys, where possible, on included repositories. Most RPM dependencies are from the BBC. https://jira.dev.bbc.co.uk/browse/RESFRAME-4073  | Yes | Low
 R14 | CentOS CVEs | Cosmos checks the CentOS CVEs and patches and highlights where these have been applied. They get applied during deployment. | Yes | N/A
 R15 | Cosmos deploys | Cosmos controls access through Cosmos projects | N/A | N/A
