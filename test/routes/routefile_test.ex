@@ -45,11 +45,11 @@ defmodule Routes.RoutefileTest do
 
       examples
       |> Enum.map(fn
-        {path, expected_status_code} -> {path, expected_status_code }
-        path -> {path, 200 }
+        {path, expected_status_code} -> {path, expected_status_code}
+        path -> {path, 200}
       end)
       |> Enum.each(fn route_example ->
-        { path, status_code } = route_example
+        {path, status_code} = route_example
         @path path
         @status_code status_code
 
