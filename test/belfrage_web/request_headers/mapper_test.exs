@@ -50,9 +50,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-candy-preview-guid", "1"},
         {"x-morph-env", "1"},
         {"x-use-fixture", "1"},
-        {"cookie-cps-language", "1"},
-        {"cookie-cps-chinese", "1"},
-        {"cookie-cps-serbian", "1"},
+        {"cookie-ckps_language", "1"},
+        {"cookie-ckps_chinese", "1"},
+        {"cookie-ckps_serbian", "1"},
         {"origin", "https://www.test.bbc.co.uk"},
         {"referer", "https://www.test.bbc.co.uk/page"}
       ]
@@ -99,9 +99,9 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"x-candy-preview-guid", ""},
         {"x-morph-env", ""},
         {"x-use-fixture", ""},
-        {"cookie-cps-language", ""},
-        {"cookie-cps-chinese", ""},
-        {"cookie-cps-serbian", ""},
+        {"cookie-ckps_language", ""},
+        {"cookie-ckps_chinese", ""},
+        {"cookie-ckps_serbian", ""},
         {"origin", ""},
         {"referer", ""}
       ]

@@ -16,9 +16,9 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     x_candy_preview_guid: %{x_candy_preview_guid: "x-candy-preview-guid"},
     x_morph_env: %{x_morph_env: "x-morph-env"},
     x_use_fixture: %{x_use_fixture: "x-use-fixture"},
-    cookie_ckps_language: %{cookie_ckps_language: "cookie-ckps-language"},
-    cookie_ckps_chinese: %{cookie_ckps_chinese: "cookie-ckps-chinese"},
-    cookie_ckps_serbian: %{cookie_ckps_serbian: "cookie-ckps-serbian"},
+    cookie_ckps_language: %{cookie_ckps_language: "cookie-ckps_language"},
+    cookie_ckps_chinese: %{cookie_ckps_chinese: "cookie-ckps_chinese"},
+    cookie_ckps_serbian: %{cookie_ckps_serbian: "cookie-ckps_serbian"},
     origin: %{origin: "origin"},
     referer: %{referer: "referer"}
   }
