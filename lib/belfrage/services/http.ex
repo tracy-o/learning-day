@@ -103,9 +103,9 @@ defmodule Belfrage.Services.HTTP do
       "x-candy-preview-guid" => request.x_candy_preview_guid,
       "x-morph-env" => request.x_morph_env,
       "x-use-fixture" => request.x_use_fixture,
-      "cookie-cps-language" => request.cookie_cps_language,
-      "cookie-cps-chinese" => request.cookie_cps_chinese,
-      "cookie-cps-serbian" => request.cookie_cps_serbian,
+      "cookie-ckps-language" => request.cookie_ckps_language,
+      "cookie-ckps-chinese" => request.cookie_ckps_chinese,
+      "cookie-ckps-serbian" => request.cookie_ckps_serbian,
       "origin" => request.origin,
       "referer" => request.referer
     }

@@ -43,9 +43,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -81,9 +81,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -120,9 +120,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -159,9 +159,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -198,9 +198,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -237,9 +237,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -277,9 +277,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -315,9 +315,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -355,9 +355,9 @@ defmodule BelfrageWeb.StructAdapterTest do
           x_candy_preview_guid: nil,
           x_morph_env: nil,
           x_use_fixture: nil,
-          cookie_cps_language: nil,
-          cookie_cps_chinese: nil,
-          cookie_cps_serbian: nil,
+          cookie_ckps_language: nil,
+          cookie_ckps_chinese: nil,
+          cookie_ckps_serbian: nil,
           origin: nil,
           referer: nil
         })
@@ -394,9 +394,9 @@ defmodule BelfrageWeb.StructAdapterTest do
           x_candy_preview_guid: nil,
           x_morph_env: nil,
           x_use_fixture: nil,
-          cookie_cps_language: nil,
-          cookie_cps_chinese: nil,
-          cookie_cps_serbian: nil,
+          cookie_ckps_language: nil,
+          cookie_ckps_chinese: nil,
+          cookie_ckps_serbian: nil,
           origin: nil,
           referer: nil
         })
@@ -431,9 +431,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -467,9 +467,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -503,9 +503,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
@@ -542,9 +542,9 @@ defmodule BelfrageWeb.StructAdapterTest do
         x_candy_preview_guid: nil,
         x_morph_env: nil,
         x_use_fixture: nil,
-        cookie_cps_language: nil,
-        cookie_cps_chinese: nil,
-        cookie_cps_serbian: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
         origin: nil,
         referer: nil
       })
