@@ -186,7 +186,6 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
       assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
     end
-
   end
 
   describe "when personalisation dial is in 'off' state" do
