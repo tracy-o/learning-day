@@ -571,12 +571,18 @@ defmodule Routes.Routefile do
   ## Sport Calendars
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/formula1/calendar.app"]
   handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/formula1/calendar"]
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
 
   ## Sport Fixtures pages
   handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
   handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures"]
   handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
+
+  ## Sport Horse Racing Results
+  handle "/sport/horse-racing/:tournament/results.app", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
+  handle "/sport/horse-racing/:tournament/results", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
 
   ## Sport Results pages
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
@@ -587,10 +593,13 @@ defmodule Routes.Routefile do
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/scores-fixtures"]
+  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
   handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
+  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures/2021-02", "/sport/football/teams/manchester-united/scores-fixtures/2021-02.app"]
 
   ## Sport Table pages
   handle "/sport/:discipline/tables.app", using: "SportDataPage", examples: ["/sport/football/tables.app"]
@@ -609,12 +618,14 @@ defmodule Routes.Routefile do
   handle "/sport/cricket/teams/:team/averages", using: "SportDataPage", examples: ["/sport/cricket/teams/lancashire/averages"]
 
   ## Sport Football Top-Scorers
-  handle "/sport/football/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/top-scorers.app"]
-  handle "/sport/football/top-scorers", using: "SportDataPage", examples: ["/sport/football/top-scorers"]
   handle "/sport/football/:tournament/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
   handle "/sport/football/:tournament/top-scorers", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers"]
+  handle "/sport/football/:tournament/top-scorers/assists.app", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers/assists.app"]
+  handle "/sport/football/:tournament/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers/assists"]
   handle "/sport/football/teams/:team/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers.app"]
   handle "/sport/football/teams/:team/top-scorers", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
+  handle "/sport/football/teams/:team/top-scorers/assists.app", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists.app"]
+  handle "/sport/football/teams/:team/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists"]
 
   ## Sport Formula 1 Pages
   handle "/sport/formula1/latest.app", using: "SportDataPage", examples: ["/sport/formula1/latest.app"]
