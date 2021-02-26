@@ -29,7 +29,18 @@ defmodule Belfrage.Transformers.UserSession do
   end
 
   defp personalisation_available?(host) when is_binary(host) do
-    @dial.state(:personalisation) && @idcta_flagpole.state() && String.ends_with?(host, "bbc.co.uk")
+    @dial.state(:personalisation) && @idcta_flagpole.state() && valid_host?(host)
+  end
+
+  defp valid_host?(host) do
+    String.ends_with?(host, "bbc.co.uk") && non_live_host?(host)
+  end
+
+  # Temporarily avoid allowing live hosts if Capability teams
+  # miss the `only_on: test` directive in the Routefile.
+  # This will go once we reach Milestone 3.
+  def non_live_host?(host) do
+    String.contains?(host, "preview") || String.contains?(host, "test")
   end
 
   defp personalisation_available?(_host) do
