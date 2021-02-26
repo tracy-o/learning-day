@@ -90,7 +90,6 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro return_404(matcher, [using: _using, examples: _examples] = args) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
-      @production_environment Application.get_env(:belfrage, :production_environment)
       get unquote(matcher) do
         View.not_found(var!(conn))
       end
