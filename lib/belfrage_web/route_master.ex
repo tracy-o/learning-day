@@ -87,8 +87,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  # I seem to have to keep using: in because its used in routefile_test.ex:14
-  defmacro serve_404(matcher, [using: _using, examples: _examples] = args) do
+  defmacro return_404(matcher, [using: _using, examples: _examples] = args) do
     quote do
       @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
       @production_environment Application.get_env(:belfrage, :production_environment)
