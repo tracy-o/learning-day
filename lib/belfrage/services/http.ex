@@ -116,5 +116,6 @@ defmodule Belfrage.Services.HTTP do
   defp scheme(_), do: "https"
 
   defp is_uk(true), do: "yes"
+  defp is_uk(false), do: "no"
   defp is_uk(_), do: nil
 end
