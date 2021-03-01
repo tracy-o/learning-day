@@ -142,6 +142,8 @@ defmodule Routes.Routefile do
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
   # RESFRAME-4095 for only-on routing test
+  handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
+
   handle "/homepage/testing", using: "TestHomePage", only_on: "test", examples: ["/homepage/testing"]
   handle "/homepage/testing", using: "HomePage", examples: []
 
