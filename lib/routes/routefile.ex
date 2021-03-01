@@ -410,24 +410,268 @@ defmodule Routes.Routefile do
   end
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:id.app", using: "SportMorphVideos", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportMorphVideos", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id", using: "SportMediaAssetPage", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id.app", using: "SportMorphVideos", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
+
+  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
+
+  ## Sport Internal Tools
+  handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
+  handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
+  handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
+
+  ## Sport Top 4
+  handle "/sport/alpha/top-4", using: "Sport", examples: ["/sport/alpha/top-4"]
+  handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
+
+  ## Sport BBC Live
+  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
+  handle "/sport/live-guide.app", using: "Sport", examples: ["/sport/live-guide.app"]
+  handle "/sport/live-guide", using: "Sport", examples: ["/sport/live-guide"]
+  handle "/sport/live-guide/*_any", using: "Sport", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+
+  ## Sport Video Collections
+  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
+  handle "/sport/:discipline/video", using: "SportMediaAssetPage", examples: ["/sport/cricket/video"]
+  handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
+  handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
+
+  ## Sport Stories with Vanity Urls 
+  handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
+  handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
+  handle "/sport/cricket/teams.app", using: "SportStoryPage", examples: ["/sport/cricket/teams.app"]
+  handle "/sport/cricket/teams", using: "SportStoryPage", examples: ["/sport/cricket/teams"]
+  handle "/sport/football/gossip.app", using: "SportStoryPage", examples: ["/sport/football/gossip.app"]
+  handle "/sport/football/gossip", using: "SportStoryPage", examples: ["/sport/football/gossip"]
+  handle "/sport/football/leagues-cups.app", using: "SportStoryPage", examples: ["/sport/football/leagues-cups.app"]
+  handle "/sport/football/leagues-cups", using: "SportStoryPage", examples: ["/sport/football/leagues-cups"]
+  handle "/sport/football/scottish/gossip.app", using: "SportStoryPage", examples: ["/sport/football/scottish/gossip.app"]
+  handle "/sport/football/scottish/gossip", using: "SportStoryPage", examples: ["/sport/football/scottish/gossip"]
+  handle "/sport/football/teams.app", using: "SportStoryPage", examples: ["/sport/football/teams.app"]
+  handle "/sport/football/teams", using: "SportStoryPage", examples: ["/sport/football/teams"]
+  handle "/sport/football/transfers.app", using: "SportStoryPage", examples: ["/sport/football/transfers.app"]
+  handle "/sport/football/transfers", using: "SportStoryPage", examples: ["/sport/football/transfers"]
+  handle "/sport/my-sport.app", using: "SportStoryPage", examples: ["/sport/my-sport.app"]
+  handle "/sport/my-sport", using: "SportStoryPage", examples: ["/sport/my-sport"]
+  handle "/sport/rugby-league/teams.app", using: "SportStoryPage", examples: ["/sport/rugby-league/teams.app"]
+  handle "/sport/rugby-league/teams", using: "SportStoryPage", examples: ["/sport/rugby-league/teams"]
+  handle "/sport/rugby-union/teams.app", using: "SportStoryPage", examples: ["/sport/rugby-union/teams.app"]
+  handle "/sport/rugby-union/teams", using: "SportStoryPage", examples: ["/sport/rugby-union/teams"]
+
+  ## Sport Manual Indexes
+  handle "/sport.app", using: "SportIndexPage", examples: ["/sport.app"]
+  handle "/sport", using: "SportIndexPage", examples: ["/sport"]
+  handle "/sport/africa.app", using: "SportIndexPage", examples: ["/sport/africa.app"]
+  handle "/sport/africa", using: "SportIndexPage", examples: ["/sport/africa"]
+  handle "/sport/american-football.app", using: "SportIndexPage", examples: ["/sport/american-football.app"]
+  handle "/sport/american-football", using: "SportIndexPage", examples: ["/sport/american-football"]
+  handle "/sport/athletics.app", using: "SportIndexPage", examples: ["/sport/athletics.app"]
+  handle "/sport/athletics", using: "SportIndexPage", examples: ["/sport/athletics"]
+  handle "/sport/basketball.app", using: "SportIndexPage", examples: ["/sport/basketball.app"]
+  handle "/sport/basketball", using: "SportIndexPage", examples: ["/sport/basketball"]
+  handle "/sport/boxing.app", using: "SportIndexPage", examples: ["/sport/boxing.app"]
+  handle "/sport/boxing", using: "SportIndexPage", examples: ["/sport/boxing"]
+  handle "/sport/commonwealth-games.app", using: "SportIndexPage", examples: ["/sport/commonwealth-games.app"]
+  handle "/sport/commonwealth-games", using: "SportIndexPage", examples: ["/sport/commonwealth-games"]
+  handle "/sport/cricket.app", using: "SportIndexPage", examples: ["/sport/cricket.app"]
+  handle "/sport/cricket", using: "SportIndexPage", examples: ["/sport/cricket"]
+  handle "/sport/cricket/counties.app", using: "SportIndexPage", examples: ["/sport/cricket/counties.app"]
+  handle "/sport/cricket/counties", using: "SportIndexPage", examples: ["/sport/cricket/counties"]
+  handle "/sport/cricket/womens.app", using: "SportIndexPage", examples: ["/sport/cricket/womens.app"]
+  handle "/sport/cricket/womens", using: "SportIndexPage", examples: ["/sport/cricket/womens"]
+  handle "/sport/cycling.app", using: "SportIndexPage", examples: ["/sport/cycling.app"]
+  handle "/sport/cycling", using: "SportIndexPage", examples: ["/sport/cycling"]
+  handle "/sport/disability-sport.app", using: "SportIndexPage", examples: ["/sport/disability-sport.app"]
+  handle "/sport/disability-sport", using: "SportIndexPage", examples: ["/sport/disability-sport"]
+  handle "/sport/england.app", using: "SportIndexPage", examples: ["/sport/england.app"]
+  handle "/sport/england", using: "SportIndexPage", examples: ["/sport/england"]
+  handle "/sport/football.app", using: "SportIndexPage", examples: ["/sport/football.app"]
+  handle "/sport/football", using: "SportIndexPage", examples: ["/sport/football"]
+  handle "/sport/football/championship.app", using: "SportIndexPage", examples: ["/sport/football/championship.app"]
+  handle "/sport/football/championship", using: "SportIndexPage", examples: ["/sport/football/championship"]
+  handle "/sport/football/european-championship.app", using: "SportIndexPage", examples: ["/sport/football/european-championship.app"]
+  handle "/sport/football/european-championship", using: "SportIndexPage", examples: ["/sport/football/european-championship"]
+  handle "/sport/football/european.app", using: "SportIndexPage", examples: ["/sport/football/european.app"]
+  handle "/sport/football/european", using: "SportIndexPage", examples: ["/sport/football/european"]
+  handle "/sport/football/fa-cup.app", using: "SportIndexPage", examples: ["/sport/football/fa-cup.app"]
+  handle "/sport/football/fa-cup", using: "SportIndexPage", examples: ["/sport/football/fa-cup"]
+  handle "/sport/football/irish.app", using: "SportIndexPage", examples: ["/sport/football/irish.app"]
+  handle "/sport/football/irish", using: "SportIndexPage", examples: ["/sport/football/irish"]
+  handle "/sport/football/premier-league.app", using: "SportIndexPage", examples: ["/sport/football/premier-league.app"]
+  handle "/sport/football/premier-league", using: "SportIndexPage", examples: ["/sport/football/premier-league"]
+  handle "/sport/football/scottish.app", using: "SportIndexPage", examples: ["/sport/football/scottish.app"]
+  handle "/sport/football/scottish", using: "SportIndexPage", examples: ["/sport/football/scottish"]
+  handle "/sport/football/welsh.app", using: "SportIndexPage", examples: ["/sport/football/welsh.app"]
+  handle "/sport/football/welsh", using: "SportIndexPage", examples: ["/sport/football/welsh"]
+  handle "/sport/football/womens.app", using: "SportIndexPage", examples: ["/sport/football/womens.app"]
+  handle "/sport/football/womens", using: "SportIndexPage", examples: ["/sport/football/womens"]
+  handle "/sport/football/world-cup.app", using: "SportIndexPage", examples: ["/sport/football/world-cup.app"]
+  handle "/sport/football/world-cup", using: "SportIndexPage", examples: ["/sport/football/world-cup"]
+  handle "/sport/formula1.app", using: "SportIndexPage", examples: ["/sport/formula1.app"]
+  handle "/sport/formula1", using: "SportIndexPage", examples: ["/sport/formula1"]
+  handle "/sport/get-inspired.app", using: "SportIndexPage", examples: ["/sport/get-inspired.app"]
+  handle "/sport/get-inspired", using: "SportIndexPage", examples: ["/sport/get-inspired"]
+  handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage", examples: ["/sport/get-inspired/activity-guides.app"]
+  handle "/sport/get-inspired/activity-guides", using: "SportIndexPage", examples: ["/sport/get-inspired/activity-guides"]
+  handle "/sport/golf.app", using: "SportIndexPage", examples: ["/sport/golf.app"]
+  handle "/sport/golf", using: "SportIndexPage", examples: ["/sport/golf"]
+  handle "/sport/horse-racing.app", using: "SportIndexPage", examples: ["/sport/horse-racing.app"]
+  handle "/sport/horse-racing", using: "SportIndexPage", examples: ["/sport/horse-racing"]
+  handle "/sport/mixed-martial-arts.app", using: "SportIndexPage", examples: ["/sport/mixed-martial-arts.app"]
+  handle "/sport/mixed-martial-arts", using: "SportIndexPage", examples: ["/sport/mixed-martial-arts"]
+  handle "/sport/motorsport.app", using: "SportIndexPage", examples: ["/sport/motorsport.app"]
+  handle "/sport/motorsport", using: "SportIndexPage", examples: ["/sport/motorsport"]
+  handle "/sport/netball.app", using: "SportIndexPage", examples: ["/sport/netball.app"]
+  handle "/sport/netball", using: "SportIndexPage", examples: ["/sport/netball"]
+  handle "/sport/northern-ireland.app", using: "SportIndexPage", examples: ["/sport/northern-ireland.app"]
+  handle "/sport/northern-ireland", using: "SportIndexPage", examples: ["/sport/northern-ireland"]
+  handle "/sport/northern-ireland/gaelic-games.app", using: "SportIndexPage", examples: ["/sport/northern-ireland/gaelic-games.app"]
+  handle "/sport/northern-ireland/gaelic-games", using: "SportIndexPage", examples: ["/sport/northern-ireland/gaelic-games"]
+  handle "/sport/northern-ireland/motorbikes.app", using: "SportIndexPage", examples: ["/sport/northern-ireland/motorbikes.app"]
+  handle "/sport/northern-ireland/motorbikes", using: "SportIndexPage", examples: ["/sport/northern-ireland/motorbikes"]
+  handle "/sport/olympics.app", using: "SportIndexPage", examples: ["/sport/olympics.app"]
+  handle "/sport/olympics", using: "SportIndexPage", examples: ["/sport/olympics"]
+  handle "/sport/rugby-league.app", using: "SportIndexPage", examples: ["/sport/rugby-league.app"]
+  handle "/sport/rugby-league", using: "SportIndexPage", examples: ["/sport/rugby-league"]
+  handle "/sport/rugby-union.app", using: "SportIndexPage", examples: ["/sport/rugby-union.app"]
+  handle "/sport/rugby-union", using: "SportIndexPage", examples: ["/sport/rugby-union"]
+  handle "/sport/rugby-union/english.app", using: "SportIndexPage", examples: ["/sport/rugby-union/english.app"]
+  handle "/sport/rugby-union/english", using: "SportIndexPage", examples: ["/sport/rugby-union/english"]
+  handle "/sport/rugby-union/irish.app", using: "SportIndexPage", examples: ["/sport/rugby-union/irish.app"]
+  handle "/sport/rugby-union/irish", using: "SportIndexPage", examples: ["/sport/rugby-union/irish"]
+  handle "/sport/rugby-union/scottish.app", using: "SportIndexPage", examples: ["/sport/rugby-union/scottish.app"]
+  handle "/sport/rugby-union/scottish", using: "SportIndexPage", examples: ["/sport/rugby-union/scottish"]
+  handle "/sport/rugby-union/welsh.app", using: "SportIndexPage", examples: ["/sport/rugby-union/welsh.app"]
+  handle "/sport/rugby-union/welsh", using: "SportIndexPage", examples: ["/sport/rugby-union/welsh"]
+  handle "/sport/scotland.app", using: "SportIndexPage", examples: ["/sport/scotland.app"]
+  handle "/sport/scotland", using: "SportIndexPage", examples: ["/sport/scotland"]
+  handle "/sport/snooker.app", using: "SportIndexPage", examples: ["/sport/snooker.app"]
+  handle "/sport/snooker", using: "SportIndexPage", examples: ["/sport/snooker"]
+  handle "/sport/sports-personality.app", using: "SportIndexPage", examples: ["/sport/sports-personality.app"]
+  handle "/sport/sports-personality", using: "SportIndexPage", examples: ["/sport/sports-personality"]
+  handle "/sport/swimming.app", using: "SportIndexPage", examples: ["/sport/swimming.app"]
+  handle "/sport/swimming", using: "SportIndexPage", examples: ["/sport/swimming"]
+  handle "/sport/tennis.app", using: "SportIndexPage", examples: ["/sport/tennis.app"]
+  handle "/sport/tennis", using: "SportIndexPage", examples: ["/sport/tennis"]
+  handle "/sport/wales.app", using: "SportIndexPage", examples: ["/sport/wales.app"]
+  handle "/sport/wales", using: "SportIndexPage", examples: ["/sport/wales"]
+  handle "/sport/winter-olympics.app", using: "SportIndexPage", examples: ["/sport/winter-olympics.app"]
+  handle "/sport/winter-olympics", using: "SportIndexPage", examples: ["/sport/winter-olympics"]
+  handle "/sport/winter-sports.app", using: "SportIndexPage", examples: ["/sport/winter-sports.app"]
+  handle "/sport/winter-sports", using: "SportIndexPage", examples: ["/sport/winter-sports"]
+
+  ## Sport Calendars
+  handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/formula1/calendar.app"]
+  handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/formula1/calendar"]
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
+
+  ## Sport Fixtures pages
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures"]
+  handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
+  handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
+
+  ## Sport Horse Racing Results
+  handle "/sport/horse-racing/:tournament/results.app", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
+  handle "/sport/horse-racing/:tournament/results", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
+
+  ## Sport Results pages
+  handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
+  handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
+  handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app"]
+  handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results"]
+
+  ## Sport Scores-Fixtures pages
+  handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/scores-fixtures.app"]
+  handle "/sport/:discipline/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/scores-fixtures"]
+  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
+  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures/2021-02", "/sport/football/teams/manchester-united/scores-fixtures/2021-02.app"]
+
+  ## Sport Table pages
+  handle "/sport/:discipline/tables.app", using: "SportDataPage", examples: ["/sport/football/tables.app"]
+  handle "/sport/:discipline/tables", using: "SportDataPage", examples: ["/sport/football/tables"]
+  handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage", examples: ["/sport/football/championship/table.app"]
+  handle "/sport/:discipline/:tournament/table", using: "SportDataPage", examples: ["/sport/football/championship/table"]
+  handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage", examples: ["/sport/football/teams/arsenal/table.app"]
+  handle "/sport/:discipline/teams/:team/table", using: "SportDataPage", examples: ["/sport/football/teams/arsenal/table"]
+
+  ## Sport Cricket Averages
+  handle "/sport/cricket/averages.app", using: "SportDataPage", examples: ["/sport/cricket/averages.app"]
+  handle "/sport/cricket/averages", using: "SportDataPage", examples: ["/sport/cricket/averages"]
+  handle "/sport/cricket/:tournament/averages.app", using: "SportDataPage", examples: ["/sport/cricket/indian-premier-league/averages.app"]
+  handle "/sport/cricket/:tournament/averages", using: "SportDataPage", examples: ["/sport/cricket/indian-premier-league/averages"]
+  handle "/sport/cricket/teams/:team/averages.app", using: "SportDataPage", examples: ["/sport/cricket/teams/lancashire/averages.app"]
+  handle "/sport/cricket/teams/:team/averages", using: "SportDataPage", examples: ["/sport/cricket/teams/lancashire/averages"]
+
+  ## Sport Football Top-Scorers
+  handle "/sport/football/:tournament/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
+  handle "/sport/football/:tournament/top-scorers", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers"]
+  handle "/sport/football/:tournament/top-scorers/assists.app", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers/assists.app"]
+  handle "/sport/football/:tournament/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers/assists"]
+  handle "/sport/football/teams/:team/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers.app"]
+  handle "/sport/football/teams/:team/top-scorers", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
+  handle "/sport/football/teams/:team/top-scorers/assists.app", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists.app"]
+  handle "/sport/football/teams/:team/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists"]
+
+  ## Sport Formula 1 Pages
+  handle "/sport/formula1/latest.app", using: "SportDataPage", examples: ["/sport/formula1/latest.app"]
+  handle "/sport/formula1/latest", using: "SportDataPage", examples: ["/sport/formula1/latest"]
+  handle "/sport/formula1/results.app", using: "SportDataPage", examples: ["/sport/formula1/results.app"]
+  handle "/sport/formula1/results", using: "SportDataPage", examples: ["/sport/formula1/results"]
+  handle "/sport/formula1/:season/results.app", using: "SportDataPage", examples: ["/sport/formula1/2020/results.app"]
+  handle "/sport/formula1/:season/results", using: "SportDataPage", examples: ["/sport/formula1/2020/results"]
+  handle "/sport/formula1/:season/:tournament/results.app", using: "SportDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
+  handle "/sport/formula1/:season/:tournament/results", using: "SportDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
+  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
+  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportDataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
+  handle "/sport/formula1/constructors-world-championship/standings", using: "SportDataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
+  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportDataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
+  handle "/sport/formula1/drivers-world-championship/standings", using: "SportDataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
+
+  ## Sport Golf Leaderboard
+  handle "/sport/golf/leaderboard.app", using: "SportDataPage", examples: ["/sport/golf/leaderboard.app"]
+  handle "/sport/golf/leaderboard", using: "SportDataPage", examples: ["/sport/golf/leaderboard"]
+  handle "/sport/golf/:tournament/leaderboard.app", using: "SportDataPage", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
+  handle "/sport/golf/:tournament/leaderboard", using: "SportDataPage", examples: ["/sport/golf/lpga-tour/leaderboard"]
+
+  ## Sport Tennis Pages
+  handle "/sport/tennis/live-scores.app", using: "SportDataPage", examples: ["/sport/tennis/live-scores.app"]
+  handle "/sport/tennis/live-scores", using: "SportDataPage", examples: ["/sport/tennis/live-scores"]
+  handle "/sport/tennis/live-scores/*_any", using: "SportDataPage", examples: ["/sport/tennis/live-scores/australian-open.app", "/sport/tennis/live-scores/australian-open"]
+  handle "/sport/tennis/order-of-play.app", using: "SportDataPage", examples: ["/sport/tennis/order-of-play.app"]
+  handle "/sport/tennis/order-of-play", using: "SportDataPage", examples: ["/sport/tennis/order-of-play"]
+  handle "/sport/tennis/order-of-play/*_any", using: "SportDataPage", examples: ["/sport/tennis/order-of-play/australian-open.app", "/sport/tennis/order-of-play/australian-open"]
+  handle "/sport/tennis/results.app", using: "SportDataPage", examples: ["/sport/tennis/results.app"]
+  handle "/sport/tennis/results", using: "SportDataPage", examples: ["/sport/tennis/results"]
+  handle "/sport/tennis/results/*_any", using: "SportDataPage", examples: ["/sport/tennis/results/australian-open/mens-singles.app", "/sport/tennis/results/australian-open/mens-singles"]
+
+  ## Sport Event Data Pages 
+  handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
+  handle "/sport/cricket/scorecard/:id", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
+  handle "/sport/horse-racing/race/:id.app", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
+  handle "/sport/horse-racing/race/:id", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
+  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786.app"]
+  handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786"]
+  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
+  handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
 
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
-
-  handle "/sport.amp", using: "SportAmp", examples: ["/sport.amp"]
-  handle "/sport.json", using: "SportAmp", examples: ["/sport.json"]
-  handle "/sport.app", using: "SportApp", examples: ["/sport.app"]
 
   handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
 
@@ -497,9 +741,35 @@ defmodule Routes.Routefile do
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
-  # TODO issue with routes such as /sport/cycling/19690053 being matched to the sport/:discipline matcher
-  handle "/sport/*_any", using: "Sport", examples: ["/sport"]
 
+  ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id.json", using: "SportAmp", examples: ["/sport/50562296.json?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id.app", using: "SportStoryPage", examples: ["/sport/50562296.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:id", using: "SportStoryPage", examples: ["/sport/50562296?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  ## Sport Stories (with discipline) - all use query string params in example URL to use live data in Mozart
+  handle "/sport/:discipline/:id.amp", using: "SportAmp", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id.json", using: "SportAmp", examples: ["/sport/football/56064289.json?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/football/56064289.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+    
   # Weather
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]

@@ -1,7 +1,7 @@
-defmodule Routes.Specs.SportMorphVideos do
+defmodule Routes.Specs.SportIndexPage do
   def specs do
     %{
-      owner: "D&ESportOneWebTeam@bbc.co.uk",
+      owner: "#help-sport",
       runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
       platform: MozartSport
     }
