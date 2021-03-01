@@ -5,7 +5,7 @@ defmodule Routes.Specs.PresTestPersonalised do
       platform: Webcore,
       query_params_allowlist: ["q", "page", "scope", "filter", "personalisationMode"],
       pipeline: ["RestrictedPersonalisation", "UserSession"],
-      cookie_allowlist: ["ckns_atkn"],
+      cookie_allowlist: ["ckns_atkn", "ckns_id"],
       headers_allowlist: ["x-id-oidc-signedin"]
     }
   end

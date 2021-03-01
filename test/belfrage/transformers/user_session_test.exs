@@ -132,6 +132,26 @@ defmodule Belfrage.Transformers.UserSessionTest do
                }
              } = UserSession.call([], struct)
     end
+
+    test "valid `ckns_atkn` and 'ckns_id' cookies will be authenticated" do
+      struct = %Struct{
+        request: %Struct.Request{
+          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar", "ckns_id" => "123"},
+          host: "bbc.co.uk"
+        }
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: true,
+                   session_token: @token,
+                   valid_session: true
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
   end
 
   describe "when personalisation dial is 'on', idcta flagpole is false" do
