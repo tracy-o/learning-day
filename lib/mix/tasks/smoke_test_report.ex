@@ -1,6 +1,8 @@
 defmodule Mix.Tasks.ReportSmokeTestResults do
   use Mix.Task
 
+  alias Mix.Tasks.ReportSmokeTestResults.Message
+
   @shortdoc "Reports smoke test failures to route owner teams."
 
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
@@ -44,16 +46,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   defp format_test_failure(failure = %ExUnit.Test{state: {:failed, errors}}) do
-    Enum.map(errors, fn {:error, assertion_error = %ExUnit.AssertionError{}, _context} ->
-      assertion = Macro.to_string(assertion_error.expr)
-
-      ~s(*#{failure.name}*
-```
-#{assertion}
-#{assertion_error.message}
-Left: #{inspect(assertion_error.left)}
-Right: #{inspect(assertion_error.right)}```)
-    end)
+    Enum.map(errors, &Message.format(failure, &1))
   end
 
   def broadcast_results_to_teams(formatted_routespec_failures, slack_auth_token) do
