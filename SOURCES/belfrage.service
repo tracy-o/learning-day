@@ -4,6 +4,7 @@ After=network.target network-online.target dial-agent.service
 [Service]
 Environment=HOME=/home/component
 Environment=PORT=7080
+LimitNOFILE=16384
 User=component
 Group=component
 WorkingDirectory=/home/component/belfrage
