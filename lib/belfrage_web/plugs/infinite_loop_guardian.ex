@@ -18,7 +18,6 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
 
   defp send_404(conn) do
     conn
-    |> Plug.Conn.resp(404, "Not Found")
     |> BelfrageWeb.View.not_found()
     |> Plug.Conn.halt()
   end
