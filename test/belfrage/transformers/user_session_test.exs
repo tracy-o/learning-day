@@ -35,7 +35,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         request: %Struct.Request{
           path: "/search",
           scheme: :http,
-          host: "test.bbc.co.uk",
+          host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
         }
       }
@@ -58,7 +58,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -81,7 +81,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -117,7 +117,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         }
       }
 
@@ -180,7 +180,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         }
       }
 
@@ -202,7 +202,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         }
       }
 
@@ -214,7 +214,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         }
       }
 
@@ -273,7 +273,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         Struct.add(%Struct{}, :request, %{
           cookies: %{"ckns_atkn" => access_token},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         })
 
       assert {
@@ -293,7 +293,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         Struct.add(struct, :request, %{
           cookies: %{"ckns_atkn" => access_token},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "test.bbc.co.uk"
+          host: "bbc.co.uk"
         })
 
       assert {
@@ -324,7 +324,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -365,7 +365,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -406,7 +406,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -447,7 +447,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -492,7 +492,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
@@ -543,7 +543,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "private"
                      }
@@ -598,7 +598,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "private"
                      }
@@ -653,7 +653,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    response: %Struct.Response{
                      headers: %{
                        "location" =>
-                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                         "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                        "x-bbc-no-scheme-rewrite" => "1",
                        "cache-control" => "private"
                      }
@@ -709,32 +709,13 @@ defmodule Belfrage.Transformers.UserSessionTest do
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
-                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Ftest.bbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "private"
                    }
                  }
                }
              } = UserSession.call([], struct)
-    end
-  end
-
-  describe "when host is live (until Milestone 3)" do
-    setup do
-      expect(FlagpoleMock, :state, fn -> true end)
-      :ok
-    end
-
-    test "'x-id-oidc-signedin' header set to '0' will not be authenticated" do
-      struct = %Struct{
-        request: %Struct.Request{
-          cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
-          raw_headers: %{"x-id-oidc-signedin" => "1"},
-          host: "bbc.co.uk"
-        }
-      }
-
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
     end
   end
 end
