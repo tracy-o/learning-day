@@ -10,6 +10,7 @@ defmodule BelfrageWeb.Router do
 
   @routefile Application.get_env(:belfrage, :routefile)
 
+  plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(ExMetrics.Plug.PageMetrics)
   plug(BelfrageWeb.Plugs.XRay)
