@@ -10,7 +10,12 @@ defmodule Belfrage.Authentication.Validator do
     default_claims(skip: [:aud, :iss])
     |> add_claim("aud", nil, &(&1 == auth_config()["aud"]))
     |> add_claim("tokenName", nil, &(&1 == "access_token"))
+    |> add_claim("exp", nil, &is_valid_expiry?/1)
     |> Map.put("iss", %Joken.Claim{generate: nil, validate: &is_valid_issuer?/3})
+  end
+
+  defp is_valid_expiry?(expiry) do
+    Validator.Expiry.valid?(auth_config()["jwt_expiry_threshold"], expiry)
   end
 
   defp is_valid_issuer?(_issuer_in_claim, claims, _) do

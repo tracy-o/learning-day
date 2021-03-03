@@ -72,7 +72,8 @@ config :belfrage,
     "aud" => "Account",
     "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
     "session_url" => "https://session.test.bbc.co.uk",
-    "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config"
+    "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config",
+    "jwt_expiry_threshold" => 600
   }
 
 config :ex_aws,
