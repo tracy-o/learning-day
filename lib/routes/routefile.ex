@@ -406,6 +406,8 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
+
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
@@ -431,9 +433,11 @@ defmodule Routes.Routefile do
   handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
 
   ## Sport Top 4
+  handle "/sport/alpha/top-4.app", using: "Sport", examples: ["/sport/alpha/top-4.app"]
   handle "/sport/alpha/top-4", using: "Sport", examples: ["/sport/alpha/top-4"]
+  handle "/sport/top-4.app", using: "Sport", examples: ["/sport/top-4.app"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
-
+  
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
   handle "/sport/live-guide.app", using: "Sport", examples: ["/sport/live-guide.app"]
