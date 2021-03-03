@@ -87,15 +87,6 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro return_404(matcher, [using: _using, examples: _examples] = args) do
-    quote do
-      @routes [{unquote(matcher), Enum.into(unquote(args), %{})} | @routes]
-      get unquote(matcher) do
-        View.not_found(var!(conn))
-      end
-    end
-  end
-
   # TODO: this is just an example, and could be replaced/expanded
   # in a validator library.
   defmacro return_404(if: check_pass) do
