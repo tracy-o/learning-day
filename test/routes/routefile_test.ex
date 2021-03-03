@@ -44,14 +44,16 @@ defmodule Routes.RoutefileTest do
       end
 
       examples
-      |> Enum.map(fn
-        {path, expected_status_code} -> {path, expected_status_code}
-        path -> {path, 200}
-      end)
-      |> Enum.each(fn route_example ->
-        {path, status_code} = route_example
-        @path path
-        @status_code status_code
+      |> Enum.each(fn example ->
+        case example do
+          {path, status_code} ->
+            @path path
+            @status_code status_code
+
+          path ->
+            @path path
+            @status_code 200
+        end
 
         test "Route example #{@path} is prefixed with `/`" do
           assert String.starts_with?(@path, "/"),
