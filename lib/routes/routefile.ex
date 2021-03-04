@@ -406,6 +406,7 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba"]
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
