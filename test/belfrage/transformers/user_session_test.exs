@@ -255,6 +255,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       FlagpoleMock |> expect(:state, fn -> true end)
 
       %{
+        valid_access_token: Fixtures.AuthToken.valid_access_token(),
         expired_access_token: Fixtures.AuthToken.expired_access_token(),
         invalid_access_token: Fixtures.AuthToken.invalid_access_token(),
         invalid_payload_access_token: Fixtures.AuthToken.invalid_payload_access_token(),
@@ -399,6 +400,56 @@ defmodule Belfrage.Transformers.UserSessionTest do
           cookies: %{"ckns_atkn" => access_token},
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         })
+
+      assert {
+               :redirect,
+               %Struct{
+                 response: %Struct.Response{
+                   headers: %{
+                     "location" =>
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "x-bbc-no-scheme-rewrite" => "1",
+                     "cache-control" => "private"
+                   }
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
+    test "nearly expired access token", %{struct: struct, valid_access_token: access_token} do
+      struct =
+        Struct.add(struct, :request, %{
+          cookies: %{"ckns_atkn" => access_token},
+          raw_headers: %{"x-id-oidc-signedin" => "1"}
+        })
+
+      expect(Belfrage.Authentication.Validator.ExpiryMock, :valid?, fn _threshold, _expiry ->
+        false
+      end)
+
+      assert {
+               :redirect,
+               %Struct{
+                 private: private = %Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
+               }
+             } = UserSession.call([], struct)
+
+    end
+
+    test "nearly expired access token will be redirected", %{struct: struct, valid_access_token: access_token} do
+      struct =
+        Struct.add(struct, :request, %{
+          cookies: %{"ckns_atkn" => access_token},
+          raw_headers: %{"x-id-oidc-signedin" => "1"}
+        })
+
+      expect(Belfrage.Authentication.Validator.ExpiryMock, :valid?, fn _threshold, _expiry ->
+        false
+      end)
 
       assert {
                :redirect,
