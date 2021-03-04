@@ -430,14 +430,14 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: private = %Struct.Private{
-                   authenticated: true,
-                   session_token: ^access_token,
-                   valid_session: false
-                 }
+                 private:
+                   private = %Struct.Private{
+                     authenticated: true,
+                     session_token: ^access_token,
+                     valid_session: false
+                   }
                }
              } = UserSession.call([], struct)
-
     end
 
     test "nearly expired access token will be redirected", %{struct: struct, valid_access_token: access_token} do
