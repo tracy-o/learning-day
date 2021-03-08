@@ -19,6 +19,7 @@ defmodule Test.Support.Helper do
     Mox.stub_with(Belfrage.DialMock, Belfrage.DialStub)
     Mox.stub_with(Belfrage.DialWithOptionalCallbackMock, Belfrage.DialStub)
     Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
+    Mox.stub_with(Belfrage.Authentication.Validator.ExpiryMock, Belfrage.Authentication.Validator.ExpiryStub)
   end
 
   defmacro assert_gzipped(compressed, should_be) do

@@ -5,12 +5,19 @@ defmodule Belfrage.Authentication.Validator do
 
   add_hook(Belfrage.Authentication.VerifyHook)
 
+  @expiry_validator Application.get_env(:belfrage, :expiry_validator)
+
   @impl Joken.Config
   def token_config do
-    default_claims(skip: [:aud, :iss])
+    default_claims(skip: [:aud, :iss, :exp])
     |> add_claim("aud", nil, &(&1 == auth_config()["aud"]))
     |> add_claim("tokenName", nil, &(&1 == "access_token"))
+    |> add_claim("exp", nil, &is_valid_expiry?/1)
     |> Map.put("iss", %Joken.Claim{generate: nil, validate: &is_valid_issuer?/3})
+  end
+
+  defp is_valid_expiry?(expiry) do
+    @expiry_validator.valid?(auth_config()["jwt_expiry_threshold"], expiry)
   end
 
   defp is_valid_issuer?(_issuer_in_claim, claims, _) do
