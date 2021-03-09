@@ -14,7 +14,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
-      path_params: %{"section" => "weightlifting"}
+      path_params: %{"section" => "get-inspired"}
     }
   }
 
@@ -103,7 +103,7 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminatorTest do
                  scheme: :http,
                  host: "www.bbc.co.uk",
                  path: "/_web_core",
-                 path_params: %{"section" => "weightlifting"}
+                 path_params: %{"section" => "get-inspired"}
                }
              }
            } = SportVideosPlatformDiscriminator.call([], @webcore_section_test)

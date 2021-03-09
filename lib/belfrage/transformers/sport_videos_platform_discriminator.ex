@@ -5,6 +5,14 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
   use Belfrage.Transformers.Transformer
 
   @webcore_sections_test [
+    # Block 6
+    "get-inspired"
+  ]
+
+  @webcore_sections_live [
+    # Block 1
+    "sports-personality",
+
     # Block 2
     "archery",
     "badminton",
@@ -12,7 +20,6 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "canoeing",
     "diving",
     "equestrian",
-    "get-inspired",
     "handball",
     "hockey",
     "ice-hockey",
@@ -25,11 +32,6 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "taekwondo",
     "triathlon",
     "weightlifting"
-  ]
-
-  # Block 1
-  @webcore_sections_live [
-    "sports-personality"
   ]
 
   def call(_rest, struct) do
