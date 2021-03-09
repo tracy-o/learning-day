@@ -32,6 +32,9 @@ defmodule Routes.RoutefileTest do
                    "`#{transformer}` is not a valid request transformer."
           end
 
+          assert length(specs.pipeline) == length(Enum.uniq(specs.pipeline)),
+                 "Duplicated transformers found in pipeline."
+
           if @env == "live" do
             assert "DevelopmentRequests" not in specs.pipeline,
                    "Sorry, the `DevelopmentRequests` transformer cannot be used on live."
