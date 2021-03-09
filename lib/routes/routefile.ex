@@ -438,7 +438,7 @@ defmodule Routes.Routefile do
   handle "/sport/top-4.app", using: "Sport", examples: ["/sport/top-4.app"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
 
-  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba"]
+  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
 
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
