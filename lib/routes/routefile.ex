@@ -406,6 +406,27 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  ## Sport correspondents redirects
+  redirect "/sport/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
+  redirect "/sport/danroan", to: "/sport/topics/cd61kendv7et", status: 301
+  redirect "/sport/davewoods", to: "/sport/topics/c48de9x0zert", status: 301
+  redirect "/sport/iaincarter", to: "/sport/topics/cezlkpjd8ent", status: 301
+  redirect "/sport/jonathanagnew", to: "/sport/topics/cj26k5030q3t", status: 301
+  redirect "/sport/mikecostello", to: "/sport/topics/cl16knzpjzzt", status: 301
+  redirect "/sport/philmcnulty", to: "/sport/topics/c37dl80p4y3t", status: 301
+  redirect "/sport/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
+  redirect "/sport/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
+  
+  redirect "/sport/correspondents/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
+  redirect "/sport/correspondents/danroan", to: "/sport/topics/cd61kendv7et", status: 301
+  redirect "/sport/correspondents/davewoods", to: "/sport/topics/c48de9x0zert", status: 301
+  redirect "/sport/correspondents/iaincarter", to: "/sport/topics/cezlkpjd8ent", status: 301
+  redirect "/sport/correspondents/jonathanagnew", to: "/sport/topics/cj26k5030q3t", status: 301
+  redirect "/sport/correspondents/mikecostello", to: "/sport/topics/cl16knzpjzzt", status: 301
+  redirect "/sport/correspondents/philmcnulty", to: "/sport/topics/c37dl80p4y3t", status: 301
+  redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
+  redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
+
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
