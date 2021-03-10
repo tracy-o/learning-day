@@ -441,7 +441,12 @@ defmodule Routes.Routefile do
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
 
   ## Sport BBC Live
-  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
+  handle "/sport/live/football/:id.app", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live"]
+  handle "/sport/live/football/:id", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366?morph_env=live&renderer_env=live"]
+  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366/page/2.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
+
+  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849/page/3.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live"]
+
   handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
   handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
