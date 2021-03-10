@@ -442,9 +442,9 @@ defmodule Routes.Routefile do
 
   ## Sport BBC Live
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/football/52581366.app", "/sport/live/football/52581366"]
-  handle "/sport/live-guide.app", using: "Sport", examples: ["/sport/live-guide.app"]
-  handle "/sport/live-guide", using: "Sport", examples: ["/sport/live-guide"]
-  handle "/sport/live-guide/*_any", using: "Sport", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+  handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
+  handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
+  handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
   handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
