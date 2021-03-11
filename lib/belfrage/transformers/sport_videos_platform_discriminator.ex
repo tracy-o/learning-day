@@ -31,7 +31,26 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "table-tennis",
     "taekwondo",
     "triathlon",
-    "weightlifting"
+    "weightlifting",
+
+    # Block 3
+    "american-football",
+    "baseball",
+    "basketball",
+    "boxing",
+    "cycling",
+    "darts",
+    "disability-sport",
+    "gaelic-games",
+    "gymnastics",
+    "mixed-martial-arts",
+    "motorsport",
+    "netball",
+    "olympics",
+    "snooker",
+    "swimming",
+    "winter-sports",
+    "winter-olympics"
   ]
 
   def call(_rest, struct) do
