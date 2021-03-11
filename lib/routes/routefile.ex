@@ -213,7 +213,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/video_and_audio/*_any", using: "NewsVideoAndAudio", examples: [{"/news/video_and_audio/a_non_existing_route", 404}] do
+  handle "/news/video_and_audio/*_any", using: "NewsVideoAndAudio", examples: [] do
     return_404 if: true
   end
 

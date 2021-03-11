@@ -44,16 +44,12 @@ defmodule Routes.RoutefileTest do
       end
 
       examples
-      |> Enum.each(fn example ->
-        case example do
-          {path, status_code} ->
-            @path path
-            @status_code status_code
-
-          path ->
-            @path path
-            @status_code 200
-        end
+      |> Enum.map(fn
+        {path, _expected_status_code} -> path
+        path -> path
+      end)
+      |> Enum.each(fn path ->
+        @path path
 
         test "Route example #{@path} is prefixed with `/`" do
           assert String.starts_with?(@path, "/"),
@@ -61,7 +57,7 @@ defmodule Routes.RoutefileTest do
         end
 
         test "The example: #{@path} points to the #{loop_id} routespec" do
-          unless @route_matcher == "/*any" or @status_code == 404 do
+          unless @route_matcher == "/*any" do
             BelfrageMock
             |> expect(
               :handle,
@@ -75,7 +71,7 @@ defmodule Routes.RoutefileTest do
                 Struct.add(
                   struct,
                   :response,
-                  %Struct.Response{http_status: @status_code, body: "The example uses the correct loop"}
+                  %Struct.Response{http_status: 200, body: "The example uses the correct loop"}
                 )
               end
             )
@@ -84,11 +80,11 @@ defmodule Routes.RoutefileTest do
           conn = conn(:get, @path)
           conn = Router.call(conn, [])
 
-          if @route_matcher == "/*any" or @status_code == 404 do
+          if @route_matcher == "/*any" do
             assert conn.status == 404
             assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
           else
-            assert conn.status == @status_code
+            assert conn.status == 200
             assert conn.resp_body == "The example uses the correct loop"
           end
         end
