@@ -2,9 +2,8 @@
 
 library 'BBCNews'
 
-@Library('devops-tools-jenkins@DOT-149_JenkinsVersion') _
-def dockerregistry = libraryResource('dockerregistry').trim()
-def dockerimage = "$dockerregistry/bbc-news/elixir-centos7"
+def dockerregistry = library('devops-tools-jenkins').libraryResource('dockerregistry').trim()
+def dockerimage = library('devops-tools-jenkins')."${dockerregistry}/bbc-news/elixir-centos7"
 
 String buildVariables() {
   def envFile = readFile 'build.env'
