@@ -1,4 +1,4 @@
-defmodule Belfrage.Dials.NaidheachdanObit do
+defmodule Belfrage.Dials.ObitMode do
   @moduledoc false
 
   @behaviour Belfrage.Dial

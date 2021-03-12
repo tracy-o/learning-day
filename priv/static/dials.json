@@ -76,8 +76,8 @@
     ]
   },
   {
-    "name": "naidheachdan_obit",
-    "description": "This enables or disables obit mode for Naidheachdan.",
+    "name": "obit_mode",
+    "description": "This enables or disables obit mode",
     "default-value": "off",
     "values": [
       {

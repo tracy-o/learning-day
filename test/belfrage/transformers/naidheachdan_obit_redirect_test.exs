@@ -5,15 +5,15 @@ defmodule Belfrage.Transformers.NaidheachdanObitRedirectTest do
   alias Belfrage.Transformers.NaidheachdanObitRedirect
   alias Belfrage.Struct
 
-  def enable_naidheachdan_obit_dial() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :naidheachdan_obit ->
-      Belfrage.Dials.NaidheachdanObit.transform("on")
+  def enable_obit_mode_dial() do
+    stub(Belfrage.Dials.ServerMock, :state, fn :obit_mode ->
+      Belfrage.Dials.ObitMode.transform("on")
     end)
   end
 
-  def disable_naidheachdan_obit_dial() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :naidheachdan_obit ->
-      Belfrage.Dials.NaidheachdanObit.transform("off")
+  def disable_obit_mode_dial() do
+    stub(Belfrage.Dials.ServerMock, :state, fn :obit_mode ->
+      Belfrage.Dials.ObitMode.transform("off")
     end)
   end
 
@@ -28,7 +28,7 @@ defmodule Belfrage.Transformers.NaidheachdanObitRedirectTest do
 
   describe "obit enabled" do
     test "/naidheachdan is redirected /news" do
-      enable_naidheachdan_obit_dial()
+      enable_obit_mode_dial()
 
       assert {
                :redirect,
@@ -49,7 +49,7 @@ defmodule Belfrage.Transformers.NaidheachdanObitRedirectTest do
 
   describe "obit disabled" do
     test "/naidheachdan is not redirected /news" do
-      disable_naidheachdan_obit_dial()
+      disable_obit_mode_dial()
 
       assert {
                :ok,

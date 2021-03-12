@@ -66,7 +66,7 @@ config :belfrage,
     "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
     "logging_level" => Belfrage.Dials.LoggingLevel,
     "personalisation" => Belfrage.Dials.Personalisation,
-    "naidheachdan_obit" => Belfrage.Dials.NaidheachdanObit
+    "obit_mode" => Belfrage.Dials.ObitMode
   },
   pool_metric_rate: 10_000,
   authentication: %{

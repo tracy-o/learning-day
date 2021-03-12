@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.NaidheachdanObitRedirect do
 
   @impl true
   def call(rest, struct) do
-    case @dial.state(:naidheachdan_obit) do
+    case @dial.state(:obit_mode) do
       true -> redirect(struct)
       false -> then(rest, struct)
     end

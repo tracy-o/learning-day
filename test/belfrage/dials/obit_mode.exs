@@ -1,12 +1,12 @@
-defmodule Belfrage.Dials.NaidheachdanObitTest do
+defmodule Belfrage.Dials.ObitModeTest do
   use ExUnit.Case, async: true
-  alias Belfrage.Dials.NaidheachdanObit
+  alias Belfrage.Dials.ObitMode
 
   test "transform/1 converts string representation of 'on' to boolean" do
-    assert NaidheachdanObit.transform("on") === true
+    assert ObitMode.transform("on") === true
   end
 
   test "transform/1 converts string representation of 'off' to boolean" do
-    assert NaidheachdanObit.transform("off") === false
+    assert ObitMode.transform("off") === false
   end
 end
