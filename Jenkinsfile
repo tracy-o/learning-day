@@ -1,9 +1,11 @@
 #!/usr/bin/env groovy
 
-library 'BBCNews'
+library 'devops-tools-jenkins'
 
-def dockerregistry = library('devops-tools-jenkins').libraryResource('dockerregistry').trim()
-def dockerimage = library('devops-tools-jenkins')."${dockerregistry}/bbc-news/elixir-centos7"
+def dockerregistry = libraryResource('dockerregistry').trim()
+def dockerimage = "${dockerregistry}/bbc-news/elixir-centos7"
+
+library 'BBCNews'
 
 String buildVariables() {
   def envFile = readFile 'belfrage-build/build.env'
