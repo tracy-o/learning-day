@@ -487,6 +487,21 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml", "/sport/cricket/womens/rss.xml"]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
 
+  ## Sport redirects
+  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
+  handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
+  handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
+  handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
+  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
+  handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
+  handle "/sport/formula1/standings/*_any", using: "SportRedirects", examples: ["/sport/formula1/standings", "/sport/formula1/standings.app"]
+  handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
+  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
+  handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/medals/countries/new-zealand", "/sport/winter-olympics/medals/countries/great-britain.app"]
+  handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", "/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app"]
+  handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
+
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
