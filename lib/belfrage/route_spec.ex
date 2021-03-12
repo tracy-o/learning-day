@@ -6,7 +6,13 @@ defmodule Belfrage.RouteSpec do
   end
 
   def specs_for(name, env) do
-    specs = Module.concat([Routes, Specs, name]).specs()
+    route_spec_module = Module.concat([Routes, Specs, name])
+
+    specs =
+      case function_exported?(route_spec_module, :specs, 1) do
+        true -> route_spec_module.specs(env)
+        false -> route_spec_module.specs()
+      end
 
     Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
@@ -19,6 +25,11 @@ defmodule Belfrage.RouteSpec do
 
   defp merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
     "*"
+  end
+
+  defp merge_key(:pipeline, platform_list_value, route_list_value)
+       when is_list(platform_list_value) and is_list(route_list_value) do
+    route_list_value
   end
 
   defp merge_key(_key, platform_list_value, route_list_value)
