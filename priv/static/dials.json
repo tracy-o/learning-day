@@ -74,5 +74,20 @@
         "description": "Disable personalisation"
       }
     ]
+  },
+  {
+    "name": "naidheachdan_obit",
+    "description": "This enables or disables obit mode for Naidheachdan.",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enable obit mode"
+      },
+      {
+        "value": "off",
+        "description": "Disable obit mode"
+      }
+    ]
   }
 ]

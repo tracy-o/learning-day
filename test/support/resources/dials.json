@@ -1,1 +1,1 @@
-{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false", "personalisation":"on"}
+{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false", "personalisation":"on", "naidheachdan_obit": "off"}
