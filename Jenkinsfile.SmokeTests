@@ -4,7 +4,7 @@ library 'BBCNews'
 
 @Library('devops-tools-jenkins@DOT-149_JenkinsVersion') _
 def dockerregistry = libraryResource('dockerregistry').trim()
-def dockerimage = "$dockerregistry/bbc-news/elixir-centos7"
+def dockerimage = "${dockerregistry}/bbc-news/elixir-centos7"
 
 def result = 'PASSED'
 def exception
