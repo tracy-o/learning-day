@@ -52,27 +52,27 @@ defmodule Belfrage.Transformers.SportTemporaryRedirectTest do
     "/sport/winter-olympics/schedule/something" => "/sport/winter-olympics",
     "/sport/winter-olympics/schedule/something.app" => "/sport/winter-olympics.app",
     "/sport/winter-olympics/sports" => "/sport/winter-olympics",
-    "/sport/winter-olympics/sports.app" => "/sport/winter-olympics.app",
+    "/sport/winter-olympics/sports.app" => "/sport/winter-olympics.app"
   }
 
-  Enum.each test_cases, fn({input, expected_redirect}) ->
+  Enum.each(test_cases, fn {input, expected_redirect} ->
     test "#{input} should redirect to #{expected_redirect}" do
       struct = request_struct(:https, "sub.domain.bbc.com", unquote(input))
 
       assert {
-              :redirect,
-              %{
-                response: %{
-                  http_status: 302,
-                  body: "Redirecting",
-                  headers: %{
-                    "location" => unquote(expected_redirect),
-                    "x-bbc-no-scheme-rewrite" => "1",
-                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                  }
-                }
-              }
-            } = SportTemporaryRedirect.call([], struct)
+               :redirect,
+               %{
+                 response: %{
+                   http_status: 302,
+                   body: "Redirecting",
+                   headers: %{
+                     "location" => unquote(expected_redirect),
+                     "x-bbc-no-scheme-rewrite" => "1",
+                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                   }
+                 }
+               }
+             } = SportTemporaryRedirect.call([], struct)
     end
-  end
+  end)
 end
