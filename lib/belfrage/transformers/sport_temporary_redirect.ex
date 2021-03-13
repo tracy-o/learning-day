@@ -29,7 +29,18 @@ defmodule Belfrage.Transformers.SportTemporaryRedirect do
     "/sport/winter-olympics/sports" => "/sport/winter-olympics",
     "/sport/winter-olympics/sports.app" => "/sport/winter-olympics.app"
   }
-  
+
+  @regex_paths %{
+    ~r{/sport/commonwealth-games/(medals|results|schedule)/.*.app$} => "/sport/commonwealth-games.app",
+    ~r{/sport/commonwealth-games/(medals|results|schedule)/.*(?<!\.app)$} => "/sport/commonwealth-games",
+    ~r{/sport/football/european-championship/schedule/.*.app$} => "/sport/football/european-championship.app",
+    ~r{/sport/football/european-championship/schedule/.*(?<!\.app)$} => "/sport/football/european-championship",
+    ~r{/sport/football/world-cup/schedule/.*.app$} => "/sport/football/world-cup.app",
+    ~r{/sport/football/world-cup/schedule/.*(?<!\.app)$} => "/sport/football/world-cup",
+    ~r{/sport/winter-olympics/(medals|results|schedule)/.*.app$} => "/sport/winter-olympics.app",
+    ~r{/sport/winter-olympics/(medals|results|schedule)/.*(?<!\.app)$} => "/sport/winter-olympics"
+  }
+
   def call(rest, struct) do
     location = @absolute_paths[struct.request.path] || redirect_to(struct.request.path)
 
@@ -40,33 +51,9 @@ defmodule Belfrage.Transformers.SportTemporaryRedirect do
   end
 
   def redirect_to(path) do
-    cond do
-      String.match?(path, ~r/\/sport\/commonwealth-games\/(medals|results|schedule)\/.*.app$/) ->
-        "/sport/commonwealth-games.app"
-
-      String.match?(path, ~r/\/sport\/commonwealth-games\/(medals|results|schedule)\/.*/) ->
-        "/sport/commonwealth-games"
-
-      String.match?(path, ~r/\/sport\/football\/european-championship\/schedule(\/.*)?.app$/) ->
-        "/sport/football/european-championship.app"
-
-      String.match?(path, ~r/\/sport\/football\/european-championship\/schedule\/.*?$/) ->
-        "/sport/football/european-championship"
-
-      String.match?(path, ~r/\/sport\/football\/world-cup\/schedule\/.*.app$/) ->
-        "/sport/football/world-cup.app"
-
-      String.match?(path, ~r/\/sport\/football\/world-cup\/schedule\/.*/) ->
-        "/sport/football/world-cup"
-
-      String.match?(path, ~r/\/sport\/winter-olympics\/(medals|results|schedule)\/.*.app$/) ->
-        "/sport/winter-olympics.app"
-
-      String.match?(path, ~r/\/sport\/winter-olympics\/(medals|results|schedule)\/.*/) ->
-        "/sport/winter-olympics"
-
-      true ->
-        nil
+    case Enum.find(@regex_paths, nil, fn {key, _val} -> String.match?(path, key) end) do
+      nil -> nil
+      {_key, val} -> val
     end
   end
 
