@@ -488,32 +488,19 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
 
   ## Sport redirects
-  redirect "/sport/commonwealth-games/home-nations", to: "/sport/commonwealth-games", status: 302
-  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations.app"]
-  redirect "/sport/commonwealth-games/medals", to: "/sport/commonwealth-games", status: 302
+  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
-  redirect "/sport/commonwealth-games/results", to: "/sport/commonwealth-games", status: 302
   handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
-  redirect "/sport/commonwealth-games/schedule", to: "/sport/commonwealth-games", status: 302
   handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
-  redirect "/sport/commonwealth-games/sports", to: "/sport/commonwealth-games", status: 302
-  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports.app"]
-  redirect "/sport/football/european-championship/schedule", to: "/sport/football/european-championship", status: 302
+  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
   handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
-  redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
-  handle "/sport/formula1/standings/*_any", using: "SportRedirects", examples: ["/sport/formula1/standings.app"]
-  redirect "/sport/football/world-cup/schedule", to: "/sport/football/world-cup", status: 302
+  handle "/sport/formula1/standings/*_any", using: "SportRedirects", examples: ["/sport/formula1/standings", "/sport/formula1/standings.app"]
   handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
-  redirect "/sport/winter-olympics/home-nations", to: "/sport/winter-olympics", status: 302
-  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations.app"]
-  redirect "/sport/winter-olympics/medals", to: "/sport/winter-olympics", status: 302
+  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
   handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/medals/countries/new-zealand", "/sport/winter-olympics/medals/countries/great-britain.app"]
-  redirect "/sport/winter-olympics/results", to: "/sport/winter-olympics", status: 302
   handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", "/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app"]
-  redirect "/sport/winter-olympics/schedule", to: "/sport/winter-olympics", status: 302
   handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
-  redirect "/sport/winter-olympics/sports", to: "/sport/winter-olympics", status: 302
-  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/sports.app"]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
 
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
