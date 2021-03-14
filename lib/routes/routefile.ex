@@ -491,54 +491,41 @@ defmodule Routes.Routefile do
   handle "/sport/53783520/*_any", using: "SportRedirects", examples: ["/sport/53783520", "/sport/53783520.app"]
   handle "/sport/34476378/*_any", using: "SportRedirects", examples: ["/sport/34476378", "/sport/34476378.app"]
   handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
+
+  ## Sport unsupported data page redirects
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
   handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
   handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
   handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
-  handle "/sport/contact/*_any", using: "SportRedirects", examples: ["/sport/contact", "/sport/contact.app"]
-  handle "/sport/cricket/53783524/*_any", using: "SportRedirects", examples: ["/sport/cricket/53783524", "/sport/cricket/53783524.app"]
   handle "/sport/disability-sport/paralympics-2012/*_any", using: "SportRedirects", examples: ["/sport/disability-sport/paralympics-2012", "/sport/disability-sport/paralympics-2012.app"]
-  handle "/sport/darts/19333759/*_any", using: "SportRedirects", examples: ["/sport/darts/19333759", "/sport/darts/19333759.app"]
-  handle "/sport/football/53783525/*_any", using: "SportRedirects", examples: ["/sport/football/53783525", "/sport/football/53783525.app"]
-  handle "/sport/football/53783521/*_any", using: "SportRedirects", examples: ["/sport/football/53783521", "/sport/football/53783521.app"]
-  handle "/sport/football/african/*_any", using: "SportRedirects", examples: ["/sport/football/african", "/sport/football/african.app"]
   handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2012", "/sport/football/european-championship/2012.app"]
   handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/euro-2016/video.app"]
   handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/euro-2016", "/sport/football/european-championship/euro-2016.app"]
   handle "/sport/football/european-championship/fixtures/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/fixtures", "/sport/football/european-championship/fixtures.app"]
   handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
   handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
-  handle "/sport/formula1/standings/*_any", using: "SportRedirects", examples: ["/sport/formula1/standings", "/sport/formula1/standings.app"]
-  handle "/sport/football/supermovers/*_any", using: "SportRedirects", examples: ["/sport/football/supermovers", "/sport/football/supermovers.app"]
-  handle "/sport/front-page/*_any", using: "SportRedirects", examples: ["/sport/front-page", "/sport/front-page.app"]
-  handle "/sport/get-inspired/bodypositive/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/bodypositive", "/sport/get-inspired/bodypositive.app"]
-  handle "/sport/get-inspired/fa-peoples-cup/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/fa-peoples-cup", "/sport/get-inspired/fa-peoples-cup.app"]
-  handle "/sport/get-inspired/unsung-heroes/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/unsung-heroes", "/sport/get-inspired/unsung-heroes.app"]
   handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: ["/sport/olympics/2012", "/sport/olympics/2012/medals.app"]
   handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/2016", "/sport/olympics/2016/schedule.app"]
   handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app", "/sport/olympics/rio-2016/video.app"]
   handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/medals", "/sport/paralympics/rio-2016/medals.app"]
   handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/schedule", "/sport/paralympics/rio-2016/schedule.app"]
-  handle "/sport/rugby-league/53783522/*_any", using: "SportRedirects", examples: ["/sport/rugby-league/53783522", "/sport/rugby-league/53783522.app"]
-  handle "/sport/rugby-union/53783523/*_any", using: "SportRedirects", examples: ["/sport/rugby-union/53783523", "/sport/rugby-union/53783523.app"]
-  handle "/sport/supermovers/42612496/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612496", "/sport/supermovers/42612496.app"]
-  handle "/sport/supermovers/42612499/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612499", "/sport/supermovers/42612499.app"]
-  handle "/sport/supermovers/42612500/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612500", "/sport/supermovers/42612500.app"]
-  handle "/sport/supermovers/42612503/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612503", "/sport/supermovers/42612503.app"]
-  handle "/sport/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]  
   handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
   handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/medals/countries/new-zealand", "/sport/winter-olympics/medals/countries/great-britain.app"]
   handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", "/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app"]
   handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
   handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
 
+  handle "/sport/contact/*_any", using: "SportRedirects", examples: ["/sport/contact", "/sport/contact.app"]
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
+
+  ## Sport AV
+  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
 
   # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
@@ -603,6 +590,14 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-league/teams", using: "SportStoryPage", examples: ["/sport/rugby-league/teams"]
   handle "/sport/rugby-union/teams.app", using: "SportStoryPage", examples: ["/sport/rugby-union/teams.app"]
   handle "/sport/rugby-union/teams", using: "SportStoryPage", examples: ["/sport/rugby-union/teams"]
+
+  ## Sport Index Redirects
+  handle "/sport/football/african/*_any", using: "SportRedirects", examples: ["/sport/football/african", "/sport/football/african.app"]
+  handle "/sport/football/supermovers/*_any", using: "SportRedirects", examples: ["/sport/football/supermovers", "/sport/football/supermovers.app"]
+  handle "/sport/front-page/*_any", using: "SportRedirects", examples: ["/sport/front-page", "/sport/front-page.app"]
+  handle "/sport/get-inspired/bodypositive/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/bodypositive", "/sport/get-inspired/bodypositive.app"]
+  handle "/sport/get-inspired/fa-peoples-cup/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/fa-peoples-cup", "/sport/get-inspired/fa-peoples-cup.app"]
+  handle "/sport/get-inspired/unsung-heroes/*_any", using: "SportRedirects", examples: ["/sport/get-inspired/unsung-heroes", "/sport/get-inspired/unsung-heroes.app"]
 
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportIndexPage", examples: ["/sport.app"]
@@ -766,6 +761,7 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists"]
 
   ## Sport Formula 1 Pages
+  handle "/sport/formula1/standings/*_any", using: "SportRedirects", examples: ["/sport/formula1/standings", "/sport/formula1/standings.app"]
   handle "/sport/formula1/latest.app", using: "SportDataPage", examples: ["/sport/formula1/latest.app"]
   handle "/sport/formula1/latest", using: "SportDataPage", examples: ["/sport/formula1/latest"]
   handle "/sport/formula1/results.app", using: "SportDataPage", examples: ["/sport/formula1/results.app"]
@@ -880,7 +876,22 @@ defmodule Routes.Routefile do
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
 
-  # Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  ## Sport Stories redirects
+  handle "/sport/53783520/*_any", using: "SportRedirects", examples: ["/sport/53783520", "/sport/53783520.app"]
+  handle "/sport/34476378/*_any", using: "SportRedirects", examples: ["/sport/34476378", "/sport/34476378.app"]
+  handle "/sport/cricket/53783524/*_any", using: "SportRedirects", examples: ["/sport/cricket/53783524", "/sport/cricket/53783524.app"]
+  handle "/sport/darts/19333759/*_any", using: "SportRedirects", examples: ["/sport/darts/19333759", "/sport/darts/19333759.app"]
+  handle "/sport/football/53783525/*_any", using: "SportRedirects", examples: ["/sport/football/53783525", "/sport/football/53783525.app"]
+  handle "/sport/football/53783521/*_any", using: "SportRedirects", examples: ["/sport/football/53783521", "/sport/football/53783521.app"]
+  handle "/sport/rugby-league/53783522/*_any", using: "SportRedirects", examples: ["/sport/rugby-league/53783522", "/sport/rugby-league/53783522.app"]
+  handle "/sport/rugby-union/53783523/*_any", using: "SportRedirects", examples: ["/sport/rugby-union/53783523", "/sport/rugby-union/53783523.app"]
+  handle "/sport/supermovers/42612496/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612496", "/sport/supermovers/42612496.app"]
+  handle "/sport/supermovers/42612499/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612499", "/sport/supermovers/42612499.app"]
+  handle "/sport/supermovers/42612500/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612500", "/sport/supermovers/42612500.app"]
+  handle "/sport/supermovers/42612503/*_any", using: "SportRedirects", examples: ["/sport/supermovers/42612503", "/sport/supermovers/42612503.app"]
+  handle "/sport/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]  
+
+  ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
