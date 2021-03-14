@@ -17,8 +17,8 @@ defmodule Belfrage.Transformers.SportRedirectTest do
     "/sport/53783520.app" => "/sport/all-sports.app",
     "/sport/34476378" => "/sport/my-sport",
     "/sport/34476378.app" => "/sport/my-sport.app",
-    "/sport/av/supermovers/12345678" => "/teach/supermovers",
-    "/sport/av/supermovers/12345678.app" => "/teach/supermovers",
+    "/sport/av/supermovers/99999999" => "/teach/supermovers",
+    "/sport/av/supermovers/99999999.app" => "/teach/supermovers",
     "/sport/contact" => "/send/u49719405",
     "/sport/contact.app" => "/send/u49719405",
     "/sport/cricket/53783524" => "/sport/cricket/teams",
@@ -87,8 +87,8 @@ defmodule Belfrage.Transformers.SportRedirectTest do
     "/sport/supermovers/42612500.app" => "/teach/supermovers/cymru/zkdjgwx",
     "/sport/supermovers/42612503" => "/teach/supermovers/just-for-fun-collection/z7tymfr",
     "/sport/supermovers/42612503.app" => "/teach/supermovers/just-for-fun-collection/z7tymfr",
-    "/sport/supermovers/12345678" => "/teach/supermovers",
-    "/sport/supermovers/12345678.app" => "/teach/supermovers"
+    "/sport/supermovers/99999999" => "/teach/supermovers",
+    "/sport/supermovers/99999999.app" => "/teach/supermovers"
   }
 
   Enum.each(test_301_cases, fn {input, expected_redirect} ->
