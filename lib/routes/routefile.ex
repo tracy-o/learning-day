@@ -128,6 +128,15 @@ defmodule Routes.Routefile do
   redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
   redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
 
+  redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+  redirect("/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+  redirect("/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+  redirect("/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+
+  redirect("/news/video_and_audio/international", to: "/news/av/10462520", status: 302)
+  redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
+  redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
+
   # Home Page
 
   redirect "/ni", to: "/northernireland", status: 302
@@ -202,8 +211,12 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio", examples: [{"/news/video_and_audio/must_see/54327412/scientists-create-a-microscopic-robot-that-walks", 301}, {"/news/video_and_audio/features/uk-36617915/36617915", 301}] do
+  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio", examples: [{"/news/video_and_audio/must_see/54327412/scientists-create-a-microscopic-robot-that-walks", 301}] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/news/video_and_audio/*_any", using: "NewsVideoAndAudio", examples: [] do
+    return_404 if: true
   end
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
