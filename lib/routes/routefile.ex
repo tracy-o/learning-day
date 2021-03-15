@@ -419,6 +419,10 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  redirect "/sport/0/*any", to: "/sport/*any", status: 301
+  redirect "/sport/uk/*any", to: "/sport/*any", status: 301
+  redirect "/sport/world/*any", to: "/sport/*any", status: 301
+
   ## Sport correspondents redirects
   redirect "/sport/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
   redirect "/sport/danroan", to: "/sport/topics/cd61kendv7et", status: 301
