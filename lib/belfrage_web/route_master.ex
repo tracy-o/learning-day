@@ -128,7 +128,10 @@ defmodule BelfrageWeb.RouteMaster do
       @redirects [{unquote(from), unquote(location), unquote(status)} | @redirects]
 
       get(to_string(uri_from.path), host: uri_from.host) do
-        new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
+        new_location =
+          BelfrageWeb.Rewriter.rewriteWithoutSlashExtension(
+            BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
+          )
 
         StructAdapter.adapt(var!(conn), "redirect")
         |> View.redirect(var!(conn), unquote(status), new_location)
