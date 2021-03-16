@@ -207,11 +207,11 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
-  handle "/news/av/:asset_id/embed", using: "NewsMozartVideos", examples: []
-  handle "/news/av/:asset_id/:slug/embed", using: "NewsMozartVideos", examples: []
-  handle "/news/av/embed/:vpid/:asset_id", using: "NewsMozartVideos", examples: []
-  handle "/news/:asset_id/embed", using: "NewsMozartVideos", examples: []
-  handle "/news/:asset_id/embed/:pid", using: "NewsMozartVideos", examples: []
+  handle "/news/av/:asset_id/embed", using: "NewsMozartVideos", examples: [{"/news/av/world-us-canada-50294316/embed", 302}]
+  handle "/news/av/:asset_id/:slug/embed", using: "NewsMozartVideos", examples: [{"/news/av/business-49843970/i-built-my-software-empire-from-a-stoke-council-house/embed", 302}]
+  handle "/news/av/embed/:vpid/:asset_id", using: "NewsMozartVideos", examples: [{"/news/av/embed/p07pd78q/49843970", 302}]
+  handle "/news/:asset_id/embed", using: "NewsMozartVideos", examples: [{"/news/health-54088206/embed", 302}, {"/news/uk-politics-54003483/embed?amp=1", 302}]
+  handle "/news/:asset_id/embed/:pid", using: "NewsMozartVideos", examples: [{"/news/health-54088206/embed/p08m8yx4", 302}, {"/news/health-54088206/embed/p08m8yx4?amp=1", 302}]
 
   redirect("/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302)
 
