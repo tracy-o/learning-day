@@ -3,7 +3,7 @@ defmodule Belfrage.Authentication.Validator.Expiry do
 
   def valid?(_threshold, expiry) when is_nil(expiry), do: false
 
-  def valid?(nil, expiry) do
+  def valid?(threshold, expiry) when is_nil(threshold) do
     expired?(expiry, now_time())
   end
 
