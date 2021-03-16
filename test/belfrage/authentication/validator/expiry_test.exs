@@ -25,7 +25,7 @@ defmodule Belfrage.Authentication.Validator.ExpiryTest do
       assert Expiry.valid?(nil, System.os_time(:second) + 1)
     end
 
-    test "when the expirt is nil", %{threshold: threshold} do
+    test "when the expiry is nil", %{threshold: threshold} do
       refute Expiry.valid?(threshold, nil)
     end
   end
