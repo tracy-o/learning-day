@@ -9,7 +9,7 @@ defmodule Belfrage.RouteSpec do
     route_spec_module = Module.concat([Routes, Specs, name])
 
     specs =
-      case function_exported?(route_spec_module, :specs, 1) do
+      case route_spec_module.__info__(:functions)[:specs] == 1 do
         true -> route_spec_module.specs(env)
         false -> route_spec_module.specs()
       end
