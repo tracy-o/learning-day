@@ -50,7 +50,16 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "snooker",
     "swimming",
     "winter-sports",
-    "winter-olympics"
+    "winter-olympics",
+
+    # Block 4
+    "formula1",
+    "cricket",
+    "rugby-union",
+    "rugby-league",
+    "tennis",
+    "golf",
+    "athletics"
   ]
 
   def call(_rest, struct) do
