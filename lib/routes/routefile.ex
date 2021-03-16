@@ -133,6 +133,8 @@ defmodule Routes.Routefile do
   redirect("/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
   redirect("/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
 
+  redirect("/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302)
+
   redirect("/news/video_and_audio/international", to: "/news/av/10462520", status: 302)
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
   redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
