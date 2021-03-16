@@ -259,6 +259,7 @@ defmodule Routes.Routefile do
 
   # Naidheachdan
 
+  handle "/naidheachdan", using: "NaidheachdanHomePage", examples: ["/naidheachdan"]
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: ["/naidheachdan/dachaigh"]
   handle "/naidheachdan/components", using: "Naidheachdan", examples: ["/naidheachdan/components"]
 
@@ -270,7 +271,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: ["/naidheachdan"]
+  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: []
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
@@ -429,7 +430,7 @@ defmodule Routes.Routefile do
   redirect "/sport/philmcnulty", to: "/sport/topics/c37dl80p4y3t", status: 301
   redirect "/sport/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
-  
+
   redirect "/sport/correspondents/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
   redirect "/sport/correspondents/danroan", to: "/sport/topics/cd61kendv7et", status: 301
   redirect "/sport/correspondents/davewoods", to: "/sport/topics/c48de9x0zert", status: 301
@@ -478,7 +479,7 @@ defmodule Routes.Routefile do
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
 
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
-  
+
   handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
   handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
@@ -489,7 +490,7 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
-  ## Sport Stories with Vanity Urls 
+  ## Sport Stories with Vanity Urls
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
   handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
   handle "/sport/cricket/teams.app", using: "SportStoryPage", examples: ["/sport/cricket/teams.app"]
@@ -704,7 +705,7 @@ defmodule Routes.Routefile do
   handle "/sport/tennis/results", using: "SportDataPage", examples: ["/sport/tennis/results"]
   handle "/sport/tennis/results/*_any", using: "SportDataPage", examples: ["/sport/tennis/results/australian-open/mens-singles.app", "/sport/tennis/results/australian-open/mens-singles"]
 
-  ## Sport Event Data Pages 
+  ## Sport Event Data Pages
   handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
   handle "/sport/cricket/scorecard/:id", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
   handle "/sport/horse-racing/race/:id.app", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
@@ -817,7 +818,7 @@ defmodule Routes.Routefile do
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
-    
+
   # Weather
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
