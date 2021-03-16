@@ -20,5 +20,13 @@ defmodule Belfrage.Authentication.Validator.ExpiryTest do
     test "when the expiry is in the past", %{threshold: threshold} do
       refute Expiry.valid?(threshold, System.os_time(:second) - 1)
     end
+
+    test "when the threshold is nil" do
+      assert Expiry.valid?(nil, System.os_time(:second) + 1)
+    end
+
+    test "when the expiry is nil", %{threshold: threshold} do
+      refute Expiry.valid?(threshold, nil)
+    end
   end
 end
