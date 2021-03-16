@@ -1,7 +1,7 @@
 defmodule Belfrage.Authentication.Validator.Expiry do
   @callback valid?(non_neg_integer(), non_neg_integer()) :: boolean()
 
-  def valid?(_threshold, nil), do: false
+  def valid?(_threshold, expiry) when is_nil(expiry), do: false
 
   def valid?(nil, expiry) do
     expired?(expiry, now_time())
