@@ -450,8 +450,8 @@ defmodule Routes.Routefile do
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
   handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
-  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
-  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml"]
+  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml", "/sport/england/rss.xml"]
+  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml", "/sport/cricket/womens/rss.xml"]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
 
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
