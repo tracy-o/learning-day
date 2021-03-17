@@ -302,6 +302,22 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location/section-12345/i-am-a-url-slug-for-SEO"]
     end
 
+    test "with a simple path with extension rewrite" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/rewrite-redirect/with-ext/resource-id-123345.ext")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location/with-ext/resource-id-123345/anywhere"]
+    end
+
     test "with a host redirect" do
       expect_belfrage_not_called()
 

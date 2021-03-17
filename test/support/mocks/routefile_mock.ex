@@ -9,6 +9,7 @@ defmodule Routes.RoutefileMock do
 
   redirect("/rewrite-redirect/:id", to: "/new-location/:id/somewhere", status: 302)
   redirect("/rewrite-redirect/:id/:type/catch-all/*any", to: "/new-location/:type-:id/*any", status: 302)
+  redirect("/rewrite-redirect/with-ext/:id.ext", to: "/new-location/with-ext/:id/anywhere", status: 302)
 
   redirect("https://example.net/rewrite-redirect/:id/catch-all/*any",
     to: "https://bbc.com/new-location/:id-*any",
