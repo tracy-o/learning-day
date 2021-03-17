@@ -492,6 +492,22 @@ defmodule Routes.Routefile do
   handle "/sport/34476378/*_any", using: "SportRedirects", examples: ["/sport/34476378", "/sport/34476378.app"]
   handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
 
+  ## Sport Supermovers redirects
+  redirect "/sport/av/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/av/supermovers/:id", to: "/teach/supermovers", status: 301
+  redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/football/supermovers", to: "/teach/supermovers", status: 301
+  redirect "/sport/supermovers/42612496.app", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
+  redirect "/sport/supermovers/42612496", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
+  redirect "/sport/supermovers/42612499.app", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
+  redirect "/sport/supermovers/42612499", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
+  redirect "/sport/supermovers/42612500.app", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
+  redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
+  redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
+  redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
+  redirect "/sport/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/supermovers/:id", to: "/teach/supermovers", status: 301
+
   ## Sport unsupported data page redirects
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
@@ -501,7 +517,7 @@ defmodule Routes.Routefile do
   redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
   redirect "/sport/disability-sport/paralympics-2012", to: "/sport/disability-sport", status: 301
   handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2012", "/sport/football/european-championship/2012.app"]
-  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/euro-2016/video.app"]
+  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/2016.app"]
   redirect "/sport/football/european-championship/euro-2016/video.app", to: "/sport/football/european-championship/video.app", status: 301
   redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
   handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/euro-2016", "/sport/football/european-championship/euro-2016.app"]
@@ -513,7 +529,7 @@ defmodule Routes.Routefile do
   handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/2016", "/sport/olympics/2016/schedule.app"]
   redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
-  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app", "/sport/olympics/rio-2016/video.app"]
+  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app"]
   handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/medals", "/sport/paralympics/rio-2016/medals.app"]
   handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/schedule", "/sport/paralympics/rio-2016/schedule.app"]
   handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
@@ -533,7 +549,6 @@ defmodule Routes.Routefile do
   end
 
   ## Sport AV
-  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
 
   # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
@@ -577,7 +592,7 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
-  ## Sport Stories with Vanity Urls
+  ## Sport Vanity Urls 
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
   handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
   handle "/sport/cricket/teams.app", using: "SportStoryPage", examples: ["/sport/cricket/teams.app"]
@@ -599,11 +614,25 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/teams.app", using: "SportStoryPage", examples: ["/sport/rugby-union/teams.app"]
   handle "/sport/rugby-union/teams", using: "SportStoryPage", examples: ["/sport/rugby-union/teams"]
 
+  ## Sport Stories redirects to Vanity Urls 
+  redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
+  redirect "/sport/53783520", to: "/sport/all-sports", status: 301
+  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
+  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
+  redirect "/sport/cricket/53783524.app", to: "/sport/cricket/teams.app", status: 301
+  redirect "/sport/cricket/53783524", to: "/sport/cricket/teams", status: 301
+  redirect "/sport/football/53783525.app", to: "/sport/football/leagues-cups.app", status: 301
+  redirect "/sport/football/53783525", to: "/sport/football/leagues-cups", status: 301
+  redirect "/sport/football/53783521.app", to: "/sport/football/teams.app", status: 301
+  redirect "/sport/football/53783521", to: "/sport/football/teams", status: 301
+  redirect "/sport/rugby-league/53783522.app", to: "/sport/rugby-league/teams.app", status: 301
+  redirect "/sport/rugby-league/53783522", to: "/sport/rugby-league/teams", status: 301
+  redirect "/sport/rugby-union/53783523.app", to: "/sport/rugby-union/teams.app", status: 301
+  redirect "/sport/rugby-union/53783523", to: "/sport/rugby-union/teams", status: 301
+
   ## Sport Index Redirects
   redirect "/sport/football/african.app", to: "/sport/africa.app", status: 301
   redirect "/sport/football/african", to: "/sport/africa", status: 301
-  redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
-  redirect "/sport/football/supermovers", to: "/teach/supermovers", status: 301
   redirect "/sport/front-page.app", to: "/sport.app", status: 301
   redirect "/sport/front-page", to: "/sport", status: 301
   redirect "/sport/get-inspired/bodypositive.app", to: "/sport/get-inspired.app", status: 301
@@ -892,30 +921,8 @@ defmodule Routes.Routefile do
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
 
   ## Sport Stories redirects
-  redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
-  redirect "/sport/53783520", to: "/sport/all-sports", status: 301
-  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
-  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
-  redirect "/sport/cricket/53783524.app", to: "/sport/cricket/teams.app", status: 301
-  redirect "/sport/cricket/53783524", to: "/sport/cricket/teams", status: 301
   redirect "/sport/darts/19333759.app", to: "/sport/ice-hockey/results.app", status: 301
   redirect "/sport/darts/19333759", to: "/sport/ice-hockey/results", status: 301
-  redirect "/sport/football/53783525.app", to: "/sport/football/leagues-cups.app", status: 301
-  redirect "/sport/football/53783525", to: "/sport/football/leagues-cups", status: 301
-  redirect "/sport/football/53783521.app", to: "/sport/football/teams.app", status: 301
-  redirect "/sport/football/53783521", to: "/sport/football/teams", status: 301
-  redirect "/sport/rugby-league/53783522.app", to: "/sport/rugby-league/teams.app", status: 301
-  redirect "/sport/rugby-league/53783522", to: "/sport/rugby-league/teams", status: 301
-  redirect "/sport/rugby-union/53783523.app", to: "/sport/rugby-union/teams.app", status: 301
-  redirect "/sport/rugby-union/53783523", to: "/sport/rugby-union/teams", status: 301
-  redirect "/sport/supermovers/42612496.app", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
-  redirect "/sport/supermovers/42612496", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
-  redirect "/sport/supermovers/42612499.app", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
-  redirect "/sport/supermovers/42612499", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
-  redirect "/sport/supermovers/42612500.app", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
-  redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
-  redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
-  redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
 
   ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
