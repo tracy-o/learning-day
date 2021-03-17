@@ -449,6 +449,11 @@ defmodule Routes.Routefile do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
+  handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
+  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
+  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml"]
+  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
+
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
@@ -796,7 +801,7 @@ defmodule Routes.Routefile do
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
 
-  ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  # Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
