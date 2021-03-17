@@ -1,10 +1,5 @@
 #!/usr/bin/env groovy
 
-library 'devops-tools-jenkins'
-
-def dockerregistry = libraryResource('dockerregistry').trim()
-def dockerimage = "${dockerregistry}/bbc-news/elixir-centos7"
-
 library 'BBCNews'
 
 String buildVariables() {
@@ -44,7 +39,7 @@ node {
       sh "cp cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
       sh 'mkdir -p SOURCES'
       String vars = buildVariables()
-      docker.image(dockerimage).inside("-u root -e MIX_ENV=prod ${vars}") {
+      docker.image('qixxit/elixir-centos').inside("-u root -e MIX_ENV=prod ${vars}") {
         sh 'mix deps.get'
         sh 'mix hex.audit'
         sh 'mix distillery.release'
@@ -75,7 +70,7 @@ node {
   }
 
   stage("clean up after ourselves") {
-    docker.image(dockerimage).inside("-u root") {
+    docker.image('qixxit/elixir-centos').inside("-u root") {
       sh "rm -rf ${env.WORKSPACE}/{deps,_build,local.log}"
     }
     cleanWs()
