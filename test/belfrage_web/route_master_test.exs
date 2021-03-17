@@ -464,6 +464,38 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location-with-path/abc"]
     end
 
+    test "when the redirect matches with a path with extension will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/redirect-with-ext.ext")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location-with-ext.ext"]
+    end
+
+    test "when the redirect matches a multi-segment path with extension it will return the location and status" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/redirect-with-ext/and-path.ext")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location-with-ext/and-path"]
+    end
+
     test "when the request is a POST it should not redirect" do
       expect_belfrage_not_called()
 

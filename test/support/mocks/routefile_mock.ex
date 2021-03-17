@@ -21,6 +21,8 @@ defmodule Routes.RoutefileMock do
   )
 
   redirect("/redirect-with-path/*any", to: "/new-location-with-path/*any", status: 302)
+  redirect("/redirect-with-ext.ext", to: "/new-location-with-ext.ext", status: 302)
+  redirect("/redirect-with-ext/and-path.ext", to: "/new-location-with-ext/and-path", status: 302)
 
   handle("/", using: "SomeLoop", examples: ["/"])
 
