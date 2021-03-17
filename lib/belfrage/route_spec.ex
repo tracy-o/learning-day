@@ -1,7 +1,6 @@
 defmodule Belfrage.RouteSpec do
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
 
-
   def specs_for(nil), do: :ok
 
   def specs_for(name) do
