@@ -1,9 +1,9 @@
-defmodule Belfrage.GenServerMonitor do
+defmodule Belfrage.MailboxMonitor do
   use GenServer
 
   @event Application.get_env(:belfrage, :event)
-  @servers Application.get_env(:belfrage, :servers_to_monitor)
-  @refresh_rate 5_000
+  @servers Application.get_env(:belfrage, :mailbox_monitors)
+  @refresh_rate 30_000
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -16,7 +16,7 @@ defmodule Belfrage.GenServerMonitor do
 
   def handle_info(:refresh, state) do
     for server_name <- state.servers do
-      case queue_length(server_name) do
+      case mailbox_size(server_name) do
         {:ok, len} -> send_metric(server_name, len)
         :error -> nil
       end
@@ -26,8 +26,10 @@ defmodule Belfrage.GenServerMonitor do
     {:noreply, state}
   end
 
-  defp queue_length(process_name) do
-    pid = Process.whereis(process_name)
+  def handle_info(_msg, state), do: {:noreply, state}
+
+  defp mailbox_size(server_name) do
+    pid = Process.whereis(server_name)
 
     case pid do
       nil -> :error
@@ -41,6 +43,6 @@ defmodule Belfrage.GenServerMonitor do
       |> String.split(".")
       |> List.last()
 
-    @event.record(:metric, :gauge, "gen_server.#{name}.queue_length", value: len)
+    @event.record(:metric, :gauge, "gen_server.#{name}.mailbox_size", value: len)
   end
 end

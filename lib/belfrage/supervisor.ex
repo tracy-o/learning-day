@@ -65,6 +65,10 @@ defmodule Belfrage.Supervisor do
 
   Belfrage.Cache.Cleaner
   - Periodically checks memory limit, and removes cached items.
+
+  Belfrage.MailboxMonitor
+  - Monitors the size of the mailbox for gen_servers and reports them
+    to CloudWatch
   """
   defp background_children(:test), do: []
 
@@ -74,7 +78,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.Credentials.Refresh,
       Belfrage.Authentication.Jwk,
       Belfrage.Authentication.Flagpole,
-      Belfrage.GenServerMonitor
+      Belfrage.MailboxMonitor
     ]
   end
 

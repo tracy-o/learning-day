@@ -62,7 +62,7 @@ config :belfrage,
   stack_name: "belfrage-stack",
   stack_id: "local",
   redirect_statuses: [301, 302, 307, 308],
-  servers_to_monitor: [:ttl_multiplier, Belfrage.GenServerMonitor],
+  mailbox_monitors: [:ttl_multiplier, :logging_level],
   dial_handlers: %{
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
     "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
