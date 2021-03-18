@@ -8,7 +8,6 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     # Block 6
     "get-inspired"
   ]
-
   @webcore_sections_live [
     # Block 1
     "sports-personality",
