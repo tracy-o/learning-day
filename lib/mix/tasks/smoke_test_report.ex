@@ -54,14 +54,6 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   defp send_slack_message({routespec, failure_messages}, slack_auth_token) do
-    case routespec == nil do
-      true -> 
-        IO.inspect("A nil routespec")
-        IO.inspect(failure_messages)
-        send_slack_message({"AlbaHomePage", failure_messages}, slack_auth_token)
-      _ -> :ok
-    end
-
     specs = Belfrage.RouteSpec.specs_for(routespec)
 
     msg = Enum.join(failure_messages, "\n\n")

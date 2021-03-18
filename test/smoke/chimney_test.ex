@@ -15,6 +15,7 @@ defmodule BelfrageChimneySmokeTest do
   @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
   @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric-belfrage"]
   @bruce_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["bruce-belfrage"]
+  @sally_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["sally-belfrage"]
 
   setup do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
@@ -36,7 +37,7 @@ defmodule BelfrageChimneySmokeTest do
       resp = Helper.get_route(endpoint, "/tajik")
 
       assert resp.status_code == 200
-      assert Helper.header_item_exists(resp.headers, @belfrage_header)
+      assert Helper.header_item_exists(resp.headers, @sally_header)
     end
   end
 
