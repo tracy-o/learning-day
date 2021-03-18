@@ -6,7 +6,7 @@ defmodule Belfrage.GenServerMonitor do
   @refresh_rate 5_000
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: Belfrage.GenServerMonitor)
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   def init(_opts) do
