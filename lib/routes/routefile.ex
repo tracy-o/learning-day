@@ -503,8 +503,8 @@ defmodule Routes.Routefile do
   redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
   redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
   redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
-  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
-  handle "/sport/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]
+  handle "/sport/av/supermovers/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
+  handle "/sport/supermovers/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]
 
   ## Sport unsupported data page redirects
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
