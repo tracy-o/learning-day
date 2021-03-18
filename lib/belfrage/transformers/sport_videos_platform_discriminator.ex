@@ -59,7 +59,10 @@ defmodule Belfrage.Transformers.SportVideosPlatformDiscriminator do
     "rugby-league",
     "tennis",
     "golf",
-    "athletics"
+    "athletics",
+
+    # Block 5
+    "football"
   ]
 
   def call(_rest, struct) do
