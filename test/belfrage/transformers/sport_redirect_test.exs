@@ -11,6 +11,8 @@ defmodule Belfrage.Transformers.SportRedirectTest do
   end
 
   test_301_cases = %{
+    "/sport/av/supermovers/99999999" => "/teach/supermovers",
+    "/sport/av/supermovers/99999999.app" => "/teach/supermovers",
     "/sport/football/european-championship/2012" => "/sport/football/european-championship",
     "/sport/football/european-championship/2012.app" => "/sport/football/european-championship.app",
     "/sport/football/european-championship/2016" => "/sport/football/european-championship",
@@ -38,7 +40,9 @@ defmodule Belfrage.Transformers.SportRedirectTest do
     "/sport/paralympics/rio-2016/schedule" => "/sport/disability-sport",
     "/sport/paralympics/rio-2016/schedule.app" => "/sport/disability-sport.app",
     "/sport/paralympics/rio-2016/schedule/something" => "/sport/disability-sport",
-    "/sport/paralympics/rio-2016/schedule/something.app" => "/sport/disability-sport.app"
+    "/sport/paralympics/rio-2016/schedule/something.app" => "/sport/disability-sport.app",
+    "/sport/supermovers/99999999" => "/teach/supermovers",
+    "/sport/supermovers/99999999.app" => "/teach/supermovers"
   }
 
   Enum.each(test_301_cases, fn {input, expected_redirect} ->

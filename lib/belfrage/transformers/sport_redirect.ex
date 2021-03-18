@@ -2,6 +2,7 @@ defmodule Belfrage.Transformers.SportRedirect do
   use Belfrage.Transformers.Transformer
 
   @regex_paths %{
+    ~r"/sport/av/supermovers/[0-9]{5,9}(.app)?$" => %{location: "/teach/supermovers", status: 301},
     ~r"/sport/commonwealth-games/(medals|results|schedule)/.*.app$" => %{
       location: "/sport/commonwealth-games.app",
       status: 302
@@ -58,6 +59,7 @@ defmodule Belfrage.Transformers.SportRedirect do
       location: "/sport/disability-sport",
       status: 301
     },
+    ~r"/sport/supermovers/[0-9]{5,9}(.app)?$" => %{location: "/teach/supermovers", status: 301},
     ~r"/sport/winter-olympics/(medals|results|schedule)/.*.app$" => %{
       location: "/sport/winter-olympics.app",
       status: 302
