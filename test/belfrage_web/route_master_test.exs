@@ -306,7 +306,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/rewrite-redirect/with-ext/resource-id-123345.ext")
+        conn(:get, "/rewrite-redirect/resource-id-123345.ext")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -315,7 +315,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location/with-ext/resource-id-123345/anywhere"]
+      assert get_resp_header(conn, "location") == ["/new-location/resource-id-123345/anywhere"]
     end
 
     test "with a host redirect" do
@@ -484,7 +484,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/redirect-with-ext.ext")
+        conn(:get, "/redirect-with-path.ext")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
@@ -493,23 +493,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       assert conn.status == 302
       assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location-with-ext.ext"]
-    end
-
-    test "when the redirect matches a multi-segment path with extension it will return the location and status" do
-      expect_belfrage_not_called()
-
-      conn =
-        conn(:get, "/redirect-with-ext/and-path.ext")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
-
-      assert conn.status == 302
-      assert conn.resp_body == ""
-      assert get_resp_header(conn, "location") == ["/new-location-with-ext/and-path"]
+      assert get_resp_header(conn, "location") == ["/new-location-with-path.ext"]
     end
 
     test "when the request is a POST it should not redirect" do

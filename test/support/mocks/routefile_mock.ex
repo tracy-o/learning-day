@@ -8,8 +8,8 @@ defmodule Routes.RoutefileMock do
   redirect("/temp-redirect", to: "/temp-location", status: 302)
 
   redirect("/rewrite-redirect/:id", to: "/new-location/:id/somewhere", status: 302)
+  redirect("/rewrite-redirect/:id.ext", to: "/new-location/:id/anywhere", status: 302)
   redirect("/rewrite-redirect/:id/:type/catch-all/*any", to: "/new-location/:type-:id/*any", status: 302)
-  redirect("/rewrite-redirect/with-ext/:id.ext", to: "/new-location/with-ext/:id/anywhere", status: 302)
 
   redirect("https://example.net/rewrite-redirect/:id/catch-all/*any",
     to: "https://bbc.com/new-location/:id-*any",
@@ -21,9 +21,8 @@ defmodule Routes.RoutefileMock do
     status: 302
   )
 
+  redirect("/redirect-with-path.ext", to: "/new-location-with-path.ext", status: 302)
   redirect("/redirect-with-path/*any", to: "/new-location-with-path/*any", status: 302)
-  redirect("/redirect-with-ext.ext", to: "/new-location-with-ext.ext", status: 302)
-  redirect("/redirect-with-ext/and-path.ext", to: "/new-location-with-ext/and-path", status: 302)
 
   handle("/", using: "SomeLoop", examples: ["/"])
 
