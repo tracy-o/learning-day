@@ -7,6 +7,8 @@ defmodule Belfrage.Event do
 
   @monitor_api Application.get_env(:belfrage, :monitor_api)
 
+  @callback record(atom(), any(), any(), any()) :: any()
+
   alias Belfrage.Event
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 

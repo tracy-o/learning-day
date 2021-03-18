@@ -27,9 +27,11 @@ config :belfrage,
   authentication_client: Belfrage.Clients.AuthenticationMock,
   flagpole: Belfrage.Authentication.FlagpoleMock,
   expiry_validator: Belfrage.Authentication.Validator.ExpiryMock,
+  event: Belfrage.EventMock,
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
-  internal_error_page: "test/support/resources/internal-error.html"
+  internal_error_page: "test/support/resources/internal-error.html",
+  servers_to_monitor: []
 
 config :cachex, :limit,
   size: 6,

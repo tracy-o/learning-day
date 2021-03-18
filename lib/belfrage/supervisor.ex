@@ -73,7 +73,8 @@ defmodule Belfrage.Supervisor do
       Belfrage.Dials.Supervisor,
       Belfrage.Credentials.Refresh,
       Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole
+      Belfrage.Authentication.Flagpole,
+      Belfrage.GenServerMonitor
     ]
   end
 
