@@ -503,30 +503,34 @@ defmodule Routes.Routefile do
   redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
   redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
   redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
+
+  ## Sport Supermovers redirects handled by Belfrage.Transformers.SportRedirect
   handle "/sport/av/supermovers/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
   handle "/sport/supermovers/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]
 
   ## Sport unsupported data page redirects
+  redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
+  redirect "/sport/disability-sport/paralympics-2012", to: "/sport/disability-sport", status: 301
+  redirect "/sport/football/european-championship/euro-2016/video.app", to: "/sport/football/european-championship/video.app", status: 301
+  redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
+  redirect "/sport/football/european-championship/fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
+  redirect "/sport/football/european-championship/fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
+  redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
+  redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
+
+  ## Sport unsupported data page redirects handled by Belfrage.Transformers.SportRedirect
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
   handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
   handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
   handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
-  redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
-  redirect "/sport/disability-sport/paralympics-2012", to: "/sport/disability-sport", status: 301
   handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2012", "/sport/football/european-championship/2012.app"]
   handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/2016.app"]
-  redirect "/sport/football/european-championship/euro-2016/video.app", to: "/sport/football/european-championship/video.app", status: 301
-  redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
   handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/euro-2016", "/sport/football/european-championship/euro-2016.app"]
-  redirect "/sport/football/european-championship/fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
-  redirect "/sport/football/european-championship/fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
   handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
   handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
   handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: ["/sport/olympics/2012", "/sport/olympics/2012/medals.app"]
   handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/2016", "/sport/olympics/2016/schedule.app"]
-  redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
-  redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
   handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app"]
   handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/medals", "/sport/paralympics/rio-2016/medals.app"]
   handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/schedule", "/sport/paralympics/rio-2016/schedule.app"]
