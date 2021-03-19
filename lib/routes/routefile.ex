@@ -461,6 +461,9 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  redirect "/sport/contact.app", to: "/send/u49719405", status: 301
+  redirect "/sport/contact", to: "/send/u49719405", status: 301
+
   ## Sport correspondents redirects
   redirect "/sport/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
   redirect "/sport/danroan", to: "/sport/topics/cd61kendv7et", status: 301
@@ -540,33 +543,22 @@ defmodule Routes.Routefile do
   handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
   handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
 
-  redirect "/sport/contact.app", to: "/send/u49719405", status: 301
-  redirect "/sport/contact", to: "/send/u49719405", status: 301
-
+  ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
+  ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
+  handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id", using: "SportMediaAssetPage", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
 
-  ## Sport AV
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportMediaAssetPage", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
-
-  # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
-  end
-
-  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
-
-  ## Sport Internal Tools
+  ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
   handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
   handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
@@ -577,9 +569,11 @@ defmodule Routes.Routefile do
   handle "/sport/top-4.app", using: "Sport", examples: ["/sport/top-4.app"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
 
+  ## Sport Misc
+  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
 
-  ## Sport BBC Live
+  ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
 
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
@@ -849,6 +843,7 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
   handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
 
+  ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
@@ -926,7 +921,7 @@ defmodule Routes.Routefile do
   redirect "/sport/darts/19333759.app", to: "/sport/ice-hockey/results.app", status: 301
   redirect "/sport/darts/19333759", to: "/sport/ice-hockey/results", status: 301
 
-  ## Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  ## Sport Stories (without discipline) - use query string params in example URLs to use live data via Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
@@ -940,7 +935,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
-  ## Sport Stories (with discipline) - all use query string params in example URL to use live data in Mozart
+  ## Sport Stories (with discipline) - use query string params in example URLs to use live data via Mozart
   handle "/sport/:discipline/:id.amp", using: "SportAmp", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
