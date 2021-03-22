@@ -118,7 +118,7 @@ defmodule Belfrage.Transformers.SportRedirectTest do
                    headers: %{
                      "location" => unquote(expected_redirect),
                      "x-bbc-no-scheme-rewrite" => "1",
-                     "cache-control" => "public, stale-while-revalidate=10, max-age=600"
+                     "cache-control" => "public, stale-while-revalidate=10, max-age=3600"
                    }
                  }
                }

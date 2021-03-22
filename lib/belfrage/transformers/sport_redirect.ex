@@ -92,30 +92,15 @@ defmodule Belfrage.Transformers.SportRedirect do
     end
   end
 
-  def redirect(%{location: location, status: 301}, struct) do
+  def redirect(%{location: location, status: status}, struct) do
     {
       :redirect,
       Struct.add(struct, :response, %{
-        http_status: 301,
+        http_status: status,
         headers: %{
           "location" => location,
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, stale-while-revalidate=10, max-age=3600"
-        },
-        body: "Redirecting"
-      })
-    }
-  end
-
-  def redirect(%{location: location, status: 302}, struct) do
-    {
-      :redirect,
-      Struct.add(struct, :response, %{
-        http_status: 302,
-        headers: %{
-          "location" => location,
-          "x-bbc-no-scheme-rewrite" => "1",
-          "cache-control" => "public, stale-while-revalidate=10, max-age=600"
         },
         body: "Redirecting"
       })
