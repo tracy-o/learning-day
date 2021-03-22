@@ -506,10 +506,10 @@ defmodule Routes.Routefile do
   redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
   redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
   redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
-
-  ## Sport Supermovers redirects handled by Belfrage.Transformers.SportRedirect
-  handle "/sport/av/supermovers/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
-  handle "/sport/supermovers/*_any", using: "SportRedirects", examples: ["/sport/supermovers/12345678", "/sport/supermovers/12345678.app"]
+  redirect "/sport/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/supermovers/:id", to: "/teach/supermovers", status: 301
+  redirect "/sport/av/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/av/supermovers/:id", to: "/teach/supermovers", status: 301
 
   ## Sport Stories redirects
   redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
