@@ -38,11 +38,14 @@ defmodule Belfrage.MailboxMonitor do
   end
 
   defp send_metric(server_name, len) do
-    name =
-      Atom.to_string(server_name)
-      |> String.split(".")
-      |> List.last()
-
+    name = gen_server_metric_name(server_name)
     @event.record(:metric, :gauge, "gen_server.#{name}.mailbox_size", value: len)
+  end
+
+  defp gen_server_metric_name(server_name) do
+    Atom.to_string(server_name)
+    |> String.split(".")
+    |> Enum.drop_while(fn x -> x == "Elixir" end)
+    |> Enum.join("_")
   end
 end

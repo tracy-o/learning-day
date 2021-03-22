@@ -16,7 +16,7 @@ defmodule Belfrage.MailboxMonitorTest do
   describe "handle_info/2" do
     test "reports the mailbox size of zero when the mailbox is empty" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.TestGenServer.mailbox_size", value: 0 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 0 -> true end)
 
       assert {:noreply, %{servers: [Belfrage.TestGenServer]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [Belfrage.TestGenServer]})
@@ -24,7 +24,7 @@ defmodule Belfrage.MailboxMonitorTest do
 
     test "reports the mailbox size when the mailbox is not empty" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.TestGenServer.mailbox_size", value: 2 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
 
       TestGenServer.work(Belfrage.TestGenServer)
       TestGenServer.work(Belfrage.TestGenServer)
@@ -38,7 +38,7 @@ defmodule Belfrage.MailboxMonitorTest do
 
     test "reports the mailbox size for more than one server" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.TestGenServer.mailbox_size", value: 2 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
       |> expect(:record, fn :metric, :gauge, "gen_server.test_server_two.mailbox_size", value: 2 -> true end)
 
       TestGenServer.work(Belfrage.TestGenServer)
