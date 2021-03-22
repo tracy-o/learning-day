@@ -74,5 +74,20 @@
         "description": "Disable personalisation"
       }
     ]
+  },
+  {
+    "name": "obit_mode",
+    "description": "This enables or disables obit mode",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enable obit mode"
+      },
+      {
+        "value": "off",
+        "description": "Disable obit mode"
+      }
+    ]
   }
 ]
