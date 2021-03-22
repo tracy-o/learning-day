@@ -466,10 +466,10 @@ defmodule Routes.Routefile do
   handle "/sport/av/:id", using: "SportVideos", examples: ["/sport/av/51107180"]
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   # includes query string params in example URL to use live data in Mozart
-  handle "/sport/av/:section/:id", using: "SportVideos", examples: ["/sport/av/football/55975423"] do
+  handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423"] do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
