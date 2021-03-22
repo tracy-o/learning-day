@@ -471,7 +471,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
       return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
-      return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+)$/)
+      return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
   end
 
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
