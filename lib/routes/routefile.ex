@@ -292,6 +292,31 @@ defmodule Routes.Routefile do
 
   # World Service
 
+  ## World Service - Podcast Redirects
+  redirect "/arabic/media-45669761", to: "/arabic/podcasts/p02pc9qc", status: 301
+  redirect "/burmese/media-45625858", to: "/burmese/podcasts/p02pc9lh", status: 301
+  redirect "/burmese/media-45625862", to: "/burmese/podcasts/p02p9f6q", status: 301
+  redirect "/gahuza/institutional-51112056", to: "/gahuza/podcasts/p07yh8hb", status: 301
+  redirect "/gahuza/institutional-50169255", to: "/gahuza/podcasts/p02pcb5c", status: 301
+  redirect "/gahuza/institutional-51111781", to: "/gahuza/podcasts/p07yjlmf", status: 301
+  redirect "/gahuza/institutional-50948665", to: "/gahuza/podcasts/p07yhgwh", status: 301
+  redirect "/gahuza/institutional-51111776", to: "/gahuza/podcasts/p07yjfjq", status: 301
+  redirect "/hausa/media-54540879", to: "/hausa/podcasts/p08mlgcb", status: 301
+  redirect "/hindi/media-45683508", to: "/hindi/podcasts/p0552909", status: 301
+  redirect "/hindi/media-45684223", to: "/hindi/podcasts/p055260j", status: 301
+  redirect "/hindi/media-45684228", to: "/hindi/podcasts/p05528hs", status: 301
+  redirect "/hindi/media-45684413", to: "/hindi/podcasts/p05523zq", status: 301
+  redirect "/hindi/media-52093366", to: "/hindi/podcasts/p05525mc", status: 301
+  redirect "/hindi/media-55217505", to: "/hindi/podcasts/p08s9wv2", status: 301
+  redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
+  redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
+  redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
+  redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
+  redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
+  redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
+  redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
+
+  ## World Service - Simorgh and ARES
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo", "/afaanoromoo/example-123", "/afaanoromoo/example-123.amp", "/afaanoromoo/example-123.json"]
