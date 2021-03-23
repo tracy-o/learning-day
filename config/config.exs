@@ -84,7 +84,7 @@ config :ex_aws,
   json_codec: Eljiffy
 
 config :cachex, :limit,
-  size: 54_000,
+  size: 36_000,
   policy: Cachex.Policy.LRW,
   reclaim: 0.3,
   options: []
