@@ -17,8 +17,8 @@ defmodule Belfrage.MailboxMonitor do
   def handle_info(:refresh, state) do
     for server_name <- state.servers do
       case mailbox_size(server_name) do
-        {:ok, len} -> send_metric(server_name, len)
-        :error -> nil
+        nil -> nil
+        len -> send_metric(server_name, len)
       end
     end
 
@@ -29,12 +29,9 @@ defmodule Belfrage.MailboxMonitor do
   def handle_info(_msg, state), do: {:noreply, state}
 
   defp mailbox_size(server_name) do
-    pid = Process.whereis(server_name)
-
-    case pid do
-      nil -> :error
-      _ -> Process.info(pid) |> Keyword.fetch(:message_queue_len)
-    end
+    with pid when not is_nil(pid) <- Process.whereis(server_name),
+         {:message_queue_len, len } <- Process.info(pid, :message_queue_len),
+         do: len
   end
 
   defp send_metric(server_name, len) do
