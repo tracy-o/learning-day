@@ -30,7 +30,7 @@ defmodule Belfrage.MailboxMonitor do
 
   defp mailbox_size(server_name) do
     with pid when not is_nil(pid) <- Process.whereis(server_name),
-         {:message_queue_len, len } <- Process.info(pid, :message_queue_len),
+         {:message_queue_len, len} <- Process.info(pid, :message_queue_len),
          do: len
   end
 
