@@ -90,6 +90,28 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
+    test "No token and 'ckns_id' cookie without signedin header will not be authenticated", %{struct: struct} do
+      struct =
+        Struct.add(struct, :request, %{
+          cookies: %{"ckns_abc" => "def", "foo" => "bar", "ckns_id" => "123"}
+        })
+
+      assert {
+               :redirect,
+               %Struct{
+                 private: @authenticated_only_session_state,
+                 response: %Struct.Response{
+                   headers: %{
+                     "location" =>
+                       "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                     "x-bbc-no-scheme-rewrite" => "1",
+                     "cache-control" => "private"
+                   }
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+
     test "cookie for 'ckns_atkn' only, 'x-id-oidc-signedin' header not set will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
       assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
@@ -430,12 +452,11 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private:
-                   private = %Struct.Private{
-                     authenticated: true,
-                     session_token: ^access_token,
-                     valid_session: false
-                   }
+                 private: %Struct.Private{
+                   authenticated: true,
+                   session_token: ^access_token,
+                   valid_session: false
+                 }
                }
              } = UserSession.call([], struct)
     end
