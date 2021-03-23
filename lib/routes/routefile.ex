@@ -422,6 +422,10 @@ defmodule Routes.Routefile do
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
 
+  # Participation
+
+  handle "/participation-test/follow", using: "ParticipationTestFollow", only_on: "test", examples: ["/participation-test/follow"]
+
   # topics
 
   handle "/topics", using: "TopicPage", examples: ["/topics"]
