@@ -26,11 +26,13 @@ defmodule Belfrage.MailboxMonitorTest do
       Belfrage.EventMock
       |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
 
-      TestGenServer.work(Belfrage.TestGenServer)
+      ref = make_ref()
+
+      TestGenServer.work(Belfrage.TestGenServer, {:work, self(), ref})
       TestGenServer.work(Belfrage.TestGenServer)
       TestGenServer.work(Belfrage.TestGenServer)
 
-      Process.sleep(100)
+      assert_receive {:work, ref}
 
       assert {:noreply, %{servers: [Belfrage.TestGenServer]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [Belfrage.TestGenServer]})
@@ -41,14 +43,18 @@ defmodule Belfrage.MailboxMonitorTest do
       |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
       |> expect(:record, fn :metric, :gauge, "gen_server.test_server_two.mailbox_size", value: 2 -> true end)
 
+      ref_one = make_ref()
+      ref_two = make_ref()
+
+      TestGenServer.work(Belfrage.TestGenServer, {:work, self(), ref_one})
       TestGenServer.work(Belfrage.TestGenServer)
       TestGenServer.work(Belfrage.TestGenServer)
-      TestGenServer.work(Belfrage.TestGenServer)
-      TestGenServer.work(:test_server_two)
+      TestGenServer.work(:test_server_two, {:work, self(), ref_two})
       TestGenServer.work(:test_server_two)
       TestGenServer.work(:test_server_two)
 
-      Process.sleep(100)
+      assert_receive {:work, ref}
+      assert_receive {:work, ref_two}
 
       assert {:noreply, %{servers: [Belfrage.TestGenServer, :test_server_two]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [Belfrage.TestGenServer, :test_server_two]})
