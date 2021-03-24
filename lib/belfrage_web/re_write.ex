@@ -83,7 +83,7 @@ defmodule BelfrageWeb.ReWrite do
   """
   def interpolate(matcher, %{"any" => params, "format" => format}) when is_binary(format) do
     {params, [format, extension]} = Enum.split(params, -2)
-    interpolate(matcher, %{"any" => List.insert_at(params, -1, format <> extension)}) 
+    interpolate(matcher, %{"any" => List.insert_at(params, -1, format <> extension)})
   end
 
   def interpolate(matcher, params) do
