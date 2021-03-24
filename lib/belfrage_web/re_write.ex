@@ -77,7 +77,15 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> interpolate(prepare("https://bbc.co.uk/supports-custom-catch-all/*catch"), %{"catch" => ["some", "seo", "slug"]})
       "https://bbc.co.uk/supports-custom-catch-all/some/seo/slug"
+
+      iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "format", ".app"], "format" => "app"})
+      "/another-page/forward/slash/format.app"
   """
+  def interpolate(matcher, %{"any" => params, "format" => format}) when is_binary(format) do
+    {params, [format, extension]} = Enum.split(params, -2)
+    interpolate(matcher, %{"any" => List.insert_at(params, -1, format <> extension)}) 
+  end
+
   def interpolate(matcher, params) do
     Enum.map_join(matcher, fn
       {:var, key} -> path_value(Map.fetch!(params, key))
