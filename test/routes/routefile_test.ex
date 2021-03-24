@@ -32,6 +32,18 @@ defmodule Routes.RoutefileTest do
                    "`#{transformer}` is not a valid request transformer."
           end
 
+          platform_specs = Module.concat([Routes, Platforms, specs.platform]).specs(@env)
+          platform_transformers = platform_specs.pipeline
+
+          assert length(specs.pipeline) == length(Enum.uniq(specs.pipeline)),
+                 "Duplicated transformers found in pipeline."
+
+          assert length(platform_transformers) == length(Enum.uniq(platform_transformers)),
+                 "Duplicated platform transformers found in pipeline."
+
+          assert length(specs.pipeline) == length(Enum.uniq(specs.pipeline ++ platform_transformers)),
+                 "Missing platform transformers in the pipeline."
+
           if @env == "live" do
             assert "DevelopmentRequests" not in specs.pipeline,
                    "Sorry, the `DevelopmentRequests` transformer cannot be used on live."
