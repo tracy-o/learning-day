@@ -189,9 +189,8 @@ defmodule Routes.Routefile do
 
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
-  # elections 2021 results pages
   handle "/news/election/2021/:polity/:divisionName/:divisionId", using: "NewsElection2021", examples: ["/news/election/2021/scotland/constituencies/S16000084"] do
-    return_404 if: !String.match?(divisionName, ~r/^(scotland|wales)$/)
+    return_404 if: !String.match?(polity, ~r/^(scotland|wales)$/)
     return_404 if: !String.match?(divisionName, ~r/^(regions|constituencies)$/)
     return_404 if: !String.match?(divisionId, ~r/^[SW][0-9]{8}$/)
   end
@@ -250,7 +249,6 @@ defmodule Routes.Routefile do
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
-  # elections results pages
   handle "/cymrufyw/etholiad/2021/cymru/:divisionName/:divisionId", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau/W09000001"] do
     return_404 if: !String.match?(divisionName, ~r/^(rhanbarthau|etholaethau)$/)
     return_404 if: !String.match?(divisionId, ~r/^W[0-9]{8}$/)
