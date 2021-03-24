@@ -37,8 +37,7 @@ defmodule Belfrage.MailboxMonitor do
   defp log_failure(server_name) do
     @event.record(:log, :error, %{
       msg: "Error retrieving the mailbox size for #{server_name}, pid could not be found"
-      }
-    )
+    })
   end
 
   defp send_metric(server_name, len) do

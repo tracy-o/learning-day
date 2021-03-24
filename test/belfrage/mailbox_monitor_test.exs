@@ -70,7 +70,11 @@ defmodule Belfrage.MailboxMonitorTest do
 
     test "logs an error when the gen_server is not running" do
       Belfrage.EventMock
-      |> expect(:record, fn :log, :error, %{msg: "Error retrieving the mailbox size for missing_server, pid could not be found"} -> true end)
+      |> expect(:record, fn :log,
+                            :error,
+                            %{msg: "Error retrieving the mailbox size for missing_server, pid could not be found"} ->
+        true
+      end)
 
       assert {:noreply, %{servers: [:missing_server]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
