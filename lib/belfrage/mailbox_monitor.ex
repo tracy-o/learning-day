@@ -17,7 +17,7 @@ defmodule Belfrage.MailboxMonitor do
   def handle_info(:refresh, state) do
     for server_name <- state.servers do
       case mailbox_size(server_name) do
-        nil -> nil
+        nil -> log_failure(server_name)
         len -> send_metric(server_name, len)
       end
     end
@@ -34,6 +34,13 @@ defmodule Belfrage.MailboxMonitor do
          do: len
   end
 
+  defp log_failure(server_name) do
+    @event.record(:log, :error, %{
+      msg: "Error retrieving the mailbox size for #{server_name}, pid could not be found"
+      }
+    )
+  end
+
   defp send_metric(server_name, len) do
     name = gen_server_metric_name(server_name)
     @event.record(:metric, :gauge, "gen_server.#{name}.mailbox_size", value: len)
@@ -41,8 +48,7 @@ defmodule Belfrage.MailboxMonitor do
 
   defp gen_server_metric_name(server_name) do
     Atom.to_string(server_name)
-    |> String.split(".")
-    |> Enum.drop_while(fn x -> x == "Elixir" end)
-    |> Enum.join("_")
+    |> Macro.underscore()
+    |> String.trim("elixir/")
   end
 end

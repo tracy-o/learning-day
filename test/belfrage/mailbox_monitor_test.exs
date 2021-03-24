@@ -16,7 +16,7 @@ defmodule Belfrage.MailboxMonitorTest do
   describe "handle_info/2" do
     test "reports the mailbox size of zero when the mailbox is empty" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 0 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.belfrage/test_gen_server.mailbox_size", value: 0 -> true end)
 
       assert {:noreply, %{servers: [Belfrage.TestGenServer]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [Belfrage.TestGenServer]})
@@ -24,7 +24,7 @@ defmodule Belfrage.MailboxMonitorTest do
 
     test "reports the mailbox size when the mailbox is not empty" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.belfrage/test_gen_server.mailbox_size", value: 2 -> true end)
 
       ref = make_ref()
 
@@ -40,7 +40,7 @@ defmodule Belfrage.MailboxMonitorTest do
 
     test "reports the mailbox size for more than one server" do
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.Belfrage_TestGenServer.mailbox_size", value: 2 -> true end)
+      |> expect(:record, fn :metric, :gauge, "gen_server.belfrage/test_gen_server.mailbox_size", value: 2 -> true end)
       |> expect(:record, fn :metric, :gauge, "gen_server.test_server_two.mailbox_size", value: 2 -> true end)
 
       ref_one = make_ref()
@@ -63,6 +63,14 @@ defmodule Belfrage.MailboxMonitorTest do
     test "does not report when the gen_server is not running" do
       Belfrage.EventMock
       |> expect(:record, 0, fn :metric, :gauge, _name, _opts -> true end)
+
+      assert {:noreply, %{servers: [:missing_server]}} =
+               MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
+    end
+
+    test "logs an error when the gen_server is not running" do
+      Belfrage.EventMock
+      |> expect(:record, fn :log, :error, %{msg: "Error retrieving the mailbox size for missing_server, pid could not be found"} -> true end)
 
       assert {:noreply, %{servers: [:missing_server]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
