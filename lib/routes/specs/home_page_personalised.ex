@@ -1,9 +1,10 @@
-defmodule Routes.Specs.PresTestPersonalised do
+defmodule Routes.Specs.HomePagePersonalised do
   def specs(production_env) do
     %{
-      owner: "D&EWebCorePresentationTeam@bbc.co.uk",
+      owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Runbook",
       platform: Webcore,
-      query_params_allowlist: ["q", "page", "scope", "filter", "personalisationMode"],
+      query_params_allowlist: ["personalisationMode"],
       pipeline: pipeline(production_env),
       cookie_allowlist: ["ckns_atkn", "ckns_id"],
       headers_allowlist: ["x-id-oidc-signedin"]

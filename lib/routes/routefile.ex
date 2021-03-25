@@ -163,6 +163,10 @@ defmodule Routes.Routefile do
   handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
 
+  handle "/homepage/personalised", using: "HomePagePersonalised", only_on: "test", examples: ["/homepage/personalised"]
+  handle "/homepage/segmented", using: "HomePageSegmented", only_on: "test", examples: ["/homepage/segmented"]
+
+
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
 
@@ -288,6 +292,31 @@ defmodule Routes.Routefile do
 
   # World Service
 
+  ## World Service - Podcast Redirects
+  redirect "/arabic/media-45669761", to: "/arabic/podcasts/p02pc9qc", status: 301
+  redirect "/burmese/media-45625858", to: "/burmese/podcasts/p02pc9lh", status: 301
+  redirect "/burmese/media-45625862", to: "/burmese/podcasts/p02p9f6q", status: 301
+  redirect "/gahuza/institutional-51112056", to: "/gahuza/podcasts/p07yh8hb", status: 301
+  redirect "/gahuza/institutional-50169255", to: "/gahuza/podcasts/p02pcb5c", status: 301
+  redirect "/gahuza/institutional-51111781", to: "/gahuza/podcasts/p07yjlmf", status: 301
+  redirect "/gahuza/institutional-50948665", to: "/gahuza/podcasts/p07yhgwh", status: 301
+  redirect "/gahuza/institutional-51111776", to: "/gahuza/podcasts/p07yjfjq", status: 301
+  redirect "/hausa/media-54540879", to: "/hausa/podcasts/p08mlgcb", status: 301
+  redirect "/hindi/media-45683508", to: "/hindi/podcasts/p0552909", status: 301
+  redirect "/hindi/media-45684223", to: "/hindi/podcasts/p055260j", status: 301
+  redirect "/hindi/media-45684228", to: "/hindi/podcasts/p05528hs", status: 301
+  redirect "/hindi/media-45684413", to: "/hindi/podcasts/p05523zq", status: 301
+  redirect "/hindi/media-52093366", to: "/hindi/podcasts/p05525mc", status: 301
+  redirect "/hindi/media-55217505", to: "/hindi/podcasts/p08s9wv2", status: 301
+  redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
+  redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
+  redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
+  redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
+  redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
+  redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
+  redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
+
+  ## World Service - Simorgh and ARES
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo", "/afaanoromoo/example-123", "/afaanoromoo/example-123.amp", "/afaanoromoo/example-123.json"]
@@ -418,6 +447,10 @@ defmodule Routes.Routefile do
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
 
+  # Participation
+
+  handle "/participation-test/follow", using: "ParticipationTestFollow", only_on: "test", examples: ["/participation-test/follow"]
+
   # topics
 
   handle "/topics", using: "TopicPage", examples: ["/topics"]
@@ -427,6 +460,9 @@ defmodule Routes.Routefile do
   end
 
   # Sport
+
+  redirect "/sport/contact.app", to: "/send/u49719405", status: 301
+  redirect "/sport/contact", to: "/send/u49719405", status: 301
 
   ## Sport correspondents redirects
   redirect "/sport/andrewbenson", to: "/sport/topics/cl16knzpeq5t", status: 301
@@ -454,19 +490,98 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml", "/sport/cricket/womens/rss.xml"]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
 
+  ## Sport redirects
+  handle "/sport/53783520/*_any", using: "SportRedirects", examples: ["/sport/53783520", "/sport/53783520.app"]
+  handle "/sport/34476378/*_any", using: "SportRedirects", examples: ["/sport/34476378", "/sport/34476378.app"]
+  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
+
+  ## Sport Supermovers redirects
+  redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/football/supermovers", to: "/teach/supermovers", status: 301
+  redirect "/sport/supermovers/42612496.app", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
+  redirect "/sport/supermovers/42612496", to: "/teach/supermovers/ks1-collection/zbr4scw", status: 301
+  redirect "/sport/supermovers/42612499.app", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
+  redirect "/sport/supermovers/42612499", to: "/teach/supermovers/ks2-collection/zr4ky9q", status: 301
+  redirect "/sport/supermovers/42612500.app", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
+  redirect "/sport/supermovers/42612500", to: "/teach/supermovers/cymru/zkdjgwx", status: 301
+  redirect "/sport/supermovers/42612503.app", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
+  redirect "/sport/supermovers/42612503", to: "/teach/supermovers/just-for-fun-collection/z7tymfr", status: 301
+  redirect "/sport/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/supermovers/:id", to: "/teach/supermovers", status: 301
+  redirect "/sport/av/supermovers/:id.app", to: "/teach/supermovers", status: 301
+  redirect "/sport/av/supermovers/:id", to: "/teach/supermovers", status: 301
+
+  ## Sport Stories redirects
+  redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
+  redirect "/sport/53783520", to: "/sport/all-sports", status: 301
+  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
+  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
+  redirect "/sport/cricket/53783524.app", to: "/sport/cricket/teams.app", status: 301
+  redirect "/sport/cricket/53783524", to: "/sport/cricket/teams", status: 301
+  redirect "/sport/darts/19333759.app", to: "/sport/ice-hockey/results.app", status: 301
+  redirect "/sport/darts/19333759", to: "/sport/ice-hockey/results", status: 301
+  redirect "/sport/football/53783525.app", to: "/sport/football/leagues-cups.app", status: 301
+  redirect "/sport/football/53783525", to: "/sport/football/leagues-cups", status: 301
+  redirect "/sport/football/53783521.app", to: "/sport/football/teams.app", status: 301
+  redirect "/sport/football/53783521", to: "/sport/football/teams", status: 301
+  redirect "/sport/rugby-league/53783522.app", to: "/sport/rugby-league/teams.app", status: 301
+  redirect "/sport/rugby-league/53783522", to: "/sport/rugby-league/teams", status: 301
+  redirect "/sport/rugby-union/53783523.app", to: "/sport/rugby-union/teams.app", status: 301
+  redirect "/sport/rugby-union/53783523", to: "/sport/rugby-union/teams", status: 301
+
+  ## Sport Index redirects
+  redirect "/sport/football/african.app", to: "/sport/africa.app", status: 301
+  redirect "/sport/football/african", to: "/sport/africa", status: 301
+  redirect "/sport/front-page.app", to: "/sport.app", status: 301
+  redirect "/sport/front-page", to: "/sport", status: 301
+  redirect "/sport/get-inspired/bodypositive.app", to: "/sport/get-inspired.app", status: 301
+  redirect "/sport/get-inspired/bodypositive", to: "/sport/get-inspired", status: 301
+  redirect "/sport/get-inspired/fa-peoples-cup.app", to: "/sport/get-inspired.app", status: 301
+  redirect "/sport/get-inspired/fa-peoples-cup", to: "/sport/get-inspired", status: 301
+  redirect "/sport/get-inspired/unsung-heroes.app", to: "/sport/get-inspired.app", status: 301
+  redirect "/sport/get-inspired/unsung-heroes", to: "/sport/get-inspired", status: 301
+
+  ## Sport unsupported data page redirects
+  redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
+  redirect "/sport/disability-sport/paralympics-2012", to: "/sport/disability-sport", status: 301
+  redirect "/sport/football/european-championship/euro-2016/video.app", to: "/sport/football/european-championship/video.app", status: 301
+  redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
+  redirect "/sport/football/european-championship/fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
+  redirect "/sport/football/european-championship/fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
+  redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
+  redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
+
+  ## Sport unsupported data page redirects handled by Belfrage.Transformers.SportRedirect
+  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
+  handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
+  handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
+  handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
+  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
+  handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2012", "/sport/football/european-championship/2012.app"]
+  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/2016.app"]
+  handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/euro-2016", "/sport/football/european-championship/euro-2016.app"]
+  handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
+  handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
+  handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: ["/sport/olympics/2012", "/sport/olympics/2012/medals.app"]
+  handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/2016", "/sport/olympics/2016/schedule.app"]
+  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app"]
+  handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/medals", "/sport/paralympics/rio-2016/medals.app"]
+  handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/schedule", "/sport/paralympics/rio-2016/schedule.app"]
+  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
+  handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/medals/countries/new-zealand", "/sport/winter-olympics/medals/countries/great-britain.app"]
+  handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", "/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app"]
+  handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
+
+  ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
-  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
-  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
-    return_404 if: String.length(id) != 8
-  end
-
+  ## Sport SFV -  use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
   handle "/sport/av/:id", using: "SportVideos", examples: ["/sport/av/51107180"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
-  # includes query string params in example URL to use live data in Mozart
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
@@ -474,9 +589,12 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
   end
 
-  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
+  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
+  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
+    return_404 if: String.length(id) != 8
+  end
 
-  ## Sport Internal Tools
+  ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
   handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
   handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
@@ -487,9 +605,11 @@ defmodule Routes.Routefile do
   handle "/sport/top-4.app", using: "Sport", examples: ["/sport/top-4.app"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
 
+  ## Sport Misc
+  handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
 
-  ## Sport BBC Live
+  ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
 
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
@@ -504,7 +624,7 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
-  ## Sport Stories with Vanity Urls
+  ## Sport Vanity Urls 
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
   handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
   handle "/sport/cricket/teams.app", using: "SportStoryPage", examples: ["/sport/cricket/teams.app"]
@@ -688,6 +808,8 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/top-scorers/assists", using: "SportDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists"]
 
   ## Sport Formula 1 Pages
+  redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
+  redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
   handle "/sport/formula1/latest.app", using: "SportDataPage", examples: ["/sport/formula1/latest.app"]
   handle "/sport/formula1/latest", using: "SportDataPage", examples: ["/sport/formula1/latest"]
   handle "/sport/formula1/results.app", using: "SportDataPage", examples: ["/sport/formula1/results.app"]
@@ -729,6 +851,7 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
   handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
 
+  ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
@@ -802,7 +925,7 @@ defmodule Routes.Routefile do
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
 
-  # Sport Stories (without discipline) - all use query string params in example URL to use live data in Mozart
+  ## Sport Stories (without discipline) - use query string params in example URLs to use live data via Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
@@ -816,7 +939,7 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
-  ## Sport Stories (with discipline) - all use query string params in example URL to use live data in Mozart
+  ## Sport Stories (with discipline) - use query string params in example URLs to use live data via Mozart
   handle "/sport/:discipline/:id.amp", using: "SportAmp", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
