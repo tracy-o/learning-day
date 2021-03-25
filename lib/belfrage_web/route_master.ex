@@ -123,7 +123,7 @@ defmodule BelfrageWeb.RouteMaster do
         raise ArgumentError, message: "only #{Enum.join(redirect_statuses, ", ")} are accepted for redirects"
       end
 
-      uri_from = URI.parse(unquote(from))
+      uri_from = URI.parse(rewrite(unquote(from)))
 
       @redirects [{unquote(from), unquote(location), unquote(status)} | @redirects]
 
