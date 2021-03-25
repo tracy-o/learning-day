@@ -17,7 +17,7 @@ defmodule Belfrage.MailboxMonitorTest do
       |> expect(:record, fn :metric, :gauge, "gen_server.test_server_one.mailbox_size", value: 0 -> true end)
 
       assert {:noreply, %{servers: [:test_server_one]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [:test_server_one]})
+               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one]})
     end
 
     test "reports the mailbox size when the mailbox is not empty" do
@@ -33,7 +33,7 @@ defmodule Belfrage.MailboxMonitorTest do
       assert_receive {:work, ref}
 
       assert {:noreply, %{servers: [:test_server_one]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [:test_server_one]})
+               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one]})
     end
 
     test "reports the mailbox size for more than one server" do
@@ -57,7 +57,7 @@ defmodule Belfrage.MailboxMonitorTest do
       assert_receive {:work, ref_two}
 
       assert {:noreply, %{servers: [:test_server_one, :test_server_two]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [:test_server_one, :test_server_two]})
+               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one, :test_server_two]})
     end
 
     test "does not report when the gen_server is not running" do
@@ -77,7 +77,7 @@ defmodule Belfrage.MailboxMonitorTest do
       end)
 
       assert {:noreply, %{servers: [:missing_server]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
+               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:missing_server]})
     end
   end
 end

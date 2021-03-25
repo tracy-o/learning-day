@@ -1,29 +1,32 @@
 defmodule Belfrage.MailboxMonitor do
-  use GenServer
+  use GenServer, restart: :temporary
 
   @event Application.get_env(:belfrage, :event)
   @servers Application.get_env(:belfrage, :mailbox_monitors)
-  @refresh_rate Application.get_env(:belfrage, :mailbox_monitor_refresh_rate)
+  @default_refresh_rate Application.get_env(:belfrage, :mailbox_monitor_refresh_rate)
 
   def start_link(opts) do
     name = Keyword.get(opts, :name, __MODULE__)
-    GenServer.start_link(__MODULE__, opts, name: name)
+    rate = Keyword.get(opts, :rate, @default_refresh_rate)
+    servers = Keyword.get(opts, :servers, @servers)
+
+    GenServer.start_link(__MODULE__, %{rate: rate, servers: servers}, name: name)
   end
 
-  def init(_opts) do
+  def init(opts) do
     send(self(), :refresh)
-    {:ok, %{servers: @servers}}
+    {:ok, opts}
   end
 
-  def handle_info(:refresh, state) do
-    for server_name <- state.servers do
+  def handle_info(:refresh, state = %{rate: rate, servers: servers}) do
+    for server_name <- servers do
       case mailbox_size(server_name) do
         nil -> log_failure(server_name)
         len -> send_metric(server_name, len)
       end
     end
 
-    Process.send_after(__MODULE__, :refresh, @refresh_rate)
+    Process.send_after(self(), :refresh, rate)
     {:noreply, state}
   end
 
