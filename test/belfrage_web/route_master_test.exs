@@ -334,7 +334,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["https://12345.bbc.com/new-location/i-am-a-url-slug-for-SEO"]
     end
 
-    test "re-writes extension to remove slash" do
+    test "handle *any to *any redirects with format extension" do
       expect_belfrage_not_called()
 
       conn =
@@ -348,6 +348,22 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 302
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["/new-location-with-path/feed.xml"]
+    end
+
+    test "handle *any to *any redirects without format extension" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/redirect-with-path/subpath/asset-1234")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/new-location-with-path/subpath/asset-1234"]
     end
   end
 
