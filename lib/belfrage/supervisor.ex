@@ -63,9 +63,6 @@ defmodule Belfrage.Supervisor do
   Belfrage.Authentication.Flagpole
   - Periodically checks personalisation flagpole.
 
-  Belfrage.Cache.Cleaner
-  - Periodically checks memory limit, and removes cached items.
-
   Belfrage.MailboxMonitor
   - Monitors the size of the mailbox for gen_servers and reports them
     to CloudWatch
