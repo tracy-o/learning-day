@@ -150,11 +150,7 @@ defmodule Routes.Routefile do
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
   handle "/alba", using: "AlbaHomePage", examples: ["/alba"]
 
-  # RESFRAME-4095 for only-on routing test
   handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
-
-  handle "/homepage/testing", using: "TestHomePage", only_on: "test", examples: ["/homepage/testing"]
-  handle "/homepage/testing", using: "HomePage", examples: []
 
   handle "/homepage/preview", using: "HomePagePreview", only_on: "test", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", only_on: "test", examples: ["/homepage/preview/scotland"]
@@ -464,7 +460,7 @@ defmodule Routes.Routefile do
   redirect "/sport/0/*any", to: "/sport/*any", status: 302
   redirect "/sport/uk/*any", to: "/sport/*any", status: 302
   redirect "/sport/world/*any", to: "/sport/*any", status: 302
-  
+
   redirect "/sport/contact.app", to: "/send/u49719405", status: 301
   redirect "/sport/contact", to: "/send/u49719405", status: 301
 
@@ -622,7 +618,7 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
-  ## Sport Vanity Urls 
+  ## Sport Vanity Urls
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
   handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
   handle "/sport/cricket/teams.app", using: "SportStoryPage", examples: ["/sport/cricket/teams.app"]
