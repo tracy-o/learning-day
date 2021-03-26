@@ -578,11 +578,17 @@ defmodule Routes.Routefile do
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportMediaAssetPage", examples: ["/sport/av/51107180?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:section/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:section/:id", using: "SportVideoAndAudio", examples: ["/sport/av/football/55975423?morph_env=live&renderer_env=live"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  handle "/sport/av/:id", using: "SportVideos", examples: ["/sport/av/51107180"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
+
+  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+
+  handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
+      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+      return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
+  end
+
   handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
