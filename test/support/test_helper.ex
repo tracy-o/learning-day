@@ -69,6 +69,18 @@ defmodule Test.Support.Helper do
     end
   end
 
+  def get_route(endpoint, path, "WorldService" <> _language) do
+    host_header =
+      case String.contains?(endpoint, ".test.") do
+        true -> "www.test.bbc.co.uk"
+        false -> "www.bbc.co.uk"
+      end
+
+    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", host_header}], %{})
+  end
+
+  def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
+
   def get_route(endpoint, path) do
     MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", endpoint}], %{})
   end

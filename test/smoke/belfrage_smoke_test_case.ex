@@ -47,7 +47,7 @@ defmodule Belfrage.SmokeTestCase do
             test "#{path}" do
               header_id = Application.get_env(:smoke, :endpoint_to_stack_id_mapping)[@target]
 
-              resp = Helper.get_route(@host, @path)
+              resp = Helper.get_route(@host, @path, @matcher_spec.using)
 
               cond do
                 @smoke_env == "live" and @matcher_spec.only_on == "test" ->
