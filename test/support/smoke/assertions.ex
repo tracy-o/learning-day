@@ -35,7 +35,7 @@ defmodule Support.Smoke.Assertions do
   defp assert_world_service_redirect(response) do
     location = Helper.get_header(response.headers, "location")
     refute is_nil(location), "Expected `location` response header to be set for world service redirect."
-    assert location =~ ".com"
+    assert location =~ world_service_redirect_tld(location)
   end
 
   defp assert_com_to_uk_redirect(response) do
@@ -43,6 +43,13 @@ defmodule Support.Smoke.Assertions do
     refute is_nil(location), "Expected `location` response header to be set for `.com` to `.co.uk` redirect."
     assert location =~ ".co.uk"
     assert response.status_code == 302
+  end
+
+  defp world_service_redirect_tld(location) do
+    case String.contains?(location, ".api.") do
+      true -> ".com"
+      false -> ".co.uk"
+    end
   end
 
   defp world_service_redirect?(%{pipeline: pipeline}) do
