@@ -252,8 +252,8 @@ defmodule Routes.Routefile do
   handle "/cymrufyw/de-ddwyrain", using: "Cymrufyw", examples: ["/cymrufyw/de-ddwyrain"]
   handle "/cymrufyw/eisteddfod", using: "Cymrufyw", examples: ["/cymrufyw/eisteddfod"]
   handle "/cymrufyw/components", using: "Cymrufyw", examples: ["/cymrufyw/components"]
-  handle "/cymrufyw/hafan", using: "Cymrufyw", examples: ["/cymrufyw/hafan"]
-  handle "/cymrufyw/etholiad", using: "Cymrufyw", examples: ["/cymrufyw/etholiad"]
+  handle "/cymrufyw/hafan", using: "Cymrufyw", examples: [{"/cymrufyw/hafan", 301}]
+  handle "/cymrufyw/etholiad", using: "Cymrufyw", examples: [{"/cymrufyw/etholiad", 302}]
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
@@ -268,7 +268,7 @@ defmodule Routes.Routefile do
   # Naidheachdan
 
   handle "/naidheachdan", using: "NaidheachdanHomePage", examples: ["/naidheachdan"]
-  handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: ["/naidheachdan/dachaigh"]
+  handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: [{"/naidheachdan/dachaigh", 301}]
   handle "/naidheachdan/components", using: "Naidheachdan", examples: ["/naidheachdan/components"]
 
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
@@ -485,15 +485,15 @@ defmodule Routes.Routefile do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
-  handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
-  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml", "/sport/england/rss.xml"]
-  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/champions-league/rss.xml", "/sport/cricket/womens/rss.xml"]
-  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/liverpool/rss.xml"]
+  handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 301}]
+  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: [{"/sport/football/rss.xml", 301}, {"/sport/england/rss.xml", 301}]
+  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
+  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: [{"/sport/football/teams/liverpool/rss.xml", 301}]
 
   ## Sport redirects
-  handle "/sport/53783520/*_any", using: "SportRedirects", examples: ["/sport/53783520", "/sport/53783520.app"]
-  handle "/sport/34476378/*_any", using: "SportRedirects", examples: ["/sport/34476378", "/sport/34476378.app"]
-  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: ["/sport/av/supermovers/12345678", "/sport/av/supermovers/12345678.app"]
+  handle "/sport/53783520/*_any", using: "SportRedirects", examples: [{"/sport/53783520", 301}, {"/sport/53783520.app", 301}]
+  handle "/sport/34476378/*_any", using: "SportRedirects", examples: [{"/sport/34476378", 301}, {"/sport/34476378.app", 301}]
+  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: [{"/sport/av/supermovers/12345678", 301}, {"/sport/av/supermovers/12345678.app", 301}]
 
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
@@ -552,26 +552,26 @@ defmodule Routes.Routefile do
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
   ## Sport unsupported data page redirects handled by Belfrage.Transformers.SportRedirect
-  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/home-nations", "/sport/commonwealth-games/home-nations.app"]
-  handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/medals/countries/canada", "/sport/commonwealth-games/medals/countries/british-virgin-islands.app"]
-  handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/results/sports/hockey/hockey-women", "/sport/commonwealth-games/results.app"]
-  handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/schedule/sports/gymnastics", "/sport/commonwealth-games/schedule/sports/volleyball.app"]
-  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
-  handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2012", "/sport/football/european-championship/2012.app"]
-  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/2016", "/sport/football/european-championship/2016.app"]
-  handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/euro-2016", "/sport/football/european-championship/euro-2016.app"]
-  handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/european-championship/schedule/knockout-stage", "/sport/football/european-championship/schedule.app"]
-  handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: ["/sport/football/world-cup/schedule/group-stage", "/sport/football/world-cup/schedule.app"]
-  handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: ["/sport/olympics/2012", "/sport/olympics/2012/medals.app"]
-  handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/2016", "/sport/olympics/2016/schedule.app"]
-  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: ["/sport/olympics/rio-2016", "/sport/olympics/rio-2016.app"]
-  handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/medals", "/sport/paralympics/rio-2016/medals.app"]
-  handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: ["/sport/paralympics/rio-2016/schedule", "/sport/paralympics/rio-2016/schedule.app"]
-  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/home-nations", "/sport/winter-olympics/home-nations.app"]
-  handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/medals/countries/new-zealand", "/sport/winter-olympics/medals/countries/great-britain.app"]
-  handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", "/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app"]
-  handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: ["/sport/winter-olympics/schedule/sports/figure-skating", "/sport/winter-olympics/schedule/sports/snowboarding.app"]
-  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: ["/sport/commonwealth-games/sports", "/sport/commonwealth-games/sports.app"]
+  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
+  handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
+  handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
+  handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/schedule/sports/gymnastics", 302}, {"/sport/commonwealth-games/schedule/sports/volleyball.app", 302}]
+  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
+  handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2012", 301}, {"/sport/football/european-championship/2012.app", 301}]
+  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
+  handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
+  handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
+  handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: [{"/sport/football/world-cup/schedule/group-stage", 302}, {"/sport/football/world-cup/schedule.app", 302}]
+  handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
+  handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
+  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
+  handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/medals", 301}, {"/sport/paralympics/rio-2016/medals.app", 301}]
+  handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/schedule", 301}, {"/sport/paralympics/rio-2016/schedule.app", 301}]
+  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/home-nations", 302}, {"/sport/winter-olympics/home-nations.app", 302}]
+  handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
+  handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
+  handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
 
   ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
@@ -794,8 +794,8 @@ defmodule Routes.Routefile do
   handle "/sport/cricket/averages", using: "SportDataPage", examples: ["/sport/cricket/averages"]
   handle "/sport/cricket/:tournament/averages.app", using: "SportDataPage", examples: ["/sport/cricket/indian-premier-league/averages.app"]
   handle "/sport/cricket/:tournament/averages", using: "SportDataPage", examples: ["/sport/cricket/indian-premier-league/averages"]
-  handle "/sport/cricket/teams/:team/averages.app", using: "SportDataPage", examples: ["/sport/cricket/teams/lancashire/averages.app"]
-  handle "/sport/cricket/teams/:team/averages", using: "SportDataPage", examples: ["/sport/cricket/teams/lancashire/averages"]
+  handle "/sport/cricket/teams/:team/averages.app", using: "SportDataPage", examples: [{"/sport/cricket/teams/lancashire/averages.app", 302}]
+  handle "/sport/cricket/teams/:team/averages", using: "SportDataPage", examples: [{"/sport/cricket/teams/lancashire/averages", 302}]
 
   ## Sport Football Top-Scorers
   handle "/sport/football/:tournament/top-scorers.app", using: "SportDataPage", examples: ["/sport/football/european-championship/top-scorers.app"]
