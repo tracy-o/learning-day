@@ -17,7 +17,7 @@ defmodule Belfrage.NonEssentialSupervisor do
   defp default_children() do
     [
       Belfrage.Metrics.Pool,
-      Belfrage.TelemetrySupervisor,
+      Belfrage.TelemetrySupervisor
     ]
   end
 
@@ -51,12 +51,11 @@ defmodule Belfrage.NonEssentialSupervisor do
   defp background_children(_env) do
     [
       Belfrage.Credentials.Refresh,
-      Belfrage.MailboxMonitor,
+      Belfrage.MailboxMonitor
     ]
   end
 
   def handle_info(:DOWN, state) do
     IO.inspect("Got a DOWN")
   end
-
 end
