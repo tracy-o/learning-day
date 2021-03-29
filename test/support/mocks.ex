@@ -17,3 +17,4 @@ Mox.defmock(Belfrage.DialMock, for: Belfrage.Dial, skip_optional_callbacks: true
 Mox.defmock(Belfrage.DialWithOptionalCallbackMock, for: Belfrage.Dial)
 Mox.defmock(Belfrage.Dials.ServerMock, for: Belfrage.Dials.Server)
 Mox.defmock(Belfrage.MonitorMock, for: Belfrage.Monitor)
+Mox.defmock(Belfrage.EventMock, for: Belfrage.Event)
