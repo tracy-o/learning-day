@@ -69,7 +69,7 @@ defmodule Belfrage.Supervisor do
     [
       Belfrage.Dials.Supervisor,
       Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole,
+      Belfrage.Authentication.Flagpole
     ]
   end
 
