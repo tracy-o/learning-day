@@ -54,8 +54,4 @@ defmodule Belfrage.NonEssentialSupervisor do
       Belfrage.MailboxMonitor
     ]
   end
-
-  def handle_info(:DOWN, state) do
-    IO.inspect("Got a DOWN")
-  end
 end
