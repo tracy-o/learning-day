@@ -242,7 +242,7 @@ defmodule Routes.Routefile do
   end
 
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
-  handle "/news/*_any", using: "News", examples: ["/news/election/2019", "/news/contact-us/editorial"]
+  handle "/news/*_any", using: "News", examples: ["/news/election/2019", {"/news/contact-us/editorial", 302}]
 
   # Cymrufyw
 
@@ -262,7 +262,7 @@ defmodule Routes.Routefile do
   handle "/cymrufyw/de-orllewin", using: "Cymrufyw", examples: ["/cymrufyw/de-orllewin"]
   handle "/cymrufyw/de-ddwyrain", using: "Cymrufyw", examples: ["/cymrufyw/de-ddwyrain"]
   handle "/cymrufyw/eisteddfod", using: "Cymrufyw", examples: ["/cymrufyw/eisteddfod"]
-  handle "/cymrufyw/components", using: "Cymrufyw", examples: ["/cymrufyw/components"]
+  handle "/cymrufyw/components", using: "Cymrufyw", examples: []
   handle "/cymrufyw/hafan", using: "Cymrufyw", examples: [{"/cymrufyw/hafan", 301}]
   handle "/cymrufyw/etholiad", using: "Cymrufyw", examples: [{"/cymrufyw/etholiad", 302}]
 
@@ -280,7 +280,7 @@ defmodule Routes.Routefile do
 
   handle "/naidheachdan", using: "NaidheachdanHomePage", examples: ["/naidheachdan"]
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: [{"/naidheachdan/dachaigh", 301}]
-  handle "/naidheachdan/components", using: "Naidheachdan", examples: ["/naidheachdan/components"]
+  handle "/naidheachdan/components", using: "Naidheachdan", examples: []
 
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)

@@ -77,13 +77,13 @@ defmodule Test.Support.Helper do
         false -> "www.bbc.co.uk"
       end
 
-    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", host_header}], %{})
+    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", host_header}], %{request_timeout: 10_000})
   end
 
   def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
 
   def get_route(endpoint, path) do
-    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", endpoint}], %{})
+    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", endpoint}], %{request_timeout: 10_000})
   end
 
   def header_item_exists(headers, header_id) do
