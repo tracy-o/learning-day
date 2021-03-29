@@ -62,9 +62,6 @@ defmodule Belfrage.Supervisor do
   Belfrage.Authentication.Flagpole
   - Periodically checks personalisation flagpole.
 
-  Belfrage.MailboxMonitor
-  - Monitors the size of the mailbox for gen_servers and reports them
-    to CloudWatch
   """
   defp background_children(:test), do: []
 
@@ -73,7 +70,6 @@ defmodule Belfrage.Supervisor do
       Belfrage.Dials.Supervisor,
       Belfrage.Authentication.Jwk,
       Belfrage.Authentication.Flagpole,
-      Belfrage.MailboxMonitor
     ]
   end
 
