@@ -71,4 +71,5 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def cookie_ckps_serbian(headers, _cache), do: headers[:cookie_ckps_serbian]
   def origin(headers, _cache), do: headers[:origin]
   def referer(headers, _cache), do: headers[:referer]
+  def user_agent(headers, _cache), do: headers[:user_agent]
 end
