@@ -468,8 +468,11 @@ defmodule Routes.Routefile do
 
   # Sport
 
+  redirect "/sport/0.app", to: "/sport.app", status: 302
   redirect "/sport/0/*any", to: "/sport/*any", status: 302
+  redirect "/sport/uk.app", to: "/sport.app", status: 302
   redirect "/sport/uk/*any", to: "/sport/*any", status: 302
+  redirect "/sport/world.app", to: "/sport.app", status: 302
   redirect "/sport/world/*any", to: "/sport/*any", status: 302
 
   redirect "/sport/contact.app", to: "/send/u49719405", status: 301
