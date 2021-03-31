@@ -504,9 +504,6 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: [{"/sport/football/teams/liverpool/rss.xml", 301}]
 
-  ## Sport redirects
-  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: [{"/sport/av/supermovers/12345678", 301}, {"/sport/av/supermovers/12345678.app", 301}]
-
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
   redirect "/sport/football/supermovers", to: "/teach/supermovers", status: 301
