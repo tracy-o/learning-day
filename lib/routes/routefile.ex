@@ -581,7 +581,7 @@ defmodule Routes.Routefile do
   handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
   handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
   handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
-  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
 
   ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
