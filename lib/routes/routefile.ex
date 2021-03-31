@@ -499,6 +499,7 @@ defmodule Routes.Routefile do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
+  ## Sport rss feed redirects
   handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 301}]
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: [{"/sport/football/rss.xml", 301}, {"/sport/england/rss.xml", 301}]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
@@ -560,7 +561,7 @@ defmodule Routes.Routefile do
   redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
-  ## Sport unsupported data page redirects handled by Belfrage.Transformers.SportRedirect
+  ## Sport unsupported data page redirects handled by Mozart
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
   handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
