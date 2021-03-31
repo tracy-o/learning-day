@@ -522,10 +522,10 @@ defmodule Routes.Routefile do
   redirect "/sport/av/supermovers/:id", to: "/teach/supermovers", status: 301
 
   ## Sport Stories redirects
+  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
+  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
   redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
   redirect "/sport/53783520", to: "/sport/all-sports", status: 301
-  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
-  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
   redirect "/sport/cricket/53783524.app", to: "/sport/cricket/teams.app", status: 301
   redirect "/sport/cricket/53783524", to: "/sport/cricket/teams", status: 301
   redirect "/sport/darts/19333759.app", to: "/sport/ice-hockey/results.app", status: 301
