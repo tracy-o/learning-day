@@ -499,15 +499,11 @@ defmodule Routes.Routefile do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
+  ## Sport rss feed redirects
   handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 301}]
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: [{"/sport/football/rss.xml", 301}, {"/sport/england/rss.xml", 301}]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: [{"/sport/football/teams/liverpool/rss.xml", 301}]
-
-  ## Sport redirects
-  handle "/sport/53783520/*_any", using: "SportRedirects", examples: [{"/sport/53783520", 301}, {"/sport/53783520.app", 301}]
-  handle "/sport/34476378/*_any", using: "SportRedirects", examples: [{"/sport/34476378", 301}, {"/sport/34476378.app", 301}]
-  handle "/sport/av/supermovers/12345678/*_any", using: "SportRedirects", examples: [{"/sport/av/supermovers/12345678", 301}, {"/sport/av/supermovers/12345678.app", 301}]
 
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
@@ -526,10 +522,10 @@ defmodule Routes.Routefile do
   redirect "/sport/av/supermovers/:id", to: "/teach/supermovers", status: 301
 
   ## Sport Stories redirects
+  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
+  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
   redirect "/sport/53783520.app", to: "/sport/all-sports.app", status: 301
   redirect "/sport/53783520", to: "/sport/all-sports", status: 301
-  redirect "/sport/34476378.app", to: "/sport/my-sport.app", status: 301
-  redirect "/sport/34476378", to: "/sport/my-sport", status: 301
   redirect "/sport/cricket/53783524.app", to: "/sport/cricket/teams.app", status: 301
   redirect "/sport/cricket/53783524", to: "/sport/cricket/teams", status: 301
   redirect "/sport/darts/19333759.app", to: "/sport/ice-hockey/results.app", status: 301
@@ -565,7 +561,7 @@ defmodule Routes.Routefile do
   redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
-  ## Sport unsupported data page redirects handled by Belfrage.Transformers.SportRedirect
+  ## Sport unsupported data page redirects handled by Mozart
   handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
   handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
   handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
@@ -585,7 +581,7 @@ defmodule Routes.Routefile do
   handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
   handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
   handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
-  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
+  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
 
   ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
