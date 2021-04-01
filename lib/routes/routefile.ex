@@ -764,8 +764,7 @@ defmodule Routes.Routefile do
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
   handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2021-05", "/sport/formula1/calendar/2021-05.app"]
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
-  handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/winter-sports/calendar"]
-  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
 
   ## Sport Fixtures pages
   handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
@@ -775,8 +774,7 @@ defmodule Routes.Routefile do
 
   ## Sport Horse Racing Results
   handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
-  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results", "/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
 
   ## Sport Results pages
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
@@ -786,14 +784,11 @@ defmodule Routes.Routefile do
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/scores-fixtures"]
-  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
+  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
-  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures/2021-02", "/sport/football/teams/manchester-united/scores-fixtures/2021-02.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures", "/sport/football/teams/manchester-united/scores-fixtures/2021-02", "/sport/football/teams/manchester-united/scores-fixtures/2021-02.app"]
 
   ## Sport Table pages
   handle "/sport/:discipline/tables.app", using: "SportDataPage", examples: ["/sport/football/tables.app"]
