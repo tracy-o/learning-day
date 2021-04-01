@@ -47,7 +47,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -85,7 +86,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -124,7 +126,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -163,7 +166,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -202,7 +206,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -241,7 +246,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -281,7 +287,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -319,7 +326,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_private(:overrides, %{})
 
@@ -359,7 +367,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           cookie_ckps_chinese: nil,
           cookie_ckps_serbian: nil,
           origin: nil,
-          referer: nil
+          referer: nil,
+          user_agent: ""
         })
         |> put_req_header("accept-encoding", "gzip, deflate, br")
 
@@ -398,7 +407,8 @@ defmodule BelfrageWeb.StructAdapterTest do
           cookie_ckps_chinese: nil,
           cookie_ckps_serbian: nil,
           origin: nil,
-          referer: nil
+          referer: nil,
+          user_agent: ""
         })
 
       assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
@@ -435,7 +445,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
@@ -471,7 +482,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
@@ -507,7 +519,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_req_header("a-custom-header", "with this value")
 
@@ -546,7 +559,8 @@ defmodule BelfrageWeb.StructAdapterTest do
         cookie_ckps_chinese: nil,
         cookie_ckps_serbian: nil,
         origin: nil,
-        referer: nil
+        referer: nil,
+        user_agent: ""
       })
       |> put_req_header("a-custom-header", "with this value")
 

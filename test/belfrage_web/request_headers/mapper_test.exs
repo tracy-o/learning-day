@@ -28,7 +28,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_ckps_chinese: %{cookie_ckps_chinese: nil},
                  cookie_ckps_serbian: %{cookie_ckps_serbian: nil},
                  origin: %{origin: nil},
-                 referer: %{referer: nil}
+                 referer: %{referer: nil},
+                 user_agent: %{user_agent: nil}
                }
     end
 
@@ -54,7 +55,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"cookie-ckps_chinese", "1"},
         {"cookie-ckps_serbian", "1"},
         {"origin", "https://www.test.bbc.co.uk"},
-        {"referer", "https://www.test.bbc.co.uk/page"}
+        {"referer", "https://www.test.bbc.co.uk/page"},
+        {"user-agent", "MozartFetcher"}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -79,7 +81,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_ckps_chinese: %{cookie_ckps_chinese: "1"},
                  cookie_ckps_serbian: %{cookie_ckps_serbian: "1"},
                  origin: %{origin: "https://www.test.bbc.co.uk"},
-                 referer: %{referer: "https://www.test.bbc.co.uk/page"}
+                 referer: %{referer: "https://www.test.bbc.co.uk/page"},
+                 user_agent: %{user_agent: "MozartFetcher"}
                }
     end
 
@@ -103,7 +106,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
         {"cookie-ckps_chinese", ""},
         {"cookie-ckps_serbian", ""},
         {"origin", ""},
-        {"referer", ""}
+        {"referer", ""},
+        {"user_agent", ""}
       ]
 
       assert Mapper.map(req_headers) ==
@@ -128,7 +132,8 @@ defmodule BelfrageWeb.RequestHeaders.MapperTest do
                  cookie_ckps_chinese: %{cookie_ckps_chinese: nil},
                  cookie_ckps_serbian: %{cookie_ckps_serbian: nil},
                  origin: %{origin: nil},
-                 referer: %{referer: nil}
+                 referer: %{referer: nil},
+                 user_agent: %{user_agent: nil}
                }
     end
   end

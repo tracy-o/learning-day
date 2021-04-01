@@ -4,12 +4,15 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
   alias Belfrage.Transformers.UserAgentValidator
   alias Belfrage.Struct
 
-  defp incoming_request(path, user_agent \\ "") do
+  @rest []
+
+  defp incoming_request(path, user_agent) do
     %Struct{
       request: %Struct.Request{
         method: :get,
         path: path,
-        user_agent: user_agent
+        user_agent: user_agent,
+        req_svc_chain: "Belfrage"
       }
     }
   end
@@ -24,11 +27,10 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "when the user agent is not MozartFetcher but has a value" do
       struct = incoming_request("/", "NotMozartFetcher")
 
-      assert {:error, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
-               body: "",
                headers: %{
                  "req-svc-chain" => "Belfrage"
                }

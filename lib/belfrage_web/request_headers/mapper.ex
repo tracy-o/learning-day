@@ -20,7 +20,8 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     cookie_ckps_chinese: %{cookie_ckps_chinese: "cookie-ckps_chinese"},
     cookie_ckps_serbian: %{cookie_ckps_serbian: "cookie-ckps_serbian"},
     origin: %{origin: "origin"},
-    referer: %{referer: "referer"}
+    referer: %{referer: "referer"},
+    user_agent: %{user_agent: "user-agent"}
   }
 
   def map(req_headers) do
