@@ -759,8 +759,12 @@ defmodule Routes.Routefile do
   handle "/sport/winter-sports", using: "SportIndexPage", examples: ["/sport/winter-sports"]
 
   ## Sport Calendars
-  handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/formula1/calendar"]
+  handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
+  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar", "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"]
+  handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
+  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2021-05", "/sport/formula1/calendar/2021-05.app"]
+  handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
+  handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/winter-sports/calendar"]
   handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
 
   ## Sport Fixtures pages
@@ -770,9 +774,9 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
 
   ## Sport Horse Racing Results
-  handle "/sport/horse-racing/:tournament/results.app", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
-  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
+  handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
+  handle "/sport/horse-racing/:tournament/results", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
 
   ## Sport Results pages
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
@@ -820,19 +824,19 @@ defmodule Routes.Routefile do
   ## Sport Formula 1 Pages
   redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
   redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
-  handle "/sport/formula1/latest.app", using: "SportDataPage", examples: ["/sport/formula1/latest.app"]
-  handle "/sport/formula1/latest", using: "SportDataPage", examples: ["/sport/formula1/latest"]
-  handle "/sport/formula1/results.app", using: "SportDataPage", examples: ["/sport/formula1/results.app"]
-  handle "/sport/formula1/results", using: "SportDataPage", examples: ["/sport/formula1/results"]
-  handle "/sport/formula1/:season/results.app", using: "SportDataPage", examples: ["/sport/formula1/2020/results.app"]
-  handle "/sport/formula1/:season/results", using: "SportDataPage", examples: ["/sport/formula1/2020/results"]
-  handle "/sport/formula1/:season/:tournament/results.app", using: "SportDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
-  handle "/sport/formula1/:season/:tournament/results", using: "SportDataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
-  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
-  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportDataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
-  handle "/sport/formula1/constructors-world-championship/standings", using: "SportDataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
-  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportDataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
-  handle "/sport/formula1/drivers-world-championship/standings", using: "SportDataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
+  handle "/sport/formula1/latest.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest.app"]
+  handle "/sport/formula1/latest", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest"]
+  handle "/sport/formula1/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/results.app"]
+  handle "/sport/formula1/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/results"]
+  handle "/sport/formula1/:season/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results.app"]
+  handle "/sport/formula1/:season/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results"]
+  handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
+  handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
+  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
+  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
+  handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
+  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
+  handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
   ## Sport Golf Leaderboard
   handle "/sport/golf/leaderboard.app", using: "SportDataPage", examples: ["/sport/golf/leaderboard.app"]
@@ -854,8 +858,8 @@ defmodule Routes.Routefile do
   ## Sport Event Data Pages
   handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
   handle "/sport/cricket/scorecard/:id", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
-  handle "/sport/horse-racing/race/:id.app", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
-  handle "/sport/horse-racing/race/:id", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
+  handle "/sport/horse-racing/race/:id.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
+  handle "/sport/horse-racing/race/:id", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
   handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786.app"]
   handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786"]
   handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
