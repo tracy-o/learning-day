@@ -90,7 +90,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
              } = UserSession.call([], struct)
     end
 
-    test "No token and 'ckns_id' cookie without signedin header will not be authenticated", %{struct: struct} do
+    test "No token and 'ckns_id' cookie without signedin header will be redirected", %{struct: struct} do
       struct =
         Struct.add(struct, :request, %{
           cookies: %{"ckns_abc" => "def", "foo" => "bar", "ckns_id" => "123"}
