@@ -776,6 +776,23 @@ defmodule Routes.Routefile do
   handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
   handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results", "/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
 
+  ## Sport Formula 1 Pages
+  redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
+  redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
+  handle "/sport/formula1/latest.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest.app"]
+  handle "/sport/formula1/latest", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest"]
+  handle "/sport/formula1/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/results.app"]
+  handle "/sport/formula1/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/results"]
+  handle "/sport/formula1/:season/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results.app"]
+  handle "/sport/formula1/:season/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results"]
+  handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
+  handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
+  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
+  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
+  handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
+  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
+  handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
+
   ## Sport Results pages
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
   handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
@@ -831,23 +848,6 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/top-scorers", using: "SportFootballDataPage", examples: ["/sport/football/teams/everton/top-scorers"]
   handle "/sport/football/teams/:team/top-scorers/assists.app", using: "SportFootballDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists.app"]
   handle "/sport/football/teams/:team/top-scorers/assists", using: "SportFootballDataPage", examples: ["/sport/football/teams/everton/top-scorers/assists"]
-
-  ## Sport Formula 1 Pages
-  redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
-  redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
-  handle "/sport/formula1/latest.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest.app"]
-  handle "/sport/formula1/latest", using: "SportFormula1DataPage", examples: ["/sport/formula1/latest"]
-  handle "/sport/formula1/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/results.app"]
-  handle "/sport/formula1/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/results"]
-  handle "/sport/formula1/:season/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results.app"]
-  handle "/sport/formula1/:season/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results"]
-  handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
-  handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
-  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
-  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
-  handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
-  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
-  handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
   ## Sport Golf Leaderboard
   handle "/sport/golf/leaderboard.app", using: "SportDataPage", examples: ["/sport/golf/leaderboard.app"]
