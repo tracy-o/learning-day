@@ -50,8 +50,8 @@ defmodule Belfrage.Clients.CCP do
     end
   end
 
-  @spec put(Struct.t()) :: :ok
-  @spec put(Struct.t(), target) :: :ok
+  @spec put(Struct.t()) :: :ok | :error
+  @spec put(Struct.t(), target) :: :ok | :error
   def put(
         %Struct{
           request: %Request{request_hash: request_hash},
@@ -59,8 +59,27 @@ defmodule Belfrage.Clients.CCP do
         },
         target \\ {:global, :belfrage_ccp}
       ) do
-    GenServer.cast(target, {:put, request_hash, response})
+
+    # When you call :erlang.send_nosuspend and the port program representing the TCP socket
+    # is busy, you'll get a 'false' return value indicating it failed because it was full
+    sent = :erlang.send_nosuspend(target, cast_msg({:put, request_hash, response}))
+
+    Case sent do
+      true ->
+        :ok
+
+      false ->
+        Belfrage.Event.record(:metric, :increment, "ccp.put_error")
+
+        Belfrage.Event.record(:log, :error, %{
+          msg: "Failed to send_nosuspend to CCP"
+        })
+
+        :error
+    end
   end
+
+  defp cast_msg(req), do: {:"$gen_cast", req}
 
   defp s3_bucket do
     Application.get_env(:belfrage, :ccp_s3_bucket)
