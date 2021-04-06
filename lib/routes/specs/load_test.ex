@@ -1,7 +1,7 @@
 defmodule Routes.Specs.LoadTest do
   def specs(production_env) do
     %{
-      owner: "D&EFablTeam@bbc.co.uk", # This needs correcting to whatever our team email address is
+      owner: "fabl@onebbc.onmicrosoft.com",
       platform: Webcore,
       pipeline: pipeline(production_env),
       cookie_allowlist: ["ckns_atkn", "ckns_id"],
