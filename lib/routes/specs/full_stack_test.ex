@@ -1,4 +1,4 @@
-defmodule Routes.Specs.LoadTest do
+defmodule Routes.Specs.FullStackTest do
   def specs(production_env) do
     %{
       owner: "fabl@onebbc.onmicrosoft.com",
