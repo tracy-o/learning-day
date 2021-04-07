@@ -632,11 +632,17 @@ defmodule Routes.Routefile do
   handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
-  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
+  handle "/sport/:discipline/video.app", using: "SportStoryPage", examples: ["/sport/cricket/video.app"]
   handle "/sport/:discipline/video", using: "SportMediaAssetPage", examples: ["/sport/cricket/video"]
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
+  ## Sport AV Disciplines Urls (Short Form Video Pages)
+    handle "/sport/av/:discipline/:id", using: "TopicPage", examples: ["/sport/av/sports-personality/50803843"] do
+    return_404 if: !Enum.member?(TopicPage.sports_disciplines_routes, discipline) or !String.match?(id , ~r/^[1-9][0-9]*$/)
+  end
+
+  
   ## Sport Vanity Urls
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
   handle "/sport/all-sports", using: "SportStoryPage", examples: ["/sport/all-sports"]
