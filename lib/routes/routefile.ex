@@ -632,7 +632,7 @@ defmodule Routes.Routefile do
   handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
-  handle "/sport/:discipline/video.app", using: "SportStoryPage", examples: ["/sport/cricket/video.app"]
+  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
   handle "/sport/:discipline/video", using: "SportMediaAssetPage", examples: ["/sport/cricket/video"]
   handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video.app"]
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
