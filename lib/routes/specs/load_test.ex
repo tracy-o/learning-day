@@ -10,7 +10,7 @@ defmodule Routes.Specs.LoadTest do
   end
 
   defp pipeline(_production_env) do
-    ["HTTPredirect", "TrailingSlashRedirector", "UserSession", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["UserSession"]
   end
 
 end
