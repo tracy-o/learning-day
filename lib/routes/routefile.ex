@@ -298,7 +298,7 @@ defmodule Routes.Routefile do
   # Container API
   handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/hasFetcher/true"]
   handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
-  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-navigation/hasFetcher/true"]
+  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-footer/hasFetcher/true"]
 
   # World Service
 
