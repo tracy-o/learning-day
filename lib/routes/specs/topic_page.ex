@@ -3,8 +3,7 @@ defmodule Routes.Specs.TopicPage do
     %{
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
-      platform: Webcore,
-      query_params_allowlist: ["page"]
+      platform: Webcore
     }
   end
 

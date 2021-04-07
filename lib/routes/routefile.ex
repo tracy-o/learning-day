@@ -639,9 +639,8 @@ defmodule Routes.Routefile do
 
   ## Sport AV Disciplines Urls (Short Form Video Pages)
     handle "/sport/av/:discipline/:id", using: "TopicPage", examples: ["/sport/av/sports-personality/50803843"] do
-    return_404 if: !Enum.member?(TopicPage.sports_disciplines_routes, discipline) or !String.match?(id , ~r/^[1-9][0-9]*$/)
+    return_404 if: !Enum.member?(TopicPage.sports_disciplines_routes, discipline) or !String.match?(id , ~r/^[1-9][0-9]{7}$/)
   end
-
   
   ## Sport Vanity Urls
   handle "/sport/all-sports.app", using: "SportStoryPage", examples: ["/sport/all-sports.app"]
