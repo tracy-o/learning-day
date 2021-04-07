@@ -137,6 +137,11 @@ defmodule Routes.Routefile do
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
   redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
 
+  redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+  redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+  redirect("/news/election", to: "/news/politics", status: 302)
+  redirect("/news/election/2021", to: "/news/politics", status: 302)
+
   # Home Page
 
   redirect "/ni", to: "/northernireland", status: 302
