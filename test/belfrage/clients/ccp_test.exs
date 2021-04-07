@@ -15,6 +15,28 @@ defmodule Belfrage.Clients.CCPTest do
 
       assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
     end
+
+    test "sends request globally and request hash as cast" do
+      struct = %Struct{
+        request: %Request{request_hash: "a-request-hash"},
+        response: %Response{body: "<h1>Hi</h1>"}
+      }
+
+      :global.register_name(:belfrage_ccp_test, self())
+
+      assert :ok == CCP.put(struct, {:global, :belfrage_ccp_test})
+
+      assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
+    end
+
+    test "returns :error whith non existant target" do
+      struct = %Struct{
+        request: %Request{request_hash: "a-request-hash"},
+        response: %Response{body: "<h1>Hi</h1>"}
+      }
+
+      assert :error == CCP.put(struct, {:global, :foo})
+    end
   end
 
   describe "fetch/1" do
