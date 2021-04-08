@@ -602,7 +602,6 @@ defmodule Routes.Routefile do
       return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
   end
 
-  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
