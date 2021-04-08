@@ -638,8 +638,8 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", examples: ["/sport/football/fa-cup/video"]
 
   ## Sport AV Disciplines Urls (Short Form Video Pages)
-    handle "/sport/av/:discipline/:id", using: "TopicPage", examples: ["/sport/av/sports-personality/50803843"] do
-    return_404 if: !Enum.member?(TopicPage.sports_disciplines_routes, discipline) or !String.match?(id , ~r/^[1-9][0-9]{7}$/)
+    handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/sports-personality/50803843"] do
+    return_404 if: !Enum.member?(SportVideos.sports_disciplines_routes, discipline) or !String.match?(id , ~r/^[1-9][0-9]{7}$/)
   end
   
   ## Sport Vanity Urls
