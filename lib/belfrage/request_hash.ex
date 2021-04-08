@@ -13,8 +13,7 @@ defmodule Belfrage.RequestHash do
     :method,
     :path,
     :scheme,
-    :cdn?,
-    :user_agent
+    :cdn?
   ]
 
   def generate(struct) do
