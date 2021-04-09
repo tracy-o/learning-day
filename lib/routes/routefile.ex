@@ -543,21 +543,9 @@ defmodule Routes.Routefile do
   )
 
   # Container API
-  handle("/container/envelope/scoreboard/*any",
-    using: "ContainerEnvelopeScoreboard",
-    examples: ["/container/envelope/scoreboard/hasFetcher/true"]
-  )
-
-  handle("/container/envelope/test-:name/*any",
-    using: "ContainerEnvelopeTestContainers",
-    only_on: "test",
-    examples: ["/container/envelope/test-message/message/hello"]
-  )
-
-  handle("/container/envelope/*any",
-    using: "ContainerEnvelope",
-    examples: ["/container/envelope/global-navigation/hasFetcher/true"]
-  )
+  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/hasFetcher/true"]
+  handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
+  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-footer/hasFetcher/true"]
 
   # World Service
 
@@ -1487,11 +1475,6 @@ defmodule Routes.Routefile do
           !String.match?(id, ~r/^[0-9]{4,9}$/)
     )
   end
-
-  handle("/sport/videos/service-worker.js",
-    using: "SportVideos",
-    examples: ["/sport/videos/service-worker.js"]
-  )
 
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404(if: String.length(id) != 8)
