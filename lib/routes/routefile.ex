@@ -599,7 +599,7 @@ defmodule Routes.Routefile do
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
-      return_404(if: !Enum.member?(SportVideos.sports_disciplines_routes(), discipline) or !String.match?(id, ~r/^[0-9]{4,9}$/)
+      return_404 if: !Enum.member?(SportVideos.sports_disciplines_routes(), discipline) or !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
