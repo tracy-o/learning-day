@@ -32,7 +32,8 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
       assert %Struct.Response{
                http_status: 400,
                headers: %{
-                 "req-svc-chain" => "Belfrage"
+                 "req-svc-chain" => "Belfrage",
+                 "cache-control" => "private"
                }
              } = struct.response
     end
@@ -45,7 +46,8 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
       assert %Struct.Response{
                http_status: 400,
                headers: %{
-                 "req-svc-chain" => "Belfrage"
+                 "req-svc-chain" => "Belfrage",
+                 "cache-control" => "private"
                }
              } = struct.response
     end

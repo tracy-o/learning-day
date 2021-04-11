@@ -9,7 +9,10 @@ defmodule Belfrage.Transformers.UserAgentValidator do
       :stop_pipeline,
       Struct.add(struct, :response, %{
         http_status: 400,
-        headers: %{"req-svc-chain" => req_svc_chain}
+        headers: %{
+          "req-svc-chain" => req_svc_chain,
+          "cache-control" => "private"
+        }
       })
     }
   end
