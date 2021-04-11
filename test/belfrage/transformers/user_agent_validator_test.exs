@@ -17,17 +17,30 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     }
   end
 
-  describe "when the user agent value is MozartFetcher" do
-    test "no redirect when top level '/' in path " do
+  describe "call/2" do
+    test "when the UserAgent is MozartFetcher the request continues" do
       struct = incoming_request("/", "MozartFetcher")
 
       assert {:ok, struct} == UserAgentValidator.call(@rest, struct)
     end
 
-    test "when the user agent is not MozartFetcher but has a value" do
+    test "when the UserAgent is not MozartFetcher but has a value it returns a 400" do
       struct = incoming_request("/", "NotMozartFetcher")
 
-      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, struct} == UserAgentValidator.call(@rest, struct)
+
+      assert %Struct.Response{
+               http_status: 400,
+               headers: %{
+                 "req-svc-chain" => "Belfrage"
+               }
+             } = struct.response
+    end
+
+    test "when the UserAgent is an empty string it returns a 400" do
+      struct = incoming_request("/", "")
+
+      assert {:stop_pipeline, struct} == UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
