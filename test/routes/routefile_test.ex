@@ -68,7 +68,7 @@ defmodule Routes.RoutefileTest do
                  "Route example `#{@path}`, for matcher `#{@route_matcher}`, must be prefixed with a `/`."
         end
 
-        test "The example: #{@path} points to the #{loop_id} routespec" do
+        test ", example: #{@path} points to the correct routespec" do
           unless @route_matcher == "/*any" do
             BelfrageMock
             |> expect(
