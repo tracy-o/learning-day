@@ -78,7 +78,10 @@ defmodule Routes.RoutefileTest do
                      loop_id: loop_id
                    }
                  } ->
-                assert @loop_id == loop_id || @loop_id in loop_id
+                case is_list(loop_id) do
+                  true -> assert @loop_id in loop_id
+                  false -> assert @loop_id == loop_id
+                end
 
                 Struct.add(
                   struct,
