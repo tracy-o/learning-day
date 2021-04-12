@@ -190,9 +190,11 @@ defmodule Routes.Routefile do
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(polity, ~r/^(scotland|wales)$/)
-    return_404 if: !String.match?(division_name, ~r/^(regions|constituencies)$/)
-    return_404 if: !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    return_404 if: [
+      !String.match?(polity, ~r/^(scotland|wales)$/),
+      !String.match?(division_name, ~r/^(regions|constituencies)$/),
+      !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    ]
   end
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
@@ -200,13 +202,17 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
-    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
-    return_404 if: !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    return_404 if: [
+      !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
+      !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    ]
   end
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-    return_404 if: !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    ]
   end
 
   handle "/news/topics/:id", using: "NewsTopics", examples: [] do
@@ -250,8 +256,10 @@ defmodule Routes.Routefile do
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/)
-    return_404 if: !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    return_404 if: [
+      !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/),
+      !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    ]
   end
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
@@ -295,7 +303,10 @@ defmodule Routes.Routefile do
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
-  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-navigation/hasFetcher/true"]
+  # Container API
+  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/hasFetcher/true"]
+  handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
+  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-footer/hasFetcher/true"]
 
   # World Service
 
@@ -468,12 +479,12 @@ defmodule Routes.Routefile do
 
   # Sport
 
-  redirect "/sport/0.app", to: "/sport.app", status: 302
-  redirect "/sport/0/*any", to: "/sport/*any", status: 302
-  redirect "/sport/uk.app", to: "/sport.app", status: 302
-  redirect "/sport/uk/*any", to: "/sport/*any", status: 302
-  redirect "/sport/world.app", to: "/sport.app", status: 302
-  redirect "/sport/world/*any", to: "/sport/*any", status: 302
+  redirect "/sport/0.app", to: "/sport.app", status: 301
+  redirect "/sport/0/*any", to: "/sport/*any", status: 301
+  redirect "/sport/uk.app", to: "/sport.app", status: 301
+  redirect "/sport/uk/*any", to: "/sport/*any", status: 301
+  redirect "/sport/world.app", to: "/sport.app", status: 301
+  redirect "/sport/world/*any", to: "/sport/*any", status: 301
 
   redirect "/sport/contact.app", to: "/send/u49719405", status: 301
   redirect "/sport/contact", to: "/send/u49719405", status: 301
@@ -595,11 +606,12 @@ defmodule Routes.Routefile do
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
-      return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
+    return_404 if: [
+      !String.match?(id, ~r/^[0-9]{4,9}$/),
+      !String.match?(discipline, ~r/^[a-z0-9-]+$/)
+    ]
   end
 
-  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
@@ -762,9 +774,9 @@ defmodule Routes.Routefile do
   handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
   handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar", "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"]
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2021-05", "/sport/formula1/calendar/2021-05.app"]
+  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2022-04", "/sport/formula1/calendar/2022-04.app"]
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
-  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
 
   ## Sport Fixtures pages
   handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
@@ -801,19 +813,19 @@ defmodule Routes.Routefile do
 
   ## Sport Football Scores-Fixtures pages
   handle "/sport/football/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/football/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
+  handle "/sport/football/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-04-26", "/sport/football/scores-fixtures/2021-04-26.app"]
   handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
+  handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2022-04", "/sport/football/champions-league/scores-fixtures/2022-04.app"]
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
-  handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2021-02", "/sport/football/teams/hull-city/scores-fixtures/2021-02.app"]
+  handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
   
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures", "/sport/rugby-league/scores-fixtures/2021-02-27", "/sport/rugby-league/scores-fixtures/2021-02-27.app"]
+  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures", "/sport/rugby-league/scores-fixtures/2021-04-26", "/sport/rugby-league/scores-fixtures/2021-04-26"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures.app"]
-  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures", "/sport/rugby-league/super-league/scores-fixtures/2021-02", "/sport/rugby-league/super-league/scores-fixtures/2021-02.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures", "/sport/rugby-league/super-league/scores-fixtures/2022-04", "/sport/rugby-league/super-league/scores-fixtures/2022-04.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures", "/sport/rugby-league/teams/st-helens/scores-fixtures/2021-02", "/sport/rugby-league/teams/st-helens/scores-fixtures/2021-02.app"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures", "/sport/rugby-league/teams/st-helens/scores-fixtures/2022-04", "/sport/rugby-league/teams/st-helens/scores-fixtures/2022-04.app"]
 
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
@@ -871,10 +883,10 @@ defmodule Routes.Routefile do
   handle "/sport/cricket/scorecard/:id", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
   handle "/sport/horse-racing/race/:id.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
   handle "/sport/horse-racing/race/:id", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
-  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786.app"]
-  handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786"]
-  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
-  handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
+  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3489302.app"]
+  handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3489302"]
+  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735.app"]
+  handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735"]
 
   ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
@@ -1030,6 +1042,8 @@ defmodule Routes.Routefile do
   handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
+
+  handle "/full-stack-test/*_any", using: "FullStackTest", only_on: "test", examples: []
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
