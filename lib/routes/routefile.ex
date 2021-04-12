@@ -190,9 +190,11 @@ defmodule Routes.Routefile do
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(polity, ~r/^(scotland|wales)$/)
-    return_404 if: !String.match?(division_name, ~r/^(regions|constituencies)$/)
-    return_404 if: !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    return_404 if: [
+      !String.match?(polity, ~r/^(scotland|wales)$/),
+      !String.match?(division_name, ~r/^(regions|constituencies)$/),
+      !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    ]
   end
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
@@ -200,13 +202,17 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
-    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
-    return_404 if: !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    return_404 if: [
+      !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
+      !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    ]
   end
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-    return_404 if: !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    ]
   end
 
   handle "/news/topics/:id", using: "NewsTopics", examples: [] do
@@ -250,8 +256,10 @@ defmodule Routes.Routefile do
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/)
-    return_404 if: !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    return_404 if: [
+      !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/),
+      !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    ]
   end
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
@@ -295,7 +303,10 @@ defmodule Routes.Routefile do
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
-  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-navigation/hasFetcher/true"]
+  # Container API
+  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/hasFetcher/true"]
+  handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
+  handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-footer/hasFetcher/true"]
 
   # World Service
 
@@ -595,11 +606,12 @@ defmodule Routes.Routefile do
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
-      return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
-      return_404 if: !String.match?(discipline, ~r/^[a-z0-9-]+$/)
+    return_404 if: [
+      !String.match?(id, ~r/^[0-9]{4,9}$/),
+      !String.match?(discipline, ~r/^[a-z0-9-]+$/)
+    ]
   end
 
-  handle "/sport/videos/service-worker.js", using: "SportVideos", examples: ["/sport/videos/service-worker.js"]
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
     return_404 if: String.length(id) != 8
   end
@@ -607,7 +619,7 @@ defmodule Routes.Routefile do
   ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/internal/football-team-selector/:slug", using: "Sport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
   handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
-  handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV"]
+  handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV?morph_env=live&renderer_env=live"]
 
   ## Sport Top 4
   handle "/sport/alpha/top-4.app", using: "Sport", examples: ["/sport/alpha/top-4.app"]

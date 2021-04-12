@@ -41,6 +41,18 @@ defmodule Belfrage.StructPrivateTest do
              } = Private.set_session_state(%Private{}, cookies, headers, valid_session?)
     end
 
+    test "returns authenticated only state when 'ckns_id' cookie only is set" do
+      cookies = %{"ckns_id" => "1234"}
+      headers = %{}
+      valid_session? = false
+
+      assert %Private{
+               authenticated: true,
+               session_token: nil,
+               valid_session: false
+             } = Private.set_session_state(%Private{}, cookies, headers, valid_session?)
+    end
+
     test "returns authenticated only state when 'ckns_atkn' cookie not set, 'x-id-oidc-signedin' header is 1" do
       cookies = %{}
       headers = %{"x-id-oidc-signedin" => "1"}
