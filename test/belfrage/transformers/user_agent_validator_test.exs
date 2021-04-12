@@ -27,7 +27,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "when the UserAgent is not MozartFetcher but has a value it returns a 400" do
       struct = incoming_request("/", "NotMozartFetcher")
 
-      assert {:stop_pipeline, struct} == UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
@@ -41,7 +41,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "when the UserAgent is an empty string it returns a 400" do
       struct = incoming_request("/", "")
 
-      assert {:stop_pipeline, struct} == UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
