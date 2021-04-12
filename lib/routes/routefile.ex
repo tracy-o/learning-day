@@ -772,8 +772,8 @@ defmodule Routes.Routefile do
 
   ## Sport Calendars
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/:discipline/calendar", using: "SportDataPage", examples: ["/sport/formula1/calendar"]
-  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar/2021-05", "/sport/winter-sports/calendar/2021-05.app"]
+  # First example URL does not include a date in order to prevent smoke tests from breaking when pages expire
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/formula1/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
 
   ## Sport Fixtures pages
   handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
@@ -783,8 +783,8 @@ defmodule Routes.Routefile do
 
   ## Sport Horse Racing Results
   handle "/sport/horse-racing/:tournament/results.app", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results"]
-  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
+  # First example URL does not include a date in order to prevent smoke tests from breaking when pages expire
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportDataPage", examples: ["/sport/horse-racing/uk-ireland/results", "/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
 
   ## Sport Results pages
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
@@ -794,14 +794,14 @@ defmodule Routes.Routefile do
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/scores-fixtures"]
-  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures/2021-02-27", "/sport/football/scores-fixtures/2021-02-27.app"]
+  # First example URL does not include a date in order to prevent smoke tests from breaking when pages expire
+  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-04-26", "/sport/football/scores-fixtures/2021-04-26.app"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/:discipline/:tournament/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
-  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures/2021-02", "/sport/football/champions-league/scores-fixtures/2021-02.app"]
+  # First example URL does not include a date in order to prevent smoke tests from breaking when pages expire
+  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2022-04", "/sport/football/champions-league/scores-fixtures/2022-04.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures.app"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures/2021-02", "/sport/football/teams/manchester-united/scores-fixtures/2021-02.app"]
+  # First example URL does not include a date in order to prevent smoke tests from breaking when pages expire
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/football/teams/manchester-united/scores-fixtures", "/sport/football/teams/manchester-united/scores-fixtures/2022-04", "/sport/football/teams/manchester-united/scores-fixtures/2022-04.app"]
 
   ## Sport Table pages
   handle "/sport/:discipline/tables.app", using: "SportDataPage", examples: ["/sport/football/tables.app"]
@@ -868,10 +868,10 @@ defmodule Routes.Routefile do
   handle "/sport/cricket/scorecard/:id", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913"]
   handle "/sport/horse-racing/race/:id.app", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835.app"]
   handle "/sport/horse-racing/race/:id", using: "SportDataPage", examples: ["/sport/horse-racing/race/EHRP771835"]
-  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786.app"]
-  handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3210786"]
-  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417.app"]
-  handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3207417"]
+  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3489302.app"]
+  handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3489302"]
+  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735.app"]
+  handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735"]
 
   ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
