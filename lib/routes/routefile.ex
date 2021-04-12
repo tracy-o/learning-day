@@ -1028,6 +1028,8 @@ defmodule Routes.Routefile do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
+  handle "/full-stack-test/*_any", using: "FullStackTest", only_on: "test", examples: []
+
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
   no_match()
