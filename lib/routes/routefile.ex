@@ -465,6 +465,12 @@ defmodule Routes.Routefile do
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
 
+  # /programmes
+
+  handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
+    return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
+  end  
+
   # Participation
 
   handle "/participation-test/follow", using: "ParticipationTestFollow", only_on: "test", examples: ["/participation-test/follow"]
