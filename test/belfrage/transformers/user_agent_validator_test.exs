@@ -17,17 +17,24 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     }
   end
 
-  describe "call/2" do
-    test "when the UserAgent is MozartFetcher the request continues" do
+  describe "when a UserAgent is received and the value is MozartFetcher" do
+    test "we receive :ok and the pipeline continues" do
       struct = incoming_request("/", "MozartFetcher")
 
-      assert {:ok, struct} == UserAgentValidator.call(@rest, struct)
+      assert {:ok, struct} = UserAgentValidator.call(@rest, struct)
     end
+  end
 
-    test "when the UserAgent is not MozartFetcher but has a value it returns a 400" do
+  describe "when a UserAgent is received and the value is not MozartFetcher" do
+    test "we receive :stop_pipeline and the struct" do
       struct = incoming_request("/", "NotMozartFetcher")
 
       assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
+    end
+
+    test "we return a 400 in the struct response" do
+      struct = incoming_request("/", "NotMozartFetcher")
+      {_, struct} = UserAgentValidator.call(@call, struct)
 
       assert %Struct.Response{
                http_status: 400,
@@ -37,11 +44,18 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
                }
              } = struct.response
     end
+  end
 
-    test "when the UserAgent is an empty string it returns a 400" do
+  describe "when an empty UserAgent string is received it returns a 400" do
+    test "we receive :stop_pipeline and the struct" do
       struct = incoming_request("/", "")
 
       assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
+    end
+
+    test "we return a 400 in the struct response" do
+      struct = incoming_request("/", "NotMozartFetcher")
+      {_, struct} = UserAgentValidator.call(@call, struct)
 
       assert %Struct.Response{
                http_status: 400,
