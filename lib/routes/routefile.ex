@@ -137,6 +137,11 @@ defmodule Routes.Routefile do
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
   redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
 
+  redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+  redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
+  redirect("/news/election", to: "/news/politics", status: 302)
+  redirect("/news/election/2021", to: "/news/politics", status: 302)
+
   # Home Page
 
   redirect "/ni", to: "/northernireland", status: 302
@@ -272,7 +277,6 @@ defmodule Routes.Routefile do
   handle "/cymrufyw/eisteddfod", using: "Cymrufyw", examples: ["/cymrufyw/eisteddfod"]
   handle "/cymrufyw/components", using: "Cymrufyw", examples: []
   handle "/cymrufyw/hafan", using: "Cymrufyw", examples: [{"/cymrufyw/hafan", 301}]
-  handle "/cymrufyw/etholiad", using: "Cymrufyw", examples: [{"/cymrufyw/etholiad", 302}]
 
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
