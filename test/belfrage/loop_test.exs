@@ -53,7 +53,7 @@ defmodule Belfrage.LoopTest do
                 platform: OriginSimulator,
                 pipeline: ["TrailingSlashRedirector", "CircuitBreaker"],
                 resp_pipeline: [],
-                circuit_breaker_error_threshold: 100,
+                circuit_breaker_error_threshold: 200,
                 loop_id: "ProxyPass"
               }}
   end

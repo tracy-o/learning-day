@@ -7,7 +7,7 @@ defmodule Routes.Platforms.MozartNews do
       pipeline: pipeline(production_env),
       resp_pipeline: [],
       query_params_allowlist: query_params_allowlist(production_env),
-      circuit_breaker_error_threshold: 100
+      circuit_breaker_error_threshold: 200
     }
   end
 
