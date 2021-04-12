@@ -202,6 +202,8 @@ defmodule Routes.Routefile do
     ]
   end
 
+  handle "/news/election", using: "NewsElection", examples: []
+
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
     return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
   end
