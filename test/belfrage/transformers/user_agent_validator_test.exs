@@ -34,7 +34,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
 
     test "we return a 400 in the struct response" do
       struct = incoming_request("/", "NotMozartFetcher")
-      {_, struct} = UserAgentValidator.call(@call, struct)
+      {_, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
@@ -55,7 +55,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
 
     test "we return a 400 in the struct response" do
       struct = incoming_request("/", "NotMozartFetcher")
-      {_, struct} = UserAgentValidator.call(@call, struct)
+      {_, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
                http_status: 400,
