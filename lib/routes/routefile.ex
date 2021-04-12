@@ -191,9 +191,11 @@ defmodule Routes.Routefile do
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(polity, ~r/^(scotland|wales)$/)
-    return_404 if: !String.match?(division_name, ~r/^(regions|constituencies)$/)
-    return_404 if: !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    return_404 if: [
+      !String.match?(polity, ~r/^(scotland|wales)$/),
+      !String.match?(division_name, ~r/^(regions|constituencies)$/),
+      !String.match?(division_id, ~r/^[SW][0-9]{8}$/)
+    ]
   end
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
@@ -201,13 +203,17 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
-    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
-    return_404 if: !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    return_404 if: [
+      !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
+      !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+    ]
   end
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-    return_404 if: !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    ]
   end
 
   handle "/news/topics/:id", using: "NewsTopics", examples: [] do
@@ -251,8 +257,10 @@ defmodule Routes.Routefile do
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", only_on: "test", examples: [] do
-    return_404 if: !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/)
-    return_404 if: !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    return_404 if: [
+      !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/),
+      !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    ]
   end
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
