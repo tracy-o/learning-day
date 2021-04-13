@@ -777,10 +777,10 @@ defmodule Routes.Routefile do
   handle "/sport/winter-sports", using: "SportIndexPage", examples: ["/sport/winter-sports"]
 
   ## Sport Calendars
-  handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
-  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar", "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"]
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
   handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2022-04", "/sport/formula1/calendar/2022-04.app"]
+  handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
+  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar", "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"]
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
   handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
 
