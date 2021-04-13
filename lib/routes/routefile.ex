@@ -818,8 +818,8 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results"]
 
   ## Sport Football Scores-Fixtures pages
-  handle "/sport/football/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/football/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-04-26", "/sport/football/scores-fixtures/2021-04-26.app"]
+  handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures.app"]
+  handle "/sport/football/scores-fixtures/*_any", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures", "/sport/football/scores-fixtures/2021-04-26", "/sport/football/scores-fixtures/2021-04-26.app"]
   handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
   handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2022-04", "/sport/football/champions-league/scores-fixtures/2022-04.app"]
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
