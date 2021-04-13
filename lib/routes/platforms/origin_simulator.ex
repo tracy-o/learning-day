@@ -6,7 +6,7 @@ defmodule Routes.Platforms.OriginSimulator do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       pipeline: ["TrailingSlashRedirector", "CircuitBreaker"],
       resp_pipeline: [],
-      circuit_breaker_error_threshold: 100
+      circuit_breaker_error_threshold: 200
     }
   end
 end

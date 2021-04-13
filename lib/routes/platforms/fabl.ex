@@ -8,7 +8,7 @@ defmodule Routes.Platforms.Fabl do
       resp_pipeline: [],
       query_params_allowlist: "*",
       headers_allowlist: headers_allowlist(production_env),
-      circuit_breaker_error_threshold: 100
+      circuit_breaker_error_threshold: 200
     }
   end
 
