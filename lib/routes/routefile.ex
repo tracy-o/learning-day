@@ -962,10 +962,11 @@ defmodule Routes.Routefile do
   handle "/sport/:id.json", using: "SportAmp", examples: ["/sport/50562296.json?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/sport/:id.app", using: "SportStoryPage", examples: ["/sport/50562296.app?morph_env=live&renderer_env=live"] do
+
+  handle "/sport/:id.app", using: "SportMajorStoryPage", examples: ["/sport/50562296.app?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/sport/:id", using: "SportStoryPage", examples: ["/sport/50562296?morph_env=live&renderer_env=live"] do
+  handle "/sport/:id", using: "SportMajorStoryPage", examples: ["/sport/50562296?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
@@ -976,10 +977,74 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/:id.json", using: "SportAmp", examples: ["/sport/football/56064289.json?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/football/56064289.app?morph_env=live&renderer_env=live"] do
+  
+  handle "/sport/cricket/:id.app", using: "SportCricketStoryPage", examples: ["/sport/cricket/56734095.app?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
+  handle "/sport/cricket/:id", using: "SportCricketStoryPage", examples: ["/sport/cricket/56734095?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/football/:id.app", using: "SportFootballStoryPage", examples: ["/sport/football/56064289.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/football/:id", using: "SportFootballStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/formula1/:id", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/athletics/:id.app", using: "SportMajorStoryPage", examples: ["/sport/athletics/56628151.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/athletics/:id", using: "SportMajorStoryPage", examples: ["/sport/athletics/56628151?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/cycling/:id.app", using: "SportMajorStoryPage", examples: ["/sport/cycling/56655734.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/cycling/:id", using: "SportMajorStoryPage", examples: ["/sport/cycling/56655734?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/golf/:id.app", using: "SportMajorStoryPage", examples: ["/sport/golf/56713156.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/golf/:id", using: "SportMajorStoryPage", examples: ["/sport/golf/56713156?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+
+  handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
