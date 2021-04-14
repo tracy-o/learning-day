@@ -11,17 +11,17 @@ defmodule Routes.RoutefileTest do
 
   @moduletag :routes_test
 
-  def shorten_path(path) do
-    case String.length(path) > 80 do
-      true -> String.slice(path, 0..50) <> "..." <> String.slice(path, -25, 25)
-      false -> path
-    end
-  end
-
   Enum.each(Routes.Routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
     describe "For route matcher: #{route_matcher} (#{loop_id})" do
       @loop_id loop_id
       @route_matcher route_matcher
+
+      def shorten_path(path) do
+        case String.length(path) > 80 do
+          true -> String.slice(path, 0..50) <> "..." <> String.slice(path, -25, 25)
+          false -> path
+        end
+      end
 
       for env <- ["test", "live"] do
         @env env
