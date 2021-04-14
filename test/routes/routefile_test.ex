@@ -16,13 +16,6 @@ defmodule Routes.RoutefileTest do
       @loop_id loop_id
       @route_matcher route_matcher
 
-      def shorten_path(path) do
-        case String.length(path) > 80 do
-          true -> String.slice(path, 0..50) <> "..." <> String.slice(path, -25, 25)
-          false -> path
-        end
-      end
-
       for env <- ["test", "live"] do
         @env env
         test "There is a valid routespec for #{@loop_id} (#{@env})" do
@@ -70,12 +63,17 @@ defmodule Routes.RoutefileTest do
       |> Enum.each(fn path ->
         @path path
 
-        test "Route example #{shorten_path(path)} is prefixed with `/`" do
+        case String.length(@path) > 80 do
+          true -> @shortened_path String.slice(@path, 0..50) <> "..." <> String.slice(@path, -25, 25)
+          false -> @shortened_path @path
+        end
+
+        test "Route example #{@shortened_path} is prefixed with `/`" do
           assert String.starts_with?(@path, "/"),
                  "Route example `#{@path}`, for matcher `#{@route_matcher}`, must be prefixed with a `/`."
         end
 
-        test ", example: #{shorten_path(path)} points to the correct routespec" do
+        test ", example: #{@shortened_path} points to the correct routespec" do
           unless @route_matcher == "/*any" do
             BelfrageMock
             |> expect(
