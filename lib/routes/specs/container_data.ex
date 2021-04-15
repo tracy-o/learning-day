@@ -8,7 +8,7 @@ defmodule Routes.Specs.ContainerData do
   end
 
   defp pipeline("live") do
-    ["UserAgentValidator", "HTTPredirect", "TrailingSlashRedirector", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "UserAgentValidator", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env) do
