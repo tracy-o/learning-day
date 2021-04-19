@@ -19,6 +19,7 @@ defmodule Belfrage.Struct.Request do
     :accept_encoding,
     :req_svc_chain,
     :request_id,
+    :user_agent,
     edge_cache?: false,
     cdn?: false,
     has_been_replayed?: nil,
