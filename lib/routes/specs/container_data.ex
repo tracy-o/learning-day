@@ -1,17 +1,8 @@
 defmodule Routes.Specs.ContainerData do
-  def specs(production_env) do
+  def specs do
     %{
       platform: Webcore,
-      query_params_allowlist: "*",
-      pipeline: pipeline(production_env)
+      query_params_allowlist: "*"
     }
-  end
-
-  defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "UserAgentValidator", "LambdaOriginAlias", "CircuitBreaker", "Language"]
-  end
-
-  defp pipeline(_production_env) do
-    pipeline("live") ++ ["DevelopmentRequests"]
   end
 end
