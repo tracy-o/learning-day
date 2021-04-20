@@ -13,7 +13,6 @@ defmodule Belfrage.Cache.LocalTest do
     http_status: 200,
     cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
   }
-  @now Belfrage.Timer.now_ms()
 
   setup do
     {:ok, _pid} = start_test_cache(@cache, size: 10)
@@ -23,7 +22,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "cache_fresh",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: @now
+      last_updated: Belfrage.Timer.now_ms()
     )
 
     Test.Support.Helper.insert_cache_seed(
@@ -31,7 +30,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "stale_cache",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: @now - :timer.seconds(31)
+      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
 
     Test.Support.Helper.insert_cache_seed(
@@ -39,7 +38,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "expired",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: @now - (:timer.hours(6) + :timer.seconds(2))
+      last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(2))
     )
 
     :ok
