@@ -1,5 +1,5 @@
 defmodule Belfrage.Metrics.MailboxMonitor do
-  use GenServer
+  use GenServer, restart: :temporary
 
   @event Application.get_env(:belfrage, :event)
   @servers Application.get_env(:belfrage, :mailbox_monitors)

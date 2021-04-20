@@ -1,5 +1,5 @@
 defmodule Belfrage.Metrics.Pool do
-  use GenServer
+  use GenServer, restart: :temporary
 
   @rate Application.get_env(:belfrage, :pool_metric_rate)
 
