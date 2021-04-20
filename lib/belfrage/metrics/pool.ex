@@ -1,6 +1,8 @@
 defmodule Belfrage.Metrics.Pool do
   use GenServer
 
+  @rate Application.get_env(:belfrage, :pool_metric_rate)
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: :pool_observer)
   end
@@ -9,31 +11,31 @@ defmodule Belfrage.Metrics.Pool do
     pools = Supervisor.which_children(MachineGun.Supervisor)
 
     pools
-    |> active_workers()
-    |> send_metric("http.pools.active_workers")
+    |> get_workers()
+    |> send_metric("http.pools.size")
 
     pools
-    |> all_workers()
-    |> send_metric("http.pools.all_workers")
+    |> get_overflow()
+    |> send_metric("http.pools.overflow")
   end
 
   def send_metric(metric, metric_name) do
     Belfrage.Event.record(:metric, :gauge, metric_name, value: metric)
   end
 
-  def all_workers([]), do: 0
+  def get_workers([]), do: 0
 
-  def all_workers(pools) do
+  def get_workers(pools) do
     call_pools(pools, :status)
-    |> Enum.map(fn {_, free_workers, _, active_workers} -> free_workers + active_workers end)
+    |> Enum.map(fn {_state_name, workers, _overflow, _monitors} -> workers end)
     |> Enum.max()
   end
 
-  def active_workers([]), do: 0
+  def get_overflow([]), do: 0
 
-  def active_workers(pools) do
+  def get_overflow(pools) do
     call_pools(pools, :status)
-    |> Enum.map(fn {_, _, _, active_workers} -> active_workers end)
+    |> Enum.map(fn {_state_name, _workers, overflow, _monitors} -> overflow end)
     |> Enum.max()
   end
 
@@ -53,12 +55,11 @@ defmodule Belfrage.Metrics.Pool do
   end
 
   defp loop() do
-    rate = Application.get_env(:belfrage, :pool_metric_rate)
-    Process.send_after(self(), :loop, rate)
+    Process.send_after(self(), :loop, @rate)
   end
 
   defp call_pools(pools, generver_term) do
     pools
-    |> Enum.map(fn {_, pool_pid, _, _} -> GenServer.call(pool_pid, generver_term) end)
+    |> Enum.map(fn {_id, pool_pid, _type, _modules} -> GenServer.call(pool_pid, generver_term) end)
   end
 end
