@@ -119,6 +119,9 @@ defmodule Belfrage.Cache.LocalTest do
       }
 
       assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
+
+      :timer.sleep(1000)
+
       assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
 
       [{:entry, "cache_fresh", ets_updated, _expires, {_response, belfrage_updated}}] =
