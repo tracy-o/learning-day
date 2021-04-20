@@ -23,6 +23,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> Map.put(:authorization, "Bearer #{session_token}")
     |> Map.put(:"x-authentication-provider", "idv5")
+    |> Map.put(:"x-authentication-environment", authentication_environment)
   end
 
   defp headers(struct), do: base_headers(struct)
@@ -36,4 +37,13 @@ defmodule Belfrage.Services.Webcore.Request do
       host: struct.request.host
     }
   end
+
+  defp authentication_environment do
+    Application.get_env(:belfrage, :authentication)["account_jwk_uri"] |> extract_env()
+  end
+
+  def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
+  def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
+  def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
+  def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
 end
