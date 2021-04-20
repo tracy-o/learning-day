@@ -1,4 +1,6 @@
 defmodule Belfrage.Credentials.Refresh do
+  @moduledoc "Periodically refreshes AWS tokens"
+
   use GenServer
   @credential_strategy Application.get_env(:belfrage, :credential_strategy)
 
