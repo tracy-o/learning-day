@@ -26,5 +26,5 @@ defmodule Belfrage.Authentication.JwkStaticKeys do
   def get_filename("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "jwk_live.json"
   def get_filename("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "jwk_test.json"
   def get_filename("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "jwk_int.json"
-  def get_filename(_uri), do: raise("")
+  def get_filename(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
 end
