@@ -1,4 +1,4 @@
-defmodule Belfrage.MailboxMonitor do
+defmodule Belfrage.Metrics.MailboxMonitor do
   use GenServer
 
   @event Application.get_env(:belfrage, :event)

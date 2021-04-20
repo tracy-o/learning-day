@@ -12,15 +12,15 @@ defmodule Belfrage.Metrics.Supervisor do
 
   defp children(env: :test) do
     [
-      Belfrage.MailboxMonitor
+      Belfrage.Metrics.MailboxMonitor
     ]
   end
 
   defp children(_env) do
     [
-      Belfrage.MailboxMonitor,
+      Belfrage.Metrics.MailboxMonitor,
       Belfrage.Metrics.Pool,
-      Belfrage.TelemetrySupervisor
+      Belfrage.Metrics.TelemetrySupervisor
     ]
   end
 end
