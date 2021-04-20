@@ -1,5 +1,5 @@
 defmodule Belfrage.Dials.Poller do
-  @moduledoc false
+  @moduledoc "Periodically checks the dials file for dial changes."
 
   use GenServer
 
