@@ -13,6 +13,7 @@ defmodule Belfrage.Cache.LocalTest do
     http_status: 200,
     cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
   }
+  @now Belfrage.Timer.now_ms()
 
   setup do
     {:ok, _pid} = start_test_cache(@cache, size: 10)
@@ -22,7 +23,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "cache_fresh",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms()
+      last_updated: @now
     )
 
     Test.Support.Helper.insert_cache_seed(
@@ -30,7 +31,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "stale_cache",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
+      last_updated: @now - :timer.seconds(31)
     )
 
     Test.Support.Helper.insert_cache_seed(
@@ -38,7 +39,7 @@ defmodule Belfrage.Cache.LocalTest do
       id: "expired",
       response: @response,
       expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(2))
+      last_updated: @now - (:timer.hours(6) + :timer.seconds(2))
     )
 
     :ok
@@ -106,6 +107,24 @@ defmodule Belfrage.Cache.LocalTest do
       }
 
       assert {:ok, true} == Cache.Local.store(struct, @cache)
+    end
+
+    test "touches the cache on access" do
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "cache_fresh"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200
+        }
+      }
+
+      assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
+
+      [{:entry, "cache_fresh", ets_updated, _expires, {_response, belfrage_updated}}] =
+        :ets.lookup(@cache, "cache_fresh")
+
+      assert ets_updated > belfrage_updated
     end
   end
 

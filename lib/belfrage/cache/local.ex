@@ -5,6 +5,8 @@ defmodule Belfrage.Cache.Local do
 
   @impl CacheStrategy
   def fetch(%Belfrage.Struct{request: %{request_hash: request_hash}}, cache \\ :cache) do
+    Cachex.touch(cache, request_hash)
+
     Cachex.get(cache, request_hash)
     |> format_cache_result()
   end
