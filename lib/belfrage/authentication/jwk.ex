@@ -1,4 +1,6 @@
 defmodule Belfrage.Authentication.Jwk do
+  @moduledoc "Periodically refreshes public certificates to verify session tokens"
+
   use GenServer
   use Belfrage.Authentication.JwkStaticKeys
 

@@ -1,4 +1,6 @@
 defmodule Belfrage.Authentication.Flagpole do
+  @moduledoc "Periodically checks the personalisation flagpole"
+
   use GenServer
 
   @authentication_client Application.get_env(:belfrage, :authentication_client)
