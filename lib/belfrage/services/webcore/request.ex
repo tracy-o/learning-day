@@ -23,7 +23,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> Map.put(:authorization, "Bearer #{session_token}")
     |> Map.put(:"x-authentication-provider", "idv5")
-    |> Map.put(:"x-authentication-environment", authentication_environment)
+    |> Map.put(:"pers-env", authentication_environment)
   end
 
   defp headers(struct), do: base_headers(struct)

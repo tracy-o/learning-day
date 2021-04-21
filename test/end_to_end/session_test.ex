@@ -60,7 +60,7 @@ defmodule EndToEnd.SessionTest do
                  "accept-encoding": "gzip",
                  authorization: "Bearer #{access_token}",
                  "x-authentication-provider": "idv5",
-                 "x-authentication-environment": "int",
+                 "pers-env": "int",
                  country: "gb",
                  host: "www.bbc.co.uk",
                  is_uk: false,
