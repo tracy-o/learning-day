@@ -15,6 +15,7 @@ defmodule Belfrage.Supervisor do
       Belfrage.LoopsSupervisor,
       {Belfrage.Authentication.Supervisor, [env: env]},
       {Belfrage.Credentials.Supervisor, [env: env]},
+      {Belfrage.Dials.Supervisor, [env: env]},
       {Belfrage.Metrics.Supervisor, [env: env]},
       worker(Cachex, [:cache, [limit: cachex_limit()]])
     ] ++ http_router(env)
