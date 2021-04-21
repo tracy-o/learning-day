@@ -5,7 +5,7 @@ defmodule Belfrage.Metrics.SupervisorTest do
     assert length(Supervisor.which_children(Belfrage.Metrics.Supervisor)) >= 0
   end
 
-  test "supervisor does NOT restarts worker on server crash" do
+  test "supervisor does restarts workers on server crash" do
     pid = Process.whereis(Belfrage.Metrics.MailboxMonitor)
     ref = Process.monitor(pid)
     Process.exit(pid, :kill)
@@ -13,10 +13,8 @@ defmodule Belfrage.Metrics.SupervisorTest do
     receive do
       {:DOWN, ^ref, :process, ^pid, :killed} ->
         :timer.sleep(1)
-        assert Process.whereis(Belfrage.Metrics.Supervisor.Monitor) == nil
+        assert is_pid(Process.whereis(Belfrage.Metrics.MailboxMonitor))
     end
-
-    {:ok, _} = Supervisor.start_child(Belfrage.Metrics.Supervisor, Belfrage.Metrics.MailboxMonitor)
   end
 
   test "supervisor does NOT restarts on server crash" do
