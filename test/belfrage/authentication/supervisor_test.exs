@@ -9,9 +9,10 @@ defmodule Belfrage.Authentication.SupervisorTest do
     pid = Process.whereis(Belfrage.Authentication.Supervisor)
     ref = Process.monitor(pid)
     Process.exit(pid, :kill)
+
     receive do
       {:DOWN, ^ref, :process, ^pid, :killed} ->
-        :timer.sleep 1
+        :timer.sleep(1)
         assert is_pid(Process.whereis(Belfrage.Authentication.Supervisor))
     end
   end

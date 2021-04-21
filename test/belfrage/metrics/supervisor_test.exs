@@ -9,9 +9,10 @@ defmodule Belfrage.Metrics.SupervisorTest do
     pid = Process.whereis(Belfrage.Metrics.MailboxMonitor)
     ref = Process.monitor(pid)
     Process.exit(pid, :kill)
+
     receive do
       {:DOWN, ^ref, :process, ^pid, :killed} ->
-        :timer.sleep 1
+        :timer.sleep(1)
         assert Process.whereis(Belfrage.Metrics.Supervisor.Monitor) == nil
     end
 
@@ -22,9 +23,10 @@ defmodule Belfrage.Metrics.SupervisorTest do
     pid = Process.whereis(Belfrage.Metrics.Supervisor)
     ref = Process.monitor(pid)
     Process.exit(pid, :kill)
+
     receive do
       {:DOWN, ^ref, :process, ^pid, :killed} ->
-        :timer.sleep 1
+        :timer.sleep(1)
         assert Process.whereis(Belfrage.Metrics.Supervisor) == nil
     end
 
