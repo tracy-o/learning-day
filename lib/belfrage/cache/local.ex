@@ -8,7 +8,7 @@ defmodule Belfrage.Cache.Local do
   strategy[1], we touch the entry in the cache which updates its "write time" in
   ETS. This causes the configured Cachex LRW strategy to actually evict things
   based on when they were last used.
-  
+
   Cachex.touch/2 updates the ETS last modified value, whereas the Belfrage stale 
   check seems to use one in the tuple with the actual response. This has been 
   tested in [2]
