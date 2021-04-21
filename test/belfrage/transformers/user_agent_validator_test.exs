@@ -25,15 +25,23 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     end
   end
 
-  describe "when a UserAgent is received and the value is not MozartFetcher" do
+  describe "when a UserAgent is received and the value is MozartCli" do
+    test "we receive :ok and the pipeline continues" do
+      struct = incoming_request("/", "MozartCli")
+
+      assert {:ok, struct} = UserAgentValidator.call(@rest, struct)
+    end
+  end
+
+  describe "when a UserAgent is received and the value is not allowed" do
     test "we receive :stop_pipeline and the struct" do
-      struct = incoming_request("/", "NotMozartFetcher")
+      struct = incoming_request("/", "NaughtyVivaldiFetcher")
 
       assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
     end
 
     test "we return a 400 in the struct response" do
-      struct = incoming_request("/", "NotMozartFetcher")
+      struct = incoming_request("/", "NaughtyVivaldiFetcher")
       {_, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
@@ -54,7 +62,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     end
 
     test "we return a 400 in the struct response" do
-      struct = incoming_request("/", "NotMozartFetcher")
+      struct = incoming_request("/", "")
       {_, struct} = UserAgentValidator.call(@rest, struct)
 
       assert %Struct.Response{
