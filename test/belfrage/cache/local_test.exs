@@ -129,32 +129,6 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert ets_updated > belfrage_updated
     end
-
-    test "touches the cache on access but does not affect expiry" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: "cache_fresh"},
-        response: %Struct.Response{
-          headers: %{"content-type" => "application/json"},
-          body: "hello!",
-          http_status: 200
-        }
-      }
-
-      assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
-
-      :timer.sleep(15_000)
-
-      assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
-
-      :timer.sleep(16_000)
-
-      assert {:ok, :stale, _} = Cache.Local.fetch(struct, @cache)
-
-      [{:entry, "cache_fresh", ets_updated, _expires, {_response, belfrage_updated}}] =
-        :ets.lookup(@cache, "cache_fresh")
-
-      assert (ets_updated - belfrage_updated) > 30_000
-    end
   end
 
   describe "fetching a cached response" do
