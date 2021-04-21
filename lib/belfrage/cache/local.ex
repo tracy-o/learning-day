@@ -3,6 +3,14 @@ defmodule Belfrage.Cache.Local do
 
   alias Belfrage.Behaviours.CacheStrategy
 
+  @doc """
+  Fetches a response from the local cache. In order to implement an LRU caching
+  strategy, we touch the entry in the cache which updates its "write time" in
+  ETS. This causes the configured Cachex LRW strategy to actually evict things
+  based on when they were last used.
+
+  - https://github.com/whitfin/cachex/blob/master/docs/features/cache-limits.md#policies
+  """
   @impl CacheStrategy
   def fetch(%Belfrage.Struct{request: %{request_hash: request_hash}}, cache \\ :cache) do
     Cachex.touch(cache, request_hash)
