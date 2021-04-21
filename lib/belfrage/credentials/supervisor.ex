@@ -18,7 +18,7 @@ defmodule Belfrage.Credentials.Supervisor do
 
   @impl true
   def init(args) do
-    Supervisor.init(children(args), strategy: :one_for_one)
+    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 20)
   end
 
   defp children(env: :test) do

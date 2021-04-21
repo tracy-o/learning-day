@@ -5,6 +5,9 @@ defmodule Belfrage.Supervisor do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
+  # TODO: refactor definition of Cachex, according to
+  # documentation it should be defined as:
+  # {Cachex, [name: :cache, limit: cachex_limit()]}
   def children(env: env) do
     [
       {BelfrageWeb.Router, router_options(env)},
@@ -14,7 +17,6 @@ defmodule Belfrage.Supervisor do
       {Belfrage.Credentials.Supervisor, [env: env]},
       {Belfrage.Metrics.Supervisor, [env: env]},
       worker(Cachex, [:cache, [limit: cachex_limit()]])
-      # {Cachex, [name: :cache, limit: cachex_limit()]}
     ] ++ http_router(env)
   end
 
