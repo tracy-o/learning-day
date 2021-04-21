@@ -44,6 +44,7 @@ defmodule Belfrage.Services.Webcore.Request do
 
   def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
   def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
+  def extract_env("https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "stage"
   def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
   def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
 end
