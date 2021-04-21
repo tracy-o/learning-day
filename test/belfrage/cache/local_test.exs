@@ -107,6 +107,28 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert {:ok, true} == Cache.Local.store(struct, @cache)
     end
+
+    test "touches the cache on access" do
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "cache_fresh"},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200
+        }
+      }
+
+      assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
+
+      :timer.sleep(1000)
+
+      assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
+
+      [{:entry, "cache_fresh", ets_updated, _expires, {_response, belfrage_updated}}] =
+        :ets.lookup(@cache, "cache_fresh")
+
+      assert ets_updated > belfrage_updated
+    end
   end
 
   describe "fetching a cached response" do

@@ -95,6 +95,7 @@ config :ex_aws,
 
 config :cachex, :limit,
   size: 36_000,
+  # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
   policy: Cachex.Policy.LRW,
   reclaim: 0.3,
   options: []
