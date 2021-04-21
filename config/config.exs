@@ -76,7 +76,8 @@ config :belfrage,
     "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
     "logging_level" => Belfrage.Dials.LoggingLevel,
     "personalisation" => Belfrage.Dials.Personalisation,
-    "obit_mode" => Belfrage.Dials.ObitMode
+    "obit_mode" => Belfrage.Dials.ObitMode,
+    "ccp_bypass" => Belfrage.Dials.CcpBypass
   },
   pool_metric_rate: 10_000,
   authentication: %{
