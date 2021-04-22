@@ -23,7 +23,7 @@ defmodule Belfrage.Supervisor do
 
   @impl true
   def init(args) do
-    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 10)
+    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
   end
 
   defp cachex_limit(conf \\ Application.get_env(:cachex, :limit))
@@ -32,7 +32,7 @@ defmodule Belfrage.Supervisor do
     {:limit, size, policy, reclaim, options}
   end
 
-  # this is due to the www stack still handlying the TLS termination,
+  # this is due to the www stack still handling the TLS termination,
   # it should go soon.
   defp http_router(:prod), do: [BelfrageWeb.Router.child_spec(scheme: :https, port: 7443)]
   defp http_router(_env), do: []

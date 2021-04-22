@@ -12,7 +12,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       {TelemetryMetricsStatsd, metrics: telemetry_metrics()}
     ]
 
-    Supervisor.init(children, strategy: :one_for_one, max_restarts: 10)
+    Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
   end
 
   defp telemetry_metrics do
