@@ -26,6 +26,7 @@ defmodule Belfrage.Cache.DistributedTest do
       request: %Struct.Request{request_hash: "distributed-cache-test"},
       response: %Struct.Response{body: "<p>Hello</p>"}
     }
+
     Belfrage.Clients.CCPMock
     |> expect(:put, 0, fn ^struct -> :ok end)
 

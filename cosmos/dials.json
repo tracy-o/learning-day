@@ -92,16 +92,16 @@
   },
   {
     "name": "ccp_bypass",
-    "description": "This bypasses CCP to cease saving fallback responses to S3",
+    "description": "This bypasses CCP to skip saving fallback responses to S3",
     "default-value": "off",
     "values": [
       {
         "value": "on",
-        "description": "Bypass CCP and do not save fallback responses"
+        "description": "Bypass CCP and do not save fallback responses to S3"
       },
       {
         "value": "off",
-        "description": "Use CCP as normal and save fallback responses"
+        "description": "Use CCP as normal and save fallback responses to S3"
       }
     ]
   }
