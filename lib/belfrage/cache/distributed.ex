@@ -14,6 +14,7 @@ defmodule Belfrage.Cache.Distributed do
   @impl CacheStrategy
   def store(struct), do: store(struct, @dial.state(:ccp_bypass))
   defp store(struct, true), do: {:ok, false}
+
   defp store(struct, false) do
     @ccp_client.put(struct)
 
