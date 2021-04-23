@@ -5,5 +5,5 @@ defmodule Belfrage.Dials.ServerStub do
   def state(:ttl_multiplier), do: Belfrage.Dials.TtlMultiplier.transform("default")
 
   @impl Belfrage.Dials.Server
-  def state(:ccp_bypass), do: Belfrage.Dials.CcpBypass.transform("off")
+  def state(:ccp_enabled), do: Belfrage.Dials.CcpEnabled.transform("true")
 end

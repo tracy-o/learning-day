@@ -91,17 +91,17 @@
     ]
   },
   {
-    "name": "ccp_bypass",
-    "description": "This bypasses CCP to skip saving fallback responses to S3",
-    "default-value": "off",
+    "name": "ccp_enabled",
+    "description": "This enabled the CCP and writing of fallback responses to S3",
+    "default-value": "true",
     "values": [
       {
-        "value": "on",
-        "description": "Bypass CCP and do not save fallback responses to S3"
+        "value": "true",
+        "description": "CCP is enabled and will write fallback responses to S3"
       },
       {
-        "value": "off",
-        "description": "Use CCP as normal and save fallback responses to S3"
+        "value": "false",
+        "description": "CCP is disabled and fallback responses will not be written to S3"
       }
     ]
   }

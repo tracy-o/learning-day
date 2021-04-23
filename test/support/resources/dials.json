@@ -1,1 +1,1 @@
-{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false", "personalisation":"on", "obit_mode": "off", "ccp_bypass": "off" }
+{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false", "personalisation":"on", "obit_mode": "off", "ccp_enabled": "true" }

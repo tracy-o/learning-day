@@ -17,9 +17,9 @@ defmodule Belfrage.Cache.DistributedTest do
     Distributed.store(struct)
   end
 
-  test "store/1 respects ccp_bypass" do
-    stub(Belfrage.Dials.ServerMock, :state, fn :ccp_bypass ->
-      Belfrage.Dials.CcpBypass.transform("on")
+  test "store/1 respects ccp_enabled" do
+    stub(Belfrage.Dials.ServerMock, :state, fn :ccp_enabled ->
+      Belfrage.Dials.CcpEnabled.transform("false")
     end)
 
     struct = %Struct{
