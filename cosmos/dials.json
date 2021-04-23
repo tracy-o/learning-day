@@ -89,5 +89,20 @@
         "description": "Disable obit mode"
       }
     ]
+  },
+  {
+    "name": "ccp_enabled",
+    "description": "This enabled the CCP and writing of fallback responses to S3",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "CCP is enabled and will write fallback responses to S3"
+      },
+      {
+        "value": "false",
+        "description": "CCP is disabled and fallback responses will not be written to S3"
+      }
+    ]
   }
 ]

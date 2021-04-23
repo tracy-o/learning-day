@@ -16,4 +16,20 @@ defmodule Belfrage.Cache.DistributedTest do
 
     Distributed.store(struct)
   end
+
+  test "store/1 respects ccp_enabled" do
+    stub(Belfrage.Dials.ServerMock, :state, fn :ccp_enabled ->
+      Belfrage.Dials.CcpEnabled.transform("false")
+    end)
+
+    struct = %Struct{
+      request: %Struct.Request{request_hash: "distributed-cache-test"},
+      response: %Struct.Response{body: "<p>Hello</p>"}
+    }
+
+    Belfrage.Clients.CCPMock
+    |> expect(:put, 0, fn ^struct -> :ok end)
+
+    Distributed.store(struct)
+  end
 end
