@@ -28,11 +28,12 @@ use Mix.Config
   end
 end)
 
-config :belfrage, authentication: %{
-  "iss" => System.get_env("ACCOUNT_ISS"),
-  "aud" => "Account",
-  "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
-  "session_url" => System.get_env("SESSION_URL"),
-  "idcta_config_uri" => System.get_env("IDCTA_CONFIG_URI"),
-  "jwt_expiry_threshold" => 4200
-}
+config :belfrage,
+  authentication: %{
+    "iss" => System.get_env("ACCOUNT_ISS"),
+    "aud" => "Account",
+    "account_jwk_uri" => System.get_env("ACCOUNT_JWK_URI"),
+    "session_url" => System.get_env("SESSION_URL"),
+    "idcta_config_uri" => System.get_env("IDCTA_CONFIG_URI"),
+    "jwt_expiry_window" => 4200
+  }

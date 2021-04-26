@@ -17,7 +17,7 @@ defmodule Belfrage.Authentication.Validator do
   end
 
   defp is_valid_expiry?(expiry) do
-    @expiry_validator.valid?(auth_config()["jwt_expiry_threshold"], expiry)
+    @expiry_validator.valid?(auth_config()["jwt_expiry_window"], expiry)
   end
 
   defp is_valid_issuer?(_issuer_in_claim, claims, _) do
