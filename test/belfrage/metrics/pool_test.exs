@@ -38,10 +38,10 @@ defmodule Belfrage.Metrics.PoolTest do
       assert Pool.get_workers(supervisor_children) == 9
     end
 
-    test "when there are multiple pools, returns the the workers of the pool with the most available workers" do
+    test "when there are multiple pools, returns the the workers of the pool with the least available workers" do
       supervisor_children = supervisor([new_pool(:a_pool, 12, 0), new_pool(:b_pool, 5, 0), new_pool(:c_pool, 7, 0)])
 
-      assert Pool.get_workers(supervisor_children) == 12
+      assert Pool.get_workers(supervisor_children) == 5
     end
 
     test "when overflow pools are created, workers is 0 to reflect all are being used" do
