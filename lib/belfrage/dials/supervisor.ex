@@ -1,5 +1,14 @@
 defmodule Belfrage.Dials.Supervisor do
-  @moduledoc false
+  @moduledoc """
+  These processes will not be started with the application
+  when running the tests. Instead, they will need to be started
+  independently in the test setup. For example:
+  `start_supervised!({Belfrage.Dials.Supervisor, name: :test_dials_supervisor})`
+  https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html#start_supervised!/2
+
+  For more help, see the testing best practices docs
+  https://github.com/bbc/belfrage/wiki/Testing-best-practices
+  """
 
   use Supervisor
   use Belfrage.DialConfig
@@ -27,9 +36,16 @@ defmodule Belfrage.Dials.Supervisor do
   dial state and provides a dedicated message queue.
   """
   @impl true
-  def init(_init_arg) do
-    children = dial_children() ++ [Belfrage.Dials.Poller]
-    Supervisor.init(children, strategy: :one_for_one)
+  def init(args) do
+    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
+  end
+
+  defp children(env: :test) do
+    []
+  end
+
+  defp children(_env) do
+    dial_children ++ [Belfrage.Dials.Poller]
   end
 
   @doc """

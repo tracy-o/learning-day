@@ -1,8 +1,8 @@
-defmodule Belfrage.MailboxMonitorTest do
+defmodule Belfrage.Metrics.MailboxMonitorTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.MailboxMonitor
+  alias Belfrage.Metrics.MailboxMonitor
   alias Belfrage.TestGenServer
 
   setup do
