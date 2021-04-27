@@ -5,7 +5,7 @@ defmodule Belfrage.Authentication.Validator.ExpiryTest do
   describe "valid?/2" do
     setup do
       %{
-        threshold: Application.get_env(:belfrage, :authentication)["jwt_expiry_threshold"]
+        threshold: Application.get_env(:belfrage, :authentication)["jwt_expiry_window"]
       }
     end
 
