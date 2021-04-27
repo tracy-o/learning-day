@@ -28,7 +28,7 @@ defmodule Belfrage.Metrics.Pool do
   def get_workers(pools) do
     call_pools(pools, :status)
     |> Enum.map(fn {_state_name, workers, _overflow, _monitors} -> workers end)
-    |> Enum.max()
+    |> Enum.min()
   end
 
   def get_overflow([]), do: 0

@@ -7,7 +7,7 @@ config :machine_gun,
     # Poolboy size
     pool_size: 512,
     # Poolboy max_overflow
-    pool_max_overflow: 256,
+    pool_max_overflow: 4096,
     pool_timeout: 6_000,
     # Gun connection options
     conn_opts: %{}
@@ -16,7 +16,7 @@ config :machine_gun,
     # Poolboy size
     pool_size: 512,
     # Poolboy max_overflow
-    pool_max_overflow: 256,
+    pool_max_overflow: 4096,
     pool_timeout: 6_000,
     # Gun connection options
     conn_opts: %{
