@@ -75,7 +75,8 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                is_uk: nil,
                language: nil,
                authorization: "Bearer a-valid-session-token",
-               "x-authentication-provider": "idv5"
+               "x-authentication-provider": "idv5",
+               "pers-env": "int"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
