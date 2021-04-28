@@ -202,7 +202,7 @@ defmodule Routes.Routefile do
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
-      !String.match?(division_name, ~r/^(councils|regions|constituencies)$/),
+      !String.match?(division_name, ~r/^(councils|constituencies)$/),
     ]
   end
 
@@ -274,11 +274,7 @@ defmodule Routes.Routefile do
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
 
-  handle "/cymrufyw/etholiad/2021/cymru/:division_name", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"] do
-    return_404 if: [
-      !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/),
-    ]
-  end
+  handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau/W09000001", "/cymrufyw/etholiad/2021/cymru/rhanbarthau/W10000006"] do
     return_404 if: [
