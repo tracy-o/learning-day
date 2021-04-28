@@ -9,7 +9,9 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   @impl true
   def init(_args) do
     children = [
-      {TelemetryMetricsStatsd, metrics: telemetry_metrics()}
+      {TelemetryMetricsStatsd, metrics: telemetry_metrics()},
+      # I'm not sure this is the right place tbh
+      Belfrage.LatencyMonitor
     ]
 
     Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
