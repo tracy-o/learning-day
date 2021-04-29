@@ -69,7 +69,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   defp metric_on_stale_routespec(%Belfrage.Struct{private: %{loop_id: loop_id}}, cache_metric, :stale) do
-    Belfrage.Statix.increment("cache.#{loop_id}.#{cache_metric}.stale.hit")
+    Belfrage.Metrics.Statix.increment("cache.#{loop_id}.#{cache_metric}.stale.hit")
   end
 
   defp metric_on_stale_routespec(_struct, _cache_metric, _freshness), do: nil
