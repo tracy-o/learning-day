@@ -59,7 +59,7 @@ defmodule Belfrage.MixProject do
        git: "https://github.com/ex-aws/ex_aws", ref: "9dbb11ce5b9c0c2974b7c86ac32f1dbc983b08a2", override: true},
       {:ex_aws_lambda, "~> 2.0.2"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
-      {:ex_metrics, git: "https://github.com/bbc/ExMetrics.git"},
+      {:statix, ">= 1.1.0"},
       {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
       {:mock, "~> 0.3", only: :test},

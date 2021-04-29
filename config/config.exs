@@ -65,7 +65,6 @@ config :belfrage,
   mailbox_monitors: [
     :ttl_multiplier,
     :logging_level,
-    ExMetrics.Statsd.Worker,
     :cache,
     :cache_janitor,
     :cache_locksmith,

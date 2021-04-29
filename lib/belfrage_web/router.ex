@@ -1,7 +1,7 @@
 defmodule BelfrageWeb.Router do
   use Plug.Router
   use Plug.ErrorHandler
-  use ExMetrics
+  use Statix
 
   alias BelfrageWeb.RequestHeaders
   alias BelfrageWeb.ProductionEnvironment
@@ -13,7 +13,6 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
-  plug(ExMetrics.Plug.PageMetrics)
   plug(BelfrageWeb.Plugs.XRay)
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AccessLogs)

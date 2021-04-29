@@ -38,6 +38,3 @@ config :cachex, :limit,
   policy: Cachex.Policy.LRW,
   reclaim: 0.5,
   options: []
-
-config :ex_metrics,
-  send_metrics: false
