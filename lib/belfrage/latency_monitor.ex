@@ -1,4 +1,4 @@
-defmodule Belfrage.Metrics.LatencyMonitor.Times do
+defmodule Belfrage.LatencyMonitor.Times do
   defstruct request_start: nil,
             request_end: nil,
             response_start: nil,
@@ -7,7 +7,7 @@ defmodule Belfrage.Metrics.LatencyMonitor.Times do
   @type t :: %__MODULE__{}
 end
 
-defmodule Belfrage.Metrics.LatencyMonitor do
+defmodule Belfrage.LatencyMonitor do
   use GenServer
 
   alias Belfrage.LatencyMonitor.{Times}
@@ -83,7 +83,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp send_metrics(%Times{} = times), do: {:error, :incomplete_times}
 
-  defp schedule_work, do: Process.send_after(__MODULE__, :cleanup, @cleanup_rate)
+  defp schedule_work do
+    Process.send_after(__MODULE__, :cleanup, @cleanup_rate)
+  end
 
   defp perform_cleanup(state), do: perform_cleanup(state, System.monotonic_time() - @cleanup_ttl)
   defp perform_cleanup(state, ttl_threshold), do: Enum.filter(state, is_request_alive(ttl_threshold))

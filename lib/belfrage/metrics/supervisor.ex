@@ -20,8 +20,7 @@ defmodule Belfrage.Metrics.Supervisor do
     [
       Belfrage.Metrics.MailboxMonitor,
       Belfrage.Metrics.Pool,
-      Belfrage.Metrics.TelemetrySupervisor,
-      Belfrage.Metrics.LatencyMonitor
+      Belfrage.Metrics.TelemetrySupervisor
     ]
   end
 end
