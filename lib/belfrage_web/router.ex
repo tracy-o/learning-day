@@ -13,6 +13,7 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
+  plug(BelfrageWeb.Plugs.ResponseMetrics)
   plug(BelfrageWeb.Plugs.XRay)
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AccessLogs)
