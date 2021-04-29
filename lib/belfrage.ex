@@ -3,7 +3,6 @@ defmodule Belfrage do
 
   @callback handle(Struct.t()) :: Struct.t()
 
-  @spec handle(Belfrage.Struct.t()) :: map
   def handle(struct = %Struct{}) do
     struct
     |> Belfrage.Concurrently.start()
