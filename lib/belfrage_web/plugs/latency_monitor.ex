@@ -12,6 +12,8 @@ defmodule BelfrageWeb.Plugs.LatencyMonitor do
     register_before_send(conn, fn
       conn = %Plug.Conn{status: 200} ->
         checkpoint(conn.private.request_id, :response_end)
+        timings = %{conn.private[:belfrage_timings] | response_end_time: System.monotonic_time()}
+
         conn
 
       conn ->
