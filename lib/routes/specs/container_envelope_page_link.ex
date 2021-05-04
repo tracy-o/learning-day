@@ -1,4 +1,4 @@
-defmodule Routes.Specs.ContainerEnvelopeScoreboard do
+defmodule Routes.Specs.ContainerEnvelopePageLink do
   def specs do
     %{
       owner: "DENewsElections@bbc.co.uk",
