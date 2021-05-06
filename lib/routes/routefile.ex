@@ -971,6 +971,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
+  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", only_on: "test", examples: ["/sport/cricket/the-hundred"]
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
   handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
@@ -992,7 +993,6 @@ defmodule Routes.Routefile do
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
-  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", only_on: "test", examples: ["/sport/cricket/the-hundred"]
 
 ## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"]
