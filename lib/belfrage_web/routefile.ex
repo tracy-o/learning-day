@@ -1,4 +1,4 @@
-defmodule DefRoutefile do
+defmodule Routefile do
   defmacro defroutefile(_name, do: block) do
     env = Application.get_env(:belfrage, :production_environment) |> String.capitalize
     if env != "Sandbox" do

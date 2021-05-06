@@ -5,22 +5,11 @@
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
 
-import DefRoutefile
+import Routefile
 
 defroutefile("Main") do
   use BelfrageWeb.RouteMaster
   alias Routes.Specs.SportVideos
-
-  # @on_load :load_check
-
-  # def load_check do
-  #   if Application.get_env(:belfrage, :production_environment) == "sandbox" do
-  #     IO.puts "aborting"
-  #     :abort
-  #   else
-  #     :ok
-  #   end
-  # end
 
   handle "/news/election", using: "NewsElection", only_on: "test", examples: []
 
