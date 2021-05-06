@@ -493,7 +493,7 @@ defmodule Routes.Routefile do
 
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
-  end  
+  end
 
   # Participation
 
@@ -849,7 +849,7 @@ defmodule Routes.Routefile do
   handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2022-04", "/sport/football/champions-league/scores-fixtures/2022-04.app"]
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
-  
+
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures", "/sport/rugby-league/scores-fixtures/2021-04-26", "/sport/rugby-league/scores-fixtures/2021-04-26.app"]
@@ -1076,7 +1076,8 @@ defmodule Routes.Routefile do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
-  handle "/full-stack-test/*_any", using: "FullStackTest", only_on: "test", examples: []
+  handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
+  handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
