@@ -1,12 +1,13 @@
 defmodule Belfrage.Metrics.LatencyMonitor do
   use GenServer
 
-  @cleanup_rate 10_000
+  @default_cleanup_rate 10_000
   @cleanup_ttl 30_000
   @valid_checkpoints [:request_start, :request_end, :response_start, :response_end]
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  def start_link(opts \\ []) do
+    rate = Keyword.get(opts, :cleanup_rate, @default_cleanup_rate)
+    GenServer.start_link(__MODULE__, %{cleanup_rate: rate}, name: __MODULE__)
   end
 
   def checkpoint(request_id, name), do: checkpoint(request_id, name, get_time())
@@ -20,14 +21,14 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   end
 
   @impl GenServer
-  def init(_opts) do
-    send(self(), :cleanup)
+  def init(opts) do
+    send(self(), {:cleanup, opts.cleanup_rate})
     {:ok, %{}}
   end
 
   @impl GenServer
-  def handle_info(:cleanup, state) do
-    schedule_work()
+  def handle_info({:cleanup, cleanup_rate}, state) do
+    schedule_work(cleanup_rate)
     {:noreply, perform_cleanup(state)}
   end
 
@@ -78,7 +79,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp compute_latency(start_time, end_time), do: end_time - start_time
 
-  defp schedule_work(), do: Process.send_after(__MODULE__, :cleanup, @cleanup_rate)
+  defp schedule_work(cleanup_rate), do: Process.send_after(__MODULE__, {:cleanup, cleanup_rate}, cleanup_rate)
 
   defp perform_cleanup(state), do: perform_cleanup(state, get_time() - @cleanup_ttl)
   defp perform_cleanup(state, ttl_threshold), do: :maps.filter(is_request_alive(ttl_threshold), state)

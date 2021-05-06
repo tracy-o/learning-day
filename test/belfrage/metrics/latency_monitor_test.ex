@@ -9,7 +9,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
   setup :verify_on_exit!
 
   setup do
-    {:ok, pid} = LatencyMonitor.start_link({})
+    {:ok, _pid} = LatencyMonitor.start_link()
     :ok
   end
 
@@ -19,7 +19,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       ref = make_ref()
 
       assert :ok == LatencyMonitor.checkpoint(request_id, :request_start, ref)
-      assert %{^request_id => %{request_start: ref}} = :sys.get_state(LatencyMonitor)
+      assert %{^request_id => %{request_start: ^ref}} = :sys.get_state(LatencyMonitor)
     end
   end
 
@@ -32,10 +32,6 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
       assert :ok == LatencyMonitor.discard(request_id)
       assert %{} = :sys.get_state(LatencyMonitor)
-    end
-
-    test ":cleanup scheduled" do
-      # TODO assert that cleanup runs regularly
     end
   end
 
@@ -59,7 +55,20 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
         "nelly-the-newer" => %{request_start: now - 29_000}
       }
 
-      assert {:noreply, expected_state} == LatencyMonitor.handle_info(:cleanup, input_state)
+      assert {:noreply, expected_state} == LatencyMonitor.handle_info({:cleanup, 10_000}, input_state)
+    end
+
+    test "should schedule another cleanup at the specified rate" do
+      now = System.monotonic_time(:nanosecond) / 1_000_000
+      input_state = %{
+        "nelly-the-newer" => %{request_start: now - 29_500}
+      }
+
+      assert {:noreply, input_state} == LatencyMonitor.handle_info({:cleanup, 1_000}, input_state)
+
+      Process.sleep(1_100)
+
+      assert %{} = :sys.get_state(LatencyMonitor)
     end
   end
 
@@ -117,11 +126,10 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
       ExMetrics.Statsd.StatixConnectionMock
       |> expect(:timing, 3, fn
-        "web.latency.internal.request", val, _ -> send(parent, {ref, :request})
-        "web.latency.internal.response", val, _ -> send(parent, {ref, :response})
-        "web.latency.internal.combined", val, _  -> send(parent, {ref, :combined})
+        "web.latency.internal.request", _val, _ -> send(parent, {ref, :request})
+        "web.latency.internal.response", _val, _ -> send(parent, {ref, :response})
+        "web.latency.internal.combined", _val, _ -> send(parent, {ref, :combined})
       end)
-
 
       assert {:noreply, %{}} ==
                LatencyMonitor.handle_cast({:checkpoint, :response_end, "sam-the-sendable", 234}, input_state)
@@ -142,9 +150,9 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
       ExMetrics.Statsd.StatixConnectionMock
       |> expect(:timing, 0, fn
-        "web.latency.internal.request", val, _ -> send(parent, {ref, :request})
-        "web.latency.internal.response", val, _ -> send(parent, {ref, :response})
-        "web.latency.internal.combined", val, _  -> send(parent, {ref, :combined})
+        "web.latency.internal.request", _val, _ -> send(parent, {ref, :request})
+        "web.latency.internal.response", _val, _ -> send(parent, {ref, :response})
+        "web.latency.internal.combined", _val, _ -> send(parent, {ref, :combined})
       end)
 
       assert {:noreply, %{}} ==
