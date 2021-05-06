@@ -1,12 +1,15 @@
 defmodule Belfrage.Metrics.LatencyMonitorTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Test.Support.Helper, :mox
 
   alias Belfrage.Metrics.LatencyMonitor
   alias Belfrage.TestGenServer
 
+  setup :set_mox_global
+  setup :verify_on_exit!
+
   setup do
-    {:ok, _pid} = LatencyMonitor.start_link({})
+    {:ok, pid} = LatencyMonitor.start_link({})
     :ok
   end
 
@@ -106,25 +109,52 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     end
 
     test "should send metrics upon recieving the :response_end checkpoint for a complete a set of times" do
+      parent = self()
+      ref = make_ref()
       input_state = %{
         "sam-the-sendable" => %{request_start: 123, request_end: 234, response_start: 345}
       }
 
+      ExMetrics.Statsd.StatixConnectionMock
+      |> expect(:timing, 3, fn
+        "web.latency.internal.request", val, _ -> send(parent, {ref, :request})
+        "web.latency.internal.response", val, _ -> send(parent, {ref, :response})
+        "web.latency.internal.combined", val, _  -> send(parent, {ref, :combined})
+      end)
+
+
       assert {:noreply, %{}} ==
                LatencyMonitor.handle_cast({:checkpoint, :response_end, "sam-the-sendable", 234}, input_state)
 
-      # TODO: assert metrics have been sent
+      Process.sleep(100)
+
+      assert_received {^ref, :request}
+      assert_received {^ref, :response}
+      assert_received {^ref, :combined}
     end
 
     test "should not send metrics upon recieving the :response_end checkpoint for an incomplete set of times" do
+      parent = self()
+      ref = make_ref()
       input_state = %{
         "iris-the-incomplete" => %{request_start: 123, request_end: 234}
       }
 
+      ExMetrics.Statsd.StatixConnectionMock
+      |> expect(:timing, 0, fn
+        "web.latency.internal.request", val, _ -> send(parent, {ref, :request})
+        "web.latency.internal.response", val, _ -> send(parent, {ref, :response})
+        "web.latency.internal.combined", val, _  -> send(parent, {ref, :combined})
+      end)
+
       assert {:noreply, %{}} ==
                LatencyMonitor.handle_cast({:checkpoint, :response_end, "iris-the-incomplete", 234}, input_state)
 
-      # TODO: assert metrics haven't been sent
+      Process.sleep(100)
+
+      refute_received {^ref, :request}
+      refute_received {^ref, :response}
+      refute_received {^ref, :combined}
     end
   end
 

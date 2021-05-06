@@ -6,7 +6,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   @valid_checkpoints [:request_start, :request_end, :response_start, :response_end]
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__, debug: [:trace])
+    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   def checkpoint(request_id, name), do: checkpoint(request_id, name, get_time())
