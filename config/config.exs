@@ -68,7 +68,8 @@ config :belfrage,
     ExMetrics.Statsd.Worker,
     :cache,
     :cache_janitor,
-    :cache_locksmith
+    :cache_locksmith,
+    Belfrage.Metrics.LatencyMonitor
   ],
   mailbox_monitor_refresh_rate: 30_000,
   dial_handlers: %{

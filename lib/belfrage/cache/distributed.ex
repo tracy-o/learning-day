@@ -7,8 +7,8 @@ defmodule Belfrage.Cache.Distributed do
   @dial Application.get_env(:belfrage, :dial)
 
   @impl CacheStrategy
-  def fetch(%Struct{request: %Request{request_hash: request_hash}}) do
-    @ccp_client.fetch(request_hash)
+  def fetch(%Struct{request: %Request{request_id: request_id, request_hash: request_hash}}) do
+    @ccp_client.fetch(request_hash, request_id)
   end
 
   @impl CacheStrategy

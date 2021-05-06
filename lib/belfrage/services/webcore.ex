@@ -23,6 +23,7 @@ defmodule Belfrage.Services.Webcore do
         arn(struct),
         struct.private.origin,
         Webcore.Request.build(struct),
+        struct.request.request_id,
         invoke_lambda_options(struct)
       )
       |> Webcore.Response.build()

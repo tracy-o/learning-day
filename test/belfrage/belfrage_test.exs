@@ -16,7 +16,8 @@ defmodule BelfrageTest do
     request: %Struct.Request{
       path: "/_web_core",
       method: "GET",
-      country: "gb"
+      country: "gb",
+      request_id: "gerald-the-get-request"
     }
   }
 
@@ -25,7 +26,8 @@ defmodule BelfrageTest do
       path: "/",
       method: "POST",
       payload: ~s({"some": "data please"}),
-      country: "gb"
+      country: "gb",
+      request_id: "pete-the-post-request"
     },
     private: %Struct.Private{
       loop_id: "SportVideos",
@@ -41,6 +43,7 @@ defmodule BelfrageTest do
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
                         _lambda_func = "pwa-lambda-function:test",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -56,6 +59,7 @@ defmodule BelfrageTest do
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -71,6 +75,7 @@ defmodule BelfrageTest do
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_404_lambda_response
     end)
@@ -90,6 +95,7 @@ defmodule BelfrageTest do
                           headers: %{country: "gb"},
                           httpMethod: "POST"
                         },
+                        _request_id = "pete-the-post-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -106,13 +112,14 @@ defmodule BelfrageTest do
       method: "GET",
       country: "gb",
       host: "www.bbc.com",
-      scheme: :http
+      scheme: :http,
+      request_id: "ronnie-the-redirect"
     }
   }
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock
-    |> expect(:call, 0, fn _role_arn, _func_name, _payload, _opts -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _role_arn, _func_name,  _payload, _request_id, _opts -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 
@@ -131,7 +138,8 @@ defmodule BelfrageTest do
         request: %Struct.Request{
           path: "/_seeded_request",
           method: "GET",
-          country: "gb"
+          country: "gb",
+          request_id: "simon-the-seeded-request"
         }
       }
 

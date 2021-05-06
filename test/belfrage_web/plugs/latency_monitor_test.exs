@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
   use ExUnit.Case
-  import Plug.Test, only: [conn: 2, sent_resp: 1]
+  import Plug.Test, only: [conn: 2]
 
   setup do
     {:ok, _pid} = Belfrage.Metrics.LatencyMonitor.start_link()
@@ -12,10 +12,9 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     pid = Process.whereis(Belfrage.Metrics.LatencyMonitor)
     :erlang.trace(pid, true, [:receive])
 
-    conn = conn(:get, "/")
+    conn(:get, "/")
     |> Plug.Conn.put_private(:request_id, "gary-the-get-request")
-
-    conn_next = BelfrageWeb.Plugs.LatencyMonitor.call(conn, _opts = [])
+    |> BelfrageWeb.Plugs.LatencyMonitor.call(_opts = [])
     |> Plug.Conn.send_resp(200, "foo")
 
     assert_receive {:trace, ^pid, :receive, {
@@ -33,10 +32,9 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     pid = Process.whereis(Belfrage.Metrics.LatencyMonitor)
     :erlang.trace(pid, true, [:receive])
 
-    conn = conn(:get, "/")
+    conn(:get, "/")
     |> Plug.Conn.put_private(:request_id, "gary-the-get-request")
-
-    conn_next = BelfrageWeb.Plugs.LatencyMonitor.call(conn, _opts = [])
+    |> BelfrageWeb.Plugs.LatencyMonitor.call(_opts = [])
     |> Plug.Conn.send_resp(400, "foo")
 
     assert_receive {:trace, ^pid, :receive, {

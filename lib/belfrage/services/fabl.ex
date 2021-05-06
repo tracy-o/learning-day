@@ -45,7 +45,7 @@ defmodule Belfrage.Services.Fabl do
 
   defp execute_request(
          struct = %Struct{
-           request: request = %Struct.Request{method: "GET", path: path, path_params: params},
+           request: request = %Struct.Request{method: "GET", path: path, path_params: params, request_id: request_id},
            private: private
          }
        ) do
@@ -53,7 +53,8 @@ defmodule Belfrage.Services.Fabl do
        %Clients.HTTP.Request{
          method: :get,
          url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
-         headers: build_headers(request)
+         headers: build_headers(request),
+         request_id: request_id
        },
        :fabl
      ), struct}

@@ -2,6 +2,7 @@ defmodule Belfrage.Clients.Lambda do
   require Belfrage.Event
   alias Belfrage.Clients.HTTP
   require Belfrage.Xray
+  import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
   @aws Application.get_env(:belfrage, :aws)
   @aws_lambda Application.get_env(:belfrage, :aws_lambda)
@@ -9,7 +10,7 @@ defmodule Belfrage.Clients.Lambda do
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @behaviour ExAws.Request.HttpClient
-  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), List.t()) :: Tuple.t()
+  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), String.t(), List.t()) :: Tuple.t()
 
   @impl ExAws.Request.HttpClient
   def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
@@ -23,15 +24,17 @@ defmodule Belfrage.Clients.Lambda do
     |> @http_client.execute()
   end
 
-  def call(arn, function, payload, opts \\ []) do
+  def call(arn, function, payload, request_id, opts \\ []) do
     case Belfrage.Credentials.Refresh.fetch(arn) do
-      {:ok, credentials} -> invoke_lambda(function, payload, credentials, opts)
+      {:ok, credentials} -> invoke_lambda(function, payload, request_id, credentials, opts)
       error -> error
     end
   end
 
-  defp invoke_lambda(function, payload, credentials, opts) do
+  defp invoke_lambda(function, payload, request_id, credentials, opts) do
     Belfrage.Event.record "function.timing.service.lambda.invoke" do
+      checkpoint(request_id, :request_end)
+
       lambda_response =
         Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
           @aws_lambda.invoke(function, payload, %{}, opts)
@@ -41,6 +44,8 @@ defmodule Belfrage.Clients.Lambda do
             secret_access_key: credentials.secret_access_key
           )
         end
+
+      checkpoint(request_id, :response_start)
 
       case lambda_response do
         {:ok, body} -> {:ok, body}
