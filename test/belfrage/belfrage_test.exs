@@ -119,7 +119,7 @@ defmodule BelfrageTest do
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock
-    |> expect(:call, 0, fn _role_arn, _func_name,  _payload, _request_id, _opts -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _role_arn, _func_name, _payload, _request_id, _opts -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 

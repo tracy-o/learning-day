@@ -48,7 +48,12 @@ defmodule Belfrage.Clients.LambdaTest do
         {:error, :timeout}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:timeout", %{some: "data"}, "larry-the-lambda-request") ==
+      assert Lambda.call(
+               "webcore-lambda-role-arn",
+               "pwa-lambda-function:timeout",
+               %{some: "data"},
+               "larry-the-lambda-request"
+             ) ==
                {:error, :failed_to_invoke_lambda}
     end
 
@@ -63,7 +68,12 @@ defmodule Belfrage.Clients.LambdaTest do
           }}}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:unknown-alias", %{some: "data"}, "larry-the-lambda-request") ==
+      assert Lambda.call(
+               "webcore-lambda-role-arn",
+               "pwa-lambda-function:unknown-alias",
+               %{some: "data"},
+               "larry-the-lambda-request"
+             ) ==
                {:error, :function_not_found}
     end
   end

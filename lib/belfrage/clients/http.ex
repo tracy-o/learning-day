@@ -20,13 +20,14 @@ defmodule Belfrage.Clients.HTTP do
   def execute(request = %HTTP.Request{}, pool_group) do
     latency_checkpoint(request, :request_end)
 
-    response = @machine_gun.request(
-      request.method,
-      request.url,
-      request.payload,
-      machine_gun_headers(request.headers),
-      build_options(request, pool_group)
-    )
+    response =
+      @machine_gun.request(
+        request.method,
+        request.url,
+        request.payload,
+        machine_gun_headers(request.headers),
+        build_options(request, pool_group)
+      )
 
     latency_checkpoint(request, :response_start)
 

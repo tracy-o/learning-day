@@ -60,6 +60,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
     test "should schedule another cleanup at the specified rate" do
       now = System.monotonic_time(:nanosecond) / 1_000_000
+
       input_state = %{
         "nelly-the-newer" => %{request_start: now - 29_500}
       }
@@ -120,6 +121,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     test "should send metrics upon recieving the :response_end checkpoint for a complete a set of times" do
       parent = self()
       ref = make_ref()
+
       input_state = %{
         "sam-the-sendable" => %{request_start: 123, request_end: 234, response_start: 345}
       }
@@ -144,6 +146,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     test "should not send metrics upon recieving the :response_end checkpoint for an incomplete set of times" do
       parent = self()
       ref = make_ref()
+
       input_state = %{
         "iris-the-incomplete" => %{request_start: 123, request_end: 234}
       }

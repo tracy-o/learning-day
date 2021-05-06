@@ -17,15 +17,17 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     |> BelfrageWeb.Plugs.LatencyMonitor.call(_opts = [])
     |> Plug.Conn.send_resp(200, "foo")
 
-    assert_receive {:trace, ^pid, :receive, {
-      _,
-      {:checkpoint, :request_start, "gary-the-get-request", _time}
-    }}
+    assert_receive {:trace, ^pid, :receive,
+                    {
+                      _,
+                      {:checkpoint, :request_start, "gary-the-get-request", _time}
+                    }}
 
-    assert_receive {:trace, ^pid, :receive, {
-      _,
-      {:checkpoint, :response_end, "gary-the-get-request", _time}
-    }}
+    assert_receive {:trace, ^pid, :receive,
+                    {
+                      _,
+                      {:checkpoint, :response_end, "gary-the-get-request", _time}
+                    }}
   end
 
   test "calls LatencyMonitor discard for non-200s" do
@@ -37,9 +39,10 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     |> BelfrageWeb.Plugs.LatencyMonitor.call(_opts = [])
     |> Plug.Conn.send_resp(400, "foo")
 
-    assert_receive {:trace, ^pid, :receive, {
-      _,
-      {:discard, "gary-the-get-request"}
-    }}
+    assert_receive {:trace, ^pid, :receive,
+                    {
+                      _,
+                      {:discard, "gary-the-get-request"}
+                    }}
   end
 end
