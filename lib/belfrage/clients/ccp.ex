@@ -13,7 +13,8 @@ defmodule Belfrage.Clients.CCP do
   @callback put(Struct.t()) :: :ok
   @callback put(Struct.t(), target) :: :ok
 
-  @spec fetch(String.t(), String.t()) :: {:ok, :content_not_found} | {:ok, :stale, Struct.Response.t()}
+  @spec fetch(String.t(), String.t()) ::
+          {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
   def fetch(request_hash, request_id) do
     # TODO Investigate using internal S3 endpoints for secure fetches
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/

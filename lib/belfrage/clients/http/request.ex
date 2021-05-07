@@ -23,7 +23,7 @@ defmodule Belfrage.Clients.HTTP.Request do
     %__MODULE__{
       url: params.url,
       method: params.method,
-      request_id: Map.get(params, :request_id, ""),
+      request_id: Map.get(params, :request_id, nil),
       headers: HTTP.Headers.as_map(params.headers),
       payload: params.payload || "",
       timeout: params.timeout

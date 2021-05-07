@@ -34,8 +34,8 @@ defmodule Belfrage.Clients.HTTP do
     format_response(response)
   end
 
-  defp latency_checkpoint(%HTTP.Request{request_id: rid}, name) when rid == "", do: :ok
-  defp latency_checkpoint(%HTTP.Request{request_id: rid}, name), do: checkpoint(rid, :response_start)
+  defp latency_checkpoint(%HTTP.Request{request_id: rid}, _name) when is_nil(rid), do: :noop
+  defp latency_checkpoint(%HTTP.Request{request_id: rid}, name), do: checkpoint(rid, name)
 
   defp machine_gun_headers(headers) do
     headers

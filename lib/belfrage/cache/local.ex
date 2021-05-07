@@ -22,6 +22,8 @@ defmodule Belfrage.Cache.Local do
     Cachex.touch(cache, request_hash)
 
     checkpoint(request_id, :request_end)
+    # TODO: this temporary variable is inefficient, potentially use Kernel.tap/2
+    # when available. https://github.com/bbc/belfrage/pull/844#discussion_r628017111
     result = Cachex.get(cache, request_hash)
     checkpoint(request_id, :response_start)
 
