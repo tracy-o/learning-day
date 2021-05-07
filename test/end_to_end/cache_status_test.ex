@@ -22,7 +22,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "when cache doesn't contain response" do
     test "returns the 'MISS' cache status header" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _role_arn, _lambda_function, _payload, _opts ->
+      |> expect(:call, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
         {:ok, @cacheable_lambda_response}
       end)
 
@@ -36,7 +36,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "when cache contains the response" do
     test "returns the 'HIT' cache status header" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _opts ->
+      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
         {:ok, @cacheable_lambda_response}
       end)
 

@@ -26,6 +26,7 @@ defmodule IsUKTest do
                         %{
                           headers: %{is_uk: false}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -47,6 +48,7 @@ defmodule IsUKTest do
                         %{
                           headers: %{is_uk: true}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -68,6 +70,7 @@ defmodule IsUKTest do
                         %{
                           headers: %{is_uk: false}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -88,6 +91,7 @@ defmodule IsUKTest do
                         %{
                           headers: %{is_uk: true}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)

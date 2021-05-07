@@ -11,7 +11,7 @@ defmodule EndToEnd.MonitorEventsTest do
     :ets.delete_all_objects(:cache)
 
     Belfrage.Clients.LambdaMock
-    |> stub(:call, fn _role_arn, _function, _payload, _opts ->
+    |> stub(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
       {:ok,
        %{
          "headers" => %{
@@ -133,7 +133,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
     test "sends events to the monitor app" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+      |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
         {:ok,
          %{
            "headers" => %{
@@ -203,7 +203,7 @@ defmodule EndToEnd.MonitorEventsTest do
   describe "when a distributed fallback can be served" do
     setup do
       Belfrage.Clients.CCPMock
-      |> expect(:fetch, fn _request_hash ->
+      |> expect(:fetch, fn _request_hash, _request_id ->
         {:ok, :stale,
          %Belfrage.Struct.Response{
            body: :zlib.gzip(~s({"hi": "bonjour"})),
@@ -218,7 +218,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
     test "sends events to the monitor app" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+      |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
         {:ok,
          %{
            "headers" => %{
@@ -288,7 +288,7 @@ defmodule EndToEnd.MonitorEventsTest do
   describe "when a distributed fallback cannot be served" do
     test "sends events to the monitor app" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _role_arn, _function, _payload, _opts ->
+      |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
         {:ok,
          %{
            "headers" => %{

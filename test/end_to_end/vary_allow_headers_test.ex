@@ -19,7 +19,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
   setup do
     Belfrage.Clients.LambdaMock
-    |> stub(:call, fn _lambda_name, _role_arn, _headers, _opts ->
+    |> stub(:call, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->
       {:ok, @lambda_response}
     end)
 
