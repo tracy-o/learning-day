@@ -19,12 +19,12 @@ defmodule Belfrage.Clients.LambdaTest do
         {:ok, "<h1>A Page</h1>"}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"}) ==
+      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
                {:ok, "<h1>A Page</h1>"}
     end
 
     test "Given a role we cannot assume we return the :failed_to_assume_role error" do
-      assert Lambda.call("the-wrong-role", "pwa-lambda-function", %{some: "data"}) ==
+      assert Lambda.call("the-wrong-role", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
                {:error, :credentials_not_found}
     end
 
@@ -38,7 +38,7 @@ defmodule Belfrage.Clients.LambdaTest do
           }}}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "not-a-real-lambda", %{some: "data"}) ==
+      assert Lambda.call("webcore-lambda-role-arn", "not-a-real-lambda", %{some: "data"}, "larry-the-lambda-request") ==
                {:error, :failed_to_invoke_lambda}
     end
 
@@ -48,7 +48,12 @@ defmodule Belfrage.Clients.LambdaTest do
         {:error, :timeout}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:timeout", %{some: "data"}) ==
+      assert Lambda.call(
+               "webcore-lambda-role-arn",
+               "pwa-lambda-function:timeout",
+               %{some: "data"},
+               "larry-the-lambda-request"
+             ) ==
                {:error, :failed_to_invoke_lambda}
     end
 
@@ -63,7 +68,12 @@ defmodule Belfrage.Clients.LambdaTest do
           }}}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function:unknown-alias", %{some: "data"}) ==
+      assert Lambda.call(
+               "webcore-lambda-role-arn",
+               "pwa-lambda-function:unknown-alias",
+               %{some: "data"},
+               "larry-the-lambda-request"
+             ) ==
                {:error, :function_not_found}
     end
   end
@@ -82,7 +92,7 @@ defmodule Belfrage.Clients.LambdaTest do
         {:ok, "<h1>trace_id option provided</h1>"}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"},
+      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request",
                xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
              ) ==
                {:ok, "<h1>trace_id option provided</h1>"}

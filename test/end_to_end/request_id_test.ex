@@ -16,7 +16,7 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
 
   test "returns the request id header" do
     Belfrage.Clients.LambdaMock
-    |> stub(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+    |> stub(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
       {:ok, @lambda_response}
     end)
 

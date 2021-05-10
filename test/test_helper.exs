@@ -5,6 +5,8 @@ Code.require_file("smoke/belfrage_smoke_test_case.ex", __DIR__)
 
 Test.Support.Helper.setup_stubs()
 
+Mox.set_mox_global()
+
 if Mix.env() == :end_to_end do
   Mox.set_mox_global()
 end

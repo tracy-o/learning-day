@@ -2,6 +2,7 @@ defmodule Belfrage.Cache.Local do
   @behaviour Belfrage.Behaviours.CacheStrategy
 
   alias Belfrage.Behaviours.CacheStrategy
+  import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
   @doc """
   Fetches a response from the local cache. In order to implement an LRU caching
@@ -9,19 +10,24 @@ defmodule Belfrage.Cache.Local do
   ETS. This causes the configured Cachex LRW strategy to actually evict things
   based on when they were last used.
 
-  Cachex.touch/2 updates the ETS last modified value, whereas the Belfrage stale 
-  check seems to use one in the tuple with the actual response. This has been 
+  Cachex.touch/2 updates the ETS last modified value, whereas the Belfrage stale
+  check seems to use one in the tuple with the actual response. This has been
   tested in [2]
 
   - [1] https://github.com/whitfin/cachex/blob/master/docs/features/cache-limits.md#policies
   - [2] https://github.com/bbc/belfrage/pull/821/commits/761d3d68ca9a30b0b6a543ed4ff42b268ac14565
   """
   @impl CacheStrategy
-  def fetch(%Belfrage.Struct{request: %{request_hash: request_hash}}, cache \\ :cache) do
+  def fetch(%Belfrage.Struct{request: %{request_id: request_id, request_hash: request_hash}}, cache \\ :cache) do
     Cachex.touch(cache, request_hash)
 
-    Cachex.get(cache, request_hash)
-    |> format_cache_result()
+    checkpoint(request_id, :request_end)
+    # TODO: this temporary variable is inefficient, potentially use Kernel.tap/2
+    # when available. https://github.com/bbc/belfrage/pull/844#discussion_r628017111
+    result = Cachex.get(cache, request_hash)
+    checkpoint(request_id, :response_start)
+
+    format_cache_result(result)
   end
 
   @impl CacheStrategy

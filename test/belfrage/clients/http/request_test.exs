@@ -8,14 +8,16 @@ defmodule Belfrage.Clients.HTTP.RequestTest do
              headers: %{"accept-encoding" => "application/json"},
              method: :get,
              timeout: 300,
-             url: "/a-page"
+             url: "/a-page",
+             request_id: "ramona-the-request"
            } ==
              HTTP.Request.new(%{
                url: "/a-page",
                method: :get,
                headers: [{"accept-encoding", "application/json"}],
                payload: nil,
-               timeout: 300
+               timeout: 300,
+               request_id: "ramona-the-request"
              })
   end
 

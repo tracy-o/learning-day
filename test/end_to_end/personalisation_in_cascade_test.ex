@@ -30,7 +30,7 @@ defmodule EndToEnd.PersonalisationInCascade do
     mozart_response: mozart_response
   } do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function_arn, payload, _opts ->
+    |> expect(:call, fn _role_arn, _function_arn, payload, _request_id, _opts ->
       assert "Bearer #{access_token}" == get_in(payload, [:headers, :authorization])
       assert "idv5" == get_in(payload, [:headers, :"x-authentication-provider"])
 

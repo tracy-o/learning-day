@@ -53,7 +53,8 @@ defmodule Belfrage.Services.HTTP do
        method: :post,
        url: private.origin <> request.path <> QueryParams.encode(request.query_params),
        payload: request.payload,
-       headers: build_headers(request)
+       headers: build_headers(request),
+       request_id: request.request_id
      }), struct}
   end
 
@@ -61,7 +62,8 @@ defmodule Belfrage.Services.HTTP do
     {@http_client.execute(%Clients.HTTP.Request{
        method: :get,
        url: private.origin <> request.path <> QueryParams.encode(request.query_params),
-       headers: build_headers(request)
+       headers: build_headers(request),
+       request_id: request.request_id
      }), struct}
   end
 

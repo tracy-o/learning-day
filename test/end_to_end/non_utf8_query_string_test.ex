@@ -31,6 +31,7 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => "science café"}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -53,6 +54,7 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => "€100"}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -75,6 +77,7 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => nil}
                         },
+                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)

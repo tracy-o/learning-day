@@ -16,7 +16,8 @@ defmodule Belfrage.Services.WebcoreTest do
       query_params: %{"id" => "1234"},
       xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy",
       is_uk: false,
-      host: "www.bbc.com"
+      host: "www.bbc.com",
+      request_id: "gemma-the-get-request"
     }
   }
 
@@ -36,6 +37,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:ok, @lambda_response}
       end)
@@ -57,6 +59,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"q" => %{"bad" => "�", "good" => "€100 café"}}
                                            },
+                                           _request_id = "geoff-the-get-request",
                                            _opts ->
         {:ok, @lambda_response}
       end)
@@ -75,6 +78,7 @@ defmodule Belfrage.Services.WebcoreTest do
                    is_uk: false,
                    host: "www.bbc.com",
                    query_params: %{"q" => %{"bad" => <<179>>, "good" => "€100 café"}},
+                   request_id: "geoff-the-get-request",
                    xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
                  }
                })
@@ -84,6 +88,7 @@ defmodule Belfrage.Services.WebcoreTest do
       expect(Clients.LambdaMock, :call, fn _role_arn,
                                            _func_name,
                                            _payload,
+                                           _request_id,
                                            _opts = [xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"] ->
         {:ok, @lambda_response}
       end)
@@ -101,6 +106,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:ok, @lambda_response}
       end)
@@ -124,6 +130,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                            %{
                                              headers: %{"accept-encoding": "gzip"}
                                            },
+                                           _request_id,
                                            _opts ->
         {:ok, @lambda_response}
       end)
@@ -132,7 +139,7 @@ defmodule Belfrage.Services.WebcoreTest do
     end
 
     test "it adds webcore subsegment with struct information" do
-      expect(Clients.LambdaMock, :call, fn _lambda_role_arn, _lambda_function_name, _headers, _opts ->
+      expect(Clients.LambdaMock, :call, fn _lambda_role_arn, _lambda_function_name, _headers, _request_id, _opts ->
         {:ok, @lambda_response}
       end)
 
@@ -164,6 +171,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:ok, @lambda_response_internal_fail}
       end)
@@ -185,6 +193,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:error, :failed_to_invoke_lambda}
       end)
@@ -206,6 +215,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:error, :function_not_found}
       end)
@@ -227,6 +237,7 @@ defmodule Belfrage.Services.WebcoreTest do
                                              path: "/_web_core",
                                              queryStringParameters: %{"id" => "1234"}
                                            },
+                                           _request_id = "gemma-the-get-request",
                                            _opts ->
         {:error, :timeout}
       end)

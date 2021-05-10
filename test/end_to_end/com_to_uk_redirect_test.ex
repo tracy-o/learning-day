@@ -31,7 +31,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
   test "does not redirect and call origin when host is not .com" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _headers, _opts ->
+    |> expect(:call, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->
       {:ok,
        %{
          "headers" => %{"cache-control" => "public, max-age=60"},

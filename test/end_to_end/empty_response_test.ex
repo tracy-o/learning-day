@@ -21,7 +21,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
   describe "returns a Belfrage internal response" do
     test "when response status code is 404", %{lambda_response: lambda_response} do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
         {:ok, Map.put(lambda_response, "statusCode", 404)}
       end)
 
@@ -32,7 +32,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
 
     test "when response status code is 400", %{lambda_response: lambda_response} do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
         {:ok, Map.put(lambda_response, "statusCode", 400)}
       end)
 

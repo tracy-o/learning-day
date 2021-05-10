@@ -22,7 +22,7 @@ defmodule EndToEnd.SessionTest do
 
   test "when no authorization token is provided", %{lambda_response: lambda_response} do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function_arn, payload, _opts ->
+    |> expect(:call, fn _role_arn, _function_arn, payload, _request_id, _opts ->
       assert %{
                body: "",
                headers: %{
@@ -53,7 +53,7 @@ defmodule EndToEnd.SessionTest do
     lambda_response: lambda_response
   } do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function_arn, payload, _opts ->
+    |> expect(:call, fn _role_arn, _function_arn, payload, _request_id, _opts ->
       assert %{
                body: "",
                headers: %{
@@ -92,7 +92,7 @@ defmodule EndToEnd.SessionTest do
     lambda_response: lambda_response
   } do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, 0, fn _role_arn, _function_arn, _payload, _opts ->
+    |> expect(:call, 0, fn _role_arn, _function_arn, _payload, _request_id, _opts ->
       flunk("Lambda should not be called")
     end)
 

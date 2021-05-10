@@ -14,7 +14,8 @@ defmodule Belfrage.Services.CascadeTest do
     },
     request: %Struct.Request{
       method: "GET",
-      path: "/_web_core"
+      path: "/_web_core",
+      request_id: "henry-the-http-request"
     }
   }
 
@@ -27,7 +28,8 @@ defmodule Belfrage.Services.CascadeTest do
       path: "/fd/example-module",
       path_params: %{
         "name" => "example-module"
-      }
+      },
+      request_id: "frank-the-fabl-request"
     }
   }
 
@@ -35,7 +37,8 @@ defmodule Belfrage.Services.CascadeTest do
     private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
     request: %Struct.Request{
       method: "GET",
-      path: "/_web_core"
+      path: "/_web_core",
+      request_id: "will-the-webcore-request"
     }
   }
 
@@ -83,6 +86,7 @@ defmodule Belfrage.Services.CascadeTest do
                                            httpMethod: "GET",
                                            path: "/_web_core"
                                          },
+                                         _request_id = "will-the-webcore-request",
                                          _opts ->
       {:ok,
        %{

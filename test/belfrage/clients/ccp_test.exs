@@ -39,7 +39,7 @@ defmodule Belfrage.Clients.CCPTest do
     end
   end
 
-  describe "fetch/1" do
+  describe "fetch/2" do
     setup do
       %{
         s3_response_body:
@@ -59,7 +59,8 @@ defmodule Belfrage.Clients.CCPTest do
         method: :get,
         payload: "",
         timeout: 6000,
-        url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
+        url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123",
+        request_id: "colin-the-ccp-request"
       }
 
       Belfrage.Clients.HTTPMock
@@ -72,7 +73,7 @@ defmodule Belfrage.Clients.CCPTest do
          })}
       end)
 
-      CCP.fetch("request-hash-123")
+      CCP.fetch("request-hash-123", "colin-the-ccp-request")
     end
 
     test "converts binary format of erlang terms in response, to erlang terms", %{s3_response_body: s3_response_body} do
@@ -87,7 +88,7 @@ defmodule Belfrage.Clients.CCPTest do
       end)
 
       fallback_response = :erlang.binary_to_term(s3_response_body)
-      assert {:ok, :stale, fallback_response} == CCP.fetch("request-hash-123")
+      assert {:ok, :stale, fallback_response} == CCP.fetch("request-hash-123", "colin-the-ccp-request")
     end
   end
 
@@ -102,7 +103,7 @@ defmodule Belfrage.Clients.CCPTest do
        })}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123", "colin-the-ccp-request")
   end
 
   test "S3 returns unexpected status code" do
@@ -116,7 +117,7 @@ defmodule Belfrage.Clients.CCPTest do
        })}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123", "colin-the-ccp-request")
   end
 
   test "when HTTP client returns an error" do
@@ -125,6 +126,6 @@ defmodule Belfrage.Clients.CCPTest do
       {:error, %Belfrage.Clients.HTTP.Error{reason: :timeout}}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123", "colin-the-ccp-request")
   end
 end

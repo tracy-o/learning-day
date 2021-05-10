@@ -6,6 +6,7 @@ defmodule Belfrage.Clients.HTTP do
   own HTTP Request, Response and Error structs.
   """
   alias Belfrage.Clients.HTTP
+  import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
   @machine_gun Application.get_env(:belfrage, :machine_gun)
 
   @type request_type :: :get | :post
@@ -17,15 +18,24 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   def execute(request = %HTTP.Request{}, pool_group) do
-    @machine_gun.request(
-      request.method,
-      request.url,
-      request.payload,
-      machine_gun_headers(request.headers),
-      build_options(request, pool_group)
-    )
-    |> format_response()
+    latency_checkpoint(request, :request_end)
+
+    response =
+      @machine_gun.request(
+        request.method,
+        request.url,
+        request.payload,
+        machine_gun_headers(request.headers),
+        build_options(request, pool_group)
+      )
+
+    latency_checkpoint(request, :response_start)
+
+    format_response(response)
   end
+
+  defp latency_checkpoint(%HTTP.Request{request_id: rid}, _name) when is_nil(rid), do: :noop
+  defp latency_checkpoint(%HTTP.Request{request_id: rid}, name), do: checkpoint(rid, name)
 
   defp machine_gun_headers(headers) do
     headers
