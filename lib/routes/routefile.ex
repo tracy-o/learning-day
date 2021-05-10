@@ -197,6 +197,8 @@ defmodule Routes.Routefile do
 
   # News
 
+  redirect "/news/articles", to: "/news", status: 302
+
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
@@ -257,6 +259,28 @@ defmodule Routes.Routefile do
   handle "/news/video_and_audio/*_any", using: "NewsVideoAndAudio", examples: [] do
     return_404 if: true
   end
+
+  handle "/news/articles/c744mjrym37o", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/c5ll353v7y9o", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/ce9992y0reyo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/cd4vr7lvrvmo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/clldg965yzjo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/cw4jd7vxxqdo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/ce9v85jlrzzo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/cd4117egk3go", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/cj7xrxz0e8zo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/cp03zwze47zo", using: "WorldServiceEnglish", examples: []
+
+  handle "/news/articles/c8xxl4l3dzeo", using: "WorldServiceEnglish", examples: []
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
