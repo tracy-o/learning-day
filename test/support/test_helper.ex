@@ -21,7 +21,6 @@ defmodule Test.Support.Helper do
     Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
     Mox.stub_with(Belfrage.Authentication.Validator.ExpiryMock, Belfrage.Authentication.Validator.ExpiryStub)
     Mox.stub_with(Belfrage.EventMock, Belfrage.EventStub)
-    Mox.stub_with(ExMetrics.Statsd.StatixConnectionMock, Belfrage.StatixConnectionStub)
   end
 
   defmacro assert_gzipped(compressed, should_be) do
