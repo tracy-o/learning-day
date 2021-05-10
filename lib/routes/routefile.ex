@@ -1076,9 +1076,9 @@ defmodule Routes.Routefile do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
-  redirect("/full-stack-test", to: "/full-stack-test/a", status: 302)
   handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
   handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
+  redirect("/full-stack-test/*_any", to: "/full-stack-test/a/*_any", status: 302)
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
