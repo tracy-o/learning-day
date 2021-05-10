@@ -260,27 +260,29 @@ defmodule Routes.Routefile do
     return_404 if: true
   end
 
-  handle "/news/articles/c744mjrym37o", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/c744mjrym37o", using: "WorldServiceEnglish", examples: ["/news/articles/c744mjrym37o"]
 
-  handle "/news/articles/c5ll353v7y9o", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/c5ll353v7y9o", using: "WorldServiceEnglish", examples: ["/news/articles/c5ll353v7y9o"]
 
-  handle "/news/articles/ce9992y0reyo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/ce9992y0reyo", using: "WorldServiceEnglish", examples: ["/news/articles/ce9992y0reyo"]
 
-  handle "/news/articles/cd4vr7lvrvmo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/cd4vr7lvrvmo", using: "WorldServiceEnglish", examples: ["/news/articles/cd4vr7lvrvmo"]
 
-  handle "/news/articles/clldg965yzjo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/clldg965yzjo", using: "WorldServiceEnglish", examples: ["/news/articles/clldg965yzjo"]
 
-  handle "/news/articles/cw4jd7vxxqdo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/cw4jd7vxxqdo", using: "WorldServiceEnglish", examples: ["/news/articles/cw4jd7vxxqdo"]
 
-  handle "/news/articles/ce9v85jlrzzo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/ce9v85jlrzzo", using: "WorldServiceEnglish", examples: ["/news/articles/ce9v85jlrzzo"]
 
-  handle "/news/articles/cd4117egk3go", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/cd4117egk3go", using: "WorldServiceEnglish", examples: ["/news/articles/cd4117egk3go"]
 
-  handle "/news/articles/cj7xrxz0e8zo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/cj7xrxz0e8zo", using: "WorldServiceEnglish", examples: ["/news/articles/cj7xrxz0e8zo"]
 
-  handle "/news/articles/cp03zwze47zo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/cp03zwze47zo", using: "WorldServiceEnglish", examples: ["/news/articles/cp03zwze47zo"]
 
-  handle "/news/articles/c8xxl4l3dzeo", using: "WorldServiceEnglish", examples: []
+  handle "/news/articles/c8xxl4l3dzeo", using: "WorldServiceEnglish", examples: ["/news/articles/c8xxl4l3dzeo"]
+
+  handle "/news/articles/*.amp", using: "WorldServiceEnglish", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
