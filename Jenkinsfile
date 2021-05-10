@@ -2,8 +2,8 @@
 
 library 'devops-tools-jenkins'
 
-def dockerregistry = libraryResource('dockerregistry').trim()
-def dockerimage = "${dockerregistry}/bbc-news/elixir-centos7"
+def dockerRegistry = libraryResource('dockerregistry').trim()
+def dockerImage = "${dockerRegistry}/bbc-news/elixir-centos7:1.11.3"
 
 library 'BBCNews'
 
@@ -38,7 +38,7 @@ node {
   ])
 
   stage('Run tests') {
-    docker.image(dockerimage).inside("-u root -e MIX_ENV=test") {
+    docker.image(dockerImage).inside("-u root -e MIX_ENV=test") {
       sh 'mix deps.get'
       sh 'mix test'
       sh 'mix test_e2e'
@@ -62,7 +62,7 @@ node {
   }
 
   stage("clean up after ourselves") {
-    docker.image(dockerimage).inside("-u root") {
+    docker.image(dockerImage).inside("-u root") {
         sh "rm -rf ${env.WORKSPACE}/{deps,_build,local.log}"
     }
     cleanWs()
