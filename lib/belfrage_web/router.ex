@@ -8,8 +8,6 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
 
-  @routefile Application.get_env(:belfrage, :routefile)
-
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
