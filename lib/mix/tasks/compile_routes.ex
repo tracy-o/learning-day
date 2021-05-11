@@ -1,4 +1,27 @@
 defmodule Mix.Tasks.CompileRoutes do
+  @moduledoc """
+  EXPERIMENTAL
+  ------------
+
+  This modules allows to compile Routefiles against different cosmos environments
+
+  Usage:
+  `mix compile_routes <cosmos_env>`
+  
+  `mix compile_routes`       compile the route for your current environment
+  `mix compile_routes test`  compile the route for the Cosmos TEST environment
+
+  Routefiles will be compile to beam files, e.g.:
+  _build/test/lib/belfrage/ebin/Elixir.Routes.Routefiles.Test.beam
+          ^                                               ^
+          ┕ Mix Env                            Cosmos Env ┙
+
+  This could be used to test building multiple files at compilation time in CI
+  instead of postponing the additional compilation tasks to runtime.
+  It also provide a file version of the compiled Routefiles instead of keeping in-memory
+  versions as we currently have.
+
+  """
   use Mix.Task
 
   def run([]) do
@@ -30,12 +53,11 @@ defmodule Mix.Tasks.CompileRoutes do
   end
 
   defp compile_routes(_) do
-    #compile_file("lib/routes/routefiles/main.ex")
     :noop
   end
 
   defp compile_file(file) do
-    IO.puts file
+    IO.puts "|  Compiling #{file} ..."
     [{module, binary}] = Code.compile_file(file)
     filename = "#{dir()}/#{module}.beam"
 
