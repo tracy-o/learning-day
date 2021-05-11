@@ -11,8 +11,6 @@ defroutefile("Main") do
   use BelfrageWeb.RouteMaster
   alias Routes.Specs.SportVideos
 
-  handle "/news/election", using: "NewsElection", only_on: "test", examples: []
-
   # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)

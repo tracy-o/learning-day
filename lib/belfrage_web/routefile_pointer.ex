@@ -15,15 +15,19 @@ defmodule BelfrageWeb.RoutefilePointer do
     routefile.call(conn, routefile.init([]))
   end
 
-  defp version("sandbox", _) do
+  defp version("sandbox" = cosmos_env, _mix_env) do
     "Sandbox"
   end
 
-  defp version(_, :test) do
+  defp version(_cosmos_env, :test = mix_env) do
     "Mock"
   end
 
-  defp version(env, _) do
-    env |> String.capitalize
+  defp version(_cosmos_env, :routes_test = mix_env) do
+    "Test"
+  end
+
+  defp version(cosmos_env, _mix_env) do
+    cosmos_env |> String.capitalize
   end
 end
