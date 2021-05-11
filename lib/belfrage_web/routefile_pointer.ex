@@ -1,22 +1,29 @@
 defmodule BelfrageWeb.RoutefilePointer do
   def init(_), do: :noop
 
+  # TODO: we could use the conn.path_info[0] to split between news, sport, etc
   def call(conn, _opts) do
-    # IO.inspect conn.path_info
+    cosmos_env = Application.get_env(:belfrage, :production_environment)
+    mix_env = Mix.env()
 
-    routefile = Application.get_env(:belfrage, :production_environment) |> version()
+    routefile = version(cosmos_env, mix_env)
     routefile = Module.concat(["Routes", "Routefiles", routefile])
 
+    # TODO: Remove me! I'm here hust to help debugging :)
     IO.inspect routefile
 
     routefile.call(conn, routefile.init([]))
   end
 
-  defp version("dev") do
+  defp version("sandbox", _) do
     "Sandbox"
   end
 
-  defp version(env) do
+  defp version(_, :test) do
+    "Mock"
+  end
+
+  defp version(env, _) do
     env |> String.capitalize
   end
 end
