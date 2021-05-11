@@ -2,8 +2,8 @@ use Mix.Config
 
 import_config "test.exs"
 
-config :belfrage,
-  routefile: Routes.RoutefileMock
+# config :belfrage,
+#   routefile: Routes.RoutefileMock
 
 config :smoke,
   ignore_specs: ["ProxyPass", "ArchiveArticles", "NewsSearch"],
