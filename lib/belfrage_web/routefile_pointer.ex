@@ -30,6 +30,10 @@ defmodule BelfrageWeb.RoutefilePointer do
     "Mock" |> routefile_module()
   end
 
+  def routefile(_cosmos_env, :smoke_test = _mix_env) do
+    "Test" |> routefile_module()
+  end
+
   def routefile(cosmos_env, _mix_env) when cosmos_env in ["live", "test"] do
     cosmos_env
     |> String.capitalize()
