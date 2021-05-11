@@ -6,8 +6,7 @@ defmodule BelfrageWeb.RoutefilePointer do
     cosmos_env = Application.get_env(:belfrage, :production_environment)
     mix_env = Mix.env()
 
-    routefile = version(cosmos_env, mix_env)
-    routefile = Module.concat(["Routes", "Routefiles", routefile])
+    routefile = routefile(cosmos_env, mix_env)
 
     # TODO: Remove me! I'm here hust to help debugging :)
     IO.inspect(routefile)
@@ -15,19 +14,29 @@ defmodule BelfrageWeb.RoutefilePointer do
     routefile.call(conn, routefile.init([]))
   end
 
-  defp version("sandbox" = _cosmos_env, _mix_env) do
-    "Sandbox"
+  def routefile(_cosmos_env, :dev = _mix_env) do
+    "Sandbox" |> routefile_module()
   end
 
-  defp version(_cosmos_env, :test = _mix_env) do
-    "Mock"
+  def routefile(_cosmos_env, :test = _mix_env) do
+    "Mock" |> routefile_module()
   end
 
-  defp version(_cosmos_env, :routes_test = _mix_env) do
-    "Test"
+  def routefile(_cosmos_env, :routes_test = _mix_env) do
+    "Test" |> routefile_module()
   end
 
-  defp version(cosmos_env, _mix_env) do
-    cosmos_env |> String.capitalize()
+  def routefile(cosmos_env, _mix_env) when cosmos_env in ["live", "test"] do
+    cosmos_env
+    |> String.capitalize()
+    |> routefile_module()
+  end
+
+  def routefile(cosmos_env, _mix_env) do
+    "Live" |> routefile_module()
+  end
+
+  defp routefile_module(name) do
+    Module.concat(["Routes", "Routefiles", name])
   end
 end
