@@ -51,7 +51,7 @@ defmodule Belfrage.MixProject do
     [
       {:uuid, "~> 1.1"},
       {:benchee, "~> 1.0.1", only: :dev},
-      {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.5.0", only: [:dev, :test], runtime: false},
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
       {:eljiffy, "~> 1.3.0"},
