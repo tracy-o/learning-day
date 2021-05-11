@@ -25,6 +25,10 @@ defmodule Belfrage.Credentials.Supervisor do
     []
   end
 
+  defp children(env: :routes_test) do
+    []
+  end
+
   defp children(_env) do
     [
       Belfrage.Credentials.Refresh

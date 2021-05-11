@@ -14,6 +14,10 @@ defmodule Belfrage.Authentication.Supervisor do
     []
   end
 
+  defp children(env: :routes_test) do
+    []
+  end
+
   defp children(_env) do
     [
       Belfrage.Authentication.Jwk,

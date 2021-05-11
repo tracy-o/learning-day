@@ -29,12 +29,16 @@ defmodule Belfrage.Dials.Supervisor do
     Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
   end
 
-  def children(opts) do
-    if opts[:env] == :test do
-      dial_children()
-    else
-      dial_children() ++ [Belfrage.Dials.Poller]
-    end
+  def children(env: :test) do
+    dial_children()
+  end
+
+  def children(env: :routes_test) do
+    []
+  end
+
+  def children(_env) do
+    dial_children() ++ [Belfrage.Dials.Poller]
   end
 
   @doc """
