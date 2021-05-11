@@ -9,20 +9,6 @@ defmodule BelfrageWeb.RoutefilePointerTest do
     end
   end
 
-  describe "on Mix.env :routes_test" do
-    test "Cosmos sandbox will return the Test Routefile" do
-      assert RoutefilePointer.routefile("sandbox", :routes_test) == Routes.Routefiles.Test
-    end
-
-    test "Cosmos test will return the Test Routefile" do
-      assert RoutefilePointer.routefile("test", :routes_test) == Routes.Routefiles.Test
-    end
-
-    test "Cosmos prod will return the Test Routefile" do
-      assert RoutefilePointer.routefile("live", :routes_test) == Routes.Routefiles.Test
-    end
-  end
-
   describe "on Mix.env :test" do
     test "Cosmos sanbox will return the Mock Routefile" do
       assert RoutefilePointer.routefile("test", :test) == Routes.Routefiles.Mock
@@ -34,6 +20,34 @@ defmodule BelfrageWeb.RoutefilePointerTest do
 
     test "Cosmos live will return the Moc Routefile" do
       assert RoutefilePointer.routefile("live", :test) == Routes.Routefiles.Mock
+    end
+  end
+
+  describe "on Mix.env :routes_test" do
+    test "Cosmos sandbox will return the Test Routefile" do
+      assert RoutefilePointer.routefile("sandbox", :routes_test) == Routes.Routefiles.Test
+    end
+
+    test "Cosmos test will return the Test Routefile" do
+      assert RoutefilePointer.routefile("test", :routes_test) == Routes.Routefiles.Test
+    end
+
+    test "Cosmos live will return the Test Routefile" do
+      assert RoutefilePointer.routefile("live", :routes_test) == Routes.Routefiles.Test
+    end
+  end
+
+  describe "on Mix.env :end_to_end" do
+    test "Cosmos sandbox will return the Mock Routefile" do
+      assert RoutefilePointer.routefile("sandbox", :end_to_end) == Routes.Routefiles.Mock
+    end
+
+    test "Cosmos test will return the Mock Routefile" do
+      assert RoutefilePointer.routefile("sandbox", :end_to_end) == Routes.Routefiles.Mock
+    end
+
+    test "Cosmos live will return the Mock Routefile" do
+      assert RoutefilePointer.routefile("live", :end_to_end) == Routes.Routefiles.Mock
     end
   end
 
