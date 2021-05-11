@@ -44,6 +44,7 @@ node {
       sh 'mix test_e2e'
       sh 'mix routes_test'
       sh 'mix format --check-formatted'
+      sh 'mix credo'
     }
   }
 
