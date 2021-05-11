@@ -1081,7 +1081,7 @@ defmodule Routes.Routefile do
 
   handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
   handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
-  redirect("/full-stack-test/*_any", to: "/full-stack-test/a/*_any", status: 302)
+  redirect("/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302)
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
