@@ -11,10 +11,10 @@ defmodule Routes.RoutefileTest do
 
   @moduletag :routes_test
 
-  IO.puts "cosmos -> #{Application.get_env(:belfrage, :production_environment)}"
-  IO.puts "MIX -> #{Mix.env()}"
-  Enum.each(Routes.Routefiles.Test.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
+  IO.puts("cosmos -> #{Application.get_env(:belfrage, :production_environment)}")
+  IO.puts("MIX -> #{Mix.env()}")
 
+  Enum.each(Routes.Routefiles.Test.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
     describe "For route matcher: #{route_matcher} (#{loop_id})" do
       @loop_id loop_id
       @route_matcher route_matcher

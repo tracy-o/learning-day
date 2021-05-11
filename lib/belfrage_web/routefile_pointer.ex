@@ -10,7 +10,7 @@ defmodule BelfrageWeb.RoutefilePointer do
     routefile = Module.concat(["Routes", "Routefiles", routefile])
 
     # TODO: Remove me! I'm here hust to help debugging :)
-    IO.inspect routefile
+    IO.inspect(routefile)
 
     routefile.call(conn, routefile.init([]))
   end
@@ -28,6 +28,6 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   defp version(cosmos_env, _mix_env) do
-    cosmos_env |> String.capitalize
+    cosmos_env |> String.capitalize()
   end
 end
