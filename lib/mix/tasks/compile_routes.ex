@@ -7,7 +7,7 @@ defmodule Mix.Tasks.CompileRoutes do
 
   Usage:
   `mix compile_routes <cosmos_env>`
-  
+
   `mix compile_routes`       compile the route for your current environment
   `mix compile_routes test`  compile the route for the Cosmos TEST environment
 
@@ -36,6 +36,8 @@ defmodule Mix.Tasks.CompileRoutes do
     IO.puts "|  Done."
     path = "#{dir()}/Elixir.Routes.Routefiles.*"
     IO.puts "|  ls #{path}"
+
+    # credo:disable-for-next-line
     IO.puts :os.cmd('ls #{path}')
     IO.puts "\n"
   end
