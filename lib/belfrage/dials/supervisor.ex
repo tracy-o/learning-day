@@ -33,7 +33,7 @@ defmodule Belfrage.Dials.Supervisor do
     dial_children()
   end
 
-  def children(env: :routes_test) do
+  def children(env: env) when env in [:routes_test, :smoke_test] do
     []
   end
 
