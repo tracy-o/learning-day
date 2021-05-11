@@ -5,32 +5,28 @@ defmodule BelfrageWeb.RoutefilePointer do
   def call(conn, _opts) do
     cosmos_env = Application.get_env(:belfrage, :production_environment)
     mix_env = Mix.env()
-
     routefile = routefile(cosmos_env, mix_env)
-
-    # TODO: Remove me! I'm here hust to help debugging :)
-    IO.inspect(routefile)
 
     routefile.call(conn, routefile.init([]))
   end
 
-  def routefile(_cosmos_env, :dev = _mix_env) do
+  def routefile(_cosmos_env, _mix_env = :dev) do
     "Sandbox" |> routefile_module()
   end
 
-  def routefile(_cosmos_env, :test = _mix_env) do
+  def routefile(_cosmos_env, _mix_env = :test) do
     "Mock" |> routefile_module()
   end
 
-  def routefile(_cosmos_env, :routes_test = _mix_env) do
+  def routefile(_cosmos_env, _mix_env = :routes_test) do
     "Test" |> routefile_module()
   end
 
-  def routefile(_cosmos_env, :end_to_end = _mix_env) do
+  def routefile(_cosmos_env, _mix_env = :end_to_end) do
     "Mock" |> routefile_module()
   end
 
-  def routefile(_cosmos_env, :smoke_test = _mix_env) do
+  def routefile(_cosmos_env, _mix_env = :smoke_test) do
     "Test" |> routefile_module()
   end
 
@@ -40,7 +36,7 @@ defmodule BelfrageWeb.RoutefilePointer do
     |> routefile_module()
   end
 
-  def routefile(cosmos_env, _mix_env) do
+  def routefile(_cosmos_env, _mix_env) do
     "Live" |> routefile_module()
   end
 

@@ -1,17 +1,19 @@
 defmodule Routefile do
   defmacro defroutefile(_name, do: block) do
-    if env != "Sandbox" && Mix.env() != :test do
+    if cosmos_env() != "Sandbox" && Mix.env() != :test do
       quote do
-        mn = Module.concat(["Routes", "Routefiles", unquote(env)])
-
-        defmodule mn do
+        defmodule unquote(module_name()) do
           unquote(block)
         end
       end
     end
   end
 
-  defp env do
+  defp module_name do
+    Module.concat(["Routes", "Routefiles", cosmos_env()])
+  end
+
+  defp cosmos_env do
     Application.get_env(:belfrage, :production_environment) |> String.capitalize()
   end
 end
