@@ -264,10 +264,6 @@ defmodule Routes.Routefile do
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.json", "/news/articles/cd4vr7lvrvmo.json"]
 
-  handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
-    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
-  end
-
   # Temporary routes until Webcore supports Optimo articles
   handle "/news/articles/c744mjrym37o", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c744mjrym37o"]
   handle "/news/articles/c5ll353v7y9o", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c5ll353v7y9o"]
@@ -281,6 +277,9 @@ defmodule Routes.Routefile do
   handle "/news/articles/cp03zwze47zo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cp03zwze47zo"]
   handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c8xxl4l3dzeo"]
 
+  handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/uk-politics-49336144.amp", "/news/world-asia-china-51787936.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/uk-politics-49336144.json", "/news/world-asia-china-51787936.json"]
