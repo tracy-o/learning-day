@@ -11,36 +11,37 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   def routefile(_cosmos_env, _mix_env = :dev) do
-    "Sandbox" |> routefile_module()
+    Routes.Routefiles.Sandbox
   end
 
   def routefile(_cosmos_env, _mix_env = :test) do
-    "Mock" |> routefile_module()
+    Routes.Routefiles.Mock
   end
 
   def routefile(_cosmos_env, _mix_env = :routes_test) do
-    "Test" |> routefile_module()
+    Routes.Routefiles.Test
   end
 
   def routefile(_cosmos_env, _mix_env = :end_to_end) do
-    "Mock" |> routefile_module()
+    Routes.Routefiles.Mock
   end
 
   def routefile(_cosmos_env, _mix_env = :smoke_test) do
-    "Test" |> routefile_module()
+    Routes.Routefiles.Test
   end
 
   def routefile(cosmos_env, _mix_env) when cosmos_env in ["live", "test"] do
-    cosmos_env
-    |> String.capitalize()
-    |> routefile_module()
+    env = cosmos_env |> String.capitalize()
+    Module.concat(["Routes", "Routefiles", env])
   end
 
-  def routefile(_cosmos_env, _mix_env) do
-    "Live" |> routefile_module()
-  end
+  def routefile(cosmos_env, mix_env) do
+    Belfrage.Event.record(:log, :error, %{
+      msg: "Using Live Routefile as catch all",
+      cosmos_env: cosmos_env,
+      mix_env: mix_env
+    })
 
-  defp routefile_module(name) do
-    Module.concat(["Routes", "Routefiles", name])
+    Routes.Routefiles.Live
   end
 end

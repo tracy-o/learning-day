@@ -10,7 +10,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
   end
 
   describe "on Mix.env :test" do
-    test "Cosmos sanbox will return the Mock Routefile" do
+    test "Cosmos sandbox will return the Mock Routefile" do
       assert RoutefilePointer.routefile("test", :test) == Routes.Routefiles.Mock
     end
 
@@ -18,7 +18,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
       assert RoutefilePointer.routefile("test", :test) == Routes.Routefiles.Mock
     end
 
-    test "Cosmos live will return the Moc Routefile" do
+    test "Cosmos live will return the Mock Routefile" do
       assert RoutefilePointer.routefile("live", :test) == Routes.Routefiles.Mock
     end
   end
@@ -60,8 +60,8 @@ defmodule BelfrageWeb.RoutefilePointerTest do
       assert RoutefilePointer.routefile("test", :smoke_test) == Routes.Routefiles.Test
     end
 
-    test "Cosmos test will return the Live Routefile" do
       assert RoutefilePointer.routefile("live", :smoke_test) == Routes.Routefiles.Test
+    test "Cosmos test will return the Live Routefile" do
     end
   end
 
