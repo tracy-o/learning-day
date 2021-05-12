@@ -264,22 +264,22 @@ defmodule Routes.Routefile do
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.json", "/news/articles/cd4vr7lvrvmo.json"]
 
-  # Temporary routes until Webcore supports Optimo articles
-  handle "/news/articles/c744mjrym37o", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c744mjrym37o"]
-  handle "/news/articles/c5ll353v7y9o", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c5ll353v7y9o"]
-  handle "/news/articles/ce9992y0reyo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/ce9992y0reyo"]
-  handle "/news/articles/cd4vr7lvrvmo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cd4vr7lvrvmo"]
-  handle "/news/articles/clldg965yzjo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/clldg965yzjo"]
-  handle "/news/articles/cw4jd7vxxqdo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cw4jd7vxxqdo"]
-  handle "/news/articles/ce9v85jlrzzo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/ce9v85jlrzzo"]
-  handle "/news/articles/cd4117egk3go", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cd4117egk3go"]
-  handle "/news/articles/cj7xrxz0e8zo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cj7xrxz0e8zo"]
-  handle "/news/articles/cp03zwze47zo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/cp03zwze47zo"]
-  handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", only_on: "live", examples: ["/news/articles/c8xxl4l3dzeo"]
-
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+
+  # Temporary routes until Webcore supports Optimo articles
+  handle "/news/articles/c744mjrym37o", using: "NewsAmp", examples: []
+  handle "/news/articles/c5ll353v7y9o", using: "NewsAmp", examples: []
+  handle "/news/articles/ce9992y0reyo", using: "NewsAmp", examples: []
+  handle "/news/articles/cd4vr7lvrvmo", using: "NewsAmp", examples: []
+  handle "/news/articles/clldg965yzjo", using: "NewsAmp", examples: []
+  handle "/news/articles/cw4jd7vxxqdo", using: "NewsAmp", examples: []
+  handle "/news/articles/ce9v85jlrzzo", using: "NewsAmp", examples: []
+  handle "/news/articles/cd4117egk3go", using: "NewsAmp", examples: []
+  handle "/news/articles/cj7xrxz0e8zo", using: "NewsAmp", examples: []
+  handle "/news/articles/cp03zwze47zo", using: "NewsAmp", examples: []
+  handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", examples: []
 
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/uk-politics-49336144.amp", "/news/world-asia-china-51787936.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/uk-politics-49336144.json", "/news/world-asia-china-51787936.json"]
