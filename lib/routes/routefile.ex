@@ -261,33 +261,26 @@ defmodule Routes.Routefile do
   end
 
   handle "/news/articles/c744mjrym37o", using: "WorldServiceEnglish", examples: ["/news/articles/c744mjrym37o"]
-
   handle "/news/articles/c5ll353v7y9o", using: "WorldServiceEnglish", examples: ["/news/articles/c5ll353v7y9o"]
-
   handle "/news/articles/ce9992y0reyo", using: "WorldServiceEnglish", examples: ["/news/articles/ce9992y0reyo"]
-
   handle "/news/articles/cd4vr7lvrvmo", using: "WorldServiceEnglish", examples: ["/news/articles/cd4vr7lvrvmo"]
-
   handle "/news/articles/clldg965yzjo", using: "WorldServiceEnglish", examples: ["/news/articles/clldg965yzjo"]
-
   handle "/news/articles/cw4jd7vxxqdo", using: "WorldServiceEnglish", examples: ["/news/articles/cw4jd7vxxqdo"]
-
   handle "/news/articles/ce9v85jlrzzo", using: "WorldServiceEnglish", examples: ["/news/articles/ce9v85jlrzzo"]
-
   handle "/news/articles/cd4117egk3go", using: "WorldServiceEnglish", examples: ["/news/articles/cd4117egk3go"]
-
   handle "/news/articles/cj7xrxz0e8zo", using: "WorldServiceEnglish", examples: ["/news/articles/cj7xrxz0e8zo"]
-
   handle "/news/articles/cp03zwze47zo", using: "WorldServiceEnglish", examples: ["/news/articles/cp03zwze47zo"]
-
   handle "/news/articles/c8xxl4l3dzeo", using: "WorldServiceEnglish", examples: ["/news/articles/c8xxl4l3dzeo"]
+
+  handle "/news/articles/:id.amp", using: "WorldServiceEnglish", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
+  handle "/news/articles/:id.json", using: "News", examples: ["/news/articles/c8xxl4l3dzeo.json", "/news/articles/cd4vr7lvrvmo.json"]
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/news/articles/*_any", using: "WorldServiceEnglish", only_on: "live", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
-
+  handle "/news/:id.amp", using: "WorldServiceEnglish", examples: ["/news/uk-politics-49336144.amp", "/news/world-asia-china-51787936.amp"]
+  handle "/news/:id.json", using: "News", examples: ["/news/uk-politics-49336144.json", "/news/world-asia-china-51787936.json"]
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
