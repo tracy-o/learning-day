@@ -48,6 +48,7 @@ node {
         sh 'mix deps.get'
         sh 'mix hex.audit'
         sh 'mix distillery.release'
+        sh 'mix compile_routes'
       }
       sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
     }
