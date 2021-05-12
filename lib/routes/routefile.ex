@@ -197,6 +197,7 @@ defmodule Routes.Routefile do
 
   # News
 
+  redirect "/news/articles/", to: "/news", status: 302
   redirect "/news/articles", to: "/news", status: 302
 
   handle "/news", using: "NewsHomePage", examples: ["/news"]
