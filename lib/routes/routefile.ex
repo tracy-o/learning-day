@@ -6,7 +6,6 @@
 #
 defmodule Routes.Routefile do
   use BelfrageWeb.RouteMaster
-  alias Routes.Specs.SportVideos
 
   # Vanity URLs
 
@@ -640,7 +639,7 @@ defmodule Routes.Routefile do
   ## Sport SFV - validate Section(Discipline) and ID
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
     return_404 if: [
-      !Enum.member?(SportVideos.sports_disciplines_routes, discipline),
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(id, ~r/^[0-9]{4,9}$/)
     ]
   end
