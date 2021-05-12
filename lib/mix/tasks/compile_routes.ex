@@ -8,8 +8,8 @@ defmodule Mix.Tasks.CompileRoutes do
   Usage:
   `mix compile_routes <cosmos_env>`
 
-  `mix compile_routes`       compile the route for your current environment
-  `mix compile_routes test`  compile the route for the Cosmos TEST environment
+  `mix compile_routes`       compile the route for the Cosmos TEST environment
+  `mix compile_routes live`  compile the route for a specific environment
 
   Routefiles will be compile to beam files, e.g.:
   _build/test/lib/belfrage/ebin/Elixir.Routes.Routefiles.Test.beam
@@ -25,7 +25,7 @@ defmodule Mix.Tasks.CompileRoutes do
   use Mix.Task
 
   def run([]) do
-    run([cosmos_env()])
+    run(["test"])
   end
 
   def run([env]) when env in ["sandbox", "test", "live"] do
