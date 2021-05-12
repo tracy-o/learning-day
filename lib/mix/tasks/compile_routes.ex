@@ -25,12 +25,11 @@ defmodule Mix.Tasks.CompileRoutes do
   use Mix.Task
 
   def run([]) do
-    penv = Application.get_env(:belfrage, :production_environment)
-    run([penv])
+    run([cosmos_env()])
   end
 
-  def run([env]) do
-    IO.puts("|  Compiling routes for #{env}")
+  def run([env]) when env in ["sandbox", "test", "live"] do
+    IO.puts("|  Compiling routes for Cosmos #{env}")
     compile_routes(env)
 
     IO.puts "|  Done."
@@ -42,12 +41,18 @@ defmodule Mix.Tasks.CompileRoutes do
     IO.puts "\n"
   end
 
+  def run([env]) do
+    raise "Unexpecteed Cosmos #{env}"
+  end
+
   defp compile_routes("test") do
+    original_cosmos_env = cosmos_env()
+
     Application.put_env(:belfrage, :production_environment, "test")
     compile_file("lib/routes/routefiles/main.ex")
     Application.put_env(:belfrage, :production_environment, "live")
     compile_file("lib/routes/routefiles/main.ex")
-    Application.put_env(:belfrage, :production_environment, "test")
+    Application.put_env(:belfrage, :production_environment, original_cosmos_env)
   end
 
   defp compile_routes("sandbox") do
@@ -69,5 +74,9 @@ defmodule Mix.Tasks.CompileRoutes do
 
   defp dir do
     "#{File.cwd!}/_build/#{Mix.env()}/lib/belfrage/ebin"
+  end
+
+  def cosmos_env do
+    Application.get_env(:belfrage, :production_environment)
   end
 end
