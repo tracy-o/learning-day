@@ -9,8 +9,7 @@ config :belfrage,
   not_supported_page: "/var/www/html/errors/405-data-ssl.html",
   internal_error_page: "/var/www/html/errors/500-data-ssl.html"
 
-config :ex_metrics,
-  send_metrics: true,
+config :statix,
   pool_size: 6
 
 config :logger,

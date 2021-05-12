@@ -7,6 +7,7 @@ defmodule Belfrage.Application do
 
   def start(_type, args) do
     recompile_routefile(Application.get_env(:belfrage, :production_environment))
+    :ok = Belfrage.Metrics.Statix.connect()
     Belfrage.Supervisor.start_link(args)
   end
 

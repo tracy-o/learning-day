@@ -31,7 +31,7 @@ defmodule Belfrage.Event do
     new(:metric, type, metric, opts)
     |> @monitor_api.record_event()
 
-    apply(ExMetrics, type, [metric, value(opts)])
+    apply(Belfrage.Metrics.Statix, type, [metric, value(opts)])
   end
 
   def new(:metric, type, metric, opts) do

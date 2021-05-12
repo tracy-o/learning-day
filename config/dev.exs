@@ -24,7 +24,4 @@ config :belfrage, :benchmark,
   dir: "benchmark",
   namespace: Benchmark
 
-config :ex_metrics,
-  send_metrics: false
-
 config :logger, truncate: :infinity

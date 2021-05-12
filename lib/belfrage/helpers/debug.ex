@@ -11,25 +11,6 @@ defmodule Belfrage.Helpers.Debug do
 
   """
 
-  ######## ExMetrics worker info, pid and queue length
-
-  @doc """
-  Returns the process info of `ExMetrics.Statsd.Worker`.
-  """
-  def exmetrics_info(), do: Process.whereis(ExMetrics.Statsd.Worker) |> Process.info()
-
-  @doc """
-  Returns the pid of `ExMetrics.Statsd.Worker`.
-  """
-  def exmetrics_pid(), do: Process.whereis(ExMetrics.Statsd.Worker)
-
-  @doc """
-  Returns the message queue length of `ExMetrics.Statsd.Worker`.
-  """
-  def exmetrics_queue_len() do
-    Process.whereis(ExMetrics.Statsd.Worker) |> Process.info() |> Keyword.get(:message_queue_len)
-  end
-
   ######## return info / pids of processes that have the most reductions
 
   @doc """
