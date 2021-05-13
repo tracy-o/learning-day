@@ -1,8 +1,8 @@
 defmodule Routes.Specs.NewsAmp do
   def specs(production_env) do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      owner: "WorldServiceSharedTeam@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
       platform: Simorgh,
       pipeline: pipeline(production_env)
     }
