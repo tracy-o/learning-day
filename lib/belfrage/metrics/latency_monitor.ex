@@ -68,9 +68,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     response_latency = compute_latency(res_start, res_end)
     combined_latency = request_latency + response_latency
 
-    ExMetrics.timing("web.latency.internal.request", request_latency)
-    ExMetrics.timing("web.latency.internal.response", response_latency)
-    ExMetrics.timing("web.latency.internal.combined", combined_latency)
+    Belfrage.Metrics.Statix.timing("web.latency.internal.request", request_latency)
+    Belfrage.Metrics.Statix.timing("web.latency.internal.response", response_latency)
+    Belfrage.Metrics.Statix.timing("web.latency.internal.combined", combined_latency)
 
     {:ok, true}
   end
