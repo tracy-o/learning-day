@@ -973,7 +973,7 @@ defmodule Routes.Routefile do
 
   handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
-  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", only_on: "test", examples: ["/sport/cricket/the-hundred"]
+  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", examples: ["/sport/cricket/the-hundred"]
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
   handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
