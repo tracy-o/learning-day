@@ -197,7 +197,6 @@ defmodule Routes.Routefile do
 
   # News
 
-  redirect "/news/articles/", to: "/news", status: 302
   redirect "/news/articles", to: "/news", status: 302
 
   handle "/news", using: "NewsHomePage", examples: ["/news"]
@@ -261,8 +260,8 @@ defmodule Routes.Routefile do
     return_404 if: true
   end
 
-  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.amp", "/news/articles/cd4vr7lvrvmo.amp"]
-  handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.json", "/news/articles/cd4vr7lvrvmo.json"]
+  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.amp?morph_env=live&renderer_env=live", "/news/articles/cd4vr7lvrvmo.amp?morph_env=live&renderer_env=live"]
+  handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.json?morph_env=live&renderer_env=live", "/news/articles/cd4vr7lvrvmo.json?morph_env=live&renderer_env=live"]
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -281,8 +280,6 @@ defmodule Routes.Routefile do
   handle "/news/articles/cp03zwze47zo", using: "NewsAmp", examples: []
   handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", examples: []
 
-  handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/uk-politics-49336144.amp", "/news/world-asia-china-51787936.amp"]
-  handle "/news/:id.json", using: "NewsAmp", examples: ["/news/uk-politics-49336144.json", "/news/world-asia-china-51787936.json"]
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
