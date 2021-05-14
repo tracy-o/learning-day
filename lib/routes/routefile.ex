@@ -260,8 +260,8 @@ defmodule Routes.Routefile do
     return_404 if: true
   end
 
-  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.amp?morph_env=live&renderer_env=live", "/news/articles/cd4vr7lvrvmo.amp?morph_env=live&renderer_env=live"]
-  handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: ["/news/articles/c8xxl4l3dzeo.json?morph_env=live&renderer_env=live", "/news/articles/cd4vr7lvrvmo.json?morph_env=live&renderer_env=live"]
+  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
+  handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
 
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
