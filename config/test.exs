@@ -31,7 +31,8 @@ config :belfrage,
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html",
-  mailbox_monitors: []
+  mailbox_monitors: [],
+  monitor_api: Belfrage.MonitorStub
 
 config :cachex, :limit,
   size: 6,

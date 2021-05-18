@@ -118,6 +118,8 @@ defmodule BelfrageTest do
   }
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
+
     LambdaMock
     |> expect(:call, 0, fn _role_arn, _func_name, _payload, _request_id, _opts -> :this_should_not_be_called end)
 

@@ -5,6 +5,7 @@ defmodule Belfrage.Cache.StoreTest do
   use Test.Support.Helper, :mox
 
   setup do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     :ets.delete_all_objects(:cache)
 
     %{
