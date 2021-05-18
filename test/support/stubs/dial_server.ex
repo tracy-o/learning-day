@@ -6,4 +6,7 @@ defmodule Belfrage.Dials.ServerStub do
 
   @impl Belfrage.Dials.Server
   def state(:ccp_enabled), do: Belfrage.Dials.CcpEnabled.transform("true")
+
+  @impl Belfrage.Dials.Server
+  def state(:monitor_enabled), do: Belfrage.Dials.MonitorEnabled.transform("true")
 end
