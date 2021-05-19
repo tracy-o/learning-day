@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSerbian do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["alternativeJsLoading", "batch"]
+      query_params_allowlist: ["alternativeJsLoading", "batch"],
+      headers_allowlist: ["Cookie-ckps_serbian"]
     }
   end
 
