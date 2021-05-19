@@ -85,9 +85,11 @@ defmodule BelfrageWeb.ReWrite do
       iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "format", ".app"], "format" => "app"})
       "/another-page/forward/slash/format.app"
 
-      # I'm not sure it should work like this, but avoids 500 for 404
-      iex> interpolate(prepare("/sport/*any"), %{"any" => [".js"], "format" => ".js"})
-      "/sport/.js"
+      iex> interpolate(prepare("/sport/*any"), %{"any" => [".js"], "format" => "js"})
+      "/sport.js"
+
+      iex> interpolate(prepare("/sport/uk/*any"), %{"any" => [".js"], "format" => "js"})
+      "/sport/uk.js"
   """
 
   def interpolate(matcher, %{"any" => params, "format" => format}) when is_binary(format) do
@@ -103,7 +105,27 @@ defmodule BelfrageWeb.ReWrite do
       char -> char
     end)
     |> String.replace_trailing("/", "")
+    |> replace_slash_dot()
   end
+
+  # if last "/" in the route is "/." change it to "."
+  #
+  # this is neccesary because our current implementation can't pass routes like
+  # "/sport/uk.js" with a redirect rule of "/sport/uk/*any, to: "/sport/*any"
+  # without this function the redirect would give "/sport/.js" instead of
+  # "/sport.js"
+  defp replace_slash_dot(str) do
+    str
+    |> String.split("", trim: true)
+    |> Enum.reverse()
+    |> Enum.reduce({:not_found, "", []}, &slash_dot_case/2)
+    |> (fn {_is_found, _prev_x, acc} -> acc end).()
+    |> Enum.join()
+  end
+
+  defp slash_dot_case("/", {:not_found, ".", acc}), do: {:found, "/", acc}
+  defp slash_dot_case("/", {:not_found, _prev_x, acc}), do: {:found, "/", ["/" | acc]}
+  defp slash_dot_case(x, {is_found, _prev_x, acc}), do: {is_found, x, [x | acc]}
 
   defp path_value(values) when is_list(values), do: Enum.join(values, "/")
   defp path_value(value), do: value
