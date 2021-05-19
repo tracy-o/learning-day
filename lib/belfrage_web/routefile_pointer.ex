@@ -11,7 +11,7 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   def routefile(_cosmos_env, _mix_env = :dev) do
-    Routes.Routefiles.Sandbox
+    Routes.Routefiles.Test
   end
 
   def routefile(_cosmos_env, _mix_env = :test) do
@@ -30,8 +30,12 @@ defmodule BelfrageWeb.RoutefilePointer do
     Routes.Routefiles.Test
   end
 
-  def routefile(cosmos_env, _mix_env) when cosmos_env in ["live", "test"] do
-    BelfrageWeb.Routefile.for_cosmos(cosmos_env)
+  def routefile("test", _mix_env) do
+    Routes.Routefiles.Test
+  end
+
+  def routefile("live", _mix_env) do
+    Routes.Routefiles.Live
   end
 
   def routefile(cosmos_env, mix_env) do

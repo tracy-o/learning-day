@@ -28,7 +28,7 @@ defmodule Mix.Tasks.CompileRoutes do
     run(["test"])
   end
 
-  def run([env]) when env in ["sandbox", "test", "live"] do
+  def run([env]) when env in ["test", "live"] do
     IO.puts("|  Compiling routes for Cosmos #{env}")
     compile_routes(env)
 
@@ -53,10 +53,6 @@ defmodule Mix.Tasks.CompileRoutes do
     Application.put_env(:belfrage, :production_environment, "live")
     compile_file("lib/routes/routefiles/main.ex")
     Application.put_env(:belfrage, :production_environment, original_cosmos_env)
-  end
-
-  defp compile_routes("sandbox") do
-    compile_file("lib/routes/routefiles/sandbox.ex")
   end
 
   defp compile_routes(_) do

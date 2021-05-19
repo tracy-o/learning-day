@@ -21,7 +21,8 @@ defmodule BelfrageWeb.Routefile do
     Application.get_env(:belfrage, :production_environment)
   end
 
+  # add other tests envs?
   defp not_running_unit_tests do
-    cosmos_env() != "sandbox" && Mix.env() != :test
+    Mix.env() != :test
   end
 end
