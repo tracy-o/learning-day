@@ -1,6 +1,6 @@
-defmodule Routefile do
+defmodule BelfrageWeb.Routefile do
   defmacro defroutefile(_name, do: block) do
-    if cosmos_env() != "Sandbox" && Mix.env() != :test do
+    if not_running_unit_tests() do
       quote do
         defmodule unquote(module_name()) do
           unquote(block)
@@ -9,11 +9,19 @@ defmodule Routefile do
     end
   end
 
+  def for_cosmos(env) do
+    Module.concat(["Routes", "Routefiles", String.capitalize(env)])
+  end
+
   defp module_name do
-    Module.concat(["Routes", "Routefiles", cosmos_env()])
+    cosmos_env() |> for_cosmos()
   end
 
   defp cosmos_env do
-    Application.get_env(:belfrage, :production_environment) |> String.capitalize()
+    Application.get_env(:belfrage, :production_environment)
+  end
+
+  defp not_running_unit_tests do
+    cosmos_env() != "sandbox" && Mix.env() != :test
   end
 end

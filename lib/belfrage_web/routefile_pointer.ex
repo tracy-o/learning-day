@@ -31,8 +31,7 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   def routefile(cosmos_env, _mix_env) when cosmos_env in ["live", "test"] do
-    env = cosmos_env |> String.capitalize()
-    Module.concat(["Routes", "Routefiles", env])
+    BelfrageWeb.Routefile.for_cosmos(cosmos_env)
   end
 
   def routefile(cosmos_env, mix_env) do

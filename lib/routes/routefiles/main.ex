@@ -5,9 +5,9 @@
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
 
-import Routefile
+import BelfrageWeb.Routefile
 
-defroutefile("Main") do
+defroutefile "Main" do
   use BelfrageWeb.RouteMaster
   alias Routes.Specs.SportVideos
 
