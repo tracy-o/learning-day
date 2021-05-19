@@ -9,8 +9,12 @@ defmodule BelfrageWeb.Routefile do
     end
   end
 
-  def for_cosmos(env) do
+  def for_cosmos(env) when env in ["test", "live"] do
     Module.concat(["Routes", "Routefiles", String.capitalize(env)])
+  end
+
+  def for_cosmos(_env) do
+    Module.concat(["Routes", "Routefiles", "Live"])
   end
 
   defp module_name do

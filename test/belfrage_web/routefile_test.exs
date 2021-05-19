@@ -12,10 +12,6 @@ defmodule BelfrageWeb.RoutefileTest do
       assert Routefile.for_cosmos("test") == Routes.Routefiles.Test
     end
 
-    test "returns the routefile associated to Sandbox cosmos env" do
-      assert Routefile.for_cosmos("sandbox") == Routes.Routefiles.Sandbox
-    end
-
     test "returns the Live routefile for any unexpected cosmos env" do
       assert Routefile.for_cosmos("foo") == Routes.Routefiles.Live
     end
