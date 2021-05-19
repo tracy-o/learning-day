@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceUkChina do
       platform: Simorgh,
       pipeline: pipeline(production_env),
       query_params_allowlist: ["alternativeJsLoading", "batch"],
-      headers_allowlist: ["Cookie-ckps_chinese"]
+      headers_allowlist: ["cookie-ckps_chinese"]
     }
   end
 
