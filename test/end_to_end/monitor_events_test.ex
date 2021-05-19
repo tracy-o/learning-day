@@ -354,4 +354,32 @@ defmodule EndToEnd.MonitorEventsTest do
       conn = Router.call(conn, [])
     end
   end
+
+  describe "when the monitor_enabled dial is set to false" do
+    test "monitor receives no data" do
+      stub(Belfrage.Dials.ServerMock, :state, fn :monitor_enabled ->
+        Belfrage.Dials.MonitorEnabled.transform("false")
+      end)
+
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public, max-age=5"
+           },
+           "statusCode" => 500,
+           "body" => "<h1>oh no, this broke!</h1>"
+         }}
+      end)
+
+      Belfrage.MonitorMock
+      |> expect(:record_event, 5, fn _ ->
+        {:ok, false}
+      end)
+
+      conn = conn(:get, "/200-ok-response")
+      conn = Router.call(conn, [])
+    end
+  end
 end
