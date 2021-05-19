@@ -4,7 +4,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
   alias Belfrage.Metrics.LatencyMonitor
 
   setup do
-    {:ok, _pid} = LatencyMonitor.start_link()
+    LatencyMonitor.start_link()
     :ok
   end
 
