@@ -680,7 +680,7 @@ defmodule Routes.Routefile do
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
-  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
+  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/scores-fixtures"]
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
