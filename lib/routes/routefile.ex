@@ -508,7 +508,7 @@ defmodule Routes.Routefile do
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
   handle "/worldservice/assets/images/*_any", using: "WsImages", examples: [{"/worldservice/assets/images/2012/07/12/120712163431_img_0328.jpg", 301}]
-  
+
   # /programmes
 
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
