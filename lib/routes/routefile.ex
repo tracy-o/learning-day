@@ -416,6 +416,11 @@ defmodule Routes.Routefile do
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123", "/marathi/example-123.amp", "/marathi/example-123.json"]
+  
+  ## World Service - Topcat to CPS Redirects
+  redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/noticias-internacional-44125537", status: 301
+  redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
+
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
