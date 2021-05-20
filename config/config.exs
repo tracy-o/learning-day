@@ -77,7 +77,8 @@ config :belfrage,
     "logging_level" => Belfrage.Dials.LoggingLevel,
     "personalisation" => Belfrage.Dials.Personalisation,
     "obit_mode" => Belfrage.Dials.ObitMode,
-    "ccp_enabled" => Belfrage.Dials.CcpEnabled
+    "ccp_enabled" => Belfrage.Dials.CcpEnabled,
+    "monitor_enabled" => Belfrage.Dials.MonitorEnabled
   },
   pool_metric_rate: 10_000,
   authentication: %{

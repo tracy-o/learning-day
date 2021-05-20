@@ -1,16 +1,30 @@
 defmodule Belfrage.Monitor do
   @callback record_event(Belfrage.Event.t()) :: :ok
 
+  @dial Application.get_env(:belfrage, :dial)
+
   def record_loop(loop_state) do
-    Belfrage.Nodes.monitor_nodes()
-    |> Enum.each(&send_to_monitor_node(&1, loop_state))
+    case @dial.state(:monitor_enabled) do
+      true ->
+        Belfrage.Nodes.monitor_nodes()
+        |> Enum.each(&send_to_monitor_node(&1, loop_state))
+
+      false ->
+        {:ok, false}
+    end
   end
 
   def record_event(event) do
-    Belfrage.Nodes.monitor_nodes()
-    |> Enum.each(fn node ->
-      :erlang.send_nosuspend({:event_interface, node}, cast_msg({:event, event}))
-    end)
+    case @dial.state(:monitor_enabled) do
+      true ->
+        Belfrage.Nodes.monitor_nodes()
+        |> Enum.each(fn node ->
+          :erlang.send_nosuspend({:event_interface, node}, cast_msg({:event, event}))
+        end)
+
+      false ->
+        {:ok, false}
+    end
   end
 
   defp send_to_monitor_node(node, loop_state) do

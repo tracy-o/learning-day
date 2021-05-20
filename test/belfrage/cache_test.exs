@@ -12,6 +12,7 @@ defmodule Belfrage.BelfrageCacheTest do
   }
 
   setup do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     :ets.delete_all_objects(:cache)
     Belfrage.LoopsSupervisor.kill_all()
 

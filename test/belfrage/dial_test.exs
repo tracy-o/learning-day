@@ -7,6 +7,9 @@ defmodule Belfrage.DialTest do
   use Test.Support.Helper, :mox
 
   setup do
+    Mox.stub_with(Belfrage.DialMock, Belfrage.DialStub)
+    Mox.stub_with(Belfrage.DialWithOptionalCallbackMock, Belfrage.DialStub)
+
     default_value = "true"
     dial_name = :"a-test-dial"
 

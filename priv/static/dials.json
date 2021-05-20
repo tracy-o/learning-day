@@ -104,5 +104,20 @@
         "description": "CCP is disabled and fallback responses will not be written to S3"
       }
     ]
+  },
+  {
+    "name": "monitor_enabled",
+    "description": "This enables the sending of data to Monitor",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "Enables the sending of messages to Monitor"
+      },
+      {
+        "value": "false",
+        "description": "Disables the sending of messsages to Monitor"
+      }
+    ]
   }
 ]
