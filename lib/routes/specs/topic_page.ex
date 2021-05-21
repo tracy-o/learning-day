@@ -10,4 +10,10 @@ defmodule Routes.Specs.TopicPage do
       headers_allowlist: ["x-id-oidc-signedin"]
     }
   end
+
+  defp pipeline("live") do
+    ["HTTPredirect", "TrailingSlashRedirector", "UserSession", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+  end
+
+  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
