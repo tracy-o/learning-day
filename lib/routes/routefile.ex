@@ -240,6 +240,9 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
+  redirect "/news/amp/:id", to: "/news/:id.amp", status: 302
+  redirect "/news/amp/:topic/:id", to: "/news/:topic/:id.amp", status: 302
+
   handle "/news/av/:asset_id/embed", using: "NewsVideosEmbed", examples: [{"/news/av/world-us-canada-50294316/embed", 302}]
   handle "/news/av/:asset_id/:slug/embed", using: "NewsVideosEmbed", examples: [{"/news/av/business-49843970/i-built-my-software-empire-from-a-stoke-council-house/embed", 302}]
   handle "/news/av/embed/:vpid/:asset_id", using: "NewsVideosEmbed", examples: [{"/news/av/embed/p07pd78q/49843970", 302}]
@@ -291,6 +294,8 @@ defmodule Routes.Routefile do
 
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/amp/:id", to: "/cymrufyw/:id.amp", status: 302
+  redirect "/cymrufyw/amp/:topic/:id", to: "/cymrufyw/:topic/:id.amp", status: 302
 
   handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
@@ -327,7 +332,8 @@ defmodule Routes.Routefile do
   handle "/naidheachdan", using: "NaidheachdanHomePage", examples: ["/naidheachdan"]
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: [{"/naidheachdan/dachaigh", 301}]
   handle "/naidheachdan/components", using: "Naidheachdan", examples: []
-
+  redirect "/naidheachdan/amp/:id", to: "/naidheachdan/:id.amp", status: 302
+  redirect "/naidheachdan/amp/:topic/:id", to: "/naidheachdan/:topic/:id.amp", status: 302
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
@@ -531,6 +537,8 @@ defmodule Routes.Routefile do
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
+  redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 302
+  redirect "/sport/amp/:topic/:id", to: "/sport/:topic/:id.amp", status: 302
   redirect "/sport/uk.app", to: "/sport.app", status: 301
   redirect "/sport/uk/*any", to: "/sport/*any", status: 301
   redirect "/sport/world.app", to: "/sport.app", status: 301
@@ -1079,6 +1087,10 @@ defmodule Routes.Routefile do
   # newsrounds routes appear to be using morphRouter
   handle "/newsround.amp", using: "Newsround", examples: []
   handle "/newsround.json", using: "Newsround", examples: []
+
+  redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 302
+  redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 302
+
   handle "/newsround/*_any", using: "Newsround", examples: []
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
