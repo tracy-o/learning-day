@@ -5,7 +5,9 @@ defmodule Routes.Specs.NewsTopics do
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       platform: MozartNews,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["page"]
+      query_params_allowlist: ["page", "personalisationMode"]
+      cookie_allowlist: ["ckns_atkn", "ckns_id"],
+      headers_allowlist: ["x-id-oidc-signedin"]
     }
   end
 
