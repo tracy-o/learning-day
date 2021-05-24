@@ -4,15 +4,12 @@ defmodule Routes.Specs.SportDisciplineTopic do
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       platform: Webcore,
-      query_params_allowlist: query_params_allowlist(production_env),
+      query_params_allowlist: ["page"],
       pipeline: pipeline(production_env),
       cookie_allowlist: cookie_allowlist(production_env),
       headers_allowlist: headers_allowlist(production_env)
     }
   end
-
-  defp query_params_allowlist("live"), do: ["page"]
-  defp query_params_allowlist(_production_env), do: ["page", "personalisationMode"]
 
   defp cookie_allowlist("live"), do: []
   defp cookie_allowlist(_production_env), do: ["ckns_atkn", "ckns_id"]
