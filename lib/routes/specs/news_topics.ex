@@ -4,10 +4,18 @@ defmodule Routes.Specs.NewsTopics do
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       platform: MozartNews,
+      query_params_allowlist: ["page"],
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["page"]
+      cookie_allowlist: cookie_allowlist(production_env),
+      headers_allowlist: headers_allowlist(production_env)
     }
   end
+
+  defp cookie_allowlist("live"), do: []
+  defp cookie_allowlist(_production_env), do: ["ckns_atkn", "ckns_id"]
+
+  defp headers_allowlist("live"), do: []
+  defp headers_allowlist(_production_env), do: ["x-id-oidc-signedin"]
 
   defp pipeline("live") do 
     ["HTTPredirect", "TrailingSlashRedirector", "NewsTopicsPlatformDiscriminator", "CircuitBreaker"]
