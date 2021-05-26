@@ -383,6 +383,17 @@ defmodule Routes.Routefile do
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
+  ## World Service - Kaleidoscope Redirects
+  redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
+  redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
+  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
+  redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
+  redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
+  redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
+  redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
+  redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
+  redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
+
   ## World Service - Simorgh and ARES
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
