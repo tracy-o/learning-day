@@ -368,6 +368,22 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location-with-path/feed.xml"]
     end
 
+    test "handle *any to *any redirects where any only includes the extension" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/some/path.js")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 301
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/another-path.js"]
+    end
+
     test "handle *any to *any redirects without format extension" do
       expect_belfrage_not_called()
 

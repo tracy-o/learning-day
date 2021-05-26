@@ -25,6 +25,10 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> prepare("https://:id.bbc.co.uk/page")
       ["https://", {:var, "id"}, ".bbc.co.uk/page"]
+
+      iex> prepare("https://bbc.co.uk/sport/*any")
+      ["https://bbc.co.uk/sport/", {:var, "any"}]
+
   """
   def prepare(matcher) do
     chunk(matcher)
@@ -80,10 +84,19 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> interpolate(prepare("/another-page/*any"), %{"any" => ["forward", "slash", "format", ".app"], "format" => "app"})
       "/another-page/forward/slash/format.app"
+
+      iex> interpolate(prepare("/sport/*any"), %{"any" => [".js"], "format" => "js"})
+      "/sport.js"
+
+      iex> interpolate(prepare("/sport/uk/*any"), %{"any" => [".js"], "format" => "js"})
+      "/sport/uk.js"
   """
+
   def interpolate(matcher, %{"any" => params, "format" => format}) when is_binary(format) do
-    {params, [format, extension]} = Enum.split(params, -2)
-    interpolate(matcher, %{"any" => List.insert_at(params, -1, format <> extension)})
+    {front_params, end_params} = Enum.split(params, -2)
+    params_with_extension = front_params ++ [Enum.join(end_params)]
+
+    interpolate(matcher, %{"any" => params_with_extension})
   end
 
   def interpolate(matcher, params) do
@@ -92,6 +105,8 @@ defmodule BelfrageWeb.ReWrite do
       char -> char
     end)
     |> String.replace_trailing("/", "")
+    # without this /sports/uk.js -> /sports/.js with matcher
+    |> String.replace("/.", ".")
   end
 
   defp path_value(values) when is_list(values), do: Enum.join(values, "/")
