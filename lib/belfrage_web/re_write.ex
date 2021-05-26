@@ -105,27 +105,9 @@ defmodule BelfrageWeb.ReWrite do
       char -> char
     end)
     |> String.replace_trailing("/", "")
-    |> replace_slash_dot()
+    # without this /sports/uk.js -> /sports/.js with matcher
+    |> String.replace("/.", ".")
   end
-
-  # if last "/" in the route is "/." change it to "."
-  #
-  # this is neccesary because our current implementation can't pass routes like
-  # "/sport/uk.js" with a redirect rule of "/sport/uk/*any, to: "/sport/*any"
-  # without this function the redirect would give "/sport/.js" instead of
-  # "/sport.js"
-  defp replace_slash_dot(str) do
-    str
-    |> String.split("", trim: true)
-    |> Enum.reverse()
-    |> Enum.reduce({:not_found, "", []}, &slash_dot_case/2)
-    |> (fn {_is_found, _prev_x, acc} -> acc end).()
-    |> Enum.join()
-  end
-
-  defp slash_dot_case("/", {:not_found, ".", acc}), do: {:found, "/", acc}
-  defp slash_dot_case("/", {:not_found, _prev_x, acc}), do: {:found, "/", ["/" | acc]}
-  defp slash_dot_case(x, {is_found, _prev_x, acc}), do: {is_found, x, [x | acc]}
 
   defp path_value(values) when is_list(values), do: Enum.join(values, "/")
   defp path_value(value), do: value
