@@ -386,17 +386,6 @@ defmodule Routes.Routefile do
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
-  ## World Service - Kaleidoscope Redirects
-  redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
-  redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
-  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
-  redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
-  redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
-  redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
-  redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
-  redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
-  redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
-
   ## World Service - Mobile Redirects
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
@@ -432,6 +421,7 @@ defmodule Routes.Routefile do
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
   ## World Service - Simorgh and ARES
+  ##    Kaleidoscope Redirects: /<service>/mobile/image/*any 
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo", "/afaanoromoo/example-123", "/afaanoromoo/example-123.amp", "/afaanoromoo/example-123.json"]
@@ -447,9 +437,15 @@ defmodule Routes.Routefile do
   handle "/azeri.amp", using: "WorldServiceAzeri", examples: ["/azeri.amp"]
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
   handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri", "/azeri/example-123", "/azeri/example-123.amp", "/azeri/example-123.json"]
+
+  redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
+
   handle "/bengali.amp", using: "WorldServiceBengali", examples: ["/bengali.amp"]
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
   handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali", "/bengali/example-123", "/bengali/example-123.amp", "/bengali/example-123.json"]
+
+  redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
+
   handle "/burmese.amp", using: "WorldServiceBurmese", examples: ["/burmese.amp"]
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese", "/burmese/example-123", "/burmese/example-123.amp", "/burmese/example-123.json"]
@@ -462,6 +458,9 @@ defmodule Routes.Routefile do
   handle "/hausa.amp", using: "WorldServiceHausa", examples: ["/hausa.amp"]
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
   handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa", "/hausa/example-123", "/hausa/example-123.amp", "/hausa/example-123.json"]
+
+  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
+
   handle "/hindi.amp", using: "WorldServiceHindi", examples: ["/hindi.amp"]
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
   handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi", "/hindi/example-123", "/hindi/example-123.amp", "/hindi/example-123.json"]
@@ -491,12 +490,21 @@ defmodule Routes.Routefile do
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
+
+  redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
+
   handle "/nepali.amp", using: "WorldServiceNepali", examples: ["/nepali.amp"]
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali", "/nepali/example-123", "/nepali/example-123.amp", "/nepali/example-123.json"]
+
+  redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
+
   handle "/pashto.amp", using: "WorldServicePashto", examples: ["/pashto.amp"]
   handle "/pashto.json", using: "WorldServicePashto", examples: ["/pashto.json"]
   handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto", "/pashto/example-123", "/pashto/example-123.amp", "/pashto/example-123.json"]
+
+  redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
+
   handle "/persian.amp", using: "WorldServicePersian", examples: ["/persian.amp"]
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian", "/persian/example-123", "/persian/example-123.amp", "/persian/example-123.json"]
@@ -515,6 +523,9 @@ defmodule Routes.Routefile do
   handle "/serbian.amp", using: "WorldServiceSerbian", examples: ["/serbian.amp"]
   handle "/serbian.json", using: "WorldServiceSerbian", examples: ["/serbian.json"]
   handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian", "/serbian/example-123", "/serbian/example-123.amp", "/serbian/example-123.json"]
+
+  redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
+
   handle "/sinhala.amp", using: "WorldServiceSinhala", examples: ["/sinhala.amp"]
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala", "/sinhala/example-123", "/sinhala/example-123.amp", "/sinhala/example-123.json"]
@@ -527,6 +538,9 @@ defmodule Routes.Routefile do
   handle "/tajik.amp", using: "WorldServiceTajik", examples: ["/tajik.amp"]
   handle "/tajik.json", using: "WorldServiceTajik", examples: ["/tajik.json"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik", "/tajik/example-123", "/tajik/example-123.amp", "/tajik/example-123.json"]
+
+  redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
+
   handle "/tamil.amp", using: "WorldServiceTamil", examples: ["/tamil.amp"]
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil", "/tamil/example-123", "/tamil/example-123.amp", "/tamil/example-123.json"]
@@ -547,6 +561,9 @@ defmodule Routes.Routefile do
   handle "/ukrainian.amp", using: "WorldServiceUkrainian", examples: ["/ukrainian.amp"]
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian", "/ukrainian/example-123", "/ukrainian/example-123.amp", "/ukrainian/example-123.json"]
+
+  redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
+
   handle "/urdu.amp", using: "WorldServiceUrdu", examples: ["/urdu.amp"]
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
   handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu", "/urdu/example-123", "/urdu/example-123.amp", "/urdu/example-123.json"]
