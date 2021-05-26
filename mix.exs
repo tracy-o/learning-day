@@ -82,7 +82,8 @@ defmodule Belfrage.MixProject do
       {:telemetry_metrics_statsd, "~> 0.4"},
       {:observer_cli, "~> 1.5", only: :dev},
       {:joken, "~> 2.0"},
-      {:cowlib, "~> 2.8", override: true}
+      {:cowlib, "~> 2.8", override: true},
+      {:fast64, "~> 0.1.3"}
     ]
   end
 end
