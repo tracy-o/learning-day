@@ -24,10 +24,7 @@ defmodule Belfrage.Services.Webcore.Response do
       {:ok, decoded_body} ->
         build({
           :ok,
-          Map.merge(lambda_response, %{
-            "body" => decoded_body,
-            "isBase64Encoded" => false
-          })
+          %{lambda_response | "body" => decoded_body, "isBase64Encoded" => false}
         })
 
       :error ->
