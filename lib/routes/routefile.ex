@@ -199,6 +199,9 @@ defmodule Routes.Routefile do
 
   redirect "/news/articles", to: "/news", status: 302
 
+  ## News - Mobile Redirect
+  redirect "/news/mobile/*any", to: "/news", status: 301
+
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
@@ -393,6 +396,40 @@ defmodule Routes.Routefile do
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
+
+  ## World Service - Mobile Redirects
+  redirect "/afrique/mobile/*any", to: "/afrique", status: 301
+  redirect "/arabic/mobile/*any", to: "/arabic", status: 301
+  redirect "/azeri/mobile/*any", to: "/azeri", status: 301
+  redirect "/bengali/mobile/*any", to: "/bengali", status: 301
+  redirect "/burmese/mobile/*any", to: "/burmese", status: 301
+  redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
+  redirect "/hausa/mobile/*any", to: "/hausa", status: 301
+  redirect "/hindi/mobile/*any", to: "/hindi", status: 301
+  redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
+  redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
+  redirect "/mundo/mobile/*any", to: "/mundo", status: 301
+  redirect "/mundo/movil/*any", to: "/mundo", status: 301
+  redirect "/nepali/mobile/*any", to: "/nepali", status: 301
+  redirect "/pashto/mobile/*any", to: "/pashto", status: 301
+  redirect "/persian/mobile/*any", to: "/persian", status: 301
+  redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
+  redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
+  redirect "/russian/mobile/*any", to: "/russian", status: 301
+  redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
+  redirect "/somali/mobile/*any", to: "/somali", status: 301
+  redirect "/swahili/mobile/*any", to: "/swahili", status: 301
+  redirect "/tamil/mobile/*any", to: "/tamil", status: 301
+  redirect "/turkce/mobile/*any", to: "/turkce", status: 301
+  redirect "/turkce/cep/*any", to: "/turkce", status: 301
+  redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
+  redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
+  redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
+  redirect "/urdu/mobile/*any", to: "/urdu", status: 301
+  redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
+  redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
+  redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
+  redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
   ## World Service - Simorgh and ARES
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
