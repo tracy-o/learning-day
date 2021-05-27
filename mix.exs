@@ -83,7 +83,7 @@ defmodule Belfrage.MixProject do
       {:observer_cli, "~> 1.5", only: :dev},
       {:joken, "~> 2.0"},
       {:cowlib, "~> 2.8", override: true},
-      {:fast64, "~> 0.1.3"}
+      {:b64fast, "~> 0.2.3"}
     ]
   end
 end

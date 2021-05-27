@@ -29,7 +29,8 @@ defmodule Benchmark.Base64Decode do
       %{
         "Base.decode64/1" => fn -> Base.decode64(lambda_response_body) end,
         ":base64.decode/1" => fn -> :base64.decode(lambda_response_body) end,
-        "Fast64.decode64/1" => fn -> Fast64.decode64(lambda_response_body) end
+        # "Fast64.decode64/1" => fn -> Fast64.decode64(lambda_response_body) end,
+        ":b64fast.decode64/1" => fn -> :b64fast.decode64(lambda_response_body) end
       },
       time: 10,
       memory_time: 2

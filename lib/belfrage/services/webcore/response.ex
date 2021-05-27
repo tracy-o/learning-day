@@ -21,7 +21,7 @@ defmodule Belfrage.Services.Webcore.Response do
 
   def build({:ok, lambda_response = %{"body" => body, "isBase64Encoded" => true}}) do
     try do
-      decoded_body = Fast64.decode64(body)
+      decoded_body = :b64fast.decode64(body)
 
       build({
         :ok,
