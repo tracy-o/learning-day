@@ -2,8 +2,8 @@
 
 library 'devops-tools-jenkins'
 
-def dockerregistry = libraryResource('dockerregistry').trim()
-def dockerimage = "${dockerregistry}/bbc-news/elixir-centos7"
+def dockerRegistry = libraryResource('dockerregistry').trim()
+def dockerImage = "${dockerRegistry}/bbc-news/elixir-centos7:1.11.3"
 
 library 'BBCNews'
 
@@ -50,7 +50,7 @@ node {
       echo "Error while attempting to stall tests, starting tests immediately"
     }
 
-    docker.image(dockerimage).inside("-u root") {
+    docker.image(dockerImage).inside("-u root") {
       sh 'mix deps.get'
 
       try {
@@ -70,7 +70,7 @@ node {
 
   if (result == 'FAILED' && (params.DEPLOYMENT_ID == '' || params.TARGET == 'bruce-belfrage')) {
     stage('Report result to slack') {
-      docker.image(dockerimage).inside("-u root -e SLACK_MESSAGE=${params.SLACK_MESSAGE}") {
+      docker.image(dockerImage).inside("-u root -e SLACK_MESSAGE=${params.SLACK_MESSAGE}") {
         withCredentials([string(credentialsId: 'moz-slack-app-auth-token', variable: 'SLACK_AUTH_TOKEN')]){
           sh 'mix report_smoke_test_results .smoke_test_output'
         }
@@ -88,7 +88,7 @@ node {
   stage("clean up after ourselves") {
     sh 'rm .smoke_test_output'
 
-    docker.image(dockerimage).inside("-u root") {
+    docker.image(dockerImage).inside("-u root") {
       sh "rm -rf ${env.WORKSPACE}/{deps,_build,local.log}"
     }
     cleanWs()

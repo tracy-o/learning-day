@@ -75,7 +75,7 @@ defmodule NonUtf8QueryStringTest do
                           httpMethod: "GET",
                           path: "/200-ok-response",
                           pathParameters: %{},
-                          queryStringParameters: %{"query" => nil}
+                          queryStringParameters: %{"query" => ""}
                         },
                         _request_id,
                         _opts ->

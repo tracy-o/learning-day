@@ -18,7 +18,7 @@ defmodule BelfrageWeb.Plugs.OverridesTest do
       |> Plug.Conn.put_private(:production_environment, "test")
       |> Plug.Conn.fetch_query_params(_opts = [])
 
-    assert %Plug.Conn{private: %{overrides: %{"belfrage-cache-bust" => nil}}} =
+    assert %Plug.Conn{private: %{overrides: %{"belfrage-cache-bust" => ""}}} =
              BelfrageWeb.Plugs.Overrides.call(conn, _opts = [])
   end
 
