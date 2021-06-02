@@ -19,7 +19,7 @@ defmodule Belfrage.Metrics.Supervisor do
   defp children(_env) do
     [
       Belfrage.Metrics.MailboxMonitor,
-      Belfrage.Metrics.Pool,
+      Belfrage.Metrics.PoolObserver,
       Belfrage.Metrics.TelemetrySupervisor,
       Belfrage.Metrics.LatencyMonitor
     ]
