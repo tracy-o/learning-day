@@ -8,6 +8,8 @@ defmodule Belfrage.Dials.LoggingLevelTest do
     FileIOMock
     |> expect(:read, fn _ -> "" end)
 
+    Logger.add_backend({LoggerFileBackend, :file}, Application.get_env(:logger, :file))
+
     start_supervised!(Belfrage.Dials.Poller)
 
     :ok
