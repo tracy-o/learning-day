@@ -22,7 +22,7 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
 
   test "returns the bid header" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+    |> expect(:call, fn _lambda_name, _role_arn, _request_id, _payload, _opts ->
       {:ok, @lambda_response}
     end)
 
