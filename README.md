@@ -66,26 +66,20 @@ This feature is only available for non-personalised responses.
 
 ### Install Elixir
 
-Get Elixir 1.8 on your Mac.
+#### Install asdf
 
-You can [install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf) - the easiest way is by using [Homebrew](https://brew.sh/).
+[Install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf) - the easiest way is by using [Homebrew](https://brew.sh/).
 
-**Note**: Before installing `erlang`, please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation.  
-For example, `asdf` does not support installation of the prescribed version 22.0.7 on MacOS 10.15.4 or newer,  
-as stipulated [here](https://github.com/asdf-vm/asdf-erlang#osx). Consider reading through the guide to obtain pointers on how to address possible issues  
-that emerge during installation on OSX.
+**Note**: Please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation of Erlang.  
 
-Then install Erlang and Elixir and set your global versions:
+#### Install Erlang/Elixir
+
+The versions of Erlang/Elixir that are supposed to be used are specified in `.tool-versions` file, which is used by asdf.
+
+Use this command to install Erlang/Elixir: 
 
 ```
-asdf plugin-add erlang
-asdf plugin-add elixir
-
-asdf install erlang 22.0.7
-asdf install elixir 1.8.2
-
-asdf global erlang 22.0.7
-asdf global elixir 1.8.2
+asdf install
 ```
 
 ### Install Hex
