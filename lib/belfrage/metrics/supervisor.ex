@@ -7,6 +7,8 @@ defmodule Belfrage.Metrics.Supervisor do
 
   @impl true
   def init(args) do
+    :ok = Belfrage.Metrics.CowboyTelemetryHandler.setup()
+
     Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 10)
   end
 
