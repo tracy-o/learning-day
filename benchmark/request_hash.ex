@@ -51,11 +51,11 @@ defmodule Benchmark.RequestHash do
     Benchee.run(
       %{
         "prev: empty raw headers" => fn -> generate(struct) end,
-        "prev: #{Map.size(base_headers)} raw headers" => fn -> generate(struct_headers) end,
-        "prev: #{Map.size(headers_with_cookie)} raw headers and cookie" => fn -> generate(struct_headers_cookie) end,
+        "prev: #{map_size(base_headers)} raw headers" => fn -> generate(struct_headers) end,
+        "prev: #{map_size(headers_with_cookie)} raw headers and cookie" => fn -> generate(struct_headers_cookie) end,
         "new: empty raw headers" => fn -> RequestHash.generate(struct) end,
-        "new: #{Map.size(base_headers)} raw headers" => fn -> RequestHash.generate(struct_headers) end,
-        "new: #{Map.size(headers_with_cookie)} raw headers and cookie" => fn ->
+        "new: #{map_size(base_headers)} raw headers" => fn -> RequestHash.generate(struct_headers) end,
+        "new: #{map_size(headers_with_cookie)} raw headers and cookie" => fn ->
           RequestHash.generate(struct_headers_cookie)
         end
       },
