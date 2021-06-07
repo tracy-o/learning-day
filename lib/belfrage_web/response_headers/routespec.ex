@@ -8,7 +8,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpec do
   @impl ResponseHeaders
   def add_header(conn, %Struct{private: %Struct.Private{loop_id: loop_id, production_environment: env}})
       when env != "live" and is_binary(loop_id) do
-    put_resp_header(conn, "belfrage-routespec", loop_id)
+    put_resp_header(conn, "routespec", loop_id)
   end
 
   @impl ResponseHeaders
