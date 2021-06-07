@@ -6,7 +6,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpec do
   @behaviour ResponseHeaders
 
   @impl ResponseHeaders
-  def add_header(conn, %Struct{request: %Struct.Private{loop_id: loop_id}}) when is_binary(loop_id) do
+  def add_header(conn, %Struct{private: %Struct.Private{loop_id: loop_id}}) when is_binary(loop_id) do
     put_resp_header(conn, "belfrage-routespec", loop_id)
   end
 
