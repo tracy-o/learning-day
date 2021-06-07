@@ -29,7 +29,7 @@ defmodule Belfrage.SupervisorTest do
 
   describe "local cache" do
     test "is alive" do
-      [{Cachex, pid, :worker, [Cachex]}] =
+      [{Cachex, pid, :supervisor, [Cachex]}] =
         Supervisor.which_children(Belfrage.Supervisor)
         |> Enum.filter(fn {cache, _, _, _} -> cache == Cachex end)
 
