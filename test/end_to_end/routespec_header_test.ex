@@ -24,7 +24,6 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
 
-    IO.inspect(resp_headers)
     assert ["SomeLoop"] = get_resp_header(response_conn, "routespec")
   end
 end
