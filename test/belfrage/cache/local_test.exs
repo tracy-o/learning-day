@@ -79,7 +79,9 @@ defmodule Belfrage.Cache.LocalTest do
         response: %Struct.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
-          http_status: 200
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+          cache_last_updated: Belfrage.Timer.now_ms()
         }
       }
 
@@ -92,7 +94,8 @@ defmodule Belfrage.Cache.LocalTest do
         response: %Struct.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
-          http_status: 200
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
         }
       }
 
@@ -105,7 +108,8 @@ defmodule Belfrage.Cache.LocalTest do
         response: %Struct.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
-          http_status: 200
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
         }
       }
 
@@ -118,7 +122,8 @@ defmodule Belfrage.Cache.LocalTest do
         response: %Struct.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
-          http_status: 200
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
         }
       }
 
