@@ -37,7 +37,7 @@ defmodule Belfrage.Cache.Local do
         Cachex.put(
           cache,
           struct.request.request_hash,
-          {struct.response, Belfrage.Timer.now_ms()},
+          %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
           ttl: struct.private.fallback_ttl
         )
 
@@ -49,7 +49,8 @@ defmodule Belfrage.Cache.Local do
   @impl CacheStrategy
   def metric_identifier, do: "local"
 
-  defp format_cache_result({:ok, {response, last_updated}}) do
+  defp format_cache_result({:ok, response = %Belfrage.Struct.Response{cache_last_updated: last_updated}})
+       when not is_nil(last_updated) do
     %{max_age: max_age} = response.cache_directive
 
     case Belfrage.Timer.stale?(last_updated, max_age) do

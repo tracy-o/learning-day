@@ -11,7 +11,8 @@ defmodule Belfrage.Cache.LocalTest do
     body: "hello!",
     headers: %{"content-type" => "application/json"},
     http_status: 200,
-    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+    cache_last_updated: Belfrage.Timer.now_ms()
   }
 
   setup do
@@ -28,7 +29,7 @@ defmodule Belfrage.Cache.LocalTest do
     Test.Support.Helper.insert_cache_seed(
       @cache,
       id: "stale_cache",
-      response: @response,
+      response: %{@response | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)},
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
@@ -36,7 +37,7 @@ defmodule Belfrage.Cache.LocalTest do
     Test.Support.Helper.insert_cache_seed(
       @cache,
       id: "expired",
-      response: @response,
+      response: %{@response | cache_last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(2))},
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms() - (:timer.hours(6) + :timer.seconds(2))
     )
@@ -60,13 +61,16 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert [
                {:entry, "abc123", _cachex_determined_last_update, _cachex_expires_in,
-                {%Belfrage.Struct.Response{
-                   body: "hello!",
-                   headers: %{"content-type" => "application/json"},
-                   http_status: 200,
-                   cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
-                 }, _belfrage_determined_last_updated}}
+                %Belfrage.Struct.Response{
+                  body: "hello!",
+                  headers: %{"content-type" => "application/json"},
+                  http_status: 200,
+                  cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+                  cache_last_updated: cache_last_updated
+                }}
              ] = :ets.lookup(@cache, "abc123")
+
+      refute cache_last_updated == nil
     end
 
     test "does not overwrite an existing fresh cache version" do
@@ -124,10 +128,9 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert {:ok, :fresh, _} = Cache.Local.fetch(struct, @cache)
 
-      [{:entry, "cache_fresh", ets_updated, _expires, {_response, belfrage_updated}}] =
-        :ets.lookup(@cache, "cache_fresh")
+      [{:entry, "cache_fresh", ets_updated, _expires, response}] = :ets.lookup(@cache, "cache_fresh")
 
-      assert ets_updated > belfrage_updated
+      assert ets_updated > response.cache_last_updated
     end
   end
 
