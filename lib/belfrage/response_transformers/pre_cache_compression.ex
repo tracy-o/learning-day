@@ -26,13 +26,13 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   end
 
   @impl true
-  def call(struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{origin: origin}}) do
-    Belfrage.Event.record(:metric, :increment, "#{origin}.pre_cache_compression")
+  def call(struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}) do
+    Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
 
     Belfrage.Event.record(:log, :info, %{
       msg: "Content was pre-cache compressed",
       path: path,
-      origin: origin
+      platform: platform
     })
 
     response_headers = Map.put(struct.response.headers, "content-encoding", "gzip")
