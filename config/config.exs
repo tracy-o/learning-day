@@ -9,7 +9,7 @@ config :machine_gun,
     # Poolboy max_overflow
     pool_max_overflow: 4096,
     pool_queue: false,
-    pool_timeout: 6_000,
+    pool_timeout: 300_000,
     # Gun connection options
     conn_opts: %{}
   },
@@ -19,7 +19,7 @@ config :machine_gun,
     # Poolboy max_overflow
     pool_max_overflow: 4096,
     pool_queue: false,
-    pool_timeout: 6_000,
+    pool_timeout: 300_000,
     # Gun connection options
     conn_opts: %{
       transport_opts: [
