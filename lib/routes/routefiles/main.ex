@@ -9,7 +9,6 @@ import BelfrageWeb.Routefile
 
 defroutefile "Main" do
   use BelfrageWeb.RouteMaster
-  alias Routes.Specs.SportVideos
 
   # Vanity URLs
 
@@ -201,6 +200,11 @@ defroutefile "Main" do
 
   # News
 
+  redirect "/news/articles", to: "/news", status: 302
+
+  ## News - Mobile Redirect
+  redirect "/news/mobile/*any", to: "/news", status: 301
+
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
@@ -242,6 +246,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
+  redirect "/news/amp/:id", to: "/news/:id.amp", status: 302
+  redirect "/news/amp/:topic/:id", to: "/news/:topic/:id.amp", status: 302
+
   handle "/news/av/:asset_id/embed", using: "NewsVideosEmbed", examples: [{"/news/av/world-us-canada-50294316/embed", 302}]
   handle "/news/av/:asset_id/:slug/embed", using: "NewsVideosEmbed", examples: [{"/news/av/business-49843970/i-built-my-software-empire-from-a-stoke-council-house/embed", 302}]
   handle "/news/av/embed/:vpid/:asset_id", using: "NewsVideosEmbed", examples: [{"/news/av/embed/p07pd78q/49843970", 302}]
@@ -262,9 +269,25 @@ defroutefile "Main" do
     return_404 if: true
   end
 
+  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
+  handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
+
   handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+
+  # Temporary routes until Webcore supports Optimo articles
+  handle "/news/articles/c744mjrym37o", using: "NewsAmp", examples: []
+  handle "/news/articles/c5ll353v7y9o", using: "NewsAmp", examples: []
+  handle "/news/articles/ce9992y0reyo", using: "NewsAmp", examples: []
+  handle "/news/articles/cd4vr7lvrvmo", using: "NewsAmp", examples: []
+  handle "/news/articles/clldg965yzjo", using: "NewsAmp", examples: []
+  handle "/news/articles/cw4jd7vxxqdo", using: "NewsAmp", examples: []
+  handle "/news/articles/ce9v85jlrzzo", using: "NewsAmp", examples: []
+  handle "/news/articles/cd4117egk3go", using: "NewsAmp", examples: []
+  handle "/news/articles/cj7xrxz0e8zo", using: "NewsAmp", examples: []
+  handle "/news/articles/cp03zwze47zo", using: "NewsAmp", examples: []
+  handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", examples: []
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
@@ -277,6 +300,8 @@ defroutefile "Main" do
 
   redirect "/newyddion/*any", to: "/cymrufyw/*any", status: 302
   redirect "/democratiaethfyw", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/amp/:id", to: "/cymrufyw/:id.amp", status: 302
+  redirect "/cymrufyw/amp/:topic/:id", to: "/cymrufyw/:topic/:id.amp", status: 302
 
   handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
@@ -313,7 +338,8 @@ defroutefile "Main" do
   handle "/naidheachdan", using: "NaidheachdanHomePage", examples: ["/naidheachdan"]
   handle "/naidheachdan/dachaigh", using: "Naidheachdan", examples: [{"/naidheachdan/dachaigh", 301}]
   handle "/naidheachdan/components", using: "Naidheachdan", examples: []
-
+  redirect "/naidheachdan/amp/:id", to: "/naidheachdan/:id.amp", status: 302
+  redirect "/naidheachdan/amp/:topic/:id", to: "/naidheachdan/:topic/:id.amp", status: 302
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
@@ -326,6 +352,8 @@ defroutefile "Main" do
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
+
+  handle "/devx-test/personalisation", using: "DevXPersonalisation", only_on: "test", examples: ["/devx-test/personalisation"]
 
   # Container API
   handle "/container/envelope/editorial-text/*any", using: "ContainerEnvelopeEditorialText", examples: ["/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2"]
@@ -362,42 +390,74 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - Simorgh and ARES
+  ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
+  ##    Mobile Redirects: /<service>/mobile/*any
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo", "/afaanoromoo/example-123", "/afaanoromoo/example-123.amp", "/afaanoromoo/example-123.json"]
+
+  redirect "/afrique/mobile/*any", to: "/afrique", status: 301
+
   handle "/afrique.amp", using: "WorldServiceAfrique", examples: ["/afrique.amp"]
   handle "/afrique.json", using: "WorldServiceAfrique", examples: ["/afrique.json"]
   handle "/afrique/*_any", using: "WorldServiceAfrique", examples: ["/afrique", "/afrique/example-123", "/afrique/example-123.amp", "/afrique/example-123.json"]
   handle "/amharic.amp", using: "WorldServiceAmharic", examples: ["/amharic.amp"]
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
   handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic", "/amharic/example-123", "/amharic/example-123.amp", "/amharic/example-123.json"]
+
+  redirect "/arabic/mobile/*any", to: "/arabic", status: 301
+
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
   handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic", "/arabic/example-123", "/arabic/example-123.amp", "/arabic/example-123.json"]
+
+  redirect "/azeri/mobile/*any", to: "/azeri", status: 301
+
   handle "/azeri.amp", using: "WorldServiceAzeri", examples: ["/azeri.amp"]
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
   handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri", "/azeri/example-123", "/azeri/example-123.amp", "/azeri/example-123.json"]
+
+  redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
+  redirect "/bengali/mobile/*any", to: "/bengali", status: 301
+
   handle "/bengali.amp", using: "WorldServiceBengali", examples: ["/bengali.amp"]
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
   handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali", "/bengali/example-123", "/bengali/example-123.amp", "/bengali/example-123.json"]
+
+  redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
+  redirect "/burmese/mobile/*any", to: "/burmese", status: 301
+
   handle "/burmese.amp", using: "WorldServiceBurmese", examples: ["/burmese.amp"]
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese", "/burmese/example-123", "/burmese/example-123.amp", "/burmese/example-123.json"]
+
+  redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
+
   handle "/gahuza.amp", using: "WorldServiceGahuza", examples: ["/gahuza.amp"]
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
   handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza", "/gahuza/example-123", "/gahuza/example-123.amp", "/gahuza/example-123.json"]
   handle "/gujarati.amp", using: "WorldServiceGujarati", examples: ["/gujarati.amp"]
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
   handle "/gujarati/*_any", using: "WorldServiceGujarati", examples: ["/gujarati", "/gujarati/example-123", "/gujarati/example-123.amp", "/gujarati/example-123.json"]
+
+  redirect "/hausa/mobile/*any", to: "/hausa", status: 301
+
   handle "/hausa.amp", using: "WorldServiceHausa", examples: ["/hausa.amp"]
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
   handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa", "/hausa/example-123", "/hausa/example-123.amp", "/hausa/example-123.json"]
+
+  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
+  redirect "/hindi/mobile/*any", to: "/hindi", status: 301
+
   handle "/hindi.amp", using: "WorldServiceHindi", examples: ["/hindi.amp"]
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
   handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi", "/hindi/example-123", "/hindi/example-123.amp", "/hindi/example-123.json"]
   handle "/igbo.amp", using: "WorldServiceIgbo", examples: ["/igbo.amp"]
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
   handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo", "/igbo/example-123", "/igbo/example-123.amp", "/igbo/example-123.json"]
+
+  redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
+
   handle "/indonesia.amp", using: "WorldServiceIndonesia", examples: ["/indonesia.amp"]
   handle "/indonesia.json", using: "WorldServiceIndonesia", examples: ["/indonesia.json"]
   handle "/indonesia/*_any", using: "WorldServiceIndonesia", examples: ["/indonesia", "/indonesia/example-123", "/indonesia/example-123.amp", "/indonesia/example-123.json"]
@@ -407,51 +467,95 @@ defroutefile "Main" do
   handle "/korean.amp", using: "WorldServiceKorean", examples: ["/korean.amp"]
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
   handle "/korean/*_any", using: "WorldServiceKorean", examples: ["/korean", "/korean/example-123", "/korean/example-123.amp", "/korean/example-123.json"]
+
+  redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
+
   handle "/kyrgyz.amp", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.amp"]
   handle "/kyrgyz.json", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.json"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz", "/kyrgyz/example-123", "/kyrgyz/example-123.amp", "/kyrgyz/example-123.json"]
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123", "/marathi/example-123.amp", "/marathi/example-123.json"]
+
+  ## World Service - Topcat to CPS Redirects
+  redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/noticias-internacional-44125537", status: 301
+  redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
+
+  redirect "/mundo/mobile/*any", to: "/mundo", status: 301
+  redirect "/mundo/movil/*any", to: "/mundo", status: 301
+
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
+
+  redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
+  redirect "/nepali/mobile/*any", to: "/nepali", status: 301
+
   handle "/nepali.amp", using: "WorldServiceNepali", examples: ["/nepali.amp"]
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali", "/nepali/example-123", "/nepali/example-123.amp", "/nepali/example-123.json"]
+
+  redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
+  redirect "/pashto/mobile/*any", to: "/pashto", status: 301
+
   handle "/pashto.amp", using: "WorldServicePashto", examples: ["/pashto.amp"]
   handle "/pashto.json", using: "WorldServicePashto", examples: ["/pashto.json"]
   handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto", "/pashto/example-123", "/pashto/example-123.amp", "/pashto/example-123.json"]
+
+  redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
+  redirect "/persian/mobile/*any", to: "/persian", status: 301
+
   handle "/persian.amp", using: "WorldServicePersian", examples: ["/persian.amp"]
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian", "/persian/example-123", "/persian/example-123.amp", "/persian/example-123.json"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin", "/pidgin/example-123", "/pidgin/example-123.amp", "/pidgin/example-123.json"]
+
+  redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
+  redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
+
   handle "/portuguese.amp", using: "WorldServicePortuguese", examples: ["/portuguese.amp"]
   handle "/portuguese.json", using: "WorldServicePortuguese", examples: ["/portuguese.json"]
   handle "/portuguese/*_any", using: "WorldServicePortuguese", examples: ["/portuguese", "/portuguese/example-123", "/portuguese/example-123.amp", "/portuguese/example-123.json"]
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi", "/punjabi/example-123", "/punjabi/example-123.amp", "/punjabi/example-123.json"]
+
+  redirect "/russian/mobile/*any", to: "/russian", status: 301
+
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian", "/russian/example-123", "/russian/example-123.amp", "/russian/example-123.json"]
   handle "/serbian.amp", using: "WorldServiceSerbian", examples: ["/serbian.amp"]
   handle "/serbian.json", using: "WorldServiceSerbian", examples: ["/serbian.json"]
   handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian", "/serbian/example-123", "/serbian/example-123.amp", "/serbian/example-123.json"]
+
+  redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
+  redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
+
   handle "/sinhala.amp", using: "WorldServiceSinhala", examples: ["/sinhala.amp"]
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala", "/sinhala/example-123", "/sinhala/example-123.amp", "/sinhala/example-123.json"]
+
+  redirect "/somali/mobile/*any", to: "/somali", status: 301
+
   handle "/somali.amp", using: "WorldServiceSomali", examples: ["/somali.amp"]
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
   handle "/somali/*_any", using: "WorldServiceSomali", examples: ["/somali", "/somali/example-123", "/somali/example-123.amp", "/somali/example-123.json"]
+
+  redirect "/swahili/mobile/*any", to: "/swahili", status: 301
+
   handle "/swahili.amp", using: "WorldServiceSwahili", examples: ["/swahili.amp"]
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili", "/swahili/example-123", "/swahili/example-123.amp", "/swahili/example-123.json"]
   handle "/tajik.amp", using: "WorldServiceTajik", examples: ["/tajik.amp"]
   handle "/tajik.json", using: "WorldServiceTajik", examples: ["/tajik.json"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik", "/tajik/example-123", "/tajik/example-123.amp", "/tajik/example-123.json"]
+
+  redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
+  redirect "/tamil/mobile/*any", to: "/tamil", status: 301
+
   handle "/tamil.amp", using: "WorldServiceTamil", examples: ["/tamil.amp"]
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil", "/tamil/example-123", "/tamil/example-123.amp", "/tamil/example-123.json"]
@@ -464,26 +568,51 @@ defroutefile "Main" do
   handle "/tigrinya.amp", using: "WorldServiceTigrinya", examples: ["/tigrinya.amp"]
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya", "/tigrinya/example-123", "/tigrinya/example-123.amp", "/tigrinya/example-123.json"]
+
+  redirect "/turkce/mobile/*any", to: "/turkce", status: 301
+  redirect "/turkce/cep/*any", to: "/turkce", status: 301
+
   handle "/turkce.amp", using: "WorldServiceTurkce", examples: ["/turkce.amp"]
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce", "/turkce/example-123", "/turkce/example-123.amp", "/turkce/example-123.json"]
+
+  redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
+  redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
+
   handle "/ukchina.amp", using: "WorldServiceUkChina", examples: [{"/ukchina.amp", 302}]
   handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
+
+  redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
+
   handle "/ukrainian.amp", using: "WorldServiceUkrainian", examples: ["/ukrainian.amp"]
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian", "/ukrainian/example-123", "/ukrainian/example-123.amp", "/ukrainian/example-123.json"]
+
+  redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
+  redirect "/urdu/mobile/*any", to: "/urdu", status: 301
+
   handle "/urdu.amp", using: "WorldServiceUrdu", examples: ["/urdu.amp"]
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
   handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu", "/urdu/example-123", "/urdu/example-123.amp", "/urdu/example-123.json"]
+
+  redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
+
   handle "/uzbek.amp", using: "WorldServiceUzbek", examples: ["/uzbek.amp"]
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
   handle "/uzbek/*_any", using: "WorldServiceUzbek", examples: ["/uzbek", "/uzbek/example-123", "/uzbek/example-123.amp", "/uzbek/example-123.json"]
+
+  redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
+
   handle "/vietnamese.amp", using: "WorldServiceVietnamese", examples: ["/vietnamese.amp"]
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
   handle "/vietnamese/*_any", using: "WorldServiceVietnamese", examples: ["/vietnamese", "/vietnamese/example-123", "/vietnamese/example-123.amp", "/vietnamese/example-123.json"]
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba", "/yoruba/example-123", "/yoruba/example-123.amp", "/yoruba/example-123.json"]
+
+  redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
+  redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
+
   handle "/zhongwen.amp", using: "WorldServiceZhongwen", examples: [{"/zhongwen.amp", 302}]
   handle "/zhongwen.json", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/simp.json", "/zhongwen/simp.amp"]
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen", "/zhongwen/example-123", "/zhongwen/example-123.amp", "/zhongwen/example-123.json"]
@@ -491,6 +620,7 @@ defroutefile "Main" do
   handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
   handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+  handle "/worldservice/assets/images/*_any", using: "WsImages", examples: [{"/worldservice/assets/images/2012/07/12/120712163431_img_0328.jpg", 301}]
 
   # /programmes
 
@@ -514,6 +644,8 @@ defroutefile "Main" do
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
+  redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 302
+  redirect "/sport/amp/:topic/:id", to: "/sport/:topic/:id.amp", status: 302
   redirect "/sport/uk.app", to: "/sport.app", status: 301
   redirect "/sport/uk/*any", to: "/sport/*any", status: 301
   redirect "/sport/world.app", to: "/sport.app", status: 301
@@ -641,7 +773,7 @@ defroutefile "Main" do
   ## Sport SFV - validate Section(Discipline) and ID
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
     return_404 if: [
-      !Enum.member?(SportVideos.sports_disciplines_routes, discipline),
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(id, ~r/^[0-9]{4,9}$/)
     ]
   end
@@ -663,7 +795,7 @@ defroutefile "Main" do
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
-  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/nba/fixtures"]
+  handle "/sport/alpha/*_any", using: "SportAlpha", examples: ["/sport/alpha/basketball/scores-fixtures"]
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
@@ -950,6 +1082,7 @@ defroutefile "Main" do
   handle "/sport/hockey", using: "SportDisciplineTopic", examples: ["/sport/hockey"]
   handle "/sport/ice-hockey", using: "SportDisciplineTopic", examples: ["/sport/ice-hockey"]
   handle "/sport/judo", using: "SportDisciplineTopic", examples: ["/sport/judo"]
+  handle "/sport/karate", using: "SportDisciplineTopic", examples: ["/sport/karate"]
   handle "/sport/luge", using: "SportDisciplineTopic", examples: ["/sport/luge"]
   handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", examples: ["/sport/modern-pentathlon"]
   handle "/sport/nordic-combined", using: "SportDisciplineTopic", examples: ["/sport/nordic-combined"]
@@ -958,11 +1091,14 @@ defroutefile "Main" do
   handle "/sport/sailing", using: "SportDisciplineTopic", examples: ["/sport/sailing"]
   handle "/sport/shooting", using: "SportDisciplineTopic", examples: ["/sport/shooting"]
   handle "/sport/short-track-skating", using: "SportDisciplineTopic", examples: ["/sport/short-track-skating"]
+  handle "/sport/skateboarding", using: "SportDisciplineTopic", examples: ["/sport/skateboarding"]
   handle "/sport/skeleton", using: "SportDisciplineTopic", examples: ["/sport/skeleton"]
   handle "/sport/ski-jumping", using: "SportDisciplineTopic", examples: ["/sport/ski-jumping"]
   handle "/sport/snowboarding", using: "SportDisciplineTopic", examples: ["/sport/snowboarding"]
   handle "/sport/speed-skating", using: "SportDisciplineTopic", examples: ["/sport/speed-skating"]
+  handle "/sport/sport-climbing", using: "SportDisciplineTopic", examples: ["/sport/sport-climbing"]
   handle "/sport/squash", using: "SportDisciplineTopic", examples: ["/sport/squash"]
+  handle "/sport/surfing", using: "SportDisciplineTopic", examples: ["/sport/surfing"]
   handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", examples: ["/sport/synchronised-swimming"]
   handle "/sport/table-tennis", using: "SportDisciplineTopic", examples: ["/sport/table-tennis"]
   handle "/sport/taekwondo", using: "SportDisciplineTopic", examples: ["/sport/taekwondo"]
@@ -974,6 +1110,7 @@ defroutefile "Main" do
 
   handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
 
+  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", examples: ["/sport/cricket/the-hundred"]
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
   handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
@@ -1029,8 +1166,8 @@ defroutefile "Main" do
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
 
-
   # Weather
+
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
@@ -1061,6 +1198,10 @@ defroutefile "Main" do
   # newsrounds routes appear to be using morphRouter
   handle "/newsround.amp", using: "Newsround", examples: []
   handle "/newsround.json", using: "Newsround", examples: []
+
+  redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 302
+  redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 302
+
   handle "/newsround/*_any", using: "Newsround", examples: []
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
@@ -1079,7 +1220,9 @@ defroutefile "Main" do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
-  handle "/full-stack-test/*_any", using: "FullStackTest", only_on: "test", examples: []
+  handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
+  handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
+  redirect("/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302)
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
