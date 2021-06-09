@@ -154,7 +154,7 @@ defmodule Routes.Routefile do
   handle "/", using: "HomePage", examples: ["/"]
   handle "/scotland", using: "ScotlandHomePage", examples: ["/scotland"]
   handle "/homepage/test", using: "TestHomePage", only_on: "test", examples: ["/homepage/test"]
-  handle "/homepage/automation", using: "AutomationHomePage", only_on: "test", examples: ["/homepage/automation"]
+  handle "/homepage/automation", using: "AutomationHomePage", examples: ["/homepage/automation"]
   handle "/northernireland", using: "NorthernIrelandHomePage", examples: ["/northernireland"]
   handle "/wales", using: "WalesHomePage", examples: ["/wales"]
   handle "/cymru", using: "CymruHomePage", examples: ["/cymru"]
