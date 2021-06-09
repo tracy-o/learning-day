@@ -30,7 +30,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
     Belfrage.Event.record(:metric, :increment, "pre_cache_compression")
 
     Belfrage.Event.record(:log, :info, %{
-      msg: "Body was pre-cache compressed",
+      msg: "Content was pre-cache compressed",
       path: path
     })
 

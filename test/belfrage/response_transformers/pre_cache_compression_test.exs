@@ -70,7 +70,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                       } = PreCacheCompression.call(struct)
 
                assert_gzipped(compressed_body, "I am some plain text")
-             end) =~ ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Body was pre-cache compressed\",\"path\":\"\/non-compressed\/path\"/
+             end) =~
+               ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Body was pre-cache compressed\",\"path\":\"\/non-compressed\/path\"/
     end
   end
 end
