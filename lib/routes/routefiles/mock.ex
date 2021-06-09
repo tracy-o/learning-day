@@ -1,5 +1,5 @@
-# this is  a copy of the test/support/mocks/routefile_mick.example
-# TODO; define the best location
+# this is  a copy of the test/support/mocks/routefile_mock.example
+# TODO: define the best location
 
 defmodule Routes.Routefiles.Mock do
   use BelfrageWeb.RouteMaster
