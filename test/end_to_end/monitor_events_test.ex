@@ -65,7 +65,9 @@ defmodule EndToEnd.MonitorEventsTest do
         assert is_binary(request_id)
 
       %Belfrage.Event{
-        data: {"pre_cache_compression", 1},
+        data:
+          {"arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test.pre_cache_compression",
+           1},
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
@@ -219,7 +221,9 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data: {"pre_cache_compression", 1},
+          data:
+            {"arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test.pre_cache_compression",
+             1},
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
@@ -328,7 +332,9 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data: {"pre_cache_compression", 1},
+          data:
+            {"arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test.pre_cache_compression",
+             1},
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
@@ -422,7 +428,9 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data: {"pre_cache_compression", 1},
+          data:
+            {"arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test.pre_cache_compression",
+             1},
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
