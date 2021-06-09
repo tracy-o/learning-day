@@ -31,28 +31,38 @@ defmodule Belfrage.Cache.Local do
   end
 
   @impl CacheStrategy
-  def store(struct = %Belfrage.Struct{}, cache \\ :cache) do
-    case stale?(struct, cache) do
-      true ->
-        Cachex.put(
-          cache,
-          struct.request.request_hash,
-          {struct.response, Belfrage.Timer.now_ms()},
-          ttl: struct.private.fallback_ttl
-        )
-
-      false ->
-        {:ok, false}
+  def store(
+        struct = %Belfrage.Struct{
+          response: %Belfrage.Struct.Response{
+            cache_directive: %Belfrage.CacheControl{max_age: max_age},
+            cache_last_updated: cache_last_updated
+          }
+        },
+        cache \\ :cache
+      ) do
+    if cacheable?(max_age) && stale?(cache_last_updated, max_age) do
+      Cachex.put(
+        cache,
+        struct.request.request_hash,
+        %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
+        ttl: struct.private.fallback_ttl
+      )
+    else
+      {:ok, false}
     end
   end
 
   @impl CacheStrategy
   def metric_identifier, do: "local"
 
-  defp format_cache_result({:ok, {response, last_updated}}) do
+  defp cacheable?(_max_age = nil), do: false
+  defp cacheable?(_max_age), do: true
+
+  defp format_cache_result({:ok, response = %Belfrage.Struct.Response{cache_last_updated: last_updated}})
+       when not is_nil(last_updated) do
     %{max_age: max_age} = response.cache_directive
 
-    case Belfrage.Timer.stale?(last_updated, max_age) do
+    case stale?(last_updated, max_age) do
       true -> {:ok, :stale, response}
       false -> {:ok, :fresh, response}
     end
@@ -62,10 +72,9 @@ defmodule Belfrage.Cache.Local do
     {:ok, :content_not_found}
   end
 
-  defp stale?(struct, cache) do
-    case fetch(struct, cache) do
-      {:ok, :fresh, _fetched} -> false
-      _ -> true
-    end
+  defp stale?(nil, _max_age), do: true
+
+  defp stale?(last_updated, max_age) do
+    Belfrage.Timer.stale?(last_updated, max_age)
   end
 end
