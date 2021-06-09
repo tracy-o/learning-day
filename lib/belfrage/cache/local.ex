@@ -30,44 +30,33 @@ defmodule Belfrage.Cache.Local do
     format_cache_result(result)
   end
 
-  # Not cacheable if no max age - will not be able to determine if fresh or stale.
-  @impl CacheStrategy
-  def store(
-        %Belfrage.Struct{
-          response: %Belfrage.Struct.Response{cache_directive: %Belfrage.CacheControl{max_age: max_age}}
-        },
-        _cache
-      )
-      when is_nil(max_age) do
-    {:ok, false}
-  end
-
   @impl CacheStrategy
   def store(
         struct = %Belfrage.Struct{
           response: %Belfrage.Struct.Response{
-            cache_last_updated: cache_last_updated,
-            cache_directive: %Belfrage.CacheControl{max_age: max_age}
+            cache_directive: %Belfrage.CacheControl{max_age: max_age},
+            cache_last_updated: cache_last_updated
           }
         },
         cache \\ :cache
       ) do
-    case stale?(cache_last_updated, max_age) do
-      true ->
-        Cachex.put(
-          cache,
-          struct.request.request_hash,
-          %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
-          ttl: struct.private.fallback_ttl
-        )
-
-      false ->
-        {:ok, false}
+    if cacheable?(max_age) && stale?(cache_last_updated, max_age) do
+      Cachex.put(
+        cache,
+        struct.request.request_hash,
+        %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
+        ttl: struct.private.fallback_ttl
+      )
+    else
+      {:ok, false}
     end
   end
 
   @impl CacheStrategy
   def metric_identifier, do: "local"
+
+  defp cacheable?(_max_age = nil), do: false
+  defp cacheable?(_max_age), do: true
 
   defp format_cache_result({:ok, response = %Belfrage.Struct.Response{cache_last_updated: last_updated}})
        when not is_nil(last_updated) do
