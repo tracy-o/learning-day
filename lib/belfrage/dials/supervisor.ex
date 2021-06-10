@@ -45,7 +45,7 @@ defmodule Belfrage.Dials.Supervisor do
   end
 
   defp children(_env) do
-    dial_children ++ [Belfrage.Dials.Poller]
+    dial_children() ++ [Belfrage.Dials.Poller]
   end
 
   @doc """
