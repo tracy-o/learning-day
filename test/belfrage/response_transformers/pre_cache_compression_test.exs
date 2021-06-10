@@ -49,7 +49,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
   end
 
   describe "when content-encoding response header is not set" do
-    test "the response body is gzipped, the content-encoding header is added info is logged" do
+    test "the response body is gzipped, the content-encoding header is added and data is logged" do
       struct = %Struct{
         request: %Struct.Request{
           path: "/non-compressed/path"
