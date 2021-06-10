@@ -66,9 +66,8 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro return_404(if: checks) when is_list(checks) do
     quote do
-      case Enum.any?(unquote(checks), fn check -> check end) do
-        true -> View.not_found(var!(conn))
-        _ -> false
+      if Enum.any?(unquote(checks), fn check -> check end) do
+        return_404()
       end
     end
   end
@@ -78,15 +77,23 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro return_404(if: check_pass) do
     quote do
       if unquote(check_pass) do
-        View.not_found(var!(conn))
+        return_404()
       end
     end
   end
 
-  defmacro no_match do
+  defmacro return_404() do
     quote do
-      get _ do
-        View.not_found(var!(conn))
+      View.not_found(var!(conn))
+    end
+  end
+
+  defmacro no_match() do
+    quote do
+      unless Enum.find(@routes, fn {matcher, _args} -> matcher == "/*any" end) do
+        get _ do
+          return_404()
+        end
       end
 
       match _ do
