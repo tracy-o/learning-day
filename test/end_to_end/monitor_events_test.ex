@@ -65,9 +65,7 @@ defmodule EndToEnd.MonitorEventsTest do
         assert is_binary(request_id)
 
       %Belfrage.Event{
-        data:
-          {"Elixir.Webcore.pre_cache_compression",
-           1},
+        data: {"Elixir.Webcore.pre_cache_compression", 1},
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
@@ -221,9 +219,7 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data:
-            {"Elixir.Webcore.pre_cache_compression",
-             1},
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
@@ -332,9 +328,7 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data:
-            {"Elixir.Webcore.pre_cache_compression",
-             1},
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
@@ -428,9 +422,7 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
 
         %Belfrage.Event{
-          data:
-            {"Elixir.Webcore.pre_cache_compression",
-             1},
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",

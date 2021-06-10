@@ -59,7 +59,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         },
         private: %Struct.Private{
           platform: SomePlatform
-        }, 
+        }
       }
 
       assert capture_log(fn ->
