@@ -56,7 +56,10 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         },
         response: %Struct.Response{
           body: "I am some plain text"
-        }
+        },
+        private: %Struct.Private{
+          platform: SomePlatform
+        }, 
       }
 
       assert capture_log(fn ->
@@ -71,7 +74,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
 
                assert_gzipped(compressed_body, "I am some plain text")
              end) =~
-               ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Body was pre-cache compressed\",\"path\":\"\/non-compressed\/path\"/
+               ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Content was pre-cache compressed\",\"path\":\"\/non-compressed\/path\",\"platform\":\"Elixir.SomePlatform\"/
     end
   end
 end
