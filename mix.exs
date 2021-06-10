@@ -11,7 +11,8 @@ defmodule Belfrage.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       aliases: aliases(),
       test_pattern: test_pattern(Mix.env()),
-      warn_test_pattern: test_pattern(Mix.env())
+      warn_test_pattern: test_pattern(Mix.env()),
+      xref: [exclude: [:memsup]]
     ]
   end
 
