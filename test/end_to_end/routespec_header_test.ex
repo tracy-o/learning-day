@@ -14,7 +14,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
-  test "returns the request id header" do
+  test "returns the routespec header" do
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
       {:ok, @lambda_response}
