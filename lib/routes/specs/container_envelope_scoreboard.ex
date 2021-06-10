@@ -1,8 +1,9 @@
 defmodule Routes.Specs.ContainerEnvelopeScoreboard do
-  def specs do
+  def specs(production_env) do
     %{
       owner: "DENewsElections@bbc.co.uk",
       platform: Webcore,
+      pipeline: pipeline(production_env),
       runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2021",
       query_params_allowlist: ["static"]
     }
