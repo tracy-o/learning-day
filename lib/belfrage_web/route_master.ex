@@ -170,35 +170,33 @@ defmodule BelfrageWeb.RouteMaster do
       var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        @production_environment Application.get_env(:belfrage, :production_environment)
-
-        get rewrite(matcher) when unquote(env) == @production_environment do
-          yield(unquote(id), var!(conn))
+        if env == Application.get_env(:belfrage, :production_environment) do
+          get rewrite(matcher) do
+            yield(unquote(id), var!(conn))
+          end
         end
       end
 
       var!(add_route_for_env_proxy_pass, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        @production_environment Application.get_env(:belfrage, :production_environment)
+        if env == Application.get_env(:belfrage, :production_environment) do
+          get rewrite(matcher) do
+            matched_env = var!(conn).private[:production_environment] == unquote(env)
+            origin_simulator = var!(conn).private.bbc_headers.origin_simulator
+            replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
 
-        get rewrite(matcher) when unquote(env) == @production_environment do
-          matched_env = var!(conn).private[:production_environment] == unquote(env)
-          origin_simulator = var!(conn).private.bbc_headers.origin_simulator
-          replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
-
-          cond do
-            matched_env and origin_simulator -> yield(unquote(id), var!(conn))
-            matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
-            true -> View.not_found(var!(conn))
+            cond do
+              matched_env and origin_simulator -> yield(unquote(id), var!(conn))
+              matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
+              true -> View.not_found(var!(conn))
+            end
           end
         end
       end
 
       var!(add_route_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, block ->
         @routes [{matcher, Enum.into(args, %{})} | @routes]
-
-        @production_environment Application.get_env(:belfrage, :production_environment)
 
         get rewrite(matcher) do
           unquote(block) || yield(unquote(id), var!(conn))
@@ -208,10 +206,10 @@ defmodule BelfrageWeb.RouteMaster do
       var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, env, block ->
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        @production_environment Application.get_env(:belfrage, :production_environment)
-
-        get rewrite(matcher) when unquote(env) == @production_environment do
-          unquote(block) || yield(unquote(id), var!(conn))
+        if env == Application.get_env(:belfrage, :production_environment) do
+          get rewrite(matcher) do
+            unquote(block) || yield(unquote(id), var!(conn))
+          end
         end
       end
     end

@@ -4,7 +4,7 @@
       name: "default",
       files: %{
         included: ["lib", "test"],
-        excluded: ["test/smoke"]
+        excluded: ["lib/belfrage_web/route_master.ex", "test/smoke"]
       },
       checks: [
         {Credo.Check.Design.TagTODO, exit_status: 0},
