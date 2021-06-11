@@ -27,7 +27,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
   test "records monitor events for using a lambda service" do
     Belfrage.MonitorMock
-    |> expect(:record_event, 3, fn
+    |> expect(:record_event, 5, fn
       %Belfrage.Event{
         data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
         dimensions: %{
@@ -61,6 +61,30 @@ defmodule EndToEnd.MonitorEventsTest do
         },
         request_id: request_id,
         type: {:metric, :increment}
+      } ->
+        assert is_binary(request_id)
+
+      %Belfrage.Event{
+        data: {"Elixir.Webcore.pre_cache_compression", 1},
+        dimensions: %{
+          request_id: request_id,
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
+        },
+        request_id: request_id,
+        type: {:metric, :increment}
+      } ->
+        assert is_binary(request_id)
+
+      %Belfrage.Event{
+        data: %{msg: "Content was pre-cache compressed", path: "/200-ok-response", platform: Webcore},
+        dimensions: %{
+          request_id: request_id,
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
+        },
+        request_id: request_id,
+        type: {:log, :info}
       } ->
         assert is_binary(request_id)
     end)
@@ -146,7 +170,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 4, fn
+      |> expect(:record_event, 6, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -194,6 +218,30 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: %{msg: "Content was pre-cache compressed", path: "/sends-request-downstream", platform: Webcore},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/sends-request-downstream")
@@ -232,7 +280,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn
+      |> expect(:record_event, 7, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/downstream-broken", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -280,6 +328,30 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: %{msg: "Content was pre-cache compressed", path: "/downstream-broken", platform: Webcore},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/downstream-broken?belfrage-cache-bust")
@@ -302,7 +374,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn
+      |> expect(:record_event, 7, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 500},
           dimensions: %{
@@ -350,6 +422,30 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"Elixir.Webcore.pre_cache_compression", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: %{msg: "Content was pre-cache compressed", path: "/sends-request-downstream", platform: Webcore},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:log, :info}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
@@ -376,7 +472,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn _ ->
+      |> expect(:record_event, 7, fn _ ->
         {:ok, false}
       end)
 
