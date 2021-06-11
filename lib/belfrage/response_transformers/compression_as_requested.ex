@@ -11,6 +11,7 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
 
       false ->
         response_headers = Map.delete(struct.response.headers, "content-encoding")
+        Belfrage.Event.record(:metric, :increment, "web.response.uncompressed")
         Struct.add(struct, :response, %{body: :zlib.gunzip(struct.response.body), headers: response_headers})
     end
   end
