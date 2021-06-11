@@ -75,7 +75,7 @@ defmodule Belfrage.MixProject do
       {:cachex, "~> 3.1"},
       {:poison, "~> 4.0", override: true},
       {:secure_random, "~> 0.5.1"},
-      {:tabula, "~> 2.2", only: [:dev]},
+      {:tabula, "~> 2.2", only: [:dev, :test]},
       {:x509, "~> 0.8", only: :dev},
       {:telemetry, "~> 0.4.2"},
       {:telemetry_poller, "~> 0.4"},
