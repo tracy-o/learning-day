@@ -81,7 +81,8 @@ defmodule Belfrage.Struct.Private do
             default_language: "en-GB",
             authenticated: false,
             session_token: nil,
-            valid_session: false
+            valid_session: false,
+            user_attributes: %{}
 
   @type t :: %__MODULE__{}
 
@@ -89,18 +90,18 @@ defmodule Belfrage.Struct.Private do
         private = %__MODULE__{},
         %{"ckns_atkn" => ckns_atkn},
         %{"x-id-oidc-signedin" => "1"},
-        {valid_session?, _user_attributes}
+        {valid_session?, user_attributes}
       ) do
-    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?, user_attributes: user_attributes}
   end
 
   def set_session_state(
         private = %__MODULE__{},
         %{"ckns_atkn" => ckns_atkn, "ckns_id" => _id},
         _headers,
-        {valid_session?, _user_attributes}
+        {valid_session?, user_attributes}
       ) do
-    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?, user_attributes: user_attributes}
   end
 
   def set_session_state(private = %__MODULE__{}, _cookies, %{"x-id-oidc-signedin" => "1"}, _token_data) do

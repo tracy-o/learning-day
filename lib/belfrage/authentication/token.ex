@@ -20,12 +20,12 @@ defmodule Belfrage.Authentication.Token do
         {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
 
       _ ->
-        {true, nil}
+        {true, %{}}
     end
   end
 
   defp get_attributes(_) do
-    {false, nil}
+    {false, %{}}
   end
 
   defp validate(_decoded_token = nil), do: false

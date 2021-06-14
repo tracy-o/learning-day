@@ -15,11 +15,11 @@ defmodule Belfrage.Authentication.TokenTest do
     end
 
     test "with non existant user_attributes access token" do
-      assert Token.parse(T.valid_access_token_without_user_attributes()) == {true, nil}
+      assert Token.parse(T.valid_access_token_without_user_attributes()) == {true, %{}}
     end
 
     test "with invalid access token" do
-      assert Token.parse(T.invalid_access_token()) == {false, nil}
+      assert Token.parse(T.invalid_access_token()) == {false, %{}}
     end
   end
 end
