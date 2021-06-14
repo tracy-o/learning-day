@@ -1168,6 +1168,9 @@ defmodule Routes.Routefile do
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
+  # WebCore Hub
+  handle "/webcore", using: "WebCoreHub", only_on: "test", examples: ["/webcore"]
+
   # News Beat
 
   redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
