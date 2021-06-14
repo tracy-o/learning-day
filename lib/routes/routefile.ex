@@ -1169,7 +1169,7 @@ defmodule Routes.Routefile do
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
   # WebCore Hub
-  handle "/webcore", using: "WebCoreHub", only_on: "test", examples: ["/webcore"]
+  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore"]
 
   # News Beat
 
