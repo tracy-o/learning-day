@@ -8,7 +8,9 @@ defmodule Belfrage.Transformers.UserSession do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies, raw_headers: headers}}) do
-    private = Struct.Private.set_session_state(struct.private, cookies, headers, valid?(cookies["ckns_atkn"]))
+    decoded_token = decode_token(cookies["ckns_atkn"])
+
+    private = Struct.Private.set_session_state(struct.private, cookies, headers, valid?(decoded_token))
     struct_with_session_state = Struct.add(struct, :private, private)
 
     cond do
@@ -26,6 +28,14 @@ defmodule Belfrage.Transformers.UserSession do
       match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
         then(rest, struct_with_session_state)
     end
+  end
+
+  defp decode_token(nil) do
+    nil
+  end
+
+  defp decode_token(cookie) do
+    Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
 
   defp personalisation_available?(host) when is_binary(host) do
@@ -51,44 +61,47 @@ defmodule Belfrage.Transformers.UserSession do
     }
   end
 
-  defp valid?(_session_token = nil), do: false
+  defp valid?(_decoded_token = nil), do: false
 
-  defp valid?(session_token) do
-    case Belfrage.Authentication.Validator.verify_and_validate(session_token) do
-      {:ok, _decoded_token} ->
-        true
+  defp valid?({:ok, _decoded_token}) do
+    true
+  end
 
-      {:error, [message: message, claim: claim, claim_val: claim_val]} ->
-        Belfrage.Event.record(:log, :warn, %{
+  defp valid?({:error, [message: message, claim: claim, claim_val: claim_val]}) do
+    Belfrage.Event.record(:log, :warn, %{
           msg: "Claim validation failed",
           message: message,
           claim_val: claim_val,
-          claim: claim
-        })
+          claim: claim })
 
-        false
+    false
+  end
 
-      {:error, :token_malformed} ->
-        Belfrage.Event.record(:log, :error, "Malformed JWT")
+  defp valid?({:error, :token_malformed}) do
+    Belfrage.Event.record(:log, :error, "Malformed JWT")
 
-        false
+    false
+  end
 
-      {:error, :public_key_not_found} ->
-        false
+  defp valid?({:error, :public_key_not_found}) do
+    false
+  end
 
-      {:error, :invalid_token_header} ->
-        Belfrage.Event.record(:log, :error, "Invalid token header")
+  defp valid?({:error, :invalid_token_header}) do
+    Belfrage.Event.record(:log, :error, "Invalid token header")
 
-        false
+    false
+  end
 
-      {:error, :signature_error} ->
-        false
 
-      {:error, _} ->
-        Belfrage.Event.record(:log, :error, "Unexpected token error.")
+  defp valid?({:error, :signature_error}) do
+    false
+  end
 
-        false
-    end
+  defp valid?({:error, _}) do
+    Belfrage.Event.record(:log, :error, "Unexpected token error.")
+
+    false
   end
 
   defp session_url, do: Application.get_env(:belfrage, :authentication)["session_url"]
