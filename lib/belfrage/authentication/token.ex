@@ -14,9 +14,14 @@ defmodule Belfrage.Authentication.Token do
     Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
 
-  defp get_attributes({true, _decoded_token}) do
-    user_attributes = 123
-    {true, user_attributes}
+  defp get_attributes({true, decoded_token}) do
+    case decoded_token["userAttributes"] do
+      %{"ageBracket" => age_bracket, "allowPersonalisation" => allow_personalisation} ->
+        {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
+
+      _ ->
+        {true, nil}
+    end
   end
 
   defp get_attributes(_) do

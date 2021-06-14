@@ -89,8 +89,7 @@ defmodule Belfrage.Struct.Private do
         private = %__MODULE__{},
         %{"ckns_atkn" => ckns_atkn},
         %{"x-id-oidc-signedin" => "1"},
-        valid_session?,
-        _user_attributes
+        {valid_session?, _user_attributes}
       ) do
     %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
   end
