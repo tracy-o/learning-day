@@ -10,8 +10,7 @@ defmodule Belfrage.Transformers.UserSession do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies, raw_headers: headers}}) do
-    decoded_token = Token.decode(cookies["ckns_atkn"])
-    private = Struct.Private.set_session_state(struct.private, cookies, headers, Token.valid?(decoded_token), %{})
+    private = Struct.Private.set_session_state(struct.private, cookies, headers, Token.parse(cookies["ckns_atkn"]))
     struct_with_session_state = Struct.add(struct, :private, private)
 
     cond do
