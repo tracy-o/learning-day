@@ -1,11 +1,13 @@
 defmodule Belfrage.Authentication.TokenTest do
   use ExUnit.Case
-  alias Belfrage.Authentication.Token
+  use Test.Support.Helper, :mox
 
+  alias Belfrage.Authentication.{Jwk,Token}
   alias Fixtures.AuthToken, as: T
 
   setup do
-    start_supervised!(Belfrage.Authentication.Jwk)
+    start_supervised!(Jwk)
+
     :ok
   end
 
