@@ -92,7 +92,13 @@ defmodule Belfrage.Struct.Private do
         %{"x-id-oidc-signedin" => "1"},
         {valid_session?, user_attributes}
       ) do
-    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?, user_attributes: user_attributes}
+    %{
+      private
+      | session_token: ckns_atkn,
+        authenticated: true,
+        valid_session: valid_session?,
+        user_attributes: user_attributes
+    }
   end
 
   def set_session_state(
@@ -101,7 +107,13 @@ defmodule Belfrage.Struct.Private do
         _headers,
         {valid_session?, user_attributes}
       ) do
-    %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?, user_attributes: user_attributes}
+    %{
+      private
+      | session_token: ckns_atkn,
+        authenticated: true,
+        valid_session: valid_session?,
+        user_attributes: user_attributes
+    }
   end
 
   def set_session_state(private = %__MODULE__{}, _cookies, %{"x-id-oidc-signedin" => "1"}, _token_data) do

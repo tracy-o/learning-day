@@ -1,3 +1,8 @@
+# TODO: I don't think this logic belongs here
+# if the team agrees we should create a ticket and try to move this logic elsewhere.
+# This could possibly allow to use the Token logic to pass the raw header data
+# instead of dealing again with the available cookie data in a different place.
+#
 defmodule Belfrage.StructPrivateTest do
   use ExUnit.Case, async: true
   alias Belfrage.Struct.Private
@@ -9,7 +14,7 @@ defmodule Belfrage.StructPrivateTest do
       cookies = %{"ckns_atkn" => @token}
       headers = %{"x-id-oidc-signedin" => "1"}
       valid_session? = true
-      user_attributes  = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert %Private{
                authenticated: true,
@@ -22,7 +27,7 @@ defmodule Belfrage.StructPrivateTest do
       cookies = %{"ckns_atkn" => @token, "ckns_id" => "1234"}
       headers = %{}
       valid_session? = true
-      user_attributes  = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert %Private{
                authenticated: true,
@@ -35,7 +40,7 @@ defmodule Belfrage.StructPrivateTest do
       cookies = %{"ckns_atkn" => @token}
       headers = %{}
       valid_session? = false
-      user_attributes  = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert %Private{
                authenticated: false,
@@ -48,7 +53,7 @@ defmodule Belfrage.StructPrivateTest do
       cookies = %{"ckns_id" => "1234"}
       headers = %{}
       valid_session? = false
-      user_attributes  = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert %Private{
                authenticated: true,
