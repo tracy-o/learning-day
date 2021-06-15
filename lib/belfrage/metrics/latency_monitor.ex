@@ -45,21 +45,17 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   end
 
   @impl GenServer
-  def handle_cast({:checkpoint, name, request_id, time}, state) when name in @valid_checkpoints,
-    do: {:noreply, append_time(state, request_id, name, time)}
+  def handle_cast({:checkpoint, name, request_id, time}, state) when name in @valid_checkpoints do
+    request_times =
+      state
+      |> Map.get(request_id, %{})
+      |> Map.put(name, time)
+
+    {:noreply, Map.put(state, request_id, request_times)}
+  end
 
   @impl GenServer
   def handle_cast({:discard, request_id}, state), do: {:noreply, remove_request_id(state, request_id)}
-
-  defp append_time(state, request_id, name, time) do
-    new_times =
-      Map.get(state, request_id, %{})
-      |> append_time(name, time)
-
-    Map.put(state, request_id, new_times)
-  end
-
-  defp append_time(times, name, time) when name in @valid_checkpoints, do: Map.put(times, name, time)
 
   defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 
