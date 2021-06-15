@@ -40,11 +40,20 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @impl GenServer
   def handle_cast({:checkpoint, :response_end, request_id, time}, state) do
-    Map.get(state, request_id)
-    |> Map.put(:response_end, time)
-    |> send_metrics()
+    request_times = Map.get(state, request_id)
 
-    {:noreply, remove_request_id(state, request_id)}
+    state =
+      if request_times do
+        request_times
+        |> Map.put(:response_end, time)
+        |> send_metrics()
+
+        remove_request_id(state, request_id)
+      else
+        state
+      end
+
+    {:noreply, state}
   end
 
   @impl GenServer

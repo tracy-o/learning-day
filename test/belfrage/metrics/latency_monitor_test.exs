@@ -141,6 +141,13 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       refute_sent_metrics(metrics)
     end
 
+    test "should handle a request that's already been cleaned up", %{metrics_server: metrics} do
+      message = {:checkpoint, :response_end, "cleaned-up-request", 123}
+      state = %{}
+      assert LatencyMonitor.handle_cast(message, state) == {:noreply, state}
+      refute_sent_metrics(metrics)
+    end
+
     defp start_metrics_server(_) do
       {:ok, server} = :gen_udp.open(8125, active: true)
       on_exit(fn -> :gen_udp.close(server) end)
