@@ -28,8 +28,11 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @impl GenServer
   def handle_info({:cleanup, cleanup_rate}, state) do
-    schedule_work(cleanup_rate)
-    {:noreply, perform_cleanup(state)}
+    Process.send_after(__MODULE__, {:cleanup, cleanup_rate}, cleanup_rate)
+
+    min_start_time = get_time() - @cleanup_ttl
+    state = :maps.filter(fn _request_id, times -> keep_request?(times, min_start_time) end, state)
+    {:noreply, state}
   end
 
   @impl GenServer
@@ -75,14 +78,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp compute_latency(start_time, end_time), do: end_time - start_time
 
-  defp schedule_work(cleanup_rate), do: Process.send_after(__MODULE__, {:cleanup, cleanup_rate}, cleanup_rate)
-
-  defp perform_cleanup(state), do: perform_cleanup(state, get_time() - @cleanup_ttl)
-  defp perform_cleanup(state, ttl_threshold), do: :maps.filter(is_request_alive(ttl_threshold), state)
-
-  defp is_request_alive(ttl_threshold), do: &is_request_alive(&1, &2, ttl_threshold)
-  defp is_request_alive(_, %{request_start: start}, ttl_threshold), do: start > ttl_threshold
-  defp is_request_alive(_request_id, _times, _ttl_threshold), do: false
+  defp keep_request?(times, min_start_time) do
+    times[:request_start] && times[:request_start] > min_start_time
+  end
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000
 end
