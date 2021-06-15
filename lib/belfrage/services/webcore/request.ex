@@ -15,7 +15,32 @@ defmodule Belfrage.Services.Webcore.Request do
 
   defp headers(
          struct = %Struct{
-           private: %Struct.Private{authenticated: true, session_token: session_token, valid_session: true}
+           private: %Struct.Private{
+             authenticated: true,
+             session_token: session_token,
+             valid_session: true,
+             user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}
+           }
+         }
+       )
+       when is_binary(session_token) do
+    struct
+    |> base_headers()
+    |> Map.put(:authorization, "Bearer #{session_token}")
+    |> Map.put(:"x-authentication-provider", "idv5")
+    |> Map.put(:"pers-env", authentication_environment)
+    |> Map.put(:"ctx-age-bracket", age_bracket)
+    |> Map.put(:"ctx-allow-personalisation", allow_personalisation)
+  end
+
+  defp headers(
+         struct = %Struct{
+           private: %Struct.Private{
+             authenticated: true,
+             session_token: session_token,
+             valid_session: true,
+             user_attributes: _user_attributes
+           }
          }
        )
        when is_binary(session_token) do
