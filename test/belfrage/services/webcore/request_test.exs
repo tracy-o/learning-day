@@ -97,7 +97,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "x-authentication-provider": "idv5",
                "pers-env": "int",
                "ctx-age-bracket": "o18",
-               "ctx-allow-personalisation": true
+               "ctx-allow-personalisation": "true"
              },
              httpMethod: nil,
              path: "/_web_core/12345",

@@ -30,7 +30,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> Map.put(:"x-authentication-provider", "idv5")
     |> Map.put(:"pers-env", authentication_environment)
     |> Map.put(:"ctx-age-bracket", age_bracket)
-    |> Map.put(:"ctx-allow-personalisation", allow_personalisation)
+    |> Map.put(:"ctx-allow-personalisation", to_string(allow_personalisation))
   end
 
   defp headers(
