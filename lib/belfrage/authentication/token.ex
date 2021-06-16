@@ -1,9 +1,10 @@
 defmodule Belfrage.Authentication.Token do
+  @spec parse(binary()) :: {boolean(), map()}
   def parse(cookie) do
     cookie
     |> decode()
     |> validate()
-    |> get_attributes()
+    |> extract_user_attributes()
   end
 
   defp decode(nil) do
@@ -14,7 +15,7 @@ defmodule Belfrage.Authentication.Token do
     Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
 
-  defp get_attributes({true, decoded_token}) do
+  defp extract_user_attributes({true, decoded_token}) do
     case decoded_token["userAttributes"] do
       %{"ageBracket" => age_bracket, "allowPersonalisation" => allow_personalisation} ->
         {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
@@ -24,7 +25,7 @@ defmodule Belfrage.Authentication.Token do
     end
   end
 
-  defp get_attributes(_) do
+  defp extract_user_attributes(_) do
     {false, %{}}
   end
 
