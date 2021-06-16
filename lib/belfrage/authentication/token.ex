@@ -1,10 +1,15 @@
 defmodule Belfrage.Authentication.Token do
-  @spec parse(binary()) :: {boolean(), map()}
+  def parse(nil), do: nil
+
   def parse(cookie) do
-    cookie
-    |> decode()
-    |> validate()
-    |> extract_user_attributes()
+    case decode(cookie) do
+      {:ok, token} ->
+        extract_user_attributes(token)
+
+      {:error, error} ->
+        handle_decoding_error(error)
+        {false, %{}}
+    end
   end
 
   defp decode(nil) do
@@ -15,7 +20,7 @@ defmodule Belfrage.Authentication.Token do
     Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
 
-  defp extract_user_attributes({true, decoded_token}) do
+  defp extract_user_attributes(decoded_token) do
     case decoded_token["userAttributes"] do
       %{"ageBracket" => age_bracket, "allowPersonalisation" => allow_personalisation} ->
         {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
@@ -25,50 +30,30 @@ defmodule Belfrage.Authentication.Token do
     end
   end
 
-  defp extract_user_attributes(_) do
-    {false, %{}}
-  end
+  defp handle_decoding_error(_decoded_token = nil), do: :noop
 
-  defp validate(_decoded_token = nil), do: false
-
-  defp validate({:ok, decoded_token}) do
-    {true, decoded_token}
-  end
-
-  defp validate({:error, [message: message, claim: claim, claim_val: claim_val]}) do
+  defp handle_decoding_error(message: message, claim: claim, claim_val: claim_val) do
     Belfrage.Event.record(:log, :warn, %{
       msg: "Claim validation failed",
       message: message,
       claim_val: claim_val,
       claim: claim
     })
-
-    false
   end
 
-  defp validate({:error, :token_malformed}) do
+  defp handle_decoding_error(:token_malformed) do
     Belfrage.Event.record(:log, :error, "Malformed JWT")
-
-    false
   end
 
-  defp validate({:error, :public_key_not_found}) do
-    false
-  end
-
-  defp validate({:error, :invalid_token_header}) do
+  defp handle_decoding_error(:invalid_token_header) do
     Belfrage.Event.record(:log, :error, "Invalid token header")
-
-    false
   end
 
-  defp validate({:error, :signature_error}) do
-    false
-  end
+  defp handle_decoding_error(:public_key_not_found), do: :noop
 
-  defp validate({:error, _}) do
+  defp handle_decoding_error(:signature_error), do: :noop
+
+  defp handle_decoding_error(_) do
     Belfrage.Event.record(:log, :error, "Unexpected token error.")
-
-    false
   end
 end
