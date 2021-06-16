@@ -59,7 +59,7 @@ defmodule Belfrage.Metrics.MailboxMonitor do
   end
 
   defp send_metric({:loop, loop_name}, len) do
-    @event.record(:metric, :gauge, "gen_server.#{loop_name}.mailbox_size", value: len)
+    @event.record(:metric, :gauge, "loop.#{loop_name}.mailbox_size", value: len)
   end
 
   defp send_metric(server_name, len) do

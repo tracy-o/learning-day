@@ -95,7 +95,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
       LoopsSupervisor.start_loop(@loop_supervisor, "HomePage")
 
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.HomePage.mailbox_size", value: 0 -> true end)
+      |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 0 -> true end)
 
       assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
                MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
@@ -105,7 +105,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
       LoopsSupervisor.start_loop(@loop_supervisor, "HomePage")
 
       Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.HomePage.mailbox_size", value: 1 -> true end)
+      |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 1 -> true end)
 
       increase_loop("HomePage")
 
