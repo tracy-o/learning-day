@@ -28,8 +28,11 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @impl GenServer
   def handle_info({:cleanup, cleanup_rate}, state) do
-    schedule_work(cleanup_rate)
-    {:noreply, perform_cleanup(state)}
+    Process.send_after(__MODULE__, {:cleanup, cleanup_rate}, cleanup_rate)
+
+    min_start_time = get_time() - @cleanup_ttl
+    state = :maps.filter(fn _request_id, times -> keep_request?(times, min_start_time) end, state)
+    {:noreply, state}
   end
 
   @impl GenServer
@@ -37,29 +40,34 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @impl GenServer
   def handle_cast({:checkpoint, :response_end, request_id, time}, state) do
-    Map.get(state, request_id)
-    |> Map.put(:response_end, time)
-    |> send_metrics()
+    request_times = Map.get(state, request_id)
 
-    {:noreply, remove_request_id(state, request_id)}
+    state =
+      if request_times do
+        request_times
+        |> Map.put(:response_end, time)
+        |> send_metrics()
+
+        remove_request_id(state, request_id)
+      else
+        state
+      end
+
+    {:noreply, state}
   end
 
   @impl GenServer
-  def handle_cast({:checkpoint, name, request_id, time}, state) when name in @valid_checkpoints,
-    do: {:noreply, append_time(state, request_id, name, time)}
+  def handle_cast({:checkpoint, name, request_id, time}, state) when name in @valid_checkpoints do
+    request_times =
+      state
+      |> Map.get(request_id, %{})
+      |> Map.put(name, time)
+
+    {:noreply, Map.put(state, request_id, request_times)}
+  end
 
   @impl GenServer
   def handle_cast({:discard, request_id}, state), do: {:noreply, remove_request_id(state, request_id)}
-
-  defp append_time(state, request_id, name, time) do
-    new_times =
-      Map.get(state, request_id, %{})
-      |> append_time(name, time)
-
-    Map.put(state, request_id, new_times)
-  end
-
-  defp append_time(times, name, time) when name in @valid_checkpoints, do: Map.put(times, name, time)
 
   defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 
@@ -79,14 +87,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp compute_latency(start_time, end_time), do: end_time - start_time
 
-  defp schedule_work(cleanup_rate), do: Process.send_after(__MODULE__, {:cleanup, cleanup_rate}, cleanup_rate)
-
-  defp perform_cleanup(state), do: perform_cleanup(state, get_time() - @cleanup_ttl)
-  defp perform_cleanup(state, ttl_threshold), do: :maps.filter(is_request_alive(ttl_threshold), state)
-
-  defp is_request_alive(ttl_threshold), do: &is_request_alive(&1, &2, ttl_threshold)
-  defp is_request_alive(_, %{request_start: start}, ttl_threshold), do: start > ttl_threshold
-  defp is_request_alive(_request_id, _times, _ttl_threshold), do: false
+  defp keep_request?(times, min_start_time) do
+    times[:request_start] && times[:request_start] > min_start_time
+  end
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000
 end
