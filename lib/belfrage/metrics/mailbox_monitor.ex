@@ -32,16 +32,34 @@ defmodule Belfrage.Metrics.MailboxMonitor do
 
   def handle_info(_msg, state), do: {:noreply, state}
 
+  defp mailbox_size({:loop, loop_name}) do
+    with pid when not is_nil(pid) <-
+           {:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}}
+           |> GenServer.whereis(),
+         {:message_queue_len, len} <- Process.info(pid, :message_queue_len),
+         do: len
+  end
+
   defp mailbox_size(server_name) do
     with pid when not is_nil(pid) <- Process.whereis(server_name),
          {:message_queue_len, len} <- Process.info(pid, :message_queue_len),
          do: len
   end
 
+  defp log_failure({:loop, loop_name}) do
+    @event.record(:log, :info, %{
+      msg: "Error retrieving the mailbox size for loop #{loop_name}, pid could not be found"
+    })
+  end
+
   defp log_failure(server_name) do
-    @event.record(:log, :error, %{
+    @event.record(:log, :info, %{
       msg: "Error retrieving the mailbox size for #{server_name}, pid could not be found"
     })
+  end
+
+  defp send_metric({:loop, loop_name}, len) do
+    @event.record(:metric, :gauge, "gen_server.#{loop_name}.mailbox_size", value: len)
   end
 
   defp send_metric(server_name, len) do
