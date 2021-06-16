@@ -6,12 +6,10 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
   alias Belfrage.TestGenServer
   alias Belfrage.{Loop, LoopsSupervisor}
 
-  @loop_supervisor :test_loop_supervisor
-
   setup do
     start_supervised!({TestGenServer, name: :test_server_one}, id: :test_server_one)
     start_supervised!({TestGenServer, name: :test_server_two}, id: :test_server_two)
-    start_supervised!(LoopsSupervisor.child_spec(name: @loop_supervisor, id: @loop_supervisor))
+    start_supervised!(LoopsSupervisor.child_spec(name: :test_loop_supervisor, id: :test_loop_supervisor))
     :ok
   end
 
@@ -92,7 +90,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
 
   describe "handle_info/2 with loops" do
     test "reports the mailbox size of zero when a loop has just started" do
-      LoopsSupervisor.start_loop(@loop_supervisor, "HomePage")
+      LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
 
       Belfrage.EventMock
       |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 0 -> true end)
@@ -102,7 +100,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
 
     test "reports the mailbox size when a loop has received a call" do
-      LoopsSupervisor.start_loop(@loop_supervisor, "HomePage")
+      LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
 
       Belfrage.EventMock
       |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 1 -> true end)
