@@ -386,6 +386,10 @@ defmodule Routes.Routefile do
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
+  ## World Service - "Access to News" Redirects
+  redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
+  redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
+
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any 
   ##    Mobile Redirects: /<service>/mobile/*any
