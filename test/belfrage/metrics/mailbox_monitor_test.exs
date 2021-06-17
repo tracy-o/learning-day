@@ -26,12 +26,15 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     expect(Belfrage.EventMock, :record, count, fn :metric, :gauge, message, value: value -> true end)
   end
 
+  defp refresh_mailbox_monitor(servers) do
+    MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: servers})
+  end
+
   describe "handle_info/2 with generic processes" do
     test "reports the mailbox size of zero when the mailbox is empty" do
       expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 0)
 
-      assert {:noreply, %{servers: [:test_server_one]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one]})
+      assert {:noreply, %{servers: [:test_server_one]}} = refresh_mailbox_monitor([:test_server_one])
     end
 
     test "reports the mailbox size when the mailbox is not empty" do
@@ -45,8 +48,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
 
       assert_receive {:work, ref}
 
-      assert {:noreply, %{servers: [:test_server_one]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one]})
+      assert {:noreply, %{servers: [:test_server_one]}} = refresh_mailbox_monitor([:test_server_one])
     end
 
     test "reports the mailbox size for more than one server" do
@@ -69,21 +71,20 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
       assert_receive {:work, ref_two}
 
       assert {:noreply, %{servers: [:test_server_one, :test_server_two]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one, :test_server_two]})
+               refresh_mailbox_monitor([:test_server_one, :test_server_two])
     end
 
     test "does not report when the gen_server is not running" do
       expect_record_event(0, :metric, :gauge, "gen_server.missing_server.mailbox_size", 0)
 
       assert {:noreply, %{servers: [:missing_server]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
+               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:missing_server]})
     end
 
     test "logs an info message when the gen_server is not running" do
       expect_record_event(:log, :info, "Error retrieving the mailbox size for missing_server, pid could not be found")
-     
-      assert {:noreply, %{servers: [:missing_server]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:missing_server]})
+
+      assert {:noreply, %{servers: [:missing_server]}} = refresh_mailbox_monitor([:missing_server])
     end
   end
 
@@ -93,8 +94,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
 
       expect_record_event(1, :metric, :gauge, "loop.HomePage.mailbox_size", 0)
 
-      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
+      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} = refresh_mailbox_monitor([{:loop, "HomePage"}])
     end
 
     test "reports the mailbox size when a loop has received a call" do
@@ -104,22 +104,19 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
 
       increase_loop("HomePage")
 
-      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
+      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} = refresh_mailbox_monitor([{:loop, "HomePage"}])
     end
 
     test "does not report when the loop is not running" do
-      expect_record_event(0, :metric, :gauge, "loop.HomePage.mailbox_size", 1)
+      expect_record_event(0, :metric, :gauge, "loop.HomePage.mailbox_size", 0)
 
-      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
-               MailboxMonitor.handle_info(:refresh, %{servers: [{:loop, "HomePage"}]})
+      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} = refresh_mailbox_monitor([{:loop, "HomePage"}])
     end
 
     test "logs an info message if a loop has not started" do
       expect_record_event(:log, :info, "Error retrieving the mailbox size for loop HomePage, pid could not be found")
-    
-      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
+
+      assert {:noreply, %{servers: [{:loop, "HomePage"}]}} = refresh_mailbox_monitor([{:loop, "HomePage"}])
     end
   end
 end
