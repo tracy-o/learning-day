@@ -3,12 +3,14 @@ defmodule Belfrage.Transformers.UserSession do
 
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
+  alias Belfrage.Authentication.Token
+
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies, raw_headers: headers}}) do
-    private = Struct.Private.set_session_state(struct.private, cookies, headers, valid?(cookies["ckns_atkn"]))
+    private = Struct.Private.set_session_state(struct.private, cookies, headers, Token.parse(cookies["ckns_atkn"]))
     struct_with_session_state = Struct.add(struct, :private, private)
 
     cond do
@@ -49,46 +51,6 @@ defmodule Belfrage.Transformers.UserSession do
         body: "Redirecting"
       })
     }
-  end
-
-  defp valid?(_session_token = nil), do: false
-
-  defp valid?(session_token) do
-    case Belfrage.Authentication.Validator.verify_and_validate(session_token) do
-      {:ok, _decoded_token} ->
-        true
-
-      {:error, [message: message, claim: claim, claim_val: claim_val]} ->
-        Belfrage.Event.record(:log, :warn, %{
-          msg: "Claim validation failed",
-          message: message,
-          claim_val: claim_val,
-          claim: claim
-        })
-
-        false
-
-      {:error, :token_malformed} ->
-        Belfrage.Event.record(:log, :error, "Malformed JWT")
-
-        false
-
-      {:error, :public_key_not_found} ->
-        false
-
-      {:error, :invalid_token_header} ->
-        Belfrage.Event.record(:log, :error, "Invalid token header")
-
-        false
-
-      {:error, :signature_error} ->
-        false
-
-      {:error, _} ->
-        Belfrage.Event.record(:log, :error, "Unexpected token error.")
-
-        false
-    end
   end
 
   defp session_url, do: Application.get_env(:belfrage, :authentication)["session_url"]

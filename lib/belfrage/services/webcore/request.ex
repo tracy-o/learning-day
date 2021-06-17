@@ -15,7 +15,11 @@ defmodule Belfrage.Services.Webcore.Request do
 
   defp headers(
          struct = %Struct{
-           private: %Struct.Private{authenticated: true, session_token: session_token, valid_session: true}
+           private: %Struct.Private{
+             authenticated: true,
+             session_token: session_token,
+             valid_session: true
+           }
          }
        )
        when is_binary(session_token) do
@@ -24,6 +28,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> Map.put(:authorization, "Bearer #{session_token}")
     |> Map.put(:"x-authentication-provider", "idv5")
     |> Map.put(:"pers-env", authentication_environment)
+    |> maybe_put_user_attributes_headers(struct.private.user_attributes)
   end
 
   defp headers(struct), do: base_headers(struct)
@@ -36,6 +41,21 @@ defmodule Belfrage.Services.Webcore.Request do
       is_uk: struct.request.is_uk,
       host: struct.request.host
     }
+  end
+
+  # This still doesn't cover partial presence of attributes
+  # that will be covered by RESFRAME-4284
+  defp maybe_put_user_attributes_headers(
+         base_headers,
+         _user_attributes = %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}
+       ) do
+    base_headers
+    |> Map.put(:"ctx-age-bracket", age_bracket)
+    |> Map.put(:"ctx-allow-personalisation", to_string(allow_personalisation))
+  end
+
+  defp maybe_put_user_attributes_headers(base_headers, _user_attributes) do
+    base_headers
   end
 
   defp authentication_environment do
