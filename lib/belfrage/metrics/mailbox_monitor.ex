@@ -22,7 +22,7 @@ defmodule Belfrage.Metrics.MailboxMonitor do
     for server_name <- servers do
       server_name
       |> get_pid()
-      |> mailbox_size()
+      |> get_mailbox_size()
       |> case do
         nil -> log_failure(server_name)
         len -> send_metric(server_name, len)
@@ -43,9 +43,9 @@ defmodule Belfrage.Metrics.MailboxMonitor do
     Process.whereis(server_name)
   end
 
-  defp mailbox_size(nil), do: nil
+  defp get_mailbox_size(nil), do: nil
 
-  defp mailbox_size(pid) do
+  defp get_mailbox_size(pid) do
     pid
     |> Process.info(:message_queue_len)
     |> elem(1)

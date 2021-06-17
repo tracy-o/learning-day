@@ -4,7 +4,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
 
   alias Belfrage.Metrics.MailboxMonitor
   alias Belfrage.TestGenServer
-  alias Belfrage.{Loop, LoopsSupervisor}
+  alias Belfrage.LoopsSupervisor
 
   setup do
     start_supervised!({TestGenServer, name: :test_server_one}, id: :test_server_one)
