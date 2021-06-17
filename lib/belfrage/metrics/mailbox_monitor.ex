@@ -20,7 +20,10 @@ defmodule Belfrage.Metrics.MailboxMonitor do
 
   def handle_info(:refresh, state = %{rate: rate, servers: servers}) do
     for server_name <- servers do
-      case mailbox_size(server_name) do
+      server_name
+      |> get_pid()
+      |> mailbox_size()
+      |> case do
         nil -> log_failure(server_name)
         len -> send_metric(server_name, len)
       end
@@ -32,18 +35,20 @@ defmodule Belfrage.Metrics.MailboxMonitor do
 
   def handle_info(_msg, state), do: {:noreply, state}
 
-  defp mailbox_size({:loop, loop_name}) do
-    with pid when not is_nil(pid) <-
-           {:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}}
-           |> GenServer.whereis(),
-         {:message_queue_len, len} <- Process.info(pid, :message_queue_len),
-         do: len
+  defp get_pid({:loop, loop_name}) do
+    GenServer.whereis({:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}})
   end
 
-  defp mailbox_size(server_name) do
-    with pid when not is_nil(pid) <- Process.whereis(server_name),
-         {:message_queue_len, len} <- Process.info(pid, :message_queue_len),
-         do: len
+  defp get_pid(server_name) do
+    Process.whereis(server_name)
+  end
+
+  defp mailbox_size(nil), do: nil
+
+  defp mailbox_size(pid) do
+    pid
+    |> Process.info(:message_queue_len)
+    |> elem(1)
   end
 
   defp log_failure({:loop, loop_name}) do

@@ -14,8 +14,10 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
   end
 
   defp increase_loop(loop_name) do
-    {:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}}
-    |> GenServer.cast({:inc, 200, "MyOrigin", true})
+    GenServer.cast(
+      {:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}},
+      {:inc, 200, "MyOrigin", true}
+    )
   end
 
   defp expect_record_event(:log, level, message) do
@@ -77,8 +79,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     test "does not report when the gen_server is not running" do
       expect_record_event(0, :metric, :gauge, "gen_server.missing_server.mailbox_size", 0)
 
-      assert {:noreply, %{servers: [:missing_server]}} =
-               MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:missing_server]})
+      assert {:noreply, %{servers: [:missing_server]}} = refresh_mailbox_monitor([:missing_server])
     end
 
     test "logs an info message when the gen_server is not running" do
