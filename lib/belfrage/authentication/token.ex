@@ -12,10 +12,6 @@ defmodule Belfrage.Authentication.Token do
     end
   end
 
-  defp decode(nil) do
-    nil
-  end
-
   defp decode(cookie) do
     Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
@@ -29,8 +25,6 @@ defmodule Belfrage.Authentication.Token do
         {true, %{}}
     end
   end
-
-  defp handle_decoding_error(_decoded_token = nil), do: :noop
 
   defp handle_decoding_error(message: message, claim: claim, claim_val: claim_val) do
     Belfrage.Event.record(:log, :warn, %{
