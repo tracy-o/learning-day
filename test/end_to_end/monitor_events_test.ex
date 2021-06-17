@@ -27,7 +27,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
   test "records monitor events for using a lambda service" do
     Belfrage.MonitorMock
-    |> expect(:record_event, 5, fn
+    |> expect(:record_event, 6, fn
       %Belfrage.Event{
         data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
         dimensions: %{
@@ -87,6 +87,18 @@ defmodule EndToEnd.MonitorEventsTest do
         type: {:log, :info}
       } ->
         assert is_binary(request_id)
+
+      %Belfrage.Event{
+        data: {"web.response.uncompressed", 1},
+        dimensions: %{
+          request_id: request_id,
+          path: "/200-ok-response",
+          loop_id: "SomeLoop"
+        },
+        request_id: request_id,
+        type: {:metric, :increment}
+      } ->
+        assert is_binary(request_id)
     end)
 
     conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
@@ -103,7 +115,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
     test "sends metrics and logs to monitor" do
       Belfrage.MonitorMock
-      |> expect(:record_event, 2, fn
+      |> expect(:record_event, 3, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -118,6 +130,18 @@ defmodule EndToEnd.MonitorEventsTest do
 
         %Belfrage.Event{
           data: {"cache.local.fresh.hit", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/200-ok-response",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"web.response.uncompressed", 1},
           dimensions: %{
             request_id: request_id,
             path: "/200-ok-response",
@@ -170,7 +194,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 6, fn
+      |> expect(:record_event, 7, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -242,6 +266,18 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:log, :info}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"web.response.uncompressed", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/sends-request-downstream")
@@ -280,7 +316,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 7, fn
+      |> expect(:record_event, 8, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/downstream-broken", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -352,6 +388,18 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:log, :info}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"web.response.uncompressed", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/downstream-broken",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/downstream-broken?belfrage-cache-bust")
@@ -374,7 +422,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 7, fn
+      |> expect(:record_event, 8, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 500},
           dimensions: %{
@@ -446,6 +494,18 @@ defmodule EndToEnd.MonitorEventsTest do
           type: {:log, :info}
         } ->
           assert is_binary(request_id)
+
+        %Belfrage.Event{
+          data: {"web.response.uncompressed", 1},
+          dimensions: %{
+            request_id: request_id,
+            path: "/sends-request-downstream",
+            loop_id: "SomeLoop"
+          },
+          request_id: request_id,
+          type: {:metric, :increment}
+        } ->
+          assert is_binary(request_id)
       end)
 
       conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
@@ -472,7 +532,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 7, fn _ ->
+      |> expect(:record_event, 8, fn _ ->
         {:ok, false}
       end)
 
