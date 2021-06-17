@@ -20,7 +20,7 @@ defmodule Belfrage.Metrics.MailboxMonitor do
 
   def handle_info(:refresh, state = %{rate: rate, servers: servers}) do
     for server_name <- servers do
-       case get_pid(server_name) do
+      case get_pid(server_name) do
         nil -> log_failure(server_name)
         pid -> send_metric(server_name, get_mailbox_size(pid))
       end
