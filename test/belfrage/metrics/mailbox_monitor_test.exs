@@ -18,18 +18,24 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     |> GenServer.cast({:inc, 200, "MyOrigin", true})
   end
 
+  defp expect_record_event(:log, level, message) do
+    expect(Belfrage.EventMock, :record, fn :log, level, %{msg: message} -> true end)
+  end
+
+  defp expect_record_event(count, :metric, :gauge, message, value) do
+    expect(Belfrage.EventMock, :record, count, fn :metric, :gauge, message, value: value -> true end)
+  end
+
   describe "handle_info/2 with generic processes" do
     test "reports the mailbox size of zero when the mailbox is empty" do
-      Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.test_server_one.mailbox_size", value: 0 -> true end)
+      expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 0)
 
       assert {:noreply, %{servers: [:test_server_one]}} =
                MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:test_server_one]})
     end
 
     test "reports the mailbox size when the mailbox is not empty" do
-      Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.test_server_one.mailbox_size", value: 2 -> true end)
+      expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 2)
 
       ref = make_ref()
 
@@ -44,9 +50,8 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
 
     test "reports the mailbox size for more than one server" do
-      Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "gen_server.test_server_one.mailbox_size", value: 2 -> true end)
-      |> expect(:record, fn :metric, :gauge, "gen_server.test_server_two.mailbox_size", value: 3 -> true end)
+      expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 2)
+      expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 3)
 
       ref_one = make_ref()
       ref_two = make_ref()
@@ -68,21 +73,15 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
 
     test "does not report when the gen_server is not running" do
-      Belfrage.EventMock
-      |> expect(:record, 0, fn :metric, :gauge, _name, _opts -> true end)
+      expect_record_event(0, :metric, :gauge, "gen_server.missing_server.mailbox_size", 0)
 
       assert {:noreply, %{servers: [:missing_server]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [:missing_server]})
     end
 
     test "logs an info message when the gen_server is not running" do
-      Belfrage.EventMock
-      |> expect(:record, fn :log,
-                            :info,
-                            %{msg: "Error retrieving the mailbox size for missing_server, pid could not be found"} ->
-        true
-      end)
-
+      expect_record_event(:log, :info, "Error retrieving the mailbox size for missing_server, pid could not be found")
+     
       assert {:noreply, %{servers: [:missing_server]}} =
                MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [:missing_server]})
     end
@@ -92,8 +91,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     test "reports the mailbox size of zero when a loop has just started" do
       LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
 
-      Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 0 -> true end)
+      expect_record_event(1, :metric, :gauge, "loop.HomePage.mailbox_size", 0)
 
       assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
                MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
@@ -102,8 +100,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     test "reports the mailbox size when a loop has received a call" do
       LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
 
-      Belfrage.EventMock
-      |> expect(:record, fn :metric, :gauge, "loop.HomePage.mailbox_size", value: 1 -> true end)
+      expect_record_event(1, :metric, :gauge, "loop.HomePage.mailbox_size", 1)
 
       increase_loop("HomePage")
 
@@ -112,21 +109,15 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
 
     test "does not report when the loop is not running" do
-      Belfrage.EventMock
-      |> expect(:record, 0, fn :metric, :gauge, _name, _opts -> true end)
+      expect_record_event(0, :metric, :gauge, "loop.HomePage.mailbox_size", 1)
 
       assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
                MailboxMonitor.handle_info(:refresh, %{servers: [{:loop, "HomePage"}]})
     end
 
     test "logs an info message if a loop has not started" do
-      Belfrage.EventMock
-      |> expect(:record, fn :log,
-                            :info,
-                            %{msg: "Error retrieving the mailbox size for loop HomePage, pid could not be found"} ->
-        true
-      end)
-
+      expect_record_event(:log, :info, "Error retrieving the mailbox size for loop HomePage, pid could not be found")
+    
       assert {:noreply, %{servers: [{:loop, "HomePage"}]}} =
                MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: [{:loop, "HomePage"}]})
     end
