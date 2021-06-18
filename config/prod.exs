@@ -13,7 +13,7 @@ config :statix,
   pool_size: 6
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, Belfrage.Metrics.CrashTracker]
 
 config :logger, :file,
   path: System.get_env("LOG_PATH"),
