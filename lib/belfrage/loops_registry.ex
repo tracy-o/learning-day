@@ -6,7 +6,7 @@ defmodule Belfrage.LoopsRegistry do
   end
 
   def find_or_start(%Struct{private: %Struct.Private{loop_id: loop_id}}) do
-    case Registry.lookup(__MODULE__, loop_id) do
+    case Registry.lookup(__MODULE__, {Belfrage.Loop, loop_id}) do
       [{pid, _}] -> pid
       [] -> LoopsSupervisor.start_loop(loop_id)
     end
