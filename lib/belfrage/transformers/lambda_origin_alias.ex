@@ -6,12 +6,24 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
-    then(
-      rest,
-      Struct.add(struct, :private, %{
-        origin: "#{private.origin}:#{lambda_alias(private.preview_mode, subdomain, private.production_environment)}"
-      })
-    )
+    case String.match?(subdomain, ~r/[a-zA-Z0-9]/) do
+      true ->
+        then(
+          rest,
+          Struct.add(struct, :private, %{
+            origin: "#{private.origin}:#{lambda_alias(private.preview_mode, subdomain, private.production_environment)}"
+          })
+        )
+
+      false ->
+        {
+          :stop_pipeline,
+          Struct.add(struct, :response, %{
+            http_status: 400,
+            body: "Invalid Alias"
+          })
+        }
+    end
   end
 
   defp lambda_alias("on", subdomain, _), do: subdomain
