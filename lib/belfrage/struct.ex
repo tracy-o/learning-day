@@ -86,6 +86,16 @@ defmodule Belfrage.Struct.Private do
 
   @type t :: %__MODULE__{}
 
+  # def set_session_state(
+  #       private = %__MODULE__{},
+  #       %{"ckns_atkn" => ckns_atkn},
+  #       _headers,
+  #       valid_session?
+  #     )
+  #     when ckns_atkn == "FAKETOKEN" do
+  #   %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+  # end
+
   def set_session_state(
         private = %__MODULE__{},
         %{"ckns_atkn" => ckns_atkn},

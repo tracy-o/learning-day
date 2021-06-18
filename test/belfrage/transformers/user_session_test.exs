@@ -176,6 +176,34 @@ defmodule Belfrage.Transformers.UserSessionTest do
     end
   end
 
+  describe "personalisation overrides" do
+    setup do
+      expect(FlagpoleMock, :state, fn -> true end)
+      :ok
+    end
+
+    test "when `ckns_atkn` has special value it will be authenticated" do
+      struct = %Struct{
+        request: %Struct.Request{
+          cookies: %{"ckns_atkn" => "FAKETOKEN"},
+          path: "/full-stack-test",
+          host: "bbc.co.uk"
+        }
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   authenticated: true,
+                   session_token: "FAKETOKEN",
+                   valid_session: true
+                 }
+               }
+             } = UserSession.call([], struct)
+    end
+  end
+
   describe "when personalisation dial is 'on', idcta flagpole is false" do
     setup do
       expect(FlagpoleMock, :state, fn -> false end)
