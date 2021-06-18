@@ -2,9 +2,7 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Metrics.MailboxMonitor
-  alias Belfrage.TestGenServer
-  alias Belfrage.LoopsSupervisor
+  alias Belfrage.{Metrics.MailboxMonitor, TestGenServer, LoopsSupervisor, Loop, Struct}
 
   setup do
     start_supervised!({TestGenServer, name: :test_server_one}, id: :test_server_one)
@@ -14,10 +12,10 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
   end
 
   defp increase_loop(loop_name) do
-    GenServer.cast(
-      {:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, loop_name}}},
-      {:inc, 200, "MyOrigin", true}
-    )
+    Loop.inc(%Struct{
+      private: %Struct.Private{loop_id: loop_name, origin: "MyOrigin"},
+      response: %Struct.Response{http_status: 200, fallback: nil}
+    })
   end
 
   defp expect_record_event(:log, level, message) do
