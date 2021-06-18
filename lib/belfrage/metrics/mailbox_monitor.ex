@@ -1,6 +1,6 @@
 defmodule Belfrage.Metrics.MailboxMonitor do
   use GenServer
-  alias Belfrage.{Struct, LoopsRegistry}
+  alias Belfrage.LoopsRegistry
 
   @event Application.get_env(:belfrage, :event)
   @servers Application.get_env(:belfrage, :mailbox_monitors)
@@ -34,7 +34,7 @@ defmodule Belfrage.Metrics.MailboxMonitor do
   def handle_info(_msg, state), do: {:noreply, state}
 
   defp get_pid({:loop, loop_name}) do
-    LoopsRegistry.find(%Struct{private: %Struct.Private{loop_id: loop_name}})
+    LoopsRegistry.find(loop_name)
   end
 
   defp get_pid(server_name) do

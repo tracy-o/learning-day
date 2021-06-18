@@ -12,7 +12,7 @@ defmodule Belfrage.LoopsRegistry do
     end
   end
 
-  def find(%Struct{private: %Struct.Private{loop_id: loop_id}}) do
+  def find(loop_id) do
     case Registry.lookup(__MODULE__, {Belfrage.Loop, loop_id}) do
       [{pid, _}] -> pid
       [] -> nil
