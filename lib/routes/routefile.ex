@@ -987,8 +987,14 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
 
   ## Sport Basketball Scores-Fixtures pages
-  handle "/sport/basketball/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures", "/sport/basketball/scores-fixtures/2021-04-26"]
-  handle "/sport/basketball/:tournament/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures", "/sport/basketball/nba/scores-fixtures/2021-04-26"]
+  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
+  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(id, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
+  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(id, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
