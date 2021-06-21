@@ -989,11 +989,11 @@ defmodule Routes.Routefile do
   ## Sport Basketball Scores-Fixtures pages
   handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
   handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(id, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
   end
   handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
   handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(id, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
   end
 
   ## Sport Scores-Fixtures pages
