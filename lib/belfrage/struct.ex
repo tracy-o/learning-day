@@ -79,64 +79,66 @@ defmodule Belfrage.Struct.Private do
             signature_keys: %{skip: [], add: []},
             preview_mode: "off",
             default_language: "en-GB",
-            authenticated: false,
-            session_token: nil,
-            valid_session: false,
-            user_attributes: %{}
+            session_state: %{}
+
+  # authenticated: false,
+  # session_token: nil,
+  # valid_session: false,
+  # user_attributes: %{}
 
   @type t :: %__MODULE__{}
+
+  # # def set_session_state(
+  # #       private = %__MODULE__{},
+  # #       %{"ckns_atkn" => ckns_atkn},
+  # #       _headers,
+  # #       valid_session?
+  # #     )
+  # #     when ckns_atkn == "FAKETOKEN" do
+  # #   %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+  # # end
 
   # def set_session_state(
   #       private = %__MODULE__{},
   #       %{"ckns_atkn" => ckns_atkn},
-  #       _headers,
-  #       valid_session?
-  #     )
-  #     when ckns_atkn == "FAKETOKEN" do
-  #   %{private | session_token: ckns_atkn, authenticated: true, valid_session: valid_session?}
+  #       %{"x-id-oidc-signedin" => "1"},
+  #       {valid_session?, user_attributes}
+  #     ) do
+  #   %{
+  #     private
+  #     | session_token: ckns_atkn,
+  #       authenticated: true,
+  #       valid_session: valid_session?,
+  #       user_attributes: user_attributes
+  #   }
   # end
 
-  def set_session_state(
-        private = %__MODULE__{},
-        %{"ckns_atkn" => ckns_atkn},
-        %{"x-id-oidc-signedin" => "1"},
-        {valid_session?, user_attributes}
-      ) do
-    %{
-      private
-      | session_token: ckns_atkn,
-        authenticated: true,
-        valid_session: valid_session?,
-        user_attributes: user_attributes
-    }
-  end
+  # def set_session_state(
+  #       private = %__MODULE__{},
+  #       %{"ckns_atkn" => ckns_atkn, "ckns_id" => _id},
+  #       _headers,
+  #       {valid_session?, user_attributes}
+  #     ) do
+  #   %{
+  #     private
+  #     | session_token: ckns_atkn,
+  #       authenticated: true,
+  #       valid_session: valid_session?,
+  #       user_attributes: user_attributes
+  #   }
+  # end
 
-  def set_session_state(
-        private = %__MODULE__{},
-        %{"ckns_atkn" => ckns_atkn, "ckns_id" => _id},
-        _headers,
-        {valid_session?, user_attributes}
-      ) do
-    %{
-      private
-      | session_token: ckns_atkn,
-        authenticated: true,
-        valid_session: valid_session?,
-        user_attributes: user_attributes
-    }
-  end
+  # def set_session_state(private = %__MODULE__{}, _cookies, %{"x-id-oidc-signedin" => "1"}, _token_data) do
+  #   %{private | session_token: nil, authenticated: true, valid_session: false}
+  # end
 
-  def set_session_state(private = %__MODULE__{}, _cookies, %{"x-id-oidc-signedin" => "1"}, _token_data) do
-    %{private | session_token: nil, authenticated: true, valid_session: false}
-  end
+  # def set_session_state(private = %__MODULE__{}, %{"ckns_id" => _id}, _headers, _token_data) do
+  #   %{private | session_token: nil, authenticated: true, valid_session: false}
+  # end
 
-  def set_session_state(private = %__MODULE__{}, %{"ckns_id" => _id}, _headers, _token_data) do
-    %{private | session_token: nil, authenticated: true, valid_session: false}
-  end
-
-  def set_session_state(private = %__MODULE__{}, _cookies, _headers, _token_data) do
-    %{private | session_token: nil, authenticated: false, valid_session: false}
-  end
+  # def set_session_state(private = %__MODULE__{}, _cookies, _headers, _token_data) do
+  #   %{private | session_token: nil, authenticated: false, valid_session: false}
+  # end
 end
 
 defmodule Belfrage.Struct do

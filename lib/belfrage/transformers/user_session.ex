@@ -9,38 +9,25 @@ defmodule Belfrage.Transformers.UserSession do
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
-  def call(
-        rest,
-        struct = %Struct{request: %Struct.Request{path: "/full-stack-test", cookies: %{"ckns_atkn" => "FAKETOKEN"}}}
-      ) do
-    fake_valid_token = {true, %{}}
+  def call(rest, struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}) do
+    session_state = SessionState.add(cookies, headers, path)
+    struct_with_session_state = Struct.add(struct, :private, %{private | session_state: session_state})
 
-    private =
-      Struct.Private.set_session_state(
-        struct.private,
-        struct.request.cookies,
-        struct.request.raw_headers,
-        fake_valid_token
-      )
+    cond do
+      !personalisation_available?(struct.request.host) ->
+        then(rest, struct)
 
-    struct_with_session_state = Struct.add(struct, :private, private)
+      match?(%{valid_session: true}, session_state) ->
+        then(rest, struct_with_session_state)
 
-    # then(rest, struct_with_session_state)
-    check_early_return(rest, struct, private, struct_with_session_state)
-  end
+      # x-id-oidc-signedin set to 1
+      match?(%{session_token: _value, authenticated: true, valid_session: false}, session_state) ->
+        redirect(struct_with_session_state)
 
-  @impl true
-  def call(rest, struct) do
-    private =
-      Struct.Private.set_session_state(
-        struct.private,
-        struct.request.cookies,
-        struct.request.raw_headers,
-        Token.parse(struct.request.cookies["ckns_atkn"])
-      )
-
-    struct_with_session_state = Struct.add(struct, :private, private)
-    check_early_return(rest, struct, private, struct_with_session_state)
+      # x-id-oidc-signedin not set
+      match?(%{session_token: nil, authenticated: false, valid_session: false}, session_state) ->
+        then(rest, struct_with_session_state)
+    end
   end
 
   defp personalisation_available?(host) when is_binary(host) do
@@ -49,24 +36,6 @@ defmodule Belfrage.Transformers.UserSession do
 
   defp personalisation_available?(_host) do
     false
-  end
-
-  defp check_early_return(rest, struct, private, struct_with_session_state) do
-    cond do
-      !personalisation_available?(struct.request.host) ->
-        then(rest, struct)
-
-      match?(%Private{authenticated: true, valid_session: true}, private) ->
-        then(rest, struct_with_session_state)
-
-      # x-id-oidc-signedin set to 1
-      match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
-        redirect(struct_with_session_state)
-
-      # x-id-oidc-signedin not set
-      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
-        then(rest, struct_with_session_state)
-    end
   end
 
   defp redirect(struct = %Struct{}) do

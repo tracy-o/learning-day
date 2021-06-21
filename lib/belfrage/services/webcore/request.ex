@@ -16,9 +16,11 @@ defmodule Belfrage.Services.Webcore.Request do
   defp headers(
          struct = %Struct{
            private: %Struct.Private{
-             authenticated: true,
-             session_token: session_token,
-             valid_session: true
+             session_state: %{
+               authenticated: true,
+               session_token: session_token,
+               valid_session: true
+             }
            }
          }
        )
@@ -27,8 +29,8 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> Map.put(:authorization, "Bearer #{session_token}")
     |> Map.put(:"x-authentication-provider", "idv5")
-    |> Map.put(:"pers-env", authentication_environment())
-    |> maybe_put_user_attributes_headers(struct.private.user_attributes)
+    |> Map.put(:"pers-env", authentication_environment)
+    |> maybe_put_user_attributes_headers(struct.private)
   end
 
   defp headers(struct), do: base_headers(struct)
@@ -47,7 +49,7 @@ defmodule Belfrage.Services.Webcore.Request do
   # that will be covered by RESFRAME-4284
   defp maybe_put_user_attributes_headers(
          base_headers,
-         _user_attributes = %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}
+         %{user_user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
        ) do
     base_headers
     |> Map.put(:"ctx-age-bracket", age_bracket)
@@ -58,13 +60,13 @@ defmodule Belfrage.Services.Webcore.Request do
     base_headers
   end
 
-  defp authentication_environment do
-    Application.get_env(:belfrage, :authentication)["account_jwk_uri"] |> extract_env()
-  end
+  # defp authentication_environment do
+  #   Application.get_env(:belfrage, :authentication)["account_jwk_uri"] |> extract_env()
+  # end
 
-  def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
-  def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
-  def extract_env("https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "stage"
-  def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
-  def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
+  # def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
+  # def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
+  # def extract_env("https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "stage"
+  # def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
+  # def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
 end
