@@ -987,8 +987,8 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
 
   ## Sport Basketball Scores-Fixtures pages
-  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures", "/sport/basketball/scores-fixtures/2021-04-26"]
-  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures", "/sport/basketball/nba/scores-fixtures/2021-04-26"]
+  handle "/sport/basketball/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures", "/sport/basketball/scores-fixtures/2021-04-26"]
+  handle "/sport/basketball/:tournament/scores-fixtures/*_any", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures", "/sport/basketball/nba/scores-fixtures/2021-04-26"]
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
