@@ -13,6 +13,29 @@ defmodule Belfrage.Event do
   alias Belfrage.Event
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
+  @doc """
+  Adds a message to the log when the first argument is `:log`, and records a
+  metric when it's `:metric`
+
+  ## Supported options
+
+  * `:request_id` - Sets/overrides `request_id` event attribute and dimension.
+  * `:loop_id` - Adds passed value to the event's dimensions.
+
+  Also when adding a log message:
+
+  * `:cloudwatch` - When `true`, the message will only be logged on CloudWatch
+  and not passed to Belfrage monitor.
+
+  Also when recording a metric:
+
+  * `:value` - Sets the metrics value. Default value is `1`.
+
+  ## Dimensions
+
+  Please note that event dimensions are only passed to Belfrage Monitor and not
+  to CloudWatch currently.
+  """
   def record(type, level, msg, opts \\ [])
 
   def record(:log, level, msg, cloudwatch: true) do
