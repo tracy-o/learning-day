@@ -34,6 +34,8 @@ defmodule Belfrage.Event do
     apply(Belfrage.Metrics.Statix, type, [metric, value(opts)])
   end
 
+  def new(log_or_metric, name, payload, opts \\ [])
+
   def new(:metric, type, metric, opts) do
     dimensions = build_dimensions(opts)
 
