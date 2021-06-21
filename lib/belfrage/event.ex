@@ -3,7 +3,7 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
-  @dimension_keys [:request_id, :loop_id]
+  @dimension_opts [:request_id, :loop_id]
 
   @monitor_api Application.get_env(:belfrage, :monitor_api)
 
@@ -64,7 +64,7 @@ defmodule Belfrage.Event do
 
   defp build_dimensions(opts) do
     opts
-    |> Keyword.take(@dimension_keys)
+    |> Keyword.take(@dimension_opts)
     |> Enum.into(Stump.metadata())
   end
 
