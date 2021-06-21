@@ -16,7 +16,7 @@ defmodule Belfrage.Authentication.SessionState do
         %{"ckns_atkn" => ckns_atkn},
         %{"x-id-oidc-signedin" => "1"},
         _path
-      ) do
+      ) when is_binary(ckns_atkn) do
     {valid_session?, user_attributes} = Token.parse(ckns_atkn)
 
     %{
@@ -32,7 +32,7 @@ defmodule Belfrage.Authentication.SessionState do
         %{"ckns_atkn" => ckns_atkn, "ckns_id" => _id},
         _headers,
         _path
-      ) do
+      ) when is_binary(ckns_atkn) do
     {valid_session?, user_attributes} = Token.parse(ckns_atkn)
 
     %{

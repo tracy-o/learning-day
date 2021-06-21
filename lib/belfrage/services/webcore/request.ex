@@ -49,7 +49,7 @@ defmodule Belfrage.Services.Webcore.Request do
   # that will be covered by RESFRAME-4284
   defp maybe_put_user_attributes_headers(
          base_headers,
-         %{user_user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
+         %{user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
        ) do
     base_headers
     |> Map.put(:"ctx-age-bracket", age_bracket)
@@ -59,14 +59,4 @@ defmodule Belfrage.Services.Webcore.Request do
   defp maybe_put_user_attributes_headers(base_headers, _user_attributes) do
     base_headers
   end
-
-  # defp authentication_environment do
-  #   Application.get_env(:belfrage, :authentication)["account_jwk_uri"] |> extract_env()
-  # end
-
-  # def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
-  # def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
-  # def extract_env("https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "stage"
-  # def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
-  # def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
 end
