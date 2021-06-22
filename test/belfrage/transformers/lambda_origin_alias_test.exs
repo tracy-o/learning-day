@@ -49,6 +49,22 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       assert origin == "lambda-function:example-branch"
     end
 
+    test "a valid subdomain containing -'s and _'s will be used as the alias" do
+      struct = %Struct{
+        request: %Struct.Request{subdomain: "example-branch_2"},
+        private: %Struct.Private{
+          loop_id: "SportVideos",
+          origin: "lambda-function",
+          production_environment: "test",
+          preview_mode: "on"
+        }
+      }
+
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], struct)
+
+      assert origin == "lambda-function:example-branch_2"
+    end
+
     test "if the subdomain is invalid a 400 will be returned" do
       struct = %Struct{
         request: %Struct.Request{subdomain: "*"},
