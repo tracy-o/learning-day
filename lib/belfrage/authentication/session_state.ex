@@ -54,13 +54,13 @@ defmodule Belfrage.Authentication.SessionState do
         %{"x-id-oidc-signedin" => "1"},
         _path
       ) do
-        %{
-          authentication_environment: authentication_environment(),
-          session_token: nil,
-          authenticated: true,
-          valid_session: false,
-          user_attributes: %{}
-        }
+    %{
+      authentication_environment: authentication_environment(),
+      session_token: nil,
+      authenticated: true,
+      valid_session: false,
+      user_attributes: %{}
+    }
   end
 
   def add(
