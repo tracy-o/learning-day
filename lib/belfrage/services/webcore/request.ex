@@ -16,15 +16,15 @@ defmodule Belfrage.Services.Webcore.Request do
   defp headers(
          struct = %Struct{
            private: %Struct.Private{
-             session_state: %{
+             session_,tstate: %{
+               authentication_environment: authentication_environment,
                authenticated: true,
                session_token: session_token,
                valid_session: true
              }
            }
          }
-       )
-       when is_binary(session_token) do
+       ) do
     struct
     |> base_headers()
     |> Map.put(:authorization, "Bearer #{session_token}")

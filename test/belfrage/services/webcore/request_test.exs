@@ -4,34 +4,38 @@ defmodule Belfrage.Services.Webcore.RequestTest do
   alias Belfrage.Struct
 
   setup do
-    private_valid_session = %Struct.Private{
+    private_valid_session = %{
       authenticated: true,
       session_token: "a-valid-session-token",
       valid_session: true,
       user_attributes: %{age_bracket: "o18", allow_personalisation: true}
     }
 
-    private_valid_session_without_user_attributes = %Struct.Private{
+    private_valid_session_without_user_attributes = %{
       authenticated: true,
       session_token: "a-valid-session-token",
       valid_session: true,
       user_attributes: %{}
     }
 
-    private_valid_session_with_partial_user_attributes = %Struct.Private{
+    private_valid_session_with_partial_user_attributes = %{
       authenticated: true,
       session_token: "a-valid-session-token",
       valid_session: true,
       user_attributes: %{allow_personalisation: true}
     }
 
-    private_invalid_session = %Struct.Private{
+    private_invalid_session = %{
       authenticated: true,
       session_token: "an-invalid-session-token",
       valid_session: false
     }
 
-    private_unauthenticated_session = %Struct.Private{authenticated: false, session_token: nil, valid_session: false}
+    private_unauthenticated_session = %{
+      authenticated: false,
+      session_token: nil,
+      valid_session: false
+    }
 
     request_struct = %Struct{
       request: %Struct.Request{

@@ -79,7 +79,11 @@ defmodule Belfrage.Struct.Private do
             signature_keys: %{skip: [], add: []},
             preview_mode: "off",
             default_language: "en-GB",
-            session_state: %{}
+            session_state: %{authentication_environment: nil,
+                             session_token: nil,
+                             authenticated: false,
+                             valid_session: false,
+                             user_attributes: %{}}
 
   @type t :: %__MODULE__{}
 end
