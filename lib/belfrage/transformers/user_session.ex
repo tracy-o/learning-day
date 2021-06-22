@@ -3,13 +3,16 @@ defmodule Belfrage.Transformers.UserSession do
 
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
-  alias Belfrage.Authentication.Token
+  alias Belfrage.Authentication.SessionState
 
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}) do
+  def call(
+        rest,
+        struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}, private: private}
+      ) do
     session_state = SessionState.add(cookies, headers, path)
     struct_with_session_state = Struct.add(struct, :private, %{private | session_state: session_state})
 

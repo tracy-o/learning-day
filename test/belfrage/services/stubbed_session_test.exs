@@ -7,9 +7,13 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, authenticated and session token is provided" do
     struct = %Struct{
       private: %Struct.Private{
-        valid_session: true,
-        authenticated: true,
-        session_token: "34fFErerG5464GereRGE3"
+        session_state: %{
+          authentication_environment: "int",
+          session_token: "34fFErerG5464GereRGE3",
+          valid_session: true,
+          authenticated: true,
+          user_attributes: %{}
+        }
       }
     }
 
@@ -31,9 +35,13 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "invalid session, authenticated and session token is provided" do
     struct = %Struct{
       private: %Struct.Private{
-        valid_session: false,
-        authenticated: true,
-        session_token: "34fFErerG5464GereRGE3"
+        session_state: %{
+          authentication_environment: "int",
+          session_token: "34fFErerG5464GereRGE3",
+          valid_session: false,
+          authenticated: true,
+          user_attributes: %{}
+        }
       }
     }
 
@@ -55,9 +63,13 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, not authenticated and session token is provided" do
     struct = %Struct{
       private: %Struct.Private{
-        valid_session: true,
-        authenticated: false,
-        session_token: "34fFErerG5464GereRGE3"
+        session_state: %{
+          authentication_environment: "int",
+          session_token: "34fFErerG5464GereRGE3",
+          valid_session: true,
+          authenticated: false,
+          user_attributes: %{}
+        }
       }
     }
 
@@ -79,9 +91,13 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, authenticated and session token is not provided" do
     struct = %Struct{
       private: %Struct.Private{
-        valid_session: true,
-        authenticated: true,
-        session_token: nil
+        session_state: %{
+          authentication_environment: "int",
+          session_token: nil,
+          valid_session: true,
+          authenticated: true,
+          user_attributes: %{}
+        }
       }
     }
 
