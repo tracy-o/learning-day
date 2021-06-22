@@ -391,7 +391,7 @@ defmodule Routes.Routefile do
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
   ## World Service - Simorgh and ARES
-  ##    Kaleidoscope Redirects: /<service>/mobile/image/*any 
+  ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
   ##    Mobile Redirects: /<service>/mobile/*any
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
@@ -522,7 +522,7 @@ defmodule Routes.Routefile do
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi", "/punjabi/example-123", "/punjabi/example-123.amp", "/punjabi/example-123.json"]
-  
+
   redirect "/russian/mobile/*any", to: "/russian", status: 301
 
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
@@ -985,6 +985,16 @@ defmodule Routes.Routefile do
   handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures", "/sport/football/champions-league/scores-fixtures/2022-04", "/sport/football/champions-league/scores-fixtures/2022-04.app"]
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
+
+  ## Sport Basketball Scores-Fixtures pages
+  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
+  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
+  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
