@@ -1,4 +1,6 @@
 defmodule Belfrage.Authentication.SessionState do
+  alias Belfrage.Authentication.Token
+
   def add(
         %{"ckns_atkn" => "FAKETOKEN"},
         _headers,
@@ -6,7 +8,8 @@ defmodule Belfrage.Authentication.SessionState do
       ) do
     %{
       authentication_environment: authentication_environment(),
-      session_token: ckns_atkn,
+      session_token: "FAKETOKEN",
+      authenticated: true,
       valid_session: true,
       user_attributes: %{}
     }
@@ -16,7 +19,8 @@ defmodule Belfrage.Authentication.SessionState do
         %{"ckns_atkn" => ckns_atkn},
         %{"x-id-oidc-signedin" => "1"},
         _path
-      ) when is_binary(ckns_atkn) do
+      )
+      when is_binary(ckns_atkn) do
     {valid_session?, user_attributes} = Token.parse(ckns_atkn)
 
     %{
@@ -32,7 +36,8 @@ defmodule Belfrage.Authentication.SessionState do
         %{"ckns_atkn" => ckns_atkn, "ckns_id" => _id},
         _headers,
         _path
-      ) when is_binary(ckns_atkn) do
+      )
+      when is_binary(ckns_atkn) do
     {valid_session?, user_attributes} = Token.parse(ckns_atkn)
 
     %{
@@ -49,7 +54,13 @@ defmodule Belfrage.Authentication.SessionState do
         %{"x-id-oidc-signedin" => "1"},
         _path
       ) do
-    %{session_token: nil, authenticated: true, valid_session: false}
+        %{
+          authentication_environment: authentication_environment(),
+          session_token: nil,
+          authenticated: true,
+          valid_session: false,
+          user_attributes: %{}
+        }
   end
 
   def add(
@@ -57,13 +68,22 @@ defmodule Belfrage.Authentication.SessionState do
         _headers,
         _path
       ) do
-    %{session_token: nil, authenticated: true, valid_session: false}
+    %{
+      authentication_environment: authentication_environment(),
+      session_token: nil,
+      authenticated: true,
+      valid_session: false,
+      user_attributes: %{}
+    }
   end
 
   def add(_cookies, _headers, _path) do
     %{
       authentication_environment: authentication_environment(),
-      valid_session: false
+      session_token: nil,
+      authenticated: false,
+      valid_session: false,
+      user_attributes: %{}
     }
   end
 

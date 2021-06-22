@@ -21,9 +21,9 @@ defmodule Belfrage.Services.StubbedSession do
 
   defp response_body(private = %Struct.Private{}) do
     Jason.encode!(%{
-      valid_session: private.valid_session,
-      authenticated: private.authenticated,
-      session_token: (private.session_token && "Provided") || nil
+      valid_session: private.session_state.valid_session,
+      authenticated: private.session_state.authenticated,
+      session_token: (private.session_state.session_token && "Provided") || nil
     })
   end
 end

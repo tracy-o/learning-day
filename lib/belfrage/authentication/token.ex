@@ -1,4 +1,6 @@
 defmodule Belfrage.Authentication.Token do
+  def parse(nil), do: nil
+
   def parse(cookie) do
     case decode(cookie) do
       {:ok, token} ->
