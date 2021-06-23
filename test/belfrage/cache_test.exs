@@ -8,7 +8,8 @@ defmodule Belfrage.BelfrageCacheTest do
     body: :zlib.gzip(~s({"hi": "bonjour"})),
     headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
     http_status: 200,
-    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+    cache_last_updated: Belfrage.Timer.now_ms()
   }
 
   setup do
@@ -25,7 +26,7 @@ defmodule Belfrage.BelfrageCacheTest do
 
     Test.Support.Helper.insert_cache_seed(
       id: "stale-cache-item",
-      response: @cache_seeded_response,
+      response: %{@cache_seeded_response | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)},
       expires_in: :timer.hours(6),
       last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     )
@@ -109,7 +110,14 @@ defmodule Belfrage.BelfrageCacheTest do
     test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
       Belfrage.Cache.store(cacheable_struct)
 
-      assert {:ok, :fresh, cacheable_struct.response} == Belfrage.Cache.Local.fetch(cacheable_struct)
+      {status, state, response} = Belfrage.Cache.Local.fetch(cacheable_struct)
+      assert :ok == status
+      assert :fresh == state
+
+      assert response.cache_directive == cacheable_struct.response.cache_directive
+      assert response.http_status == cacheable_struct.response.http_status
+
+      refute response.cache_last_updated == nil
     end
 
     test "when max-age is nil, it should not be saved to the cache", %{cacheable_struct: cacheable_struct} do

@@ -63,6 +63,8 @@ defmodule EndToEnd.SessionTest do
                  "pers-env": "int",
                  country: "gb",
                  host: "www.bbc.co.uk",
+                 "ctx-age-bracket": "o18",
+                 "ctx-allow-personalisation": "true",
                  is_uk: false,
                  language: "en-GB"
                },

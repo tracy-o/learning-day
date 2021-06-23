@@ -112,10 +112,12 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
         LatencyMonitor.handle_cast({:checkpoint, :party_time_start, "ursula-the-unchanged", 234}, input_state)
       )
     end
+  end
 
-    test "should send metrics upon recieving the :response_end checkpoint for a complete a set of times" do
-      {:ok, udp} = :gen_udp.open(8125, active: true)
+  describe "handle_cast/2 :checkpoint, :response_end" do
+    setup :start_metrics_server
 
+    test "should send metrics for a complete a set of times", %{metrics_server: metrics} do
       input_state = %{
         "sam-the-sendable" => %{request_start: 123, request_end: 234, response_start: 345}
       }
@@ -123,21 +125,12 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       assert {:noreply, %{}} ==
                LatencyMonitor.handle_cast({:checkpoint, :response_end, "sam-the-sendable", 234}, input_state)
 
-      assert_receive {:udp, ^udp, _ip, _port, message}, 10
-      assert to_string(message) =~ "web.latency.internal.request"
-
-      assert_receive {:udp, ^udp, _ip, _port, message}, 10
-      assert to_string(message) =~ "web.latency.internal.response"
-
-      assert_receive {:udp, ^udp, _ip, _port, message}, 10
-      assert to_string(message) =~ "web.latency.internal.combined"
-
-      :gen_udp.close(udp)
+      assert sent_metric(metrics) =~ "web.latency.internal.request"
+      assert sent_metric(metrics) =~ "web.latency.internal.response"
+      assert sent_metric(metrics) =~ "web.latency.internal.combined"
     end
 
-    test "should not send metrics upon recieving the :response_end checkpoint for an incomplete set of times" do
-      {:ok, udp} = :gen_udp.open(8125, active: true)
-
+    test "should not send metrics for an incomplete set of times", %{metrics_server: metrics} do
       input_state = %{
         "iris-the-incomplete" => %{request_start: 123, request_end: 234}
       }
@@ -145,9 +138,29 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       assert {:noreply, %{}} ==
                LatencyMonitor.handle_cast({:checkpoint, :response_end, "iris-the-incomplete", 234}, input_state)
 
-      refute_receive {:udp, ^udp, _ip, _port, _message}, 10
+      refute_sent_metrics(metrics)
+    end
 
-      :gen_udp.close(udp)
+    test "should handle a request that's already been cleaned up", %{metrics_server: metrics} do
+      message = {:checkpoint, :response_end, "cleaned-up-request", 123}
+      state = %{}
+      assert LatencyMonitor.handle_cast(message, state) == {:noreply, state}
+      refute_sent_metrics(metrics)
+    end
+
+    defp start_metrics_server(_) do
+      {:ok, server} = :gen_udp.open(8125, active: true)
+      on_exit(fn -> :gen_udp.close(server) end)
+      %{metrics_server: server}
+    end
+
+    defp sent_metric(metrics_server) do
+      assert_receive {:udp, ^metrics_server, _ip, _port, message}, 10
+      to_string(message)
+    end
+
+    defp refute_sent_metrics(metrics_server) do
+      refute_receive {:udp, ^metrics_server, _ip, _port, _message}, 10
     end
   end
 

@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.ResponseHeaders.BIDTest do
+defmodule BelfrageWeb.ResponseHeaders.RequestIdTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router

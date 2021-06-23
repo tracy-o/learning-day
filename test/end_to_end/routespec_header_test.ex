@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.ResponseHeaders.BIDTest do
+defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
@@ -14,21 +14,16 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
-  setup do
-    :ets.delete_all_objects(:cache)
-
-    :ok
-  end
-
-  test "returns the bid header" do
+  test "returns the routespec header" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _request_id, _payload, _opts ->
+    |> stub(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
       {:ok, @lambda_response}
     end)
 
     response_conn = conn(:get, "/200-ok-response") |> Router.call([])
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
-    assert {"bid", Application.get_env(:belfrage, :stack_id)} in resp_headers
+
+    assert ["SomeLoop"] = get_resp_header(response_conn, "routespec")
   end
 end

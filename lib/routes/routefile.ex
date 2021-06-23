@@ -373,6 +373,10 @@ defmodule Routes.Routefile do
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
+  ## World Service - "Access to News" Redirects
+  redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
+  redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
+
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
   ##    Mobile Redirects: /<service>/mobile/*any
@@ -969,6 +973,16 @@ defmodule Routes.Routefile do
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
 
+  ## Sport Basketball Scores-Fixtures pages
+  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
+  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
+  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures", "/sport/rugby-league/scores-fixtures/2021-04-26", "/sport/rugby-league/scores-fixtures/2021-04-26.app"]
@@ -1154,6 +1168,9 @@ defmodule Routes.Routefile do
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
+
+  # WebCore Hub
+  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore"]
 
   # News Beat
 
