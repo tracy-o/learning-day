@@ -14,7 +14,20 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
       Belfrage.Metrics.Statix.increment("web.response.status.#{conn.status}")
       Belfrage.Metrics.Statix.timing("web.response.timing.#{conn.status}", timing)
       Belfrage.Metrics.Statix.timing("web.response.timing.page", timing)
+
+      if private_request(conn) do
+        Belfrage.Metrics.Statix.increment("web.response.private")
+      end
+
       conn
     end)
+  end
+
+  defp private_request(conn) do
+    if get_resp_header(conn, "cacheability") == "private" do
+      true
+    else
+      false
+    end
   end
 end
