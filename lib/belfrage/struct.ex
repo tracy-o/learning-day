@@ -83,7 +83,7 @@ defmodule Belfrage.Struct.Private do
 end
 
 defmodule Belfrage.Struct.UserSession do
-  @derive {Inspect, except: [:session_token]}
+  @derive {Inspect, except: [:session_token, :user_attributes]}
 
   defstruct authentication_environment: nil,
             session_token: nil,
