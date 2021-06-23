@@ -61,7 +61,6 @@ defmodule Belfrage.Struct.Response do
 end
 
 defmodule Belfrage.Struct.Private do
-  @derive {Inspect, except: [:session_token]}
   defstruct fallback_ttl: :timer.hours(6),
             loop_id: nil,
             candidate_loop_ids: [],
@@ -78,19 +77,25 @@ defmodule Belfrage.Struct.Private do
             platform: nil,
             signature_keys: %{skip: [], add: []},
             preview_mode: "off",
-            default_language: "en-GB",
-            session_state: %{authentication_environment: nil,
-                             session_token: nil,
-                             authenticated: false,
-                             valid_session: false,
-                             user_attributes: %{}}
+            default_language: "en-GB"
 
   @type t :: %__MODULE__{}
+end
+
+defmodule Belfrage.Struct.UserSession do
+  @derive {Inspect, except: [:session_token]}
+
+  defstruct authentication_environment: nil,
+            session_token: nil,
+            authenticated: false,
+            valid_session: false,
+            user_attributes: %{}
 end
 
 defmodule Belfrage.Struct do
   defstruct request: %Belfrage.Struct.Request{},
             private: %Belfrage.Struct.Private{},
+            user_session: %Belfrage.Struct.UserSession{},
             response: %Belfrage.Struct.Response{},
             debug: %Belfrage.Struct.Debug{}
 
@@ -106,7 +111,7 @@ defmodule Belfrage.Struct do
     |> update_in([Access.key(:request), Access.key(:raw_headers)], &Belfrage.PII.clean/1)
     |> update_in([Access.key(:request), Access.key(:cookies)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:response), Access.key(:headers)], &Belfrage.PII.clean/1)
-    |> update_in([Access.key(:private), Access.key(:session_token)], fn
+    |> update_in([Access.key(:user_session), Access.key(:session_token)], fn
       nil -> nil
       _value -> "REDACTED"
     end)

@@ -11,10 +11,10 @@ defmodule Belfrage.Transformers.UserSession do
   @impl true
   def call(
         rest,
-        struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}, private: private}
+        struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}
       ) do
     session_state = SessionState.add(cookies, headers, path)
-    struct_with_session_state = Struct.add(struct, :private, %{private | session_state: session_state})
+    struct_with_session_state = Struct.add(struct, :user_session, session_state)
 
     cond do
       !personalisation_available?(struct.request.host) ->
