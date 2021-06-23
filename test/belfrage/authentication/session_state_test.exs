@@ -1,13 +1,14 @@
 defmodule Belfrage.Authentication.SessionStateTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Authentication.SessionState
+  alias Belfrage.Authentication.Jwk
 
   @token Fixtures.AuthToken.valid_access_token()
 
-  alias Belfrage.Authentication.Jwk
-
   setup do
+    :set_mox_global
     start_supervised!(Jwk)
 
     :ok

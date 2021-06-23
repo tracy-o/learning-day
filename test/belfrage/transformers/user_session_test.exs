@@ -323,6 +323,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
           host: "bbc.com"
         }
       }
+
       assert {:ok, %Struct{user_session: @default_session_state}} = UserSession.call([], struct)
     end
   end

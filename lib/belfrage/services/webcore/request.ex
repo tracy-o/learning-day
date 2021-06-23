@@ -28,7 +28,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> Map.put(:authorization, "Bearer #{session_token}")
     |> Map.put(:"x-authentication-provider", "idv5")
     |> Map.put(:"pers-env", authentication_environment)
-    |> maybe_put_user_attributes_headers(struct.private)
+    |> maybe_put_user_attributes_headers(struct.user_session)
   end
 
   defp headers(struct), do: base_headers(struct)
@@ -47,7 +47,7 @@ defmodule Belfrage.Services.Webcore.Request do
   # that will be covered by RESFRAME-4284
   defp maybe_put_user_attributes_headers(
          base_headers,
-         %{user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
+         %Struct.UserSession{user_attributes: %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
        ) do
     base_headers
     |> Map.put(:"ctx-age-bracket", age_bracket)
