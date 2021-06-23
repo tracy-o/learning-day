@@ -15,13 +15,11 @@ defmodule Belfrage.Services.Webcore.Request do
 
   defp headers(
          struct = %Struct{
-           private: %Struct.Private{
-             session_,tstate: %{
-               authentication_environment: authentication_environment,
-               authenticated: true,
-               session_token: session_token,
-               valid_session: true
-             }
+           user_session: %Struct.UserSession{
+             authentication_environment: authentication_environment,
+             authenticated: true,
+             session_token: session_token,
+             valid_session: true
            }
          }
        ) do
