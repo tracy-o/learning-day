@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.UserSession do
+defmodule Belfrage.Transformers.Personalisation do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct

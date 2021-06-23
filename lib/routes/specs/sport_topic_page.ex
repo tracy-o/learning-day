@@ -7,7 +7,7 @@ defmodule Routes.Specs.SportTopicPage do
       query_params_allowlist: ["page"],
       pipeline: pipeline(production_env),
       cookie_allowlist: cookie_allowlist(production_env),
-      headers_allowlist: headers_allowlist(production_env)
+      headers_allowlist: headers_allowlist(production_env),
     }
   end
 
@@ -18,7 +18,7 @@ defmodule Routes.Specs.SportTopicPage do
   defp headers_allowlist(_production_env), do: ["x-id-oidc-signedin"]
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "UserSession", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
