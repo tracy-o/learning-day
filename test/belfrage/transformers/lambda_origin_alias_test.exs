@@ -65,7 +65,29 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       assert origin == "lambda-function:example-branch_2"
     end
 
-    test "if the subdomain is invalid a 400 will be returned" do
+    test "if the subdomain is longer than 50 characters a 400 will be returned" do
+      struct = %Struct{
+        request: %Struct.Request{subdomain: "123456789012345678901234567890123456789012345678901"},
+        private: %Struct.Private{
+          loop_id: "SportVideos",
+          origin: "lambda-function",
+          production_environment: "test",
+          preview_mode: "on"
+        }
+      }
+
+      assert {
+               :stop_pipeline,
+               %Belfrage.Struct{
+                 response: %Belfrage.Struct.Response{
+                   http_status: 400,
+                   body: "Invalid Alias"
+                 }
+               }
+             } = LambdaOriginAlias.call([], struct)
+    end
+
+    test "if the subdomain contains invalid characters a 400 will be returned" do
       struct = %Struct{
         request: %Struct.Request{subdomain: "*"},
         private: %Struct.Private{
