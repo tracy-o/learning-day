@@ -23,7 +23,10 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       last_value("vm.system_counts.port_count"),
       last_value("vm.total_run_queue_lengths.total"),
       last_value("vm.total_run_queue_lengths.cpu"),
-      last_value("vm.total_run_queue_lengths.io")
+      last_value("vm.total_run_queue_lengths.io"),
+      last_value("cowboy.request.stop.duration"),
+      counter("cowboy.request.exception.duration"),
+      counter("cowboy.request.early_error.system_time")
     ]
   end
 end
