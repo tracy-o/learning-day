@@ -18,13 +18,13 @@ defmodule Belfrage.StructTest do
     end
 
     test "removes session_token PII" do
-      struct = %Struct{private: %Struct.Private{session_state: %{:session_token => "some-token"}}}
-      assert %Struct{private: %Struct.Private{session_state: %{:session_token => "REDACTED"}}} = Struct.loggable(struct)
+      struct = %Struct{user_session: %Struct.UserSession{:session_token => "some-token"}}
+      assert %Struct{user_session: %Struct.UserSession{:session_token => "REDACTED"}} = Struct.loggable(struct)
     end
 
     test "keeps nil session_token values" do
-      struct = %Struct{private: %Struct.Private{session_state: %{:session_token => nil}}}
-      assert %Struct{private: %Struct.Private{session_state: %{:session_token => nil}}} = Struct.loggable(struct)
+      struct = %Struct{user_session: %Struct.UserSession{:session_token => nil}}
+      assert %Struct{user_session: %Struct.UserSession{:session_token => nil}} = Struct.loggable(struct)
     end
 
     test "keeps non-PII request headers" do
