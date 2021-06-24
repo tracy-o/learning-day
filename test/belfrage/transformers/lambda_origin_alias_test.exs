@@ -65,28 +65,6 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       assert origin == "lambda-function:example-branch_2"
     end
 
-    test "if the subdomain is longer than 50 characters a 400 will be returned" do
-      struct = %Struct{
-        request: %Struct.Request{subdomain: "123456789012345678901234567890123456789012345678901"},
-        private: %Struct.Private{
-          loop_id: "SportVideos",
-          origin: "lambda-function",
-          production_environment: "test",
-          preview_mode: "on"
-        }
-      }
-
-      assert {
-               :stop_pipeline,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
-                   http_status: 400,
-                   body: "Invalid Alias"
-                 }
-               }
-             } = LambdaOriginAlias.call([], struct)
-    end
-
     test "if the subdomain contains invalid characters a 400 will be returned" do
       struct = %Struct{
         request: %Struct.Request{subdomain: "*"},
@@ -107,6 +85,26 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
                  }
                }
              } = LambdaOriginAlias.call([], struct)
+    end
+  end
+
+  describe "validate_alias/1" do
+    test "if the subdomain is valid then it will return true" do
+      subdomain = "this-is-a_valid_lambda-alias"
+
+      assert true == LambdaOriginAlias.validate_alias(subdomain)
+    end
+
+    test "if the subdomain is longer than 50 characters it will return false" do
+      subdomain = "123456789012345678901234567890123456789012345678901"
+
+      assert false == LambdaOriginAlias.validate_alias(subdomain)
+    end
+
+    test "if the subdomain contains invalid characters it will return false" do
+      subdomain = "*?"
+
+      assert false == LambdaOriginAlias.validate_alias(subdomain)
     end
   end
 end

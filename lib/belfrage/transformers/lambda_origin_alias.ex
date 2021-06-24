@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
-    if String.match?(subdomain, ~r/^[a-zA-Z0-9-_]{1,50}$/) do
+    if validate_alias(subdomain) do
       then(
         rest,
         Struct.add(struct, :private, %{
@@ -22,6 +22,10 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
         })
       }
     end
+  end
+
+  def validate_alias(subdomain) do
+    String.match?(subdomain, ~r/^[a-zA-Z0-9-_]{1,50}$/)
   end
 
   defp lambda_alias("on", subdomain, _), do: subdomain
