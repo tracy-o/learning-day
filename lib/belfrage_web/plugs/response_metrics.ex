@@ -24,10 +24,6 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
   end
 
   defp private_request(conn) do
-    if get_resp_header(conn, "cacheability") == "private" do
-      true
-    else
-      false
-    end
+    get_resp_header(conn, "cacheability") == "private"
   end
 end
