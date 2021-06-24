@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.Plugs.ResponseMetrics do
   @behaviour Plug
-  import Plug.Conn, only: [register_before_send: 2]
+  import Plug.Conn, only: [register_before_send: 2, get_resp_header: 2]
 
   def init(opts), do: opts
 
