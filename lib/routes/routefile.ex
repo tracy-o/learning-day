@@ -612,9 +612,20 @@ defmodule Routes.Routefile do
 
   # /programmes
 
+  #   path: /programmes/{pid}
+  # # !find_by_pid is a special value, that shall be converted into an proper
+  # # _controller value (i.e. a class name) by the FindByPidRouterSubscriber
+  # defaults: { _controller: '!find_by_pid' }
+  # requirements: { pid: '[0-9b-df-hj-np-tv-z]{8,15}' }
+  handle "/programmes/:pid", using: "ProgrammesEntity", examples: [] do
+    return_404 if: !String.match?(pid, ~r/[0-9b-df-hj-np-tv-z]{8,15}/)
+  end
+
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
   end
+
+  handle "/programmes/*_any", using: "Programmes", examples: []
 
   # Participation
 
