@@ -1,8 +1,8 @@
 defmodule Routes.Specs.Programmes do
   def specs(_production_env) do
     %{
-      owner: "programmes@bbc.co.uk",
-      runbook: "",
+      owner: "homedatacap@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=152098352",
       platform: Programmes
     }
   end

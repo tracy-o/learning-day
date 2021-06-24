@@ -612,11 +612,6 @@ defmodule Routes.Routefile do
 
   # /programmes
 
-  #   path: /programmes/{pid}
-  # # !find_by_pid is a special value, that shall be converted into an proper
-  # # _controller value (i.e. a class name) by the FindByPidRouterSubscriber
-  # defaults: { _controller: '!find_by_pid' }
-  # requirements: { pid: '[0-9b-df-hj-np-tv-z]{8,15}' }
   handle "/programmes/:pid", using: "ProgrammesEntity", examples: [] do
     return_404 if: !String.match?(pid, ~r/[0-9b-df-hj-np-tv-z]{8,15}/)
   end
