@@ -3,7 +3,7 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
-  @dimension_keys [:request_id, :loop_id]
+  @dimension_opts [:request_id, :loop_id]
 
   @monitor_api Application.get_env(:belfrage, :monitor_api)
 
@@ -13,6 +13,29 @@ defmodule Belfrage.Event do
   alias Belfrage.Event
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
+  @doc """
+  Adds a message to the log when the first argument is `:log`, and records a
+  metric when it's `:metric`
+
+  ## Supported options
+
+  * `:request_id` - Sets/overrides `request_id` event attribute and dimension.
+  * `:loop_id` - Adds passed value to the event's dimensions.
+
+  Also when adding a log message:
+
+  * `:cloudwatch` - When `true`, the message will only be logged on CloudWatch
+  and not passed to Belfrage monitor.
+
+  Also when recording a metric:
+
+  * `:value` - Sets the metrics value. Default value is `1`.
+
+  ## Dimensions
+
+  Please note that event dimensions are only passed to Belfrage Monitor and not
+  to CloudWatch currently.
+  """
   def record(type, level, msg, opts \\ [])
 
   def record(:log, level, msg, cloudwatch: true) do
@@ -33,6 +56,8 @@ defmodule Belfrage.Event do
 
     apply(Belfrage.Metrics.Statix, type, [metric, value(opts)])
   end
+
+  def new(log_or_metric, name, payload, opts \\ [])
 
   def new(:metric, type, metric, opts) do
     dimensions = build_dimensions(opts)
@@ -62,7 +87,7 @@ defmodule Belfrage.Event do
 
   defp build_dimensions(opts) do
     opts
-    |> Keyword.take(@dimension_keys)
+    |> Keyword.take(@dimension_opts)
     |> Enum.into(Stump.metadata())
   end
 
