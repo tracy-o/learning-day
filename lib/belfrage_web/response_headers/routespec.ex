@@ -12,7 +12,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpec do
   end
 
   @impl ResponseHeaders
-  def add_header(conn, struct) do
+  def add_header(conn, _struct) do
     conn
   end
 end

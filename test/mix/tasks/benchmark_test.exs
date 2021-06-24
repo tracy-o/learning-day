@@ -8,11 +8,11 @@ defmodule Mix.Tasks.BenchmarkTest do
   end
 
   test "run/1 handles not available suite" do
-    assert capture_io(fn -> Benchmark.run(["not_available_suite"]) end) == "#{Benchmark.test_not_available_message()}\n"
+    assert capture_io(fn -> Benchmark.run(["not_available_suite"]) end) =~ "Test suite can't be loaded"
   end
 
   test "run/1 only run suites in dev env" do
-    assert capture_io(fn -> Benchmark.run([]) end) == "#{Benchmark.test_not_available_message()}\n"
+    assert capture_io(fn -> Benchmark.run([]) end) =~ "Benchmark dir is not configured"
   end
 
   test "run/2 run all suites" do

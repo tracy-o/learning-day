@@ -7,26 +7,22 @@ defmodule Mix.Tasks.Benchmark do
   def run([suite | args]) do
     test_module = Module.concat(@namespace, Macro.camelize(suite))
 
-    test_module
-    |> Code.ensure_compiled?()
-    |> run({test_module, args})
+    case Code.ensure_compiled(test_module) do
+      {:module, module} ->
+        module.run(args)
+
+      {:error, reason} ->
+        IO.puts("Test suite can't be loaded, reason: #{reason}")
+    end
   end
 
-  def run([]), do: run([], @dir)
-
-  def run([], dir) when dir != nil do
-    File.ls!(dir)
-    |> Enum.map(&(String.split(&1, ".") |> hd))
-    |> Enum.each(&run([&1 | []]))
+  def run([], dir \\ @dir) do
+    if dir do
+      File.ls!(dir)
+      |> Enum.map(&(String.split(&1, ".") |> hd))
+      |> Enum.each(&run([&1 | []]))
+    else
+      IO.puts("Benchmark dir is not configured")
+    end
   end
-
-  def run([], _), do: IO.puts(test_not_available_message())
-
-  def run(false, _), do: IO.puts(test_not_available_message())
-
-  def run(true, {module, args}) do
-    module.run(args)
-  end
-
-  def test_not_available_message(), do: "Test suite not available"
 end
