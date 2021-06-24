@@ -57,6 +57,13 @@
   },
   {
     "values": {
+      "test": "https://programmes-frontend.test.api.bbc.co.uk",
+      "live": "https://programmes-frontend.api.bbc.co.uk"
+    },
+    "name": "PROGRAMMES_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole",
       "live": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole"
     },

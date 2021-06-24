@@ -6,6 +6,7 @@ use Mix.Config
   {"MOZART_NEWS_ENDPOINT", :default},
   {"MOZART_WEATHER_ENDPOINT", :default},
   {"MOZART_SPORT_ENDPOINT", :default},
+  {"PROGRAMMES_ENDPOINT", :default},
   {"FABL_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
