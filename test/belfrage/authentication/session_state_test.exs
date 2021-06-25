@@ -26,7 +26,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: true,
                user_attributes: ^user_attributes
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns authenticated state when 'ckns_atkn' and 'ckns_id' cookies are set" do
@@ -40,7 +40,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: true,
                user_attributes: ^user_attributes
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns unauthenticated state when only 'ckns_atkn' cookie set" do
@@ -53,7 +53,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: false,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns authenticated only state when 'ckns_id' cookie only is set" do
@@ -66,7 +66,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns authenticated only state when 'ckns_atkn' cookie not set, 'x-id-oidc-signedin' header is 1" do
@@ -79,7 +79,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns unauthenticated state when 'ckns_atkn' cookie not set, 'x-id-oidc-signedin' header is 0" do
@@ -92,7 +92,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: false,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns unauthenticated state when both 'ckns_atkn' cookie and 'x-id-oidc-signedin' header not set" do
@@ -105,7 +105,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: false,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
 
     test "returns authenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is /full-stack-test/a/ft" do
@@ -118,7 +118,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: true,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/full-stack-test/a/ft")
+             } = SessionState.build(cookies, headers, "/full-stack-test/a/ft")
     end
 
     test "returns unauthenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is NOT /full-stack-test/a/ft" do
@@ -131,7 +131,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: false,
                valid_session: false,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/")
+             } = SessionState.build(cookies, headers, "/")
     end
   end
 end

@@ -13,7 +13,7 @@ defmodule Belfrage.Transformers.Personalisation do
         rest,
         struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}
       ) do
-    session_state = SessionState.add(cookies, headers, path)
+    session_state = SessionState.build(cookies, headers, path)
     struct_with_session_state = Struct.add(struct, :user_session, session_state)
 
     cond do
