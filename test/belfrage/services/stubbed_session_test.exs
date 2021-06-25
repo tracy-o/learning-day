@@ -7,7 +7,7 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, authenticated and session token is provided" do
     struct = %Struct{
       user_session: %Struct.UserSession{
-        authentication_environment: "int",
+        authentication_env: "int",
         session_token: "34fFErerG5464GereRGE3",
         valid_session: true,
         authenticated: true,
@@ -33,7 +33,7 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "invalid session, authenticated and session token is provided" do
     struct = %Struct{
       user_session: %Struct.UserSession{
-        authentication_environment: "int",
+        authentication_env: "int",
         session_token: "34fFErerG5464GereRGE3",
         valid_session: false,
         authenticated: true,
@@ -59,7 +59,7 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, not authenticated and session token is provided" do
     struct = %Struct{
       user_session: %Struct.UserSession{
-        authentication_environment: "int",
+        authentication_env: "int",
         session_token: "34fFErerG5464GereRGE3",
         valid_session: true,
         authenticated: false,
@@ -85,7 +85,7 @@ defmodule Belfrage.Services.StubbedSessionTest do
   test "valid session, authenticated and session token is not provided" do
     struct = %Struct{
       user_session: %Struct.UserSession{
-        authentication_environment: "int",
+        authentication_env: "int",
         session_token: nil,
         valid_session: true,
         authenticated: true,

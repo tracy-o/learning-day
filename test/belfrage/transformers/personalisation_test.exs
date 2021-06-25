@@ -9,14 +9,14 @@ defmodule Belfrage.Transformers.PersonalisationTest do
   alias Belfrage.Transformers.Personalisation
 
   @authenticated_only_session_state %Struct.UserSession{
-    authentication_environment: "int",
+    authentication_env: "int",
     session_token: nil,
     authenticated: true,
     valid_session: false,
     user_attributes: %{}
   }
   @unauthenticated_session_state %Struct.UserSession{
-    authentication_environment: "int",
+    authentication_env: "int",
     session_token: nil,
     authenticated: false,
     valid_session: false,
@@ -24,7 +24,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
   }
 
   @default_session_state %Struct.UserSession{
-    authentication_environment: nil,
+    authentication_env: nil,
     session_token: nil,
     authenticated: false,
     valid_session: false,
@@ -167,7 +167,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :ok,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: @token,
                    authenticated: true,
                    valid_session: true,
@@ -189,7 +189,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :ok,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: @token,
                    authenticated: true,
                    valid_session: true,
@@ -219,7 +219,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :ok,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    authenticated: true,
                    session_token: "FAKETOKEN",
                    valid_session: true,
@@ -298,7 +298,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :ok,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: nil,
+                   authentication_env: nil,
                    session_token: nil,
                    authenticated: false,
                    valid_session: false,
@@ -359,7 +359,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :ok,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    authenticated: true,
                    session_token: ^access_token,
                    valid_session: true,
@@ -381,7 +381,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :redirect,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: ^access_token,
                    authenticated: true,
                    valid_session: false,
@@ -427,7 +427,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :redirect,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: ^access_token,
                    authenticated: true,
                    valid_session: false,
@@ -470,7 +470,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :redirect,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: ^access_token,
                    authenticated: true,
                    valid_session: false,
@@ -517,7 +517,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :redirect,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: ^access_token,
                    authenticated: true,
                    valid_session: false,
@@ -564,7 +564,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                :redirect,
                %Struct{
                  user_session: %Struct.UserSession{
-                   authentication_environment: "int",
+                   authentication_env: "int",
                    session_token: ^access_token,
                    authenticated: true,
                    valid_session: false,
@@ -608,7 +608,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                  :redirect,
                  %Struct{
                    user_session: %Struct.UserSession{
-                     authentication_environment: "int",
+                     authentication_env: "int",
                      session_token: ^access_token,
                      authenticated: true,
                      valid_session: false,
@@ -657,7 +657,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                  :redirect,
                  %Struct{
                    user_session: %Struct.UserSession{
-                     authentication_environment: "int",
+                     authentication_env: "int",
                      session_token: ^access_token,
                      authenticated: true,
                      valid_session: false,
@@ -714,7 +714,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                  :redirect,
                  %Struct{
                    user_session: %Struct.UserSession{
-                     authentication_environment: "int",
+                     authentication_env: "int",
                      session_token: ^access_token,
                      authenticated: true,
                      valid_session: false,
@@ -771,7 +771,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                  :redirect,
                  %Struct{
                    user_session: %Struct.UserSession{
-                     authentication_environment: "int",
+                     authentication_env: "int",
                      session_token: ^access_token,
                      authenticated: true,
                      valid_session: false,
@@ -833,7 +833,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                  :redirect,
                  %Struct{
                    user_session: %Struct.UserSession{
-                     authentication_environment: "int",
+                     authentication_env: "int",
                      session_token: @token,
                      authenticated: true,
                      valid_session: false,

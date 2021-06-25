@@ -1,6 +1,6 @@
 defmodule Belfrage.Authentication.SessionStateTest do
   use ExUnit.Case
-  # use Test.Support.Helper, :mox
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Authentication.SessionState
   alias Belfrage.Authentication.Jwk
@@ -21,7 +21,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: @token,
                authenticated: true,
                valid_session: true,
@@ -35,7 +35,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: @token,
                authenticated: true,
                valid_session: true,
@@ -48,7 +48,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: false,
                valid_session: false,
@@ -61,7 +61,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: true,
                valid_session: false,
@@ -74,7 +74,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{"x-id-oidc-signedin" => "1"}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: true,
                valid_session: false,
@@ -87,7 +87,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{"x-id-oidc-signedin" => "0"}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: false,
                valid_session: false,
@@ -100,7 +100,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: false,
                valid_session: false,
@@ -113,7 +113,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{}
 
       assert SessionState.build(cookies, headers, "/full-stack-test/a/ft") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: "FAKETOKEN",
                authenticated: true,
                valid_session: true,
@@ -126,7 +126,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       headers = %{}
 
       assert SessionState.build(cookies, headers, "/") == %{
-               authentication_environment: "int",
+               authentication_env: "int",
                session_token: nil,
                authenticated: false,
                valid_session: false,

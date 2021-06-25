@@ -14,7 +14,7 @@ defmodule Belfrage.Authentication.SessionState do
 
       signed_in ->
         %{
-          authentication_environment: authentication_environment(),
+          authentication_env: authentication_env(),
           session_token: nil,
           authenticated: true,
           valid_session: false,
@@ -23,7 +23,7 @@ defmodule Belfrage.Authentication.SessionState do
 
       true ->
         %{
-          authentication_environment: authentication_environment(),
+          authentication_env: authentication_env(),
           session_token: nil,
           valid_session: false,
           authenticated: false,
@@ -34,7 +34,7 @@ defmodule Belfrage.Authentication.SessionState do
 
   defp build_fake_session(token) do
     %{
-      authentication_environment: authentication_environment(),
+      authentication_env: authentication_env(),
       session_token: token,
       valid_session: true,
       authenticated: true,
@@ -46,7 +46,7 @@ defmodule Belfrage.Authentication.SessionState do
     {valid_session?, user_attributes} = Token.parse(token)
 
     %{
-      authentication_environment: authentication_environment(),
+      authentication_env: authentication_env(),
       session_token: token,
       authenticated: true,
       valid_session: valid_session?,
@@ -54,13 +54,18 @@ defmodule Belfrage.Authentication.SessionState do
     }
   end
 
-  defp authentication_environment do
-    Application.get_env(:belfrage, :authentication)["account_jwk_uri"] |> extract_env()
-  end
+  @environments %{
+    "https://access.api.bbc.com/v1/oauth/connect/jwk_uri" => "live",
+    "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri" => "test",
+    "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri" => "stage",
+    "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri" => "int"
+  }
 
-  def extract_env("https://access.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "live"
-  def extract_env("https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "test"
-  def extract_env("https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "stage"
-  def extract_env("https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"), do: "int"
-  def extract_env(_uri), do: raise("No JWK Account URI found, please check Cosmos config")
+  defp authentication_env do
+    url = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
+
+    Map.get(@environments, url, fn _url ->
+      raise "No JWK Account URI found, please check Cosmos config"
+    end)
+  end
 end

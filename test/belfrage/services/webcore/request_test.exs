@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
 
   setup do
     private_valid_session = %Struct.UserSession{
-      authentication_environment: "int",
+      authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
       valid_session: true,
@@ -13,7 +13,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     }
 
     private_valid_session_without_user_attributes = %Struct.UserSession{
-      authentication_environment: "int",
+      authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
       valid_session: true,
@@ -21,7 +21,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     }
 
     private_valid_session_with_partial_user_attributes = %Struct.UserSession{
-      authentication_environment: "int",
+      authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
       valid_session: true,
@@ -29,7 +29,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     }
 
     private_invalid_session = %Struct.UserSession{
-      authentication_environment: "int",
+      authentication_env: "int",
       session_token: "an-invalid-session-token",
       authenticated: true,
       valid_session: false,
@@ -37,7 +37,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     }
 
     private_unauthenticated_session = %Struct.UserSession{
-      authentication_environment: "int",
+      authentication_env: "int",
       session_token: nil,
       authenticated: false,
       valid_session: false,

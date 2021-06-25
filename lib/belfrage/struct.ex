@@ -85,7 +85,7 @@ end
 defmodule Belfrage.Struct.UserSession do
   @derive {Inspect, except: [:session_token, :user_attributes]}
 
-  defstruct authentication_environment: nil,
+  defstruct authentication_env: nil,
             session_token: nil,
             authenticated: false,
             valid_session: false,
