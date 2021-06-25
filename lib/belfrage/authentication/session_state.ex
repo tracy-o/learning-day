@@ -4,7 +4,7 @@ defmodule Belfrage.Authentication.SessionState do
   def add(
         %{"ckns_atkn" => "FAKETOKEN"},
         _headers,
-        "/full-stack-test"
+        "/full-stack-test/a/ft"
       ) do
     %{
       authentication_environment: authentication_environment(),

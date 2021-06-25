@@ -108,7 +108,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
              } = SessionState.add(cookies, headers, "/")
     end
 
-    test "returns authenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is /full-stack-test" do
+    test "returns authenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is /full-stack-test/a/ft" do
       cookies = %{"ckns_atkn" => "FAKETOKEN"}
       headers = %{}
 
@@ -118,10 +118,10 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authenticated: true,
                valid_session: true,
                user_attributes: %{}
-             } = SessionState.add(cookies, headers, "/full-stack-test")
+             } = SessionState.add(cookies, headers, "/full-stack-test/a/ft")
     end
 
-    test "returns unauthenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is NOT /full-stack-test" do
+    test "returns unauthenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is NOT /full-stack-test/a/ft" do
       cookies = %{"ckns_atkn" => "FAKETOKEN"}
       headers = %{}
 
