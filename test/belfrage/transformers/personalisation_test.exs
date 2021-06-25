@@ -210,7 +210,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
       struct = %Struct{
         request: %Struct.Request{
           cookies: %{"ckns_atkn" => "FAKETOKEN"},
-          path: "/full-stack-test",
+          path: "/full-stack-test/a/ft",
           host: "bbc.co.uk"
         }
       }
