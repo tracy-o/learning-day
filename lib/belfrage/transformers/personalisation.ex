@@ -20,17 +20,16 @@ defmodule Belfrage.Transformers.Personalisation do
       !personalisation_available?(struct.request.host) ->
         then(rest, struct)
 
-      match?(%{valid_session: true}, session_state) ->
-        then(rest, struct_with_session_state)
-
-      # x-id-oidc-signedin set to 1
-      match?(%{session_token: _value, authenticated: true, valid_session: false}, session_state) ->
+      reauthentication_required?(session_state) ->
         redirect(struct_with_session_state)
 
-      # x-id-oidc-signedin not set
-      match?(%{session_token: nil, authenticated: false, valid_session: false}, session_state) ->
+      true ->
         then(rest, struct_with_session_state)
     end
+  end
+
+  defp reauthentication_required?(session_state) do
+    session_state.authenticated && !session_state.valid_session
   end
 
   defp personalisation_available?(host) when is_binary(host) do
