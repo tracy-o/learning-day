@@ -19,15 +19,15 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
   end
 
   defp expect_record_event(:log, level, message) do
-    expect(Belfrage.EventMock, :record, fn :log, level, %{msg: message} -> true end)
+    expect(Belfrage.EventMock, :record, fn :log, ^level, %{msg: ^message} -> true end)
   end
 
-  defp expect_record_event(count, :metric, :gauge, message, value) do
-    expect(Belfrage.EventMock, :record, count, fn :metric, :gauge, message, value: value -> true end)
+  defp expect_record_event(count, :metric, :gauge, metric, value) do
+    expect(Belfrage.EventMock, :record, count, fn :metric, :gauge, ^metric, value: ^value -> true end)
   end
 
   defp refresh_mailbox_monitor_assertion(servers) do
-    assert {:noreply, %{servers: servers}} = MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: servers})
+    assert {:noreply, %{servers: ^servers}} = MailboxMonitor.handle_info(:refresh, %{rate: 100, servers: servers})
   end
 
   describe "handle_info/2 with generic processes" do
@@ -46,14 +46,14 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
       TestGenServer.work(:test_server_one)
       TestGenServer.work(:test_server_one)
 
-      assert_receive {:work, ref}
+      assert_receive {:work, ^ref}
 
       refresh_mailbox_monitor_assertion([:test_server_one])
     end
 
     test "reports the mailbox size for more than one server" do
       expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 2)
-      expect_record_event(1, :metric, :gauge, "gen_server.test_server_one.mailbox_size", 3)
+      expect_record_event(1, :metric, :gauge, "gen_server.test_server_two.mailbox_size", 3)
 
       ref_one = make_ref()
       ref_two = make_ref()
@@ -67,8 +67,8 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
       TestGenServer.work(:test_server_two)
       TestGenServer.work(:test_server_two)
 
-      assert_receive {:work, ref}
-      assert_receive {:work, ref_two}
+      assert_receive {:work, ^ref_one}
+      assert_receive {:work, ^ref_two}
 
       refresh_mailbox_monitor_assertion([:test_server_one, :test_server_two])
     end
