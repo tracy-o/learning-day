@@ -8,7 +8,10 @@ defmodule Belfrage.Cache.Distributed do
 
   @impl CacheStrategy
   def fetch(%Struct{request: %Request{request_id: request_id, request_hash: request_hash}}) do
+    before_time = System.monotonic_time(:millisecond)
     @ccp_client.fetch(request_hash, request_id)
+    timing = (System.monotonic_time(:millisecond) - before_time) |> abs
+    Belfrage.Metrics.Statix.timing("web.response.timing.#{conn.status}", timing)
   end
 
   @impl CacheStrategy
