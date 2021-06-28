@@ -25,12 +25,15 @@ defmodule Belfrage.Clients.CCP do
     })
     |> case do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
+        Belfrage.Metrics.Statix.increment("service.S3.response.200")
         {:ok, :stale, cached_body |> :erlang.binary_to_term()}
 
       {:ok, %Clients.HTTP.Response{status_code: @s3_not_found_response_code}} ->
+        Belfrage.Metrics.Statix.increment("service.S3.response.not_found")
         {:ok, :content_not_found}
 
-      {:ok, response} ->
+      {:ok, response = %Clients.HTTP.Response{status_code: status_code}} ->
+        Belfrage.Metrics.Statix.increment("service.S3.response.#{status_code}")
         Belfrage.Event.record(:metric, :increment, "ccp.unexpected_response")
 
         Belfrage.Event.record(:log, :error, %{
