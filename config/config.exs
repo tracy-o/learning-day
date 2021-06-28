@@ -70,7 +70,10 @@ config :belfrage,
     :cache,
     :cache_janitor,
     :cache_locksmith,
-    Belfrage.Metrics.LatencyMonitor
+    Belfrage.Metrics.LatencyMonitor,
+    {:loop, "NewsArticlePage"},
+    {:loop, "WorldServiceMundo"},
+    {:loop, "FablData"}
   ],
   mailbox_monitor_refresh_rate: 30_000,
   dial_handlers: %{

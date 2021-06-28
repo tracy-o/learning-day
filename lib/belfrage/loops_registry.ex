@@ -12,6 +12,13 @@ defmodule Belfrage.LoopsRegistry do
     end
   end
 
+  def find(loop_id) do
+    case Registry.lookup(__MODULE__, {Belfrage.Loop, loop_id}) do
+      [{pid, _}] -> pid
+      [] -> nil
+    end
+  end
+
   def via_tuple(key) do
     {:via, Registry, {__MODULE__, key}}
   end
