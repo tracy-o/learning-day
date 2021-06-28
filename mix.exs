@@ -64,7 +64,6 @@ defmodule Belfrage.MixProject do
       {:statix, ">= 1.1.0"},
       {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
-      {:mock, "~> 0.3", only: :test},
       {:machine_gun, git: "https://github.com/bbc/machine_gun.git"},
       # Use latest of mox, as requires https://github.com/plataformatec/mox/commit/4dd4c9bed572c9ec8e9dd992b1079a895ceeacc2
       {:mox,
