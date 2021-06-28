@@ -15,7 +15,7 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
       Belfrage.Metrics.Statix.timing("web.response.timing.#{conn.status}", timing)
       Belfrage.Metrics.Statix.timing("web.response.timing.page", timing)
 
-      if private_request(conn) do
+      if private_200?(conn) do
         Belfrage.Metrics.Statix.increment("web.response.private")
       end
 
@@ -23,7 +23,9 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
     end)
   end
 
-  defp private_request(conn) do
+  defp private_200?(conn = %Plug.Conn{status: 200}) do
     get_resp_header(conn, "cacheability") == "private"
   end
+
+  defp private_200?(conn), do: false
 end
