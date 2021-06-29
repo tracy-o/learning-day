@@ -27,7 +27,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
 
       response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
 
-      assert {404, resp_headers, "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+      assert {404, _resp_headers, "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end
 
     test "when response status code is 400", %{lambda_response: lambda_response} do
@@ -38,7 +38,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
 
       response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
 
-      assert {400, resp_headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+      assert {400, _resp_headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end
   end
 end

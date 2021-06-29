@@ -45,7 +45,7 @@ defmodule ContentEncodingTest do
     conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "deflate, br")
     conn = Router.call(conn, [])
 
-    assert {200, headers, "<p>content</p>"} = sent_resp(conn)
+    assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
     assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
   end
 
@@ -68,7 +68,7 @@ defmodule ContentEncodingTest do
       conn = conn(:get, "/proxy-pass")
       conn = Router.call(conn, [])
 
-      assert {200, headers, "<p>content</p>"} = sent_resp(conn)
+      assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
       assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
     end
 
@@ -82,7 +82,7 @@ defmodule ContentEncodingTest do
         conn(:get, "/proxy-pass")
         |> Router.call([])
 
-      assert {200, headers, "<p>content</p>"} = sent_resp(conn)
+      assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
       assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
     end
   end

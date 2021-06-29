@@ -89,10 +89,7 @@ defmodule EndToEnd.SessionTest do
     assert body == lambda_response["body"]
   end
 
-  test "when an invalid authorization token is provided", %{
-    invalid_access_token: access_token,
-    lambda_response: lambda_response
-  } do
+  test "when an invalid authorization token is provided", %{invalid_access_token: access_token} do
     Belfrage.Clients.LambdaMock
     |> expect(:call, 0, fn _role_arn, _function_arn, _payload, _request_id, _opts ->
       flunk("Lambda should not be called")
