@@ -15,6 +15,7 @@ defmodule Belfrage.Cache.Fetch do
         Struct.add(struct, :response, response) |> Struct.add(:private, %{origin: :belfrage_cache})
 
       {:ok, :stale, response} ->
+        Belfrage.Metrics.Statix.increment("web.response.fallback")
         Struct.add(struct, :response, response) |> Struct.add(:response, %{fallback: true})
 
       {:ok, :content_not_found} ->
