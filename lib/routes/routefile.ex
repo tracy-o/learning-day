@@ -668,10 +668,6 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/podcasts", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/podcasts"] do
-    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
-  end
-
   handle "/programmes/:pid/episodes", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
@@ -689,6 +685,10 @@ defmodule Routes.Routefile do
   end
 
   handle "/programmes/:pid/playlist.json", using: "ProgrammesEntity", examples: ["/programmes/b08lkyzk/playlist.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/podcasts", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/podcasts"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -716,15 +716,15 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
+  handle "/programmes/:pid.html", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq.html"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
   handle "/programmes/:pid/:imagepid", using: "ProgrammesEntity", examples: ["/programmes/p028d9jw/p028d8nr"] do
     return_404 if: [
       !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
       !String.match?(imagepid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
     ]
-  end
-
-  handle "/programmes/:pid.html", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq.html"] do
-    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
   handle "/programmes/:pid", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq"] do
