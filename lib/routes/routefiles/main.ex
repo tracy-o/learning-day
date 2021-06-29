@@ -272,22 +272,9 @@ defroutefile "Main" do
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
 
-  handle "/news/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/news/articles/crkxdvxzwxko?mode=testData", "/news/articles/c3wmq4d1y3wo?mode=testData"] do
+  handle "/news/articles/:optimo_id", using: "StorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-
-  # Temporary routes until Webcore supports Optimo articles
-  handle "/news/articles/c744mjrym37o", using: "NewsAmp", examples: []
-  handle "/news/articles/c5ll353v7y9o", using: "NewsAmp", examples: []
-  handle "/news/articles/ce9992y0reyo", using: "NewsAmp", examples: []
-  handle "/news/articles/cd4vr7lvrvmo", using: "NewsAmp", examples: []
-  handle "/news/articles/clldg965yzjo", using: "NewsAmp", examples: []
-  handle "/news/articles/cw4jd7vxxqdo", using: "NewsAmp", examples: []
-  handle "/news/articles/ce9v85jlrzzo", using: "NewsAmp", examples: []
-  handle "/news/articles/cd4117egk3go", using: "NewsAmp", examples: []
-  handle "/news/articles/cj7xrxz0e8zo", using: "NewsAmp", examples: []
-  handle "/news/articles/cp03zwze47zo", using: "NewsAmp", examples: []
-  handle "/news/articles/c8xxl4l3dzeo", using: "NewsAmp", examples: []
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
@@ -388,6 +375,10 @@ defroutefile "Main" do
   redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
+
+  ## World Service - "Access to News" Redirects
+  redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
+  redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
@@ -624,9 +615,16 @@ defroutefile "Main" do
 
   # /programmes
 
+  # temporarily commented out to enable testing
+  # handle "/programmes/:pid", using: "ProgrammesEntity", examples: [] do
+  #   return_404 if: !String.match?(pid, ~r/[0-9b-df-hj-np-tv-z]{8,15}/)
+  # end
+
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
   end
+
+  handle "/programmes/*_any", using: "Programmes", examples: []
 
   # Participation
 
@@ -985,6 +983,16 @@ defroutefile "Main" do
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
   handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures", "/sport/football/teams/hull-city/scores-fixtures/2022-04", "/sport/football/teams/hull-city/scores-fixtures/2022-04.app"]
 
+  ## Sport Basketball Scores-Fixtures pages
+  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
+  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
+  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
+    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+  end
+
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures", "/sport/rugby-league/scores-fixtures/2021-04-26", "/sport/rugby-league/scores-fixtures/2021-04-26.app"]
@@ -1170,6 +1178,9 @@ defroutefile "Main" do
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
+
+  # WebCore Hub
+  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore"]
 
   # News Beat
 
