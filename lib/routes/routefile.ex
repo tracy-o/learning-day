@@ -719,6 +719,14 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
+  handle "/programmes/:pid/members/all", using: "ProgrammesEntity", examples: ["/programmes/p001rshg/members/all"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/members", using: "ProgrammesEntity", examples: ["/programmes/p001rshg/members"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
   handle "/programmes/:pid/microsite", using: "ProgrammesEntity", examples: ["/programmes/p001rshg/microsite"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
@@ -748,6 +756,17 @@ defmodule Routes.Routefile do
   end
 
   handle "/programmes/:pid/recipes", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/schedules/:date", using: "ProgrammesEntity", examples: ["/programmes/p02str2y/schedules/2019/03/18"] do
+    return_404 if: [
+      !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
+      !String.match?(date, ~r/^\d{4}\/\d{2}\/\d{2}$/)
+    ]
+  end
+
+  handle "/programmes/:pid/schedules", using: "ProgrammesEntity", examples: ["/programmes/p02str2y/schedules"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
