@@ -11,7 +11,7 @@ defmodule Belfrage.Cache.Distributed do
     before_time = System.monotonic_time(:millisecond)
     @ccp_client.fetch(request_hash, request_id)
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
-    Belfrage.Metrics.Statix.timing("web.response.timing.#{conn.status}", timing)
+    Belfrage.Metrics.Statix.timing("service.S3.request.timing", timing)
   end
 
   @impl CacheStrategy
