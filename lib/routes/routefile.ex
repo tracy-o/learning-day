@@ -616,13 +616,56 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
   end
 
-  handle "/programmes/articles/:key/:slug", using: "ProgrammesEntity", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
+  handle "/programmes/articles/:key/:slug", using: "Programmes", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/profiles/:key/:slug", using: "ProgrammesEntity", examples: ["/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC/tommy-shelby"] do
+  handle "/programmes/a-z/current", using: "Programmes", examples: ["/programmes/a-z/current"]
+
+  handle "/programmes/a-z/by/:search/current", using: "Programmes", examples: ["/programmes/a-z/by/b/current"] do
+    return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
+  end
+
+  handle "/programmes/a-z/by/:search/:slice", using: "Programmes", examples: ["/programmes/a-z/by/b/all", "/programmes/a-z/by/b/player"] do
+    return_404 if: [
+      !String.match?(search, ~r/^[a-zA-Z@]$/),
+      !Enum.member?(["all", "player"], slice),
+    ]
+  end
+
+  handle "/programmes/a-z/by/:search", using: "Programmes", examples: ["/programmes/a-z/by/b"] do
+    return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
+  end
+
+  handle "/programmes/a-z", using: "Programmes", examples: ["/programmes/a-z"]
+
+  handle "/programmes/formats/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/formats/animation/all", "/programmes/formats/animation/player"] do
+    return_404 if: !Enum.member?(["all", "player"], slice)
+  end
+
+  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do 
+    return_404 if: !Enum.member?(["all", "player"], slice)
+  end
+
+  handle "/programmes/formats/:category_hierarchy", using: "Programmes", examples: ["/programmes/formats/animation"]
+
+  handle "/programmes/genres/:category_hierarchy", using: "Programmes", examples: ["/programmes/genres/childrens"]
+
+  handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
+
+  handle "/programmes/genres", using: "Programmes", examples: ["/programmes/genres"]
+
+  handle "/programmes/profiles/:key/:slug", using: "Programmes", examples: ["/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC/tommy-shelby"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
+
+  handle "/programmes/snippet/:records_ids.json", using: "Programmes", examples: ["/programmes/snippet/n45bj5.json"]
+
+  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio"] do
+    return_404 if: !Enum.member?(["audio", "video"], slice)
+  end
+  
+  handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
 
   handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
@@ -713,6 +756,14 @@ defmodule Routes.Routefile do
   end
 
   handle "/programmes/:pid/series", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/series"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics/1091_Media_films"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/topics", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
