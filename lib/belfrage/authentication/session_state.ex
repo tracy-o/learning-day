@@ -13,22 +13,10 @@ defmodule Belfrage.Authentication.SessionState do
         build_session(token)
 
       signed_in ->
-        %{
-          authentication_env: authentication_env(),
-          session_token: nil,
-          authenticated: true,
-          valid_session: false,
-          user_attributes: %{}
-        }
+        build_invalid_session()
 
       true ->
-        %{
-          authentication_env: authentication_env(),
-          session_token: nil,
-          valid_session: false,
-          authenticated: false,
-          user_attributes: %{}
-        }
+        build_unauthenticated_session()
     end
   end
 
@@ -51,6 +39,26 @@ defmodule Belfrage.Authentication.SessionState do
       authenticated: true,
       valid_session: valid_session?,
       user_attributes: user_attributes
+    }
+  end
+
+  defp build_invalid_session() do
+    %{
+      authentication_env: authentication_env(),
+      session_token: nil,
+      authenticated: true,
+      valid_session: false,
+      user_attributes: %{}
+    }
+  end
+
+  defp build_unauthenticated_session() do
+    %{
+      authentication_env: authentication_env(),
+      session_token: nil,
+      valid_session: false,
+      authenticated: false,
+      user_attributes: %{}
     }
   end
 
