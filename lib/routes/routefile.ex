@@ -612,13 +612,123 @@ defmodule Routes.Routefile do
 
   # /programmes
 
-  # temporarily commented out to enable testing
-  # handle "/programmes/:pid", using: "ProgrammesEntity", examples: [] do
-  #   return_404 if: !String.match?(pid, ~r/[0-9b-df-hj-np-tv-z]{8,15}/)
-  # end
-
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
+  end
+
+  handle "/programmes/articles/:key/:slug", using: "ProgrammesEntity", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/profiles/:key/:slug", using: "ProgrammesEntity", examples: ["/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC/tommy-shelby"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesEntity", examples: ["/programmes/b006qsq5/broadcasts/2020/01"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/clips", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/clips"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/contact", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/contact"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/credits", using: "ProgrammesEntity", examples: ["/programmes/b06ss3j4/credits"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesEntity", examples: ["/programmes/b006qnmr/episodes/a-z/a"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/episodes/downloads.rss"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/downloads", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/episodes/downloads"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/guide", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes/guide"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/guide.2013inc", using: "ProgrammesEntity", examples: ["/programmes/p02zmzss/episodes/guide.2013inc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/player", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes/player"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/podcasts", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/podcasts"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/galleries", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/galleries"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/microsite", using: "ProgrammesEntity", examples: ["/programmes/p001rshg/microsite"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/player", using: "ProgrammesEntity", examples: ["/programmes/p097pw9q/player"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/playlist.json", using: "ProgrammesEntity", examples: ["/programmes/b08lkyzk/playlist.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/profiles", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/profiles"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes.ameninc", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes.ameninc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes.2013inc", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes.2013inc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/segments", using: "ProgrammesEntity", examples: ["/programmes/b01m2fz4/segments"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/series", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/series"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/:imagepid", using: "ProgrammesEntity", examples: ["/programmes/p028d9jw/p028d8nr"] do
+    return_404 if: [
+      !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
+      !String.match?(imagepid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+    ]
+  end
+
+  handle "/programmes/:pid.html", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq.html"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
   handle "/programmes/*_any", using: "Programmes", examples: []
