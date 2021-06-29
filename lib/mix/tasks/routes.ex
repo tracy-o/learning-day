@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Routes do
   def run([env]) do
     IO.puts("# Belfrage #{env} Routes Matchers\n")
 
-    Enum.map(Routes.Routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
+    Enum.map(Routes.Routefiles.Main.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
       specs = Belfrage.RouteSpec.specs_for(loop_id, env)
 
       %{
