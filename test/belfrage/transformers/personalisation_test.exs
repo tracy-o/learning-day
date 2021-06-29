@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.UserSessionTest do
+defmodule Belfrage.Transformers.PersonalisationTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
@@ -6,10 +6,30 @@ defmodule Belfrage.Transformers.UserSessionTest do
 
   alias Belfrage.Authentication.FlagpoleMock
   alias Belfrage.Struct
-  alias Belfrage.Transformers.UserSession
+  alias Belfrage.Transformers.Personalisation
 
-  @authenticated_only_session_state %Struct.Private{authenticated: true, session_token: nil, valid_session: false}
-  @unauthenticated_session_state %Struct.Private{authenticated: false, session_token: nil, valid_session: false}
+  @authenticated_only_session_state %Struct.UserSession{
+    authentication_env: "int",
+    session_token: nil,
+    authenticated: true,
+    valid_session: false,
+    user_attributes: %{}
+  }
+  @unauthenticated_session_state %Struct.UserSession{
+    authentication_env: "int",
+    session_token: nil,
+    authenticated: false,
+    valid_session: false,
+    user_attributes: %{}
+  }
+
+  @default_session_state %Struct.UserSession{
+    authentication_env: nil,
+    session_token: nil,
+    authenticated: false,
+    valid_session: false,
+    user_attributes: %{}
+  }
 
   @token Fixtures.AuthToken.valid_access_token()
 
@@ -54,7 +74,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: @authenticated_only_session_state,
+                 user_session: @authenticated_only_session_state,
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
@@ -64,7 +84,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "'x-id-oidc-signedin' header set to '1' and other cookies will be redirected", %{struct: struct} do
@@ -77,7 +97,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: @authenticated_only_session_state,
+                 user_session: @authenticated_only_session_state,
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
@@ -87,7 +107,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "No token and 'ckns_id' cookie without signedin header will be redirected", %{struct: struct} do
@@ -99,7 +119,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: @authenticated_only_session_state,
+                 user_session: @authenticated_only_session_state,
                  response: %Struct.Response{
                    headers: %{
                      "location" =>
@@ -109,29 +129,29 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "cookie for 'ckns_atkn' only, 'x-id-oidc-signedin' header not set will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_atkn" => "1234"}})
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @unauthenticated_session_state}} = Personalisation.call([], struct)
     end
 
     test "'x-id-oidc-signedin' header set to '0' will not be authenticated", %{struct: struct} do
       struct =
         Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}, raw_headers: %{"x-id-oidc-signedin" => "0"}})
 
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @unauthenticated_session_state}} = Personalisation.call([], struct)
     end
 
     test "cookie without 'ckns_atkn' will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{"ckns_abc" => "def"}})
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @unauthenticated_session_state}} = Personalisation.call([], struct)
     end
 
     test "empty cookie will not be authenticated", %{struct: struct} do
       struct = Struct.add(struct, :request, %{cookies: %{}})
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @unauthenticated_session_state}} = Personalisation.call([], struct)
     end
 
     test "'x-id-oidc-signedin' header set to '1' and valid `ckns_atkn` cookie will be authenticated" do
@@ -146,13 +166,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :ok,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: @token,
-                   valid_session: true
+                   authenticated: true,
+                   valid_session: true,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "valid `ckns_atkn` and 'ckns_id' cookies will be authenticated" do
@@ -166,13 +188,45 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :ok,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: @token,
-                   valid_session: true
+                   authenticated: true,
+                   valid_session: true,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
+    end
+  end
+
+  describe "personalisation overrides" do
+    setup do
+      expect(FlagpoleMock, :state, fn -> true end)
+      :ok
+    end
+
+    test "when `ckns_atkn` has special value it will be authenticated" do
+      struct = %Struct{
+        request: %Struct.Request{
+          cookies: %{"ckns_atkn" => "FAKETOKEN"},
+          path: "/full-stack-test/a/ft",
+          host: "bbc.co.uk"
+        }
+      }
+
+      assert {
+               :ok,
+               %Struct{
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
+                   authenticated: true,
+                   session_token: "FAKETOKEN",
+                   valid_session: true,
+                   user_attributes: %{}
+                 }
+               }
+             } = Personalisation.call([], struct)
     end
   end
 
@@ -189,12 +243,12 @@ defmodule Belfrage.Transformers.UserSessionTest do
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         })
 
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @default_session_state}} = Personalisation.call([], struct)
     end
 
     test "'x-id-oidc-signedin' header set to '1' only will not be redirected", %{struct: struct} do
       struct = Struct.add(struct, :request, %{raw_headers: %{"x-id-oidc-signedin" => "1"}})
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @default_session_state}} = Personalisation.call([], struct)
     end
 
     test "'x-id-oidc-signedin' header set to '1' and valid `ckns_atkn` cookie will not be authenticated" do
@@ -206,7 +260,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         }
       }
 
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @default_session_state}} = Personalisation.call([], struct)
     end
   end
 
@@ -228,7 +282,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         }
       }
 
-      UserSession.call([], struct)
+      Personalisation.call([], struct)
     end
 
     test "request remains unauthenticated, despite valid cookie and header" do
@@ -243,13 +297,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :ok,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: false,
+                 user_session: %Struct.UserSession{
+                   authentication_env: nil,
                    session_token: nil,
-                   valid_session: false
+                   authenticated: false,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
   end
 
@@ -268,7 +324,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
         }
       }
 
-      assert {:ok, %Struct{private: @unauthenticated_session_state}} = UserSession.call([], struct)
+      assert {:ok, %Struct{user_session: @default_session_state}} = Personalisation.call([], struct)
     end
   end
 
@@ -290,7 +346,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
       }
     end
 
-    # This behviour to be confirmed with account team.
+    # TODO: This behviour to be confirmed with account team.
     test "accepts an invalid scope access token as valid", %{invalid_scope_access_token: access_token} do
       struct =
         Struct.add(%Struct{}, :request, %{
@@ -302,13 +358,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :ok,
                %Struct{
-                 private: %Struct.Private{
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    authenticated: true,
                    session_token: ^access_token,
-                   valid_session: true
+                   valid_session: true,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "invalid payload access token", %{struct: struct, invalid_payload_access_token: access_token} do
@@ -322,13 +380,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: ^access_token,
-                   valid_session: false
+                   authenticated: true,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "invalid payload access token will be redirected", %{
@@ -353,7 +413,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "invalid access token", %{struct: struct, invalid_access_token: access_token} do
@@ -366,13 +426,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: ^access_token,
-                   valid_session: false
+                   authenticated: true,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "invalid access token will be redirected", %{struct: struct, invalid_access_token: access_token} do
@@ -394,7 +456,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "expired access token", %{struct: struct, expired_access_token: access_token} do
@@ -407,13 +469,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: ^access_token,
-                   valid_session: false
+                   authenticated: true,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "expired access token will be redirected", %{struct: struct, expired_access_token: access_token} do
@@ -435,7 +499,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "nearly expired access token", %{struct: struct, valid_access_token: access_token} do
@@ -452,13 +516,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: ^access_token,
-                   valid_session: false
+                   authenticated: true,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "nearly expired access token will be redirected", %{struct: struct, valid_access_token: access_token} do
@@ -484,7 +550,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "a malformed access token", %{struct: struct, malformed_access_token: access_token} do
@@ -497,13 +563,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
       assert {
                :redirect,
                %Struct{
-                 private: %Struct.Private{
-                   authenticated: true,
+                 user_session: %Struct.UserSession{
+                   authentication_env: "int",
                    session_token: ^access_token,
-                   valid_session: false
+                   authenticated: true,
+                   valid_session: false,
+                   user_attributes: %{}
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "a malformed access token will be redirected", %{struct: struct, malformed_access_token: access_token} do
@@ -525,7 +593,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "an invalid token header", %{struct: struct, invalid_access_token_header: access_token} do
@@ -539,13 +607,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
         assert {
                  :redirect,
                  %Struct{
-                   private: %Struct.Private{
-                     authenticated: true,
+                   user_session: %Struct.UserSession{
+                     authentication_env: "int",
                      session_token: ^access_token,
-                     valid_session: false
+                     authenticated: true,
+                     valid_session: false,
+                     user_attributes: %{}
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s(Invalid token header)
@@ -570,7 +640,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
 
     test "an invalid token issuer", %{struct: struct, invalid_token_issuer: access_token} do
@@ -586,13 +656,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
         assert {
                  :redirect,
                  %Struct{
-                   private: %Struct.Private{
-                     authenticated: true,
+                   user_session: %Struct.UserSession{
+                     authentication_env: "int",
                      session_token: ^access_token,
-                     valid_session: false
+                     authenticated: true,
+                     valid_session: false,
+                     user_attributes: %{}
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"iss")
@@ -621,7 +693,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      }
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"iss")
@@ -641,13 +713,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
         assert {
                  :redirect,
                  %Struct{
-                   private: %Struct.Private{
-                     authenticated: true,
+                   user_session: %Struct.UserSession{
+                     authentication_env: "int",
                      session_token: ^access_token,
-                     valid_session: false
+                     authenticated: true,
+                     valid_session: false,
+                     user_attributes: %{}
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"aud")
@@ -676,7 +750,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      }
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"aud")
@@ -696,13 +770,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
         assert {
                  :redirect,
                  %Struct{
-                   private: %Struct.Private{
-                     authenticated: true,
+                   user_session: %Struct.UserSession{
+                     authentication_env: "int",
                      session_token: ^access_token,
-                     valid_session: false
+                     authenticated: true,
+                     valid_session: false,
+                     user_attributes: %{}
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"tokenName")
@@ -731,7 +807,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                      }
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s("claim":"tokenName")
@@ -756,13 +832,15 @@ defmodule Belfrage.Transformers.UserSessionTest do
         assert {
                  :redirect,
                  %Struct{
-                   private: %Struct.Private{
-                     authenticated: true,
+                   user_session: %Struct.UserSession{
+                     authentication_env: "int",
                      session_token: @token,
-                     valid_session: false
+                     authenticated: true,
+                     valid_session: false,
+                     user_attributes: %{}
                    }
                  }
-               } = UserSession.call([], struct)
+               } = Personalisation.call([], struct)
       end
 
       assert capture_log(run_fn) =~ ~s(Public key not found)
@@ -787,7 +865,7 @@ defmodule Belfrage.Transformers.UserSessionTest do
                    }
                  }
                }
-             } = UserSession.call([], struct)
+             } = Personalisation.call([], struct)
     end
   end
 end

@@ -10,7 +10,7 @@ defmodule Belfrage.Services.StubbedSession do
 
     Struct.add(struct, :response, %Struct.Response{
       http_status: 200,
-      body: :zlib.gzip(response_body(struct.private)),
+      body: :zlib.gzip(response_body(struct.user_session)),
       headers: %{
         "cache-control" => "private",
         "content-encoding" => "gzip",
@@ -19,11 +19,11 @@ defmodule Belfrage.Services.StubbedSession do
     })
   end
 
-  defp response_body(private = %Struct.Private{}) do
+  defp response_body(user_session = %Struct.UserSession{}) do
     Jason.encode!(%{
-      valid_session: private.valid_session,
-      authenticated: private.authenticated,
-      session_token: (private.session_token && "Provided") || nil
+      valid_session: user_session.valid_session,
+      authenticated: user_session.authenticated,
+      session_token: (user_session.session_token && "Provided") || nil
     })
   end
 end
