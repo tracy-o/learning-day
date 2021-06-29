@@ -11,8 +11,7 @@ defmodule Belfrage.Dials.LoggingLevel do
 
   @impl Belfrage.Dial
   def on_change(dial_value) when dial_value in @valid_levels do
-    # Logger.configure_backend({LoggerFileBackend, :file}, logger_opts(dial_value))
-    Application.put_env(:logger, :file, logger_opts(dial_value))
+    Logger.configure_backend({LoggerFileBackend, :file}, logger_opts(dial_value))
     :ok
   end
 

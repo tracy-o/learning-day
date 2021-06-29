@@ -1,10 +1,8 @@
 defmodule BelfrageWeb.Routefile do
   defmacro defroutefile(_name, do: block) do
-    if not_running_unit_tests() do
-      quote do
-        defmodule unquote(module_name()) do
-          unquote(block)
-        end
+    quote do
+      defmodule unquote(module_name()) do
+        unquote(block)
       end
     end
   end
@@ -23,9 +21,5 @@ defmodule BelfrageWeb.Routefile do
 
   defp cosmos_env do
     Application.get_env(:belfrage, :production_environment)
-  end
-
-  defp not_running_unit_tests do
-    Mix.env() != :test
   end
 end
