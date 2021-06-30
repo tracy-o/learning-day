@@ -804,11 +804,8 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules/:date", using: "ProgrammesEntity", examples: ["/programmes/p02str2y/schedules/2019/03/18"] do
-    return_404 if: [
-      !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
-      !String.match?(date, ~r/^\d{4}\/\d{2}\/\d{2}$/)
-    ]
+  handle "/programmes/:pid/schedules/*_any", using: "ProgrammesEntity", examples: ["/programmes/p02str2y/schedules/2019/03/18"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
   handle "/programmes/:pid/schedules", using: "ProgrammesEntity", examples: ["/programmes/p02str2y/schedules"] do
