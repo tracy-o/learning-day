@@ -1,33 +1,35 @@
-defmodule Belfrage.Transformers.UserSession do
+defmodule Belfrage.Transformers.Personalisation do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
-  alias Belfrage.Authentication.Token
+  alias Belfrage.Authentication.SessionState
 
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{cookies: cookies, raw_headers: headers}}) do
-    private = Struct.Private.set_session_state(struct.private, cookies, headers, Token.parse(cookies["ckns_atkn"]))
-    struct_with_session_state = Struct.add(struct, :private, private)
+  def call(
+        rest,
+        struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}
+      ) do
+    session_state = SessionState.build(cookies, headers, path)
+    struct_with_session_state = Struct.add(struct, :user_session, session_state)
 
     cond do
       !personalisation_available?(struct.request.host) ->
         then(rest, struct)
 
-      match?(%Private{authenticated: true, valid_session: true}, private) ->
-        then(rest, struct_with_session_state)
-
-      # x-id-oidc-signedin set to 1
-      match?(%Private{session_token: _value, authenticated: true, valid_session: false}, private) ->
+      reauthentication_required?(session_state) ->
         redirect(struct_with_session_state)
 
-      # x-id-oidc-signedin not set
-      match?(%Private{session_token: nil, authenticated: false, valid_session: false}, private) ->
+      true ->
         then(rest, struct_with_session_state)
     end
+  end
+
+  defp reauthentication_required?(session_state) do
+    session_state.authenticated && !session_state.valid_session
   end
 
   defp personalisation_available?(host) when is_binary(host) do

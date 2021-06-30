@@ -4,34 +4,45 @@ defmodule Belfrage.Services.Webcore.RequestTest do
   alias Belfrage.Struct
 
   setup do
-    private_valid_session = %Struct.Private{
-      authenticated: true,
+    private_valid_session = %Struct.UserSession{
+      authentication_env: "int",
       session_token: "a-valid-session-token",
+      authenticated: true,
       valid_session: true,
       user_attributes: %{age_bracket: "o18", allow_personalisation: true}
     }
 
-    private_valid_session_without_user_attributes = %Struct.Private{
-      authenticated: true,
+    private_valid_session_without_user_attributes = %Struct.UserSession{
+      authentication_env: "int",
       session_token: "a-valid-session-token",
+      authenticated: true,
       valid_session: true,
       user_attributes: %{}
     }
 
-    private_valid_session_with_partial_user_attributes = %Struct.Private{
-      authenticated: true,
+    private_valid_session_with_partial_user_attributes = %Struct.UserSession{
+      authentication_env: "int",
       session_token: "a-valid-session-token",
+      authenticated: true,
       valid_session: true,
       user_attributes: %{allow_personalisation: true}
     }
 
-    private_invalid_session = %Struct.Private{
-      authenticated: true,
+    private_invalid_session = %Struct.UserSession{
+      authentication_env: "int",
       session_token: "an-invalid-session-token",
-      valid_session: false
+      authenticated: true,
+      valid_session: false,
+      user_attributes: %{}
     }
 
-    private_unauthenticated_session = %Struct.Private{authenticated: false, session_token: nil, valid_session: false}
+    private_unauthenticated_session = %Struct.UserSession{
+      authentication_env: "int",
+      session_token: nil,
+      authenticated: false,
+      valid_session: false,
+      user_attributes: %{}
+    }
 
     request_struct = %Struct{
       request: %Struct.Request{
@@ -48,13 +59,13 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     }
 
     %{
-      valid_session: Struct.add(request_struct, :private, private_valid_session),
+      valid_session: Struct.add(request_struct, :user_session, private_valid_session),
       valid_session_without_user_attributes:
-        Struct.add(request_struct, :private, private_valid_session_without_user_attributes),
+        Struct.add(request_struct, :user_session, private_valid_session_without_user_attributes),
       valid_session_with_partial_user_attributes:
-        Struct.add(request_struct, :private, private_valid_session_with_partial_user_attributes),
-      invalid_session: Struct.add(request_struct, :private, private_invalid_session),
-      unauthenticated_session: Struct.add(request_struct, :private, private_unauthenticated_session)
+        Struct.add(request_struct, :user_session, private_valid_session_with_partial_user_attributes),
+      invalid_session: Struct.add(request_struct, :user_session, private_invalid_session),
+      unauthenticated_session: Struct.add(request_struct, :user_session, private_unauthenticated_session)
     }
   end
 
