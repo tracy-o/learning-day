@@ -21,5 +21,5 @@ defmodule Routes.Specs.NewsTopics do
     ["HTTPredirect", "TrailingSlashRedirector", "NewsTopicsPlatformDiscriminator", "CircuitBreaker"]
   end
  
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests", "UserSession"]
+  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests", "Personalisation"]
 end

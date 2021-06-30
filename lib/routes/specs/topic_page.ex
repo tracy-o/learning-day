@@ -18,8 +18,8 @@ defmodule Routes.Specs.TopicPage do
   defp headers_allowlist(_production_env), do: ["x-id-oidc-signedin"]
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests", "UserSession"]
+  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests", "Personalisation"]
 end
