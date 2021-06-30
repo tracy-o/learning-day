@@ -11,7 +11,7 @@ defmodule Routes.Platforms.Programmes do
     }
   end
 
-  defp pipeline("live"), do
+  defp pipeline("live") do
     ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
   end
 
