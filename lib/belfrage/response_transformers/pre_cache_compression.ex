@@ -26,7 +26,16 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   end
 
   @impl true
-  def call(struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}) do
+  def call(struct = %Struct{response: %Struct.Response{http_status: http_status}}) do
+    case http_status do
+      200 -> gzip_response(struct)
+      _ -> struct
+    end
+  end
+
+  defp gzip_response(
+         struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}
+       ) do
     Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
 
     Belfrage.Event.record(:log, :info, %{
