@@ -102,13 +102,13 @@ defmodule EndToEnd.MonitorEventsTest do
     end)
 
     conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
-    conn = Router.call(conn, [])
+    Router.call(conn, [])
   end
 
   describe "a fresh cache response" do
     setup do
       conn = conn(:get, "/200-ok-response")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
 
       :ok
     end
@@ -154,7 +154,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/200-ok-response")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
   end
 
@@ -281,7 +281,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/sends-request-downstream")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
   end
 
@@ -403,7 +403,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/downstream-broken?belfrage-cache-bust")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
   end
 
@@ -509,7 +509,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
   end
 
@@ -537,7 +537,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/200-ok-response")
-      conn = Router.call(conn, [])
+      Router.call(conn, [])
     end
   end
 end

@@ -16,7 +16,7 @@ defmodule Belfrage.Credentials.SupervisorTest do
         assert is_pid(Process.whereis(Belfrage.Credentials.Supervisor))
     after
       1000 ->
-        raise :timeout
+        raise "Timeout"
     end
   end
 end

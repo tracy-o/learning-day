@@ -28,7 +28,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
 
       response_conn = conn(:get, "/200-ok-response") |> Router.call([])
 
-      assert {200, resp_headers, _body} = sent_resp(response_conn)
+      assert {200, _resp_headers, _body} = sent_resp(response_conn)
       assert ["MISS"] = get_resp_header(response_conn, "belfrage-cache-status")
     end
   end
@@ -43,7 +43,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
       conn(:get, "/200-ok-response") |> Router.call([])
       response_conn = conn(:get, "/200-ok-response") |> Router.call([])
 
-      assert {200, resp_headers, _body} = sent_resp(response_conn)
+      assert {200, _resp_headers, _body} = sent_resp(response_conn)
       assert ["HIT"] = get_resp_header(response_conn, "belfrage-cache-status")
     end
   end
