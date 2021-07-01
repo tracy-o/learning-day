@@ -18,12 +18,20 @@ defmodule Belfrage.Clients.CCP do
   def fetch(request_hash, request_id) do
     # TODO Investigate using internal S3 endpoints for secure fetches
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
-    @http_client.execute(%Clients.HTTP.Request{
-      method: :get,
-      url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
-      request_id: request_id
-    })
-    |> case do
+
+    before_time = System.monotonic_time(:millisecond)
+
+    ccp_response =
+      @http_client.execute(%Clients.HTTP.Request{
+        method: :get,
+        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
+        request_id: request_id
+      })
+
+    timing = (System.monotonic_time(:millisecond) - before_time) |> abs
+    Belfrage.Metrics.Statix.timing("service.S3.request.timing", timing)
+
+    case ccp_response do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
         Belfrage.Metrics.Statix.increment("service.S3.response.200")
         {:ok, :stale, cached_body |> :erlang.binary_to_term()}
