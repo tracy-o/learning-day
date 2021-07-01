@@ -29,6 +29,7 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequestedTest do
           http_status: 404
         }
       }
+
       assert non_200_struct == CompressionAsRequested.call(non_200_struct)
     end
   end
