@@ -232,6 +232,8 @@ defmodule Routes.Routefile do
     ]
   end
 
+  handle "/news/topics/c9999999999t", using: "HomePageSegmented", only_on: "test", examples: []
+
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -664,7 +666,7 @@ defmodule Routes.Routefile do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do 
+  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
@@ -685,7 +687,7 @@ defmodule Routes.Routefile do
   handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio"] do
     return_404 if: !Enum.member?(["audio", "video"], slice)
   end
-  
+
   handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
 
   handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
