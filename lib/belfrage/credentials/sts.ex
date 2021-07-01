@@ -1,12 +1,13 @@
 defmodule Belfrage.Credentials.STS do
+  alias Belfrage.AWS.STS
+
   @behaviour Belfrage.Behaviours.CredentialStrategy
-  @aws_sts Application.get_env(:belfrage, :aws_sts)
   @aws Application.get_env(:belfrage, :aws)
 
   @impl true
   def refresh_credential(arn, session_name) do
     assume_result =
-      @aws_sts.assume_role(arn, session_name)
+      STS.assume_role(arn, session_name)
       |> @aws.request()
       |> format_response()
 
