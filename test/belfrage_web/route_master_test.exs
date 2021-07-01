@@ -5,6 +5,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   alias Belfrage.Struct
   alias Routes.{RoutefileMock, RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
+  alias Belfrage.Helpers.FileIOMock
 
   @struct_with_html_response %Struct{
     response: %Struct.Response{
@@ -707,36 +708,36 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
   end
 
-  describe "matching undefined routes" do
-    test "404 is returned for non-matching GET requests" do
+  describe "no_match/0" do
+    defmodule RouteFileWithNoMatch do
+      use BelfrageWeb.RouteMaster
+      no_match()
+    end
+
+    test "defines a catch-all 404 GET route" do
       expect_belfrage_not_called()
       not_found_page = Application.get_env(:belfrage, :not_found_page)
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
+      expect(FileIOMock, :read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
 
       conn =
         conn(:get, "/a_route_that_will_not_match")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> RoutefileMock.call([])
+        |> RouteFileWithNoMatch.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
     end
 
-    test "405 is returned with 405 page for unsupported methods" do
+    test "defines a catch-all 405 route for all other HTTP methods" do
       expect_belfrage_not_called()
       not_supported_page = Application.get_env(:belfrage, :not_supported_page)
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_supported_page -> {:ok, "<h1>405 Error Page</h1>\n"} end)
+      expect(FileIOMock, :read, fn ^not_supported_page -> {:ok, "<h1>405 Error Page</h1>\n"} end)
 
       conn =
         conn(:post, "/a_route_that_will_not_match")
-        |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> RoutefileMock.call([])
+        |> RouteFileWithNoMatch.call([])
 
       assert conn.status == 405
       assert conn.resp_body == "<h1>405 Error Page</h1>\n<!-- Belfrage -->"
