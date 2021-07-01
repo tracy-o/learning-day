@@ -2,7 +2,6 @@ defmodule Belfrage.Transformers.Personalisation do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct
-  alias Belfrage.Struct.Private
   alias Belfrage.Authentication.SessionState
 
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
