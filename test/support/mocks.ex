@@ -5,8 +5,6 @@ Mox.defmock(Belfrage.Clients.HTTP.MachineGunMock, for: Belfrage.Clients.HTTP.Mac
 Mox.defmock(Belfrage.AWSMock, for: Belfrage.AWS)
 Mox.defmock(Belfrage.Helpers.FileIOMock, for: Belfrage.Helpers.FileIO)
 Mox.defmock(Belfrage.XrayMock, for: Belfrage.Xray)
-Mox.defmock(CacheStrategyMock, for: Belfrage.Behaviours.CacheStrategy)
-Mox.defmock(CacheStrategyTwoMock, for: Belfrage.Behaviours.CacheStrategy)
 Mox.defmock(Belfrage.Clients.CCPMock, for: Belfrage.Clients.CCP)
 Mox.defmock(Belfrage.Clients.AuthenticationMock, for: Belfrage.Clients.Authentication)
 Mox.defmock(Belfrage.Authentication.FlagpoleMock, for: Belfrage.Authentication.Flagpole)
