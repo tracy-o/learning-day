@@ -169,8 +169,8 @@ defmodule Routes.Routefile do
   handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
 
-  handle "/homepage/personalised", using: "HomePagePersonalised", only_on: "test", examples: ["/homepage/personalised"]
-  handle "/homepage/segmented", using: "HomePageSegmented", only_on: "test", examples: ["/homepage/segmented"]
+  handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
+  handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
 
 
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
