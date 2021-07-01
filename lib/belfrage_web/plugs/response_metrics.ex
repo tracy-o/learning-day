@@ -15,7 +15,7 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
       Belfrage.Metrics.Statix.timing("web.response.timing.#{conn.status}", timing)
       Belfrage.Metrics.Statix.timing("web.response.timing.page", timing)
 
-      if conn.status == 200 and String.contains?(cache_control_header(conn), "private") do
+      if conn.status == 200 and private_response?(conn) do
         Belfrage.Metrics.Statix.increment("web.response.private")
       end
 
@@ -23,7 +23,10 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
     end)
   end
 
-  def cache_control_header(conn) do
-    List.first(get_resp_header(conn, "cache-control"))
+  def private_response?(conn) do
+    conn
+    |> get_resp_header("cache-control")
+    |> List.first()
+    |> String.contains?("private")
   end
 end
