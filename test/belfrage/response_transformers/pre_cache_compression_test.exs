@@ -83,15 +83,9 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
   describe "when content-encoding resoponse header is not set, but response is not a 200" do
     test "the response isn't gzipped, struct is returned unmodified" do
       struct = %Struct{
-        request: %Struct.Request{
-          path: "/non-compressed/path"
-        },
         response: %Struct.Response{
           body: "I am a non 200 response",
           http_status: 404
-        },
-        private: %Struct.Private{
-          platform: SomePlatform
         }
       }
 

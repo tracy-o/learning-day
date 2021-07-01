@@ -23,9 +23,6 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequestedTest do
       non_200_struct = %Struct{
         response: %Struct.Response{
           body: "<p>Hi. I am some uncompressed content</p>",
-          headers: %{
-            "content-encoding" => "gzip"
-          },
           http_status: 404
         }
       }
