@@ -160,7 +160,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
       url = "https://foo.bar/v1/oauth/connect/jwk_uri"
 
       assert_raise KeyError, fn ->
-        SessionState.authentication_env(url) == "test"
+        SessionState.authentication_env(url)
       end
     end
   end
