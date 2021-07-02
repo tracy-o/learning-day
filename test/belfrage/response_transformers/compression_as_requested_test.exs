@@ -18,19 +18,6 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequestedTest do
     }
   end
 
-  describe "when response is not a 200" do
-    test "the response is returned untouched" do
-      non_200_struct = %Struct{
-        response: %Struct.Response{
-          body: "<p>Hi. I am some uncompressed content</p>",
-          http_status: 404
-        }
-      }
-
-      assert non_200_struct == CompressionAsRequested.call(non_200_struct)
-    end
-  end
-
   describe "when no accept_encoding value is set" do
     test "unzips the body in the struct & removes content-encoding response header", %{
       struct_fixture: struct_fixture

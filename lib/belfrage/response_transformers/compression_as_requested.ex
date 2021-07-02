@@ -4,17 +4,7 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
   @behaviour ResponseTransformer
 
   @impl true
-  def call(struct = %Struct{response: %Struct.Response{http_status: http_status}}) when http_status != 200 do
-    struct
-  end
-
-  @impl true
-  def call(
-        struct = %Struct{
-          request: %Struct.Request{accept_encoding: accept_encoding},
-          response: %Struct.Response{http_status: 200}
-        }
-      ) do
+  def call(struct = %Struct{request: %Struct.Request{accept_encoding: accept_encoding}}) do
     case should_return_gzip?(accept_encoding) do
       true ->
         struct
