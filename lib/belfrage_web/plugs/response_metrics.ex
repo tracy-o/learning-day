@@ -24,9 +24,11 @@ defmodule BelfrageWeb.Plugs.ResponseMetrics do
   end
 
   def private_response?(conn) do
-    conn
-    |> get_resp_header("cache-control")
-    |> List.first()
-    |> String.contains?("private")
+    header =
+      conn
+      |> get_resp_header("cache-control")
+      |> List.first()
+
+    header && String.contains?(header, "private")
   end
 end
