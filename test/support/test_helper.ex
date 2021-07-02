@@ -8,11 +8,7 @@ defmodule Test.Support.Helper do
   def setup_stubs do
     Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
-    Mox.stub_with(Belfrage.AWS.STSMock, Belfrage.AWS.STSStub)
-    Mox.stub_with(Belfrage.AWS.LambdaMock, Belfrage.AWS.LambdaStub)
     Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
-    Mox.stub_with(CacheStrategyMock, CacheStrategyStub)
-    Mox.stub_with(CacheStrategyTwoMock, CacheStrategyStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
     Mox.stub_with(Belfrage.Clients.AuthenticationMock, Belfrage.Clients.AuthenticationStub)
     Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)

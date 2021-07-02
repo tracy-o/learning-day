@@ -5,7 +5,6 @@ defmodule Belfrage.Clients.Lambda do
   import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
   @aws Application.get_env(:belfrage, :aws)
-  @aws_lambda Application.get_env(:belfrage, :aws_lambda)
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
@@ -37,7 +36,7 @@ defmodule Belfrage.Clients.Lambda do
 
       lambda_response =
         Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
-          @aws_lambda.invoke(function, payload, %{}, opts)
+          Belfrage.AWS.Lambda.invoke(function, payload, %{}, opts)
           |> @aws.request(
             security_token: credentials.session_token,
             access_key_id: credentials.access_key_id,
