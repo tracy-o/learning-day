@@ -85,7 +85,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
+      conn(:get, "/200-ok-response?belfrage-cache-bust") |> put_req_header("accept-encoding", "gzip") |> Router.call([])
     end
   end
 end

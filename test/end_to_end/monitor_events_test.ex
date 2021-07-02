@@ -437,7 +437,8 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
-      conn = Router.call(conn, [])
+      |> put_req_header("accept-encoding", "gzip")
+      |> Router.call([])
     end
   end
 
@@ -465,7 +466,8 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       conn = conn(:get, "/200-ok-response")
-      conn = Router.call(conn, [])
+      |> put_req_header("accept-encoding", "gzip")
+      |> Router.call([])
     end
   end
 end

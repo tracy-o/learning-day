@@ -25,7 +25,8 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
         {:ok, Map.put(lambda_response, "statusCode", 404)}
       end)
 
-      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+      response_conn =
+        conn(:get, "/downstream-not-found") |> put_req_header("accept-encoding", "gzip") |> Router.call([])
 
       assert {404, resp_headers, "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end
@@ -36,7 +37,8 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
         {:ok, Map.put(lambda_response, "statusCode", 400)}
       end)
 
-      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+      response_conn =
+        conn(:get, "/downstream-not-found") |> put_req_header("accept-encoding", "gzip") |> Router.call([])
 
       assert {400, resp_headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end

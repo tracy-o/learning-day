@@ -10,7 +10,8 @@ defmodule EndToEnd.LambdaTest do
 
   @lambda_response %{
     "headers" => %{
-      "cache-control" => "public, max-age=30"
+      "cache-control" => "public, max-age=30",
+      "content-encoding" => "gzip"
     },
     "statusCode" => 200,
     "body" => "<h1>Hello from the Lambda!</h1>"
@@ -44,12 +45,15 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, "/200-ok-response")
-    conn = Router.call(conn, [])
+    conn =
+      conn(:get, "/200-ok-response")
+      |> put_req_header("accept-encoding", "gzip")
+      |> Router.call([])
 
     assert {200,
             [
               {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"},
+              {"content-encoding", "gzip"},
               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
@@ -77,7 +81,9 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn(:get, "/200-ok-response?query[hi]=foo") |> Router.call([])
+    conn(:get, "/200-ok-response?query[hi]=foo")
+    |> put_req_header("accept-encoding", "gzip")
+    |> Router.call([])
   end
 
   test "a failed response from a lambda e2e" do
@@ -90,12 +96,15 @@ defmodule EndToEnd.LambdaTest do
       {:ok, response}
     end)
 
-    conn = conn(:get, "/downstream-broken")
-    conn = Router.call(conn, [])
+    conn =
+      conn(:get, "/downstream-broken")
+      |> put_req_header("accept-encoding", "gzip")
+      |> Router.call([])
 
     assert {500,
             [
               {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"},
+              {"content-encoding", "gzip"},
               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
