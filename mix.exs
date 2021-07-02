@@ -1,6 +1,8 @@
 defmodule Belfrage.MixProject do
   use Mix.Project
 
+  @test_envs ~w(test end_to_end routes_test smoke_test)a
+
   def project do
     [
       app: :belfrage,
@@ -16,7 +18,7 @@ defmodule Belfrage.MixProject do
     ]
   end
 
-  defp elixirc_paths(mix_env) when mix_env in [:test, :end_to_end, :routes_test, :smoke_test],
+  defp elixirc_paths(mix_env) when mix_env in @test_envs,
     do: ["lib", "test/support"]
 
   defp elixirc_paths(mix_env) when mix_env == :dev,
@@ -62,20 +64,15 @@ defmodule Belfrage.MixProject do
       {:statix, ">= 1.1.0"},
       {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
-      {:mock, "~> 0.3", only: :test},
       {:machine_gun, git: "https://github.com/bbc/machine_gun.git"},
-      # Use latest of mox, as requires https://github.com/plataformatec/mox/commit/4dd4c9bed572c9ec8e9dd992b1079a895ceeacc2
-      {:mox,
-       git: "https://github.com/plataformatec/mox",
-       ref: "4dd4c9bed572c9ec8e9dd992b1079a895ceeacc2",
-       only: [:test, :end_to_end, :routes_test, :smoke_test]},
+      {:mox, "~> 1.0.0", only: @test_envs},
       {:plug_cowboy, "~> 2.5"},
       {:stump, "~> 1.7"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
       {:poison, "~> 4.0", override: true},
       {:secure_random, "~> 0.5.1"},
-      {:tabula, "~> 2.2", only: [:dev, :test]},
+      {:tabula, "~> 2.2", only: [:dev] ++ @test_envs},
       {:x509, "~> 0.8", only: :dev},
       {:telemetry, "~> 0.4.2"},
       {:telemetry_poller, "~> 0.4"},

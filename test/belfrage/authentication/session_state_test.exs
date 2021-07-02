@@ -134,4 +134,34 @@ defmodule Belfrage.Authentication.SessionStateTest do
              }
     end
   end
+
+  describe "authentication_env/1" do
+    test "returns live for live access url" do
+      url = "https://access.api.bbc.com/v1/oauth/connect/jwk_uri"
+      assert SessionState.authentication_env(url) == "live"
+    end
+
+    test "returns stage for stage access url" do
+      url = "https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri"
+      assert SessionState.authentication_env(url) == "stage"
+    end
+
+    test "returns test for test access url" do
+      url = "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri"
+      assert SessionState.authentication_env(url) == "test"
+    end
+
+    test "returns int for int access url" do
+      url = "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri"
+      assert SessionState.authentication_env(url) == "int"
+    end
+
+    test "raise on invalid url" do
+      url = "https://foo.bar/v1/oauth/connect/jwk_uri"
+
+      assert_raise KeyError, fn ->
+        SessionState.authentication_env(url)
+      end
+    end
+  end
 end

@@ -90,7 +90,12 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro no_match() do
     quote do
-      unless Enum.find(@routes, fn {matcher, _args} -> matcher == "/*any" end) do
+      catch_all_get_exists =
+        Enum.find(@routes, fn {matcher, args} ->
+          matcher == "/*any" and args[:only_on] == Application.get_env(:belfrage, :production_environment)
+        end)
+
+      unless catch_all_get_exists do
         get _ do
           return_404()
         end

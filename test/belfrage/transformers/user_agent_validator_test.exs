@@ -21,7 +21,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "we receive :ok and the pipeline continues" do
       struct = incoming_request("/", "MozartFetcher")
 
-      assert {:ok, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:ok, ^struct} = UserAgentValidator.call(@rest, struct)
     end
   end
 
@@ -29,7 +29,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "we receive :ok and the pipeline continues" do
       struct = incoming_request("/", "MozartCli")
 
-      assert {:ok, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:ok, ^struct} = UserAgentValidator.call(@rest, struct)
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "we receive :stop_pipeline and the struct" do
       struct = incoming_request("/", "NaughtyVivaldiFetcher")
 
-      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, _struct} = UserAgentValidator.call(@rest, struct)
     end
 
     test "we return a 400 in the struct response" do
@@ -58,7 +58,7 @@ defmodule Belfrage.Transformers.UserAgentValidatorTest do
     test "we receive :stop_pipeline and the struct" do
       struct = incoming_request("/", "")
 
-      assert {:stop_pipeline, struct} = UserAgentValidator.call(@rest, struct)
+      assert {:stop_pipeline, _struct} = UserAgentValidator.call(@rest, struct)
     end
 
     test "we return a 400 in the struct response" do

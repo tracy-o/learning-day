@@ -32,6 +32,23 @@ defmodule Test.Support.Helper do
     end
   end
 
+  # This is used by tests that set Mox expectations.
+  #
+  # It sets Mox mode (global or private) based on the `async` tag: if a test is
+  # async, Mox will be used in private mode.
+  #
+  # It also sets up stubs for some of the mocked modules. We do this here in
+  # addition to doing it in `test/test_helper.exs` because otherwise tests
+  # won't be able to:
+  # * Set Mox expectations. Mox is put in global mode in `test/test_helper.exs`
+  # and only the process that puts Mox in global mode (i.e. the Mix process
+  # that runs tests) can set expectations. Tests are executed in separate
+  # processes and so they can't.
+  # * Use stubs set up in `test/test_helper.exs`. When we enable global mode
+  # for Mox in a test, the test process can no longer call a stub that was
+  # enabled in `test/test_helper.exs` because that was done by a different
+  # process (the Mix process that runs tests) which is no longer the global
+  # process in Mox.
   def mox do
     quote do
       import Mox
