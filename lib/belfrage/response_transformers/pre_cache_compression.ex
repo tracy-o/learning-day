@@ -26,8 +26,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   end
 
   @impl true
-  def call(struct) do
-    if struct.response.http_status == 200 do
+  def call(%Struct{response: %Struct.Response{} = response} = struct) do
+    if response.http_status == 200 do
       gzip_response_body(struct)
     else
       struct
