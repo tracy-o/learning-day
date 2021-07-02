@@ -80,7 +80,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
     end
   end
 
-  describe "when content-encoding resoponse header is not set, but response is not a 200" do
+  describe "when content-encoding response header is not set, but response is not a 200" do
     test "the response isn't gzipped, struct is returned unmodified" do
       struct = %Struct{
         response: %Struct.Response{
