@@ -436,9 +436,10 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
       end)
 
-      conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
-      |> put_req_header("accept-encoding", "gzip")
-      |> Router.call([])
+      conn =
+        conn(:get, "/sends-request-downstream?belfrage-cache-bust")
+        |> put_req_header("accept-encoding", "gzip")
+        |> Router.call([])
     end
   end
 
@@ -465,9 +466,10 @@ defmodule EndToEnd.MonitorEventsTest do
         {:ok, false}
       end)
 
-      conn = conn(:get, "/200-ok-response")
-      |> put_req_header("accept-encoding", "gzip")
-      |> Router.call([])
+      conn =
+        conn(:get, "/200-ok-response")
+        |> put_req_header("accept-encoding", "gzip")
+        |> Router.call([])
     end
   end
 end
