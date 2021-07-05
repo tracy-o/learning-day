@@ -3,7 +3,13 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @default_cleanup_rate 10_000
   @cleanup_ttl 30_000
-  @valid_checkpoints [:request_received, :origin_request_sent, :origin_response_received, :response_sent]
+  @valid_checkpoints [
+    :request_received,
+    :early_response_received,
+    :origin_request_sent,
+    :origin_response_received,
+    :response_sent
+  ]
 
   def start_link(opts \\ []) do
     rate = Keyword.get(opts, :cleanup_rate, @default_cleanup_rate)
@@ -80,24 +86,34 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 
-  defp send_metrics(%{
-         request_received: request_received,
-         origin_request_sent: origin_request_sent,
-         origin_response_received: origin_response_received,
-         response_sent: response_sent
-       }) do
-    request_latency = origin_request_sent - request_received
-    response_latency = response_sent - origin_response_received
-    combined_latency = request_latency + response_latency
+  defp send_metrics(checkpoints) do
+    request = request_latency(checkpoints)
+    response = response_latency(checkpoints)
 
-    Belfrage.Metrics.Statix.timing("web.latency.internal.request", request_latency)
-    Belfrage.Metrics.Statix.timing("web.latency.internal.response", response_latency)
-    Belfrage.Metrics.Statix.timing("web.latency.internal.combined", combined_latency)
-
-    {:ok, true}
+    if request && response do
+      Belfrage.Metrics.Statix.timing("web.latency.internal.request", request)
+      Belfrage.Metrics.Statix.timing("web.latency.internal.response", response)
+      Belfrage.Metrics.Statix.timing("web.latency.internal.combined", request + response)
+    end
   end
 
-  defp send_metrics(_), do: {:error, :incomplete_times}
+  def request_latency(checkpoints) do
+    start = checkpoints[:request_received]
+    finish = checkpoints[:early_response_received] || checkpoints[:origin_request_sent]
+
+    if start && finish do
+      finish - start
+    end
+  end
+
+  def response_latency(checkpoints) do
+    start = checkpoints[:early_response_received] || checkpoints[:origin_response_received]
+    finish = checkpoints[:response_sent]
+
+    if start && finish do
+      finish - start
+    end
+  end
 
   defp keep_request?(times, min_start_time) do
     times[:request_received] && times[:request_received] > min_start_time

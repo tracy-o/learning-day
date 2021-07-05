@@ -1,5 +1,5 @@
 defmodule BelfrageTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
@@ -7,6 +7,7 @@ defmodule BelfrageTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Clients.LambdaMock
+  alias Belfrage.Metrics.LatencyMonitor
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
@@ -169,6 +170,15 @@ defmodule BelfrageTest do
              } = Belfrage.handle(struct)
 
       refute Map.has_key?(headers, "content-encoding")
+    end
+
+    test "records latency checkpoint", %{struct: struct} do
+      start_supervised!(LatencyMonitor)
+
+      Belfrage.handle(struct)
+
+      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      assert checkpoints[:early_response_received]
     end
   end
 end

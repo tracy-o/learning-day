@@ -48,6 +48,23 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       assert sent_metric(metrics) == "web.latency.internal.combined:3000|ms"
     end
 
+    test "sends latency metrics for early responses" do
+      request_id = "some-request-id"
+      now = System.monotonic_time(:millisecond)
+
+      metrics = start_metrics_server()
+
+      LatencyMonitor.checkpoint(request_id, :request_received, now)
+      LatencyMonitor.checkpoint(request_id, :early_response_received, now + 1_000)
+      LatencyMonitor.checkpoint(request_id, :response_sent, now + 3_000)
+
+      refute LatencyMonitor.get_checkpoints(request_id)
+
+      assert sent_metric(metrics) == "web.latency.internal.request:1000|ms"
+      assert sent_metric(metrics) == "web.latency.internal.response:2000|ms"
+      assert sent_metric(metrics) == "web.latency.internal.combined:3000|ms"
+    end
+
     test "does not crash on receiving incomplete set of checkpoints" do
       metrics = start_metrics_server()
 
