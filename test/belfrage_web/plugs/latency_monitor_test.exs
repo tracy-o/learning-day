@@ -8,7 +8,7 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     :ok
   end
 
-  test "calls LatencyMonitor checkpoints for request_start and response_end for 200s" do
+  test "calls LatencyMonitor checkpoints for request_received and response_sent for 200s" do
     pid = Process.whereis(Belfrage.Metrics.LatencyMonitor)
     :erlang.trace(pid, true, [:receive])
 
@@ -20,13 +20,13 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
     assert_receive {:trace, ^pid, :receive,
                     {
                       _,
-                      {:checkpoint, :request_start, "gary-the-get-request", _time}
+                      {:checkpoint, :request_received, "gary-the-get-request", _time}
                     }}
 
     assert_receive {:trace, ^pid, :receive,
                     {
                       _,
-                      {:checkpoint, :response_end, "gary-the-get-request", _time}
+                      {:checkpoint, :response_sent, "gary-the-get-request", _time}
                     }}
   end
 

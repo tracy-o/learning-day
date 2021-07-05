@@ -32,7 +32,7 @@ defmodule Belfrage.Clients.Lambda do
 
   defp invoke_lambda(function, payload, request_id, credentials, opts) do
     Belfrage.Event.record "function.timing.service.lambda.invoke" do
-      checkpoint(request_id, :request_end)
+      checkpoint(request_id, :origin_request_sent)
 
       lambda_response =
         Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
@@ -44,7 +44,7 @@ defmodule Belfrage.Clients.Lambda do
           )
         end
 
-      checkpoint(request_id, :response_start)
+      checkpoint(request_id, :origin_response_received)
 
       case lambda_response do
         {:ok, body} -> {:ok, body}

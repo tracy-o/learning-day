@@ -21,11 +21,11 @@ defmodule Belfrage.Cache.Local do
   def fetch(%Belfrage.Struct{request: %{request_id: request_id, request_hash: request_hash}}, cache \\ :cache) do
     Cachex.touch(cache, request_hash)
 
-    checkpoint(request_id, :request_end)
+    checkpoint(request_id, :origin_request_sent)
     # TODO: this temporary variable is inefficient, potentially use Kernel.tap/2
     # when available. https://github.com/bbc/belfrage/pull/844#discussion_r628017111
     result = Cachex.get(cache, request_hash)
-    checkpoint(request_id, :response_start)
+    checkpoint(request_id, :origin_response_received)
 
     format_cache_result(result)
   end

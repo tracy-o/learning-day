@@ -3,7 +3,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @default_cleanup_rate 10_000
   @cleanup_ttl 30_000
-  @valid_checkpoints [:request_start, :request_end, :response_start, :response_end]
+  @valid_checkpoints [:request_received, :origin_request_sent, :origin_response_received, :response_sent]
 
   def start_link(opts \\ []) do
     rate = Keyword.get(opts, :cleanup_rate, @default_cleanup_rate)
@@ -39,13 +39,13 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   def handle_info(_, state), do: {:noreply, state}
 
   @impl GenServer
-  def handle_cast({:checkpoint, :response_end, request_id, time}, state) do
+  def handle_cast({:checkpoint, :response_sent, request_id, time}, state) do
     request_times = Map.get(state, request_id)
 
     state =
       if request_times do
         request_times
-        |> Map.put(:response_end, time)
+        |> Map.put(:response_sent, time)
         |> send_metrics()
 
         remove_request_id(state, request_id)
@@ -71,9 +71,14 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 
-  defp send_metrics(%{request_start: req_start, request_end: req_end, response_start: res_start, response_end: res_end}) do
-    request_latency = compute_latency(req_start, req_end)
-    response_latency = compute_latency(res_start, res_end)
+  defp send_metrics(%{
+         request_received: request_received,
+         origin_request_sent: origin_request_sent,
+         origin_response_received: origin_response_received,
+         response_sent: response_sent
+       }) do
+    request_latency = origin_request_sent - request_received
+    response_latency = response_sent - origin_response_received
     combined_latency = request_latency + response_latency
 
     Belfrage.Metrics.Statix.timing("web.latency.internal.request", request_latency)
@@ -85,10 +90,8 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   defp send_metrics(_), do: {:error, :incomplete_times}
 
-  defp compute_latency(start_time, end_time), do: end_time - start_time
-
   defp keep_request?(times, min_start_time) do
-    times[:request_start] && times[:request_start] > min_start_time
+    times[:request_received] && times[:request_received] > min_start_time
   end
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000

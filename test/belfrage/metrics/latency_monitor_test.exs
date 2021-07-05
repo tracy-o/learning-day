@@ -13,8 +13,8 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       request_id = "some-request-id"
       ref = make_ref()
 
-      assert :ok == LatencyMonitor.checkpoint(request_id, :request_start, ref)
-      assert %{^request_id => %{request_start: ^ref}} = :sys.get_state(LatencyMonitor)
+      assert :ok == LatencyMonitor.checkpoint(request_id, :request_received, ref)
+      assert %{^request_id => %{request_received: ^ref}} = :sys.get_state(LatencyMonitor)
     end
   end
 
@@ -22,7 +22,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     test "casts a discard message to the genserver" do
       request_id = "some-other-request-id"
 
-      assert :ok == LatencyMonitor.checkpoint(request_id, :request_start, 1234)
+      assert :ok == LatencyMonitor.checkpoint(request_id, :request_received, 1234)
       assert %{^request_id => _} = :sys.get_state(LatencyMonitor)
 
       assert :ok == LatencyMonitor.discard(request_id)
@@ -32,7 +32,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
   describe "handle_info/2" do
     test "should handle undefined messages transparently" do
-      input_state = %{"a-bit-of-a-state" => %{request_start: 1234}}
+      input_state = %{"a-bit-of-a-state" => %{request_received: 1234}}
       assert {:noreply, input_state} == LatencyMonitor.handle_info(:an_undefined_message, input_state)
     end
   end
@@ -42,12 +42,12 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       now = System.monotonic_time(:nanosecond) / 1_000_000
 
       input_state = %{
-        "oliver-the-older" => %{request_start: now - 31_000},
-        "nelly-the-newer" => %{request_start: now - 29_000}
+        "oliver-the-older" => %{request_received: now - 31_000},
+        "nelly-the-newer" => %{request_received: now - 29_000}
       }
 
       expected_state = %{
-        "nelly-the-newer" => %{request_start: now - 29_000}
+        "nelly-the-newer" => %{request_received: now - 29_000}
       }
 
       assert {:noreply, expected_state} == LatencyMonitor.handle_info({:cleanup, 10_000}, input_state)
@@ -57,7 +57,7 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
       now = System.monotonic_time(:nanosecond) / 1_000_000
 
       input_state = %{
-        "nelly-the-newer" => %{request_start: now - 29_500}
+        "nelly-the-newer" => %{request_received: now - 29_500}
       }
 
       assert {:noreply, input_state} == LatencyMonitor.handle_info({:cleanup, 1_000}, input_state)
@@ -71,41 +71,44 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
   describe "handle_cast/2 :checkpoint" do
     test "should create new entry in state for a new request's first checkpoint" do
       input_state = %{
-        "evan-the-existing" => %{request_start: 123}
+        "evan-the-existing" => %{request_received: 123}
       }
 
       expected_state = %{
-        "evan-the-existing" => %{request_start: 123},
-        "adam-the-addition" => %{request_start: 456}
+        "evan-the-existing" => %{request_received: 123},
+        "adam-the-addition" => %{request_received: 456}
       }
 
       assert {:noreply, expected_state} ==
-               LatencyMonitor.handle_cast({:checkpoint, :request_start, "adam-the-addition", 456}, input_state)
+               LatencyMonitor.handle_cast({:checkpoint, :request_received, "adam-the-addition", 456}, input_state)
     end
 
     test "should update state to reflect a valid checkpoints" do
       input_state = %{
-        "isaac-the-incomplete" => %{request_start: 123}
+        "isaac-the-incomplete" => %{request_received: 123}
       }
 
       expected_state_1 = %{
-        "isaac-the-incomplete" => %{request_start: 123, request_end: 234}
+        "isaac-the-incomplete" => %{request_received: 123, origin_request_sent: 234}
       }
 
       expected_state_2 = %{
-        "isaac-the-incomplete" => %{request_start: 123, request_end: 234, response_start: 345}
+        "isaac-the-incomplete" => %{request_received: 123, origin_request_sent: 234, origin_response_received: 345}
       }
 
       assert {:noreply, expected_state_1} ==
-               LatencyMonitor.handle_cast({:checkpoint, :request_end, "isaac-the-incomplete", 234}, input_state)
+               LatencyMonitor.handle_cast({:checkpoint, :origin_request_sent, "isaac-the-incomplete", 234}, input_state)
 
       assert {:noreply, expected_state_2} ==
-               LatencyMonitor.handle_cast({:checkpoint, :response_start, "isaac-the-incomplete", 345}, expected_state_1)
+               LatencyMonitor.handle_cast(
+                 {:checkpoint, :origin_response_received, "isaac-the-incomplete", 345},
+                 expected_state_1
+               )
     end
 
     test "should not update state to reflect an invalid checkpoint" do
       input_state = %{
-        "ursula-the-unchanged" => %{request_start: 123}
+        "ursula-the-unchanged" => %{request_received: 123}
       }
 
       catch_error(
@@ -114,16 +117,16 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     end
   end
 
-  describe "handle_cast/2 :checkpoint, :response_end" do
+  describe "handle_cast/2 :checkpoint, :response_sent" do
     setup :start_metrics_server
 
     test "should send metrics for a complete a set of times", %{metrics_server: metrics} do
       input_state = %{
-        "sam-the-sendable" => %{request_start: 123, request_end: 234, response_start: 345}
+        "sam-the-sendable" => %{request_received: 123, origin_request_sent: 234, origin_response_received: 345}
       }
 
       assert {:noreply, %{}} ==
-               LatencyMonitor.handle_cast({:checkpoint, :response_end, "sam-the-sendable", 234}, input_state)
+               LatencyMonitor.handle_cast({:checkpoint, :response_sent, "sam-the-sendable", 234}, input_state)
 
       assert sent_metric(metrics) =~ "web.latency.internal.request"
       assert sent_metric(metrics) =~ "web.latency.internal.response"
@@ -132,17 +135,17 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
     test "should not send metrics for an incomplete set of times", %{metrics_server: metrics} do
       input_state = %{
-        "iris-the-incomplete" => %{request_start: 123, request_end: 234}
+        "iris-the-incomplete" => %{request_received: 123, origin_request_sent: 234}
       }
 
       assert {:noreply, %{}} ==
-               LatencyMonitor.handle_cast({:checkpoint, :response_end, "iris-the-incomplete", 234}, input_state)
+               LatencyMonitor.handle_cast({:checkpoint, :response_sent, "iris-the-incomplete", 234}, input_state)
 
       refute_sent_metrics(metrics)
     end
 
     test "should handle a request that's already been cleaned up", %{metrics_server: metrics} do
-      message = {:checkpoint, :response_end, "cleaned-up-request", 123}
+      message = {:checkpoint, :response_sent, "cleaned-up-request", 123}
       state = %{}
       assert LatencyMonitor.handle_cast(message, state) == {:noreply, state}
       refute_sent_metrics(metrics)
@@ -167,12 +170,12 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
   describe "handle_cast/2 :discard" do
     test "should update state remove discarded request_id" do
       input_state = %{
-        "dave-the-deleted" => %{request_start: 123},
-        "pete-the-persisted" => %{request_start: 456}
+        "dave-the-deleted" => %{request_received: 123},
+        "pete-the-persisted" => %{request_received: 456}
       }
 
       expected_state = %{
-        "pete-the-persisted" => %{request_start: 456}
+        "pete-the-persisted" => %{request_received: 456}
       }
 
       assert {:noreply, expected_state} == LatencyMonitor.handle_cast({:discard, "dave-the-deleted"}, input_state)

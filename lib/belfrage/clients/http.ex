@@ -18,7 +18,7 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   def execute(request = %HTTP.Request{}, pool_group) do
-    latency_checkpoint(request, :request_end)
+    latency_checkpoint(request, :origin_request_sent)
 
     response =
       @machine_gun.request(
@@ -29,7 +29,7 @@ defmodule Belfrage.Clients.HTTP do
         build_options(request, pool_group)
       )
 
-    latency_checkpoint(request, :response_start)
+    latency_checkpoint(request, :origin_response_received)
 
     format_response(response)
   end
