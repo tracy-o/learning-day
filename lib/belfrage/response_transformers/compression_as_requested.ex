@@ -10,11 +10,10 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
           response: %Struct.Response{headers: headers}
         }
       ) do
-    with true <- contains_gzip?(headers["content-encoding"]),
-         false <- contains_gzip?(accept_encoding) do
+    if contains_gzip?(headers["content-encoding"]) && !contains_gzip?(accept_encoding) do
       decompress_body(struct)
     else
-      _ -> struct
+      struct
     end
   end
 
