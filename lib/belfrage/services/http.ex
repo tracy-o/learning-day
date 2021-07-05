@@ -5,6 +5,7 @@ defmodule Belfrage.Services.HTTP do
   alias Belfrage.{Clients, Struct}
   alias Belfrage.Struct.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
+  alias Belfrage.Metrics.LatencyMonitor
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
@@ -110,7 +111,10 @@ defmodule Belfrage.Services.HTTP do
 
   defp execute_request(request = %Clients.HTTP.Request{}, platform) do
     Belfrage.Event.record "function.timing.service.#{platform}.request" do
-      @http_client.execute(request)
+      LatencyMonitor.checkpoint(request.request_id, :origin_request_sent)
+      response = @http_client.execute(request)
+      LatencyMonitor.checkpoint(request.request_id, :origin_response_received)
+      response
     end
   end
 

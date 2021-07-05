@@ -20,6 +20,10 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     GenServer.cast(__MODULE__, {:discard, request_id})
   end
 
+  def get_checkpoints(request_id) do
+    GenServer.call(__MODULE__, {:get_checkpoints, request_id})
+  end
+
   @impl GenServer
   def init(opts) do
     send(self(), {:cleanup, opts.cleanup_rate})
@@ -68,6 +72,11 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   @impl GenServer
   def handle_cast({:discard, request_id}, state), do: {:noreply, remove_request_id(state, request_id)}
+
+  @impl GenServer
+  def handle_call({:get_checkpoints, request_id}, _from, state) do
+    {:reply, Map.get(state, request_id), state}
+  end
 
   defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 

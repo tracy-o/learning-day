@@ -2,6 +2,7 @@ defmodule Belfrage.Services.HTTPTest do
   alias Belfrage.Clients
   alias Belfrage.Services.HTTP
   alias Belfrage.Struct
+  alias Belfrage.Metrics.LatencyMonitor
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
@@ -292,6 +293,30 @@ defmodule Belfrage.Services.HTTPTest do
                  headers: %{"content-type" => "application/json"}
                }
              } = HTTP.dispatch(struct)
+    end
+
+    test "tracks latency checkpoints" do
+      start_supervised!(LatencyMonitor)
+
+      request_id = UUID.uuid4(:hex)
+      struct = Struct.add(@get_struct, :request, %{request_id: request_id})
+
+      stub_request()
+      response = HTTP.dispatch(struct)
+      assert_successful_response(response)
+
+      checkpoints = LatencyMonitor.get_checkpoints(request_id)
+      assert checkpoints[:origin_request_sent]
+      assert checkpoints[:origin_response_received]
+      assert checkpoints[:origin_response_received] > checkpoints[:origin_request_sent]
+    end
+
+    defp stub_request() do
+      stub(Clients.HTTPMock, :execute, fn _ -> @ok_response end)
+    end
+
+    defp assert_successful_response(response) do
+      assert %Struct{response: %{http_status: 200}} = response
     end
   end
 end
