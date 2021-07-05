@@ -857,6 +857,9 @@ defmodule Routes.Routefile do
 
   handle "/programmes", using: "Programmes", examples: ["/programmes"]
 
+  # /programmes catch all
+  handle "/programmes/*_any", using: "Programmes", examples: []
+
   # /schedules
 
   handle "/schedules/network/:network/on-now", using: "Schedules", examples: ["/schedules/network/cbeebies/on-now"] do
@@ -872,6 +875,9 @@ defmodule Routes.Routefile do
   end
 
   handle "/schedules", using: "Schedules", examples: ["/schedules"]
+
+  # /schedules catch all
+  handle "/schedules/*_any", using: "Schedules", examples: []
 
   # Participation
 
