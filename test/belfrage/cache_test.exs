@@ -190,7 +190,17 @@ defmodule Belfrage.BelfrageCacheTest do
       }
     end
 
-    test "when request status is 408 , add cached response to request hash" do
+    test "when request status is 401, add cached response to request hash" do
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(401))
+    end
+
+    test "when request status is 403, add cached response to request hash" do
+      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+               Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(403))
+    end
+
+    test "when request status is 408, add cached response to request hash" do
       assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
                Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(408))
     end
