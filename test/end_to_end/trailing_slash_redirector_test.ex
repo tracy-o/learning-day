@@ -7,8 +7,10 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   @moduletag :end_to_end
 
   test "a succesful redirect if there is multiple trailing slashes at the top level" do
-    conn = conn(:get, "///") |> Map.put(:request_path, "///")
-    conn = Router.call(conn, [])
+    conn =
+      conn(:get, "///")
+      |> Map.put(:request_path, "///")
+      |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"location", "/"} in headers
@@ -24,8 +26,10 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   end
 
   test "keeps default response headers" do
-    conn = conn(:get, "/200-ok-response///") |> Plug.Conn.put_req_header("req-svc-chain", "GTM")
-    conn = Router.call(conn, [])
+    conn =
+      conn(:get, "/200-ok-response///")
+      |> put_req_header("req-svc-chain", "GTM")
+      |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"server", "Belfrage"} in headers
@@ -34,8 +38,10 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   end
 
   test "keeps req-svc-chain values when provided" do
-    conn = conn(:get, "/200-ok-response///") |> Plug.Conn.put_req_header("req-svc-chain", "GTM")
-    conn = Router.call(conn, [])
+    conn =
+      conn(:get, "/200-ok-response///")
+      |> put_req_header("req-svc-chain", "GTM")
+      |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"req-svc-chain", "GTM,BELFRAGE"} in headers

@@ -77,7 +77,8 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn(:get, "/200-ok-response?query[hi]=foo") |> Router.call([])
+    conn = conn(:get, "/200-ok-response?query[hi]=foo")
+    Router.call(conn, [])
   end
 
   test "a failed response from a lambda e2e" do

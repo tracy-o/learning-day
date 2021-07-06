@@ -48,14 +48,15 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
     end
   end
 
-  describe "when content-encoding response header is not set" do
+  describe "when content-encoding response header is not set and response is a 200" do
     test "the response body is gzipped, the content-encoding header is added and data is logged" do
       struct = %Struct{
         request: %Struct.Request{
           path: "/non-compressed/path"
         },
         response: %Struct.Response{
-          body: "I am some plain text"
+          body: "I am some plain text",
+          http_status: 200
         },
         private: %Struct.Private{
           platform: SomePlatform
@@ -66,6 +67,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                assert %Struct{
                         response: %Struct.Response{
                           body: compressed_body,
+                          http_status: 200,
                           headers: %{
                             "content-encoding" => "gzip"
                           }
@@ -75,6 +77,19 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                assert_gzipped(compressed_body, "I am some plain text")
              end) =~
                ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Content was pre-cache compressed\",\"path\":\"\/non-compressed\/path\",\"platform\":\"Elixir.SomePlatform\"/
+    end
+  end
+
+  describe "when content-encoding response header is not set, but response is not a 200" do
+    test "the response isn't gzipped, struct is returned unmodified" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: "I am a non 200 response",
+          http_status: 404
+        }
+      }
+
+      assert struct == PreCacheCompression.call(struct)
     end
   end
 end
