@@ -28,6 +28,6 @@ defmodule Belfrage.Metrics.SupervisorTest do
         assert Process.whereis(Belfrage.Metrics.Supervisor) == nil
     end
 
-    {:ok, _} = Supervisor.start_child(Belfrage.Supervisor, Belfrage.Metrics.Supervisor)
+    {:ok, _} = Supervisor.start_child(Belfrage.Supervisor, {Belfrage.Metrics.Supervisor, env: :test})
   end
 end

@@ -3,8 +3,7 @@ defmodule BelfrageWeb.Plugs.LatencyMonitorTest do
   import Plug.Test, only: [conn: 2]
 
   setup do
-    {:ok, _pid} = Belfrage.Metrics.LatencyMonitor.start_link()
-
+    start_supervised!(Belfrage.Metrics.LatencyMonitor)
     :ok
   end
 
