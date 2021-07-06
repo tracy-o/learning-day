@@ -232,8 +232,6 @@ defmodule Routes.Routefile do
     ]
   end
 
-  handle "/news/topics/c9999999999t", using: "HomePageSegmented", only_on: "test", examples: []
-
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -888,6 +886,8 @@ defmodule Routes.Routefile do
   end
 
   # Sport
+
+  handle "/sport/0/mhqu7270m50e", using: "HomePageSegmented", only_on: "test", examples: []
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
