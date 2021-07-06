@@ -436,9 +436,8 @@ defmodule EndToEnd.MonitorEventsTest do
           assert is_binary(request_id)
       end)
 
-      conn =
-        conn(:get, "/sends-request-downstream?belfrage-cache-bust")
-        |> Router.call([])
+      conn = conn(:get, "/sends-request-downstream?belfrage-cache-bust")
+      Router.call(conn, [])
     end
   end
 
@@ -465,9 +464,8 @@ defmodule EndToEnd.MonitorEventsTest do
         {:ok, false}
       end)
 
-      conn =
-        conn(:get, "/200-ok-response")
-        |> Router.call([])
+      conn = conn(:get, "/200-ok-response")
+      Router.call(conn, [])
     end
   end
 end

@@ -17,9 +17,8 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   end
 
   test "a succesful redirect if there is a trailing slash" do
-    conn =
-      conn(:get, "/200-ok-response///")
-      |> Router.call([])
+    conn = conn(:get, "/200-ok-response///")
+    conn = Router.call(conn, [])
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"location", "/200-ok-response"} in headers
