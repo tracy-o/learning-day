@@ -68,7 +68,7 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
-    struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch", accept_encoding: "gzip"})
+    struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
     struct = Belfrage.Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
@@ -108,7 +108,6 @@ defmodule BelfrageTest do
       loop_id: "SportVideos"
     },
     request: %Struct.Request{
-      accept_encoding: "gzip",
       path: "/_web_core",
       method: "GET",
       country: "gb",

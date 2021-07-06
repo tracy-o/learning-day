@@ -11,7 +11,6 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     conn =
       conn(:get, "/com-to-uk-redirect")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)
@@ -23,7 +22,6 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     conn =
       conn(:get, "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)

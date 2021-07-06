@@ -10,7 +10,6 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "///")
       |> Map.put(:request_path, "///")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
@@ -20,7 +19,6 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   test "a succesful redirect if there is a trailing slash" do
     conn =
       conn(:get, "/200-ok-response///")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
@@ -32,7 +30,6 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "/200-ok-response///")
       |> put_req_header("req-svc-chain", "GTM")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)
@@ -45,7 +42,6 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "/200-ok-response///")
       |> put_req_header("req-svc-chain", "GTM")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {301, headers, ""} = sent_resp(conn)

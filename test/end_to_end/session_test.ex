@@ -100,7 +100,6 @@ defmodule EndToEnd.SessionTest do
       |> Map.put(:host, "www.bbc.co.uk")
       |> put_req_header("cookie", "ckns_atkn=#{access_token}")
       |> put_req_header("x-id-oidc-signedin", "1")
-      |> put_req_header("accept-encoding", "gzip")
       |> Router.call([])
 
     assert {302, headers, _body} = sent_resp(response_conn)
