@@ -24,14 +24,14 @@ defmodule Belfrage.Cache.Fetch do
   end
 
   defp allow_fallback?(struct) do
-    server_error?(struct) or request_timeout_error?(struct)
+    server_error?(struct) or valid_fallback_4xx_status?(struct)
+  end
+
+  defp valid_fallback_4xx_status?(struct) do
+    struct.response.http_status >= 400 and not Enum.member?([404, 410, 451], struct.response.http_status)
   end
 
   defp server_error?(struct) do
     struct.response.http_status >= 500
-  end
-
-  defp request_timeout_error?(struct) do
-    struct.response.http_status == 408
   end
 end
