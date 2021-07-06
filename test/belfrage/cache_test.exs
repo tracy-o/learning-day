@@ -213,5 +213,9 @@ defmodule Belfrage.BelfrageCacheTest do
     test "when a request status is anything else, return the struct" do
       assert struct_with_status_code(200) == Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(200))
     end
+
+    test "when a request status is 404, return the struct" do
+      assert struct_with_status_code(404) == Belfrage.Cache.fetch_fallback_on_error(struct_with_status_code(404))
+    end
   end
 end
