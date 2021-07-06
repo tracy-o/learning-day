@@ -85,7 +85,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, "/200-ok-response?belfrage-cache-bust") 
+      conn(:get, "/200-ok-response?belfrage-cache-bust")
       |> Router.call([])
     end
   end
