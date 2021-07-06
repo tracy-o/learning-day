@@ -3,182 +3,129 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
 
   alias Belfrage.Metrics.LatencyMonitor
 
-  setup do
-    LatencyMonitor.start_link()
-    :ok
-  end
-
   describe "checkpoint/2" do
-    test "casts a checkpoint message to the genserver" do
-      request_id = "some-request-id"
-      ref = make_ref()
+    setup do
+      start_supervised!(LatencyMonitor)
+      :ok
+    end
 
-      assert :ok == LatencyMonitor.checkpoint(request_id, :request_received, ref)
-      assert %{^request_id => %{request_received: ^ref}} = :sys.get_state(LatencyMonitor)
+    test "stores a checkpoint for the passed request id" do
+      request_id = "some-request-id"
+      refute LatencyMonitor.get_checkpoints(request_id)
+
+      time = System.monotonic_time()
+      assert LatencyMonitor.checkpoint(request_id, :request_received, time) == :ok
+      assert LatencyMonitor.get_checkpoints(request_id) == %{request_received: time}
+    end
+
+    test "adds a checkpoint for the passed request id" do
+      request_id = "some-request-id"
+
+      assert LatencyMonitor.checkpoint(request_id, :request_received) == :ok
+      assert LatencyMonitor.checkpoint(request_id, :origin_request_sent) == :ok
+
+      checkpoints = LatencyMonitor.get_checkpoints(request_id)
+      assert checkpoints[:request_received]
+      assert checkpoints[:origin_request_sent]
+      assert checkpoints[:origin_request_sent] > checkpoints[:request_received]
+    end
+
+    test "sends latency metrics on recording :response_sent checkpoint" do
+      request_id = "some-request-id"
+      now = System.monotonic_time(:millisecond)
+
+      metrics = start_metrics_server()
+
+      LatencyMonitor.checkpoint(request_id, :request_received, now)
+      LatencyMonitor.checkpoint(request_id, :origin_request_sent, now + 1_000)
+      LatencyMonitor.checkpoint(request_id, :origin_response_received, now + 10_000)
+      LatencyMonitor.checkpoint(request_id, :response_sent, now + 12_000)
+
+      refute LatencyMonitor.get_checkpoints(request_id)
+
+      assert sent_metric(metrics) == "web.latency.internal.request:1000|ms"
+      assert sent_metric(metrics) == "web.latency.internal.response:2000|ms"
+      assert sent_metric(metrics) == "web.latency.internal.combined:3000|ms"
+    end
+
+    test "does not crash on receiving incomplete set of checkpoints" do
+      metrics = start_metrics_server()
+
+      LatencyMonitor.checkpoint("request-1", :request_received)
+
+      LatencyMonitor.checkpoint("request-2", :request_received)
+      LatencyMonitor.checkpoint("request-2", :response_sent)
+
+      refute LatencyMonitor.get_checkpoints("request-2")
+      refute_sent_metrics(metrics)
+
+      assert LatencyMonitor.get_checkpoints("request-1")
+    end
+
+    test "does not crash on recording :response_sent checkpoint for a cleaned-up request" do
+      LatencyMonitor.checkpoint("request-1", :request_received)
+      LatencyMonitor.checkpoint("request-2", :response_sent)
+
+      refute LatencyMonitor.get_checkpoints("request-2")
+      assert LatencyMonitor.get_checkpoints("request-1")
     end
   end
 
   describe "discard/2" do
-    test "casts a discard message to the genserver" do
+    setup do
+      start_supervised!(LatencyMonitor)
+      :ok
+    end
+
+    test "removes request checkpoints" do
       request_id = "some-other-request-id"
 
-      assert :ok == LatencyMonitor.checkpoint(request_id, :request_received, 1234)
-      assert %{^request_id => _} = :sys.get_state(LatencyMonitor)
+      assert LatencyMonitor.checkpoint(request_id, :request_received)
+      assert %{request_received: _} = LatencyMonitor.get_checkpoints(request_id)
 
-      assert :ok == LatencyMonitor.discard(request_id)
-      assert %{} = :sys.get_state(LatencyMonitor)
+      assert LatencyMonitor.discard(request_id) == :ok
+      refute LatencyMonitor.get_checkpoints(request_id)
     end
   end
 
-  describe "handle_info/2" do
-    test "should handle undefined messages transparently" do
-      input_state = %{"a-bit-of-a-state" => %{request_received: 1234}}
-      assert {:noreply, input_state} == LatencyMonitor.handle_info(:an_undefined_message, input_state)
+  describe "auto-cleanup" do
+    setup do
+      start_supervised!({LatencyMonitor, cleanup_rate: 0})
+      :ok
+    end
+
+    test "automatically removes old requests" do
+      now = System.monotonic_time(:millisecond)
+
+      LatencyMonitor.checkpoint("request-1", :request_received, now - 31_000)
+      LatencyMonitor.checkpoint("request-2", :request_received, now - 29_000)
+
+      wait_for(fn -> LatencyMonitor.get_checkpoints("request-1") |> is_nil() end)
+      assert LatencyMonitor.get_checkpoints("request-2")
+
+      LatencyMonitor.checkpoint("request-1", :request_received, now - 31_000)
+
+      wait_for(fn -> LatencyMonitor.get_checkpoints("request-1") |> is_nil() end)
+      assert LatencyMonitor.get_checkpoints("request-2")
+    end
+
+    defp wait_for(condition) do
+      condition.() || wait_for(condition)
     end
   end
 
-  describe "handle_info/2 :cleanup" do
-    test "should remove any request_ids which are older than the TTL" do
-      now = System.monotonic_time(:nanosecond) / 1_000_000
-
-      input_state = %{
-        "oliver-the-older" => %{request_received: now - 31_000},
-        "nelly-the-newer" => %{request_received: now - 29_000}
-      }
-
-      expected_state = %{
-        "nelly-the-newer" => %{request_received: now - 29_000}
-      }
-
-      assert {:noreply, expected_state} == LatencyMonitor.handle_info({:cleanup, 10_000}, input_state)
-    end
-
-    test "should schedule another cleanup at the specified rate" do
-      now = System.monotonic_time(:nanosecond) / 1_000_000
-
-      input_state = %{
-        "nelly-the-newer" => %{request_received: now - 29_500}
-      }
-
-      assert {:noreply, input_state} == LatencyMonitor.handle_info({:cleanup, 1_000}, input_state)
-
-      Process.sleep(1_100)
-
-      assert %{} = :sys.get_state(LatencyMonitor)
-    end
+  defp start_metrics_server() do
+    {:ok, server} = :gen_udp.open(8125, active: true)
+    on_exit(fn -> :gen_udp.close(server) end)
+    server
   end
 
-  describe "handle_cast/2 :checkpoint" do
-    test "should create new entry in state for a new request's first checkpoint" do
-      input_state = %{
-        "evan-the-existing" => %{request_received: 123}
-      }
-
-      expected_state = %{
-        "evan-the-existing" => %{request_received: 123},
-        "adam-the-addition" => %{request_received: 456}
-      }
-
-      assert {:noreply, expected_state} ==
-               LatencyMonitor.handle_cast({:checkpoint, :request_received, "adam-the-addition", 456}, input_state)
-    end
-
-    test "should update state to reflect a valid checkpoints" do
-      input_state = %{
-        "isaac-the-incomplete" => %{request_received: 123}
-      }
-
-      expected_state_1 = %{
-        "isaac-the-incomplete" => %{request_received: 123, origin_request_sent: 234}
-      }
-
-      expected_state_2 = %{
-        "isaac-the-incomplete" => %{request_received: 123, origin_request_sent: 234, origin_response_received: 345}
-      }
-
-      assert {:noreply, expected_state_1} ==
-               LatencyMonitor.handle_cast({:checkpoint, :origin_request_sent, "isaac-the-incomplete", 234}, input_state)
-
-      assert {:noreply, expected_state_2} ==
-               LatencyMonitor.handle_cast(
-                 {:checkpoint, :origin_response_received, "isaac-the-incomplete", 345},
-                 expected_state_1
-               )
-    end
-
-    test "should not update state to reflect an invalid checkpoint" do
-      input_state = %{
-        "ursula-the-unchanged" => %{request_received: 123}
-      }
-
-      catch_error(
-        LatencyMonitor.handle_cast({:checkpoint, :party_time_start, "ursula-the-unchanged", 234}, input_state)
-      )
-    end
+  defp sent_metric(metrics_server) do
+    assert_receive {:udp, ^metrics_server, _ip, _port, message}, 10
+    to_string(message)
   end
 
-  describe "handle_cast/2 :checkpoint, :response_sent" do
-    setup :start_metrics_server
-
-    test "should send metrics for a complete a set of times", %{metrics_server: metrics} do
-      input_state = %{
-        "sam-the-sendable" => %{request_received: 123, origin_request_sent: 234, origin_response_received: 345}
-      }
-
-      assert {:noreply, %{}} ==
-               LatencyMonitor.handle_cast({:checkpoint, :response_sent, "sam-the-sendable", 234}, input_state)
-
-      assert sent_metric(metrics) =~ "web.latency.internal.request"
-      assert sent_metric(metrics) =~ "web.latency.internal.response"
-      assert sent_metric(metrics) =~ "web.latency.internal.combined"
-    end
-
-    test "should not send metrics for an incomplete set of times", %{metrics_server: metrics} do
-      input_state = %{
-        "iris-the-incomplete" => %{request_received: 123, origin_request_sent: 234}
-      }
-
-      assert {:noreply, %{}} ==
-               LatencyMonitor.handle_cast({:checkpoint, :response_sent, "iris-the-incomplete", 234}, input_state)
-
-      refute_sent_metrics(metrics)
-    end
-
-    test "should handle a request that's already been cleaned up", %{metrics_server: metrics} do
-      message = {:checkpoint, :response_sent, "cleaned-up-request", 123}
-      state = %{}
-      assert LatencyMonitor.handle_cast(message, state) == {:noreply, state}
-      refute_sent_metrics(metrics)
-    end
-
-    defp start_metrics_server(_) do
-      {:ok, server} = :gen_udp.open(8125, active: true)
-      on_exit(fn -> :gen_udp.close(server) end)
-      %{metrics_server: server}
-    end
-
-    defp sent_metric(metrics_server) do
-      assert_receive {:udp, ^metrics_server, _ip, _port, message}, 10
-      to_string(message)
-    end
-
-    defp refute_sent_metrics(metrics_server) do
-      refute_receive {:udp, ^metrics_server, _ip, _port, _message}, 10
-    end
-  end
-
-  describe "handle_cast/2 :discard" do
-    test "should update state remove discarded request_id" do
-      input_state = %{
-        "dave-the-deleted" => %{request_received: 123},
-        "pete-the-persisted" => %{request_received: 456}
-      }
-
-      expected_state = %{
-        "pete-the-persisted" => %{request_received: 456}
-      }
-
-      assert {:noreply, expected_state} == LatencyMonitor.handle_cast({:discard, "dave-the-deleted"}, input_state)
-    end
+  defp refute_sent_metrics(metrics_server) do
+    refute_receive {:udp, ^metrics_server, _ip, _port, _message}, 10
   end
 end
