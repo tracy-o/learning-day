@@ -664,7 +664,7 @@ defmodule Routes.Routefile do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do 
+  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
@@ -685,7 +685,7 @@ defmodule Routes.Routefile do
   handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio"] do
     return_404 if: !Enum.member?(["audio", "video"], slice)
   end
-  
+
   handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
 
   handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
@@ -886,6 +886,8 @@ defmodule Routes.Routefile do
   end
 
   # Sport
+
+  handle "/sport/0/mhqu7270m50e", using: "FullStackHomePageTest", only_on: "test", examples: []
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
