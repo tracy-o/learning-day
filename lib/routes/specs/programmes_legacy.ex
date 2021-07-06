@@ -1,4 +1,4 @@
-defmodule Routes.Specs.ProgrammesRedirect do
+defmodule Routes.Specs.ProgrammesLegacy do
   def specs(_production_env) do
     %{
       owner: "homedatacap@bbc.co.uk",

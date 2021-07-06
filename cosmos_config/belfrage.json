@@ -57,7 +57,7 @@
   },
   {
     "values": {
-      "test": "https://programmes-frontend.test.api.bbc.co.uk",
+      "test": "https://programmes-frontend.stage.api.bbc.co.uk",
       "live": "https://programmes-frontend.api.bbc.co.uk"
     },
     "name": "PROGRAMMES_ENDPOINT"
