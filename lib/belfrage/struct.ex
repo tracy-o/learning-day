@@ -79,7 +79,8 @@ defmodule Belfrage.Struct.Private do
             preview_mode: "off",
             default_language: "en-GB",
             owner: nil,
-            runbook: nil
+            runbook: nil,
+            personalisation: false
 
   @type t :: %__MODULE__{}
 end
