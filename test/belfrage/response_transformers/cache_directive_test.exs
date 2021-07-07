@@ -25,26 +25,12 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   }
 
   defp set_stubs(%{personalisation: personalisation, webcore_ttl_multiplier: ttl}) do
-    stub(Belfrage.Dials.ServerMock, :state, fn
-      :personalisation ->
-        Belfrage.Dials.Personalisation.transform(personalisation)
-
-      :webcore_ttl_multiplier ->
-        Belfrage.Dials.WebcoreTtlMultiplier.transform(ttl)
-    end)
-
+    stub_dials(personalisation: personalisation, webcore_ttl_multiplier: ttl)
     stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
   end
 
   defp set_stubs(%{personalisation: personalisation, ttl_multiplier: ttl}) do
-    stub(Belfrage.Dials.ServerMock, :state, fn
-      :personalisation ->
-        Belfrage.Dials.Personalisation.transform(personalisation)
-
-      :ttl_multiplier ->
-        Belfrage.Dials.TtlMultiplier.transform(ttl)
-    end)
-
+    stub_dials(personalisation: personalisation, ttl_multiplier: ttl)
     stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
   end
 

@@ -435,9 +435,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
   describe "when the monitor_enabled dial is set to false" do
     test "monitor receives no data" do
-      stub(Belfrage.Dials.ServerMock, :state, fn :monitor_enabled ->
-        Belfrage.Dials.MonitorEnabled.transform("false")
-      end)
+      stub_dial(:monitor_enabled, "false")
 
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->

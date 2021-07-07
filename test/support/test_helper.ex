@@ -43,6 +43,8 @@ defmodule Test.Support.Helper do
   def mox do
     quote do
       import Mox
+      import Belfrage.Test.StubHelper
+
       setup :set_mox_from_context
       setup :verify_on_exit!
 
