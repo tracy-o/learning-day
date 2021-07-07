@@ -1,29 +1,22 @@
 defmodule Belfrage.Metrics.MailboxMonitorTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Metrics.MailboxMonitor, TestGenServer, LoopsSupervisor, Loop, Struct}
+  alias Belfrage.{Metrics.MailboxMonitor, TestGenServer}
+  alias Belfrage.EventMock
 
   setup do
     start_supervised!({TestGenServer, name: :test_server_one}, id: :test_server_one)
     start_supervised!({TestGenServer, name: :test_server_two}, id: :test_server_two)
-    start_supervised!(LoopsSupervisor.child_spec(name: :test_loop_supervisor, id: :test_loop_supervisor))
     :ok
   end
 
-  defp increase_loop(loop_name) do
-    Loop.inc(%Struct{
-      private: %Struct.Private{loop_id: loop_name, origin: "MyOrigin"},
-      response: %Struct.Response{http_status: 200, fallback: nil}
-    })
-  end
-
   defp expect_record_event(:log, level, message) do
-    expect(Belfrage.EventMock, :record, fn :log, ^level, %{msg: ^message} -> true end)
+    expect(EventMock, :record, fn :log, ^level, %{msg: ^message} -> true end)
   end
 
   defp expect_record_event(count, :metric, :gauge, metric, value) do
-    expect(Belfrage.EventMock, :record, count, fn :metric, :gauge, ^metric, value: ^value -> true end)
+    expect(EventMock, :record, count, fn :metric, :gauge, ^metric, value: ^value -> true end)
   end
 
   defp refresh_mailbox_monitor_assertion(servers) do
@@ -86,35 +79,58 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
   end
 
-  describe "handle_info/2 with loops" do
-    test "reports the mailbox size of zero when a loop has just started" do
-      LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
-
-      expect_record_event(1, :metric, :gauge, "loop.HomePage.mailbox_size", 0)
-
-      refresh_mailbox_monitor_assertion([{:loop, "HomePage"}])
+  describe "monitoring loops" do
+    # `Module.concat` prevents the module from being nested under the test's
+    # module name. This is necessary because loops must be under `Routes.Specs`
+    defmodule Module.concat([Routes, Specs, MailboxMonitorLoop]) do
+      def specs do
+        %{
+          platform: Webcore
+        }
+      end
     end
 
-    test "reports the mailbox size when a loop has received a call" do
-      LoopsSupervisor.start_loop(:test_loop_supervisor, "HomePage")
-
-      expect_record_event(1, :metric, :gauge, "loop.HomePage.mailbox_size", 1)
-
-      increase_loop("HomePage")
-
-      refresh_mailbox_monitor_assertion([{:loop, "HomePage"}])
+    test "does not report mailbox size when loop is not running" do
+      expect_no_metric()
+      expect_log("Error retrieving the mailbox size for loop MailboxMonitorLoop, pid could not be found")
+      monitor_mailbox_size({:loop, "MailboxMonitorLoop"})
     end
 
-    test "does not report when the loop is not running" do
-      expect_record_event(0, :metric, :gauge, "loop.HomePage.mailbox_size", 0)
-
-      refresh_mailbox_monitor_assertion([{:loop, "HomePage"}])
+    test "reports mailbox size of 0 when loop has no messages in mailbox" do
+      start_supervised!({Belfrage.Loop, "MailboxMonitorLoop"})
+      expect_metric("loop.MailboxMonitorLoop.mailbox_size", 0)
+      monitor_mailbox_size({:loop, "MailboxMonitorLoop"})
     end
 
-    test "logs an info message if a loop has not started" do
-      expect_record_event(:log, :info, "Error retrieving the mailbox size for loop HomePage, pid could not be found")
+    test "reports mailbox size when loop has messages in mailbox" do
+      loop_pid = start_supervised!({Belfrage.Loop, "MailboxMonitorLoop"})
+      # Suspend the loop so that it doesn't process any messages and they
+      # remain in its mailbox
+      :sys.suspend(loop_pid, :infinity)
 
-      refresh_mailbox_monitor_assertion([{:loop, "HomePage"}])
+      send(loop_pid, :hello)
+      send(loop_pid, :hello)
+
+      expect_metric("loop.MailboxMonitorLoop.mailbox_size", 2)
+      monitor_mailbox_size({:loop, "MailboxMonitorLoop"})
     end
+  end
+
+  defp monitor_mailbox_size(servers) do
+    pid = start_supervised!({MailboxMonitor, name: :test_mailbox_monitor, servers: List.wrap(servers)})
+    # Make sure :refresh message is processed by sending a blocking message
+    :sys.get_state(pid)
+  end
+
+  defp expect_no_metric() do
+    expect(EventMock, :record, 0, fn :metric, _, _, _ -> true end)
+  end
+
+  defp expect_metric(name, value) do
+    expect(EventMock, :record, 1, fn :metric, :gauge, ^name, value: ^value -> true end)
+  end
+
+  defp expect_log(message) do
+    expect(EventMock, :record, fn :log, :info, %{msg: ^message} -> true end)
   end
 end
