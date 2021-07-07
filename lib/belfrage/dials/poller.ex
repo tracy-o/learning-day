@@ -1,5 +1,11 @@
 defmodule Belfrage.Dials.Poller do
-  @moduledoc "Periodically checks the dials file for dial changes."
+  @moduledoc """
+  Periodically checks the dials file for dial changes.
+
+  This process is not stated automatically in test environment. If you need to
+  test it, start it manually, e.g. using
+  [`start_supervised!`](https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html#start_supervised!/2).
+  """
 
   use GenServer
 

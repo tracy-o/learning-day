@@ -5,11 +5,6 @@ defmodule Belfrage.Cache.DistributedTest do
   alias Belfrage.Struct
   alias Belfrage.Cache.Distributed
 
-  setup do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-    :ok
-  end
-
   test "store/1" do
     struct = %Struct{
       request: %Struct.Request{request_hash: "distributed-cache-test"},

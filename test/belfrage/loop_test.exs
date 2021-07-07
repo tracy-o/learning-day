@@ -10,8 +10,6 @@ defmodule Belfrage.LoopTest do
   setup :set_mox_global
 
   setup do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-
     start_supervised!(LoopsSupervisor.child_spec(name: @loop_supervisor, id: @loop_supervisor))
 
     LoopsSupervisor.start_loop(@loop_supervisor, "ProxyPass")
