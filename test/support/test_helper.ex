@@ -1,10 +1,4 @@
 defmodule Test.Support.Helper do
-  @doc "Inserts cache seed in the format Cachex expects it to be in."
-  def insert_cache_seed(cache \\ :cache, id: id, response: response, expires_in: expires_in, last_updated: last_updated) do
-    item_to_store = response
-    :ets.insert(cache, {:entry, id, last_updated, expires_in, item_to_store})
-  end
-
   def setup_stubs do
     Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
@@ -61,23 +55,6 @@ defmodule Test.Support.Helper do
 
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
-  end
-
-  @doc """
-  This helper starts a new local cache and links it to
-  the test process. It will terminate when the calling
-  process (test case or test module) ends.
-  """
-  defmacro start_test_cache(cache, config \\ []) do
-    quote do
-      default = %{size: 100, policy: Cachex.Policy.LRW, reclaim: 0.3, options: []}
-
-      %{options: opts, policy: policy, reclaim: reclaim, size: size} =
-        Map.merge(default, unquote(config) |> Enum.into(%{}))
-
-      limit = {:limit, size, policy, reclaim, opts}
-      start_supervised(%{id: unquote(cache), start: {Cachex, :start_link, [unquote(cache), [limit: limit]]}})
-    end
   end
 
   def get_route(endpoint, path, "WorldService" <> _language) do

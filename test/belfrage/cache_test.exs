@@ -1,6 +1,7 @@
 defmodule Belfrage.BelfrageCacheTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Belfrage.Test.CachingHelper
 
   alias Belfrage.Struct
 
@@ -14,22 +15,14 @@ defmodule Belfrage.BelfrageCacheTest do
 
   setup do
     Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-    :ets.delete_all_objects(:cache)
     Belfrage.LoopsSupervisor.kill_all()
 
-    Test.Support.Helper.insert_cache_seed(
-      id: "fresh-cache-item",
-      response: @cache_seeded_response,
-      expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms()
-    )
+    put_into_cache(cache_key("fresh"), @cache_seeded_response)
 
-    Test.Support.Helper.insert_cache_seed(
-      id: "stale-cache-item",
-      response: %{@cache_seeded_response | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)},
-      expires_in: :timer.hours(6),
-      last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
-    )
+    put_into_cache(cache_key("stale"), %{
+      @cache_seeded_response
+      | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
+    })
 
     :ok
   end
@@ -38,7 +31,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "serves a cached response" do
       struct = %Struct{
         request: %Struct.Request{
-          request_hash: "fresh-cache-item"
+          request_hash: cache_key("fresh")
         }
       }
 
@@ -51,7 +44,7 @@ defmodule Belfrage.BelfrageCacheTest do
           loop_id: "ALoop"
         },
         request: %Struct.Request{
-          request_hash: "fresh-cache-item"
+          request_hash: cache_key("fresh")
         }
       }
 
@@ -66,7 +59,7 @@ defmodule Belfrage.BelfrageCacheTest do
           loop_id: "ALoop"
         },
         request: %Struct.Request{
-          request_hash: "stale-cache-item"
+          request_hash: cache_key("stale")
         }
       }
 
@@ -79,7 +72,7 @@ defmodule Belfrage.BelfrageCacheTest do
           loop_id: "ALoop"
         },
         request: %Struct.Request{
-          request_hash: "stale-cache-item"
+          request_hash: cache_key("stale")
         }
       }
 
@@ -96,7 +89,7 @@ defmodule Belfrage.BelfrageCacheTest do
             loop_id: "ALoop"
           },
           request: %Struct.Request{
-            request_hash: "req-hash",
+            request_hash: unique_cache_key(),
             method: "GET"
           },
           response: %Struct.Response{
@@ -182,7 +175,7 @@ defmodule Belfrage.BelfrageCacheTest do
           loop_id: "ALoop"
         },
         request: %Struct.Request{
-          request_hash: "stale-cache-item"
+          request_hash: cache_key("stale")
         },
         response: %Struct.Response{
           http_status: status_code
