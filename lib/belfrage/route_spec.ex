@@ -1,10 +1,13 @@
 defmodule Belfrage.RouteSpec do
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
-  @production_environment Application.get_env(:belfrage, :production_environment)
   @allow_personalisation_map %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
 
+  def get_production_environment() do
+    Application.get_env(:belfrage, :production_environment)
+  end
+
   def specs_for(name) do
-    specs_for(name, @production_environment)
+    specs_for(name, get_production_environment())
   end
 
   def specs_for(name, env) do
@@ -37,7 +40,7 @@ defmodule Belfrage.RouteSpec do
   def personalisation?(route_spec) do
     case route_spec[:personalisation] do
       "on" -> true
-      "test_only" -> @production_environment == "test"
+      "test_only" -> get_production_environment() == "test"
       _ -> false
     end
   end

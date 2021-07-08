@@ -16,41 +16,53 @@ defmodule BelfrageWeb.StructAdapterTest do
     put_private(conn, :request_id, "req-123456")
   end
 
+  defp put_headers(conn, add_headers \\ %{}) do
+    bbc_headers =
+      Map.merge(
+        %{
+          scheme: :https,
+          host: nil,
+          is_uk: false,
+          is_advertise: false,
+          country: "gb",
+          query_string: nil,
+          replayed_traffic: nil,
+          origin_simulator: nil,
+          varnish: 1,
+          cache: 0,
+          cdn: false,
+          req_svc_chain: "BELFRAGE",
+          x_cdn: 0,
+          x_candy_audience: nil,
+          x_candy_override: nil,
+          x_candy_preview_guid: nil,
+          x_morph_env: nil,
+          x_use_fixture: nil,
+          cookie_ckps_language: nil,
+          cookie_ckps_chinese: nil,
+          cookie_ckps_serbian: nil,
+          origin: nil,
+          referer: nil,
+          user_agent: ""
+        },
+        add_headers
+      )
+
+    conn
+    |> put_test_production_environment()
+    |> put_request_id()
+    |> put_preview_mode_off()
+    |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+    |> put_private(:bbc_headers, bbc_headers)
+    |> put_private(:overrides, %{})
+  end
+
   test "Adds www as the subdomain to the struct" do
     id = "SomeLoop"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "www.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers()
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -60,36 +72,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "test-branch.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers(%{host: "test-branch.belfrage.com"})
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -99,37 +82,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
+      |> put_headers()
       |> Map.put(:host, "")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "www",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -139,37 +93,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
+      |> put_headers()
       |> Map.put(:host, nil)
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "www",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -179,39 +104,9 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "test-branch.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        query_string: %{foo: "ba"},
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers(%{query_string: %{foo: "ba"}})
 
-    assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
 
   test "When the request does not have a query string it adds an empty map to the struct" do
@@ -219,37 +114,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "test-branch.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        query_string: %{},
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers()
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -260,37 +125,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
       |> Map.put(:path_params, %{"id" => "article-1234"})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "test-branch.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        query_string: %{},
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers()
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
   end
@@ -300,36 +135,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "www.belfrage.com",
-        is_uk: false,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
-      |> put_private(:overrides, %{})
+      |> put_headers()
 
     assert "test" == StructAdapter.adapt(conn, id).private.production_environment
   end
@@ -340,36 +146,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
-        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-        |> put_private(:overrides, %{})
-        |> put_test_production_environment()
-        |> put_request_id()
-        |> put_preview_mode_off()
-        |> put_private(:bbc_headers, %{
-          scheme: :https,
-          host: "www.belfrage.com",
-          is_uk: false,
-          is_advertise: false,
-          country: "gb",
-          replayed_traffic: nil,
-          origin_simulator: nil,
-          varnish: 1,
-          cache: 0,
-          cdn: false,
-          req_svc_chain: "BELFRAGE",
-          x_cdn: 0,
-          x_candy_audience: nil,
-          x_candy_override: nil,
-          x_candy_preview_guid: nil,
-          x_morph_env: nil,
-          x_use_fixture: nil,
-          cookie_ckps_language: nil,
-          cookie_ckps_chinese: nil,
-          cookie_ckps_serbian: nil,
-          origin: nil,
-          referer: nil,
-          user_agent: ""
-        })
+        |> put_headers()
         |> put_req_header("accept-encoding", "gzip, deflate, br")
 
       assert "gzip, deflate, br" == StructAdapter.adapt(conn, id).request.accept_encoding
@@ -380,36 +157,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
-        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-        |> put_private(:overrides, %{})
-        |> put_test_production_environment()
-        |> put_request_id()
-        |> put_preview_mode_off()
-        |> put_private(:bbc_headers, %{
-          scheme: :https,
-          host: "www.belfrage.com",
-          is_uk: false,
-          is_advertise: false,
-          country: "gb",
-          replayed_traffic: nil,
-          origin_simulator: nil,
-          varnish: 1,
-          cache: 0,
-          cdn: false,
-          req_svc_chain: "BELFRAGE",
-          x_cdn: 0,
-          x_candy_audience: nil,
-          x_candy_override: nil,
-          x_candy_preview_guid: nil,
-          x_morph_env: nil,
-          x_use_fixture: nil,
-          cookie_ckps_language: nil,
-          cookie_ckps_chinese: nil,
-          cookie_ckps_serbian: nil,
-          origin: nil,
-          referer: nil,
-          user_agent: ""
-        })
+        |> put_headers()
 
       assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
     end
@@ -418,36 +166,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "when is_uk header is true, is_uk in the struct is set to true" do
     conn =
       conn(:get, "/")
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:overrides, %{})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: "www.belfrage.com",
-        is_uk: true,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
+      |> put_headers(%{is_uk: true})
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
   end
@@ -455,36 +174,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "when the bbc_headers host is nil, uses host from the conn" do
     conn =
       conn(:get, "/")
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:overrides, %{})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: nil,
-        is_uk: true,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
+      |> put_headers(%{host: nil})
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
   end
@@ -492,36 +182,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds raw_headers to the struct.request" do
     conn =
       conn(:get, "/")
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:overrides, %{})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: nil,
-        is_uk: true,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
+      |> put_headers()
       |> put_req_header("a-custom-header", "with this value")
 
     assert StructAdapter.adapt(conn, SomeLoop).request.raw_headers == %{
@@ -532,36 +193,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds request_id to the struct.request" do
     conn =
       conn(:get, "/")
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:overrides, %{})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: nil,
-        is_uk: true,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
+      |> put_headers()
       |> put_req_header("a-custom-header", "with this value")
 
     assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
@@ -570,36 +202,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds personalisation to struct.private" do
     conn =
       conn(:get, "/")
-      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-      |> put_private(:overrides, %{})
-      |> put_test_production_environment()
-      |> put_request_id()
-      |> put_preview_mode_off()
-      |> put_private(:bbc_headers, %{
-        scheme: :https,
-        host: nil,
-        is_uk: true,
-        is_advertise: false,
-        country: "gb",
-        replayed_traffic: nil,
-        origin_simulator: nil,
-        varnish: 1,
-        cache: 0,
-        cdn: false,
-        req_svc_chain: "BELFRAGE",
-        x_cdn: 0,
-        x_candy_audience: nil,
-        x_candy_override: nil,
-        x_candy_preview_guid: nil,
-        x_morph_env: nil,
-        x_use_fixture: nil,
-        cookie_ckps_language: nil,
-        cookie_ckps_chinese: nil,
-        cookie_ckps_serbian: nil,
-        origin: nil,
-        referer: nil,
-        user_agent: ""
-      })
+      |> put_headers()
 
     assert StructAdapter.adapt(conn, SomePersonalisedLoop).private.personalisation == true
   end
