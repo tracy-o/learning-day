@@ -46,7 +46,8 @@ defmodule BelfrageWeb.StructAdapter do
         loop_id: loop_id,
         overrides: conn.private.overrides,
         production_environment: conn.private.production_environment,
-        preview_mode: conn.private.preview_mode
+        preview_mode: conn.private.preview_mode,
+        personalisation: personalisation?(loop_id)
       }
     }
   end
@@ -72,6 +73,14 @@ defmodule BelfrageWeb.StructAdapter do
     case Plug.Conn.get_req_header(conn, "accept-encoding") do
       [accept_encoding] -> accept_encoding
       [] -> nil
+    end
+  end
+
+  defp personalisation?(loop_id) do
+    if loop_id == "redirect" do
+      false
+    else
+      Belfrage.RouteSpec.personalisation?(loop_id)
     end
   end
 end

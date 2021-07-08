@@ -17,7 +17,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "Adds www as the subdomain to the struct" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
@@ -56,7 +56,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
@@ -95,7 +95,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the host header is empty, we default to www" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
@@ -135,7 +135,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the host header is not binary, we default to www" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
@@ -175,7 +175,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the request contains a query string it is added to the struct" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
@@ -215,7 +215,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the request does not have a query string it adds an empty map to the struct" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
@@ -255,7 +255,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the path has path parameters" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
@@ -296,7 +296,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "Adds the production_environment to the struct" do
-    id = "12345678"
+    id = "SomeLoop"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
@@ -336,7 +336,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   describe "accept_encoding value" do
     test "when an Accept-Encoding header is provided, the value is stored in struct.request" do
-      id = "12345678"
+      id = "SomeLoop"
 
       conn =
         conn(:get, "/")
@@ -376,7 +376,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     end
 
     test "when an Accept-Encoding header is not provided" do
-      id = "12345678"
+      id = "SomeLoop"
 
       conn =
         conn(:get, "/")
@@ -565,5 +565,42 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_req_header("a-custom-header", "with this value")
 
     assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
+  end
+
+  test "adds personalisation to struct.private" do
+    conn =
+      conn(:get, "/")
+      |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+      |> put_private(:overrides, %{})
+      |> put_test_production_environment()
+      |> put_request_id()
+      |> put_preview_mode_off()
+      |> put_private(:bbc_headers, %{
+        scheme: :https,
+        host: nil,
+        is_uk: true,
+        is_advertise: false,
+        country: "gb",
+        replayed_traffic: nil,
+        origin_simulator: nil,
+        varnish: 1,
+        cache: 0,
+        cdn: false,
+        req_svc_chain: "BELFRAGE",
+        x_cdn: 0,
+        x_candy_audience: nil,
+        x_candy_override: nil,
+        x_candy_preview_guid: nil,
+        x_morph_env: nil,
+        x_use_fixture: nil,
+        cookie_ckps_language: nil,
+        cookie_ckps_chinese: nil,
+        cookie_ckps_serbian: nil,
+        origin: nil,
+        referer: nil,
+        user_agent: ""
+      })
+
+    assert StructAdapter.adapt(conn, SomePersonalisedLoop).private.personalisation == true
   end
 end
