@@ -22,7 +22,7 @@ defmodule Belfrage do
     |> Processor.generate_request_hash()
   end
 
-  defp check_cache(struct), do: Processor.query_cache_for_early_response(struct)
+  defp check_cache(struct), do: Processor.fetch_early_response_from_cache(struct)
 
   defp generate_response(struct = %Struct{response: %Struct.Response{http_status: http_status}})
        when http_status != nil do

@@ -168,7 +168,7 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "query_cache_for_early_response/1" do
+  describe "fetch_early_response_from_cache/1" do
     setup do
       struct = %Struct{request: %Request{request_hash: unique_cache_key()}}
       response = %Response{body: "Cached response", cache_directive: %{max_age: 60}}
@@ -177,13 +177,13 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "uses cached response", %{struct: struct, cached_response: cached_response} do
-      %{response: response} = Processor.query_cache_for_early_response(struct)
+      %{response: response} = Processor.fetch_early_response_from_cache(struct)
       assert response.body == cached_response.body
     end
 
     test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
       struct = Struct.add(struct, :private, %{personalisation: true})
-      %{response: response} = Processor.query_cache_for_early_response(struct)
+      %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
     end
   end

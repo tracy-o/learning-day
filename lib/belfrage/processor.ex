@@ -34,7 +34,7 @@ defmodule Belfrage.Processor do
     RequestHash.generate(struct)
   end
 
-  def query_cache_for_early_response(struct = %Struct{private: private = %Private{}}) do
+  def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
     if private.personalisation do
       struct
     else
