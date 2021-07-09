@@ -162,7 +162,7 @@ defmodule BelfrageTest do
       assert_gzipped(compressed_body, ~s({"hi": "bonjour"}))
     end
 
-    test "decompresses cached response if client doesn't acept compression", %{struct: struct} do
+    test "decompresses cached response if client doesn't accept compression", %{struct: struct} do
       assert %Struct{
                response: %Response{
                  body: ~s({"hi": "bonjour"}),
