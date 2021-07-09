@@ -107,7 +107,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> put_headers()
       |> fetch_query_params(_opts = [])
 
-      assert %{"page" => "6"} == StructAdapter.adapt(conn, id).request.query_params
+    assert %{"page" => "6"} == StructAdapter.adapt(conn, id).request.query_params
   end
 
   test "When the request does not have a query string it adds an empty map to the struct" do

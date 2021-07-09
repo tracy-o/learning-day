@@ -1,7 +1,6 @@
 defmodule Belfrage.RouteSpec do
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
   @allow_personalisation_map %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
-  @allow_personalisation_transformer ["Personalisation"]
 
   def get_production_environment() do
     Application.get_env(:belfrage, :production_environment)
@@ -30,15 +29,9 @@ defmodule Belfrage.RouteSpec do
     if personalisation_enabled?(route_specs) do
       route_specs
       |> Map.merge(@allow_personalisation_map)
-      |> add_personalisation_to_pipeline()
     else
       route_specs
     end
-  end
-
-  defp add_personalisation_to_pipeline(route_specs) do
-    pipeline = route_specs[:pipeline] ++ @allow_personalisation_transformer 
-    %{route_specs | pipeline: pipeline}
   end
 
   def personalisation_enabled?(loop_id) when not is_map(loop_id) do

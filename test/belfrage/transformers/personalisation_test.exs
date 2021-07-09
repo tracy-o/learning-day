@@ -57,6 +57,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           scheme: :http,
           host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
     }
@@ -160,6 +163,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
           host: "bbc.co.uk"
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
 
@@ -182,6 +188,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
         request: %Struct.Request{
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar", "ckns_id" => "123"},
           host: "bbc.co.uk"
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
 
@@ -212,6 +221,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           cookies: %{"ckns_atkn" => "FAKETOKEN"},
           path: "/full-stack-test/a/ft",
           host: "bbc.co.uk"
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
 
@@ -257,6 +269,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
           host: "bbc.co.uk"
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
 
@@ -321,6 +336,9 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           cookies: %{"ckns_abc" => "def", "ckns_atkn" => @token, "foo" => "bar"},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
           host: "bbc.com"
+        },
+        private: %Struct.Private{
+          personalisation: true
         }
       }
 
@@ -348,12 +366,16 @@ defmodule Belfrage.Transformers.PersonalisationTest do
 
     # TODO: This behviour to be confirmed with account team.
     test "accepts an invalid scope access token as valid", %{invalid_scope_access_token: access_token} do
-      struct =
-        Struct.add(%Struct{}, :request, %{
+      struct = %Struct{
+        request: %Struct.Request{
           cookies: %{"ckns_atkn" => access_token},
           raw_headers: %{"x-id-oidc-signedin" => "1"},
           host: "bbc.co.uk"
-        })
+        },
+        private: %Struct.Private{
+          personalisation: true
+        }
+      }
 
       assert {
                :ok,

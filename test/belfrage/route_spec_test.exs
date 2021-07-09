@@ -68,7 +68,7 @@ defmodule Belfrage.RouteSpecTest do
                owner: "An owner",
                runbook: "A run book",
                platform: Webcore,
-               pipeline: ["a", "really", "long", "pipeline", "Personalisation"],
+               pipeline: ["a", "really", "long", "pipeline"],
                personalisation: "on",
                cookie_allowlist: ["ckns_atkn", "ckns_id"],
                headers_allowlist: ["x-id-oidc-signedin"]
@@ -84,38 +84,6 @@ defmodule Belfrage.RouteSpecTest do
                platform: Webcore,
                pipeline: ["a", "really", "long", "pipeline"],
                personalisation: "off"
-             }
-    end
-
-    test "a routespec with personalisation: 'test_only' is interpolated correctly when on 'test'", %{
-      route_spec: route_spec
-    } do
-      route_spec = Map.put(route_spec, :personalisation, "test_only")
-
-      assert RouteSpec.maybe_interpolate_personalisation(route_spec) == %{
-               owner: "An owner",
-               runbook: "A run book",
-               platform: Webcore,
-               pipeline: ["a", "really", "long", "pipeline", "Personalisation"],
-               personalisation: "test_only",
-               cookie_allowlist: ["ckns_atkn", "ckns_id"],
-               headers_allowlist: ["x-id-oidc-signedin"]
-             }
-    end
-
-    test "a routespec with personalisation: 'test_only' is interpolated correctly when on 'live'", %{
-      route_spec: route_spec
-    } do
-      route_spec = Map.put(route_spec, :personalisation, "test_only")
-
-      Application.put_env(:belfrage, :production_environment, "live")
-
-      assert RouteSpec.maybe_interpolate_personalisation(route_spec) == %{
-               owner: "An owner",
-               runbook: "A run book",
-               platform: Webcore,
-               pipeline: ["a", "really", "long", "pipeline"],
-               personalisation: "test_only"
              }
     end
   end
