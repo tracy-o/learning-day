@@ -47,7 +47,7 @@ defmodule BelfrageWeb.StructAdapter do
         overrides: conn.private.overrides,
         production_environment: conn.private.production_environment,
         preview_mode: conn.private.preview_mode,
-        personalisation: personalisation?(loop_id)
+        personalisation: personalisation_enabled?(loop_id)
       }
     }
   end
@@ -76,11 +76,12 @@ defmodule BelfrageWeb.StructAdapter do
     end
   end
 
-  defp personalisation?(loop_id) do
-    if loop_id == "redirect" do
+  # For now, personalisation is not supported for cascade routes
+  defp personalisation_enabled?(loop_id) do
+    if loop_id == "redirect" || is_list(loop_id) do
       false
     else
-      Belfrage.RouteSpec.personalisation?(loop_id)
+      Belfrage.RouteSpec.personalisation_enabled?(loop_id)
     end
   end
 end

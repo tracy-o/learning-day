@@ -103,10 +103,11 @@ defmodule BelfrageWeb.StructAdapterTest do
     id = "SomeLoop"
 
     conn =
-      conn(:get, "https://test-branch.belfrage.com/_web_core?foo=bar")
-      |> put_headers(%{query_string: %{foo: "ba"}})
+      conn(:get, "https://test-branch.belfrage.com/_web_core?page=6")
+      |> put_headers()
+      |> fetch_query_params(_opts = [])
 
-      assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+      assert %{"page" => "6"} == StructAdapter.adapt(conn, id).request.query_params
   end
 
   test "When the request does not have a query string it adds an empty map to the struct" do
@@ -115,8 +116,9 @@ defmodule BelfrageWeb.StructAdapterTest do
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
       |> put_headers()
+      |> fetch_query_params(_opts = [])
 
-    assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
+    assert %{} == StructAdapter.adapt(conn, id).request.query_params
   end
 
   test "when the path has path parameters" do

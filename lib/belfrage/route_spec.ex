@@ -27,7 +27,7 @@ defmodule Belfrage.RouteSpec do
   end
 
   def maybe_interpolate_personalisation(route_specs) do
-    if personalisation?(route_specs) do
+    if personalisation_enabled?(route_specs) do
       route_specs
       |> Map.merge(@allow_personalisation_map)
       |> add_personalisation_to_pipeline()
@@ -41,11 +41,11 @@ defmodule Belfrage.RouteSpec do
     %{route_specs | pipeline: pipeline}
   end
 
-  def personalisation?(loop_id) when not is_map(loop_id) do
-    personalisation?(specs_for(loop_id))
+  def personalisation_enabled?(loop_id) when not is_map(loop_id) do
+    personalisation_enabled?(specs_for(loop_id))
   end
 
-  def personalisation?(route_specs) do
+  def personalisation_enabled?(route_specs) do
     case route_specs[:personalisation] do
       "on" -> true
       "test_only" -> get_production_environment() == "test"
