@@ -12,6 +12,8 @@ defmodule Belfrage.Processor do
     Event
   }
 
+  alias Struct.{Response, Private}
+
   def get_loop(struct = %Struct{}) do
     LoopsRegistry.find_or_start(struct)
 
@@ -32,8 +34,12 @@ defmodule Belfrage.Processor do
     RequestHash.generate(struct)
   end
 
-  def query_cache_for_early_response(struct = %Struct{}) do
-    Cache.fetch(struct, [:fresh])
+  def query_cache_for_early_response(struct = %Struct{private: private = %Private{}}) do
+    if private.personalisation do
+      struct
+    else
+      Cache.fetch(struct, [:fresh])
+    end
   end
 
   def request_pipeline(struct = %Struct{}) do
@@ -43,12 +49,12 @@ defmodule Belfrage.Processor do
     end
   end
 
-  def perform_call(struct = %Struct{response: %Struct.Response{http_status: code}}) when is_number(code) do
+  def perform_call(struct = %Struct{response: %Response{http_status: code}}) when is_number(code) do
     struct
   end
 
   # when only one struct
-  def perform_call([struct = %Struct{private: %Struct.Private{origin: origin}}]) do
+  def perform_call([struct = %Struct{private: %Private{origin: origin}}]) do
     ServiceProvider.service_for(origin).dispatch(struct)
   end
 
@@ -84,7 +90,7 @@ defmodule Belfrage.Processor do
     raise "Failed to load loop state."
   end
 
-  defp maybe_log_response_status(struct = %Struct{response: %Struct.Response{http_status: http_status}})
+  defp maybe_log_response_status(struct = %Struct{response: %Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
     Event.record(:log, :warn, "#{http_status} error from origin", cloudwatch: true)
     struct

@@ -180,5 +180,11 @@ defmodule Belfrage.ProcessorTest do
       %{response: response} = Processor.query_cache_for_early_response(struct)
       assert response.body == cached_response.body
     end
+
+    test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
+      struct = Struct.add(struct, :private, %{personalisation: true})
+      %{response: response} = Processor.query_cache_for_early_response(struct)
+      refute response.body == cached_response.body
+    end
   end
 end
