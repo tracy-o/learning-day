@@ -36,7 +36,7 @@ defmodule Belfrage.Processor do
   end
 
   def generate_request_hash(struct = %Struct{}) do
-    RequestHash.generate(struct)
+    RequestHash.put(struct)
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do

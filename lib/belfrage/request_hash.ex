@@ -16,17 +16,18 @@ defmodule Belfrage.RequestHash do
     :cdn?
   ]
 
-  def generate(struct) do
-    case Belfrage.Overrides.should_cache_bust?(struct) do
-      true ->
-        cache_bust_request_hash()
+  def put(struct = %Struct{}) do
+    Struct.add(struct, :request, %{request_hash: generate(struct)})
+  end
 
-      false ->
-        extract_keys(struct)
-        |> remove_disallow_vary_headers()
-        |> Crimpex.signature()
+  def generate(struct = %Struct{}) do
+    if Belfrage.Overrides.should_cache_bust?(struct) do
+      cache_bust_request_hash()
+    else
+      extract_keys(struct)
+      |> remove_disallow_vary_headers()
+      |> Crimpex.signature()
     end
-    |> update_struct(struct)
   end
 
   defp remove_disallow_vary_headers(keys)
@@ -44,10 +45,6 @@ defmodule Belfrage.RequestHash do
          private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
        }) do
     (@default_signature_keys ++ add_keys) -- skip_keys
-  end
-
-  defp update_struct(request_hash, struct) do
-    Struct.add(struct, :request, %{request_hash: request_hash})
   end
 
   defp cache_bust_request_hash do
