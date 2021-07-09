@@ -42,10 +42,14 @@ defmodule EndToEnd.PersonalisationTest do
       assert headers[:"ctx-age-bracket"]
     end)
 
-    build_request()
-    |> personalise_request(token)
-    |> make_request()
-    |> assert_successful_response()
+    response =
+      build_request()
+      |> personalise_request(token)
+      |> make_request()
+      |> assert_successful_response()
+
+    [vary_header] = get_resp_header(response, "vary")
+    assert vary_header =~ "x-id-oidc-signedin"
   end
 
   test "invalid auth token" do
@@ -94,5 +98,6 @@ defmodule EndToEnd.PersonalisationTest do
   defp assert_successful_response(conn) do
     assert conn.status == 200
     assert conn.resp_body == @response["body"]
+    conn
   end
 end
