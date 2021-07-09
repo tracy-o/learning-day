@@ -3,7 +3,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Authentication.FlagpoleMock
-  alias Belfrage.Belfrage.Dials.ServerMock
+  alias Belfrage.Dials.ServerMock
   alias Belfrage.Transformers.NewsTopicsPlatformDiscriminator
   alias Belfrage.Struct
 
@@ -34,7 +34,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   }
 
   def enable_personalisation_dial() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :personalisation ->
+    stub(ServerMock, :state, fn :personalisation ->
       Belfrage.Dials.Personalisation.transform("on")
     end)
   end
