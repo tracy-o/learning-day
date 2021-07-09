@@ -5,13 +5,12 @@ defmodule Routes.Specs.MySessionWebcorePlatform do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: Webcore,
       pipeline: pipeline(production_env),
-      cookie_allowlist: ["ckns_atkn"],
-      headers_allowlist: ["x-id-oidc-signedin"]
+      personalisation: "on"
     }
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env) do
