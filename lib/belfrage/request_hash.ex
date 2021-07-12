@@ -1,7 +1,6 @@
 defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
-  alias BelfrageWeb.ResponseHeaders.Vary
 
   @signature_keys [
     :raw_headers,
@@ -17,7 +16,7 @@ defmodule Belfrage.RequestHash do
     :cdn?
   ]
 
-  @personalisation_headers ~w(x-id-oidc-signedin)
+  @ignore_headers ~w(cookie x-id-oidc-signedin)
 
   def put(struct = %Struct{}) do
     Struct.add(struct, :request, %{request_hash: generate(struct)})
@@ -58,6 +57,6 @@ defmodule Belfrage.RequestHash do
   end
 
   defp signature_headers(headers) do
-    Map.keys(headers) -- (Vary.disallow_headers() ++ @personalisation_headers)
+    Map.keys(headers) -- @ignore_headers
   end
 end

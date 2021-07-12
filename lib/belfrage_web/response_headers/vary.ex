@@ -40,8 +40,6 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def vary_headers(_request, _private, true), do: "Accept-Encoding"
 
-  def disallow_headers(), do: @disallow_headers
-
   defp base_headers(request) do
     [
       "Accept-Encoding",

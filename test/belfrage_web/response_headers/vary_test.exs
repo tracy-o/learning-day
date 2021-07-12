@@ -95,30 +95,6 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
       refute List.first(get_resp_header(conn, "vary")) =~ ",cookie"
     end
-
-    test "never vary on disallowed headers" do
-      disallow_headers = Vary.disallow_headers()
-
-      conn =
-        conn(:get, "/")
-        |> Vary.add_header(%Struct{private: %Struct.Private{headers_allowlist: disallow_headers}})
-
-      refute List.first(get_resp_header(conn, "vary")) =~ ",#{disallow_headers |> Enum.join(",")}"
-    end
-
-    test "never vary on disallowed headers but allow other headers" do
-      disallow_headers = Vary.disallow_headers()
-
-      conn =
-        conn(:get, "/")
-        |> Vary.add_header(%Struct{
-          private: %Struct.Private{
-            headers_allowlist: ["one_header"] ++ disallow_headers ++ ["another_header", "more_header"]
-          }
-        })
-
-      assert List.first(get_resp_header(conn, "vary")) =~ ",one_header,another_header,more_header"
-    end
   end
 
   describe "advertise headers" do

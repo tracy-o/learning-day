@@ -3,7 +3,6 @@ defmodule Belfrage.RequestHashTest do
 
   alias Belfrage.RequestHash
   alias Belfrage.Struct
-  alias BelfrageWeb.ResponseHeaders.Vary
 
   @struct %Struct{
     request: %Struct.Request{
@@ -165,17 +164,6 @@ defmodule Belfrage.RequestHashTest do
     test "never vary on cookie header" do
       struct_one =
         @struct |> Belfrage.Struct.add(:request, %{raw_headers: Map.merge(%{"foo" => "bar"}, %{"cookie" => "yummy"})})
-
-      struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
-
-      assert RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
-    end
-
-    test "never vary on disallow headers" do
-      disallow_headers = for header <- Vary.disallow_headers(), into: %{}, do: {header, "abc"}
-
-      struct_one =
-        @struct |> Belfrage.Struct.add(:request, %{raw_headers: Map.merge(%{"foo" => "bar"}, disallow_headers)})
 
       struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
 
