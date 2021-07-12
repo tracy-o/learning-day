@@ -10,7 +10,7 @@ defmodule Routes.Specs.PresTestPersonalised do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
