@@ -103,6 +103,13 @@
   },
   {
     "values": {
+      "test": "date_separator",
+      "live": "date_separator"
+    },
+    "name": "td_logs_path_format"
+  },
+  {
+    "values": {
       "test": "cedric-belfrage-stack",
       "live": "cedric-belfrage-stack"
     },
