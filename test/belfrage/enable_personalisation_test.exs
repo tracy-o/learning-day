@@ -15,7 +15,7 @@ defmodule Belfrage.EnablePersonalisationTest do
 
   describe "when the production environment is test" do
     setup do
-        Application.put_env(:belfrage, :production_environment, "test")
+      Application.put_env(:belfrage, :production_environment, "test")
     end
 
     test "a routespec with personalisation: 'on' is interpolated correctly", %{route_spec: route_spec} do
@@ -61,9 +61,9 @@ defmodule Belfrage.EnablePersonalisationTest do
 
   describe "when the production environment is live" do
     setup do
-        Application.put_env(:belfrage, :production_environment, "live")
+      Application.put_env(:belfrage, :production_environment, "live")
     end
-    
+
     test "a routespec with personalisation: 'on' is interpolated correctly", %{route_spec: route_spec} do
       route_spec = Map.put(route_spec, :personalisation, "on")
 
