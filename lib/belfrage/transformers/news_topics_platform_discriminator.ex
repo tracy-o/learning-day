@@ -121,5 +121,5 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     )
   end
 
-  def call(_rest, struct), do: then(["PlatformKillSwitch", "CircuitBreaker"], struct)
+  def call(_rest, struct), do: then(["CircuitBreaker"], struct)
 end

@@ -88,7 +88,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
              :ok,
              %Struct{
                debug: %Struct.Debug{
-                 pipeline_trail: ["CircuitBreaker", "PlatformKillSwitch"]
+                 pipeline_trail: ["CircuitBreaker"]
                },
                private: %Struct.Private{
                  origin: ^mozart_endpoint,
@@ -138,7 +138,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  debug: %Struct.Debug{
-                   pipeline_trail: ["CircuitBreaker", "PlatformKillSwitch"]
+                   pipeline_trail: ["CircuitBreaker"]
                  },
                  private: %Struct.Private{
                    origin: ^mozart_endpoint,
