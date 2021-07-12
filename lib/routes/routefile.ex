@@ -897,6 +897,14 @@ defmodule Routes.Routefile do
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
+
+  # Sport Optimo Articles
+  redirect "/sport/articles", to: "/sport", status: 302
+
+  handle "/sport/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/sport/articles/ce2rrpqn9ezo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 302
   redirect "/sport/amp/:topic/:id", to: "/sport/:topic/:id.amp", status: 302
   redirect "/sport/uk.app", to: "/sport.app", status: 301
@@ -1423,6 +1431,7 @@ defmodule Routes.Routefile do
   handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
+
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
 
@@ -1443,6 +1452,13 @@ defmodule Routes.Routefile do
   redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
   redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+
+  # BBC Optimo Articles
+  redirect "/articles", to: "/", status: 302
+
+  handle "/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: ["/articles/cg4vyzdwrxeo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   # Catch all
 
