@@ -34,8 +34,12 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   }
 
   def enable_personalisation_dial() do
-    stub(ServerMock, :state, fn :personalisation ->
-      Belfrage.Dials.Personalisation.transform("on")
+    stub(ServerMock, :state, fn dial ->
+      if dial == :personalisation do
+        Belfrage.Dials.Personalisation.transform("on")
+      else
+        Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
+      end
     end)
   end
 
@@ -54,7 +58,13 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  debug: %Struct.Debug{
-                   pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias", "Personalisation"]
+                   pipeline_trail: [
+                     "Language",
+                     "CircuitBreaker",
+                     "PlatformKillSwitch",
+                     "LambdaOriginAlias",
+                     "Personalisation"
+                   ]
                  },
                  private: %Struct.Private{
                    origin: ^lambda_function,
