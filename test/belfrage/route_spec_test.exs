@@ -48,43 +48,4 @@ defmodule Belfrage.RouteSpecTest do
       assert result == %{foo: "I want the route spec to win"}
     end
   end
-
-  describe "maybe_interpolate_personalisation/1" do
-    setup do
-      %{
-        route_spec: %{
-          owner: "An owner",
-          runbook: "A run book",
-          platform: Webcore,
-          pipeline: ["a", "really", "long", "pipeline"]
-        }
-      }
-    end
-
-    test "a routespec with personalisation: 'on' is interpolated correctly", %{route_spec: route_spec} do
-      route_spec = Map.put(route_spec, :personalisation, "on")
-
-      assert RouteSpec.maybe_interpolate_personalisation(route_spec) == %{
-               owner: "An owner",
-               runbook: "A run book",
-               platform: Webcore,
-               pipeline: ["a", "really", "long", "pipeline"],
-               personalisation: "on",
-               cookie_allowlist: ["ckns_atkn", "ckns_id"],
-               headers_allowlist: ["x-id-oidc-signedin"]
-             }
-    end
-
-    test "a routespec with personalisation: 'off' is interpolated correctly", %{route_spec: route_spec} do
-      route_spec = Map.put(route_spec, :personalisation, "off")
-
-      assert RouteSpec.maybe_interpolate_personalisation(route_spec) == %{
-               owner: "An owner",
-               runbook: "A run book",
-               platform: Webcore,
-               pipeline: ["a", "really", "long", "pipeline"],
-               personalisation: "off"
-             }
-    end
-  end
 end

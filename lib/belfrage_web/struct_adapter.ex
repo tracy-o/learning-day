@@ -81,7 +81,7 @@ defmodule BelfrageWeb.StructAdapter do
     if loop_id == "redirect" || is_list(loop_id) do
       false
     else
-      Belfrage.RouteSpec.personalisation_enabled?(loop_id)
+      Belfrage.EnablePersonalisation.personalisation_enabled?(loop_id)
     end
   end
 end

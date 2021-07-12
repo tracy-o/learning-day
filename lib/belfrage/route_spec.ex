@@ -1,13 +1,8 @@
 defmodule Belfrage.RouteSpec do
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
-  @allow_personalisation_map %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
-
-  def get_production_environment() do
-    Application.get_env(:belfrage, :production_environment)
-  end
 
   def specs_for(name) do
-    specs_for(name, get_production_environment())
+    specs_for(name, Application.get_env(:belfrage, :production_environment))
   end
 
   def specs_for(name, env) do
@@ -22,28 +17,7 @@ defmodule Belfrage.RouteSpec do
     Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
     |> Map.put(:loop_id, name)
-    |> maybe_interpolate_personalisation()
-  end
-
-  def maybe_interpolate_personalisation(route_specs) do
-    if personalisation_enabled?(route_specs) do
-      route_specs
-      |> Map.merge(@allow_personalisation_map)
-    else
-      route_specs
-    end
-  end
-
-  def personalisation_enabled?(loop_id) when not is_map(loop_id) do
-    personalisation_enabled?(specs_for(loop_id))
-  end
-
-  def personalisation_enabled?(route_specs) do
-    case route_specs[:personalisation] do
-      "on" -> true
-      "test_only" -> get_production_environment() == "test"
-      _ -> false
-    end
+    |> Belfrage.EnablePersonalisation.maybe_interpolate_personalisation()
   end
 
   def merge_specs(platform_specs, route_specs) do
