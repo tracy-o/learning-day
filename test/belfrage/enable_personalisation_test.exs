@@ -1,5 +1,5 @@
 defmodule Belfrage.EnablePersonalisationTest do
-  use ExUnit.Case, aync: true
+  use ExUnit.Case, async: true
   alias Belfrage.EnablePersonalisation
 
   setup do
