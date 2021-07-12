@@ -40,13 +40,13 @@ defmodule Belfrage.Transformers.PlatformKillSwitchTest do
     test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
       activate_webcore_kill_switch()
       original_struct = struct_with_platform(Fabl)
-      assert {:ok, original_struct} = PlatformKillSwitch.call([], original_struct)
+      assert {:ok, ^original_struct} = PlatformKillSwitch.call([], original_struct)
     end
 
     test "and the platform is nil, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
       original_struct = struct_with_platform(nil)
-      assert {:ok, original_struct} = PlatformKillSwitch.call([], original_struct)
+      assert {:ok, ^original_struct} = PlatformKillSwitch.call([], original_struct)
     end
   end
 
@@ -54,19 +54,19 @@ defmodule Belfrage.Transformers.PlatformKillSwitchTest do
     test "and the platform is Webcore, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
       original_struct = struct_with_platform(Webcore)
-      assert {:ok, original_struct} = PlatformKillSwitch.call([], original_struct)
+      assert {:ok, ^original_struct} = PlatformKillSwitch.call([], original_struct)
     end
 
     test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
       original_struct = struct_with_platform(Fabl)
-      assert {:ok, original_struct} = PlatformKillSwitch.call([], original_struct)
+      assert {:ok, ^original_struct} = PlatformKillSwitch.call([], original_struct)
     end
 
     test "and the platform is nil, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
       original_struct = struct_with_platform(nil)
-      assert {:ok, original_struct} = PlatformKillSwitch.call([], original_struct)
+      assert {:ok, ^original_struct} = PlatformKillSwitch.call([], original_struct)
     end
   end
 end
