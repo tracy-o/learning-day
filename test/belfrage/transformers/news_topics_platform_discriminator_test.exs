@@ -33,19 +33,19 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
     }
   }
 
-  def enable_personalisation_dial() do
-    stub(ServerMock, :state, fn dial ->
-      if dial == :personalisation do
+  defp stub_dials() do
+    stub(ServerMock, :state, fn
+      :personalisation ->
         Belfrage.Dials.Personalisation.transform("on")
-      else
+
+      :webcore_kill_switch ->
         Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
-      end
     end)
   end
 
   describe "when personalisation on" do
     setup do
-      enable_personalisation_dial()
+      stub_dials()
       # enables flagpole
       expect(FlagpoleMock, :state, fn -> true end)
       :ok
