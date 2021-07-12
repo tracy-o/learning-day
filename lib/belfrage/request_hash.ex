@@ -16,6 +16,8 @@ defmodule Belfrage.RequestHash do
     :cdn?
   ]
 
+  @personalisation_headers ~w(x-id-oidc-signedin)
+
   def put(struct = %Struct{}) do
     Struct.add(struct, :request, %{request_hash: generate(struct)})
   end
@@ -26,6 +28,7 @@ defmodule Belfrage.RequestHash do
     else
       extract_keys(struct)
       |> remove_disallow_vary_headers()
+      |> remove_personalisation_headers()
       |> Crimpex.signature()
     end
   end
@@ -45,6 +48,10 @@ defmodule Belfrage.RequestHash do
          private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
        }) do
     (@default_signature_keys ++ add_keys) -- skip_keys
+  end
+
+  defp remove_personalisation_headers(keys = %{raw_headers: headers}) do
+    %{keys | raw_headers: Map.split(headers, @personalisation_headers) |> elem(1)}
   end
 
   defp cache_bust_request_hash do

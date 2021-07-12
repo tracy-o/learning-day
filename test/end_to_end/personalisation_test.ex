@@ -68,15 +68,39 @@ defmodule EndToEnd.PersonalisationTest do
             "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fmy%2Fsession%2Fwebcore-platform"} in conn.resp_headers
   end
 
-  defp expect_origin_request(fun) do
+  test "use non-personalised cached response as fallback" do
+    request = build_request()
+
+    # Store non-personalised response in cache
+    response = Map.put(@response, "headers", %{"cache-control" => "public, max-age=60"})
+    stub_origin_request(response: {:ok, response})
+
+    request
+    |> make_request()
+    |> assert_successful_response()
+
+    # Simulate origin failure
+    stub_origin_request(response: {:error, :boom})
+
+    request
+    |> personalise_request()
+    |> make_request()
+    |> assert_successful_response()
+  end
+
+  defp expect_origin_request(fun, opts \\ []) do
     expect(LambdaMock, :call, fn _role_arn, _function_arn, request, _request_id, _opts ->
       fun.(request)
-      {:ok, @response}
+      Keyword.get(opts, :response, {:ok, @response})
     end)
   end
 
   defp expect_no_origin_request() do
     expect(LambdaMock, :call, 0, fn _role_arn, _function_arn, _request, _request_id, _opts -> nil end)
+  end
+
+  defp stub_origin_request(opts) do
+    expect_origin_request(fn _req -> nil end, opts)
   end
 
   defp build_request() do
@@ -85,7 +109,7 @@ defmodule EndToEnd.PersonalisationTest do
     |> Map.put(:host, "www.bbc.co.uk")
   end
 
-  defp personalise_request(conn, token) do
+  defp personalise_request(conn, token \\ AuthToken.valid_access_token()) do
     conn
     |> put_req_header("cookie", "ckns_atkn=#{token}")
     |> put_req_header("x-id-oidc-signedin", "1")

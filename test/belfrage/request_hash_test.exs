@@ -181,6 +181,12 @@ defmodule Belfrage.RequestHashTest do
 
       assert RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
     end
+
+    test "does not vary on personalisation headers" do
+      non_personalised = @struct
+      personalised = Belfrage.Struct.add(@struct, :request, %{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+      assert RequestHash.generate(personalised) == RequestHash.generate(non_personalised)
+    end
   end
 
   describe "put/1" do
