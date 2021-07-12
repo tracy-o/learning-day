@@ -1,8 +1,9 @@
 defmodule Belfrage.RequestHash do
   alias Belfrage.Struct
+  alias Belfrage.Struct.Private
   alias BelfrageWeb.ResponseHeaders.Vary
 
-  @default_signature_keys [
+  @signature_keys [
     :raw_headers,
     :query_params,
     :country,
@@ -24,37 +25,39 @@ defmodule Belfrage.RequestHash do
 
   def generate(struct = %Struct{}) do
     if Belfrage.Overrides.should_cache_bust?(struct) do
-      cache_bust_request_hash()
+      cache_bust_hash()
     else
-      extract_keys(struct)
-      |> remove_disallow_vary_headers()
-      |> remove_personalisation_headers()
+      struct
+      |> take_signature_keys()
       |> Crimpex.signature()
     end
   end
 
-  defp remove_disallow_vary_headers(keys)
-  defp remove_disallow_vary_headers(keys = %{raw_headers: headers}) when headers == %{}, do: keys
-
-  defp remove_disallow_vary_headers(keys = %{raw_headers: headers}) do
-    %{keys | raw_headers: Map.split(headers, Vary.disallow_headers()) |> elem(1)}
-  end
-
-  defp extract_keys(struct) do
-    Map.take(struct.request, build_signature_keys(struct))
-  end
-
-  defp build_signature_keys(%Struct{
-         private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
-       }) do
-    (@default_signature_keys ++ add_keys) -- skip_keys
-  end
-
-  defp remove_personalisation_headers(keys = %{raw_headers: headers}) do
-    %{keys | raw_headers: Map.split(headers, @personalisation_headers) |> elem(1)}
-  end
-
-  defp cache_bust_request_hash do
+  defp cache_bust_hash() do
     "cache-bust." <> UUID.uuid4()
+  end
+
+  defp take_signature_keys(struct = %Struct{}) do
+    struct.request
+    |> Map.take(signature_keys(struct.private))
+    |> filter_headers()
+  end
+
+  defp signature_keys(%Private{signature_keys: %{add: add, skip: skip}}) do
+    (@signature_keys ++ add) -- skip
+  end
+
+  defp filter_headers(keys) do
+    case keys do
+      %{raw_headers: headers} when headers != %{} ->
+        %{keys | raw_headers: Map.take(headers, signature_headers(headers))}
+
+      _ ->
+        keys
+    end
+  end
+
+  defp signature_headers(headers) do
+    Map.keys(headers) -- (Vary.disallow_headers() ++ @personalisation_headers)
   end
 end
