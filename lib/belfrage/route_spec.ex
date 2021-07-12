@@ -17,7 +17,7 @@ defmodule Belfrage.RouteSpec do
     Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
     |> Map.put(:loop_id, name)
-    |> Belfrage.EnablePersonalisation.maybe_interpolate_personalisation()
+    |> Belfrage.RouteSpec.Personalisation.maybe_interpolate_personalisation()
   end
 
   def merge_specs(platform_specs, route_specs) do

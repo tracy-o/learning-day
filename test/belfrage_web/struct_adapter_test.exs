@@ -16,7 +16,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     put_private(conn, :request_id, "req-123456")
   end
 
-  defp put_headers(conn, add_headers \\ %{}) do
+  defp build_request(conn, override_headers \\ %{}) do
     bbc_headers =
       Map.merge(
         %{
@@ -45,7 +45,7 @@ defmodule BelfrageWeb.StructAdapterTest do
           referer: nil,
           user_agent: ""
         },
-        add_headers
+        override_headers
       )
 
     conn
@@ -62,7 +62,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
-      |> put_headers()
+      |> build_request()
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -72,7 +72,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
-      |> put_headers(%{host: "test-branch.belfrage.com"})
+      |> build_request(%{host: "test-branch.belfrage.com"})
 
     assert "test-branch" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -82,8 +82,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
-      |> put_headers()
-      |> Map.put(:host, "")
+      |> build_request(%{host: ""})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -93,8 +92,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
-      |> put_headers()
-      |> Map.put(:host, nil)
+      |> build_request(%{host: nil})
 
     assert "www" == StructAdapter.adapt(conn, id).request.subdomain
   end
@@ -104,7 +102,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?page=6")
-      |> put_headers()
+      |> build_request()
       |> fetch_query_params(_opts = [])
 
     assert %{"page" => "6"} == StructAdapter.adapt(conn, id).request.query_params
@@ -115,7 +113,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
-      |> put_headers()
+      |> build_request()
       |> fetch_query_params(_opts = [])
 
     assert %{} == StructAdapter.adapt(conn, id).request.query_params
@@ -126,8 +124,8 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
+      |> build_request()
       |> Map.put(:path_params, %{"id" => "article-1234"})
-      |> put_headers()
 
     assert %{"id" => "article-1234"} == StructAdapter.adapt(conn, id).request.path_params
   end
@@ -137,7 +135,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
-      |> put_headers()
+      |> build_request()
 
     assert "test" == StructAdapter.adapt(conn, id).private.production_environment
   end
@@ -148,7 +146,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
-        |> put_headers()
+        |> build_request()
         |> put_req_header("accept-encoding", "gzip, deflate, br")
 
       assert "gzip, deflate, br" == StructAdapter.adapt(conn, id).request.accept_encoding
@@ -159,7 +157,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
       conn =
         conn(:get, "/")
-        |> put_headers()
+        |> build_request()
 
       assert nil == StructAdapter.adapt(conn, id).request.accept_encoding
     end
@@ -168,7 +166,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "when is_uk header is true, is_uk in the struct is set to true" do
     conn =
       conn(:get, "/")
-      |> put_headers(%{is_uk: true})
+      |> build_request(%{is_uk: true})
 
     assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
   end
@@ -176,7 +174,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "when the bbc_headers host is nil, uses host from the conn" do
     conn =
       conn(:get, "/")
-      |> put_headers(%{host: nil})
+      |> build_request(%{host: nil})
 
     assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
   end
@@ -184,7 +182,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds raw_headers to the struct.request" do
     conn =
       conn(:get, "/")
-      |> put_headers()
+      |> build_request()
       |> put_req_header("a-custom-header", "with this value")
 
     assert StructAdapter.adapt(conn, SomeLoop).request.raw_headers == %{
@@ -195,7 +193,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds request_id to the struct.request" do
     conn =
       conn(:get, "/")
-      |> put_headers()
+      |> build_request()
       |> put_req_header("a-custom-header", "with this value")
 
     assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
@@ -204,7 +202,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds personalisation: 'true' to struct.private" do
     conn =
       conn(:get, "/")
-      |> put_headers()
+      |> build_request()
 
     assert StructAdapter.adapt(conn, SomePersonalisedLoop).private.personalisation == true
   end
@@ -212,7 +210,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   test "adds personalisation: 'false' to struct.private" do
     conn =
       conn(:get, "/")
-      |> put_headers()
+      |> build_request()
 
     assert StructAdapter.adapt(conn, SomeLoop).private.personalisation == false
   end
