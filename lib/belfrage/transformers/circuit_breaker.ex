@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.CircuitBreaker do
     Belfrage.Event.record(:metric, :increment, "circuit_breaker.active")
 
     struct
-    |> Struct.add(:response, %{http_status: 500})
+    |> Struct.add(:response, %{http_status: 500, headers: %{"content-length" => "0"}})
     |> Struct.add(:private, %{origin: :belfrage_circuit_breaker})
   end
 
