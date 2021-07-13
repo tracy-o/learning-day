@@ -15,8 +15,7 @@ defmodule Belfrage.RouteSpec.Personalisation do
 
   def maybe_interpolate_personalisation(route_specs) do
     if personalisation_enabled?(route_specs) do
-      route_specs
-      |> Map.merge(@allow_personalisation_map, &merge_key/3)
+      Map.merge(route_specs, @allow_personalisation_map, &merge_key/3)
     else
       route_specs
     end

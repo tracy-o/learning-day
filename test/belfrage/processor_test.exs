@@ -168,7 +168,7 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Process.personalisation/1" do
+  describe "personalisation/1" do
     test "adds personalised: true to a personalised route" do
       struct = %Struct{private: %Struct.Private{loop_id: SomePersonalisedLoop}}
 

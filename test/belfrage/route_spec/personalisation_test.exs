@@ -35,8 +35,8 @@ defmodule Belfrage.RouteSpec.PersonalisationTest do
 
       result = Personalisation.maybe_interpolate_personalisation(route_spec)
 
-      assert result[:cookie_allowlist] != ["ckns_atkn", "ckns_id"]
-      assert result[:headers_allowlist] != ["x-id-oidc-signedin"]
+      refute result[:cookie_allowlist]
+      refute result[:headers_allowlist]
       assert result == route_spec
     end
 
@@ -45,8 +45,8 @@ defmodule Belfrage.RouteSpec.PersonalisationTest do
 
       result = Personalisation.maybe_interpolate_personalisation(route_spec)
 
-      assert result[:cookie_allowlist] != ["ckns_atkn", "ckns_id"]
-      assert result[:headers_allowlist] != ["x-id-oidc-signedin"]
+      refute result[:cookie_allowlist]
+      refute result[:headers_allowlist]
       assert result == route_spec
     end
   end
@@ -71,8 +71,8 @@ defmodule Belfrage.RouteSpec.PersonalisationTest do
 
       result = Personalisation.maybe_interpolate_personalisation(route_spec)
 
-      assert result[:cookie_allowlist] != ["ckns_atkn", "ckns_id"]
-      assert result[:headers_allowlist] != ["x-id-oidc-signedin"]
+      refute result[:cookie_allowlist]
+      refute result[:headers_allowlist]
       assert result == route_spec
     end
 
