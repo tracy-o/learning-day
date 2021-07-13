@@ -5,7 +5,7 @@ defmodule Routes.Specs.PresTestPersonalised do
       platform: Webcore,
       query_params_allowlist: ["q", "page", "scope", "filter", "personalisationMode"],
       pipeline: pipeline(production_env),
-      personalisation: "on"
+      personalisation: "test_only"
     }
   end
 

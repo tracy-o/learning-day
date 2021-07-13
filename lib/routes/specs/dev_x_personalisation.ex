@@ -5,7 +5,7 @@ defmodule Routes.Specs.DevXPersonalisation do
       platform: Webcore,
       query_params_allowlist: ["personalisationMode"],
       pipeline: pipeline(production_env),
-      personalisation: "on"
+      personalisation: "test_only"
     }
   end
 

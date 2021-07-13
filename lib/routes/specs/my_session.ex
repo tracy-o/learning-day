@@ -6,7 +6,7 @@ defmodule Routes.Specs.MySession do
       platform: OriginSimulator,
       origin: :stubbed_session_origin,
       pipeline: ["TrailingSlashRedirector", "Personalisation", "CircuitBreaker"],
-      personalisation: "on"
+      personalisation: "test_only"
     }
   end
 end

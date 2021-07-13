@@ -4,7 +4,7 @@ defmodule Routes.Specs.SomePersonalisedLoop do
       owner: "Some personalised guy",
       runbook: "Some personalised runbook",
       platform: Webcore,
-      personalisation: "on"
+      personalisation: "test_only"
     }
   end
 end

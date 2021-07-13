@@ -5,7 +5,7 @@ defmodule Routes.Specs.MySessionWebcorePlatform do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: Webcore,
       pipeline: pipeline(production_env),
-      personalisation: "on"
+      personalisation: "test_only"
     }
   end
 

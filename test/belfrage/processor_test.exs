@@ -166,4 +166,18 @@ defmodule Belfrage.ProcessorTest do
       assert %{"best" => "bourbon"} == Processor.allowlists(struct).request.cookies
     end
   end
+
+  describe "Process.personalisation/1" do
+    test "adds personalised: true to a personalised route" do
+      struct = %Struct{private: %Struct.Private{loop_id: SomePersonalisedLoop}}
+
+      assert true == Processor.personalisation(struct).private.personalised
+    end
+
+    test "adds personalised: false to a non personalised route" do
+      struct = %Struct{private: %Struct.Private{loop_id: SomeLoop}}
+
+      assert false == Processor.personalisation(struct).private.personalised
+    end
+  end
 end
