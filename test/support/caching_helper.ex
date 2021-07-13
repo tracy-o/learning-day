@@ -35,10 +35,19 @@ defmodule Belfrage.Test.CachingHelper do
   Puts the response into the cache under the passed key.
   """
   def put_into_cache(key, response = %Belfrage.Struct.Response{}) do
-    Cachex.put(
-      :cache,
-      key,
-      Map.put(response, :cache_last_updated, response.cache_last_updated || Belfrage.Timer.now_ms())
-    )
+    response =
+      response
+      |> Map.put(:cache_last_updated, response.cache_last_updated || Belfrage.Timer.now_ms())
+      |> Map.put(:cache_directive, default_cache_directive(response.cache_directive))
+
+    Cachex.put(:cache, key, response)
+  end
+
+  defp default_cache_directive(cache_directive) do
+    if cache_directive == %Belfrage.CacheControl{cacheability: "private"} do
+      %Belfrage.CacheControl{cacheability: "public", max_age: 60}
+    else
+      cache_directive
+    end
   end
 end

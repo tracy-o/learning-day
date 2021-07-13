@@ -194,7 +194,7 @@ defmodule Belfrage.ProcessorTest do
   describe "fetch_early_response_from_cache/1" do
     setup do
       struct = %Struct{request: %Request{request_hash: unique_cache_key()}}
-      response = %Response{body: "Cached response", cache_directive: %{max_age: 60}}
+      response = %Response{body: "Cached response"}
       put_into_cache(%Struct{struct | response: response})
       %{struct: struct, cached_response: response}
     end
