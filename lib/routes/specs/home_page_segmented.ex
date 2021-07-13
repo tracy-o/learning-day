@@ -11,7 +11,7 @@ defmodule Routes.Specs.HomePageSegmented do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

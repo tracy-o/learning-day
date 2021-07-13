@@ -1,1 +1,10 @@
-{"ttl_multiplier":"default", "logging_level":"debug", "circuit_breaker":"false", "personalisation":"on", "obit_mode": "off", "ccp_enabled": "true", "monitor_enabled": "true" }
+{
+	"ttl_multiplier":"default",
+	"logging_level":"debug",
+	"circuit_breaker":"false",
+	"personalisation":"on",
+	"obit_mode": "off",
+	"ccp_enabled": "true",
+	"monitor_enabled": "true",
+	"webcore_kill_switch": "inactive"
+}

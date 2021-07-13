@@ -41,6 +41,8 @@ defmodule BelfrageTest do
   @web_core_404_lambda_response {:ok, %{"body" => "404 - not found", "headers" => %{}, "statusCode" => 404}}
 
   test "GET request invokes lambda service with Lambda transformer" do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
+
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
                         _lambda_func = "pwa-lambda-function:test",
@@ -54,6 +56,7 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode, invokes lambda with the lambda alias" do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
     struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
@@ -70,6 +73,7 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
     struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
@@ -89,6 +93,8 @@ defmodule BelfrageTest do
   end
 
   test "POST request invokes lambda service with Lambda transformer" do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
+
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
                         _lambda_func = "pwa-lambda-function:test",

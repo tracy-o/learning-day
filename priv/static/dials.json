@@ -119,5 +119,20 @@
         "description": "Disables the sending of messsages to Monitor"
       }
     ]
+  },
+  {
+    "name": "webcore_kill_switch",
+    "description": "If active this will block requests to the Webcore platform, still allowing other platforms to work as expected",
+    "default-value": "inactive",
+    "values": [
+      {
+        "value": "active",
+        "description": "Disables the sending of requests to Webcore"
+      },
+      {
+        "value": "inactive",
+        "description": "Enables the sending of requests to Webcore"
+      }
+    ]
   }
 ]

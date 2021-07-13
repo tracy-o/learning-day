@@ -33,15 +33,19 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
     }
   }
 
-  def enable_personalisation_dial() do
-    stub(ServerMock, :state, fn :personalisation ->
-      Belfrage.Dials.Personalisation.transform("on")
+  defp stub_dials() do
+    stub(ServerMock, :state, fn
+      :personalisation ->
+        Belfrage.Dials.Personalisation.transform("on")
+
+      :webcore_kill_switch ->
+        Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
     end)
   end
 
   describe "when personalisation on" do
     setup do
-      enable_personalisation_dial()
+      stub_dials()
       # enables flagpole
       expect(FlagpoleMock, :state, fn -> true end)
       :ok
@@ -54,7 +58,13 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  debug: %Struct.Debug{
-                   pipeline_trail: ["Language", "CircuitBreaker", "LambdaOriginAlias", "Personalisation"]
+                   pipeline_trail: [
+                     "Language",
+                     "CircuitBreaker",
+                     "PlatformKillSwitch",
+                     "LambdaOriginAlias",
+                     "Personalisation"
+                   ]
                  },
                  private: %Struct.Private{
                    origin: ^lambda_function,

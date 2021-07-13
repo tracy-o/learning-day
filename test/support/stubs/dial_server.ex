@@ -9,4 +9,7 @@ defmodule Belfrage.Dials.ServerStub do
 
   @impl Belfrage.Dials.Server
   def state(:monitor_enabled), do: Belfrage.Dials.MonitorEnabled.transform("true")
+
+  @impl Belfrage.Dials.Server
+  def state(:webcore_kill_switch), do: Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
 end
