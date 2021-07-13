@@ -2,14 +2,13 @@ defmodule EndToEnd.MonitorEventsTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
 
   @moduletag :end_to_end
 
   setup do
-    :ets.delete_all_objects(:cache)
-
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
       {:ok,
@@ -21,6 +20,8 @@ defmodule EndToEnd.MonitorEventsTest do
          "body" => "<h1>Hello from the Lambda!</h1>"
        }}
     end)
+
+    on_exit(&clear_cache/0)
 
     :ok
   end
@@ -160,22 +161,13 @@ defmodule EndToEnd.MonitorEventsTest do
 
   describe "when a local fallback is served" do
     setup do
-      seeded_response = %Belfrage.Struct.Response{
+      put_into_cache("ecd8bc630a0757b4ccd2b53a15639219", %Belfrage.Struct.Response{
         body: :zlib.gzip(~s({"hi": "bonjour"})),
         headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
         http_status: 200,
         cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 0},
-        cache_last_updated: Belfrage.Timer.now_ms()
-      }
-
-      Test.Support.Helper.insert_cache_seed(
-        id: "ecd8bc630a0757b4ccd2b53a15639219",
-        response: seeded_response,
-        expires_in: :timer.hours(6),
-        last_updated: Belfrage.Timer.now_ms()
-      )
-
-      :timer.sleep(1)
+        cache_last_updated: Belfrage.Timer.now_ms() - 1_000
+      })
 
       :ok
     end

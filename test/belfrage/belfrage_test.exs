@@ -2,18 +2,20 @@ defmodule BelfrageTest do
   use ExUnit.Case, async: true
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.CachingHelper
 
-  alias Belfrage.Clients.LambdaMock
   alias Belfrage.Struct
+  alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.Clients.LambdaMock
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
   @get_request_struct %Struct{
-    private: %Struct.Private{
+    private: %Private{
       loop_id: "SportVideos",
       production_environment: "test"
     },
-    request: %Struct.Request{
+    request: %Request{
       path: "/_web_core",
       method: "GET",
       country: "gb",
@@ -22,14 +24,14 @@ defmodule BelfrageTest do
   }
 
   @post_request_struct %Struct{
-    request: %Struct.Request{
+    request: %Request{
       path: "/",
       method: "POST",
       payload: ~s({"some": "data please"}),
       country: "gb",
       request_id: "pete-the-post-request"
     },
-    private: %Struct.Private{
+    private: %Private{
       loop_id: "SportVideos",
       production_environment: "test"
     }
@@ -52,8 +54,8 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode, invokes lambda with the lambda alias" do
-    struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
-    struct = Belfrage.Struct.add(struct, :private, %{preview_mode: "on"})
+    struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
+    struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
@@ -68,8 +70,8 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
-    struct = Belfrage.Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
-    struct = Belfrage.Struct.add(struct, :private, %{preview_mode: "on"})
+    struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
+    struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
@@ -104,10 +106,10 @@ defmodule BelfrageTest do
   end
 
   @redirect_request_struct %Struct{
-    private: %Struct.Private{
+    private: %Private{
       loop_id: "SportVideos"
     },
-    request: %Struct.Request{
+    request: %Request{
       path: "/_web_core",
       method: "GET",
       country: "gb",
@@ -130,65 +132,45 @@ defmodule BelfrageTest do
 
   describe "with seeded cache" do
     setup do
-      :ets.delete_all_objects(:cache)
+      struct = Struct.add(@get_request_struct, :request, %{path: "/_seeded_cache"})
 
-      request_for_seeded_response = %Struct{
-        private: %Struct.Private{
-          loop_id: "SportVideos",
-          production_environment: "test"
-        },
-        request: %Struct.Request{
-          path: "/_seeded_request",
-          method: "GET",
-          country: "gb",
-          request_id: "simon-the-seeded-request"
-        }
-      }
+      put_into_cache(%Struct{
+        struct
+        | response: %Response{
+            body: :zlib.gzip(~s({"hi": "bonjour"})),
+            headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+            http_status: 200,
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+          }
+      })
 
-      seeded_response = %Belfrage.Struct.Response{
-        body: :zlib.gzip(~s({"hi": "bonjour"})),
-        headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
-        http_status: 200,
-        cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
-        cache_last_updated: Belfrage.Timer.now_ms()
-      }
-
-      Test.Support.Helper.insert_cache_seed(
-        id: Belfrage.RequestHash.generate(request_for_seeded_response).request.request_hash,
-        response: seeded_response,
-        expires_in: :timer.hours(6),
-        last_updated: Belfrage.Timer.now_ms()
-      )
-
-      %{
-        request: request_for_seeded_response
-      }
+      %{struct: struct}
     end
 
-    test "serves plain text from compressed cache when gzip is not accepted", %{request: request_struct} do
-      assert %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
-                 body: ~s({"hi": "bonjour"}),
-                 headers: headers
-               }
-             } = Belfrage.handle(request_struct)
+    test "returns cached response", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{accept_encoding: "gzip, br, deflate"})
 
-      refute Map.has_key?(headers, "content-encoding")
-    end
-
-    test "serves gzip content from compressed cache when gzip is accepted", %{request: request_struct} do
-      struct_accepts_gzip = request_struct |> Struct.add(:request, %{accept_encoding: "gzip, br, deflate"})
-
-      assert %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
+      assert %Struct{
+               response: %Response{
                  body: compressed_body,
                  headers: %{
                    "content-encoding" => "gzip"
                  }
                }
-             } = Belfrage.handle(struct_accepts_gzip)
+             } = Belfrage.handle(struct)
 
       assert_gzipped(compressed_body, ~s({"hi": "bonjour"}))
+    end
+
+    test "decompresses cached response if client doesn't accept compression", %{struct: struct} do
+      assert %Struct{
+               response: %Response{
+                 body: ~s({"hi": "bonjour"}),
+                 headers: headers
+               }
+             } = Belfrage.handle(struct)
+
+      refute Map.has_key?(headers, "content-encoding")
     end
   end
 end

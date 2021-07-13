@@ -1,18 +1,19 @@
 defmodule Belfrage.Cache.StoreTest do
   use ExUnit.Case
+  import Belfrage.Test.CachingHelper
+
   alias Belfrage.{Struct, CacheControl}
 
   use Test.Support.Helper, :mox
 
   setup do
     Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-    :ets.delete_all_objects(:cache)
 
     %{
       struct: %Struct{
         request: %Struct.Request{
           method: "GET",
-          request_hash: "store-test-stubbed-signature"
+          request_hash: unique_cache_key()
         },
         response: %Struct.Response{
           http_status: 200,

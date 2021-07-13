@@ -1,8 +1,6 @@
 defmodule Belfrage.SupervisorTest do
   use ExUnit.Case, async: true
 
-  import Test.Support.Helper, only: [start_test_cache: 2]
-
   import Cachex.Spec, only: [{:limit, 1}]
   import Fixtures.Struct
 
@@ -62,6 +60,18 @@ defmodule Belfrage.SupervisorTest do
         assert {:ok, true} = Cachex.exists?(@test_cache, remaining_cache_key)
       end
     end
+  end
+
+  # This helper starts a new local cache and links it to
+  # the test process. It will terminate when the calling
+  # process (test case or test module) ends.
+  defp start_test_cache(cache, config) do
+    default = %{size: 100, policy: Cachex.Policy.LRW, reclaim: 0.3, options: []}
+
+    %{options: opts, policy: policy, reclaim: reclaim, size: size} = Map.merge(default, config |> Enum.into(%{}))
+
+    limit = {:limit, size, policy, reclaim, opts}
+    start_supervised(%{id: cache, start: {Cachex, :start_link, [cache, [limit: limit]]}})
   end
 
   defp seed_test_cache(test_key_range, cache) do
