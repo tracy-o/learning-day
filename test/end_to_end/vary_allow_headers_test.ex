@@ -24,8 +24,6 @@ defmodule EndToEnd.VaryAllowHeadersTest do
       {:ok, @lambda_response}
     end)
 
-    Belfrage.LoopsSupervisor.kill_all()
-
     on_exit(&clear_cache/0)
   end
 
