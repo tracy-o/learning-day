@@ -210,4 +210,52 @@ defmodule Belfrage.ProcessorTest do
       refute response.body == cached_response.body
     end
   end
+
+  describe "fetch_fallback_from_cache/1" do
+    setup do
+      struct = %Struct{request: %Request{request_hash: unique_cache_key()}, response: %Response{http_status: 200}}
+      response = %Response{body: "Cached response"}
+      put_into_cache(%Struct{struct | response: response})
+      %{struct: struct, cached_response: response}
+    end
+
+    test "does not use cached response as fallback for successful response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      refute response.body == cached_response.body
+    end
+
+    test "uses cached response as fallback for failed response", %{struct: struct, cached_response: cached_response} do
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response.body == cached_response.body
+    end
+
+    test "uses stale cached response as fallback", %{struct: struct, cached_response: cached_response} do
+      make_cached_reponse_stale(struct.request.request_hash)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response.body == cached_response.body
+    end
+  end
+
+  describe "use_fallback?/1" do
+    test "returns true for server errors and most client errors" do
+      assert Processor.use_fallback?(%Response{http_status: 500})
+      assert Processor.use_fallback?(%Response{http_status: 503})
+
+      assert Processor.use_fallback?(%Response{http_status: 400})
+      assert Processor.use_fallback?(%Response{http_status: 403})
+      assert Processor.use_fallback?(%Response{http_status: 429})
+    end
+
+    test "returns false for some client errors" do
+      refute Processor.use_fallback?(%Response{http_status: 404})
+      refute Processor.use_fallback?(%Response{http_status: 410})
+      refute Processor.use_fallback?(%Response{http_status: 451})
+    end
+  end
 end

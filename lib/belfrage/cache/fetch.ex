@@ -1,13 +1,6 @@
 defmodule Belfrage.Cache.Fetch do
   alias Belfrage.Struct
 
-  def fetch_fallback_on_error(struct) do
-    case allow_fallback?(struct) do
-      true -> fetch(struct, [:fresh, :stale])
-      false -> struct
-    end
-  end
-
   def fetch(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
@@ -21,17 +14,5 @@ defmodule Belfrage.Cache.Fetch do
       {:ok, :content_not_found} ->
         struct
     end
-  end
-
-  defp allow_fallback?(struct) do
-    server_error?(struct) or valid_fallback_4xx_status?(struct)
-  end
-
-  defp valid_fallback_4xx_status?(struct) do
-    struct.response.http_status >= 400 and not Enum.member?([404, 410, 451], struct.response.http_status)
-  end
-
-  defp server_error?(struct) do
-    struct.response.http_status >= 500
   end
 end

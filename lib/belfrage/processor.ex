@@ -77,7 +77,19 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store()
-    |> Cache.fetch_fallback_on_error()
+    |> fetch_fallback_from_cache()
+  end
+
+  def fetch_fallback_from_cache(struct = %Struct{}) do
+    if use_fallback?(struct.response) do
+      Cache.fetch(struct, [:fresh, :stale])
+    else
+      struct
+    end
+  end
+
+  def use_fallback?(%Response{http_status: status}) do
+    status >= 400 && status not in [404, 410, 451]
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do
