@@ -46,8 +46,7 @@ defmodule BelfrageWeb.StructAdapter do
         loop_id: loop_id,
         overrides: conn.private.overrides,
         production_environment: conn.private.production_environment,
-        preview_mode: conn.private.preview_mode,
-        personalisation: personalisation_enabled?(loop_id)
+        preview_mode: conn.private.preview_mode
       }
     }
   end
@@ -73,15 +72,6 @@ defmodule BelfrageWeb.StructAdapter do
     case Plug.Conn.get_req_header(conn, "accept-encoding") do
       [accept_encoding] -> accept_encoding
       [] -> nil
-    end
-  end
-
-  # For now, personalisation is not supported for cascade routes
-  defp personalisation_enabled?(loop_id) do
-    if loop_id == "redirect" || is_list(loop_id) do
-      false
-    else
-      Belfrage.RouteSpec.Personalisation.personalisation_enabled?(loop_id)
     end
   end
 end

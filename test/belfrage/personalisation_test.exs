@@ -94,10 +94,9 @@ defmodule Belfrage.RouteSpec.PersonalisationTest do
       |> Map.put(:cookie_allowlist, ["cookie1", "cookie2"])
       |> Map.put(:headers_allowlist, ["header1"])
 
+    result = Personalisation.maybe_interpolate_personalisation(route_spec)
 
-      result = Personalisation.maybe_interpolate_personalisation(route_spec)
-
-      assert result[:cookie_allowlist] == ["cookie1", "cookie2", "ckns_atkn", "ckns_id"]
-      assert result[:headers_allowlist] == ["header1", "x-id-oidc-signedin"]
+    assert result[:cookie_allowlist] == ["cookie1", "cookie2", "ckns_atkn", "ckns_id"]
+    assert result[:headers_allowlist] == ["header1", "x-id-oidc-signedin"]
   end
 end

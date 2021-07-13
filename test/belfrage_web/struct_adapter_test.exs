@@ -198,20 +198,4 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
   end
-
-  test "adds personalisation: 'true' to struct.private" do
-    conn =
-      conn(:get, "/")
-      |> build_request()
-
-    assert StructAdapter.adapt(conn, SomePersonalisedLoop).private.personalisation == true
-  end
-
-  test "adds personalisation: 'false' to struct.private" do
-    conn =
-      conn(:get, "/")
-      |> build_request()
-
-    assert StructAdapter.adapt(conn, SomeLoop).private.personalisation == false
-  end
 end

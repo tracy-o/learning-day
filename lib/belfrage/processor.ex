@@ -9,7 +9,8 @@ defmodule Belfrage.Processor do
     Cache,
     ResponseTransformers,
     Allowlist,
-    Event
+    Event,
+    RouteSpec.Personalisation
   }
 
   def get_loop(struct = %Struct{}) do
@@ -19,6 +20,10 @@ defmodule Belfrage.Processor do
       {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
       _ -> loop_state_failure()
     end
+  end
+
+  def personalisation(struct = %Struct{}) do
+    Struct.add(struct, :private, %{personalised: Personalisation.personalisation_enabled?(struct.private.loop_id)})
   end
 
   def allowlists(struct) do

@@ -59,7 +59,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
     }
@@ -165,7 +165,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.co.uk"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
@@ -190,7 +190,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.co.uk"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
@@ -223,7 +223,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.co.uk"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
@@ -271,7 +271,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.co.uk"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
@@ -338,7 +338,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.com"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
@@ -373,7 +373,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           host: "bbc.co.uk"
         },
         private: %Struct.Private{
-          personalisation: true
+          personalised: true
         }
       }
 
