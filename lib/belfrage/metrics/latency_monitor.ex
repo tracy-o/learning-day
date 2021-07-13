@@ -8,6 +8,8 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     :early_response_received,
     :origin_request_sent,
     :origin_response_received,
+    :fallback_request_sent,
+    :fallback_response_received,
     :response_sent
   ]
 
@@ -97,7 +99,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     end
   end
 
-  def request_latency(checkpoints) do
+  defp request_latency(checkpoints) do
     start = checkpoints[:request_received]
     finish = checkpoints[:early_response_received] || checkpoints[:origin_request_sent]
 
@@ -106,12 +108,23 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     end
   end
 
-  def response_latency(checkpoints) do
+  defp response_latency(checkpoints) do
     start = checkpoints[:early_response_received] || checkpoints[:origin_response_received]
     finish = checkpoints[:response_sent]
 
     if start && finish do
+      finish - start - fallback_latency(checkpoints)
+    end
+  end
+
+  defp fallback_latency(checkpoints) do
+    start = checkpoints[:fallback_request_sent]
+    finish = checkpoints[:fallback_response_received]
+
+    if start && finish do
       finish - start
+    else
+      0
     end
   end
 
