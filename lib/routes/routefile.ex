@@ -708,6 +708,10 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
+  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy", examples: ["/programmes/w172vkw6f1ffv5f/broadcasts"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
   handle "/programmes/:pid/children.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/children.json"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
