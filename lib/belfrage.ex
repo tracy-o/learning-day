@@ -19,6 +19,7 @@ defmodule Belfrage do
     struct
     |> Processor.get_loop()
     |> Processor.allowlists()
+    |> Processor.personalisation()
     |> Processor.generate_request_hash()
   end
 

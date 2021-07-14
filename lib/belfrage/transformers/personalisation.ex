@@ -8,6 +8,11 @@ defmodule Belfrage.Transformers.Personalisation do
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
+  def call(rest, struct = %Struct{private: %Struct.Private{personalised: false}}) do
+    then(rest, struct)
+  end
+
+  @impl true
   def call(
         rest,
         struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}

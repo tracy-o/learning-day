@@ -5,16 +5,9 @@ defmodule Routes.Specs.ParticipationTestFollow do
       platform: Webcore,
       query_params_allowlist: ["page"],
       pipeline: pipeline(production_env),
-      cookie_allowlist: cookie_allowlist(production_env),
-      headers_allowlist: headers_allowlist(production_env)
+      personalisation: "test_only"
     }
   end
-
-  defp cookie_allowlist("live"), do: []
-  defp cookie_allowlist(_production_env), do: ["ckns_atkn", "ckns_id"]
-
-  defp headers_allowlist("live"), do: []
-  defp headers_allowlist(_production_env), do: ["x-id-oidc-signedin"]
 
   defp pipeline("live") do
     ["HTTPredirect", "TrailingSlashRedirector", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]

@@ -4,8 +4,7 @@ defmodule Routes.Specs.FullStackHomePageTest do
       owner: "fabl@onebbc.onmicrosoft.com",
       platform: Webcore,
       pipeline: pipeline(production_env),
-      cookie_allowlist: ["ckns_atkn", "ckns_id"],
-      headers_allowlist: ["x-id-oidc-signedin"]
+      personalisation: "test_only"
     }
   end
 

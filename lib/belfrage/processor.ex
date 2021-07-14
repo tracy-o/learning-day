@@ -9,7 +9,8 @@ defmodule Belfrage.Processor do
     Cache,
     ResponseTransformers,
     Allowlist,
-    Event
+    Event,
+    RouteSpec.Personalisation
   }
 
   alias Struct.{Response, Private}
@@ -21,6 +22,10 @@ defmodule Belfrage.Processor do
       {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
       _ -> loop_state_failure()
     end
+  end
+
+  def personalisation(struct = %Struct{}) do
+    Struct.add(struct, :private, %{personalised: Personalisation.enabled?(struct.private.loop_id)})
   end
 
   def allowlists(struct) do
@@ -35,7 +40,7 @@ defmodule Belfrage.Processor do
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalisation do
+    if private.personalised do
       struct
     else
       Cache.fetch(struct, [:fresh])

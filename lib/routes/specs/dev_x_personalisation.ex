@@ -5,8 +5,7 @@ defmodule Routes.Specs.DevXPersonalisation do
       platform: Webcore,
       query_params_allowlist: ["personalisationMode"],
       pipeline: pipeline(production_env),
-      cookie_allowlist: ["ckns_atkn", "ckns_id"],
-      headers_allowlist: ["x-id-oidc-signedin"]
+      personalisation: "test_only"
     }
   end
 
