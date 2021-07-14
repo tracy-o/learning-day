@@ -668,17 +668,17 @@ defmodule Routes.Routefile do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
+  handle "/programmes/formats/:category", using: "Programmes", examples: ["/programmes/formats/animation"]
+
+  handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
+
   handle "/programmes/genres/:category/:subcategory/:slice", using: "Programmes", examples: ["/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all"] do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/formats/:category", using: "Programmes", examples: ["/programmes/formats/animation"]
-
   handle "/programmes/genres/:category/:subcategory_or_slice", using: "Programmes", examples: ["/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player"]
 
   handle "/programmes/genres/:category", using: "Programmes", examples: ["/programmes/genres/childrens"]
-
-  handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
 
   handle "/programmes/genres", using: "Programmes", examples: ["/programmes/genres"]
 
