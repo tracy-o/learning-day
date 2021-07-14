@@ -40,7 +40,7 @@ defmodule Belfrage.Processor do
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalisation do
+    if private.personalised do
       struct
     else
       Cache.fetch(struct, [:fresh])
