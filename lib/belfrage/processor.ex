@@ -25,7 +25,7 @@ defmodule Belfrage.Processor do
   end
 
   def personalisation(struct = %Struct{}) do
-    Struct.add(struct, :private, %{personalised: Personalisation.personalisation_enabled?(struct.private.loop_id)})
+    Struct.add(struct, :private, %{personalised: Personalisation.enabled?(struct.private.loop_id)})
   end
 
   def allowlists(struct) do

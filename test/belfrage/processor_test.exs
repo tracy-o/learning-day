@@ -8,6 +8,15 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
 
+  defmodule Module.concat([Routes, Specs, SomePersonalisedLoop]) do
+    def specs do
+      %{
+        platform: Webcore,
+        personalisation: "test_only"
+      }
+    end
+  end
+
   describe "Processor.get_loop/1" do
     @struct %Struct{private: %Private{loop_id: "SportVideos"}}
 
@@ -196,7 +205,7 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
-      struct = Struct.add(struct, :private, %{personalisation: true})
+      struct = Struct.add(struct, :private, %{personalised: true})
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
     end
