@@ -664,17 +664,23 @@ defmodule Routes.Routefile do
 
   handle "/programmes/a-z", using: "Programmes", examples: ["/programmes/a-z"]
 
-  handle "/programmes/formats/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/formats/animation/all", "/programmes/formats/animation/player"] do
+  handle "/programmes/formats/:category/:slice", using: "Programmes", examples: ["/programmes/formats/animation/all", "/programmes/formats/animation/player"] do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/genres/:category_hierarchy/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do
+  handle "/programmes/genres/:category/:subcategory/:slice", using: "Programmes", examples: ["/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all"] do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/formats/:category_hierarchy", using: "Programmes", examples: ["/programmes/formats/animation"]
+  handle "/programmes/genres/:category/:slice", using: "Programmes", examples: ["/programmes/genres/childrens/all", "/programmes/genres/childrens/player"] do
+    return_404 if: !Enum.member?(["all", "player"], slice)
+  end
 
-  handle "/programmes/genres/:category_hierarchy", using: "Programmes", examples: ["/programmes/genres/childrens"]
+  handle "/programmes/formats/:category", using: "Programmes", examples: ["/programmes/formats/animation"]
+
+  handle "/programmes/genres/:category/:subcategory", using: "Programmes", examples: ["/programmes/genres/comedy/sitcoms"]
+
+  handle "/programmes/genres/:category", using: "Programmes", examples: ["/programmes/genres/childrens"]
 
   handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
 
