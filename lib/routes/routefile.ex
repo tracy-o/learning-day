@@ -686,6 +686,8 @@ defmodule Routes.Routefile do
     return_404 if: !Enum.member?(["audio", "video"], slice)
   end
 
+  handle "/programmes/topics/:topic", using: "Programmes", examples: ["/programmes/topics/Performers_of_Sufi_music"]
+
   handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
 
   handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
