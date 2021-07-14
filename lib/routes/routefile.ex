@@ -620,11 +620,11 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/articles/:key/:slug", using: "Programmes", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
+  handle "/programmes/articles/:key/:slug", using: "ProgrammesArticle", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/articles/:key", using: "Programmes", examples: ["/programmes/articles/yHvY1qp0QstSmj6NKbJlKk"] do
+  handle "/programmes/articles/:key", using: "ProgrammesArticle", examples: ["/programmes/articles/yHvY1qp0QstSmj6NKbJlKk"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
@@ -696,7 +696,7 @@ defmodule Routes.Routefile do
 
   handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
 
-  handle "/programmes/:pid/articles", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/articles"] do
+  handle "/programmes/:pid/articles", using: "ProgrammesArticle", examples: ["/programmes/b006m8dq/articles"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
