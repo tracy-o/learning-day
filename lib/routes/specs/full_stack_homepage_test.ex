@@ -4,7 +4,7 @@ defmodule Routes.Specs.FullStackHomePageTest do
       owner: "fabl@onebbc.onmicrosoft.com",
       platform: Webcore,
       pipeline: pipeline(production_env),
-      personalisation: "test_only"
+      personalisation: "on"
     }
   end
 
