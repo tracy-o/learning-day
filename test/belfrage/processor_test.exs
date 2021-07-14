@@ -172,13 +172,13 @@ defmodule Belfrage.ProcessorTest do
     test "adds personalised: true to a personalised route" do
       struct = %Struct{private: %Struct.Private{loop_id: SomePersonalisedLoop}}
 
-      assert true == Processor.personalisation(struct).private.personalised
+      assert Processor.personalisation(struct).private.personalised
     end
 
     test "adds personalised: false to a non personalised route" do
       struct = %Struct{private: %Struct.Private{loop_id: SomeLoop}}
 
-      assert false == Processor.personalisation(struct).private.personalised
+      refute Processor.personalisation(struct).private.personalised
     end
   end
 
