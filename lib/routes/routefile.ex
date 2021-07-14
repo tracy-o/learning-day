@@ -624,6 +624,10 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
+  handle "/programmes/articles/:key", using: "Programmes", examples: ["/programmes/articles/yHvY1qp0QstSmj6NKbJlKk"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
   handle "/programmes/a-z/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/current"]
 
   handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/by/b/current"] do
