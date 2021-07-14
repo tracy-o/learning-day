@@ -893,7 +893,7 @@ defmodule Routes.Routefile do
 
   # Sport
 
-  handle "/sport/0/mhqu7270m50e", using: "FullStackHomePageTest", only_on: "test", examples: []
+  handle "/sport/0/mhqu7270m50e", using: "FullStackHomePageTest", examples: []
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
