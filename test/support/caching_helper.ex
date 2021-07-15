@@ -2,6 +2,8 @@ defmodule Belfrage.Test.CachingHelper do
   alias Belfrage.{Struct, CacheControl, Timer}
   alias Belfrage.Struct.Response
 
+  @cache_name :cache
+
   @doc """
   Using this will ensure that the caching key is unique to the test and prevent
   clashes with other tests
@@ -22,8 +24,9 @@ defmodule Belfrage.Test.CachingHelper do
   This clears the entire cache, so can affect other tests if called from an
   async test. Consider using unique cache keys instead if possible.
   """
-  def clear_cache(name \\ :cache) do
-    Cachex.clear(name)
+  def clear_cache(_ \\ nil) do
+    Cachex.clear(@cache_name)
+    :ok
   end
 
   @doc """
@@ -43,7 +46,7 @@ defmodule Belfrage.Test.CachingHelper do
       |> Map.put(:cache_last_updated, response.cache_last_updated || Timer.now_ms())
       |> Map.put(:cache_directive, default_cache_directive(response.cache_directive))
 
-    {:ok, _} = Cachex.put(:cache, key, response)
+    {:ok, _} = Cachex.put(@cache_name, key, response)
 
     response
   end
@@ -60,7 +63,7 @@ defmodule Belfrage.Test.CachingHelper do
   Updates the parameters of the response cached under the passed key to make it stale
   """
   def make_cached_reponse_stale(key) do
-    {:ok, response} = Cachex.get(:cache, key)
+    {:ok, response} = Cachex.get(@cache_name, key)
     put_into_cache(key, %Response{response | cache_last_updated: Timer.now_ms() - 60})
   end
 end

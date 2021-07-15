@@ -2,12 +2,15 @@ defmodule EndToEnd.PersonalisationTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.LambdaMock
   alias Fixtures.AuthToken
 
   @moduletag :end_to_end
+
+  setup :clear_cache
 
   @response %{
     "headers" => %{
