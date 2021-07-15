@@ -76,9 +76,15 @@ defmodule BelfrageWeb.View do
     )
   end
 
-  defp internal_response(conn, status, struct) do
-    response = BelfrageWeb.View.InternalResponse.new(conn, status, struct.private.personalised)
+  def cacheable?(struct = %Struct{}) do
+    case struct.request.raw_headers do
+      %{"x-id-oidc-signedin" => "1"} -> !struct.private.personalised
+      _ -> true
+    end
+  end
 
+  defp internal_response(conn, status, struct) do
+    response = BelfrageWeb.View.InternalResponse.new(conn, status, cacheable?(struct))
     render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
