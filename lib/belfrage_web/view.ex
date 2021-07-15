@@ -71,13 +71,14 @@ defmodule BelfrageWeb.View do
 
   defp internal_response(conn, status) do
     render(
-      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)},
+      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status, false)},
       conn
     )
   end
 
   defp internal_response(conn, status, struct) do
-    response = BelfrageWeb.View.InternalResponse.new(conn, status)
+    response = BelfrageWeb.View.InternalResponse.new(conn, status, struct.private.personalised)
+
     render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
