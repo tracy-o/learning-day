@@ -82,10 +82,14 @@ defmodule EndToEnd.PersonalisationTest do
     # Simulate origin failure
     stub_origin_request(response: {:error, :boom})
 
-    request
-    |> personalise_request()
-    |> make_request()
-    |> assert_successful_response()
+    response =
+      request
+      |> personalise_request()
+      |> make_request()
+      |> assert_successful_response()
+
+    [cache_control] = get_resp_header(response, "cache-control")
+    assert cache_control == "private"
   end
 
   defp expect_origin_request(fun, opts \\ []) do

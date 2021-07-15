@@ -194,8 +194,8 @@ defmodule Belfrage.ProcessorTest do
   describe "fetch_early_response_from_cache/1" do
     setup do
       struct = %Struct{request: %Request{request_hash: unique_cache_key()}}
-      response = %Response{body: "Cached response", cache_directive: %{max_age: 60}}
-      put_into_cache(%Struct{struct | response: response})
+      response = %Response{body: "Cached response"}
+      response = put_into_cache(%Struct{struct | response: response})
       %{struct: struct, cached_response: response}
     end
 
@@ -208,6 +208,66 @@ defmodule Belfrage.ProcessorTest do
       struct = Struct.add(struct, :private, %{personalised: true})
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
+    end
+  end
+
+  describe "fetch_fallback_from_cache/1" do
+    setup do
+      struct = %Struct{request: %Request{request_hash: unique_cache_key()}, response: %Response{http_status: 200}}
+      response = %Response{http_status: 200, body: "Cached response"}
+      response = put_into_cache(%Struct{struct | response: response})
+      %{struct: struct, cached_response: response}
+    end
+
+    test "does not use cached response as fallback for successful response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      refute response.body == cached_response.body
+    end
+
+    test "uses cached response as fallback for failed response", %{struct: struct, cached_response: cached_response} do
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response == cached_response
+    end
+
+    test "uses stale cached response as fallback", %{struct: struct} do
+      cached_response = make_cached_reponse_stale(struct.request.request_hash)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response == cached_response
+    end
+
+    test "makes the response private if request is personalised", %{struct: struct, cached_response: cached_response} do
+      struct =
+        struct
+        |> Struct.add(:response, %{http_status: 500})
+        |> Struct.add(:private, %{personalised: true})
+        |> Struct.add(:user_session, %{authenticated: true})
+
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response.body == cached_response.body
+      assert response.cache_directive.cacheability == "private"
+    end
+  end
+
+  describe "use_fallback?/1" do
+    test "returns true for server errors and most client errors" do
+      assert Processor.use_fallback?(%Response{http_status: 500})
+      assert Processor.use_fallback?(%Response{http_status: 503})
+
+      assert Processor.use_fallback?(%Response{http_status: 400})
+      assert Processor.use_fallback?(%Response{http_status: 403})
+      assert Processor.use_fallback?(%Response{http_status: 429})
+    end
+
+    test "returns false for some client errors" do
+      refute Processor.use_fallback?(%Response{http_status: 404})
+      refute Processor.use_fallback?(%Response{http_status: 410})
+      refute Processor.use_fallback?(%Response{http_status: 451})
     end
   end
 end

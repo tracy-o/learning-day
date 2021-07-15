@@ -10,10 +10,11 @@ defmodule Belfrage.Processor do
     ResponseTransformers,
     Allowlist,
     Event,
-    RouteSpec.Personalisation
+    RouteSpec.Personalisation,
+    CacheControl
   }
 
-  alias Struct.{Response, Private}
+  alias Struct.{Response, Private, UserSession}
 
   def get_loop(struct = %Struct{}) do
     LoopsRegistry.find_or_start(struct)
@@ -77,7 +78,35 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
     |> Cache.store()
-    |> Cache.fetch_fallback_on_error()
+    |> fetch_fallback_from_cache()
+  end
+
+  def fetch_fallback_from_cache(struct = %Struct{}) do
+    if use_fallback?(struct.response) do
+      struct
+      |> Cache.fetch([:fresh, :stale])
+      |> make_fallback_private_if_personalised_request()
+    else
+      struct
+    end
+  end
+
+  def use_fallback?(%Response{http_status: status}) do
+    status >= 400 && status not in [404, 410, 451]
+  end
+
+  defp make_fallback_private_if_personalised_request(
+         struct = %Struct{
+           response: response = %Response{},
+           private: private = %Private{},
+           user_session: user_session = %UserSession{}
+         }
+       ) do
+    if response.http_status == 200 && private.personalised && user_session.authenticated do
+      Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
+    else
+      struct
+    end
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do
