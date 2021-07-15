@@ -21,7 +21,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
                http_status: status
-             } == InternalResponse.new(conn, status, false)
+             } == InternalResponse.new(conn, status, true)
     end
 
     test "when accept not set, and status code does not have a BBC error page" do
@@ -38,7 +38,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/html; charset=utf-8"},
                http_status: status
-             } == InternalResponse.new(conn, status, false)
+             } == InternalResponse.new(conn, status, true)
     end
 
     test "when accept is application/json" do
@@ -56,7 +56,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                fallback: false,
                headers: %{"content-type" => "application/json"},
                http_status: status
-             } == InternalResponse.new(conn, status, false)
+             } == InternalResponse.new(conn, status, true)
     end
 
     test "when accept is text/plain" do
@@ -74,7 +74,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                fallback: false,
                headers: %{"content-type" => "text/plain"},
                http_status: status
-             } == InternalResponse.new(conn, status, false)
+             } == InternalResponse.new(conn, status, true)
     end
   end
 
@@ -90,7 +90,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  stale_if_error: 90,
                  stale_while_revalidate: 60
                }
-             } = InternalResponse.new(conn, status, false)
+             } = InternalResponse.new(conn, status, true)
     end
 
     test "server error cacheability" do
@@ -103,7 +103,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  max_age: 5,
                  stale_while_revalidate: 15
                }
-             } = InternalResponse.new(conn, status, false)
+             } = InternalResponse.new(conn, status, true)
     end
 
     test "redirect cacheability" do
@@ -116,10 +116,10 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  max_age: 60,
                  stale_while_revalidate: 60
                }
-             } = InternalResponse.new(conn, status, false)
+             } = InternalResponse.new(conn, status, true)
     end
 
-    test "cache-control is private for 500s with personalised: true and signed in" do
+    test "cache-control is private for response with false cacheability" do
       conn = conn(:get, "/")
       status = 500
 
@@ -129,7 +129,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
                  max_age: 5,
                  stale_while_revalidate: 15
                }
-             } = InternalResponse.new(conn, status, true)
+             } = InternalResponse.new(conn, status, false)
     end
   end
 end

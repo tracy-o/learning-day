@@ -289,38 +289,38 @@ defmodule BelfrageWeb.ViewTest do
 
   describe "cacheable?/1" do
     
-    test "returns false when user is signed in and route is personalised" do
+    test "returns false when user is authenticated and route is personalised" do
       struct = 
       %Struct{}
       |> Struct.add(:private, %{personalised: true})
-      |> Struct.add(:request, %{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+      |> Struct.add(:user_session, %{authenticated: true})
 
       refute View.cacheable?(struct)
     end
 
-    test "returns true when user is signed in and route is not personalised" do
+    test "returns true when user is authenticated and route is not personalised" do
       struct = 
       %Struct{}
       |> Struct.add(:private, %{personalised: false})
-      |> Struct.add(:request, %{headers: %{"x-id-oidc-signedin" => "1"}})
+      |> Struct.add(:user_session, %{authenticated: true})
 
       assert View.cacheable?(struct)
     end
 
-    test "returns true when user is not signed in and route is personalised" do
+    test "returns true when user is not authenticated and route is personalised" do
       struct = 
       %Struct{}
       |> Struct.add(:private, %{personalised: true})
-      |> Struct.add(:request, %{headers: %{"x-id-oidc-signedin" => "0"}})
+      |> Struct.add(:user_session, %{authenticated: false})
 
       assert View.cacheable?(struct)
     end
 
-    test "returns true when user is not signed in and route is not personalised" do
+    test "returns true when user is not authenticated and route is not personalised" do
       struct = 
       %Struct{}
       |> Struct.add(:private, %{personalised: false})
-      |> Struct.add(:request, %{headers: %{"x-id-oidc-signedin" => "0"}})
+      |> Struct.add(:user_session, %{authenticated: false})
 
       assert View.cacheable?(struct)
     end

@@ -8,9 +8,9 @@ defmodule BelfrageWeb.View.InternalResponse do
 
   @redirect_http_status Application.get_env(:belfrage, :redirect_statuses)
 
-  def new(conn, status, personalised) do
+  def new(conn, status, cacheable) do
     %Response{http_status: status}
-    |> put_cache_directive(personalised)
+    |> put_cache_directive(cacheable)
     |> put_internal_response_headers(conn)
     |> put_body()
   end
@@ -37,9 +37,9 @@ defmodule BelfrageWeb.View.InternalResponse do
   defp put_cache_directive(response, cacheable) do
     cacheability =
       if cacheable do
-        "private"
-      else
         "public"
+      else
+        "private"
       end
 
     Map.put(response, :cache_directive, %Belfrage.CacheControl{

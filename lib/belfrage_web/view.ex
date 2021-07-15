@@ -69,18 +69,15 @@ defmodule BelfrageWeb.View do
     internal_server_error(conn)
   end
 
-  defp internal_response(conn, status) do
-    render(
-      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status, false)},
-      conn
-    )
+  def cacheable?(%Struct{user_session: user_session = %Struct.UserSession{}, private: private = %Struct.Private{}}) do
+    !(private.personalised && user_session.authenticated)
   end
 
-  def cacheable?(struct = %Struct{}) do
-    case struct.request.raw_headers do
-      %{"x-id-oidc-signedin" => "1"} -> !struct.private.personalised
-      _ -> true
-    end
+  defp internal_response(conn, status) do
+    render(
+      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status, true)},
+      conn
+    )
   end
 
   defp internal_response(conn, status, struct) do
