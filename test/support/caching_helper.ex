@@ -43,7 +43,9 @@ defmodule Belfrage.Test.CachingHelper do
       |> Map.put(:cache_last_updated, response.cache_last_updated || Timer.now_ms())
       |> Map.put(:cache_directive, default_cache_directive(response.cache_directive))
 
-    Cachex.put(:cache, key, response)
+    {:ok, _} = Cachex.put(:cache, key, response)
+
+    response
   end
 
   defp default_cache_directive(cache_directive) do
