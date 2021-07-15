@@ -27,7 +27,7 @@ defmodule Belfrage.Test.CachingHelper do
   Puts the struct's response into the cache under the `request_hash` of the struct's request.
   """
   def put_into_cache(struct = %Belfrage.Struct{}) do
-    request_hash = struct.request.request_hash || Belfrage.RequestHash.generate(struct).request.request_hash
+    request_hash = struct.request.request_hash || Belfrage.RequestHash.generate(struct)
     put_into_cache(request_hash, struct.response)
   end
 
