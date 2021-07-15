@@ -4,6 +4,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
 
   alias Belfrage.Authentication.SessionState
   alias Belfrage.Authentication.Jwk
+  alias Belfrage.Struct.Request
 
   @token Fixtures.AuthToken.valid_access_token()
 
@@ -12,6 +13,19 @@ defmodule Belfrage.Authentication.SessionStateTest do
     start_supervised!(Jwk)
 
     :ok
+  end
+
+  describe "authenticated?/1" do
+    test "returns true if ckns_id cookie is set" do
+      refute SessionState.authenticated?(%Request{})
+      assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}})
+    end
+
+    test "returns true if x-id-oidc-signedin header is set to '1'" do
+      refute SessionState.authenticated?(%Request{})
+      refute SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "0"}})
+      assert SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+    end
   end
 
   describe "build/3  function" do

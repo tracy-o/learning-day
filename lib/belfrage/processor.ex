@@ -15,6 +15,7 @@ defmodule Belfrage.Processor do
   }
 
   alias Struct.{Response, Private, UserSession}
+  alias Belfrage.Authentication.SessionState
 
   def get_loop(struct = %Struct{}) do
     LoopsRegistry.find_or_start(struct)
@@ -41,7 +42,7 @@ defmodule Belfrage.Processor do
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalised do
+    if private.personalised && SessionState.authenticated?(struct.request) do
       struct
     else
       Cache.fetch(struct, [:fresh])

@@ -1,5 +1,10 @@
 defmodule Belfrage.Authentication.SessionState do
+  alias Belfrage.Struct.Request
   alias Belfrage.Authentication.Token
+
+  def authenticated?(request = %Request{}) do
+    request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1"
+  end
 
   def build(cookies, headers, path) do
     token = cookies["ckns_atkn"]
