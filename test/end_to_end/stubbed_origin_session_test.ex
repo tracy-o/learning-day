@@ -2,15 +2,11 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.PersonalisationHelper
+
   alias BelfrageWeb.Router
 
   @moduletag :end_to_end
-
-  setup do
-    %{
-      valid_access_token: Fixtures.AuthToken.valid_access_token()
-    }
-  end
 
   test "when no token provided" do
     response_conn = conn(:get, "/my/session") |> Router.call([])
@@ -20,14 +16,11 @@ defmodule EndToEnd.StubbedOriginSessionTest do
     assert %{"authenticated" => false, "session_token" => nil, "valid_session" => false} == Jason.decode!(resp_body)
   end
 
-  test "valid access and identity token", %{
-    valid_access_token: access_token
-  } do
+  test "valid access and identity token" do
     response_conn =
       conn(:get, "/my/session")
       |> Map.put(:host, "www.bbc.co.uk")
-      |> put_req_header("cookie", "ckns_atkn=#{access_token}")
-      |> put_req_header("x-id-oidc-signedin", "1")
+      |> personalise_request()
       |> Router.call([])
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)

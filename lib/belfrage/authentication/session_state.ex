@@ -1,18 +1,23 @@
 defmodule Belfrage.Authentication.SessionState do
+  alias Belfrage.Struct.Request
   alias Belfrage.Authentication.Token
 
-  def build(cookies, headers, path) do
-    token = cookies["ckns_atkn"]
-    signed_in = cookies["ckns_id"] || headers["x-id-oidc-signedin"] == "1"
+  def authenticated?(request = %Request{}) do
+    request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1"
+  end
+
+  def build(request = %Request{}) do
+    token = request.cookies["ckns_atkn"]
+    authenticated = authenticated?(request)
 
     cond do
-      path == "/full-stack-test/a/ft" && token == "FAKETOKEN" ->
+      request.path == "/full-stack-test/a/ft" && token == "FAKETOKEN" ->
         build_fake_session(token)
 
-      signed_in && token ->
+      authenticated && token ->
         build_session(token)
 
-      signed_in ->
+      authenticated ->
         build_invalid_session()
 
       true ->

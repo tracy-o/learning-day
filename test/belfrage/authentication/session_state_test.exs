@@ -4,23 +4,39 @@ defmodule Belfrage.Authentication.SessionStateTest do
 
   alias Belfrage.Authentication.SessionState
   alias Belfrage.Authentication.Jwk
+  alias Belfrage.Struct.Request
 
   @token Fixtures.AuthToken.valid_access_token()
 
   setup do
-    :set_mox_global
     start_supervised!(Jwk)
-
     :ok
   end
 
-  describe "build/3  function" do
+  describe "authenticated?/1" do
+    test "returns true if ckns_id cookie is set" do
+      refute SessionState.authenticated?(%Request{})
+      assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}})
+    end
+
+    test "returns true if x-id-oidc-signedin header is set to '1'" do
+      refute SessionState.authenticated?(%Request{})
+      refute SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "0"}})
+      assert SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+    end
+  end
+
+  describe "build/1" do
     test "returns authenticated state when 'ckns_atkn' cookie set, 'x-id-oidc-signedin' header is 1" do
-      cookies = %{"ckns_atkn" => @token}
-      headers = %{"x-id-oidc-signedin" => "1"}
+      request = %Request{
+        path: "/",
+        cookies: %{"ckns_atkn" => @token},
+        raw_headers: %{"x-id-oidc-signedin" => "1"}
+      }
+
       user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: @token,
                authenticated: true,
@@ -30,11 +46,14 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns authenticated state when 'ckns_atkn' and 'ckns_id' cookies are set" do
-      cookies = %{"ckns_atkn" => @token, "ckns_id" => "1234"}
-      headers = %{}
+      request = %Request{
+        path: "/",
+        cookies: %{"ckns_atkn" => @token, "ckns_id" => "1234"}
+      }
+
       user_attributes = %{age_bracket: "o18", allow_personalisation: true}
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: @token,
                authenticated: true,
@@ -44,10 +63,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns unauthenticated state when only 'ckns_atkn' cookie set" do
-      cookies = %{"ckns_atkn" => @token}
-      headers = %{}
+      request = %Request{
+        path: "/",
+        cookies: %{"ckns_atkn" => @token}
+      }
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: false,
@@ -57,10 +78,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns authenticated only state when 'ckns_id' cookie only is set" do
-      cookies = %{"ckns_id" => "1234"}
-      headers = %{}
+      request = %Request{
+        path: "/",
+        cookies: %{"ckns_id" => "1234"}
+      }
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: true,
@@ -70,10 +93,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns authenticated only state when 'ckns_atkn' cookie not set, 'x-id-oidc-signedin' header is 1" do
-      cookies = %{}
-      headers = %{"x-id-oidc-signedin" => "1"}
+      request = %Request{
+        path: "/",
+        raw_headers: %{"x-id-oidc-signedin" => "1"}
+      }
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: true,
@@ -83,10 +108,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns unauthenticated state when 'ckns_atkn' cookie not set, 'x-id-oidc-signedin' header is 0" do
-      cookies = %{}
-      headers = %{"x-id-oidc-signedin" => "0"}
+      request = %Request{
+        path: "/",
+        raw_headers: %{"x-id-oidc-signedin" => "0"}
+      }
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: false,
@@ -96,10 +123,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns unauthenticated state when both 'ckns_atkn' cookie and 'x-id-oidc-signedin' header not set" do
-      cookies = %{}
-      headers = %{}
-
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(%Request{path: "/"}) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: false,
@@ -109,10 +133,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns authenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is /full-stack-test/a/ft" do
-      cookies = %{"ckns_atkn" => "FAKETOKEN"}
-      headers = %{}
+      request = %Request{
+        path: "/full-stack-test/a/ft",
+        cookies: %{"ckns_atkn" => "FAKETOKEN"}
+      }
 
-      assert SessionState.build(cookies, headers, "/full-stack-test/a/ft") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: "FAKETOKEN",
                authenticated: true,
@@ -122,10 +148,12 @@ defmodule Belfrage.Authentication.SessionStateTest do
     end
 
     test "returns unauthenticated state when 'ckns_atkn' cookie set to FAKETOKEN and path is NOT /full-stack-test/a/ft" do
-      cookies = %{"ckns_atkn" => "FAKETOKEN"}
-      headers = %{}
+      request = %Request{
+        path: "/",
+        cookies: %{"ckns_atkn" => "FAKETOKEN"}
+      }
 
-      assert SessionState.build(cookies, headers, "/") == %{
+      assert SessionState.build(request) == %{
                authentication_env: "int",
                session_token: nil,
                authenticated: false,

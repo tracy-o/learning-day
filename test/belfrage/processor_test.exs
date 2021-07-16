@@ -3,7 +3,7 @@ defmodule Belfrage.ProcessorTest do
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
-  import Belfrage.Test.CachingHelper
+  import Belfrage.Test.{CachingHelper, PersonalisationHelper}
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
@@ -204,8 +204,21 @@ defmodule Belfrage.ProcessorTest do
       assert response.body == cached_response.body
     end
 
-    test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
+    test "uses cached response for unauthenticated requests to personalised routes", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
       struct = Struct.add(struct, :private, %{personalised: true})
+      %{response: response} = Processor.fetch_early_response_from_cache(struct)
+      assert response.body == cached_response.body
+    end
+
+    test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
+      struct =
+        struct
+        |> Struct.add(:private, %{personalised: true})
+        |> authenticate_request()
+
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
     end

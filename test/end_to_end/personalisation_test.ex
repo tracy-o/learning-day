@@ -2,12 +2,15 @@ defmodule EndToEnd.PersonalisationTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.{CachingHelper, PersonalisationHelper}
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.LambdaMock
   alias Fixtures.AuthToken
 
   @moduletag :end_to_end
+
+  setup :clear_cache
 
   @response %{
     "headers" => %{
@@ -111,12 +114,6 @@ defmodule EndToEnd.PersonalisationTest do
     :get
     |> conn("/my/session/webcore-platform")
     |> Map.put(:host, "www.bbc.co.uk")
-  end
-
-  defp personalise_request(conn, token \\ AuthToken.valid_access_token()) do
-    conn
-    |> put_req_header("cookie", "ckns_atkn=#{token}")
-    |> put_req_header("x-id-oidc-signedin", "1")
   end
 
   defp make_request(conn) do

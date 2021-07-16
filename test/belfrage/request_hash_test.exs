@@ -1,5 +1,6 @@
 defmodule Belfrage.RequestHashTest do
   use ExUnit.Case, async: true
+  import Belfrage.Test.PersonalisationHelper
 
   alias Belfrage.RequestHash
   alias Belfrage.Struct
@@ -172,7 +173,7 @@ defmodule Belfrage.RequestHashTest do
 
     test "does not vary on personalisation headers" do
       non_personalised = @struct
-      personalised = Belfrage.Struct.add(@struct, :request, %{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+      personalised = authenticate_request(@struct)
       assert RequestHash.generate(personalised) == RequestHash.generate(non_personalised)
     end
   end

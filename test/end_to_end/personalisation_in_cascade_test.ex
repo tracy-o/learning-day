@@ -2,6 +2,8 @@ defmodule EndToEnd.PersonalisationInCascade do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.PersonalisationHelper
+
   alias BelfrageWeb.Router
 
   setup do
@@ -50,8 +52,7 @@ defmodule EndToEnd.PersonalisationInCascade do
 
     conn(:get, "/personalisation-in-cascade")
     |> Map.put(:host, "www.bbc.co.uk")
-    |> put_req_header("cookie", "ckns_atkn=#{access_token}")
-    |> put_req_header("x-id-oidc-signedin", "1")
+    |> personalise_request(access_token)
     |> Router.call([])
   end
 end

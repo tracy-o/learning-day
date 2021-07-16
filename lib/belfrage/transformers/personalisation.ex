@@ -2,6 +2,7 @@ defmodule Belfrage.Transformers.Personalisation do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct
+  alias Belfrage.Struct.Request
   alias Belfrage.Authentication.SessionState
 
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
@@ -13,15 +14,12 @@ defmodule Belfrage.Transformers.Personalisation do
   end
 
   @impl true
-  def call(
-        rest,
-        struct = %Struct{request: %Struct.Request{path: path, raw_headers: headers, cookies: cookies}}
-      ) do
-    session_state = SessionState.build(cookies, headers, path)
+  def call(rest, struct = %Struct{}) do
+    session_state = SessionState.build(struct.request)
     struct_with_session_state = Struct.add(struct, :user_session, session_state)
 
     cond do
-      !personalisation_available?(struct.request.host) ->
+      !personalisation_available?(struct.request) ->
         then(rest, struct)
 
       reauthentication_required?(session_state) ->
@@ -36,11 +34,11 @@ defmodule Belfrage.Transformers.Personalisation do
     session_state.authenticated && !session_state.valid_session
   end
 
-  defp personalisation_available?(host) when is_binary(host) do
+  defp personalisation_available?(%Request{host: host}) when is_binary(host) do
     @dial.state(:personalisation) && @idcta_flagpole.state() && String.ends_with?(host, "bbc.co.uk")
   end
 
-  defp personalisation_available?(_host) do
+  defp personalisation_available?(_request) do
     false
   end
 
