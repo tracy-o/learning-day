@@ -14,6 +14,14 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
+  @lambda_private_error_response %{
+    "headers" => %{
+      "cache-control" => "private, max-age=123"
+    },
+    "statusCode" => 500,
+    "body" => "<h1>error from the lambda</h1>"
+  }
+
   setup do
     :ets.delete_all_objects(:cache)
     Belfrage.LoopsSupervisor.kill_all()
@@ -38,5 +46,18 @@ defmodule EndToEndTest.PrivateCacheControlTest do
 
     assert {404, headers, _body} = sent_resp(conn)
     assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"} in headers
+  end
+
+  test "when Pres 500s with private cache control, Belfrage keeps cache-control as private" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
+      {:ok, @lambda_private_error_response}
+    end)
+
+    conn = conn(:get, "/downstream-broken")
+    conn = Router.call(conn, [])
+
+    assert {500, headers, _body} = sent_resp(conn)
+    assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30, max-age=123"} in headers
   end
 end

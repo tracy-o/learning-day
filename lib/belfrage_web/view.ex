@@ -71,14 +71,18 @@ defmodule BelfrageWeb.View do
 
   defp internal_response(conn, status) do
     render(
-      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status)},
+      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status, true)},
       conn
     )
   end
 
   defp internal_response(conn, status, struct) do
-    response = BelfrageWeb.View.InternalResponse.new(conn, status)
+    response = BelfrageWeb.View.InternalResponse.new(conn, status, cacheable?(struct))
     render(Belfrage.Struct.add(struct, :response, response), conn)
+  end
+
+  def cacheable?(%Struct{user_session: user_session = %Struct.UserSession{}, private: private = %Struct.Private{}}) do
+    !(private.personalised && user_session.authenticated)
   end
 
   defp add_response_headers(conn, struct) do

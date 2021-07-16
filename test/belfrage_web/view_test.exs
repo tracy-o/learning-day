@@ -286,4 +286,42 @@ defmodule BelfrageWeb.ViewTest do
       assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
     end
   end
+
+  describe "cacheable?/1" do
+    test "returns false when user is authenticated and route is personalised" do
+      struct =
+        %Struct{}
+        |> Struct.add(:private, %{personalised: true})
+        |> Struct.add(:user_session, %{authenticated: true})
+
+      refute View.cacheable?(struct)
+    end
+
+    test "returns true when user is authenticated and route is not personalised" do
+      struct =
+        %Struct{}
+        |> Struct.add(:private, %{personalised: false})
+        |> Struct.add(:user_session, %{authenticated: true})
+
+      assert View.cacheable?(struct)
+    end
+
+    test "returns true when user is not authenticated and route is personalised" do
+      struct =
+        %Struct{}
+        |> Struct.add(:private, %{personalised: true})
+        |> Struct.add(:user_session, %{authenticated: false})
+
+      assert View.cacheable?(struct)
+    end
+
+    test "returns true when user is not authenticated and route is not personalised" do
+      struct =
+        %Struct{}
+        |> Struct.add(:private, %{personalised: false})
+        |> Struct.add(:user_session, %{authenticated: false})
+
+      assert View.cacheable?(struct)
+    end
+  end
 end
