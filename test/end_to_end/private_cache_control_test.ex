@@ -48,7 +48,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"} in headers
   end
 
-  test "when belfrage 500s, cache control is sent back as private on private response" do
+  test "when Pres 500s with private cache control, Belfrage keeps cache-control as private" do
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
       {:ok, @lambda_private_error_response}

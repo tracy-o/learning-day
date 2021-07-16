@@ -119,14 +119,14 @@ defmodule BelfrageWeb.View.InternalResponseTest do
              } = InternalResponse.new(conn, status, true)
     end
 
-    test "cache-control is private for response with false cacheability" do
+    test "cache-control is private with max_age 0 for response with false cacheability" do
       conn = conn(:get, "/")
       status = 500
 
       assert %Struct.Response{
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "private",
-                 max_age: 5,
+                 max_age: 0,
                  stale_while_revalidate: 15
                }
              } = InternalResponse.new(conn, status, false)

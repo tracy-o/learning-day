@@ -35,18 +35,21 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response, cacheable) do
-    cacheability =
-      if cacheable do
-        "public"
-      else
-        "private"
-      end
 
     Map.put(response, :cache_directive, %Belfrage.CacheControl{
-      cacheability: cacheability,
-      max_age: 5,
+      cacheability: cacheabilty(cacheable),
+      max_age: max_age(cacheable),
       stale_while_revalidate: 15
     })
+  end
+
+
+  defp cacheabilty(cacheable) do
+    if cacheable, do: "public", else: "private"
+  end
+
+  defp max_age(cacheable) do
+    if cacheable, do: 5, else: 0
   end
 
   defp put_internal_response_headers(response, conn) do
