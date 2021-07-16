@@ -3,7 +3,7 @@ defmodule Belfrage.ProcessorTest do
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
-  import Belfrage.Test.CachingHelper
+  import Belfrage.Test.{CachingHelper, PersonalisationHelper}
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
@@ -217,7 +217,7 @@ defmodule Belfrage.ProcessorTest do
       struct =
         struct
         |> Struct.add(:private, %{personalised: true})
-        |> Struct.add(:request, %{raw_headers: %{"x-id-oidc-signedin" => "1"}})
+        |> authenticate_request()
 
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
