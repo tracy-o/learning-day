@@ -1212,8 +1212,13 @@ defmodule Routes.Routefile do
   handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
 
   ## Sport Fixtures pages
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
-  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures"]
+  redirect "/sport/basketball/:tournament/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/:tournament/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
+
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures"]
   handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
 
@@ -1239,6 +1244,11 @@ defmodule Routes.Routefile do
   handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
   ## Sport Results pages
+  redirect "/sport/basketball/:tournament/results.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/:tournament/results", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/results.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/results", to: "/sport/basketball/scores-fixtures", status: 301
+
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
   handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
   handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app"]
@@ -1255,11 +1265,11 @@ defmodule Routes.Routefile do
   ## Sport Basketball Scores-Fixtures pages
   handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
   handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
   handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
   handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
 
   ## Sport Scores-Fixtures pages
