@@ -672,9 +672,9 @@ defmodule Routes.Routefile do
 
   handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
 
-  handle "/programmes/genres/*_any", using: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
-
   handle "/programmes/genres", using: "Programmes", examples: ["/programmes/genres"]
+
+  handle "/programmes/genres/*_any", using: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
 
   handle "/programmes/profiles/:key/:slug", using: "Programmes", examples: ["/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC/tommy-shelby"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
