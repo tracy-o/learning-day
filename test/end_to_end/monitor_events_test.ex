@@ -9,6 +9,8 @@ defmodule EndToEnd.MonitorEventsTest do
   @moduletag :end_to_end
 
   setup do
+    clear_cache()
+
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
       {:ok,
@@ -20,8 +22,6 @@ defmodule EndToEnd.MonitorEventsTest do
          "body" => "<h1>Hello from the Lambda!</h1>"
        }}
     end)
-
-    on_exit(&clear_cache/0)
 
     :ok
   end

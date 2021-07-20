@@ -1,7 +1,8 @@
 defmodule EndToEnd.VaryAllowHeadersTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
   alias Routes.Specs.SomeLoopAllowHeaders
@@ -22,8 +23,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
       {:ok, @lambda_response}
     end)
 
-    :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    on_exit(&clear_cache/0)
   end
 
   describe "when route allows headers" do
