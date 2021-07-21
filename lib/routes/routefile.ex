@@ -981,6 +981,14 @@ defmodule Routes.Routefile do
   redirect "/sport/rugby-league/53783522", to: "/sport/rugby-league/teams", status: 301
   redirect "/sport/rugby-union/53783523.app", to: "/sport/rugby-union/teams.app", status: 301
   redirect "/sport/rugby-union/53783523", to: "/sport/rugby-union/teams", status: 301
+  redirect "/sport/tennis/20096126.app", to: "/sport/tennis/live-scores.app", status: 301
+  redirect "/sport/tennis/20096126", to: "/sport/tennis/live-scores", status: 301
+  redirect "/sport/tennis/20096125.app", to: "/sport/tennis/results.app", status: 301
+  redirect "/sport/tennis/20096125", to: "/sport/tennis/results", status: 301
+  redirect "/sport/tennis/22713811.app", to: "/sport/tennis/order-of-play.app", status: 301
+  redirect "/sport/tennis/22713811", to: "/sport/tennis/order-of-play", status: 301
+  redirect "/sport/golf/20096131.app", to: "/sport/golf/leaderboard.app", status: 301
+  redirect "/sport/golf/20096131", to: "/sport/golf/leaderboard", status: 301
 
   ## Sport Index redirects
   redirect "/sport/football/african.app", to: "/sport/africa.app", status: 301
