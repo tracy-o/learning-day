@@ -4,13 +4,17 @@ defmodule Belfrage.Dials.WebcoreTtlMultiplier do
   @behaviour Belfrage.Dial
 
   @impl Belfrage.Dial
-  def transform(ttl_value) do
-    case ttl_value do
-      "0.5x" -> 0.5
-      "0.8x" -> 0.8
-      "1x" -> 1
-      "2x" -> 2
-      "4x" -> 4
-    end
-  end
+  def transform("0.5x"), do: 0.5
+
+  @impl Belfrage.Dial
+  def transform("0.8x"), do: 0.8
+
+  @impl Belfrage.Dial
+  def transform("1x"), do: 1
+
+  @impl Belfrage.Dial
+  def transform("2x"), do: 2
+
+  @impl Belfrage.Dial
+  def transform("4x"), do: 4
 end
