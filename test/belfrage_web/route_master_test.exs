@@ -400,6 +400,22 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["/new-location-with-path/subpath/asset-1234"]
     end
+
+    test "redirect can redirects to /" do
+      expect_belfrage_not_called()
+
+      conn =
+        conn(:get, "/some-redirect")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> RoutefileMock.call([])
+
+      assert conn.status == 302
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["/"]
+    end
   end
 
   describe "calling redirect with host" do
