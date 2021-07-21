@@ -405,7 +405,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       expect_belfrage_not_called()
 
       conn =
-        conn(:get, "/some-redirect")
+        conn(:get, "/redirect-to-root")
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
