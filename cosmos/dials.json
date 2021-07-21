@@ -134,5 +134,32 @@
         "description": "Enables the sending of requests to Webcore"
       }
     ]
+  },
+  {
+    "name": "webcore_ttl_multiplier",
+    "description": "The value selected is used to multiply the max-age value for the cache-control on Webcore requests",
+    "default-value": "1x",
+    "values": [
+      {
+        "value": "0.5x",
+        "description": "Multiplies the max-age by 0.5 for Webcore requests"
+      },
+      {
+        "value": "0.8x",
+        "description": "Multiplies the max-age by 0.8 for Webcore requests"
+      },
+      {
+        "value": "1x",
+        "description": "Multiplies the max-age by 1 for Webcore requests"
+      },
+      {
+        "value": "2x",
+        "description": "Multiplies the max-age by 2 for Webcore requests"
+      },
+      {
+        "value": "4x",
+        "description": "Multiplies the max-age by 4 for Webcore requests"
+      }
+    ]
   }
 ]
