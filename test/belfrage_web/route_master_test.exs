@@ -401,7 +401,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert get_resp_header(conn, "location") == ["/new-location-with-path/subpath/asset-1234"]
     end
 
-    test "redirect can redirects to /" do
+    test "redirect can redirect to /" do
       expect_belfrage_not_called()
 
       conn =
