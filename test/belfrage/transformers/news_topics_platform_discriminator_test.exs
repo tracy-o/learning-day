@@ -2,8 +2,6 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Authentication.FlagpoleMock
-  alias Belfrage.Dials.ServerMock
   alias Belfrage.Transformers.NewsTopicsPlatformDiscriminator
   alias Belfrage.Struct
 
@@ -35,52 +33,41 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
     }
   }
 
-  defp stub_dials() do
-    stub(ServerMock, :state, fn
-      :personalisation ->
-        Belfrage.Dials.Personalisation.transform("on")
-
-      :webcore_kill_switch ->
-        Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
+  setup do
+    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
+      Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
     end)
+
+    :ok
   end
 
-  describe "when personalisation on" do
-    setup do
-      stub_dials()
-      # enables flagpole
-      expect(FlagpoleMock, :state, fn -> true end)
-      :ok
-    end
+  test "if the Topic ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
 
-    test "if the Topic ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
-      lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
-
-      assert {
-               :ok,
-               %Struct{
-                 debug: %Struct.Debug{
-                   pipeline_trail: [
-                     "Language",
-                     "CircuitBreaker",
-                     "PlatformKillSwitch",
-                     "LambdaOriginAlias",
-                     "Personalisation"
-                   ]
-                 },
-                 private: %Struct.Private{
-                   origin: ^lambda_function,
-                   platform: Webcore
-                 },
-                 request: %Struct.Request{
-                   scheme: :http,
-                   host: "www.bbc.co.uk",
-                   path: "/_web_core",
-                   path_params: %{"id" => "ck7l4e11g49t"}
-                 }
+    assert {
+             :ok,
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: [
+                   "Language",
+                   "CircuitBreaker",
+                   "PlatformKillSwitch",
+                   "LambdaOriginAlias",
+                   "Personalisation"
+                 ]
+               },
+               private: %Struct.Private{
+                 origin: ^lambda_function,
+                 platform: Webcore
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"id" => "ck7l4e11g49t"}
                }
-             } = NewsTopicsPlatformDiscriminator.call([], @webcore_topic_id)
-    end
+             }
+           } = NewsTopicsPlatformDiscriminator.call([], @webcore_topic_id)
   end
 
   test "if the Topic ID is not in the Webcore allow list, the origin and platform will remain the same" do

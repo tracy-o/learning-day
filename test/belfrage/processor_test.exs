@@ -3,7 +3,7 @@ defmodule Belfrage.ProcessorTest do
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
-  import Belfrage.Test.{CachingHelper, PersonalisationHelper}
+  import Belfrage.Test.CachingHelper
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
@@ -177,20 +177,6 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "personalisation/1" do
-    test "adds personalised: true to a personalised route" do
-      struct = %Struct{private: %Struct.Private{loop_id: SomePersonalisedLoop}}
-
-      assert Processor.personalisation(struct).private.personalised
-    end
-
-    test "adds personalised: false to a non personalised route" do
-      struct = %Struct{private: %Struct.Private{loop_id: SomeLoop}}
-
-      refute Processor.personalisation(struct).private.personalised
-    end
-  end
-
   describe "fetch_early_response_from_cache/1" do
     setup do
       struct = %Struct{request: %Request{request_hash: unique_cache_key()}}
@@ -204,20 +190,8 @@ defmodule Belfrage.ProcessorTest do
       assert response.body == cached_response.body
     end
 
-    test "uses cached response for unauthenticated requests to personalised routes", %{
-      struct: struct,
-      cached_response: cached_response
-    } do
-      struct = Struct.add(struct, :private, %{personalised: true})
-      %{response: response} = Processor.fetch_early_response_from_cache(struct)
-      assert response.body == cached_response.body
-    end
-
     test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
-      struct =
-        struct
-        |> Struct.add(:private, %{personalised: true})
-        |> authenticate_request()
+      struct = Struct.add(struct, :private, %{personalised: true})
 
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
@@ -259,7 +233,6 @@ defmodule Belfrage.ProcessorTest do
         struct
         |> Struct.add(:response, %{http_status: 500})
         |> Struct.add(:private, %{personalised: true})
-        |> Struct.add(:user_session, %{authenticated: true})
 
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response.body == cached_response.body

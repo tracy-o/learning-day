@@ -10,12 +10,11 @@ defmodule Belfrage.Processor do
     ResponseTransformers,
     Allowlist,
     Event,
-    RouteSpec.Personalisation,
+    Personalisation,
     CacheControl
   }
 
-  alias Struct.{Response, Private, UserSession}
-  alias Belfrage.Authentication.SessionState
+  alias Struct.{Response, Private}
 
   def get_loop(struct = %Struct{}) do
     LoopsRegistry.find_or_start(struct)
@@ -27,7 +26,7 @@ defmodule Belfrage.Processor do
   end
 
   def personalisation(struct = %Struct{}) do
-    Struct.add(struct, :private, %{personalised: Personalisation.enabled?(struct.private.loop_id)})
+    Struct.add(struct, :private, %{personalised: Personalisation.personalised_request?(struct)})
   end
 
   def allowlists(struct) do
@@ -42,7 +41,7 @@ defmodule Belfrage.Processor do
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalised && SessionState.authenticated?(struct.request) do
+    if private.personalised do
       struct
     else
       Cache.fetch(struct, [:fresh])
@@ -99,11 +98,10 @@ defmodule Belfrage.Processor do
   defp make_fallback_private_if_personalised_request(
          struct = %Struct{
            response: response = %Response{},
-           private: private = %Private{},
-           user_session: user_session = %UserSession{}
+           private: private = %Private{}
          }
        ) do
-    if response.http_status == 200 && private.personalised && user_session.authenticated do
+    if response.http_status == 200 && private.personalised do
       Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
     else
       struct
