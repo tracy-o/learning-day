@@ -29,6 +29,8 @@ defmodule BelfrageWeb.ReWrite do
       iex> prepare("https://bbc.co.uk/sport/*any")
       ["https://bbc.co.uk/sport/", {:var, "any"}]
 
+      iex> prepare("/")
+      ["/"]
   """
   def prepare(matcher) do
     chunk(matcher)
@@ -90,6 +92,9 @@ defmodule BelfrageWeb.ReWrite do
 
       iex> interpolate(prepare("/sport/uk/*any"), %{"any" => [".js"], "format" => "js"})
       "/sport/uk.js"
+
+      iex> interpolate(prepare("/"), %{})
+      "/"
   """
 
   def interpolate(matcher, %{"any" => params, "format" => format}) when is_binary(format) do
@@ -104,9 +109,17 @@ defmodule BelfrageWeb.ReWrite do
       {:var, key} -> path_value(Map.fetch!(params, key))
       char -> char
     end)
-    |> String.replace_trailing("/", "")
-    # without this /sports/uk.js -> /sports/.js with matcher
+    |> replace_trailing_slash()
+    # without this /sport/uk.js -> /sport/.js with matcher
     |> String.replace("/.", ".")
+  end
+
+  defp replace_trailing_slash(url_string) do
+    if url_string == "/" do
+      url_string
+    else
+      String.replace_trailing(url_string, "/", "")
+    end
   end
 
   defp path_value(values) when is_list(values), do: Enum.join(values, "/")
