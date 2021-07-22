@@ -3,42 +3,39 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
-  alias Belfrage.Struct.Private
+  alias Belfrage.Struct.{Request, Private, UserSession}
 
   @behaviour ResponseHeaders
 
-  # TODO: to be removed and made explicit via DSL in RESFRAME-3924
-  @disallow_headers ["cookie"]
-
   @impl ResponseHeaders
-  def add_header(conn, %Struct{request: request, private: private}) do
+  def add_header(conn, struct = %Struct{request: request}) do
     put_resp_header(
       conn,
       "vary",
-      vary_headers(request, private, request.cdn?)
+      vary_headers(struct, request.cdn?)
     )
   end
 
-  def vary_headers(request, private, cdn?)
+  def vary_headers(struct, cdn?)
 
-  def vary_headers(request, %Private{headers_allowlist: [], platform: platform}, false) do
+  def vary_headers(%Struct{request: request = %Request{}, private: private = %Private{headers_allowlist: []}}, false) do
     [
       base_headers(request),
-      adverts_headers(request.edge_cache?, platform)
+      adverts_headers(request.edge_cache?, private.platform)
     ]
     |> IO.iodata_to_binary()
   end
 
-  def vary_headers(request, %Private{headers_allowlist: list, platform: platform}, false) do
+  def vary_headers(struct = %Struct{request: request = %Request{}, private: private = %Private{}}, false) do
     [
       base_headers(request),
-      allow_headers(list),
-      adverts_headers(request.edge_cache?, platform)
+      allowed_headers(struct),
+      adverts_headers(request.edge_cache?, private.platform)
     ]
     |> IO.iodata_to_binary()
   end
 
-  def vary_headers(_request, _private, true), do: "Accept-Encoding"
+  def vary_headers(_struct, true), do: "Accept-Encoding"
 
   defp base_headers(request) do
     [
@@ -54,10 +51,23 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     ]
   end
 
-  defp allow_headers(headers)
-  defp allow_headers([]), do: []
-  defp allow_headers([header | rest]) when header in @disallow_headers, do: allow_headers(rest)
-  defp allow_headers([header | rest]), do: [?,, header, allow_headers(rest)]
+  # TODO: to be improved in RESFRAME-3924
+  defp allowed_headers(%Struct{private: private = %Private{}, user_session: user_session = %UserSession{}}) do
+    ignore_headers =
+      if user_session.authenticated && !private.personalised_request do
+        ~w(cookie x-id-oidc-signedin)
+      else
+        ~w(cookie)
+      end
+
+    case private.headers_allowlist -- ignore_headers do
+      [] ->
+        []
+
+      headers ->
+        [?, | Enum.intersperse(headers, ?,)]
+    end
+  end
 
   # TODO Remove duplication of headers - so commenting out for now
   # TODO Sort headers and also allow these to be specified as part of route/platform

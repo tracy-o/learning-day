@@ -4,7 +4,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
   alias BelfrageWeb.ResponseHeaders.Vary
   alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Private}
+  alias Belfrage.Struct.{Request, Private, UserSession}
 
   describe "Country Header" do
     test "When the cache header is set it varies on X-BBC-Edge-Country" do
@@ -68,6 +68,36 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
     test "never vary on cookie" do
       struct = %Struct{private: %Private{headers_allowlist: ["cookie"]}}
       refute "cookie" in vary_headers(struct)
+    end
+
+    test "vary personalised requests on x-id-oidc-signedin" do
+      struct = %Struct{private: %Private{headers_allowlist: ["x-id-oidc-signedin"], personalised_request: true}}
+      assert "x-id-oidc-signedin" in vary_headers(struct)
+    end
+
+    test "vary non-personalised requests to personalised routes on x-id-oidc-signedin" do
+      struct = %Struct{
+        private: %Private{
+          headers_allowlist: ["x-id-oidc-signedin"],
+          personalised_route: true,
+          personalised_request: false
+        }
+      }
+
+      assert "x-id-oidc-signedin" in vary_headers(struct)
+    end
+
+    test "don't vary authenticated non-personalised requests to personalised routes on x-id-oidc-signedin" do
+      struct = %Struct{
+        private: %Private{
+          headers_allowlist: ["x-id-oidc-signedin"],
+          personalised_route: true,
+          personalised_request: false
+        },
+        user_session: %UserSession{authenticated: true}
+      }
+
+      refute "x-id-oidc-signedin" in vary_headers(struct)
     end
   end
 
