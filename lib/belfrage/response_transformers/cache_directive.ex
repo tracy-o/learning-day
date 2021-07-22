@@ -26,7 +26,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
   defp ttl_multiplier(%Private{platform: platform}) do
     if platform == Webcore do
-      @dial.state(:ttl_multiplier) * @dial.state(:webcore_ttl_multiplier)
+      @dial.state(:webcore_ttl_multiplier)
     else
       @dial.state(:ttl_multiplier)
     end

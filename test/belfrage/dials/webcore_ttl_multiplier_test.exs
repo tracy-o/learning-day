@@ -3,24 +3,24 @@ defmodule Belfrage.Dials.WebcoreTtlMultiplierTest do
   alias Belfrage.Dials.WebcoreTtlMultiplier
 
   describe "transform/1" do
-    test "when the value is 0.5x" do
-      assert WebcoreTtlMultiplier.transform("0.5x") == 0.5
+    test "when the value is half" do
+      assert WebcoreTtlMultiplier.transform("half") == 0.5
     end
 
-    test "when the value is 0.8x" do
-      assert WebcoreTtlMultiplier.transform("0.8x") == 0.8
+    test "when the value is three-quarters" do
+      assert WebcoreTtlMultiplier.transform("three-quarters") == 0.75
     end
 
-    test "when the value is 1x" do
-      assert WebcoreTtlMultiplier.transform("1x") == 1
+    test "when the value is one" do
+      assert WebcoreTtlMultiplier.transform("one") == 1
     end
 
-    test "when the value is 2x" do
-      assert WebcoreTtlMultiplier.transform("2x") == 2
+    test "when the value is two" do
+      assert WebcoreTtlMultiplier.transform("two") == 2
     end
 
-    test "when the value is 4x" do
-      assert WebcoreTtlMultiplier.transform("4x") == 4
+    test "when the value is four" do
+      assert WebcoreTtlMultiplier.transform("four") == 4
     end
   end
 end

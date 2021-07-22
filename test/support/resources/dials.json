@@ -1,11 +1,11 @@
 {
 	"ttl_multiplier":"default",
+	"webcore_ttl_multiplier": "one",
 	"logging_level":"debug",
 	"circuit_breaker":"false",
 	"personalisation":"on",
 	"obit_mode": "off",
 	"ccp_enabled": "true",
 	"monitor_enabled": "true",
-	"webcore_kill_switch": "inactive",
-	"webcore_ttl_multiplier": "1x"
+	"webcore_kill_switch": "inactive"
 }
