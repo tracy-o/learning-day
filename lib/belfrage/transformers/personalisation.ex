@@ -5,7 +5,7 @@ defmodule Belfrage.Transformers.Personalisation do
   alias Belfrage.Authentication.SessionState
 
   @impl true
-  def call(rest, struct = %Struct{private: %Struct.Private{personalised: false}}) do
+  def call(rest, struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
     then(rest, struct)
   end
 

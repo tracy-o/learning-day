@@ -80,7 +80,8 @@ defmodule Belfrage.Struct.Private do
             default_language: "en-GB",
             owner: nil,
             runbook: nil,
-            personalised: false
+            personalised_route: false,
+            personalised_request: false
 
   @type t :: %__MODULE__{}
 end

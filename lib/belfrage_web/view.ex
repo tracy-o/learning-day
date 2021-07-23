@@ -83,7 +83,7 @@ defmodule BelfrageWeb.View do
   end
 
   def cacheable?(%Struct{private: private = %Private{}}) do
-    !private.personalised
+    !private.personalised_request
   end
 
   defp add_response_headers(conn, struct) do

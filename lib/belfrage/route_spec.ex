@@ -1,4 +1,6 @@
 defmodule Belfrage.RouteSpec do
+  alias Belfrage.Personalisation
+
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
 
   def specs_for(name) do
@@ -17,7 +19,7 @@ defmodule Belfrage.RouteSpec do
     Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
     |> Map.put(:loop_id, name)
-    |> Belfrage.RouteSpec.Personalisation.maybe_interpolate_personalisation()
+    |> Personalisation.transform_route_spec()
   end
 
   def merge_specs(platform_specs, route_specs) do

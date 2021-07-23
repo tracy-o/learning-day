@@ -26,7 +26,7 @@ defmodule Belfrage.Processor do
   end
 
   def personalisation(struct = %Struct{}) do
-    Struct.add(struct, :private, %{personalised: Personalisation.personalised_request?(struct)})
+    Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
   end
 
   def allowlists(struct) do
@@ -41,7 +41,7 @@ defmodule Belfrage.Processor do
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalised do
+    if private.personalised_request do
       struct
     else
       Cache.fetch(struct, [:fresh])
@@ -101,7 +101,7 @@ defmodule Belfrage.Processor do
            private: private = %Private{}
          }
        ) do
-    if response.http_status == 200 && private.personalised do
+    if response.http_status == 200 && private.personalised_request do
       Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
     else
       struct

@@ -48,4 +48,20 @@ defmodule Belfrage.RouteSpecTest do
       assert result == %{foo: "I want the route spec to win"}
     end
   end
+
+  describe "specs_for/1" do
+    defmodule Module.concat([Routes, Specs, PersonalisedRouteSpec]) do
+      def specs(_) do
+        %{
+          platform: Webcore,
+          personalisation: "on"
+        }
+      end
+    end
+
+    test "adds personalisation attributes" do
+      spec = RouteSpec.specs_for(PersonalisedRouteSpec)
+      assert spec.personalised_route
+    end
+  end
 end
