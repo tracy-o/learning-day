@@ -39,10 +39,12 @@ defmodule EndToEnd.PersonalisationTest do
 
     expect_origin_request(fn %{headers: headers} ->
       assert headers[:authorization] == "Bearer #{token}"
-      assert headers[:"ctx-allow-personalisation"] == "true"
       assert headers[:"x-authentication-provider"]
       assert headers[:"pers-env"]
+      assert headers[:"ctx-allow-personalisation"] == "true"
       assert headers[:"ctx-age-bracket"]
+      assert headers[:"ctx-pii-allow-personalisation"] == "true"
+      assert headers[:"ctx-pii-age-bracket"]
     end)
 
     response =
