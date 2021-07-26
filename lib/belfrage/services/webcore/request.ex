@@ -52,6 +52,8 @@ defmodule Belfrage.Services.Webcore.Request do
     base_headers
     |> Map.put(:"ctx-age-bracket", age_bracket)
     |> Map.put(:"ctx-allow-personalisation", to_string(allow_personalisation))
+    |> Map.put(:"ctx-pii-age-bracket", age_bracket)
+    |> Map.put(:"ctx-pii-allow-personalisation", to_string(allow_personalisation))
   end
 
   defp maybe_put_user_attributes_headers(base_headers, _user_attributes) do
