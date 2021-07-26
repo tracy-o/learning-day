@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
 
-  alias Belfrage.{CacheControl, Struct}
+  alias Belfrage.{CacheControl, Struct, Struct.Private}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -16,13 +16,21 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), @dial.state(:ttl_multiplier)),
+      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), ttl_multiplier(struct.private)),
       headers: response_headers
     })
   end
 
   @impl true
   def call(struct), do: struct
+
+  defp ttl_multiplier(%Private{platform: platform}) do
+    if platform == Webcore do
+      @dial.state(:webcore_ttl_multiplier)
+    else
+      @dial.state(:ttl_multiplier)
+    end
+  end
 
   defp dial_multiply(nil, _ttl_multiplier), do: nil
 

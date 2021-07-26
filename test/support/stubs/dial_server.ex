@@ -12,4 +12,7 @@ defmodule Belfrage.Dials.ServerStub do
 
   @impl Belfrage.Dials.Server
   def state(:webcore_kill_switch), do: Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
+
+  @impl Belfrage.Dials.Server
+  def state(:webcore_ttl_multiplier), do: Belfrage.Dials.WebcoreTtlMultiplier.transform("one")
 end
