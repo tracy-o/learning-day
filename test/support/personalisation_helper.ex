@@ -21,9 +21,39 @@ defmodule Belfrage.Test.PersonalisationHelper do
   end
 
   @doc """
-  Make the passed %Plug.Conn request authenticated and personalised
+  Make the passed request unauthenticated. Accepts a %Struct{}, %Struct.Request{}
+  or %Plug.Conn{} so can be used in unit and end-to-end tests.
   """
-  def personalise_request(conn = %Conn{}, token \\ AuthToken.valid_access_token()) do
+  def deauthenticate_request(struct = %Struct{}) do
+    Struct.add(struct, :request, deauthenticate_request(struct.request))
+  end
+
+  def deauthenticate_request(request = %Request{}) do
+    %Request{request | raw_headers: Map.put(request.raw_headers, "x-id-oidc-signedin", "0")}
+  end
+
+  def deauthenticate_request(conn = %Conn{}) do
+    Conn.put_req_header(conn, "x-id-oidc-signedin", "0")
+  end
+
+  @doc """
+  Make the passed request authenticated and personalised by adding a token
+  cookie. Accepts a %Struct{}, %Struct.Request{} and %Plug.Conn so can be used
+  in unit and end-to-end tests.
+  """
+  def personalise_request(request, token \\ AuthToken.valid_access_token())
+
+  def personalise_request(struct = %Struct{}, token) do
+    Struct.add(struct, :request, personalise_request(struct.request, token))
+  end
+
+  def personalise_request(request = %Request{}, token) do
+    request
+    |> authenticate_request()
+    |> struct!(cookies: Map.put(request.cookies, "ckns_atkn", token))
+  end
+
+  def personalise_request(conn = %Conn{}, token) do
     conn
     |> authenticate_request()
     |> Conn.put_req_header("cookie", "ckns_atkn=#{token}")

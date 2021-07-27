@@ -5,6 +5,7 @@ defmodule BelfrageWeb.ViewTest do
 
   alias BelfrageWeb.View
   alias Belfrage.Struct
+  alias Belfrage.Struct.Private
 
   @json_codec Application.get_env(:belfrage, :json_codec)
 
@@ -288,39 +289,13 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   describe "cacheable?/1" do
-    test "returns false when user is authenticated and route is personalised" do
-      struct =
-        %Struct{}
-        |> Struct.add(:private, %{personalised: true})
-        |> Struct.add(:user_session, %{authenticated: true})
-
+    test "returns false when request is personalised" do
+      struct = %Struct{private: %Private{personalised: true}}
       refute View.cacheable?(struct)
     end
 
-    test "returns true when user is authenticated and route is not personalised" do
-      struct =
-        %Struct{}
-        |> Struct.add(:private, %{personalised: false})
-        |> Struct.add(:user_session, %{authenticated: true})
-
-      assert View.cacheable?(struct)
-    end
-
-    test "returns true when user is not authenticated and route is personalised" do
-      struct =
-        %Struct{}
-        |> Struct.add(:private, %{personalised: true})
-        |> Struct.add(:user_session, %{authenticated: false})
-
-      assert View.cacheable?(struct)
-    end
-
-    test "returns true when user is not authenticated and route is not personalised" do
-      struct =
-        %Struct{}
-        |> Struct.add(:private, %{personalised: false})
-        |> Struct.add(:user_session, %{authenticated: false})
-
+    test "returns true when request is not personalised" do
+      struct = %Struct{private: %Private{personalised: false}}
       assert View.cacheable?(struct)
     end
   end

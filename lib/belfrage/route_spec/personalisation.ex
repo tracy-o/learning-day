@@ -1,11 +1,11 @@
 defmodule Belfrage.RouteSpec.Personalisation do
   @allow_personalisation_map %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
 
-  def enabled?(loop_id) when not is_map(loop_id) do
-    enabled?(Belfrage.RouteSpec.specs_for(loop_id))
+  def personalised?(loop_id) when not is_map(loop_id) do
+    personalised?(Belfrage.RouteSpec.specs_for(loop_id))
   end
 
-  def enabled?(route_specs) do
+  def personalised?(route_specs) do
     case route_specs[:personalisation] do
       "on" -> true
       "test_only" -> production_environment() == "test"
@@ -14,7 +14,7 @@ defmodule Belfrage.RouteSpec.Personalisation do
   end
 
   def maybe_interpolate_personalisation(route_specs) do
-    if enabled?(route_specs) do
+    if personalised?(route_specs) do
       Map.merge(route_specs, @allow_personalisation_map, &merge_key/3)
     else
       route_specs

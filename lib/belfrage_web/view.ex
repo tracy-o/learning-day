@@ -2,6 +2,7 @@ defmodule BelfrageWeb.View do
   import Plug.Conn
 
   alias Belfrage.Struct
+  alias Belfrage.Struct.Private
   alias BelfrageWeb.ResponseHeaders
 
   @default_headers [
@@ -81,8 +82,8 @@ defmodule BelfrageWeb.View do
     render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
-  def cacheable?(%Struct{user_session: user_session = %Struct.UserSession{}, private: private = %Struct.Private{}}) do
-    !(private.personalised && user_session.authenticated)
+  def cacheable?(%Struct{private: private = %Private{}}) do
+    !private.personalised
   end
 
   defp add_response_headers(conn, struct) do
