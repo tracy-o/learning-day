@@ -470,7 +470,7 @@ defmodule Routes.Routefile do
   redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
 
   ## World Service - Olympic Redirects
-  "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
+  redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
 
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
