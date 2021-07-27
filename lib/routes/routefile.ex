@@ -465,12 +465,12 @@ defmodule Routes.Routefile do
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123", "/marathi/example-123.amp", "/marathi/example-123.json"]
 
+  ## World Service - Olympic Redirects
+  redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
+
   ## World Service - Topcat to CPS Redirects
   redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/noticias-internacional-44125537", status: 301
   redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
-
-  ## World Service - Olympic Redirects
-  redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
 
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
