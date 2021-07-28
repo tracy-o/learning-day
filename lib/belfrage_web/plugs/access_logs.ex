@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.Plugs.AccessLogs do
   import Plug.Conn, only: [register_before_send: 2]
+  alias Belfrage.HeaderRedactor
 
   def init(opts), do: opts
 
@@ -12,8 +13,8 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
       path: conn.request_path,
       status: conn.status,
       method: conn.method,
-      req_headers: Belfrage.PII.clean(conn.req_headers),
-      resp_headers: Belfrage.PII.clean(conn.resp_headers)
+      req_headers: HeaderRedactor.redact(conn.req_headers),
+      resp_headers: HeaderRedactor.redact(conn.resp_headers)
     })
 
     conn
