@@ -290,12 +290,12 @@ defmodule BelfrageWeb.ViewTest do
 
   describe "cacheable?/1" do
     test "returns false when request is personalised" do
-      struct = %Struct{private: %Private{personalised: true}}
+      struct = %Struct{private: %Private{personalised_request: true}}
       refute View.cacheable?(struct)
     end
 
     test "returns true when request is not personalised" do
-      struct = %Struct{private: %Private{personalised: false}}
+      struct = %Struct{private: %Private{personalised_request: false}}
       assert View.cacheable?(struct)
     end
   end

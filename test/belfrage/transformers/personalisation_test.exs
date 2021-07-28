@@ -20,7 +20,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
         },
         private: %Private{
-          personalised: true
+          personalised_request: true
         }
       }
       |> authenticate_request()
@@ -30,7 +30,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
 
   describe "call/2" do
     test "request is not personalised", %{struct: struct} do
-      struct = Struct.add(struct, :private, %{personalised: false})
+      struct = Struct.add(struct, :private, %{personalised_request: false})
       assert Personalisation.call([], struct) == {:ok, struct}
     end
 
