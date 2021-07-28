@@ -1,6 +1,6 @@
-defmodule Belfrage.HeaderRedactor do
+defmodule Belfrage.Logging.HeaderRedactor do
   @moduledoc """
-  Redact personal or unnecessary information from headers
+  Redacts personal or unnecessary information from headers when logging
   """
 
   @redacted_headers ["cookie", "ssl", "content-security-policy", "feature-policy", "report-to"]
