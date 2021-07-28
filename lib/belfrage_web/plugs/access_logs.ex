@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.Plugs.AccessLogs do
   import Plug.Conn, only: [register_before_send: 2]
-  alias Belfrage.Logging.HeaderRedactor
+  alias Belfrage.Logger.HeaderRedactor
 
   def init(opts), do: opts
 

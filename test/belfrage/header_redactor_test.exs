@@ -1,7 +1,7 @@
 defmodule Belfrage.Logging.HeaderRedactorTest do
   use ExUnit.Case
 
-  alias Belfrage.Logging.HeaderRedactor
+  alias Belfrage.Logger.HeaderRedactor
 
   describe "redact/1" do
     test "header not on redacted list are not redacted" do

@@ -96,7 +96,7 @@ defmodule Belfrage.Struct.UserSession do
 end
 
 defmodule Belfrage.Struct do
-  alias Belfrage.Logging.HeaderRedactor
+  alias Belfrage.Logger.HeaderRedactor
 
   defstruct request: %Belfrage.Struct.Request{},
             private: %Belfrage.Struct.Private{},

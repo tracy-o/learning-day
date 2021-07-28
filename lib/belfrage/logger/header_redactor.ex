@@ -1,4 +1,4 @@
-defmodule Belfrage.Logging.HeaderRedactor do
+defmodule Belfrage.Logger.HeaderRedactor do
   @moduledoc """
   Redacts personal or unnecessary information from headers when logging
   """
