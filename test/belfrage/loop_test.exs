@@ -10,6 +10,8 @@ defmodule Belfrage.LoopTest do
   setup :set_mox_global
 
   setup do
+    Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
+
     Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
 
     start_supervised!(LoopsSupervisor.child_spec(name: @loop_supervisor, id: @loop_supervisor))

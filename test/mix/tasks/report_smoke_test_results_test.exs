@@ -1,8 +1,13 @@
 defmodule Mix.Tasks.ReportSmokeTestResultsTest do
   use ExUnit.Case
+  use Test.Support.Helper, :mox
+
   alias Mix.Tasks.ReportSmokeTestResults
 
   setup do
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
+    Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
+
     %{
       output_with_failures: Fixtures.SmokeTestReportOutput.with_failures(),
       output_with_exceptions: Fixtures.SmokeTestReportOutput.with_exceptions(),

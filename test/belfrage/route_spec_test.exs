@@ -1,5 +1,7 @@
 defmodule Belfrage.RouteSpecTest do
   use ExUnit.Case
+  use Test.Support.Helper, :mox
+
   alias Belfrage.RouteSpec
 
   describe "merge_specs/2" do
@@ -60,6 +62,9 @@ defmodule Belfrage.RouteSpecTest do
     end
 
     test "adds personalisation attributes" do
+      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
+      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
+
       spec = RouteSpec.specs_for(PersonalisedRouteSpec)
       assert spec.personalised_route
     end
