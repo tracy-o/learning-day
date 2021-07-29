@@ -97,6 +97,8 @@ defmodule Belfrage.Struct.UserSession do
 end
 
 defmodule Belfrage.Struct do
+  alias Belfrage.Logger.HeaderRedactor
+
   defstruct request: %Belfrage.Struct.Request{},
             private: %Belfrage.Struct.Private{},
             user_session: %Belfrage.Struct.UserSession{},
@@ -112,9 +114,9 @@ defmodule Belfrage.Struct do
   def loggable(struct) do
     struct
     |> update_in([Access.key(:response), Access.key(:body)], fn _value -> "REMOVED" end)
-    |> update_in([Access.key(:request), Access.key(:raw_headers)], &Belfrage.PII.clean/1)
+    |> update_in([Access.key(:request), Access.key(:raw_headers)], &HeaderRedactor.redact/1)
     |> update_in([Access.key(:request), Access.key(:cookies)], fn _value -> "REMOVED" end)
-    |> update_in([Access.key(:response), Access.key(:headers)], &Belfrage.PII.clean/1)
+    |> update_in([Access.key(:response), Access.key(:headers)], &HeaderRedactor.redact/1)
     |> update_in([Access.key(:user_session), Access.key(:session_token)], fn
       nil -> nil
       _value -> "REDACTED"
