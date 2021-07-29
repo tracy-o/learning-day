@@ -8,7 +8,7 @@ defmodule Belfrage.Personalisation do
   @idcta_flagpole Application.get_env(:belfrage, :flagpole)
 
   def transform_route_spec(spec) do
-    if personalised_route_spec?(spec) do
+    if enabled?() && personalised_route_spec?(spec) do
       spec
       |> Map.put(:personalised_route, true)
       |> Map.merge(@route_spec_attrs, fn _key, v1, v2 -> v1 ++ v2 end)
@@ -19,7 +19,6 @@ defmodule Belfrage.Personalisation do
 
   def personalised_request?(%Struct{request: request = %Request{}, private: private = %Private{}}) do
     private.personalised_route &&
-      enabled?() &&
       applicable_request?(request) &&
       SessionState.authenticated?(request)
   end
