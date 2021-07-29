@@ -15,7 +15,4 @@ defmodule Belfrage.Dials.ServerStub do
 
   @impl Belfrage.Dials.Server
   def state(:webcore_ttl_multiplier), do: Belfrage.Dials.WebcoreTtlMultiplier.transform("one")
-
-  @impl Belfrage.Dials.Server
-  def state(:personalisation), do: Belfrage.Dials.Personalisation.transform("on")
 end

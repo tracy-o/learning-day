@@ -21,9 +21,6 @@ defmodule Belfrage.ProcessorTest do
     @struct %Struct{private: %Private{loop_id: "SportVideos"}}
 
     test "adds loop information to Struct.private" do
-      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
-      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
       assert %Struct{
                request: _request,
                private: %Private{
@@ -40,9 +37,6 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "keeps Struct.Private default values when merging in routespec data" do
-      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
-      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
       assert %Struct{
                request: _request,
                private: %Private{
@@ -101,9 +95,6 @@ defmodule Belfrage.ProcessorTest do
     }
 
     test "increments status" do
-      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
-      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
       Belfrage.LoopsRegistry.find_or_start(@resp_struct)
       Processor.init_post_response_pipeline(@resp_struct)
 

@@ -77,18 +77,12 @@ defmodule Belfrage.Metrics.MailboxMonitorTest do
     end
 
     test "reports mailbox size of 0 when loop has no messages in mailbox" do
-      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
-      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
       start_supervised!({Belfrage.Loop, "MailboxMonitorLoop"})
       expect_metric("loop.MailboxMonitorLoop.mailbox_size", 0)
       monitor_mailbox_size({:loop, "MailboxMonitorLoop"})
     end
 
     test "reports mailbox size when loop has messages in mailbox" do
-      Mox.stub(Belfrage.Dials.ServerMock, :state, fn :personalisation -> true end)
-      Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
       loop_pid = start_supervised!({Belfrage.Loop, "MailboxMonitorLoop"})
       suspend(loop_pid)
 

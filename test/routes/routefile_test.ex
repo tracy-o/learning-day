@@ -19,9 +19,6 @@ defmodule Routes.RoutefileTest do
       for env <- ["test", "live"] do
         @env env
         test "There is a valid routespec for #{@loop_id} (#{@env})" do
-          Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-          Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> true end)
-
           specs = Belfrage.RouteSpec.specs_for(@loop_id, @env)
 
           assert Map.has_key?(specs, :platform)
