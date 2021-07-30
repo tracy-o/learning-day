@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
 
-  alias Belfrage.{CacheControl, Struct, Struct.Private}
+  alias Belfrage.{CacheControl, Personalisation, Struct, Struct.Private}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -16,7 +16,12 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
 
     struct
     |> Struct.add(:response, %{
-      cache_directive: cache_directive(CacheControl.Parser.parse(cache_control), ttl_multiplier(struct.private)),
+      cache_directive:
+        cache_directive(
+          CacheControl.Parser.parse(cache_control),
+          ttl_multiplier(struct.private),
+          Personalisation.personalised_request?(struct)
+        ),
       headers: response_headers
     })
   end
@@ -43,12 +48,23 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   defp to_integer(max_age) when is_float(max_age), do: round(max_age)
   defp to_integer(max_age), do: max_age
 
-  defp cache_directive(cache_directive = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier)
+  defp cache_directive(cache_control = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier, _personalised)
        when ttl_multiplier == 0 do
-    %Belfrage.CacheControl{cache_directive | cacheability: "private", max_age: dial_multiply(max_age, ttl_multiplier)}
+    %Belfrage.CacheControl{cache_control | cacheability: "private", max_age: dial_multiply(max_age, ttl_multiplier)}
   end
 
-  defp cache_directive(cache_directive = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier) do
-    %Belfrage.CacheControl{cache_directive | max_age: dial_multiply(max_age, ttl_multiplier)}
+  defp cache_directive(cache_control = %Belfrage.CacheControl{cacheability: "public"}, _ttl_multiplier, true) do
+    Stump.log(
+      :info,
+      "The request is personalised, however the response cache-control header is set to \"public\" - setting cacheability to \"private\""
+    )
+
+    Belfrage.Metrics.Statix.increment("request.personalised.unexpected_public_response")
+
+    %Belfrage.CacheControl{cache_control | cacheability: "private", max_age: 0}
+  end
+
+  defp cache_directive(cache_control = %Belfrage.CacheControl{max_age: max_age}, ttl_multiplier, _personalised) do
+    %Belfrage.CacheControl{cache_control | max_age: dial_multiply(max_age, ttl_multiplier)}
   end
 end

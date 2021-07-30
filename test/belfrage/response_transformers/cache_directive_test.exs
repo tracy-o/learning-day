@@ -4,210 +4,390 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Struct
+  alias Belfrage.Test.PersonalisationHelper
 
-  defp set_ttl_multiplier(value) do
+  @personalised_struct %Struct{
+    request: %Struct.Request{
+      host: "bbc.co.uk"
+    },
+    private: %Struct.Private{
+      personalised_route: true
+    }
+  }
+
+  @non_personalised_struct %Struct{
+    request: %Struct.Request{
+      host: "bbc.com"
+    },
+    private: %Struct.Private{
+      personalised_route: false
+    }
+  }
+
+  defp set_stubs(%{personalisation: personalisation, webcore_ttl_multiplier: ttl}) do
     stub(Belfrage.Dials.ServerMock, :state, fn
-      :ttl_multiplier ->
-        Belfrage.Dials.TtlMultiplier.transform(value)
+      :personalisation ->
+        Belfrage.Dials.Personalisation.transform(personalisation)
+
+      :webcore_ttl_multiplier ->
+        Belfrage.Dials.WebcoreTtlMultiplier.transform(ttl)
     end)
+
+    stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
   end
 
-  defp set_webcore_ttl_multiplier(value) do
+  defp set_stubs(%{personalisation: personalisation, ttl_multiplier: ttl}) do
     stub(Belfrage.Dials.ServerMock, :state, fn
-      :webcore_ttl_multiplier ->
-        Belfrage.Dials.WebcoreTtlMultiplier.transform(value)
+      :personalisation ->
+        Belfrage.Dials.Personalisation.transform(personalisation)
+
+      :ttl_multiplier ->
+        Belfrage.Dials.TtlMultiplier.transform(ttl)
     end)
+
+    stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
   end
 
   describe "&call/1 with default multipliers" do
     setup do
-      set_ttl_multiplier("default")
-      :ok
+      set_stubs(%{personalisation: "off", ttl_multiplier: "default"})
+      {:ok, struct: @non_personalised_struct}
     end
 
     test "Given no cache_control response header, nothing is changed" do
       assert CacheDirective.call(%Struct{}) == %Struct{}
     end
 
-    test "Given a cache control with no max-age, the max-age remains unprovided" do
-      struct =
-        CacheDirective.call(%Struct{
-          response: %Struct.Response{
-            headers: %{
-              "cache-control" => "private"
+    test "Given a cache control with no max-age, the max-age remains unprovided", %{struct: struct} do
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private"
+              }
             }
-          }
         })
 
-      assert struct.response.cache_directive.max_age == nil
-      assert struct.response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == nil
+      assert response.cache_directive.cacheability == "private"
     end
 
-    test "Given a max-age, with default multipliers, the max-age remains unchanged" do
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 30
+    test "Given a max-age, with default multipliers, the max-age remains unchanged", %{struct: struct} do
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "max-age=30"
+              }
+            }
+        })
+
+      assert response.cache_directive.max_age == 30
+    end
+  end
+
+  describe "&call/1 Given a non-personalised struct and default ttl multiplier" do
+    setup do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "default"})
+      {:ok, struct: @non_personalised_struct}
+    end
+
+    test "with cache-control set to public, in the response cache directive the cacheabilty is set to \"public\" and the max_age is unchanged",
+         %{struct: struct} do
+      %{response: response} =
+        %{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=1000"
+              }
+            }
+        }
+        |> PersonalisationHelper.authenticate_request()
+        |> CacheDirective.call()
+
+      assert response.cache_directive.cacheability == "public"
+      assert response.cache_directive.max_age == 1000
+    end
+
+    test "with cache-control set to private, in the response cache directive the cacheabilty is set to \"private\" and the max_age is unchanged",
+         %{struct: struct} do
+      %{response: response} =
+        %{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private, max-age=1000"
+              }
+            }
+        }
+        |> PersonalisationHelper.authenticate_request()
+        |> CacheDirective.call()
+
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 1000
+    end
+  end
+
+  describe "&call/1 Given a personalised struct and default ttl multiplier" do
+    setup do
+      set_stubs(%{personalisation: "on", ttl_multiplier: "default"})
+      {:ok, struct: @personalised_struct}
+    end
+
+    test "with cache-control set to public, in the response cache directive the cacheabilty is set to \"private\" and the max_age is set to 0",
+         %{struct: struct} do
+      %{response: response} =
+        %{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=1000"
+              }
+            }
+        }
+        |> PersonalisationHelper.authenticate_request()
+        |> CacheDirective.call()
+
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 0
+    end
+
+    test "with cache-control set to private, in the response cache directive the cacheabilty is set to \"private\" the and max_age is unchanged",
+         %{struct: struct} do
+      %{response: response} =
+        %{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private, max-age=1000"
+              }
+            }
+        }
+        |> PersonalisationHelper.authenticate_request()
+        |> CacheDirective.call()
+
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 1000
     end
   end
 
   describe "&call/1 with altered ttl_multiplier" do
     setup do
-      set_ttl_multiplier("default")
-      :ok
+      {:ok, struct: @non_personalised_struct}
     end
 
-    test "Given a max-age and a private ttl_multiplier, the max-age is set to 0 and the cacheability is set to private" do
-      set_ttl_multiplier("private")
+    test "Given a max-age and a private ttl_multiplier, the max-age is set to 0 and the cacheability is set to private",
+         %{struct: struct} do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "private"})
 
-      struct =
-        CacheDirective.call(%Struct{
-          response: %Struct.Response{
-            headers: %{
-              "cache-control" => "public, max-age=30"
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
             }
-          }
         })
 
-      assert struct.response.cache_directive.max_age == 0
-      assert struct.response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 0
+      assert response.cache_directive.cacheability == "private"
     end
 
-    test "Given a max-age and a long ttl_multiplier, 3 times the original max-age is returned" do
-      set_ttl_multiplier("long")
+    test "Given a max-age and a long ttl_multiplier, 3 times the original max-age is returned", %{struct: struct} do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "long"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 90
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            }
+        })
+
+      assert response.cache_directive.max_age == 90
     end
 
-    test "Given a max-age and a super_long ttl_multiplier, 10 times the original max-age is returned" do
-      set_ttl_multiplier("super_long")
+    test "Given a max-age and a super_long ttl_multiplier, 10 times the original max-age is returned", %{struct: struct} do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "super_long"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 300
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            }
+        })
+
+      assert response.cache_directive.max_age == 300
     end
 
-    test "Given no max-age, and a long ttl_multiplier, the max-age remains unprovided" do
-      set_ttl_multiplier("long")
+    test "Given no max-age, and a long ttl_multiplier, the max-age remains unprovided", %{struct: struct} do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "long"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "private"
-                 }
-               }
-             }).response.cache_directive.max_age == nil
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private"
+              }
+            }
+        })
+
+      assert response.cache_directive.max_age == nil
     end
   end
 
   describe "&call/1 with altered webcore_ttl_multiplier" do
     setup do
-      set_webcore_ttl_multiplier("one")
-      :ok
+      stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> "on" end)
+
+      {:ok, struct: @non_personalised_struct}
     end
 
-    test "Given a max-age, a non Webcore platform the ttl_multiplier is used and 3 times the original max-age is returned" do
-      set_ttl_multiplier("long")
+    test "Given a max-age, a non Webcore platform the ttl_multiplier is used and 3 times the original max-age is returned",
+         %{struct: struct = %{private: private}} do
+      set_stubs(%{personalisation: "off", ttl_multiplier: "long"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: NotWebcore}
-             }).response.cache_directive.max_age == 90
+      %{response: response} =
+        CacheDirective.call(%{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: NotWebcore}
+        })
+
+      assert response.cache_directive.max_age == 90
     end
 
-    test "Given a max-age, a Webcore platform and a one webcore_ttl_multiplier the original max-age is returned" do
-      set_webcore_ttl_multiplier("one")
+    test "Given a max-age, a Webcore platform and a one webcore_ttl_multiplier the original max-age is returned", %{
+      struct: struct = %{private: private}
+    } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "one"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 30
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == 30
     end
 
-    test "Given a max-age, a Webcore platform and a half webcore_ttl_multiplier, 0.5 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("half")
+    test "Given a max-age, a Webcore platform and a half webcore_ttl_multiplier, 0.5 times the original max-age is returned",
+         %{
+           struct: struct = %{private: private}
+         } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "half"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 15
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == 15
     end
 
-    test "Given a max-age, a Webcore platform and a three-quarters webcore_ttl_multiplier, 0.75 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("three-quarters")
+    test "Given a max-age, a Webcore platform and a three-quarters webcore_ttl_multiplier, 0.75 times the original max-age is returned",
+         %{
+           struct: struct = %{private: private}
+         } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "three-quarters"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 23
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == 23
     end
 
-    test "Given a max-age, a Webcore platform and a two webcore_ttl_multiplier, 2 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("two")
+    test "Given a max-age, a Webcore platform and a two webcore_ttl_multiplier, 2 times the original max-age is returned",
+         %{
+           struct: struct = %{private: private}
+         } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "two"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 60
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == 60
     end
 
-    test "Given a max-age, a Webcore platform and a four webcore_ttl_multiplier, 4 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("four")
+    test "Given a max-age, a Webcore platform and a four webcore_ttl_multiplier, 4 times the original max-age is returned",
+         %{
+           struct: struct = %{private: private}
+         } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "four"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 120
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == 120
     end
 
-    test "Given no max-age, a Webcore platform and a four webcore_ttl_multiplier the max-age remains unprovided" do
-      set_webcore_ttl_multiplier("four")
+    test "Given no max-age, a Webcore platform and a four webcore_ttl_multiplier the max-age remains unprovided",
+         %{
+           struct: struct = %{private: private}
+         } do
+      set_stubs(%{personalisation: "off", webcore_ttl_multiplier: "four"})
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "private"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == nil
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          struct
+          | response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private"
+              }
+            },
+            private: %Struct.Private{private | platform: Webcore}
+        })
+
+      assert response.cache_directive.max_age == nil
     end
   end
 end
