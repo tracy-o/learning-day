@@ -14,6 +14,13 @@ defmodule Belfrage.PersonalisationTest do
       pipeline: ["a", "really", "long", "pipeline"]
     }
 
+    setup do
+      stub_dial(:personalisation, "on")
+      stub_flagpole(true)
+
+      :ok
+    end
+
     test "adds personalisation attrs if personalisation is 'on'" do
       spec = Map.put(@route_spec, :personalisation, "on")
       result = Personalisation.transform_route_spec(spec)
@@ -87,8 +94,6 @@ defmodule Belfrage.PersonalisationTest do
 
   describe "personalised_request?/1" do
     test "returns true if personalisation is enabled and request is made by authenticated user to personalised route on bbc.co.uk" do
-      enable_personalisation()
-
       struct =
         %Struct{}
         |> set_host("bbc.co.uk")
@@ -96,20 +101,43 @@ defmodule Belfrage.PersonalisationTest do
         |> authenticate_request()
 
       assert Personalisation.personalised_request?(struct)
-
-      refute struct |> deauthenticate_request() |> Personalisation.personalised_request?()
-      refute struct |> set_personalised_route(false) |> Personalisation.personalised_request?()
-      refute struct |> set_host("bbc.com") |> Personalisation.personalised_request?()
-
-      disable_personalisation()
-      refute Personalisation.personalised_request?(struct)
     end
 
-    def set_host(struct, host) do
+    test "returns false if personalisation is enabled and request is made by unauthenticated user to personalised route on bbc.co.uk" do
+      struct =
+        %Struct{}
+        |> set_host("bbc.co.uk")
+        |> set_personalised_route(true)
+        |> authenticate_request()
+
+      refute struct |> deauthenticate_request() |> Personalisation.personalised_request?()
+    end
+
+    test "returns false if personalisation is enabled and request is made by authenticated user to non-personalised route on bbc.co.uk" do
+      struct =
+        %Struct{}
+        |> set_host("bbc.co.uk")
+        |> set_personalised_route(false)
+        |> authenticate_request()
+
+      refute struct |> set_personalised_route(false) |> Personalisation.personalised_request?()
+    end
+
+    test "returns false if personalisation is enabled and request is made by authenticated user to personalised route on bbc.com" do
+      struct =
+        %Struct{}
+        |> set_host("bbc.com")
+        |> set_personalised_route(true)
+        |> authenticate_request()
+
+      refute struct |> set_host("bbc.com") |> Personalisation.personalised_request?()
+    end
+
+    defp set_host(struct, host) do
       Struct.add(struct, :request, %{host: host})
     end
 
-    def set_personalised_route(struct, value) do
+    defp set_personalised_route(struct, value) do
       Struct.add(struct, :private, %{personalised_route: value})
     end
   end
@@ -125,15 +153,5 @@ defmodule Belfrage.PersonalisationTest do
 
   defp stub_flagpole(value) do
     Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> value end)
-  end
-
-  def enable_personalisation() do
-    stub_dial(:personalisation, "on")
-    stub_flagpole(true)
-  end
-
-  def disable_personalisation() do
-    stub_dial(:personalisation, "off")
-    stub_flagpole(false)
   end
 end
