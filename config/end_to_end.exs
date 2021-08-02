@@ -9,4 +9,5 @@ config :belfrage,
   authentication_client: Belfrage.Clients.AuthenticationMock,
   routefile: Routes.RoutefileMock,
   monitor_api: Belfrage.MonitorMock,
-  production_environment: "test"
+  production_environment: "test",
+  dial: Belfrage.Dials.ServerMock
