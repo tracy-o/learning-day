@@ -1,4 +1,6 @@
 defmodule Belfrage.Test.PersonalisationHelper do
+  import Belfrage.Test.StubHelper
+
   alias Plug.Conn
   alias Belfrage.Struct
   alias Belfrage.Struct.Request
@@ -57,5 +59,23 @@ defmodule Belfrage.Test.PersonalisationHelper do
     conn
     |> authenticate_request()
     |> Conn.put_req_header("cookie", "ckns_atkn=#{token}")
+  end
+
+  @doc """
+  Stubs the personalisation dial to be 'on' and authentication flagpole to be
+  green.
+  """
+  def enable_personalisation() do
+    stub_dial(:personalisation, "on")
+    stub_authentication_flagpole(true)
+  end
+
+  @doc """
+  Stubs the personalisation dial to be 'off' and authentication flagpole to be
+  red.
+  """
+  def disable_personalisation() do
+    stub_dial(:personalisation, "off")
+    stub_authentication_flagpole(false)
   end
 end

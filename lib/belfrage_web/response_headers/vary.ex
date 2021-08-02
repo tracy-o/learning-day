@@ -3,7 +3,8 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Private, UserSession}
+  alias Belfrage.Struct.{Request, Private}
+  alias Belfrage.Personalisation
 
   @behaviour ResponseHeaders
 
@@ -25,10 +26,10 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     |> Enum.join(",")
   end
 
-  def vary_headers(struct = %Struct{request: request = %Request{}, private: private = %Private{}}, false) do
+  def vary_headers(%Struct{request: request = %Request{}, private: private = %Private{}}, false) do
     request
     |> base_headers()
-    |> Kernel.++(allowed_headers(struct))
+    |> Kernel.++(route_headers(private))
     |> Kernel.++(adverts_headers(request.edge_cache?, private.platform))
     |> Enum.join(",")
   end
@@ -46,9 +47,9 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp allowed_headers(%Struct{private: private = %Private{}, user_session: user_session = %UserSession{}}) do
+  defp route_headers(private = %Private{}) do
     ignore_headers =
-      if user_session.authenticated && !private.personalised_request do
+      if private.personalised_route && !Personalisation.enabled?() do
         ~w(cookie x-id-oidc-signedin)
       else
         ~w(cookie)

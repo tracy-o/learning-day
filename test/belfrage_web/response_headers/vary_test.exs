@@ -1,6 +1,8 @@
 defmodule BelfrageWeb.ResponseHeaders.VaryTest do
   use ExUnit.Case, async: true
   use Plug.Test
+  use Test.Support.Helper, :mox
+  import Belfrage.Test.PersonalisationHelper
 
   alias BelfrageWeb.ResponseHeaders.Vary
   alias Belfrage.Struct
@@ -75,24 +77,26 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       assert "x-id-oidc-signedin" in vary_headers(struct)
     end
 
-    test "vary non-personalised requests to personalised routes on x-id-oidc-signedin" do
+    test "vary requests to personalised routes on x-id-oidc-signedin if personalisation is enabled" do
+      enable_personalisation()
+
       struct = %Struct{
         private: %Private{
           headers_allowlist: ["x-id-oidc-signedin"],
-          personalised_route: true,
-          personalised_request: false
+          personalised_route: true
         }
       }
 
       assert "x-id-oidc-signedin" in vary_headers(struct)
     end
 
-    test "don't vary authenticated non-personalised requests to personalised routes on x-id-oidc-signedin" do
+    test "don't vary requests to personalised routes on x-id-oidc-signedin if personalisation is disabled" do
+      disable_personalisation()
+
       struct = %Struct{
         private: %Private{
           headers_allowlist: ["x-id-oidc-signedin"],
-          personalised_route: true,
-          personalised_request: false
+          personalised_route: true
         },
         user_session: %UserSession{authenticated: true}
       }

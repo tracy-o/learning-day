@@ -26,12 +26,12 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   defp set_stubs(%{personalisation: personalisation, webcore_ttl_multiplier: ttl}) do
     stub_dials(personalisation: personalisation, webcore_ttl_multiplier: ttl)
-    stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
+    stub_authentication_flagpole(personalisation)
   end
 
   defp set_stubs(%{personalisation: personalisation, ttl_multiplier: ttl}) do
     stub_dials(personalisation: personalisation, ttl_multiplier: ttl)
-    stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> personalisation end)
+    stub_authentication_flagpole(personalisation)
   end
 
   describe "&call/1 with default multipliers" do
