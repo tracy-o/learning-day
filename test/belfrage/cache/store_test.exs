@@ -7,8 +7,6 @@ defmodule Belfrage.Cache.StoreTest do
   use Test.Support.Helper, :mox
 
   setup do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-
     %{
       struct: %Struct{
         request: %Struct.Request{

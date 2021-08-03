@@ -1,15 +1,4 @@
 defmodule Belfrage.Dials.Supervisor do
-  @moduledoc """
-  These processes will not be started with the application
-  when running the tests. Instead, they will need to be started
-  independently in the test setup. For example:
-  `start_supervised!({Belfrage.Dials.Supervisor, name: :test_dials_supervisor})`
-  https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html#start_supervised!/2
-
-  For more help, see the testing best practices docs
-  https://github.com/bbc/belfrage/wiki/Testing-best-practices
-  """
-
   use Supervisor
   use Belfrage.DialConfig
   @type dials_event :: :dials_changed
@@ -40,12 +29,12 @@ defmodule Belfrage.Dials.Supervisor do
     Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
   end
 
-  defp children(env: :test) do
-    []
-  end
-
-  defp children(_env) do
-    dial_children() ++ [Belfrage.Dials.Poller]
+  def children(opts) do
+    if opts[:env] == :test do
+      dial_children()
+    else
+      dial_children() ++ [Belfrage.Dials.Poller]
+    end
   end
 
   @doc """
@@ -60,7 +49,7 @@ defmodule Belfrage.Dials.Supervisor do
 
   defp dial_children do
     Enum.map(dial_config(), fn dial_info = {_dial_mod, dial_name, _default_value} ->
-      Supervisor.child_spec({Belfrage.Dials.Server, dial_info}, id: dial_name)
+      Supervisor.child_spec({Belfrage.Dials.LiveServer, dial_info}, id: dial_name)
     end)
   end
 end

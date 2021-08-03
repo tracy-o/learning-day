@@ -5,11 +5,6 @@ defmodule Belfrage.Cache.DistributedTest do
   alias Belfrage.Struct
   alias Belfrage.Cache.Distributed
 
-  setup do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-    :ok
-  end
-
   test "store/1" do
     struct = %Struct{
       request: %Struct.Request{request_hash: "distributed-cache-test"},
@@ -23,9 +18,7 @@ defmodule Belfrage.Cache.DistributedTest do
   end
 
   test "store/1 respects ccp_enabled" do
-    stub(Belfrage.Dials.ServerMock, :state, fn :ccp_enabled ->
-      Belfrage.Dials.CcpEnabled.transform("false")
-    end)
+    stub_dial(:ccp_enabled, "false")
 
     struct = %Struct{
       request: %Struct.Request{request_hash: "distributed-cache-test"},

@@ -114,15 +114,6 @@ defmodule Belfrage.PersonalisationTest do
     end
   end
 
-  defp stub_dial(name, value) do
-    value =
-      Application.get_env(:belfrage, :dial_handlers)
-      |> Map.fetch!(to_string(name))
-      |> apply(:transform, [value])
-
-    Mox.stub(Belfrage.Dials.ServerMock, :state, fn ^name -> value end)
-  end
-
   defp stub_flagpole(value) do
     Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> value end)
   end

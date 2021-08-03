@@ -1,7 +1,8 @@
-defmodule Belfrage.DialTest do
+defmodule Belfrage.Dials.LiveServerTest do
   use ExUnit.Case, async: true
 
-  alias Belfrage.{Dial, Dials}
+  alias Belfrage.Dial
+  alias Belfrage.Dials.LiveServer
 
   defmodule TestDial do
     @behaviour Dial
@@ -39,22 +40,20 @@ defmodule Belfrage.DialTest do
   setup do
     default_value = "true"
     dial_name = :"a-test-dial"
-
-    {:ok, _pid} = Belfrage.Dials.Server.start_link({TestDial, dial_name, default_value})
-
+    start_supervised!({LiveServer, {TestDial, dial_name, default_value}})
     :ok
   end
 
   test "dial correctly handles changed event in which the dial boolean state is flipped" do
-    dial_state = Dials.Server.state(:"a-test-dial")
+    dial_state = LiveServer.state(:"a-test-dial")
     GenServer.cast(:"a-test-dial", {:dials_changed, %{"a-test-dial" => "#{!dial_state}"}})
 
-    assert Dials.Server.state(:"a-test-dial") == !dial_state
+    assert LiveServer.state(:"a-test-dial") == !dial_state
   end
 
   describe "state/0" do
     test "returns transformed initial value after init" do
-      assert Dials.Server.state(:"a-test-dial") == true
+      assert LiveServer.state(:"a-test-dial") == true
     end
   end
 
@@ -63,21 +62,21 @@ defmodule Belfrage.DialTest do
       state = {TestDial, "a-test-dial", true}
 
       assert {:noreply, {TestDial, "a-test-dial", true}} ==
-               Dials.Server.handle_cast({:dials_changed, %{}}, state)
+               LiveServer.handle_cast({:dials_changed, %{}}, state)
     end
 
     test "when a change for a different dial is submitted" do
       state = {TestDial, "a-test-dial", true}
 
       assert {:noreply, {TestDial, "a-test-dial", true}} ==
-               Dials.Server.handle_cast({:dials_changed, %{"foo" => "bar"}}, state)
+               LiveServer.handle_cast({:dials_changed, %{"foo" => "bar"}}, state)
     end
 
     test "when a valid change for the dial is submitted" do
       state = {TestDial, "a-test-dial", true}
 
       assert {:noreply, {TestDial, "a-test-dial", false}} ==
-               Dials.Server.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
+               LiveServer.handle_cast({:dials_changed, %{"a-test-dial" => "false"}}, state)
     end
 
     test "when dial has on_change/1 callback logic, it is called" do
@@ -87,7 +86,7 @@ defmodule Belfrage.DialTest do
       state = {TestDialWithCallback, "a-test-dial", true}
 
       assert {:noreply, {TestDialWithCallback, "a-test-dial", false}} ==
-               Dials.Server.handle_cast({:dials_changed, %{"a-test-dial" => false}}, state)
+               LiveServer.handle_cast({:dials_changed, %{"a-test-dial" => false}}, state)
 
       assert TestDialWithCallback.value() == false
     end
