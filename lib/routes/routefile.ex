@@ -683,11 +683,13 @@ defmodule Routes.Routefile do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
+  handle "/programmes/profiles/:key", using: "Programmes", examples: ["/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
   handle "/programmes/snippet/:records_ids.json", using: "ProgrammesData", examples: ["/programmes/snippet/n45bj5.json"]
 
-  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio"] do
-    return_404 if: !Enum.member?(["audio", "video"], slice)
-  end
+  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio", "/programmes/topics/Documentary_films_about_HIV/AIDS"]
 
   handle "/programmes/topics/:topic", using: "Programmes", examples: ["/programmes/topics/Performers_of_Sufi_music"]
 
