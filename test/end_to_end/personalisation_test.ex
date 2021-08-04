@@ -114,6 +114,31 @@ defmodule EndToEnd.PersonalisationTest do
     end
   end
 
+  describe "non-personalised route" do
+    test "authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request_to_non_personalised_route()
+        |> personalise_request()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+
+    test "non-authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request_to_non_personalised_route()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+  end
+
   defp expect_origin_request(fun, opts \\ []) do
     expect(LambdaMock, :call, fn _role_arn, _function_arn, request, _request_id, _opts ->
       fun.(request)
@@ -151,10 +176,14 @@ defmodule EndToEnd.PersonalisationTest do
     expect_origin_request(fn _req -> nil end, opts)
   end
 
-  defp build_request() do
+  defp build_request(path \\ "/my/session/webcore-platform") do
     :get
-    |> conn("/my/session/webcore-platform")
+    |> conn(path)
     |> Map.put(:host, "www.bbc.co.uk")
+  end
+
+  defp build_request_to_non_personalised_route() do
+    build_request("/")
   end
 
   defp make_request(conn) do
