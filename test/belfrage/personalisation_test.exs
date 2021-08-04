@@ -68,19 +68,19 @@ defmodule Belfrage.PersonalisationTest do
   describe "enabled?/0" do
     test "returns true when the dial is on and the flagpole is green" do
       stub_dial(:personalisation, "off")
-      stub_flagpole(false)
+      stub_authentication_flagpole(false)
       refute Personalisation.enabled?()
 
       stub_dial(:personalisation, "on")
-      stub_flagpole(false)
+      stub_authentication_flagpole(false)
       refute Personalisation.enabled?()
 
       stub_dial(:personalisation, "off")
-      stub_flagpole(true)
+      stub_authentication_flagpole(true)
       refute Personalisation.enabled?()
 
       stub_dial(:personalisation, "on")
-      stub_flagpole(true)
+      stub_authentication_flagpole(true)
       assert Personalisation.enabled?()
     end
   end
@@ -105,26 +105,12 @@ defmodule Belfrage.PersonalisationTest do
       refute Personalisation.personalised_request?(struct)
     end
 
-    def set_host(struct, host) do
+    defp set_host(struct, host) do
       Struct.add(struct, :request, %{host: host})
     end
 
-    def set_personalised_route(struct, value) do
+    defp set_personalised_route(struct, value) do
       Struct.add(struct, :private, %{personalised_route: value})
     end
-  end
-
-  defp stub_flagpole(value) do
-    Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> value end)
-  end
-
-  def enable_personalisation() do
-    stub_dial(:personalisation, "on")
-    stub_flagpole(true)
-  end
-
-  def disable_personalisation() do
-    stub_dial(:personalisation, "off")
-    stub_flagpole(false)
   end
 end

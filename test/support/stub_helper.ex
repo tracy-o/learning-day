@@ -27,4 +27,8 @@ defmodule Belfrage.Test.StubHelper do
     |> Map.fetch!(to_string(name))
     |> apply(:transform, [value])
   end
+
+  def stub_authentication_flagpole(value) do
+    Mox.stub(Belfrage.Authentication.FlagpoleMock, :state, fn -> value end)
+  end
 end

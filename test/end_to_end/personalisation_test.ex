@@ -21,31 +21,19 @@ defmodule EndToEnd.PersonalisationTest do
   }
 
   test "non-personalised request" do
-    expect_origin_request(fn %{headers: headers} ->
-      refute headers[:authorization]
-      refute headers[:"x-authentication-provider"]
-      refute headers[:"pers-env"]
-      refute headers[:"ctx-age-bracket"]
-      refute headers[:"ctx-allow-personalisation"]
-    end)
+    expect_non_personalised_origin_request()
 
-    build_request()
-    |> make_request()
-    |> assert_successful_response()
+    response =
+      build_request()
+      |> make_request()
+      |> assert_successful_response()
+
+    assert vary_header(response) =~ "x-id-oidc-signedin"
   end
 
   test "personalised request" do
     token = AuthToken.valid_access_token()
-
-    expect_origin_request(fn %{headers: headers} ->
-      assert headers[:authorization] == "Bearer #{token}"
-      assert headers[:"x-authentication-provider"]
-      assert headers[:"pers-env"]
-      assert headers[:"ctx-allow-personalisation"] == "true"
-      assert headers[:"ctx-age-bracket"]
-      assert headers[:"ctx-pii-allow-personalisation"] == "true"
-      assert headers[:"ctx-pii-age-bracket"]
-    end)
+    expect_personalised_origin_request(token)
 
     response =
       build_request()
@@ -53,8 +41,7 @@ defmodule EndToEnd.PersonalisationTest do
       |> make_request()
       |> assert_successful_response()
 
-    [vary_header] = get_resp_header(response, "vary")
-    assert vary_header =~ "x-id-oidc-signedin"
+    assert vary_header(response) =~ "x-id-oidc-signedin"
   end
 
   test "invalid auth token" do
@@ -97,6 +84,61 @@ defmodule EndToEnd.PersonalisationTest do
     assert cache_control == "private"
   end
 
+  describe "personalisation is disabled" do
+    setup do
+      stub_dial(:personalisation, "off")
+      :ok
+    end
+
+    test "authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request()
+        |> personalise_request()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+
+    test "non-authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+  end
+
+  describe "non-personalised route" do
+    test "authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request_to_non_personalised_route()
+        |> personalise_request()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+
+    test "non-authenticated request" do
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request_to_non_personalised_route()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+  end
+
   defp expect_origin_request(fun, opts \\ []) do
     expect(LambdaMock, :call, fn _role_arn, _function_arn, request, _request_id, _opts ->
       fun.(request)
@@ -108,14 +150,40 @@ defmodule EndToEnd.PersonalisationTest do
     expect(LambdaMock, :call, 0, fn _role_arn, _function_arn, _request, _request_id, _opts -> nil end)
   end
 
+  defp expect_non_personalised_origin_request() do
+    expect_origin_request(fn %{headers: headers} ->
+      refute headers[:authorization]
+      refute headers[:"x-authentication-provider"]
+      refute headers[:"pers-env"]
+      refute headers[:"ctx-age-bracket"]
+      refute headers[:"ctx-allow-personalisation"]
+    end)
+  end
+
+  defp expect_personalised_origin_request(token) do
+    expect_origin_request(fn %{headers: headers} ->
+      assert headers[:authorization] == "Bearer #{token}"
+      assert headers[:"x-authentication-provider"]
+      assert headers[:"pers-env"]
+      assert headers[:"ctx-allow-personalisation"] == "true"
+      assert headers[:"ctx-age-bracket"]
+      assert headers[:"ctx-pii-allow-personalisation"] == "true"
+      assert headers[:"ctx-pii-age-bracket"]
+    end)
+  end
+
   defp stub_origin_request(opts) do
     expect_origin_request(fn _req -> nil end, opts)
   end
 
-  defp build_request() do
+  defp build_request(path \\ "/my/session/webcore-platform") do
     :get
-    |> conn("/my/session/webcore-platform")
+    |> conn(path)
     |> Map.put(:host, "www.bbc.co.uk")
+  end
+
+  defp build_request_to_non_personalised_route() do
+    build_request("/")
   end
 
   defp make_request(conn) do
@@ -126,5 +194,11 @@ defmodule EndToEnd.PersonalisationTest do
     assert conn.status == 200
     assert conn.resp_body == @response["body"]
     conn
+  end
+
+  defp vary_header(response) do
+    response
+    |> get_resp_header("vary")
+    |> hd()
   end
 end
