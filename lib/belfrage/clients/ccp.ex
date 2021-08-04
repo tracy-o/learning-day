@@ -8,14 +8,14 @@ defmodule Belfrage.Clients.CCP do
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
   @type target :: pid() | {:global, atom()}
-  @callback fetch(String.t(), String.t()) ::
+  @callback fetch(String.t()) ::
               {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
   @callback put(Struct.t()) :: :ok
   @callback put(Struct.t(), target) :: :ok
 
-  @spec fetch(String.t(), String.t()) ::
+  @spec fetch(String.t()) ::
           {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
-  def fetch(request_hash, request_id) do
+  def fetch(request_hash) do
     # TODO Investigate using internal S3 endpoints for secure fetches
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
 
@@ -24,8 +24,7 @@ defmodule Belfrage.Clients.CCP do
     ccp_response =
       @http_client.execute(%Clients.HTTP.Request{
         method: :get,
-        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
-        request_id: request_id
+        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash})
       })
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs

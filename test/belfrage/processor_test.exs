@@ -7,6 +7,7 @@ defmodule Belfrage.ProcessorTest do
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.Metrics.LatencyMonitor
 
   defmodule Module.concat([Routes, Specs, SomePersonalisedLoop]) do
     def specs do
@@ -200,7 +201,11 @@ defmodule Belfrage.ProcessorTest do
 
   describe "fetch_fallback_from_cache/1" do
     setup do
-      struct = %Struct{request: %Request{request_hash: unique_cache_key()}, response: %Response{http_status: 200}}
+      struct = %Struct{
+        request: %Request{request_hash: unique_cache_key(), request_id: UUID.uuid4()},
+        response: %Response{http_status: 200}
+      }
+
       response = %Response{http_status: 200, body: "Cached response"}
       response = put_into_cache(%Struct{struct | response: response})
       %{struct: struct, cached_response: response}
@@ -237,6 +242,18 @@ defmodule Belfrage.ProcessorTest do
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response.body == cached_response.body
       assert response.cache_directive.cacheability == "private"
+    end
+
+    test "tracks latency checkpoints when fetching fallback", %{struct: struct} do
+      start_supervised!(LatencyMonitor)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      Processor.fetch_fallback_from_cache(struct)
+
+      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      assert checkpoints[:fallback_request_sent]
+      assert checkpoints[:fallback_response_received]
+      assert checkpoints[:fallback_response_received] > checkpoints[:fallback_request_sent]
     end
   end
 

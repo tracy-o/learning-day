@@ -256,7 +256,7 @@ defmodule EndToEnd.MonitorEventsTest do
   describe "when a distributed fallback can be served" do
     setup do
       Belfrage.Clients.CCPMock
-      |> expect(:fetch, fn _request_hash, _request_id ->
+      |> expect(:fetch, fn _request_hash ->
         {:ok, :stale,
          %Belfrage.Struct.Response{
            body: :zlib.gzip(~s({"hi": "bonjour"})),

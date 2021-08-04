@@ -1,5 +1,7 @@
 defmodule Belfrage do
   alias Belfrage.{Processor, Struct}
+  alias Belfrage.Struct.{Request, Response}
+  alias Belfrage.Metrics.LatencyMonitor
 
   @callback handle(Struct.t()) :: Struct.t()
 
@@ -25,10 +27,10 @@ defmodule Belfrage do
 
   defp check_cache(struct), do: Processor.fetch_early_response_from_cache(struct)
 
-  defp generate_response(struct = %Struct{response: %Struct.Response{http_status: http_status}})
+  defp generate_response(struct = %Struct{request: request = %Request{}, response: %Response{http_status: http_status}})
        when http_status != nil do
-    struct
-    |> Processor.init_post_response_pipeline()
+    LatencyMonitor.checkpoint(request.request_id, :early_response_received)
+    Processor.init_post_response_pipeline(struct)
   end
 
   defp generate_response(structs) do

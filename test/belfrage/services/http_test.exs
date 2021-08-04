@@ -2,6 +2,7 @@ defmodule Belfrage.Services.HTTPTest do
   alias Belfrage.Clients
   alias Belfrage.Services.HTTP
   alias Belfrage.Struct
+  alias Belfrage.Metrics.LatencyMonitor
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
@@ -39,32 +40,35 @@ defmodule Belfrage.Services.HTTPTest do
 
   @ok_response {
     :ok,
-    %Belfrage.Clients.HTTP.Response{
+    %Clients.HTTP.Response{
       status_code: 200,
       headers: %{"content-type" => "application/json"},
       body: ~s({"some": "body"})
     }
   }
 
+  defmacro expect_request(request, response) do
+    quote do
+      expect(Clients.HTTPMock, :execute, fn unquote(request) -> unquote(response) end)
+    end
+  end
+
   describe "HTTP service" do
     test "get returns a response" do
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core?foo=bar",
-             payload: "",
-             headers: %{
-               "accept-encoding" => "gzip",
-               "x-country" => "gb",
-               "user-agent" => "Belfrage",
-               "x-forwarded-host" => "www.bbc.co.uk",
-               "req-svc-chain" => "BELFRAGE"
-             }
-           } ->
-          @ok_response
-        end
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-country" => "gb",
+            "user-agent" => "Belfrage",
+            "x-forwarded-host" => "www.bbc.co.uk",
+            "req-svc-chain" => "BELFRAGE"
+          }
+        },
+        @ok_response
       )
 
       assert %Struct{
@@ -77,17 +81,14 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     test "post returns a response" do
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :post,
-             url: "https://www.bbc.co.uk/_web_core?foo=bar",
-             payload: ~s({"some": "data"}),
-             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-           } ->
-          @ok_response
-        end
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :post,
+          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          payload: ~s({"some": "data"}),
+          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
+        },
+        @ok_response
       )
 
       assert %Struct{
@@ -100,20 +101,27 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     test "origin returns a 500 response" do
-      Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :get,
-                               url: "https://www.bbc.co.uk/_web_core?foo=bar",
-                               payload: "",
-                               headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-                             } ->
+      response =
         {:ok,
-         %Belfrage.Clients.HTTP.Response{
+         %Clients.HTTP.Response{
            status_code: 500,
            headers: %{"content-type" => "text/plain"},
            body: "500 - Internal Server Error"
          }}
-      end)
+
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-country" => "gb",
+            "user-agent" => "Belfrage"
+          }
+        },
+        response
+      )
 
       assert %Struct{
                response: %Struct.Response{
@@ -124,22 +132,16 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     test "Cannot connect to origin" do
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core?foo=bar",
-             payload: "",
-             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-           } ->
-          {
-            :error,
-            %Belfrage.Clients.HTTP.Error{
-              reason: :failed_to_connect
-            }
-          }
-        end
+      response = {:error, %Clients.HTTP.Error{reason: :failed_to_connect}}
+
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          payload: "",
+          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
+        },
+        response
       )
 
       assert %Struct{
@@ -152,20 +154,16 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     test "origin times out" do
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core?foo=bar",
-             payload: "",
-             headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-           } ->
-          {
-            :error,
-            %Belfrage.Clients.HTTP.Error{reason: :timeout}
-          }
-        end
+      response = {:error, %Clients.HTTP.Error{reason: :timeout}}
+
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          payload: "",
+          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
+        },
+        response
       )
 
       assert %Struct{
@@ -189,22 +187,19 @@ defmodule Belfrage.Services.HTTPTest do
         }
       }
 
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core",
-             payload: "",
-             headers: %{
-               "accept-encoding" => "gzip",
-               "x-country" => "gb",
-               "user-agent" => "Belfrage",
-               "x-forwarded-host" => "www.bbc.co.uk"
-             }
-           } ->
-          @ok_response
-        end
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-country" => "gb",
+            "user-agent" => "Belfrage",
+            "x-forwarded-host" => "www.bbc.co.uk"
+          }
+        },
+        @ok_response
       )
 
       assert %Struct{
@@ -232,23 +227,20 @@ defmodule Belfrage.Services.HTTPTest do
         }
       }
 
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core",
-             payload: "",
-             headers: %{
-               "accept-encoding" => "gzip",
-               "x-country" => "gb",
-               "user-agent" => "Belfrage",
-               "x-forwarded-host" => "www.bbc.co.uk",
-               "raw-header" => "val"
-             }
-           } ->
-          @ok_response
-        end
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-country" => "gb",
+            "user-agent" => "Belfrage",
+            "x-forwarded-host" => "www.bbc.co.uk",
+            "raw-header" => "val"
+          }
+        },
+        @ok_response
       )
 
       assert %Struct{
@@ -276,25 +268,22 @@ defmodule Belfrage.Services.HTTPTest do
         }
       }
 
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Belfrage.Clients.HTTP.Request{
-             method: :get,
-             url: "https://www.bbc.co.uk/_web_core",
-             payload: "",
-             headers: %{
-               "accept-encoding" => "gzip",
-               "x-bbc-edge-cache" => "1",
-               "x-bbc-edge-country" => "gb",
-               "x-bbc-edge-host" => "www.bbc.co.uk",
-               "x-bbc-edge-isuk" => "yes",
-               "x-bbc-edge-scheme" => "https",
-               "user-agent" => "Belfrage"
-             }
-           } ->
-          @ok_response
-        end
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/_web_core",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-bbc-edge-cache" => "1",
+            "x-bbc-edge-country" => "gb",
+            "x-bbc-edge-host" => "www.bbc.co.uk",
+            "x-bbc-edge-isuk" => "yes",
+            "x-bbc-edge-scheme" => "https",
+            "user-agent" => "Belfrage"
+          }
+        },
+        @ok_response
       )
 
       assert %Struct{
@@ -304,6 +293,30 @@ defmodule Belfrage.Services.HTTPTest do
                  headers: %{"content-type" => "application/json"}
                }
              } = HTTP.dispatch(struct)
+    end
+
+    test "tracks latency checkpoints" do
+      start_supervised!(LatencyMonitor)
+
+      request_id = UUID.uuid4(:hex)
+      struct = Struct.add(@get_struct, :request, %{request_id: request_id})
+
+      stub_request()
+      response = HTTP.dispatch(struct)
+      assert_successful_response(response)
+
+      checkpoints = LatencyMonitor.get_checkpoints(request_id)
+      assert checkpoints[:origin_request_sent]
+      assert checkpoints[:origin_response_received]
+      assert checkpoints[:origin_response_received] > checkpoints[:origin_request_sent]
+    end
+
+    defp stub_request() do
+      stub(Clients.HTTPMock, :execute, fn _ -> @ok_response end)
+    end
+
+    defp assert_successful_response(response) do
+      assert %Struct{response: %{http_status: 200}} = response
     end
   end
 end
