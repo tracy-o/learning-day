@@ -7,7 +7,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
-  @default_slack_channel "help-belfrage"
+  @default_slack_channel "belfrage-smoke-tests"
   @slack_auth_token_env_var_name "SLACK_AUTH_TOKEN"
   @additional_slack_message_env_var_name "SLACK_MESSAGE"
 
