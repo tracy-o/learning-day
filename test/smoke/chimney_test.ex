@@ -23,6 +23,9 @@ defmodule BelfrageChimneySmokeTest do
 
   describe "GTM tests" do
     @describetag stack: "gtm"
+
+    @tag spec: "SportVideos"
+    @tag platform: "Webcore"
     test "GTM /sport/videos/48521428", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host(smoke_env)
 
@@ -32,6 +35,8 @@ defmodule BelfrageChimneySmokeTest do
       assert Helper.header_item_exists(resp.headers, @bruce_header)
     end
 
+    @tag spec: "WorldServiceTajik"
+    @tag platform: "MozartNews"
     test "GTM .com /tajik", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host_com(smoke_env)
       resp = Helper.get_route(endpoint, "/tajik")
@@ -43,6 +48,9 @@ defmodule BelfrageChimneySmokeTest do
 
   describe "CDN" do
     @describetag stack: "cdn"
+    @describetag spec: "FablData"
+    @describetag platform: "Fabl"
+
     test "web", %{smoke_env: smoke_env} do
       endpoint = Helper.cdn_web_host(smoke_env)
 
