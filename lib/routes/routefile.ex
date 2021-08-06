@@ -904,8 +904,6 @@ defmodule Routes.Routefile do
 
   # Sport
 
-  handle "/sport/0/mhqu7270m50e", using: "FullStackHomePageTest", examples: []
-
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
 
@@ -1529,7 +1527,7 @@ defmodule Routes.Routefile do
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
   handle "/_health/private_content", using: "PhoPrivateContent", examples: ["/_health/private_content"]
-  
+
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
