@@ -21,7 +21,7 @@ defmodule Belfrage.Services.HTTP do
     response =
       case result do
         {:ok, response} ->
-          track_response(private.platform, response.status_code)
+          track_response(private, response.status_code)
           %Response{http_status: response.status_code, body: response.body, headers: response.headers}
 
         {:error, error} ->
@@ -118,18 +118,22 @@ defmodule Belfrage.Services.HTTP do
     end
   end
 
-  defp track_response(platform, status) do
-    Belfrage.Event.record(:metric, :increment, "service.#{platform}.response.#{status}")
+  defp track_response(private = %Private{}, status) do
+    Belfrage.Event.record(:metric, :increment, "service.#{platform_name(private)}.response.#{status}")
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
-    increment_metric("error.service.#{private.platform}.timeout")
+    increment_metric("error.service.#{platform_name(private)}.timeout")
     log_error(:timeout, struct)
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
-    increment_metric("error.service.#{private.platform}.request")
+    increment_metric("error.service.#{platform_name(private)}.request")
     log_error(error, struct)
+  end
+
+  defp platform_name(%Private{platform: platform}) do
+    Macro.to_string(platform)
   end
 
   defp increment_metric(metric) do
