@@ -92,7 +92,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       :ok
     end
 
-    test "Given a cache-control set to public, in the response cache directive the cacheabilty is set to \"private\" and the max_age is set to 0" do
+    test "Given a cache-control set to public, the cacheabilty is set to 'private' and the max_age is set to 0" do
       %{response: response} =
         CacheDirective.call(%Struct{
           response: %Struct.Response{
@@ -109,7 +109,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       assert response.cache_directive.max_age == 0
     end
 
-    test "Given a cache-control set to private, in the response cache directive the cacheabilty is set to \"private\" the and max_age is unchanged" do
+    test "Given a cache-control set to private, the cacheabilty remains as 'private' the and max_age is unchanged" do
       %{response: response} =
         CacheDirective.call(%Struct{
           response: %Struct.Response{
@@ -119,6 +119,42 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
           },
           private: %Struct.Private{
             personalised_request: true
+          }
+        })
+
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 30
+    end
+
+    test "Given a cache-control set to public and a Webcore platform, the cacheabilty is set to 'private' and the max_age is set to 0" do
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          response: %Struct.Response{
+            headers: %{
+              "cache-control" => "public, max-age=30"
+            }
+          },
+          private: %Struct.Private{
+            personalised_request: true,
+            platform: Webcore
+          }
+        })
+
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 0
+    end
+
+    test "Given a cache-control set to private and a Webcore platform, the cacheabilty remains as 'private' the and max_age is unchanged" do
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          response: %Struct.Response{
+            headers: %{
+              "cache-control" => "private, max-age=30"
+            }
+          },
+          private: %Struct.Private{
+            personalised_request: true,
+            platform: Webcore
           }
         })
 
