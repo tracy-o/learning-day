@@ -13,14 +13,14 @@ We may wish to stub out our AWS library with OriginSimulator on to test the effe
 
 2. Remove "DevelopmentRequests" from the pipeline in the platform/route spec which uses AWS:
 
-        --- a/lib/routes/platforms/webcore.ex
-        +++ b/lib/routes/platforms/webcore.ex
-        @@ -19,6 +19,6 @@ defmodule Routes.Platforms.Webcore do
-        end
-        
-        defp pipeline(_production_env) do
-        -    pipeline("live") ++ ["DevelopmentRequests"]
-        +    pipeline("live")
+        #/lib/routes/platforms/webcore.ex
+        defmodule Routes.Platforms.Webcore do
+            ...
+            
+            defp pipeline(_production_env) do
+            --  pipeline("live") ++ ["DevelopmentRequests"]
+            ++  pipeline("live")
+            end
         end
 
 3. Setup OriginSimulator to return JSON (Must have body, headers, statusCode):
