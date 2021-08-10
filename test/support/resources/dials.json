@@ -1,6 +1,6 @@
 {
-	"ttl_multiplier":"default",
-	"webcore_ttl_multiplier": "one",
+	"webcore_ttl_multiplier": "default",
+	"non_webcore_ttl_multiplier":"default",
 	"logging_level":"debug",
 	"circuit_breaker":"false",
 	"personalisation":"on",

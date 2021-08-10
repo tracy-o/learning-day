@@ -1,6 +1,6 @@
 defmodule Belfrage.Dials.NonWebcoreTtlMultiplierTest do
   use ExUnit.Case, async: true
-  alias Belfrage.Dials.TtlMultiplier
+  alias Belfrage.Dials.NonWebcoreTtlMultiplier
 
   describe "transform/1" do
     test "when the value is very-short" do
