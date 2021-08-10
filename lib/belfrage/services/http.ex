@@ -16,7 +16,7 @@ defmodule Belfrage.Services.HTTP do
     result =
       request
       |> build_request(private.origin)
-      |> execute_request(private.platform)
+      |> execute_request(private)
 
     response =
       case result do
@@ -109,8 +109,8 @@ defmodule Belfrage.Services.HTTP do
   defp is_uk(false), do: "no"
   defp is_uk(_), do: nil
 
-  defp execute_request(request = %Clients.HTTP.Request{}, platform) do
-    Belfrage.Event.record "function.timing.service.#{platform}.request" do
+  defp execute_request(request = %Clients.HTTP.Request{}, private = %Private{}) do
+    Belfrage.Event.record "function.timing.service.#{platform_name(private)}.request" do
       LatencyMonitor.checkpoint(request.request_id, :origin_request_sent)
       response = @http_client.execute(request)
       LatencyMonitor.checkpoint(request.request_id, :origin_response_received)
