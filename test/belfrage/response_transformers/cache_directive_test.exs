@@ -39,7 +39,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       end
     end
   end
-  
+
   describe "call/1 with varying non-Webcore multipliers" do
     for non_webcore_value <- ["very-short", "short", "default", "long", "very-long"] do
       @non_webcore_value non_webcore_value
@@ -109,9 +109,9 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
       assert response.cache_directive.max_age == 0
     end
 
-    test "with cache-control set to private, in the response cache directive the cacheabilty is set to \"private\" the and max_age is unchanged" do
+    test "Given a cache-control set to private, in the response cache directive the cacheabilty is set to \"private\" the and max_age is unchanged" do
       %{response: response} =
-      CacheDirective.call(%Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "private, max-age=30"
