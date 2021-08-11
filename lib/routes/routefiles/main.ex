@@ -172,8 +172,8 @@ defroutefile "Main" do
   handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
 
-  handle "/homepage/personalised", using: "HomePagePersonalised", only_on: "test", examples: ["/homepage/personalised"]
-  handle "/homepage/segmented", using: "HomePageSegmented", only_on: "test", examples: ["/homepage/segmented"]
+  handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
+  handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
 
 
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
@@ -468,6 +468,9 @@ defroutefile "Main" do
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123", "/marathi/example-123.amp", "/marathi/example-123.json"]
 
+  ## World Service - Olympic Redirects
+  redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
+
   ## World Service - Topcat to CPS Redirects
   redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/noticias-internacional-44125537", status: 301
   redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
@@ -615,16 +618,280 @@ defroutefile "Main" do
 
   # /programmes
 
-  # temporarily commented out to enable testing
-  # handle "/programmes/:pid", using: "ProgrammesEntity", examples: [] do
-  #   return_404 if: !String.match?(pid, ~r/[0-9b-df-hj-np-tv-z]{8,15}/)
-  # end
-
   handle "/programmes/av/:id", using: "ProgrammesVideos", only_on: "test", examples: ["/programmes/av/p0992fn5", "/programmes/av/p092wf79", "/programmes/av/p091z0jn"] do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
   end
 
+  handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final/contact"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/articles/:key/:slug", using: "ProgrammesArticle", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/articles/:key", using: "ProgrammesArticle", examples: ["/programmes/articles/yHvY1qp0QstSmj6NKbJlKk"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/a-z/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/current"]
+
+  handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/by/b/current"] do
+    return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
+  end
+
+  handle "/programmes/a-z/by/:search/:slice.json", using: "ProgrammesData", examples: ["/programmes/a-z/by/b/all.json", "/programmes/a-z/by/b/player.json"] do
+    return_404 if: [
+      !String.match?(search, ~r/^[a-zA-Z@]$/),
+      !Enum.member?(["all", "player"], slice),
+    ]
+  end
+
+  handle "/programmes/a-z/by/:search.json", using: "ProgrammesData", examples: ["/programmes/a-z/by/b.json"] do
+    return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
+  end
+
+  handle "/programmes/a-z/by/:search/:slice", using: "Programmes", examples: ["/programmes/a-z/by/b/all", "/programmes/a-z/by/b/player"] do
+    return_404 if: [
+      !String.match?(search, ~r/^[a-zA-Z@]$/),
+      !Enum.member?(["all", "player"], slice),
+    ]
+  end
+
+  handle "/programmes/a-z/by/:search", using: "ProgrammesLegacy", examples: ["/programmes/a-z/by/b"] do
+    return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
+  end
+
+  handle "/programmes/a-z/:slice.json", using: "ProgrammesData", examples: ["/programmes/a-z/player.json", "/programmes/a-z/all.json"] do
+    return_404 if: !Enum.member?(["all", "player"], slice)
+  end
+
+  handle "/programmes/a-z.json", using: "ProgrammesData", examples: ["/programmes/a-z.json"]
+
+  handle "/programmes/a-z", using: "Programmes", examples: ["/programmes/a-z"]
+
+  handle "/programmes/formats/:category/:slice", using: "Programmes", examples: ["/programmes/formats/animation/all", "/programmes/formats/animation/player"] do
+    return_404 if: !Enum.member?(["all", "player"], slice)
+  end
+
+  handle "/programmes/formats/:category", using: "Programmes", examples: ["/programmes/formats/animation"]
+
+  handle "/programmes/formats", using: "Programmes", examples: ["/programmes/formats"]
+
+  handle "/programmes/genres", using: "Programmes", examples: ["/programmes/genres"]
+
+  handle "/programmes/genres/*_any", using: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
+
+  handle "/programmes/profiles/:key/:slug", using: "Programmes", examples: ["/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC/tommy-shelby"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/profiles/:key", using: "Programmes", examples: ["/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f"] do
+    return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
+  end
+
+  handle "/programmes/snippet/:records_ids.json", using: "ProgrammesData", examples: ["/programmes/snippet/n45bj5.json"]
+
+  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio", "/programmes/topics/Documentary_films_about_HIV/AIDS"]
+
+  handle "/programmes/topics/:topic", using: "Programmes", examples: ["/programmes/topics/Performers_of_Sufi_music"]
+
+  handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
+
+  handle "/programmes/:pid/articles", using: "ProgrammesArticle", examples: ["/programmes/b006m8dq/articles"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesLegacy", examples: ["/programmes/b006qsq5/broadcasts/2020/01"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy", examples: ["/programmes/w172vkw6f1ffv5f/broadcasts"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/children.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/children.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/clips", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/clips"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/contact", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/contact"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/credits", using: "ProgrammesLegacy", examples: ["/programmes/b06ss3j4/credits"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesLegacy", examples: ["/programmes/b006qnmr/episodes/a-z/a"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesLegacy", examples: ["/programmes/p02nrw8y/episodes/downloads.rss"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/downloads", using: "ProgrammesEntity", examples: ["/programmes/p02nrw8y/episodes/downloads"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/guide", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes/guide"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/guide.2013inc", using: "ProgrammesEntity", examples: ["/programmes/p02zmzss/episodes/guide.2013inc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/last.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/episodes/last.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/player", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes/player"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/upcoming.json", using: "ProgrammesData", examples: ["/programmes/b04drklx/episodes/upcoming.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes/:year/:month.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/episodes/2020/12.json"] do
+    return_404 if: [
+      !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
+      !String.match?(year, ~r/^[1-2][0-9]{3}$/),
+      !String.match?(month, ~r/^0?[1-9]|1[0-2]$/)
+    ]
+  end
+
+  handle "/programmes/:pid/episodes.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/episodes.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/episodes", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/galleries", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/galleries"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/members/all", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/members/all"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/members", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/members"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/microsite", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/microsite"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/player", using: "ProgrammesEntity", examples: ["/programmes/p097pw9q/player"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/playlist.json", using: "ProgrammesData", examples: ["/programmes/b08lkyzk/playlist.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/podcasts", using: "ProgrammesLegacy", examples: ["/programmes/p02nrw8y/podcasts"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/profiles", using: "ProgrammesEntity", examples: ["/programmes/b045fz8r/profiles"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes.ameninc", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes.ameninc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes.2013inc", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes.2013inc"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/recipes", using: "ProgrammesEntity", examples: ["/programmes/b006v5y2/recipes"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/schedules", using: "ProgrammesLegacy", examples: ["/programmes/p02str2y/schedules"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/schedules/*_any", using: "ProgrammesLegacy", examples: ["/programmes/p02str2y/schedules/2019/03/18"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/segments.json", using: "ProgrammesData", examples: ["/programmes/b01m2fz4/segments.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/segments", using: "ProgrammesLegacy", examples: ["/programmes/b01m2fz4/segments"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/series.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq/series.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/series", using: "ProgrammesLegacy", examples: ["/programmes/b006m8dq/series"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics/1091_Media_films"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/topics", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid.html", using: "ProgrammesLegacy", examples: ["/programmes/b006m8dq.html"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid.json", using: "ProgrammesData", examples: ["/programmes/b006m8dq.json"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes/:pid/:imagepid", using: "ProgrammesEntity", examples: ["/programmes/p028d9jw/p028d8nr"] do
+    return_404 if: [
+      !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
+      !String.match?(imagepid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+    ]
+  end
+
+  handle "/programmes/:pid", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/programmes", using: "Programmes", examples: ["/programmes"]
+
+  # /programmes catch all
   handle "/programmes/*_any", using: "Programmes", examples: []
+
+  # /schedules
+
+  handle "/schedules/network/:network/on-now", using: "Schedules", examples: ["/schedules/network/cbeebies/on-now"] do
+    return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
+  end
+
+  handle "/schedules/network/:network", using: "Schedules", examples: ["/schedules/network/radioscotland"] do
+    return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
+  end
+
+  handle "/schedules/:pid/*_any", using: "Schedules", examples: ["/schedules/p00fzl6v/2021/06/28", "/schedules/p05pkt1d/2020/w02", "/schedules/p05pkt1d/2020/01", "/schedules/p05pkt1d/yesterday", "/schedules/p05pkt1d/2021"] do
+    return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
+  end
+
+  handle "/schedules", using: "Schedules", examples: ["/schedules"]
+
+  # /schedules catch all
+  handle "/schedules/*_any", using: "Schedules", examples: []
 
   # Participation
 
@@ -642,6 +909,14 @@ defroutefile "Main" do
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
+
+  # Sport Optimo Articles
+  redirect "/sport/articles", to: "/sport", status: 302
+
+  handle "/sport/articles/:optimo_id", using: "StorytellingPage", examples: ["/sport/articles/cx94820kl0mo"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 302
   redirect "/sport/amp/:topic/:id", to: "/sport/:topic/:id.amp", status: 302
   redirect "/sport/uk.app", to: "/sport.app", status: 301
@@ -712,6 +987,14 @@ defroutefile "Main" do
   redirect "/sport/rugby-league/53783522", to: "/sport/rugby-league/teams", status: 301
   redirect "/sport/rugby-union/53783523.app", to: "/sport/rugby-union/teams.app", status: 301
   redirect "/sport/rugby-union/53783523", to: "/sport/rugby-union/teams", status: 301
+  redirect "/sport/tennis/20096126.app", to: "/sport/tennis/live-scores.app", status: 301
+  redirect "/sport/tennis/20096126", to: "/sport/tennis/live-scores", status: 301
+  redirect "/sport/tennis/20096125.app", to: "/sport/tennis/results.app", status: 301
+  redirect "/sport/tennis/20096125", to: "/sport/tennis/results", status: 301
+  redirect "/sport/tennis/22713811.app", to: "/sport/tennis/order-of-play.app", status: 301
+  redirect "/sport/tennis/22713811", to: "/sport/tennis/order-of-play", status: 301
+  redirect "/sport/golf/20096131.app", to: "/sport/golf/leaderboard.app", status: 301
+  redirect "/sport/golf/20096131", to: "/sport/golf/leaderboard", status: 301
 
   ## Sport Index redirects
   redirect "/sport/football/african.app", to: "/sport/africa.app", status: 301
@@ -943,8 +1226,13 @@ defroutefile "Main" do
   handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
 
   ## Sport Fixtures pages
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures.app"]
-  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/basketball/nba/fixtures"]
+  redirect "/sport/basketball/:tournament/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/:tournament/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
+
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures"]
   handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
 
@@ -970,6 +1258,11 @@ defroutefile "Main" do
   handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings"]
 
   ## Sport Results pages
+  redirect "/sport/basketball/:tournament/results.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/:tournament/results", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/results.app", to: "/sport/basketball/scores-fixtures", status: 301
+  redirect "/sport/basketball/results", to: "/sport/basketball/scores-fixtures", status: 301
+
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
   handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
   handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app"]
@@ -986,11 +1279,11 @@ defroutefile "Main" do
   ## Sport Basketball Scores-Fixtures pages
   handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
   handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
   handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures"]
   handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
-    return_404 if: !String.match?(date, ~r/^\d{4}-\d{2}-\d{2}$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
 
   ## Sport Scores-Fixtures pages
@@ -1168,6 +1461,7 @@ defroutefile "Main" do
   handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
+
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
 
@@ -1180,7 +1474,7 @@ defroutefile "Main" do
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
   # WebCore Hub
-  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore"]
+  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore", "/webcore/tutorials", "/webcore/tutorials/getting-started"]
 
   # News Beat
 
@@ -1188,6 +1482,13 @@ defroutefile "Main" do
   redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
   redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
   redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+
+  # BBC Optimo Articles
+  redirect "/articles", to: "/", status: 302
+
+  handle "/articles/:optimo_id", using: "StorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   # Catch all
 
@@ -1225,6 +1526,10 @@ defroutefile "Main" do
   handle "/proms/*_any", using: "Proms", examples: []
 
   handle "/music", using: "Music", examples: []
+
+  # Platform Health Observability endpoints for response time monitoring of Webcore platform
+  handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
+  handle "/_health/private_content", using: "PhoPrivateContent", examples: ["/_health/private_content"]
 
   handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
   handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
