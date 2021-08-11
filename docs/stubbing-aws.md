@@ -35,5 +35,19 @@ We may wish to stub out our AWS library with OriginSimulator on to test the effe
             }
         ]
         }
+        
+    or a gzipped version:
+
+        {
+        "body": "{\"body\":\"SOME GZIPPED WEBCORE CONTENT\", \"isBase64Encoded\":true, \"statusCode\":200, \"headers\":{\"content-length\":30, \"content-encoding\":\"gzip"\}}",
+        "stages": [
+            {
+                "at": 0,
+                "latency": "120ms",
+                "status": 200
+            }
+        ]
+        }
+
 
 4. A branch with all the changes can be found here: https://github.com/bbc/belfrage/tree/stub-aws-with-origin-sim 
