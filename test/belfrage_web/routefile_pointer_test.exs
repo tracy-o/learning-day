@@ -44,7 +44,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
       assert RoutefilePointer.routefile("test", :smoke_test) == Routes.Routefiles.Test
     end
 
-    test "Cosmos test will return the Live Routefile" do
+    test "Cosmos live  will return the Live Routefile" do
       assert RoutefilePointer.routefile("live", :smoke_test) == Routes.Routefiles.Test
     end
   end
@@ -56,7 +56,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
   end
 
   describe "on Cosmos env live" do
-    test "Cosmos test will return the Live Routefile" do
+    test "Cosmos live will return the Live Routefile" do
       assert RoutefilePointer.routefile("live", :live) == Routes.Routefiles.Live
     end
   end

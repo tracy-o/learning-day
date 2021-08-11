@@ -42,7 +42,7 @@ defmodule Mix.Tasks.CompileRoutes do
   end
 
   def run([env]) do
-    raise "Unexpecteed Cosmos #{env}"
+    raise "Unexpected Cosmos env: #{env}"
   end
 
   defp compile_routes("test") do

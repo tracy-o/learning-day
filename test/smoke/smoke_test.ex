@@ -7,8 +7,8 @@ defmodule Belfrage.SmokeTest do
   @moduletag :smoke_test
 
   Routes.Routefiles.Test.routes()
-  |> Enum.reject(fn {_route_matcher, %{using: loop_id, only_on: only_env}} ->
-    loop_id in @ignore_specs and only_env != "test"
+  |> Enum.filter(fn {_route_matcher, %{using: loop_id, only_on: only_env}} ->
+    not (loop_id in @ignore_specs) and only_env != "test"
   end)
   |> Enum.each(fn {route_matcher, matcher_spec} ->
     @matcher_spec Macro.escape(matcher_spec)
