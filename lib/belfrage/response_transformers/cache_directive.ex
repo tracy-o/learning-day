@@ -38,7 +38,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
     if platform == Webcore do
       @dial.state(:webcore_ttl_multiplier)
     else
-      @dial.state(:ttl_multiplier)
+      @dial.state(:non_webcore_ttl_multiplier)
     end
   end
 

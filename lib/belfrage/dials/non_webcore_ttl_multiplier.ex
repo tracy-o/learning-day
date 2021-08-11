@@ -1,4 +1,4 @@
-defmodule Belfrage.Dials.WebcoreTtlMultiplier do
+defmodule Belfrage.Dials.NonWebcoreTtlMultiplier do
   @moduledoc false
 
   @behaviour Belfrage.Dial

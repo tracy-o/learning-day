@@ -76,14 +76,14 @@ config :belfrage,
   mailbox_monitor_refresh_rate: 30_000,
   dial_handlers: %{
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
-    "ttl_multiplier" => Belfrage.Dials.TtlMultiplier,
+    "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier,
+    "non_webcore_ttl_multiplier" => Belfrage.Dials.NonWebcoreTtlMultiplier,
     "logging_level" => Belfrage.Dials.LoggingLevel,
     "personalisation" => Belfrage.Dials.Personalisation,
     "obit_mode" => Belfrage.Dials.ObitMode,
     "ccp_enabled" => Belfrage.Dials.CcpEnabled,
     "monitor_enabled" => Belfrage.Dials.MonitorEnabled,
-    "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
-    "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier
+    "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch
   },
   pool_metric_rate: 10_000,
   authentication: %{
