@@ -3,7 +3,7 @@
 ## Using OriginSimulator (https://github.com/bbc/origin_simulator)
 We may wish to stub out our AWS library with OriginSimulator on to test the effect the library is having on our system, with OriginSimulator we are able to replicate situations where AWS may return a variety of responses. 
 
-1. Add some config to overrite the host, scheme and port:
+1. Add some config to overwrite the host, scheme and port:
 
         config :ex_aws, :lambda,
             host: "test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com/",
