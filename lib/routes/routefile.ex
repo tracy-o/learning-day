@@ -513,6 +513,9 @@ defmodule Routes.Routefile do
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi", "/punjabi/example-123", "/punjabi/example-123.amp", "/punjabi/example-123.json"]
 
+  ## World Service - Russian Partners Redirects
+  redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
+
   redirect "/russian/mobile/*any", to: "/russian", status: 301
 
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
