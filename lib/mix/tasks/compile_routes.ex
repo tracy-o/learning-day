@@ -62,6 +62,7 @@ defmodule Mix.Tasks.CompileRoutes do
   defp compile_file(file) do
     IO.puts "|  Compiling #{file} ..."
     [{module, binary}] = Code.compile_file(file)
+    File.mkdir_p(dir())
     filename = "#{dir()}/#{module}.beam"
 
     File.write(filename, binary)
@@ -69,7 +70,7 @@ defmodule Mix.Tasks.CompileRoutes do
   end
 
   defp dir do
-    "#{File.cwd!}/_build/#{Mix.env()}/lib/belfrage/ebin"
+    "#{File.cwd!}/_build/routes"
   end
 
   def cosmos_env do

@@ -54,6 +54,8 @@ end
 release :belfrage do
   set overlays: [
     {:copy, "rel/runtime_config.exs", "etc/runtime_config.exs"},
+    {:copy, "_build/routes/Elixir.Routes.Routefiles.Live.beam", "lib/<%= release_name %>-<%= release_version %>/ebin/Elixir.Routes.Routefiles.Live.beam"},
+    {:copy, "_build/routes/Elixir.Routes.Routefiles.Test.beam", "lib/<%= release_name %>-<%= release_version %>/ebin/Elixir.Routes.Routefiles.Test.beam"}
   ]
 
   set config_providers: [

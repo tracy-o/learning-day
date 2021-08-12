@@ -47,8 +47,8 @@ node {
       docker.image(dockerImage).inside("-u root -e MIX_ENV=prod ${vars}") {
         sh 'mix deps.get'
         sh 'mix hex.audit'
-        sh 'mix distillery.release'
         sh 'mix compile_routes'
+        sh 'mix distillery.release'
       }
       sh 'cp _build/prod/rel/belfrage/releases/*/belfrage.tar.gz SOURCES/'
     }
