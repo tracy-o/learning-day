@@ -17,7 +17,7 @@ defmodule Belfrage.Services.Webcore do
     )
   end
 
-  defp build_webcore_response(struct) do
+  defp build_webcore_response(struct = %Struct{private: %Struct.Private{preview_mode: preview_mode}}) do
     @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
       @lambda_client.call(
         arn(struct),
@@ -26,7 +26,7 @@ defmodule Belfrage.Services.Webcore do
         struct.request.request_id,
         invoke_lambda_options(struct)
       )
-      |> Webcore.Response.build()
+      |> Webcore.Response.build(preview_mode)
     end)
   end
 

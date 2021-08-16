@@ -11,7 +11,8 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              body: "<p>Hello</p>"
            } =
              Response.build(
-               {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200, "headers" => %{}}}
+               {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200, "headers" => %{}}},
+               "off"
              )
   end
 
@@ -20,7 +21,11 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              http_status: 500,
              headers: %{},
              body: ""
-           } = Response.build({:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200}})
+           } =
+             Response.build(
+               {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200}},
+               "off"
+             )
   end
 
   test "when fails to decode base64 response a 500 is returned" do
@@ -28,7 +33,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              http_status: 500,
              headers: %{},
              body: ""
-           } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}})
+           } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}}, "off")
   end
 
   describe "response headers" do
@@ -53,7 +58,8 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
                       "another-header" => false,
                       "a-nil-header" => nil
                     }
-                  }}
+                  }},
+                 "off"
                )
     end
   end
