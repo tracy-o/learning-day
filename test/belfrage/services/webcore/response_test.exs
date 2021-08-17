@@ -38,7 +38,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}}, "off")
     end
 
-    test "when {:error, :function_not_found} is the response" do
+    test "when {:error, :function_not_found} is the response a 500 is returned" do
       assert %Struct.Response{
                http_status: 500,
                headers: %{},
@@ -81,7 +81,7 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
              } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}}, "on")
     end
 
-    test "when {:error, :function_not_found} is the response" do
+    test "when {:error, :function_not_found} is the response a 404 is returned" do
       assert %Struct.Response{
                http_status: 404,
                headers: %{},

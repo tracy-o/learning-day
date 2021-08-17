@@ -206,7 +206,7 @@ defmodule Belfrage.Services.WebcoreTest do
              } = Webcore.dispatch(struct_with_alias())
     end
 
-    test "When the alias cannot be found, we serve a 404 and preview environment is on" do
+    test "When the preview environment is on and the alias cannot be found, we serve a 404" do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
@@ -228,7 +228,7 @@ defmodule Belfrage.Services.WebcoreTest do
              } = Webcore.dispatch(struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", "on"))
     end
 
-    test "When the alias cannot be found, we serve a 500 and preview environment is off" do
+    test "When the preview environment is off and the alias cannot be found, we serve a 500" do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
