@@ -1,13 +1,25 @@
-defmodule Belfrage.Release.TestRoutefile do
+defmodule Belfrage.Releases.Plugins.Routefiles do
   use Distillery.Releases.Plugin
 
   def before_assembly(release, _opts) do
-    compile_routes("test", release)
+    compile_routes(release)
 
     release
   end
 
-  defp compile_routes("test", release) do
+  def after_assembly(release, _opts) do
+    release
+  end
+
+  def before_package(release, _opts) do
+    release
+  end
+
+  def after_package(release, _opts) do
+    release
+  end
+
+  defp compile_routes(release) do
     original_cosmos_env = cosmos_env()
 
     Application.put_env(:belfrage, :production_environment, "test")
@@ -15,10 +27,8 @@ defmodule Belfrage.Release.TestRoutefile do
     Application.put_env(:belfrage, :production_environment, original_cosmos_env)
   end
 
-  defp compile_routes(_, _release) do
-    :noop
-  end
 
+  # Used with the overlays in rel/config.exs to be added to the release
   defp compile_file(file, release) do
     IO.puts "|  Compiling #{file} ..."
     [{module, binary}] = Code.compile_file(file)
@@ -28,10 +38,9 @@ defmodule Belfrage.Release.TestRoutefile do
     IO.puts "|  Compiled #{module} in #{dir(release)}"
   end
 
-  # output_dir: "_build/prod/rel/belfrage"
-  # target dir: prod/rel/belfrage/lib/belfrage-0.2.0/ebin
+  # _build/prod/lib/belfrage/ebin/Elixir.Routes.Routefiles.Test.beam
   defp dir(release) do
-    release.profile.output_dir <> "/lib/" <> to_string(release.name) <> "-" <> release.version <> "/ebin"
+    "_build/" <> to_string(release.env) <> "/lib/" <> to_string(release.name) <> "/ebin"
   end
 
   def cosmos_env do
