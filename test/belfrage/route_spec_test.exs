@@ -49,6 +49,26 @@ defmodule Belfrage.RouteSpecTest do
     end
   end
 
+  describe "merge_key/3" do
+    test "when the key is a :pipeline and the platform_list contains :routespec_placeholder the placeholder is replaced with the routespec_list values" do
+      platform_list = ["one", :routespec_placeholder, "three"]
+      routespec_list = ["two"]
+
+      result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
+
+      assert result == ["one", "two", "three"]
+    end
+
+    test "when the key is :pipeline and the platform_list_value does not contain :routespec_placeholder, the routespec values are returned" do
+      platform_list = ["one", "three"]
+      routespec_list = ["two"]
+
+      result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
+
+      assert result == ["two"]
+    end
+  end
+
   describe "specs_for/1" do
     defmodule Module.concat([Routes, Specs, PersonalisedRouteSpec]) do
       def specs(_) do

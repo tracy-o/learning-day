@@ -26,21 +26,24 @@ defmodule Belfrage.RouteSpec do
     Map.merge(platform_specs, route_specs, &merge_key/3)
   end
 
-  defp merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
+  def merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
     "*"
   end
 
-  defp merge_key(:pipeline, platform_list_value, route_list_value)
-       when is_list(platform_list_value) and is_list(route_list_value) do
-    route_list_value
+  def merge_key(:pipeline, platform_value, route_value) when is_list(platform_value) and is_list(route_value) do
+    if :routespec_placeholder in platform_value do
+      List.flatten(Enum.map(platform_value, fn transformer -> if transformer == :routespec_placeholder, do: route_value, else: transformer end))
+    else
+      route_value
+    end
   end
 
-  defp merge_key(_key, platform_list_value, route_list_value)
+  def merge_key(_key, platform_list_value, route_list_value)
        when is_list(platform_list_value) and is_list(route_list_value) do
     platform_list_value ++ route_list_value
   end
 
-  defp merge_key(_any_key, _platform_value, route_value) do
+  def merge_key(_any_key, _platform_value, route_value) do
     route_value
   end
 end
