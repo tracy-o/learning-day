@@ -53,17 +53,13 @@ touch %{buildroot}/var/log/component/app.log
 touch %{buildroot}/var/log/component/cloudwatch.log
 mkdir -p %{buildroot}/etc/logrotate.d
 cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
+cp -p %{SOURCES6} %{buildroot}/etc/crontab
 
 %post
 systemctl enable belfrage
 systemctl enable cloudformation-signal
 /bin/chown -R component:component /home/component
 /bin/chown -R component:component /var/log/component
-
-crontab -l > logrotate_cron
-echo "*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/component" >> logrotate_cron
-crontab logrotate_cron
-rm logrotate_cron
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
