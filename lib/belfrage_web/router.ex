@@ -51,7 +51,7 @@ defmodule BelfrageWeb.Router do
         Enum.concat(
           [
             port: port,
-            protocol_options: [max_keepalive: 5_000_000, max_header_value_length: 16_384]
+            protocol_options: [max_keepalive: 5_000_000, max_header_value_length: 16_384, idle_timeout: 10_000]
           ],
           options(scheme)
         ),
