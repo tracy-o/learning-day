@@ -65,6 +65,7 @@ systemctl enable cloudformation-signal
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
 %attr(0644, root, root) /etc/logrotate.d/cloudwatch
+%attr(0644, root, root) /etc/crontab
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service
@@ -72,3 +73,4 @@ systemctl enable cloudformation-signal
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
 /var/log/component/cloudwatch.log
+/
