@@ -53,7 +53,7 @@ touch %{buildroot}/var/log/component/app.log
 touch %{buildroot}/var/log/component/cloudwatch.log
 mkdir -p %{buildroot}/etc/logrotate.d
 cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
-cp -p %{SOURCES6} %{buildroot}/etc/crontab
+cp -p %{SOURCE6} %{buildroot}/etc/crontab
 
 %post
 systemctl enable belfrage
