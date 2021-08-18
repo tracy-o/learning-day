@@ -51,21 +51,21 @@ defmodule Belfrage.RouteSpecTest do
 
   describe "merge_key/3" do
     test "when the key is a :pipeline and the platform_list contains :routespec_placeholder the placeholder is replaced with the routespec_list values" do
-      platform_list = ["one", :routespec_placeholder, "three"]
-      routespec_list = ["two"]
+      platform_list = ["HttpRedirector", :routespec_placeholder, "CircuitBreaker"]
+      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
 
       result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
 
-      assert result == ["one", "two", "three"]
+      assert result == ["HttpRedirector", "LambdaOriginAlias", "PlatformKillswitch", "CircuitBreaker"]
     end
 
     test "when the key is :pipeline and the platform_list_value does not contain :routespec_placeholder, the routespec values are returned" do
-      platform_list = ["one", "three"]
-      routespec_list = ["two"]
+      platform_list = ["HttpRedirector", "CircuitBreaker"]
+      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
 
       result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
 
-      assert result == ["two"]
+      assert result == ["LambdaOriginAlias", "PlatformKillswitch"]
     end
   end
 
