@@ -4,7 +4,8 @@ defmodule BelfrageWeb.RouteMasterTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
-  alias Routes.{RoutefileMock, RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
+  alias Routes.Routefiles.Mock, as: Routefile
+  alias Routes.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
   alias Belfrage.Helpers.FileIOMock
 
   @struct_with_html_response %Struct{
@@ -76,7 +77,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_bbc_headers()
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 404
       assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
@@ -91,7 +92,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 200
     end
@@ -191,7 +192,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 301
       assert conn.resp_body == ""
@@ -207,7 +208,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert get_resp_header(conn, "cache-control") == [
                "public, stale-if-error=90, stale-while-revalidate=60, max-age=60"
@@ -223,7 +224,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert get_resp_header(conn, "req-svc-chain") == ["GTM,BELFRAGE"]
     end
@@ -266,7 +267,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_req_header("x-host", "www.bbc.co.uk")
         |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
         |> put_req_header("cookie", "foo=bar")
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert get_resp_header(conn, "vary") == [
                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
@@ -282,7 +283,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -298,7 +299,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -314,7 +315,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -330,7 +331,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -346,7 +347,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -362,7 +363,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -378,7 +379,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 301
       assert conn.resp_body == ""
@@ -394,7 +395,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -410,7 +411,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -428,7 +429,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert get_resp_header(conn, "cache-control") == [
                "public, stale-if-error=90, stale-while-revalidate=60, max-age=60"
@@ -444,7 +445,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -460,7 +461,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -476,7 +477,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -492,7 +493,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -508,7 +509,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -524,7 +525,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -540,7 +541,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -556,7 +557,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 302
       assert conn.resp_body == ""
@@ -572,7 +573,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 405
     end
@@ -597,7 +598,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "test")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 200
     end
@@ -645,7 +646,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "test")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 200
     end
@@ -661,7 +662,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "test")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 404
     end
@@ -678,7 +679,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "live")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 404
     end
@@ -718,7 +719,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "live")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
-        |> RoutefileMock.call([])
+        |> Routefile.call([])
 
       assert conn.status == 404
     end

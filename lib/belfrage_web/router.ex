@@ -8,8 +8,6 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
 
-  @routefile Application.get_env(:belfrage, :routefile)
-
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
@@ -42,7 +40,7 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 405, "")
   end
 
-  match(_, to: @routefile)
+  match(_, to: BelfrageWeb.RoutefilePointer)
 
   def child_spec(scheme: scheme, port: port) do
     Plug.Cowboy.child_spec(
