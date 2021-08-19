@@ -10,7 +10,7 @@ defmodule Belfrage.Authentication.Supervisor do
     Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
   end
 
-  defp children(env: env) when env in [:test, :routes_test, :smoke_test] do
+  defp children(env: :test) do
     []
   end
 
