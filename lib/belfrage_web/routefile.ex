@@ -1,7 +1,7 @@
 defmodule BelfrageWeb.Routefile do
   defmacro defroutefile(_name, do: block) do
     quote do
-      for env <- unquote(module_envs()) do
+      for env <- unquote(["Test", "Live"]) do
         defmodule apply(BelfrageWeb.Routefile, :module_name, [env]) do
           unquote(block)
         end
@@ -9,18 +9,16 @@ defmodule BelfrageWeb.Routefile do
     end
   end
 
-  def module_name(env) do
+  # This function is needed by the routes mix task otherwise it can go
+  def for_cosmos(env) when env in ["test", "live"] do
     Module.concat(["Routes", "Routefiles", String.capitalize(env)])
   end
 
-  def module_envs do
-    case cosmos_env() do
-      "test" -> ["Test", "Live"]
-      _ -> ["Live"]
-    end
+  def for_cosmos(_env) do
+    Module.concat(["Routes", "Routefiles", "Live"])
   end
 
-  defp cosmos_env do
-    Application.get_env(:belfrage, :production_environment)
+  def module_name(env) do
+    Module.concat(["Routes", "Routefiles", String.capitalize(env)])
   end
 end
