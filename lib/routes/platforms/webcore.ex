@@ -15,7 +15,7 @@ defmodule Routes.Platforms.Webcore do
   defp query_params_allowlist(_production_env), do: ["mode", "chameleon"]
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
