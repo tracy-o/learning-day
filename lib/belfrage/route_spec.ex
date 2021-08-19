@@ -50,10 +50,10 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp alter_pipeline(platform_pipeline, routespec_pipeline) do
-    if :routespec_placeholder in platform_pipeline do
+    if :_routespec_pipeline_placeholder in platform_pipeline do
       List.flatten(
         Enum.map(platform_pipeline, fn transformer ->
-          if transformer == :routespec_placeholder, do: routespec_pipeline, else: transformer
+          if transformer == :_routespec_pipeline_placeholder, do: routespec_pipeline, else: transformer
         end)
       )
     else
