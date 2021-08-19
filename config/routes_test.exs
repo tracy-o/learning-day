@@ -2,5 +2,4 @@ use Mix.Config
 
 import_config "test.exs"
 
-config :belfrage,
-  routefile: Routes.Routefile
+# FIXME: we could now avoid another mix env...

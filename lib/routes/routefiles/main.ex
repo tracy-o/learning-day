@@ -4,7 +4,10 @@
 # What types of route matcher you can  use:
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
-defmodule Routes.Routefile do
+
+import BelfrageWeb.Routefile
+
+defroutefile "Main" do
   use BelfrageWeb.RouteMaster
 
   # Vanity URLs

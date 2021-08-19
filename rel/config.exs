@@ -52,9 +52,12 @@ end
 # will be used by default
 
 release :belfrage do
+  plugin Belfrage.Releases.Plugins.Routefiles
+
+  # Elixir.Routes.Routefiles.Test.beam overlay copies the beam produced by the plugin above into the rel/ directory
   set overlays: [
     {:copy, "rel/runtime_config.exs", "etc/runtime_config.exs"},
-    {:copy, "lib/routes/routefile.ex", "etc/routefile.ex"}
+    {:copy, "_build/prod/lib/belfrage/ebin/Elixir.Routes.Routefiles.Test.beam", "lib/<%= release_name %>-<%= release_version %>/ebin/Elixir.Routes.Routefiles.Test.beam"}
   ]
 
   set config_providers: [
@@ -65,4 +68,5 @@ release :belfrage do
   set applications: [
     :runtime_tools
   ]
+
 end
