@@ -30,18 +30,14 @@ defmodule Belfrage.RouteSpec do
     "*"
   end
 
-  def merge_key(key, platform_pipeline, routespec_pipeline)
-      when (is_list(platform_pipeline) and is_list(routespec_pipeline) and key == :pipeline) or
-             key == :response_pipeline do
-    if :routespec_placeholder in platform_pipeline do
-      List.flatten(
-        Enum.map(platform_pipeline, fn transformer ->
-          if transformer == :routespec_placeholder, do: routespec_pipeline, else: transformer
-        end)
-      )
-    else
-      routespec_pipeline
-    end
+  def merge_key(:pipeline, platform_pipeline, routespec_pipeline)
+      when is_list(platform_pipeline) and is_list(routespec_pipeline) do
+    alter_pipeline(platform_pipeline, routespec_pipeline)
+  end
+
+  def merge_key(:response_pipeline, platform_pipeline, routespec_pipeline)
+      when is_list(platform_pipeline) and is_list(routespec_pipeline) do
+    alter_pipeline(platform_pipeline, routespec_pipeline)
   end
 
   def merge_key(_key, platform_list_value, route_list_value)
@@ -51,5 +47,17 @@ defmodule Belfrage.RouteSpec do
 
   def merge_key(_any_key, _platform_value, route_value) do
     route_value
+  end
+
+  defp alter_pipeline(platform_pipeline, routespec_pipeline) do
+    if :routespec_placeholder in platform_pipeline do
+      List.flatten(
+        Enum.map(platform_pipeline, fn transformer ->
+          if transformer == :routespec_placeholder, do: routespec_pipeline, else: transformer
+        end)
+      )
+    else
+      routespec_pipeline
+    end
   end
 end
