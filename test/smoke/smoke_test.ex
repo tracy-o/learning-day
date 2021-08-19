@@ -1,12 +1,14 @@
 defmodule Belfrage.SmokeTest do
   use ExUnit.Case, async: true
+  alias Test.Support.Helper
+  alias Belfrage.RouteSpec
 
   @environments (System.get_env("SMOKE_ENV") || "test,live") |> String.split(",")
   @ignore_specs Application.get_env(:smoke, :ignore_specs)
 
   @moduletag :smoke_test
 
-  Routes.Routefiles.Test.routes()
+  Routes.Routefile.routes()
   |> Enum.filter(fn {_route_matcher, %{using: loop_id, only_on: only_env}} ->
     not (loop_id in @ignore_specs) and only_env != "test"
   end)
