@@ -4,31 +4,90 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
 
   use ExUnit.Case
 
-  test "when content is base64 encoded response, the response is base64 decoded" do
-    assert %Struct.Response{
-             http_status: 200,
-             headers: %{},
-             body: "<p>Hello</p>"
-           } =
-             Response.build(
-               {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200, "headers" => %{}}}
-             )
+  describe "with preview mode off" do
+    test "when content is base64 encoded response, the response is base64 decoded" do
+      assert %Struct.Response{
+               http_status: 200,
+               headers: %{},
+               body: "<p>Hello</p>"
+             } =
+               Response.build(
+                 {:ok,
+                  %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200, "headers" => %{}}},
+                 "off"
+               )
+    end
+
+    test "when body is base64 encoded, but missing other keys a 500 is returned" do
+      assert %Struct.Response{
+               http_status: 500,
+               headers: %{},
+               body: ""
+             } =
+               Response.build(
+                 {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statuscode" => 200}},
+                 "off"
+               )
+    end
+
+    test "when fails to decode base64 response a 500 is returned" do
+      assert %Struct.Response{
+               http_status: 500,
+               headers: %{},
+               body: ""
+             } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}}, "off")
+    end
+
+    test "when {:error, :function_not_found} is the response a 500 is returned" do
+      assert %Struct.Response{
+               http_status: 500,
+               headers: %{},
+               body: ""
+             } = Response.build({:error, :function_not_found}, "off")
+    end
   end
 
-  test "when body is base64 encoded, but missing other keys a 500 is returned" do
-    assert %Struct.Response{
-             http_status: 500,
-             headers: %{},
-             body: ""
-           } = Response.build({:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200}})
-  end
+  describe "with preview_mode on" do
+    test "when content is base64 encoded response, the response is base64 decoded" do
+      assert %Struct.Response{
+               http_status: 200,
+               headers: %{},
+               body: "<p>Hello</p>"
+             } =
+               Response.build(
+                 {:ok,
+                  %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statusCode" => 200, "headers" => %{}}},
+                 "on"
+               )
+    end
 
-  test "when fails to decode base64 response a 500 is returned" do
-    assert %Struct.Response{
-             http_status: 500,
-             headers: %{},
-             body: ""
-           } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}})
+    test "when body is base64 encoded, but missing other keys a 500 is returned" do
+      assert %Struct.Response{
+               http_status: 500,
+               headers: %{},
+               body: ""
+             } =
+               Response.build(
+                 {:ok, %{"body" => "PHA+SGVsbG88L3A+", "isBase64Encoded" => true, "statuscode" => 200}},
+                 "on"
+               )
+    end
+
+    test "when fails to decode base64 response a 500 is returned" do
+      assert %Struct.Response{
+               http_status: 500,
+               headers: %{},
+               body: ""
+             } = Response.build({:ok, %{"body" => "i am not base 64 encoded", "isBase64Encoded" => true}}, "on")
+    end
+
+    test "when {:error, :function_not_found} is the response a 404 is returned" do
+      assert %Struct.Response{
+               http_status: 404,
+               headers: %{},
+               body: "404 - not found"
+             } = Response.build({:error, :function_not_found}, "on")
+    end
   end
 
   describe "response headers" do
@@ -53,7 +112,8 @@ defmodule Belfrage.Services.Webcore.ResponseTest do
                       "another-header" => false,
                       "a-nil-header" => nil
                     }
-                  }}
+                  }},
+                 "off"
                )
     end
   end

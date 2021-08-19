@@ -3,7 +3,7 @@ defmodule Belfrage.Services.Webcore.Response do
 
   alias Belfrage.Struct
 
-  def build({:error, :function_not_found}) do
+  def build({:error, :function_not_found}, _preview_mode = "on") do
     %Struct.Response{
       http_status: 404,
       headers: %{},
@@ -11,7 +11,7 @@ defmodule Belfrage.Services.Webcore.Response do
     }
   end
 
-  def build({:error, _reason}) do
+  def build({:error, _reason}, _preview_mode) do
     %Struct.Response{
       http_status: 500,
       headers: %{},
@@ -19,25 +19,28 @@ defmodule Belfrage.Services.Webcore.Response do
     }
   end
 
-  def build({:ok, lambda_response = %{"body" => body, "isBase64Encoded" => true}}) do
+  def build({:ok, lambda_response = %{"body" => body, "isBase64Encoded" => true}}, preview_mode) do
     try do
       decoded_body = :b64fast.decode64(body)
 
-      build({
-        :ok,
-        %{lambda_response | "body" => decoded_body, "isBase64Encoded" => false}
-      })
+      build(
+        {
+          :ok,
+          %{lambda_response | "body" => decoded_body, "isBase64Encoded" => false}
+        },
+        preview_mode
+      )
     rescue
       ArgumentError ->
         Belfrage.Event.record(:log, :error, %{
           msg: "Failed to base64 decode response body."
         })
 
-        build({:error, :failed_base_64_decode})
+        build({:error, :failed_base_64_decode}, preview_mode)
     end
   end
 
-  def build({:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}) do
+  def build({:ok, %{"body" => body, "headers" => headers, "statusCode" => http_status}}, _preview_mode) do
     Belfrage.Event.record(:metric, :increment, "service.lambda.response.#{http_status}")
 
     %Struct.Response{
@@ -47,7 +50,7 @@ defmodule Belfrage.Services.Webcore.Response do
     }
   end
 
-  def build({:ok, invalid_response_from_web_core}) do
+  def build({:ok, invalid_response_from_web_core}, _preview_mode) do
     Belfrage.Event.record(:log, :debug, %{
       msg: "Received an invalid response from web core",
       web_core_response: invalid_response_from_web_core

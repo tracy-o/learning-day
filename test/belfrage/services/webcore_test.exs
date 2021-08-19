@@ -8,18 +8,20 @@ defmodule Belfrage.Services.WebcoreTest do
 
   @arn Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
 
-  @struct %Struct{
-    private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
-    request: %Struct.Request{
-      method: "GET",
-      path: "/_web_core",
-      query_params: %{"id" => "1234"},
-      xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy",
-      is_uk: false,
-      host: "www.bbc.com",
-      request_id: "gemma-the-get-request"
+  def struct_with_alias(origin \\ "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", preview_mode \\ "off") do
+    %Struct{
+      private: %Struct.Private{origin: origin, preview_mode: preview_mode},
+      request: %Struct.Request{
+        method: "GET",
+        path: "/_web_core",
+        query_params: %{"id" => "1234"},
+        xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy",
+        is_uk: false,
+        host: "www.bbc.com",
+        request_id: "gemma-the-get-request"
+      }
     }
-  }
+  end
 
   @lambda_response %{
     "headers" => %{},
@@ -47,7 +49,7 @@ defmodule Belfrage.Services.WebcoreTest do
                  http_status: 200,
                  body: "<h1>Hello from the Lambda!</h1>"
                }
-             } = Webcore.dispatch(@struct)
+             } = Webcore.dispatch(struct_with_alias())
     end
 
     test "given a nested query string that requires encoding" do
@@ -93,7 +95,7 @@ defmodule Belfrage.Services.WebcoreTest do
         {:ok, @lambda_response}
       end)
 
-      Webcore.dispatch(@struct)
+      Webcore.dispatch(struct_with_alias())
     end
 
     test "given an origin with an alias, it invokes the origin lambda with that alias" do
@@ -111,17 +113,15 @@ defmodule Belfrage.Services.WebcoreTest do
         {:ok, @lambda_response}
       end)
 
-      struct = %{
-        @struct
-        | private: %{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch"}
-      }
-
       assert %Struct{
                response: %Struct.Response{
                  http_status: 200,
                  body: "<h1>Hello from the Lambda!</h1>"
                }
-             } = Webcore.dispatch(struct)
+             } =
+               Webcore.dispatch(
+                 struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch", "off")
+               )
     end
 
     test "it will invoke lambda with the accept-encoding header" do
@@ -135,7 +135,7 @@ defmodule Belfrage.Services.WebcoreTest do
         {:ok, @lambda_response}
       end)
 
-      Webcore.dispatch(@struct)
+      Webcore.dispatch(struct_with_alias())
     end
 
     test "it adds webcore subsegment with struct information" do
@@ -151,7 +151,7 @@ defmodule Belfrage.Services.WebcoreTest do
         end
       )
 
-      Webcore.dispatch(@struct)
+      Webcore.dispatch(struct_with_alias())
     end
   end
 
@@ -181,7 +181,7 @@ defmodule Belfrage.Services.WebcoreTest do
                  http_status: 500,
                  body: "oh dear, Lambda broke"
                }
-             } = Webcore.dispatch(@struct)
+             } = Webcore.dispatch(struct_with_alias())
     end
 
     test "cannot invoke a lambda it serves a generic 500" do
@@ -203,10 +203,10 @@ defmodule Belfrage.Services.WebcoreTest do
                  http_status: 500,
                  body: ""
                }
-             } = Webcore.dispatch(@struct)
+             } = Webcore.dispatch(struct_with_alias())
     end
 
-    test "When the alias cannot be found, we serve a 404" do
+    test "When the preview environment is on and the alias cannot be found, we serve a 404" do
       expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
                                            _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
                                            _payload = %{
@@ -225,7 +225,30 @@ defmodule Belfrage.Services.WebcoreTest do
                  http_status: 404,
                  body: "404 - not found"
                }
-             } = Webcore.dispatch(@struct)
+             } = Webcore.dispatch(struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", "on"))
+    end
+
+    test "When the preview environment is off and the alias cannot be found, we serve a 500" do
+      expect(Clients.LambdaMock, :call, fn _role_arn = @arn,
+                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
+                                           _payload = %{
+                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
+                                             httpMethod: "GET",
+                                             path: "/_web_core",
+                                             queryStringParameters: %{"id" => "1234"}
+                                           },
+                                           _request_id = "gemma-the-get-request",
+                                           _opts ->
+        {:error, :function_not_found}
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 500,
+                 body: ""
+               }
+             } =
+               Webcore.dispatch(struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", "off"))
     end
 
     test "When the client times out" do
@@ -247,7 +270,7 @@ defmodule Belfrage.Services.WebcoreTest do
                  http_status: 500,
                  body: ""
                }
-             } = Webcore.dispatch(@struct)
+             } = Webcore.dispatch(struct_with_alias())
     end
   end
 end
