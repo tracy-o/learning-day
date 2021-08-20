@@ -1545,5 +1545,8 @@ defroutefile "Main" do
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
+  # Bitesize
+  handle "/bitesize/secondary", using: "BitesizeSecondary", only_on: "test", examples: ["/bitesize/secondary"]
+
   no_match()
 end
