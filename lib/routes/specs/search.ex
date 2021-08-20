@@ -10,7 +10,7 @@ defmodule Routes.Specs.Search do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "Personalisation", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

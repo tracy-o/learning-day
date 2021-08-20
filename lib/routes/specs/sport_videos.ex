@@ -80,5 +80,4 @@ defmodule Routes.Specs.SportVideos do
       "wrestling"
    ]
   end
-  
 end
