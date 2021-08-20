@@ -5,3 +5,4 @@ defmodule Routes.Specs.NewsElection do
        }
     end
   end
+  
