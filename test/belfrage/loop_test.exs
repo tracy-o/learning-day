@@ -2,47 +2,40 @@ defmodule Belfrage.LoopTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Loop, LoopsSupervisor}
-  alias Belfrage.Struct
-
-  @loop_supervisor :test_loop_supervisor
-
-  setup :set_mox_global
-
-  setup do
-    start_supervised!(LoopsSupervisor.child_spec(name: @loop_supervisor, id: @loop_supervisor))
-
-    LoopsSupervisor.start_loop(@loop_supervisor, "ProxyPass")
-    LoopsSupervisor.start_loop(@loop_supervisor, "SportVideos")
-
-    :ok
-  end
+  alias Belfrage.{Struct, Loop}
 
   @failure_status_code Enum.random(500..504)
 
-  @legacy_request_struct %Struct{private: %Struct.Private{loop_id: "ProxyPass"}}
+  @loop_id "ProxyPass"
+
+  @legacy_request_struct %Struct{private: %Struct.Private{loop_id: @loop_id}}
 
   @resp_struct %Struct{
-    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
   }
   @resp_struct_2 %Struct{
-    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
+    private: %Struct.Private{loop_id: @loop_id, origin: "https://s3.aws.com/"},
     response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
   }
   @non_error_resp_struct %Struct{
-    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: 200, fallback: nil}
   }
   @non_error_resp_struct_2 %Struct{
-    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://s3.aws.com/"},
+    private: %Struct.Private{loop_id: @loop_id, origin: "https://s3.aws.com/"},
     response: %Struct.Response{http_status: 200, fallback: nil}
   }
 
   @fallback_resp_struct %Struct{
-    private: %Struct.Private{loop_id: "ProxyPass", origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: 200, fallback: true}
   }
+
+  setup do
+    start_supervised!({Loop, @loop_id})
+    :ok
+  end
 
   test "returns a state pointer" do
     assert Loop.state(@legacy_request_struct) ==
@@ -57,7 +50,7 @@ defmodule Belfrage.LoopTest do
                 pipeline: ["TrailingSlashRedirector", "CircuitBreaker"],
                 resp_pipeline: [],
                 circuit_breaker_error_threshold: 200,
-                loop_id: "ProxyPass"
+                loop_id: @loop_id
               }}
   end
 
