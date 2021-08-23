@@ -51,7 +51,8 @@ node {
       echo "Error while attempting to stall tests, starting tests immediately"
     }
 
-    docker.image(dockerImage).inside("-u root -e SLACK_MESSAGE=${params.SLACK_MESSAGE}") {
+    def slackMessage = params.SLACK_MESSAGE.replace('"', '\\"')
+    docker.image(dockerImage).inside(/-u root -e "SLACK_MESSAGE=$slackMessage"/) {
       sh 'mix deps.get'
 
       try {
