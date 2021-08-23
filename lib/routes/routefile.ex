@@ -1527,6 +1527,9 @@ defmodule Routes.Routefile do
 
   handle "/music", using: "Music", examples: []
 
+   # Bitesize
+   handle "/bitesize/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/secondary"]
+
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
   handle "/_health/private_content", using: "PhoPrivateContent", examples: ["/_health/private_content"]
