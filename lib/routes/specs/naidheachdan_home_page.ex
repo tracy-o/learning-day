@@ -8,6 +8,5 @@ defmodule Routes.Specs.NaidheachdanHomePage do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "NaidheachdanObitRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
+  defp pipeline(_production_env), do: ["NaidheachdanObitRedirect"]
 end

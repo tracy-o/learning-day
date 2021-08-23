@@ -7,6 +7,5 @@ defmodule Routes.Specs.WorldServiceTajik do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
+  defp pipeline(_production_env), do: ["WorldServiceRedirect"]
 end
