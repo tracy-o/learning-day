@@ -58,8 +58,7 @@ defmodule Belfrage.Clients.Lambda do
 
   defp function_not_found(response) do
     Belfrage.Event.record(:log, :error, %{
-      message: "Function not found",
-      status: 404,
+      message: "Lambda function not found",
       response: response.body
     })
 
