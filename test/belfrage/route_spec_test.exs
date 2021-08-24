@@ -47,6 +47,15 @@ defmodule Belfrage.RouteSpecTest do
 
       assert result == %{foo: "I want the route spec to win"}
     end
+
+    test "platforms keys are returned if the same response key is not set" do
+      platform_specs = %{pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]}
+      route_specs = %{foo: "I want the route spec to win"}
+
+      result = RouteSpec.merge_specs(platform_specs, route_specs)
+
+      assert result == %{foo: "I want the route spec to win", pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]}
+    end
   end
 
   describe "merge_key/3" do
