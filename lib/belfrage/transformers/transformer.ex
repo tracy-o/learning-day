@@ -9,6 +9,10 @@ defmodule Belfrage.Transformers.Transformer do
     end
   end
 
+  def then([:_routespec_pipeline_placeholder | rest], struct) do
+    then(rest, struct)
+  end
+
   def then([next | rest], struct) do
     apply(
       String.to_existing_atom(@namespace <> "." <> next),
