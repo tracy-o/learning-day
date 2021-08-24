@@ -54,7 +54,10 @@ defmodule Belfrage.RouteSpecTest do
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{foo: "I want the route spec to win", pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]}
+      assert result == %{
+               foo: "I want the route spec to win",
+               pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+             }
     end
   end
 
