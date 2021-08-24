@@ -33,7 +33,7 @@ defmodule Belfrage.LoopTest do
   }
 
   setup do
-    start_supervised!({Loop, @loop_id})
+    start_loop()
     :ok
   end
 
@@ -118,22 +118,34 @@ defmodule Belfrage.LoopTest do
   end
 
   test "resets counter after a specific time" do
+    # Set the interval just for this specifc test and restart the loop
+    stop_loop()
+    interval = 100
+    set_env(:short_counter_reset_interval, interval)
+    start_loop()
+
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.counter.errors == 30
 
-    Process.sleep(Application.get_env(:belfrage, :short_counter_reset_interval) + 1)
+    Process.sleep(interval + 1)
 
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert false == Map.has_key?(state.counter, :error), "Loop should have reset"
   end
 
   test "resets long_counter after a specific time" do
+    # Set the interval just for this specifc test and restart the loop
+    stop_loop()
+    interval = 100
+    set_env(:long_counter_reset_interval, interval)
+    start_loop()
+
     for _ <- 1..30, do: Loop.inc(@resp_struct)
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert state.counter.errors == 30
 
-    Process.sleep(Application.get_env(:belfrage, :long_counter_reset_interval) + 1)
+    Process.sleep(interval + 1)
 
     {:ok, state} = Loop.state(@legacy_request_struct)
     assert false == Map.has_key?(state.long_counter, :error), "Loop should have reset"
@@ -164,5 +176,22 @@ defmodule Belfrage.LoopTest do
 
       assert not Map.has_key?(counter, :fallback)
     end
+  end
+
+  defp start_loop() do
+    start_supervised!({Loop, @loop_id})
+  end
+
+  defp stop_loop() do
+    # TODO: Replace with stop_supervised! once we upgrade to Elixir 1.12.
+    # stop_supervisor currently returns an error if the process that is stopped
+    # is temporary, like the loop process here.
+    stop_supervised(Loop)
+  end
+
+  defp set_env(name, value) do
+    original_value = Application.get_env(:belfrage, name)
+    Application.put_env(:belfrage, name, value)
+    on_exit(fn -> Application.put_env(:belfrage, name, original_value) end)
   end
 end

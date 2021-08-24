@@ -1,8 +1,10 @@
 use Mix.Config
 
 config :belfrage,
-  short_counter_reset_interval: 100,
-  long_counter_reset_interval: 100,
+  # Arbitrary long value so that it never fires in tests
+  short_counter_reset_interval: 3_600_000,
+  # Arbitrary long value so that it never fires in tests
+  long_counter_reset_interval: 3_600_000,
   errors_threshold: 20,
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,
