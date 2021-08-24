@@ -58,7 +58,7 @@ defmodule Belfrage.Clients.CCPTest do
         headers: %{},
         method: :get,
         payload: "",
-        timeout: 6000,
+        timeout: 1000,
         url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
       }
 

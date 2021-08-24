@@ -24,7 +24,8 @@ defmodule Belfrage.Clients.CCP do
     ccp_response =
       @http_client.execute(%Clients.HTTP.Request{
         method: :get,
-        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash})
+        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
+        timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
       })
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
