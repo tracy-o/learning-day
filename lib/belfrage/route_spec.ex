@@ -35,7 +35,7 @@ defmodule Belfrage.RouteSpec do
     alter_pipeline(platform_pipeline, routespec_pipeline)
   end
 
-  def merge_key(:response_pipeline, platform_pipeline, routespec_pipeline)
+  def merge_key(:resp_pipeline, platform_pipeline, routespec_pipeline)
       when is_list(platform_pipeline) and is_list(routespec_pipeline) do
     alter_pipeline(platform_pipeline, routespec_pipeline)
   end

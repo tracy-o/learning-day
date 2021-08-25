@@ -4,59 +4,59 @@ defmodule Belfrage.RouteSpecTest do
 
   describe "merge_specs/2" do
     test "when values are lists, lists are concatenated" do
-      platform_specs = %{a: ["one"]}
+      platform_specs = %{a: ["one"], pipeline: ["foo"], resp_pipeline: ["foo"]}
       route_specs = %{a: ["two"]}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{a: ["one", "two"]}
+      assert result == %{a: ["one", "two"], pipeline: ["foo"], resp_pipeline: ["foo"]}
     end
 
     test "platform's allow all '*' does not always override routespec value" do
-      platform_specs = %{some_key: "*"}
+      platform_specs = %{some_key: "*", pipeline: ["foo"], resp_pipeline: ["foo"]}
       route_specs = %{some_key: "a-value"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{some_key: "a-value"}
+      assert result == %{some_key: "a-value", pipeline: ["foo"], resp_pipeline: ["foo"]}
     end
 
     test "when platform allows all headers" do
-      platform_specs = %{headers_allowlist: "*"}
+      platform_specs = %{headers_allowlist: "*", pipeline: ["foo"], resp_pipeline: ["foo"]}
       route_specs = %{headers_allowlist: ["a-header"]}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{headers_allowlist: "*"}
+      assert result == %{headers_allowlist: "*", pipeline: ["foo"], resp_pipeline: ["foo"]}
     end
 
     test "when platform allows all query params" do
-      platform_specs = %{query_params_allowlist: "*"}
+      platform_specs = %{query_params_allowlist: "*", pipeline: ["foo"], resp_pipeline: ["foo"]}
       route_specs = %{query_params_allowlist: ["a-param"]}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{query_params_allowlist: "*"}
+      assert result == %{query_params_allowlist: "*", pipeline: ["foo"], resp_pipeline: ["foo"]}
     end
 
     test "basic behaviour for values, is that route value takes precedence" do
-      platform_specs = %{foo: "I want the platform to win"}
+      platform_specs = %{foo: "I want the platform to win", pipeline: ["foo"], resp_pipeline: ["foo"]}
       route_specs = %{foo: "I want the route spec to win"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{foo: "I want the route spec to win"}
+      assert result == %{foo: "I want the route spec to win", pipeline: ["foo"], resp_pipeline: ["foo"]}
     end
 
     test "platforms keys are returned if the same response key is not set" do
-      platform_specs = %{pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]}
+      platform_specs = %{pipeline: ["HttpRedirector", "CircuitBreaker"]}
       route_specs = %{foo: "I want the route spec to win"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
       assert result == %{
                foo: "I want the route spec to win",
-               pipeline: ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+               pipeline: ["HttpRedirector", "CircuitBreaker"]
              }
     end
   end
@@ -84,18 +84,9 @@ defmodule Belfrage.RouteSpecTest do
       platform_list = ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
       routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
 
-      result = RouteSpec.merge_key(:response_pipeline, platform_list, routespec_list)
+      result = RouteSpec.merge_key(:resp_pipeline, platform_list, routespec_list)
 
       assert result == ["HttpRedirector", "LambdaOriginAlias", "PlatformKillswitch", "CircuitBreaker"]
-    end
-
-    test "when the key is :response_pipeline and the platform_list_value does not contain :_routespec_pipeline_placeholder, the routespec values are returned" do
-      platform_list = ["HttpRedirector", "CircuitBreaker"]
-      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
-
-      result = RouteSpec.merge_key(:response_pipeline, platform_list, routespec_list)
-
-      assert result == ["LambdaOriginAlias", "PlatformKillswitch"]
     end
   end
 
