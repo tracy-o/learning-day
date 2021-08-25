@@ -65,6 +65,9 @@ node {
     BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
     BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE)
 
+    // get visibility of rpm building errors errors
+    sh "cat ${env.WORKSPACE}/local.log"
+
   } catch(err) {
     if (env.BRANCH_NAME == "master") {
       stage("Report result to slack") {

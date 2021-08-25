@@ -74,4 +74,3 @@ systemctl enable cloudformation-signal
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
 /var/log/component/cloudwatch.log
-/
