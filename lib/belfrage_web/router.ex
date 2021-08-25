@@ -77,19 +77,19 @@ defmodule BelfrageWeb.Router do
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
     status = router_status(reason)
 
-    case status do
-      400 ->
-        BelfrageWeb.View.not_found(conn)
+    Event.record(:log, :error, %{
+      msg: "Router Service returned a #{status} status",
+      kind: kind,
+      reason: reason,
+      stack: Exception.format_stacktrace(stack),
+      request_path: conn.request_path,
+      query_string: conn.query_string
+    })
 
-      _ ->
-        Belfrage.Event.record(:log, :error, %{
-          msg: "Router Service returned a #{status} status",
-          kind: kind,
-          reason: reason,
-          stack: Exception.format_stacktrace(stack)
-        })
-
-        BelfrageWeb.View.internal_server_error(conn)
+    if status == 400 do
+      BelfrageWeb.View.not_found(conn)
+    else
+      BelfrageWeb.View.internal_server_error(conn)
     end
   end
 
@@ -103,11 +103,19 @@ defmodule BelfrageWeb.Router do
 
   defp log_invalid_utf8(conn, _opts) do
     if invalid_utf8?(conn.request_path) do
-      Event.record(:log, :warn, %{msg: "Invalid UTF8 character in request path", request_path: conn.request_path, query_string: conn.query_string})
+      Event.record(:log, :warn, %{
+        msg: "Invalid UTF8 character in request path",
+        request_path: conn.request_path,
+        query_string: conn.query_string
+      })
     end
 
-    if invalid_utf8?(conn.query_string)  do
-      Event.record(:log, :warn, %{msg: "Invalid UTF8 character in query string", request_path: conn.request_path, query_string: conn.query_string})
+    if invalid_utf8?(conn.query_string) do
+      Event.record(:log, :warn, %{
+        msg: "Invalid UTF8 character in query string",
+        request_path: conn.request_path,
+        query_string: conn.query_string
+      })
     end
 
     conn
