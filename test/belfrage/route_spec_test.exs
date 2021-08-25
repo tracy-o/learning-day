@@ -104,5 +104,35 @@ defmodule Belfrage.RouteSpecTest do
       spec = RouteSpec.specs_for(PersonalisedRouteSpec)
       assert spec.personalised_route
     end
+
+    defmodule Module.concat([Routes, Specs, PlaceholderRouteSpec]) do
+      def specs(_) do
+        %{
+          platform: MozartNews,
+          pipeline: ["SomeRedirectLogic"],
+          resp_pipeline: ["SomeRedirectLogic"]
+        }
+      end
+    end
+
+    test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys are present in routespec" do
+      spec = RouteSpec.specs_for(PlaceholderRouteSpec)
+      assert ":_routespec_pipeline_placeholder" not in spec.pipeline
+      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
+    end
+
+    defmodule Module.concat([Routes, Specs, NonPlaceholderRouteSpec]) do
+      def specs(_) do
+        %{
+          platform: MozartNews,
+        }
+      end
+    end
+
+    test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys aren't present in routespec" do
+      spec = RouteSpec.specs_for(NonPlaceholderRouteSpec)
+      assert ":_routespec_pipeline_placeholder" not in spec.pipeline
+      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
+    end
   end
 end

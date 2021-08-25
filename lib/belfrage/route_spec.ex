@@ -18,12 +18,25 @@ defmodule Belfrage.RouteSpec do
 
     Module.concat([Routes, Platforms, specs.platform]).specs(env)
     |> merge_specs(specs)
+    |> remove_placeholder()
     |> Map.put(:loop_id, name)
     |> Personalisation.transform_route_spec()
   end
 
   def merge_specs(platform_specs, route_specs) do
     Map.merge(platform_specs, route_specs, &merge_key/3)
+  end
+
+  def remove_placeholder(specs) do
+    specs
+    |> check_and_update_spec(:pipeline)
+    |> check_and_update_spec(:resp_pipeline)
+  end
+
+  defp check_and_update_spec(specs, key) do
+    if Map.has_key?(specs, key) do
+      Map.update!(specs, key, fn x -> x -- [:_routespec_pipeline_placeholder] end)
+    end
   end
 
   def merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
