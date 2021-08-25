@@ -65,7 +65,6 @@ node {
     BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
     BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE)
 
-
   } catch(err) {
     if (env.BRANCH_NAME == "master") {
       stage("Report result to slack") {
