@@ -54,7 +54,7 @@ touch %{buildroot}/var/log/component/app.log
 touch %{buildroot}/var/log/component/cloudwatch.log
 mkdir -p %{buildroot}/etc/logrotate.d
 cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
-cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
+# cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
 
 %post
 systemctl enable belfrage
@@ -67,7 +67,7 @@ cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
 %attr(0644, root, root) /etc/logrotate.d/cloudwatch
-%attr(0644, root, root) /etc/cron.d/component-cron
+# %attr(0644, root, root) /etc/cron.d/component-cron
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service
