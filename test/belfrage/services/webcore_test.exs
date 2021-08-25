@@ -52,40 +52,6 @@ defmodule Belfrage.Services.WebcoreTest do
              } = Webcore.dispatch(struct_with_alias())
     end
 
-    test "given a nested query string that requires encoding" do
-      expect(Clients.LambdaMock, :call, fn _role_arn,
-                                           _lambda_func,
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"q" => %{"bad" => "�", "good" => "€100 café"}}
-                                           },
-                                           _request_id = "geoff-the-get-request",
-                                           _opts ->
-        {:ok, @lambda_response}
-      end)
-
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 200,
-                 body: "<h1>Hello from the Lambda!</h1>"
-               }
-             } =
-               Webcore.dispatch(%Struct{
-                 private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
-                 request: %Struct.Request{
-                   method: "GET",
-                   path: "/_web_core",
-                   is_uk: false,
-                   host: "www.bbc.com",
-                   query_params: %{"q" => %{"bad" => <<179>>, "good" => "€100 café"}},
-                   request_id: "geoff-the-get-request",
-                   xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"
-                 }
-               })
-    end
-
     test "it invokes the origin lambda with the xray_trace_id" do
       expect(Clients.LambdaMock, :call, fn _role_arn,
                                            _func_name,
