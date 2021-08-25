@@ -1,1 +1,1 @@
-*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/component
+*/15 * * * * component /usr/sbin/logrotate /etc/cron.daily/logrotate
