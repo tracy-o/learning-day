@@ -3,8 +3,6 @@ defmodule Belfrage.Loop do
 
   alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec}
 
-  @short_interval Application.get_env(:belfrage, :short_counter_reset_interval)
-  @long_interval Application.get_env(:belfrage, :long_counter_reset_interval)
   @fetch_loop_timeout Application.get_env(:belfrage, :fetch_loop_timeout)
 
   def start_link(name) do
@@ -30,8 +28,8 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def init(specs) do
-    Process.send_after(self(), :short_reset, @short_interval)
-    Process.send_after(self(), :long_reset, @long_interval)
+    Process.send_after(self(), :short_reset, short_interval())
+    Process.send_after(self(), :long_reset, long_interval())
 
     {:ok,
      Map.merge(specs, %{
@@ -66,7 +64,7 @@ defmodule Belfrage.Loop do
   @impl GenServer
   def handle_info(:short_reset, state) do
     Belfrage.Monitor.record_loop(state)
-    Process.send_after(self(), :short_reset, @short_interval)
+    Process.send_after(self(), :short_reset, short_interval())
     state = %{state | counter: Counter.init()}
 
     {:noreply, state}
@@ -74,8 +72,16 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_info(:long_reset, state) do
-    Process.send_after(self(), :long_reset, @long_interval)
+    Process.send_after(self(), :long_reset, long_interval())
     state = %{state | long_counter: Counter.init()}
     {:noreply, state}
+  end
+
+  defp short_interval do
+    Application.get_env(:belfrage, :short_counter_reset_interval)
+  end
+
+  defp long_interval do
+    Application.get_env(:belfrage, :long_counter_reset_interval)
   end
 end
