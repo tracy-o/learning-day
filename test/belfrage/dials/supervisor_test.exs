@@ -49,7 +49,7 @@ defmodule Belfrage.Dials.SupervisorTest do
   end
 
   defp read_cosmos_dials_config() do
-    Application.app_dir(:belfrage, "priv/static/dials.json")
+    "cosmos/dials.json"
     |> File.read!()
     |> Jason.decode!()
   end
