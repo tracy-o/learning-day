@@ -84,7 +84,8 @@ config :belfrage,
     "obit_mode" => Belfrage.Dials.ObitMode,
     "ccp_enabled" => Belfrage.Dials.CcpEnabled,
     "monitor_enabled" => Belfrage.Dials.MonitorEnabled,
-    "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch
+    "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
+    "datalab_machine_recommendations" => Belfrage.Dials.DatalabMachineRecommendations
   },
   pool_metric_rate: 10_000,
   authentication: %{

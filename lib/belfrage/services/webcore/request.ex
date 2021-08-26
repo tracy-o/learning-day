@@ -1,6 +1,6 @@
 defmodule Belfrage.Services.Webcore.Request do
   alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, UserSession}
+  alias Belfrage.Struct.{Request, Private, UserSession}
 
   def build(struct) do
     %{
@@ -17,6 +17,7 @@ defmodule Belfrage.Services.Webcore.Request do
     struct
     |> base_headers()
     |> put_user_session_headers(struct.user_session)
+    |> put_feature_header(struct.private)
   end
 
   defp base_headers(%Struct{request: request = %Request{}}) do
@@ -54,6 +55,15 @@ defmodule Belfrage.Services.Webcore.Request do
 
       _ ->
         headers
+    end
+  end
+
+  defp put_feature_header(headers, private = %Private{}) do
+    if private.features == %{} do
+      headers
+    else
+      value = private.features |> Enum.map(&Tuple.to_list/1) |> Enum.map(&Enum.join(&1, "=")) |> Enum.join(",")
+      Map.put(headers, :"ctx-features", value)
     end
   end
 end
