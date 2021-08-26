@@ -19,6 +19,7 @@ defmodule Belfrage.Clients.HTTP do
   def execute(request = %HTTP.Request{}, pool_group) do
     request
     |> perform_request(pool_group)
+    |> metric_response()
     |> format_response()
   end
 
@@ -52,5 +53,24 @@ defmodule Belfrage.Clients.HTTP do
 
   defp format_response({:error, error = %MachineGun.Error{}}) do
     {:error, HTTP.Error.new(error)}
+  end
+
+  defp metric_response(response) do
+    case response do
+      {:error, %MachineGun.Error{reason: :pool_timeout}} ->
+        Belfrage.Metrics.Statix.increment("http.pools.error.timeout")
+        response
+
+      {:error, %MachineGun.Error{reason: :pool_full}} ->
+        Belfrage.Metrics.Statix.increment("http.pools.error.full")
+        response
+
+      {:error, %MachineGun.Error{reason: _error}} ->
+        Belfrage.Metrics.Statix.increment("http.client.error")
+        response
+
+      _ ->
+        response
+    end
   end
 end
