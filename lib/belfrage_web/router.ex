@@ -7,6 +7,7 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.ProductionEnvironment
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
+  alias Belfrage.Event
 
   @routefile Application.get_env(:belfrage, :routefile)
 
@@ -20,6 +21,7 @@ defmodule BelfrageWeb.Router do
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
   plug(PreviewMode)
+  plug(:log_invalid_utf8)
   plug(:fetch_query_params)
   plug(BelfrageWeb.Plugs.Overrides)
   plug(Plugs.PathLogger)
@@ -97,5 +99,21 @@ defmodule BelfrageWeb.Router do
 
   defp router_status(_) do
     500
+  end
+
+  defp log_invalid_utf8(conn, _opts) do
+    if invalid_utf8?(conn.request_path) do
+      Event.record(:log, :warn, %{msg: "Invalid UTF8 character in request path", request_path: conn.request_path, query_string: conn.query_string})
+    end
+
+    if invalid_utf8?(conn.query_string)  do
+      Event.record(:log, :warn, %{msg: "Invalid UTF8 character in query string", request_path: conn.request_path, query_string: conn.query_string})
+    end
+
+    conn
+  end
+
+  defp invalid_utf8?(url_encoded_string) do
+    !(url_encoded_string |> URI.decode() |> String.valid?())
   end
 end
