@@ -129,7 +129,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   end
 
   defp keep_request?(times, min_start_time) do
-    times[:request_received] && times[:request_received] > min_start_time
+    Map.has_key?(times, :request_received) && times[:request_received] > min_start_time
   end
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000
