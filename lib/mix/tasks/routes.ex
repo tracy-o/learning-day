@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Routes do
 
     routefile = BelfrageWeb.Routefile.for_cosmos(env)
 
-    Enum.map(routefile, fn {route_matcher, %{using: loop_id, examples: examples}} ->
+    Enum.map(routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples}} ->
       specs = Belfrage.RouteSpec.specs_for(loop_id, env)
 
       %{
