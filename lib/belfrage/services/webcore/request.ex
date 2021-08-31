@@ -1,6 +1,5 @@
 defmodule Belfrage.Services.Webcore.Request do
   alias Belfrage.Struct
-  alias Belfrage.Services.Webcore.Helpers.Utf8Sanitiser
 
   def build(struct) do
     %{
@@ -8,7 +7,7 @@ defmodule Belfrage.Services.Webcore.Request do
       body: struct.request.payload,
       httpMethod: struct.request.method,
       path: struct.request.path,
-      queryStringParameters: Utf8Sanitiser.utf8_sanitise_query_params(struct.request.query_params),
+      queryStringParameters: struct.request.query_params,
       pathParameters: struct.request.path_params
     }
   end
