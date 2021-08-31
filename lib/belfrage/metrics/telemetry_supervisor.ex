@@ -26,7 +26,11 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       last_value("vm.total_run_queue_lengths.io"),
       summary("cowboy.request.stop.duration", unit: {:native, :millisecond}),
       counter("cowboy.request.exception.count"),
-      counter("cowboy.request.early_error.count")
+      counter("cowboy.request.early_error.count"),
+      counter("cowboy.request.idle_timeout.count",
+        event_name: "cowboy.request.stop",
+        keep: &match?(%{error: {:connection_error, :timeout, _}}, &1)
+      )
     ]
   end
 end
