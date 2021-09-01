@@ -81,7 +81,8 @@ defmodule Belfrage.Struct.Private do
             owner: nil,
             runbook: nil,
             personalised_route: false,
-            personalised_request: false
+            personalised_request: false,
+            features: %{}
 
   @type t :: %__MODULE__{}
 end
