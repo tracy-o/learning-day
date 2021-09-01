@@ -19,14 +19,15 @@ defmodule BelfrageWeb.Routefile do
   end
 
   def module_name(env) do
+    Application.put_env(:belfrage, :production_environment, env)
     Module.concat(["Routes", "Routefiles", String.capitalize(env)])
   end
 
   defp routefile_envs do
-    if Mix.env == :dev do
-      ["Test"]
+    if Mix.env() == :dev do
+      ["test"]
     else
-      ["Test", "Live"]
+      ["test", "live"]
     end
   end
 end
