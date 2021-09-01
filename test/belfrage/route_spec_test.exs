@@ -124,7 +124,7 @@ defmodule Belfrage.RouteSpecTest do
     defmodule Module.concat([Routes, Specs, NonPlaceholderRouteSpec]) do
       def specs(_) do
         %{
-          platform: MozartNews,
+          platform: MozartNews
         }
       end
     end

@@ -41,7 +41,8 @@ defmodule Routes.RoutefileTest do
           assert length(platform_transformers) == length(Enum.uniq(platform_transformers)),
                  "Duplicated platform transformers found in pipeline."
 
-          assert length(specs.pipeline) == length(Enum.uniq(specs.pipeline ++ platform_transformers)),
+          assert length(specs.pipeline) ==
+                   length(Enum.uniq(specs.pipeline ++ platform_transformers) -- [:_routespec_pipeline_placeholder]),
                  "Missing platform transformers in the pipeline."
 
           if @env == "live" do
