@@ -29,7 +29,6 @@ defmodule BelfrageWeb.StructAdapter do
         is_advertise: bbc_headers.is_advertise,
         req_svc_chain: bbc_headers.req_svc_chain,
         request_id: conn.private.request_id,
-        x_cdn: bbc_headers.x_cdn,
         x_candy_audience: bbc_headers.x_candy_audience,
         x_candy_override: bbc_headers.x_candy_override,
         x_candy_preview_guid: bbc_headers.x_candy_preview_guid,
