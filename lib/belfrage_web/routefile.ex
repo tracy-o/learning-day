@@ -1,7 +1,7 @@
 defmodule BelfrageWeb.Routefile do
   defmacro defroutefile(_name, do: block) do
     quote do
-      for env <- unquote(["Test", "Live"]) do
+      for env <- unquote(routefile_envs()) do
         defmodule apply(BelfrageWeb.Routefile, :module_name, [env]) do
           unquote(block)
         end
@@ -20,5 +20,13 @@ defmodule BelfrageWeb.Routefile do
 
   def module_name(env) do
     Module.concat(["Routes", "Routefiles", String.capitalize(env)])
+  end
+
+  defp routefile_envs do
+    if Mix.env == :dev do
+      ["Test"]
+    else
+      ["Test", "Live"]
+    end
   end
 end
