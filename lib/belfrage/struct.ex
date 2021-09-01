@@ -29,7 +29,6 @@ defmodule Belfrage.Struct.Request do
     query_params: %{},
     path_params: %{},
     cookies: %{},
-    x_cdn: %{},
     x_candy_audience: %{},
     x_candy_override: %{},
     x_candy_preview_guid: %{},

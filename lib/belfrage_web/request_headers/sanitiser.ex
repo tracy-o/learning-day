@@ -60,7 +60,6 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   defp edge(headers, true), do: headers[:edge]
   defp edge(_headers, false), do: nil
 
-  def x_cdn(headers, _cache), do: headers[:x_cdn]
   def x_candy_audience(headers, _cache), do: headers[:x_candy_audience]
   def x_candy_override(headers, _cache), do: headers[:x_candy_override]
   def x_candy_preview_guid(headers, _cache), do: headers[:x_candy_preview_guid]

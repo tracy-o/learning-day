@@ -10,7 +10,6 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     replayed_traffic: %{replayed_traffic: "replayed-traffic"},
     origin_simulator: %{origin_simulator: "origin-simulator"},
     req_svc_chain: %{req_svc_chain: "req-svc-chain"},
-    x_cdn: %{x_cdn: "x-cdn"},
     x_candy_audience: %{x_candy_audience: "x-candy-audience"},
     x_candy_override: %{x_candy_override: "x-candy-override"},
     x_candy_preview_guid: %{x_candy_preview_guid: "x-candy-preview-guid"},

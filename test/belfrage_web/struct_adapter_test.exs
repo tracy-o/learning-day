@@ -32,7 +32,6 @@ defmodule BelfrageWeb.StructAdapterTest do
           cache: 0,
           cdn: false,
           req_svc_chain: "BELFRAGE",
-          x_cdn: 0,
           x_candy_audience: nil,
           x_candy_override: nil,
           x_candy_preview_guid: nil,

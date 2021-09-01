@@ -87,7 +87,6 @@ defmodule Belfrage.Services.HTTP do
       "req-svc-chain" => request.req_svc_chain,
       "x-bbc-edge-host" => request.host,
       "x-bbc-edge-scheme" => scheme(request.scheme),
-      "x-cdn" => request.x_cdn,
       "x-candy-audience" => request.x_candy_audience,
       "x-candy-override" => request.x_candy_override,
       "x-candy-preview-guid" => request.x_candy_preview_guid,
