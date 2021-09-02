@@ -1,9 +1,9 @@
 # this is  a copy of the test/support/mocks/routefile_mock.example
 # TODO: define the best location
 
-defmodule Routes.Routefiles.Mock do
-  @production_environment "test"
+import BelfrageWeb.Routefile
 
+defroutefile "Mock", "test" do
   use BelfrageWeb.RouteMaster
 
   redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)

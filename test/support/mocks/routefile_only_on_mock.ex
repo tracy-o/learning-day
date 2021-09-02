@@ -1,8 +1,8 @@
 # this route file is compiled with matching "some_environment" production environment
 
-defmodule Routes.RoutefileOnlyOnMock do
-  @production_environment "test"
+import BelfrageWeb.Routefile
 
+defroutefile "RoutefileOnlyOnMock", "test" do
   use BelfrageWeb.RouteMaster
 
   handle("/only-on", using: "SomeLoop", only_on: "test", examples: ["/only-on"])

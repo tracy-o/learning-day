@@ -5,7 +5,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   alias Belfrage.Struct
   alias Routes.Routefiles.Mock, as: Routefile
-  alias Routes.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
+  alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
   alias Belfrage.Helpers.FileIOMock
 
   @struct_with_html_response %Struct{

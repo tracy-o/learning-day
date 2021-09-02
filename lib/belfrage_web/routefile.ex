@@ -2,10 +2,19 @@ defmodule BelfrageWeb.Routefile do
   defmacro defroutefile(_name, do: block) do
     quote do
       for env <- unquote(routefile_envs()) do
-        defmodule apply(BelfrageWeb.Routefile, :module_name, [env]) do
+        defmodule Module.concat(["Routes", "Routefiles", String.capitalize(env)]) do
           @production_environment env
           unquote(block)
         end
+      end
+    end
+  end
+
+  defmacro defroutefile(name, env, do: block) do
+    quote do
+      defmodule Module.concat(["Routes", "Routefiles", unquote(name)]) do
+        @production_environment unquote(env)
+        unquote(block)
       end
     end
   end
@@ -17,10 +26,6 @@ defmodule BelfrageWeb.Routefile do
 
   def for_cosmos(_env) do
     Module.concat(["Routes", "Routefiles", "Live"])
-  end
-
-  def module_name(env) do
-    Module.concat(["Routes", "Routefiles", String.capitalize(env)])
   end
 
   defp routefile_envs do
