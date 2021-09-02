@@ -21,10 +21,10 @@ defmodule BelfrageWeb.View do
   @json_codec Application.get_env(:belfrage, :json_codec)
 
   def render(
-        struct = %Struct{response: %Struct.Response{http_status: status, headers: %{"content-length" => "0"}}},
+        struct = %Struct{response: %Struct.Response{http_status: status, body: body}},
         conn
       )
-      when status > 399 do
+      when status > 399 and body in ["", nil] do
     internal_response(conn, status, struct)
   end
 

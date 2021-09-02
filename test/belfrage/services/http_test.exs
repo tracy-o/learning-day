@@ -169,8 +169,7 @@ defmodule Belfrage.Services.HTTPTest do
       assert %Struct{
                response: %Struct.Response{
                  http_status: 500,
-                 body: "",
-                 headers: %{"content-length" => "0"}
+                 body: ""
                }
              } = HTTP.dispatch(@get_struct)
     end

@@ -26,7 +26,7 @@ defmodule Belfrage.Services.HTTP do
 
         {:error, error} ->
           track_error(struct, error)
-          %Response{http_status: 500, body: "", headers: %{"content-length" => "0"}}
+          %Response{http_status: 500, body: ""}
       end
 
     %Struct{struct | response: response}
