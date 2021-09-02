@@ -50,12 +50,12 @@ defmodule Belfrage.RouteSpecTest do
 
     test "platforms keys are returned if the same response key is not set" do
       platform_specs = %{pipeline: ["HttpRedirector", "CircuitBreaker"]}
-      route_specs = %{foo: "I want the route spec to win"}
+      route_specs = %{owner: "owner@bbc.co.uk"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
       assert result == %{
-               foo: "I want the route spec to win",
+               owner: "owner@bbc.co.uk",
                pipeline: ["HttpRedirector", "CircuitBreaker"]
              }
     end
