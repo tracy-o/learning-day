@@ -5,7 +5,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
 
   describe "on Mix.env :dev" do
     test "Cosmos test will return the Test Routefile" do
-      assert RoutefilePointer.routefile("sandbox", :dev) == Routes.Routefiles.Test
+      assert RoutefilePointer.routefile("test", :dev) == Routes.Routefiles.Test
     end
   end
 
@@ -44,7 +44,7 @@ defmodule BelfrageWeb.RoutefilePointerTest do
       assert RoutefilePointer.routefile("test", :smoke_test) == Routes.Routefiles.Test
     end
 
-    test "Cosmos live  will return the Live Routefile" do
+    test "Cosmos live  will return the Test Routefile" do
       assert RoutefilePointer.routefile("live", :smoke_test) == Routes.Routefiles.Test
     end
   end
