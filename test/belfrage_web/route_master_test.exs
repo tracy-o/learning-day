@@ -728,6 +728,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     defmodule RouteFileWithProxyPassAndNoMatch do
+      @production_environment "test"
       use BelfrageWeb.RouteMaster
       handle_proxy_pass("/*any", using: "ProxyPass", only_on: "some_env", examples: ["/foo"])
       no_match()

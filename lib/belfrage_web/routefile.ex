@@ -3,6 +3,7 @@ defmodule BelfrageWeb.Routefile do
     quote do
       for env <- unquote(routefile_envs()) do
         defmodule apply(BelfrageWeb.Routefile, :module_name, [env]) do
+          @production_environment env
           unquote(block)
         end
       end
@@ -19,7 +20,6 @@ defmodule BelfrageWeb.Routefile do
   end
 
   def module_name(env) do
-    Application.put_env(:belfrage, :production_environment, env)
     Module.concat(["Routes", "Routefiles", String.capitalize(env)])
   end
 

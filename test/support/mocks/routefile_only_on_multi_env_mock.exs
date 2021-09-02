@@ -1,6 +1,8 @@
 # this route file is compiled with non matching "some_other_environment" production environment
 
 defmodule Routes.RoutefileOnlyOnMultiEnvMock do
+  @production_environment "test"
+
   use BelfrageWeb.RouteMaster
 
   handle("/only-on", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
