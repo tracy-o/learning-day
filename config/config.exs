@@ -23,9 +23,9 @@ config :machine_gun,
     # Gun connection options
     conn_opts: %{
       transport_opts: [
-        {:cacertfile, System.get_env("SERVICE_CERT_CA")},
-        {:certfile, System.get_env("SERVICE_CERT")},
-        {:keyfile, System.get_env("SERVICE_CERT_KEY")}
+        {:cacertfile, System.get_env("CLIENT_CERT_CA")},
+        {:certfile, System.get_env("CLIENT_CERT")},
+        {:keyfile, System.get_env("CLIENT_CERT_KEY")}
       ]
     }
   }
