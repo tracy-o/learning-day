@@ -8,8 +8,6 @@
 import BelfrageWeb.Routefile
 
 defroutefile "Main" do
-  use BelfrageWeb.RouteMaster
-
   # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)

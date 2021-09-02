@@ -722,11 +722,13 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "no_match/0" do
+    # This could be extracted to another module using defroutefile
     defmodule RouteFileWithNoMatch do
       use BelfrageWeb.RouteMaster
       no_match()
     end
 
+    # This could be extracted to another module using defroutefile
     defmodule RouteFileWithProxyPassAndNoMatch do
       @production_environment "test"
       use BelfrageWeb.RouteMaster

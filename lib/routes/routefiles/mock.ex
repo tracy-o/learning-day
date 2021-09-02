@@ -4,8 +4,6 @@
 import BelfrageWeb.Routefile
 
 defroutefile "Mock", "test" do
-  use BelfrageWeb.RouteMaster
-
   redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
   redirect("https://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
 

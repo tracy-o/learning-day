@@ -3,8 +3,6 @@
 import BelfrageWeb.Routefile
 
 defroutefile "RoutefileOnlyOnMultiEnvMock", "test" do
-  use BelfrageWeb.RouteMaster
-
   handle("/only-on", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
 
   handle("/only-on-multi-env", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
