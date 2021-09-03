@@ -108,12 +108,11 @@ defmodule BelfrageWeb.ViewTest do
       assert {"bsig", "#request-hash"} in headers
     end
 
-    test "returns HTML 500 page" do
+    test "returns HTML 500 page when body is an empty string" do
       struct = %Struct{
         response: %Struct.Response{
           body: "",
-          http_status: 500,
-          headers: %{"content-length" => "0"}
+          http_status: 500
         }
       }
 
@@ -128,8 +127,7 @@ defmodule BelfrageWeb.ViewTest do
       struct = %Struct{
         response: %Struct.Response{
           body: nil,
-          http_status: 500,
-          headers: %{"content-length" => "0"}
+          http_status: 500
         }
       }
 
