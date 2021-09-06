@@ -1,12 +1,9 @@
 defmodule Routes.Specs.WorldServiceTajik do
-  def specs(production_env) do
+  def specs do
     %{
       platform: MozartNews,
-      pipeline: pipeline(production_env),
+      pipeline: ["WorldServiceRedirect"],
       query_params_allowlist: ["alternativeJsLoading", "batch"]
     }
   end
-
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
