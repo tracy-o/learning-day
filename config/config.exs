@@ -31,7 +31,7 @@ config :machine_gun,
   }
 
 config :ex_aws, :retries,
-  max_attempts: 2,
+  max_attempts: 1,
   base_backoff_in_ms: 10,
   max_backoff_in_ms: 200
 
