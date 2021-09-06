@@ -85,10 +85,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
              :stop_pipeline,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 http_status: 500,
-                 headers: %{
-                   "content-length" => "0"
-                 }
+                 http_status: 500
                }
              }
            } = CircuitBreaker.call([], struct)

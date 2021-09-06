@@ -31,10 +31,7 @@ defmodule Belfrage.Transformers.PlatformKillSwitchTest do
                :stop_pipeline,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
-                   http_status: 500,
-                   headers: %{
-                     "content-length" => "0"
-                   }
+                   http_status: 500
                  }
                }
              } = PlatformKillSwitch.call([], struct_with_platform(Webcore))
