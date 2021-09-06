@@ -1061,7 +1061,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"] do
+  handle "/sport/videos/:id", using: "SportVideos", examples: [{"/sport/videos/49104905", 301}] do
     return_404 if: String.length(id) != 8
   end
 
