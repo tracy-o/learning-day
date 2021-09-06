@@ -173,9 +173,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
-
         if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
+
           get rewrite(matcher) do
             yield(unquote(id), var!(conn))
           end
@@ -183,9 +183,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env_proxy_pass, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
-
         if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
+
           get rewrite(matcher) do
             matched_env = var!(conn).private[:production_environment] == unquote(env)
             origin_simulator = var!(conn).private.bbc_headers.origin_simulator
@@ -209,9 +209,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, env, block ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
-
         if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
+
           get rewrite(matcher) do
             unquote(block) || yield(unquote(id), var!(conn))
           end
