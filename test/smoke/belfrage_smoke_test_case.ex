@@ -36,15 +36,15 @@ defmodule Belfrage.SmokeTestCase do
         describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{@target}" do
           @describetag spec: @matcher_spec.using
           @describetag platform: Belfrage.RouteSpec.specs_for(@matcher_spec.using, smoke_env).platform
-          @tag route: @route_matcher
-          @tag stack: @target
 
           for example <- @matcher_spec.examples do
             {path, expected_status_code} = normalise_example(example)
             @path path
             @expected_status_code expected_status_code
 
-            test "#{path}" do
+            @tag route: @route_matcher
+            @tag stack: @target
+            test "#{path}", context do
               header_id = Application.get_env(:smoke, :endpoint_to_stack_id_mapping)[@target]
 
               resp = Helper.get_route(@host, @path, @matcher_spec.using)
