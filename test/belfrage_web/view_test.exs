@@ -134,7 +134,6 @@ defmodule BelfrageWeb.ViewTest do
       conn = conn(:get, "/") |> put_req_header("accept", "text/html")
       {status, headers, body} = View.render(struct, conn) |> sent_resp()
       assert status == 500
-      IO.inspect(body)
       assert body == "content for file test/support/resources/internal-error.html<!-- Belfrage -->"
       assert {"content-type", "text/html; charset=utf-8"} in headers
     end
