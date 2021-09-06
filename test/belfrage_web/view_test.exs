@@ -108,12 +108,26 @@ defmodule BelfrageWeb.ViewTest do
       assert {"bsig", "#request-hash"} in headers
     end
 
-    test "returns HTML 500 page" do
+    test "returns HTML 500 page when body is an empty string" do
       struct = %Struct{
         response: %Struct.Response{
           body: "",
-          http_status: 500,
-          headers: %{"content-length" => "0"}
+          http_status: 500
+        }
+      }
+
+      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
+      {status, headers, body} = View.render(struct, conn) |> sent_resp()
+      assert status == 500
+      assert body == "content for file test/support/resources/internal-error.html<!-- Belfrage -->"
+      assert {"content-type", "text/html; charset=utf-8"} in headers
+    end
+
+    test "returns HTML 500 page when body is nil" do
+      struct = %Struct{
+        response: %Struct.Response{
+          body: nil,
+          http_status: 500
         }
       }
 

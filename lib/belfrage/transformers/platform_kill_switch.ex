@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.PlatformKillSwitch do
   @impl true
   def call(rest, struct = %Struct{private: %Private{platform: platform}}) do
     if killswitch_active?(platform) do
-      {:stop_pipeline, Struct.add(struct, :response, %{http_status: 500, headers: %{"content-length" => "0"}})}
+      {:stop_pipeline, Struct.add(struct, :response, %{http_status: 500})}
     else
       then(rest, struct)
     end
