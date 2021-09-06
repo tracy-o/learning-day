@@ -12,7 +12,6 @@ defmodule BelfrageChimneySmokeTest do
   @moduletag :smoke_test
   @moduletag :chimney
 
-  @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
   @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric-belfrage"]
   @bruce_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["bruce-belfrage"]
   @sally_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["sally-belfrage"]

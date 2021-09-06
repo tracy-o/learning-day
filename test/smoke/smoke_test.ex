@@ -1,7 +1,5 @@
 defmodule Belfrage.SmokeTest do
   use ExUnit.Case, async: true
-  alias Test.Support.Helper
-  alias Belfrage.RouteSpec
 
   @environments (System.get_env("SMOKE_ENV") || "test,live") |> String.split(",")
   @ignore_specs Application.get_env(:smoke, :ignore_specs)
