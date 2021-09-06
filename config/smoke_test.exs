@@ -5,7 +5,7 @@ import_config "test.exs"
 config :belfrage,
   routefile: Routes.RoutefileMock
 
-config :smoke,
+config :belfrage, :smoke,
   ignore_specs: ["ProxyPass", "ArchiveArticles", "NewsSearch"],
   endpoint_to_stack_id_mapping: %{
     "belfrage" => %{:id => "bid", :value => "www"},

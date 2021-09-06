@@ -2,7 +2,7 @@ defmodule Belfrage.SmokeTest do
   use ExUnit.Case, async: true
 
   @environments (System.get_env("SMOKE_ENV") || "test,live") |> String.split(",")
-  @ignore_specs Application.get_env(:smoke, :ignore_specs)
+  @ignore_specs Application.get_env(:belfrage, :smoke)[:ignore_specs]
 
   @moduletag :smoke_test
 

@@ -7,7 +7,7 @@ defmodule Belfrage.SmokeTestCase do
   end
 
   def targets_for(environment) do
-    Application.get_env(:smoke, String.to_atom(environment))
+    Application.get_env(:belfrage, :smoke)[String.to_atom(environment)]
   end
 
   def normalise_example(path) when is_binary(path), do: {path, 200}
@@ -45,7 +45,7 @@ defmodule Belfrage.SmokeTestCase do
             @tag route: @route_matcher
             @tag stack: @target
             test "#{path}", context do
-              header_id = Application.get_env(:smoke, :endpoint_to_stack_id_mapping)[@target]
+              header_id = Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping][@target]
 
               resp = Helper.get_route(@host, @path, @matcher_spec.using)
 
