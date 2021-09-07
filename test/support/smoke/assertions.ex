@@ -2,7 +2,7 @@ defmodule Support.Smoke.Assertions do
   alias Test.Support.Helper
   import ExUnit.Assertions
 
-  @stack_ids Application.get_env(:smoke, :endpoint_to_stack_id_mapping)
+  @stack_ids Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
   @expected_minimum_content_length 30
   @redirects_statuses Application.get_env(:belfrage, :redirect_statuses)
 
