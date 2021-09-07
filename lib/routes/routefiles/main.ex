@@ -688,7 +688,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/profiles/:key", using: "Programmes", examples: ["/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f"] do
+  handle "/programmes/profiles/:key", using: "Programmes", examples: [{"/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f", 301}] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
