@@ -878,11 +878,11 @@ defroutefile "Main" do
 
   # /schedules
 
-  handle "/schedules/network/:network/on-now", using: "Schedules", examples: ["/schedules/network/cbeebies/on-now"] do
+  handle "/schedules/network/:network/on-now", using: "Schedules", examples: [{"/schedules/network/cbeebies/on-now", 302}] do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
-  handle "/schedules/network/:network", using: "Schedules", examples: ["/schedules/network/radioscotland"] do
+  handle "/schedules/network/:network", using: "Schedules", examples: [{"/schedules/network/radioscotland", 301}] do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
