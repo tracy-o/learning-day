@@ -28,7 +28,7 @@ defmodule Routes.RoutefileTest do
           assert Map.has_key?(specs, :origin)
 
           for transformer <- specs.pipeline do
-            assert Code.ensure_compiled?(Module.concat([Belfrage, Transformers, transformer])),
+            assert {:module, _} = Code.ensure_compiled(Module.concat([Belfrage, Transformers, transformer])),
                    "`#{transformer}` is not a valid request transformer."
           end
 
