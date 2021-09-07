@@ -394,6 +394,7 @@ defmodule Routes.Routefile do
   handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic", "/amharic/example-123", "/amharic/example-123.amp", "/amharic/example-123.json"]
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
+  redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
 
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
