@@ -828,7 +828,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/segments.json", using: "ProgrammesData", examples: ["/programmes/b01m2fz4/segments.json"] do
+  handle "/programmes/:pid/segments.json", using: "ProgrammesData", examples: ["/programmes/b01m2fyy/segments.json"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
