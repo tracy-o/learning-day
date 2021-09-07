@@ -4,9 +4,10 @@
 # What types of route matcher you can  use:
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
-defmodule Routes.Routefile do
-  use BelfrageWeb.RouteMaster
 
+import BelfrageWeb.Routefile
+
+defroutefile "Main" do
   # Vanity URLs
 
   redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)

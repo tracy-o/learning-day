@@ -1,8 +1,8 @@
 # this route file is compiled with non matching "some_other_environment" production environment
 
-defmodule Routes.RoutefileOnlyOnMultiEnvMock do
-  use BelfrageWeb.RouteMaster
+import BelfrageWeb.Routefile
 
+defroutefile "RoutefileOnlyOnMultiEnvMock", "test" do
   handle("/only-on", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])
 
   handle("/only-on-multi-env", using: "SomeLoop", only_on: "some_environment", examples: ["/only-on"])

@@ -1,6 +1,9 @@
-defmodule Routes.RoutefileMock do
-  use BelfrageWeb.RouteMaster
+# this is  a copy of the test/support/mocks/routefile_mock.example
+# TODO: define the best location
 
+import BelfrageWeb.Routefile
+
+defroutefile "Mock", "test" do
   redirect("https://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
   redirect("https://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
 
