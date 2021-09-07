@@ -624,7 +624,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^[a-z][a-z0-9]+$/)
   end
 
-  handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy", examples: ["/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final/contact"] do
+  handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy", examples: [{"/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final/contact", 301}] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
@@ -636,9 +636,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/a-z/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/current"]
+  handle "/programmes/a-z/current", using: "ProgrammesLegacy", examples: [{"/programmes/a-z/current", 301}]
 
-  handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy", examples: ["/programmes/a-z/by/b/current"] do
+  handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy", examples: [{"/programmes/a-z/by/b/current", 301}] do
     return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
   end
 
@@ -660,7 +660,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/programmes/a-z/by/:search", using: "ProgrammesLegacy", examples: ["/programmes/a-z/by/b"] do
+  handle "/programmes/a-z/by/:search", using: "ProgrammesLegacy", examples: [{"/programmes/a-z/by/b", 301}] do
     return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
   end
 
@@ -704,11 +704,11 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesLegacy", examples: ["/programmes/b006qsq5/broadcasts/2020/01"] do
+  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesLegacy", examples: [{"/programmes/b006qsq5/broadcasts/2020/01", 302}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy", examples: ["/programmes/w172vkw6f1ffv5f/broadcasts"] do
+  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy", examples: [{"/programmes/w172vkw6f1ffv5f/broadcasts", 302}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -724,15 +724,15 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/credits", using: "ProgrammesLegacy", examples: ["/programmes/b06ss3j4/credits"] do
+  handle "/programmes/:pid/credits", using: "ProgrammesLegacy", examples: [{"/programmes/b06ss3j4/credits", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesLegacy", examples: ["/programmes/b006qnmr/episodes/a-z/a"] do
+  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesLegacy", examples: [{"/programmes/b006qnmr/episodes/a-z/a", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesLegacy", examples: ["/programmes/p02nrw8y/episodes/downloads.rss"] do
+  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesLegacy", examples: [{"/programmes/p02nrw8y/episodes/downloads.rss", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -780,15 +780,15 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/members/all", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/members/all"] do
+  handle "/programmes/:pid/members/all", using: "ProgrammesLegacy", examples: [{"/programmes/p001rshg/members/all", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/members", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/members"] do
+  handle "/programmes/:pid/members", using: "ProgrammesLegacy", examples: [{"/programmes/p001rshg/members", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/microsite", using: "ProgrammesLegacy", examples: ["/programmes/p001rshg/microsite"] do
+  handle "/programmes/:pid/microsite", using: "ProgrammesLegacy", examples: [{"/programmes/p001rshg/microsite", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -800,7 +800,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/podcasts", using: "ProgrammesLegacy", examples: ["/programmes/p02nrw8y/podcasts"] do
+  handle "/programmes/:pid/podcasts", using: "ProgrammesLegacy", examples: [{"/programmes/p02nrw8y/podcasts", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -820,11 +820,11 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules", using: "ProgrammesLegacy", examples: ["/programmes/p02str2y/schedules"] do
+  handle "/programmes/:pid/schedules", using: "ProgrammesLegacy", examples: [{"/programmes/p02str2y/schedules", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules/*_any", using: "ProgrammesLegacy", examples: ["/programmes/p02str2y/schedules/2019/03/18"] do
+  handle "/programmes/:pid/schedules/*_any", using: "ProgrammesLegacy", examples: [{"/programmes/p02str2y/schedules/2019/03/18", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -832,7 +832,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/segments", using: "ProgrammesLegacy", examples: ["/programmes/b01m2fz4/segments"] do
+  handle "/programmes/:pid/segments", using: "ProgrammesLegacy", examples: [{"/programmes/b01m2fz4/segments", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -840,7 +840,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/series", using: "ProgrammesLegacy", examples: ["/programmes/b006m8dq/series"] do
+  handle "/programmes/:pid/series", using: "ProgrammesLegacy", examples: [{"/programmes/b006m8dq/series", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -852,7 +852,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid.html", using: "ProgrammesLegacy", examples: ["/programmes/b006m8dq.html"] do
+  handle "/programmes/:pid.html", using: "ProgrammesLegacy", examples: [{"/programmes/b006m8dq.html", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
