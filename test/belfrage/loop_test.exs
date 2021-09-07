@@ -178,6 +178,12 @@ defmodule Belfrage.LoopTest do
     end
   end
 
+  test "exits when fetch_loop_timeout reached" do
+    assert catch_exit(Loop.state(@resp_struct, 0)) ==
+             {:timeout,
+              {GenServer, :call, [{:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, "ProxyPass"}}}, :state, 0]}}
+  end
+
   defp start_loop() do
     start_supervised!({Loop, @loop_id})
   end
