@@ -632,7 +632,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/articles/:key", using: "ProgrammesArticle", examples: ["/programmes/articles/yHvY1qp0QstSmj6NKbJlKk"] do
+  handle "/programmes/articles/:key", using: "ProgrammesArticle", examples: [{"/programmes/articles/yHvY1qp0QstSmj6NKbJlKk", 301}] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
