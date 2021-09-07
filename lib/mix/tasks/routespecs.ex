@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Routespecs do
   use Mix.Task
 
-  @shortdoc "Lists all route matchers. Optional environment [test|live], defaults to live"
+  @shortdoc "Lists all defined RouteSpecs. Optional environment [test|live], defaults to test"
   def run([]) do
     run(["test"])
   end
@@ -19,11 +19,11 @@ defmodule Mix.Tasks.Routespecs do
       %{
         "RouteSpec" => loop_id,
         "Platform" => spec.platform,
-        "req_pipeline" => Enum.join(spec.pipeline, ","),
-        "resp_pipeline" => Enum.join(spec.resp_pipeline, ",")
+        "Request Pipeline" => Enum.join(spec.pipeline, ","),
+        "Response Pipeline" => Enum.join(spec.resp_pipeline, ",")
       }
     end)
     |> Enum.reverse()
-    |> Tabula.print_table(only: ["#", "RouteSpec", "Platform", "req_pipeline", "resp_pipeline"], style: :github_md)
+    |> Tabula.print_table(only: ["#", "RouteSpec", "Platform", "Request Pipeline", "Response Pipeline"], style: :github_md)
   end
 end
