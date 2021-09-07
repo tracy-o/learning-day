@@ -844,11 +844,11 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics/1091_Media_films"] do
+  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity", examples: [{"/programmes/b00lvdrj/topics/1091_Media_films", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/topics", using: "ProgrammesEntity", examples: ["/programmes/b00lvdrj/topics"] do
+  handle "/programmes/:pid/topics", using: "ProgrammesEntity", examples: [{"/programmes/b00lvdrj/topics", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
