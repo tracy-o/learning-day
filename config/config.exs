@@ -125,4 +125,8 @@ config :logger, :cloudwatch,
   metadata: :all,
   metadata_filter: [cloudwatch: true]
 
+config :aws_ex_ray,
+  store_monitor_pool_size: 512,
+  client_pool_size: 512
+
 import_config "#{Mix.env()}.exs"
