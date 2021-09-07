@@ -1233,8 +1233,8 @@ defroutefile "Main" do
   redirect "/sport/basketball/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
   redirect "/sport/basketball/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
 
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures.app"]
-  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/nba/fixtures"]
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/nhl/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/nhl/fixtures"]
   handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
 
