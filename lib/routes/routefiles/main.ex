@@ -688,7 +688,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/profiles/:key", using: "Programmes", examples: [{"/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f", 301}] do
+  handle "/programmes/profiles/:key", using: "Programmes", examples: [{"/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f", 301}, {"/programmes/profiles/4T5qnzlnvHmWQcrl3yZyLwC", 301}] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
@@ -772,7 +772,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes", using: "ProgrammesEntity", examples: ["/programmes/b006m8dq/episodes"] do
+  handle "/programmes/:pid/episodes", using: "ProgrammesEntity", examples: [{"/programmes/b006m8dq/episodes", 302}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
