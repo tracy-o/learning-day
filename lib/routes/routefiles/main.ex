@@ -694,11 +694,11 @@ defroutefile "Main" do
 
   handle "/programmes/snippet/:records_ids.json", using: "ProgrammesData", examples: ["/programmes/snippet/n45bj5.json"]
 
-  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: ["/programmes/topics/21st-century_American_non-fiction_writers/video", "/programmes/topics/21st-century_American_non-fiction_writers/audio", "/programmes/topics/Documentary_films_about_HIV/AIDS"]
+  handle "/programmes/topics/:topic/:slice", using: "Programmes", examples: [{"/programmes/topics/21st-century_American_non-fiction_writers/video", 301}, {"/programmes/topics/21st-century_American_non-fiction_writers/audio", 301}, {"/programmes/topics/Documentary_films_about_HIV/AIDS", 301}]
 
-  handle "/programmes/topics/:topic", using: "Programmes", examples: ["/programmes/topics/Performers_of_Sufi_music"]
+  handle "/programmes/topics/:topic", using: "Programmes", examples: [{"/programmes/topics/Performers_of_Sufi_music", 301}]
 
-  handle "/programmes/topics", using: "Programmes", examples: ["/programmes/topics"]
+  handle "/programmes/topics", using: "Programmes", examples: [{"/programmes/topics", 301}]
 
   handle "/programmes/:pid/articles", using: "ProgrammesArticle", examples: ["/programmes/b006m8dq/articles"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
