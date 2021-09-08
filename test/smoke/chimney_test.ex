@@ -25,10 +25,10 @@ defmodule BelfrageChimneySmokeTest do
 
     @tag spec: "SportVideos"
     @tag platform: "Webcore"
-    test "GTM /sport/videos/48521428", %{smoke_env: smoke_env} do
+    test "GTM /sport/av/cricket/48521428", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host(smoke_env)
 
-      resp = Helper.get_route(endpoint, "/sport/videos/48521428")
+      resp = Helper.get_route(endpoint, "/sport/av/cricket/48521428")
 
       assert resp.status_code == 200
       assert Helper.header_item_exists(resp.headers, @bruce_header)
