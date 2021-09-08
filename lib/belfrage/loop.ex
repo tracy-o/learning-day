@@ -9,8 +9,14 @@ defmodule Belfrage.Loop do
     GenServer.start_link(__MODULE__, RouteSpec.specs_for(name), name: via_tuple(name))
   end
 
-  def state(%Struct{private: %Struct.Private{loop_id: name}}) do
-    GenServer.call(via_tuple(name), :state, @fetch_loop_timeout)
+  def state(%Struct{private: %Struct.Private{loop_id: name}}, timeout \\ @fetch_loop_timeout) do
+    try do
+      GenServer.call(via_tuple(name), :state, timeout)
+    catch
+      :exit, value ->
+        Belfrage.Metrics.Statix.increment("loop.state.fetch.timeout")
+        Kernel.exit(value)
+    end
   end
 
   def inc(%Struct{
