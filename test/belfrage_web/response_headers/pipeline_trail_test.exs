@@ -6,7 +6,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
   alias Belfrage.Struct
 
   describe "when pipeline trail exists in struct and production_environment is not live" do
-    test "the routespec header is set" do
+    test "the pipeline trail header is set" do
       input_conn = conn(:get, "/")
 
       struct = %Struct{
@@ -16,12 +16,12 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert ["CircuitBreaker,HttpRedirector"] == get_resp_header(output_conn, "pipeline-trail")
+      assert get_resp_header(output_conn, "pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
     end
   end
 
   describe "when pipeline trail exists in struct and production_environment is live" do
-    test "the routespec header is not set" do
+    test "the pipeline trail header is not set" do
       input_conn = conn(:get, "/")
 
       struct = %Struct{
@@ -31,7 +31,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert [] == get_resp_header(output_conn, "pipeline-trail")
+      assert get_resp_header(output_conn, "pipeline-trail") == []
     end
   end
 
@@ -41,7 +41,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
       struct = %Struct{private: %Struct.Private{loop_id: nil}}
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert [] == get_resp_header(output_conn, "pipeline-trail")
+      assert get_resp_header(output_conn, "pipeline-trail") == []
     end
   end
 end
