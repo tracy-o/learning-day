@@ -24,8 +24,6 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailHeaderTest do
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
 
-    assert [
-             "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"
-           ] = get_resp_header(response_conn, "pipeline-trail")
+    assert get_resp_header(response_conn, "pipeline-trail")
   end
 end
