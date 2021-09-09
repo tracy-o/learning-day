@@ -1,4 +1,11 @@
 defmodule Belfrage.SmokeTestCase do
+  alias Test.Support.Helper
+  import ExUnit.Assertions
+
+  @stack_ids Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
+  @expected_minimum_content_length 30
+  @redirects_statuses Application.get_env(:belfrage, :redirect_statuses)
+
   def tld(host) do
     cond do
       String.ends_with?(host, ".com") -> ".com"
@@ -14,6 +21,22 @@ defmodule Belfrage.SmokeTestCase do
 
   def normalise_example({path, status_code}) when is_binary(path) and is_integer(status_code), do: {path, status_code}
 
+  def assert_smoke_response(test_properties, response, expected_status_code) do
+    assert response.status_code == expected_status_code
+
+    if expected_status_code in @redirects_statuses do
+      location_header = Helper.get_header(response.headers, "location")
+      assert not is_nil(location_header) and String.length(location_header) > 0
+    else
+      assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
+    end
+
+    refute {"belfrage-cache-status", "STALE"} in response.headers
+
+    expected_stack_id_header = Map.get(@stack_ids, test_properties.target)
+    assert Helper.header_item_exists(response.headers, expected_stack_id_header)
+  end
+
   defmacro __using__(
              route_matcher: route_matcher,
              matcher_spec: matcher_spec,
@@ -22,7 +45,7 @@ defmodule Belfrage.SmokeTestCase do
     quote do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
-      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1, normalise_example: 1]
+      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1, normalise_example: 1, assert_smoke_response: 3]
 
       @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
@@ -63,11 +86,8 @@ defmodule Belfrage.SmokeTestCase do
                     tld: tld(@host)
                   }
 
-                  route_specs = Belfrage.RouteSpec.specs_for(test_properties.using, test_properties.smoke_env)
-
-                  Support.Smoke.Assertions.assert_smoke_response(
+                  assert_smoke_response(
                     test_properties,
-                    route_specs,
                     resp,
                     @expected_status_code
                   )

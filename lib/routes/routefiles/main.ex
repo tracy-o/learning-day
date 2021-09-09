@@ -383,89 +383,89 @@ defroutefile "Main" do
   ##    Mobile Redirects: /<service>/mobile/*any
   handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.amp"]
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
-  handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo", "/afaanoromoo/example-123", "/afaanoromoo/example-123.amp", "/afaanoromoo/example-123.json"]
+  handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
 
   handle "/afrique.amp", using: "WorldServiceAfrique", examples: ["/afrique.amp"]
   handle "/afrique.json", using: "WorldServiceAfrique", examples: ["/afrique.json"]
-  handle "/afrique/*_any", using: "WorldServiceAfrique", examples: ["/afrique", "/afrique/example-123", "/afrique/example-123.amp", "/afrique/example-123.json"]
+  handle "/afrique/*_any", using: "WorldServiceAfrique", examples: ["/afrique"]
   handle "/amharic.amp", using: "WorldServiceAmharic", examples: ["/amharic.amp"]
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
-  handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic", "/amharic/example-123", "/amharic/example-123.amp", "/amharic/example-123.json"]
+  handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic"]
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
 
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
-  handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic", "/arabic/example-123", "/arabic/example-123.amp", "/arabic/example-123.json"]
+  handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic"]
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
 
   handle "/azeri.amp", using: "WorldServiceAzeri", examples: ["/azeri.amp"]
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
-  handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri", "/azeri/example-123", "/azeri/example-123.amp", "/azeri/example-123.json"]
+  handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri"]
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
   redirect "/bengali/mobile/*any", to: "/bengali", status: 301
 
   handle "/bengali.amp", using: "WorldServiceBengali", examples: ["/bengali.amp"]
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
-  handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali", "/bengali/example-123", "/bengali/example-123.amp", "/bengali/example-123.json"]
+  handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali"]
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
 
   handle "/burmese.amp", using: "WorldServiceBurmese", examples: ["/burmese.amp"]
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
-  handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese", "/burmese/example-123", "/burmese/example-123.amp", "/burmese/example-123.json"]
+  handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese"]
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
 
   handle "/gahuza.amp", using: "WorldServiceGahuza", examples: ["/gahuza.amp"]
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
-  handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza", "/gahuza/example-123", "/gahuza/example-123.amp", "/gahuza/example-123.json"]
+  handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza"]
   handle "/gujarati.amp", using: "WorldServiceGujarati", examples: ["/gujarati.amp"]
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
-  handle "/gujarati/*_any", using: "WorldServiceGujarati", examples: ["/gujarati", "/gujarati/example-123", "/gujarati/example-123.amp", "/gujarati/example-123.json"]
+  handle "/gujarati/*_any", using: "WorldServiceGujarati", examples: ["/gujarati"]
 
   redirect "/hausa/mobile/*any", to: "/hausa", status: 301
 
   handle "/hausa.amp", using: "WorldServiceHausa", examples: ["/hausa.amp"]
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
-  handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa", "/hausa/example-123", "/hausa/example-123.amp", "/hausa/example-123.json"]
+  handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa"]
 
   redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
   redirect "/hindi/mobile/*any", to: "/hindi", status: 301
 
   handle "/hindi.amp", using: "WorldServiceHindi", examples: ["/hindi.amp"]
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
-  handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi", "/hindi/example-123", "/hindi/example-123.amp", "/hindi/example-123.json"]
+  handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi"]
   handle "/igbo.amp", using: "WorldServiceIgbo", examples: ["/igbo.amp"]
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
-  handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo", "/igbo/example-123", "/igbo/example-123.amp", "/igbo/example-123.json"]
+  handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo"]
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
 
   handle "/indonesia.amp", using: "WorldServiceIndonesia", examples: ["/indonesia.amp"]
   handle "/indonesia.json", using: "WorldServiceIndonesia", examples: ["/indonesia.json"]
-  handle "/indonesia/*_any", using: "WorldServiceIndonesia", examples: ["/indonesia", "/indonesia/example-123", "/indonesia/example-123.amp", "/indonesia/example-123.json"]
+  handle "/indonesia/*_any", using: "WorldServiceIndonesia", examples: ["/indonesia"]
   handle "/japanese.amp", using: "WorldServiceJapanese", examples: ["/japanese.amp"]
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
-  handle "/japanese/*_any", using: "WorldServiceJapanese", examples: ["/japanese", "/japanese/example-123", "/japanese/example-123.amp", "/japanese/example-123.json"]
+  handle "/japanese/*_any", using: "WorldServiceJapanese", examples: ["/japanese"]
   handle "/korean.amp", using: "WorldServiceKorean", examples: ["/korean.amp"]
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
-  handle "/korean/*_any", using: "WorldServiceKorean", examples: ["/korean", "/korean/example-123", "/korean/example-123.amp", "/korean/example-123.json"]
+  handle "/korean/*_any", using: "WorldServiceKorean", examples: ["/korean"]
 
   redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
 
   handle "/kyrgyz.amp", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.amp"]
   handle "/kyrgyz.json", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.json"]
-  handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz", "/kyrgyz/example-123", "/kyrgyz/example-123.amp", "/kyrgyz/example-123.json"]
+  handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
-  handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi", "/marathi/example-123", "/marathi/example-123.amp", "/marathi/example-123.json"]
+  handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi"]
 
   ## World Service - Olympic Redirects
   redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
@@ -479,41 +479,41 @@ defroutefile "Main" do
 
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
-  handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo", "/mundo/example-123", "/mundo/example-123.amp", "/mundo/example-123.json"]
+  handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo"]
 
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
   redirect "/nepali/mobile/*any", to: "/nepali", status: 301
 
   handle "/nepali.amp", using: "WorldServiceNepali", examples: ["/nepali.amp"]
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
-  handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali", "/nepali/example-123", "/nepali/example-123.amp", "/nepali/example-123.json"]
+  handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali"]
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
   redirect "/pashto/mobile/*any", to: "/pashto", status: 301
 
   handle "/pashto.amp", using: "WorldServicePashto", examples: ["/pashto.amp"]
   handle "/pashto.json", using: "WorldServicePashto", examples: ["/pashto.json"]
-  handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto", "/pashto/example-123", "/pashto/example-123.amp", "/pashto/example-123.json"]
+  handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto"]
 
   redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
   redirect "/persian/mobile/*any", to: "/persian", status: 301
 
   handle "/persian.amp", using: "WorldServicePersian", examples: ["/persian.amp"]
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
-  handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian", "/persian/example-123", "/persian/example-123.amp", "/persian/example-123.json"]
+  handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
-  handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin", "/pidgin/example-123", "/pidgin/example-123.amp", "/pidgin/example-123.json"]
+  handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin"]
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
   redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
 
   handle "/portuguese.amp", using: "WorldServicePortuguese", examples: ["/portuguese.amp"]
   handle "/portuguese.json", using: "WorldServicePortuguese", examples: ["/portuguese.json"]
-  handle "/portuguese/*_any", using: "WorldServicePortuguese", examples: ["/portuguese", "/portuguese/example-123", "/portuguese/example-123.amp", "/portuguese/example-123.json"]
+  handle "/portuguese/*_any", using: "WorldServicePortuguese", examples: ["/portuguese"]
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
-  handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi", "/punjabi/example-123", "/punjabi/example-123.amp", "/punjabi/example-123.json"]
+  handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi"]
 
   ## World Service - Russian Partners Redirects
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
@@ -522,96 +522,89 @@ defroutefile "Main" do
 
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
-  handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian", "/russian/example-123", "/russian/example-123.amp", "/russian/example-123.json"]
-  handle "/serbian.amp", using: "WorldServiceSerbian", examples: ["/serbian.amp"]
-  handle "/serbian.json", using: "WorldServiceSerbian", examples: ["/serbian.json"]
-  handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian", "/serbian/example-123", "/serbian/example-123.amp", "/serbian/example-123.json"]
+  handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian"]
+  handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
 
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
   redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
 
   handle "/sinhala.amp", using: "WorldServiceSinhala", examples: ["/sinhala.amp"]
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
-  handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala", "/sinhala/example-123", "/sinhala/example-123.amp", "/sinhala/example-123.json"]
+  handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala"]
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
 
   handle "/somali.amp", using: "WorldServiceSomali", examples: ["/somali.amp"]
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
-  handle "/somali/*_any", using: "WorldServiceSomali", examples: ["/somali", "/somali/example-123", "/somali/example-123.amp", "/somali/example-123.json"]
+  handle "/somali/*_any", using: "WorldServiceSomali", examples: ["/somali"]
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
 
   handle "/swahili.amp", using: "WorldServiceSwahili", examples: ["/swahili.amp"]
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
-  handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili", "/swahili/example-123", "/swahili/example-123.amp", "/swahili/example-123.json"]
-  handle "/tajik.amp", using: "WorldServiceTajik", examples: ["/tajik.amp"]
-  handle "/tajik.json", using: "WorldServiceTajik", examples: ["/tajik.json"]
-  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik", "/tajik/example-123", "/tajik/example-123.amp", "/tajik/example-123.json"]
+  handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili"]
+  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik"]
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
   redirect "/tamil/mobile/*any", to: "/tamil", status: 301
 
   handle "/tamil.amp", using: "WorldServiceTamil", examples: ["/tamil.amp"]
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
-  handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil", "/tamil/example-123", "/tamil/example-123.amp", "/tamil/example-123.json"]
+  handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil"]
   handle "/telugu.amp", using: "WorldServiceTelugu", examples: ["/telugu.amp"]
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
-  handle "/telugu/*_any", using: "WorldServiceTelugu", examples: ["/telugu", "/telugu/example-123", "/telugu/example-123.amp", "/telugu/example-123.json"]
+  handle "/telugu/*_any", using: "WorldServiceTelugu", examples: ["/telugu"]
   handle "/thai.amp", using: "WorldServiceThai", examples: ["/thai.amp"]
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
-  handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai", "/thai/example-123", "/thai/example-123.amp", "/thai/example-123.json"]
+  handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai"]
   handle "/tigrinya.amp", using: "WorldServiceTigrinya", examples: ["/tigrinya.amp"]
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
-  handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya", "/tigrinya/example-123", "/tigrinya/example-123.amp", "/tigrinya/example-123.json"]
+  handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
   redirect "/turkce/cep/*any", to: "/turkce", status: 301
 
   handle "/turkce.amp", using: "WorldServiceTurkce", examples: ["/turkce.amp"]
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
-  handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce", "/turkce/example-123", "/turkce/example-123.amp", "/turkce/example-123.json"]
+  handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce"]
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
 
-  handle "/ukchina.amp", using: "WorldServiceUkChina", examples: [{"/ukchina.amp", 302}]
   handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
 
   redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
 
   handle "/ukrainian.amp", using: "WorldServiceUkrainian", examples: ["/ukrainian.amp"]
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
-  handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian", "/ukrainian/example-123", "/ukrainian/example-123.amp", "/ukrainian/example-123.json"]
+  handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian"]
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
   redirect "/urdu/mobile/*any", to: "/urdu", status: 301
 
   handle "/urdu.amp", using: "WorldServiceUrdu", examples: ["/urdu.amp"]
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
-  handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu", "/urdu/example-123", "/urdu/example-123.amp", "/urdu/example-123.json"]
+  handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu"]
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
 
   handle "/uzbek.amp", using: "WorldServiceUzbek", examples: ["/uzbek.amp"]
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
-  handle "/uzbek/*_any", using: "WorldServiceUzbek", examples: ["/uzbek", "/uzbek/example-123", "/uzbek/example-123.amp", "/uzbek/example-123.json"]
+  handle "/uzbek/*_any", using: "WorldServiceUzbek", examples: ["/uzbek"]
 
   redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
 
   handle "/vietnamese.amp", using: "WorldServiceVietnamese", examples: ["/vietnamese.amp"]
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
-  handle "/vietnamese/*_any", using: "WorldServiceVietnamese", examples: ["/vietnamese", "/vietnamese/example-123", "/vietnamese/example-123.amp", "/vietnamese/example-123.json"]
+  handle "/vietnamese/*_any", using: "WorldServiceVietnamese", examples: ["/vietnamese"]
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
-  handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba", "/yoruba/example-123", "/yoruba/example-123.amp", "/yoruba/example-123.json"]
+  handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba"]
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
-  handle "/zhongwen.amp", using: "WorldServiceZhongwen", examples: [{"/zhongwen.amp", 302}]
-  handle "/zhongwen.json", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/simp.json", "/zhongwen/simp.amp"]
-  handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen", "/zhongwen/example-123", "/zhongwen/example-123.amp", "/zhongwen/example-123.json"]
+  handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
 
   handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
   handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []

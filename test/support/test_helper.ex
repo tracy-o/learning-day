@@ -63,8 +63,8 @@ defmodule Test.Support.Helper do
   def get_route(endpoint, path, "WorldService" <> _language) do
     host_header =
       case String.contains?(endpoint, ".test.") do
-        true -> "www.test.bbc.co.uk"
-        false -> "www.bbc.co.uk"
+        true -> "www.test.bbc.com"
+        false -> "www.bbc.com"
       end
 
     request_route(endpoint, path, [{"x-forwarded-host", host_header}])
