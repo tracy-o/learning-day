@@ -6,7 +6,17 @@
 - Tests run using http1
 
 ## Background
-Recently there was an attack on the search page in which belfrage was under massive load. We want to replicate this attack, so we can mitigate the impact if something like this were to happen again.
+Recently there was an attack on the search page in which belfrage was under massive load for roughly 5 minutes at 2AM on the 11th Aug 2021. (see post mortem docs for more information [here](https://confluence.dev.bbc.co.uk/display/WebCore/2021-08-11+P1+-++OPS-255395+-+Multiple+Web+Core+services+500+errors))
+
+We want to replicate this attack, so we can mitigate the impact if something like this were to happen again.
+
+During the attack Belfrage saw very high page response times of 10s and upwards. We also saw a high number of 500s coming from us due to this increased load.
+
+## Goals
+We want to discover from these load tests:
+- How much load is required to replicate the behaviour we see in Belfrage from the attack
+- When a single page type is being hit hard how does this effect the performance of other pages
+- How the load test results change when changing the Poolboy configuration to use no overflow workers and an increase normal workers
 
 ## Method
 Using the loadtest instance, playground and origin simulator we will attempt to replicate the volume and nature of the load experienced in the attack.
@@ -364,3 +374,98 @@ see html graph [here](img/2021-09-07-replicating-search-incident/1000wrk1200rps/
 
 #### Pool Workers
 ![](img/2021-09-07-replicating-search-incident/1000wrk1200rps/1000wrk-1200rps-pool-workers.png)
+
+
+
+## Discussion of Results
+To reiterate, we want to discover from these load tests:
+- How much load is required to replicate the behaviour we see in Belfrage from the attack
+- When a single page type is being hit hard how does this effect the performance of other pages
+- How the load test results change when changing the Poolboy configuration to use no overflow workers and an increase normal workers
+
+### Load Required
+
+We that belfrage can handle 1000 requests comfortably with 1ms latency. This stands to reason as 1ms * 1000 rps assuming requests are distributed equally the pool should stabilise at 1000 workers. This shows to be true in experimentation too using all its 512 persistent workers and roughly 500 overflow workers. This is while 96% of the requests are 200s.
+
+![graph for reference](img/2021-09-07-replicating-search-incident/300s_1000rps_1slat_http2false/300s_1000rps_1slat_http2false_poolworker.png)
+
+We can also see that the page response times are reasonable:
+
+![graph for reference](img/2021-09-07-replicating-search-incident/300s_1000rps_1slat_http2false/300s_1000rps_1slat_http2false_responsetimings.png)
+
+After just 100rps more 200s plummet to 62% and page response times rise to a maximum of 10s. While pool seems like it may have maxed out its overflow workers and restarted.
+
+![](img/2021-09-07-replicating-search-incident/300s_1100rps_1slat_http2false/300s_1100rps_1slat_http2false_poolworkers.png)
+
+![](img/2021-09-07-replicating-search-incident/300s_1100rps_1slat_http2false/300s_1100rps_1slat_http2false_pagetimings.png)
+
+So we can see that between 1000-1100rps is the amount of non-cacheable requests belfrage can handle before we start seeing high 500 rates and slow page response times, when belfrage is in this configuration.
+
+### Performance of Page Types
+When belfrage can handle the load, both pages types return with almost identical average latency.
+```
+/search Latencies     [mean, 50, 95, 99, max]    1.117395042s, 1.00646438s, 1.787235504s, 2.336244184s, 3.165103163s
+/news   Latencies     [mean, 50, 95, 99, max]    1.114064578s, 1.006609371s, 1.78862111s, 2.256335577s, 2.631084269s
+```
+
+When belfrage is under real stress from `/search` being hit, the latency of `/news` also takes a hit but its latency is about half that of `/search`
+
+```
+1100rps
+/search Latencies     [mean, 50, 95, 99, max]    10.541637046s, 3.444882638s, 30.130328183s, 32.978833955s, 36.322324076s
+/news   Latencies     [mean, 50, 95, 99, max]    5.91985234s, 2.554334058s, 20.606900107s, 26.608517649s, 30.000154536s
+
+1200rps
+/search Latencies     [mean, 50, 95, 99, max]    9.613452265s, 5.228787748s, 30.486982162s, 33.021743758s, 42.832403111s
+/news   Latencies     [mean, 50, 95, 99, max]    5.541969579s, 2.363824787s, 20.404429s, 30.000142043s, 30.001174045s
+```
+
+We also see that the success ratio is slightly higher for `/news` pages than `/search` When belfrage is under load.
+
+```
+Success Ratio
+
+1000rps
+/search 95.67%
+/news   96.33%
+
+1100rps
+/search 57.22%
+/news   62.67%
+
+1200rps
+/search 57.96%
+/news   64.33%
+```
+
+### Pool Configuration
+Here we can see that overflow workers seems to impact the CPU more than the a fixed size pool does even when belfrage is coping with the load at 1000rps
+
+512 Workers 4096 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/300s_1000rps_1slat_http2false/300s_1000rps_1slat_http2false_cpu.png)
+
+1024 Workers 0 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/1000wrk1000rps/1000wrk-1000rps-cpu-idle.png)
+
+```
+Configuration                           largest CPU difference
+512 Workers 4096 Overflow Workers       65%
+1024 Workers 0 Overflow Workers         50%
+```
+
+We see here that with the overflow worker configuration uses the CPU more than the fixed pool configuration, even when the system is functioning normally.
+
+512 Workers 4096 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/300s_1200rps_1slat_http2false/results_search_300s_1200rps_http2off_cpu.png)
+
+1024 Workers 0 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/1000wrk1200rps/1000wrk-1200rps-cpu-idle.png)
+
+
+```
+Configuration                           largest CPU difference
+512 Workers 4096 Overflow Workers       91%
+1024 Workers 0 Overflow Workers         74%
+```
+
+next talk about the difference in response times etc
