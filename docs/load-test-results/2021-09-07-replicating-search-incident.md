@@ -439,6 +439,7 @@ Success Ratio
 ```
 
 ### Pool Configuration
+#### Impact on the CPU
 Here we can see that overflow workers seems to impact the CPU more than the a fixed size pool does even when belfrage is coping with the load at 1000rps
 
 512 Workers 4096 Overflow Workers
@@ -468,4 +469,55 @@ Configuration                           largest CPU difference
 1024 Workers 0 Overflow Workers         74%
 ```
 
-next talk about the difference in response times etc
+#### Impact on Responses
+Here are the responses latencies side by side for comparison.
+
+```
+Configuration                           RPS     Latencies   [mean, 50, 95, 99, max]
+512 Workers 4096 Overflow Workers       1000    1.117395042s, 1.00646438s, 1.787235504s, 2.336244184s, 3.165103163s
+1024 Workers 0 Overflow Workers         1000    1.004626697s, 1.004423419s, 1.005770966s, 1.018097616s, 1.337482601s
+
+512 Workers 4096 Overflow Workers       1100    10.541637046s, 3.444882638s, 30.130328183s, 32.978833955s, 36.322324076s
+1024 Workers 0 Overflow Workers         1100    933.111088ms, 1.004382528s, 1.006208125s, 1.040752963s, 2.466380794s
+
+512 Workers 4096 Overflow Workers       1200    9.613452265s, 5.228787748s, 30.486982162s, 33.021743758s, 42.832403111s
+1024 Workers 0 Overflow Workers         1200    864.576612ms, 1.004423018s, 1.011226956s, 1.275691569s, 2.058437452s
+```
+
+From here we can see that when the pool is of a fixed size the latencies of the loadtests are significantly lower.
+
+If we go on to compare the success ratio
+```
+Configuration                           RPS     Success Ratio
+512 Workers 4096 Overflow Workers       1000    95.67%
+1024 Workers 0 Overflow Workers         1000    99.89%
+
+512 Workers 4096 Overflow Workers       1100    57.22%
+1024 Workers 0 Overflow Workers         1100    92.51%
+
+512 Workers 4096 Overflow Workers       1200    57.96%
+1024 Workers 0 Overflow Workers         1200    84.78%
+```
+We also see that across the board the fixed worker configuration performs better returning more 200 responses.
+
+Now looking at the response latency graphs we can see that the fixed worker configuration is much more stable as the overflow configuration is much more erratic. Take the graphs for 1200 RPS for example:
+
+512 Workers 4096 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/300s_1200rps_1slat_http2false/results_search_300s_1200rps_http2off.plot.png)
+
+1024 Workers 0 Overflow Workers
+![](img/2021-09-07-replicating-search-incident/1000wrk1200rps/results_search_300s_1200rps_http2off_1000wrk.plot.png)
+
+We can see that the performance in the fixed pool worker configuration is consistent. It provides a response as quickly as possible or returns a 500 if the pool is full. The overflow worker configuration's performance seems to be degrading over time. Performance seriously degrades after 160 seconds where it seems like the poolboy may have crashed.
+
+
+## Conclusion
+
+From the loadtests we have conducted its clear that currently a single instance of belfrage can withstand about 1000-1100 rps when the origin has a 1s latency.
+
+There is a possibility that if we increased, the pool worker size of the fixed pool we could maintain a higher rps but eventually the pool wouldn't become the limiting factor of our request and would stress some other maybe less resilient part of our system.
+
+As for page types we can see that when one page type is being hit very hard with requests other page types have degraded performance but not as much as the page being hit. In our tests when `/search` is being hit and has a latency of 10s `/news` will have a latency of 5s. This is good news because it means that a page being hit will not degrade the performance of other pages as much. Even when the pages are part of the same pool. One thing we could do to mitigate this even further is having separate pools for different services.
+
+The most revealing discovery we've made is that a fixed size pool configuration is more performant reliable and resilient across the board with lower latencies, higher response ratios and more efficient CPU usage in comparison to the overflow worker configuration. From the results of this loadtest its clear we should change our poolboy configurations to have a large pool of a fixed size.
+
