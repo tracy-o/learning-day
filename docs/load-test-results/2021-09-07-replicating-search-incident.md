@@ -385,7 +385,7 @@ To reiterate, we want to discover from these load tests:
 
 ### Load Required
 
-We that belfrage can handle 1000 requests comfortably with 1ms latency. This stands to reason as 1ms * 1000 rps assuming requests are distributed equally the pool should stabilise at 1000 workers. This shows to be true in experimentation too using all its 512 persistent workers and roughly 500 overflow workers. This is while 96% of the requests are 200s.
+We that belfrage can handle 1000 rps of uncacheable content comfortably with 1s latency. This stands to reason as 1s * 1000 rps (assuming requests are distributed equally the pool should stabilise) at 1000 workers. This shows to be true in experimentation too using all its 512 persistent workers and roughly 500 overflow workers. This is while 96% of the requests are 200s.
 
 ![graph for reference](img/2021-09-07-replicating-search-incident/300s_1000rps_1slat_http2false/300s_1000rps_1slat_http2false_poolworker.png)
 
@@ -408,7 +408,7 @@ When belfrage can handle the load, both pages types return with almost identical
 /news   Latencies     [mean, 50, 95, 99, max]    1.114064578s, 1.006609371s, 1.78862111s, 2.256335577s, 2.631084269s
 ```
 
-When belfrage is under real stress from `/search` being hit, the latency of `/news` also takes a hit but its latency is about half that of `/search`
+When belfrage is under real stress from `/search` being hit, the latency of `/news` but doesn't seem to be effected as much as `/search`.
 
 ```
 1100rps
@@ -437,6 +437,8 @@ Success Ratio
 /search 57.96%
 /news   64.33%
 ```
+
+It is hard to say why `/news` seems to be performing better. It could be because we are polling `/news` rather than loadtesting it. The main takeaway here is that. Hitting `/search` also degrades `/news` performance. But not as much as `/search`'s performance is degraded.
 
 ### Pool Configuration
 #### Impact on the CPU
@@ -517,7 +519,7 @@ From the loadtests we have conducted its clear that currently a single instance 
 
 There is a possibility that if we increased, the pool worker size of the fixed pool we could maintain a higher rps but eventually the pool wouldn't become the limiting factor of our request and would stress some other maybe less resilient part of our system.
 
-As for page types we can see that when one page type is being hit very hard with requests other page types have degraded performance but not as much as the page being hit. In our tests when `/search` is being hit and has a latency of 10s `/news` will have a latency of 5s. This is good news because it means that a page being hit will not degrade the performance of other pages as much. Even when the pages are part of the same pool. One thing we could do to mitigate this even further is having separate pools for different services.
+As for page types we can see that when one page type is being hit very hard with requests other page types have degraded performance but not as much as the page being hit. In our tests when `/search` is being hit and has a latency of 10s `/news` will have a latency of 5s. However this doesn't necessarily mean this will reflect real life performance as the traffic on other page types is often more than 1rps. However this is still good news because it means that a page being hit will not degrade the performance of other pages as much. Even when the pages are part of the same pool. One thing we could do (if we really wanted to) to mitigate this even further is having separate pools for different routespecs.
 
 The most revealing discovery we've made is that a fixed size pool configuration is more performant reliable and resilient across the board with lower latencies, higher response ratios and more efficient CPU usage in comparison to the overflow worker configuration. From the results of this loadtest its clear we should change our poolboy configurations to have a large pool of a fixed size.
 
