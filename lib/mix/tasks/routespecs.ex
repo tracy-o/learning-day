@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Routespecs do
   def run([env]) do
     IO.puts("# Belfrage #{env} RouteSpecs\n")
 
-    routefile = Routes.Routefile
+    routefile = Routes.Routefiles.Test
 
     routefile.routes()
     |> Enum.uniq_by(fn {_matcher, attrs} -> attrs.using end)
@@ -24,6 +24,9 @@ defmodule Mix.Tasks.Routespecs do
       }
     end)
     |> Enum.reverse()
-    |> Tabula.print_table(only: ["#", "RouteSpec", "Platform", "Request Pipeline", "Response Pipeline"], style: :github_md)
+    |> Tabula.print_table(
+      only: ["#", "RouteSpec", "Platform", "Request Pipeline", "Response Pipeline"],
+      style: :github_md
+    )
   end
 end
