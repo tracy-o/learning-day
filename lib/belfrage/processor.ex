@@ -41,11 +41,12 @@ defmodule Belfrage.Processor do
     RequestHash.put(struct)
   end
 
-  def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalised_request do
-      struct
-    else
-      Cache.fetch(struct, [:fresh])
+  def fetch_early_response_from_cache(
+        struct = %Struct{private: %Private{personalised_request: personalised, caching_enabled: caching_enabled}}
+      ) do
+    case {personalised, caching_enabled} do
+      {false, true} -> Cache.fetch(struct, [:fresh])
+      _ -> struct
     end
   end
 
@@ -78,12 +79,12 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.CacheDirective.call()
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
-    |> Cache.store()
+    |> maybe_store_cache()
     |> fetch_fallback_from_cache()
   end
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
-    if use_fallback?(struct.response) do
+    if use_fallback?(struct) do
       struct
       |> latency_checkpoint(:fallback_request_sent)
       |> Cache.fetch([:fresh, :stale])
@@ -94,13 +95,24 @@ defmodule Belfrage.Processor do
     end
   end
 
-  def use_fallback?(%Response{http_status: status}) do
-    status >= 400 && status not in [404, 410, 451]
+  def use_fallback?(%Struct{
+        response: %Response{http_status: status},
+        private: %Private{caching_enabled: caching_enabled}
+      }) do
+    status >= 400 and status not in [404, 410, 451] and caching_enabled
   end
 
   defp latency_checkpoint(struct = %Struct{request: request = %Request{}}, checkpoint) do
     LatencyMonitor.checkpoint(request.request_id, checkpoint)
     struct
+  end
+
+  def maybe_store_cache(struct = %Struct{}) do
+    if struct.private.caching_enabled do
+      Cache.store(struct)
+    else
+      struct
+    end
   end
 
   defp make_fallback_private_if_personalised_request(
