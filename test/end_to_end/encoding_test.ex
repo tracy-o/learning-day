@@ -14,7 +14,7 @@ defmodule ContentEncodingTest do
 
   test "when the client accepts gzip the response should be gzipped" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
+    |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{}, _ ->
       {:ok,
        %Belfrage.Clients.HTTP.Response{
          status_code: 200,
@@ -33,7 +33,7 @@ defmodule ContentEncodingTest do
 
   test "when client does not accept gzip the response is not gzipped" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
+    |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{}, _ ->
       {:ok,
        %Belfrage.Clients.HTTP.Response{
          status_code: 200,
@@ -52,7 +52,7 @@ defmodule ContentEncodingTest do
   describe "when no accept-encoding header is sent" do
     setup do
       Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{} ->
+      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{}, _ ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
            status_code: 200,

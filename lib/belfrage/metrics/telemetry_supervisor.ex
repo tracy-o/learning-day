@@ -30,7 +30,9 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       counter("cowboy.request.idle_timeout.count",
         event_name: "cowboy.request.stop",
         keep: &match?(%{error: {:connection_error, :timeout, _}}, &1)
-      )
+      ),
+      last_value("poolboy.available_workers.count", event_name: "belfrage.poolboy.available_workers", tags: [:pool_name]),
+      last_value("poolboy.overflow_workers.count", event_name: "belfrage.poolboy.overflow_workers", tags: [:pool_name])
     ]
   end
 end

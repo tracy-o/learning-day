@@ -20,7 +20,7 @@ defmodule Belfrage.Clients.Lambda do
       timeout: @lambda_timeout,
       headers: headers
     })
-    |> @http_client.execute()
+    |> @http_client.execute(:Webcore)
   end
 
   def call(arn, function, payload, request_id, opts \\ []) do

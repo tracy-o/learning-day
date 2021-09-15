@@ -115,7 +115,8 @@ defmodule Belfrage.Clients.LambdaTest do
                                payload: ~s({"some": "data"}),
                                headers: %{},
                                timeout: @lambda_timeout
-                             } ->
+                             },
+                             :Webcore ->
         @generic_response
       end)
 
@@ -130,7 +131,8 @@ defmodule Belfrage.Clients.LambdaTest do
                                payload: ~s({"some": "data"}),
                                headers: %{},
                                timeout: @lambda_timeout
-                             } ->
+                             },
+                             :Webcore ->
         @generic_response
       end)
 
@@ -145,7 +147,8 @@ defmodule Belfrage.Clients.LambdaTest do
                                payload: "",
                                headers: %{},
                                timeout: @lambda_timeout
-                             } ->
+                             },
+                             :Webcore ->
         @generic_response
       end)
 

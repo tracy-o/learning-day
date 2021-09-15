@@ -14,7 +14,7 @@ defmodule EndToEndTest.FablTest do
 
   test "Fabl headers contain x-amzn-trace-id" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn %HTTP.Request{headers: headers}, :fabl ->
+    |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->
       assert Map.has_key?(headers, "x-amzn-trace-id")
       assert String.contains?(headers["x-amzn-trace-id"], "Sampled=")
       assert String.contains?(headers["x-amzn-trace-id"], "Root=")

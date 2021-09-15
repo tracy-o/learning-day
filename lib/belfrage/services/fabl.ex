@@ -56,7 +56,7 @@ defmodule Belfrage.Services.Fabl do
          headers: build_headers(request),
          request_id: request_id
        },
-       :fabl
+       :Fabl
      ), struct}
   end
 

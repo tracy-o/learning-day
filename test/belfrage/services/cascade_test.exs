@@ -10,18 +10,20 @@ defmodule Belfrage.Services.CascadeTest do
 
   @http_struct %Struct{
     private: %Struct.Private{
-      origin: "https://www.bbc.co.uk"
+      origin: "https://www.bbc.co.uk",
+      platform: MozartNews
     },
     request: %Struct.Request{
       method: "GET",
-      path: "/_web_core",
+      path: "/_some_path",
       request_id: "henry-the-http-request"
     }
   }
 
   @fabl_struct %Struct{
     private: %Struct.Private{
-      origin: "https://fabl.test.api.bbci.co.uk"
+      origin: "https://fabl.test.api.bbci.co.uk",
+      platform: Fabl
     },
     request: %Struct.Request{
       method: "GET",
@@ -34,7 +36,7 @@ defmodule Belfrage.Services.CascadeTest do
   }
 
   @webcore_struct %Struct{
-    private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function"},
+    private: %Struct.Private{origin: "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", platform: Webcore},
     request: %Struct.Request{
       method: "GET",
       path: "/_web_core",
@@ -48,8 +50,9 @@ defmodule Belfrage.Services.CascadeTest do
       :execute,
       fn %Belfrage.Clients.HTTP.Request{
            method: :get,
-           url: "https://www.bbc.co.uk/_web_core"
-         } ->
+           url: "https://www.bbc.co.uk/_some_path"
+         },
+         :MozartNews ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
            status_code: status_code,
@@ -67,7 +70,7 @@ defmodule Belfrage.Services.CascadeTest do
            method: :get,
            url: "https://fabl.test.api.bbci.co.uk/module/example-module"
          },
-         :fabl ->
+         :Fabl ->
         {
           :ok,
           %Belfrage.Clients.HTTP.Response{

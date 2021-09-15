@@ -23,7 +23,8 @@ defmodule AllowAllQsOverrideTest do
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
                              method: :get,
                              url: "https://www.mozart-routing.test.api.bbci.co.uk/moz?a=bar&b=foo"
-                           } ->
+                           },
+                           :MozartNews ->
       {:ok, @http_response}
     end)
 
@@ -40,7 +41,8 @@ defmodule AllowAllQsOverrideTest do
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
                              method: :get,
                              url: "https://www.mozart-routing.test.api.bbci.co.uk/moz?only_allow_this_on_live=123"
-                           } ->
+                           },
+                           :MozartNews ->
       {:ok, @http_response}
     end)
 
