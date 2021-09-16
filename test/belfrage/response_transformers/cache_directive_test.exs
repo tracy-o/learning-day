@@ -37,6 +37,41 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
         assert response.cache_directive.cacheability == "private"
         assert response.cache_directive.max_age == round(30 * @webcore_multiplier)
       end
+
+      test "Given a max-age of 15 and a #{@webcore_value} webcore_ttl_multiplier, the correct value is returned" do
+        set_webcore_ttl_multiplier(@webcore_value)
+
+        %{response: response} =
+          CacheDirective.call(%Struct{
+            response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private, max-age=15"
+              }
+            },
+            private: %Struct.Private{
+              platform: Webcore
+            }
+          })
+
+        assert response.cache_directive.cacheability == "private"
+
+        case @webcore_value do
+          "very-short" ->
+            assert response.cache_directive.max_age == 5
+
+          "short" ->
+            assert response.cache_directive.max_age == 10
+
+          "default" ->
+            assert response.cache_directive.max_age == 15
+
+          "long" ->
+            assert response.cache_directive.max_age == 30
+
+          "very-long" ->
+            assert response.cache_directive.max_age == 60
+        end
+      end
     end
   end
 
