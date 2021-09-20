@@ -44,7 +44,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           @ok_response
         end
       )
@@ -68,7 +68,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           {:ok,
            %Belfrage.Clients.HTTP.Response{
              status_code: 500,
@@ -96,7 +96,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           {
             :error,
             %Belfrage.Clients.HTTP.Error{
@@ -125,7 +125,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           {
             :error,
             %Belfrage.Clients.HTTP.Error{reason: :timeout}
@@ -165,7 +165,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           @ok_response
         end
       )
@@ -206,7 +206,7 @@ defmodule Belfrage.Services.FablTest do
              payload: "",
              headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
            },
-           :fabl ->
+           :Fabl ->
           @ok_response
         end
       )
@@ -235,7 +235,7 @@ defmodule Belfrage.Services.FablTest do
                "req-svc-chain" => "BELFRAGE"
              }
            },
-           :fabl ->
+           :Fabl ->
           @ok_response
         end
       )
@@ -258,7 +258,7 @@ defmodule Belfrage.Services.FablTest do
                "req-svc-chain" => "BELFRAGE"
              }
            },
-           :fabl ->
+           :Fabl ->
           @ok_response
         end
       )
@@ -294,7 +294,7 @@ defmodule Belfrage.Services.FablTest do
              payload: _payload,
              headers: headers
            },
-           :fabl ->
+           :Fabl ->
           refute Map.has_key?(headers, "x-amzn-trace-id")
           @ok_response
         end

@@ -22,11 +22,14 @@ defmodule Belfrage.Clients.CCP do
     before_time = System.monotonic_time(:millisecond)
 
     ccp_response =
-      @http_client.execute(%Clients.HTTP.Request{
-        method: :get,
-        url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
-        timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
-      })
+      @http_client.execute(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
+          timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
+        },
+        :S3
+      )
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
     Belfrage.Metrics.Statix.timing("service.S3.request.timing", timing)

@@ -109,9 +109,11 @@ defmodule Belfrage.Services.HTTP do
   defp is_uk(_), do: nil
 
   defp execute_request(request = %Clients.HTTP.Request{}, private = %Private{}) do
-    Belfrage.Event.record "function.timing.service.#{platform_name(private)}.request" do
+    platform = platform_name(private)
+
+    Belfrage.Event.record "function.timing.service.#{platform}.request" do
       LatencyMonitor.checkpoint(request.request_id, :origin_request_sent)
-      response = @http_client.execute(request)
+      response = @http_client.execute(request, platform)
       LatencyMonitor.checkpoint(request.request_id, :origin_response_received)
       response
     end
@@ -132,7 +134,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp platform_name(%Private{platform: platform}) do
-    Macro.to_string(platform)
+    Module.split(platform) |> hd() |> String.to_atom()
   end
 
   defp increment_metric(metric) do

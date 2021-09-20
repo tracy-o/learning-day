@@ -9,11 +9,12 @@ defmodule Belfrage.Services.HTTPTest do
 
   @get_struct %Struct{
     private: %Struct.Private{
-      origin: "https://www.bbc.co.uk"
+      origin: "https://www.bbc.co.uk",
+      platform: SomePlatform
     },
     request: %Struct.Request{
       method: "GET",
-      path: "/_web_core",
+      path: "/_some_path",
       country: "gb",
       host: "www.bbc.co.uk",
       query_params: %{
@@ -25,11 +26,12 @@ defmodule Belfrage.Services.HTTPTest do
 
   @post_struct %Struct{
     private: %Struct.Private{
-      origin: "https://www.bbc.co.uk"
+      origin: "https://www.bbc.co.uk",
+      platform: SomePlatform
     },
     request: %Struct.Request{
       payload: ~s({"some": "data"}),
-      path: "/_web_core",
+      path: "/_some_path",
       method: "POST",
       country: "gb",
       query_params: %{
@@ -49,7 +51,7 @@ defmodule Belfrage.Services.HTTPTest do
 
   defmacro expect_request(request, response) do
     quote do
-      expect(Clients.HTTPMock, :execute, fn unquote(request) -> unquote(response) end)
+      expect(Clients.HTTPMock, :execute, fn unquote(request), _ -> unquote(response) end)
     end
   end
 
@@ -58,7 +60,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          url: "https://www.bbc.co.uk/_some_path?foo=bar",
           payload: "",
           headers: %{
             "accept-encoding" => "gzip",
@@ -84,7 +86,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :post,
-          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          url: "https://www.bbc.co.uk/_some_path?foo=bar",
           payload: ~s({"some": "data"}),
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
@@ -112,7 +114,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          url: "https://www.bbc.co.uk/_some_path?foo=bar",
           payload: "",
           headers: %{
             "accept-encoding" => "gzip",
@@ -137,7 +139,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          url: "https://www.bbc.co.uk/_some_path?foo=bar",
           payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
@@ -159,7 +161,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core?foo=bar",
+          url: "https://www.bbc.co.uk/_some_path?foo=bar",
           payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
@@ -177,11 +179,12 @@ defmodule Belfrage.Services.HTTPTest do
     test "when varnish is set, the varnish header is used" do
       struct = %Struct{
         private: %Struct.Private{
-          origin: "https://www.bbc.co.uk"
+          origin: "https://www.bbc.co.uk",
+          platform: SomePlatform
         },
         request: %Struct.Request{
           method: "GET",
-          path: "/_web_core",
+          path: "/_some_path",
           country: "gb",
           host: "www.bbc.co.uk"
         }
@@ -190,7 +193,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core",
+          url: "https://www.bbc.co.uk/_some_path",
           payload: "",
           headers: %{
             "accept-encoding" => "gzip",
@@ -214,11 +217,12 @@ defmodule Belfrage.Services.HTTPTest do
     test "when the raw headers are set, the raw headers are used" do
       struct = %Struct{
         private: %Struct.Private{
-          origin: "https://www.bbc.co.uk"
+          origin: "https://www.bbc.co.uk",
+          platform: SomePlatform
         },
         request: %Struct.Request{
           method: "GET",
-          path: "/_web_core",
+          path: "/_some_path",
           country: "gb",
           host: "www.bbc.co.uk",
           raw_headers: %{
@@ -230,7 +234,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core",
+          url: "https://www.bbc.co.uk/_some_path",
           payload: "",
           headers: %{
             "accept-encoding" => "gzip",
@@ -255,11 +259,12 @@ defmodule Belfrage.Services.HTTPTest do
     test "when edge cache is set, the edge cache request headers are used" do
       struct = %Struct{
         private: %Struct.Private{
-          origin: "https://www.bbc.co.uk"
+          origin: "https://www.bbc.co.uk",
+          platform: SomePlatform
         },
         request: %Struct.Request{
           method: "GET",
-          path: "/_web_core",
+          path: "/_some_path",
           country: "gb",
           host: "www.bbc.co.uk",
           edge_cache?: true,
@@ -271,7 +276,7 @@ defmodule Belfrage.Services.HTTPTest do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
-          url: "https://www.bbc.co.uk/_web_core",
+          url: "https://www.bbc.co.uk/_some_path",
           payload: "",
           headers: %{
             "accept-encoding" => "gzip",
@@ -312,7 +317,7 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     defp stub_request() do
-      stub(Clients.HTTPMock, :execute, fn _ -> @ok_response end)
+      stub(Clients.HTTPMock, :execute, fn _, _ -> @ok_response end)
     end
 
     defp assert_successful_response(response) do

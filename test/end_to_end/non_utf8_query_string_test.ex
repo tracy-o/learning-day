@@ -124,7 +124,7 @@ defmodule NonUtf8QueryStringTest do
   test "path params with invalid utf chars don't raise an error for non-Webcore requests" do
     fabl_url = URI.decode("#{Application.get_env(:belfrage, :fabl_endpoint)}/module/fo%a0")
 
-    expect(HTTPMock, :execute, fn %HTTP.Request{url: ^fabl_url}, :fabl ->
+    expect(HTTPMock, :execute, fn %HTTP.Request{url: ^fabl_url}, :Fabl ->
       {:ok, %HTTP.Response{status_code: 200, body: "OK"}}
     end)
 

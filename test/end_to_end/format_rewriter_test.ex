@@ -67,7 +67,7 @@ defmodule EndToEndTest.FormatRewriterTest do
   describe "when path has a trailing format" do
     setup do
       Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn _ ->
+      |> expect(:execute, fn _, :MozartNews ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
            status_code: 200,
@@ -103,7 +103,7 @@ defmodule EndToEndTest.FormatRewriterTest do
   describe "when path has multiple formats" do
     setup do
       Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn _ ->
+      |> expect(:execute, fn _, :MozartNews ->
         {:ok,
          %Belfrage.Clients.HTTP.Response{
            status_code: 200,

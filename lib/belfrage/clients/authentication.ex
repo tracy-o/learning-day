@@ -29,13 +29,16 @@ defmodule Belfrage.Clients.Authentication do
   end
 
   defp get_from_api(url, api_config_name) do
-    @http_client.execute(%Clients.HTTP.Request{
-      method: :get,
-      url: url,
-      headers: %{
-        "connection" => "close"
-      }
-    })
+    @http_client.execute(
+      %Clients.HTTP.Request{
+        method: :get,
+        url: url,
+        headers: %{
+          "connection" => "close"
+        }
+      },
+      :AccountAuthentication
+    )
     |> handle_response(api_config_name)
   end
 

@@ -23,9 +23,18 @@ defmodule Belfrage.Metrics.Supervisor do
   defp children(_env) do
     [
       Belfrage.Metrics.MailboxMonitor,
-      Belfrage.Metrics.PoolObserver,
       Belfrage.Metrics.TelemetrySupervisor,
-      Belfrage.Metrics.LatencyMonitor
+      Belfrage.Metrics.LatencyMonitor,
+      {:telemetry_poller,
+       [
+         measurements: [
+           {Belfrage.Metrics.Poolboy, :track_machine_gun_pools, []},
+           {Belfrage.Metrics.Poolboy, :track, [:aws_ex_store_pool, "AwsExRayProcessMonitor"]},
+           {Belfrage.Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]}
+         ],
+         period: :timer.seconds(5),
+         name: :belfrage_telemetry_poller
+       ]}
     ]
   end
 end

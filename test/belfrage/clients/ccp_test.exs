@@ -63,7 +63,7 @@ defmodule Belfrage.Clients.CCPTest do
       }
 
       Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn ^expected_s3_request ->
+      |> expect(:execute, fn ^expected_s3_request, :S3 ->
         {:ok,
          Belfrage.Clients.HTTP.Response.new(%{
            status_code: 200,
@@ -77,7 +77,7 @@ defmodule Belfrage.Clients.CCPTest do
 
     test "converts binary format of erlang terms in response, to erlang terms", %{s3_response_body: s3_response_body} do
       Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn _request ->
+      |> expect(:execute, fn _request, :S3 ->
         {:ok,
          Belfrage.Clients.HTTP.Response.new(%{
            status_code: 200,
@@ -93,7 +93,7 @@ defmodule Belfrage.Clients.CCPTest do
 
   test "when item does not exist in S3" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn _request ->
+    |> expect(:execute, fn _request, :S3 ->
       {:ok,
        Belfrage.Clients.HTTP.Response.new(%{
          status_code: 403,
@@ -107,7 +107,7 @@ defmodule Belfrage.Clients.CCPTest do
 
   test "S3 returns unexpected status code" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn _request ->
+    |> expect(:execute, fn _request, :S3 ->
       {:ok,
        Belfrage.Clients.HTTP.Response.new(%{
          status_code: 202,
@@ -121,7 +121,7 @@ defmodule Belfrage.Clients.CCPTest do
 
   test "when HTTP client returns an error" do
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn _request ->
+    |> expect(:execute, fn _request, :S3 ->
       {:error, %Belfrage.Clients.HTTP.Error{reason: :timeout}}
     end)
 

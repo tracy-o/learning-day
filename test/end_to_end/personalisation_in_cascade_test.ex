@@ -40,7 +40,7 @@ defmodule EndToEnd.PersonalisationInCascade do
     end)
 
     Belfrage.Clients.HTTPMock
-    |> expect(:execute, fn request ->
+    |> expect(:execute, fn request, :MozartNews ->
       assert Enum.all?(request.headers, &is_binary(elem(&1, 0))),
              "Expects all header keys to be binaries for following assertions."
 
