@@ -11,7 +11,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
       on_exit(fn -> stop_machine_gun_pool(pool_pid) end)
 
       assert_metric(
-        {[:poolboy, :available_workers], %{count: 1}, %{pool_name: pool_name}},
+        {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}},
         fn -> Poolboy.track_machine_gun_pools() end
       )
     end
@@ -41,8 +41,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :available_workers], %{count: 1}, %{pool_name: pool_name}},
-          {[:poolboy, :overflow_workers], %{count: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -51,8 +50,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :available_workers], %{count: 0}, %{pool_name: pool_name}},
-          {[:poolboy, :overflow_workers], %{count: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 0, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -61,8 +59,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :available_workers], %{count: 0}, %{pool_name: pool_name}},
-          {[:poolboy, :overflow_workers], %{count: 1}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 0, overflow_workers: 1}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -74,8 +71,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :available_workers], %{count: 1}, %{pool_name: pool_name}},
-          {[:poolboy, :overflow_workers], %{count: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(:test_poolboy_process, pool_name) end
       )
