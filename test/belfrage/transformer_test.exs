@@ -6,8 +6,9 @@ defmodule Belfrage.Transformers.TransformerTest do
 
   test "when there are transformers in the list it will call the next one, seen via the reverse ordering in the debug pipeline trail" do
     struct = %Struct{private: %Struct.Private{pipeline: ["HTTPredirect", "CircuitBreaker"]}}
-    output_struct = %Struct{private: %Struct.Debug{pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}
-    assert {:ok, output_struct} = Subject.then(struct.private.pipeline, struct)
+
+    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}} =
+             Subject.then(struct.private.pipeline, struct)
   end
 
   test "when there are no more transformers in the list it returns {:ok, struct}" do
