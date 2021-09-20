@@ -68,6 +68,19 @@ defmodule Belfrage.Metrics.PoolboyTest do
       )
     end
 
+    test "can find the pool by process name" do
+      pool_name = :test_poolboy_pool
+      start_pool(size: 1, max_overflow: 1, name: {:local, :test_poolboy_process})
+
+      assert_metrics(
+        [
+          {[:poolboy, :available_workers], %{count: 1}, %{pool_name: pool_name}},
+          {[:poolboy, :overflow_workers], %{count: 0}, %{pool_name: pool_name}}
+        ],
+        fn -> Poolboy.track(:test_poolboy_process, pool_name) end
+      )
+    end
+
     defp start_pool(opts) do
       start_supervised!(%{
         id: :test_poolboy_pool,
