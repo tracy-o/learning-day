@@ -40,6 +40,11 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         measurement: :overflow_workers,
         event_name: "belfrage.poolboy.status",
         tags: [:pool_name]
+      ),
+      last_value("poolboy.pool_saturation",
+        measurement: :saturation,
+        event_name: "belfrage.poolboy.status",
+        tags: [:pool_name]
       )
     ]
   end
