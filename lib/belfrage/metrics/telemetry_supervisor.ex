@@ -31,8 +31,21 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         event_name: "cowboy.request.stop",
         keep: &match?(%{error: {:connection_error, :timeout, _}}, &1)
       ),
-      last_value("poolboy.available_workers.count", event_name: "belfrage.poolboy.available_workers", tags: [:pool_name]),
-      last_value("poolboy.overflow_workers.count", event_name: "belfrage.poolboy.overflow_workers", tags: [:pool_name])
+      last_value("poolboy.available_workers.count",
+        measurement: :available_workers,
+        event_name: "belfrage.poolboy.status",
+        tags: [:pool_name]
+      ),
+      last_value("poolboy.overflow_workers.count",
+        measurement: :overflow_workers,
+        event_name: "belfrage.poolboy.status",
+        tags: [:pool_name]
+      ),
+      last_value("poolboy.pool_saturation",
+        measurement: :saturation,
+        event_name: "belfrage.poolboy.status",
+        tags: [:pool_name]
+      )
     ]
   end
 end
