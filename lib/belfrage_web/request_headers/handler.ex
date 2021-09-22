@@ -6,11 +6,14 @@ defmodule BelfrageWeb.RequestHeaders.Handler do
 
   alias BelfrageWeb.RequestHeaders.Sanitiser
   alias BelfrageWeb.RequestHeaders.Mapper
+  alias Belfrage.Metrics
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    put_private(conn, :bbc_headers, bbc_headers(Mapper.map(conn.req_headers)))
+    Metrics.duration(:process_request_headers, fn ->
+      put_private(conn, :bbc_headers, bbc_headers(Mapper.map(conn.req_headers)))
+    end)
   end
 
   defp bbc_headers(req_headers) do

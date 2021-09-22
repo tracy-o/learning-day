@@ -1,6 +1,7 @@
 defmodule BelfrageWeb.View.InternalResponse do
   @file_io Application.get_env(:belfrage, :file_io)
   alias Belfrage.Struct.Response
+  alias Belfrage.Metrics
 
   @html_content_type "text/html; charset=utf-8"
   @json_content_type "application/json"
@@ -9,10 +10,12 @@ defmodule BelfrageWeb.View.InternalResponse do
   @redirect_http_status Application.get_env(:belfrage, :redirect_statuses)
 
   def new(conn, status, cacheable) do
-    %Response{http_status: status}
-    |> put_cache_directive(cacheable)
-    |> put_internal_response_headers(conn)
-    |> put_body()
+    Metrics.duration(:generate_internal_response, fn ->
+      %Response{http_status: status}
+      |> put_cache_directive(cacheable)
+      |> put_internal_response_headers(conn)
+      |> put_body()
+    end)
   end
 
   defp put_cache_directive(response = %Response{http_status: 404}, _cacheable) do
