@@ -59,6 +59,7 @@ cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
 %post
 systemctl enable belfrage
 systemctl enable cloudformation-signal
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/etc/cloudwatch-agent-config.json
 /bin/chown -R component:component /home/component
 /bin/chown -R component:component /var/log/component
 cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
