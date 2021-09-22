@@ -54,7 +54,7 @@ defmodule Belfrage.Event do
     new(:metric, type, metric, opts)
     |> @monitor_api.record_event()
 
-    apply(Belfrage.Metrics.Statix, type, [metric, value(opts)])
+    apply(Belfrage.Metrics.Statix, type, [metric, value(opts), [tags: build_metric_tags()]])
   end
 
   def new(log_or_metric, name, payload, opts \\ [])
@@ -84,6 +84,10 @@ defmodule Belfrage.Event do
   end
 
   defp value(opts), do: Keyword.get(opts, :value, 1)
+
+  defp build_metric_tags() do
+    ["BBCEnvironment:" <> Application.get_env(:belfrage, :production_environment)]
+  end
 
   defp build_dimensions(opts) do
     opts
