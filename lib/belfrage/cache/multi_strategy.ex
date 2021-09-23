@@ -51,12 +51,12 @@ defmodule Belfrage.Cache.MultiStrategy do
   defp execute_fetch(cache, struct, accepted_freshness) do
     cache_metric = cache.metric_identifier()
 
-    with {:ok, freshness, response} <- cache.fetch(struct),
+    with {:ok, {strategy, freshness}, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
       Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
 
       metric_on_stale_routespec(struct, cache_metric, freshness)
-      {:halt, {:ok, freshness, response}}
+      {:halt, {:ok, {strategy, freshness}, response}}
     else
       # TODO? we could match here on `false` and record a metric that
       # shows when we asked for a `fresh` response, but only a

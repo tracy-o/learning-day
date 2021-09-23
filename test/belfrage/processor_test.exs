@@ -8,7 +8,6 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
-  alias Belfrage.CacheControl
 
   defmodule Module.concat([Routes, Specs, SomePersonalisedLoop]) do
     def specs do
@@ -230,18 +229,38 @@ defmodule Belfrage.ProcessorTest do
       refute response.body == cached_response.body
     end
 
-    test "uses cached response as fallback for failed response", %{struct: struct, cached_response: cached_response} do
+    test "uses response in local cache as fallback for failed response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response == cached_response
     end
 
-    test "uses stale cached response as fallback", %{struct: struct} do
+    test "uses stale response in local cache as fallback", %{struct: struct} do
       cached_response = make_cached_reponse_stale(struct.request.request_hash)
 
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
-      assert response == %{cached_response | fallback: true}
+      assert response == %{cached_response | fallback: true, cache_type: :local}
+    end
+
+    test "uses response in distributed cache as fallback for failed response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
+      clear_cache()
+
+      expect(Belfrage.Clients.CCPMock, :fetch, fn _struct ->
+        {:ok, cached_response}
+      end)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response.body == cached_response.body
+      assert response.fallback == true
+      assert response.cache_type == :distributed
     end
 
     test "makes the response private if request is personalised", %{struct: struct, cached_response: cached_response} do
@@ -291,43 +310,6 @@ defmodule Belfrage.ProcessorTest do
     test "returns false if struct.private.caching_enabled is false" do
       refute Processor.use_fallback?(struct_fixture(status: 500, caching_enabled: false))
       refute Processor.use_fallback?(struct_fixture(status: 404, caching_enabled: false))
-    end
-  end
-
-  describe "maybe_store_cache/1" do
-    setup do
-      %{
-        struct: %Struct{
-          request: %Struct.Request{
-            method: "GET",
-            request_hash: unique_cache_key()
-          },
-          response: %Struct.Response{
-            http_status: 200,
-            body: "<p>Hi there.</p>",
-            cache_directive: CacheControl.Parser.parse("public, max-age=30")
-          },
-          private: %Private{
-            caching_enabled: false
-          }
-        }
-      }
-    end
-
-    test "doesn't cache if struct.private.caching_enabled is false", %{struct: struct} do
-      expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
-
-      Processor.maybe_store_cache(struct)
-      assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(struct)
-    end
-
-    test "does cache if struct.private.caching_enabled is true", %{struct: struct} do
-      struct = %{struct | private: %Private{caching_enabled: true}}
-
-      expect(Belfrage.Clients.CCPMock, :put, fn _struct -> :ok end)
-
-      Processor.maybe_store_cache(struct)
-      assert {:ok, :fresh, _response} = Belfrage.Cache.Local.fetch(struct)
     end
   end
 end

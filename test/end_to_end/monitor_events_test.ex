@@ -257,7 +257,7 @@ defmodule EndToEnd.MonitorEventsTest do
     setup do
       Belfrage.Clients.CCPMock
       |> expect(:fetch, fn _request_hash ->
-        {:ok, :stale,
+        {:ok,
          %Belfrage.Struct.Response{
            body: :zlib.gzip(~s({"hi": "bonjour"})),
            headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},

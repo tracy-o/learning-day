@@ -1,14 +1,41 @@
 defmodule Belfrage.Cache.Store do
   alias Belfrage.Cache.MultiStrategy
+  alias Belfrage.Cache.Local
+  alias Belfrage.Metrics
 
   def store(struct) do
-    if is_cacheable?(struct), do: MultiStrategy.store(struct)
+    cond do
+      store_in_local_and_distributed_cache?(struct) ->
+        Metrics.duration(:cache_response, fn ->
+          MultiStrategy.store(struct)
+        end)
 
-    struct
+        struct
+
+      store_in_local_cache?(struct) ->
+        Metrics.duration(:cache_response, fn ->
+          Local.store(struct, make_stale: true)
+        end)
+
+        struct
+
+      true ->
+        struct
+    end
+  end
+
+  defp store_in_local_and_distributed_cache?(struct) do
+    is_cacheable?(struct) and not is_response_fallback?(struct)
+  end
+
+  defp store_in_local_cache?(struct) do
+    is_cacheable?(struct) and is_response_fallback?(struct) and
+      struct.response.cache_type == :distributed
   end
 
   defp is_cacheable?(struct) do
-    is_successful_response?(struct) and is_get_request?(struct) and is_public_cacheable_response?(struct)
+    is_caching_enabled?(struct) and is_successful_response?(struct) and is_get_request?(struct) and
+      is_public_cacheable_response?(struct)
   end
 
   defp is_public_cacheable_response?(struct) do
@@ -24,5 +51,13 @@ defmodule Belfrage.Cache.Store do
 
   defp is_get_request?(struct) do
     struct.request.method == "GET"
+  end
+
+  defp is_caching_enabled?(struct) do
+    struct.private.caching_enabled
+  end
+
+  defp is_response_fallback?(struct) do
+    struct.response.fallback
   end
 end

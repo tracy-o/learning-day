@@ -18,12 +18,14 @@ defmodule Belfrage.BelfrageCacheTest do
 
     put_into_cache(cache_key("fresh"), @cache_seeded_response)
 
-    put_into_cache(cache_key("stale"), %{
+    stale_response = %{
       @cache_seeded_response
       | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
-    })
+    }
 
-    :ok
+    put_into_cache(cache_key("stale"), stale_response)
+
+    %{stale_response: stale_response}
   end
 
   describe "a fresh cache" do
@@ -65,7 +67,7 @@ defmodule Belfrage.BelfrageCacheTest do
       assert %Struct{response: %Struct.Response{http_status: nil}} = Belfrage.Cache.fetch(struct, [:fresh])
     end
 
-    test "fetches cached stale response when requesting fresh or stale" do
+    test "fetches cached stale response when requesting fresh or stale content and the local cache returns the content" do
       struct = %Struct{
         private: %Struct.Private{
           loop_id: "ALoop"
@@ -75,8 +77,30 @@ defmodule Belfrage.BelfrageCacheTest do
         }
       }
 
-      assert %Struct{response: %Struct.Response{fallback: true, http_status: 200}} =
+      assert %Struct{response: %Struct.Response{cache_type: :local, fallback: true, http_status: 200}} =
                Belfrage.Cache.fetch(struct, [:fresh, :stale])
+    end
+
+    test "fetches cached stale response when requesting stale content and the distributed cache returns the content", %{
+      stale_response: stale_response
+    } do
+      # Make sure the local cache does not contain the content
+      clear_cache()
+
+      # Ensure that distributed cache client returns the content
+      expect(Belfrage.Clients.CCPMock, :fetch, fn _struct -> {:ok, stale_response} end)
+
+      struct = %Struct{
+        private: %Struct.Private{
+          loop_id: "ALoop"
+        },
+        request: %Struct.Request{
+          request_hash: cache_key("stale")
+        }
+      }
+
+      assert %Struct{response: %Struct.Response{cache_type: :distributed, fallback: true, http_status: 200}} =
+               Belfrage.Cache.fetch(struct, [:stale])
     end
   end
 
@@ -102,7 +126,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "when response is cacheable it should be saved to the cache", %{cacheable_struct: cacheable_struct} do
       Belfrage.Cache.store(cacheable_struct)
 
-      {status, state, response} = Belfrage.Cache.Local.fetch(cacheable_struct)
+      {status, {_, state}, response} = Belfrage.Cache.Local.fetch(cacheable_struct)
       assert :ok == status
       assert :fresh == state
 
@@ -163,7 +187,7 @@ defmodule Belfrage.BelfrageCacheTest do
       Belfrage.Cache.store(cacheable_struct)
       :timer.sleep(1)
 
-      assert {:ok, :stale, _struct} = Belfrage.Cache.Local.fetch(cacheable_struct)
+      assert {:ok, {:local, :stale}, _struct} = Belfrage.Cache.Local.fetch(cacheable_struct)
     end
   end
 end

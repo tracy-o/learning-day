@@ -87,7 +87,7 @@ defmodule Belfrage.Clients.CCPTest do
       end)
 
       fallback_response = :erlang.binary_to_term(s3_response_body)
-      assert {:ok, :stale, fallback_response} == CCP.fetch("request-hash-123")
+      assert {:ok, fallback_response} == CCP.fetch("request-hash-123")
     end
   end
 
