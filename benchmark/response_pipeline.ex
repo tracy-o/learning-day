@@ -49,8 +49,8 @@ defmodule Benchmark.ResponsePipeline do
       {
         size_kb,
         {
-          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)})),
-          struct_with_resp(struct, Response.build({:ok, gzip_base64_lambda_resp(size_kb)}))
+          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)}, "off")),
+          struct_with_resp(struct, Response.build({:ok, gzip_base64_lambda_resp(size_kb)}, "off"))
         }
       }
     end
