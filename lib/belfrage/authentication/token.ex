@@ -1,13 +1,17 @@
 defmodule Belfrage.Authentication.Token do
-  def parse(cookie) do
-    case decode(cookie) do
-      {:ok, token} ->
-        extract_user_attributes(token)
+  alias Belfrage.Metrics
 
-      {:error, error} ->
-        handle_decoding_error(error)
-        {false, %{}}
-    end
+  def parse(cookie) do
+    Metrics.duration(:parse_session_token, fn ->
+      case decode(cookie) do
+        {:ok, token} ->
+          extract_user_attributes(token)
+
+        {:error, error} ->
+          handle_decoding_error(error)
+          {false, %{}}
+      end
+    end)
   end
 
   defp decode(cookie) do

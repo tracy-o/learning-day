@@ -11,19 +11,22 @@ defmodule Belfrage.Processor do
     Allowlist,
     Event,
     Personalisation,
-    CacheControl
+    CacheControl,
+    Metrics
   }
 
   alias Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
   def get_loop(struct = %Struct{}) do
-    LoopsRegistry.find_or_start(struct)
+    Metrics.duration(:set_request_loop_data, fn ->
+      LoopsRegistry.find_or_start(struct)
 
-    case Loop.state(struct) do
-      {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
-      _ -> loop_state_failure()
-    end
+      case Loop.state(struct) do
+        {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
+        _ -> loop_state_failure()
+      end
+    end)
   end
 
   def personalisation(struct = %Struct{}) do
@@ -31,30 +34,41 @@ defmodule Belfrage.Processor do
   end
 
   def allowlists(struct) do
-    struct
-    |> Allowlist.QueryParams.filter()
-    |> Allowlist.Cookies.filter()
-    |> Allowlist.Headers.filter()
+    Metrics.duration(:filter_request_data, fn ->
+      struct
+      |> Allowlist.QueryParams.filter()
+      |> Allowlist.Cookies.filter()
+      |> Allowlist.Headers.filter()
+    end)
   end
 
   def generate_request_hash(struct = %Struct{}) do
-    RequestHash.put(struct)
+    Metrics.duration(:generate_request_hash, fn ->
+      RequestHash.put(struct)
+    end)
   end
 
   def fetch_early_response_from_cache(
         struct = %Struct{private: %Private{personalised_request: personalised, caching_enabled: caching_enabled}}
       ) do
     case {personalised, caching_enabled} do
-      {false, true} -> Cache.fetch(struct, [:fresh])
-      _ -> struct
+      {false, true} ->
+        Metrics.duration(:fetch_early_response_from_cache, fn ->
+          Cache.fetch(struct, [:fresh])
+        end)
+
+      _ ->
+        struct
     end
   end
 
   def request_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct) do
-      {:ok, struct} -> struct
-      {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
-    end
+    Metrics.duration(:request_pipeline, fn ->
+      case Pipeline.process(struct) do
+        {:ok, struct} -> struct
+        {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
+      end
+    end)
   end
 
   def perform_call(struct = %Struct{response: %Response{http_status: code}}) when is_number(code) do
@@ -85,11 +99,13 @@ defmodule Belfrage.Processor do
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
     if use_fallback?(struct) do
-      struct
-      |> latency_checkpoint(:fallback_request_sent)
-      |> Cache.fetch([:fresh, :stale])
-      |> latency_checkpoint(:fallback_response_received)
-      |> make_fallback_private_if_personalised_request()
+      Metrics.duration(:fetch_fallback, fn ->
+        struct
+        |> latency_checkpoint(:fallback_request_sent)
+        |> Cache.fetch([:fresh, :stale])
+        |> latency_checkpoint(:fallback_response_received)
+        |> make_fallback_private_if_personalised_request()
+      end)
     else
       struct
     end
@@ -109,7 +125,9 @@ defmodule Belfrage.Processor do
 
   def maybe_store_cache(struct = %Struct{}) do
     if struct.private.caching_enabled do
-      Cache.store(struct)
+      Metrics.duration(:cache_response, fn ->
+        Cache.store(struct)
+      end)
     else
       struct
     end

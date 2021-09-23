@@ -7,7 +7,7 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.ProductionEnvironment
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
-  alias Belfrage.Event
+  alias Belfrage.{Event, Metrics}
 
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
@@ -25,6 +25,17 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.PathLogger)
   plug(:match)
   plug(:dispatch)
+
+  def call(conn, opts) do
+    conn
+    |> assign(:plug_pipeline_start_time, System.monotonic_time())
+    |> super(opts)
+  end
+
+  def dispatch(conn, opts) do
+    Metrics.stop(:plug_pipeline, conn.assigns.plug_pipeline_start_time)
+    super(conn, opts)
+  end
 
   get "/status" do
     send_resp(conn, 200, "I'm ok thanks")
