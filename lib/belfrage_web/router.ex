@@ -120,6 +120,10 @@ defmodule BelfrageWeb.Router do
   end
 
   defp invalid_utf8?(url_encoded_string) do
-    !(url_encoded_string |> URI.decode() |> String.valid?())
+    try do
+      !(url_encoded_string |> URI.decode() |> String.valid?())
+    rescue
+      ArgumentError -> false
+    end
   end
 end

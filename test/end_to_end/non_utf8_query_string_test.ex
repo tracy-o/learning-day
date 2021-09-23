@@ -131,4 +131,13 @@ defmodule NonUtf8QueryStringTest do
     conn = conn(:get, "/fabl/fo%a0") |> Router.call([])
     assert conn.status == 200
   end
+
+  test "malformed URI" do
+    conn = conn(:get, "/200-ok-response?query=%")
+
+    assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
+
+    {status, _headers, _body} = sent_resp(conn)
+    assert status == 404
+  end
 end
