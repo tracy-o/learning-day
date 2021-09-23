@@ -6,11 +6,11 @@
     "values": [
       {
         "value": "very-short",
-        "description": "Multiplies the max-age by half for Webcore (max-age * 0.5)"
+        "description": "Multiplies the max-age by one third for Webcore (max-age * 1/3)"
       },
       {
         "value": "short",
-        "description": "Multiplies the max-age by three quarters for Webcore (max-age * 0.75)"
+        "description": "Multiplies the max-age by two thirds for Webcore (max-age * 2/3)"
       },
       {
         "value": "default",
