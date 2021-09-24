@@ -12,7 +12,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     children = [
       {
         TelemetryMetricsStatsd,
-        metrics: telemetry_metrics(), global_tags: GlobalDimensions.build()
+        metrics: telemetry_metrics(), global_tags: GlobalDimensions.build(), formatter: :datadog
       }
     ]
 
