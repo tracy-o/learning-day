@@ -17,7 +17,6 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   describe "call/1 with varying Webcore multipliers" do
     for webcore_value <- ["very-short", "short", "default", "long", "very-long"] do
       @webcore_value webcore_value
-      @webcore_multiplier Belfrage.Dials.WebcoreTtlMultiplier.transform(@webcore_value)
 
       test "Given a max-age of 15 and a #{@webcore_value} webcore_ttl_multiplier, the correct value is returned" do
         set_webcore_ttl_multiplier(@webcore_value)
