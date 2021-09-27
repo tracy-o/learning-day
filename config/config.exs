@@ -133,4 +133,6 @@ config :aws_ex_ray,
   store_monitor_pool_size: 512,
   client_pool_size: 512
 
+config :statix, tags: ["BBCEnvironment:#{Application.get_env(:belfrage, :production_environment)}"]
+
 import_config "#{Mix.env()}.exs"
