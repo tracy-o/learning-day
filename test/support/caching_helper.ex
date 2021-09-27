@@ -66,4 +66,13 @@ defmodule Belfrage.Test.CachingHelper do
     {:ok, response} = Cachex.get(@cache_name, key)
     put_into_cache(key, %Response{response | cache_last_updated: Timer.now_ms() - 61_000})
   end
+
+  @doc """
+  Puts the struct's response into the cache and marks the cached response as stale.
+  """
+  def put_into_cache_as_stale(struct = %Struct{}) do
+    request_hash = struct.request.request_hash || Belfrage.RequestHash.generate(struct)
+    put_into_cache(request_hash, struct.response)
+    make_cached_reponse_stale(request_hash)
+  end
 end
