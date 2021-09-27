@@ -88,7 +88,6 @@ defmodule Belfrage.Processor do
   end
 
   def response_pipeline(struct = %Struct{}) do
-
     struct
     |> maybe_log_response_status()
     |> ResponseTransformers.CacheDirective.call()
@@ -178,6 +177,4 @@ defmodule Belfrage.Processor do
   end
 
   defp maybe_log_response_status(struct), do: struct
-
-
 end
