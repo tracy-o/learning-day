@@ -152,15 +152,14 @@ defmodule Belfrage.LoopTest do
   end
 
   describe "when in fallback" do
-    test "it increments both the status and fallback counters" do
+    test "it only increments the fallback counter" do
       for _ <- 1..30, do: Loop.inc(@fallback_resp_struct)
       {:ok, state} = Loop.state(@legacy_request_struct)
 
       assert %{
                counter: %{
                  "https://origin.bbc.com/" => %{
-                   :fallback => 30,
-                   200 => 30
+                   :fallback => 30
                  }
                }
              } = state
