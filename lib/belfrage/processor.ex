@@ -99,13 +99,11 @@ defmodule Belfrage.Processor do
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
     if use_fallback?(struct) do
-      Metrics.duration(:fetch_fallback, fn ->
-        struct
-        |> latency_checkpoint(:fallback_request_sent)
-        |> Cache.fetch([:fresh, :stale])
-        |> latency_checkpoint(:fallback_response_received)
-        |> make_fallback_private_if_personalised_request()
-      end)
+      struct
+      |> latency_checkpoint(:fallback_request_sent)
+      |> Cache.fetch([:fresh, :stale])
+      |> latency_checkpoint(:fallback_response_received)
+      |> make_fallback_private_if_personalised_request()
     else
       struct
     end
