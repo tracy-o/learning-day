@@ -1,28 +1,33 @@
 defmodule Belfrage.Counter do
-  defmacro is_error(http_status) do
-    quote do
-      unquote(http_status) in 500..504 or unquote(http_status) == 408
-    end
-  end
+  @error_statuses [500, 501, 502, 503, 504, 408]
 
   def init do
     %{}
   end
 
-  def inc(counter, status, origin) when is_error(status) do
+  def inc(counter, status, origin, opts \\ []) do
+    fallback = Keyword.get(opts, :fallback, false)
+
+    cond do
+      not is_number(status) ->
+        {:error, "'status' must be an integer"}
+
+      fallback ->
+        increment_key(counter, :fallback, origin)
+
+      status in @error_statuses ->
+        increment_error(counter, status, origin)
+
+      true ->
+        increment_key(counter, status, origin)
+    end
+  end
+
+  defp increment_error(counter, status, origin) do
     counter
-    |> increment_key(origin, status)
-    |> increment_key(origin, :errors)
+    |> increment_key(status, origin)
+    |> increment_key(:errors, origin)
     |> Map.update(:errors, 1, &(&1 + 1))
-  end
-
-  def inc(_state, status, _origin) when status == :error do
-    {:error, "key not allowed: ':error'"}
-  end
-
-  def inc(counter, status, origin) do
-    counter
-    |> increment_key(origin, status)
   end
 
   def exceed?(state, key, threshold) do
@@ -33,7 +38,7 @@ defmodule Belfrage.Counter do
     state[key] || 0
   end
 
-  defp increment_key(counter, origin, key) do
+  defp increment_key(counter, key, origin) do
     counter
     |> ensure_origin(origin)
     |> get_and_update_in([origin, key], &{&1, (&1 || 0) + 1})
