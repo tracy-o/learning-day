@@ -223,6 +223,8 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2017/northern-ireland/constituencies", only_on: "test", using: "NewsElectionResults"
+
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
