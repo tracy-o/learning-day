@@ -12,7 +12,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     children = [
       {
         TelemetryMetricsStatsd,
-        metrics: telemetry_metrics(), formatter: :datadog
+        metrics: telemetry_metrics(), global_tags: GlobalDimensions.build(), formatter: :datadog
       }
     ]
 
@@ -45,7 +45,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       counter("cowboy.request.early_error.count", tags: [:BBCEnvironment]),
       counter("cowboy.request.idle_timeout.count",
         event_name: "cowboy.request.stop",
-        keep: &match?(%{error: {:connection_error, :timeout, _}}, &1)
+        keep: &match?(%{error: {:connection_error, :timeout, _}}, &1),
+        tags: [:BBCEnvironment]
       ),
     ]
   end

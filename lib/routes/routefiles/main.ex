@@ -1528,8 +1528,6 @@ defroutefile "Main" do
 
   handle "/music", using: "Music", examples: []
 
-  handle "/joes-test-route", using: "JoeTest", examples: []
-
    # Bitesize
    handle "/bitesize/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/secondary"]
 
