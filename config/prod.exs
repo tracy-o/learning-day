@@ -10,7 +10,8 @@ config :belfrage,
   internal_error_page: "/var/www/html/errors/500-data-ssl.html"
 
 config :statix,
-  pool_size: 6
+  pool_size: 6,
+  tags: ["BBCEnvironment:live"]
 
 config :logger,
   backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, Belfrage.Metrics.CrashTracker]

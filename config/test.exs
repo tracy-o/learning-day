@@ -38,3 +38,6 @@ config :cachex, :limit,
   policy: Cachex.Policy.LRW,
   reclaim: 0.5,
   options: []
+
+config :statix,
+  tags: ["BBCEnvironment:live"]
