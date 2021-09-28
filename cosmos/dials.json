@@ -180,5 +180,20 @@
         "description": "Disables Datalab machine-driven recommendations"
       }
     ]
+  },
+  {
+    "name": "chameleon",
+    "description": "Controls if the Chameleon navigation bar is displayed",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enables Chameleon navigation bar"
+      },
+      {
+        "value": "off",
+        "description": "Disables Chameleon navigation bar"
+      }
+    ]
   }
 ]
