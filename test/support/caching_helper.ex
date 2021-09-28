@@ -64,6 +64,6 @@ defmodule Belfrage.Test.CachingHelper do
   """
   def make_cached_reponse_stale(key) do
     {:ok, response} = Cachex.get(@cache_name, key)
-    put_into_cache(key, %Response{response | cache_last_updated: Timer.now_ms() - 60})
+    put_into_cache(key, %Response{response | cache_last_updated: Timer.now_ms() - 61_000})
   end
 end
