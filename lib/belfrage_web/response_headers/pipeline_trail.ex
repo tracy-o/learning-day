@@ -11,7 +11,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrail do
         debug: %Struct.Debug{pipeline_trail: trail}
       })
       when env != "live" and is_list(trail) and trail != [] do
-    put_resp_header(conn, "pipeline-trail", Enum.join(trail, ","))
+    put_resp_header(conn, "belfrage-pipeline-trail", Enum.join(trail, ","))
   end
 
   @impl ResponseHeaders

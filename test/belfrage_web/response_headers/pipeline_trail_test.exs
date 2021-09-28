@@ -16,7 +16,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
+      assert get_resp_header(output_conn, "belfrage-pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
     end
   end
 
@@ -31,7 +31,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "pipeline-trail") == []
+      assert get_resp_header(output_conn, "belfrage-pipeline-trail") == []
     end
   end
 
@@ -41,7 +41,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
       struct = %Struct{private: %Struct.Private{loop_id: nil}}
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "pipeline-trail") == []
+      assert get_resp_header(output_conn, "belfrage-pipeline-trail") == []
     end
   end
 end

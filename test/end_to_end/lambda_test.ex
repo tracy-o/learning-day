@@ -59,7 +59,7 @@ defmodule EndToEnd.LambdaTest do
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeLoop"},
-              {"pipeline-trail",
+              {"belfrage-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
@@ -108,7 +108,7 @@ defmodule EndToEnd.LambdaTest do
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeLoop"},
-              {"pipeline-trail",
+              {"belfrage-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
