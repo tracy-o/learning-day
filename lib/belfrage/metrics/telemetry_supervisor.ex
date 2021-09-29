@@ -12,7 +12,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     children = [
       {
         TelemetryMetricsStatsd,
-        metrics: telemetry_metrics(), global_tags: GlobalDimensions.build(), formatter: :datadog
+        metrics: telemetry_metrics(), global_tags: [BBCEnvironment: "test"], formatter: :datadog
       }
     ]
 
@@ -34,7 +34,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       last_value("vm.system_counts.port_count", tags: [:BBCEnvironment]),
       last_value("vm.total_run_queue_lengths.total", tags: [:BBCEnvironment]),
       last_value("vm.total_run_queue_lengths.cpu", tags: [:BBCEnvironment]),
-      last_value("vm.total_run_queue_lengths.io", tags: [:BBCEnvironment]),
+      last_value("vm.total_run_queue_lengths.io", tags: [:BBCEnvironment])
     ]
   end
 
@@ -47,7 +47,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         event_name: "cowboy.request.stop",
         keep: &match?(%{error: {:connection_error, :timeout, _}}, &1),
         tags: [:BBCEnvironment]
-      ),
+      )
     ]
   end
 
@@ -99,7 +99,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     summary("belfrage.latency.#{name}",
       event_name: "belfrage.#{name}.stop",
       measurement: :duration,
-      unit: {:native, :microsecond}
+      unit: {:native, :microsecond},
+      tags: [:BBCEnvironment]
     )
   end
 end
