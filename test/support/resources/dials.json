@@ -8,5 +8,6 @@
 	"ccp_enabled": "true",
 	"monitor_enabled": "true",
 	"webcore_kill_switch": "inactive",
-	"datalab_machine_recommendations": "enabled"
+	"datalab_machine_recommendations": "enabled",
+	"chameleon": "off"
 }

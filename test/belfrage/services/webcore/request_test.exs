@@ -166,4 +166,15 @@ defmodule Belfrage.Services.Webcore.RequestTest do
              queryStringParameters: %{"q" => "something"}
            } == Request.build(struct)
   end
+
+  test "concatenates private.features into the feature header" do
+    struct_with_features = %Struct{
+      private: %Struct.Private{
+        features: %{datalab_machine_recommendations: "enabled", chameleon: "off"}
+      }
+    }
+
+    %{headers: %{"ctx-features": "chameleon=off,datalab_machine_recommendations=enabled"}} =
+      Request.build(struct_with_features)
+  end
 end
