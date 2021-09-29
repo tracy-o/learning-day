@@ -241,7 +241,7 @@ defmodule Belfrage.ProcessorTest do
 
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
-      assert response == cached_response
+      assert response == %{cached_response | fallback: true}
     end
 
     test "makes the response private if request is personalised", %{struct: struct, cached_response: cached_response} do
