@@ -10,7 +10,7 @@ defmodule Belfrage.Event do
   @callback record(atom(), any(), any(), any()) :: any()
   @callback record(atom(), any(), any()) :: any()
 
-  alias Belfrage.{Event, Metrics.GlobalDimensions, Metrics.Statix}
+  alias Belfrage.{Event, Metrics.Statix}
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
   @doc """
@@ -54,7 +54,11 @@ defmodule Belfrage.Event do
     new(:metric, type, metric, opts)
     |> @monitor_api.record_event()
 
-    apply(Statix, type, [metric, value(opts), [tags: GlobalDimensions.build()]])
+    apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
+  end
+
+  defp global_dimensions() do
+    ["BBCEnvironment:" <> Application.get_env(:belfrage, :production_environment)]
   end
 
   def new(log_or_metric, name, payload, opts \\ [])

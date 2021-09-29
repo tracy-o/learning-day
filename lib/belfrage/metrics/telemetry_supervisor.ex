@@ -1,7 +1,6 @@
 defmodule Belfrage.Metrics.TelemetrySupervisor do
   use Supervisor
   import Telemetry.Metrics
-  alias Belfrage.Metrics.GlobalDimensions
 
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
@@ -12,7 +11,9 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     children = [
       {
         TelemetryMetricsStatsd,
-        metrics: telemetry_metrics(), global_tags: [BBCEnvironment: "test"], formatter: :datadog
+        metrics: telemetry_metrics(),
+        global_tags: [BBCEnvironment: Application.get_env(:belfrage, :production_environment)],
+        formatter: :datadog
       }
     ]
 
