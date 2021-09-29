@@ -43,8 +43,8 @@ defmodule Benchmark.PreCacheCompressionCall do
       {
         size_kb,
         {
-          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)})),
-          struct_with_resp(struct, Response.build({:ok, gzip_lambda_resp(size_kb)}))
+          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)}, "off")),
+          struct_with_resp(struct, Response.build({:ok, gzip_lambda_resp(size_kb)}, "off"))
         }
       }
     end

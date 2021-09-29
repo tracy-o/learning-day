@@ -50,10 +50,10 @@ defmodule Benchmark.WebcoreResponseBuild do
     setup(iteration, step_size_kb)
     |> Enum.map(fn {size_kb, {a, b, c, d}} ->
       [
-        {"build #{size_kb}kb resp", fn -> Response.build({:ok, a}) end},
-        {"build #{size_kb}kb gzip resp", fn -> Response.build({:ok, b}) end},
-        {"build #{size_kb}kb base64 resp", fn -> Response.build({:ok, c}) end},
-        {"build #{size_kb}kb gzip base64 resp", fn -> Response.build({:ok, d}) end}
+        {"build #{size_kb}kb resp", fn -> Response.build({:ok, a}, "off") end},
+        {"build #{size_kb}kb gzip resp", fn -> Response.build({:ok, b}, "off") end},
+        {"build #{size_kb}kb base64 resp", fn -> Response.build({:ok, c}, "off") end},
+        {"build #{size_kb}kb gzip base64 resp", fn -> Response.build({:ok, d}, "off") end}
       ]
     end)
     |> List.flatten()
