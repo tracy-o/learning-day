@@ -5,7 +5,7 @@ defmodule Belfrage.Clients.HTTP do
   Makes requests and formats responses using Belfrage's
   own HTTP Request, Response and Error structs.
   """
-  alias Belfrage.Clients.HTTP
+  alias Belfrage.{Clients.HTTP, Metrics.Statix, Event}
   @machine_gun Application.get_env(:belfrage, :machine_gun)
 
   @type request_type :: :get | :post
@@ -58,15 +58,15 @@ defmodule Belfrage.Clients.HTTP do
   defp metric_response(response) do
     case response do
       {:error, %MachineGun.Error{reason: :pool_timeout}} ->
-        Belfrage.Metrics.Statix.increment("http.pools.error.timeout")
+        Statix.increment("http.pools.error.timeout", 1, tags: Event.global_dimensions())
         response
 
       {:error, %MachineGun.Error{reason: :pool_full}} ->
-        Belfrage.Metrics.Statix.increment("http.pools.error.full")
+        Statix.increment("http.pools.error.full", 1, tags: Event.global_dimensions())
         response
 
       {:error, %MachineGun.Error{reason: _error}} ->
-        Belfrage.Metrics.Statix.increment("http.client.error")
+        Statix.increment("http.client.error", 1, tags: Event.global_dimensions())
         response
 
       _ ->
