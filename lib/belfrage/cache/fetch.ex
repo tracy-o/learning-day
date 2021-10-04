@@ -4,12 +4,12 @@ defmodule Belfrage.Cache.Fetch do
   def fetch(struct, accepted_freshness) do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
-      {:ok, :fresh, response} ->
+      {:ok, {:local, :fresh}, response} ->
         Struct.add(struct, :response, response) |> Struct.add(:private, %{origin: :belfrage_cache})
 
-      {:ok, :stale, response} ->
+      {:ok, {cache_type, :stale}, response} ->
         Belfrage.Metrics.Statix.increment("web.response.fallback")
-        Struct.add(struct, :response, response) |> Struct.add(:response, %{fallback: true})
+        Struct.add(struct, :response, response) |> Struct.add(:response, %{fallback: true, cache_type: cache_type})
 
       {:ok, :content_not_found} ->
         struct

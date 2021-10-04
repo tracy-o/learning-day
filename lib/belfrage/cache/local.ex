@@ -4,6 +4,7 @@ defmodule Belfrage.Cache.Local do
   alias Belfrage.Behaviours.CacheStrategy
   alias Belfrage.Struct
   alias Belfrage.Struct.Request
+  alias Belfrage.Timer
 
   @doc """
   Fetches a response from the local cache. In order to implement an LRU caching
@@ -35,15 +36,29 @@ defmodule Belfrage.Cache.Local do
             cache_last_updated: cache_last_updated
           }
         },
-        cache \\ :cache
+        # Options are:
+        #   :cache_name - The name of the cache to be used
+        #   :make_stale - Whether or not to make the cache entry stale
+        opts \\ []
       ) do
     if cacheable?(max_age) && stale?(cache_last_updated, max_age) do
-      Cachex.put(
-        cache,
-        struct.request.request_hash,
-        %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
-        ttl: struct.private.fallback_ttl
-      )
+      %{cache_name: cache, make_stale: make_stale} = Enum.into(opts, %{cache_name: :cache, make_stale: false})
+
+      if make_stale do
+        Cachex.put(
+          cache,
+          struct.request.request_hash,
+          %{struct.response | cache_last_updated: Timer.make_stale(Timer.now_ms(), max_age)},
+          ttl: struct.private.fallback_ttl
+        )
+      else
+        Cachex.put(
+          cache,
+          struct.request.request_hash,
+          %{struct.response | cache_last_updated: Timer.now_ms()},
+          ttl: struct.private.fallback_ttl
+        )
+      end
     else
       {:ok, false}
     end
@@ -60,8 +75,8 @@ defmodule Belfrage.Cache.Local do
     %{max_age: max_age} = response.cache_directive
 
     case stale?(last_updated, max_age) do
-      true -> {:ok, :stale, response}
-      false -> {:ok, :fresh, response}
+      true -> {:ok, {:local, :stale}, response}
+      false -> {:ok, {:local, :fresh}, response}
     end
   end
 

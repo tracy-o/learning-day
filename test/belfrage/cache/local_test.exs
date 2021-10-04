@@ -4,6 +4,7 @@ defmodule Belfrage.Cache.LocalTest do
 
   alias Belfrage.Cache
   alias Belfrage.Struct
+  alias Belfrage.Timer
 
   @response %Belfrage.Struct.Response{
     body: "hello!",
@@ -40,12 +41,41 @@ defmodule Belfrage.Cache.LocalTest do
                   body: "hello!",
                   headers: %{"content-type" => "application/json"},
                   http_status: 200,
-                  cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+                  cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: max_age},
                   cache_last_updated: cache_last_updated
                 }}
              ] = :ets.lookup(:cache, cache_key("abc123"))
 
       refute cache_last_updated == nil
+      refute Timer.stale?(cache_last_updated, max_age)
+    end
+
+    test "a new response as stale" do
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, true} == Cache.Local.store(struct, make_stale: true)
+
+      assert [
+               {:entry, _key, _cachex_determined_last_update, _cachex_expires_in,
+                %Belfrage.Struct.Response{
+                  body: "hello!",
+                  headers: %{"content-type" => "application/json"},
+                  http_status: 200,
+                  cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: max_age},
+                  cache_last_updated: cache_last_updated
+                }}
+             ] = :ets.lookup(:cache, cache_key("abc123"))
+
+      assert cache_last_updated
+      assert Timer.stale?(cache_last_updated, max_age)
     end
 
     test "does not overwrite an existing fresh cache version" do
@@ -88,11 +118,11 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, :fresh, _} = Cache.Local.fetch(struct)
+      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(struct)
 
       :timer.sleep(1000)
 
-      assert {:ok, :fresh, _} = Cache.Local.fetch(struct)
+      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(struct)
 
       [{:entry, _key, ets_updated, _expires, response}] = :ets.lookup(:cache, cache_key("fresh"))
 
@@ -104,7 +134,7 @@ defmodule Belfrage.Cache.LocalTest do
     test "fetches a fresh cache" do
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
 
-      assert {:ok, :fresh,
+      assert {:ok, {:local, :fresh},
               %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
@@ -115,7 +145,7 @@ defmodule Belfrage.Cache.LocalTest do
     test "fetches a stale cache" do
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("stale")}}
 
-      assert {:ok, :stale,
+      assert {:ok, {:local, :stale},
               %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
@@ -140,7 +170,7 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert {:ok, true} == Cache.Local.store(struct_with_response)
 
-      assert {:ok, :fresh,
+      assert {:ok, {:local, :fresh},
               %Belfrage.Struct.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},

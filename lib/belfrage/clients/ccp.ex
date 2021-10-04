@@ -9,12 +9,12 @@ defmodule Belfrage.Clients.CCP do
 
   @type target :: pid() | {:global, atom()}
   @callback fetch(String.t()) ::
-              {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
+              {:ok, :content_not_found} | {:ok, Struct.Response.t()}
   @callback put(Struct.t()) :: :ok
   @callback put(Struct.t(), target) :: :ok
 
   @spec fetch(String.t()) ::
-          {:ok, :content_not_found} | {:ok, :fresh, Struct.Response.t()} | {:ok, :stale, Struct.Response.t()}
+          {:ok, :content_not_found} | {:ok, Struct.Response.t()}
   def fetch(request_hash) do
     # TODO Investigate using internal S3 endpoints for secure fetches
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
@@ -37,7 +37,7 @@ defmodule Belfrage.Clients.CCP do
     case ccp_response do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
         Belfrage.Metrics.Statix.increment("service.S3.response.200")
-        {:ok, :stale, cached_body |> :erlang.binary_to_term()}
+        {:ok, cached_body |> :erlang.binary_to_term()}
 
       {:ok, %Clients.HTTP.Response{status_code: @s3_not_found_response_code}} ->
         Belfrage.Metrics.Statix.increment("service.S3.response.not_found")

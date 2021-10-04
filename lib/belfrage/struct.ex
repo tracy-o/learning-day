@@ -50,7 +50,8 @@ defmodule Belfrage.Struct.Response do
             headers: %{},
             body: "",
             cache_directive: %Belfrage.CacheControl{cacheability: "private"},
-            cache_last_updated: nil
+            cache_last_updated: nil,
+            cache_type: nil
 
   @type t :: %__MODULE__{}
 

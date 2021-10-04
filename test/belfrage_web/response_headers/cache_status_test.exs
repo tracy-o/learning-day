@@ -28,4 +28,16 @@ defmodule BelfrageWeb.ResponseHeaders.CacheStatusTest do
       assert ["MISS"] == get_resp_header(conn, "belfrage-cache-status")
     end
   end
+
+  describe "when the response is stale" do
+    test "the belfrage-cache-status header has the value 'STALE'" do
+      struct = %Struct{response: %Struct.Response{fallback: true}}
+
+      conn =
+        conn(:get, "/")
+        |> CacheStatus.add_header(struct)
+
+      assert ["STALE"] == get_resp_header(conn, "belfrage-cache-status")
+    end
+  end
 end

@@ -93,7 +93,7 @@ defmodule Belfrage.Processor do
     |> ResponseTransformers.CacheDirective.call()
     |> ResponseTransformers.ResponseHeaderGuardian.call()
     |> ResponseTransformers.PreCacheCompression.call()
-    |> maybe_store_cache()
+    |> Cache.store()
     |> fetch_fallback_from_cache()
   end
 
@@ -103,6 +103,7 @@ defmodule Belfrage.Processor do
       |> latency_checkpoint(:fallback_request_sent)
       |> Cache.fetch([:fresh, :stale])
       |> latency_checkpoint(:fallback_response_received)
+      |> Cache.store()
       |> make_fallback_private_if_personalised_request()
     else
       struct
@@ -119,16 +120,6 @@ defmodule Belfrage.Processor do
   defp latency_checkpoint(struct = %Struct{request: request = %Request{}}, checkpoint) do
     LatencyMonitor.checkpoint(request.request_id, checkpoint)
     struct
-  end
-
-  def maybe_store_cache(struct = %Struct{}) do
-    if struct.private.caching_enabled do
-      Metrics.duration(:cache_response, fn ->
-        Cache.store(struct)
-      end)
-    else
-      struct
-    end
   end
 
   defp make_fallback_private_if_personalised_request(

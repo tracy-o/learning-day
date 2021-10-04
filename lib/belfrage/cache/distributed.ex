@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache.Distributed do
-  alias Belfrage.{Struct, Struct.Request}
+  alias Belfrage.{Struct, Struct.Request, Struct.Response}
   alias Belfrage.Behaviours.CacheStrategy
   @behaviour CacheStrategy
 
@@ -8,7 +8,9 @@ defmodule Belfrage.Cache.Distributed do
 
   @impl CacheStrategy
   def fetch(%Struct{request: %Request{request_hash: request_hash}}) do
-    @ccp_client.fetch(request_hash)
+    with {:ok, response = %Response{}} <- @ccp_client.fetch(request_hash) do
+      {:ok, {:distributed, :stale}, response}
+    end
   end
 
   @impl CacheStrategy
