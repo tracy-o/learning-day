@@ -1528,8 +1528,9 @@ defroutefile "Main" do
 
   handle "/music", using: "Music", examples: []
 
-   # Bitesize
-   handle "/bitesize/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/secondary"]
+  # Bitesize
+  handle "/bitesize/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/secondary"]
+  handle "/bitesize/articles/zm8fhbk", using: "Bitesize", only_on: "test", examples: ["/bitesize/articles/zm8fhbk"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
