@@ -58,7 +58,9 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeLoop"}
+              {"routespec", "SomeLoop"},
+              {"belfrage-pipeline-trail",
+               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
     assert response_body == @lambda_response["body"]
@@ -105,7 +107,9 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeLoop"}
+              {"routespec", "SomeLoop"},
+              {"belfrage-pipeline-trail",
+               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
     assert @lambda_response["body"] == response_body

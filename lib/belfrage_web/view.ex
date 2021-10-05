@@ -16,7 +16,8 @@ defmodule BelfrageWeb.View do
     ResponseHeaders.AccessControlAllowOrigin,
     ResponseHeaders.RequestId,
     ResponseHeaders.CacheStatus,
-    ResponseHeaders.RouteSpec
+    ResponseHeaders.RouteSpec,
+    ResponseHeaders.PipelineTrail
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
