@@ -65,7 +65,7 @@ path_params: %{"id" => "123456", "rest" => ["i-love-seo", "also", "42"]}
 ** I want to use a Regex!
 Unfortunately *you can't*, by design.
 
-/Note: while you can't match a route using a regex, you can use one for validation. For details on this see [[Route-Validation-in-Belfrage][Route Validation]]./
+/Note: while you can't match a route using a regex, you can use one for validation. For details on this see [[Route-Validation-in-Belfrage](Route-Validation)]./
 
 The reason for this is to avoid worst-case scenarios of sequential reads ~O(n)~ where the incoming request has to be matched against all the defined routes.
 When the Routefile is compiled it builds a tree of matchers to optimize the underlying routes into a tree lookup, instead of a linear lookup that would instead match route-per-route. This means route lookups are extremely fast in Belfrage!

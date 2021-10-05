@@ -123,5 +123,5 @@ For more information, see [Personalisation](https://github.com/bbc/belfrage/blob
 
 ### Further reading
 
-- [Route Matchers](Types-of-Route-Matchers-in-Belfrage)
-- [Route Validation](Route-Validation-in-Belfrage)
+- [Route Matchers](route-matcher-types)
+- [Route Validation](Route-Validation)
