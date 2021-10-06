@@ -11,7 +11,7 @@ defmodule Routes.Specs.WelshSearch do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "Personalisation", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "Personalisation", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "Chameleon", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

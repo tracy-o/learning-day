@@ -13,7 +13,7 @@ defmodule Routes.Specs.NewsVideos do
   defp query_params_allowlist(_production_env), do: ["features"]
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "Language", "DatalabMachineRecommendations", "PlatformKillSwitch", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "LambdaOriginAlias", "Language", "DatalabMachineRecommendations", "PlatformKillSwitch", "Chameleon", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
