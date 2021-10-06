@@ -1,5 +1,6 @@
 defmodule Belfrage.Metrics.LatencyMonitor do
   use GenServer
+  alias Belfrage.{Metrics.Statix, Event}
 
   @default_cleanup_rate 10_000
   @cleanup_ttl 30_000
@@ -93,9 +94,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     response = response_latency(checkpoints)
 
     if request && response do
-      Belfrage.Metrics.Statix.timing("web.latency.internal.request", request)
-      Belfrage.Metrics.Statix.timing("web.latency.internal.response", response)
-      Belfrage.Metrics.Statix.timing("web.latency.internal.combined", request + response)
+      Statix.timing("web.latency.internal.request", request, tags: Event.global_dimensions())
+      Statix.timing("web.latency.internal.response", response, tags: Event.global_dimensions())
+      Statix.timing("web.latency.internal.combined", request + response, tags: Event.global_dimensions())
     end
   end
 

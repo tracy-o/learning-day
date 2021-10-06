@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.Cache.{Local, Distributed}
+  alias Belfrage.{Cache.Local, Cache.Distributed, Metrics.Statix, Event}
 
   @default_result {:ok, :content_not_found}
 
@@ -53,7 +53,7 @@ defmodule Belfrage.Cache.MultiStrategy do
 
     with {:ok, {strategy, freshness}, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
-      Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
+      Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
 
       metric_on_stale_routespec(struct, cache_metric, freshness)
       {:halt, {:ok, {strategy, freshness}, response}}
@@ -63,13 +63,13 @@ defmodule Belfrage.Cache.MultiStrategy do
       # stale one exists.
 
       _content_not_found_or_not_accepted_freshness ->
-        Belfrage.Event.record(:metric, :increment, "cache.#{cache_metric}.miss")
+        Event.record(:metric, :increment, "cache.#{cache_metric}.miss")
         {:cont, {:ok, :content_not_found}}
     end
   end
 
   defp metric_on_stale_routespec(%Belfrage.Struct{private: %{loop_id: loop_id}}, cache_metric, :stale) do
-    Belfrage.Metrics.Statix.increment("cache.#{loop_id}.#{cache_metric}.stale.hit")
+    Statix.increment("cache.#{loop_id}.#{cache_metric}.stale.hit", 1, tags: Event.global_dimensions())
   end
 
   defp metric_on_stale_routespec(_struct, _cache_metric, _freshness), do: nil

@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
 
-  alias Belfrage.{CacheControl, Struct, Struct.Private}
+  alias Belfrage.{CacheControl, Struct, Struct.Private, Metrics.Statix, Event}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -64,7 +64,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
       "The request is personalised, however the response cache-control header is set to \"public\" - setting cacheability to \"private\""
     )
 
-    Belfrage.Metrics.Statix.increment("request.personalised.unexpected_public_response")
+    Statix.increment("request.personalised.unexpected_public_response", 1, tags: Event.global_dimensions())
 
     %Belfrage.CacheControl{cache_control | cacheability: "private", max_age: 0}
   end
