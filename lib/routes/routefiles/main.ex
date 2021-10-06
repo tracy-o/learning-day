@@ -177,7 +177,7 @@ defroutefile "Main" do
 
 
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
-  handle "/sporttipo", using: "SportTipo", only_on: "test", examples: ["/sporttipo"]
+  handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
 
   # data endpoints
 
