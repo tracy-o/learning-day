@@ -78,7 +78,7 @@ cat > /etc/cloudwatch-agent-config.json <<EOF
       }
     },
     "aggregation_dimensions" : [
-      ["BBCEnvironment"]
+      ["BBCEnvironment"], ["BBCEnvironment", "pool_name"]
     ]
   },
   "logs": {
