@@ -15,7 +15,7 @@ defmodule Belfrage.DatalabMachineRecommendationsTest do
 
     test "transformer is enabled for the route" do
       expect_origin_request(fn %{headers: headers} ->
-        assert headers[:"ctx-features"] == "datalab_machine_recommendations=enabled"
+        assert headers[:"ctx-features"] |> String.contains?("datalab_machine_recommendations=enabled")
       end)
 
       make_request("SportVideos")
@@ -23,7 +23,7 @@ defmodule Belfrage.DatalabMachineRecommendationsTest do
 
     test "transformer is not enabled for the route" do
       expect_origin_request(fn %{headers: headers} ->
-        refute headers[:"ctx-features"]
+        refute headers[:"ctx-features"] |> String.contains?("datalab_machine_recommendations=enabled")
       end)
 
       make_request("ProgrammesVideos")
@@ -38,7 +38,7 @@ defmodule Belfrage.DatalabMachineRecommendationsTest do
 
     test "transformer is enabled for the route" do
       expect_origin_request(fn %{headers: headers} ->
-        assert headers[:"ctx-features"] == "datalab_machine_recommendations=disabled"
+        assert headers[:"ctx-features"] |> String.contains?("datalab_machine_recommendations=disabled")
       end)
 
       make_request("SportVideos")
@@ -46,7 +46,7 @@ defmodule Belfrage.DatalabMachineRecommendationsTest do
 
     test "transformer is not enabled for the route" do
       expect_origin_request(fn %{headers: headers} ->
-        refute headers[:"ctx-features"]
+        refute headers[:"ctx-features"] |> String.contains?("datalab_machine_recommendations=disabled")
       end)
 
       make_request("ProgrammesVideos")

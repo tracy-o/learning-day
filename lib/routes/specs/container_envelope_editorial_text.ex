@@ -10,7 +10,7 @@ defmodule Routes.Specs.ContainerEnvelopeEditorialText do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "UserAgentValidator", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
+    ["HTTPredirect", "TrailingSlashRedirector", "UserAgentValidator", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Chameleon", "Language"]
   end
 
   defp pipeline(_production_env) do
