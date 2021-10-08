@@ -86,26 +86,6 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Processor.init_post_response_pipeline/1" do
-    @resp_struct %Struct{
-      private: %Private{
-        loop_id: "SportVideos",
-        origin: "https://origin.bbc.co.uk/"
-      },
-      response: %Response{body: :zlib.gzip("a response"), http_status: 501}
-    }
-
-    test "increments status" do
-      Belfrage.LoopsRegistry.find_or_start(@resp_struct)
-      Processor.init_post_response_pipeline(@resp_struct)
-
-      assert {:ok,
-              %{
-                counter: %{"https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1}}
-              }} = Belfrage.Loop.state(@resp_struct)
-    end
-  end
-
   describe "Processor.response_pipeline/1" do
     @resp_struct %Struct{
       response: %Response{

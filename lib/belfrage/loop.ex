@@ -51,10 +51,8 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_cast({:inc, http_status, origin, true}, state) do
-    state = %{state | counter: Counter.inc(state.counter, :fallback, origin)}
-    state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
-    state = %{state | long_counter: Counter.inc(state.long_counter, :fallback, origin)}
-    state = %{state | long_counter: Counter.inc(state.long_counter, http_status, origin)}
+    state = %{state | counter: Counter.inc(state.counter, http_status, origin, fallback: true)}
+    state = %{state | long_counter: Counter.inc(state.long_counter, http_status, origin, fallback: true)}
 
     {:noreply, state}
   end

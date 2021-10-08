@@ -11,9 +11,11 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
+  @loop_id "SportArticlePage"
+
   @get_request_struct %Struct{
     private: %Private{
-      loop_id: "SportVideos",
+      loop_id: @loop_id,
       production_environment: "test"
     },
     request: %Request{
@@ -33,13 +35,19 @@ defmodule BelfrageTest do
       request_id: "pete-the-post-request"
     },
     private: %Private{
-      loop_id: "SportVideos",
+      loop_id: @loop_id,
       production_environment: "test"
     }
   }
 
   @web_core_lambda_response {:ok, %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
   @web_core_404_lambda_response {:ok, %{"body" => "404 - not found", "headers" => %{}, "statusCode" => 404}}
+  @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
+
+  setup do
+    start_supervised!({Belfrage.Loop, @loop_id})
+    :ok
+  end
 
   test "GET request invokes lambda service with Lambda transformer" do
     LambdaMock
@@ -129,9 +137,50 @@ defmodule BelfrageTest do
     assert response_struct.response.http_status == 302
   end
 
+  test "increments the loop when request has 200 status" do
+    LambdaMock
+    |> expect(:call, 1, fn _role_arn = "webcore-lambda-role-arn",
+                           _lambda_func = "pwa-lambda-function:test",
+                           _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                           _request_id = "gerald-the-get-request",
+                           _opts = [] ->
+      @web_core_lambda_response
+    end)
+
+    Belfrage.handle(@get_request_struct)
+
+    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+
+    assert state.counter == %{
+             "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
+           }
+  end
+
+  test "increments the loop when request has 500 status" do
+    LambdaMock
+    |> expect(:call, 1, fn _role_arn = "webcore-lambda-role-arn",
+                           _lambda_func = "pwa-lambda-function:test",
+                           _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                           _request_id = "gerald-the-get-request",
+                           _opts = [] ->
+      @web_core_500_lambda_response
+    end)
+
+    Belfrage.handle(@get_request_struct)
+
+    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+
+    assert state.counter == %{
+             :errors => 1,
+             "pwa-lambda-function:test" => %{500 => 1, :errors => 1}
+           }
+  end
+
   describe "with seeded cache" do
     setup do
-      struct = Struct.add(@get_request_struct, :request, %{path: "/_seeded_cache"})
+      struct =
+        @get_request_struct
+        |> Struct.add(:request, %{path: "/_seeded_cache"})
 
       put_into_cache(%Struct{
         struct
@@ -179,6 +228,63 @@ defmodule BelfrageTest do
 
       checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
       assert checkpoints[:early_response_received]
+    end
+
+    test "increments the loop, when fetching from cache", %{struct: struct} do
+      LambdaMock
+      |> expect(:call, 0, fn _role_arn = "webcore-lambda-role-arn",
+                             _lambda_func = "pwa-lambda-function:test",
+                             _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                             _request_id = "gerald-the-get-request",
+                             _opts = [] ->
+        flunk("This should never be called")
+      end)
+
+      Belfrage.handle(struct)
+
+      {:ok, state} = Belfrage.Loop.state(struct)
+
+      assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
+    end
+  end
+
+  describe "seeded with stale cache" do
+    setup do
+      struct =
+        @get_request_struct
+        |> Struct.add(:request, %{path: "/_stale_seeded_cache"})
+
+      put_into_cache_as_stale(%Struct{
+        struct
+        | response: %Response{
+            body: :zlib.gzip(~s({"hi": "bonjour"})),
+            headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+            http_status: 200,
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+          }
+      })
+
+      %{struct: struct}
+    end
+
+    test "increments the loop, when fetching from fallback", %{struct: struct} do
+      LambdaMock
+      |> expect(:call, 1, fn _role_arn = "webcore-lambda-role-arn",
+                             _lambda_func = "pwa-lambda-function:test",
+                             _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                             _request_id = "gerald-the-get-request",
+                             _opts = [] ->
+        @web_core_500_lambda_response
+      end)
+
+      Belfrage.handle(struct)
+
+      {:ok, state} = Belfrage.Loop.state(struct)
+
+      assert state.counter == %{
+               :errors => 1,
+               "pwa-lambda-function:test" => %{500 => 1, :errors => 1, :fallback => 1}
+             }
     end
   end
 end

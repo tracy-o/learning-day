@@ -136,10 +136,21 @@ defmodule Belfrage.Processor do
   end
 
   def init_post_response_pipeline(struct = %Struct{}) do
-    Loop.inc(struct)
-
     struct
     |> ResponseTransformers.CompressionAsRequested.call()
+  end
+
+  def inc_loop(struct) do
+    Loop.inc(struct)
+    struct
+  end
+
+  def inc_loop_on_fallback(struct) do
+    if struct.response.fallback do
+      Loop.inc(struct)
+    end
+
+    struct
   end
 
   defp loop_state_failure do

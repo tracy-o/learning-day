@@ -30,7 +30,10 @@ defmodule Belfrage do
   defp generate_response(struct = %Struct{request: request = %Request{}, response: %Response{http_status: http_status}})
        when http_status != nil do
     LatencyMonitor.checkpoint(request.request_id, :early_response_received)
-    Processor.init_post_response_pipeline(struct)
+
+    struct
+    |> Processor.inc_loop()
+    |> Processor.init_post_response_pipeline()
   end
 
   defp generate_response(structs) do
@@ -38,7 +41,9 @@ defmodule Belfrage do
     |> Belfrage.Concurrently.run(&Processor.request_pipeline/1)
     |> Belfrage.Concurrently.pick_early_response()
     |> Processor.perform_call()
+    |> Processor.inc_loop()
     |> Processor.response_pipeline()
     |> Processor.init_post_response_pipeline()
+    |> Processor.inc_loop_on_fallback()
   end
 end
