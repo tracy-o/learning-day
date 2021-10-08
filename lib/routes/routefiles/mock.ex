@@ -66,7 +66,7 @@ defroutefile "Mock", "test" do
 
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
-  handle("/personalisation-in-cascade", using: ["MySessionWebcorePlatform", "SomeMozartLoop"], examples: [])
+  handle("/cascade", using: ["MySessionWebcorePlatform", "SomeMozartLoop"], examples: [])
 
   handle("/caching-disabled", using: "CacheDisabled", examples: [])
 
