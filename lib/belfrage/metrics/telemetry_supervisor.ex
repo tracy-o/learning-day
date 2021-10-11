@@ -9,12 +9,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   @impl true
   def init(_args) do
     children = [
-      {
-        TelemetryMetricsStatsd,
-        metrics: telemetry_metrics(),
-        global_tags: [BBCEnvironment: Application.get_env(:belfrage, :production_environment)],
-        formatter: :datadog
-      }
+      {TelemetryMetricsStatsd, metrics: telemetry_metrics()}
     ]
 
     Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
@@ -29,25 +24,24 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
 
   defp vm_metrics() do
     [
-      last_value("vm.memory.total", unit: {:byte, :kilobyte}, tags: [:BBCEnvironment]),
-      last_value("vm.system_counts.process_count", tags: [:BBCEnvironment]),
-      last_value("vm.system_counts.atom_count", tags: [:BBCEnvironment]),
-      last_value("vm.system_counts.port_count", tags: [:BBCEnvironment]),
-      last_value("vm.total_run_queue_lengths.total", tags: [:BBCEnvironment]),
-      last_value("vm.total_run_queue_lengths.cpu", tags: [:BBCEnvironment]),
-      last_value("vm.total_run_queue_lengths.io", tags: [:BBCEnvironment])
+      last_value("vm.memory.total", unit: {:byte, :kilobyte}),
+      last_value("vm.system_counts.process_count"),
+      last_value("vm.system_counts.atom_count"),
+      last_value("vm.system_counts.port_count"),
+      last_value("vm.total_run_queue_lengths.total"),
+      last_value("vm.total_run_queue_lengths.cpu"),
+      last_value("vm.total_run_queue_lengths.io")
     ]
   end
 
   defp cowboy_metrics() do
     [
-      summary("cowboy.request.stop.duration", unit: {:native, :millisecond}, tags: [:BBCEnvironment]),
-      counter("cowboy.request.exception.count", tags: [:BBCEnvironment]),
-      counter("cowboy.request.early_error.count", tags: [:BBCEnvironment]),
+      summary("cowboy.request.stop.duration", unit: {:native, :millisecond}),
+      counter("cowboy.request.exception.count"),
+      counter("cowboy.request.early_error.count"),
       counter("cowboy.request.idle_timeout.count",
         event_name: "cowboy.request.stop",
-        keep: &match?(%{error: {:connection_error, :timeout, _}}, &1),
-        tags: [:BBCEnvironment]
+        keep: &match?(%{error: {:connection_error, :timeout, _}}, &1)
       )
     ]
   end
@@ -57,17 +51,17 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       last_value("poolboy.available_workers.count",
         measurement: :available_workers,
         event_name: "belfrage.poolboy.status",
-        tags: [:BBCEnvironment, :pool_name]
+        tags: [:pool_name]
       ),
       last_value("poolboy.overflow_workers.count",
         measurement: :overflow_workers,
         event_name: "belfrage.poolboy.status",
-        tags: [:BBCEnvironment, :pool_name]
+        tags: [:pool_name]
       ),
       last_value("poolboy.pool_saturation",
         measurement: :saturation,
         event_name: "belfrage.poolboy.status",
-        tags: [:BBCEnvironment, :pool_name]
+        tags: [:pool_name]
       )
     ]
   end
@@ -100,8 +94,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     summary("belfrage.latency.#{name}",
       event_name: "belfrage.#{name}.stop",
       measurement: :duration,
-      unit: {:native, :microsecond},
-      tags: [:BBCEnvironment]
+      unit: {:native, :microsecond}
     )
   end
 end
