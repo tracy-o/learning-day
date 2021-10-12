@@ -32,9 +32,9 @@ In particular, Belfrage implements:
 Here's a diagram illustrating what Belfrage does when it comes to
 personalisation:
 
-![Personalisation in Belfrage](img/belfrage-personalisation.svg)
+![Personalisation in Belfrage](../img/belfrage-personalisation.svg)
 
-[Diagram source](source/belfrage-personalisation.drawio)
+[Diagram source](../source/belfrage-personalisation.drawio)
 
 ## Personalisation dial
 
