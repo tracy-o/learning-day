@@ -1,61 +1,22 @@
 # Struct
 
-Current struct example
-```
-{
-   "request": {
-        "request_id": "d5a2d7676858b9f86d725d96585373d3",
-        "environment": "live",
-        "request_type": "GET",
-        "path": "/news/story/123",
-        "country": "gb",
-        "edition": "domestic",
-        "hashed_user_id": "123abc",
-        "date_time_utc": "2019-04-24 10:37:26 UTC",
-        "user_token": "abc123xyz"
-    },
-    "private": {
-        "matcher_id": "NewsStory",
-        "route": "on",
-        "circuit_breaker": "off",
-        "try_fallback_on_error": true,
-        "timeout": 1000,
-        "req_pipeline": ["story_validator", "user_validator"],
-        "resp_pipeline": ["resp_validator", "debug"]
-    },
-    "response": {
-        "source": "presentation",
-        "http_status": 200,
-        "headers": {
-            "cache_control": "public, max-age=30",
-            "vary": "edition,user_token",
-            "set-cookie": "foo",
-            "Content-Type": "text/html; charset=utf-8",
-            "Transfer-Encoding": "gzip",
-            "Content-Security-Policy": "default-src https"
-        },
-        "body": "H4sIAAAAAAAA/7PJMLTLSM3JyVcIzy/KSbHRB/IBnHcpQRQAAAA="
-    }
-}
-```
+The struct is how Belfrage keeps track of the connection throughout its entire lifetime. It is an Elixir struct (terrible naming we know) which is similar to a map but has default keys. It is designed in a way so at any point in a connections lifetime you could inspect the struct and see the exact state of the connection.
 
-Proposed Payload Example
-```
-{
-   "request": {
-        "request_id": "d5a2d7676858b9f86d725d96585373d3",
-        "environment": "live",
-        "request_type": "GET",
-        "path": "/news/story/123",
-        "country": "gb",
-        "hashed_user_id": "123abc",
-        "date_time_utc": "2019-04-24 10:37:26 UTC"
-    },
-    "experiments": {},
-    "config": {
-        "election_mode": "campaign",
-        "front_page_video": "on"
-    },
-    "version": 1
-}
-```
+The struct currently contains five main sections:
+- Debug
+    - A section in which we, as developers, can add information that may contain non essential information about a request that allow us to debug.
+    - Currently only contains the `pipeline_trail` which is used to view which transformers your response has been through
+- Request
+    - The request section contains all information we are provided with when a connection comes into Belfrage.
+    - Example keys: `path`: '/news/story/123', `method`: 'GET', `request_hash`: 'abc123'
+- Response
+    - This section contains various keys regarding our reply to the request.
+    - Example keys: `http_status`:200, `body`: 'Hello! This is the body'
+- Private
+    - This section contains data which is not passed down to later services, just for use within Belfrage.
+    - Example keys: `loop_id`: HomePage, `personalised_route`: false
+- UserSession
+    - This section of the struct keeps track of all the information required for a logged in user
+    - Example keys: `session_token`: "abc123", `authenticated`: true
+
+The struct is defined here:[ belfrage/lib/belfrage/struct.ex ](../../../lib/belfrage/struct.ex)
