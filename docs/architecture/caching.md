@@ -84,9 +84,9 @@ It is worth being aware that due to the cascade a `cache.local.miss` metric is s
 
 The following diagram shows the flow in Belfrage when requesting fresh cache content.
 
-![belfrage-cache](../../img/belfrage-cache-fresh.svg)
+![belfrage-cache](../img/belfrage-cache-fresh.svg)
 
-[Diagram source](../../source/belfrage-cache-fresh.drawio)
+[Diagram source](../source/belfrage-cache-fresh.drawio)
 
 ### Caching in depth
 
@@ -95,6 +95,6 @@ The following diagram shows the detailed flow of cache content for fresh and sta
 1. Check for "fresh" content in the local cache.
 2. Check for "fresh" or "stale" content in the local or distributed cache (applicable when an origin has returned a 500 response).
 
-![belfrage-cache](../../img/belfrage-cache.svg)
+![belfrage-cache](../img/belfrage-cache.svg)
 
-[Diagram source](../../source/belfrage-cache.drawio)
+[Diagram source](../source/belfrage-cache.drawio)
