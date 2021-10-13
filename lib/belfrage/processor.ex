@@ -5,7 +5,6 @@ defmodule Belfrage.Processor do
     Loop,
     Pipeline,
     RequestHash,
-    ServiceProvider,
     Cache,
     ResponseTransformers,
     Allowlist,
@@ -69,22 +68,6 @@ defmodule Belfrage.Processor do
         {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
       end
     end)
-  end
-
-  def perform_call(struct = %Struct{response: %Response{http_status: code}}) when is_number(code) do
-    struct
-  end
-
-  # when only one struct
-  def perform_call([struct = %Struct{private: %Private{origin: origin}}]) do
-    ServiceProvider.service_for(origin).dispatch(struct)
-  end
-
-  @doc """
-  When a list of structs, call the cascade service
-  """
-  def perform_call(structs) do
-    Belfrage.Services.Cascade.dispatch(structs)
   end
 
   def response_pipeline(struct = %Struct{}) do

@@ -1,5 +1,5 @@
 defmodule Belfrage do
-  alias Belfrage.{Processor, Struct}
+  alias Belfrage.{Processor, Struct, Cascade}
   alias Belfrage.Struct.{Request, Response}
   alias Belfrage.Metrics.LatencyMonitor
 
@@ -7,13 +7,12 @@ defmodule Belfrage do
 
   def handle(struct = %Struct{}) do
     struct
-    |> Belfrage.Concurrently.start()
-    |> Belfrage.Concurrently.run(fn struct ->
+    |> Cascade.build()
+    |> Cascade.fan_out(fn struct ->
       struct
       |> prepare_request()
       |> check_cache()
     end)
-    |> Belfrage.Concurrently.pick_early_response()
     |> generate_response()
   end
 
@@ -38,9 +37,8 @@ defmodule Belfrage do
 
   defp generate_response(structs) do
     structs
-    |> Belfrage.Concurrently.run(&Processor.request_pipeline/1)
-    |> Belfrage.Concurrently.pick_early_response()
-    |> Processor.perform_call()
+    |> Cascade.fan_out(&Processor.request_pipeline/1)
+    |> Cascade.dispatch()
     |> Processor.inc_loop()
     |> Processor.response_pipeline()
     |> Processor.init_post_response_pipeline()

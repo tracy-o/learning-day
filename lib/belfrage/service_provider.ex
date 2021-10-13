@@ -1,9 +1,12 @@
 defmodule Belfrage.ServiceProvider do
-  alias Belfrage.{Services, Behaviours.ServiceProvider}
+  alias Belfrage.{Struct, Services}
+  alias Belfrage.Struct.Private
 
-  @behaviour ServiceProvider
+  def dispatch(struct = %Struct{private: private = %Private{}}) do
+    service = service_for(private.origin)
+    service.dispatch(struct)
+  end
 
-  @impl ServiceProvider
   def service_for(origin) do
     cond do
       origin == :stubbed_session_origin -> Services.StubbedSession
