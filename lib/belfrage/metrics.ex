@@ -36,6 +36,12 @@ defmodule Belfrage.Metrics do
   end
 
   @doc """
+  Record an event with no measurements and no metadata.
+  """
+  @spec event(event_name()) :: :ok
+  def event(name), do: event(name, %{}, %{})
+
+  @doc """
   Records the end of an event span. Emits a `[prefix, name, :stop]` event with
   a `duration` measurement calculated using the passed `start_time` which must
   be the result of calling `System.monotonic_time/0` at the beginning of the

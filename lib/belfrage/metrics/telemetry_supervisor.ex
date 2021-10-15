@@ -25,7 +25,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       cowboy_metrics() ++
       poolboy_metrics() ++
       latency_metrics() ++
-      request_metrics()
+      request_metrics() ++
+      cache_metrics()
   end
 
   defp vm_metrics() do
@@ -114,5 +115,9 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         tags: [:BBCEnvironment]
       )
     end)
+  end
+
+  defp cache_metrics() do
+    [counter("cache.local.fetch_exit", tags: [:BBCEnvironment])]
   end
 end

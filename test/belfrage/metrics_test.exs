@@ -34,6 +34,14 @@ defmodule Belfrage.MetricsTest do
     end
   end
 
+  describe "event/2" do
+    test "emits an event with no measurements and no metadata" do
+      assert_metric({[:foo, :bar], %{}, %{}}, fn ->
+        Metrics.event([:foo, :bar])
+      end)
+    end
+  end
+
   describe "stop/3" do
     test "emits a stop event with duration measurement and metadata" do
       start_time = System.monotonic_time() - 1
