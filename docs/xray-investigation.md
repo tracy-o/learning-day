@@ -28,6 +28,7 @@ Belfrage --> aws_ex_ray --> X-Ray daemon --> X-Ray API
 ## Where is X-Ray Used in Belfrage?
 
 ![](img/xray-trace-diagram.png)
+
 credit: Owen Tourlamain
 
 - [`belfrage/xray.ex` (link)](https://github.com/bbc/belfrage/blob/87754708b8de461c06f6cc189b6d4bf09cfe0ab0/lib/xray.ex) - This module is a wrapper around the [AwsExRaylibrary](https://github.com/lyokato/aws_ex_ray).
@@ -37,8 +38,8 @@ credit: Owen Tourlamain
 
   - This does 3 main things:
     - creates, starts and stops the X-Ray tracing
-    - attaches data to the trace such as `request_id` `method` and `request path`
-    - puts the `:xray_trace_id` in the `conn.private` (`:xray_trace_id` contains the `id` and sampling information)
+    - attaches data to the trace such as `request_id` `method` and `request path` 
+    - puts the `:xray_trace_id` in the `conn.private`. Here is an example: `xray-trace-id: Root=1-616d2d72-1d593ce637efece8e19e8ba7;Parent=76573fdfd0d5f0f7;Sampled=0`
     <br>
 
 - [`belfrage_web/struct_adaptor.ex` (link)](https://github.com/bbc/belfrage/blob/f6eaf776880a0c258384b01059e49fa56d1766bf/lib/belfrage_web/struct_adapter.ex)
@@ -57,7 +58,7 @@ credit: Owen Tourlamain
 
 We use the [aws_ex_ray](https://github.com/lyokato/aws_ex_ray) library in belfrage to handle our requests to interface with X-Ray.
 
-This library functions by creating an ETS table which is bound to the process which calls `start_tracing` (in our case each request process). This keeps track of the segments and subsegments of each request. When the tracing is finished it is sent to the X-Ray daemon (on the instance) via a UDP client.
+This library functions by creating an ETS table. This keeps track of the segments and subsegments of each request. When the tracing is finished it is sent to the X-Ray daemon (on the instance) via a UDP client.
 
 This also means that if the X-Ray daemon or X-Ray API is down it will have no effect on our application. As aws_ex_ray sends its data to the daemon via UDP.
 
@@ -77,11 +78,11 @@ Under closer inspection we see:
 
 This shows that while under extreme load the aws_ex_store_pool becomes overwhelmed, but why is this?
 
-When a trace is started an ETS table is created linked to the process and its ID is placed in the ETS table. When a trace is finished the table (and ID) is deleted as aws_ex_ray no longer needs to keep track of it.
+When a trace is started an entry is created in the ETS table. When a trace is finished all references of the ID is deleted as aws_ex_ray no longer needs to keep track of it.
 
-But what if before `finish_tracing/1` is called the process dies? That would result in pollution of the ETS table for all of the traces of the processes that have failed.
+But what if before `finish_tracing/1` is called the process dies? That would result in pollution of the ETS table for all of the traces that failed.
 
-To get around this a monitor per process is made to supervise the thing being traced. If the process does fail, then the ETS table related to that process is deleted.
+To get around this a monitor per process is made to supervise the thing being traced. If the process does fail, then all references related to that request process are deleted from the ETS table.
 
 The relevant code is below:
 
@@ -142,7 +143,7 @@ These 500s will be caused by poolboy giving us a timeout error because the pool 
 
 However a timeout error isn't the only error that may cause a 500, in fact any runtime error produced by the pool worker will result in a 500. 
 
-`system_limit` errors could also occur when using the ETS, but this is very likely. ([see here](https://erlang.org/doc/man/ets.html#failures))
+`system_limit` errors could also occur when using the ETS or if a process , but this is very unlikely. ([see here](https://erlang.org/doc/man/ets.html#failures))
 
 #### Inefficient Sampling
 As X-Ray is designed for production applications it would be impractical to send a trace of every request to the X-Ray API. Therefore there is a concept of sampling. In our case we have a sample rate of 0.1 or 1 in 10 requests.
@@ -247,8 +248,8 @@ To summarise:
   - aws_ex_ray has some issues which include:
     - Causing bottlenecks by using a fixed pool to monitor belfrage request processes, which result in latency and could produce 500s
     - Performing more work than necessary on traces that won't be sent to the X-Ray API
-  - These issued can be mitigated by:
-    - Only calling aws_ex_ray when we wish to sent a trace to the X-Ray API
+  - These issues can be mitigated by:
+    - Only calling aws_ex_ray when we wish to send a trace to the X-Ray API
     - Enforcing timeouts for calls to aws_ex_ray within Belfrage
     - Wrapping calls to aws_ex_ray in its own isolated process or try-catch blocks
 
