@@ -1,6 +1,6 @@
 # Elixir & Erlang
 
-EElixir compiles to Erlang with no performance loss. Erlang's design goals are to abstract away many of the problems of designing and deploying highly available, concurrent, fault-tolerant systems.
+Elixir compiles to Erlang with no performance loss. Erlang's design goals are to abstract away many of the problems of designing and deploying highly available, concurrent, fault-tolerant systems.
 
 ## The Web is concurrent
 

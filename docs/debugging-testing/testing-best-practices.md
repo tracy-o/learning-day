@@ -1,12 +1,11 @@
 # Best Practices in Elixir testing.
 ### General rules
 ```
-1. Every test file should try to be configured as async: true
+1. Every test file should try to be configured as async: true where possible
 2. Use Mox to mock external or extraneous services.
 3. Use start_supervised to start unique GenServers or other required async processes in the setup block of that test.
 4. GenServers/Supervisors need to be made configurable on startup.
 ```
-
 
 ### Blocking expectations
 Testing code ran in different processes can result in race conditions. These can be difficult to test. You have a couple of options.

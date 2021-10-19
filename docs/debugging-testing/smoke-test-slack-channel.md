@@ -1,3 +1,5 @@
+# Changing smoke tests report slack channel
+
 Belfrage now supports sending smoke test failures into a slack channel of your choosing, after 2 steps.
 
 1. Set the `slack_channel` key & value in the specs of your `routespec`, to the name of the destination channel. e.g ("help-belfrage")

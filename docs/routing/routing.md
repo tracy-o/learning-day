@@ -3,20 +3,20 @@
 We want tenant users to be able to quickly add a new route to Belfrage with minimal effort.
 
 A tenant should just:
-- define the route matcher in the `Routefile`
-- define one or more examples of routes in the `Routefile`
-- add basic information about their route in a `Spec File`
+- Define the route matcher in the `Routefile`
+- Define one or more examples of routes in the `Routefile`
+- Add basic information about their route in a `Spec File`
 
 A tenant will not:
-- need to know Elixir
-- build unit tests in Elixir (but if they desire to do so they're welcome to!)
+- Need to know Elixir
+- Build unit tests in Elixir (but if they desire to do so they're welcome to!)
 
 ### Features
-- simple DSL
-- super performant independently of the number of route matchers
-- allow basic validation of routes
-- allow redirects
-- more to come...
+- Simple Domain Specific Language (DSL)
+- Super performant independently of the number of route matchers
+- Allow basic validation of routes
+- Allow redirects
+- More to come...
 
 ### Design 
 The `Routefile` introduces a simple DSL to easily define routing rules. Just a few macros are used behind the scenes to perform a simple definition of the route. Once compiled, this becomes a single standard `Plug.Router` module.
@@ -40,11 +40,12 @@ The Route is the unit of action to deal with resiliency in Belfrage. There are a
 So the unit of action for Belfrage, the one which keeps track of the state of the resource is the route handler (eg: `/sport/clip/:id`) - we considered ways to intercept requests and build the routes definition at runtime but realised it couldn’t scale and adapt properly.
 
 ### How to add a route
-1. **go** to the `lib/routes` dir
-2. **add a new matcher** in `lib/routefiles/main.ex`, like:
+1. **go** to the `lib/routes/routefiles` dir
+2. **add a new matcher** in one of the routefiles depending on which environment you want your route to be available, more info [here](https://github.com/bbc/belfrage/blob/7b66fba6b0efa8c27e896aa1c4d9432a98fbb32f/lib/belfrage_web/routefile_pointer.ex) like:
 ```elixir
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"]
 ```
+
 where:
 - `handle "/sport/videos/:id"` is the matcher, it accepts a params as `:id`
 - `using: "SportVideos"` is the pointer to the `RouteSpec`
@@ -60,9 +61,9 @@ A route matcher can also define validations, like:
 ```
 where the tenant can define a 404 in case the `id` length is different from 8 chars. 
 
-Check out [Route Matcher](Types-of-Route-Matchers-in-Belfrage) and [Route Validation](Route-Validation-in-Belfrage) for more details and examples.
+Check out [Route Matcher Types](route-matcher-types.md) and [Route Validation](route-validation.md) for more details and examples.
 
-3. **add a RouteSpec** in `lib/routes/specs/sport_videos.ex`
+3. **add a RouteSpec** in `lib/routes/specs` such as `lib/routes/specs/sport_videos.ex`:
 ```elixir
 defmodule Routes.Specs.SportVideos do
   def specs do
@@ -76,7 +77,8 @@ defmodule Routes.Specs.SportVideos do
     }
   end
 end
-````
+```
+
 where:
 - `owner` is the email of the owning team
 - `runbook` is the link of the tenant page
@@ -119,9 +121,9 @@ defmodule Routes.Specs.HomePagePersonalised do
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
 ```
-For more information, see [Personalisation](https://github.com/bbc/belfrage/blob/master/docs/personalisation.md).
+For more information, see [Personalisation](../architecture/personalisation.md).
 
 ### Further reading
 
 - [Route Matchers](route-matcher-types)
-- [Route Validation](Route-Validation)
+- [Route Validation](route-alidation)

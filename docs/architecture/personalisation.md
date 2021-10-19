@@ -45,8 +45,7 @@ early responses and fallbacks to users.
 
 ## Personalised routes
 
-Please see this [wiki
-page](https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#personalising-a-route)
+Please see this [Routing](../routing/routing.md)
 for info on how teams can enable personalisation for a route.
 
 Note that only requests to `*.bbc.co.uk` can be personalised currently.
