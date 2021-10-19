@@ -2,15 +2,34 @@
 This is where you can find the answers to most, if not all your questions regarding Belfrage!
 ---
 
-- [Cache](../docs/architecture/caching.md)
-- [Cascade](../docs/cascade.md)
-- [Updating-Elixir-Erlang](../docs/updating-elixir-erlang.md)
-- Routing
-    - [Routing](../docs/routing/routing.md)
-    - [Route Validation](../docs/routing/route-validation.md)
-    - [Route Matcher Types](../docs/routing/route-matcher-types.md)
-- Testing / Debugging
-    - [Testing best practises](../docs/debugging-testing/testing-best-practices.md)
-    - [Smoke test slack channel](../docs/debugging-testing/smoke-test-slack-channel.md)
-    - [Stubbing out AWS](../docs/debugging-testing/stubbing-aws.md)
+- Architecture
+    - [Architecture-CI-CD](architecture/architecture-ci-cd.md)
+    - [Architecture](architecture/architecture.md)
+    - [Belfrage monitor](architecture/belfrage-monitor.md)
+    - [Build pipeline](architecture/build-pipeline.md)
+    - [Layers](architecture/layers.md)
+    - [Multi stack Belfrage](architecture/multi-stack-belfrage.md)
+    - [Struct](architecture/struct.md)
+    - [Webcore Contract](architecture/webcore-contract.md)
+- Topics
+    - [Caching](topics/caching.md)
+    - [Cascade](topics/cascade.md)
+    - [Circuit Breaker](topics/circuit-breaker.md)
+    - [Dials](topics/dials.md)
+    - [Personalisation](topics/personalisation.md)
+    - Routing
+        - [Route Matcher Types](topics/routing/route-matcher-types.md)
+        - [Route Validation](topics/routing/route-validation.md)
+        - [Routing](topics/routing/routing.md)
+    - Testing / Debugging
+        - [Smoke test slack channel](topics/debugging-testing/smoke-test-slack-channel.md)
+        - [Stubbing out AWS](topics/debugging-testing/stubbing-aws.md)
+        - [Testing best practises](topics/debugging-testing/testing-best-practices.md)
+- Misc
+    - [CI-CD threat analysis](misc/ci-cd-threat-analysis.md)
+    - [Elixir/Erlang](misc/elixir-erlang.md)
+    - [Feature requests](misc/feature-requests.md)
+    - [LTDD](misc/load-test-driven-development.md)
+    - [HTTP requests to origins](misc/making-http-requests-to-origins.md)
+    - [Threat analysis](misc/threat-analysis.md)
 

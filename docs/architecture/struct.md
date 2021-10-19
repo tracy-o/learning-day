@@ -19,4 +19,5 @@ The struct currently contains five main sections:
     - This section of the struct keeps track of all the information required for a logged in user
     - Example keys: `session_token`: "abc123", `authenticated`: true
 
-The struct is defined here:[ belfrage/lib/belfrage/struct.ex ](../../../lib/belfrage/struct.ex)
+The struct is defined here:[ belfrage/lib/belfrage/struct.ex ](https://github.com/bbc/belfrage/blob/master/lib/belfrage/struct.ex)
+The struct life cycle can be found [here](../img/struct_lifecycle.png)

@@ -45,7 +45,7 @@ early responses and fallbacks to users.
 
 ## Personalised routes
 
-Please see this [Routing](../routing/routing.md)
+Please see this [Routing](routing/routing.md)
 for info on how teams can enable personalisation for a route.
 
 Note that only requests to `*.bbc.co.uk` can be personalised currently.

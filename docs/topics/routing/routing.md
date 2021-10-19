@@ -121,9 +121,9 @@ defmodule Routes.Specs.HomePagePersonalised do
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
 ```
-For more information, see [Personalisation](../architecture/personalisation.md).
+For more information, see [Personalisation](../personalisation.md).
 
 ### Further reading
 
-- [Route Matchers](route-matcher-types)
-- [Route Validation](route-alidation)
+- [Route Matchers](route-matcher-types.md)
+- [Route Validation](route-alidation.md)
