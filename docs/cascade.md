@@ -67,25 +67,25 @@ Processing a request that must be handled by the cascade works like this:
 * `Belfrage.handle/1` receives a `Struct` with `private.loop_id` containing
   list of route specs that should be used by the cascade.
 * The cascade is built by duplicating the received `Struct` for each route spec
-  that should be used. The result is a list of `Struct`s each containing a
-  single route spec in `private.loop_id`. The entire list of route specs is
-  stored in `Struct.private.candidate_loop_ids`.
-* Each `Struct` in the list is concurrently "prepared" (all necessary data is
-  populated) and we attempt to fetch an early response from cache. If there is
-  a cached response for any of the `Struct`s in the list, then that response is
-  returned back to the user.
-* The request pipeline is then executed for each `Struct` in the list
+  that should be used (this happens in `Belfrage.Cascade.build/1`). The result
+  is a `Belfrage.Cascade` struct with a list of items which are `Struct`s each
+  containing a single route spec in `private.loop_id`. The entire list of route
+  specs is stored in `Struct.private.candidate_loop_ids` for each of the
+  `Struct`s.
+* Each `Struct` in the cascade is concurrently "pre-processed" (all necessary
+  data is populated) and we attempt to fetch an early response from cache. If
+  there is a cached response for any of the `Struct`s in the list of items,
+  then that response is returned back to the user.
+* The request pipeline is then executed for each `Struct` in the list of items
   concurrently. If any of the transformers produce a response (e.g. a redirect
   or a 500 from the circuit breaker), that response is sent back to the user.
-* The origins in the cascade are requested one by one. If the first origin
-  returns a 404, the request is passed to the following origin, etc, until a
-  non-404 response is received (including other errors or timeouts) or the end
-  of the cascade is reached, in which case the last response is served to the
-  user.
 * The origins in the cascade are requested one by one (this happens in
-  `Belfrage.Services.Cascade`) If the first origin returns a 404, the request
-  is passed to the following origin, etc, until a non-404 response is received
-  (including other errors or timeouts) or the end of the cascade is reached, in
-  which case the last response is served to the user.
+  `Belfrage.Cascade.dispatch/1`). If the first origin returns a 404, the
+  request is passed to the following origin, etc, until a non-404 response is
+  received (including other errors or timeouts) or the end of the cascade is
+  reached, in which case the last response is served to the user.
+* If the last requested origin returns a 404, Belfrage sends a 404 back to the
+  user, but doesn't use the response body from the origin: it generates a
+  generic 404 response instead.
 * Processing and rendering the response happens as usual, including fetching
   fallbacks for errors.
