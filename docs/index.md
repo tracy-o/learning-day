@@ -32,4 +32,5 @@ This is where you can find the answers to most, if not all your questions regard
     - [LTDD](misc/load-test-driven-development.md)
     - [HTTP requests to origins](misc/making-http-requests-to-origins.md)
     - [Threat analysis](misc/threat-analysis.md)
+    - [Xray investigation](/misc/xray-investigation)
 
