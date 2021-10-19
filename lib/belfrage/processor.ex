@@ -17,6 +17,14 @@ defmodule Belfrage.Processor do
   alias Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
+  def pre_request_pipeline(struct = %Struct{}) do
+    struct
+    |> get_loop()
+    |> allowlists()
+    |> personalisation()
+    |> generate_request_hash()
+  end
+
   def get_loop(struct = %Struct{}) do
     Metrics.duration(:set_request_loop_data, fn ->
       LoopsRegistry.find_or_start(struct)
@@ -52,9 +60,17 @@ defmodule Belfrage.Processor do
       ) do
     case {personalised, caching_enabled} do
       {false, true} ->
-        Metrics.duration(:fetch_early_response_from_cache, fn ->
-          Cache.fetch(struct, [:fresh])
-        end)
+        struct =
+          Metrics.duration(:fetch_early_response_from_cache, fn ->
+            Cache.fetch(struct, [:fresh])
+          end)
+
+        if struct.response.http_status do
+          latency_checkpoint(struct, :early_response_received)
+          Loop.inc(struct)
+        end
+
+        struct
 
       _ ->
         struct
@@ -71,6 +87,8 @@ defmodule Belfrage.Processor do
   end
 
   def response_pipeline(struct = %Struct{}) do
+    Loop.inc(struct)
+
     struct
     |> maybe_log_response_status()
     |> ResponseTransformers.CacheDirective.call()
@@ -82,12 +100,21 @@ defmodule Belfrage.Processor do
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
     if use_fallback?(struct) do
-      struct
-      |> latency_checkpoint(:fallback_request_sent)
-      |> Cache.fetch([:fresh, :stale])
-      |> latency_checkpoint(:fallback_response_received)
-      |> Cache.store()
-      |> make_fallback_private_if_personalised_request()
+      struct =
+        struct
+        |> latency_checkpoint(:fallback_request_sent)
+        |> Cache.fetch([:fresh, :stale])
+        |> latency_checkpoint(:fallback_response_received)
+
+      if struct.response.http_status == 200 do
+        Loop.inc(struct)
+
+        struct
+        |> Cache.store()
+        |> make_fallback_private_if_personalised_request()
+      else
+        struct
+      end
     else
       struct
     end
@@ -107,33 +134,18 @@ defmodule Belfrage.Processor do
 
   defp make_fallback_private_if_personalised_request(
          struct = %Struct{
-           response: response = %Response{},
            private: private = %Private{}
          }
        ) do
-    if response.http_status == 200 && private.personalised_request do
+    if private.personalised_request do
       Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
     else
       struct
     end
   end
 
-  def init_post_response_pipeline(struct = %Struct{}) do
-    struct
-    |> ResponseTransformers.CompressionAsRequested.call()
-  end
-
-  def inc_loop(struct) do
-    Loop.inc(struct)
-    struct
-  end
-
-  def inc_loop_on_fallback(struct) do
-    if struct.response.fallback do
-      Loop.inc(struct)
-    end
-
-    struct
+  def post_response_pipeline(struct = %Struct{}) do
+    ResponseTransformers.CompressionAsRequested.call(struct)
   end
 
   defp loop_state_failure do

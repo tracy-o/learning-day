@@ -9,29 +9,35 @@ defmodule Belfrage.CascadeTest do
     test "builds a list of structs, one for each route spec" do
       struct = %Struct{private: %Private{loop_id: ~w(Loop1 Loop2)}}
 
-      assert Cascade.build(struct) == [
-               %Struct{private: %Private{loop_id: "Loop1", candidate_loop_ids: ~w(Loop1 Loop2)}},
-               %Struct{private: %Private{loop_id: "Loop2", candidate_loop_ids: ~w(Loop1 Loop2)}}
-             ]
+      assert Cascade.build(struct) == %Cascade{
+               items: [
+                 %Struct{private: %Private{loop_id: "Loop1", candidate_loop_ids: ~w(Loop1 Loop2)}},
+                 %Struct{private: %Private{loop_id: "Loop2", candidate_loop_ids: ~w(Loop1 Loop2)}}
+               ]
+             }
     end
 
     test "returns a list with one struct if it doesn't need to be handled by the cascade" do
       struct = %Struct{private: %Private{loop_id: ~w(Loop)}}
 
-      assert Cascade.build(struct) == [
-               %Struct{private: %Private{loop_id: "Loop", candidate_loop_ids: ~w(Loop)}}
-             ]
+      assert Cascade.build(struct) == %Cascade{
+               items: [
+                 %Struct{private: %Private{loop_id: "Loop", candidate_loop_ids: ~w(Loop)}}
+               ]
+             }
     end
   end
 
   describe "fan_out/2" do
     setup do
-      cascade = [
-        %Struct{private: %Private{loop_id: "Loop1"}},
-        %Struct{private: %Private{loop_id: "Loop2"}}
-      ]
-
-      %{cascade: cascade}
+      %{
+        cascade: %Cascade{
+          items: [
+            %Struct{private: %Private{loop_id: "Loop1"}},
+            %Struct{private: %Private{loop_id: "Loop2"}}
+          ]
+        }
+      }
     end
 
     test "executes the callback for each struct in the cascade asynchronously", %{cascade: cascade} do
@@ -56,7 +62,7 @@ defmodule Belfrage.CascadeTest do
     end
 
     test "returns the struct with a response if there is one", %{cascade: cascade} do
-      result =
+      %Cascade{result: result} =
         Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
           if private.loop_id == "Loop1" do
             Struct.add(struct, :response, %Response{http_status: 200})
@@ -67,7 +73,7 @@ defmodule Belfrage.CascadeTest do
 
       assert result == %Struct{response: %Response{http_status: 200}, private: %Private{loop_id: "Loop1"}}
 
-      result =
+      %Cascade{result: result} =
         Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
           if private.loop_id == "Loop2" do
             Struct.add(struct, :response, %Response{http_status: 200})
@@ -101,23 +107,13 @@ defmodule Belfrage.CascadeTest do
       end
     end
 
-    test "does nothing when passed a struct" do
-      struct = %Struct{private: %Private{loop_id: "Loop"}}
-      assert Cascade.dispatch(struct) == struct
-    end
-
-    test "delegates to the appropriate service when passed a list with a single struct" do
-      struct = %Struct{private: %Private{loop_id: "SuccessLoop"}}
-      assert %Struct{response: response} = Cascade.dispatch([struct], MockServiceProvider)
-      assert response.http_status == 200
-      assert response.body == "Response for loop SuccessLoop"
-    end
-
     test "sequentially requests services for each loop in the cascade" do
-      cascade = [
-        %Struct{private: %Private{loop_id: "404Loop"}},
-        %Struct{private: %Private{loop_id: "SuccessLoop"}}
-      ]
+      cascade = %Cascade{
+        items: [
+          %Struct{private: %Private{loop_id: "404Loop"}},
+          %Struct{private: %Private{loop_id: "SuccessLoop"}}
+        ]
+      }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 200
@@ -128,10 +124,12 @@ defmodule Belfrage.CascadeTest do
     end
 
     test "halts on first non-404 response from origins in the cascade" do
-      cascade = [
-        %Struct{private: %Private{loop_id: "SuccessLoop"}},
-        %Struct{private: %Private{loop_id: "404Loop"}}
-      ]
+      cascade = %Cascade{
+        items: [
+          %Struct{private: %Private{loop_id: "SuccessLoop"}},
+          %Struct{private: %Private{loop_id: "404Loop"}}
+        ]
+      }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 200
@@ -142,14 +140,28 @@ defmodule Belfrage.CascadeTest do
     end
 
     test "returns 404 response with empty body if all origins in cascade return 404" do
-      cascade = [
-        %Struct{private: %Private{loop_id: "404Loop"}},
-        %Struct{private: %Private{loop_id: "404Loop"}}
-      ]
+      cascade = %Cascade{
+        items: [
+          %Struct{private: %Private{loop_id: "404Loop"}},
+          %Struct{private: %Private{loop_id: "404Loop"}}
+        ]
+      }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 404
       assert response.body == ""
+    end
+
+    test "returns received 404 response body if there's only one origin in cascade" do
+      cascade = %Cascade{
+        items: [
+          %Struct{private: %Private{loop_id: "404Loop"}}
+        ]
+      }
+
+      assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
+      assert response.http_status == 404
+      assert response.body == "Response for loop 404Loop"
     end
   end
 end
