@@ -126,4 +126,4 @@ For more information, see [Personalisation](../personalisation.md).
 ### Further reading
 
 - [Route Matchers](route-matcher-types.md)
-- [Route Validation](route-alidation.md)
+- [Route Validation](route-validation.md)
