@@ -10,13 +10,13 @@ Belfrage is simple and fast, with a number of ancillary apps outside of the traf
 
 ## Architecture
 
-[More details on the Belfrage architecture](./docs/architecture.md)
+[More details on the Belfrage architecture](./docs/architecture/architecture.md)
 
 ## Personalisation
 
 Belfrage supports requests for personalised content.
 
-[More details on personalisation in Belfrage](./docs/personalisation.md)
+[More details on personalisation in Belfrage](./docs/architecture/personalisation.md)
 
 ## Key features of Belfrage
 
@@ -25,9 +25,9 @@ Belfrage supports requests for personalised content.
 We use a simple architecture with clear separation of responsibilities for any layer.
 Every layer knows how to communicate with the adjacent ones, but communication with further layers is discouraged. Only a subset of these layers will handle HTTP tasks, the rest of the layers will do business logic against the struct, an internal data structure representing the request/response cycle.
 
-![alt text](./docs/layers.png)
+![alt text](./docs/architecture/layers.png)
 
-[More details on the different layers are in the Layers document](./docs/layers.md)
+[More details on the different layers are in the Layers document](./docs/architecture/layers.md)
 
 ### Struct
 
@@ -39,14 +39,14 @@ At any time the system can log the struct giving the precise state of the curren
 
 It's the responsibility of the web interface to transform the struct into the final HTTP response.
 
-![alt text](./docs/struct_lifecycle.png "Struct Lifecycle")
+![alt text](./docs/architecture/struct/struct_lifecycle.png "Struct Lifecycle")
 
-[Struct examples are in the Struct document](./docs/struct.md)
+[Struct examples are in the Struct document](./docs/architecture/struct/struct.md)
 
 ### Caching
 Belfrage currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
 
-[More details on caching](./docs/caching.md)
+[More details on caching](./docs/architecture/caching/caching.md)
 
 ### Resiliency
 
