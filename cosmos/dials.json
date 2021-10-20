@@ -184,7 +184,7 @@
   {
     "name": "chameleon",
     "description": "Controls if the Chameleon navigation bar is displayed",
-    "default-value": "off",
+    "default-value": "on",
     "values": [
       {
         "value": "on",
