@@ -12,6 +12,10 @@ cat > /etc/statsd.conf <<EOF
       bbcApp: "${NAME}",
       bbcEnvironment: "${ENVIRONMENT}"
     },
-    flushInterval: 60000
+    flushInterval: 60000,
+    deleteGauges: true,
+    deleteTimers: true,
+    deleteSets: true,
+    deleteCounters: true
 }
 EOF
