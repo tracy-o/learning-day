@@ -225,6 +225,10 @@ defroutefile "Main" do
 
   handle "/news/election/2017/northern-ireland/constituencies", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies"]
 
+  handle "/news/election/2017/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001"] do
+    return_404 if: !String.match?(division_id, ~r/^N[0-9]{8}$/)
+  end
+
   handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/results"]
 
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
