@@ -66,22 +66,26 @@ defmodule Belfrage.PersonalisationTest do
   end
 
   describe "enabled?/0" do
-    test "returns true when the dial is on and the flagpole is green" do
+    defmodule BBCIDAvailable do
+      def available?(), do: true
+    end
+
+    defmodule BBCIDNotAvailable do
+      def available?(), do: false
+    end
+
+    test "returns true when the dial is on and BBC ID is available" do
       stub_dial(:personalisation, "off")
-      stub_authentication_flagpole(false)
-      refute Personalisation.enabled?()
+      refute Personalisation.enabled?(bbc_id: BBCIDNotAvailable)
 
       stub_dial(:personalisation, "on")
-      stub_authentication_flagpole(false)
-      refute Personalisation.enabled?()
+      refute Personalisation.enabled?(bbc_id: BBCIDNotAvailable)
 
       stub_dial(:personalisation, "off")
-      stub_authentication_flagpole(true)
-      refute Personalisation.enabled?()
+      refute Personalisation.enabled?(bbc_id: BBCIDAvailable)
 
       stub_dial(:personalisation, "on")
-      stub_authentication_flagpole(true)
-      assert Personalisation.enabled?()
+      assert Personalisation.enabled?(bbc_id: BBCIDAvailable)
     end
   end
 

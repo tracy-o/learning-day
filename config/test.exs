@@ -1,10 +1,6 @@
 use Mix.Config
 
 config :belfrage,
-  # Arbitrary long value so that it never fires in tests
-  short_counter_reset_interval: 3_600_000,
-  # Arbitrary long value so that it never fires in tests
-  long_counter_reset_interval: 3_600_000,
   errors_threshold: 20,
   http_client: Belfrage.Clients.HTTPMock,
   lambda_client: Belfrage.Clients.LambdaMock,
@@ -24,14 +20,19 @@ config :belfrage,
   dial: Belfrage.Dials.ServerMock,
   dials_location: "test/support/resources/dials.json",
   authentication_client: Belfrage.Clients.AuthenticationMock,
-  flagpole: Belfrage.Authentication.FlagpoleMock,
   expiry_validator: Belfrage.Authentication.Validator.ExpiryMock,
   event: Belfrage.EventMock,
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html",
   mailbox_monitors: [],
-  monitor_api: Belfrage.MonitorStub
+  monitor_api: Belfrage.MonitorStub,
+
+  # Arbitrary long values so that the corresponding operations are never
+  # executed in tests
+  short_counter_reset_interval: 3_600_000,
+  long_counter_reset_interval: 3_600_000,
+  bbc_id_availability_poll_interval: 3_600_000
 
 config :cachex, :limit,
   size: 6,

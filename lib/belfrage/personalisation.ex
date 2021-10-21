@@ -1,11 +1,10 @@
 defmodule Belfrage.Personalisation do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
-  alias Belfrage.Authentication.SessionState
+  alias Belfrage.Authentication.{BBCID, SessionState}
 
   @route_spec_attrs %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
   @dial Application.get_env(:belfrage, :dial)
-  @idcta_flagpole Application.get_env(:belfrage, :flagpole)
 
   def transform_route_spec(spec) do
     if personalised_route_spec?(spec) do
@@ -24,8 +23,9 @@ defmodule Belfrage.Personalisation do
       SessionState.authenticated?(request)
   end
 
-  def enabled?() do
-    @dial.state(:personalisation) && @idcta_flagpole.state()
+  def enabled?(opts \\ []) do
+    bbc_id = Keyword.get(opts, :bbc_id, BBCID)
+    @dial.state(:personalisation) && bbc_id.available?()
   end
 
   defp production_environment() do

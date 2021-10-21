@@ -62,20 +62,16 @@ defmodule Belfrage.Test.PersonalisationHelper do
   end
 
   @doc """
-  Stubs the personalisation dial to be 'on' and authentication flagpole to be
-  green.
+  Stubs the personalisation dial to be 'on'.
   """
   def enable_personalisation() do
     stub_dial(:personalisation, "on")
-    stub_authentication_flagpole(true)
   end
 
   @doc """
-  Stubs the personalisation dial to be 'off' and authentication flagpole to be
-  red.
+  Stubs the personalisation dial to be 'off'.
   """
   def disable_personalisation() do
     stub_dial(:personalisation, "off")
-    stub_authentication_flagpole(false)
   end
 end

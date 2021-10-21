@@ -1,6 +1,8 @@
 defmodule Belfrage.Authentication.Supervisor do
   use Supervisor
 
+  alias Belfrage.Authentication
+
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
@@ -11,13 +13,17 @@ defmodule Belfrage.Authentication.Supervisor do
   end
 
   defp children(env: env) when env in [:test, :routes_test, :smoke_test] do
-    []
+    [
+      Authentication.BBCID,
+      Authentication.BBCID.AvailabilityPoller
+    ]
   end
 
   defp children(_env) do
     [
-      Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole
+      Authentication.BBCID,
+      Authentication.BBCID.AvailabilityPoller,
+      Authentication.Jwk
     ]
   end
 end

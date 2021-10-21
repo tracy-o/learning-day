@@ -57,7 +57,6 @@ config :belfrage,
   ccp_client: Belfrage.Clients.CCP,
   dial: Belfrage.Dials.LiveServer,
   authentication_client: Belfrage.Clients.Authentication,
-  flagpole: Belfrage.Authentication.Flagpole,
   expiry_validator: Belfrage.Authentication.Validator.Expiry,
   file_io: Belfrage.Helpers.FileIO,
   xray: Belfrage.Xray,
@@ -99,7 +98,8 @@ config :belfrage,
     "session_url" => "https://session.test.bbc.co.uk",
     "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config",
     "jwt_expiry_window" => 4200
-  }
+  },
+  bbc_id_availability_poll_interval: 10_000
 
 config :ex_aws,
   region: "eu-west-1",

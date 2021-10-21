@@ -9,4 +9,8 @@ config :belfrage,
   authentication_client: Belfrage.Clients.AuthenticationMock,
   monitor_api: Belfrage.MonitorMock,
   production_environment: "test",
-  dial: Belfrage.Dials.ServerMock
+  dial: Belfrage.Dials.ServerMock,
+
+  # Arbitrary long values so that the corresponding operations are never
+  # executed in tests
+  bbc_id_availability_poll_interval: 3_600_000

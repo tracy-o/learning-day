@@ -130,23 +130,28 @@ next fetch is performed, where Belfrage is unable to successfully verify newly
 signed in users. A manual process exists where the keys can be updated manually
 on each instance should this be required.
 
-### IDCTA flagpole
+### BBC ID availability
 
-A periodic request is made to the IDCTA config which contains the BBC ID
-flagpole status. Belfrage looks for the `id-availability` key for the values
-`GREEN` or `RED` applying the fallback of `GREEN` should there be an issue
-retrieving the config. If the flagpole is red, personalisation is disabled.
+Belfrage periodically checks the status of BBC ID services to determine if
+personalisation should be enabled or not. If BBC ID services are unavailable or
+degraded, personalisation is turned off.
 
-The config is retrieved from the API at
-https://idcta.api.bbc.co.uk/idcta/config every 10 seconds currently and stored
-in-memory. The config flagpole state is available for continuous polling by
-other personalisation components, e.g. `Belfrage.Personalisation`.
+The status of BBC ID services (aka [BBC ID
+flagpole](https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=135467558))
+is retrieved from the [IDCTA config
+endpoint](https://confluence.dev.bbc.co.uk/display/BBCAccount/FE+-+BBC+IDCTA+config).
+The status can be either `GREEN` ('available') or `RED` ('unavailable').
+
+The default assumption is that BBC ID services are available. Belfrage polls
+the status every 10 seconds, and stores it in a process called
+`Belfrage.Authentication.BBCID`. The status can be checked by calling
+`Belfrage.Authentication.BBCID.available?/0` function.
 
 ## Personalised requests to upstream services
 
 Belfrage considers a request personalised if:
 
-* Personalisation is enabled (dial is on, IDCTA flagpole is green).
+* Personalisation is enabled (dial is on, BBC ID is available).
 * Requested route is personalised in the current environment.
 * User is authenticated.
 * User's session is valid.
