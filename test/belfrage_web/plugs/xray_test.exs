@@ -5,26 +5,12 @@ defmodule BelfrageWeb.Plugs.XRayTest do
 
   alias BelfrageWeb.Plugs
 
-  test "creates a new trace" do
-    Belfrage.XrayMock
-    |> expect(:new_trace, fn ->
-      Belfrage.XrayStub.new_trace()
-    end)
-
-    conn(:get, "/")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
-  end
-
   test "starts tracing" do
     Belfrage.XrayMock
     |> expect(
       :start_tracing,
-      fn trace = %AwsExRay.Trace{
-           root: "1-5dd274e2-00644696c03ec16a784a2e43"
-         },
-         "Belfrage" ->
-        Belfrage.XrayStub.start_tracing(trace, "Belfrage")
+      fn "Belfrage" ->
+        Belfrage.XrayStub.start_tracing("Belfrage")
       end
     )
 
@@ -137,7 +123,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
 
   test "skips status route" do
     Belfrage.XrayMock
-    |> expect(:new_trace, 0, fn ->
+    |> expect(:start_tracing, 0, fn _app_name ->
       raise "Should not be called"
     end)
 

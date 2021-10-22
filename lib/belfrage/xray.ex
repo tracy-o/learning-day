@@ -4,9 +4,8 @@ defmodule Belfrage.Xray do
   @type app_name :: String.t()
   @type segment_name :: String.t()
 
-  @callback new_trace() :: trace
   @callback sampled?(segment) :: boolean()
-  @callback start_tracing(trace, app_name) :: segment
+  @callback start_tracing(app_name) :: segment
   @callback finish_tracing(segment) :: any()
   @callback start_subsegment(String.t()) :: {:ok, segment} | {:error, String.t()}
   @callback finish_subsegment(segment) :: any()
@@ -19,18 +18,52 @@ defmodule Belfrage.Xray do
               status: pos_integer()
             }) :: segment
 
-  @callback subsegment_with_struct_annotations(segment_name, Belfrage.Struct.t(), (-> any)) :: any()
+  @callback subsegment_with_struct_annotations(segment_name, Belfrage.Struct.t(), (() -> any)) :: any()
 
   alias AwsExRay.Record.{HTTPResponse, HTTPRequest}
 
-  defdelegate new_trace, to: AwsExRay.Trace, as: :new
   defdelegate sampled?(segment), to: AwsExRay.Segment, as: :sampled?
-  defdelegate start_tracing(trace, app_name), to: AwsExRay, as: :start_tracing
-  defdelegate finish_tracing(segment), to: AwsExRay, as: :finish_tracing
-  defdelegate start_subsegment(segment), to: AwsExRay, as: :start_subsegment
-  defdelegate finish_subsegment(segment), to: AwsExRay, as: :finish_subsegment
-  defdelegate record_subsegment(name, annotations, opts, func), to: AwsExRay, as: :subsegment
   defdelegate add_annotations(segment, map), to: AwsExRay.Segment, as: :add_annotations
+
+  def start_tracing(app_name) do
+    try do
+      {:ok, AwsExRay.start_tracing(app_name)}
+    catch
+      :error, reason ->
+        Belfrage.Event.record(:log, :error, inspect(reason))
+        {:error, reason}
+    end
+  end
+
+  def finish_tracing(segment) do
+    try do
+      AwsExRay.finish_tracing(segment)
+    catch
+      :error, reason ->
+        Belfrage.Event.record(:log, :error, inspect(reason))
+        :ok
+    end
+  end
+
+  def start_subsegment(name, opts \\ []) do
+    try do
+      AwsExRay.start_subsegment(name, opts)
+    catch
+      :error, reason ->
+        Belfrage.Event.record(:log, :error, inspect(reason))
+        {:error, reason}
+    end
+  end
+
+  def finish_subsegment(subsegment) do
+    try do
+      AwsExRay.finish_subsegment(subsegment)
+    catch
+      :error, reason ->
+        Belfrage.Event.record(:log, :error, inspect(reason))
+        :ok
+    end
+  end
 
   def set_http_request(segment, %{method: method, path: path}) do
     segment
@@ -56,13 +89,19 @@ defmodule Belfrage.Xray do
 
   def subsegment_with_struct_annotations(subsegment_name, struct = %Belfrage.Struct{}, func) do
     opts = [namespace: :none]
-    record_subsegment(subsegment_name, %{
-      "owner" => struct.private.owner,
-      "loop_id" => struct.private.loop_id,
-      "preview_mode" => struct.private.preview_mode,
-      "production_environment" => struct.private.production_environment,
-      "runbook" => struct.private.runbook
-    }, opts, fn _trace_value -> func.() end)
+
+    AwsExRay.subsegment(
+      subsegment_name,
+      %{
+        "owner" => struct.private.owner,
+        "loop_id" => struct.private.loop_id,
+        "preview_mode" => struct.private.preview_mode,
+        "production_environment" => struct.private.production_environment,
+        "runbook" => struct.private.runbook
+      },
+      opts,
+      fn _trace_value -> func.() end
+    )
   end
 
   defmacro trace_subsegment(segment_name, do: yield) do
