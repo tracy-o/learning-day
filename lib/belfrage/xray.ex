@@ -45,9 +45,9 @@ defmodule Belfrage.Xray do
     end
   end
 
-  def start_subsegment(name, opts \\ []) do
+  def start_subsegment(name) do
     try do
-      AwsExRay.start_subsegment(name, opts)
+      AwsExRay.start_subsegment(name)
     catch
       :error, reason ->
         Belfrage.Event.record(:log, :error, inspect(reason))
