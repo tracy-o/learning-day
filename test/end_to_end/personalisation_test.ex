@@ -155,8 +155,8 @@ defmodule EndToEnd.PersonalisationTest do
       refute headers[:authorization]
       refute headers[:"x-authentication-provider"]
       refute headers[:"pers-env"]
-      refute headers[:"ctx-age-bracket"]
-      refute headers[:"ctx-allow-personalisation"]
+      refute headers[:"ctx-pii-allow-personalisation"]
+      refute headers[:"ctx-pii-age-bracket"]
     end)
   end
 
@@ -165,8 +165,6 @@ defmodule EndToEnd.PersonalisationTest do
       assert headers[:authorization] == "Bearer #{token}"
       assert headers[:"x-authentication-provider"]
       assert headers[:"pers-env"]
-      assert headers[:"ctx-allow-personalisation"] == "true"
-      assert headers[:"ctx-age-bracket"]
       assert headers[:"ctx-pii-allow-personalisation"] == "true"
       assert headers[:"ctx-pii-age-bracket"]
     end)

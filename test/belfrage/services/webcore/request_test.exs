@@ -107,8 +107,6 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                authorization: "Bearer a-valid-session-token",
                "x-authentication-provider": "idv5",
                "pers-env": "int",
-               "ctx-age-bracket": "o18",
-               "ctx-allow-personalisation": "true",
                "ctx-pii-age-bracket": "o18",
                "ctx-pii-allow-personalisation": "true"
              },

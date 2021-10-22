@@ -48,8 +48,6 @@ defmodule Belfrage.Services.Webcore.Request do
     case user_attributes do
       %{age_bracket: age_bracket, allow_personalisation: allow_personalisation} ->
         headers
-        |> Map.put(:"ctx-age-bracket", age_bracket)
-        |> Map.put(:"ctx-allow-personalisation", to_string(allow_personalisation))
         |> Map.put(:"ctx-pii-age-bracket", age_bracket)
         |> Map.put(:"ctx-pii-allow-personalisation", to_string(allow_personalisation))
 
