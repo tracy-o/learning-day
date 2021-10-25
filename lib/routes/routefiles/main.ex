@@ -129,6 +129,13 @@ defroutefile "Main" do
   redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
   redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
 
+  redirect("/news/0", to: "/news", status: 302)
+  redirect("/news/2/hi", to: "/news", status: 302)
+  redirect("/news/mobile", to: "/news", status: 302)
+  redirect("/news/popular/read", to: "/news", status: 302)
+
+  redirect("/news/magazine", to: "/news/stories", status: 302)
+
   redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
   redirect("/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
   redirect("/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
@@ -284,6 +291,110 @@ defroutefile "Main" do
   handle "/news/articles/:optimo_id", using: "StorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+
+  # News indexes
+  handle "/news/also_in_the_news", using: "News", examples: ["/news/also_in_the_news"]
+  handle "/news/business", using: "News", examples: ["/news/business"]
+  handle "/news/components", using: "News", examples: ["/news/components"]
+  handle "/news/coronavirus", using: "News", examples: ["/news/coronavirus"]
+  handle "/news/disability", using: "News", examples: ["/news/disability"]
+  handle "/news/education", using: "News", examples: ["/news/education"]
+  handle "/news/england", using: "News", examples: ["/news/england"]
+  handle "/news/entertainment_and_arts", using: "News", examples: ["/news/entertainment_and_arts"]
+  handle "/news/explainers", using: "News", examples: ["/news/explainers"]
+  handle "/news/front_page", using: "News", examples: ["/news/front_page"]
+  handle "/news/front-page-service-worker.js", using: "News", examples: ["/news/front-page-service-worker.js"]
+  handle "/news/have_your_say", using: "News", examples: ["/news/have_your_say"]
+  handle "/news/health", using: "News", examples: ["/news/health"]
+  handle "/news/in_pictures", using: "News", examples: ["/news/in_pictures"]
+  handle "/news/localnews", using: "News", examples: ["/news/localnews"]
+  handle "/news/newsbeat", using: "News", examples: ["/news/newsbeat"]
+  handle "/news/northern_ireland", using: "News", examples: ["/news/northern_ireland"]
+  handle "/news/paradisepapers", using: "News", examples: ["/news/paradisepapers"]
+  handle "/news/politics", using: "News", examples: ["/news/politics"]
+  handle "/news/reality_check", using: "News", examples: ["/news/reality_check"]
+  handle "/news/science_and_environment", using: "News", examples: ["/news/science_and_environment"]
+  handle "/news/scotland", using: "News", examples: ["/news/scotland"]
+  handle "/news/stories", using: "News", examples: ["/news/stories"]
+  handle "/news/technology", using: "News", examples: ["/news/technology"]
+  handle "/news/the_reporters", using: "News", examples: ["/news/the_reporters"]
+  handle "/news/uk", using: "News", examples: ["/news/uk"]
+  handle "/news/wales", using: "News", examples: ["/news/wales"]
+  handle "/news/world", using: "News", examples: ["/news/world"]
+  handle "/news/world_radio_and_tv", using: "News", examples: ["/news/world_radio_and_tv"]
+
+  # News feature indexes (FIX assets)
+  handle "/news/business-11428889", using: "News", examples: ["/news/business-11428889"]
+  handle "/news/business-12686570", using: "News", examples: ["/news/business-12686570"]
+  handle "/news/business-15521824", using: "News", examples: ["/news/business-15521824"]
+  handle "/news/business-22434141", using: "News", examples: ["/news/business-22434141"]
+  handle "/news/business-22449886", using: "News", examples: ["/news/business-22449886"]
+  handle "/news/business-33712313", using: "News", examples: ["/news/business-33712313"]
+  handle "/news/business-38507481", using: "News", examples: ["/news/business-38507481"]
+  handle "/news/business-41188875", using: "News", examples: ["/news/business-41188875"]
+  handle "/news/business-45489065", using: "News", examples: ["/news/business-45489065"]
+  handle "/news/business-46985441", using: "News", examples: ["/news/business-46985441"]
+  handle "/news/business-46985442", using: "News", examples: ["/news/business-46985442"]
+  handle "/news/education-46131593", using: "News", examples: ["/news/education-46131593"]
+  handle "/news/uk-england-47486169", using: "News", examples: ["/news/uk-england-47486169"]
+  handle "/news/science-environment-56837908", using: "News", examples: ["/news/science-environment-56837908"]
+  handle "/news/technology-22774341", using: "News", examples: ["/news/technology-22774341"]
+  handle "/news/uk-55220521", using: "News", examples: ["/news/uk-55220521"]
+  handle "/news/uk-northern-ireland-38323577", using: "News", examples: ["/news/uk-northern-ireland-38323577"]
+  handle "/news/uk-northern-ireland-55401938", using: "News", examples: ["/news/uk-northern-ireland-55401938"]
+  handle "/news/uk-politics-48448557", using: "News", examples: ["/news/uk-politics-48448557"]
+  handle "/news/world-43160365", using: "News", examples: ["/news/world-43160365"]
+  handle "/news/world-48623037", using: "News", examples: ["/news/world-48623037"]
+  handle "/news/world-middle-east-48433977", using: "News", examples: ["/news/world-middle-east-48433977"]
+  handle "/news/world-us-canada-15949569", using: "News", examples: ["/news/world-us-canada-15949569"]
+
+  # News archive assets
+  handle "/news/10284448/ticker.sjson", using: "News", examples: ["/news/10284448/ticker.sjson"]
+  handle "/news/1/*_any", using: "News", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
+  handle "/news/2/*_any", using: "News", examples: ["/news/2/text_only.stm"]
+  handle "/news/sport1/*_any", using: "News", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+
+  # News section matchers
+  handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
+  handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
+  handle "/news/bigscreen/*_any", using: "News", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
+  handle "/news/blogs/*_any", using: "News", examples: ["/news/blogs/the_papers"]
+  handle "/news/business/*_any", using: "News", examples: ["/news/business/companies"]
+  handle "/news/correspondents/*_any", using: "News", examples: ["/news/correspondents/philcoomes"]
+  handle "/news/england/*_any", using: "News", examples: ["/news/england/regions"]
+  handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
+  handle "/news/events/*_any", using: "News", examples: ["/news/events/scotland-decides/results"]
+  handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
+  handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
+  handle "/news/localnewsdata/*_any", using: "News", examples: ["/news/localnewsdata/promoted-content/2644688/0"]
+  handle "/news/local_news_slice/*_any", using: "News", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
+  handle "/news/northern_ireland/*_any", using: "News", examples: ["/news/northern_ireland/northern_ireland_politics"]
+  handle "/news/politics/*_any", using: "News", examples: ["/news/politics/eu_referendum/results"]
+  handle "/news/resources/*_any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
+  handle "/news/rss/*_any", using: "News", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
+  handle "/news/science-environment/*_any", using: "News", examples: ["/news/science-environment/18552512"]
+  handle "/news/scotland/*_any", using: "News", examples: ["/news/scotland/glasgow_and_west"]
+  handle "/news/slides/*_any", using: "News", examples: ["/news/slides/dress/3/yes-you-can-go-to-the-ball"]
+  handle "/news/special/*_any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
+  handle "/news/technology/*_any", using: "News", examples: ["/news/technology/31153361"]
+  handle "/news/wales/*_any", using: "News", examples: ["/news/wales/south_east_wales"]
+  handle "/news/world/*_any", using: "News", examples: ["/news/world/europe"]
+  handle "/news/world_radio_and_tv/*_any", using: "News", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
+
+  # 404 matchers
+  handle "/news/favicon.ico", using: "News", examples: [] do
+    return_404 if: true
+  end
+
+  handle "/news/av/favicon.ico", using: "News", examples: [] do
+    return_404 if: true
+  end
+
+  handle "/news/:id.amp", using: "News", examples: ["/news/business-58847275.amp"]
+  handle "/news/:id.json", using: "News", examples: ["/news/business-58847275.json"]
+
+  handle "/news/rss.xml", using: "News", examples: ["/news/rss.xml"]
+  handle "/news/:id/rss.xml", using: "News", examples: ["/news/uk/rss.xml"]
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
