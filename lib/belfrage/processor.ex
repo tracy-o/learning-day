@@ -37,7 +37,9 @@ defmodule Belfrage.Processor do
   end
 
   def personalisation(struct = %Struct{}) do
-    Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
+    Metrics.duration(:check_if_personalised_request, fn ->
+      Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
+    end)
   end
 
   def allowlists(struct) do

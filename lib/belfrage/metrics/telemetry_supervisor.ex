@@ -74,6 +74,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       process_request_headers
       set_request_loop_data
       filter_request_data
+      check_if_personalised_request
       generate_request_hash
       fetch_early_response_from_cache
       request_pipeline
