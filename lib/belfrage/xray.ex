@@ -5,10 +5,10 @@ defmodule Belfrage.Xray do
   @type segment_name :: String.t()
 
   @callback sampled?(segment) :: boolean()
-  @callback start_tracing(app_name) :: segment
-  @callback finish_tracing(segment) :: any()
+  @callback start_tracing(app_name) :: {:ok, segment} | {:error, String.t()}
+  @callback finish_tracing(segment) :: :ok
   @callback start_subsegment(String.t()) :: {:ok, segment} | {:error, String.t()}
-  @callback finish_subsegment(segment) :: any()
+  @callback finish_subsegment(segment) :: :ok
   @callback add_annotations(segment, map) :: segment
   @callback set_http_request(segment, %{
               method: String.t(),
