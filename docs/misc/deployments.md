@@ -12,8 +12,15 @@ Deployments give us a method to move what has been tested on our test environmen
 
 4. Whilst each stack deployment is going through you want to keep your eye on a few places to ensure nothing out of the ordinary is occuring:   
     a. [Grafana](https://grafana.news.tools.bbc.co.uk/d/cZYVwjIWz/belfrage-dashboards?orgId=1) Any metric which looks to spike or severly drop and continue to do so after a significant time may be cause for concern.   
-    b. Specific endpoints ie: https://cedric.belfrage.api.bbc.co.uk/ can act as a good 'smoke test' to your deployments.   
+    b. Specific endpoints ie: https://cedric.belfrage.api.bbc.co.uk/ can be useful to test specific paths for diffrent stacks such as world service routes for the Sally stack, double checking you are actually hitting the new instances not the old ones.    
     c. Log output on specific instances after [sshing in](https://cosmos.tools.bbc.co.uk/services/bruce-belfrage/test/instances), using the command `cat /var/log/component/app.log` may show messages which can give you an insight on how the instance is doing.   
     d. The deployment terminal may also provide messages which can show errors.
 
 5. Once each of the stacks has been completed, put a final message on the same thread you have been using mentioning that the deployment is complete. Always good to keep an eye out on the previously mentioned data sources just to ensure no issues.
+
+## If something goes wrong
+If you believe an error has occured with the deployment and belfrage is acting in an unexpected way, you will need to go through these steps:
+
+1. Notify the thread that you used previously that you will be performing a roll back
+2. On cosmos, go through each stack and promote the last stable build which was already on live, from test to live. This rolls back the application to before the deployment.
+3. Attempt to debug and uncover the source of the issue before re-trying.
