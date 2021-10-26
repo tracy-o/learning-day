@@ -42,7 +42,7 @@ In case of MISS, it will then try to fetch this page from the distributed cache.
 
 Fallback TTL is currently configured as 6h.
 
-![Fallback Mechanism](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_fallback_mechanism.png "Fallback Mechanism")
+![Fallback Mechanism](../img/belfrage_fallback_mechanism.png)
 
 # Caching & Circuit Breaker
 
@@ -62,15 +62,15 @@ Cache in Belfrage can be set per-route in active and passive mode.
 
 This mode will allow serving cached content for a specified TTL. During this fraction of time, cached content will be served if available. Once the content gets stale, a new request to the origin will be made which will ultimately update the cache. Even if stale pages will be kept in the cache and used as a fallback mechanism in case of faults. The max fallback TTL is currently 6h.
 
-![Active Mode](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_active_cache_hit.png "Active Mode HIT")
-![Active Mode](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_active_cache_miss.png "Active Mode MISS")
+![Active Mode](../img/belfrage_active_cache_hit.png "Active Mode HIT")
+![Active Mode](../img/belfrage_active_cache_miss.png "Active Mode MISS")
 
 ### Passive Mode
 
 A route configured in passive mode will not serve any cached content but will still store successful non-personalised responses as a fallback.
 
-![Passive Mode](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_passive_cache_200.png "Passive Mode 200")
-![Passive Mode](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_passive_cache_500.png "Passive Mode 500")
+![Passive Mode](../img/belfrage_passive_cache_200.png "Passive Mode 200")
+![Passive Mode](../img/belfrage_passive_cache_500.png "Passive Mode 500")
 
 ## Metrics
 
@@ -86,7 +86,7 @@ The following diagram shows the flow in Belfrage when requesting fresh cache con
 
 ![belfrage-cache](../img/belfrage-cache-fresh.svg)
 
-[Diagram source](../source/belfrage-cache-fresh.drawio)
+[Diagram source](../img/source/belfrage-cache-fresh.drawio)
 
 ### Caching in depth
 
@@ -97,4 +97,4 @@ The following diagram shows the detailed flow of cache content for fresh and sta
 
 ![belfrage-cache](../img/belfrage-cache.svg)
 
-[Diagram source](../source/belfrage-cache.drawio)
+[Diagram source](../img/source/belfrage-cache.drawio)

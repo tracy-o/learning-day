@@ -27,7 +27,7 @@ Belfrage --> aws_ex_ray --> X-Ray daemon --> X-Ray API
 
 ## Where is X-Ray Used in Belfrage?
 
-![](img/xray-trace-diagram.png)
+![](../img/xray-trace-diagram.png)
 
 credit: Owen Tourlamain
 

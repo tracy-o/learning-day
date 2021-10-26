@@ -23,7 +23,7 @@ D = Discoverability, scored out of 10
 Total DREAD score is sum / 5.
 ```
 
-![c4-level-1](img/architecture/c4-level-1.svg)
+![c4-level-1](../img/architecture/c4-level-1.svg)
 
 ## Threat targets
 
