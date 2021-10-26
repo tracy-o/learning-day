@@ -519,7 +519,9 @@ defroutefile "Main" do
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
+  redirect "/arabic/institutional/2011/01/000000_frequencies_radio ", to: "/arabic/tv-and-radio-57895092", status: 301
 
+   
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
   handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic"]
@@ -642,6 +644,8 @@ defroutefile "Main" do
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
 
   redirect "/russian/mobile/*any", to: "/russian", status: 301
+  redirect "/russia", to: "/russian", status: 301
+  
 
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
