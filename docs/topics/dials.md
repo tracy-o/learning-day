@@ -3,6 +3,7 @@ Belfrage dials architecture and how-to.
 ## Architecture
 Belfrage relies on Cosmos dials to provide near real-time controls for caching TTL, logging verbosity (log-level) and circuit breaker that throttles requests to malfunctioning origins. Dial values are imported into Belfrage runtime through supervised [GenServer](https://hexdocs.pm/elixir/GenServer.html) architecture (below) which is based on two key elements: supervised GenServer dial processes and event handling.
 
+![https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_dials_architecture.png]
 ### Supervised GenServer dial processes
 Each dial has a runtime state that is based on a discrete value in the JSON file (`dials.json`) serialised by Cosmos dials service. A fault-tolerant architecture necessitates decoupling of dials values in the file from their runtime usage because the JSON file is network-dependent and liable to corruption. GenServer provides a safe way to extract, transform and store a dial state in-memory efficiently. Dial read performance is also crucial, for example the TTL (multiplier) dial is read by [`CacheDirective`](https://github.com/bbc/belfrage/blob/1c6feb2d6d5d6501e4b90e2004e76357b2bef2f0/lib/belfrage/response_transformers/cache_directive.ex#L17) for every request.
 
@@ -77,4 +78,5 @@ For example: `"logging_level":"debug"`
 @dial.state(:logging_level)
 
 ```
+We like to use this method of assigning the environment variable to an attribute to ensure consistency as well as using this method in tests means we are able to mock the dials server cleanly.
       
