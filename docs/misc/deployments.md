@@ -4,7 +4,7 @@
 Deployments give us a method to move what has been tested on our test environment to our live environment.
 
 ## How to complete a deployment 
-1. View the diff between the test and live environment to view what is to be deployed, the easiest way to do this is to use the Moz app on the #belfrage slack channel with `moz diff belfrage' (this compares the git hashes for live and test which can be found on [cosmos](https://cosmos.tools.bbc.co.uk/))
+1. View the diff between the test and live environment to view what is to be deployed, the easiest way to do this is to use the Moz app on the #belfrage slack channel with `moz diff belfrage` (this compares the git hashes for live and test which can be found on [cosmos](https://cosmos.tools.bbc.co.uk/))
 
 2. Use the diff to post a message on #belfrage and #help-belfrage with a summary of the changes, this allows anyone who has an interest in the deployment to know their changes are soon to go live or for them to object if they do not wish changes to go live.
 
