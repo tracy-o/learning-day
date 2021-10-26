@@ -82,6 +82,28 @@ defmodule BelfrageWeb.Plugs.XRayTest do
     callback.(conn)
   end
 
+  describe "if start tracing fails" do
+    setup do
+      Belfrage.XrayMock
+      |> expect(:start_tracing, fn _ -> {:error, "some error"} end)
+
+      conn =
+        conn(:get, "/")
+        |> Plugs.RequestId.call([])
+        |> Plugs.XRay.call([])
+
+      %{conn: conn}
+    end
+
+    test "xray trace id isn't set", %{conn: conn} do
+      refute conn.private |> Map.has_key?(:xray_trace_id)
+    end
+
+    test "callback isn't set", %{conn: conn} do
+      assert conn.before_send == []
+    end
+  end
+
   describe "adds response information in plug callback" do
     test "when content-length response header is given" do
       Belfrage.XrayMock
