@@ -16,7 +16,7 @@ Deployments give us a method to move what has been tested on our test environmen
     c. Log output on specific instances after [sshing in](https://cosmos.tools.bbc.co.uk/services/bruce-belfrage/test/instances), using the command `cat /var/log/component/app.log` may show messages which can give you an insight on how the instance is doing.   
     d. The deployment terminal may also provide messages which can show errors.
 
-5. Once each of the stacks has been completed, put a final message on the same thread you have been using mentioning that the deployment is complete. Always good to keep an eye out on the previously mentioned data sources just to ensure no issues.
+5. Once each of the stacks has been completed, put a final message on the same thread you have been using mentioning that the deployment is complete. It is also a good idea to recheck the Grafana graphs and direct endpoints to ensure no problems have occured to the previously deployed stacks as sometimes it can take time for issues to arise.
 
 ## If something goes wrong
 If you believe an error has occured with the deployment and belfrage is acting in an unexpected way, you will need to go through these steps:
