@@ -1,6 +1,8 @@
 defmodule Belfrage.Metrics.Supervisor do
   use Supervisor, restart: :temporary
 
+  alias Belfrage.Metrics
+
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
@@ -12,7 +14,7 @@ defmodule Belfrage.Metrics.Supervisor do
 
   defp children(env: :test) do
     [
-      Belfrage.Metrics.MailboxMonitor
+      Metrics.ProcessMessageQueueLength.Supervisor
     ]
   end
 
@@ -22,19 +24,19 @@ defmodule Belfrage.Metrics.Supervisor do
 
   defp children(_env) do
     [
-      Belfrage.Metrics.MailboxMonitor,
-      Belfrage.Metrics.TelemetrySupervisor,
-      Belfrage.Metrics.LatencyMonitor,
+      Metrics.TelemetrySupervisor,
+      Metrics.LatencyMonitor,
       {:telemetry_poller,
        [
          measurements: [
-           {Belfrage.Metrics.Poolboy, :track_machine_gun_pools, []},
-           {Belfrage.Metrics.Poolboy, :track, [:aws_ex_store_pool, "AwsExRayProcessMonitor"]},
-           {Belfrage.Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]}
+           {Metrics.Poolboy, :track_machine_gun_pools, []},
+           {Metrics.Poolboy, :track, [:aws_ex_store_pool, "AwsExRayProcessMonitor"]},
+           {Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]}
          ],
          period: :timer.seconds(5),
          name: :belfrage_telemetry_poller
-       ]}
+       ]},
+      Metrics.ProcessMessageQueueLength.Supervisor
     ]
   end
 end

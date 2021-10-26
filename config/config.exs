@@ -65,18 +65,6 @@ config :belfrage,
   stack_name: "belfrage-stack",
   stack_id: "local",
   redirect_statuses: [301, 302, 307, 308],
-  mailbox_monitors: [
-    :ttl_multiplier,
-    :logging_level,
-    :cache,
-    :cache_janitor,
-    :cache_locksmith,
-    Belfrage.Metrics.LatencyMonitor,
-    {:loop, "NewsArticlePage"},
-    {:loop, "WorldServiceMundo"},
-    {:loop, "FablData"}
-  ],
-  mailbox_monitor_refresh_rate: 30_000,
   dial_handlers: %{
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
     "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier,
