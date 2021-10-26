@@ -14,7 +14,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   @availability_states %{"GREEN" => true, "RED" => false}
 
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, Keyword.get(opts, :interval, @interval))
+    GenServer.start_link(__MODULE__, Keyword.get(opts, :interval, @interval), name: Keyword.get(opts, :name, __MODULE__))
   end
 
   @impl true

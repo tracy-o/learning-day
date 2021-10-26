@@ -12,7 +12,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
     assert BBCID.available?()
 
     stub_idcta_config({:ok, %{"id-availability" => "RED"}})
-    start_supervised!({AvailabilityPoller, interval: 0})
+    start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
     wait_until(fn -> not BBCID.available?() end)
 
     stub_idcta_config({:ok, %{"id-availability" => "GREEN"}})
