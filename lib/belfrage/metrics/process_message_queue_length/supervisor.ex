@@ -9,7 +9,9 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
     :cache,
     :cache_janitor,
     :cache_locksmith,
-    Belfrage.Metrics.LatencyMonitor
+    Belfrage.Metrics.LatencyMonitor,
+    Belfrage.Authentication.BBCID,
+    Belfrage.Authentication.BBCID.AvailabilityPoller
   ]
 
   @loops ~w(
