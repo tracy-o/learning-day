@@ -41,7 +41,7 @@ So the unit of action for Belfrage, the one which keeps track of the state of th
 
 ### How to add a route
 1. **go** to the `lib/routes/routefiles` dir
-2. **add a new matcher** in one of the routefiles depending on which environment you want your route to be available, more info [here](https://github.com/bbc/belfrage/blob/7b66fba6b0efa8c27e896aa1c4d9432a98fbb32f/lib/belfrage_web/routefile_pointer.ex) like:
+2. **add a new matcher** in `lib/routes/routfiles/main.ex`, like:
 ```elixir
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"]
 ```
