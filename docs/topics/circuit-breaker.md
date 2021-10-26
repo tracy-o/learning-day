@@ -1,3 +1,5 @@
+# Circuit Breaker
+
 The circuit breaker is designed to protect Belfrage, and up-stream services through periods of high latency or elevated error rates.
 
 ### What triggers the circuit breaker?
@@ -48,7 +50,7 @@ defmodule Routes.Specs.NewsArticlePage do
 end
 ```
 
-The value is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then for the remainder of that minute the circuit breaker will be triggered. [Details on erroneous responses](https://github.com/bbc/belfrage/wiki/Circuit-Breaker#what-triggers-the-circuit-breaker)
+The value is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then for the remainder of that minute the circuit breaker will be triggered.
 
 ***
 

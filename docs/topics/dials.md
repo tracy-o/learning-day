@@ -3,8 +3,7 @@ Belfrage dials architecture and how-to.
 ## Architecture
 Belfrage relies on Cosmos dials to provide near real-time controls for caching TTL, logging verbosity (log-level) and circuit breaker that throttles requests to malfunctioning origins. Dial values are imported into Belfrage runtime through supervised [GenServer](https://hexdocs.pm/elixir/GenServer.html) architecture (below) which is based on two key elements: supervised GenServer dial processes and event handling.
 
-[[https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_dials_architecture.png|alt=belfrage_dials_architecture]]
-
+![https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_dials_architecture.png]
 ### Supervised GenServer dial processes
 Each dial has a runtime state that is based on a discrete value in the JSON file (`dials.json`) serialised by Cosmos dials service. A fault-tolerant architecture necessitates decoupling of dials values in the file from their runtime usage because the JSON file is network-dependent and liable to corruption. GenServer provides a safe way to extract, transform and store a dial state in-memory efficiently. Dial read performance is also crucial, for example the TTL (multiplier) dial is read by [`CacheDirective`](https://github.com/bbc/belfrage/blob/1c6feb2d6d5d6501e4b90e2004e76357b2bef2f0/lib/belfrage/response_transformers/cache_directive.ex#L17) for every request.
 
@@ -45,18 +44,24 @@ These are the pending tests to further improve resiliency of Belfrage dials:
 
 1. Create and add the dial in [cosmos/dials.json](https://github.com/bbc/belfrage/blob/master/cosmos/dials.json) according to [Cosmos guideline](https://confluence.dev.bbc.co.uk/display/platform/Developing+with+Dials#DevelopingwithDials-3:WriteaDialSchema).
 
-2. Copy the updated [cosmos/dials.json](https://github.com/bbc/belfrage/blob/master/cosmos/dials.json) to [priv/static/dials.json](https://github.com/bbc/belfrage/blob/master/priv/static/dials.json). Until a better release mechanism is developed, this step is currently required to ensure dial defaults availability to safeguard dial GenServers startup. A unit test currently ensures both JSONs are identical.
 
-3. Create a dial module (and tests) in Belfrage by implementing the following functions in `Dial` behaviour:
+2. Create a dial module (and tests) in Belfrage by implementing the following functions in `Dial` behaviour:
     - `transform/1`: map all string values of the dial into a Belfrage data type, for example:
     
       ```
       def transform("true"), do: true
       def transform("false"), do: false
       ```
-    - `on_change/1` (optional): for any explicit action after dial state change, for example [changing logging level](https://github.com/bbc/belfrage/blob/1c6feb2d6d5d6501e4b90e2004e76357b2bef2f0/lib/belfrage/dials/logging_level.ex#L14).
+    - `on_change/1` (optional): for any explicit action after dial state change. 
+    
+    An example is [changing logging level dial](https://github.com/bbc/belfrage/blob/1c6feb2d6d5d6501e4b90e2004e76357b2bef2f0/lib/belfrage/dials/logging_level.ex#L14),
+    and [related tests](https://github.com/bbc/belfrage/blob/master/test/belfrage/dials/logging_level_test.exs)
 
-4. Add the dial module in Belfrage `dial_handler` configuration:
+3. Add the default state for the dial to the list in [test/support/resources/dials.json](https://github.com/bbc/belfrage/blob/5dc76af57732bc77a59d842cf805822d596839cd/test/support/resources/dials.json)
+For example: `"logging_level":"debug"`
+
+
+4. Add the dial mapping in Belfrage `dial_handler` configuration within confix.exs:
 
   ```
     dial_handlers: %{
@@ -66,5 +71,12 @@ These are the pending tests to further improve resiliency of Belfrage dials:
     }
   ```
   
-5. New dial is available to read in Belfrage via the `state(dial)` callback, where `dial` is the atomised version of the configured name, for example `Belfrage.Dial.state(:new_dial)`.
+5. New dial is available to read in Belfrage via the `state(dial)` callback. You can access the state of your dial by attaching the environment variable to an attribute, shown here:
+```
+@dial Application.get_env(:belfrage, :dial)
+
+@dial.state(:logging_level)
+
+```
+We like to use this method of assigning the environment variable to an attribute to ensure consistency as well as using this method in tests means we are able to mock the dials server cleanly.
       

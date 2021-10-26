@@ -34,7 +34,7 @@ personalisation:
 
 ![Personalisation in Belfrage](../img/belfrage-personalisation.svg)
 
-[Diagram source](../source/belfrage-personalisation.drawio)
+[Diagram source](../img/source/belfrage-personalisation.drawio)
 
 ## Personalisation dial
 
@@ -45,8 +45,7 @@ early responses and fallbacks to users.
 
 ## Personalised routes
 
-Please see this [wiki
-page](https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#personalising-a-route)
+Please see this [Routing](routing/routing.md)
 for info on how teams can enable personalisation for a route.
 
 Note that only requests to `*.bbc.co.uk` can be personalised currently.
@@ -105,7 +104,7 @@ Belfrage uses both these values to ensure a unique key is returned from the list
 ### BBC Account Keys
 
 The Account keys are provided by the BBC Account team (see
-[C4](docs/architecture.md#level-2-container-diagrams)). Upon deployment of
+[C4](../architecture/architecture.md#level-2-container-diagrams)). Upon deployment of
 Belfrage the keys are fetched and stored in memory. They are then periodically
 fetched to ensure they remain up to date.
 

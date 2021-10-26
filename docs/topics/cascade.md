@@ -62,7 +62,7 @@ origins before defining a route that uses the cascade.
 
 Processing a request that must be handled by the cascade works like this:
 
-![Cascade flow](img/cascade_flow.png)
+![Cascade flow](../img/cascade_flow.png)
 
 * `Belfrage.handle/1` receives a `Struct` with `private.loop_id` containing
   list of route specs that should be used by the cascade.
