@@ -19,7 +19,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     vm_metrics() ++
       cowboy_metrics() ++
       poolboy_metrics() ++
-      latency_metrics()
+      latency_metrics() ++
+      request_metrics()
   end
 
   defp vm_metrics() do
@@ -73,6 +74,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       process_request_headers
       set_request_loop_data
       filter_request_data
+      check_if_personalised_request
       generate_request_hash
       fetch_early_response_from_cache
       request_pipeline
@@ -96,5 +98,14 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       measurement: :duration,
       unit: {:native, :microsecond}
     )
+  end
+
+  defp request_metrics() do
+    Enum.map(~w(idcta_config jwk), fn name ->
+      summary("belfrage.request.#{name}.duration",
+        event_name: "belfrage.request.#{name}.stop",
+        unit: {:native, :millisecond}
+      )
+    end)
   end
 end
