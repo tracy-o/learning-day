@@ -111,4 +111,15 @@ defmodule Test.Support.Helper do
 
   def cdn_news_host("test"), do: "news-app.test.api.bbc.co.uk"
   def cdn_news_host("live"), do: "news-app.api.bbc.co.uk"
+
+  def wait_for(condition, tries \\ 100) do
+    unless condition.() do
+      if tries > 0 do
+        Process.sleep(1)
+        wait_for(condition, tries - 1)
+      else
+        ExUnit.Assertions.flunk("Function passed to `wait_for` never returned `true`")
+      end
+    end
+  end
 end

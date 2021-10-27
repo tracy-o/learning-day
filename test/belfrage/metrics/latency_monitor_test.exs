@@ -1,5 +1,6 @@
 defmodule Belfrage.Metrics.LatencyMonitorTest do
   use ExUnit.Case
+  import Test.Support.Helper, only: [wait_for: 1]
 
   alias Belfrage.Metrics.LatencyMonitor
 
@@ -149,10 +150,6 @@ defmodule Belfrage.Metrics.LatencyMonitorTest do
     test "removes requests without request_received timestamp" do
       LatencyMonitor.checkpoint("request", :origin_request_sent, System.monotonic_time(:millisecond))
       wait_for(fn -> LatencyMonitor.get_checkpoints("request") |> is_nil() end)
-    end
-
-    defp wait_for(condition) do
-      condition.() || wait_for(condition)
     end
   end
 

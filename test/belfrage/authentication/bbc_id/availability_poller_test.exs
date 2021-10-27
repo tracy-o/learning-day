@@ -3,6 +3,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
   # Belfrage.Authentication.BBCID which is a global resource
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [wait_for: 1]
 
   alias Belfrage.Authentication.BBCID
   alias Belfrage.Authentication.BBCID.AvailabilityPoller
@@ -13,10 +14,10 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
 
     stub_idcta_config({:ok, %{"id-availability" => "RED"}})
     start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
-    wait_until(fn -> not BBCID.available?() end)
+    wait_for(fn -> not BBCID.available?() end)
 
     stub_idcta_config({:ok, %{"id-availability" => "GREEN"}})
-    wait_until(fn -> BBCID.available?() end)
+    wait_for(fn -> BBCID.available?() end)
   end
 
   describe "get_availability/0" do
@@ -43,9 +44,5 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
 
   defp stub_idcta_config(config) do
     stub(AuthenticationClient, :get_idcta_config, fn -> config end)
-  end
-
-  defp wait_until(condition) do
-    condition.() || wait_until(condition)
   end
 end
