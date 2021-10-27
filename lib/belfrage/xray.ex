@@ -39,7 +39,7 @@ defmodule Belfrage.Xray do
 
   def finish_tracing(segment, xray \\ AwsExRay) do
     try do
-      xray.finish_tracing(segment)
+      :ok = xray.finish_tracing(segment)
     catch
       exception, reason ->
         reason = error_message(exception, reason, "finish_tracing/1")
@@ -51,7 +51,7 @@ defmodule Belfrage.Xray do
 
   def start_subsegment(name, xray \\ AwsExRay) do
     try do
-      xray.start_subsegment(name)
+      {:ok, _subsegment} = xray.start_subsegment(name)
     catch
       exception, reason ->
         reason = error_message(exception, reason, "start_subsegment/1")
@@ -63,7 +63,7 @@ defmodule Belfrage.Xray do
 
   def finish_subsegment(subsegment, xray \\ AwsExRay) do
     try do
-      xray.finish_subsegment(subsegment)
+      :ok = xray.finish_subsegment(subsegment)
     catch
       exception, reason ->
         reason = error_message(exception, reason, "finish_subsegment/1")
