@@ -6,12 +6,17 @@ ENVIRONMENT=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj
 cat > /etc/cloudwatch-agent-config.json <<EOF
 {
   "agent": {
-    "metrics_collection_interval": 60,
     "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
   },
   "metrics": {
     "namespace": "BBCApp/$COMPONENT_NAME",
     "metrics_collected": {
+      "statsd": {
+        "service_address": ":8125",
+        "metric_separator": ".",
+        "metrics_collection_interval": 1,
+        "metrics_aggregation_interval": 60
+      },
       "cpu": {
         "measurement": [
           "cpu_usage_idle",
