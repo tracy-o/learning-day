@@ -31,15 +31,17 @@ defmodule Belfrage.Metrics.Poolboy do
     )
   end
 
-  def track_pool_aggregates() do
-    pools = [:aws_ex_store_pool, :aws_ex_ray_client_pool] ++ http_client_pool_pids()
-
+  def track_pool_aggregates(pools \\ list_pools()) do
     max_saturation =
       pools
       |> Enum.map(&pool_saturation/1)
       |> Enum.max()
 
     Metrics.measurement([:poolboy, :pools], %{max_saturation: max_saturation}, %{})
+  end
+
+  def list_pools() do
+    [:aws_ex_store_pool, :aws_ex_ray_client_pool] ++ http_client_pool_pids()
   end
 
   defp http_client_pool_pids() do

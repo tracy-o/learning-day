@@ -1,7 +1,6 @@
 defmodule Belfrage.Metrics.PoolboyTest do
   use ExUnit.Case, async: true
   import Belfrage.Test.MetricsHelper
-  import Test.Support.Helper, only: [wait_for: 1]
 
   alias Belfrage.Metrics.Poolboy
 
@@ -80,54 +79,53 @@ defmodule Belfrage.Metrics.PoolboyTest do
   end
 
   describe "track_pool_aggregates/1" do
-    test "tracks aggregates of the relevant pools when they are started" do
-      http_pool_pid = start_machine_gun_pool("test-http-pool", 4)
+    test "tracks max saturation of the pools" do
+      pool1 = start_pool(size: 2, name: {:local, :test_poolboy_process1})
+      pool2 = start_pool(size: 2, name: {:local, :test_poolboy_process2})
 
-      store_monitor_pool_size = Application.get_env(:aws_ex_ray, :store_monitor_pool_size)
-      client_pool_size = Application.get_env(:aws_ex_ray, :client_pool_size)
-      update_aws_ex_ray_pool_sizes(client_pool_size: 2, store_monitor_pool_size: 2)
+      pools = [pool1, pool2]
 
       assert_metrics(
         [
           {[:poolboy, :pools], %{max_saturation: 0}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates() end
+        fn -> Poolboy.track_pool_aggregates(pools) end
       )
 
-      use_worker(http_pool_pid)
+      use_worker(pool1)
 
       assert_metrics(
         [
-          {[:poolboy, :pools], %{max_saturation: 25}, %{}}
+          {[:poolboy, :pools], %{max_saturation: 50}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates() end
+        fn -> Poolboy.track_pool_aggregates(pools) end
       )
 
-      use_worker(:aws_ex_ray_client_pool)
+      use_worker(pool2)
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0, saturation: 50},
-           %{pool_name: "AwsExRayUDPClient"}}
+          {[:poolboy, :pools], %{max_saturation: 50}, %{}}
         ],
-        fn -> Poolboy.track(:aws_ex_ray_client_pool, "AwsExRayUDPClient") end
+        fn -> Poolboy.track_pool_aggregates(pools) end
       )
 
-      use_worker(:aws_ex_store_pool)
-      use_worker(:aws_ex_store_pool)
+      use_worker(pool1)
 
       assert_metrics(
         [
           {[:poolboy, :pools], %{max_saturation: 100}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates() end
+        fn -> Poolboy.track_pool_aggregates(pools) end
       )
 
-      stop_machine_gun_pool(http_pool_pid)
+      use_worker(pool2)
 
-      update_aws_ex_ray_pool_sizes(
-        client_pool_size: client_pool_size,
-        store_monitor_pool_size: store_monitor_pool_size
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 100}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
       )
     end
   end
@@ -152,30 +150,5 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
   defp use_worker(pool_pid) do
     :poolboy.checkout(pool_pid)
-  end
-
-  defp update_aws_ex_ray_pool_sizes(sizes) do
-    Supervisor.stop(AwsExRay.Supervisor)
-    Application.put_env(:aws_ex_ray, :client_pool_size, sizes[:client_pool_size])
-    Application.put_env(:aws_ex_ray, :store_monitor_pool_size, sizes[:store_monitor_pool_size])
-
-    {:ok, _pid} =
-      Supervisor.start_link(
-        [
-          {AwsExRay.Client, []},
-          {AwsExRay.Store.MonitorSupervisor, []}
-        ],
-        strategy: :one_for_one,
-        name: AwsExRay.Supervisor
-      )
-
-    wait_for(fn -> all_supervisor_specs_active?(AwsExRay.Supervisor) end)
-  end
-
-  defp all_supervisor_specs_active?(supervisor) do
-    %{active: active, specs: specs, supervisors: _supervisors, workers: _workers} =
-      Supervisor.count_children(supervisor)
-
-    specs > 0 and active == specs
   end
 end
