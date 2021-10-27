@@ -1,7 +1,7 @@
 defmodule Belfrage.Loop do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec}
+  alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec, Metrics.Statix, Event}
 
   @fetch_loop_timeout Application.get_env(:belfrage, :fetch_loop_timeout)
 
@@ -14,7 +14,7 @@ defmodule Belfrage.Loop do
       GenServer.call(via_tuple(name), :state, timeout)
     catch
       :exit, value ->
-        Belfrage.Metrics.Statix.increment("loop.state.fetch.timeout")
+        Statix.increment("loop.state.fetch.timeout", 1, tags: Event.global_dimensions())
         Kernel.exit(value)
     end
   end

@@ -2,7 +2,7 @@ defmodule Belfrage.Clients.CCP do
   @moduledoc """
   The interface to the Belfrage Central Cache Processor (CCP)
   """
-  alias Belfrage.{Clients, Struct, Struct.Request}
+  alias Belfrage.{Clients, Struct, Struct.Request, Metrics.Statix, Event}
 
   @s3_not_found_response_code 403
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
@@ -32,22 +32,22 @@ defmodule Belfrage.Clients.CCP do
       )
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
-    Belfrage.Metrics.Statix.timing("service.S3.request.timing", timing)
+    Statix.timing("service.S3.request.timing", timing, tags: Event.global_dimensions())
 
     case ccp_response do
       {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
-        Belfrage.Metrics.Statix.increment("service.S3.response.200")
+        Statix.increment("service.S3.response.200", 1, tags: Event.global_dimensions())
         {:ok, cached_body |> :erlang.binary_to_term()}
 
       {:ok, %Clients.HTTP.Response{status_code: @s3_not_found_response_code}} ->
-        Belfrage.Metrics.Statix.increment("service.S3.response.not_found")
+        Statix.increment("service.S3.response.not_found", 1, tags: Event.global_dimensions())
         {:ok, :content_not_found}
 
       {:ok, response = %Clients.HTTP.Response{status_code: status_code}} ->
-        Belfrage.Metrics.Statix.increment("service.S3.response.#{status_code}")
-        Belfrage.Event.record(:metric, :increment, "ccp.unexpected_response")
+        Statix.increment("service.S3.response.#{status_code}", 1, tags: Event.global_dimensions())
+        Event.record(:metric, :increment, "ccp.unexpected_response")
 
-        Belfrage.Event.record(:log, :error, %{
+        Event.record(:log, :error, %{
           msg: "Received an unexpected response from S3.",
           response: response
         })
@@ -55,9 +55,9 @@ defmodule Belfrage.Clients.CCP do
         {:ok, :content_not_found}
 
       {:error, http_error} ->
-        Belfrage.Event.record(:metric, :increment, "ccp.fetch_error")
+        Event.record(:metric, :increment, "ccp.fetch_error")
 
-        Belfrage.Event.record(:log, :error, %{
+        Event.record(:log, :error, %{
           msg: "Failed to fetch from S3.",
           error: http_error
         })
