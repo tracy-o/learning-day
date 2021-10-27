@@ -47,23 +47,18 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp route_headers(%Struct{request: %Request{host: host}, private: private = %Private{}}) do
-    ignore_headers =
-      if dotcom?(host) or personalised?(private) do
-        ~w(cookie x-id-oidc-signedin)
-      else
-        ~w(cookie)
-      end
-
-    private.headers_allowlist -- ignore_headers
+  defp route_headers(struct = %Struct{private: private = %Private{}}) do
+    private.headers_allowlist
+    |> List.delete("cookie")
+    |> remove_signed_in_header(struct)
   end
 
-  defp dotcom?(host) do
-    String.ends_with?(host, "bbc.com")
-  end
-
-  defp personalised?(private) do
-    private.personalised_route && !Personalisation.enabled?()
+  defp remove_signed_in_header(headers, %Struct{request: request, private: private = %Private{}}) do
+    if private.personalised_route && !(Personalisation.applicable_request?(request) && Personalisation.enabled?()) do
+      List.delete(headers, "x-id-oidc-signedin")
+    else
+      headers
+    end
   end
 
   # TODO Remove duplication of headers - so commenting out for now

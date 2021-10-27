@@ -45,13 +45,12 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
   describe "allowed_headers" do
     test "varies on a provided allowed header, when cdn is false" do
-      struct = %Struct{request: %Request{host: "bbc.co.uk"}, private: %Private{headers_allowlist: ["one_header"]}}
+      struct = %Struct{private: %Private{headers_allowlist: ["one_header"]}}
       assert "one_header" in vary_headers(struct)
     end
 
     test "varies on provided allowed headers, when cdn is false" do
       struct = %Struct{
-        request: %Request{host: "bbc.co.uk"},
         private: %Private{headers_allowlist: ["one_header", "another_header", "more_header"]}
       }
 
@@ -69,7 +68,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
     end
 
     test "never vary on cookie" do
-      struct = %Struct{request: %Request{host: "bbc.co.uk"}, private: %Private{headers_allowlist: ["cookie"]}}
+      struct = %Struct{private: %Private{headers_allowlist: ["cookie"]}}
       refute "cookie" in vary_headers(struct)
     end
 
@@ -111,13 +110,14 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       refute "x-id-oidc-signedin" in vary_headers(struct)
     end
 
-    test "don't vary requests if from .com" do
+    test "don't vary requests to personalised routes on x-id-oidc-signedin if host is bbc.com" do
       struct = %Struct{
-        private: %Private{
-          headers_allowlist: ["x-id-oidc-signedin"]
-        },
         request: %Request{
           host: "bbc.com"
+        },
+        private: %Private{
+          headers_allowlist: ["x-id-oidc-signedin"],
+          personalised_route: true
         }
       }
 
