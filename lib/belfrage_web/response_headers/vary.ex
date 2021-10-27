@@ -26,10 +26,10 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     |> Enum.join(",")
   end
 
-  def vary_headers(%Struct{request: request = %Request{}, private: private = %Private{}}, false) do
+  def vary_headers(struct = %Struct{request: request = %Request{}, private: private = %Private{}}, false) do
     request
     |> base_headers()
-    |> Kernel.++(route_headers(private))
+    |> Kernel.++(route_headers(struct))
     |> Kernel.++(adverts_headers(request.edge_cache?, private.platform))
     |> Enum.join(",")
   end
@@ -47,15 +47,23 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp route_headers(private = %Private{}) do
+  defp route_headers(%Struct{request: %Request{host: host}, private: private = %Private{}}) do
     ignore_headers =
-      if private.personalised_route && !Personalisation.enabled?() do
+      if dotcom?(host) or personalised?(private) do
         ~w(cookie x-id-oidc-signedin)
       else
         ~w(cookie)
       end
 
     private.headers_allowlist -- ignore_headers
+  end
+
+  defp dotcom?(host) do
+    String.ends_with?(host, "bbc.com")
+  end
+
+  defp personalised?(private) do
+    private.personalised_route && !Personalisation.enabled?()
   end
 
   # TODO Remove duplication of headers - so commenting out for now
