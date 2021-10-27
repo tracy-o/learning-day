@@ -25,42 +25,50 @@ defmodule Belfrage.Xray do
   defdelegate sampled?(segment), to: AwsExRay.Segment, as: :sampled?
   defdelegate add_annotations(segment, map), to: AwsExRay.Segment, as: :add_annotations
 
-  def start_tracing(app_name) do
+  def start_tracing(app_name, xray \\ AwsExRay) do
     try do
-      {:ok, AwsExRay.start_tracing(app_name)}
+      {:ok, xray.start_tracing(app_name)}
     catch
-      :error, reason ->
-        Belfrage.Event.record(:log, :error, inspect(reason))
+      exception, reason ->
+        reason = error_message(exception, reason, "start_tracing/1")
+
+        Belfrage.Event.record(:log, :error, reason)
         {:error, reason}
     end
   end
 
-  def finish_tracing(segment) do
+  def finish_tracing(segment, xray \\ AwsExRay) do
     try do
-      AwsExRay.finish_tracing(segment)
+      xray.finish_tracing(segment)
     catch
-      :error, reason ->
-        Belfrage.Event.record(:log, :error, inspect(reason))
+      exception, reason ->
+        reason = error_message(exception, reason, "finish_tracing/1")
+        Belfrage.Event.record(:log, :error, reason)
+
         :ok
     end
   end
 
-  def start_subsegment(name) do
+  def start_subsegment(name, xray \\ AwsExRay) do
     try do
-      AwsExRay.start_subsegment(name)
+      xray.start_subsegment(name)
     catch
-      :error, reason ->
-        Belfrage.Event.record(:log, :error, inspect(reason))
+      exception, reason ->
+        reason = error_message(exception, reason, "start_subsegment/1")
+
+        Belfrage.Event.record(:log, :error, reason)
         {:error, reason}
     end
   end
 
-  def finish_subsegment(subsegment) do
+  def finish_subsegment(subsegment, xray \\ AwsExRay) do
     try do
-      AwsExRay.finish_subsegment(subsegment)
+      xray.finish_subsegment(subsegment)
     catch
-      :error, reason ->
-        Belfrage.Event.record(:log, :error, inspect(reason))
+      exception, reason ->
+        reason = error_message(exception, reason, "finish_subsegment/1")
+        Belfrage.Event.record(:log, :error, reason)
+
         :ok
     end
   end
@@ -118,5 +126,17 @@ defmodule Belfrage.Xray do
 
       result
     end
+  end
+
+  defp error_message(:error, reason, function_name) do
+    "AwsExRay.#{function_name} errored with reason: #{inspect(reason)}"
+  end
+
+  defp error_message(:exit, reason, function_name) do
+    "AwsExRay.#{function_name} exited with reason: #{inspect(reason)}"
+  end
+
+  defp error_message(:throw, value, function_name) do
+    "AwsExRay.#{function_name} unexpectedly threw value: #{inspect(value)}"
   end
 end
