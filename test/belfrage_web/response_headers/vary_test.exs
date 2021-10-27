@@ -73,7 +73,11 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
     end
 
     test "vary personalised requests on x-id-oidc-signedin" do
-      struct = %Struct{private: %Private{headers_allowlist: ["x-id-oidc-signedin"], personalised_request: true}}
+      struct = %Struct{
+        request: %Request{host: "bbc.co.uk"},
+        private: %Private{headers_allowlist: ["x-id-oidc-signedin"], personalised_request: true}
+      }
+
       assert "x-id-oidc-signedin" in vary_headers(struct)
     end
 
@@ -81,6 +85,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       enable_personalisation()
 
       struct = %Struct{
+        request: %Request{host: "bbc.co.uk"},
         private: %Private{
           headers_allowlist: ["x-id-oidc-signedin"],
           personalised_route: true
@@ -94,11 +99,26 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       disable_personalisation()
 
       struct = %Struct{
+        request: %Request{host: "bbc.co.uk"},
         private: %Private{
           headers_allowlist: ["x-id-oidc-signedin"],
           personalised_route: true
         },
         user_session: %UserSession{authenticated: true}
+      }
+
+      refute "x-id-oidc-signedin" in vary_headers(struct)
+    end
+
+    test "don't vary requests to personalised routes on x-id-oidc-signedin if host is bbc.com" do
+      struct = %Struct{
+        request: %Request{
+          host: "bbc.com"
+        },
+        private: %Private{
+          headers_allowlist: ["x-id-oidc-signedin"],
+          personalised_route: true
+        }
       }
 
       refute "x-id-oidc-signedin" in vary_headers(struct)

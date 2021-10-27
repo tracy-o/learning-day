@@ -26,10 +26,10 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
     |> Enum.join(",")
   end
 
-  def vary_headers(%Struct{request: request = %Request{}, private: private = %Private{}}, false) do
+  def vary_headers(struct = %Struct{request: request = %Request{}, private: private = %Private{}}, false) do
     request
     |> base_headers()
-    |> Kernel.++(route_headers(private))
+    |> Kernel.++(route_headers(struct))
     |> Kernel.++(adverts_headers(request.edge_cache?, private.platform))
     |> Enum.join(",")
   end
@@ -47,15 +47,18 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp route_headers(private = %Private{}) do
-    ignore_headers =
-      if private.personalised_route && !Personalisation.enabled?() do
-        ~w(cookie x-id-oidc-signedin)
-      else
-        ~w(cookie)
-      end
+  defp route_headers(struct = %Struct{private: private = %Private{}}) do
+    private.headers_allowlist
+    |> List.delete("cookie")
+    |> remove_signed_in_header(struct)
+  end
 
-    private.headers_allowlist -- ignore_headers
+  defp remove_signed_in_header(headers, %Struct{request: request, private: private = %Private{}}) do
+    if private.personalised_route && !(Personalisation.applicable_request?(request) && Personalisation.enabled?()) do
+      List.delete(headers, "x-id-oidc-signedin")
+    else
+      headers
+    end
   end
 
   # TODO Remove duplication of headers - so commenting out for now
