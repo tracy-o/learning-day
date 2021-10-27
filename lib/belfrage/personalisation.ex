@@ -40,7 +40,7 @@ defmodule Belfrage.Personalisation do
     end
   end
 
-  defp applicable_request?(%Request{host: host}) do
+  def applicable_request?(%Request{host: host}) do
     String.ends_with?(host, "bbc.co.uk")
   end
 end
