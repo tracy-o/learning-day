@@ -60,7 +60,6 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         tags: [:pool_name]
       ),
       last_value("poolboy.pools.max_saturation",
-        measurement: :max_saturation,
         event_name: "belfrage.poolboy.pools"
       )
     ]
