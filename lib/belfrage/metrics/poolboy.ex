@@ -16,14 +16,13 @@ defmodule Belfrage.Metrics.Poolboy do
   end
 
   def track(pid_or_name, pool_name) do
-    {_state_name, available, overflow, monitors} = :poolboy.status(pid_or_name)
+    {_state_name, available, overflow, _monitors} = :poolboy.status(pid_or_name)
 
     Metrics.measurement(
       [:poolboy, :status],
       %{
         available_workers: available,
-        overflow_workers: overflow,
-        saturation: pool_saturation(available, overflow, monitors)
+        overflow_workers: overflow
       },
       %{
         pool_name: pool_name
