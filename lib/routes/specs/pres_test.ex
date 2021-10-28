@@ -3,7 +3,7 @@ defmodule Routes.Specs.PresTest do
     %{
       owner: "D&EWebCorePresentationTeam@bbc.co.uk",
       platform: Webcore,
-      query_params_allowlist: ["q", "page", "scope", "filter"]
+      query_params_allowlist: "*"
     }
   end
 end
