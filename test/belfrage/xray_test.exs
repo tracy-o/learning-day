@@ -49,15 +49,20 @@ defmodule Belfrage.XrayTest do
 
   describe "start_tracing/1 on error" do
     test "when catches :error, returns {:error, reason}" do
+      # cannot start same trace twice, causes an error
       Xray.start_tracing("Belfrage")
       {:error, msg} = Xray.start_tracing("Belfrage")
+
       assert msg =~ "AwsExRay.start_tracing/1 errored with reason: "
+      assert msg =~ "<AwsExRay> Tracing Context already exists on this process."
     end
 
     test "when catches :error, logs error" do
       Xray.start_tracing("Belfrage")
       log = capture_log(fn -> Xray.start_tracing("Belfrage") end)
+
       assert log =~ "AwsExRay.start_tracing/1 errored with reason: "
+      assert log =~ "<AwsExRay> Tracing Context already exists on this process."
     end
 
     test "when catches :exit, returns {:error, reason}" do
@@ -109,17 +114,18 @@ defmodule Belfrage.XrayTest do
   end
 
   describe "start_subsegment/1 on error" do
-    test "when catches :error, returns :ok" do
+    test "when catches :error, returns {:error, reason}" do
+      # cant start subsegment if trace not started, causes {:error, :out_of_xray}
       {:error, msg} = Xray.start_subsegment("test_segment")
-      assert msg =~ "AwsExRay.start_subsegment/1 errored with reason: "
+      assert msg =~ "AwsExRay.start_subsegment/1 errored with reason: {:badmatch, {:error, :out_of_xray}}"
     end
 
     test "when catches :error, logs error" do
       log = capture_log(fn -> Xray.start_subsegment("test_segment") end)
-      assert log =~ "AwsExRay.start_subsegment/1 errored with reason: "
+      assert log =~ "AwsExRay.start_subsegment/1 errored with reason: {:badmatch, {:error, :out_of_xray}}"
     end
 
-    test "when catches :exit, returns :ok" do
+    test "when catches :exit, returns {:error, reason}" do
       {:error, msg} = Xray.start_subsegment("test_segment", AwsExRayMockExit)
       assert msg == "AwsExRay.start_subsegment/1 exited with reason: :start_subsegment"
     end
