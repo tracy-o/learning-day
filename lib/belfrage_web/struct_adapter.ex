@@ -23,7 +23,7 @@ defmodule BelfrageWeb.StructAdapter do
         subdomain: subdomain(conn),
         edge_cache?: bbc_headers.cache,
         cdn?: bbc_headers.cdn,
-        xray_trace_id: xray_trace(conn),
+        xray_trace_id: conn.private[:xray_trace_id],
         accept_encoding: accept_encoding(conn),
         is_uk: bbc_headers.is_uk,
         is_advertise: bbc_headers.is_advertise,
@@ -66,9 +66,6 @@ defmodule BelfrageWeb.StructAdapter do
   end
 
   defp subdomain(_conn), do: "www"
-
-  defp xray_trace(%Plug.Conn{private: %{xray_trace_id: id}}), do: id
-  defp xray_trace(_conn), do: nil
 
   defp accept_encoding(conn) do
     case Plug.Conn.get_req_header(conn, "accept-encoding") do
