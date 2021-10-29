@@ -1,18 +1,15 @@
 defmodule Belfrage.Dials.LoggingLevelTest do
+  # Can't be async because it changes the logger config which can affect other
+  # tests
   use ExUnit.Case
-  use Test.Support.Helper, :mox
   alias Belfrage.Dials.LoggingLevel
-  alias Belfrage.Helpers.FileIOMock
 
-  setup do
-    FileIOMock
-    |> expect(:read, fn _ -> "" end)
-
+  setup_all do
     Logger.add_backend({LoggerFileBackend, :file}, Application.get_env(:logger, :file))
 
-    start_supervised!(Belfrage.Dials.Poller)
-
-    :ok
+    on_exit(fn ->
+      Logger.remove_backend({LoggerFileBackend, :file})
+    end)
   end
 
   def log_level() do

@@ -16,4 +16,5 @@ config :belfrage,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
+  dials_startup_polling_delay: 3_600_000,
   bbc_id_availability_poll_interval: 3_600_000
