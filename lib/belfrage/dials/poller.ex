@@ -5,9 +5,7 @@ defmodule Belfrage.Dials.Poller do
 
   use GenServer
 
-  @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
-  @file_io Application.get_env(:belfrage, :file_io)
   @startup_polling_delay Application.get_env(:belfrage, :dials_startup_polling_delay)
   @polling_interval 5_000
 
@@ -54,7 +52,9 @@ defmodule Belfrage.Dials.Poller do
   end
 
   def read_dials() do
-    with {:ok, contents} <- @file_io.read(@dials_location) do
+    file_path = Application.get_env(:belfrage, :dials_location)
+
+    with {:ok, contents} <- File.read(file_path) do
       @json_codec.decode(contents)
     end
   end
