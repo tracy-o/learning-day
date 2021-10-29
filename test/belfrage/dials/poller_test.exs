@@ -1,83 +1,45 @@
 defmodule Belfrage.Dials.PollerTest do
+  # Can't be async because it updates dials which is a global resource
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [wait_for: 1]
 
   alias Belfrage.Dials.Poller
+  alias Belfrage.Dials.LiveServer, as: DialsServer
+  alias Belfrage.Helpers.FileIOMock
 
-  setup do
-    start_supervised!(Poller)
+  test "polls and updates dials values" do
+    # The test updates one of the dials called :logging_level
+    assert DialsServer.state(:logging_level) == :error
 
-    :ok
+    stub_dials_file(~s({"logging_level": "debug"}))
+    start_supervised!({Poller, startup_polling_delay: 0, polling_interval: 0, name: :test_dials_poller})
+
+    wait_for(fn -> DialsServer.state(:logging_level) == :debug end)
+
+    stub_dials_file(~s({"logging_level": "error"}))
+    wait_for(fn -> DialsServer.state(:logging_level) == :error end)
   end
 
-  describe "handle_info/2" do
-    test "when are no dial changes" do
-      old_dials = %{"a-dial" => "yes"}
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
-
-      assert {:noreply,
-              %{
-                "a-dial" => "yes"
-              }} == Poller.handle_info(:refresh, old_dials)
+  describe "read_dials/0" do
+    test "returns the contents of the dials file" do
+      file_path = Application.get_env(:belfrage, :dials_location)
+      expect(FileIOMock, :read, fn ^file_path -> {:ok, ~s({"dial": "value"})} end)
+      assert Poller.read_dials() == {:ok, %{"dial" => "value"}}
     end
 
-    test "when there are dial changes" do
-      old_dials = %{"a-dial" => "no"}
+    test "returns error if dials file doesn't exist" do
+      stub(FileIOMock, :read, fn _file_path -> {:error, :enoent} end)
+      assert Poller.read_dials() == {:error, :enoent}
+    end
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
-
-      assert {:noreply,
-              %{
-                "a-dial" => "yes"
-              }} == Poller.handle_info(:refresh, old_dials)
+    test "returns error if dials file contains invalid JSON" do
+      expect(FileIOMock, :read, fn _file_path -> {:ok, "not json"} end)
+      assert {:error, _} = Poller.read_dials()
     end
   end
 
-  describe "&state/0" do
-    test "state returns initial dial config" do
-      assert Poller.state() == %{}
-    end
-
-    test "checks the correct path to the dials config" do
-      dials_location = Application.get_env(:belfrage, :dials_location)
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^dials_location -> {:ok, ~s({})} end)
-
-      Poller.refresh_now()
-      Poller.state()
-    end
-
-    test "init/1 sets initial state of dials to an empty map" do
-      options = []
-      assert {:ok, %{}} = Poller.init(options)
-    end
-
-    test "Changing the file and refreshing gives the new dials value" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"some-dial-key": "ok"})} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{"some-dial-key" => "ok"}
-    end
-
-    test "Writing unparsable JSON to the file returns the initial dials values" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({}}}}\\inva\"id: \nJSON!!</what?>})} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{}
-    end
-
-    test "A missing file returns the initial dials values" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:error, :enoent} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{}
-    end
+  defp stub_dials_file(contents) do
+    stub(FileIOMock, :read, fn _dials_location -> {:ok, contents} end)
   end
 end

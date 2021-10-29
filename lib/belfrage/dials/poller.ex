@@ -1,10 +1,6 @@
 defmodule Belfrage.Dials.Poller do
   @moduledoc """
-  Periodically checks the dials file for dial changes.
-
-  This process is not stated automatically in test environment. If you need to
-  test it, start it manually, e.g. using
-  [`start_supervised!`](https://hexdocs.pm/ex_unit/ExUnit.Callbacks.html#start_supervised!/2).
+  Periodically read the dials file and updates the dials with its contents
   """
 
   use GenServer
@@ -12,75 +8,54 @@ defmodule Belfrage.Dials.Poller do
   @dials_location Application.get_env(:belfrage, :dials_location)
   @json_codec Application.get_env(:belfrage, :json_codec)
   @file_io Application.get_env(:belfrage, :file_io)
-  @refresh_rate 5_000
+  @startup_polling_delay Application.get_env(:belfrage, :dials_startup_polling_delay)
+  @polling_interval 5_000
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
-  end
+    opts =
+      opts
+      |> Keyword.put_new(:startup_polling_delay, @startup_polling_delay)
+      |> Keyword.put_new(:polling_interval, @polling_interval)
 
-  def state() do
-    GenServer.call(__MODULE__, :state)
-  end
-
-  def clear() do
-    GenServer.call(__MODULE__, :clear)
-  end
-
-  def refresh_now() do
-    Process.send(__MODULE__, :refresh, [])
+    GenServer.start_link(__MODULE__, opts, name: Keyword.get(opts, :name, __MODULE__))
   end
 
   @impl GenServer
-  def init(_opts) do
-    send(self(), :refresh)
-    {:ok, %{}}
+  def init(opts) do
+    opts
+    |> Keyword.fetch!(:startup_polling_delay)
+    |> schedule_polling()
+
+    {:ok, opts}
   end
 
   @impl GenServer
-  def handle_info(:refresh, old_dials) do
-    schedule_work()
+  def handle_info(:poll, opts) do
+    opts
+    |> Keyword.fetch!(:polling_interval)
+    |> schedule_polling()
 
     case read_dials() do
       {:ok, dials} ->
         Belfrage.Dials.Supervisor.notify(:dials_changed, dials)
-
-        {:noreply, dials}
 
       {:error, reason} ->
         Belfrage.Event.record(:log, :error, %{
           msg: "Unable to read dials",
           reason: reason
         })
-
-        {:noreply, old_dials}
     end
+
+    {:noreply, opts}
   end
 
-  # Catch all to handle unexpected messages
-  # https://elixir-lang.org/getting-started/mix-otp/genserver.html#call-cast-or-info
-  @impl GenServer
-  def handle_info(_any_message, state) do
-    {:noreply, state}
+  defp schedule_polling(delay) do
+    Process.send_after(self(), :poll, delay)
   end
 
-  @impl GenServer
-  def handle_call(:state, _from, dials) when is_map(dials) do
-    {:reply, dials, dials}
-  end
-
-  @impl GenServer
-  def handle_call(:clear, _from, _state) do
-    {:reply, %{}, %{}}
-  end
-
-  defp schedule_work do
-    Process.send_after(__MODULE__, :refresh, @refresh_rate)
-  end
-
-  defp read_dials() do
-    case @file_io.read(@dials_location) do
-      {:ok, dials_file_contents} -> @json_codec.decode(dials_file_contents)
-      {:error, reason} -> {:error, reason}
+  def read_dials() do
+    with {:ok, contents} <- @file_io.read(@dials_location) do
+      @json_codec.decode(contents)
     end
   end
 end

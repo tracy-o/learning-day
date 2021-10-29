@@ -37,6 +37,7 @@ config :belfrage,
   # executed in tests
   short_counter_reset_interval: 3_600_000,
   long_counter_reset_interval: 3_600_000,
+  dials_startup_polling_delay: 3_600_000,
   bbc_id_availability_poll_interval: 3_600_000
 
 config :cachex, :limit,
