@@ -4,6 +4,14 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
   alias Belfrage.Metrics.Poolboy
 
+  defmodule TestWorker do
+    use Agent
+
+    def start_link(_args) do
+      Agent.start_link(fn -> nil end)
+    end
+  end
+
   describe "track_machine_gun_pools/0" do
     test "tracks children of MachineGun.Supervisor" do
       pool_name = "test-pool"
@@ -11,37 +19,20 @@ defmodule Belfrage.Metrics.PoolboyTest do
       on_exit(fn -> stop_machine_gun_pool(pool_pid) end)
 
       assert_metric(
-        {[:poolboy, :status], %{available_workers: 1, saturation: 0, overflow_workers: 0}, %{pool_name: pool_name}},
+        {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}},
         fn -> Poolboy.track_machine_gun_pools() end
       )
-    end
-
-    defp start_machine_gun_pool(name) do
-      {:ok, pid} = MachineGun.Supervisor.start(:"#{name}@localhost:1234", "localhost", 1234, 1, 0, :lifo, [])
-      pid
-    end
-
-    defp stop_machine_gun_pool(pid) do
-      DynamicSupervisor.terminate_child(MachineGun.Supervisor, pid)
     end
   end
 
   describe "track/2" do
-    defmodule TestWorker do
-      use Agent
-
-      def start_link(_args) do
-        Agent.start_link(fn -> nil end)
-      end
-    end
-
     test "emits the number of available and overflow workers, and saturation" do
       pool_name = :test_poolboy_pool
       pool_pid = start_pool(size: 2, max_overflow: 1)
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 2, saturation: 0, overflow_workers: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 2, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -50,7 +41,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 1, saturation: 50, overflow_workers: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -59,7 +50,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 0, saturation: 100, overflow_workers: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 0, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -68,7 +59,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 0, saturation: 100, overflow_workers: 1}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 0, overflow_workers: 1}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(pool_pid, pool_name) end
       )
@@ -80,21 +71,84 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert_metrics(
         [
-          {[:poolboy, :status], %{available_workers: 1, saturation: 0, overflow_workers: 0}, %{pool_name: pool_name}}
+          {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}}
         ],
         fn -> Poolboy.track(:test_poolboy_process, pool_name) end
       )
     end
+  end
 
-    defp start_pool(opts) do
-      start_supervised!(%{
-        id: :test_poolboy_pool,
-        start: {:poolboy, :start_link, [Keyword.merge([worker_module: TestWorker], opts), []]}
-      })
-    end
+  describe "track_pool_aggregates/1" do
+    test "tracks max saturation of the pools" do
+      pool1 = start_pool(size: 2, name: {:local, :test_poolboy_process1})
+      pool2 = start_pool(size: 2, name: {:local, :test_poolboy_process2})
 
-    defp use_worker(pool_pid) do
-      :poolboy.checkout(pool_pid)
+      pools = [pool1, pool2]
+
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 0}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
+      )
+
+      use_worker(pool1)
+
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 50}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
+      )
+
+      use_worker(pool2)
+
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 50}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
+      )
+
+      use_worker(pool1)
+
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 100}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
+      )
+
+      use_worker(pool2)
+
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 100}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools) end
+      )
     end
+  end
+
+  defp start_machine_gun_pool(name, pool_size \\ 1) do
+    {:ok, pid} = MachineGun.Supervisor.start(:"#{name}@localhost:1234", "localhost", 1234, pool_size, 0, :lifo, [])
+    pid
+  end
+
+  defp stop_machine_gun_pool(pid) do
+    DynamicSupervisor.terminate_child(MachineGun.Supervisor, pid)
+  end
+
+  defp start_pool(opts) do
+    name = Keyword.get(opts, :name, {:local, :test_poolboy_process})
+
+    start_supervised!(%{
+      id: name,
+      start: {:poolboy, :start_link, [Keyword.merge([worker_module: TestWorker], opts), []]}
+    })
+  end
+
+  defp use_worker(pool_pid) do
+    :poolboy.checkout(pool_pid)
   end
 end
