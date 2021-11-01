@@ -22,12 +22,8 @@ defmodule Belfrage.Dials.PollerTest do
 
   describe "read_dials/0" do
     test "returns the contents of the dials file" do
-      contents =
-        get_dials_file_path()
-        |> File.read!()
-        |> Application.get_env(:belfrage, :json_codec).decode!()
-
-      assert Poller.read_dials() == {:ok, contents}
+      overwrite_dials_config(~s({"logging_level": "debug"}))
+      assert Poller.read_dials() == {:ok, %{"logging_level" => "debug"}}
     end
 
     test "returns error if dials file doesn't exist" do
