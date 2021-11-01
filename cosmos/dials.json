@@ -94,7 +94,7 @@
   {
     "name": "personalisation",
     "description": "This enables or disables personalisation at a global level.",
-    "default-value": "off",
+    "default-value": "on",
     "values": [
       {
         "value": "on",
