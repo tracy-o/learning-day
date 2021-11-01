@@ -11,6 +11,7 @@ config :belfrage,
   production_environment: "test",
   dial: Belfrage.Dials.ServerMock,
   xray: Belfrage.XrayMock,
+  jwk_polling_enabled: false,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

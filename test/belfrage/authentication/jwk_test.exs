@@ -1,84 +1,45 @@
-defmodule Belfrage.Authentication.JwkTest do
-  use ExUnit.Case
-  use Test.Support.Helper, :mox
+defmodule Belfrage.Authentication.JWKTest do
+  use ExUnit.Case, async: true
 
-  alias Belfrage.Clients.AuthenticationMock
-  alias Belfrage.Authentication.Jwk
+  alias Belfrage.Authentication.JWK
+  alias Fixtures.AuthToken, as: AuthFixtures
 
-  import ExUnit.CaptureLog
-  import Belfrage.Authentication.JwkStaticKeys
+  describe "get/2" do
+    test "returns static keys on startup" do
+      keys = AuthFixtures.keys()
 
-  @expected_jwk_response %{
-    "keys" => Fixtures.AuthToken.keys()
-  }
+      refute keys == []
 
-  test "init/1" do
-    jwk_uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-    expected_keys_data = File.read!("priv/static/#{jwk_uri |> get_filename()}") |> Jason.decode!()
-
-    assert Jwk.init([]) == {:ok, expected_keys_data}
-  end
-
-  test "use of static JWK keys as fallback" do
-    stub(AuthenticationMock, :get_jwk_keys, fn -> {:error, %{}} end)
-    start_supervised!(Jwk)
-
-    jwk_uri = Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-    expected_keys_data = File.read!("priv/static/#{jwk_uri |> get_filename()}") |> Jason.decode!()
-
-    assert Jwk.get_keys() == expected_keys_data["keys"]
-  end
-
-  test "get_keys/0 requests the keys from the authentication client" do
-    start_supervised!(Jwk)
-
-    AuthenticationMock
-    |> expect(:get_jwk_keys, fn -> {:ok, @expected_jwk_response} end)
-
-    Jwk.refresh_now()
-    assert Fixtures.AuthToken.keys() == Jwk.get_keys()
-  end
-
-  describe "get_key/2" do
-    setup do
-      start_supervised!(Jwk)
-
-      AuthenticationMock
-      |> expect(:get_jwk_keys, fn -> {:ok, @expected_jwk_response} end)
-
-      :ok
+      for %{"alg" => alg, "kid" => kid} = key <- keys do
+        assert JWK.get(alg, kid) == {:ok, alg, key}
+      end
     end
 
-    test "when a public key is not found" do
-      alg = "bar"
-      kid = "foo"
-
-      Jwk.refresh_now()
-
-      run_fn = fn ->
-        assert {:error, :public_key_not_found} == Belfrage.Authentication.Jwk.get_key(alg, kid)
-      end
-
-      assert capture_log(run_fn) =~ ~s(Public key not found)
-      assert capture_log(run_fn) =~ ~s("kid":"#{kid}")
-      assert capture_log(run_fn) =~ ~s("alg":"#{alg}")
+    test "returns error if requested key doesn't exist" do
+      assert JWK.get("foo", "bar") == {:error, :public_key_not_found}
     end
+  end
 
-    test "when a public key is found" do
-      alg = "RS256"
-      kid = "0ccd7c65-ff20-4500-8742-5da72ef4af67"
+  describe "update/1" do
+    test "updates the keys" do
+      pid = start_supervised!({JWK, name: :test_jwk_agent})
+      assert JWK.get(pid, "foo", "bar") == {:error, :public_key_not_found}
 
-      Jwk.refresh_now()
+      JWK.update(pid, [%{"alg" => "foo", "kid" => "bar"}])
+      assert JWK.get(pid, "foo", "bar") == {:ok, "foo", %{"alg" => "foo", "kid" => "bar"}}
+    end
+  end
 
-      run_fn = fn ->
-        assert {:ok, "RS256",
-                %{"alg" => "RS256", "kid" => "0ccd7c65-ff20-4500-8742-5da72ef4af67", "kty" => "RSA", "use" => "enc"}} ==
-                 Belfrage.Authentication.Jwk.get_key(alg, kid)
+  describe "read_satic_keys/1" do
+    test "reads keys from the passed JSON file name" do
+      keys = JWK.read_static_keys("jwk_int.json")
+
+      assert length(keys) > 0
+
+      for key <- keys do
+        assert key["alg"]
+        assert key["kid"]
       end
-
-      assert capture_log(run_fn) =~ ~s(Public key found)
-      assert capture_log(run_fn) =~ ~s("kid":"#{kid}")
-      assert capture_log(run_fn) =~ ~s("alg":"#{alg}")
     end
   end
 end
