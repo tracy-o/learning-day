@@ -58,15 +58,16 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       last_value("poolboy.available_workers.count",
         measurement: :available_workers,
         event_name: "belfrage.poolboy.status",
-        tags: [:pool_name]
+        tags: [:pool_name, :BBCEnvironment]
       ),
       last_value("poolboy.overflow_workers.count",
         measurement: :overflow_workers,
         event_name: "belfrage.poolboy.status",
-        tags: [:pool_name]
+        tags: [:pool_name, :BBCEnvironment]
       ),
       last_value("poolboy.pools.max_saturation",
-        event_name: "belfrage.poolboy.pools"
+        event_name: "belfrage.poolboy.pools",
+        tags: [:BBCEnvironment]
       )
     ]
   end
