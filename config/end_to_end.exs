@@ -10,6 +10,7 @@ config :belfrage,
   monitor_api: Belfrage.MonitorMock,
   production_environment: "test",
   dial: Belfrage.Dials.ServerMock,
+  xray: Belfrage.XrayMock,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
