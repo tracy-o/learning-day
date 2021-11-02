@@ -27,6 +27,7 @@ This is where you can find the answers to most, if not all your questions regard
         - [Testing best practises](topics/debugging-testing/testing-best-practices.md)
 - Misc
     - [CI-CD threat analysis](misc/ci-cd-threat-analysis.md)
+    - [Deployments](misc/deployments.md)
     - [Elixir/Erlang](misc/elixir-erlang.md)
     - [Feature requests](misc/feature-requests.md)
     - [LTDD](misc/load-test-driven-development.md)
