@@ -4,11 +4,11 @@
 Deployments give us a method to move what has been tested on our test environment to our live environment.
 
 ## How to complete a deployment 
-1. View the diff between the test and live environment to view what is to be deployed, the easiest way to do this is to use the Moz app on the #belfrage slack channel with `moz diff belfrage` (this compares the git hashes for live and test which can be found on [cosmos](https://cosmos.tools.bbc.co.uk/))
+1. View the diff between the test and live environment to see what is to be deployed, the easiest way to do this is to use the Moz app on the #belfrage slack channel with `moz diff belfrage` (this compares the git hashes for live and test which can be found on [cosmos](https://cosmos.tools.bbc.co.uk/))
 
-2. Use the diff to post a message on #belfrage and #help-belfrage with a summary of the changes, this allows anyone who has an interest in the deployment to know their changes are soon to go live or for them to object if they do not wish changes to go live.
+2. Use the diff to post a message on #belfrage and #help-belfrage with a summary of the changes, this allows anyone who has an interest in the deployment to know their changes are soon to go live or for them to object if they do not wish the changes to go live.
 
-3. It is now time to go through each belfrage stack on cosmos and use the 'promote to live' button, you can then double check the values used on the config page are the live values. It is best to deploy the stacks in order from lest busy to the most busy so you can slowly ramp up the traffic. Currently, this order would be: WWW, Cedric, Sally, Bruce. Posting each of the [deployment terminals](https://cosmos.tools.bbc.co.uk/deployments/5639226) into the thread of the message you sent previously.
+3. It is now time to go through each belfrage stack on cosmos and use the 'promote to live' button, you can then double check the values used on the config page are the live values. It is best to deploy the stacks in order from least busy to the most busy so you can slowly ramp up the traffic. Currently, this order would be: WWW, Cedric, Sally, Bruce. Posting each of the [deployment terminals](https://cosmos.tools.bbc.co.uk/deployments/5639226) links into the thread of the message you sent previously.
 
 4. Whilst each stack deployment is going through you want to keep your eye on a few places to ensure nothing out of the ordinary is occuring:   
     a. [Grafana](https://grafana.news.tools.bbc.co.uk/d/cZYVwjIWz/belfrage-dashboards?orgId=1) Any metric which looks to spike or severly drop and continue to do so after a significant time may be cause for concern.   
@@ -22,5 +22,8 @@ Deployments give us a method to move what has been tested on our test environmen
 If you believe an error has occured with the deployment and belfrage is acting in an unexpected way, you will need to go through these steps:
 
 1. Notify the thread that you used previously that you will be performing a roll back
-2. On cosmos, go through each stack and promote the last stable build which was already on live, from test to live. This rolls back the application to before the deployment.
-3. Attempt to debug and uncover the source of the issue before re-trying.
+
+2. On cosmos, go through each stack and promote the last stable build which was already on live, from test to 
+live. This rolls back the application to before the deployment.
+
+3. Attempt to debug and uncover the source of the issue before re-trying to deploy.
