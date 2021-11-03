@@ -53,7 +53,9 @@ defmodule Belfrage.Processor do
 
   def generate_request_hash(struct = %Struct{}) do
     Metrics.duration(:generate_request_hash, fn ->
-      RequestHash.put(struct)
+      struct
+      |> Belfrage.Language.vary_on_language_cookie()
+      |> RequestHash.put()
     end)
   end
 
