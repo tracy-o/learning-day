@@ -70,6 +70,8 @@ defroutefile "Mock", "test" do
 
   handle("/caching-disabled", using: "CacheDisabled", examples: [])
 
+  handle("/language-from-cookie", using: "LanguageFromCookieLoop", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
