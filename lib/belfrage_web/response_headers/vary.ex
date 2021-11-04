@@ -19,18 +19,14 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   def vary_headers(struct, cdn?)
 
-  def vary_headers(%Struct{request: request = %Request{}, private: private = %Private{headers_allowlist: []}}, false) do
-    request
-    |> base_headers()
-    |> Kernel.++(adverts_headers(request.edge_cache?, private.platform))
-    |> Enum.join(",")
-  end
+  def vary_headers(struct = %Struct{}, false) do
+    edge_cache? = struct.request.edge_cache?
+    platform = struct.private.platform
 
-  def vary_headers(struct = %Struct{request: request = %Request{}, private: private = %Private{}}, false) do
-    request
+    struct.request
     |> base_headers()
     |> Kernel.++(route_headers(struct))
-    |> Kernel.++(adverts_headers(request.edge_cache?, private.platform))
+    |> Kernel.++(adverts_headers(edge_cache?, platform))
     |> Enum.join(",")
   end
 
@@ -47,8 +43,12 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp route_headers(struct = %Struct{private: private = %Private{}}) do
-    private.headers_allowlist
+  defp route_headers(%Struct{private: %Private{headers_allowlist: []}}) do
+    []
+  end
+
+  defp route_headers(struct = %Struct{private: %Private{headers_allowlist: allowlist}}) do
+    allowlist
     |> List.delete("cookie")
     |> remove_signed_in_header(struct)
   end
