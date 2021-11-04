@@ -43,13 +43,13 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
     end
   end
 
-  describe "allowed_headers" do
-    test "varies on a provided allowed header, when cdn is false" do
+  describe "route headers" do
+    test "varies on a provided route header, when cdn is false" do
       struct = %Struct{private: %Private{headers_allowlist: ["one_header"]}}
       assert "one_header" in vary_headers(struct)
     end
 
-    test "varies on provided allowed headers, when cdn is false" do
+    test "varies on provided route headers, when cdn is false" do
       struct = %Struct{
         private: %Private{headers_allowlist: ["one_header", "another_header", "more_header"]}
       }
@@ -60,7 +60,7 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       assert "more_header" in headers
     end
 
-    test "does not vary on allowed headers, when cdn is true" do
+    test "does not vary on route headers, when cdn is true" do
       struct = %Struct{request: %Request{cdn?: true}, private: %{headers_allowlist: ["one_header", "another_header"]}}
       headers = vary_headers(struct)
       refute "one_header" in headers
@@ -122,6 +122,28 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
       }
 
       refute "x-id-oidc-signedin" in vary_headers(struct)
+    end
+
+    test "vary on cookie-ckps_language if language_from_cookie true" do
+      struct = %Struct{
+        private: %Private{
+          headers_allowlist: [],
+          language_from_cookie: true
+        }
+      }
+
+      assert "cookie-ckps_language" in vary_headers(struct)
+    end
+
+    test "don't vary on cookie-ckps_language if language_from_cookie false" do
+      struct = %Struct{
+        private: %Private{
+          headers_allowlist: [],
+          language_from_cookie: false
+        }
+      }
+
+      refute "cookie-ckps_language" in vary_headers(struct)
     end
   end
 
