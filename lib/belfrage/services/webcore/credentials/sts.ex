@@ -4,13 +4,14 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
   configured IAM role.
   """
 
-  alias Belfrage.{AWS, Event}
+  alias Belfrage.{AWS, Event, Metrics}
   @aws Application.get_env(:belfrage, :aws)
 
   def get() do
     request = AWS.STS.assume_role(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
+    result = Metrics.duration([:request, :assume_webcore_lambda_role], fn -> @aws.request(request) end)
 
-    case @aws.request(request) do
+    case result do
       {:ok, %{body: credentials}} ->
         {:ok, struct(AWS.Credentials, credentials)}
 
