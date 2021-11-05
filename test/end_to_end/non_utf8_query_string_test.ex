@@ -22,7 +22,7 @@ defmodule NonUtf8QueryStringTest do
 
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
                           body: "",
@@ -45,7 +45,7 @@ defmodule NonUtf8QueryStringTest do
 
   test "Given a query string with a multi byte character, it still passes this on to the origin" do
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
                           body: "",
@@ -68,7 +68,7 @@ defmodule NonUtf8QueryStringTest do
 
   test "Given a query string with no value, it still passes this on to the origin" do
     LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
                           body: "",

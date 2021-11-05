@@ -12,6 +12,7 @@ config :belfrage,
   dial: Belfrage.Dials.ServerMock,
   xray: Belfrage.XrayMock,
   jwk_polling_enabled: false,
+  webcore_credentials_polling_enabled: false,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

@@ -22,8 +22,10 @@ defmodule EndToEnd.LambdaTest do
   end
 
   test "a successful response from a lambda e2e" do
+    credentials = Belfrage.Services.Webcore.Credentials.get()
+
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn "webcore-lambda-role-arn",
+    |> expect(:call, fn ^credentials,
                         "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test",
                         %{
                           body: "",

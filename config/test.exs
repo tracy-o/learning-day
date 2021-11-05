@@ -27,6 +27,11 @@ config :belfrage,
   internal_error_page: "test/support/resources/internal-error.html",
   monitor_api: Belfrage.MonitorStub,
   jwk_polling_enabled: false,
+  webcore_credentials_source: Belfrage.Services.Webcore.Credentials.Env,
+  webcore_credentials_polling_enabled: false,
+  webcore_credentials_session_token: "stub-access-key-id",
+  webcore_credentials_access_key_id: "stub-secret-access-key",
+  webcore_credentials_secret_access_key: "stub-session-token",
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
