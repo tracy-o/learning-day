@@ -11,14 +11,18 @@ defmodule Belfrage.Transformers.Language do
     # The logic to use a cookie/header language instead of the default, will be done in this
     # request transformer.
 
+    language_from_cookie = struct.private.lanaguage_from_cookie
+    cookie_ckps_language = struct.request.cookie_ckps_language
+    default_language = struct.private.default_language
+
     lang =
-      case {struct.private.language_from_cookie, struct.request.cookie_ckps_language} do
-        {false, _} -> struct.private.default_language
+      case {language_from_cookie, cookie_ckps_language} do
+        {false, _} -> default_language
         {true, "cy"} -> "cy"
         {true, "ga"} -> "ga"
         {true, "gd"} -> "gd"
         {true, "en"} -> "en-GB"
-        {true, _} -> "en-GB"
+        {true, _} -> default_language
       end
 
     then(
