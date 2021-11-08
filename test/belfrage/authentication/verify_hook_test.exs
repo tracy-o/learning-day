@@ -1,48 +1,36 @@
 defmodule Belfrage.Authentication.VerifyHookTest do
-  use ExUnit.Case
-  use Test.Support.Helper, :mox
+  use ExUnit.Case, async: true
+
   alias Belfrage.Authentication.VerifyHook
-
-  setup do
-    start_supervised!(Belfrage.Authentication.Jwk)
-
-    %{
-      valid_access_token: Fixtures.AuthToken.valid_access_token(),
-      malformed_access_token: Fixtures.AuthToken.malformed_access_token(),
-      invalid_access_token_header: Fixtures.AuthToken.invalid_access_token_header()
-    }
-  end
+  alias Fixtures.AuthToken
 
   describe "before_verify/2" do
-    test "returns a signer", %{valid_access_token: jwt} do
+    test "returns a signer" do
+      jwt = AuthToken.valid_access_token()
       opts = []
 
       assert {:cont, {^jwt, %Joken.Signer{}}} = VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
 
-    test "malformed token", %{malformed_access_token: jwt} do
+    test "malformed token" do
+      jwt = AuthToken.malformed_access_token()
       opts = []
 
       assert {:halt, {:error, :token_malformed}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
 
-    test "an invalid token header", %{invalid_access_token_header: jwt} do
+    test "an invalid token header" do
+      jwt = AuthToken.invalid_access_token_header()
       opts = []
 
       assert {:halt, {:error, :invalid_token_header}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
-  end
 
-  describe "no public keys" do
-    setup do
-      :sys.replace_state(Belfrage.Authentication.Jwk, fn _existing_state -> %{"keys" => []} end)
-    end
-
-    test "when public key not found", %{valid_access_token: jwt} do
+    test "an invalid key token" do
+      jwt = AuthToken.invalid_key_token()
       opts = []
 
-      assert {:halt, {:error, :public_key_not_found}} ==
-               VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
+      assert {:halt, {:error, :public_key_not_found}} == VerifyHook.before_verify(opts, {jwt, %Joken.Signer{}})
     end
   end
 end

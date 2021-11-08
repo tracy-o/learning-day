@@ -87,7 +87,8 @@ config :belfrage,
     "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config",
     "jwt_expiry_window" => 4200
   },
-  bbc_id_availability_poll_interval: 10_000
+  bbc_id_availability_poll_interval: 10_000,
+  jwk_polling_enabled: true
 
 config :ex_aws,
   region: "eu-west-1",

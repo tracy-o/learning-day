@@ -18,7 +18,8 @@ config :belfrage,
   secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
   not_found_page: "test/support/resources/not-found.html",
   not_supported_page: "test/support/resources/not-supported.html",
-  internal_error_page: "test/support/resources/internal-error.html"
+  internal_error_page: "test/support/resources/internal-error.html",
+  jwk_polling_enabled: false
 
 config :belfrage, :benchmark,
   dir: "benchmark",

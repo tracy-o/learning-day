@@ -26,6 +26,7 @@ config :belfrage,
   not_supported_page: "test/support/resources/not-supported.html",
   internal_error_page: "test/support/resources/internal-error.html",
   monitor_api: Belfrage.MonitorStub,
+  jwk_polling_enabled: false,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

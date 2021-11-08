@@ -9,8 +9,6 @@ defmodule Belfrage.Transformers.PersonalisationTest do
   alias Belfrage.Transformers.Personalisation
 
   setup do
-    start_supervised!(Belfrage.Authentication.Jwk)
-
     struct =
       %Struct{
         request: %Request{
