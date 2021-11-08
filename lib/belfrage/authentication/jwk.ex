@@ -41,7 +41,8 @@ defmodule Belfrage.Authentication.JWK do
   end
 
   def read_static_keys(file_name) do
-    "priv/static/#{file_name}"
+    :belfrage
+    |> Application.app_dir("priv/static/#{file_name}")
     |> File.read!()
     |> Jason.decode!()
     |> Map.fetch!("keys")
