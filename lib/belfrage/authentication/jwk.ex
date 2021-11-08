@@ -36,7 +36,7 @@ defmodule Belfrage.Authentication.JWK do
     end
   end
 
-  def update(agent \\ __MODULE__, keys) do
+  def update(agent \\ __MODULE__, keys) when is_list(keys) do
     Agent.update(agent, fn _current_keys -> keys end)
   end
 

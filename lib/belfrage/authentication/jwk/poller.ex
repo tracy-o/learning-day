@@ -20,7 +20,7 @@ defmodule Belfrage.Authentication.JWK.Poller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, keys} <- @auth_client.get_jwk_keys() do
+    with {:ok, %{"keys" => keys}} <- @auth_client.get_jwk_keys() do
       JWK.update(keys)
     end
 

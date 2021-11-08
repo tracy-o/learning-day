@@ -12,11 +12,11 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
   test "fetches and updates JWK keys from the API" do
     assert JWK.get("foo", "bar") == {:error, :public_key_not_found}
 
-    stub_jwk_api({:ok, [%{"alg" => "foo", "kid" => "bar"}]})
+    stub_jwk_api({:ok, %{"keys" => [%{"alg" => "foo", "kid" => "bar"}]}})
     start_supervised!({Poller, interval: 0, name: :test_jwk_poller})
     wait_for(fn -> JWK.get("foo", "bar") |> elem(0) == :ok end)
 
-    stub_jwk_api({:ok, []})
+    stub_jwk_api({:ok, %{"keys" => []}})
     wait_for(fn -> JWK.get("foo", "bar") == {:error, :public_key_not_found} end)
 
     # Restore the state
