@@ -1651,6 +1651,7 @@ defroutefile "Main" do
 
   # Bitesize
   handle "/bitesize/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/secondary"]
+  handle "/bitesize/subjects", using: "Bitesize", only_on: "test", examples: ["/bitesize/subjects"]
   handle "/bitesize/articles/zm8fhbk", using: "Bitesize", only_on: "test", examples: ["/bitesize/articles/zm8fhbk"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
