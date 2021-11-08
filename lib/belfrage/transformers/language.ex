@@ -3,15 +3,7 @@ defmodule Belfrage.Transformers.Language do
 
   @impl true
   def call(rest, struct) do
-    # TODO
-    # We use the naming `default_language` in the route spec, to future-proof the tenant's API, so
-    # that when Belfrage has logic to set the language depending on a cookie for webcore requests,
-    # we don't have to change `language` to `default_language` in the route specs, as it's already done.
-    #
-    # The logic to use a cookie/header language instead of the default, will be done in this
-    # request transformer.
-
-    language_from_cookie = struct.private.lanaguage_from_cookie
+    language_from_cookie = struct.private.language_from_cookie
     cookie_ckps_language = struct.request.cookie_ckps_language
     default_language = struct.private.default_language
 
