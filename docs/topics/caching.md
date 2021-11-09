@@ -19,7 +19,7 @@ We have a seperate application [Belfrage-ccp](https://github.com/bbc/belfrage-cc
 
 ## Design
 
-Belfrage offers an optional caching and resiliency layer. Routes requiring these features can rely on faster response times, less load on the origin and the peace of mind of a fallback content in case of temporary faults.
+Belfrage offers an optional caching and resiliency layer. Routes requiring these features can rely on faster response times, less load on the origin and the peace of mind of a fallback content in case of temporary faults. A route can disable caching by using the key `caching_enabled: false` in its routespec.
 
 Personalised pages will not be able to use the cache feature. The fallback option will still be available. When a personalised route is requested the cache directive is set to private so it is not stored in cache however when a personalised request fails, we can return a non-personalised version in the form of a fallback.
 
