@@ -4,79 +4,67 @@
 
 Belfrage will provide two cascading caching layers:
 ### Tier 1 - Local Cache
+A per-node in-memory LRU cache with no network involved and almost no latency. Currently, every Belfrage node can cache around 12Gb of content. 
 
-A per-node in-memory LRU cache with no network involved and almost no latency. Currently, every Belfrage node can cache around 12Gb of content.
-RESFRAME-2881 plans work to pre-warm the cache for new nodes added to the pool.
+We use a library `Cachex` for our local cache, see more [lib/belfrage/cache/local.ex](../../lib/belfrage/cache/local.ex)
 
 NOTE: future iterations could implement smarter ways to determine which content has more chances to get a hit or requires continuous presence in the in-memory cache.
 
 
 ### Tier 2 - Distributed cache
+A slower and longer-term cache on Amazon S3. 
 
-A slower and longer-term cache used for fallback reasons. If the first tier misses a fallback page, Belfrage will try to fetch it form this second tier before returning a 500.
-
-NOTE: TIER 2 work hasn't started yet. The current plan is to use S3 as cache storage.
-S3 Advantages:
-
--   S3 will not pose any limit in terms of number of stored items,
--   S3  offers a self-deleting mechanism once the max life of the page is reached
--   S3 offer multi-region (only 2 currently) bucket sync
--   S3 performance is less of a problem because of the TIER 1 layer.
+We have a seperate application [Belfrage-ccp](https://github.com/bbc/belfrage-ccp) which is our central cache processor and deals with storing pages on S3. (Fetching pages is done by requesting straight from S3 within Belfrage)
 
 
 ## Design
 
-Belfrage can offer an optional caching and resiliency layer. Routes requiring these features can rely on faster response times, less load on the origin and the peace of mind of a fallback content in case of temporary faults.
+Belfrage offers an optional caching and resiliency layer. Routes requiring these features can rely on faster response times, less load on the origin and the peace of mind of a fallback content in case of temporary faults.
 
-Personalised pages will not be able to use the cache feature. The fallback option will still be available. It's still early stage for this, but the plan is to serve the un-personalised fallback version of the page when the errors reach the circuit breaker threshold.
+Personalised pages will not be able to use the cache feature. The fallback option will still be available. When a personalised route is requested the cache directive is set to private so it is not stored in cache however when a personalised request fails, we can return a non-personalised version in the form of a fallback.
 
 On a request the first action Belfrage takes is to look for cached content in the local cache. The cached content will be returned if found and it is `fresh`. If not, a request to the origin is then made.
 
-If the origin returns a non 500 response then Belfrage will simply return that response. However, if the origin does return a 500 response then the fallback mechanism kicks in. 408 responses are handled slightly differently in that they signify a timeout. In this case the fallback mechanism is also triggered.
+If the final response has a status code greater or equal to 400 that is not 404, 410 or 451 then the fallback mechanism kicks in.
+
+Items in the cache are stored against a request hash which depends on a set of signature keys defined here: [lib/belfrage/request_hash.ex](../../lib/belfrage/request_hash.ex), this means two structs must have the same signature keys for them to match. These keys can be added to and skipped from the `signature_keys` key in the private of the struct.
 
 ## Fallback Mechanism
 
-When Belfrage receives a 500 response from an origin it sets an internal flag called `fallback_on_error`, when the route configuration indicates that an attempt to serve fallback is possible, Belfrage will try to fetch a fallback copy from the in-memory cache. 
+If Belfrage is unable to find fresh cached content from any of the service providers in the cascade it will then make requests to each of the service providers until it receives a response that is not a 404, if all responses are 404, it will return 404. 
 
-In case of MISS, it will then try to fetch this page from the distributed cache. In case of success, the user will see a successful page. After a certain threshold of fallbacks alarm will be raised so that the Belfrage and the SRE team can take corrective actions.
+Belfrage will then try to store this response in cache depending on a few factors such as if caching is enabled for that struct. Finally, if the response we have has a status code >=400 and is not 404, 401 or 451 and caching is enabled, we look for both fresh and stale content in the cache and if this reponse is a 200, we try to store it back in the cache.
 
 Fallback TTL is currently configured as 6h.
+
+[Where we store items in cache](../../lib/belfrage/cache/store.ex#6)
+[Where we fetch fallbacks](../../lib/belfrage/processor.ex#103)
 
 ![Fallback Mechanism](../img/belfrage_fallback_mechanism.png)
 
 # Caching & Circuit Breaker
 
-The Circuit Breaker relies massively on the caching layer. Essentially it monitors routes error responses, and if a threshold is reached, it simulates an origin error to stop attempting to fetch content from the origin temporarily. In the meantime, the simulated failure triggers the fallback mechanism.
+The [Circuit Breaker](../../lib/belfrage/transformers/circuit_breaker.ex) is a transformer that is dependant on a dial. If the dial is set to true, the circuit breaker will be used otherwise it will not. 
 
-Error thresholds are configurable per-route.
+The Circuit Breaker relies massively on the caching layer, Essentially the circuit breaker monitors routes error responses, and if a threshold is reached, it simulates an origin error to stop attempting to fetch content from the origin temporarily. In the meantime, the simulated failure triggers the fallback mechanism.
 
-The retry mechanism will improve in time; the first iteration is pretty simple and just stops calling a faulty endpoint for a given amount of time. Next iterations will introduce progressive reintroduction of faulty services and retry policies.
+Error thresholds are configurable per-route from within the routespec, an example shown here: [lib/routes/specs/news_article_page.ex](../../lib/routes/specs/news_article_page.ex).
 
-NOTE: while the circuit breaker is active and continuously monitoring routes response statuses it still doesn't trigger. We plan to enable it in Q3 2019.
 
-## Modes
+Currently the threshold must exceed the preovided number of errors in a specific amount of time, this is currently set to a value of 60s under the value of `long_counter_reset_interval` in [config/config.exs](../../config/config.exs). This means the number of errors is set to 0 every 60 seconds and if the circuit breaker activates it will only be active for the remainder of that 60 seconds until the error count is set back to 0.
 
-Cache in Belfrage can be set per-route in active and passive mode.
-
-### Active Mode
-
-This mode will allow serving cached content for a specified TTL. During this fraction of time, cached content will be served if available. Once the content gets stale, a new request to the origin will be made which will ultimately update the cache. Even if stale pages will be kept in the cache and used as a fallback mechanism in case of faults. The max fallback TTL is currently 6h.
-
-![Active Mode](../img/belfrage_active_cache_hit.png "Active Mode HIT")
-![Active Mode](../img/belfrage_active_cache_miss.png "Active Mode MISS")
-
-### Passive Mode
-
-A route configured in passive mode will not serve any cached content but will still store successful non-personalised responses as a fallback.
-
-![Passive Mode](../img/belfrage_passive_cache_200.png "Passive Mode 200")
-![Passive Mode](../img/belfrage_passive_cache_500.png "Passive Mode 500")
 
 ## Metrics
 
 Belfrage records metrics for each type of cache result. You will be able to see these on the Grafana Dashboards.
 
-It is worth being aware that due to the cascade a `cache.local.miss` metric is set for both the initial cache lookup and on the `fallback_on_error` request. This can mean that the metric is recorded twice for a request (once on the `miss` when requesting fresh content and once on the cascade request when fetching based on an origin 500).
+These are the metrics we record and when we record them:
+- Local fresh hit: When an item is found in local cache and the time elapsed since stored is less than the max-age
+- Local stale hit: When an item is found in local cache and the time elapsed since stored is greater than the max-age
+- Local cache miss: When an item is not found in local cache
+- Distributed fresh hit: ?
+- Distributed stale hit: When a item is found in the distributed cache
+- Distributed cache miss: When an item is not found in the distributed cache (S3)
 
 ## Cache flow
 
