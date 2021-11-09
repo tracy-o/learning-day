@@ -1,5 +1,5 @@
 defmodule Routes.Specs.ContainerEnvelopeElectionBanner do
-  def specs(production_env) do
+  def specs do
     %{
       owner: "DENewsElections@bbc.co.uk",
       platform: Webcore,

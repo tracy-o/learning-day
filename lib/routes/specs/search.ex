@@ -1,5 +1,5 @@
 defmodule Routes.Specs.Search do
-  def specs(production_env) do
+  def specs do
     %{
       owner: "D+ESearchAndNavigationDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
