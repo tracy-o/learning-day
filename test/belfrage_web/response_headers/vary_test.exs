@@ -123,28 +123,6 @@ defmodule BelfrageWeb.ResponseHeaders.VaryTest do
 
       refute "x-id-oidc-signedin" in vary_headers(struct)
     end
-
-    test "vary on cookie-ckps_language if language_from_cookie true" do
-      struct = %Struct{
-        private: %Private{
-          headers_allowlist: [],
-          language_from_cookie: true
-        }
-      }
-
-      assert "cookie-ckps_language" in vary_headers(struct)
-    end
-
-    test "don't vary on cookie-ckps_language if language_from_cookie false" do
-      struct = %Struct{
-        private: %Private{
-          headers_allowlist: [],
-          language_from_cookie: false
-        }
-      }
-
-      refute "cookie-ckps_language" in vary_headers(struct)
-    end
   end
 
   describe "advertise headers" do

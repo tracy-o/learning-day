@@ -1,4 +1,4 @@
-defmodule EndToEnd.LanguageFromCookieTest do
+defmodule EndToEnd.LanguageTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
@@ -95,7 +95,7 @@ defmodule EndToEnd.LanguageFromCookieTest do
       assert get_resp_header(conn_ga, "bsig") != get_resp_header(conn_cy, "bsig")
     end
 
-    test "the langauge header uses the default language" do
+    test "the language header contains the value from the cookie" do
       expect_lambda_call(headers: %{language: "ga"})
 
       conn(:get, "/language-from-cookie")
@@ -103,15 +103,14 @@ defmodule EndToEnd.LanguageFromCookieTest do
       |> Router.call([])
     end
 
-    test "the vary header doesn't contain cookie-ckps_language" do
+    test "the vary header contains cookie-ckps_language" do
       expect_lambda_call()
 
-      vary_string =
+      [vary_string] =
         conn(:get, "/language-from-cookie")
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
         |> get_resp_header("vary")
-        |> (fn [vary_string] -> vary_string end).()
 
       assert vary_string =~ "cookie-ckps_language"
     end

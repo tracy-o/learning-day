@@ -5,6 +5,7 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
   alias Belfrage.Personalisation
+  alias Belfrage.Language
 
   @behaviour ResponseHeaders
 
@@ -44,27 +45,19 @@ defmodule BelfrageWeb.ResponseHeaders.Vary do
 
   # TODO: to be improved in RESFRAME-3924
   defp route_headers(struct = %Struct{private: %Private{headers_allowlist: []}}) do
-    add_language_cookie_header([], struct)
+    Language.vary([], struct)
   end
 
   defp route_headers(struct = %Struct{private: %Private{headers_allowlist: allowlist}}) do
     allowlist
     |> List.delete("cookie")
     |> remove_signed_in_header(struct)
-    |> add_language_cookie_header(struct)
+    |> Language.vary(struct)
   end
 
   defp remove_signed_in_header(headers, %Struct{request: request, private: private = %Private{}}) do
     if private.personalised_route && !(Personalisation.applicable_request?(request) && Personalisation.enabled?()) do
       List.delete(headers, "x-id-oidc-signedin")
-    else
-      headers
-    end
-  end
-
-  defp add_language_cookie_header(headers, struct) do
-    if struct.private.language_from_cookie do
-      ["cookie-ckps_language" | headers]
     else
       headers
     end

@@ -158,44 +158,6 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "generate_request_hash/1" do
-    def make_struct(language_from_cookie, cookie_ckps_language) do
-      %Struct{
-        private: %Private{
-          loop_id: "SportVideos",
-          language_from_cookie: language_from_cookie
-        },
-        request: %Request{
-          cookie_ckps_language: cookie_ckps_language
-        }
-      }
-    end
-
-    test "when language_from_cookie is false request hashes don't vary on cookie_ckps_language" do
-      language_ga =
-        make_struct(false, "ga")
-        |> Processor.pre_request_pipeline()
-
-      language_cy =
-        make_struct(false, "cy")
-        |> Processor.pre_request_pipeline()
-
-      assert language_ga.request.request_hash == language_cy.request.request_hash
-    end
-
-    test "when language_from_cookie is true request hashes do vary on cookie_ckps_language" do
-      language_ga =
-        make_struct(true, "ga")
-        |> Processor.pre_request_pipeline()
-
-      language_cy =
-        make_struct(true, "cy")
-        |> Processor.pre_request_pipeline()
-
-      assert language_ga.request.request_hash != language_cy.request.request_hash
-    end
-  end
-
   describe "fetch_early_response_from_cache/1" do
     setup do
       struct = %Struct{request: %Request{request_hash: unique_cache_key()}}
