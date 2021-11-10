@@ -16,20 +16,16 @@ defmodule EndToEnd.LanguageTest do
 
   defp expect_lambda_call(opts \\ []) do
     times_called = Keyword.get(opts, :times_called, 1)
-    headers = Keyword.get(opts, :headers, %{})
+    expected_headers = Keyword.get(opts, :headers, %{})
 
-    # this if statment is to get rid of compiler warnings
-    if headers == %{} do
-      Belfrage.Clients.LambdaMock
-      |> expect(:call, times_called, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->
-        {:ok, @lambda_response}
-      end)
-    else
-      Belfrage.Clients.LambdaMock
-      |> expect(:call, times_called, fn _lambda_name, _role_arn, headers, _request_id, _opts ->
-        {:ok, @lambda_response}
-      end)
-    end
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _request_id, _opts ->
+      for {expected_key, expected_value} <- expected_headers do
+        assert actual_headers[expected_key] == expected_value
+      end
+
+      {:ok, @lambda_response}
+    end)
   end
 
   setup do
@@ -67,12 +63,11 @@ defmodule EndToEnd.LanguageTest do
     test "the vary header doesn't contain cookie-ckps_language" do
       expect_lambda_call()
 
-      vary_string =
+      [vary_string] =
         conn(:get, "/200-ok-response")
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
         |> get_resp_header("vary")
-        |> (fn [vary_string] -> vary_string end).()
 
       refute vary_string =~ "cookie-ckps_language"
     end

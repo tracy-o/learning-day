@@ -15,12 +15,11 @@ defmodule Belfrage.Language do
     default_language = struct.private.default_language
 
     case {language_from_cookie, cookie_ckps_language} do
-      {false, _} -> default_language
       {true, "cy"} -> "cy"
       {true, "ga"} -> "ga"
       {true, "gd"} -> "gd"
       {true, "en"} -> "en-GB"
-      {true, _} -> default_language
+      _ -> default_language
     end
   end
 

@@ -41,7 +41,7 @@ defmodule Belfrage.LanguageTest do
 
   describe "set/1" do
     test "uses default_language specified in struct.private" do
-      assert "cy" == struct_with(default_language: "cy") |> Language.set()
+      assert struct_with(default_language: "cy") |> Language.set() == "cy"
     end
 
     test "struct.private.default_language is used when language_from_cookie is not present" do
@@ -49,7 +49,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(language_from_cookie: false, default_language: "some_lang")
         |> Language.set()
 
-      assert "some_lang" == lang
+      assert lang == "some_lang"
     end
 
     test "language_from_cookie and cookie_ckps_language of 'cy' gives language header of 'cy'" do
@@ -57,7 +57,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(language_from_cookie: true, default_language: "cy")
         |> Language.set()
 
-      assert "cy" == lang
+      assert lang == "cy"
     end
 
     test "language_from_cookie and cookie_ckps_language of 'ga' gives language header of 'ga'" do
@@ -65,7 +65,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(language_from_cookie: true, cookie_ckps_language: "ga")
         |> Language.set()
 
-      assert "ga" == lang
+      assert lang == "ga"
     end
 
     test "language_from_cookie and cookie_ckps_language of 'gd' gives language header of 'gd'" do
@@ -73,7 +73,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(language_from_cookie: true, cookie_ckps_language: "gd")
         |> Language.set()
 
-      assert "gd" == lang
+      assert lang == "gd"
     end
 
     test "language_from_cookie and cookie_ckps_language of 'en' gives language header of 'en-GB'" do
@@ -81,7 +81,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(language_from_cookie: true, cookie_ckps_language: "en")
         |> Language.set()
 
-      assert "en-GB" == lang
+      assert lang == "en-GB"
     end
 
     test "language_from_cookie and any other value of cookie_ckps_language gives the default_language" do
@@ -89,7 +89,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(default_language: "def_lang", language_from_cookie: true, cookie_ckps_language: "invalid")
         |> Language.set()
 
-      assert "def_lang" == lang
+      assert lang == "def_lang"
     end
 
     test "language_from_cookie and no cookie_ckps_language gives the default_language" do
@@ -97,7 +97,7 @@ defmodule Belfrage.LanguageTest do
         struct_with(default_language: "def_lang", language_from_cookie: true)
         |> Language.set()
 
-      assert "def_lang" == lang
+      assert lang == "def_lang"
     end
   end
 
@@ -110,7 +110,7 @@ defmodule Belfrage.LanguageTest do
         }
       }
 
-      assert ["cookie-ckps_language"] == Language.vary([], struct)
+      assert Language.vary([], struct) == ["cookie-ckps_language"]
     end
 
     test "don't vary on cookie-ckps_language if language_from_cookie false" do
@@ -121,7 +121,7 @@ defmodule Belfrage.LanguageTest do
         }
       }
 
-      assert [] == Language.vary([], struct)
+      assert Language.vary([], struct) == []
     end
   end
 end
