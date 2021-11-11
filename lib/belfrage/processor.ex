@@ -11,7 +11,8 @@ defmodule Belfrage.Processor do
     Event,
     Personalisation,
     CacheControl,
-    Metrics
+    Metrics,
+    Language
   }
 
   alias Struct.{Request, Response, Private}
@@ -22,6 +23,7 @@ defmodule Belfrage.Processor do
     |> get_loop()
     |> allowlists()
     |> personalisation()
+    |> language()
     |> generate_request_hash()
   end
 
@@ -40,6 +42,10 @@ defmodule Belfrage.Processor do
     Metrics.duration(:check_if_personalised_request, fn ->
       Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
     end)
+  end
+
+  def language(struct) do
+    Language.add_signature(struct)
   end
 
   def allowlists(struct) do
