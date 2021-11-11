@@ -64,6 +64,13 @@
   },
   {
     "values": {
+      "test": "https://morph-router.test.api.bbci.co.uk",
+      "live": "https://morph-router.api.bbci.co.uk"
+    },
+    "name": "MORPH_ROUTER_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
       "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
     },

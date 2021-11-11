@@ -8,6 +8,7 @@ use Mix.Config
   {"MOZART_SPORT_ENDPOINT", :default},
   {"PROGRAMMES_ENDPOINT", :default},
   {"FABL_ENDPOINT", :default},
+  {"MORPH_ROUTER_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
   {"STACK_NAME", :default},
