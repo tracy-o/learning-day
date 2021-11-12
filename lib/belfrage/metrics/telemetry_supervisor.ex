@@ -107,7 +107,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp request_metrics() do
-    Enum.map(~w(idcta_config jwk), fn name ->
+    Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
       summary("belfrage.request.#{name}.duration",
         event_name: "belfrage.request.#{name}.stop",
         unit: {:native, :millisecond},

@@ -1,8 +1,10 @@
 defmodule Belfrage.Clients.Lambda do
   require Belfrage.Event
-  alias Belfrage.Clients.HTTP
   require Belfrage.Xray
   import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
+
+  alias Belfrage.AWS
+  alias Belfrage.Clients.HTTP
 
   @aws Application.get_env(:belfrage, :aws)
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
@@ -23,14 +25,7 @@ defmodule Belfrage.Clients.Lambda do
     |> @http_client.execute(:Webcore)
   end
 
-  def call(arn, function, payload, request_id, opts \\ []) do
-    case Belfrage.Credentials.Refresh.fetch(arn) do
-      {:ok, credentials} -> invoke_lambda(function, payload, request_id, credentials, opts)
-      error -> error
-    end
-  end
-
-  defp invoke_lambda(function, payload, request_id, credentials, opts) do
+  def call(credentials = %AWS.Credentials{}, function, payload, request_id, opts \\ []) do
     Belfrage.Event.record "function.timing.service.lambda.invoke" do
       checkpoint(request_id, :origin_request_sent)
 

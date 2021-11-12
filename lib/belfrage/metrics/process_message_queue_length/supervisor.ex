@@ -13,7 +13,9 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
     Belfrage.Authentication.BBCID,
     Belfrage.Authentication.BBCID.AvailabilityPoller,
     Belfrage.Authentication.JWK,
-    Belfrage.Authentication.JWK.Poller
+    Belfrage.Authentication.JWK.Poller,
+    Belfrage.Services.Webcore.Credentials,
+    Belfrage.Services.Webcore.Credentials.Poller
   ]
 
   @loops ~w(
