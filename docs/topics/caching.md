@@ -33,9 +33,6 @@ Belfrage will then try to store this response in cache depending on a few factor
 
 Fallback TTL is currently configured as 6h.
 
-[Where we store items in cache](../../lib/belfrage/cache/store.ex#6)
-[Where we fetch fallbacks](../../lib/belfrage/processor.ex#103)
-
 ## Personalisation
 Personalised pages will not be able to use the cache feature. The fallback option will still be available. When a personalised route is requested the cache directive is set to private so the personalised response is not stored in cache; however, when a personalised request fails, we can return a non-personalised version in the form of a fallback.
 
