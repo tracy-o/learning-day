@@ -28,4 +28,14 @@ defmodule Fixtures.Struct do
       }
     }
   end
+
+  def successful_response() do
+    %Belfrage.Struct.Response{
+      body: "hello!",
+      headers: %{"content-type" => "application/json"},
+      http_status: 200,
+      cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
+      cache_last_updated: Belfrage.Timer.now_ms()
+    }
+  end
 end

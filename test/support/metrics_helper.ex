@@ -2,6 +2,12 @@ defmodule Belfrage.Test.MetricsHelper do
   import ExUnit.Assertions
 
   @doc """
+  Asserts that the passed event, with no measurements and no metadata,
+  is recorded during the execution of the passed function.
+  """
+  def assert_event(name, fun), do: assert_metric({name, %{}, %{}}, fun)
+
+  @doc """
   Asserts that the passed metric is recorded during the execution of the passed
   function.
   """

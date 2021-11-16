@@ -1,22 +1,31 @@
 defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper
 
   alias Belfrage.Cache
   alias Belfrage.Struct
   alias Belfrage.Timer
+  import Belfrage.Test.MetricsHelper, only: [assert_event: 2]
+  require Cachex.Spec
 
-  @response %Belfrage.Struct.Response{
-    body: "hello!",
-    headers: %{"content-type" => "application/json"},
-    http_status: 200,
-    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
-    cache_last_updated: Belfrage.Timer.now_ms()
-  }
+  defmodule TestCache do
+    def touch(_cache, _key) do
+      exit(:some_reason)
+    end
+
+    def fetch(_cache, _key) do
+      {:ok, %Struct{response: Fixtures.Struct.successful_response()}}
+    end
+  end
 
   setup do
-    put_into_cache(cache_key("fresh"), @response)
-    put_into_cache(cache_key("stale"), %{@response | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)})
+    put_into_cache(cache_key("fresh"), Fixtures.Struct.successful_response())
+
+    put_into_cache(cache_key("stale"), %{
+      Fixtures.Struct.successful_response()
+      | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
+    })
 
     :ok
   end
@@ -130,8 +139,8 @@ defmodule Belfrage.Cache.LocalTest do
     end
   end
 
-  describe "fetching a cached response" do
-    test "fetches a fresh cache" do
+  describe "Fetches a cached response" do
+    test "that is fresh" do
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
 
       assert {:ok, {:local, :fresh},
@@ -142,7 +151,7 @@ defmodule Belfrage.Cache.LocalTest do
               }} = Cache.Local.fetch(struct)
     end
 
-    test "fetches a stale cache" do
+    test "that is stale" do
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("stale")}}
 
       assert {:ok, {:local, :stale},
@@ -151,6 +160,27 @@ defmodule Belfrage.Cache.LocalTest do
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
               }} = Cache.Local.fetch(struct)
+    end
+  end
+
+  describe "When an exit signal is sent during an attempt to fetch a cached response" do
+    setup do
+      {:ok, caching_module: TestCache, struct: %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}}
+    end
+
+    test "the expected message is logged", %{struct: struct, caching_module: caching_module} do
+      captured_log = capture_log(fn -> Cache.Local.fetch(struct, caching_module) end)
+
+      assert captured_log =~
+               "level\":\"error\",\"metadata\":{},\"msg\":\"Attempt to fetch from the local cache failed: :some_reason"
+    end
+
+    test "the correct event is emitted", %{struct: struct, caching_module: caching_module} do
+      assert_event([:cache, :local, :fetch_exit], fn -> Cache.Local.fetch(struct, caching_module) end)
+    end
+
+    test "the correct tuple is returned", %{struct: struct, caching_module: caching_module} do
+      assert {:ok, :content_not_found} == Cache.Local.fetch(struct, caching_module)
     end
   end
 

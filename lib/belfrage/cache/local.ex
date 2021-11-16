@@ -5,6 +5,7 @@ defmodule Belfrage.Cache.Local do
   alias Belfrage.Struct
   alias Belfrage.Struct.Request
   alias Belfrage.Timer
+  alias Belfrage.Metrics
 
   @doc """
   Fetches a response from the local cache. In order to implement an LRU caching
@@ -20,12 +21,19 @@ defmodule Belfrage.Cache.Local do
   - [2] https://github.com/bbc/belfrage/pull/821/commits/761d3d68ca9a30b0b6a543ed4ff42b268ac14565
   """
   @impl CacheStrategy
-  def fetch(%Struct{request: %Request{request_hash: request_hash}}, cache \\ :cache) do
-    Cachex.touch(cache, request_hash)
+  def fetch(%Struct{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
+    try do
+      caching_module.touch(:cache, request_hash)
 
-    cache
-    |> Cachex.get(request_hash)
-    |> format_cache_result()
+      :cache
+      |> caching_module.get(request_hash)
+      |> format_cache_result()
+    catch
+      :exit, cause ->
+        Metrics.event([:cache, :local, :fetch_exit])
+        Belfrage.Event.record(:log, :error, %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
+        {:ok, :content_not_found}
+    end
   end
 
   @impl CacheStrategy
