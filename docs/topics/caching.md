@@ -24,12 +24,12 @@ NOTE: future iterations could implement smarter ways to determine which content 
 ### Tier 2 - Distributed cache
 A slower and longer-term cache on Amazon S3. 
 
-We have a seperate application [Belfrage-ccp](https://github.com/bbc/belfrage-ccp) which is our central cache processor and deals with storing pages on S3. (Fetching pages is done by requesting straight from S3 within Belfrage)
+We have a seperate application [Belfrage-ccp](https://github.com/bbc/belfrage-ccp) where Belfrage sends responses from origins and which stores them on S3. Fetching pages is done by requesting straight from S3 within Belfrage.
 
 ## Fallback Mechanism
-If Belfrage is unable to find fresh cached content it will then make requests to each of the available service providers until it receives a response that is not a 404, if all responses are 404, it will return 404. 
+If Belfrage is unable to find fresh cached content it will then make request(s) to origin(s) to get a response. 
 
-Belfrage will then try to store this response in cache depending on a few factors such as if caching is enabled for that request. Finally, if the response we have has a status code >=400 and is not 404, 401 or 451 and caching is enabled, we look for both fresh and stale content in the cache and if this reponse is a 200, we try to store it back in the cache.
+Belfrage will then try to store this response in cache depending on a few factors such as if caching is enabled for that request. Finally, if the response is an error (for the purpose of serving a fallback, it has to have a status code >=400 and not 404, 401 or 451) and caching is enabled, we attempt to find any cached response (fresh or stale) and serve it as a fallback. If we got the cached response from S3, we add it to the local cache so that on the following request to the same page we could find the fallback quicker.
 
 Fallback TTL is currently configured as 6h.
 
@@ -40,7 +40,7 @@ Fallback TTL is currently configured as 6h.
 Personalised pages will not be able to use the cache feature. The fallback option will still be available. When a personalised route is requested the cache directive is set to private so the personalised response is not stored in cache; however, when a personalised request fails, we can return a non-personalised version in the form of a fallback.
 
 ## Vary Header
-The [Vary Header](../../lib/belfrage_web/response_headers/vary.ex) is a header which Belfrage adds when sending the reponse downstream to services such as GTM, this header is then used within their caching services. These values include if the request was from the uk, if the response has adverts and if it was routed through a cdn.
+The [Vary Header](../../lib/belfrage_web/response_headers/vary.ex) is a header which Belfrage adds when sending the response downstream to services such as GTM. It contains a list of request headers that downstream services should use to vary their caches, which means that the current response should only be used as a cached response for requests with the same values of the headers included in the value of the `Vary` header. This is how Belfrage effectively instructs downstream services on how to cache the response. Various headers are included in the value of the `Vary` header, many of which are set by GTM itself (i.e. are internal headers). 
 
 ## Metrics
 Belfrage records metrics for each type of cache result. You will be able to see these on the Grafana Dashboards.
