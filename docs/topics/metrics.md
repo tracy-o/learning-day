@@ -90,3 +90,4 @@ Agent too (to aggregate on the new dimension). This is a limitation of the
 current approach and it would probably be better to combine metrics from hosts
 into one when displaying them rather than publishing an additional aggregated
 metric.
+=======
