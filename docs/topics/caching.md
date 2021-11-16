@@ -15,7 +15,7 @@ The request hash is generated using the Crimpex library.
 ## Caching tiers
 Belfrage will provide two cascading caching layers:
 ### Tier 1 - Local Cache
-A per-node in-memory LRU cache with no network involved and almost no latency. Currently, every Belfrage node can cache around 12Gb of content. 
+A per-node in-memory LRU cache with no network involved and almost no latency. The size of the per-node cache is dependant on the memory capacity of the server. 
 
 We use a library `Cachex` for our local cache, see more [lib/belfrage/cache/local.ex](../../lib/belfrage/cache/local.ex)
 
