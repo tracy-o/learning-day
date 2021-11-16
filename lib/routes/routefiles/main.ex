@@ -521,7 +521,7 @@ defroutefile "Main" do
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
   redirect "/arabic/institutional/2011/01/000000_frequencies_radio", to: "/arabic/tv-and-radio-57895092", status: 301
 
-   
+
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
   handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic"]
@@ -645,7 +645,7 @@ defroutefile "Main" do
 
   redirect "/russian/mobile/*any", to: "/russian", status: 301
   redirect "/russia", to: "/russian", status: 301
-  
+
 
   handle "/russian.amp", using: "WorldServiceRussian", examples: ["/russian.amp"]
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
@@ -1199,6 +1199,9 @@ defroutefile "Main" do
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
+
+  ## Live WebCore
+  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt"]
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
