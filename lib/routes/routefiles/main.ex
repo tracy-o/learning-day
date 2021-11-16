@@ -475,6 +475,7 @@ defroutefile "Main" do
   ## World Service - Podcast Redirects
   redirect "/arabic/media-45669761", to: "/arabic/podcasts/p02pc9qc", status: 301
   redirect "/arabic/xlevels", to: "/arabic/podcasts/p09w8yvk", status: 301
+  redirect "/arabic/morahakaty", to: "/arabic/podcasts/p0b3xdrj", status: 301
   redirect "/burmese/media-45625858", to: "/burmese/podcasts/p02pc9lh", status: 301
   redirect "/burmese/media-45625862", to: "/burmese/podcasts/p02p9f6q", status: 301
   redirect "/gahuza/institutional-51112056", to: "/gahuza/podcasts/p07yh8hb", status: 301
