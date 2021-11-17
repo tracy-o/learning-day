@@ -17,7 +17,8 @@ defmodule Routes.Specs.BitesizeTransition do
   def specs(_production_env) do
     %{
       owner: "bitesize-developers@bbc.co.uk",
-      platform: Webcore
+      platform: Webcore,
+      language_from_cookie: true
     }
   end
 end
