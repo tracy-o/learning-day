@@ -13,19 +13,22 @@ default_machine_gun_config = %{
   conn_opts: %{}
 }
 
+secure_machine_gun_config = %{
+  default_machine_gun_config
+  | conn_opts: %{
+      transport_opts: [
+        {:cacertfile, System.get_env("CLIENT_CERT_CA")},
+        {:certfile, System.get_env("CLIENT_CERT")},
+        {:keyfile, System.get_env("CLIENT_CERT_KEY")}
+      ]
+    }
+}
+
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
-  Fabl: %{
-    default_machine_gun_config
-    | conn_opts: %{
-        transport_opts: [
-          {:cacertfile, System.get_env("CLIENT_CERT_CA")},
-          {:certfile, System.get_env("CLIENT_CERT")},
-          {:keyfile, System.get_env("CLIENT_CERT_KEY")}
-        ]
-      }
-  },
+  Fabl: secure_machine_gun_config,
+  MorphRouter: secure_machine_gun_config,
   MozartNews: default_machine_gun_config,
   MozartSport: default_machine_gun_config,
   MozartWeather: default_machine_gun_config,
