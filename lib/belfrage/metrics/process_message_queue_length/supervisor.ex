@@ -63,7 +63,8 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
         Telemetry.Metrics.last_value("gen_server.#{metric_name}.mailbox_size",
           event_name: [:belfrage, :process_message_queue_length],
           measurement: :message_queue_len,
-          keep: &(&1.name == name)
+          keep: &(&1.name == name),
+          tags: [:BBCEnvironment]
         )
       end)
 
@@ -73,10 +74,14 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
           Telemetry.Metrics.last_value("loop.#{name}.mailbox_size",
             event_name: [:belfrage, :loop_message_queue_length],
             measurement: :message_queue_len,
-            keep: &(&1.name == name)
+            keep: &(&1.name == name),
+            tags: [:BBCEnvironment]
           )
         end)
 
-    {TelemetryMetricsStatsd, metrics: metrics}
+    {TelemetryMetricsStatsd,
+     metrics: metrics,
+     global_tags: [BBCEnvironment: Application.get_env(:belfrage, :production_environment)],
+     formatter: :datadog}
   end
 end
