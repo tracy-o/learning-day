@@ -1,5 +1,5 @@
 defmodule Routes.Specs.ContainerEnvelopeTestContainers do
-  def specs(production_env) do
+  def specs do
     %{
       owner: "d&ewebcorepresentationteam@bbc.co.uk",
       platform: Webcore,
