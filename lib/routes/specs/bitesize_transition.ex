@@ -9,14 +9,14 @@ defmodule Routes.Specs.BitesizeTransition do
 
   def specs("live") do
     %{
-      owner: "bitesize-developers@bbc.co.uk",
+      owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter
     }
   end
 
   def specs(_production_env) do
     %{
-      owner: "bitesize-developers@bbc.co.uk",
+      owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: Webcore,
       language_from_cookie: true
     }

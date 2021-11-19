@@ -8,7 +8,7 @@ defmodule Routes.Specs.BitesizeLegacy do
 
   def specs do
     %{
-      owner: "bitesize-developers@bbc.co.uk",
+      owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter
     }
   end
