@@ -27,13 +27,6 @@ defmodule Belfrage.Dials.SupervisorTest do
     end
   end
 
-  describe "children/1" do
-    test "does not include Poller in test env" do
-      assert Dials.Poller in Dials.Supervisor.children([])
-      refute Dials.Poller in Dials.Supervisor.children(env: :test)
-    end
-  end
-
   describe "notify/2" do
     test "updates dial value" do
       [{module, name, current_value} | _] = Dials.Supervisor.dial_config()

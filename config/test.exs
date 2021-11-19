@@ -18,7 +18,6 @@ config :belfrage,
   ccp_client: Belfrage.Clients.CCPMock,
   ccp_s3_bucket: "belfrage-distributed-cache-test",
   dial: Belfrage.Dials.ServerMock,
-  dials_location: "test/support/resources/dials.json",
   authentication_client: Belfrage.Clients.AuthenticationMock,
   expiry_validator: Belfrage.Authentication.Validator.ExpiryMock,
   event: Belfrage.EventMock,
@@ -37,6 +36,7 @@ config :belfrage,
   # executed in tests
   short_counter_reset_interval: 3_600_000,
   long_counter_reset_interval: 3_600_000,
+  dials_startup_polling_delay: 3_600_000,
   bbc_id_availability_poll_interval: 3_600_000
 
 config :cachex, :limit,

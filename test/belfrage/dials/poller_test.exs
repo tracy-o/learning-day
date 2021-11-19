@@ -1,83 +1,60 @@
 defmodule Belfrage.Dials.PollerTest do
+  # Can't be async because it updates dials which is a global resource
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [wait_for: 1]
 
   alias Belfrage.Dials.Poller
+  alias Belfrage.Dials.LiveServer, as: DialsServer
 
-  setup do
-    start_supervised!(Poller)
+  test "polls and updates dials values" do
+    # The test updates one of the dials called :logging_level
+    assert DialsServer.state(:logging_level) == :error
 
-    :ok
+    overwrite_dials_config(~s({"logging_level": "debug"}))
+    start_supervised!({Poller, startup_polling_delay: 0, polling_interval: 0, name: :test_dials_poller})
+
+    wait_for(fn -> DialsServer.state(:logging_level) == :debug end)
+
+    overwrite_dials_config(~s({"logging_level": "error"}))
+    wait_for(fn -> DialsServer.state(:logging_level) == :error end)
   end
 
-  describe "handle_info/2" do
-    test "when are no dial changes" do
-      old_dials = %{"a-dial" => "yes"}
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
-
-      assert {:noreply,
-              %{
-                "a-dial" => "yes"
-              }} == Poller.handle_info(:refresh, old_dials)
+  describe "read_dials/0" do
+    test "returns the contents of the dials file" do
+      overwrite_dials_config(~s({"logging_level": "debug"}))
+      assert Poller.read_dials() == {:ok, %{"logging_level" => "debug"}}
     end
 
-    test "when there are dial changes" do
-      old_dials = %{"a-dial" => "no"}
+    test "returns error if dials file doesn't exist" do
+      restore_dials_config_on_exit()
+      set_dials_file_path("/some/non-existent/file")
+      assert Poller.read_dials() == {:error, :enoent}
+    end
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _dials_location -> {:ok, ~s({"a-dial": "yes"})} end)
-
-      assert {:noreply,
-              %{
-                "a-dial" => "yes"
-              }} == Poller.handle_info(:refresh, old_dials)
+    test "returns error if dials file contains invalid JSON" do
+      overwrite_dials_config("not json")
+      assert {:error, _} = Poller.read_dials()
     end
   end
 
-  describe "&state/0" do
-    test "state returns initial dial config" do
-      assert Poller.state() == %{}
-    end
+  defp overwrite_dials_config(contents) do
+    restore_dials_config_on_exit()
+    new_file_path = System.tmp_dir!() |> Path.join("dials.json")
+    File.write!(new_file_path, contents)
+    set_dials_file_path(new_file_path)
+  end
 
-    test "checks the correct path to the dials config" do
-      dials_location = Application.get_env(:belfrage, :dials_location)
+  defp restore_dials_config_on_exit() do
+    original_file_path = get_dials_file_path()
+    on_exit(fn -> set_dials_file_path(original_file_path) end)
+  end
 
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^dials_location -> {:ok, ~s({})} end)
+  defp get_dials_file_path() do
+    Application.get_env(:belfrage, :dials_location)
+  end
 
-      Poller.refresh_now()
-      Poller.state()
-    end
-
-    test "init/1 sets initial state of dials to an empty map" do
-      options = []
-      assert {:ok, %{}} = Poller.init(options)
-    end
-
-    test "Changing the file and refreshing gives the new dials value" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({"some-dial-key": "ok"})} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{"some-dial-key" => "ok"}
-    end
-
-    test "Writing unparsable JSON to the file returns the initial dials values" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:ok, ~s({}}}}\\inva\"id: \nJSON!!</what?>})} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{}
-    end
-
-    test "A missing file returns the initial dials values" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn _ -> {:error, :enoent} end)
-
-      Poller.refresh_now()
-      assert Poller.state() == %{}
-    end
+  defp set_dials_file_path(file_path) do
+    Application.put_env(:belfrage, :dials_location, file_path)
   end
 end
