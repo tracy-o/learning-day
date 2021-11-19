@@ -1,149 +1,112 @@
-defmodule BelfrageWeb.Plugs.XRayTest do
-  use ExUnit.Case
+defmodule BelfrageWeb.Plugs.XrayTest do
+  use ExUnit.Case, async: true
   use Plug.Test
   use Test.Support.Helper, :mox
+  use Belfrage.Test.XrayHelper
 
   alias BelfrageWeb.Plugs
+  alias AwsExRay.Record.HTTPRequest
 
-  test "starts tracing" do
-    Belfrage.XrayMock
-    |> expect(
-      :start_tracing,
-      fn "Belfrage" ->
-        Belfrage.XrayStub.start_tracing("Belfrage")
-      end
-    )
-
-    conn(:get, "/")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
-  end
-
-  test "adds the request method and path" do
-    Belfrage.XrayMock
-    |> expect(:set_http_request, fn segment, %{method: "GET", path: "/"} ->
-      segment
-    end)
-
-    conn(:get, "/")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
-  end
-
-  test "when request is sampled, it sets xray trace ID, with 'Sampled' to 1" do
-    conn =
-      conn(:get, "/")
-      |> Plugs.RequestId.call([])
-      |> Plugs.XRay.call([])
-
-    assert %Plug.Conn{
-             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=1"}
-           } = conn
-  end
-
-  test "when request is not sampled, it sets xray trace ID, with 'Sampled' to 0" do
-    Belfrage.XrayMock
-    |> expect(:sampled?, fn _segment -> false end)
-
-    conn =
-      conn(:get, "/")
-      |> Plugs.RequestId.call([])
-      |> Plugs.XRay.call([])
-
-    assert %Plug.Conn{
-             private: %{xray_trace_id: "Root=1-5dd274e2-00644696c03ec16a784a2e43;Parent=fake-xray-parent-id;Sampled=0"}
-           } = conn
-  end
-
-  test "finishes tracing after sending response" do
-    Belfrage.XrayMock
-    |> expect(
-      :finish_tracing,
-      fn _trace = %AwsExRay.Segment{
-           trace: %AwsExRay.Trace{
-             root: "1-5dd274e2-00644696c03ec16a784a2e43"
-           }
-         } ->
-        :ok
-      end
-    )
-
-    conn(:get, "/")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
-    |> Plug.Conn.resp(200, "OK")
-    |> Plug.Conn.send_resp()
-  end
-
-  describe "if start tracing fails" do
+  describe "call/2 when tracing" do
     setup do
-      Belfrage.XrayMock
-      |> expect(:start_tracing, fn _ -> {:error, "some error"} end)
-
       conn =
-        conn(:get, "/")
+        conn(:get, "/some/route")
         |> Plugs.RequestId.call([])
-        |> Plugs.XRay.call([])
-        |> Plug.Conn.resp(200, "OK")
-        |> Plug.Conn.send_resp()
+        |> Plugs.Xray.call(xray_client: SampleXray)
 
       %{conn: conn}
     end
 
-    test "xray trace id isn't set", %{conn: conn} do
-      refute conn.private |> Map.has_key?(:xray_trace_id)
+    test "skips status route" do
+      conn =
+        conn(:get, "/status")
+        |> Plugs.RequestId.call([])
+
+      assert conn == Plugs.Xray.call(conn, [])
+    end
+
+    test "puts the segment into the conn", %{conn: conn} do
+      assert conn.private[:xray_segment]
+    end
+
+    test "segment has annotations", %{conn: conn} do
+      assert %{request_id: _} = conn.private[:xray_segment].annotation
+    end
+
+    test "segment has http request set", %{conn: conn} do
+      request = conn.private[:xray_segment].http.request
+
+      assert request == %HTTPRequest{
+               segment_type: :segment,
+               method: "GET",
+               url: "/some/route"
+             }
+    end
+
+    test "registers a before_send callback", %{conn: conn} do
+      assert length(conn.before_send) == 1
+    end
+
+    test "when response had been sent, finishes tracing", %{conn: conn} do
+      conn =
+        conn
+        |> resp(200, "OK")
+        |> send_resp()
+
+      assert conn.private[:xray_segment].end_time > 0
+    end
+
+    test "when response had been sent, sends message to client", %{conn: conn} do
+      conn
+      |> resp(200, "OK")
+      |> send_resp()
+
+      assert_received {:client_mock, data}
+      json = Jason.decode!(data)
+      assert json["trace_id"]
+      assert json["name"] == "Belfrage"
     end
   end
 
-  describe "adds response information in plug callback" do
-    test "when content-length response header is given" do
-      Belfrage.XrayMock
-      |> expect(:set_http_response, fn segment, %{status: _status, content_length: "34758435"} ->
-        segment
-      end)
+  describe "call/2 when no tracing is occuring" do
+    setup do
+      conn =
+        conn(:get, "/some/route")
+        |> Plugs.RequestId.call([])
+        |> Plugs.Xray.call(xray_client: IgnoreXray)
 
-      conn(:get, "/")
-      |> Plug.Conn.put_resp_header("content-length", "34758435")
-      |> Plugs.RequestId.call([])
-      |> Plugs.XRay.call([])
-      |> Plug.Conn.resp(200, "OK")
-      |> Plug.Conn.send_resp()
+      %{conn: conn}
     end
 
-    test "when content-length response header is not set" do
-      Belfrage.XrayMock
-      |> expect(:set_http_response, fn segment, %{status: _status, content_length: "not-reporting"} ->
-        segment
-      end)
-
-      conn(:get, "/")
-      |> Plugs.RequestId.call([])
-      |> Plugs.XRay.call([])
-      |> Plug.Conn.resp(200, "OK")
-      |> Plug.Conn.send_resp()
+    test "puts segment into the conn", %{conn: conn} do
+      assert conn.private[:xray_segment]
     end
-  end
 
-  test "skips status route" do
-    Belfrage.XrayMock
-    |> expect(:start_tracing, 0, fn _app_name ->
-      raise "Should not be called"
-    end)
+    test "segment has no annotations", %{conn: conn} do
+      assert %{} == conn.private[:xray_segment].annotation
+    end
 
-    conn(:get, "/status")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
-  end
+    test "segment has no http request set", %{conn: conn} do
+      request = conn.private[:xray_segment].http.request
 
-  test "adds request_id as an annotation" do
-    Belfrage.XrayMock
-    |> expect(:add_annotations, fn segment, %{request_id: request_id} ->
-      assert is_binary(request_id)
-      segment
-    end)
+      assert request == nil
+    end
 
-    conn(:get, "/")
-    |> Plugs.RequestId.call([])
-    |> Plugs.XRay.call([])
+    test "when response had been sent, doesn't finish tracing", %{conn: conn} do
+      conn =
+        conn
+        |> resp(200, "OK")
+        |> send_resp()
+
+      assert conn.private[:xray_segment].end_time == 0
+    end
+
+    test "when response had been sent, doesn't send message to client", %{conn: conn} do
+      conn
+      |> resp(200, "OK")
+      |> send_resp()
+
+      refute_received {:client_mock, _data}
+    end
   end
 end
