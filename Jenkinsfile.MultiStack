@@ -41,10 +41,11 @@ node {
     }
 
     stage('Build RPM') {
+      sh "./download_bbc_error_pages.sh"
       sh "cp cosmos_config/${params.SERVICE}.json cosmos/release-configuration.json"
-      sh 'mkdir -p SOURCES'
       String vars = buildVariables()
       docker.image(dockerImage).inside("-u root -e MIX_ENV=prod ${vars}") {
+        sh 'rpm -i bbc-error-pages.rpm'
         sh 'mix deps.get'
         sh 'mix hex.audit'
         sh 'mix distillery.release'
