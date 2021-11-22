@@ -1658,6 +1658,7 @@ defroutefile "Main" do
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
   handle "/bitesize/subjects", using: "BitesizeTransition", examples: ["/bitesize/subjects"]
   handle "/bitesize/articles/zm8fhbk", using: "BitesizeTransition", examples: ["/bitesize/articles/zm8fhbk"]
+  handle "/bitesize/levels/z98jmp3", using: "BitesizeTransition", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
