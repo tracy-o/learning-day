@@ -28,7 +28,6 @@ defmodule Belfrage.MixProject do
 
   defp aliases do
     [
-      test: ["test --no-start"],
       test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
       routes_test: ["cmd MIX_ENV=routes_test mix test --color"],
       # for smoke_test, see lib/mix/tasks/smoke_test.ex

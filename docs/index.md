@@ -25,6 +25,7 @@ This is where you can find the answers to most, if not all your questions regard
         - [Smoke test slack channel](topics/debugging-testing/smoke-test-slack-channel.md)
         - [Stubbing out AWS](topics/debugging-testing/stubbing-aws.md)
         - [Testing best practises](topics/debugging-testing/testing-best-practices.md)
+    - [Metrics](topics/metrics.md)
 - Misc
     - [CI-CD threat analysis](misc/ci-cd-threat-analysis.md)
     - [Deployments](misc/deployments.md)
