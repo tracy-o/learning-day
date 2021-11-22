@@ -89,11 +89,6 @@ defmodule BelfrageWeb.HeadersTest do
     end
 
     test "with a 404 path default response_headers are added" do
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
       conn = make_404_call("<p>some html content</p>", %{}, "/premature-404")
 
       assert {404,
@@ -106,15 +101,10 @@ defmodule BelfrageWeb.HeadersTest do
                 {"via", "1.1 Belfrage"},
                 {"req-svc-chain", "BELFRAGE"},
                 {"belfrage-cache-status", "MISS"}
-              ], "<h1>404 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
+              ], "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
 
     test "with a 500 path default response_headers are added" do
-      internal_error_page = Application.get_env(:belfrage, :internal_error_page)
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
-
       conn = make_500_call("<p>some html content</p>", %{}, "/200-ok-response")
 
       assert {500,
@@ -127,7 +117,7 @@ defmodule BelfrageWeb.HeadersTest do
                 {"via", "1.1 Belfrage"},
                 {"req-svc-chain", "BELFRAGE"},
                 {"belfrage-cache-status", "MISS"}
-              ], "<h1>500 Error Page</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
+              ], "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"} = sent_resp(conn)
     end
   end
 end

@@ -6,7 +6,6 @@ defmodule BelfrageWeb.RouteMasterTest do
   alias Belfrage.Struct
   alias Routes.Routefiles.Mock, as: Routefile
   alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
-  alias Belfrage.Helpers.FileIOMock
 
   @struct_with_html_response %Struct{
     response: %Struct.Response{
@@ -66,10 +65,6 @@ defmodule BelfrageWeb.RouteMasterTest do
   describe "calling handle with do block" do
     test "when 404 check is truthy, route is not called" do
       expect_belfrage_not_called()
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
-
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
 
       conn =
         conn(:get, "/premature-404")
@@ -79,7 +74,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
     end
 
     test "when 404 check is false, the request continues downstream" do
@@ -122,7 +117,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
     end
 
     test "when the environments do not match, will match similar route from other environment" do
@@ -164,7 +159,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
     end
 
     test "when the environments do not match, will match similar route from other environment ans execute block" do
@@ -742,41 +737,32 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "defines a catch-all 404 GET route" do
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
-      expect(FileIOMock, :read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
       conn =
         conn(:get, "/a_route_that_will_not_match")
         |> put_bbc_headers()
         |> RouteFileWithNoMatch.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
     end
 
     test "defines a catch-all 405 route for all other HTTP methods" do
-      not_supported_page = Application.get_env(:belfrage, :not_supported_page)
-      expect(FileIOMock, :read, fn ^not_supported_page -> {:ok, "<h1>405 Error Page</h1>\n"} end)
-
       conn =
         conn(:post, "/a_route_that_will_not_match")
         |> RouteFileWithNoMatch.call([])
 
       assert conn.status == 405
-      assert conn.resp_body == "<h1>405 Error Page</h1>\n<!-- Belfrage -->"
+      assert conn.resp_body =~ "405"
     end
 
     test "defines a catch-all 404 GET route when there's a proxy-pass catch-all route for a different env" do
-      not_found_page = Application.get_env(:belfrage, :not_found_page)
-      expect(FileIOMock, :read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
       conn =
         conn(:get, "/a_route_that_will_not_match")
         |> put_bbc_headers()
         |> RouteFileWithProxyPassAndNoMatch.call([])
 
       assert conn.status == 404
-      assert conn.resp_body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
     end
   end
 end

@@ -119,7 +119,7 @@ defmodule BelfrageWeb.ViewTest do
       conn = conn(:get, "/") |> put_req_header("accept", "text/html")
       {status, headers, body} = View.render(struct, conn) |> sent_resp()
       assert status == 500
-      assert body == "content for file test/support/resources/internal-error.html<!-- Belfrage -->"
+      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
       assert {"content-type", "text/html; charset=utf-8"} in headers
     end
 
@@ -134,7 +134,7 @@ defmodule BelfrageWeb.ViewTest do
       conn = conn(:get, "/") |> put_req_header("accept", "text/html")
       {status, headers, body} = View.render(struct, conn) |> sent_resp()
       assert status == 500
-      assert body == "content for file test/support/resources/internal-error.html<!-- Belfrage -->"
+      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
       assert {"content-type", "text/html; charset=utf-8"} in headers
     end
 
@@ -150,7 +150,7 @@ defmodule BelfrageWeb.ViewTest do
       conn = conn(:get, "/") |> put_req_header("accept", "text/html")
       {status, headers, body} = View.render(struct, conn) |> sent_resp()
       assert status == 404
-      assert body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
       assert {"content-type", "text/html; charset=utf-8"} in headers
     end
 
@@ -236,49 +236,34 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   describe "error pages" do
-    @not_found_page Application.get_env(:belfrage, :not_found_page)
-    @internal_error_page Application.get_env(:belfrage, :internal_error_page)
-
     test "Rendering response from a struct with a 200 and a nil response" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn @internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
-
       {status, _headers, body} = build_struct_and_render(nil)
 
       assert status == 500
-      assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
+      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
     end
 
     test "serving the BBC standard error page for a 500 status" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn @internal_error_page -> {:ok, "<h1>500 Error Page</h1>\n"} end)
-
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.internal_server_error()
         |> sent_resp()
 
       assert status == 500
-      assert body == "<h1>500 Error Page</h1>\n<!-- Belfrage -->"
+      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
     end
 
     test "serving the BBC standard error page for a 404 status" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn @not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.not_found()
         |> sent_resp()
 
       assert status == 404
-      assert body == "<h1>404 Error Page</h1>\n<!-- Belfrage -->"
+      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
     end
 
     test "when the BBC standard error page for a 404 does not exist it serves a default error body" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn @not_found_page -> {:error, ~s()} end)
-
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.not_found()
@@ -289,9 +274,6 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     test "when the BBC standard error page for a 500 does not exist it serves a default error body" do
-      Belfrage.Helpers.FileIOMock
-      |> expect(:read, fn @internal_error_page -> {:error, ~s()} end)
-
       {status, _headers, body} =
         conn(:get, "/_web_core")
         |> View.internal_server_error()
