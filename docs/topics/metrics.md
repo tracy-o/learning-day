@@ -4,8 +4,14 @@ Belfrage publishes metrics to AWS CloudWatch and we use Grafana to visualise
 them. Those metrics are used for things like investigating issues with Belfrage
 or origins, monitoring the health of Belfrage, tracking its performance, etc.
 
+## Unifying our approach
+Currently in Belfrage we have used a mixture of two libraries; Statix and Telemetry. The use of two libraries has led to some confusing in the team so we have decided to start migrating towards the use of Telemetry. Our reasoning behind this is that Telemetry is becoming more of a standard within the Elixir community, it is simpler to implement and requires us to have less code within Belfrage itself.
+We are migrating slowly so currently some calls to Statix still remain the main usage is calls to Belfrage.Event which wraps calls to Statix, along with some direct calls to Statix dotted around the rest of Belfrage.
+
 ## Telemetry, Telemetry.Metrics, Telemetry.Metrics.StatsD and :telemetry_poller
 The [:telemetry](https://hexdocs.pm/phoenix/telemetry.html) library allows us to emit events (such as `:telemetry.execute(event, metadata)`) and then aggregate these events as metrics using [Telemetry.Metrics](https://hexdocs.pm/telemetry_metrics/0.6.1/Telemetry.Metrics.html) (such as collecting the count of the above event with `Telemetry.Metrics.counter(event)`) these metrics are then sent and consumed by a reporter, in our case this is [Telemetry.Metrics.StatsD](https://hexdocs.pm/telemetry_metrics_statsd/TelemetryMetricsStatsd.html) which our Amazon Agent is configured to collect metrics from periodically. We also use [Telemetry.Poller](https://hexdocs.pm/telemetry_poller/readme.html) to create a poller which collects VM metrics along with metrics related to our different PoolBoy pools.
+
+We now use our [Belfrage.Metrics](../../lib/belfrage/metrics.ex) to emit telemetry events instead of calling telemetry directly. 
 
 ## How AWS CloudWatch metric dimensions work
 
@@ -94,7 +100,7 @@ current approach and it would probably be better to combine metrics from hosts
 into one when displaying them rather than publishing an additional aggregated
 metric.
 
-## Old vs New Approach
-Previously we used a mix of Statix directly along with Statix through [Belfrage.Event](../../lib/belfrage/event.ex) to record metrics. However we have now started to move over to only use so the code base uses a single method to periodically collect and report metrics. This effectively replaces our own custom logic with configuration for those 3rd party libraries.
-
-We now use our [Belfrage.Metrics](../../lib/belfrage/metrics.ex) to emit telemetry events instead of calling telemetry directly. 
+## How to track a new metric
+1. Generate an event where you wish to track the metric using Metrics.event(event_name) where event_name is the name of the event, can be represented by an atom list ie `[:cache, :local, :fetch_exit]`.
+2. Add the new metric to the supervisor (`lib/belfrage/metrics/telemetry_supervisor.ex`) along with the type of metric you wish to collect such as summary, counter, last_value for example: `counter("cowboy.request.exception.count", tags: [:BBCEnvironment])` which will count the number of cowboy requests exception , this will ensure it is picked up by StatsD and sent to AWS.
+3. The metric should now appear on AWS CloudWatch and should be able to be attached to a Grafana graph.
