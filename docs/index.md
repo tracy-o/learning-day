@@ -16,6 +16,7 @@ This is where you can find the answers to most, if not all your questions regard
     - [Cascade](topics/cascade.md)
     - [Circuit Breaker](topics/circuit-breaker.md)
     - [Dials](topics/dials.md)
+    - [Metrics](topics/metrics.md)
     - [Personalisation](topics/personalisation.md)
     - Routing
         - [Route Matcher Types](topics/routing/route-matcher-types.md)
@@ -25,7 +26,6 @@ This is where you can find the answers to most, if not all your questions regard
         - [Smoke test slack channel](topics/debugging-testing/smoke-test-slack-channel.md)
         - [Stubbing out AWS](topics/debugging-testing/stubbing-aws.md)
         - [Testing best practises](topics/debugging-testing/testing-best-practices.md)
-    - [Metrics](topics/metrics.md)
 - Misc
     - [CI-CD threat analysis](misc/ci-cd-threat-analysis.md)
     - [Deployments](misc/deployments.md)

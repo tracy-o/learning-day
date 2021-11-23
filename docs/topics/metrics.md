@@ -4,6 +4,9 @@ Belfrage publishes metrics to AWS CloudWatch and we use Grafana to visualise
 them. Those metrics are used for things like investigating issues with Belfrage
 or origins, monitoring the health of Belfrage, tracking its performance, etc.
 
+## Telemetry, Telemetry.Metrics, Telemetry.Metrics.StatsD and :telemetry_poller
+The [:telemetry](https://hexdocs.pm/phoenix/telemetry.html) library allows us to emit events (such as `:telemetry.execute(event, metadata)`) and then aggregate these events as metrics using [Telemetry.Metrics](https://hexdocs.pm/telemetry_metrics/0.6.1/Telemetry.Metrics.html) (such as collecting the count of the above event with `Telemetry.Metrics.counter(event)`) these metrics are then sent and consumed by a reporter, in our case this is [Telemetry.Metrics.StatsD](https://hexdocs.pm/telemetry_metrics_statsd/TelemetryMetricsStatsd.html) which our Amazon Agent is configured to collect metrics from periodically. We also use [Telemetry.Poller](https://hexdocs.pm/telemetry_poller/readme.html) to create a poller which collects VM metrics along with metrics related to our different PoolBoy pools.
+
 ## How AWS CloudWatch metric dimensions work
 
 AWS CloudWatch supports specifying dimensions with metrics, which are basically
@@ -95,7 +98,3 @@ metric.
 Previously we used a mix of Statix directly along with Statix through [Belfrage.Event](../../lib/belfrage/event.ex) to record metrics. However we have now started to move over to only use so the code base uses a single method to periodically collect and report metrics. This effectively replaces our own custom logic with configuration for those 3rd party libraries.
 
 We now use our [Belfrage.Metrics](../../lib/belfrage/metrics.ex) to emit telemetry events instead of calling telemetry directly. 
-
-
-## Telemetry, Telemetry.Metrics and Telemetry.Metrics.StatsD
-The [:telemetry](https://hexdocs.pm/phoenix/telemetry.html) library allows us to emit events (such as `:telemetry.execute(event, metadata)`) and then aggregate these events as metrics using [Telemetry.Metrics](https://hexdocs.pm/telemetry_metrics/0.6.1/Telemetry.Metrics.html) (such as collecting the count of the above event with `Telemetry.Metrics.counter(event)`) these metrics are then sent and consumed by a reporter, in our case this is [Telemetry.Metrics.StatsD](https://hexdocs.pm/telemetry_metrics_statsd/TelemetryMetricsStatsd.html) which our Amazon Agent is configured to collect metrics from periodically. We also use [Telemetry.Poller](https://hexdocs.pm/telemetry_poller/readme.html) to create a poller which collects VM metrics along with metrics related to our different PoolBoy pools.
