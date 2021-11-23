@@ -38,7 +38,7 @@ defmodule Belfrage.Services.WebcoreTest do
     struct = %Struct{}
 
     expect(XrayMock, :subsegment_with_struct_annotations, fn "webcore-service", ^struct, _fn ->
-      %Response{body: "OK"}
+      @successful_response
     end)
 
     assert %Struct{response: %Response{body: "OK"}} = Webcore.dispatch(struct)
