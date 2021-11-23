@@ -2,240 +2,114 @@ defmodule Belfrage.Services.WebcoreTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Clients, Struct}
+  alias Belfrage.Struct
+  alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
+  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.XrayMock
 
-  def struct_with_alias(origin \\ "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", preview_mode \\ "off") do
-    %Struct{
-      private: %Struct.Private{origin: origin, preview_mode: preview_mode},
-      request: %Struct.Request{
-        method: "GET",
-        path: "/_web_core",
-        query_params: %{"id" => "1234"},
-        xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy",
-        is_uk: false,
-        host: "www.bbc.com",
-        request_id: "gemma-the-get-request"
+  @successful_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
+
+  test "call the lambda client" do
+    struct = %Struct{
+      request: %Request{
+        request_id: "request-id",
+        xray_trace_id: "xray-trace-id"
+      },
+      private: %Private{
+        origin: "lambda-arn"
       }
     }
+
+    credentials = Webcore.Credentials.get()
+    request = Webcore.Request.build(struct)
+
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", xray_trace_id: "xray-trace-id" ->
+      @successful_response
+    end)
+
+    assert %Struct{response: response} = Webcore.dispatch(struct)
+
+    assert response.http_status == 200
+    assert response.body == "OK"
   end
 
-  @lambda_response %{
-    "headers" => %{},
-    "statusCode" => 200,
-    "body" => "<h1>Hello from the Lambda!</h1>"
-  }
+  test "add xray subsegment" do
+    struct = %Struct{}
 
-  describe "Webcore lambda service" do
-    test "given a struct it invokes the origin lambda" do
-      credentials = Webcore.Credentials.get()
+    expect(XrayMock, :subsegment_with_struct_annotations, fn "webcore-service", ^struct, _fn ->
+      %Response{body: "OK"}
+    end)
 
-      expect(Clients.LambdaMock, :call, fn ^credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:ok, @lambda_response}
-      end)
-
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 200,
-                 body: "<h1>Hello from the Lambda!</h1>"
-               }
-             } = Webcore.dispatch(struct_with_alias())
-    end
-
-    test "it invokes the origin lambda with the xray_trace_id" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _func_name,
-                                           _payload,
-                                           _request_id,
-                                           _opts = [xray_trace_id: "1-xxxxx-yyyyyyyyyyyyyyy"] ->
-        {:ok, @lambda_response}
-      end)
-
-      Webcore.dispatch(struct_with_alias())
-    end
-
-    test "given an origin with an alias, it invokes the origin lambda with that alias" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func =
-                                             "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:ok, @lambda_response}
-      end)
-
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 200,
-                 body: "<h1>Hello from the Lambda!</h1>"
-               }
-             } =
-               Webcore.dispatch(
-                 struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function:example-branch", "off")
-               )
-    end
-
-    test "it will invoke lambda with the accept-encoding header" do
-      expect(Clients.LambdaMock, :call, fn _lambda_role_arn,
-                                           _lambda_function_name,
-                                           %{
-                                             headers: %{"accept-encoding": "gzip"}
-                                           },
-                                           _request_id,
-                                           _opts ->
-        {:ok, @lambda_response}
-      end)
-
-      Webcore.dispatch(struct_with_alias())
-    end
-
-    test "it adds webcore subsegment with struct information" do
-      expect(Clients.LambdaMock, :call, fn _lambda_role_arn, _lambda_function_name, _headers, _request_id, _opts ->
-        {:ok, @lambda_response}
-      end)
-
-      Belfrage.XrayMock
-      |> expect(
-        :subsegment_with_struct_annotations,
-        fn "webcore-service", _struct, func ->
-          func.()
-        end
-      )
-
-      Webcore.dispatch(struct_with_alias())
-    end
+    assert %Struct{response: %Response{body: "OK"}} = Webcore.dispatch(struct)
   end
 
-  @lambda_response_internal_fail %{
-    "headers" => %{},
-    "statusCode" => 500,
-    "body" => "oh dear, Lambda broke"
-  }
+  test "missing xray trace id" do
+    expect(LambdaMock, :call, fn _credentials, _lambda_arn, _request, _request_id, [] ->
+      @successful_response
+    end)
 
-  describe "Failures from Webcore services" do
-    test "The origin Lambda is invoked, but it returns an error" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:ok, @lambda_response_internal_fail}
-      end)
+    assert %Struct{response: %Response{body: "OK"}} = Webcore.dispatch(%Struct{})
+  end
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 500,
-                 body: "oh dear, Lambda broke"
-               }
-             } = Webcore.dispatch(struct_with_alias())
-    end
+  test "convert values of response headers to strings" do
+    stub_lambda_success(%{"headers" => %{"int" => 1, "bool" => true, "nil" => nil}})
+    assert %Struct{response: %Response{headers: headers}} = Webcore.dispatch(%Struct{})
+    assert headers == %{"int" => "1", "bool" => "true", "nil" => ""}
+  end
 
-    test "cannot invoke a lambda it serves a generic 500" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:error, :failed_to_invoke_lambda}
-      end)
+  test "decode base64 encoded body" do
+    stub_lambda_success(%{"body" => "RW5jb2RlZA==", "isBase64Encoded" => true})
+    assert %Struct{response: %Response{body: "Encoded"}} = Webcore.dispatch(%Struct{})
+  end
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 500,
-                 body: ""
-               }
-             } = Webcore.dispatch(struct_with_alias())
-    end
+  # This test is just to demonstrate that we currently attempt to decode body
+  # that is not actualy base64 encoded
+  test "body is not actually base64 encoded" do
+    stub_lambda_success(%{"body" => "Not encoded", "isBase64Encoded" => true})
+    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+    assert response.http_status == 200
+    assert response.body == "6\x8B\xFFzw(u\xE7"
+  end
 
-    test "When the preview environment is on and the alias cannot be found, we serve a 404" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:error, :function_not_found}
-      end)
+  test "invoking lambda fails" do
+    stub_lambda_error(:some_error)
+    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+    assert response.http_status == 500
+    assert response.body == ""
+  end
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 404,
-                 body: "404 - not found"
-               }
-             } = Webcore.dispatch(struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", "on"))
-    end
+  test "lambda function not found" do
+    stub_lambda_error(:function_not_found)
 
-    test "When the preview environment is off and the alias cannot be found, we serve a 500" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:error, :function_not_found}
-      end)
+    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+    assert response.http_status == 500
+    assert response.body == ""
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 500,
-                 body: ""
-               }
-             } =
-               Webcore.dispatch(struct_with_alias("arn:aws:lambda:eu-west-1:123456:function:a-lambda-function", "off"))
-    end
+    struct = %Struct{private: %Private{preview_mode: "on"}}
+    assert %Struct{response: response} = Webcore.dispatch(struct)
+    assert response.http_status == 404
+    assert response.body == "404 - not found"
+  end
 
-    test "When the client times out" do
-      expect(Clients.LambdaMock, :call, fn _credentials,
-                                           _lambda_func = "arn:aws:lambda:eu-west-1:123456:function:a-lambda-function",
-                                           _payload = %{
-                                             headers: %{country: nil, is_uk: false, host: "www.bbc.com"},
-                                             httpMethod: "GET",
-                                             path: "/_web_core",
-                                             queryStringParameters: %{"id" => "1234"}
-                                           },
-                                           _request_id = "gemma-the-get-request",
-                                           _opts ->
-        {:error, :timeout}
-      end)
+  test "invalid response format" do
+    stub_lambda({:ok, %{"some" => "unexpected format"}})
+    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+    assert response.http_status == 500
+    assert response.body == ""
+  end
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 500,
-                 body: ""
-               }
-             } = Webcore.dispatch(struct_with_alias())
-    end
+  defp stub_lambda_success(attrs) do
+    stub_lambda({:ok, Map.merge(%{"statusCode" => 200, "headers" => %{}, "body" => "OK"}, attrs)})
+  end
+
+  defp stub_lambda_error(error) do
+    stub_lambda({:error, error})
+  end
+
+  defp stub_lambda(response) do
+    stub(LambdaMock, :call, fn _credentials, _arn, _request, _request_id, _opts ->
+      response
+    end)
   end
 end
