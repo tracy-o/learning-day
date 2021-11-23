@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.Webcore do
-  alias Belfrage.{Struct, Event}
+  alias Belfrage.{Struct, Event, Metrics}
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
@@ -14,7 +14,7 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
-        Event.record(:metric, :increment, "service.lambda.response.#{response.http_status}")
+        Metrics.event(~w(webcore response)a, %{status_code: response.http_status})
         response
       else
         {:error, :function_not_found} ->
@@ -80,7 +80,7 @@ defmodule Belfrage.Services.Webcore do
       web_core_response: invalid_response
     })
 
-    Event.record(:metric, :increment, "service.lambda.response.invalid_web_core_contract")
+    Metrics.event(~w(webcore error)a, %{error_code: :invalid_web_core_contract})
 
     {:error, :invalid_response}
   end

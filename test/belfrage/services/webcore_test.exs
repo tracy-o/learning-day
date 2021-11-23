@@ -1,6 +1,7 @@
 defmodule Belfrage.Services.WebcoreTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
+  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2]
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
@@ -28,10 +29,11 @@ defmodule Belfrage.Services.WebcoreTest do
       @successful_response
     end)
 
-    assert %Struct{response: response} = Webcore.dispatch(struct)
-
-    assert response.http_status == 200
-    assert response.body == "OK"
+    assert_metric({~w(webcore response)a, %{status_code: 200}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(struct)
+      assert response.http_status == 200
+      assert response.body == "OK"
+    end)
   end
 
   test "add xray subsegment" do
@@ -94,9 +96,12 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invalid response format" do
     stub_lambda({:ok, %{"some" => "unexpected format"}})
-    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
-    assert response.http_status == 500
-    assert response.body == ""
+
+    assert_metric({~w(webcore error)a, %{error_code: :invalid_web_core_contract}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+      assert response.http_status == 500
+      assert response.body == ""
+    end)
   end
 
   defp stub_lambda_success(attrs) do

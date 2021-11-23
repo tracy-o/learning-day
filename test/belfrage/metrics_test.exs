@@ -40,6 +40,12 @@ defmodule Belfrage.MetricsTest do
         Metrics.event([:foo, :bar])
       end)
     end
+
+    test "emits an event with metadata" do
+      assert_metric({[:foo], %{}, %{bar: 1}}, fn ->
+        Metrics.event(:foo, %{bar: 1})
+      end)
+    end
   end
 
   describe "stop/3" do

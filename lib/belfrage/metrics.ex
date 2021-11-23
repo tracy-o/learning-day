@@ -36,10 +36,10 @@ defmodule Belfrage.Metrics do
   end
 
   @doc """
-  Record an event with no measurements and no metadata.
+  Record an event with optional metadata.
   """
-  @spec event(event_name()) :: :ok
-  def event(name), do: event(name, %{}, %{})
+  @spec event(event_name(), metadata()) :: :ok
+  def event(name, metadata \\ %{}), do: event(name, %{}, metadata)
 
   @doc """
   Records the end of an event span. Emits a `[prefix, name, :stop]` event with
