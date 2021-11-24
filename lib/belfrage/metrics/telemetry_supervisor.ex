@@ -133,14 +133,15 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         )
       end)
 
-    webcore_errors = [
-      counter(
-        "service.lambda.response.invalid_web_core_contract",
-        event_name: "belfrage.webcore.error",
-        keep: &(&1.error_code == :invalid_web_core_contract),
-        tags: [:BBCEnvironment]
-      )
-    ]
+    webcore_errors =
+      Enum.map(~w(invalid_web_core_contract function_not_found invoke_timeout invoke_failure)a, fn error_code ->
+        counter(
+          "service.lambda.response.#{error_code}",
+          event_name: "belfrage.webcore.error",
+          keep: &(&1.error_code == error_code),
+          tags: [:BBCEnvironment]
+        )
+      end)
 
     webcore_response_codes ++ webcore_errors
   end

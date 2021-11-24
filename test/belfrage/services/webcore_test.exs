@@ -76,9 +76,12 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invoking lambda fails" do
     stub_lambda_error(:some_error)
-    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
-    assert response.http_status == 500
-    assert response.body == ""
+
+    assert_metric({~w(webcore error)a, %{error_code: :some_error}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+      assert response.http_status == 500
+      assert response.body == ""
+    end)
   end
 
   test "lambda function not found" do

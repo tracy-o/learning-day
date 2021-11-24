@@ -17,7 +17,7 @@ defmodule Belfrage.Clients.LambdaTest do
                {:ok, "<h1>A Page</h1>"}
     end
 
-    test "Given an incorrect function name we return the :failed_to_invoke_lambda error" do
+    test "Given an incorrect function name we return the :invoke_failure error" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:error,
@@ -28,10 +28,10 @@ defmodule Belfrage.Clients.LambdaTest do
       end)
 
       assert Lambda.call(@credentials, "not-a-real-lambda", %{some: "data"}, "larry-the-lambda-request") ==
-               {:error, :failed_to_invoke_lambda}
+               {:error, :invoke_failure}
     end
 
-    test "Given a correct function name and the lambda timesout we return the :failed_to_invoke_lambda error" do
+    test "Given a correct function name and the lambda timesout we return the :invoke_timeout error" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:error, :timeout}
@@ -43,7 +43,7 @@ defmodule Belfrage.Clients.LambdaTest do
                %{some: "data"},
                "larry-the-lambda-request"
              ) ==
-               {:error, :failed_to_invoke_lambda}
+               {:error, :invoke_timeout}
     end
 
     test "Given a correct function name, but a non-existant alias we return the :function_not_found error" do

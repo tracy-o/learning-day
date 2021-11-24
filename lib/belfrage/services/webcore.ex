@@ -17,15 +17,14 @@ defmodule Belfrage.Services.Webcore do
         Metrics.event(~w(webcore response)a, %{status_code: response.http_status})
         response
       else
-        {:error, :function_not_found} ->
-          if private.preview_mode == "on" do
+        {:error, error_code} ->
+          Metrics.event(~w(webcore error)a, %{error_code: error_code})
+
+          if error_code == :function_not_found && private.preview_mode == "on" do
             %Response{http_status: 404, body: "404 - not found"}
           else
             %Response{http_status: 500}
           end
-
-        {:error, _reason} ->
-          %Response{http_status: 500}
       end
 
     Struct.add(struct, :response, response)
@@ -80,8 +79,6 @@ defmodule Belfrage.Services.Webcore do
       web_core_response: invalid_response
     })
 
-    Metrics.event(~w(webcore error)a, %{error_code: :invalid_web_core_contract})
-
-    {:error, :invalid_response}
+    {:error, :invalid_web_core_contract}
   end
 end
