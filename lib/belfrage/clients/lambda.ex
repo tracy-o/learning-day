@@ -4,26 +4,11 @@ defmodule Belfrage.Clients.Lambda do
   import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
   alias Belfrage.AWS
-  alias Belfrage.Clients.HTTP
 
   @aws Application.get_env(:belfrage, :aws)
-  @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
-  @behaviour ExAws.Request.HttpClient
   @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), String.t(), List.t()) :: Tuple.t()
-
-  @impl ExAws.Request.HttpClient
-  def request(method, url, body \\ "", headers \\ [], _http_opts \\ []) do
-    HTTP.Request.new(%{
-      method: method,
-      url: url,
-      payload: body,
-      timeout: @lambda_timeout,
-      headers: headers
-    })
-    |> @http_client.execute(:Webcore)
-  end
 
   def call(credentials = %AWS.Credentials{}, function, payload, request_id, opts \\ []) do
     Belfrage.Event.record "function.timing.service.lambda.invoke" do
@@ -31,11 +16,12 @@ defmodule Belfrage.Clients.Lambda do
 
       lambda_response =
         Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
-          Belfrage.AWS.Lambda.invoke(function, payload, %{}, opts)
-          |> @aws.request(
+          @aws.request(
+            AWS.Lambda.invoke(function, payload, %{}, opts),
             security_token: credentials.session_token,
             access_key_id: credentials.access_key_id,
-            secret_access_key: credentials.secret_access_key
+            secret_access_key: credentials.secret_access_key,
+            http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
           )
         end
 

@@ -4,7 +4,6 @@ defmodule Belfrage.Clients.LambdaTest do
 
   alias Belfrage.Clients.Lambda
 
-  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
   @credentials %Belfrage.AWS.Credentials{}
 
   describe "Belfrage.Clients.Lambda.call/3" do
@@ -86,63 +85,6 @@ defmodule Belfrage.Clients.LambdaTest do
                xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
              ) ==
                {:ok, "<h1>trace_id option provided</h1>"}
-    end
-  end
-
-  describe "ExAWS request callback" do
-    @generic_response {:ok,
-                       %Belfrage.Clients.HTTP.Response{
-                         status_code: 200,
-                         headers: [{"content-type", "application/json"}],
-                         body: "{}"
-                       }}
-
-    test "Lambda request function uses http client to send POST" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :post,
-                               url: "https://www.example.com/foo",
-                               payload: ~s({"some": "data"}),
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             },
-                             :Webcore ->
-        @generic_response
-      end)
-
-      Lambda.request(:post, "https://www.example.com/foo", ~s({"some": "data"}))
-    end
-
-    test "Lambda request function does pass through query strings" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :post,
-                               url: "https://www.example.com/foo?some-qs=hello",
-                               payload: ~s({"some": "data"}),
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             },
-                             :Webcore ->
-        @generic_response
-      end)
-
-      Lambda.request(:post, "https://www.example.com/foo?some-qs=hello", ~s({"some": "data"}))
-    end
-
-    test "Lambda request handles get" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :get,
-                               url: "https://www.example.com/foo?some-qs=hello",
-                               payload: "",
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             },
-                             :Webcore ->
-        @generic_response
-      end)
-
-      Lambda.request(:get, "https://www.example.com/foo?some-qs=hello")
     end
   end
 end

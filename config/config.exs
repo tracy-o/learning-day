@@ -27,6 +27,7 @@ secure_machine_gun_config = %{
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
+  AWS: default_machine_gun_config,
   Fabl: secure_machine_gun_config,
   MorphRouter: secure_machine_gun_config,
   MozartNews: default_machine_gun_config,
@@ -37,6 +38,11 @@ config :machine_gun,
   S3: default_machine_gun_config,
   Simorgh: default_machine_gun_config,
   Webcore: default_machine_gun_config
+
+config :ex_aws,
+  region: "eu-west-1",
+  http_client: Belfrage.AWS.HttpClient,
+  json_codec: Eljiffy
 
 config :ex_aws, :retries,
   max_attempts: 1,
@@ -94,11 +100,6 @@ config :belfrage,
   },
   bbc_id_availability_poll_interval: 10_000,
   jwk_polling_enabled: true
-
-config :ex_aws,
-  region: "eu-west-1",
-  http_client: Belfrage.Clients.Lambda,
-  json_codec: Eljiffy
 
 config :cachex, :limit,
   size: 36_000,
