@@ -1,7 +1,7 @@
 defmodule Belfrage.Services.WebcoreTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
-  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2]
+  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2, intercept_metric: 2]
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
@@ -34,6 +34,17 @@ defmodule Belfrage.Services.WebcoreTest do
       assert response.http_status == 200
       assert response.body == "OK"
     end)
+  end
+
+  test "tracks the duration of the lambda call" do
+    stub_lambda_success()
+
+    {_event, measurement, _metadata} =
+      intercept_metric(~w(webcore request stop)a, fn ->
+        Webcore.dispatch(%Struct{})
+      end)
+
+    assert measurement.duration > 0
   end
 
   test "add xray subsegment" do
@@ -107,7 +118,7 @@ defmodule Belfrage.Services.WebcoreTest do
     end)
   end
 
-  defp stub_lambda_success(attrs) do
+  defp stub_lambda_success(attrs \\ %{}) do
     stub_lambda({:ok, Map.merge(%{"statusCode" => 200, "headers" => %{}, "body" => "OK"}, attrs)})
   end
 

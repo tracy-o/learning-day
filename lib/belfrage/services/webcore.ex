@@ -32,13 +32,15 @@ defmodule Belfrage.Services.Webcore do
 
   defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
     @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
-      @lambda_client.call(
-        Webcore.Credentials.get(),
-        private.origin,
-        Webcore.Request.build(struct),
-        request.request_id,
-        lambda_options(struct.request)
-      )
+      Metrics.duration(~w(webcore request)a, fn ->
+        @lambda_client.call(
+          Webcore.Credentials.get(),
+          private.origin,
+          Webcore.Request.build(struct),
+          request.request_id,
+          lambda_options(struct.request)
+        )
+      end)
     end)
   end
 

@@ -123,6 +123,16 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp service_metrics() do
+    webcore_request = [
+      summary(
+        "function.timing.service.lambda.invoke",
+        event_name: "belfrage.webcore.request.stop",
+        measurement: :duration,
+        unit: {:native, :millisecond},
+        tags: [:BBCEnvironment]
+      )
+    ]
+
     webcore_response_codes =
       Enum.map([200, 301, 302, 400, 404, 500, 502], fn status_code ->
         counter(
@@ -143,6 +153,6 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         )
       end)
 
-    webcore_response_codes ++ webcore_errors
+    webcore_request ++ webcore_response_codes ++ webcore_errors
   end
 end
