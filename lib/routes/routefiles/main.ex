@@ -193,6 +193,7 @@ defroutefile "Main" do
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
   handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", only_on: "test", examples: []
+  handle "/wc-data/p/container/test-client-side-personalised", using: "PersonalisedContainerData", only_on: "test", examples: []
   handle "/wc-data/p/container/:name", using: "ContainerData", only_on: "test", examples: ["/wc-data/p/container/consent-banner"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/search&params=%7B%7D"]
 
