@@ -28,7 +28,7 @@ defmodule EndToEnd.MonitorEventsTest do
 
   test "records monitor events for using a lambda service" do
     Belfrage.MonitorMock
-    |> expect(:record_event, 6, fn
+    |> expect(:record_event, 5, fn
       %Belfrage.Event{
         data: %{method: "GET", path: "/200-ok-response", req_headers: _, resp_headers: _, status: 200},
         dimensions: %{
@@ -38,18 +38,6 @@ defmodule EndToEnd.MonitorEventsTest do
         },
         request_id: request_id,
         type: {:log, :info}
-      } ->
-        assert is_binary(request_id)
-
-      %Belfrage.Event{
-        data: {"service.lambda.response.200", 1},
-        dimensions: %{
-          request_id: request_id,
-          path: "/200-ok-response",
-          loop_id: "SomeLoop"
-        },
-        request_id: request_id,
-        type: {:metric, :increment}
       } ->
         assert is_binary(request_id)
 
@@ -186,7 +174,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn
+      |> expect(:record_event, 4, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -196,18 +184,6 @@ defmodule EndToEnd.MonitorEventsTest do
           },
           request_id: request_id,
           type: {:log, :info}
-        } ->
-          assert is_binary(request_id)
-
-        %Belfrage.Event{
-          data: {"service.lambda.response.500", 1},
-          dimensions: %{
-            request_id: request_id,
-            path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
-          },
-          request_id: request_id,
-          type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
 
@@ -284,7 +260,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 6, fn
+      |> expect(:record_event, 5, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/downstream-broken", req_headers: _, resp_headers: _, status: 200},
           dimensions: %{
@@ -294,18 +270,6 @@ defmodule EndToEnd.MonitorEventsTest do
           },
           request_id: request_id,
           type: {:log, :info}
-        } ->
-          assert is_binary(request_id)
-
-        %Belfrage.Event{
-          data: {"service.lambda.response.500", 1},
-          dimensions: %{
-            request_id: request_id,
-            path: "/downstream-broken",
-            loop_id: "SomeLoop"
-          },
-          request_id: request_id,
-          type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
 
@@ -366,7 +330,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn
+      |> expect(:record_event, 4, fn
         %Belfrage.Event{
           data: %{method: "GET", path: "/sends-request-downstream", req_headers: _, resp_headers: _, status: 500},
           dimensions: %{
@@ -376,18 +340,6 @@ defmodule EndToEnd.MonitorEventsTest do
           },
           request_id: request_id,
           type: {:log, :info}
-        } ->
-          assert is_binary(request_id)
-
-        %Belfrage.Event{
-          data: {"service.lambda.response.500", 1},
-          dimensions: %{
-            request_id: request_id,
-            path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
-          },
-          request_id: request_id,
-          type: {:metric, :increment}
         } ->
           assert is_binary(request_id)
 
@@ -450,7 +402,7 @@ defmodule EndToEnd.MonitorEventsTest do
       end)
 
       Belfrage.MonitorMock
-      |> expect(:record_event, 5, fn _ ->
+      |> expect(:record_event, 4, fn _ ->
         {:ok, false}
       end)
 

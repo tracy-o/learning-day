@@ -6,7 +6,7 @@ defmodule Belfrage.Cache.LocalTest do
   alias Belfrage.Cache
   alias Belfrage.Struct
   alias Belfrage.Timer
-  import Belfrage.Test.MetricsHelper, only: [assert_event: 2]
+  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2]
   require Cachex.Spec
 
   defmodule TestCache do
@@ -176,7 +176,7 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "the correct event is emitted", %{struct: struct, caching_module: caching_module} do
-      assert_event([:cache, :local, :fetch_exit], fn -> Cache.Local.fetch(struct, caching_module) end)
+      assert_metric(~w(cache local fetch_exit)a, fn -> Cache.Local.fetch(struct, caching_module) end)
     end
 
     test "the correct tuple is returned", %{struct: struct, caching_module: caching_module} do

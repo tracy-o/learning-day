@@ -1,6 +1,7 @@
 defmodule Belfrage.Services.WebcoreTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
+  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2, intercept_metric: 2]
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
@@ -28,10 +29,22 @@ defmodule Belfrage.Services.WebcoreTest do
       @successful_response
     end)
 
-    assert %Struct{response: response} = Webcore.dispatch(struct)
+    assert_metric({~w(webcore response)a, %{status_code: 200}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(struct)
+      assert response.http_status == 200
+      assert response.body == "OK"
+    end)
+  end
 
-    assert response.http_status == 200
-    assert response.body == "OK"
+  test "tracks the duration of the lambda call" do
+    stub_lambda_success()
+
+    {_event, measurement, _metadata} =
+      intercept_metric(~w(webcore request stop)a, fn ->
+        Webcore.dispatch(%Struct{})
+      end)
+
+    assert measurement.duration > 0
   end
 
   test "add xray subsegment" do
@@ -74,9 +87,12 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invoking lambda fails" do
     stub_lambda_error(:some_error)
-    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
-    assert response.http_status == 500
-    assert response.body == ""
+
+    assert_metric({~w(webcore error)a, %{error_code: :some_error}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+      assert response.http_status == 500
+      assert response.body == ""
+    end)
   end
 
   test "lambda function not found" do
@@ -94,12 +110,15 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invalid response format" do
     stub_lambda({:ok, %{"some" => "unexpected format"}})
-    assert %Struct{response: response} = Webcore.dispatch(%Struct{})
-    assert response.http_status == 500
-    assert response.body == ""
+
+    assert_metric({~w(webcore error)a, %{error_code: :invalid_web_core_contract}}, fn ->
+      assert %Struct{response: response} = Webcore.dispatch(%Struct{})
+      assert response.http_status == 500
+      assert response.body == ""
+    end)
   end
 
-  defp stub_lambda_success(attrs) do
+  defp stub_lambda_success(attrs \\ %{}) do
     stub_lambda({:ok, Map.merge(%{"statusCode" => 200, "headers" => %{}, "body" => "OK"}, attrs)})
   end
 

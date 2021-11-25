@@ -2,23 +2,35 @@ defmodule Belfrage.Test.MetricsHelper do
   import ExUnit.Assertions
 
   @doc """
-  Asserts that the passed event, with no measurements and no metadata,
-  is recorded during the execution of the passed function.
-  """
-  def assert_event(name, fun), do: assert_metric({name, %{}, %{}}, fun)
-
-  @doc """
   Asserts that the passed metric is recorded during the execution of the passed
   function.
+
+  The metric can be:
+  * Just the name of the event, in which case it's assumed that measurements
+  and metadata are empty
+  * {event, metadata} tuple
+  * {event, measurements, metadata} tuple
   """
-  def assert_metric(metric, fun), do: assert_metrics(List.wrap(metric), fun)
+  def assert_metric(metric, fun), do: assert_metrics([metric], fun)
 
   @doc """
   Asserts that the passed metrics are recorded during the execution of the
-  passed function.
+  passed function. See assert_metric/2 for info on what can be passed as metric
   """
   def assert_metrics(metrics, fun) do
-    metrics = Enum.map(metrics, fn {event, measurement, metadata} -> {prefix_event(event), measurement, metadata} end)
+    metrics =
+      Enum.map(metrics, fn metric ->
+        case metric do
+          {event, measurement, metadata} ->
+            {prefix_event(event), measurement, metadata}
+
+          {event, metadata} ->
+            {prefix_event(event), %{}, metadata}
+
+          event ->
+            {prefix_event(event), %{}, %{}}
+        end
+      end)
 
     metrics
     |> Enum.map(fn {event, _, _} -> event end)

@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.Webcore do
-  alias Belfrage.{Struct, Event}
+  alias Belfrage.{Struct, Event, Metrics}
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
@@ -14,18 +14,17 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
-        Event.record(:metric, :increment, "service.lambda.response.#{response.http_status}")
+        Metrics.event(~w(webcore response)a, %{status_code: response.http_status})
         response
       else
-        {:error, :function_not_found} ->
-          if private.preview_mode == "on" do
+        {:error, error_code} ->
+          Metrics.event(~w(webcore error)a, %{error_code: error_code})
+
+          if error_code == :function_not_found && private.preview_mode == "on" do
             %Response{http_status: 404, body: "404 - not found"}
           else
             %Response{http_status: 500}
           end
-
-        {:error, _reason} ->
-          %Response{http_status: 500}
       end
 
     Struct.add(struct, :response, response)
@@ -33,13 +32,15 @@ defmodule Belfrage.Services.Webcore do
 
   defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
     @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
-      @lambda_client.call(
-        Webcore.Credentials.get(),
-        private.origin,
-        Webcore.Request.build(struct),
-        request.request_id,
-        lambda_options(struct.request)
-      )
+      Metrics.duration(~w(webcore request)a, fn ->
+        @lambda_client.call(
+          Webcore.Credentials.get(),
+          private.origin,
+          Webcore.Request.build(struct),
+          request.request_id,
+          lambda_options(struct.request)
+        )
+      end)
     end)
   end
 
@@ -80,8 +81,6 @@ defmodule Belfrage.Services.Webcore do
       web_core_response: invalid_response
     })
 
-    Event.record(:metric, :increment, "service.lambda.response.invalid_web_core_contract")
-
-    {:error, :invalid_response}
+    {:error, :invalid_web_core_contract}
   end
 end

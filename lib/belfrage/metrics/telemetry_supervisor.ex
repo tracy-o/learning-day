@@ -26,7 +26,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       poolboy_metrics() ++
       latency_metrics() ++
       request_metrics() ++
-      cache_metrics()
+      cache_metrics() ++
+      service_metrics()
   end
 
   defp vm_metrics() do
@@ -119,5 +120,39 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
 
   defp cache_metrics() do
     [counter("cache.local.fetch_exit", tags: [:BBCEnvironment])]
+  end
+
+  defp service_metrics() do
+    webcore_request = [
+      summary(
+        "function.timing.service.lambda.invoke",
+        event_name: "belfrage.webcore.request.stop",
+        measurement: :duration,
+        unit: {:native, :millisecond},
+        tags: [:BBCEnvironment]
+      )
+    ]
+
+    webcore_response_codes =
+      Enum.map([200, 301, 302, 400, 404, 500, 502], fn status_code ->
+        counter(
+          "service.lambda.response.#{status_code}",
+          event_name: "belfrage.webcore.response",
+          keep: &(&1.status_code == status_code),
+          tags: [:BBCEnvironment]
+        )
+      end)
+
+    webcore_errors =
+      Enum.map(~w(invalid_web_core_contract function_not_found invoke_timeout invoke_failure)a, fn error_code ->
+        counter(
+          "service.lambda.response.#{error_code}",
+          event_name: "belfrage.webcore.error",
+          keep: &(&1.error_code == error_code),
+          tags: [:BBCEnvironment]
+        )
+      end)
+
+    webcore_request ++ webcore_response_codes ++ webcore_errors
   end
 end
