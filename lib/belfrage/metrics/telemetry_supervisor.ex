@@ -27,7 +27,8 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       latency_metrics() ++
       request_metrics() ++
       cache_metrics() ++
-      service_metrics()
+      service_metrics() ++
+      plug_metrics()
   end
 
   defp vm_metrics() do
@@ -177,5 +178,52 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         end)
 
     webcore ++ webcore_legacy
+  end
+
+  defp plug_metrics() do
+    statuses = [200, 204, 301, 302, 400, 404, 405, 408, 500]
+
+    [
+      counter(
+        "web.request.count",
+        event_name: "belfrage.plug.start",
+        tags: [:BBCEnvironment]
+      ),
+      summary(
+        "web.response.timing.page",
+        event_name: "belfrage.plug.stop",
+        measurement: :duration,
+        unit: {:native, :millisecond},
+        tags: [:BBCEnvironment]
+      ),
+      counter(
+        "web.response.private",
+        event_name: "belfrage.plug.stop",
+        keep: &(&1.conn.status == 200 && private_response?(&1.conn)),
+        tags: [:BBCEnvironment]
+      )
+    ] ++
+      Enum.flat_map(statuses, fn status ->
+        [
+          counter(
+            "web.response.status.#{status}",
+            event_name: "belfrage.plug.stop",
+            keep: &(&1.conn.status == status),
+            tags: [:BBCEnvironment]
+          ),
+          summary(
+            "web.response.timing.#{status}",
+            event_name: "belfrage.plug.stop",
+            measurement: :duration,
+            unit: {:native, :millisecond},
+            keep: &(&1.conn.status == status),
+            tags: [:BBCEnvironment]
+          )
+        ]
+      end)
+  end
+
+  def private_response?(conn = %Plug.Conn{}) do
+    match?(["private" <> _], Plug.Conn.get_resp_header(conn, "cache-control"))
   end
 end

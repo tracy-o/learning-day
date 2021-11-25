@@ -9,10 +9,10 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.Plugs
   alias Belfrage.{Event, Metrics}
 
+  plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
-  plug(BelfrageWeb.Plugs.ResponseMetrics)
   plug(BelfrageWeb.Plugs.XRay)
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AccessLogs)
