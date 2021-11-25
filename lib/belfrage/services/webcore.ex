@@ -14,11 +14,11 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
-        Metrics.event(~w(webcore response)a, %{status_code: response.http_status})
+        Metrics.event(~w(webcore response)a, %{status_code: response.http_status, route_spec: private.loop_id})
         response
       else
         {:error, error_code} ->
-          Metrics.event(~w(webcore error)a, %{error_code: error_code})
+          Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.loop_id})
 
           if error_code == :function_not_found && private.preview_mode == "on" do
             %Response{http_status: 404, body: "404 - not found"}
@@ -32,7 +32,7 @@ defmodule Belfrage.Services.Webcore do
 
   defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
     @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
-      Metrics.duration(~w(webcore request)a, fn ->
+      Metrics.duration(~w(webcore request)a, %{route_spec: private.loop_id}, fn ->
         @lambda_client.call(
           Webcore.Credentials.get(),
           private.origin,

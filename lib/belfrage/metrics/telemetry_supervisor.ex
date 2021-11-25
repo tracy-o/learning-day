@@ -123,36 +123,59 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp service_metrics() do
-    webcore_request = [
-      summary(
-        "function.timing.service.lambda.invoke",
+    webcore = [
+      counter(
+        "webcore.request.count",
         event_name: "belfrage.webcore.request.stop",
-        measurement: :duration,
+        tags: [:route_spec]
+      ),
+      summary(
+        "webcore.request.duration",
+        event_name: "belfrage.webcore.request.stop",
         unit: {:native, :millisecond},
-        tags: [:BBCEnvironment]
+        tags: [:route_spec]
+      ),
+      counter(
+        "webcore.response",
+        event_name: "belfrage.webcore.response",
+        tags: [:status_code, :route_spec]
+      ),
+      counter(
+        "webcore.error",
+        event_name: "belfrage.webcore.error",
+        tags: [:error_code, :route_spec]
       )
     ]
 
-    webcore_response_codes =
-      Enum.map([200, 301, 302, 400, 404, 500, 502], fn status_code ->
-        counter(
-          "service.lambda.response.#{status_code}",
-          event_name: "belfrage.webcore.response",
-          keep: &(&1.status_code == status_code),
+    # TODO: Remove these legacy metrics when they are no longer used on any
+    # dashboards
+    webcore_legacy =
+      [
+        summary(
+          "function.timing.service.lambda.invoke",
+          event_name: "belfrage.webcore.request.stop",
+          measurement: :duration,
+          unit: {:native, :millisecond},
           tags: [:BBCEnvironment]
         )
-      end)
+      ] ++
+        Enum.map([200, 301, 302, 400, 404, 500, 502], fn status_code ->
+          counter(
+            "service.lambda.response.#{status_code}",
+            event_name: "belfrage.webcore.response",
+            keep: &(&1.status_code == status_code),
+            tags: [:BBCEnvironment]
+          )
+        end) ++
+        Enum.map(~w(invalid_web_core_contract function_not_found invoke_timeout invoke_failure)a, fn error_code ->
+          counter(
+            "service.lambda.response.#{error_code}",
+            event_name: "belfrage.webcore.error",
+            keep: &(&1.error_code == error_code),
+            tags: [:BBCEnvironment]
+          )
+        end)
 
-    webcore_errors =
-      Enum.map(~w(invalid_web_core_contract function_not_found invoke_timeout invoke_failure)a, fn error_code ->
-        counter(
-          "service.lambda.response.#{error_code}",
-          event_name: "belfrage.webcore.error",
-          keep: &(&1.error_code == error_code),
-          tags: [:BBCEnvironment]
-        )
-      end)
-
-    webcore_request ++ webcore_response_codes ++ webcore_errors
+    webcore ++ webcore_legacy
   end
 end
