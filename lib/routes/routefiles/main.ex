@@ -402,6 +402,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
+  handle "/news/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/news/mvt/testing"]
+
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
   handle "/news/*_any", using: "News", examples: [{"/news/contact-us/editorial", 302}]
 
@@ -604,6 +606,8 @@ defroutefile "Main" do
 
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
+
+  handle "/mundo/mvt/*_any", using: "WorldServiceMvtPoc", only_on: "test", examples: ["/mundo/mvt/testing"]
 
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
@@ -1589,6 +1593,8 @@ defroutefile "Main" do
   handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
+
+  handle "/sport/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/sport/mvt/testing"]
 
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
