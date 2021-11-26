@@ -62,6 +62,23 @@ defmodule BelfrageWeb.RouteMasterTest do
     })
   end
 
+  describe "handle/2" do
+    test "successful match" do
+      mock_handle_route("/200-ok-response", "SomeLoop")
+
+      conn =
+        conn(:get, "/200-ok-response")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> Routefile.call([])
+
+      assert conn.status == 200
+      assert conn.resp_body == "<p>Basic HTML response</p>"
+    end
+  end
+
   describe "calling handle with do block" do
     test "when 404 check is truthy, route is not called" do
       expect_belfrage_not_called()
