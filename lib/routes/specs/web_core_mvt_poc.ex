@@ -11,6 +11,8 @@ defmodule Routes.Specs.WebCoreMvtPoc do
   end
 
   defp mvt_headers do
-    1..20 |> Enum.map(fn i -> "bbc-mvt-#{i}" end)
+    1..20
+    |> Enum.map(fn i -> "bbc-mvt-#{i}" end)
+    |> Enum.concat(["bbc-mvt-complete"])
   end
 end
