@@ -181,46 +181,94 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp plug_metrics() do
-    statuses = [200, 204, 301, 302, 400, 404, 405, 408, 500]
-
-    [
+    metrics = [
       counter(
-        "web.request.count",
-        event_name: "belfrage.plug.start",
-        tags: [:BBCEnvironment]
-      ),
-      summary(
-        "web.response.timing.page",
+        "belfrage.request.duration",
         event_name: "belfrage.plug.stop",
-        measurement: :duration,
+        tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
         unit: {:native, :millisecond},
-        tags: [:BBCEnvironment]
+        tags: [:BBCEnvironment, :status_code, :route_spec]
       ),
       counter(
-        "web.response.private",
+        "belfrage.response",
+        event_name: "belfrage.plug.stop",
+        tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
+        tags: [:status_code, :route_spec]
+      ),
+      counter(
+        "belfrage.response.private",
         event_name: "belfrage.plug.stop",
         keep: &(&1.conn.status == 200 && private_response?(&1.conn)),
-        tags: [:BBCEnvironment]
+        tag_values: &Map.put(&1, :route_spec, &1.conn.assigns[:route_spec]),
+        tags: [:BBCEnvironment, :route_spec]
+      ),
+      counter(
+        "befrage.response.stale",
+        event_name: "belfrage.plug.stop",
+        keep: &(Plug.Conn.get_resp_header(&1.conn, "belfrage-cache-status") == ["STALE"]),
+        tag_values: &Map.put(&1, :route_spec, &1.conn.assigns[:route_spec]),
+        tags: [:BBCEnvironment, :route_spec]
+      ),
+      counter(
+        "belfrage.error",
+        event_name: "plug.router_dispatch.exception",
+        keep: &(&1.router == BelfrageWeb.Router),
+        tag_values: fn metadata ->
+          case metadata.reason do
+            %{conn: conn} ->
+              Map.put(metadata, :route_spec, conn.assigns[:route_spec])
+
+            _ ->
+              metadata
+          end
+        end,
+        tags: [:BBCEnvironment, :route_spec]
       )
-    ] ++
-      Enum.flat_map(statuses, fn status ->
-        [
-          counter(
-            "web.response.status.#{status}",
-            event_name: "belfrage.plug.stop",
-            keep: &(&1.conn.status == status),
-            tags: [:BBCEnvironment]
-          ),
-          summary(
-            "web.response.timing.#{status}",
-            event_name: "belfrage.plug.stop",
-            measurement: :duration,
-            unit: {:native, :millisecond},
-            keep: &(&1.conn.status == status),
-            tags: [:BBCEnvironment]
-          )
-        ]
-      end)
+    ]
+
+    # TODO: Remove these legacy metrics when they are no longer used on any
+    # dashboards
+    legacy_metrics =
+      [
+        counter(
+          "web.request.count",
+          event_name: "belfrage.plug.start",
+          tags: [:BBCEnvironment]
+        ),
+        summary(
+          "web.response.timing.page",
+          event_name: "belfrage.plug.stop",
+          measurement: :duration,
+          unit: {:native, :millisecond},
+          tags: [:BBCEnvironment]
+        ),
+        counter(
+          "web.response.private",
+          event_name: "belfrage.plug.stop",
+          keep: &(&1.conn.status == 200 && private_response?(&1.conn)),
+          tags: [:BBCEnvironment]
+        )
+      ] ++
+        Enum.flat_map([200, 204, 301, 302, 400, 404, 405, 408, 500], fn status ->
+          [
+            counter(
+              "web.response.status.#{status}",
+              event_name: "belfrage.plug.stop",
+              keep: &(&1.conn.status == status),
+              tags: [:BBCEnvironment]
+            ),
+            summary(
+              "web.response.timing.#{status}",
+              event_name: "belfrage.plug.stop",
+              measurement: :duration,
+              unit: {:native, :millisecond},
+              keep: &(&1.conn.status == status),
+              tags: [:BBCEnvironment]
+            )
+          ]
+        end)
+
+    metrics ++ legacy_metrics
   end
 
   def private_response?(conn = %Plug.Conn{}) do

@@ -1,4 +1,5 @@
 defmodule BelfrageWeb.RouteMaster do
+  alias Plug.Conn
   alias BelfrageWeb.{View, StructAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
@@ -23,10 +24,22 @@ defmodule BelfrageWeb.RouteMaster do
   end
 
   def yield(id, conn) do
-    conn
-    |> StructAdapter.adapt(id)
-    |> @belfrage.handle()
-    |> View.render(conn)
+    conn = Conn.assign(conn, :route_spec, id)
+
+    try do
+      conn
+      |> StructAdapter.adapt(id)
+      |> @belfrage.handle()
+      |> View.render(conn)
+    catch
+      kind, reason ->
+        # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
+        # which now contains the name of the route spec, so that we could link
+        # errors to route specs in our metrics.
+        stack = __STACKTRACE__
+        wrapper = %Conn.WrapperError{conn: conn, kind: :error, reason: reason, stack: stack}
+        :erlang.raise(kind, wrapper, stack)
+    end
   end
 
   defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do
