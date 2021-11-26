@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.MvtEcho do
       :stop_pipeline,
       Struct.add(struct, :response, %{
         http_status: 200,
-        headers: %{"content-type" => "application/json"},
+        headers: %{"content-type" => "application/json", "cache-control" => "public, max-age=5"},
         body: body(struct)
       })
     }
