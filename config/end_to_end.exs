@@ -1,20 +1,24 @@
 use Mix.Config
 
-import_config "dev.exs"
+import_config "test.exs"
 
 config :belfrage,
-  http_client: Belfrage.Clients.HTTPMock,
-  lambda_client: Belfrage.Clients.LambdaMock,
-  ccp_client: Belfrage.Clients.CCPMock,
-  authentication_client: Belfrage.Clients.AuthenticationMock,
+  errors_threshold: 100,
+  pwa_lambda_function: "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda",
+  origin_simulator: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com",
+  ccp_s3_bucket: nil,
+  short_counter_reset_interval: 5_000,
+  long_counter_reset_interval: 60_000,
+  mozart_news_endpoint: "https://www.mozart-routing.test.api.bbci.co.uk",
+  mozart_weather_endpoint: "https://www.mozart-routing-weather.test.api.bbci.co.uk",
+  mozart_sport_endpoint: "https://www.mozart-routing-sport.test.api.bbci.co.uk",
+  fabl_endpoint: "https://fabl.test.api.bbci.co.uk",
+  programmes_endpoint: "https://programmes-frontend.test.api.bbc.co.uk",
+  morph_router_endpoint: "https://morph-router.test.api.bbci.co.uk",
+  belfrage: Belfrage,
   monitor_api: Belfrage.MonitorMock,
-  production_environment: "test",
-  dial: Belfrage.Dials.ServerMock,
-  xray: Belfrage.XrayMock,
-  jwk_polling_enabled: false,
-  webcore_credentials_polling_enabled: false,
-
-  # Arbitrary long values so that the corresponding operations are never
-  # executed in tests
-  dials_startup_polling_delay: 3_600_000,
-  bbc_id_availability_poll_interval: 3_600_000
+  machine_gun: Belfrage.Clients.HTTP.MachineGun,
+  aws: Belfrage.AWS,
+  file_io: Belfrage.Helpers.FileIO,
+  expiry_validator: Belfrage.Authentication.Validator.Expiry,
+  event: Belfrage.Event
