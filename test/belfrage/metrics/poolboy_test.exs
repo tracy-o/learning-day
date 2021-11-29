@@ -1,5 +1,6 @@
 defmodule Belfrage.Metrics.PoolboyTest do
   use ExUnit.Case, async: true
+  import ExUnit.CaptureLog
   import Belfrage.Test.MetricsHelper
 
   alias Belfrage.Metrics.Poolboy
@@ -9,6 +10,12 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
     def start_link(_args) do
       Agent.start_link(fn -> nil end)
+    end
+  end
+
+  defmodule TimingOutPoolClient do
+    def status(pid_or_name) do
+      exit({:timeout, {:gen_server, :call, [pid_or_name, :status]}})
     end
   end
 
@@ -89,7 +96,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
         [
           {[:poolboy, :pools], %{max_saturation: 0}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates(pools) end
+        fn -> Poolboy.track_pool_aggregates(pools: pools) end
       )
 
       use_worker(pool1)
@@ -98,7 +105,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
         [
           {[:poolboy, :pools], %{max_saturation: 50}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates(pools) end
+        fn -> Poolboy.track_pool_aggregates(pools: pools) end
       )
 
       use_worker(pool2)
@@ -107,7 +114,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
         [
           {[:poolboy, :pools], %{max_saturation: 50}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates(pools) end
+        fn -> Poolboy.track_pool_aggregates(pools: pools) end
       )
 
       use_worker(pool1)
@@ -116,7 +123,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
         [
           {[:poolboy, :pools], %{max_saturation: 100}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates(pools) end
+        fn -> Poolboy.track_pool_aggregates(pools: pools) end
       )
 
       use_worker(pool2)
@@ -125,8 +132,25 @@ defmodule Belfrage.Metrics.PoolboyTest do
         [
           {[:poolboy, :pools], %{max_saturation: 100}, %{}}
         ],
-        fn -> Poolboy.track_pool_aggregates(pools) end
+        fn -> Poolboy.track_pool_aggregates(pools: pools) end
       )
+    end
+
+    test "returns the max pool saturation when pool status call times out" do
+      assert_metrics(
+        [
+          {[:poolboy, :pools], %{max_saturation: 100}, %{}}
+        ],
+        fn -> Poolboy.track_pool_aggregates(pools: [:some_pool], pool_client: TimingOutPoolClient) end
+      )
+    end
+
+    test "logs expected message when pool status call times out" do
+      captured_log =
+        capture_log(fn -> Poolboy.track_pool_aggregates(pools: [:some_pool], pool_client: TimingOutPoolClient) end)
+
+      assert captured_log =~
+               "level\":\"error\",\"metadata\":{},\"msg\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
     end
   end
 

@@ -5,6 +5,9 @@ defmodule Belfrage.Metrics.Poolboy do
   """
 
   alias Belfrage.Metrics
+  alias Belfrage.Event
+
+  @max_pool_saturation 100
 
   def track_machine_gun_pools() do
     pids = http_client_pool_pids()
@@ -30,10 +33,12 @@ defmodule Belfrage.Metrics.Poolboy do
     )
   end
 
-  def track_pool_aggregates(pools \\ list_pools()) do
+  def track_pool_aggregates(opts \\ []) do
+    %{pool_client: pool_client, pools: pools} = Enum.into(opts, %{pool_client: :poolboy, pools: list_pools()})
+
     max_saturation =
       pools
-      |> Enum.map(&pool_saturation/1)
+      |> Enum.map(&pool_saturation(&1, pool_client))
       |> Enum.max()
 
     Metrics.measurement([:poolboy, :pools], %{max_saturation: max_saturation}, %{})
@@ -49,13 +54,21 @@ defmodule Belfrage.Metrics.Poolboy do
     |> Enum.map(fn {:undefined, pid, :worker, [:poolboy]} -> pid end)
   end
 
-  defp pool_saturation(pid_or_name) do
-    {_, available, overflow, monitors} = :poolboy.status(pid_or_name)
-    pool_saturation(available, overflow, monitors)
-  end
-
   defp pool_saturation(available, overflow, monitors) do
     busy = monitors - overflow
-    trunc(busy * 100 / (busy + available))
+    trunc(busy * @max_pool_saturation / (busy + available))
+  end
+
+  defp pool_saturation(pid_or_name, pool_client) do
+    {_, available, overflow, monitors} = pool_client.status(pid_or_name)
+    pool_saturation(available, overflow, monitors)
+  catch
+    :exit, {:timeout, {:gen_server, :call, [^pid_or_name, :status]}} ->
+      Event.record(:log, :error, %{
+        msg:
+          "The :poolboy.status/1 call timed out during the saturation calculation of the pool: #{inspect(pid_or_name)}"
+      })
+
+      @max_pool_saturation
   end
 end
