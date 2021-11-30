@@ -1,12 +1,21 @@
 # Belfrage
 
 ## What is Belfrage
-
 __Belfrage__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Belfrage is generic enough to be used as an entry point for any BBC service with minimal effort.
 
 Belfrage looks after the resiliency of the page, it monitors in real-time the status of the responses and can take actions in case of errors.
 
 Belfrage is simple and fast, with a number of ancillary apps outside of the traffic flow to add additional features and functionality.
+
+## Documentation
+The index for the documentation can be found [here](docs/index.md)
+
+Some of the notable documents are:
+ - [All about routing](docs/topics/routing/routing.md)
+ - [Cascade](docs/topics/cascade.md)
+ - [Personalisation](docs/topics/personalisation.md)
+ - [Circuit-Breaker](docs/topics/circuit-breaker.md)
+
 
 ## Architecture
 
