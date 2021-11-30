@@ -70,6 +70,17 @@ This feature is only available for non-personalised responses.
 
 [Install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf) - the easiest way is by using [Homebrew](https://brew.sh/).
 
+However if you use `oh-my-zsh` as your prefered shell we recommend using the plugin approach to install asdf this can be done as follows:
+
+Enable the plugin by adding it to your plugins definition in ~/.zshrc.
+```
+plugins=(asdf)
+```
+Install asdf by running the following:
+```bash
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+```
+
 **Note**: Please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation of Erlang.  
 
 #### Install Erlang/Elixir
