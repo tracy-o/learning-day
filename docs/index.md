@@ -16,6 +16,7 @@ This is where you can find the answers to most, if not all your questions regard
     - [Cascade](topics/cascade.md)
     - [Circuit Breaker](topics/circuit-breaker.md)
     - [Dials](topics/dials.md)
+    - [Logging](topics/debugging-testing/logging.md)
     - [Metrics](topics/metrics.md)
     - [Personalisation](topics/personalisation.md)
     - Routing
@@ -35,4 +36,3 @@ This is where you can find the answers to most, if not all your questions regard
     - [HTTP requests to origins](misc/making-http-requests-to-origins.md)
     - [Threat analysis](misc/threat-analysis.md)
     - [Xray investigation](/misc/xray-investigation)
-
