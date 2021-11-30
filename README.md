@@ -35,7 +35,7 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 2. Use asdf to install Erlang and Elixir
 **Note**: Please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation of Erlang for your operating system.  
 
-The versions of Erlang/Elixir that are supposed to be used are specified in the [`.tool-versions`](.tool-versions) file.
+The versions of Erlang/Elixir that are supposed to be used are specified in the [`.tool-versions`](.tool-versions) file, from within the belfrage directory just running `asdf install` will use the versions in this file.
 
 You can read through the documentation on asdf on how to install Erlang and Elixir but here is a tl;dr:
 
