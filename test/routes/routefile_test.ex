@@ -193,7 +193,7 @@ defmodule Routes.RoutefileTest do
     if missing_attrs == [] do
       :ok
     else
-      {:error, "Route #{matcher} doesn't have required attrs #{missing_attrs} in route spec for #{env}"}
+      {:error, "Route #{matcher} doesn't have required attrs #{inspect(missing_attrs)} in route spec for #{env}"}
     end
   end
 
