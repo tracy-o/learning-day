@@ -16,112 +16,60 @@ Some of the notable documents are:
  - [Personalisation](docs/topics/personalisation.md)
  - [Circuit-Breaker](docs/topics/circuit-breaker.md)
 
+## Getting Belfrage running
 
-## Architecture
+### Installing Erlang and Elixir
 
-[More details on the Belfrage architecture](./docs/architecture/architecture.md)
+1. [Install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf), the easiest way is through [Homebrew](https://brew.sh/) with `brew install asdf`.
 
-## Personalisation
+2. Use asdf to install Erlang and Elixir
+**Note**: Please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation of Erlang for your operating system.  
 
-Belfrage supports requests for personalised content.
+The versions of Erlang/Elixir that are supposed to be used are specified in the [`.tool-versions`](.tool-versions) file.
 
-[More details on personalisation in Belfrage](./docs/architecture/personalisation.md)
-
-## Key features of Belfrage
-
-### Layers
-
-We use a simple architecture with clear separation of responsibilities for any layer.
-Every layer knows how to communicate with the adjacent ones, but communication with further layers is discouraged. Only a subset of these layers will handle HTTP tasks, the rest of the layers will do business logic against the struct, an internal data structure representing the request/response cycle.
-
-![alt text](./docs/architecture/layers.png)
-
-[More details on the different layers are in the Layers document](./docs/architecture/layers.md)
-
-### Struct
-
-The struct is a data structure which will represent the state of the request at any moment. Internally it will be a hash map whose key will be progressively filled with data along the request path.
-
-    struct = { request: {}, private: {}, response: {} }
-
-At any time the system can log the struct giving the precise state of the current request (some values are removed for privacy).
-
-It's the responsibility of the web interface to transform the struct into the final HTTP response.
-
-![alt text](./docs/architecture/struct/struct_lifecycle.png "Struct Lifecycle")
-
-[Struct examples are in the Struct document](./docs/architecture/struct/struct.md)
-
-### Caching
-Belfrage currently uses the "Erlang Term Storage" or ETS for in-memory cache. We have a small layer around the cache interface to only store successful responses for `GET` requests and non-personalised responses.
-
-[More details on caching](./docs/architecture/caching/caching.md)
-
-### Resiliency
-
-#### Fallback
-Fallback is the first resiliency feature to be added to Belfrage. It currently utilises the in-memory caching mechanism to serve stale, cached responses from origins if an origin returns an unsuccessful response. Currently, fallback responses do have an expiry and will not be stored indefinitely.
-
-This feature is only available for non-personalised responses.
-
-## Properties of Belfrage
-
-* resilient
-* performant
-* handle failures
-* more to come...
-
-## Getting it running
-
-### Install Elixir
-
-#### Install asdf
-
-[Install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf) - the easiest way is by using [Homebrew](https://brew.sh/).
-
-**Note**: Please read this [guide](https://github.com/asdf-vm/asdf-erlang#before-asdf-install), to establish the prerequisites for a successful installation of Erlang.  
-
-#### Install Erlang/Elixir
-
-The versions of Erlang/Elixir that are supposed to be used are specified in `.tool-versions` file, which is used by asdf.
-
-Use this command to install Erlang/Elixir: 
+You can read through the documentation on asdf on how to install Erlang and Elixir but here is a tl;dr:
 
 ```
-asdf install
+asdf plugin add erlang
+asdf install erlang {VERSION}
+asdf global erlang {VERSION}
+
+asdf plugin add elixir
+asdf install elixir {VERSION}
+asdf global elixir {VERSION}
 ```
+(The erlang install can take a little while)
 
-### Install Hex
+### Installing Hex and Dependencies
 
-Hex is a package manager for Elixir. You'll need it to install dependencies.
+3. [Hex](https://hex.pm/) is a package manager for Elixir. You'll need it to install dependencies.
+To install it, just run:
 
 ```
 mix local.hex
 ```
-
-### Install dependencies
+4. Then install all required dependencies: 
 
 ```
 mix deps.get
 ```
 
-### Set your credentials
+### Set your credentials and certificates
 
-Running locally, Belfrage will connect to the Test Lambda in the webcore-sre-dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
+5. Running locally, Belfrage will connect to the Test Lambda in the webcore-sre-dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
 
-### Generate a self signed certificate
+6. Generate a self signed certificate with the command: 
 
 ```
 mix x509.gen.selfsigned
 ```
 
 ### Run the app
-
+7. Start the Belfrage application with: 
 ```
 mix run --no-halt
 ```
-
-The app runs on port 7080.
+When you see `Generated belfrage app` you are then able to visit http://localhost:7080/news
 
 ### Testing
 
