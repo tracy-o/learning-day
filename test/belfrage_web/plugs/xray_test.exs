@@ -55,7 +55,7 @@ defmodule BelfrageWeb.Plugs.XRayTest do
            } = conn
   end
 
-  test "registers a before_send callback that finishes tracing" do
+  test "finishes tracing after sending response" do
     Belfrage.XrayMock
     |> expect(
       :finish_tracing,
@@ -68,18 +68,11 @@ defmodule BelfrageWeb.Plugs.XRayTest do
       end
     )
 
-    conn =
-      conn(:get, "/")
-      |> Plugs.RequestId.call([])
-      |> Plugs.XRay.call([])
-
-    assert length(conn.before_send) == 1
-
-    callback =
-      conn.before_send
-      |> List.first()
-
-    callback.(conn)
+    conn(:get, "/")
+    |> Plugs.RequestId.call([])
+    |> Plugs.XRay.call([])
+    |> Plug.Conn.resp(200, "OK")
+    |> Plug.Conn.send_resp()
   end
 
   describe "if start tracing fails" do
@@ -91,16 +84,14 @@ defmodule BelfrageWeb.Plugs.XRayTest do
         conn(:get, "/")
         |> Plugs.RequestId.call([])
         |> Plugs.XRay.call([])
+        |> Plug.Conn.resp(200, "OK")
+        |> Plug.Conn.send_resp()
 
       %{conn: conn}
     end
 
     test "xray trace id isn't set", %{conn: conn} do
       refute conn.private |> Map.has_key?(:xray_trace_id)
-    end
-
-    test "callback isn't set", %{conn: conn} do
-      assert conn.before_send == []
     end
   end
 
@@ -111,17 +102,12 @@ defmodule BelfrageWeb.Plugs.XRayTest do
         segment
       end)
 
-      conn =
-        conn(:get, "/")
-        |> Plug.Conn.put_resp_header("content-length", "34758435")
-        |> Plugs.RequestId.call([])
-        |> Plugs.XRay.call([])
-
-      callback =
-        conn.before_send
-        |> List.first()
-
-      callback.(conn)
+      conn(:get, "/")
+      |> Plug.Conn.put_resp_header("content-length", "34758435")
+      |> Plugs.RequestId.call([])
+      |> Plugs.XRay.call([])
+      |> Plug.Conn.resp(200, "OK")
+      |> Plug.Conn.send_resp()
     end
 
     test "when content-length response header is not set" do
@@ -130,16 +116,11 @@ defmodule BelfrageWeb.Plugs.XRayTest do
         segment
       end)
 
-      conn =
-        conn(:get, "/")
-        |> Plugs.RequestId.call([])
-        |> Plugs.XRay.call([])
-
-      callback =
-        conn.before_send
-        |> List.first()
-
-      callback.(conn)
+      conn(:get, "/")
+      |> Plugs.RequestId.call([])
+      |> Plugs.XRay.call([])
+      |> Plug.Conn.resp(200, "OK")
+      |> Plug.Conn.send_resp()
     end
   end
 

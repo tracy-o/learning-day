@@ -4,28 +4,9 @@ defmodule BelfrageWeb.Plugs.AccessLogsTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
-  alias BelfrageWeb.Plugs
   import ExUnit.CaptureLog
 
-  test "registers a callback for access log" do
-    conn = conn(:get, "/")
-    conn = Plugs.AccessLogs.call(conn, [])
-
-    assert length(conn.before_send) == 1
-  end
-
-  test "the registered callback returns a %Plug.Conn{}" do
-    conn = conn(:get, "/")
-    conn = Plugs.AccessLogs.call(conn, [])
-
-    callback =
-      conn.before_send
-      |> List.first()
-
-    assert %Plug.Conn{} = callback.(conn)
-  end
-
-  test "the registered callback logs" do
+  test "logs after sending response" do
     BelfrageMock
     |> expect(:handle, fn struct ->
       Struct.add(struct, :response, %{
