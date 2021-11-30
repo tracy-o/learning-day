@@ -1,5 +1,4 @@
 # Belfrage
-
 ## What is Belfrage
 __Belfrage__ is part of the WebCore stack, it takes care of transforming and validating HTTP requests to and from a rendering service like the WebCore presentation layer. Belfrage is generic enough to be used as an entry point for any BBC service with minimal effort.
 
@@ -19,7 +18,6 @@ Some of the notable documents are:
 ## Getting Belfrage running
 
 ### Installing Erlang and Elixir
-
 1. [Install the asdf package manager](https://asdf-vm.com/#/core-manage-asdf), the easiest way is through [Homebrew](https://brew.sh/) with `brew install asdf`.
 
 2. Use asdf to install Erlang and Elixir
@@ -41,7 +39,6 @@ asdf global elixir {VERSION}
 (The erlang install can take a little while)
 
 ### Installing Hex and Dependencies
-
 3. [Hex](https://hex.pm/) is a package manager for Elixir. You'll need it to install dependencies.
 To install it, just run:
 
@@ -55,7 +52,6 @@ mix deps.get
 ```
 
 ### Set your credentials and certificates
-
 5. Running locally, Belfrage will connect to the Test Lambda in the webcore-sre-dev account. Unlike Prod and Test where Belfrage will assume a role to refresh the credentials, local dev will simply use your local credentials for the account. You can set these however you wish - if in doubt you can use [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for mozart_dev account number `134209033928`.
 
 6. Generate a self signed certificate with the command: 
@@ -71,14 +67,11 @@ mix run --no-halt
 ```
 When you see `Generated belfrage app` you are then able to visit http://localhost:7080/news
 
-### Testing
-
-To run unit tests use the standard `mix` command:
+### Running Tests
+To run unit tests:
 ```
 mix test
 ```
-
-In addition to unit tests, Belfrage provides other test suites. These can be executed via dedicated mix tasks that run corresponding tests contained in specific subdirectories (see below) in [`./test`](./test/). When a particular suite is being run, the other test suites are excluded to provide faster test duration and clearer results summary. The mechanism is based on `mix test`'s [:test_pattern configuration](https://hexdocs.pm/mix/Mix.Tasks.Test.html#module-configuration) that uses file path extension (`_test.ex`) to select related tests - see https://github.com/bbc/belfrage/pull/415.
 
 To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
 ```
@@ -112,14 +105,12 @@ To run the automatically generated smoke tests on the example routes in the rout
 ```
 
 ### See all the defined route matchers
-
-Will produce a markdown table with all the defined route matchers:
+To produce a markdown table with all the defined route matchers:
 ```
 mix routes
 
 ```
-
-It defaults to live but the environment can be passed:
+Can also display routes for specific environments (test/live) only:
 ```
 mix routes test
 ```
