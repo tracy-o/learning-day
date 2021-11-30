@@ -4,21 +4,21 @@ defmodule Belfrage.RouteSpecTest do
 
   describe "merge_specs/2" do
     test "when values are lists, lists are concatenated" do
-      platform_specs = %{a: ["one"]}
-      route_specs = %{a: ["two"]}
+      platform_specs = %{headers_allowlist: ["one", "two"]}
+      route_specs = %{headers_allowlist: ["three"]}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{a: ["one", "two"]}
+      assert result == %RouteSpec{headers_allowlist: ["one", "two", "three"]}
     end
 
-    test "platform's allow all '*' does not always override routespec value" do
-      platform_specs = %{some_key: "*"}
-      route_specs = %{some_key: "a-value"}
+    test "when keys are not in RouteSpec struct they are not merged" do
+      platform_specs = %{a: "*"}
+      route_specs = %{a: "a-value"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{some_key: "a-value"}
+      assert result == %RouteSpec{}
     end
 
     test "when platform allows all headers" do
@@ -27,7 +27,7 @@ defmodule Belfrage.RouteSpecTest do
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{headers_allowlist: "*"}
+      assert result == %RouteSpec{headers_allowlist: "*"}
     end
 
     test "when platform allows all query params" do
@@ -36,16 +36,16 @@ defmodule Belfrage.RouteSpecTest do
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{query_params_allowlist: "*"}
+      assert result == %RouteSpec{query_params_allowlist: "*"}
     end
 
     test "basic behaviour for values, is that route value takes precedence" do
-      platform_specs = %{foo: "I want the platform to win"}
-      route_specs = %{foo: "I want the route spec to win"}
+      platform_specs = %{runbook: "I want the platform to win"}
+      route_specs = %{runbook: "I want the route spec to win"}
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{foo: "I want the route spec to win"}
+      assert result == %RouteSpec{runbook: "I want the route spec to win"}
     end
 
     test "platforms keys are returned if the same response key is not set" do
@@ -54,10 +54,7 @@ defmodule Belfrage.RouteSpecTest do
 
       result = RouteSpec.merge_specs(platform_specs, route_specs)
 
-      assert result == %{
-               owner: "owner@bbc.co.uk",
-               pipeline: ["HttpRedirector", "CircuitBreaker"]
-             }
+      assert result == %Belfrage.RouteSpec{owner: "owner@bbc.co.uk", pipeline: ["HttpRedirector", "CircuitBreaker"]}
     end
   end
 

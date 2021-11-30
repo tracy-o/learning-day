@@ -1,7 +1,21 @@
 defmodule Belfrage.RouteSpec do
+  alias __MODULE__
   alias Belfrage.Personalisation
 
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
+
+  defstruct owner: "",
+            pipeline: [],
+            resp_pipeline: [],
+            platform: nil,
+            personalisation: nil,
+            origin: nil,
+            runbook: "",
+            query_params_allowlist: [],
+            headers_allowlist: [],
+            caching_enabled: true,
+            language_from_cookie: false,
+            circuit_breaker_error_threshold: nil
 
   def specs_for(name) do
     specs_for(name, Application.get_env(:belfrage, :production_environment))
@@ -24,7 +38,9 @@ defmodule Belfrage.RouteSpec do
   end
 
   def merge_specs(platform_specs, route_specs) do
-    Map.merge(platform_specs, route_specs, &merge_key/3)
+    route_spec = Map.merge(platform_specs, route_specs, &merge_key/3)
+
+    struct(RouteSpec, route_spec)
   end
 
   def remove_placeholder(specs) do

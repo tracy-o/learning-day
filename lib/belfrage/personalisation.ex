@@ -33,7 +33,7 @@ defmodule Belfrage.Personalisation do
   end
 
   defp personalised_route_spec?(spec) do
-    case spec[:personalisation] do
+    case spec.personalisation do
       "on" -> true
       "test_only" -> production_environment() == "test"
       _ -> false
