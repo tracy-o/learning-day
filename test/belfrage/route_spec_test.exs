@@ -12,15 +12,6 @@ defmodule Belfrage.RouteSpecTest do
       assert result == %RouteSpec{headers_allowlist: ["one", "two", "three"]}
     end
 
-    test "when keys are not in RouteSpec struct they are not merged" do
-      platform_specs = %{a: "*"}
-      route_specs = %{a: "a-value"}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %RouteSpec{}
-    end
-
     test "when platform allows all headers" do
       platform_specs = %{headers_allowlist: "*"}
       route_specs = %{headers_allowlist: ["a-header"]}

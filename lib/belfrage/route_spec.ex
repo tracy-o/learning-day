@@ -40,7 +40,7 @@ defmodule Belfrage.RouteSpec do
   def merge_specs(platform_specs, route_specs) do
     route_spec = Map.merge(platform_specs, route_specs, &merge_key/3)
 
-    struct(RouteSpec, route_spec)
+    struct!(RouteSpec, route_spec)
   end
 
   def remove_placeholder(specs) do
