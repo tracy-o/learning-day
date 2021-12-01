@@ -14,6 +14,8 @@ defmodule Belfrage.RouteSpec do
             query_params_allowlist: [],
             headers_allowlist: [],
             caching_enabled: true,
+            signature_keys: %{skip: [], add: []},
+            default_language: "en-GB",
             language_from_cookie: false,
             circuit_breaker_error_threshold: nil
 
