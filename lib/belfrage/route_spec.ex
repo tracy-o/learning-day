@@ -11,10 +11,18 @@ defmodule Belfrage.RouteSpec do
             resp_pipeline: [],
             platform: nil,
             personalisation: nil,
+            # TODO: This probably shouldn't be an attribute of RouteSpec. It
+            # currently is for convenience, but this value is specific to the
+            # current request that's being processed by Belfrage and depends on
+            # the environment. It's not a configuration option for a route and
+            # so it should not be possible to set or override it in a route
+            # spec module.
+            personalised_route: false,
             origin: nil,
             runbook: "",
             query_params_allowlist: [],
             headers_allowlist: [],
+            cookie_allowlist: [],
             caching_enabled: true,
             signature_keys: %{skip: [], add: []},
             default_language: "en-GB",

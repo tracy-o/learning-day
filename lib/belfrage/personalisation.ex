@@ -1,16 +1,18 @@
 defmodule Belfrage.Personalisation do
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, RouteSpec}
   alias Belfrage.Struct.{Request, Private}
   alias Belfrage.Authentication.{BBCID, SessionState}
 
-  @route_spec_attrs %{cookie_allowlist: ["ckns_atkn", "ckns_id"], headers_allowlist: ["x-id-oidc-signedin"]}
   @dial Application.get_env(:belfrage, :dial)
 
-  def transform_route_spec(spec) do
+  def transform_route_spec(spec = %RouteSpec{}) do
     if personalised_route_spec?(spec) do
-      spec
-      |> Map.put(:personalised_route, true)
-      |> Map.merge(@route_spec_attrs, fn _key, v1, v2 -> v1 ++ v2 end)
+      %RouteSpec{
+        spec
+        | personalised_route: true,
+          headers_allowlist: spec.headers_allowlist ++ ["x-id-oidc-signedin"],
+          cookie_allowlist: spec.cookie_allowlist ++ ["ckns_atkn", "ckns_id"]
+      }
     else
       spec
     end
@@ -32,8 +34,8 @@ defmodule Belfrage.Personalisation do
     Application.get_env(:belfrage, :production_environment)
   end
 
-  defp personalised_route_spec?(spec) do
-    case spec.personalisation do
+  defp personalised_route_spec?(%RouteSpec{personalisation: personalisation}) do
+    case personalisation do
       "on" -> true
       "test_only" -> production_environment() == "test"
       _ -> false
