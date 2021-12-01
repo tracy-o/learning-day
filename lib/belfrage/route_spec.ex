@@ -6,7 +6,7 @@ defmodule Belfrage.RouteSpec do
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
   defstruct loop_id: nil,
-            owner: "",
+            owner: nil,
             slack_channel: nil,
             pipeline: [],
             platform: nil,
@@ -19,7 +19,7 @@ defmodule Belfrage.RouteSpec do
             # spec module.
             personalised_route: false,
             origin: nil,
-            runbook: "",
+            runbook: nil,
             query_params_allowlist: [],
             headers_allowlist: [],
             cookie_allowlist: [],
