@@ -13,8 +13,11 @@ defmodule Belfrage.Dials.WebcoreTtlMultiplier do
   def transform("default"), do: 1
 
   @impl Belfrage.Dial
-  def transform("long"), do: 2
+  def transform("long"), do: 6
 
   @impl Belfrage.Dial
-  def transform("very-long"), do: 4
+  def transform("very-long"), do: 12
+
+  @impl Belfrage.Dial
+  def transform("longest"), do: 24
 end
