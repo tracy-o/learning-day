@@ -7,6 +7,7 @@ defmodule Belfrage.RouteSpec do
 
   defstruct loop_id: nil,
             owner: "",
+            slack_channel: nil,
             pipeline: [],
             resp_pipeline: [],
             platform: nil,
