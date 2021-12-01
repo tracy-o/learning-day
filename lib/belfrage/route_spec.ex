@@ -3,8 +3,10 @@ defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
 
   @allow_all_keys [:headers_allowlist, :query_params_allowlist]
+  @pipeline_placeholder :_routespec_pipeline_placeholder
 
-  defstruct owner: "",
+  defstruct loop_id: nil,
+            owner: "",
             pipeline: [],
             resp_pipeline: [],
             platform: nil,
@@ -26,35 +28,34 @@ defmodule Belfrage.RouteSpec do
   def specs_for(name, env) do
     route_spec_module = Module.concat([Routes, Specs, name])
 
-    specs =
-      case route_spec_module.__info__(:functions)[:specs] == 1 do
-        true -> route_spec_module.specs(env)
-        false -> route_spec_module.specs()
+    route_spec =
+      if route_spec_module.__info__(:functions)[:specs] == 1 do
+        route_spec_module.specs(env)
+      else
+        route_spec_module.specs()
       end
 
-    Module.concat([Routes, Platforms, specs.platform]).specs(env)
-    |> merge_specs(specs)
-    |> remove_placeholder()
+    platform_spec = Module.concat([Routes, Platforms, route_spec.platform]).specs(env)
+
+    route_spec
     |> Map.put(:loop_id, name)
+    |> merge_specs(platform_spec)
+    |> remove_placeholder()
     |> Personalisation.transform_route_spec()
   end
 
-  def merge_specs(platform_specs, route_specs) do
+  def merge_specs(route_specs, platform_specs) do
     route_spec = Map.merge(platform_specs, route_specs, &merge_key/3)
 
     struct!(RouteSpec, route_spec)
   end
 
-  def remove_placeholder(specs) do
-    specs
-    |> check_and_update_spec(:pipeline)
-    |> check_and_update_spec(:resp_pipeline)
-  end
-
-  defp check_and_update_spec(specs, key) do
-    if Map.has_key?(specs, key) do
-      Map.update!(specs, key, fn x -> x -- [:_routespec_pipeline_placeholder] end)
-    end
+  def remove_placeholder(spec) do
+    %RouteSpec{
+      spec
+      | pipeline: List.delete(spec.pipeline, @pipeline_placeholder),
+        resp_pipeline: List.delete(spec.resp_pipeline, @pipeline_placeholder)
+    }
   end
 
   def merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do

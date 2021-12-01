@@ -7,7 +7,7 @@ defmodule Belfrage.RouteSpecTest do
       platform_specs = %{headers_allowlist: ["one", "two"]}
       route_specs = %{headers_allowlist: ["three"]}
 
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
+      result = RouteSpec.merge_specs(route_specs, platform_specs)
 
       assert result == %RouteSpec{headers_allowlist: ["one", "two", "three"]}
     end
@@ -16,7 +16,7 @@ defmodule Belfrage.RouteSpecTest do
       platform_specs = %{headers_allowlist: "*"}
       route_specs = %{headers_allowlist: ["a-header"]}
 
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
+      result = RouteSpec.merge_specs(route_specs, platform_specs)
 
       assert result == %RouteSpec{headers_allowlist: "*"}
     end
@@ -25,7 +25,7 @@ defmodule Belfrage.RouteSpecTest do
       platform_specs = %{query_params_allowlist: "*"}
       route_specs = %{query_params_allowlist: ["a-param"]}
 
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
+      result = RouteSpec.merge_specs(route_specs, platform_specs)
 
       assert result == %RouteSpec{query_params_allowlist: "*"}
     end
@@ -34,7 +34,7 @@ defmodule Belfrage.RouteSpecTest do
       platform_specs = %{runbook: "I want the platform to win"}
       route_specs = %{runbook: "I want the route spec to win"}
 
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
+      result = RouteSpec.merge_specs(route_specs, platform_specs)
 
       assert result == %RouteSpec{runbook: "I want the route spec to win"}
     end
@@ -43,7 +43,7 @@ defmodule Belfrage.RouteSpecTest do
       platform_specs = %{pipeline: ["HttpRedirector", "CircuitBreaker"]}
       route_specs = %{owner: "owner@bbc.co.uk"}
 
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
+      result = RouteSpec.merge_specs(route_specs, platform_specs)
 
       assert result == %Belfrage.RouteSpec{owner: "owner@bbc.co.uk", pipeline: ["HttpRedirector", "CircuitBreaker"]}
     end
