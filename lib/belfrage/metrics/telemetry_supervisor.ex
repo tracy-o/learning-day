@@ -128,13 +128,13 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       counter(
         "webcore.request.count",
         event_name: "belfrage.webcore.request.stop",
-        tags: [:route_spec]
+        tags: [:BBCEnvironment, :route_spec]
       ),
       summary(
         "webcore.request.duration",
         event_name: "belfrage.webcore.request.stop",
         unit: {:native, :millisecond},
-        tags: [:route_spec]
+        tags: [:BBCEnvironment, :route_spec]
       ),
       counter(
         "webcore.response",
