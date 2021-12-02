@@ -9,7 +9,6 @@ defmodule Belfrage.RouteSpec do
             owner: "",
             slack_channel: nil,
             pipeline: [],
-            resp_pipeline: [],
             platform: nil,
             personalisation: nil,
             # TODO: This probably shouldn't be an attribute of RouteSpec. It
@@ -60,11 +59,7 @@ defmodule Belfrage.RouteSpec do
   end
 
   def remove_placeholder(spec) do
-    %RouteSpec{
-      spec
-      | pipeline: List.delete(spec.pipeline, @pipeline_placeholder),
-        resp_pipeline: List.delete(spec.resp_pipeline, @pipeline_placeholder)
-    }
+    %RouteSpec{spec | pipeline: List.delete(spec.pipeline, @pipeline_placeholder)}
   end
 
   def merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
@@ -72,11 +67,6 @@ defmodule Belfrage.RouteSpec do
   end
 
   def merge_key(:pipeline, platform_pipeline, routespec_pipeline)
-      when is_list(platform_pipeline) and is_list(routespec_pipeline) do
-    alter_pipeline(platform_pipeline, routespec_pipeline)
-  end
-
-  def merge_key(:resp_pipeline, platform_pipeline, routespec_pipeline)
       when is_list(platform_pipeline) and is_list(routespec_pipeline) do
     alter_pipeline(platform_pipeline, routespec_pipeline)
   end

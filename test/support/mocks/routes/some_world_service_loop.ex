@@ -5,8 +5,7 @@ defmodule Routes.Specs.SomeWorldServiceLoop do
       runbook: "Some runbook",
       platform: Simorgh,
       pipeline: ["WorldServiceRedirect"],
-      query_params_allowlist: ["query"],
-      resp_pipeline: []
+      query_params_allowlist: ["query"]
     }
   end
 end

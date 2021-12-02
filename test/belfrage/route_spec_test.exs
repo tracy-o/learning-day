@@ -67,15 +67,6 @@ defmodule Belfrage.RouteSpecTest do
 
       assert result == ["LambdaOriginAlias", "PlatformKillswitch"]
     end
-
-    test "when the key is a :response_pipeline and the platform_list contains :_routespec_pipeline_placeholder the placeholder is replaced with the routespec_list values" do
-      platform_list = ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
-      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
-
-      result = RouteSpec.merge_key(:resp_pipeline, platform_list, routespec_list)
-
-      assert result == ["HttpRedirector", "LambdaOriginAlias", "PlatformKillswitch", "CircuitBreaker"]
-    end
   end
 
   describe "specs_for/1" do
@@ -97,8 +88,7 @@ defmodule Belfrage.RouteSpecTest do
       def specs(_) do
         %{
           platform: MozartNews,
-          pipeline: ["SomeRedirectLogic"],
-          resp_pipeline: ["SomeRedirectLogic"]
+          pipeline: ["SomeRedirectLogic"]
         }
       end
     end
@@ -106,7 +96,6 @@ defmodule Belfrage.RouteSpecTest do
     test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys are present in routespec" do
       spec = RouteSpec.specs_for(PlaceholderRouteSpec)
       assert ":_routespec_pipeline_placeholder" not in spec.pipeline
-      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
     end
 
     defmodule Module.concat([Routes, Specs, NonPlaceholderRouteSpec]) do
@@ -120,7 +109,6 @@ defmodule Belfrage.RouteSpecTest do
     test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys aren't present in routespec" do
       spec = RouteSpec.specs_for(NonPlaceholderRouteSpec)
       assert ":_routespec_pipeline_placeholder" not in spec.pipeline
-      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
     end
   end
 end
