@@ -525,6 +525,8 @@ defroutefile "Main" do
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
   redirect "/arabic/institutional/2011/01/000000_frequencies_radio", to: "/arabic/tv-and-radio-57895092", status: 301
+  redirect "/arabic/investigations", to: "/arabic/59432629", status: 301
+
 
 
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
