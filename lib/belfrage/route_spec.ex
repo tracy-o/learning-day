@@ -18,6 +18,11 @@ defmodule Belfrage.RouteSpec do
             # so it should not be possible to set or override it in a route
             # spec module.
             personalised_route: false,
+            # TODO: `origin` attribute can potentially be removed as it's
+            # probably enough to just have `platform`. Each `platform` has its
+            # own origin and there are no platforms with multiple origins, so
+            # the origin could be determined from the platform when it comes to
+            # making a request.
             origin: nil,
             runbook: nil,
             query_params_allowlist: [],
