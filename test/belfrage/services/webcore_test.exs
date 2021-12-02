@@ -1,13 +1,13 @@
 defmodule Belfrage.Services.WebcoreTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
-  import Belfrage.Test.MetricsHelper, only: [assert_metric: 2, intercept_metric: 2]
+  use Belfrage.Test.XrayHelper
 
+  import Belfrage.Test.MetricsHelper
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Clients.LambdaMock
-  alias Belfrage.XrayMock
 
   @successful_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
 
@@ -15,7 +15,7 @@ defmodule Belfrage.Services.WebcoreTest do
     struct = %Struct{
       request: %Request{
         request_id: "request-id",
-        # xray_trace_id: "xray-trace-id"
+        xray_segment: build_segment(sampled: false, name: "Belfrage")
       },
       private: %Private{
         route_state_id: "SomeRouteSpec",
@@ -26,7 +26,7 @@ defmodule Belfrage.Services.WebcoreTest do
     credentials = Webcore.Credentials.get()
     request = Webcore.Request.build(struct)
 
-    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", [] ->
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", [xray_trace_id: _trace_id] ->
       @successful_response
     end)
 
@@ -48,31 +48,6 @@ defmodule Belfrage.Services.WebcoreTest do
 
     assert measurement.duration > 0
     assert metadata.route_spec == "SomeRouteSpec"
-  end
-
-  test "emits xray metric upon measurement of the lambda call" do
-    stub_lambda_success()
-    struct = %Struct{
-      private: %Private{loop_id: "SomeRouteSpec"},
-      request: %Request{xray_segment: build_segment(sampled: true)}
-    }
-
-    {_event, measurement, metadata} =
-      intercept_metric(~w(webcore-service stop)a, fn ->
-        Webcore.dispatch(struct)
-      end)
-
-    assert metadata[:xray_segment]
-    assert measurement[:start_time]
-    assert measurement[:duration]
-  end
-
-  test "missing xray trace id" do
-    expect(LambdaMock, :call, fn _credentials, _lambda_arn, _request, _request_id, [] ->
-      @successful_response
-    end)
-
-    assert %Struct{response: %Response{body: "OK"}} = Webcore.dispatch(%Struct{})
   end
 
   test "convert values of response headers to strings" do
