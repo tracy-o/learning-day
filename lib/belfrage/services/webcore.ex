@@ -5,8 +5,6 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Behaviours.Service
 
   @behaviour Service
-
-  @xray Application.get_env(:belfrage, :xray)
   @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
@@ -31,7 +29,6 @@ defmodule Belfrage.Services.Webcore do
   end
 
   defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
-    @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
       Metrics.duration(~w(webcore request)a, %{route_spec: private.route_state_id}, fn ->
         @lambda_client.call(
           Webcore.Credentials.get(),
@@ -41,15 +38,16 @@ defmodule Belfrage.Services.Webcore do
           lambda_options(struct.request)
         )
       end)
-    end)
   end
 
   defp lambda_options(request = %Struct.Request{}) do
-    if request.xray_trace_id do
-      [xray_trace_id: request.xray_trace_id]
-    else
-      []
-    end
+    # if request.xray_trace_id do
+    #   [xray_trace_id: request.xray_trace_id]
+    # else
+    #   []
+    # end
+
+    []
   end
 
   defp build_response(response = %{"body" => body, "headers" => headers, "statusCode" => status_code}) do

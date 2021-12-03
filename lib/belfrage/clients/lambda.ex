@@ -13,7 +13,6 @@ defmodule Belfrage.Clients.Lambda do
     checkpoint(request_id, :origin_request_sent)
 
     lambda_response =
-      Belfrage.Xray.trace_subsegment "invoke-lambda-call" do
         @aws.request(
           AWS.Lambda.invoke(function, payload, %{}, opts),
           security_token: credentials.session_token,
@@ -21,7 +20,6 @@ defmodule Belfrage.Clients.Lambda do
           secret_access_key: credentials.secret_access_key,
           http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
         )
-      end
 
     checkpoint(request_id, :origin_response_received)
 

@@ -15,7 +15,7 @@ defmodule Belfrage.Services.WebcoreTest do
     struct = %Struct{
       request: %Request{
         request_id: "request-id",
-        xray_trace_id: "xray-trace-id"
+        # xray_trace_id: "xray-trace-id"
       },
       private: %Private{
         route_state_id: "SomeRouteSpec",
@@ -26,7 +26,7 @@ defmodule Belfrage.Services.WebcoreTest do
     credentials = Webcore.Credentials.get()
     request = Webcore.Request.build(struct)
 
-    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", xray_trace_id: "xray-trace-id" ->
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", [] ->
       @successful_response
     end)
 
@@ -50,14 +50,21 @@ defmodule Belfrage.Services.WebcoreTest do
     assert metadata.route_spec == "SomeRouteSpec"
   end
 
-  test "add xray subsegment" do
-    struct = %Struct{}
+  test "emits xray metric upon measurement of the lambda call" do
+    stub_lambda_success()
+    struct = %Struct{
+      private: %Private{loop_id: "SomeRouteSpec"},
+      request: %Request{xray_segment: build_segment(sampled: true)}
+    }
 
-    expect(XrayMock, :subsegment_with_struct_annotations, fn "webcore-service", ^struct, _fn ->
-      @successful_response
-    end)
+    {_event, measurement, metadata} =
+      intercept_metric(~w(webcore-service stop)a, fn ->
+        Webcore.dispatch(struct)
+      end)
 
-    assert %Struct{response: %Response{body: "OK"}} = Webcore.dispatch(struct)
+    assert metadata[:xray_segment]
+    assert measurement[:start_time]
+    assert measurement[:duration]
   end
 
   test "missing xray trace id" do

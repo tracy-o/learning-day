@@ -65,8 +65,8 @@ defmodule Belfrage.Services.Fabl do
 
   defp build_headers(%Struct.Request{
          raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_trace_id: nil
+         req_svc_chain: req_svc_chain
+        #  xray_trace_id: nil
        }) do
     Map.merge(raw_headers, %{
       "accept-encoding" => "gzip",
@@ -75,16 +75,14 @@ defmodule Belfrage.Services.Fabl do
     })
   end
 
-  defp build_headers(%Struct.Request{
-         raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_trace_id: xray_trace_id
-       }) do
-    Map.merge(raw_headers, %{
-      "accept-encoding" => "gzip",
-      "user-agent" => "Belfrage",
-      "req-svc-chain" => req_svc_chain,
-      "x-amzn-trace-id" => xray_trace_id
-    })
-  end
+  # defp build_headers(%Struct.Request{
+  #        raw_headers: raw_headers,
+  #        req_svc_chain: req_svc_chain
+  #      }) do
+  #   Map.merge(raw_headers, %{
+  #     "accept-encoding" => "gzip",
+  #     "user-agent" => "Belfrage",
+  #     "req-svc-chain" => req_svc_chain
+  #   })
+  # end
 end
