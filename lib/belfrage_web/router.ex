@@ -14,7 +14,7 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
   plug(BelfrageWeb.Plugs.ResponseMetrics)
-  plug(BelfrageWeb.Plugs.Xray)
+  plug(BelfrageWeb.Plugs.Xray, builder_opts())
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AccessLogs)
   plug(RequestHeaders.Handler)

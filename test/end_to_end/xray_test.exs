@@ -3,6 +3,8 @@ defmodule EndToEnd.XrayTest do
   use Plug.Test
   use Test.Support.Helper, :mox
 
+  import Belfrage.Test.MetricsHelper
+
   alias BelfrageWeb.Router
   alias Belfrage.Clients.HTTP
 
@@ -21,16 +23,25 @@ defmodule EndToEnd.XrayTest do
     Belfrage.RouteStateSupervisor.kill_all()
   end
 
-  describe "hitting the webcore lambda" do
-    test "when start_trace/1 errors, requests still succeed" do
+  describe "request goes through webcore service" do
+    test "a webcore.request.stop event is emmited (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
         {:ok, @lambda_response}
       end)
 
-      Belfrage.XrayMock
-      |> expect(:start_tracing, fn "Belfrage" ->
-        {:error, %RuntimeError{message: "<AwsExRay> Tracing Context already exists on this process."}}
+      assert {_event, %{start_time: _start_time, duration: _duration}, _metadata} =
+        intercept_metric(~w(webcore request stop)a, fn ->
+        conn(:get, "/200-ok-response")
+        |> Router.call([])
+      end)
+    end
+
+    test "has trace_id in the opts" do
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, [xray_trace_id: trace_id] ->
+        assert trace_id
+        {:ok, @lambda_response}
       end)
 
       conn(:get, "/200-ok-response")
@@ -46,28 +57,6 @@ defmodule EndToEnd.XrayTest do
         assert String.contains?(headers["x-amzn-trace-id"], "Sampled=")
         assert String.contains?(headers["x-amzn-trace-id"], "Root=")
         assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
-
-        {:ok,
-         %HTTP.Response{
-           headers: %{"cache-control" => "public, max-age=60"},
-           status_code: 200,
-           body: ""
-         }}
-      end)
-
-      conn = conn(:get, "/fabl/xray") |> Router.call([])
-      {200, _, _} = sent_resp(conn)
-    end
-
-    test "when start_trace/1 errors, fabl headers don't contain x-amzn-trace-id" do
-      Belfrage.XrayMock
-      |> expect(:start_tracing, fn "Belfrage" ->
-        {:error, %RuntimeError{message: "<AwsExRay> Tracing Context already exists on this process."}}
-      end)
-
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->
-        refute Map.has_key?(headers, "x-amzn-trace-id")
 
         {:ok,
          %HTTP.Response{
