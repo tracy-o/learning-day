@@ -54,11 +54,9 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   defp send_slack_message({routespec, failure_messages}, slack_auth_token) do
-    specs = Belfrage.RouteSpec.specs_for(routespec)
+    slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @default_slack_channel
 
     msg = Enum.join(failure_messages, "\n\n")
-
-    slack_channel = Map.get(specs, :slack_channel, @default_slack_channel)
 
     %Belfrage.Clients.HTTP.Request{
       method: :post,

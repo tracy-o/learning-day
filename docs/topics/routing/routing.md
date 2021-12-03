@@ -72,7 +72,6 @@ defmodule Routes.Specs.SportVideos do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: :webcore,
       pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
-      resp_pipeline: [],
       query_params_allowlist: ["keyOne", "keyTwo"]
     }
   end
@@ -84,7 +83,6 @@ where:
 - `runbook` is the link of the tenant page
 - `platform` is the platform used
 - `pipeline` is a list of zero or more pipeline transformers, which decorate the request or add some business logic to take further decisions for the request (i.e. think a migration business logic process)
-- `resp_pipeline` same to decorate/act on the response.
 - `query_params_allowlist` valid values are: `"*"` or an array of query string keys to allow. This property is optional, and if not specified, the route defaults to removing the query string from the request.
 
 We plan to add more properties to the RouteSpec while the app evolves.

@@ -187,13 +187,13 @@ defmodule Routes.RoutefileTest do
   end
 
   defp validate_required_attrs_in_route_spec(matcher, spec, env) do
-    required_attrs = ~w[platform pipeline resp_pipeline circuit_breaker_error_threshold origin]a
+    required_attrs = ~w[platform pipeline circuit_breaker_error_threshold origin]a
     missing_attrs = required_attrs -- Map.keys(spec)
 
     if missing_attrs == [] do
       :ok
     else
-      {:error, "Route #{matcher} doesn't have required attrs #{missing_attrs} in route spec for #{env}"}
+      {:error, "Route #{matcher} doesn't have required attrs #{inspect(missing_attrs)} in route spec for #{env}"}
     end
   end
 

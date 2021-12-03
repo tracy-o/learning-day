@@ -4,10 +4,11 @@ defmodule Belfrage.PersonalisationTest do
   import Belfrage.Test.PersonalisationHelper
 
   alias Belfrage.Personalisation
+  alias Belfrage.RouteSpec
   alias Belfrage.Struct
 
   describe "transform_route_spec/1" do
-    @route_spec %{
+    @route_spec %RouteSpec{
       owner: "An owner",
       runbook: "A run book",
       platform: Webcore,
@@ -20,7 +21,6 @@ defmodule Belfrage.PersonalisationTest do
       assert result.headers_allowlist == ["x-id-oidc-signedin"]
       assert result.cookie_allowlist == ["ckns_atkn", "ckns_id"]
       assert result.personalised_route
-      assert Map.drop(result, ~w(personalised_route cookie_allowlist headers_allowlist)a) == spec
     end
 
     test "adds personalisation attrs if personalisation is 'test_only' and prod env is test" do
@@ -31,7 +31,6 @@ defmodule Belfrage.PersonalisationTest do
       assert result.headers_allowlist == ["x-id-oidc-signedin"]
       assert result.cookie_allowlist == ["ckns_atkn", "ckns_id"]
       assert result.personalised_route
-      assert Map.drop(result, ~w(personalised_route cookie_allowlist headers_allowlist)a) == spec
     end
 
     test "does not add personalisation attrs if personalisation is 'test_only' and prod env is not test" do

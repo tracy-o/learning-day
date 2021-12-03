@@ -19,8 +19,7 @@ defmodule Mix.Tasks.Routespecs do
       %{
         "RouteSpec" => loop_id,
         "Platform" => spec.platform,
-        "Request Pipeline" => Enum.join(spec.pipeline, ","),
-        "Response Pipeline" => Enum.join(spec.resp_pipeline, ",")
+        "Request Pipeline" => Enum.join(spec.pipeline, ",")
       }
     end)
     |> Enum.reverse()
