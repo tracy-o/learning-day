@@ -31,7 +31,6 @@ defmodule Belfrage.Metrics.Supervisor do
        [
          measurements: [
            {Metrics.Poolboy, :track_machine_gun_pools, []},
-           {Metrics.Poolboy, :track, [:aws_ex_store_pool, "AwsExRayProcessMonitor"]},
            {Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]},
            {Metrics.Poolboy, :track_pool_aggregates, []}
          ],
