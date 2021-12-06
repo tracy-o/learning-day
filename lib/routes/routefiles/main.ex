@@ -1669,6 +1669,9 @@ defroutefile "Main" do
   handle "/bitesize/articles/zm8fhbk", using: "BitesizeTransition", examples: ["/bitesize/articles/zm8fhbk"]
   handle "/bitesize/levels/z98jmp3", using: "BitesizeTransition", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
+  
+  # Games
+  handle "/games/*_any", using: "Games", only_on: "test", examples: ["/games/embed/genie-starter-pack"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
