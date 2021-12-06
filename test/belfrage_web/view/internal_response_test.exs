@@ -11,7 +11,7 @@ defmodule BelfrageWeb.View.InternalResponseTest do
       status = 404
 
       assert %Struct.Response{
-               body: "content for file test/support/resources/not-found.html<!-- Belfrage -->",
+               body: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->",
                cache_directive: %Belfrage.CacheControl{
                  cacheability: "public",
                  max_age: 30,

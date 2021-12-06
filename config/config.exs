@@ -99,7 +99,10 @@ config :belfrage,
     "jwt_expiry_window" => 4200
   },
   bbc_id_availability_poll_interval: 10_000,
-  jwk_polling_enabled: true
+  jwk_polling_enabled: true,
+  not_found_page: "priv/static/default_error_pages/not_found.html",
+  not_supported_page: "priv/static/default_error_pages/not_supported.html",
+  internal_error_page: "priv/static/default_error_pages/internal_error.html"
 
 config :cachex, :limit,
   size: 36_000,

@@ -1,11 +1,20 @@
 defmodule BelfrageWeb.View.InternalResponse do
-  @file_io Application.get_env(:belfrage, :file_io)
   alias Belfrage.Struct.Response
   alias Belfrage.Metrics
 
   @html_content_type "text/html; charset=utf-8"
   @json_content_type "application/json"
   @plain_content_type "text/plain"
+
+  @html_body %{
+    301 => "",
+    302 => "",
+    # These files are read from disk at compilation time. If you change them be
+    # sure to recompile this module.
+    404 => File.read!(Application.get_env(:belfrage, :not_found_page)) <> "<!-- Belfrage -->",
+    405 => File.read!(Application.get_env(:belfrage, :not_supported_page)) <> "<!-- Belfrage -->",
+    500 => File.read!(Application.get_env(:belfrage, :internal_error_page)) <> "<!-- Belfrage -->"
+  }
 
   @redirect_http_status Application.get_env(:belfrage, :redirect_statuses)
 
@@ -76,33 +85,19 @@ defmodule BelfrageWeb.View.InternalResponse do
     end
   end
 
-  defp put_body(response = %Response{headers: %{"content-type" => @json_content_type}}) do
-    Map.put(response, :body, ~s({"status":#{response.http_status}}))
+  defp put_body(response = %Response{}) do
+    body =
+      case response.headers["content-type"] do
+        @json_content_type ->
+          ~s({"status":#{response.http_status}})
+
+        @plain_content_type ->
+          "#{response.http_status}, Belfrage"
+
+        @html_content_type ->
+          Map.get_lazy(@html_body, response.http_status, fn -> "<h1>#{response.http_status}</h1>\n<!-- Belfrage -->" end)
+      end
+
+    %Response{response | body: body}
   end
-
-  defp put_body(response = %Response{headers: %{"content-type" => @plain_content_type}}) do
-    Map.put(response, :body, "#{response.http_status}, Belfrage")
-  end
-
-  defp put_body(response = %Response{headers: %{"content-type" => @html_content_type}}) do
-    Map.put(response, :body, html_body(response.http_status))
-  end
-
-  defp html_body(301), do: ""
-  defp html_body(302), do: ""
-  defp html_body(404), do: html_body(Application.get_env(:belfrage, :not_found_page), 404)
-  defp html_body(405), do: html_body(Application.get_env(:belfrage, :not_supported_page), 405)
-  defp html_body(500), do: html_body(Application.get_env(:belfrage, :internal_error_page), 500)
-  defp html_body(status_code), do: default_html_body(status_code)
-
-  defp html_body(path, status) do
-    case @file_io.read(path) do
-      {:ok, body} -> body <> "<!-- Belfrage -->"
-      {:error, _} -> default_html_body(status)
-    end
-  end
-
-  defp default_html_body(500), do: "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-  defp default_html_body(404), do: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-  defp default_html_body(http_status), do: "<h1>#{http_status}</h1>\n<!-- Belfrage -->"
 end

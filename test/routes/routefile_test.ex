@@ -97,8 +97,7 @@ defmodule Routes.RoutefileTest do
         conn = conn(:get, example)
         conn = Router.call(conn, [])
 
-        if conn.status == 404 &&
-             conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->" do
+        if conn.status == 404 && conn.resp_body =~ "404" do
           :ok
         else
           {:error,
@@ -148,7 +147,7 @@ defmodule Routes.RoutefileTest do
       conn = Router.call(conn, [])
 
       assert conn.status == 404
-      assert conn.resp_body == "content for file test/support/resources/not-found.html<!-- Belfrage -->"
+      assert conn.resp_body =~ "404"
 
       Application.put_env(:belfrage, :production_environment, "test")
     end
@@ -160,7 +159,7 @@ defmodule Routes.RoutefileTest do
       conn = Router.call(conn, [])
 
       assert conn.status == 405
-      assert conn.resp_body == "content for file test/support/resources/not-supported.html<!-- Belfrage -->"
+      assert conn.resp_body =~ "405"
     end
   end
 

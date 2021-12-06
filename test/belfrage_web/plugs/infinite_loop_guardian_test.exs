@@ -6,11 +6,6 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
   alias BelfrageWeb.Plugs.InfiniteLoopGuardian
 
   test "returns a 404 if req-svc-chain already contains 'BELFRAGE'" do
-    not_found_page = Application.get_env(:belfrage, :not_found_page)
-
-    Belfrage.Helpers.FileIOMock
-    |> expect(:read, fn ^not_found_page -> {:ok, "<h1>404 Error Page</h1>\n"} end)
-
     conn =
       conn(:get, "/foo/bar/123.json")
       |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
