@@ -1,8 +1,7 @@
 defmodule Belfrage.RouteSpec do
-  alias __MODULE__
   alias Belfrage.Personalisation
 
-  @allow_all_keys [:headers_allowlist, :query_params_allowlist]
+  @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
   defstruct loop_id: nil,
@@ -34,64 +33,82 @@ defmodule Belfrage.RouteSpec do
             language_from_cookie: false,
             circuit_breaker_error_threshold: nil
 
-  def specs_for(name) do
-    specs_for(name, Application.get_env(:belfrage, :production_environment))
-  end
+  def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
+    route_attrs = get_route_attrs(name, env)
 
-  def specs_for(name, env) do
-    route_spec_module = Module.concat([Routes, Specs, name])
-
-    route_spec =
-      if route_spec_module.__info__(:functions)[:specs] == 1 do
-        route_spec_module.specs(env)
-      else
-        route_spec_module.specs()
-      end
-
-    platform_spec = Module.concat([Routes, Platforms, route_spec.platform]).specs(env)
-
-    route_spec
-    |> Map.put(:loop_id, name)
-    |> merge_specs(platform_spec)
-    |> remove_placeholder()
+    route_attrs.platform
+    |> get_platform_spec(env)
+    |> update_with_route_attrs(route_attrs)
     |> Personalisation.transform_route_spec()
   end
 
-  def merge_specs(route_specs, platform_specs) do
-    route_spec = Map.merge(platform_specs, route_specs, &merge_key/3)
-
-    struct!(RouteSpec, route_spec)
+  defp get_route_attrs(name, env) do
+    [Routes, Specs, name]
+    |> call_specs_func(env)
+    |> Map.put(:loop_id, name)
   end
 
-  def remove_placeholder(spec) do
-    %RouteSpec{spec | pipeline: List.delete(spec.pipeline, @pipeline_placeholder)}
+  defp call_specs_func(module_name, env) do
+    module = Module.concat(module_name)
+
+    case Code.ensure_loaded(module) do
+      {:module, module} ->
+        cond do
+          function_exported?(module, :specs, 1) ->
+            module.specs(env)
+
+          function_exported?(module, :specs, 0) ->
+            module.specs()
+
+          true ->
+            raise "Module #{module} must define a specs/0 or specs/1 function"
+        end
+
+      _ ->
+        raise "Module #{module} doesn't exist"
+    end
   end
 
-  def merge_key(key, _platform_value = "*", _route_value) when key in @allow_all_keys do
-    "*"
+  defp get_platform_spec(name, env) do
+    struct!(__MODULE__, call_specs_func([Routes, Platforms, name], env))
   end
 
-  def merge_key(:pipeline, platform_pipeline, routespec_pipeline)
-      when is_list(platform_pipeline) and is_list(routespec_pipeline) do
-    alter_pipeline(platform_pipeline, routespec_pipeline)
+  defp update_with_route_attrs(spec = %__MODULE__{}, route_attrs) do
+    route_overrides =
+      route_attrs
+      |> Map.merge(merge_allowlists(spec, route_attrs))
+      |> Map.put(:pipeline, merge_pipelines(spec.pipeline, route_attrs[:pipeline]))
+
+    struct!(spec, route_overrides)
   end
 
-  def merge_key(_key, platform_list_value, route_list_value)
-      when is_list(platform_list_value) and is_list(route_list_value) do
-    platform_list_value ++ route_list_value
-  end
-
-  def merge_key(_any_key, _platform_value, route_value) do
-    route_value
-  end
-
-  defp alter_pipeline(platform_pipeline, routespec_pipeline) do
-    if :_routespec_pipeline_placeholder in platform_pipeline do
+  defp merge_pipelines(platform_pipeline, route_pipeline) do
+    if @pipeline_placeholder in platform_pipeline do
       Enum.flat_map(platform_pipeline, fn transformer ->
-        if transformer == :_routespec_pipeline_placeholder, do: routespec_pipeline, else: [transformer]
+        if transformer == @pipeline_placeholder do
+          route_pipeline || []
+        else
+          [transformer]
+        end
       end)
     else
-      routespec_pipeline
+      route_pipeline || platform_pipeline
     end
+  end
+
+  defp merge_allowlists(spec, route_attrs) do
+    Enum.reduce(@allowlists, %{}, fn attr, result ->
+      spec_value = Map.fetch!(spec, attr)
+      route_value = route_attrs[attr] || []
+
+      value =
+        if spec_value == "*" do
+          spec_value
+        else
+          spec_value ++ route_value
+        end
+
+      Map.put(result, attr, value)
+    end)
   end
 end
