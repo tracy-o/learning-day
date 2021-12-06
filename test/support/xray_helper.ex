@@ -1,7 +1,6 @@
 defmodule Belfrage.Test.XrayHelper do
   alias AwsExRay.{Trace, Segment}
 
-
   defmacro __using__(_opts) do
     quote do
       import Belfrage.Test.XrayHelper, only: [build_segment: 1]

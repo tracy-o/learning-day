@@ -63,7 +63,7 @@ defmodule Belfrage.MetricsTest do
     test "emits a stop event with duration, start_time and metadata" do
       start_time = System.monotonic_time() - 1
 
-      {_, %{start_time: start_time, duration: duration}, %{bar: :baz}} =
+      {_, %{start_time: _start_time, duration: duration}, %{bar: :baz}} =
         intercept_metric([:foo, :stop], fn ->
           Metrics.stop(:foo, start_time, %{bar: :baz})
         end)

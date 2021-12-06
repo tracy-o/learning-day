@@ -1,5 +1,4 @@
 defmodule Belfrage.Xray do
-
   alias AwsExRay.Trace
   alias AwsExRay.Segment
   alias AwsExRay.Subsegment
@@ -11,15 +10,15 @@ defmodule Belfrage.Xray do
   @type metadata :: map()
   @type request_info :: %{method: String.t(), path: String.t()}
   @type response_info :: %{
-    status: non_neg_integer(), content_length: non_neg_integer()
-  }
+          status: non_neg_integer(),
+          content_length: non_neg_integer()
+        }
 
   @spec start_tracing(name) :: Segment.t()
   def start_tracing(name) do
     Trace.new()
     |> Segment.new(name)
   end
-
 
   @spec start_subsegment(Trace.t(), name) :: Subsegment.t()
   def start_subsegment(segment = %Segment{}, name) do

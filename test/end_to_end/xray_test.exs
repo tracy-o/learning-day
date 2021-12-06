@@ -31,10 +31,10 @@ defmodule EndToEnd.XrayTest do
       end)
 
       assert {_event, %{start_time: _start_time, duration: _duration}, _metadata} =
-        intercept_metric(~w(webcore request stop)a, fn ->
-        conn(:get, "/200-ok-response")
-        |> Router.call([])
-      end)
+               intercept_metric(~w(webcore request stop)a, fn ->
+                 conn(:get, "/200-ok-response")
+                 |> Router.call([])
+               end)
     end
 
     test "has trace_id in the opts" do

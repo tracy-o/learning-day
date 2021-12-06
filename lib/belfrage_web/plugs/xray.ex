@@ -3,9 +3,7 @@ defmodule BelfrageWeb.Plugs.Xray do
   import Plug.Conn, only: [register_before_send: 2, assign: 3]
   alias Belfrage.Xray
 
-
   @skip_paths ["/status"]
-
 
   @impl true
   def init(opts), do: opts
@@ -32,7 +30,8 @@ defmodule BelfrageWeb.Plugs.Xray do
       segment
       |> xray.finish()
       |> xray.set_http_response(%{
-        status: conn.status, content_length: content_length(conn)
+        status: conn.status,
+        content_length: content_length(conn)
       })
 
     xray.send(segment)

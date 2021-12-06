@@ -14,11 +14,11 @@ defmodule Belfrage.Clients.Lambda do
 
     lambda_response =
       @aws.request(
-          AWS.Lambda.invoke(function, payload, %{}, opts),
-          security_token: credentials.session_token,
-          access_key_id: credentials.access_key_id,
-          secret_access_key: credentials.secret_access_key,
-          http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
+        AWS.Lambda.invoke(function, payload, %{}, opts),
+        security_token: credentials.session_token,
+        access_key_id: credentials.access_key_id,
+        secret_access_key: credentials.secret_access_key,
+        http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
       )
 
     checkpoint(request_id, :origin_response_received)

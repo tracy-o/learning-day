@@ -1,7 +1,6 @@
 defmodule Belfrage.Xray.TelemetryTest do
   use ExUnit.Case, async: true
   use Belfrage.Test.XrayHelper
-  import Belfrage.Test.MetricsHelper
 
   alias Belfrage.Xray
   alias Belfrage.Struct
@@ -43,7 +42,6 @@ defmodule Belfrage.Xray.TelemetryTest do
     test "subsegments have start_time", %{webcore_subsegment: webcore_subsegment, lambda_subsegment: lambda_subsegment} do
       assert webcore_subsegment["start_time"]
       assert lambda_subsegment["start_time"]
-
     end
 
     test "subsegments have end_time", %{webcore_subsegment: webcore_subsegment, lambda_subsegment: lambda_subsegment} do
@@ -51,7 +49,10 @@ defmodule Belfrage.Xray.TelemetryTest do
       assert lambda_subsegment["end_time"]
     end
 
-    test "subsegments end_time is after start_time", %{webcore_subsegment: webcore_subsegment, lambda_subsegment: lambda_subsegment} do
+    test "subsegments end_time is after start_time", %{
+      webcore_subsegment: webcore_subsegment,
+      lambda_subsegment: lambda_subsegment
+    } do
       assert webcore_subsegment["end_time"] - webcore_subsegment["start_time"] > 0
       assert lambda_subsegment["end_time"] - lambda_subsegment["start_time"] > 0
     end

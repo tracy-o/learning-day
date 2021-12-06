@@ -4,8 +4,6 @@ defmodule Belfrage.Metrics do
   `:telemetry` directly. It encapsulates our telemetry conventions.
   """
 
-  alias Belfrage.Xray
-
   @type event_name :: atom() | [atom()]
   @type start_time :: integer()
   @type measurements :: map()
@@ -55,6 +53,7 @@ defmodule Belfrage.Metrics do
   def stop(name, start_time, metadata \\ %{}) do
     duration = System.monotonic_time(@time_unit) - start_time
     os_start_time = System.os_time(@time_unit) - duration
+
     name
     |> suffix_name(:stop)
     |> event(%{duration: duration, start_time: os_start_time}, metadata)

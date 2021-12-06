@@ -15,7 +15,6 @@ defmodule Belfrage.Xray.Telemetry do
     start_time = format_time(Map.get(measurements, :start_time))
     duration = format_time(Map.get(measurements, :duration))
 
-
     subsegment(segment, "webcore-service", start_time, duration, metadata)
     subsegment(segment, "invoke-lambda-call", start_time, duration, metadata)
   end
