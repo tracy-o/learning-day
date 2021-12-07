@@ -22,5 +22,9 @@ defmodule Belfrage.Dials.NonWebcoreTtlMultiplierTest do
     test "when the value is very-long" do
       assert NonWebcoreTtlMultiplier.transform("very-long") == 4
     end
+
+    test "when the value is longest" do
+      assert NonWebcoreTtlMultiplier.transform("longest") == 6
+    end
   end
 end

@@ -5,7 +5,6 @@ defmodule Routes.Platforms.Programmes do
       owner: "homedatacap@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=152098352",
       pipeline: pipeline(production_env),
-      resp_pipeline: [],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200
     }

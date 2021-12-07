@@ -16,11 +16,15 @@ defmodule Belfrage.Dials.WebcoreTtlMultiplierTest do
     end
 
     test "when the value is long" do
-      assert WebcoreTtlMultiplier.transform("long") == 2
+      assert WebcoreTtlMultiplier.transform("long") == 6
     end
 
     test "when the value is very-long" do
-      assert WebcoreTtlMultiplier.transform("very-long") == 4
+      assert WebcoreTtlMultiplier.transform("very-long") == 12
+    end
+
+    test "when the value is longest" do
+      assert WebcoreTtlMultiplier.transform("longest") == 24
     end
   end
 end

@@ -17,7 +17,9 @@ This is where you can find the answers to most, if not all your questions regard
     - [Circuit Breaker](topics/circuit-breaker.md)
     - [Dials](topics/dials.md)
     - [Logging](topics/debugging-testing/logging.md)
-    - [Metrics](topics/metrics.md)
+    - Metrics
+      - [Belfrage metrics for other teams](topics/metrics/metrics-for-external-use.md)
+      - [How metrics in Belfrage work](topics/metrics/metrics-in-belfrage.md)
     - [Personalisation](topics/personalisation.md)
     - Routing
         - [Route Matcher Types](topics/routing/route-matcher-types.md)

@@ -525,6 +525,8 @@ defroutefile "Main" do
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
   redirect "/arabic/institutional/2011/01/000000_frequencies_radio", to: "/arabic/tv-and-radio-57895092", status: 301
+  redirect "/arabic/investigations", to: "/arabic/59432629", status: 301
+
 
 
   handle "/arabic.amp", using: "WorldServiceArabic", examples: ["/arabic.amp"]
@@ -1667,6 +1669,9 @@ defroutefile "Main" do
   handle "/bitesize/articles/zm8fhbk", using: "BitesizeTransition", examples: ["/bitesize/articles/zm8fhbk"]
   handle "/bitesize/levels/z98jmp3", using: "BitesizeTransition", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
+  
+  # Games
+  handle "/games/*_any", using: "Games", only_on: "test", examples: ["/games/embed/genie-starter-pack"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]

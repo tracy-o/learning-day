@@ -13,7 +13,6 @@ defmodule Routes.Platforms.MorphRouter do
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/morph/Morph+Router+Run+Book",
       pipeline: pipeline(production_env),
-      resp_pipeline: [],
       circuit_breaker_error_threshold: 200,
     }
   end

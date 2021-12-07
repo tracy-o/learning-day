@@ -37,6 +37,8 @@ defmodule Belfrage.Loop do
     Process.send_after(self(), :short_reset, short_interval())
     Process.send_after(self(), :long_reset, long_interval())
 
+    specs = Map.from_struct(specs)
+
     {:ok,
      Map.merge(specs, %{
        counter: Counter.init(),

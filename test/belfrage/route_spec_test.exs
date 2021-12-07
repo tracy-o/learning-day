@@ -1,138 +1,111 @@
 defmodule Belfrage.RouteSpecTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Belfrage.RouteSpec
 
-  describe "merge_specs/2" do
-    test "when values are lists, lists are concatenated" do
-      platform_specs = %{a: ["one"]}
-      route_specs = %{a: ["two"]}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{a: ["one", "two"]}
-    end
-
-    test "platform's allow all '*' does not always override routespec value" do
-      platform_specs = %{some_key: "*"}
-      route_specs = %{some_key: "a-value"}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{some_key: "a-value"}
-    end
-
-    test "when platform allows all headers" do
-      platform_specs = %{headers_allowlist: "*"}
-      route_specs = %{headers_allowlist: ["a-header"]}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{headers_allowlist: "*"}
-    end
-
-    test "when platform allows all query params" do
-      platform_specs = %{query_params_allowlist: "*"}
-      route_specs = %{query_params_allowlist: ["a-param"]}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{query_params_allowlist: "*"}
-    end
-
-    test "basic behaviour for values, is that route value takes precedence" do
-      platform_specs = %{foo: "I want the platform to win"}
-      route_specs = %{foo: "I want the route spec to win"}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{foo: "I want the route spec to win"}
-    end
-
-    test "platforms keys are returned if the same response key is not set" do
-      platform_specs = %{pipeline: ["HttpRedirector", "CircuitBreaker"]}
-      route_specs = %{owner: "owner@bbc.co.uk"}
-
-      result = RouteSpec.merge_specs(platform_specs, route_specs)
-
-      assert result == %{
-               owner: "owner@bbc.co.uk",
-               pipeline: ["HttpRedirector", "CircuitBreaker"]
-             }
+  defmacrop define_platform(name, attrs) do
+    quote do
+      defmodule Module.concat([Routes, Platforms, unquote(name)]) do
+        def specs() do
+          unquote(attrs)
+        end
+      end
     end
   end
 
-  describe "merge_key/3" do
-    test "when the key is a :pipeline and the platform_list contains :routespec_placeholder the placeholder is replaced with the routespec_list values" do
-      platform_list = ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
-      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
-
-      result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
-
-      assert result == ["HttpRedirector", "LambdaOriginAlias", "PlatformKillswitch", "CircuitBreaker"]
-    end
-
-    test "when the key is :pipeline and the platform_list_value does not contain :routespec_placeholder, the routespec values are returned" do
-      platform_list = ["HttpRedirector", "CircuitBreaker"]
-      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
-
-      result = RouteSpec.merge_key(:pipeline, platform_list, routespec_list)
-
-      assert result == ["LambdaOriginAlias", "PlatformKillswitch"]
-    end
-
-    test "when the key is a :response_pipeline and the platform_list contains :_routespec_pipeline_placeholder the placeholder is replaced with the routespec_list values" do
-      platform_list = ["HttpRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
-      routespec_list = ["LambdaOriginAlias", "PlatformKillswitch"]
-
-      result = RouteSpec.merge_key(:resp_pipeline, platform_list, routespec_list)
-
-      assert result == ["HttpRedirector", "LambdaOriginAlias", "PlatformKillswitch", "CircuitBreaker"]
+  defmacrop define_route(name, attrs) do
+    quote do
+      defmodule Module.concat([Routes, Specs, unquote(name)]) do
+        def specs() do
+          unquote(attrs)
+        end
+      end
     end
   end
 
   describe "specs_for/1" do
-    defmodule Module.concat([Routes, Specs, PersonalisedRouteSpec]) do
-      def specs(_) do
-        %{
-          platform: Webcore,
-          personalisation: "on"
-        }
-      end
+    test "merges route attributes into platform attributes" do
+      define_platform(MergePlatform, %{caching_enabled: false, default_language: "foo"})
+      define_route(MergeRoute, %{platform: MergePlatform, default_language: "bar", owner: "baz"})
+
+      spec = RouteSpec.specs_for(MergeRoute)
+      assert spec.platform == MergePlatform
+      assert spec.owner == "baz"
+      assert spec.default_language == "bar"
+      assert spec.caching_enabled == false
     end
 
-    test "adds personalisation attributes" do
-      spec = RouteSpec.specs_for(PersonalisedRouteSpec)
-      assert spec.personalised_route
+    test "merges allowlists" do
+      define_platform(MergeAllowlistPlatform, %{
+        query_params_allowlist: ["param1"],
+        headers_allowlist: ["header1"],
+        cookie_allowlist: ["cookie1"]
+      })
+
+      define_route(MergeAllowlistRoute, %{
+        platform: MergeAllowlistPlatform,
+        query_params_allowlist: ["param2"],
+        headers_allowlist: ["header2"],
+        cookie_allowlist: ["cookie2"]
+      })
+
+      spec = RouteSpec.specs_for(MergeAllowlistRoute)
+      assert spec.query_params_allowlist == ~w(param1 param2)
+      assert spec.headers_allowlist == ~w(header1 header2)
+      assert spec.cookie_allowlist == ~w(cookie1 cookie2)
     end
 
-    defmodule Module.concat([Routes, Specs, PlaceholderRouteSpec]) do
-      def specs(_) do
-        %{
-          platform: MozartNews,
-          pipeline: ["SomeRedirectLogic"],
-          resp_pipeline: ["SomeRedirectLogic"]
-        }
-      end
+    test "does not overwrite wildcard in platform allowlist" do
+      define_platform(WildcardAllowlistPlatform, %{
+        query_params_allowlist: "*",
+        headers_allowlist: "*",
+        cookie_allowlist: "*"
+      })
+
+      define_route(WildcardAllowlistRoute, %{
+        platform: WildcardAllowlistPlatform,
+        query_params_allowlist: ["param2"],
+        headers_allowlist: ["header2"],
+        cookie_allowlist: ["cookie2"]
+      })
+
+      spec = RouteSpec.specs_for(WildcardAllowlistRoute)
+      assert spec.query_params_allowlist == "*"
+      assert spec.headers_allowlist == "*"
+      assert spec.cookie_allowlist == "*"
     end
 
-    test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys are present in routespec" do
-      spec = RouteSpec.specs_for(PlaceholderRouteSpec)
-      assert ":_routespec_pipeline_placeholder" not in spec.pipeline
-      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
+    test "replaces pipeline placeholder with route pipeline" do
+      define_platform(PipelinePlaceholderPlatform, %{pipeline: ["Foo", :_routespec_pipeline_placeholder, "Bar"]})
+      define_route(NoPipelineRoute, %{platform: PipelinePlaceholderPlatform})
+      define_route(PipelineRoute, %{platform: PipelinePlaceholderPlatform, pipeline: ["Baz1", "Baz2"]})
+
+      spec = RouteSpec.specs_for(NoPipelineRoute)
+      assert spec.pipeline == ["Foo", "Bar"]
+
+      spec = RouteSpec.specs_for(PipelineRoute)
+      assert spec.pipeline == ["Foo", "Baz1", "Baz2", "Bar"]
     end
 
-    defmodule Module.concat([Routes, Specs, NonPlaceholderRouteSpec]) do
-      def specs(_) do
-        %{
-          platform: MozartNews
-        }
-      end
+    test "overwrites pipeline if platform spec does not have placeholder" do
+      define_platform(OverwritePipelinePlatform, %{pipeline: ["Foo"]})
+      define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, pipeline: ["Bar"]})
+
+      spec = RouteSpec.specs_for(OverwritePipelineRoute)
+      assert spec.pipeline == ["Bar"]
     end
 
-    test ":_routespec_pipeline_placeholder is removed if :pipeline and :response_pipeline keys aren't present in routespec" do
-      spec = RouteSpec.specs_for(NonPlaceholderRouteSpec)
-      assert ":_routespec_pipeline_placeholder" not in spec.pipeline
-      assert ":_routespec_pipeline_placeholder" not in spec.resp_pipeline
+    test "sets personalised_route attribute" do
+      define_platform(PersonalisedPlatform, %{})
+      define_route(PersonalisedRoute, %{platform: PersonalisedPlatform, personalisation: "on"})
+      define_route(NonPersonalisedRoute, %{platform: PersonalisedPlatform, personalisation: "off"})
+
+      spec = RouteSpec.specs_for(PersonalisedRoute)
+      assert spec.personalisation == "on"
+      assert spec.personalised_route == true
+
+      spec = RouteSpec.specs_for(NonPersonalisedRoute)
+      assert spec.personalisation == "off"
+      assert spec.personalised_route == false
     end
   end
 end

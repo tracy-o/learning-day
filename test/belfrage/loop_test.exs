@@ -2,7 +2,7 @@ defmodule Belfrage.LoopTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Struct, Loop}
+  alias Belfrage.{Struct, Loop, RouteSpec}
 
   @failure_status_code Enum.random(500..504)
 
@@ -38,20 +38,14 @@ defmodule Belfrage.LoopTest do
   end
 
   test "returns a state pointer" do
+    route_spec =
+      @loop_id
+      |> String.to_atom()
+      |> RouteSpec.specs_for()
+      |> Map.from_struct()
+
     assert Loop.state(@legacy_request_struct) ==
-             {:ok,
-              %{
-                counter: %{},
-                long_counter: %{},
-                origin: "http://origin.bbc.com",
-                owner: "belfrage-team@bbc.co.uk",
-                runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-                platform: OriginSimulator,
-                pipeline: ["TrailingSlashRedirector", "CircuitBreaker"],
-                resp_pipeline: [],
-                circuit_breaker_error_threshold: 200,
-                loop_id: @loop_id
-              }}
+             {:ok, Map.merge(route_spec, %{loop_id: @loop_id, counter: %{}, long_counter: %{}})}
   end
 
   describe "returns a different count per origin" do

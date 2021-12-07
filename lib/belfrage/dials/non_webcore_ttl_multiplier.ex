@@ -17,4 +17,7 @@ defmodule Belfrage.Dials.NonWebcoreTtlMultiplier do
 
   @impl Belfrage.Dial
   def transform("very-long"), do: 4
+
+  @impl Belfrage.Dial
+  def transform("longest"), do: 6
 end
