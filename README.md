@@ -8,6 +8,8 @@ Belfrage is part of the WebCore stack, but it's also used in front of services t
 ## Documentation
 The index for the documentation can be found here: [docs/index.md](docs/index.md)
 
+Belfrage Confluence: https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage
+
 ## Getting Belfrage running
 
 ### Installing Erlang and Elixir
