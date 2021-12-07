@@ -6,6 +6,43 @@
 3. Use start_supervised to start unique GenServers or other required async processes in the setup block of that test.
 4. GenServers/Supervisors need to be made configurable on startup.
 ```
+### How to run tests
+To run unit tests:
+```
+mix test
+```
+
+To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
+```
+mix test_e2e
+```
+
+To run the automatically generated route matcher tests in [./test/routes/](./test/routes/):
+```
+mix routes_test
+```
+
+To run the automatically generated smoke tests on the example routes in the router [./test/smoke/](./test/smoke/):
+```elixir
+  # test all example routes
+  mix smoke_test
+
+  # test a subset of routes
+  mix smoke_test --only platform:Webcore
+  mix smoke_test --only spec:Search
+  mix smoke_test --only stack:bruce-belfrage
+
+  # test a single route
+  mix smoke_test --only route:/wales
+  mix smoke_test --only route:/topics/:id
+
+  # choose Cosmos environment with --bbc-env
+  mix smoke_test --bbc-env live --only route:/topics/:id
+
+  # for further information
+  mix help smoke_test
+```
+
 
 ### Blocking expectations
 Testing code ran in different processes can result in race conditions. These can be difficult to test. You have a couple of options.

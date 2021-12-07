@@ -16,9 +16,10 @@ This is where you can find the answers to most, if not all your questions regard
     - [Cascade](topics/cascade.md)
     - [Circuit Breaker](topics/circuit-breaker.md)
     - [Dials](topics/dials.md)
+    - [Logging](topics/debugging-testing/logging.md)
     - Metrics
-      - [How metrics in Belfrage work](topics/metrics/metrics-in-belfrage.md)
       - [Belfrage metrics for other teams](topics/metrics/metrics-for-external-use.md)
+      - [How metrics in Belfrage work](topics/metrics/metrics-in-belfrage.md)
     - [Personalisation](topics/personalisation.md)
     - Routing
         - [Route Matcher Types](topics/routing/route-matcher-types.md)
@@ -37,4 +38,3 @@ This is where you can find the answers to most, if not all your questions regard
     - [HTTP requests to origins](misc/making-http-requests-to-origins.md)
     - [Threat analysis](misc/threat-analysis.md)
     - [Xray investigation](/misc/xray-investigation)
-
