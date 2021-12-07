@@ -55,20 +55,40 @@ defmodule Belfrage.RouteSpecTest do
     end
 
     test "does not overwrite wildcard in platform allowlist" do
-      define_platform(WildcardAllowlistPlatform, %{
+      define_platform(PlatformWildcardAllowlistPlatform, %{
         query_params_allowlist: "*",
         headers_allowlist: "*",
         cookie_allowlist: "*"
       })
 
-      define_route(WildcardAllowlistRoute, %{
-        platform: WildcardAllowlistPlatform,
+      define_route(PlatformWildcardAllowlistRoute, %{
+        platform: PlatformWildcardAllowlistPlatform,
         query_params_allowlist: ["param2"],
         headers_allowlist: ["header2"],
         cookie_allowlist: ["cookie2"]
       })
 
-      spec = RouteSpec.specs_for(WildcardAllowlistRoute)
+      spec = RouteSpec.specs_for(PlatformWildcardAllowlistRoute)
+      assert spec.query_params_allowlist == "*"
+      assert spec.headers_allowlist == "*"
+      assert spec.cookie_allowlist == "*"
+    end
+
+    test "allows to specify  wildcard in route allowlist" do
+      define_platform(RouteWildcardAllowlistPlatform, %{
+        query_params_allowlist: ["param2"],
+        headers_allowlist: ["header2"],
+        cookie_allowlist: ["cookie2"]
+      })
+
+      define_route(RouteWildcardAllowlistRoute, %{
+        platform: RouteWildcardAllowlistPlatform,
+        query_params_allowlist: "*",
+        headers_allowlist: "*",
+        cookie_allowlist: "*"
+      })
+
+      spec = RouteSpec.specs_for(RouteWildcardAllowlistRoute)
       assert spec.query_params_allowlist == "*"
       assert spec.headers_allowlist == "*"
       assert spec.cookie_allowlist == "*"

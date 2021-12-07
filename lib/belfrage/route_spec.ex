@@ -102,8 +102,8 @@ defmodule Belfrage.RouteSpec do
       route_value = route_attrs[attr] || []
 
       value =
-        if spec_value == "*" do
-          spec_value
+        if spec_value == "*" || route_value == "*" do
+          "*"
         else
           spec_value ++ route_value
         end
