@@ -123,9 +123,9 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
 ## Creating a basic route
 1. Create your new route within the [`main.ex`](lib/routes/routefiles/main.ex) routefile
     - A basic route should look like this: `handle "/search", using: "Search", examples: ["/search"]`
-    - `handle `"/search"` is the regex which your route should match
+    - `handle "/search"` is the URL matcher (see the docs for more info on the format).
     - `using: "Search"` is the routespec you wish to use, these can be found and added to in the [specs folder](lib/routes/specs)
-    - `examples: ["/search"]` is a required list of example routes which are used to test your route in `[routefile_test.ex](test/routes/routefile_test.ex)`
+    - `examples: ["/search"]` is a required list of example routes which are used to test your route in [`routefile_test.ex`](test/routes/routefile_test.ex)
 
 2. If you need to create a routespec for your new route:
     - A basic routespec will look like this:
@@ -140,14 +140,14 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
         end
         ```
     - `owner` is the email of the team that owns the routes tied to this routespec
-    - `runbook` is the runbook of the team that owns the routes ties to this routespec
+    - `runbook` is the relevant runbook 
     - `platform` is the platform which the routes tied to this routespec will be routes to
     - A full list of spec keys that can be used can be found in the [route_spec file](lib/belfrage/route_spec.ex)
 
-3. As mentioned before, the examples you provide are used for testing purposes. Running `mix format`, `mix test`, `mix test_e2e` and `mix routes_test` to ensure all code is formatted and no tests have broken
+3. If you've got Belfrage set-up locally you can run `mix routes_test` to ensure that there are no issues with the routes that you added / edited. It will run on CI anyway though.
 
 5. Create a PR against the Belfrage repository with a meaningful branch name and a link to the ticket along with any description needed
 
-6. Post the PR in the #help-belfrage slack channel to get it reviewed by as (As well as in your own channels to get it reviewed by your team members)
+6. Post the PR in the #help-belfrage slack channel to get it reviewed by us (As well as in your own channels to get it reviewed by your team members)
 
 7. More information can be found in the [routing documentation](docs/topics/routing/routing.md)
