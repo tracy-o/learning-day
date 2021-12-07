@@ -3,7 +3,7 @@
 
 __Belfrage__ is a routing and resiliency layer. It routes requests to upstream services after validating and transforming those requests, along with the responses from these services.  __Belfrage__ also provides many resiliency features such as caching.
 
-Belfrage is part of the WebCore stack, but it's also used in front of services that haven't migrated to WebCore yet.
+Belfrage is a part of the WebCore stack, but it's also used in front of services that are not part of WebCore, you can see the current list of platforms here: [lib/routes/platforms](lib/routes/platforms)
 
 ## Documentation
 The index for the documentation can be found here: [docs/index.md](docs/index.md)
@@ -53,7 +53,7 @@ mix run --no-halt
 
 When you see `Generated belfrage app` you are then able to visit http://localhost:7080/news
 
-### Set your credentials to access Pres
+### Set your credentials to access WebCore Presentation Layer
 
 *Note that these instruction may need to be updated*
 
