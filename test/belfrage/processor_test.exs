@@ -219,7 +219,7 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "uses stale response in local cache as fallback", %{struct: struct} do
-      cached_response = make_cached_reponse_stale(struct.request.request_hash)
+      cached_response = make_cached_response_stale(struct.request.request_hash)
 
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)

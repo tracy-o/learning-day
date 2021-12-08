@@ -200,38 +200,6 @@ defmodule BelfrageWeb.ViewTest do
     end
   end
 
-  describe "fallback page response header" do
-    test "when response is a fallback page" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "<p>hi</p>",
-          http_status: 200,
-          headers: %{},
-          fallback: true
-        }
-      }
-
-      conn = conn(:get, "/_web_core")
-      {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
-      assert {"belfrage-cache-status", "STALE"} in headers
-    end
-
-    test "when response is not a fallback page" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "<p>hi</p>",
-          http_status: 200,
-          headers: %{},
-          fallback: false
-        }
-      }
-
-      conn = conn(:get, "/_web_core")
-      {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
-      refute {"belfrage-cache-status", "STALE"} in headers
-    end
-  end
-
   describe "error pages" do
     test "Rendering response from a struct with a 200 and a nil response" do
       {status, _headers, body} = build_struct_and_render(nil)

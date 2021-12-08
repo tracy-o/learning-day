@@ -35,7 +35,7 @@ defmodule Belfrage.Cache.FetchTest do
     test "returns a struct with expected values when fetching a stale response from the local cache", %{
       struct: struct
     } do
-      cached_response = make_cached_reponse_stale(struct.request.request_hash)
+      cached_response = make_cached_response_stale(struct.request.request_hash)
 
       %Struct{response: response, private: private} = Fetch.fetch(struct, [:stale])
 
