@@ -4,260 +4,148 @@ defmodule BelfrageWeb.ViewTest do
 
   alias BelfrageWeb.View
   alias Belfrage.Struct
-  alias Belfrage.Struct.Private
+  alias Belfrage.Struct.{Request, Response, Private}
 
-  @json_codec Application.get_env(:belfrage, :json_codec)
-
-  defp build_struct_and_render(body) do
-    %Struct{response: %Struct.Response{body: body, http_status: 200}}
-    |> View.render(conn(:get, "/_web_core"))
-    |> sent_resp()
-  end
-
-  test "Rendering response from a struct with a 200 HTML response" do
-    {status, _headers, body} = build_struct_and_render("<p>Basic HTML response</p>")
-
-    assert status == 200
-    assert body == "<p>Basic HTML response</p>"
-  end
-
-  test "Rendering response from a struct with a 200 Map response" do
-    {status, _headers, body} = build_struct_and_render(%{some: "json data"})
-
-    assert status == 200
-    assert body == @json_codec.encode!(%{some: "json data"})
-  end
-
-  test "ignores non-string header values when building response headers for the conn" do
-    struct = %Struct{
-      response: %Struct.Response{
-        body: "<p>hi</p>",
-        http_status: 200,
-        headers: %{"non-string" => true, "string" => "true"}
-      }
-    }
-
-    conn = conn(:get, "/_web_core")
-    {_status, headers, _body} = View.render(struct, conn) |> sent_resp()
-    assert {"string", "true"} in headers
-    refute {"non-string", true} in headers
-  end
-
-  test "redirect returns the header location" do
-    struct = %Struct{
-      response: %Struct.Response{
-        body: "<p>hi</p>",
-        http_status: 301
-      }
-    }
-
-    conn = conn(:get, "/_web_core")
-    {_status, headers, _body} = View.redirect(struct, conn, 301, "new_location") |> sent_resp()
-    assert {"location", "new_location"} in headers
-  end
-
-  test "redirect returns a 400 when the header location contains a newline char" do
-    struct = %Struct{
-      response: %Struct.Response{
-        body: "<p>hi</p>",
-        http_status: 301
-      }
-    }
-
-    conn = conn(:get, "/_web_core")
-    {status, headers, _body} = View.redirect(struct, conn, 301, "new_location/.\n/.") |> sent_resp()
-    refute {"location", "new_location"} in headers
-    assert 400 == status
-  end
-
-  test "redirect returns a 400 when the header location contains a control feed char" do
-    struct = %Struct{
-      response: %Struct.Response{
-        body: "<p>hi</p>",
-        http_status: 301
-      }
-    }
-
-    conn = conn(:get, "/_web_core")
-    {status, headers, _body} = View.redirect(struct, conn, 301, "new_location/.\r/.") |> sent_resp()
-    refute {"location", "new_location"} in headers
-    assert 400 == status
-  end
-
-  describe "when content-length is 0" do
-    test "keeps request information" do
-      struct = %Struct{
-        request: %Struct.Request{
-          request_id: "request-id-12345",
-          request_hash: "#request-hash"
-        },
-        response: %Struct.Response{
-          body: "",
-          http_status: 500,
-          headers: %{"content-length" => "0"}
-        }
-      }
-
-      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
-      {status, headers, _body} = View.render(struct, conn) |> sent_resp()
-      assert status == 500
-      assert {"brequestid", "request-id-12345"} in headers
-      assert {"bsig", "#request-hash"} in headers
+  describe "render/2" do
+    test "renders a successful binary response" do
+      conn = render_response(%Response{http_status: 200, body: "OK"})
+      assert conn.status == 200
+      assert conn.resp_body == "OK"
     end
 
-    test "returns HTML 500 page when body is an empty string" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "",
-          http_status: 500
-        }
-      }
-
-      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 500
-      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-      assert {"content-type", "text/html; charset=utf-8"} in headers
+    test "renders a map as JSON response" do
+      conn = render_response(%Response{http_status: 200, body: %{some: "json"}})
+      assert conn.status == 200
+      assert conn.resp_body == ~s({"some":"json"})
+      assert get_resp_header(conn, "content-type") == ["application/json; charset=utf-8"]
     end
 
-    test "returns HTML 500 page when body is nil" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: nil,
-          http_status: 500
-        }
-      }
-
-      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 500
-      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
-      assert {"content-type", "text/html; charset=utf-8"} in headers
+    test "renders an error from origin" do
+      conn = render_response(%Response{http_status: 500, body: "ERROR"})
+      assert conn.status == 500
+      assert conn.resp_body == "ERROR"
     end
 
-    test "returns HTML 404 page" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "",
-          http_status: 404,
-          headers: %{"content-length" => "0"}
-        }
-      }
-
-      conn = conn(:get, "/") |> put_req_header("accept", "text/html")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 404
-      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-      assert {"content-type", "text/html; charset=utf-8"} in headers
+    test "sets response headers" do
+      conn = render_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => "bar"}})
+      assert conn.status == 200
+      assert conn.resp_body == "OK"
+      assert get_resp_header(conn, "foo") == ["bar"]
     end
 
-    test "returns JSON error content" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "",
-          http_status: 500,
-          headers: %{"content-length" => "0"}
-        }
-      }
-
-      conn = conn(:get, "/") |> put_req_header("accept", "application/json")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 500
-      assert body == ~s({"status":500})
-      assert {"content-type", "application/json"} in headers
+    test "ignores non-binary headers" do
+      conn = render_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => :bar}})
+      assert conn.status == 200
+      assert conn.resp_body == "OK"
+      assert get_resp_header(conn, "foo") == []
     end
 
-    test "returns plain text error content" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "",
-          http_status: 500,
-          headers: %{"content-length" => "0"}
-        }
-      }
+    test "sets Belfrage headers" do
+      conn =
+        render_response(%Struct{
+          request: %Request{request_id: "request-id"},
+          response: %Response{http_status: 200, body: "OK"}
+        })
 
-      conn = conn(:get, "/") |> put_req_header("accept", "text/plain")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 500
-      assert body == "500, Belfrage"
-      assert {"content-type", "text/plain"} in headers
+      assert conn.status == 200
+      assert conn.resp_body == "OK"
+      assert get_resp_header(conn, "brequestid") == ["request-id"]
     end
 
-    test "continue rendering response struct, when status code is bellow 400" do
-      struct = %Struct{
-        response: %Struct.Response{
-          body: "",
-          http_status: 302,
-          headers: %{"content-length" => "0", "content-type" => "text/plain"}
-        }
-      }
+    test "renders redirects from origin" do
+      conn = render_response(%Response{http_status: 301, body: "", headers: %{"location" => "http://example.com"}})
+      assert conn.status == 301
+      assert conn.resp_body == ""
+      assert get_resp_header(conn, "location") == ["http://example.com"]
+    end
 
-      conn = conn(:get, "/") |> put_req_header("accept", "text/plain")
-      {status, headers, body} = View.render(struct, conn) |> sent_resp()
-      assert status == 302
-      assert body == ""
-      assert {"content-type", "text/plain"} in headers
+    test "renders default error page if response body is empty" do
+      conn =
+        render_response(%Struct{
+          request: %Request{request_id: "request-id"},
+          response: %Response{http_status: 500, body: nil}
+        })
+
+      assert conn.status == 500
+      assert conn.resp_body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+      assert get_resp_header(conn, "brequestid") == ["request-id"]
+    end
+
+    test "renders default error page as publicly cacheable if request is not personalised" do
+      conn =
+        render_response(%Struct{
+          response: %Response{http_status: 500, body: nil},
+          private: %Private{personalised_request: false}
+        })
+
+      assert conn.status == 500
+      assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
+    end
+
+    test "renders default error page as privately cacheable if request is personalised" do
+      conn =
+        render_response(%Struct{
+          response: %Response{http_status: 500, body: nil},
+          private: %Private{personalised_request: true}
+        })
+
+      assert conn.status == 500
+      assert get_resp_header(conn, "cache-control") == ["private, stale-while-revalidate=15, max-age=0"]
+    end
+
+    defp render_response(response = %Response{}) do
+      render_response(%Struct{response: response})
+    end
+
+    defp render_response(struct = %Struct{}) do
+      View.render(struct, build_conn())
     end
   end
 
-  describe "error pages" do
-    test "Rendering response from a struct with a 200 and a nil response" do
-      {status, _headers, body} = build_struct_and_render(nil)
-
-      assert status == 500
-      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+  describe "redirect/4" do
+    test "returns a redirect" do
+      conn = redirect(301, "http://example.com")
+      assert conn.status == 301
+      assert get_resp_header(conn, "location") == ["http://example.com"]
     end
 
-    test "serving the BBC standard error page for a 500 status" do
-      {status, _headers, body} =
-        conn(:get, "/_web_core")
-        |> View.internal_server_error()
-        |> sent_resp()
-
-      assert status == 500
-      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+    test "returns error 400 if location header contains a new line" do
+      conn = redirect(301, "http://example.com\n")
+      assert conn.status == 400
+      assert conn.resp_body == "<h1>400</h1>\n<!-- Belfrage -->"
+      assert get_resp_header(conn, "location") == []
     end
 
-    test "serving the BBC standard error page for a 404 status" do
-      {status, _headers, body} =
-        conn(:get, "/_web_core")
-        |> View.not_found()
-        |> sent_resp()
-
-      assert status == 404
-      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-    end
-
-    test "when the BBC standard error page for a 404 does not exist it serves a default error body" do
-      {status, _headers, body} =
-        conn(:get, "/_web_core")
-        |> View.not_found()
-        |> sent_resp()
-
-      assert status == 404
-      assert body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
-    end
-
-    test "when the BBC standard error page for a 500 does not exist it serves a default error body" do
-      {status, _headers, body} =
-        conn(:get, "/_web_core")
-        |> View.internal_server_error()
-        |> sent_resp()
-
-      assert status == 500
-      assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+    defp redirect(status, location) do
+      View.redirect(%Struct{}, build_conn(), status, location)
     end
   end
 
-  describe "cacheable?/1" do
-    test "returns false when request is personalised" do
-      struct = %Struct{private: %Private{personalised_request: true}}
-      refute View.cacheable?(struct)
-    end
+  test "not_found/1" do
+    conn = build_conn() |> View.not_found()
+    assert conn.status == 404
+    assert conn.resp_body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
-    test "returns true when request is not personalised" do
-      struct = %Struct{private: %Private{personalised_request: false}}
-      assert View.cacheable?(struct)
-    end
+    assert get_resp_header(conn, "cache-control") == [
+             "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"
+           ]
+  end
+
+  test "internal_server_error/1" do
+    conn = build_conn() |> View.internal_server_error()
+    assert conn.status == 500
+    assert conn.resp_body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+    assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
+  end
+
+  test "unsupported_method/1" do
+    conn = build_conn() |> View.unsupported_method()
+    assert conn.status == 405
+    assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
+    assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
+  end
+
+  defp build_conn() do
+    conn(:get, "/_web_core")
   end
 end
