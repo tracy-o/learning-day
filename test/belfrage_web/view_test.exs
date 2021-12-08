@@ -1,15 +1,12 @@
 defmodule BelfrageWeb.ViewTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
-  use Test.Support.Helper, :mox
 
   alias BelfrageWeb.View
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
 
   @json_codec Application.get_env(:belfrage, :json_codec)
-
-  doctest View
 
   defp build_struct_and_render(body) do
     %Struct{response: %Struct.Response{body: body, http_status: 200}}
