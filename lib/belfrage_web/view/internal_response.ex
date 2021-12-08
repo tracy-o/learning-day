@@ -7,8 +7,6 @@ defmodule BelfrageWeb.View.InternalResponse do
   @plain_content_type "text/plain"
 
   @html_body %{
-    301 => "",
-    302 => "",
     # These files are read from disk at compilation time. If you change them be
     # sure to recompile this module.
     404 => File.read!(Application.get_env(:belfrage, :not_found_page)) <> "<!-- Belfrage -->",
@@ -16,7 +14,7 @@ defmodule BelfrageWeb.View.InternalResponse do
     500 => File.read!(Application.get_env(:belfrage, :internal_error_page)) <> "<!-- Belfrage -->"
   }
 
-  @redirect_http_status Application.get_env(:belfrage, :redirect_statuses)
+  @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
 
   def new(conn, status, cacheable) do
     Metrics.duration(:generate_internal_response, fn ->
@@ -37,7 +35,7 @@ defmodule BelfrageWeb.View.InternalResponse do
   end
 
   defp put_cache_directive(response = %Response{http_status: http_status}, _cacheable)
-       when http_status in @redirect_http_status do
+       when http_status in @redirect_statuses do
     Map.put(response, :cache_directive, %Belfrage.CacheControl{
       cacheability: "public",
       max_age: 60,
@@ -87,14 +85,17 @@ defmodule BelfrageWeb.View.InternalResponse do
 
   defp put_body(response = %Response{}) do
     body =
-      case response.headers["content-type"] do
-        @json_content_type ->
+      cond do
+        response.headers["content-type"] == @json_content_type ->
           ~s({"status":#{response.http_status}})
 
-        @plain_content_type ->
+        response.headers["content-type"] == @plain_content_type ->
           "#{response.http_status}, Belfrage"
 
-        @html_content_type ->
+        response.http_status in @redirect_statuses ->
+          ""
+
+        true ->
           Map.get_lazy(@html_body, response.http_status, fn -> "<h1>#{response.http_status}</h1>\n<!-- Belfrage -->" end)
       end
 

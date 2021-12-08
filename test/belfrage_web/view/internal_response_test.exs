@@ -1,135 +1,96 @@
 defmodule BelfrageWeb.View.InternalResponseTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
-  use Test.Support.Helper, :mox
+
   alias BelfrageWeb.View.InternalResponse
-  alias Belfrage.Struct
+  alias Belfrage.CacheControl
 
-  describe "content-type" do
-    test "when accept is not set" do
-      conn = conn(:get, "/")
-      status = 404
+  test "html requested" do
+    response = build_response(404, request_headers: %{"accept" => "text/html"})
+    assert response.headers["content-type"] == "text/html; charset=utf-8"
+  end
 
-      assert %Struct.Response{
-               body: "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->",
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 90,
-                 stale_while_revalidate: 60
-               },
-               fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8"},
-               http_status: status
-             } == InternalResponse.new(conn, status, true)
-    end
+  test "json requested" do
+    response = build_response(404, request_headers: %{"accept" => "application/json"})
+    assert response.headers["content-type"] == "application/json"
+    assert response.body == ~s({"status":404})
+  end
 
-    test "when accept not set, and status code does not have a BBC error page" do
-      conn = conn(:get, "/")
-      status = 418
+  test "plain text requested" do
+    response = build_response(404, request_headers: %{"accept" => "text/plain"})
+    assert response.headers["content-type"] == "text/plain"
+    assert response.body == "404, Belfrage"
+  end
 
-      assert %Struct.Response{
-               body: "<h1>#{status}</h1>\n<!-- Belfrage -->",
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 5,
-                 stale_while_revalidate: 15
-               },
-               fallback: false,
-               headers: %{"content-type" => "text/html; charset=utf-8"},
-               http_status: status
-             } == InternalResponse.new(conn, status, true)
-    end
+  test "error 404" do
+    response = build_response(404)
+    assert response.body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
-    test "when accept is application/json" do
-      conn = conn(:get, "/") |> Plug.Conn.put_req_header("accept", "application/json")
-      status = 404
+    assert response.cache_directive == %CacheControl{
+             cacheability: "public",
+             max_age: 30,
+             stale_while_revalidate: 60,
+             stale_if_error: 90
+           }
+  end
 
-      assert %Struct.Response{
-               body: "{\"status\":#{status}}",
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 90,
-                 stale_while_revalidate: 60
-               },
-               fallback: false,
-               headers: %{"content-type" => "application/json"},
-               http_status: status
-             } == InternalResponse.new(conn, status, true)
-    end
+  test "error 405" do
+    response = build_response(405)
+    assert response.body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
+  end
 
-    test "when accept is text/plain" do
-      conn = conn(:get, "/") |> Plug.Conn.put_req_header("accept", "text/plain")
-      status = 404
+  test "error 500" do
+    response = build_response(500)
+    assert response.body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
+  end
 
-      assert %Struct.Response{
-               body: "#{status}, Belfrage",
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 90,
-                 stale_while_revalidate: 60
-               },
-               fallback: false,
-               headers: %{"content-type" => "text/plain"},
-               http_status: status
-             } == InternalResponse.new(conn, status, true)
+  test "error page template doesn't exist" do
+    response = build_response(400)
+    assert response.body == "<h1>400</h1>\n<!-- Belfrage -->"
+  end
+
+  for status <- Application.get_env(:belfrage, :redirect_statuses) do
+    test "#{status} redirect" do
+      response = build_response(unquote(status))
+      assert response.body == ""
+
+      assert response.cache_directive == %CacheControl{
+               cacheability: "public",
+               max_age: 60,
+               stale_while_revalidate: 60,
+               stale_if_error: 90
+             }
     end
   end
 
-  describe "cache-control" do
-    test "404 cacheability" do
-      conn = conn(:get, "/")
-      status = 404
+  test "cacheable response" do
+    response = build_response(500, cacheable: true)
 
-      assert %Struct.Response{
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 30,
-                 stale_if_error: 90,
-                 stale_while_revalidate: 60
-               }
-             } = InternalResponse.new(conn, status, true)
-    end
+    assert response.cache_directive == %CacheControl{
+             cacheability: "public",
+             max_age: 5,
+             stale_while_revalidate: 15
+           }
+  end
 
-    test "server error cacheability" do
-      conn = conn(:get, "/")
-      status = 500
+  test "non-cacheable response" do
+    response = build_response(500, cacheable: false)
 
-      assert %Struct.Response{
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 5,
-                 stale_while_revalidate: 15
-               }
-             } = InternalResponse.new(conn, status, true)
-    end
+    assert response.cache_directive == %CacheControl{
+             cacheability: "private",
+             max_age: 0,
+             stale_while_revalidate: 15
+           }
+  end
 
-    test "redirect cacheability" do
-      conn = conn(:get, "/")
-      status = 301
+  defp build_response(status, opts \\ []) do
+    conn = Keyword.get(opts, :request_headers, %{}) |> build_conn()
+    InternalResponse.new(conn, status, Keyword.get(opts, :cacheable, false))
+  end
 
-      assert %Struct.Response{
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "public",
-                 max_age: 60,
-                 stale_while_revalidate: 60
-               }
-             } = InternalResponse.new(conn, status, true)
-    end
-
-    test "cache-control is private with max_age 0 for response with false cacheability" do
-      conn = conn(:get, "/")
-      status = 500
-
-      assert %Struct.Response{
-               cache_directive: %Belfrage.CacheControl{
-                 cacheability: "private",
-                 max_age: 0,
-                 stale_while_revalidate: 15
-               }
-             } = InternalResponse.new(conn, status, false)
-    end
+  defp build_conn(headers) do
+    Enum.reduce(headers, conn(:get, "/"), fn {header, value}, conn ->
+      put_req_header(conn, header, value)
+    end)
   end
 end
