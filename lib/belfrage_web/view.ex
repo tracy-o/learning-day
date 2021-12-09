@@ -2,8 +2,9 @@ defmodule BelfrageWeb.View do
   import Plug.Conn
 
   alias Belfrage.{Struct, Metrics}
-  alias Belfrage.Struct.Private
+  alias Belfrage.Struct.{Response, Private}
   alias BelfrageWeb.ResponseHeaders
+  alias BelfrageWeb.View.InternalResponse
 
   @default_headers [
     ResponseHeaders.Vary,
@@ -21,33 +22,46 @@ defmodule BelfrageWeb.View do
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  def render(
-        struct = %Struct{response: %Struct.Response{http_status: status, body: body}},
-        conn
-      )
-      when status > 399 and body in ["", nil] do
-    internal_response(conn, status, struct)
-  end
+  def render(struct = %Struct{response: response = %Response{}}, conn) do
+    response =
+      if response.http_status > 399 && response.body in ["", nil] do
+        InternalResponse.new(conn, response.http_status, cacheable?(struct))
+      else
+        response
+      end
 
-  def render(struct = %Struct{response: response = %Struct.Response{}}, conn) do
+    struct = %Struct{struct | response: response}
+
     conn
     |> add_response_headers(struct)
     |> put_response(response.http_status, response.body)
   end
 
-  def not_found(conn), do: internal_response(conn, 404)
-  def internal_server_error(conn), do: internal_response(conn, 500)
-  def unsupported_method(conn), do: internal_response(conn, 405)
+  def error(conn, status) do
+    render(%Struct{response: %Response{http_status: status}}, conn)
+  end
+
+  def not_found(conn) do
+    error(conn, 404)
+  end
+
+  def internal_server_error(conn) do
+    error(conn, 500)
+  end
+
+  def unsupported_method(conn) do
+    error(conn, 405)
+  end
 
   def redirect(struct, conn, status, new_location) do
     case :binary.match(new_location, ["\n", "\r"]) do
       {_, _} ->
-        internal_response(conn, 400)
+        error(conn, 400)
 
       :nomatch ->
-        conn
-        |> put_resp_header("location", new_location)
-        |> internal_response(status, struct)
+        conn = put_resp_header(conn, "location", new_location)
+        response = InternalResponse.new(conn, status, cacheable?(struct))
+        render(%Struct{struct | response: response}, conn)
     end
   end
 
@@ -74,18 +88,6 @@ defmodule BelfrageWeb.View do
     })
 
     internal_server_error(conn)
-  end
-
-  defp internal_response(conn, status) do
-    render(
-      %Struct{response: BelfrageWeb.View.InternalResponse.new(conn, status, true)},
-      conn
-    )
-  end
-
-  defp internal_response(conn, status, struct) do
-    response = BelfrageWeb.View.InternalResponse.new(conn, status, cacheable?(struct))
-    render(Belfrage.Struct.add(struct, :response, response), conn)
   end
 
   def cacheable?(%Struct{private: private = %Private{}}) do
