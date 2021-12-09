@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.View.InternalResponse do
-  alias Belfrage.Struct.Response
+  alias Belfrage.Struct
+  alias Belfrage.Struct.{Response, Private}
   alias Belfrage.{Metrics, CacheControl}
   alias Plug.Conn
 
@@ -16,21 +17,20 @@ defmodule BelfrageWeb.View.InternalResponse do
                  ]
              )
 
-  def new(conn, status, cacheable) do
+  def new(struct = %Struct{}, conn = %Conn{}) do
     Metrics.duration(:generate_internal_response, fn ->
-      response = %Response{http_status: status}
-      {content_type, body} = body(status, conn)
+      {content_type, body} = body(struct.response, conn)
 
       %Response{
-        response
+        struct.response
         | headers: %{"content-type" => content_type},
           body: body,
-          cache_directive: cache_control(status, cacheable)
+          cache_directive: cache_control(struct)
       }
     end)
   end
 
-  defp body(status, conn = %Conn{}) do
+  defp body(%Response{http_status: status}, conn = %Conn{}) do
     accepted_content_type = Conn.get_req_header(conn, "accept") |> List.first()
 
     cond do
@@ -47,9 +47,9 @@ defmodule BelfrageWeb.View.InternalResponse do
     end
   end
 
-  defp cache_control(status, cacheable) do
+  defp cache_control(%Struct{response: response = %Response{}, private: private = %Private{}}) do
     cond do
-      status == 404 ->
+      response.http_status == 404 ->
         %CacheControl{
           cacheability: "public",
           max_age: 30,
@@ -57,7 +57,7 @@ defmodule BelfrageWeb.View.InternalResponse do
           stale_if_error: 90
         }
 
-      status in @redirect_statuses ->
+      response.http_status in @redirect_statuses ->
         %CacheControl{
           cacheability: "public",
           max_age: 60,
@@ -65,17 +65,17 @@ defmodule BelfrageWeb.View.InternalResponse do
           stale_if_error: 90
         }
 
-      cacheable ->
+      private.personalised_request ->
         %CacheControl{
-          cacheability: "public",
-          max_age: 5,
+          cacheability: "private",
+          max_age: 0,
           stale_while_revalidate: 15
         }
 
       true ->
         %CacheControl{
-          cacheability: "private",
-          max_age: 0,
+          cacheability: "public",
+          max_age: 5,
           stale_while_revalidate: 15
         }
     end

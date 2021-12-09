@@ -2,7 +2,7 @@ defmodule BelfrageWeb.View do
   import Plug.Conn
 
   alias Belfrage.{Struct, Metrics}
-  alias Belfrage.Struct.{Response, Private}
+  alias Belfrage.Struct.Response
   alias BelfrageWeb.ResponseHeaders
   alias BelfrageWeb.View.InternalResponse
 
@@ -25,7 +25,7 @@ defmodule BelfrageWeb.View do
   def render(struct = %Struct{response: response = %Response{}}, conn) do
     response =
       if response.http_status > 399 && response.body in ["", nil] do
-        InternalResponse.new(conn, response.http_status, cacheable?(struct))
+        InternalResponse.new(struct, conn)
       else
         response
       end
@@ -60,7 +60,8 @@ defmodule BelfrageWeb.View do
 
       :nomatch ->
         conn = put_resp_header(conn, "location", new_location)
-        response = InternalResponse.new(conn, status, cacheable?(struct))
+        struct = %Struct{struct | response: %Response{http_status: status}}
+        response = InternalResponse.new(struct, conn)
         render(%Struct{struct | response: response}, conn)
     end
   end
@@ -88,10 +89,6 @@ defmodule BelfrageWeb.View do
     })
 
     internal_server_error(conn)
-  end
-
-  def cacheable?(%Struct{private: private = %Private{}}) do
-    !private.personalised_request
   end
 
   defp add_response_headers(conn, struct) do

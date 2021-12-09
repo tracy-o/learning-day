@@ -3,7 +3,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
   use Plug.Test
 
   alias BelfrageWeb.View.InternalResponse
-  alias Belfrage.CacheControl
+  alias Belfrage.{Struct, CacheControl}
+  alias Belfrage.Struct.{Response, Private}
 
   test "html requested" do
     response = build_response(404, request_headers: %{"accept" => "text/html"})
@@ -63,8 +64,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
     end
   end
 
-  test "cacheable response" do
-    response = build_response(500, cacheable: true)
+  test "non-personalised request" do
+    response = build_response(500, personalised: false)
 
     assert response.cache_directive == %CacheControl{
              cacheability: "public",
@@ -73,8 +74,8 @@ defmodule BelfrageWeb.View.InternalResponseTest do
            }
   end
 
-  test "non-cacheable response" do
-    response = build_response(500, cacheable: false)
+  test "personalised request" do
+    response = build_response(500, personalised: true)
 
     assert response.cache_directive == %CacheControl{
              cacheability: "private",
@@ -85,7 +86,13 @@ defmodule BelfrageWeb.View.InternalResponseTest do
 
   defp build_response(status, opts \\ []) do
     conn = Keyword.get(opts, :request_headers, %{}) |> build_conn()
-    InternalResponse.new(conn, status, Keyword.get(opts, :cacheable, false))
+
+    struct = %Struct{
+      response: %Response{http_status: status},
+      private: %Private{personalised_request: Keyword.get(opts, :personalised, false)}
+    }
+
+    InternalResponse.new(struct, conn)
   end
 
   defp build_conn(headers) do
