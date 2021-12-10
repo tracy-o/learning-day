@@ -80,16 +80,10 @@ mix routes test
 
 ## Running Tests
 
-To run unit tests:
+To run unit and integration tests:
 
 ```
 mix test
-```
-
-To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
-
-```
-mix test_e2e
 ```
 
 To run the automatically generated route matcher tests in [./test/routes/](./test/routes/):

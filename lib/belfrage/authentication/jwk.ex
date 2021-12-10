@@ -49,7 +49,7 @@ defmodule Belfrage.Authentication.JWK do
   end
 
   defp static_keys_file_name(uri) do
-    if Mix.env() in ~w(test end_to_end)a do
+    if Mix.env() == :test do
       "jwk_fixtures.json"
     else
       Map.fetch!(@static_keys_filenames, uri)

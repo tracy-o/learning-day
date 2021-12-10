@@ -18,10 +18,6 @@ defmodule BelfrageWeb.RoutefilePointer do
     Routes.Routefiles.Test
   end
 
-  def routefile(_cosmos_env, _mix_env = :end_to_end) do
-    Routes.Routefiles.Mock
-  end
-
   def routefile(_cosmos_env, _mix_env = :smoke_test) do
     Routes.Routefiles.Test
   end
