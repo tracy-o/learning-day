@@ -9,6 +9,13 @@ defmodule EndToEnd.MonitorEventsTest do
   @moduletag :end_to_end
 
   setup do
+    original_monitor_api = Application.get_env(:belfrage, :monitor_api)
+    Application.put_env(:belfrage, :monitor_api, Belfrage.MonitorMock)
+
+    on_exit(fn ->
+      Application.put_env(:belfrage, :monitor_api, original_monitor_api)
+    end)
+
     clear_cache()
 
     Belfrage.Clients.LambdaMock
@@ -96,6 +103,8 @@ defmodule EndToEnd.MonitorEventsTest do
 
   describe "a fresh cache response" do
     setup do
+      Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
+
       conn = conn(:get, "/200-ok-response")
       Router.call(conn, [])
 
