@@ -1,11 +1,10 @@
 defmodule Routes.RoutefileTest do
   use ExUnit.Case
   use Plug.Test
-
   use Test.Support.Helper, :mox
+  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients
   alias Routes.Routefiles.Test, as: Routefile
 
   @moduletag :routes_test
@@ -64,13 +63,7 @@ defmodule Routes.RoutefileTest do
     end
 
     test "example is routed correctly" do
-      stub(Clients.HTTPMock, :execute, fn _request, _platform ->
-        {:ok, Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
-      end)
-
-      stub(Clients.LambdaMock, :call, fn _creds, _arn, _payload, _req_id, _opts ->
-        {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
-      end)
+      stub_origins()
 
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
