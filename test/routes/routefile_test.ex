@@ -5,8 +5,7 @@ defmodule Routes.RoutefileTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
-  alias Belfrage.Struct
-  alias Struct.{Response, Private}
+  alias Belfrage.Clients
   alias Routes.Routefiles.Test, as: Routefile
 
   @moduletag :routes_test
@@ -65,27 +64,24 @@ defmodule Routes.RoutefileTest do
     end
 
     test "example is routed correctly" do
+      stub(Clients.HTTPMock, :execute, fn _request, _platform ->
+        {:ok, Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
+      end)
+
+      stub(Clients.LambdaMock, :call, fn _creds, _arn, _payload, _req_id, _opts ->
+        {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
+      end)
+
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, %{using: loop_id}, example} ->
-        stub(BelfrageMock, :handle, fn struct = %Struct{private: private = %Private{}} ->
-          response =
-            if loop_id in List.wrap(private.loop_id) do
-              %Response{http_status: 200, body: "The example uses the correct loop"}
-            else
-              %Response{http_status: 404, body: inspect(private.loop_id)}
-            end
+        conn = conn(:get, example) |> Router.call([])
 
-          Struct.add(struct, :response, response)
-        end)
-
-        conn = conn(:get, example)
-        conn = Router.call(conn, [])
-
-        if conn.status == 200 && conn.resp_body == "The example uses the correct loop" do
+        if conn.assigns.route_spec == loop_id do
           :ok
         else
-          {:error, "Example #{example} for route #{matcher} is not routed to #{loop_id}, but to #{conn.resp_body}"}
+          {:error,
+           "Example #{example} for route #{matcher} is not routed to #{loop_id}, but to #{conn.assigns.route_spec}"}
         end
       end)
     end
@@ -133,13 +129,6 @@ defmodule Routes.RoutefileTest do
   end
 
   describe "for routes that arent supported" do
-    defp expect_belfrage_not_called() do
-      BelfrageMock
-      |> expect(:handle, 0, fn _struct ->
-        raise "this should never run"
-      end)
-    end
-
     test "when the request is a GET request" do
       Application.put_env(:belfrage, :production_environment, "live")
 
@@ -153,8 +142,6 @@ defmodule Routes.RoutefileTest do
     end
 
     test "when the request is a POST request" do
-      expect_belfrage_not_called()
-
       conn = conn(:post, "/a_route_that_will_not_match")
       conn = Router.call(conn, [])
 

@@ -27,6 +27,12 @@ config :belfrage,
   webcore_credentials_session_token: "stub-access-key-id",
   webcore_credentials_access_key_id: "stub-secret-access-key",
   webcore_credentials_secret_access_key: "stub-session-token",
+  fabl_endpoint: "https://fabl.example.com",
+  morph_router_endpoint: "https://morph-router.example.com",
+  mozart_news_endpoint: "https://mozart-news.example.com",
+  mozart_sport_endpoint: "https://mozart-sport.example.com",
+  mozart_weather_endpoint: "https://mozart-weather.example.com",
+  programmes_endpoint: "https://programmes.example.com",
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
