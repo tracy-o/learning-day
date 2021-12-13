@@ -26,7 +26,7 @@ defmodule Benchmark.ResponsePipeline do
 
   alias Belfrage.Struct
   alias Belfrage.Processor
-  alias Belfrage.Services.Webcore.Response
+  alias Belfrage.Services.Webcore
 
   # TODO: see webcore_response_build.ex
 
@@ -49,8 +49,8 @@ defmodule Benchmark.ResponsePipeline do
       {
         size_kb,
         {
-          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)}, "off")),
-          struct_with_resp(struct, Response.build({:ok, gzip_base64_lambda_resp(size_kb)}, "off"))
+          struct_with_resp(struct, Webcore.build_response({:ok, lambda_resp(size_kb)})),
+          struct_with_resp(struct, Webcore.build_response({:ok, gzip_base64_lambda_resp(size_kb)}))
         }
       }
     end
