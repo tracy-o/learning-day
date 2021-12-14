@@ -1,6 +1,7 @@
 defmodule BelfrageWeb.Response do
   import Plug.Conn
 
+  alias Plug.Conn
   alias Belfrage.{Struct, Metrics}
   alias Belfrage.Struct.Response
   alias BelfrageWeb.Response.Headers
@@ -22,7 +23,7 @@ defmodule BelfrageWeb.Response do
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  def render(struct = %Struct{response: response = %Response{}}, conn) do
+  def put(conn = %Conn{}, struct = %Struct{response: response = %Response{}}) do
     response =
       if response.http_status > 399 && response.body in ["", nil] do
         InternalResponse.new(struct, conn)
@@ -37,23 +38,23 @@ defmodule BelfrageWeb.Response do
     |> put_response(response.http_status, response.body)
   end
 
-  def error(conn, status) do
-    render(%Struct{response: %Response{http_status: status}}, conn)
+  def error(conn = %Conn{}, status) do
+    put(conn, %Struct{response: %Response{http_status: status}})
   end
 
-  def not_found(conn) do
+  def not_found(conn = %Conn{}) do
     error(conn, 404)
   end
 
-  def internal_server_error(conn) do
+  def internal_server_error(conn = %Conn{}) do
     error(conn, 500)
   end
 
-  def unsupported_method(conn) do
+  def unsupported_method(conn = %Conn{}) do
     error(conn, 405)
   end
 
-  def redirect(struct, conn, status, new_location) do
+  def redirect(conn = %Conn{}, struct = %Struct{}, status, new_location) do
     case :binary.match(new_location, ["\n", "\r"]) do
       {_, _} ->
         error(conn, 400)
@@ -62,7 +63,7 @@ defmodule BelfrageWeb.Response do
         conn = put_resp_header(conn, "location", new_location)
         struct = %Struct{struct | response: %Response{http_status: status}}
         response = InternalResponse.new(struct, conn)
-        render(%Struct{struct | response: response}, conn)
+        put(conn, %Struct{struct | response: response})
     end
   end
 

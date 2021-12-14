@@ -25,10 +25,12 @@ defmodule BelfrageWeb.RouteMaster do
     conn = Conn.assign(conn, :route_spec, id)
 
     try do
-      conn
-      |> StructAdapter.adapt(id)
-      |> Belfrage.handle()
-      |> Response.render(conn)
+      struct =
+        conn
+        |> StructAdapter.adapt(id)
+        |> Belfrage.handle()
+
+      Response.put(conn, struct)
     catch
       kind, reason ->
         # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
@@ -169,9 +171,7 @@ defmodule BelfrageWeb.RouteMaster do
 
         get(to_string(uri_from.path), host: uri_from.host) do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
-
-          StructAdapter.adapt(var!(conn), "redirect")
-          |> Response.redirect(var!(conn), unquote(status), new_location)
+          Response.redirect(var!(conn), StructAdapter.adapt(var!(conn), "redirect"), unquote(status), new_location)
         end
       end
 

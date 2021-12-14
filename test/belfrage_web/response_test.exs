@@ -5,35 +5,35 @@ defmodule BelfrageWeb.ResponseTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
 
-  describe "render/2" do
-    test "renders a successful binary response" do
-      conn = render_response(%Response{http_status: 200, body: "OK"})
+  describe "put/2" do
+    test "returns a successful binary response" do
+      conn = put_response(%Response{http_status: 200, body: "OK"})
       assert conn.status == 200
       assert conn.resp_body == "OK"
     end
 
-    test "renders a map as JSON response" do
-      conn = render_response(%Response{http_status: 200, body: %{some: "json"}})
+    test "returns a map as JSON response" do
+      conn = put_response(%Response{http_status: 200, body: %{some: "json"}})
       assert conn.status == 200
       assert conn.resp_body == ~s({"some":"json"})
       assert get_resp_header(conn, "content-type") == ["application/json; charset=utf-8"]
     end
 
-    test "renders an error from origin" do
-      conn = render_response(%Response{http_status: 500, body: "ERROR"})
+    test "returns an error from origin" do
+      conn = put_response(%Response{http_status: 500, body: "ERROR"})
       assert conn.status == 500
       assert conn.resp_body == "ERROR"
     end
 
     test "sets response headers" do
-      conn = render_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => "bar"}})
+      conn = put_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => "bar"}})
       assert conn.status == 200
       assert conn.resp_body == "OK"
       assert get_resp_header(conn, "foo") == ["bar"]
     end
 
     test "ignores non-binary headers" do
-      conn = render_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => :bar}})
+      conn = put_response(%Response{http_status: 200, body: "OK", headers: %{"foo" => :bar}})
       assert conn.status == 200
       assert conn.resp_body == "OK"
       assert get_resp_header(conn, "foo") == []
@@ -41,7 +41,7 @@ defmodule BelfrageWeb.ResponseTest do
 
     test "sets Belfrage headers" do
       conn =
-        render_response(%Struct{
+        put_response(%Struct{
           request: %Request{request_id: "request-id"},
           response: %Response{http_status: 200, body: "OK"}
         })
@@ -51,16 +51,16 @@ defmodule BelfrageWeb.ResponseTest do
       assert get_resp_header(conn, "brequestid") == ["request-id"]
     end
 
-    test "renders redirects from origin" do
-      conn = render_response(%Response{http_status: 301, body: "", headers: %{"location" => "http://example.com"}})
+    test "returns redirects from origin" do
+      conn = put_response(%Response{http_status: 301, body: "", headers: %{"location" => "http://example.com"}})
       assert conn.status == 301
       assert conn.resp_body == ""
       assert get_resp_header(conn, "location") == ["http://example.com"]
     end
 
-    test "renders default error page if response body is empty" do
+    test "returns default error page if response body is empty" do
       conn =
-        render_response(%Struct{
+        put_response(%Struct{
           request: %Request{request_id: "request-id"},
           response: %Response{http_status: 500, body: nil}
         })
@@ -70,9 +70,9 @@ defmodule BelfrageWeb.ResponseTest do
       assert get_resp_header(conn, "brequestid") == ["request-id"]
     end
 
-    test "renders default error page as publicly cacheable if request is not personalised" do
+    test "returns default error page as publicly cacheable if request is not personalised" do
       conn =
-        render_response(%Struct{
+        put_response(%Struct{
           response: %Response{http_status: 500, body: nil},
           private: %Private{personalised_request: false}
         })
@@ -81,9 +81,9 @@ defmodule BelfrageWeb.ResponseTest do
       assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
     end
 
-    test "renders default error page as privately cacheable if request is personalised" do
+    test "returns default error page as privately cacheable if request is personalised" do
       conn =
-        render_response(%Struct{
+        put_response(%Struct{
           response: %Response{http_status: 500, body: nil},
           private: %Private{personalised_request: true}
         })
@@ -92,12 +92,12 @@ defmodule BelfrageWeb.ResponseTest do
       assert get_resp_header(conn, "cache-control") == ["private, stale-while-revalidate=15, max-age=0"]
     end
 
-    defp render_response(response = %Response{}) do
-      render_response(%Struct{response: response})
+    defp put_response(response = %Response{}) do
+      put_response(%Struct{response: response})
     end
 
-    defp render_response(struct = %Struct{}) do
-      BelfrageWeb.Response.render(struct, build_conn())
+    defp put_response(struct = %Struct{}) do
+      BelfrageWeb.Response.put(build_conn(), struct)
     end
   end
 
@@ -116,7 +116,7 @@ defmodule BelfrageWeb.ResponseTest do
     end
 
     defp redirect(status, location) do
-      BelfrageWeb.Response.redirect(%Struct{}, build_conn(), status, location)
+      BelfrageWeb.Response.redirect(build_conn(), %Struct{}, status, location)
     end
   end
 
