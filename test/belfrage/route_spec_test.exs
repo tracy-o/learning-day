@@ -1,26 +1,8 @@
 defmodule Belfrage.RouteSpecTest do
   use ExUnit.Case, async: true
+  import Belfrage.Test.RoutingHelper
+
   alias Belfrage.RouteSpec
-
-  defmacrop define_platform(name, attrs) do
-    quote do
-      defmodule Module.concat([Routes, Platforms, unquote(name)]) do
-        def specs() do
-          unquote(attrs)
-        end
-      end
-    end
-  end
-
-  defmacrop define_route(name, attrs) do
-    quote do
-      defmodule Module.concat([Routes, Specs, unquote(name)]) do
-        def specs() do
-          unquote(attrs)
-        end
-      end
-    end
-  end
 
   describe "specs_for/1" do
     test "merges route attributes into platform attributes" do

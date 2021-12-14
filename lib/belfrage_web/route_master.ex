@@ -3,8 +3,6 @@ defmodule BelfrageWeb.RouteMaster do
   alias BelfrageWeb.{View, StructAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
-  @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
-
   defmacro __using__(_opts) do
     quote do
       use Plug.Router
@@ -29,7 +27,7 @@ defmodule BelfrageWeb.RouteMaster do
     try do
       conn
       |> StructAdapter.adapt(id)
-      |> @belfrage.handle()
+      |> Belfrage.handle()
       |> View.render(conn)
     catch
       kind, reason ->

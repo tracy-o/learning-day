@@ -1,36 +1,11 @@
 defmodule BelfrageWeb.RouteMasterTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
-  alias Belfrage.Struct
   alias Routes.Routefiles.Mock, as: Routefile
   alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
-
-  @struct_with_html_response %Struct{
-    response: %Struct.Response{
-      body: "<p>Basic HTML response</p>",
-      headers: %{"content-type" => "text/html; charset=utf-8"},
-      http_status: 200
-    }
-  }
-
-  defp expect_belfrage_not_called() do
-    BelfrageMock
-    |> expect(:handle, 0, fn _struct ->
-      raise "this should never run"
-    end)
-  end
-
-  defp mock_handle_route(path, loop_id) do
-    BelfrageMock
-    |> expect(:handle, fn %Struct{
-                            private: %Struct.Private{loop_id: ^loop_id},
-                            request: %Struct.Request{path: ^path}
-                          } ->
-      @struct_with_html_response
-    end)
-  end
 
   defp put_bbc_headers(conn, origin_simulator \\ nil) do
     conn
@@ -62,10 +37,24 @@ defmodule BelfrageWeb.RouteMasterTest do
     })
   end
 
-  describe "calling handle with do block" do
-    test "when 404 check is truthy, route is not called" do
-      expect_belfrage_not_called()
+  describe "handle/2" do
+    test "successful match" do
+      stub_origins()
 
+      conn =
+        conn(:get, "/200-ok-response")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> Routefile.call([])
+
+      assert conn.status == 200
+    end
+  end
+
+  describe "calling handle with do block" do
+    test "when 404 check is truthy 404 is returned" do
       conn =
         conn(:get, "/premature-404")
         |> put_bbc_headers()
@@ -78,7 +67,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when 404 check is false, the request continues downstream" do
-      mock_handle_route("/sends-request-downstream", "SomeLoop")
+      stub_origins()
 
       conn =
         conn(:get, "/sends-request-downstream")
@@ -94,7 +83,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with only_on option" do
     test "when the environments match, will yield request" do
-      mock_handle_route("/only-on", "SomeLoop")
+      stub_origins()
 
       conn =
         conn(:get, "/only-on")
@@ -121,7 +110,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match, will match similar route from other environment" do
-      mock_handle_route("/only-on-multi-env", "SomeMozartLoop")
+      stub_origins()
 
       conn =
         conn(:get, "/only-on-multi-env")
@@ -129,10 +118,10 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> put_private(:production_environment, "some_other_environment")
         |> put_private(:preview_mode, "off")
         |> put_private(:overrides, %{})
+        |> fetch_query_params()
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 200
-      assert conn.resp_body == "<p>Basic HTML response</p>"
     end
   end
 
@@ -178,8 +167,6 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling redirect" do
     test "when the redirect matches will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
@@ -194,8 +181,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "redirect is publicly cachable, with max-age set" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
@@ -210,8 +195,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "redirect retains the req-svc-chain header" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
@@ -224,8 +207,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "redirect has a simple vary header" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/permanent-redirect")
         |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
@@ -268,8 +249,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "with a simple path rewrite" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/rewrite-redirect/resource-id-123345")
         |> put_bbc_headers()
@@ -284,8 +263,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "with a complex path rewrite" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/rewrite-redirect/12345/section/catch-all/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
@@ -300,8 +277,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "with a simple path with extension rewrite" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/rewrite-redirect/resource-id-123345.ext")
         |> put_bbc_headers()
@@ -316,8 +291,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "with a host redirect" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://example.net/rewrite-redirect/12345/catch-all/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
@@ -332,8 +305,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "re-writes path variable into host" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://example.net/rewrite-redirect/12345/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
@@ -348,8 +319,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "handle *any to *any redirects with format extension" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/redirect-with-path/feed.xml")
         |> put_bbc_headers()
@@ -364,8 +333,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "handle *any to *any redirects where any only includes the extension" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/some/path.js")
         |> put_bbc_headers()
@@ -380,8 +347,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "handle *any to *any redirects without format extension" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/redirect-with-path/subpath/asset-1234")
         |> put_bbc_headers()
@@ -396,8 +361,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "redirect can redirect to /" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/redirect-to-root")
         |> put_bbc_headers()
@@ -414,8 +377,6 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling redirect with host" do
     test "redirect is publicly cachable, with max-age set" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "http://www.bbcarabic.com")
         |> put_bbc_headers()
@@ -430,8 +391,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches without a subdomain will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "http://www.bbcarabic.com")
         |> put_bbc_headers()
@@ -446,8 +405,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches without a subdomain and a trailing slash will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://bbcarabic.com/")
         |> put_bbc_headers()
@@ -462,8 +419,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches with a subdomain and without a trailing slash will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://www.bbcarabic.com")
         |> put_bbc_headers()
@@ -478,8 +433,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches without a subdomain and without a trailing slash will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://bbcarabic.com")
         |> put_bbc_headers()
@@ -494,8 +447,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches with a subdomain and trailing slash will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://www.bbcarabic.com/")
         |> put_bbc_headers()
@@ -510,8 +461,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches with a path will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "https://www.bbcarabic.com/middleeast-51412901")
         |> put_bbc_headers()
@@ -526,8 +475,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches a multi-segment path it will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/redirect-with-path/abc")
         |> put_bbc_headers()
@@ -542,8 +489,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the redirect matches with a path with extension will return the location and status" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, "/redirect-with-path.ext")
         |> put_bbc_headers()
@@ -558,8 +503,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the request is a POST it should not redirect" do
-      expect_belfrage_not_called()
-
       conn =
         conn(:post, "/redirect-with-path/abc")
         |> put_bbc_headers()
@@ -577,13 +520,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       origin_simulator_header = "true"
       route = "/some-route-for-proxy-pass"
 
-      BelfrageMock
-      |> expect(:handle, fn %Struct{
-                              private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
-                              request: %Struct.Request{path: _route, origin_simulator?: _origin_simulator_header}
-                            } ->
-        @struct_with_html_response
-      end)
+      stub_origins()
 
       conn =
         conn(:get, route)
@@ -594,18 +531,13 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
+      assert conn.assigns.route_spec == "ProxyPass"
     end
 
     test "200 is returned when on the test env and replayed_header header is set" do
       route = "/some-route-for-proxy-pass"
 
-      BelfrageMock
-      |> expect(:handle, fn %Struct{
-                              private: %Struct.Private{loop_id: "ProxyPass", production_environment: "test"},
-                              request: %Struct.Request{path: _route, has_been_replayed?: _replayed_traffic_header}
-                            } ->
-        @struct_with_html_response
-      end)
+      stub_origins()
 
       conn =
         conn(:get, route)
@@ -621,7 +553,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           origin_simulator: nil,
           varnish: "",
           cache: "",
-          cdn: false,
+          cdn: true,
           req_svc_chain: "BELFRAGE",
           x_candy_audience: nil,
           x_candy_override: nil,
@@ -641,12 +573,11 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
+      assert conn.assigns.route_spec == "ProxyPass"
     end
 
     test "404 is returned when on test and origin_simulator header is not set" do
       route = "/some-route-for-proxy-pass"
-
-      expect_belfrage_not_called()
 
       conn =
         conn(:get, route)
@@ -663,8 +594,6 @@ defmodule BelfrageWeb.RouteMasterTest do
       origin_simulator_header = "true"
       route = "/some-route-for-proxy-pass"
 
-      expect_belfrage_not_called()
-
       conn =
         conn(:get, route)
         |> put_bbc_headers(origin_simulator_header)
@@ -678,8 +607,6 @@ defmodule BelfrageWeb.RouteMasterTest do
 
     test "404 is returned when replayed_header is set but env is not test" do
       route = "/some-route-for-proxy-pass"
-
-      expect_belfrage_not_called()
 
       conn =
         conn(:get, route)
@@ -729,11 +656,6 @@ defmodule BelfrageWeb.RouteMasterTest do
       use BelfrageWeb.RouteMaster
       handle_proxy_pass("/*any", using: "ProxyPass", only_on: "some_env", examples: ["/foo"])
       no_match()
-    end
-
-    setup do
-      expect_belfrage_not_called()
-      :ok
     end
 
     test "defines a catch-all 404 GET route" do

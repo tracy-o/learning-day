@@ -27,4 +27,18 @@ defmodule Belfrage.Test.StubHelper do
     |> Map.fetch!(to_string(name))
     |> apply(:transform, [value])
   end
+
+  @doc """
+  Makes Lambda and HTTP client return a successful response, which mean that
+  any request to an origin will succeed.
+  """
+  def stub_origins() do
+    Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn _request, _platform ->
+      {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
+    end)
+
+    Mox.stub(Belfrage.Clients.LambdaMock, :call, fn _creds, _arn, _payload, _req_id, _opts ->
+      {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
+    end)
+  end
 end

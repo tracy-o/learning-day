@@ -1,24 +1,36 @@
-defmodule BelfrageWeb.Plugs.AccessLogsTest do
+defmodule EndToEnd.AccessLogsTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-
-  alias Belfrage.Struct
+  import Belfrage.Test.CachingHelper
   import ExUnit.CaptureLog
 
-  test "logs after sending response" do
-    BelfrageMock
-    |> expect(:handle, fn struct ->
-      Struct.add(struct, :response, %{
-        body: "",
-        headers: %{"access-log-res-header" => "yes", "ssl" => "ssl-value", "set-cookie" => "session=12345"},
-        http_status: 200
-      })
+  alias BelfrageWeb.Router
+  alias Belfrage.Clients.LambdaMock
+
+  @moduletag :end_to_end
+
+  setup :clear_cache
+
+  test "requests are logged" do
+    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _request_id, _opts ->
+      {:ok,
+       %{
+         "headers" => %{
+           "access-log-res-header" => "yes",
+           "ssl" => "ssl-value",
+           "set-cookie" => "session=12345"
+         },
+         "statusCode" => 200,
+         "body" => "OK"
+       }}
     end)
 
     captured_log =
       capture_log(fn ->
-        conn(:get, "/200-ok-response") |> put_req_header("access-log-req-header", "yes") |> BelfrageWeb.Router.call([])
+        conn(:get, "/200-ok-response")
+        |> put_req_header("access-log-req-header", "yes")
+        |> Router.call([])
       end)
 
     assert captured_log =~ "/200-ok-response", "Failed to log request path"

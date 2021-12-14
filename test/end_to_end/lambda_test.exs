@@ -23,10 +23,11 @@ defmodule EndToEnd.LambdaTest do
 
   test "a successful response from a lambda e2e" do
     credentials = Belfrage.Services.Webcore.Credentials.get()
+    lambda_arn = Application.get_env(:belfrage, :pwa_lambda_function) <> ":test"
 
     Belfrage.Clients.LambdaMock
     |> expect(:call, fn ^credentials,
-                        "arn:aws:lambda:eu-west-1:997052946310:function:test-presentation-layer-lambda:test",
+                        ^lambda_arn,
                         %{
                           body: "",
                           headers: %{

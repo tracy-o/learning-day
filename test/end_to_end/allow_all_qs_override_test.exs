@@ -19,10 +19,12 @@ defmodule AllowAllQsOverrideTest do
 
   # The Moz.ex route spec only allows one query string, but on test the mozart platform allows all query strings
   test "Allow all query strings for Mozart platform routes on test" do
+    url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?a=bar&b=foo"
+
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
                              method: :get,
-                             url: "https://www.mozart-routing.test.api.bbci.co.uk/moz?a=bar&b=foo"
+                             url: ^url
                            },
                            :MozartNews ->
       {:ok, @http_response}
@@ -35,12 +37,19 @@ defmodule AllowAllQsOverrideTest do
   end
 
   test "Don't allow all query string for the Mozart platform routes on Live" do
+    original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
+
+    on_exit(fn ->
+      Application.put_env(:belfrage, :production_environment, original_env)
+    end)
+
+    url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?only_allow_this_on_live=123"
 
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
                              method: :get,
-                             url: "https://www.mozart-routing.test.api.bbci.co.uk/moz?only_allow_this_on_live=123"
+                             url: ^url
                            },
                            :MozartNews ->
       {:ok, @http_response}
@@ -50,7 +59,5 @@ defmodule AllowAllQsOverrideTest do
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
-
-    Application.put_env(:belfrage, :production_environment, "test")
   end
 end

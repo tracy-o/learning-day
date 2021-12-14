@@ -5,8 +5,6 @@ defmodule Belfrage.Event do
 
   @dimension_opts [:request_id, :loop_id]
 
-  @monitor_api Application.get_env(:belfrage, :monitor_api)
-
   @callback record(atom(), any(), any(), any()) :: any()
   @callback record(atom(), any(), any()) :: any()
 
@@ -43,16 +41,16 @@ defmodule Belfrage.Event do
   end
 
   def record(:log, level, msg, opts) do
-    new(:log, level, msg, opts)
-    |> @monitor_api.record_event()
+    event = new(:log, level, msg, opts)
+    monitor_api().record_event(event)
 
     Stump.log(level, msg)
     Stump.log(level, msg, cloudwatch: true)
   end
 
   def record(:metric, type, metric, opts) do
-    new(:metric, type, metric, opts)
-    |> @monitor_api.record_event()
+    event = new(:metric, type, metric, opts)
+    monitor_api().record_event(event)
 
     apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
   end
@@ -105,5 +103,9 @@ defmodule Belfrage.Event do
       Belfrage.Event.record(:metric, :timing, unquote(key), value: diff / 1_000)
       result
     end
+  end
+
+  defp monitor_api do
+    Application.get_env(:belfrage, :monitor_api)
   end
 end
