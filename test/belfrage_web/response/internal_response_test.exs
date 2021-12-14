@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.View.InternalResponseTest do
+defmodule BelfrageWeb.Response.InternalResponseTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias BelfrageWeb.View.InternalResponse
+  alias BelfrageWeb.Response.InternalResponse
   alias Belfrage.{Struct, CacheControl}
   alias Belfrage.Struct.{Response, Private}
 

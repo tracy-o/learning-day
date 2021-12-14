@@ -1,10 +1,10 @@
-defmodule BelfrageWeb.View do
+defmodule BelfrageWeb.Response do
   import Plug.Conn
 
   alias Belfrage.{Struct, Metrics}
   alias Belfrage.Struct.Response
   alias BelfrageWeb.ResponseHeaders
-  alias BelfrageWeb.View.InternalResponse
+  alias BelfrageWeb.Response.InternalResponse
 
   @default_headers [
     ResponseHeaders.Vary,

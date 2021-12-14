@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.RouteMaster do
   alias Plug.Conn
-  alias BelfrageWeb.{View, StructAdapter}
+  alias BelfrageWeb.{Response, StructAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
   defmacro __using__(_opts) do
@@ -28,7 +28,7 @@ defmodule BelfrageWeb.RouteMaster do
       conn
       |> StructAdapter.adapt(id)
       |> Belfrage.handle()
-      |> View.render(conn)
+      |> Response.render(conn)
     catch
       kind, reason ->
         # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
@@ -95,7 +95,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro return_404() do
     quote do
-      View.not_found(var!(conn))
+      Response.not_found(var!(conn))
     end
   end
 
@@ -113,7 +113,7 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       match _ do
-        View.unsupported_method(var!(conn))
+        Response.unsupported_method(var!(conn))
       end
     end
   end
@@ -171,7 +171,7 @@ defmodule BelfrageWeb.RouteMaster do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
 
           StructAdapter.adapt(var!(conn), "redirect")
-          |> View.redirect(var!(conn), unquote(status), new_location)
+          |> Response.redirect(var!(conn), unquote(status), new_location)
         end
       end
 
@@ -205,7 +205,7 @@ defmodule BelfrageWeb.RouteMaster do
             cond do
               matched_env and origin_simulator -> yield(unquote(id), var!(conn))
               matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
-              true -> View.not_found(var!(conn))
+              true -> Response.not_found(var!(conn))
             end
           end
         end

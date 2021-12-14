@@ -1,8 +1,7 @@
-defmodule BelfrageWeb.ViewTest do
+defmodule BelfrageWeb.ResponseTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias BelfrageWeb.View
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
 
@@ -98,7 +97,7 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     defp render_response(struct = %Struct{}) do
-      View.render(struct, build_conn())
+      BelfrageWeb.Response.render(struct, build_conn())
     end
   end
 
@@ -117,12 +116,12 @@ defmodule BelfrageWeb.ViewTest do
     end
 
     defp redirect(status, location) do
-      View.redirect(%Struct{}, build_conn(), status, location)
+      BelfrageWeb.Response.redirect(%Struct{}, build_conn(), status, location)
     end
   end
 
   test "not_found/1" do
-    conn = build_conn() |> View.not_found()
+    conn = build_conn() |> BelfrageWeb.Response.not_found()
     assert conn.status == 404
     assert conn.resp_body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
 
@@ -132,14 +131,14 @@ defmodule BelfrageWeb.ViewTest do
   end
 
   test "internal_server_error/1" do
-    conn = build_conn() |> View.internal_server_error()
+    conn = build_conn() |> BelfrageWeb.Response.internal_server_error()
     assert conn.status == 500
     assert conn.resp_body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
     assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
   end
 
   test "unsupported_method/1" do
-    conn = build_conn() |> View.unsupported_method()
+    conn = build_conn() |> BelfrageWeb.Response.unsupported_method()
     assert conn.status == 405
     assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
     assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
