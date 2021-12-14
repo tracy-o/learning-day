@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.RouteSpecTest do
+defmodule BelfrageWeb.Response.Headers.RouteSpecTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.RouteSpec
+  alias BelfrageWeb.Response.Headers.RouteSpec
   alias Belfrage.Struct
 
   describe "when route spec (loop_id) exists in struct and production_environment is not live" do

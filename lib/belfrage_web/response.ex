@@ -3,22 +3,22 @@ defmodule BelfrageWeb.Response do
 
   alias Belfrage.{Struct, Metrics}
   alias Belfrage.Struct.Response
-  alias BelfrageWeb.ResponseHeaders
+  alias BelfrageWeb.Response.Headers
   alias BelfrageWeb.Response.InternalResponse
 
   @default_headers [
-    ResponseHeaders.Vary,
-    ResponseHeaders.CacheControl,
-    ResponseHeaders.Server,
-    ResponseHeaders.Signature,
-    ResponseHeaders.BID,
-    ResponseHeaders.Via,
-    ResponseHeaders.ReqSvcChain,
-    ResponseHeaders.AccessControlAllowOrigin,
-    ResponseHeaders.RequestId,
-    ResponseHeaders.CacheStatus,
-    ResponseHeaders.RouteSpec,
-    ResponseHeaders.PipelineTrail
+    Headers.Vary,
+    Headers.CacheControl,
+    Headers.Server,
+    Headers.Signature,
+    Headers.BID,
+    Headers.Via,
+    Headers.ReqSvcChain,
+    Headers.AccessControlAllowOrigin,
+    Headers.RequestId,
+    Headers.CacheStatus,
+    Headers.RouteSpec,
+    Headers.PipelineTrail
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 

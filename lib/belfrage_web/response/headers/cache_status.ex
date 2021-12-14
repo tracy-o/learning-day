@@ -1,17 +1,15 @@
-defmodule BelfrageWeb.ResponseHeaders.CacheStatus do
+defmodule BelfrageWeb.Response.Headers.CacheStatus do
   import Plug.Conn
   alias Belfrage.Struct
 
-  alias BelfrageWeb.Behaviours.ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @behaviour ResponseHeaders
-
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, %Struct{response: %Struct.Response{fallback: true}}) do
     put_resp_header(conn, "belfrage-cache-status", "STALE")
   end
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, %Struct{private: %Struct.Private{origin: :belfrage_cache}}) do
     put_resp_header(conn, "belfrage-cache-status", "HIT")
   end

@@ -1,16 +1,15 @@
-defmodule BelfrageWeb.ResponseHeaders.AccessControlAllowOrigin do
+defmodule BelfrageWeb.Response.Headers.AccessControlAllowOrigin do
   import Plug.Conn
 
-  alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
 
-  @behaviour ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, %Struct{request: %Struct.Request{cdn?: true}}) do
     put_resp_header(conn, "access-control-allow-origin", "*")
   end
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, _struct), do: conn
 end

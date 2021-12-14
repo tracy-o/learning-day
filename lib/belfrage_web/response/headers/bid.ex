@@ -1,11 +1,9 @@
-defmodule BelfrageWeb.ResponseHeaders.BID do
+defmodule BelfrageWeb.Response.Headers.BID do
   import Plug.Conn
 
-  alias BelfrageWeb.Behaviours.ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @behaviour ResponseHeaders
-
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, _struct) do
     put_resp_header(conn, "bid", bid_value())
   end

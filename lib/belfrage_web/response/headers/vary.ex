@@ -1,15 +1,14 @@
-defmodule BelfrageWeb.ResponseHeaders.Vary do
+defmodule BelfrageWeb.Response.Headers.Vary do
   import Plug.Conn
 
-  alias BelfrageWeb.Behaviours.ResponseHeaders
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
   alias Belfrage.Personalisation
   alias Belfrage.Language
 
-  @behaviour ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, struct = %Struct{request: request}) do
     put_resp_header(
       conn,

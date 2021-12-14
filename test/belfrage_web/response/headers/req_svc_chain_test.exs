@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.ReqSvcChainTest do
+defmodule BelfrageWeb.Response.Headers.ReqSvcChainTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.ReqSvcChain
+  alias BelfrageWeb.Response.Headers.ReqSvcChain
   alias Belfrage.Struct
 
   test "when the response has 'req-svc-chain' then it is returned" do

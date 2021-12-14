@@ -1,11 +1,9 @@
-defmodule BelfrageWeb.ResponseHeaders.ReqSvcChain do
+defmodule BelfrageWeb.Response.Headers.ReqSvcChain do
   import Plug.Conn
 
-  alias BelfrageWeb.Behaviours.ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @behaviour ResponseHeaders
-
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, struct) do
     put_resp_header(
       conn,

@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.CacheStatusTest do
+defmodule BelfrageWeb.Response.Headers.CacheStatusTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.CacheStatus
+  alias BelfrageWeb.Response.Headers.CacheStatus
   alias Belfrage.Struct
 
   describe "when response origin is from belfrage cache" do
