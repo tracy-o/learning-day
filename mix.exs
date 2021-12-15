@@ -1,7 +1,7 @@
 defmodule Belfrage.MixProject do
   use Mix.Project
 
-  @test_envs ~w(test routes_test smoke_test)a
+  @test_envs ~w(test smoke_test)a
 
   def project do
     [
@@ -28,13 +28,11 @@ defmodule Belfrage.MixProject do
 
   defp aliases do
     [
-      routes_test: ["cmd MIX_ENV=routes_test mix test --color"],
       # for smoke_test, see lib/mix/tasks/smoke_test.ex
       t: ["format", "cmd mix test --force --color"]
     ]
   end
 
-  defp test_pattern(mix_env) when mix_env == :routes_test, do: "routes/*_test.ex"
   defp test_pattern(mix_env) when mix_env == :smoke_test, do: "smoke/**/*.ex"
   defp test_pattern(_mix_env), do: "*_test.exs"
 
