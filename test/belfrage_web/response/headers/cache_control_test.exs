@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.CacheControlTest do
+defmodule BelfrageWeb.Response.Headers.CacheControlTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.CacheControl
+  alias BelfrageWeb.Response.Headers.CacheControl
   alias Belfrage.Struct
 
   doctest CacheControl

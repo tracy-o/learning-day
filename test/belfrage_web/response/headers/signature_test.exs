@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.SignatureTest do
+defmodule BelfrageWeb.Response.Headers.SignatureTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.Signature
+  alias BelfrageWeb.Response.Headers.Signature
   alias Belfrage.Struct
 
   describe "when request_hash exists in struct" do

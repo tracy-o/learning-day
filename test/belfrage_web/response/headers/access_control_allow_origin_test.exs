@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.AccessControlAllowOriginTest do
+defmodule BelfrageWeb.Response.Headers.AccessControlAllowOriginTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.AccessControlAllowOrigin
+  alias BelfrageWeb.Response.Headers.AccessControlAllowOrigin
   alias Belfrage.Struct
 
   test "when in cdn mode, allow-control-allow-origin is set" do

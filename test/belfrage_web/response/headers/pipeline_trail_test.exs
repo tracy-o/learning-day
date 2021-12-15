@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.PipelineTrailTest do
+defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.PipelineTrail
+  alias BelfrageWeb.Response.Headers.PipelineTrail
   alias Belfrage.Struct
 
   describe "when pipeline trail exists in struct and production_environment is not live" do

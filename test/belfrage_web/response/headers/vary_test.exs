@@ -1,10 +1,10 @@
-defmodule BelfrageWeb.ResponseHeaders.VaryTest do
+defmodule BelfrageWeb.Response.Headers.VaryTest do
   use ExUnit.Case, async: true
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.PersonalisationHelper
 
-  alias BelfrageWeb.ResponseHeaders.Vary
+  alias BelfrageWeb.Response.Headers.Vary
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private, UserSession}
 

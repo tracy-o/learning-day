@@ -1,9 +1,9 @@
-defmodule BelfrageWeb.ResponseHeaders.ViaTest do
+defmodule BelfrageWeb.Response.Headers.ViaTest do
   use ExUnit.Case
   use Plug.Test
 
   import ExUnit.CaptureLog
-  alias BelfrageWeb.ResponseHeaders.Via
+  alias BelfrageWeb.Response.Headers.Via
   alias Belfrage.Struct
 
   test "when upstream does not set a Via header" do

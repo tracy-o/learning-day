@@ -1,11 +1,10 @@
-defmodule BelfrageWeb.ResponseHeaders.PipelineTrail do
+defmodule BelfrageWeb.Response.Headers.PipelineTrail do
   import Plug.Conn
   alias Belfrage.Struct
-  alias BelfrageWeb.Behaviours.ResponseHeaders
 
-  @behaviour ResponseHeaders
+  @behaviour BelfrageWeb.Response.Headers.Behaviour
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, %Struct{
         private: %Struct.Private{production_environment: env},
         debug: %Struct.Debug{pipeline_trail: trail}
@@ -14,7 +13,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrail do
     put_resp_header(conn, "belfrage-pipeline-trail", Enum.join(trail, ","))
   end
 
-  @impl ResponseHeaders
+  @impl true
   def add_header(conn, _struct) do
     conn
   end

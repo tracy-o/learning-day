@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.ResponseHeaders.RequestIdTest do
+defmodule BelfrageWeb.Response.Headers.RequestIdTest do
   use ExUnit.Case
   use Plug.Test
 
-  alias BelfrageWeb.ResponseHeaders.RequestId
+  alias BelfrageWeb.Response.Headers.RequestId
   alias Belfrage.Struct
 
   describe "when request_id exists in struct" do
