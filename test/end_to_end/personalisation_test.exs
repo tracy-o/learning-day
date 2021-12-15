@@ -84,6 +84,22 @@ defmodule EndToEnd.PersonalisationTest do
     assert cache_control == "private"
   end
 
+  test "internal error in Belfrage" do
+    # Simulate an error by making origin return an unexpected response
+    stub_origin_request(response: {:foo, :bar})
+
+    request =
+      build_request()
+      |> personalise_request()
+
+    assert_raise(Plug.Conn.WrapperError, fn -> make_request(request) end)
+
+    {status, headers, _body} = sent_resp(request)
+    assert status == 500
+    # Errors returned in response to personalised requests must be private
+    assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in headers
+  end
+
   describe "personalisation is disabled" do
     setup do
       stub_dial(:personalisation, "off")

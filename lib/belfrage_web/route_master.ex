@@ -25,21 +25,29 @@ defmodule BelfrageWeb.RouteMaster do
     conn = Conn.assign(conn, :route_spec, id)
 
     try do
-      struct =
-        conn
-        |> StructAdapter.adapt(id)
-        |> Belfrage.handle()
+      struct = StructAdapter.adapt(conn, id)
 
-      Response.put(conn, struct)
+      conn
+      |> Conn.assign(:struct, Belfrage.handle(struct))
+      |> Response.put()
     catch
+      # Unwrap an internal Belfrage error to extract %Struct{} from it
+      _, error = %Belfrage.WrapperError{} ->
+        conn = Conn.assign(conn, :struct, error.struct)
+        reraise(conn, error.kind, error.reason, error.stack)
+
       kind, reason ->
-        # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
-        # which now contains the name of the route spec, so that we could link
-        # errors to route specs in our metrics.
-        stack = __STACKTRACE__
-        wrapper = %Conn.WrapperError{conn: conn, kind: :error, reason: reason, stack: stack}
-        :erlang.raise(kind, wrapper, stack)
+        reraise(conn, kind, reason, __STACKTRACE__)
     end
+  end
+
+  defp reraise(conn, kind, reason, stack) do
+    # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
+    # which now contains the name of the route spec and the struct, so that
+    # we could use that data when generating an error response or tracking
+    # metrics.
+    wrapper = %Conn.WrapperError{conn: conn, kind: kind, reason: reason, stack: stack}
+    :erlang.raise(kind, wrapper, stack)
   end
 
   defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do

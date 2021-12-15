@@ -23,7 +23,7 @@ defmodule BelfrageWeb.Response do
   ]
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  def put(conn = %Conn{}, struct = %Struct{response: response = %Response{}}) do
+  def put(conn = %Conn{assigns: %{struct: struct = %Struct{response: response = %Response{}}}}) do
     response =
       if response.http_status > 399 && response.body in ["", nil] do
         Internal.new(struct, conn)
@@ -39,7 +39,14 @@ defmodule BelfrageWeb.Response do
   end
 
   def error(conn = %Conn{}, status) do
-    put(conn, %Struct{response: %Response{http_status: status}})
+    struct =
+      conn.assigns
+      |> Map.get(:struct, %Struct{})
+      |> Struct.add(:response, %{http_status: status, body: ""})
+
+    conn
+    |> assign(:struct, struct)
+    |> put()
   end
 
   def not_found(conn = %Conn{}) do
@@ -63,7 +70,10 @@ defmodule BelfrageWeb.Response do
         conn = put_resp_header(conn, "location", new_location)
         struct = %Struct{struct | response: %Response{http_status: status}}
         response = Internal.new(struct, conn)
-        put(conn, %Struct{struct | response: response})
+
+        conn
+        |> assign(:struct, %Struct{struct | response: response})
+        |> put()
     end
   end
 

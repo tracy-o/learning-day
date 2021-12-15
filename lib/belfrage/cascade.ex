@@ -1,7 +1,6 @@
 defmodule Belfrage.Cascade do
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, ServiceProvider, WrapperError}
   alias Belfrage.Struct.{Response, Private}
-  alias Belfrage.ServiceProvider
 
   defstruct items: [],
             result: nil
@@ -55,7 +54,7 @@ defmodule Belfrage.Cascade do
   end
 
   defp dispatch_to_next_origin(cascade, [struct | tail], service_provider) do
-    result = service_provider.dispatch(struct)
+    result = WrapperError.wrap(&service_provider.dispatch/1, struct)
 
     cond do
       use_response?(cascade, result.response) ->

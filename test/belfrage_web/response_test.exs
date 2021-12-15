@@ -97,7 +97,7 @@ defmodule BelfrageWeb.ResponseTest do
     end
 
     defp put_response(struct = %Struct{}) do
-      BelfrageWeb.Response.put(build_conn(), struct)
+      BelfrageWeb.Response.put(build_conn(struct))
     end
   end
 
@@ -144,7 +144,17 @@ defmodule BelfrageWeb.ResponseTest do
     assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
   end
 
-  defp build_conn() do
-    conn(:get, "/_web_core")
+  test "keep struct data on error" do
+    struct = %Struct{private: %Private{personalised_request: true}}
+    conn = build_conn(struct) |> BelfrageWeb.Response.internal_server_error()
+    assert conn.status == 500
+    # Check that the response is private because the request is personalised,
+    # which verifies that the data in the `Struct` is kept and used
+    assert get_resp_header(conn, "cache-control") == ["private, stale-while-revalidate=15, max-age=0"]
+  end
+
+  defp build_conn(struct \\ nil) do
+    conn = conn(:get, "/_web_core")
+    if struct, do: assign(conn, :struct, struct), else: conn
   end
 end
