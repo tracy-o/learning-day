@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.Response.InternalResponse do
+defmodule BelfrageWeb.Response.Internal do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Response, Private}
   alias Belfrage.{Metrics, CacheControl}

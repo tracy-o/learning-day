@@ -1,8 +1,8 @@
-defmodule BelfrageWeb.Response.InternalResponseTest do
+defmodule BelfrageWeb.Response.InternalTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias BelfrageWeb.Response.InternalResponse
+  alias BelfrageWeb.Response.Internal
   alias Belfrage.{Struct, CacheControl}
   alias Belfrage.Struct.{Response, Private}
 
@@ -92,7 +92,7 @@ defmodule BelfrageWeb.Response.InternalResponseTest do
       private: %Private{personalised_request: Keyword.get(opts, :personalised, false)}
     }
 
-    InternalResponse.new(struct, conn)
+    Internal.new(struct, conn)
   end
 
   defp build_conn(headers) do

@@ -5,7 +5,7 @@ defmodule BelfrageWeb.Response do
   alias Belfrage.{Struct, Metrics}
   alias Belfrage.Struct.Response
   alias BelfrageWeb.Response.Headers
-  alias BelfrageWeb.Response.InternalResponse
+  alias BelfrageWeb.Response.Internal
 
   @default_headers [
     Headers.Vary,
@@ -26,7 +26,7 @@ defmodule BelfrageWeb.Response do
   def put(conn = %Conn{}, struct = %Struct{response: response = %Response{}}) do
     response =
       if response.http_status > 399 && response.body in ["", nil] do
-        InternalResponse.new(struct, conn)
+        Internal.new(struct, conn)
       else
         response
       end
@@ -62,7 +62,7 @@ defmodule BelfrageWeb.Response do
       :nomatch ->
         conn = put_resp_header(conn, "location", new_location)
         struct = %Struct{struct | response: %Response{http_status: status}}
-        response = InternalResponse.new(struct, conn)
+        response = Internal.new(struct, conn)
         put(conn, %Struct{struct | response: response})
     end
   end
