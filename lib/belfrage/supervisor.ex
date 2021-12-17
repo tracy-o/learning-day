@@ -40,7 +40,6 @@ defmodule Belfrage.Supervisor do
   defp router_options(env) do
     case env do
       :test -> [scheme: :http, port: 7081]
-      :routes_test -> [scheme: :http, port: 7083]
       :smoke_test -> [scheme: :http, port: 7084]
       :dev -> [scheme: :http, port: 7080]
       :prod -> [scheme: :http, port: 7080]

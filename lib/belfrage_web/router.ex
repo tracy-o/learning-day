@@ -29,6 +29,7 @@ defmodule BelfrageWeb.Router do
   def call(conn, opts) do
     conn
     |> assign(:plug_pipeline_start_time, System.monotonic_time())
+    |> assign(:routefile, opts[:routefile])
     |> super(opts)
   end
 

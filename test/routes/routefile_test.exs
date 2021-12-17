@@ -68,7 +68,7 @@ defmodule Routes.RoutefileTest do
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, %{using: loop_id}, example} ->
-        conn = conn(:get, example) |> Router.call([])
+        conn = make_call(:get, example)
 
         if conn.assigns.route_spec == loop_id do
           :ok
@@ -83,8 +83,7 @@ defmodule Routes.RoutefileTest do
       @examples
       |> Enum.filter(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, _, example} ->
-        conn = conn(:get, example)
-        conn = Router.call(conn, [])
+        conn = make_call(:get, example)
 
         if conn.status == 404 && conn.resp_body =~ "404" do
           :ok
@@ -125,8 +124,7 @@ defmodule Routes.RoutefileTest do
     test "when the request is a GET request" do
       Application.put_env(:belfrage, :production_environment, "live")
 
-      conn = conn(:get, "/a_route_that_will_not_match")
-      conn = Router.call(conn, [])
+      conn = make_call(:get, "/a_route_that_will_not_match")
 
       assert conn.status == 404
       assert conn.resp_body =~ "404"
@@ -135,12 +133,15 @@ defmodule Routes.RoutefileTest do
     end
 
     test "when the request is a POST request" do
-      conn = conn(:post, "/a_route_that_will_not_match")
-      conn = Router.call(conn, [])
+      conn = make_call(:post, "/a_route_that_will_not_match")
 
       assert conn.status == 405
       assert conn.resp_body =~ "405"
     end
+  end
+
+  defp make_call(method, path) do
+    conn(method, path) |> Router.call(routefile: Routefile)
   end
 
   defp validate(items, validator) do
