@@ -42,7 +42,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "served early from cache sets origin to :belfrage_cache" do
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "ARouteState"
+          route_state_id: "ARouteState"
         },
         request: %Struct.Request{
           request_hash: cache_key("fresh")
@@ -57,7 +57,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "does not add a stale response when requesting a fresh response" do
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "ARouteState"
+          route_state_id: "ARouteState"
         },
         request: %Struct.Request{
           request_hash: cache_key("stale")
@@ -70,7 +70,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "fetches cached stale response when requesting fresh or stale content and the local cache returns the content" do
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "ARouteState"
+          route_state_id: "ARouteState"
         },
         request: %Struct.Request{
           request_hash: cache_key("stale")
@@ -92,7 +92,7 @@ defmodule Belfrage.BelfrageCacheTest do
 
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "ARouteState"
+          route_state_id: "ARouteState"
         },
         request: %Struct.Request{
           request_hash: cache_key("stale")
@@ -109,7 +109,7 @@ defmodule Belfrage.BelfrageCacheTest do
       %{
         cacheable_struct: %Struct{
           private: %Struct.Private{
-            loop_id: "ARouteState"
+            route_state_id: "ARouteState"
           },
           request: %Struct.Request{
             request_hash: unique_cache_key(),

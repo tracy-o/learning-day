@@ -14,7 +14,7 @@ defmodule Belfrage.RouteStateSupervisor do
     }
   end
 
-  def start_loop(supervisor \\ __MODULE__, name) do
+  def start_route_state(supervisor \\ __MODULE__, name) do
     case start_child(supervisor, name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid

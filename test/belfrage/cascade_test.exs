@@ -7,22 +7,22 @@ defmodule Belfrage.CascadeTest do
 
   describe "build/1" do
     test "builds a list of structs, one for each route spec" do
-      struct = %Struct{private: %Private{loop_id: ~w(RouteState1 RouteState2)}}
+      struct = %Struct{private: %Private{route_state_id: ~w(RouteState1 RouteState2)}}
 
       assert Cascade.build(struct) == %Cascade{
                items: [
-                 %Struct{private: %Private{loop_id: "RouteState1", candidate_loop_ids: ~w(RouteState1 RouteState2)}},
-                 %Struct{private: %Private{loop_id: "RouteState2", candidate_loop_ids: ~w(RouteState1 RouteState2)}}
+                 %Struct{private: %Private{route_state_id: "RouteState1", candidate_route_state_ids: ~w(RouteState1 RouteState2)}},
+                 %Struct{private: %Private{route_state_id: "RouteState2", candidate_route_state_ids: ~w(RouteState1 RouteState2)}}
                ]
              }
     end
 
     test "returns a list with one struct if it doesn't need to be handled by the cascade" do
-      struct = %Struct{private: %Private{loop_id: ~w(RouteState)}}
+      struct = %Struct{private: %Private{route_state_id: ~w(RouteState)}}
 
       assert Cascade.build(struct) == %Cascade{
                items: [
-                 %Struct{private: %Private{loop_id: "RouteState", candidate_loop_ids: ~w(RouteState)}}
+                 %Struct{private: %Private{route_state_id: "RouteState", candidate_route_state_ids: ~w(RouteState)}}
                ]
              }
     end
@@ -33,8 +33,8 @@ defmodule Belfrage.CascadeTest do
       %{
         cascade: %Cascade{
           items: [
-            %Struct{private: %Private{loop_id: "RouteState1"}},
-            %Struct{private: %Private{loop_id: "RouteState2"}}
+            %Struct{private: %Private{route_state_id: "RouteState1"}},
+            %Struct{private: %Private{route_state_id: "RouteState2"}}
           ]
         }
       }
@@ -48,13 +48,13 @@ defmodule Belfrage.CascadeTest do
           Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
             # Sleep for 10ms when processing each struct
             Process.sleep(10)
-            send(pid, {:processed_struct_with_loop_id, private.loop_id})
+            send(pid, {:processed_struct_with_route_state_id, private.route_state_id})
             struct
           end)
         end)
 
-      assert_received {:processed_struct_with_loop_id, "RouteState1"}
-      assert_received {:processed_struct_with_loop_id, "RouteState2"}
+      assert_received {:processed_struct_with_route_state_id, "RouteState1"}
+      assert_received {:processed_struct_with_route_state_id, "RouteState2"}
 
       # Check that total execution time is less than 20ms, which proves that
       # the structs were processed asynchronously.
@@ -64,25 +64,25 @@ defmodule Belfrage.CascadeTest do
     test "returns the struct with a response if there is one", %{cascade: cascade} do
       %Cascade{result: result} =
         Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
-          if private.loop_id == "RouteState1" do
+          if private.route_state_id == "RouteState1" do
             Struct.add(struct, :response, %Response{http_status: 200})
           else
             struct
           end
         end)
 
-      assert result == %Struct{response: %Response{http_status: 200}, private: %Private{loop_id: "RouteState1"}}
+      assert result == %Struct{response: %Response{http_status: 200}, private: %Private{route_state_id: "RouteState1"}}
 
       %Cascade{result: result} =
         Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
-          if private.loop_id == "RouteState2" do
+          if private.route_state_id == "RouteState2" do
             Struct.add(struct, :response, %Response{http_status: 200})
           else
             struct
           end
         end)
 
-      assert result == %Struct{response: %Response{http_status: 200}, private: %Private{loop_id: "RouteState2"}}
+      assert result == %Struct{response: %Response{http_status: 200}, private: %Private{route_state_id: "RouteState2"}}
     end
 
     test "returns the cascade if there are no structs with responses", %{cascade: cascade} do
@@ -92,58 +92,58 @@ defmodule Belfrage.CascadeTest do
 
   describe "dispatch/1" do
     defmodule MockServiceProvider do
-      @loop_responses %{
+      @route_state_responses %{
         "SuccessRouteState" => 200,
         "404RouteState" => 404
       }
 
-      def dispatch(struct = %Struct{private: %Private{loop_id: loop_id}}) do
-        send(self(), {:dispatched_struct_with_loop_id, loop_id})
+      def dispatch(struct = %Struct{private: %Private{route_state_id: route_state_id}}) do
+        send(self(), {:dispatched_struct_with_route_state_id, route_state_id})
 
         Struct.add(struct, :response, %Response{
-          http_status: Map.fetch!(@loop_responses, loop_id),
-          body: "Response for loop #{loop_id}"
+          http_status: Map.fetch!(@route_state_responses, route_state_id),
+          body: "Response for route_state #{route_state_id}"
         })
       end
     end
 
-    test "sequentially requests services for each loop in the cascade" do
+    test "sequentially requests services for each route_state in the cascade" do
       cascade = %Cascade{
         items: [
-          %Struct{private: %Private{loop_id: "404RouteState"}},
-          %Struct{private: %Private{loop_id: "SuccessRouteState"}}
+          %Struct{private: %Private{route_state_id: "404RouteState"}},
+          %Struct{private: %Private{route_state_id: "SuccessRouteState"}}
         ]
       }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 200
-      assert response.body == "Response for loop SuccessRouteState"
+      assert response.body == "Response for route_state SuccessRouteState"
 
-      assert_received {:dispatched_struct_with_loop_id, "404RouteState"}
-      assert_received {:dispatched_struct_with_loop_id, "SuccessRouteState"}
+      assert_received {:dispatched_struct_with_route_state_id, "404RouteState"}
+      assert_received {:dispatched_struct_with_route_state_id, "SuccessRouteState"}
     end
 
     test "halts on first non-404 response from origins in the cascade" do
       cascade = %Cascade{
         items: [
-          %Struct{private: %Private{loop_id: "SuccessRouteState"}},
-          %Struct{private: %Private{loop_id: "404RouteState"}}
+          %Struct{private: %Private{route_state_id: "SuccessRouteState"}},
+          %Struct{private: %Private{route_state_id: "404RouteState"}}
         ]
       }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 200
-      assert response.body == "Response for loop SuccessRouteState"
+      assert response.body == "Response for route_state SuccessRouteState"
 
-      assert_received {:dispatched_struct_with_loop_id, "SuccessRouteState"}
-      refute_received {:dispatched_struct_with_loop_id, "404RouteState"}
+      assert_received {:dispatched_struct_with_route_state_id, "SuccessRouteState"}
+      refute_received {:dispatched_struct_with_route_state_id, "404RouteState"}
     end
 
     test "returns 404 response with empty body if all origins in cascade return 404" do
       cascade = %Cascade{
         items: [
-          %Struct{private: %Private{loop_id: "404RouteState"}},
-          %Struct{private: %Private{loop_id: "404RouteState"}}
+          %Struct{private: %Private{route_state_id: "404RouteState"}},
+          %Struct{private: %Private{route_state_id: "404RouteState"}}
         ]
       }
 
@@ -155,13 +155,13 @@ defmodule Belfrage.CascadeTest do
     test "returns received 404 response body if there's only one origin in cascade" do
       cascade = %Cascade{
         items: [
-          %Struct{private: %Private{loop_id: "404RouteState"}}
+          %Struct{private: %Private{route_state_id: "404RouteState"}}
         ]
       }
 
       assert %Struct{response: response} = Cascade.dispatch(cascade, MockServiceProvider)
       assert response.http_status == 404
-      assert response.body == "Response for loop 404RouteState"
+      assert response.body == "Response for route_state 404RouteState"
     end
   end
 end

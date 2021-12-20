@@ -4,7 +4,7 @@ defmodule Belfrage.RouteSpec do
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
-  defstruct loop_id: nil,
+  defstruct route_state_id: nil,
             owner: nil,
             slack_channel: nil,
             pipeline: [],
@@ -45,7 +45,7 @@ defmodule Belfrage.RouteSpec do
   defp get_route_attrs(name, env) do
     [Routes, Specs, name]
     |> call_specs_func(env)
-    |> Map.put(:loop_id, name)
+    |> Map.put(:route_state_id, name)
   end
 
   defp call_specs_func(module_name, env) do

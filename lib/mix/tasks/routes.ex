@@ -11,13 +11,13 @@ defmodule Mix.Tasks.Routes do
 
     routefile = BelfrageWeb.Routefile.for_cosmos(env)
 
-    Enum.map(routefile.routes(), fn {route_matcher, %{using: loop_id, examples: examples, only_on: only_on}} ->
-      specs = Belfrage.RouteSpec.specs_for(loop_id, env)
+    Enum.map(routefile.routes(), fn {route_matcher, %{using: route_state_id, examples: examples, only_on: only_on}} ->
+      specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
       env = only_on || "live"
 
       %{
         "Route Matcher" => route_matcher,
-        "RouteSpec" => loop_id,
+        "RouteSpec" => route_state_id,
         "Platform" => specs.platform,
         "Examples" => examples,
         "Runbook" => specs.runbook,

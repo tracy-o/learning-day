@@ -4,8 +4,8 @@ defmodule BelfrageWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, loop_id) do
-    Stump.metadata(loop_id: loop_id)
+  def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, route_state_id) do
+    Stump.metadata(route_state_id: route_state_id)
 
     %Struct{
       request: %Request{
@@ -42,7 +42,7 @@ defmodule BelfrageWeb.StructAdapter do
         user_agent: bbc_headers.user_agent
       },
       private: %Private{
-        loop_id: loop_id,
+        route_state_id: route_state_id,
         overrides: conn.private.overrides,
         production_environment: conn.private.production_environment,
         preview_mode: conn.private.preview_mode

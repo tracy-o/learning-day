@@ -6,13 +6,13 @@ ENVIRONMENT=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj
 # STACKID should be changed to evaluate to the name of your Main stack
 STACKID=${ENVIRONMENT}-${COMPONENT_NAME}-main
 
-# beginning of app testing loop
+# beginning of app testing route_state
 # edit the contents of the next two lines to define a specific test for your application
 until [ "$status" == "pong" ]; do
 status=$(sudo -u component /home/component/belfrage/bin/belfrage ping);
 sleep 5;
 done
-# end of app testing loop
+# end of app testing route_state
 
 # We should only reach here if the check above has confirmed that the app is up
 # resource_id should be set to the Logical Resource id of the instances AutoScalingGroup

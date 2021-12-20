@@ -5,15 +5,15 @@ defmodule Belfrage.RouteStateRegistry do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
-  def find_or_start(%Struct{private: %Struct.Private{loop_id: loop_id}}) do
-    case Registry.lookup(__MODULE__, {Belfrage.RouteState, loop_id}) do
+  def find_or_start(%Struct{private: %Struct.Private{route_state_id: route_state_id}}) do
+    case Registry.lookup(__MODULE__, {Belfrage.RouteState, route_state_id}) do
       [{pid, _}] -> pid
-      [] -> RouteStateSupervisor.start_loop(loop_id)
+      [] -> RouteStateSupervisor.start_route_state(route_state_id)
     end
   end
 
-  def find(loop_id) do
-    case Registry.lookup(__MODULE__, {Belfrage.RouteState, loop_id}) do
+  def find(route_state_id) do
+    case Registry.lookup(__MODULE__, {Belfrage.RouteState, route_state_id}) do
       [{pid, _}] -> pid
       [] -> nil
     end

@@ -161,7 +161,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 200
-      assert conn.resp_body == "block run from loop on another env"
+      assert conn.resp_body == "block run from route_state on another env"
     end
   end
 

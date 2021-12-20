@@ -21,7 +21,7 @@ defroutefile "RoutefileOnlyOnMultiEnvMock", "test" do
   end
 
   handle("/only-on-with-block-multi-env", using: "SomeMozartRouteState", examples: ["/only-on-with-block"]) do
-    send_resp(conn, 200, "block run from loop on another env")
+    send_resp(conn, 200, "block run from route_state on another env")
   end
 
   no_match()

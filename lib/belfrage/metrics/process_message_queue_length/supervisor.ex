@@ -18,7 +18,7 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
     Belfrage.Services.Webcore.Credentials.Poller
   ]
 
-  @loops ~w(
+  @route_states ~w(
     NewsArticlePage
     WorldServiceMundo
     FablData
@@ -43,8 +43,8 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
 
     measurements =
       measurements ++
-        Enum.map(@loops, fn name ->
-          {ProcessMessageQueueLength, :track_loop_message_queue_length, [name]}
+        Enum.map(@route_states, fn name ->
+          {ProcessMessageQueueLength, :track_route_state_message_queue_length, [name]}
         end)
 
     {:telemetry_poller,
@@ -70,9 +70,9 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
 
     metrics =
       metrics ++
-        Enum.map(@loops, fn name ->
-          Telemetry.Metrics.last_value("loop.#{name}.mailbox_size",
-            event_name: [:belfrage, :loop_message_queue_length],
+        Enum.map(@route_states, fn name ->
+          Telemetry.Metrics.last_value("route_state.#{name}.mailbox_size",
+            event_name: [:belfrage, :route_state_message_queue_length],
             measurement: :message_queue_len,
             keep: &(&1.name == name),
             tags: [:BBCEnvironment]

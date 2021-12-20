@@ -38,7 +38,7 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
   describe "when pipeline trail is nil" do
     test "the pipeline_trail header is not set" do
       input_conn = conn(:get, "/")
-      struct = %Struct{private: %Struct.Private{loop_id: nil}}
+      struct = %Struct{private: %Struct.Private{route_state_id: nil}}
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
       assert get_resp_header(output_conn, "belfrage-pipeline-trail") == []

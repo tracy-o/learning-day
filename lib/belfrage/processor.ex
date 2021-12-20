@@ -21,7 +21,7 @@ defmodule Belfrage.Processor do
 
   def pre_request_pipeline(struct = %Struct{}) do
     pipeline = [
-      &get_loop/1,
+      &get_route_state/1,
       &allowlists/1,
       &personalisation/1,
       &language/1,
@@ -31,13 +31,13 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, struct)
   end
 
-  def get_loop(struct = %Struct{}) do
-    Metrics.duration(:set_request_loop_data, fn ->
+  def get_route_state(struct = %Struct{}) do
+    Metrics.duration(:set_request_route_state_data, fn ->
       RouteStateRegistry.find_or_start(struct)
 
       case RouteState.state(struct) do
-        {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
-        _ -> loop_state_failure()
+        {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
+        _ -> route_state_state_failure()
       end
     end)
   end
@@ -104,7 +104,7 @@ defmodule Belfrage.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     pipeline = [
-      &inc_loop/1,
+      &inc_route_state/1,
       &maybe_log_response_status/1,
       &ResponseTransformers.CacheDirective.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
@@ -116,7 +116,7 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, struct)
   end
 
-  defp inc_loop(struct = %Struct{}) do
+  defp inc_route_state(struct = %Struct{}) do
     RouteState.inc(struct)
     struct
   end
@@ -131,7 +131,7 @@ defmodule Belfrage.Processor do
 
       if struct.response.http_status == 200 do
         struct
-        |> inc_loop()
+        |> inc_route_state()
         |> Cache.store()
         |> make_fallback_private_if_personalised_request()
       else
@@ -170,12 +170,12 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(&ResponseTransformers.CompressionAsRequested.call/1, struct)
   end
 
-  defp loop_state_failure do
-    Belfrage.Event.record(:metric, :increment, "error.loop.state")
+  defp route_state_state_failure do
+    Belfrage.Event.record(:metric, :increment, "error.route_state.state")
 
-    Belfrage.Event.record(:log, :error, "Error retrieving loop state")
+    Belfrage.Event.record(:log, :error, "Error retrieving route_state state")
 
-    raise "Failed to load loop state."
+    raise "Failed to load route_state state."
   end
 
   defp maybe_log_response_status(struct = %Struct{response: %Response{http_status: http_status}})

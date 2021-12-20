@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.ReplayedTrafficTest do
   @replayed_request_struct %Struct{
     request: %Struct.Request{has_been_replayed?: true, path: "/_web_core"},
     private: %Struct.Private{
-      origin: "an-origin-set-by-the-loop",
+      origin: "an-origin-set-by-the-route_state",
       pipeline: ["ReplayedTraffic"]
     }
   }
@@ -21,7 +21,7 @@ defmodule Belfrage.Transformers.ReplayedTrafficTest do
              :ok,
              %Struct{
                private: %Struct.Private{
-                 origin: "an-origin-set-by-the-loop"
+                 origin: "an-origin-set-by-the-route_state"
                }
              }
            } = ReplayedTraffic.call([], @non_replayed_request_struct)

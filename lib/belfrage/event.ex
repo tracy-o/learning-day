@@ -3,7 +3,7 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
-  @dimension_opts [:request_id, :loop_id]
+  @dimension_opts [:request_id, :route_state_id]
 
   @callback record(atom(), any(), any(), any()) :: any()
   @callback record(atom(), any(), any()) :: any()
@@ -18,7 +18,7 @@ defmodule Belfrage.Event do
   ## Supported options
 
   * `:request_id` - Sets/overrides `request_id` event attribute and dimension.
-  * `:loop_id` - Adds passed value to the event's dimensions.
+  * `:route_state_id` - Adds passed value to the event's dimensions.
 
   Also when adding a log message:
 

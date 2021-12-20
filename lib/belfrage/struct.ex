@@ -62,8 +62,8 @@ end
 
 defmodule Belfrage.Struct.Private do
   defstruct fallback_ttl: :timer.hours(6),
-            loop_id: nil,
-            candidate_loop_ids: [],
+            route_state_id: nil,
+            candidate_route_state_ids: [],
             origin: nil,
             counter: %{},
             long_counter: %{},

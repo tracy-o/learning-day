@@ -146,11 +146,11 @@ defmodule BelfrageWeb.RouteMaster do
         @routes
         |> Enum.flat_map(fn
           {matcher, args = %{using: using}} when is_list(using) ->
-            Enum.map(using, fn loop_id ->
+            Enum.map(using, fn route_state_id ->
               args =
                 args
                 |> Map.put_new(:only_on, nil)
-                |> Map.put(:using, loop_id)
+                |> Map.put(:using, route_state_id)
 
               {matcher, args}
             end)

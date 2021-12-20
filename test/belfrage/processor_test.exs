@@ -18,23 +18,23 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Processor.get_loop/1" do
-    @struct %Struct{private: %Private{loop_id: "SportVideos"}}
+  describe "Processor.get_route_state/1" do
+    @struct %Struct{private: %Private{route_state_id: "SportVideos"}}
 
-    test "adds loop information to Struct.private" do
+    test "adds route_state information to Struct.private" do
       assert %Struct{
                request: _request,
                private: %Private{
-                 loop_id: "SportVideos",
+                 route_state_id: "SportVideos",
                  origin: origin,
                  counter: counter,
                  pipeline: pipeline
                }
-             } = Processor.get_loop(@struct)
+             } = Processor.get_route_state(@struct)
 
-      assert origin != nil, "Expected an origin value to be provided by the loop"
-      assert counter != nil, "Expected a counter value to be provided by the loop"
-      assert pipeline != nil, "Expected a pipeline value to be provided by the loop"
+      assert origin != nil, "Expected an origin value to be provided by the route_state"
+      assert counter != nil, "Expected a counter value to be provided by the route_state"
+      assert pipeline != nil, "Expected a pipeline value to be provided by the route_state"
     end
 
     test "keeps Struct.Private default values when merging in routespec data" do
@@ -43,7 +43,7 @@ defmodule Belfrage.ProcessorTest do
                private: %Private{
                  cookie_allowlist: cookie_allowlist
                }
-             } = Processor.get_loop(@struct)
+             } = Processor.get_route_state(@struct)
 
       assert cookie_allowlist == []
     end
@@ -52,7 +52,7 @@ defmodule Belfrage.ProcessorTest do
   describe "Processor.request_pipeline/1" do
     @struct %Struct{
       private: %Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
         pipeline: ["MyTransformer1"]
@@ -71,7 +71,7 @@ defmodule Belfrage.ProcessorTest do
   describe "Processor.request_pipeline/1 with empty pipeline" do
     @struct %Struct{
       private: %Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
         pipeline: []

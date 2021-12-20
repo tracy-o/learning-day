@@ -40,8 +40,8 @@ defmodule Routes.RoutefileTest do
       test "route spec for #{env} is valid" do
         env = unquote(env)
 
-        validate(@routes, fn {matcher, %{using: loop_id}} ->
-          specs = Belfrage.RouteSpec.specs_for(loop_id, env)
+        validate(@routes, fn {matcher, %{using: route_state_id}} ->
+          specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
 
           with :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
                :ok <- validate_transformers(matcher, specs, env),
@@ -67,14 +67,16 @@ defmodule Routes.RoutefileTest do
 
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
-      |> validate(fn {matcher, %{using: loop_id}, example} ->
+      |> validate(fn {matcher, %{using: route_state_id}, example} ->
         conn = make_call(:get, example)
 
-        if conn.assigns.route_spec == loop_id do
+        if conn.assigns.route_spec == route_state_id do
           :ok
         else
           {:error,
-           "Example #{example} for route #{matcher} is not routed to #{loop_id}, but to #{conn.assigns.route_spec}"}
+           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{
+             conn.assigns.route_spec
+           }"}
         end
       end)
     end

@@ -18,7 +18,7 @@ defmodule Belfrage.Services.WebcoreTest do
         xray_trace_id: "xray-trace-id"
       },
       private: %Private{
-        loop_id: "SomeRouteSpec",
+        route_state_id: "SomeRouteSpec",
         origin: "lambda-arn"
       }
     }
@@ -39,7 +39,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "tracks the duration of the lambda call" do
     stub_lambda_success()
-    struct = %Struct{private: %Private{loop_id: "SomeRouteSpec"}}
+    struct = %Struct{private: %Private{route_state_id: "SomeRouteSpec"}}
 
     {_event, measurement, metadata} =
       intercept_metric(~w(webcore request stop)a, fn ->
@@ -90,7 +90,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invoking lambda fails" do
     stub_lambda_error(:some_error)
-    struct = %Struct{private: %Private{loop_id: "SomeRouteSpec"}}
+    struct = %Struct{private: %Private{route_state_id: "SomeRouteSpec"}}
 
     assert_metric({~w(webcore error)a, %{error_code: :some_error, route_spec: "SomeRouteSpec"}}, fn ->
       assert %Struct{response: response} = Webcore.dispatch(struct)
@@ -114,7 +114,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invalid response format" do
     stub_lambda({:ok, %{"some" => "unexpected format"}})
-    struct = %Struct{private: %Private{loop_id: "SomeRouteSpec"}}
+    struct = %Struct{private: %Private{route_state_id: "SomeRouteSpec"}}
 
     assert_metric({~w(webcore error)a, %{error_code: :invalid_web_core_contract, route_spec: "SomeRouteSpec"}}, fn ->
       assert %Struct{response: response} = Webcore.dispatch(struct)

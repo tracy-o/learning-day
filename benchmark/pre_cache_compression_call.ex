@@ -34,7 +34,7 @@ defmodule Benchmark.PreCacheCompressionCall do
 
   def setup(iteration \\ 1, step_size_kb \\ 1) do
     struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "ProxyPass"}
+      private: %Struct.Private{pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
     }
 
     for i <- 1..iteration, into: %{} do

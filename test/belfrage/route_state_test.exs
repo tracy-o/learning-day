@@ -7,48 +7,48 @@ defmodule Belfrage.RouteStateTest do
 
   @failure_status_code Enum.random(500..504)
 
-  @loop_id "RouteStateTestRouteSpec"
+  @route_state_id "RouteStateTestRouteSpec"
 
-  define_route(@loop_id, %{platform: Webcore})
+  define_route(@route_state_id, %{platform: Webcore})
 
-  @legacy_request_struct %Struct{private: %Struct.Private{loop_id: @loop_id}}
+  @legacy_request_struct %Struct{private: %Struct.Private{route_state_id: @route_state_id}}
 
   @resp_struct %Struct{
-    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
   }
   @resp_struct_2 %Struct{
-    private: %Struct.Private{loop_id: @loop_id, origin: "https://s3.aws.com/"},
+    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
     response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
   }
   @non_error_resp_struct %Struct{
-    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: 200, fallback: nil}
   }
   @non_error_resp_struct_2 %Struct{
-    private: %Struct.Private{loop_id: @loop_id, origin: "https://s3.aws.com/"},
+    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
     response: %Struct.Response{http_status: 200, fallback: nil}
   }
 
   @fallback_resp_struct %Struct{
-    private: %Struct.Private{loop_id: @loop_id, origin: "https://origin.bbc.com/"},
+    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
     response: %Struct.Response{http_status: 200, fallback: true}
   }
 
   setup do
-    start_loop()
+    start_route_state()
     :ok
   end
 
   test "returns a state pointer" do
     route_spec =
-      @loop_id
+      @route_state_id
       |> String.to_atom()
       |> RouteSpec.specs_for()
       |> Map.from_struct()
 
     assert RouteState.state(@legacy_request_struct) ==
-             {:ok, Map.merge(route_spec, %{loop_id: @loop_id, counter: %{}, long_counter: %{}})}
+             {:ok, Map.merge(route_spec, %{route_state_id: @route_state_id, counter: %{}, long_counter: %{}})}
   end
 
   describe "returns a different count per origin" do
@@ -115,11 +115,11 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets counter after a specific time" do
-    # Set the interval just for this specifc test and restart the loop
-    stop_loop()
+    # Set the interval just for this specifc test and restart the route_state
+    stop_route_state()
     interval = 100
     set_env(:short_counter_reset_interval, interval)
-    start_loop()
+    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -132,11 +132,11 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets long_counter after a specific time" do
-    # Set the interval just for this specifc test and restart the loop
-    stop_loop()
+    # Set the interval just for this specifc test and restart the route_state
+    stop_route_state()
     interval = 100
     set_env(:long_counter_reset_interval, interval)
-    start_loop()
+    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -174,20 +174,20 @@ defmodule Belfrage.RouteStateTest do
     end
   end
 
-  test "exits when fetch_loop_timeout reached" do
+  test "exits when fetch_route_state_timeout reached" do
     assert catch_exit(RouteState.state(@resp_struct, 0)) ==
              {:timeout,
-              {GenServer, :call, [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @loop_id}}}, :state, 0]}}
+              {GenServer, :call, [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @route_state_id}}}, :state, 0]}}
   end
 
-  defp start_loop() do
-    start_supervised!({RouteState, @loop_id})
+  defp start_route_state() do
+    start_supervised!({RouteState, @route_state_id})
   end
 
-  defp stop_loop() do
+  defp stop_route_state() do
     # TODO: Replace with stop_supervised! once we upgrade to Elixir 1.12.
     # stop_supervisor currently returns an error if the process that is stopped
-    # is temporary, like the loop process here.
+    # is temporary, like the route_state process here.
     stop_supervised(RouteState)
   end
 
