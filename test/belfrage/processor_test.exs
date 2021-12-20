@@ -9,7 +9,7 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
-  defmodule Module.concat([Routes, Specs, SomePersonalisedLoop]) do
+  defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
     def specs do
       %{
         platform: Webcore,

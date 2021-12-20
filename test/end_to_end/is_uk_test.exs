@@ -16,7 +16,7 @@ defmodule IsUKTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
   end
 
   test "edge is_uk headers set to no" do

@@ -11,8 +11,8 @@ defmodule Belfrage.Supervisor do
   def children(env: env) do
     [
       {BelfrageWeb.Router, router_options(env)},
-      Belfrage.LoopsRegistry,
-      Belfrage.LoopsSupervisor,
+      Belfrage.RouteStateRegistry,
+      Belfrage.RouteStateSupervisor,
       {Belfrage.Authentication.Supervisor, [env: env]},
       {Belfrage.Dials.Supervisor, [env: env]},
       {Belfrage.Metrics.Supervisor, [env: env]},

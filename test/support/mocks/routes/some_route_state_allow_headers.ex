@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SomeLoopAllowHeaders do
+defmodule Routes.Specs.SomeRouteStateAllowHeaders do
   def specs do
     %{
       owner: "Some person",

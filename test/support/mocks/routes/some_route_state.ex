@@ -1,10 +1,9 @@
-defmodule Routes.Specs.SomeWorldServiceLoop do
+defmodule Routes.Specs.SomeRouteState do
   def specs do
     %{
       owner: "Some guy",
       runbook: "Some runbook",
-      platform: Simorgh,
-      pipeline: ["WorldServiceRedirect"],
+      platform: Webcore,
       query_params_allowlist: ["query"]
     }
   end

@@ -17,7 +17,7 @@ defmodule NonUtf8QueryStringTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
   end
 
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do

@@ -1,7 +1,7 @@
-defmodule Belfrage.Loop do
+defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec, Metrics.Statix, Event}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event}
 
   @fetch_loop_timeout Application.get_env(:belfrage, :fetch_loop_timeout)
 
@@ -27,7 +27,7 @@ defmodule Belfrage.Loop do
   end
 
   defp via_tuple(name) do
-    LoopsRegistry.via_tuple({__MODULE__, name})
+    RouteStateRegistry.via_tuple({__MODULE__, name})
   end
 
   # callbacks

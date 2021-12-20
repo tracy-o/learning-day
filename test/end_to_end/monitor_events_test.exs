@@ -41,7 +41,7 @@ defmodule EndToEnd.MonitorEventsTest do
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
-          loop_id: "SomeLoop"
+          loop_id: "SomeRouteState"
         },
         request_id: request_id,
         type: {:log, :info}
@@ -53,7 +53,7 @@ defmodule EndToEnd.MonitorEventsTest do
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
-          loop_id: "SomeLoop"
+          loop_id: "SomeRouteState"
         },
         request_id: request_id,
         type: {:metric, :increment}
@@ -65,7 +65,7 @@ defmodule EndToEnd.MonitorEventsTest do
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
-          loop_id: "SomeLoop"
+          loop_id: "SomeRouteState"
         },
         request_id: request_id,
         type: {:metric, :increment}
@@ -77,7 +77,7 @@ defmodule EndToEnd.MonitorEventsTest do
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
-          loop_id: "SomeLoop"
+          loop_id: "SomeRouteState"
         },
         request_id: request_id,
         type: {:log, :info}
@@ -89,7 +89,7 @@ defmodule EndToEnd.MonitorEventsTest do
         dimensions: %{
           request_id: request_id,
           path: "/200-ok-response",
-          loop_id: "SomeLoop"
+          loop_id: "SomeRouteState"
         },
         request_id: request_id,
         type: {:metric, :increment}
@@ -119,7 +119,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/200-ok-response",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:log, :info}
@@ -131,7 +131,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/200-ok-response",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -143,7 +143,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/200-ok-response",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -189,7 +189,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:log, :info}
@@ -201,7 +201,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -213,7 +213,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -225,7 +225,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -275,7 +275,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:log, :info}
@@ -287,7 +287,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -299,7 +299,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -311,7 +311,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/downstream-broken",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -345,7 +345,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:log, :info}
@@ -357,7 +357,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -369,7 +369,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}
@@ -381,7 +381,7 @@ defmodule EndToEnd.MonitorEventsTest do
           dimensions: %{
             request_id: request_id,
             path: "/sends-request-downstream",
-            loop_id: "SomeLoop"
+            loop_id: "SomeRouteState"
           },
           request_id: request_id,
           type: {:metric, :increment}

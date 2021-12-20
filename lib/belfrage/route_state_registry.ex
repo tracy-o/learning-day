@@ -1,19 +1,19 @@
-defmodule Belfrage.LoopsRegistry do
-  alias Belfrage.{Struct, LoopsSupervisor}
+defmodule Belfrage.RouteStateRegistry do
+  alias Belfrage.{Struct, RouteStateSupervisor}
 
   def start_link do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
   def find_or_start(%Struct{private: %Struct.Private{loop_id: loop_id}}) do
-    case Registry.lookup(__MODULE__, {Belfrage.Loop, loop_id}) do
+    case Registry.lookup(__MODULE__, {Belfrage.RouteState, loop_id}) do
       [{pid, _}] -> pid
-      [] -> LoopsSupervisor.start_loop(loop_id)
+      [] -> RouteStateSupervisor.start_loop(loop_id)
     end
   end
 
   def find(loop_id) do
-    case Registry.lookup(__MODULE__, {Belfrage.Loop, loop_id}) do
+    case Registry.lookup(__MODULE__, {Belfrage.RouteState, loop_id}) do
       [{pid, _}] -> pid
       [] -> nil
     end

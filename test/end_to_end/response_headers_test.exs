@@ -30,7 +30,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"req-svc-chain", "BELFRAGE"},
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
-               {"routespec", "SomeLoop"},
+               {"routespec", "SomeRouteState"},
                {"belfrage-pipeline-trail",
                 "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
              ] = conn.resp_headers
@@ -72,7 +72,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"req-svc-chain", "BELFRAGE"},
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
-               {"routespec", "SomeLoop"},
+               {"routespec", "SomeRouteState"},
                {"belfrage-pipeline-trail",
                 "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
              ] = conn.resp_headers

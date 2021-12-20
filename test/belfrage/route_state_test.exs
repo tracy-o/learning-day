@@ -1,13 +1,13 @@
-defmodule Belfrage.LoopTest do
+defmodule Belfrage.RouteStateTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import Belfrage.Test.RoutingHelper
 
-  alias Belfrage.{Struct, Loop, RouteSpec}
+  alias Belfrage.{Struct, RouteState, RouteSpec}
 
   @failure_status_code Enum.random(500..504)
 
-  @loop_id "LoopTestRouteSpec"
+  @loop_id "RouteStateTestRouteSpec"
 
   define_route(@loop_id, %{platform: Webcore})
 
@@ -47,18 +47,18 @@ defmodule Belfrage.LoopTest do
       |> RouteSpec.specs_for()
       |> Map.from_struct()
 
-    assert Loop.state(@legacy_request_struct) ==
+    assert RouteState.state(@legacy_request_struct) ==
              {:ok, Map.merge(route_spec, %{loop_id: @loop_id, counter: %{}, long_counter: %{}})}
   end
 
   describe "returns a different count per origin" do
     test "when there are errors" do
       for _ <- 1..15 do
-        Loop.inc(@resp_struct)
+        RouteState.inc(@resp_struct)
       end
 
       for _ <- 1..9 do
-        Loop.inc(@resp_struct_2)
+        RouteState.inc(@resp_struct_2)
       end
 
       assert {:ok,
@@ -73,13 +73,13 @@ defmodule Belfrage.LoopTest do
                     :errors => 9
                   }
                 }
-              }} = Loop.state(@resp_struct)
+              }} = RouteState.state(@resp_struct)
     end
 
     test "when there are no errors" do
       for _ <- 1..15 do
-        Loop.inc(@non_error_resp_struct)
-        Loop.inc(@non_error_resp_struct_2)
+        RouteState.inc(@non_error_resp_struct)
+        RouteState.inc(@non_error_resp_struct_2)
       end
 
       assert {:ok,
@@ -92,13 +92,13 @@ defmodule Belfrage.LoopTest do
                     200 => 15
                   }
                 }
-              }} = Loop.state(@resp_struct)
+              }} = RouteState.state(@resp_struct)
     end
 
     test "when there are a mix of errors and success responses" do
       for _ <- 1..15 do
-        Loop.inc(@non_error_resp_struct)
-        Loop.inc(@resp_struct)
+        RouteState.inc(@non_error_resp_struct)
+        RouteState.inc(@resp_struct)
       end
 
       assert {:ok,
@@ -110,7 +110,7 @@ defmodule Belfrage.LoopTest do
                     :errors => 15
                   }
                 }
-              }} = Loop.state(@resp_struct)
+              }} = RouteState.state(@resp_struct)
     end
   end
 
@@ -121,14 +121,14 @@ defmodule Belfrage.LoopTest do
     set_env(:short_counter_reset_interval, interval)
     start_loop()
 
-    for _ <- 1..30, do: Loop.inc(@resp_struct)
-    {:ok, state} = Loop.state(@legacy_request_struct)
+    for _ <- 1..30, do: RouteState.inc(@resp_struct)
+    {:ok, state} = RouteState.state(@legacy_request_struct)
     assert state.counter.errors == 30
 
     Process.sleep(interval + 1)
 
-    {:ok, state} = Loop.state(@legacy_request_struct)
-    assert false == Map.has_key?(state.counter, :error), "Loop should have reset"
+    {:ok, state} = RouteState.state(@legacy_request_struct)
+    assert false == Map.has_key?(state.counter, :error), "RouteState should have reset"
   end
 
   test "resets long_counter after a specific time" do
@@ -138,20 +138,20 @@ defmodule Belfrage.LoopTest do
     set_env(:long_counter_reset_interval, interval)
     start_loop()
 
-    for _ <- 1..30, do: Loop.inc(@resp_struct)
-    {:ok, state} = Loop.state(@legacy_request_struct)
+    for _ <- 1..30, do: RouteState.inc(@resp_struct)
+    {:ok, state} = RouteState.state(@legacy_request_struct)
     assert state.counter.errors == 30
 
     Process.sleep(interval + 1)
 
-    {:ok, state} = Loop.state(@legacy_request_struct)
-    assert false == Map.has_key?(state.long_counter, :error), "Loop should have reset"
+    {:ok, state} = RouteState.state(@legacy_request_struct)
+    assert false == Map.has_key?(state.long_counter, :error), "RouteState should have reset"
   end
 
   describe "when in fallback" do
     test "it only increments the fallback counter" do
-      for _ <- 1..30, do: Loop.inc(@fallback_resp_struct)
-      {:ok, state} = Loop.state(@legacy_request_struct)
+      for _ <- 1..30, do: RouteState.inc(@fallback_resp_struct)
+      {:ok, state} = RouteState.state(@legacy_request_struct)
 
       assert %{
                counter: %{
@@ -164,31 +164,31 @@ defmodule Belfrage.LoopTest do
 
     test "it does not increment fallback for successful responses" do
       for _ <- 1..15 do
-        Loop.inc(@non_error_resp_struct)
-        Loop.inc(@resp_struct)
+        RouteState.inc(@non_error_resp_struct)
+        RouteState.inc(@resp_struct)
       end
 
-      assert {:ok, %{counter: counter}} = Loop.state(@resp_struct)
+      assert {:ok, %{counter: counter}} = RouteState.state(@resp_struct)
 
       assert not Map.has_key?(counter, :fallback)
     end
   end
 
   test "exits when fetch_loop_timeout reached" do
-    assert catch_exit(Loop.state(@resp_struct, 0)) ==
+    assert catch_exit(RouteState.state(@resp_struct, 0)) ==
              {:timeout,
-              {GenServer, :call, [{:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, @loop_id}}}, :state, 0]}}
+              {GenServer, :call, [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @loop_id}}}, :state, 0]}}
   end
 
   defp start_loop() do
-    start_supervised!({Loop, @loop_id})
+    start_supervised!({RouteState, @loop_id})
   end
 
   defp stop_loop() do
     # TODO: Replace with stop_supervised! once we upgrade to Elixir 1.12.
     # stop_supervisor currently returns an error if the process that is stopped
     # is temporary, like the loop process here.
-    stop_supervised(Loop)
+    stop_supervised(RouteState)
   end
 
   defp set_env(name, value) do

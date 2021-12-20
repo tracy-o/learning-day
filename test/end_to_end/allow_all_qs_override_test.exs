@@ -14,7 +14,7 @@ defmodule AllowAllQsOverrideTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
   end
 
   # The Moz.ex route spec only allows one query string, but on test the mozart platform allows all query strings

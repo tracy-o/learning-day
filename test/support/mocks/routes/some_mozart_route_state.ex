@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SomeMozartLoop do
+defmodule Routes.Specs.SomeMozartRouteState do
   def specs do
     %{
       owner: "An owner",

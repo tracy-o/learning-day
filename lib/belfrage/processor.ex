@@ -1,8 +1,8 @@
 defmodule Belfrage.Processor do
   alias Belfrage.{
-    LoopsRegistry,
+    RouteStateRegistry,
     Struct,
-    Loop,
+    RouteState,
     Pipeline,
     RequestHash,
     Cache,
@@ -33,9 +33,9 @@ defmodule Belfrage.Processor do
 
   def get_loop(struct = %Struct{}) do
     Metrics.duration(:set_request_loop_data, fn ->
-      LoopsRegistry.find_or_start(struct)
+      RouteStateRegistry.find_or_start(struct)
 
-      case Loop.state(struct) do
+      case RouteState.state(struct) do
         {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
         _ -> loop_state_failure()
       end
@@ -83,7 +83,7 @@ defmodule Belfrage.Processor do
 
     if struct.response.http_status do
       latency_checkpoint(struct, :early_response_received)
-      Loop.inc(struct)
+      RouteState.inc(struct)
     end
 
     struct
@@ -117,7 +117,7 @@ defmodule Belfrage.Processor do
   end
 
   defp inc_loop(struct = %Struct{}) do
-    Loop.inc(struct)
+    RouteState.inc(struct)
     struct
   end
 

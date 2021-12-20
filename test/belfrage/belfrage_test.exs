@@ -45,7 +45,7 @@ defmodule BelfrageTest do
   @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
 
   setup do
-    start_supervised!({Belfrage.Loop, @loop_id})
+    start_supervised!({Belfrage.RouteState, @loop_id})
     :ok
   end
 
@@ -149,7 +149,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
 
     assert state.counter == %{
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
@@ -168,7 +168,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
 
     assert state.counter == %{
              :errors => 1,
@@ -242,7 +242,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.Loop.state(struct)
+      {:ok, state} = Belfrage.RouteState.state(struct)
 
       assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
     end
@@ -279,7 +279,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.Loop.state(struct)
+      {:ok, state} = Belfrage.RouteState.state(struct)
 
       assert state.counter == %{
                :errors => 1,

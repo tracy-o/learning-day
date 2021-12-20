@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SomeLoopComToUK do
+defmodule Routes.Specs.SomeRouteStateComToUK do
   def specs do
     %{
       owner: "Some person",
