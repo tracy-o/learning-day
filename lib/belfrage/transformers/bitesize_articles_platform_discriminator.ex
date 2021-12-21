@@ -1,14 +1,31 @@
+require Logger
 defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   @moduledoc """
   Alters the Platform and Origin for a subset of Bitesize Articles IDs that need to be served by Webcore.
   """
   use Belfrage.Transformers.Transformer
 
-  @webcore_ids [
+  @webcore_live_ids [
+    "zm8fhbkjj",
+    "zjykkmnjj",
+    "zj8yydmjj"
+  ]
+
+  @webcore_test_ids [
     "zm8fhbk",
     "zjykkmn",
     "zj8yydm"
   ]
+
+  prog_env = Application.get_env(:belfrage, :production_environment)
+
+  @webcore_ids (if(prog_env === "live") do
+    @webcore_live_ids
+  else
+    @webcore_test_ids
+  end)
+
+  Logger.debug("Var value====: #{inspect(prog_env)}")
 
   def call(
         _rest,

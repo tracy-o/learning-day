@@ -3,8 +3,7 @@ defmodule Routes.Specs.BitesizeArticles do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
-      pipeline: ["BitesizeArticlesPlatformDiscriminator"],
-      language_from_cookie: true
+      pipeline: ["BitesizeArticlesPlatformDiscriminator"]
     }
   end
 
@@ -12,7 +11,7 @@ defmodule Routes.Specs.BitesizeArticles do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
-      pipeline: ["BitesizeTestArticlesPlatformDiscriminator"]
+      pipeline: ["BitesizeArticlesPlatformDiscriminator"]
     }
   end
 end
