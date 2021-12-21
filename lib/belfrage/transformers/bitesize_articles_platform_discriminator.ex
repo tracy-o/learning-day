@@ -5,11 +5,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   """
   use Belfrage.Transformers.Transformer
 
-  @webcore_live_ids [
-    "zm8fhbkjj",
-    "zjykkmnjj",
-    "zj8yydmjj"
-  ]
+  app_env = Application.get_env(:belfrage, :production_environment)
 
   @webcore_test_ids [
     "zm8fhbk",
@@ -17,15 +13,13 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
     "zj8yydm"
   ]
 
-  prog_env = Application.get_env(:belfrage, :production_environment)
+  @webcore_live_ids []
 
-  @webcore_ids (if(prog_env === "live") do
+  @webcore_ids (if(app_env === "live") do
     @webcore_live_ids
   else
     @webcore_test_ids
   end)
-
-  Logger.debug("Var value====: #{inspect(prog_env)}")
 
   def call(
         _rest,
