@@ -3,7 +3,7 @@ defmodule Routes.Specs.BitesizeArticles do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
-      pipeline: ["BitesizeArticlesPlatformDiscriminator"]
+      pipeline: ["BitesizeArticlesPlatformDiscriminator", "HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
     }
   end
 
@@ -11,7 +11,7 @@ defmodule Routes.Specs.BitesizeArticles do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
-      pipeline: ["BitesizeArticlesPlatformDiscriminator"]
+      pipeline: ["BitesizeArticlesPlatformDiscriminator", "HTTPredirect", "TrailingSlashRedirector", "DevelopmentRequests", "CircuitBreaker"]
     }
   end
 end
