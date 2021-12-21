@@ -11,8 +11,18 @@ defmodule Belfrage.CascadeTest do
 
       assert Cascade.build(struct) == %Cascade{
                items: [
-                 %Struct{private: %Private{route_state_id: "RouteState1", candidate_route_state_ids: ~w(RouteState1 RouteState2)}},
-                 %Struct{private: %Private{route_state_id: "RouteState2", candidate_route_state_ids: ~w(RouteState1 RouteState2)}}
+                 %Struct{
+                   private: %Private{
+                     route_state_id: "RouteState1",
+                     candidate_route_state_ids: ~w(RouteState1 RouteState2)
+                   }
+                 },
+                 %Struct{
+                   private: %Private{
+                     route_state_id: "RouteState2",
+                     candidate_route_state_ids: ~w(RouteState1 RouteState2)
+                   }
+                 }
                ]
              }
     end

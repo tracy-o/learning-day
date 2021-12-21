@@ -177,7 +177,8 @@ defmodule Belfrage.RouteStateTest do
   test "exits when fetch_route_state_timeout reached" do
     assert catch_exit(RouteState.state(@resp_struct, 0)) ==
              {:timeout,
-              {GenServer, :call, [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @route_state_id}}}, :state, 0]}}
+              {GenServer, :call,
+               [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @route_state_id}}}, :state, 0]}}
   end
 
   defp start_route_state() do
