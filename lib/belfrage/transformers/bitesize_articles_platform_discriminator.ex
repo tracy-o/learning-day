@@ -1,4 +1,3 @@
-require Logger
 defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   @moduledoc """
   Alters the Platform and Origin for a subset of Bitesize Articles IDs that need to be served by Webcore.
@@ -16,10 +15,10 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   @webcore_live_ids []
 
   @webcore_ids (if(app_env === "live") do
-    @webcore_live_ids
-  else
-    @webcore_test_ids
-  end)
+                  @webcore_live_ids
+                else
+                  @webcore_test_ids
+                end)
 
   def call(
         _rest,

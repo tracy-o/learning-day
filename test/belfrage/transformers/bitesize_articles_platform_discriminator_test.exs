@@ -1,4 +1,3 @@
-require Logger
 defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
@@ -32,7 +31,6 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
     }
   }
 
-
   @webcore_live_data %Struct{
     private: %Struct.Private{
       origin: "pwa-lambda-function:live",
@@ -64,11 +62,13 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
     stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
       Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
     end)
+
     :ok
   end
 
   test "if the Article ID is in the Test Webcore allow list, the origin and platform will be altered to the Lambda" do
     lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":test"
+
     assert {
              :ok,
              %Struct{
@@ -97,6 +97,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   test "if the Article ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
     morph_endpoint = "https://morph-router.test.api.bbci.co.uk"
+
     assert {
              :ok,
              %Struct{
@@ -119,6 +120,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   test "if the Article ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
     lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
+
     assert {
              :ok,
              %Struct{
@@ -147,6 +149,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   test "if the Article ID is not in the Webcore allow list, the origin and platform will remain the same" do
     morph_endpoint = "https://morph-router.api.bbci.co.uk"
+
     assert {
              :ok,
              %Struct{
