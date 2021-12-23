@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   @webcore_test_data %Struct{
     private: %Struct.Private{
-      origin: "pwa-lambda-function:test",
+      origin: Application.get_env(:belfrage, :pwa_lambda_function) <> ":test",
       platform: Webcore,
       production_environment: "test"
     },
@@ -119,6 +119,10 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
   end
 
   test "if the Article ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
+    original_env = Application.get_env(:belfrage, :production_environment)
+    Application.put_env(:belfrage, :production_environment, "live")
+    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
+
     lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
 
     assert {
@@ -148,6 +152,9 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
   end
 
   test "if the Article ID is not in the Webcore allow list, the origin and platform will remain the same" do
+    original_env = Application.get_env(:belfrage, :production_environment)
+    Application.put_env(:belfrage, :production_environment, "live")
+    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
     morph_endpoint = "https://morph-router.api.bbci.co.uk"
 
     assert {
