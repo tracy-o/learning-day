@@ -12,8 +12,18 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
 
   @webcore_live_ids []
 
+  defmacro webcore_ids(environment) do
+    if environment === "live" do
+      @webcore_live_ids
+    else
+      @webcore_test_ids
+    end
+  end
+
+  _application_env = Application.get_env(:belfrage, :production_environment)
+
   def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}})
-      when id in @webcore_test_ids or @webcore_live_ids do
+      when id in webcore_ids(application_env) do
     then(
       ["Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"],
       Struct.add(struct, :private, %{
