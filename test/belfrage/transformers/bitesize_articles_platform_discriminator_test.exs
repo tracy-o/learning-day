@@ -118,7 +118,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
            } = BitesizeArticlesPlatformDiscriminator.call([], @morph_test_data)
   end
 
-  test "if the Article ID is in the Webcore allow list, the origin and platform will be altered to the Lambda" do
+  test "if the Article ID is in the Live Webcore allow list, the origin and platform will be altered to the Lambda" do
     original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
     on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
@@ -151,7 +151,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
            } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_live_data)
   end
 
-  test "if the Article ID is not in the Webcore allow list, the origin and platform will remain the same" do
+  test "if the Article ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
     original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
     on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
