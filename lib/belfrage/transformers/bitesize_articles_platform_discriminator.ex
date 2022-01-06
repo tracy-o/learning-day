@@ -12,26 +12,32 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
 
   @webcore_live_ids []
 
-  defmacro webcore_ids(environment) do
-    if environment === "live" do
-      @webcore_live_ids
+  defp is_webcore_id(id) do
+    application_env = Application.get_env(:belfrage, :production_environment)
+
+    if application_env === "live" do
+      id in @webcore_live_ids
     else
-      @webcore_test_ids
+      id in @webcore_test_ids
     end
   end
 
-  _application_env = Application.get_env(:belfrage, :production_environment)
+  defp maybe_update_origin(id, struct) do
+    case is_webcore_id(id) do
+      true ->
+        Struct.add(struct, :private, %{
+          platform: Webcore,
+          origin: Application.get_env(:belfrage, :pwa_lambda_function)
+        })
 
-  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}})
-      when id in webcore_ids(application_env) do
-    then(
-      ["Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"],
-      Struct.add(struct, :private, %{
-        platform: Webcore,
-        origin: Application.get_env(:belfrage, :pwa_lambda_function)
-      })
-    )
+      _ ->
+        struct
+    end
   end
 
-  def call(_rest, struct), do: then(["CircuitBreaker"], struct)
+  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
+    then(rest, maybe_update_origin(id, struct))
+  end
+
+  def call(_rest, struct), do: then([], struct)
 end

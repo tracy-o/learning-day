@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   @webcore_test_data %Struct{
     private: %Struct.Private{
-      origin: Application.get_env(:belfrage, :pwa_lambda_function) <> ":test",
+      origin: "pwa-lambda-function",
       platform: Webcore,
       production_environment: "test"
     },
@@ -28,20 +28,6 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
       host: "www.bbc.co.uk",
       path: "/_web_core",
       path_params: %{"id" => "abc123xyz789"}
-    }
-  }
-
-  @webcore_live_data %Struct{
-    private: %Struct.Private{
-      origin: "pwa-lambda-function:live",
-      platform: Webcore,
-      production_environment: "live"
-    },
-    request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "zm8fhbk"}
     }
   }
 
@@ -67,19 +53,13 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
   end
 
   test "if the Article ID is in the Test Webcore allow list, the origin and platform will be altered to the Lambda" do
-    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":test"
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function)
 
     assert {
              :ok,
              %Struct{
                debug: %Struct.Debug{
-                 pipeline_trail: [
-                   "Language",
-                   "CircuitBreaker",
-                   "PlatformKillSwitch",
-                   "LambdaOriginAlias",
-                   "Personalisation"
-                 ]
+                 pipeline_trail: []
                },
                private: %Struct.Private{
                  origin: ^lambda_function,
@@ -102,7 +82,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
              :ok,
              %Struct{
                debug: %Struct.Debug{
-                 pipeline_trail: ["CircuitBreaker"]
+                 pipeline_trail: []
                },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
@@ -118,39 +98,6 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
            } = BitesizeArticlesPlatformDiscriminator.call([], @morph_test_data)
   end
 
-  test "if the Article ID is in the Live Webcore allow list, the origin and platform will be altered to the Lambda" do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, "live")
-    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
-
-    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function) <> ":live"
-
-    assert {
-             :ok,
-             %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: [
-                   "Language",
-                   "CircuitBreaker",
-                   "PlatformKillSwitch",
-                   "LambdaOriginAlias",
-                   "Personalisation"
-                 ]
-               },
-               private: %Struct.Private{
-                 origin: ^lambda_function,
-                 platform: Webcore
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "zm8fhbk"}
-               }
-             }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_live_data)
-  end
-
   test "if the Article ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
     original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
@@ -161,7 +108,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
              :ok,
              %Struct{
                debug: %Struct.Debug{
-                 pipeline_trail: ["CircuitBreaker"]
+                 pipeline_trail: []
                },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
