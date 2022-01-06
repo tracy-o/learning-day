@@ -192,7 +192,7 @@ defroutefile "Main" do
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
-  handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", only_on: "test", examples: []
+  handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", examples: []
   handle "/wc-data/p/container/test-client-side-personalised", using: "PersonalisedContainerData", only_on: "test", examples: []
   handle "/wc-data/p/container/:name", using: "ContainerData", only_on: "test", examples: ["/wc-data/p/container/consent-banner"]
   handle "/wc-data/page-composition", using: "PageComposition", examples: ["/wc-data/page-composition?path=/search&params=%7B%7D"]
@@ -1669,7 +1669,7 @@ defroutefile "Main" do
   handle "/bitesize/articles/zm8fhbk", using: "BitesizeTransition", examples: ["/bitesize/articles/zm8fhbk"]
   handle "/bitesize/levels/z98jmp3", using: "BitesizeTransition", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
-  
+
   # Games
   handle "/games/*_any", using: "Games", only_on: "test", examples: ["/games/embed/genie-starter-pack"]
 
