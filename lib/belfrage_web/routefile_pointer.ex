@@ -5,20 +5,12 @@ defmodule BelfrageWeb.RoutefilePointer do
   def call(conn, _opts) do
     cosmos_env = Application.get_env(:belfrage, :production_environment)
     mix_env = Mix.env()
-    routefile = routefile(cosmos_env, mix_env)
+    routefile = conn.assigns[:routefile] || routefile(cosmos_env, mix_env)
 
     routefile.call(conn, routefile.init([]))
   end
 
   def routefile(_cosmos_env, _mix_env = :test) do
-    Routes.Routefiles.Mock
-  end
-
-  def routefile(_cosmos_env, _mix_env = :routes_test) do
-    Routes.Routefiles.Test
-  end
-
-  def routefile(_cosmos_env, _mix_env = :end_to_end) do
     Routes.Routefiles.Mock
   end
 

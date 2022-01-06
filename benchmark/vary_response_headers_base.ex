@@ -4,7 +4,7 @@ defmodule Benchmark.VaryResponseHeadersBase do
   `ResponseHeaders.Vary.add_header/2`.
 
   This benchmark measures the performance
-  of both implementations when headers_allowlist = [] and Belfrage 
+  of both implementations when headers_allowlist = [] and Belfrage
   adds the base vary header (in most request cases).
 
   ### To run this experiment
@@ -16,7 +16,7 @@ defmodule Benchmark.VaryResponseHeadersBase do
   import Plug.Conn, only: [put_resp_header: 3]
   import Plug.Test, only: [conn: 2]
 
-  alias BelfrageWeb.ResponseHeaders.Vary
+  alias BelfrageWeb.Response.Headers.Vary
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
 

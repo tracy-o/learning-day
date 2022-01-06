@@ -29,6 +29,7 @@ defmodule BelfrageWeb.Router do
   def call(conn, opts) do
     conn
     |> assign(:plug_pipeline_start_time, System.monotonic_time())
+    |> assign(:routefile, opts[:routefile])
     |> super(opts)
   end
 
@@ -96,9 +97,9 @@ defmodule BelfrageWeb.Router do
     })
 
     if status == 400 do
-      BelfrageWeb.View.not_found(conn)
+      BelfrageWeb.Response.not_found(conn)
     else
-      BelfrageWeb.View.internal_server_error(conn)
+      BelfrageWeb.Response.internal_server_error(conn)
     end
   end
 

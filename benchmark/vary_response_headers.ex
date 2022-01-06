@@ -5,7 +5,7 @@ defmodule Benchmark.VaryResponseHeaders do
 
   This benchmark measures the performance
   of both implementations when capability team adds custom vary
-  headers in routespec (headers_allowlist) and Belfrage 
+  headers in routespec (headers_allowlist) and Belfrage
   adds the base + the additional headers to vary header.
 
   The test also involves "cookie" header that is removed and
@@ -21,7 +21,7 @@ defmodule Benchmark.VaryResponseHeaders do
   import Plug.Conn, only: [put_resp_header: 3]
   import Plug.Test, only: [conn: 2]
 
-  alias BelfrageWeb.ResponseHeaders.Vary
+  alias BelfrageWeb.Response.Headers.Vary
   alias Belfrage.Struct
   alias Belfrage.Struct.Private
 

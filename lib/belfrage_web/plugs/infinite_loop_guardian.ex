@@ -23,7 +23,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
     })
 
     conn
-    |> BelfrageWeb.View.not_found()
+    |> BelfrageWeb.Response.not_found()
     |> Plug.Conn.halt()
   end
 end

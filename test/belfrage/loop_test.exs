@@ -1,12 +1,15 @@
 defmodule Belfrage.LoopTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Belfrage.Test.RoutingHelper
 
   alias Belfrage.{Struct, Loop, RouteSpec}
 
   @failure_status_code Enum.random(500..504)
 
-  @loop_id "ProxyPass"
+  @loop_id "LoopTestRouteSpec"
+
+  define_route(@loop_id, %{platform: Webcore})
 
   @legacy_request_struct %Struct{private: %Struct.Private{loop_id: @loop_id}}
 
@@ -174,7 +177,7 @@ defmodule Belfrage.LoopTest do
   test "exits when fetch_loop_timeout reached" do
     assert catch_exit(Loop.state(@resp_struct, 0)) ==
              {:timeout,
-              {GenServer, :call, [{:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, "ProxyPass"}}}, :state, 0]}}
+              {GenServer, :call, [{:via, Registry, {Belfrage.LoopsRegistry, {Belfrage.Loop, @loop_id}}}, :state, 0]}}
   end
 
   defp start_loop() do

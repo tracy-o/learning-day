@@ -7,19 +7,17 @@
 4. GenServers/Supervisors need to be made configurable on startup.
 ```
 ### How to run tests
-To run unit tests:
+
+To run all tests except smoke tests:
+
 ```
 mix test
 ```
 
-To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
-```
-mix test_e2e
-```
+To run the automatically generated route matcher tests in [./test/routes/](./test/routes/) only:
 
-To run the automatically generated route matcher tests in [./test/routes/](./test/routes/):
 ```
-mix routes_test
+mix test --only routes_test
 ```
 
 To run the automatically generated smoke tests on the example routes in the router [./test/smoke/](./test/smoke/):

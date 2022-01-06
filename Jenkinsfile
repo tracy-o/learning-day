@@ -41,8 +41,6 @@ node {
     docker.image(dockerImage).inside("-u root -e MIX_ENV=test") {
       sh 'mix deps.get'
       sh 'mix test'
-      sh 'mix test_e2e'
-      sh 'mix routes_test'
       sh 'mix format --check-formatted'
       sh 'mix credo'
     }

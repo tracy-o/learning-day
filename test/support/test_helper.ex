@@ -1,11 +1,9 @@
 defmodule Test.Support.Helper do
   def setup_stubs do
-    Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
     Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
     Mox.stub_with(Belfrage.Clients.AuthenticationMock, Belfrage.Clients.AuthenticationStub)
-    Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
     Mox.stub_with(Belfrage.Authentication.Validator.ExpiryMock, Belfrage.Authentication.Validator.ExpiryStub)
     Mox.stub_with(Belfrage.EventMock, Belfrage.EventStub)
     Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.LiveServer)

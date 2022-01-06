@@ -18,7 +18,7 @@ defmodule Belfrage.Metrics.Supervisor do
     ]
   end
 
-  defp children(env: env) when env in [:routes_test, :smoke_test] do
+  defp children(env: env) when env in [:smoke_test] do
     []
   end
 

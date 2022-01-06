@@ -12,19 +12,23 @@ defmodule Belfrage.Processor do
     Personalisation,
     CacheControl,
     Metrics,
-    Language
+    Language,
+    WrapperError
   }
 
   alias Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
   def pre_request_pipeline(struct = %Struct{}) do
-    struct
-    |> get_loop()
-    |> allowlists()
-    |> personalisation()
-    |> language()
-    |> generate_request_hash()
+    pipeline = [
+      &get_loop/1,
+      &allowlists/1,
+      &personalisation/1,
+      &language/1,
+      &generate_request_hash/1
+    ]
+
+    WrapperError.wrap(pipeline, struct)
   end
 
   def get_loop(struct = %Struct{}) do
@@ -63,47 +67,58 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  def fetch_early_response_from_cache(
-        struct = %Struct{private: %Private{personalised_request: personalised, caching_enabled: caching_enabled}}
-      ) do
-    case {personalised, caching_enabled} do
-      {false, true} ->
-        struct =
-          Metrics.duration(:fetch_early_response_from_cache, fn ->
-            Cache.fetch(struct, [:fresh])
-          end)
-
-        if struct.response.http_status do
-          latency_checkpoint(struct, :early_response_received)
-          Loop.inc(struct)
-        end
-
-        struct
-
-      _ ->
-        struct
+  def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
+    if private.caching_enabled && !private.personalised_request do
+      WrapperError.wrap(&do_fetch_early_response_from_cache/1, struct)
+    else
+      struct
     end
+  end
+
+  defp do_fetch_early_response_from_cache(struct = %Struct{}) do
+    struct =
+      Metrics.duration(:fetch_early_response_from_cache, fn ->
+        Cache.fetch(struct, [:fresh])
+      end)
+
+    if struct.response.http_status do
+      latency_checkpoint(struct, :early_response_received)
+      Loop.inc(struct)
+    end
+
+    struct
   end
 
   def request_pipeline(struct = %Struct{}) do
     Metrics.duration(:request_pipeline, fn ->
-      case Pipeline.process(struct) do
-        {:ok, struct} -> struct
-        {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
-      end
+      WrapperError.wrap(&process_request_pipeline/1, struct)
     end)
   end
 
-  def response_pipeline(struct = %Struct{}) do
-    Loop.inc(struct)
+  defp process_request_pipeline(struct = %Struct{}) do
+    case Pipeline.process(struct) do
+      {:ok, struct} -> struct
+      {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
+    end
+  end
 
+  def response_pipeline(struct = %Struct{}) do
+    pipeline = [
+      &inc_loop/1,
+      &maybe_log_response_status/1,
+      &ResponseTransformers.CacheDirective.call/1,
+      &ResponseTransformers.ResponseHeaderGuardian.call/1,
+      &ResponseTransformers.PreCacheCompression.call/1,
+      &Cache.store/1,
+      &fetch_fallback_from_cache/1
+    ]
+
+    WrapperError.wrap(pipeline, struct)
+  end
+
+  defp inc_loop(struct = %Struct{}) do
+    Loop.inc(struct)
     struct
-    |> maybe_log_response_status()
-    |> ResponseTransformers.CacheDirective.call()
-    |> ResponseTransformers.ResponseHeaderGuardian.call()
-    |> ResponseTransformers.PreCacheCompression.call()
-    |> Cache.store()
-    |> fetch_fallback_from_cache()
   end
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
@@ -115,9 +130,8 @@ defmodule Belfrage.Processor do
         |> latency_checkpoint(:fallback_response_received)
 
       if struct.response.http_status == 200 do
-        Loop.inc(struct)
-
         struct
+        |> inc_loop()
         |> Cache.store()
         |> make_fallback_private_if_personalised_request()
       else
@@ -153,7 +167,7 @@ defmodule Belfrage.Processor do
   end
 
   def post_response_pipeline(struct = %Struct{}) do
-    ResponseTransformers.CompressionAsRequested.call(struct)
+    WrapperError.wrap(&ResponseTransformers.CompressionAsRequested.call/1, struct)
   end
 
   defp loop_state_failure do

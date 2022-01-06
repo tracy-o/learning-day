@@ -80,22 +80,16 @@ mix routes test
 
 ## Running Tests
 
-To run unit tests:
+To run all tests except smoke tests:
 
 ```
 mix test
 ```
 
-To run the end to end integration suite in [./test/end_to_end/](./test/end_to_end/):
+To run the automatically generated route matcher tests in [./test/routes/](./test/routes/) only:
 
 ```
-mix test_e2e
-```
-
-To run the automatically generated route matcher tests in [./test/routes/](./test/routes/):
-
-```
-mix routes_test
+mix test --only routes_test
 ```
 
 To run the automatically generated smoke tests on the example routes in the router [./test/smoke/](./test/smoke/):
