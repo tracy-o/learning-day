@@ -22,7 +22,7 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
       platform: MorphRouter,
-      production_environment: "test",
+      production_environment: "test"
     },
     request: %Struct.Request{
       scheme: :http,
