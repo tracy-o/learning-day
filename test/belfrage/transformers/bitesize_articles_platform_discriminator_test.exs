@@ -6,8 +6,8 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
 
   @webcore_test_data %Struct{
     private: %Struct.Private{
-      origin: "pwa-lambda-function",
-      platform: Webcore,
+      origin: "https://morph-router.test.api.bbci.co.uk",
+      platform: MorphRouter,
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -21,7 +21,8 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminatorTest do
   @morph_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter
+      platform: MorphRouter,
+      production_environment: "test"
     },
     request: %Struct.Request{
       scheme: :http,
