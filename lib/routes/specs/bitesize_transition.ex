@@ -10,7 +10,8 @@ defmodule Routes.Specs.BitesizeTransition do
   def specs("live") do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: MorphRouter
+      platform: MorphRouter,
+      language_from_cookie: true
     }
   end
 
