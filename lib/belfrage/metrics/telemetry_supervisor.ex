@@ -80,7 +80,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       ~w(
       plug_pipeline
       process_request_headers
-      set_request_loop_data
+      set_request_route_state_data
       filter_request_data
       check_if_personalised_request
       generate_request_hash

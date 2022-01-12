@@ -11,11 +11,11 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @loop_id "SportArticlePage"
+  @route_state_id "SportArticlePage"
 
   @get_request_struct %Struct{
     private: %Private{
-      loop_id: @loop_id,
+      route_state_id: @route_state_id,
       production_environment: "test"
     },
     request: %Request{
@@ -35,7 +35,7 @@ defmodule BelfrageTest do
       request_id: "pete-the-post-request"
     },
     private: %Private{
-      loop_id: @loop_id,
+      route_state_id: @route_state_id,
       production_environment: "test"
     }
   }
@@ -45,7 +45,7 @@ defmodule BelfrageTest do
   @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
 
   setup do
-    start_supervised!({Belfrage.Loop, @loop_id})
+    start_supervised!({Belfrage.RouteState, @route_state_id})
     :ok
   end
 
@@ -116,7 +116,7 @@ defmodule BelfrageTest do
 
   @redirect_request_struct %Struct{
     private: %Private{
-      loop_id: "SportVideos"
+      route_state_id: "SportVideos"
     },
     request: %Request{
       path: "/_web_core",
@@ -137,7 +137,7 @@ defmodule BelfrageTest do
     assert response_struct.response.http_status == 302
   end
 
-  test "increments the loop when request has 200 status" do
+  test "increments the route_state when request has 200 status" do
     LambdaMock
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
@@ -149,14 +149,14 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
 
     assert state.counter == %{
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
            }
   end
 
-  test "increments the loop when request has 500 status" do
+  test "increments the route_state when request has 500 status" do
     LambdaMock
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
@@ -168,7 +168,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.Loop.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
 
     assert state.counter == %{
              :errors => 1,
@@ -230,7 +230,7 @@ defmodule BelfrageTest do
       assert checkpoints[:early_response_received]
     end
 
-    test "increments the loop, when fetching from cache", %{struct: struct} do
+    test "increments the route_state, when fetching from cache", %{struct: struct} do
       LambdaMock
       |> expect(:call, 0, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
@@ -242,7 +242,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.Loop.state(struct)
+      {:ok, state} = Belfrage.RouteState.state(struct)
 
       assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
     end
@@ -267,7 +267,7 @@ defmodule BelfrageTest do
       %{struct: struct}
     end
 
-    test "increments the loop, when fetching from fallback", %{struct: struct} do
+    test "increments the route_state, when fetching from fallback", %{struct: struct} do
       LambdaMock
       |> expect(:call, 1, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
@@ -279,7 +279,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.Loop.state(struct)
+      {:ok, state} = Belfrage.RouteState.state(struct)
 
       assert state.counter == %{
                :errors => 1,

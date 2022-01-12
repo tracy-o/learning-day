@@ -16,7 +16,7 @@ defmodule VaryCacheByHost do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
 
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->

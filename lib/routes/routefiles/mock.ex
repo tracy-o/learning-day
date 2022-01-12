@@ -29,48 +29,48 @@ defroutefile "Mock", "test" do
   redirect("/some/path/*any", to: "/another-path/*any", status: 301)
   redirect("/redirect-to-root", to: "/", status: 302)
 
-  handle("/", using: "SomeLoop", examples: ["/"])
+  handle("/", using: "SomeRouteState", examples: ["/"])
 
-  handle("/fabl/:name", using: "SomeFablLoop", examples: ["/fabl/xray"])
+  handle("/fabl/:name", using: "SomeFablRouteState", examples: ["/fabl/xray"])
 
-  handle("/200-ok-response", using: "SomeLoop", examples: ["/200-ok-response"])
+  handle("/200-ok-response", using: "SomeRouteState", examples: ["/200-ok-response"])
 
-  handle("/downstream-not-found", using: "SomeLoop", examples: ["/downstream-not-found"])
+  handle("/downstream-not-found", using: "SomeRouteState", examples: ["/downstream-not-found"])
 
-  handle("/downstream-broken", using: "SomeLoop", examples: ["/downstream-broken"])
+  handle("/downstream-broken", using: "SomeRouteState", examples: ["/downstream-broken"])
 
-  handle "/premature-404", using: "SomeLoop", examples: ["/premature-404"] do
+  handle "/premature-404", using: "SomeRouteState", examples: ["/premature-404"] do
     return_404(if: true)
   end
 
-  handle "/sends-request-downstream", using: "SomeLoop", examples: ["/sends-request-downstream"] do
+  handle "/sends-request-downstream", using: "SomeRouteState", examples: ["/sends-request-downstream"] do
     return_404(if: false)
   end
 
   handle("/moz", using: "Moz", examples: ["/moz"])
 
-  handle("/com-to-uk-redirect", using: "SomeLoopComToUK", examples: ["/com-to-uk-redirect"])
+  handle("/com-to-uk-redirect", using: "SomeRouteStateComToUK", examples: ["/com-to-uk-redirect"])
 
   handle("/my/session", using: "MySession", examples: [])
 
   handle("/my/session/webcore-platform", using: "MySessionWebcorePlatform", examples: [])
 
-  handle("/route-allow-headers", using: "SomeLoopAllowHeaders", examples: [])
+  handle("/route-allow-headers", using: "SomeRouteStateAllowHeaders", examples: [])
 
-  handle("/format/rewrite/:discipline/av/:team.app", using: "SomeMozartLoop", examples: [])
-  handle("/format/rewrite/:discipline/av/:team", using: "SomeLoop", examples: [])
+  handle("/format/rewrite/:discipline/av/:team.app", using: "SomeMozartRouteState", examples: [])
+  handle("/format/rewrite/:discipline/av/:team", using: "SomeRouteState", examples: [])
 
-  handle("/format/rewrite/:discipline.app", using: "SomeMozartLoop", examples: [])
-  handle("/format/rewrite/:discipline", using: "SomeLoop", examples: [])
-  handle("/format/rewrite/:discipline/av", using: "SomeLoop", examples: [])
+  handle("/format/rewrite/:discipline.app", using: "SomeMozartRouteState", examples: [])
+  handle("/format/rewrite/:discipline", using: "SomeRouteState", examples: [])
+  handle("/format/rewrite/:discipline/av", using: "SomeRouteState", examples: [])
 
   handle("/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"])
 
-  handle("/cascade", using: ["MySessionWebcorePlatform", "SomeMozartLoop"], examples: [])
+  handle("/cascade", using: ["MySessionWebcorePlatform", "SomeMozartRouteState"], examples: [])
 
   handle("/caching-disabled", using: "CacheDisabled", examples: [])
 
-  handle("/language-from-cookie", using: "LanguageFromCookieLoop", examples: [])
+  handle("/language-from-cookie", using: "LanguageFromCookieRouteState", examples: [])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 

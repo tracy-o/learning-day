@@ -68,8 +68,8 @@ defmodule Belfrage.Cache.MultiStrategy do
     end
   end
 
-  defp metric_on_stale_routespec(%Belfrage.Struct{private: %{loop_id: loop_id}}, cache_metric, :stale) do
-    Statix.increment("cache.#{loop_id}.#{cache_metric}.stale.hit", 1, tags: Event.global_dimensions())
+  defp metric_on_stale_routespec(%Belfrage.Struct{private: %{route_state_id: route_state_id}}, cache_metric, :stale) do
+    Statix.increment("cache.#{route_state_id}.#{cache_metric}.stale.hit", 1, tags: Event.global_dimensions())
   end
 
   defp metric_on_stale_routespec(_struct, _cache_metric, _freshness), do: nil

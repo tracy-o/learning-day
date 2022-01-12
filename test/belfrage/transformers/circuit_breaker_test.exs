@@ -8,7 +8,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   test "long_counter with no errors will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{}},
         pipeline: ["CircuitBreaker"],
@@ -29,7 +29,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   test "long_counter with no information at all will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{},
         pipeline: ["CircuitBreaker"],
@@ -50,7 +50,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   test "long_counter containing errors under threshold will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, :errors => 4}},
         pipeline: ["CircuitBreaker"],
@@ -73,7 +73,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
         pipeline: ["CircuitBreaker"],
@@ -96,7 +96,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
         pipeline: ["CircuitBreaker"],
@@ -119,7 +119,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
         pipeline: ["CircuitBreaker"],
@@ -142,7 +142,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
         long_counter: %{
           "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
@@ -169,7 +169,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
         long_counter: %{
           "https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1},
@@ -197,7 +197,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "https://origin.bbc.co.uk/",
           long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
           pipeline: ["CircuitBreaker"],
@@ -223,7 +223,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
 
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "https://origin2.bbc.co.uk/",
           long_counter: %{
             "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},

@@ -1,33 +1,33 @@
-defmodule Belfrage.Loop do
+defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, LoopsRegistry, Struct, RouteSpec, Metrics.Statix, Event}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event}
 
-  @fetch_loop_timeout Application.get_env(:belfrage, :fetch_loop_timeout)
+  @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, RouteSpec.specs_for(name), name: via_tuple(name))
   end
 
-  def state(%Struct{private: %Struct.Private{loop_id: name}}, timeout \\ @fetch_loop_timeout) do
+  def state(%Struct{private: %Struct.Private{route_state_id: name}}, timeout \\ @fetch_route_state_timeout) do
     try do
       GenServer.call(via_tuple(name), :state, timeout)
     catch
       :exit, value ->
-        Statix.increment("loop.state.fetch.timeout", 1, tags: Event.global_dimensions())
+        Statix.increment("route_state.state.fetch.timeout", 1, tags: Event.global_dimensions())
         Kernel.exit(value)
     end
   end
 
   def inc(%Struct{
-        private: %Struct.Private{loop_id: name, origin: origin},
+        private: %Struct.Private{route_state_id: name, origin: origin},
         response: %Struct.Response{http_status: http_status, fallback: fallback}
       }) do
     GenServer.cast(via_tuple(name), {:inc, http_status, origin, fallback})
   end
 
   defp via_tuple(name) do
-    LoopsRegistry.via_tuple({__MODULE__, name})
+    RouteStateRegistry.via_tuple({__MODULE__, name})
   end
 
   # callbacks
@@ -69,7 +69,7 @@ defmodule Belfrage.Loop do
 
   @impl GenServer
   def handle_info(:short_reset, state) do
-    Belfrage.Monitor.record_loop(state)
+    Belfrage.Monitor.record_route_state(state)
     Process.send_after(self(), :short_reset, short_interval())
     state = %{state | counter: Counter.init()}
 

@@ -14,7 +14,7 @@ The struct currently contains five main sections:
     - Example keys: `http_status`:200, `body`: 'Hello! This is the body'
 - Private
     - This section contains data which is not passed down to later services, just for use within Belfrage.
-    - Example keys: `loop_id`: HomePage, `personalised_route`: false
+    - Example keys: `route_state_id`: HomePage, `personalised_route`: false
 - UserSession
     - This section of the struct keeps track of all the information required for a logged in user
     - Example keys: `session_token`: "abc123", `authenticated`: true

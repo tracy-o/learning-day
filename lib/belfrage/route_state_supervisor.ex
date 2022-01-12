@@ -1,4 +1,4 @@
-defmodule Belfrage.LoopsSupervisor do
+defmodule Belfrage.RouteStateSupervisor do
   def start_link(opts) do
     DynamicSupervisor.start_link(
       name: Keyword.get(opts, :name, __MODULE__),
@@ -14,7 +14,7 @@ defmodule Belfrage.LoopsSupervisor do
     }
   end
 
-  def start_loop(supervisor \\ __MODULE__, name) do
+  def start_route_state(supervisor \\ __MODULE__, name) do
     case start_child(supervisor, name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
@@ -33,7 +33,7 @@ defmodule Belfrage.LoopsSupervisor do
   defp start_child(supervisor, name) do
     DynamicSupervisor.start_child(
       supervisor,
-      {Belfrage.Loop, name}
+      {Belfrage.RouteState, name}
     )
   end
 end

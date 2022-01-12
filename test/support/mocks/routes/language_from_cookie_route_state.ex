@@ -1,4 +1,4 @@
-defmodule Routes.Specs.LanguageFromCookieLoop do
+defmodule Routes.Specs.LanguageFromCookieRouteState do
   def specs do
     %{
       owner: "Some person",

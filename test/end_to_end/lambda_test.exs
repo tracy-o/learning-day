@@ -18,7 +18,7 @@ defmodule EndToEnd.LambdaTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
   end
 
   test "a successful response from a lambda e2e" do
@@ -61,7 +61,7 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeLoop"},
+              {"routespec", "SomeRouteState"},
               {"belfrage-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
@@ -110,7 +110,7 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeLoop"},
+              {"routespec", "SomeRouteState"},
               {"belfrage-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)

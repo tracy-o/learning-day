@@ -23,9 +23,9 @@ A webcore match is controlled by three simple rules:
 ```
 
 Fragments match a whitelist of services (news, sport, etc), page types (stories, feeds, etc.) and ids (valid format and valid checksum of the id). 
-Once matched and validated we can dynamically define which loop to call by building the loop name dynamically, eg: `/sport/story/abc123` points to the `sport_story` loop.
+Once matched and validated we can dynamically define which route_state to call by building the route_state name dynamically, eg: `/sport/story/abc123` points to the `sport_story` route_state.
 
-A legacy match is more complex as routes are not very uniform. This will require a list of custom route matchers and an explicit pointer to the corresponding Loop.
+A legacy match is more complex as routes are not very uniform. This will require a list of custom route matchers and an explicit pointer to the corresponding RouteState.
 
 ```
 /mundo                       => :ws_mundo_frontpage
@@ -33,14 +33,14 @@ A legacy match is more complex as routes are not very uniform. This will require
 /sport/a/legacy/page?abc=123 => :sport_project_foo_story
 ```
 
-## Loop
-> input: loop id, output: struct “private” key
+## RouteState
+> input: route_state id, output: struct “private” key
 
-A route matcher points to a loop. A loop keeps a real-time state of a page like, the news frontpage, or the sport stories. Please note that it represent the whole sport stories and not a single story.
+A route matcher points to a route_state. A route_state keeps a real-time state of a page like, the news frontpage, or the sport stories. Please note that it represent the whole sport stories and not a single story.
 
-A loop keeps the state of the page. A loop listens to messages which will update its state with information on errors or response times. 
+A route_state keeps the state of the page. A route_state listens to messages which will update its state with information on errors or response times. 
 
-Internally a loop will return a data structure with an initial set of information regarding the state of the route, like if the page is okay or experiencing problems and which pipeline to call.
+Internally a route_state will return a data structure with an initial set of information regarding the state of the route, like if the page is okay or experiencing problems and which pipeline to call.
 
 ## Pipeline
 > input: struct, output: struct

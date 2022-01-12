@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SomeFablLoop do
+defmodule Routes.Specs.SomeFablRouteState do
   def specs do
     %{
       owner: "Some chap/chapette",

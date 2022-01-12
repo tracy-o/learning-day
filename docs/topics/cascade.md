@@ -64,13 +64,13 @@ Processing a request that must be handled by the cascade works like this:
 
 ![Cascade flow](../img/cascade_flow.png)
 
-* `Belfrage.handle/1` receives a `Struct` with `private.loop_id` containing
+* `Belfrage.handle/1` receives a `Struct` with `private.route_state_id` containing
   list of route specs that should be used by the cascade.
 * The cascade is built by duplicating the received `Struct` for each route spec
   that should be used (this happens in `Belfrage.Cascade.build/1`). The result
   is a `Belfrage.Cascade` struct with a list of items which are `Struct`s each
-  containing a single route spec in `private.loop_id`. The entire list of route
-  specs is stored in `Struct.private.candidate_loop_ids` for each of the
+  containing a single route spec in `private.route_state_id`. The entire list of route
+  specs is stored in `Struct.private.candidate_route_state_ids` for each of the
   `Struct`s.
 * Each `Struct` in the cascade is concurrently "pre-processed" (all necessary
   data is populated) and we attempt to fetch an early response from cache. If

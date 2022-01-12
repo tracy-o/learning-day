@@ -13,11 +13,11 @@ defmodule Mix.Tasks.Routespecs do
 
     routefile.routes()
     |> Enum.uniq_by(fn {_matcher, attrs} -> attrs.using end)
-    |> Enum.map(fn {_matcher, %{using: loop_id}} ->
-      spec = Belfrage.RouteSpec.specs_for(loop_id, env)
+    |> Enum.map(fn {_matcher, %{using: route_state_id}} ->
+      spec = Belfrage.RouteSpec.specs_for(route_state_id, env)
 
       %{
-        "RouteSpec" => loop_id,
+        "RouteSpec" => route_state_id,
         "Platform" => spec.platform,
         "Request Pipeline" => Enum.join(spec.pipeline, ",")
       }

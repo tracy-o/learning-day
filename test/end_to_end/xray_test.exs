@@ -18,7 +18,7 @@ defmodule EndToEnd.XrayTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.LoopsSupervisor.kill_all()
+    Belfrage.RouteStateSupervisor.kill_all()
   end
 
   describe "hitting the webcore lambda" do

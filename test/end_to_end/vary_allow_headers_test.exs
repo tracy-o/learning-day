@@ -5,7 +5,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Routes.Specs.SomeLoopAllowHeaders
+  alias Routes.Specs.SomeRouteStateAllowHeaders
 
   @lambda_response %{
     "headers" => %{
@@ -28,7 +28,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
   describe "when route allows headers" do
     test "vary header contains allow headers" do
-      headers_allowlist = SomeLoopAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
 
       [vary_header] = conn(:get, "/route-allow-headers") |> Router.call([]) |> get_resp_header("vary")
       assert vary_header =~ ",#{headers_allowlist |> Enum.join(",")}"
@@ -40,7 +40,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
     end
 
     test "request hash varies on allow headers of different values" do
-      headers_allowlist = SomeLoopAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
 
       for allow_header <- headers_allowlist do
         [request_hash1] =
@@ -60,7 +60,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
     end
 
     test "request hash does not vary on allow headers of the same value" do
-      headers_allowlist = SomeLoopAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
 
       for allow_header <- headers_allowlist do
         [request_hash1] =

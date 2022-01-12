@@ -11,12 +11,12 @@ defmodule Belfrage.Cascade do
         }
 
   def build(struct = %Struct{private: private = %Private{}}) do
-    loop_ids = List.wrap(private.loop_id)
+    route_state_ids = List.wrap(private.route_state_id)
 
     %__MODULE__{
       items:
-        Enum.map(loop_ids, fn loop_id ->
-          Struct.add(struct, :private, %{loop_id: loop_id, candidate_loop_ids: loop_ids})
+        Enum.map(route_state_ids, fn route_state_id ->
+          Struct.add(struct, :private, %{route_state_id: route_state_id, candidate_route_state_ids: route_state_ids})
         end)
     }
   end

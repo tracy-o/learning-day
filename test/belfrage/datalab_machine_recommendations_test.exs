@@ -71,7 +71,7 @@ defmodule Belfrage.DatalabMachineRecommendationsTest do
   defp make_request(spec) do
     Belfrage.handle(%Struct{
       private: %Private{
-        loop_id: spec
+        route_state_id: spec
       },
       request: %Request{
         path: "/_web_core",

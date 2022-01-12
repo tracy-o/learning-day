@@ -37,7 +37,7 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       struct = %Struct{
         request: %Struct.Request{subdomain: "example-branch"},
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
           preview_mode: "on"
@@ -53,7 +53,7 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       struct = %Struct{
         request: %Struct.Request{subdomain: "example-branch_2"},
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
           preview_mode: "on"
@@ -69,7 +69,7 @@ defmodule Belfrage.Transformers.LambdaOriginAliasTest do
       struct = %Struct{
         request: %Struct.Request{subdomain: "*"},
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
           preview_mode: "on"
