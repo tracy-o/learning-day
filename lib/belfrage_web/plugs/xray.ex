@@ -10,12 +10,12 @@ defmodule BelfrageWeb.Plugs.Xray do
 
   @impl true
   def call(conn = %Plug.Conn{request_path: request_path}, opts) when request_path not in @skip_paths do
-    xray = Keyword.get(opts, :xray_client, Xray)
+    xray = Keyword.get(opts, :xray, Xray)
 
     segment =
       xray.start_tracing("Belfrage")
       |> xray.add_annotations(%{request_id: conn.private.request_id})
-      |> xray.add_metadata(%{xray_client: xray})
+      |> xray.add_metadata(%{xray: xray})
       |> xray.set_http_request(%{method: conn.method, path: request_path})
 
     conn

@@ -12,7 +12,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       conn =
         conn(:get, "/some/route")
         |> Plugs.RequestId.call([])
-        |> Plugs.Xray.call(xray_client: SampleXray)
+        |> Plugs.Xray.call(xray: MockXray)
 
       %{conn: conn}
     end
@@ -22,7 +22,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
         conn(:get, "/status")
         |> Plugs.RequestId.call([])
 
-      assert conn == Plugs.Xray.call(conn, [])
+      assert Plugs.Xray.call(conn, []) == conn
     end
 
     test "puts the segment into the conn", %{conn: conn} do
@@ -57,7 +57,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       |> resp(200, "OK")
       |> send_resp()
 
-      assert_received {:client_mock, data}
+      assert_received {:mock_xray_client_data, data}
       json = Jason.decode!(data)
       assert json["trace_id"]
       assert json["name"] == "Belfrage"

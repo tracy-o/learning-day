@@ -30,6 +30,9 @@ defmodule Belfrage.Metrics.Supervisor do
        [
          measurements: [
            {Metrics.Poolboy, :track_machine_gun_pools, []},
+
+           # Once RESFRAME-4458-non-blocking-ex-ray is merged the line below can
+           # be removed as these pools will exist but are no longer being used
            {Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]},
            {Metrics.Poolboy, :track_pool_aggregates, []}
          ],

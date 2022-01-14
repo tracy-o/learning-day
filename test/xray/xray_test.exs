@@ -106,9 +106,9 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can be sent", %{segment: segment} do
-      Xray.send(segment, ClientMock)
+      Xray.send(segment, MockXrayClient)
 
-      assert_received {:client_mock, json_string}
+      assert_received {:mock_xray_client_data, json_string}
       json = Jason.decode!(json_string)
 
       assert json["trace_id"]
@@ -146,8 +146,8 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can't be sent", %{segment: segment} do
-      Xray.send(segment, ClientMock)
-      refute_receive {:client_mock, _data}
+      Xray.send(segment, MockXrayClient)
+      refute_receive {:mock_xray_client_data, _data}
     end
   end
 
@@ -223,9 +223,9 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can be sent", %{subsegment: subsegment} do
-      Xray.send(subsegment, ClientMock)
+      Xray.send(subsegment, MockXrayClient)
 
-      assert_received {:client_mock, json_string}
+      assert_received {:mock_xray_client_data, json_string}
       json = Jason.decode!(json_string)
 
       assert json["trace_id"]

@@ -22,9 +22,12 @@ defmodule Belfrage.Xray.TelemetryTest do
 
       Xray.Telemetry.setup()
 
-      Belfrage.Metrics.duration(~w(webcore request)a, %{struct: struct, client: ClientMock}, fn -> Process.sleep(1) end)
-      assert_received {:client_mock, webcore_subsegment}
-      assert_received {:client_mock, lambda_subsegment}
+      Belfrage.Metrics.duration(~w(webcore request)a, %{struct: struct, client: MockXrayClient}, fn ->
+        Process.sleep(1)
+      end)
+
+      assert_received {:mock_xray_client_data, webcore_subsegment}
+      assert_received {:mock_xray_client_data, lambda_subsegment}
 
       webcore_subsegment = Jason.decode!(webcore_subsegment)
       lambda_subsegment = Jason.decode!(lambda_subsegment)

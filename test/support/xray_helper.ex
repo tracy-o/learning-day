@@ -5,13 +5,13 @@ defmodule Belfrage.Test.XrayHelper do
     quote do
       import Belfrage.Test.XrayHelper, only: [build_segment: 1]
 
-      defmodule ClientMock do
+      defmodule MockXrayClient do
         def send(data) do
-          send(self(), {:client_mock, data})
+          send(self(), {:mock_xray_client_data, data})
         end
       end
 
-      defmodule SampleXray do
+      defmodule MockXray do
         alias AwsExRay.{Trace, Segment}
 
         def start_tracing(name), do: build_segment(sampled: true, name: name)
@@ -25,7 +25,7 @@ defmodule Belfrage.Test.XrayHelper do
         defdelegate build_trace_id_header(segment), to: Belfrage.Xray
         defdelegate finish(segment), to: Belfrage.Xray
         defdelegate finish(subsegment, end_time), to: Belfrage.Xray
-        def send(segment), do: Belfrage.Xray.send(segment, ClientMock)
+        def send(segment), do: Belfrage.Xray.send(segment, MockXrayClient)
       end
     end
   end

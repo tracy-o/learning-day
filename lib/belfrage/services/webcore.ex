@@ -6,10 +6,6 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Xray
 
   @behaviour Service
-<<<<<<< HEAD
-=======
-
->>>>>>> dec6a3a7... introduces a new way to record xray subsegments through telemetry metrics:
   @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
