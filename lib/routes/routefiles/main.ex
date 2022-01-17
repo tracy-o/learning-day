@@ -240,6 +240,12 @@ defroutefile "Main" do
 
   handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/results"]
 
+  handle "/news/election/2022/:polity/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/results", "/news/election/2022/scotland/results", "/news/election/2022/wales/results"] do
+    return_404 if: [
+      !String.match?(polity, ~r/^(england|scotland|wales)$/)
+    ]
+  end
+
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
