@@ -178,7 +178,7 @@ defmodule Belfrage.Xray do
   defp struct_annotations(struct) do
     %{
       "owner" => struct.private.owner,
-      "loop_id" => struct.private.loop_id,
+      "route_state_id" => struct.private.route_state_id,
       "preview_mode" => struct.private.preview_mode,
       "production_environment" => struct.private.production_environment,
       "runbook" => struct.private.runbook

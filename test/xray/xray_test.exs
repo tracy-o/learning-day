@@ -14,7 +14,7 @@ defmodule Belfrage.XrayTest do
   @test_struct %Struct{
     private: %Private{
       owner: "me!",
-      loop_id: "some_id",
+      route_state_id: "some_id",
       preview_mode: "off",
       production_environment: "test",
       runbook: "https://some.runbook/url"
@@ -42,7 +42,7 @@ defmodule Belfrage.XrayTest do
 
       assert segment.annotation == %{
                "owner" => "me!",
-               "loop_id" => "some_id",
+               "route_state_id" => "some_id",
                "preview_mode" => "off",
                "production_environment" => "test",
                "runbook" => "https://some.runbook/url"
@@ -168,7 +168,7 @@ defmodule Belfrage.XrayTest do
 
       assert subsegment.segment.annotation == %{
                "owner" => "me!",
-               "loop_id" => "some_id",
+               "route_state_id" => "some_id",
                "preview_mode" => "off",
                "production_environment" => "test",
                "runbook" => "https://some.runbook/url"
