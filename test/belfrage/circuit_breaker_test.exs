@@ -19,7 +19,7 @@ defmodule Belfrage.CircuitBreakerTest do
     test "if treshold exceeeded and dial on, circuit breaker applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 10)
 
-      {:active, output_struct} = CircuitBreaker.apply_circuit_breaker?(input_struct, true)
+      {:active, output_struct} = CircuitBreaker.apply?(input_struct, true)
 
       assert %Struct{
                response: %Response{http_status: 500},
@@ -30,21 +30,21 @@ defmodule Belfrage.CircuitBreakerTest do
     test "if treshold exceeeded and dial off, circuit breaker not applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 10)
 
-      assert {:inactive, output_struct} = CircuitBreaker.apply_circuit_breaker?(input_struct, false)
+      assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, false)
       assert input_struct == output_struct
     end
 
     test "if below threshold and dial on, circuit breaker not applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 1)
 
-      assert {:inactive, output_struct} = CircuitBreaker.apply_circuit_breaker?(input_struct, true)
+      assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, true)
       assert input_struct == output_struct
     end
 
     test "if below threshold and dial off, circuit breaker not applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 1)
 
-      assert {:inactive, output_struct} = CircuitBreaker.apply_circuit_breaker?(input_struct, false)
+      assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, false)
       assert input_struct == output_struct
     end
   end

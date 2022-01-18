@@ -1,15 +1,15 @@
 defmodule Belfrage.CircuitBreaker do
   alias Belfrage.Struct
 
-  def apply_circuit_breaker?(struct, dial_enabled?) do
+  def apply?(struct, dial_enabled?) do
     if dial_enabled? and threshold_exceeded?(struct) do
-      {:active, circuit_breaker_active(struct)}
+      {:active, active(struct)}
     else
       {:inactive, struct}
     end
   end
 
-  defp circuit_breaker_active(struct = %Belfrage.Struct{}) do
+  defp active(struct = %Belfrage.Struct{}) do
     Belfrage.Event.record(:metric, :increment, "circuit_breaker.active")
 
     struct
