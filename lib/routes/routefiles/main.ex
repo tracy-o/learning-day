@@ -429,7 +429,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
+  handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
