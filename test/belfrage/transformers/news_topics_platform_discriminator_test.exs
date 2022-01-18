@@ -32,9 +32,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   }
 
   setup do
-    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
-      Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
-    end)
+    stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
 
     :ok
   end
