@@ -5,6 +5,23 @@ defmodule Belfrage.CircuitBreakerTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Response, Private}
 
+  describe "next_throughput/2" do
+    test "next throughput is 0 when threshold is exceeded" do
+      for t <- [0, 10, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t) == 0)
+    end
+
+    test "next throughput remains the same when at the maximum, and threshold is not exceeded" do
+      assert CircuitBreaker.next_throughput(false, 100) == 100
+    end
+
+    test "next throughput is as expected when not at the maximum, and threshold is not exceeded" do
+      assert CircuitBreaker.next_throughput(false, 0) == 10
+      assert CircuitBreaker.next_throughput(false, 10) == 20
+      assert CircuitBreaker.next_throughput(false, 20) == 60
+      assert CircuitBreaker.next_throughput(false, 60) == 100
+    end
+  end
+
   describe "apply_circuit_breaker/2" do
     def build_struct(error_threshold: error_threshold, error_count: error_count) do
       %Struct{
