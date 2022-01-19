@@ -234,16 +234,29 @@ defroutefile "Main" do
 
   handle "/news/election/2017/northern-ireland/constituencies", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies"]
 
-  handle "/news/election/2017/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001"] do
-    return_404 if: !String.match?(division_id, ~r/^N[0-9]{8}$/)
-  end
-
   handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/results"]
 
   handle "/news/election/2022/:polity/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/results", "/news/election/2022/scotland/results", "/news/election/2022/wales/results"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/)
     ]
+  end
+
+  handle "/news/election/:year/northern-ireland/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001", "/news/election/2022/northern-ireland/constituencies/N06000001"] do
+    return_404 if: [
+                 !String.match?(year, ~r/^20(17|22)$/),
+                 !String.match?(division_name, ~r/^(constituencies)$/),
+                 !String.match?(division_id, ~r/^[N][0-9]{8}$/)
+               ]
+  end
+
+  handle "/news/election/:year/:polity/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/councils/E06000001", "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/S06000001"] do
+    return_404 if: [
+                 !String.match?(year, ~r/^20(22)$/),
+                 !String.match?(polity, ~r/^(england|wales|scotland)$/),
+                 !String.match?(division_name, ~r/^(councils)$/),
+                 !String.match?(division_id, ~r/^[SWE][0-9]{8}$/)
+               ]
   end
 
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
@@ -430,6 +443,14 @@ defroutefile "Main" do
   end
 
   handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
+
+  handle "/cymrufyw/etholiad/:year/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor/W10000006"] do
+    return_404 if: [
+                 !String.match?(year, ~r/^20(22)$/),
+                 !String.match?(division_name, ~r/^(cygnor)$/),
+                 !String.match?(division_id, ~r/^[W][0-9]{8}$/)
+               ]
+  end
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
