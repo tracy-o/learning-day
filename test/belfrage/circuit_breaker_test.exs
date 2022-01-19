@@ -33,7 +33,7 @@ defmodule Belfrage.CircuitBreakerTest do
       }
     end
 
-    test "if treshold exceeeded and dial on, circuit breaker applied" do
+    test "if threshold exceeeded and dial on, circuit breaker applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 10)
 
       {:active, output_struct} = CircuitBreaker.apply?(input_struct, true)
@@ -44,7 +44,7 @@ defmodule Belfrage.CircuitBreakerTest do
              } = output_struct
     end
 
-    test "if treshold exceeeded and dial off, circuit breaker not applied" do
+    test "if threshold exceeeded and dial off, circuit breaker not applied" do
       input_struct = build_struct(error_threshold: 5, error_count: 10)
 
       assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, false)
