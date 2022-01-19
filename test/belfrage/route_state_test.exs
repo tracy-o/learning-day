@@ -115,11 +115,9 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets counter after a specific time" do
-    # Set the interval just for this specifc test and restart the route_state
-    stop_route_state()
+    # Set the interval just for this specifc test
     interval = 100
     set_env(:short_counter_reset_interval, interval)
-    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -132,11 +130,9 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets long_counter after a specific time" do
-    # Set the interval just for this specifc test and restart the route_state
-    stop_route_state()
+    # Set the interval just for this specifc test
     interval = 100
     set_env(:long_counter_reset_interval, interval)
-    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -183,13 +179,6 @@ defmodule Belfrage.RouteStateTest do
 
   defp start_route_state() do
     start_supervised!({RouteState, @route_state_id})
-  end
-
-  defp stop_route_state() do
-    # TODO: Replace with stop_supervised! once we upgrade to Elixir 1.12.
-    # stop_supervisor currently returns an error if the process that is stopped
-    # is temporary, like the route_state process here.
-    stop_supervised(RouteState)
   end
 
   defp set_env(name, value) do
