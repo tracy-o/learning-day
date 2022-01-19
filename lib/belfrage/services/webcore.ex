@@ -3,10 +3,9 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
+  alias Belfrage.Xray
 
   @behaviour Service
-
-  @xray Application.get_env(:belfrage, :xray)
   @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
@@ -31,22 +30,26 @@ defmodule Belfrage.Services.Webcore do
   end
 
   defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
-    @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
-      Metrics.duration(~w(webcore request)a, %{route_spec: private.route_state_id}, fn ->
-        @lambda_client.call(
-          Webcore.Credentials.get(),
-          private.origin,
-          Webcore.Request.build(struct),
-          request.request_id,
-          lambda_options(struct.request)
-        )
-      end)
+    metadata = %{
+      route_spec: private.route_state_id,
+      struct: struct
+    }
+
+    Metrics.duration(~w(webcore request)a, metadata, fn ->
+      @lambda_client.call(
+        Webcore.Credentials.get(),
+        private.origin,
+        Webcore.Request.build(struct),
+        request.request_id,
+        lambda_options(struct.request)
+      )
     end)
   end
 
   defp lambda_options(request = %Struct.Request{}) do
-    if request.xray_trace_id do
-      [xray_trace_id: request.xray_trace_id]
+    if request.xray_segment do
+      trace_id = Xray.build_trace_id_header(request.xray_segment)
+      [xray_trace_id: trace_id]
     else
       []
     end

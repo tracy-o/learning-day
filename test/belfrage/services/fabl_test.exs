@@ -5,6 +5,7 @@ defmodule Belfrage.Services.FablTest do
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  use Belfrage.Test.XrayHelper
 
   @get_struct %Struct{
     private: %Struct.Private{
@@ -19,7 +20,6 @@ defmodule Belfrage.Services.FablTest do
       raw_headers: %{
         "a-header" => "a value"
       },
-      xray_trace_id: "xxxx-yyyyyyyyyy-1",
       req_svc_chain: "BELFRAGE"
     }
   }
@@ -252,37 +252,21 @@ defmodule Belfrage.Services.FablTest do
              url: _url,
              payload: _payload,
              headers: %{
-               "x-amzn-trace-id" => "xxxx-yyyyyyyyyy-1",
+               "x-amzn-trace-id" => trace_id,
                "accept-encoding" => "gzip",
                "user-agent" => "Belfrage",
                "req-svc-chain" => "BELFRAGE"
              }
            },
            :Fabl ->
+          assert trace_id
           @ok_response
         end
       )
 
-      Fabl.dispatch(@get_struct)
+      struct = put_in(@get_struct.request.xray_segment, build_segment(sampled: true))
+      Fabl.dispatch(struct)
     end
-
-    @get_nil_xray_struct %Struct{
-      private: %Struct.Private{
-        origin: "https://fabl.test.api.bbci.co.uk"
-      },
-      request: %Struct.Request{
-        method: "GET",
-        path: "/fd/example-module",
-        path_params: %{
-          "name" => "example-module"
-        },
-        raw_headers: %{
-          "a-header" => "a value"
-        },
-        xray_trace_id: nil,
-        req_svc_chain: "BELFRAGE"
-      }
-    }
 
     test "does not pass nil xray-trace-id " do
       Clients.HTTPMock
@@ -300,7 +284,7 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      Fabl.dispatch(@get_nil_xray_struct)
+      Fabl.dispatch(@get_struct)
     end
   end
 end

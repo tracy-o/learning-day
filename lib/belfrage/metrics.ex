@@ -5,10 +5,12 @@ defmodule Belfrage.Metrics do
   """
 
   @type event_name :: atom() | [atom()]
+  @type start_time :: integer()
   @type measurements :: map()
   @type metadata :: map()
 
   @event_prefix :belfrage
+  @time_unit :nanosecond
 
   @doc """
   Record a measurement. Name can be an atom or a list of atoms if the
@@ -29,7 +31,7 @@ defmodule Belfrage.Metrics do
   """
   @spec duration(event_name(), metadata(), fun()) :: any()
   def duration(name, metadata, func) do
-    start_time = System.monotonic_time()
+    start_time = System.monotonic_time(@time_unit)
     result = func.()
     stop(name, start_time, metadata)
     result
@@ -47,11 +49,14 @@ defmodule Belfrage.Metrics do
   be the result of calling `System.monotonic_time/0` at the beginning of the
   event span.
   """
-  @spec stop(event_name(), start_time :: integer(), metadata()) :: :ok
+  @spec stop(event_name(), start_time(), metadata()) :: :ok
   def stop(name, start_time, metadata \\ %{}) do
+    duration = System.monotonic_time(@time_unit) - start_time
+    os_start_time = System.os_time(@time_unit) - duration
+
     name
     |> suffix_name(:stop)
-    |> event(%{duration: System.monotonic_time() - start_time}, metadata)
+    |> event(%{duration: duration, start_time: os_start_time}, metadata)
   end
 
   defp event(name, measurements, metadata) do
