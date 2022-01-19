@@ -242,17 +242,17 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/:year/northern-ireland/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: [ "/news/election/2017/northern-ireland/constituencies/N06000001"] do
+  handle "/news/election/:year/northern-ireland/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: [ "/news/election/2017/northern-ireland/constituencies/N06000001", "/news/election/2022/northern-ireland/constituencies/N06000001"] do
     return_404 if: [
-                 !String.match?(year, ~r/^(2017|2022)$/),
+                 !String.match?(year, ~r/^20(17|22)$/),
                  !String.match?(division_name, ~r/^(constituencies)$/),
                  !String.match?(division_id, ~r/^[N][0-9]{8}$/)
                ]
   end
 
-  handle "/news/election/:year/:polity/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: [  "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/W06000001"] do
+  handle "/news/election/:year/:polity/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: [  "/news/election/2022/england/councils/E06000001", "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/W06000001"] do
     return_404 if: [
-                 !String.match?(year, ~r/^20(16|22)$/),
+                 !String.match?(year, ~r/^20(22)$/),
                  !String.match?(polity, ~r/^(england|wales|scotland)$/),
                  !String.match?(division_name, ~r/^(councils)$/),
                  !String.match?(division_id, ~r/^[SWE][0-9]{8}$/)
@@ -443,6 +443,14 @@ defroutefile "Main" do
   end
 
   handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
+
+  handle "/cymrufyw/etholiad/:year/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: [  "/cymrufyw/etholiad/2022/cymru/canlyniadau/W10000006", ] do
+    return_404 if: [
+                 !String.match?(year, ~r/^20(22)$/),
+                 !String.match?(division_name, ~r/^(canlyniadau)$/),
+                 !String.match?(division_id, ~r/^[W][0-9]{8}$/)
+               ]
+  end
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
