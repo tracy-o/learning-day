@@ -31,3 +31,6 @@ priv/cert/*
 #log when running tests
 local.log
 cloudwatch.log
+
+#IntelliJ based IDEs
+.idea/
