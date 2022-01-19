@@ -84,7 +84,8 @@ defmodule Belfrage.Struct.Private do
             personalised_request: false,
             caching_enabled: true,
             features: %{},
-            language_from_cookie: false
+            language_from_cookie: false,
+            throughput: 100
 
   @type t :: %__MODULE__{}
 end

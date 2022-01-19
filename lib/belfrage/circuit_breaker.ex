@@ -17,11 +17,17 @@ defmodule Belfrage.CircuitBreaker do
     |> Struct.add(:private, %{origin: :belfrage_circuit_breaker})
   end
 
-  defp threshold_exceeded?(struct = %Belfrage.Struct{}) do
-    error_count(struct) > struct.private.circuit_breaker_error_threshold
+  def threshold_exceeded?(%Struct{
+        private: %{origin: origin, long_counter: counts, circuit_breaker_error_threshold: threshold}
+      }) do
+    error_count(origin, counts) > threshold
   end
 
-  defp error_count(%Struct{private: %{origin: origin, long_counter: counts}}) do
+  def threshold_exceeded?(%{origin: origin, long_counter: counts, circuit_breaker_error_threshold: threshold}) do
+    error_count(origin, counts) > threshold
+  end
+
+  defp error_count(origin, counts) do
     parse_count(get_in(counts, [origin, :errors]))
   end
 
