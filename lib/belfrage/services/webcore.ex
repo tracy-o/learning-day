@@ -55,7 +55,7 @@ defmodule Belfrage.Services.Webcore do
     end
   end
 
-  defp build_response(response = %{"body" => body, "headers" => headers, "statusCode" => status_code}) do
+  def build_response(response = %{"body" => body, "headers" => headers, "statusCode" => status_code}) do
     headers =
       headers
       |> Enum.map(fn {key, value} -> {key, to_string(value)} end)
@@ -78,7 +78,7 @@ defmodule Belfrage.Services.Webcore do
      }}
   end
 
-  defp build_response(invalid_response) do
+  def build_response(invalid_response) do
     Event.record(:log, :debug, %{
       msg: "Received an invalid response from web core",
       web_core_response: invalid_response
