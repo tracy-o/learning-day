@@ -111,15 +111,12 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     }
   end
 
-  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id in @webcore_ids do
-    then_do(
-      ["Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"],
+  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id not in @webcore_ids do
+    then(
+      ["CircuitBreaker"],
       Struct.add(struct, :private, %{
-        platform: Webcore,
-        origin: Application.get_env(:belfrage, :pwa_lambda_function)
+        platform: MozartNews
       })
     )
   end
-
-  def call(_rest, struct), do: then_do(["CircuitBreaker"], struct)
 end
