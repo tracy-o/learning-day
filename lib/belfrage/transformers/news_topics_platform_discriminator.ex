@@ -1,6 +1,6 @@
 defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   @moduledoc """
-  Alters the Platform and Origin for a subset of News Topics IDs that need to be served by Webcore.
+  Alters the Platform for a subset of News Topics IDs that need to be served by Mozart.
   """
   use Belfrage.Transformers.Transformer
 
