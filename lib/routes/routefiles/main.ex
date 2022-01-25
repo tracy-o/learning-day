@@ -232,15 +232,19 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/2017/northern-ireland/constituencies", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies"]
-
-  handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/results"]
-
-  handle "/news/election/2022/:polity/:division_name", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/results", "/news/election/2022/scotland/results", "/news/election/2022/wales/results", "/news/election/2022/england/councils", "/news/election/2022/scotland/councils", "/news/election/2022/wales/councils"] do
+  handle "/news/election/:year/:polity/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/results", "/news/election/2022/scotland/results", "/news/election/2022/wales/results", "/news/election/2017/northern-ireland/results"] do
     return_404 if: [
-                 !String.match?(polity, ~r/^(england|scotland|wales)$/),
-                 !String.match?(division_name, ~r/^(councils|results)$/),
+                 !String.match?(year, ~r/^20(17|22)$/),
+                 !String.match?(polity, ~r/^(england|scotland|wales|northern-ireland)$/)
                ]
+  end
+
+  handle "/news/election/:year/:polity/:division_name", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies", "/news/election/2022/england/councils", "/news/election/2022/scotland/councils", "/news/election/2022/wales/councils"] do
+    return_404 if: [
+       !String.match?(year, ~r/^20(17|22)$/),
+       !String.match?(polity, ~r/^(england|scotland|wales|northern-ireland)$/),
+       !String.match?(division_name, ~r/^(constituencies|councils)$/)
+    ]
   end
 
   handle "/news/election/:year/northern-ireland/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001", "/news/election/2022/northern-ireland/constituencies/N06000001"] do
