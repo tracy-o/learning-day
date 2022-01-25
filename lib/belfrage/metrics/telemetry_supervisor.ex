@@ -182,7 +182,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
 
   defp plug_metrics() do
     metrics = [
-      counter(
+      summary(
         "belfrage.request.duration",
         event_name: "belfrage.plug.stop",
         tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
