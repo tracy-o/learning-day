@@ -55,6 +55,9 @@ defmodule Belfrage.Services.Webcore.RequestTest do
         query_params: %{
           "q" => "something"
         }
+      },
+      private: %Struct.Private{
+        route_state_id: "HomePage"
       }
     }
 
@@ -72,7 +75,14 @@ defmodule Belfrage.Services.Webcore.RequestTest do
   test "builds a non-personalised request", %{unauthenticated_session: struct} do
     assert %{
              body: nil,
-             headers: %{"accept-encoding": "gzip", country: nil, host: "bbc.co.uk", is_uk: nil, language: nil},
+             headers: %{
+               "accept-encoding": "gzip",
+               country: nil,
+               host: "bbc.co.uk",
+               is_uk: nil,
+               language: nil,
+               "ctx-route-spec": "HomePage"
+             },
              httpMethod: nil,
              path: "/_web_core/12345",
              pathParameters: %{
@@ -85,7 +95,14 @@ defmodule Belfrage.Services.Webcore.RequestTest do
   test "when session is invalid", %{invalid_session: struct} do
     assert %{
              body: nil,
-             headers: %{"accept-encoding": "gzip", country: nil, host: "bbc.co.uk", is_uk: nil, language: nil},
+             headers: %{
+               "accept-encoding": "gzip",
+               country: nil,
+               host: "bbc.co.uk",
+               is_uk: nil,
+               language: nil,
+               "ctx-route-spec": "HomePage"
+             },
              httpMethod: nil,
              path: "/_web_core/12345",
              pathParameters: %{
@@ -108,7 +125,8 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "x-authentication-provider": "idv5",
                "pers-env": "int",
                "ctx-pii-age-bracket": "o18",
-               "ctx-pii-allow-personalisation": "true"
+               "ctx-pii-allow-personalisation": "true",
+               "ctx-route-spec": "HomePage"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -130,7 +148,8 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                language: nil,
                authorization: "Bearer a-valid-session-token",
                "x-authentication-provider": "idv5",
-               "pers-env": "int"
+               "pers-env": "int",
+               "ctx-route-spec": "HomePage"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -154,7 +173,8 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                language: nil,
                authorization: "Bearer a-valid-session-token",
                "x-authentication-provider": "idv5",
-               "pers-env": "int"
+               "pers-env": "int",
+               "ctx-route-spec": "HomePage"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
