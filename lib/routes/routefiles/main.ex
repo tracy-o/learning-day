@@ -447,16 +447,12 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/cymrufyw/etholiad/:year/cymru/:division_name", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau", "/cymrufyw/etholiad/2022/cymru/cygnor"] do
-    return_404 if: [
-                 !String.match?(year, ~r/^20(22)$/),
-                 !String.match?(division_name, ~r/^(cygnor|canlyniadau)$/),
-               ]
-  end
+  handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
 
-  handle "/cymrufyw/etholiad/:year/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor/W10000006"] do
+  handle "/cymrufyw/etholiad/2022/cymru/cygnor", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor"]
+
+  handle "/cymrufyw/etholiad/2022/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor/W10000006"] do
     return_404 if: [
-                 !String.match?(year, ~r/^20(22)$/),
                  !String.match?(division_name, ~r/^(cygnor)$/),
                  !String.match?(division_id, ~r/^[W][0-9]{8}$/)
                ]
