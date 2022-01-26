@@ -20,13 +20,14 @@ defmodule Belfrage.Services.Webcore.Request do
     |> put_feature_header(struct.private)
   end
 
-  defp base_headers(%Struct{request: request = %Request{}}) do
+  defp base_headers(%Struct{request: request = %Request{}, private: private = %Private{}}) do
     %{
       country: request.country,
       language: request.language,
       "accept-encoding": "gzip",
       is_uk: request.is_uk,
-      host: request.host
+      host: request.host,
+      "ctx-route-spec": private.route_state_id
     }
   end
 
