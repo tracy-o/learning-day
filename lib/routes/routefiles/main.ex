@@ -450,7 +450,7 @@ defroutefile "Main" do
   handle "/cymrufyw/etholiad/:year/cymru/:division_name", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau", "/cymrufyw/etholiad/2022/cymru/cygnor"] do
     return_404 if: [
                  !String.match?(year, ~r/^20(22)$/),
-                 !String.match?(division_name, ~r/^(cygnor||canlyniadau)$/),
+                 !String.match?(division_name, ~r/^(cygnor|canlyniadau)$/),
                ]
   end
 
