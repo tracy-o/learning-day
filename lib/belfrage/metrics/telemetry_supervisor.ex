@@ -26,6 +26,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       poolboy_metrics() ++
       latency_metrics() ++
       request_metrics() ++
+      route_state_metrics() ++
       cache_metrics() ++
       service_metrics() ++
       plug_metrics()
@@ -117,6 +118,14 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         tags: [:BBCEnvironment]
       )
     end)
+  end
+
+  defp route_state_metrics() do
+    last_value("circuit_breaker.throughput",
+      measurement: :throughput,
+      event_name: "belfrage.circuit_breaker.throughput",
+      tags: [:BBCEnvironment, :route_spec]
+    )
   end
 
   defp cache_metrics() do

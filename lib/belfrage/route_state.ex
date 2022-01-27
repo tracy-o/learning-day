@@ -86,6 +86,10 @@ defmodule Belfrage.RouteState do
       |> CircuitBreaker.threshold_exceeded?()
       |> CircuitBreaker.next_throughput(throughput)
 
+    Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{thoughput: next_throughput}, %{
+      route_spec: state.route_state_id
+    })
+
     state = %{state | long_counter: Counter.init(), throughput: next_throughput}
     {:noreply, state}
   end
