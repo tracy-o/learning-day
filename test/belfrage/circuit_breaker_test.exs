@@ -22,7 +22,7 @@ defmodule Belfrage.CircuitBreakerTest do
     end
   end
 
-  describe "apply?/2" do
+  describe "maybe_activate/2" do
     def build_struct(throughput) do
       %Struct{
         private: %Private{
@@ -35,14 +35,14 @@ defmodule Belfrage.CircuitBreakerTest do
     test "if throughput is 0 and dial off, circuit breaker not applied" do
       input_struct = build_struct(0)
 
-      assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, false)
+      assert {:inactive, output_struct} = CircuitBreaker.maybe_activate(input_struct, false)
       assert input_struct == output_struct
     end
 
     test "if throughput is 100 and dial off, circuit breaker not applied" do
       input_struct = build_struct(100)
 
-      assert {:inactive, output_struct} = CircuitBreaker.apply?(input_struct, false)
+      assert {:inactive, output_struct} = CircuitBreaker.maybe_activate(input_struct, false)
       assert input_struct == output_struct
     end
 
@@ -71,8 +71,8 @@ defmodule Belfrage.CircuitBreakerTest do
         throughput
         |> build_struct()
         |> List.duplicate(no_of_structs)
-        |> Enum.map(&CircuitBreaker.apply?/1)
-        |> Enum.count(&CircuitBreaker.applied?/1)
+        |> Enum.map(&CircuitBreaker.maybe_activate/1)
+        |> Enum.count(&CircuitBreaker.activated?/1)
         |> round_to_nearest_multiple(round_to)
 
       applied / no_of_structs

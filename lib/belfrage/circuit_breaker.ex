@@ -1,8 +1,9 @@
 defmodule Belfrage.CircuitBreaker do
   alias Belfrage.Struct
+  import Enum, only: [random: 1]
 
-  def apply?(struct, dial_enabled? \\ true) do
-    if dial_enabled? and not sampled?(struct) do
+  def maybe_activate(struct, dial_enabled? \\ true) do
+    if activate?(struct, dial_enabled?) do
       {:active, active(struct)}
     else
       {:inactive, struct}
@@ -54,11 +55,11 @@ defmodule Belfrage.CircuitBreaker do
     throughput == 100
   end
 
-  defp sampled?(struct) do
-    Enum.random(1..100) <= struct.private.throughput
+  defp activate?(struct, dial_enabled?) do
+    dial_enabled? and random(1..100) > struct.private.throughput
   end
 
-  def applied?({active_or_inactive, _}) do
+  def activated?({active_or_inactive, _}) do
     case active_or_inactive do
       :active -> true
       :inactive -> false
