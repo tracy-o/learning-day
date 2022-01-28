@@ -7,7 +7,7 @@ defmodule Belfrage.CircuitBreakerTest do
 
   describe "next_throughput/2" do
     test "next throughput is 0 when threshold is exceeded" do
-      for t <- [0, 10, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t) == 0)
+      for t <- [0, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t) == 0)
     end
 
     test "next throughput remains the same when at the maximum, and threshold is not exceeded" do
@@ -15,8 +15,7 @@ defmodule Belfrage.CircuitBreakerTest do
     end
 
     test "next throughput is as expected when not at the maximum, and threshold is not exceeded" do
-      assert CircuitBreaker.next_throughput(false, 0) == 10
-      assert CircuitBreaker.next_throughput(false, 10) == 20
+      assert CircuitBreaker.next_throughput(false, 0) == 20
       assert CircuitBreaker.next_throughput(false, 20) == 60
       assert CircuitBreaker.next_throughput(false, 60) == 100
     end
@@ -48,10 +47,6 @@ defmodule Belfrage.CircuitBreakerTest do
 
     test "if throughput is 0 and dial on, circuit breaker applied to 100% of structs (nearest 10%)" do
       assert check_cb_applied(0) == 1.0
-    end
-
-    test "if throughput is 10 and dial on, circuit breaker applied to 90% of structs (nearest 10%)" do
-      assert check_cb_applied(10) == 0.9
     end
 
     test "if throughput is 20 and dial on, circuit breaker applied to 80% of structs (nearest 10%)" do

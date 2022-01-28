@@ -214,10 +214,6 @@ defmodule Belfrage.RouteStateTest do
 
       send(pid, :long_reset, [])
 
-      assert match?(%{throughput: 10}, :sys.get_state(pid))
-
-      send(pid, :long_reset, [])
-
       assert match?(%{throughput: 20}, :sys.get_state(pid))
 
       send(pid, :long_reset, [])
