@@ -18,16 +18,27 @@ defmodule Belfrage.Personalisation do
     end
   end
 
-  def personalised_request?(%Struct{request: request = %Request{}, private: private = %Private{}}) do
+  def personalised_request?(%Struct{
+        request: request = %Request{},
+        private: private = %Private{route_state_id: route_state_id}
+      }) do
     private.personalised_route &&
-      enabled?() &&
+      enabled?(route_state_id: route_state_id) &&
       applicable_request?(request) &&
       SessionState.authenticated?(request)
   end
 
   def enabled?(opts \\ []) do
+    route_state_id = Keyword.get(opts, :route_state_id, :no_route_state_id)
     bbc_id = Keyword.get(opts, :bbc_id, BBCID)
-    @dial.state(:personalisation) && bbc_id.available?()
+
+    case route_state_id do
+      PersonalisedContainerData ->
+        @dial.state(:news_articles_personalisation) && @dial.state(:personalisation) && bbc_id.available?()
+
+      _ ->
+        @dial.state(:personalisation) && bbc_id.available?()
+    end
   end
 
   defp production_environment() do
