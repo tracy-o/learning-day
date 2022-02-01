@@ -11,7 +11,7 @@ defmodule Belfrage.CircuitBreaker do
   end
 
   defp apply(struct = %Belfrage.Struct{}) do
-    Belfrage.Event.record(:metric, :increment, "circuit_breaker.applied")
+    Belfrage.Metrics.event(~w(circuit_breaker applied)a, %{route_spec: struct.private.route_state_id})
 
     struct
     |> Struct.add(:response, %{http_status: 500})
