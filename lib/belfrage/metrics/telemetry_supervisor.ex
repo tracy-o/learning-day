@@ -121,11 +121,13 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp route_state_metrics() do
-    last_value("circuit_breaker.throughput",
-      measurement: :throughput,
-      event_name: "belfrage.circuit_breaker.throughput",
-      tags: [:BBCEnvironment, :route_spec]
-    )
+    [
+      last_value("circuit_breaker.throughput",
+        measurement: :throughput,
+        event_name: "belfrage.circuit_breaker.throughput",
+        tags: [:BBCEnvironment, :route_spec]
+      )
+    ]
   end
 
   defp cache_metrics() do
