@@ -22,7 +22,9 @@ defmodule Belfrage.Xray do
 
   @spec start_subsegment(Trace.t(), name) :: Subsegment.t()
   def start_subsegment(segment = %Segment{}, name) do
-    if_sampled(segment, fn -> Subsegment.new(segment.trace, name, :none) end)
+    if_sampled(segment, fn ->
+      Subsegment.new(%{segment.trace | parent: segment.id}, name, :none)
+    end)
   end
 
   @spec set_start_time(Subsegment.t(), float()) :: Subsegment.t()

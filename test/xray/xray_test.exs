@@ -158,6 +158,12 @@ defmodule Belfrage.XrayTest do
       %{subsegment: subsegment}
     end
 
+    test "which has been started, contains a the id of its parent segment" do
+      parent_segment = build_segment(sampled: true)
+      subsegment = Xray.start_subsegment(parent_segment, "test_subsegment")
+      assert subsegment.segment.trace.parent == parent_segment.id
+    end
+
     test "can be annotated", %{subsegment: subsegment} do
       subsegment = Xray.add_annotations(subsegment, %{hello: "there"})
       assert subsegment.segment.annotation == %{hello: "there"}
