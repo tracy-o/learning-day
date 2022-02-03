@@ -202,9 +202,10 @@ defmodule Belfrage.Services.Webcore.RequestTest do
         production_environment: "live"
       }
     }
+
     refute Request.build(struct_with_environment)
-    |> Map.get(:headers)
-    |> Map.has_key?("mvt-box_colour_change")
+           |> Map.get(:headers)
+           |> Map.has_key?("mvt-box_colour_change")
   end
 
   test "adds mvt playground header when not on live" do
@@ -214,7 +215,6 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       }
     }
 
-    assert %{headers: %{"mvt-box_colour_change": "red"}} =
-      Request.build(struct_with_environment)
+    assert %{headers: %{"mvt-box_colour_change": "red"}} = Request.build(struct_with_environment)
   end
 end
