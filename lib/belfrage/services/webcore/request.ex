@@ -18,6 +18,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> put_user_session_headers(struct.user_session)
     |> put_feature_header(struct.private)
+    |> put_mvt_playground_header(struct.private)
   end
 
   defp base_headers(%Struct{request: request = %Request{}, private: private = %Private{}}) do
@@ -64,5 +65,13 @@ defmodule Belfrage.Services.Webcore.Request do
       value = private.features |> Enum.map(&Tuple.to_list/1) |> Enum.map(&Enum.join(&1, "=")) |> Enum.join(",")
       Map.put(headers, :"ctx-features", value)
     end
+  end
+
+  defp put_mvt_playground_header(headers, _private = %Private{production_environment: "live"}) do
+    headers
+  end
+
+  defp put_mvt_playground_header(headers, _private = %Private{}) do
+    Map.put(headers, :"mvt-box_colour_change", "red")
   end
 end
