@@ -1632,9 +1632,11 @@ defroutefile "Main" do
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
 
   handle "/sport/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/sport/mvt/testing"]
+  handle "/sport/mvt-playground/:id", using: "WebCoreMvtPlayground", only_on: "test", examples: ["/sport/mvt-playground/1"]
 
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
+
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
