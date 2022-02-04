@@ -4,7 +4,6 @@
 	"logging_level":"debug",
 	"circuit_breaker":"false",
 	"personalisation":"on",
-	"news_articles_personalisation":"on",
 	"obit_mode": "off",
 	"ccp_enabled": "true",
 	"monitor_enabled": "true",

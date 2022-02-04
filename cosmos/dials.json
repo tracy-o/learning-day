@@ -115,21 +115,6 @@
     ]
   },
   {
-    "name": "news_articles_personalisation",
-    "description": "This enables or disables personalisation for News article routes",
-    "default-value": "on",
-    "values": [
-      {
-        "value": "on",
-        "description": "Enable News article personalisation"
-      },
-      {
-        "value": "off",
-        "description": "Disable News article personalisation"
-      }
-    ]
-  },
-  {
     "name": "obit_mode",
     "description": "This enables or disables obit mode",
     "default-value": "off",

@@ -64,7 +64,7 @@ defmodule Belfrage.PersonalisationTest do
     end
   end
 
-  describe "enabled?/1" do
+  describe "enabled?/0" do
     defmodule BBCIDAvailable do
       def available?(), do: true
     end
@@ -85,29 +85,6 @@ defmodule Belfrage.PersonalisationTest do
 
       stub_dial(:personalisation, "on")
       assert Personalisation.enabled?(bbc_id: BBCIDAvailable)
-    end
-
-    test "returns true when both the news article personalisation and personalisation dial is on" do
-      stub_dials(news_articles_personalisation: "on", personalisation: "on")
-      assert(Personalisation.enabled?(route_state_id: HomePagePersonalised))
-    end
-
-    test "returns true when both the news article personalisation and personalisation dial is on for PersonalisedContainerData routes" do
-      stub_dials(news_articles_personalisation: "on", personalisation: "on")
-      assert(Personalisation.enabled?(route_state_id: PersonalisedContainerData))
-      assert(Personalisation.enabled?(route_state_id: HomePagePersonalised))
-    end
-
-    test "returns false when the news article personalisation is off and personalisation dial is on for PersonalisedContainerData routes" do
-      stub_dials(news_articles_personalisation: "off", personalisation: "on")
-      refute(Personalisation.enabled?(route_state_id: PersonalisedContainerData))
-      assert(Personalisation.enabled?(route_state_id: HomePagePersonalised))
-    end
-
-    test "returns false when global personalisation dial is off for PersonalisedContainerData routes" do
-      stub_dials(news_articles_personalisation: "on", personalisation: "off")
-      refute(Personalisation.enabled?(route_state_id: PersonalisedContainerData))
-      refute(Personalisation.enabled?(route_state_id: HomePagePersonalised))
     end
   end
 
