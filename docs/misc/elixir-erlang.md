@@ -26,12 +26,13 @@ This guide will help you update the Belfrage application (and any other Elixir /
 1. The first step is to create a new Docker image using your new Elixir / Erlang versions. This is a bit of a nuicance to do as we are only able to access the Amazon Elastic Container Registry (ECR) through a jenkins job
     * Our Dockerfile in Devops-tools-ecr Repo: https://github.com/bbc/devops-tools-ecr/tree/master/containers/elixir-centos7
     * The Jenkins job: https://ci.news.tools.bbc.co.uk/job/bbc/job/devops-tools-ecr/
-We need to create a new Docker image, passing in parameters for our wanted Elixir and Erlang versions as well as tagging the image with the Elixir version. To do this we have to replay the Jenkins job with slightly altered code inside the main script:
+We need to create a new Docker image, passing in parameters for our wanted Elixir and Erlang versions as well as tagging the image with the Elixir version. 
 
+To do this we have to replay the Jenkins job with slightly altered code inside the script (You may also need to change the when clauses higher in the script just to ensure the script runs):
 
 ```
-docker build -t elixir-centos7:xxxx --build-arg GIT_COMMIT=${REMOTE_GIT_COMMIT} --build-arg RUN_DISPLAY_URL=${env.RUN_DISPLAY_URL} --build-arg REPO_ADDRESS=${env.remote_repo_address} --build-arg ELIXIR_VERSION=xxxx --build-arg ERLANG_VERSION=zzzz .
-docker push ${dockerRegistry}/elixir-centos7:xxxx
+    docker build -t ${dockerRegistry}/bbc-news/elixir-centos7:xxxx --build-arg ELIXIR_VERSION_ARG=xxxx --build-arg ERLANG_VERSION_ARG=zzzz .
+    docker push ${dockerRegistry}/bbc-news/elixir-centos7:xxxx
 ```
 This code edit will build an image with Elixir version xxxx, Erlang version zzzz, the image will be tagged with the Elixir version xxxx and finally pushed up to AWS ECR which will make the image available to us.
 
