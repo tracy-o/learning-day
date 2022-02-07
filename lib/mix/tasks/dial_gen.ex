@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.DialGen do
   @moduledoc "Printed when the user requests `mix help echo`"
-  @shortdoc "Echoes arguments"
+  @shortdoc "generates dial"
 
   use Mix.Task
 
@@ -14,43 +14,74 @@ defmodule Mix.Tasks.DialGen do
     [dial_name | _rest] = args
 
     parse_dial_name(dial_name)
+    add_to_cosmos_json("jeff", "a_desc", "on", [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}])
   end
 
   defp parse_dial_name(arg) do
-    lower_alpha = for n <- ?a..?z, do: n
-    IO.inspect(lower_alpha)
+    lower_alpha = ((for n <- ?a..?z, do: n) |> to_string()) <> "_"
 
     parsed_dial = String.graphemes(arg)
     |> Enum.reduce_while(
       [],fn x, acc ->
-        if String.contains?(x, lower_alpha) do
+        if String.contains?(lower_alpha, x) do
           {:cont, [x| acc]}
         else
-          {:halt, {:error, "invalid dial name"}}
+          {:halt, {:error, "invalid char '#{x}' in dial name"}}
         end
       end
     )
-    |> Enum.reverse()
-    |> Enum.join()
 
     case parsed_dial do
-      {:error, reason} -> {:error, reason}
-      parsed_dial -> {parsed_dial, dial_module_name(parsed_dial)}
+      {:error, reason} ->
+        {:error, reason}
+
+      dial ->
+        parsed_dial = dial
+        |> Enum.reverse()
+        |> Enum.join()
+
+        {parsed_dial, dial_module_name(parsed_dial)}
     end
   end
 
   def dial_module_name(dial_name) do
     String.graphemes(dial_name)
     |> Enum.reduce(
+      [],
       fn x, acc ->
-        [prev_1 | rest] = acc
-        case prev_1 do
-          '_' -> [String.upcase(x)| rest]
-          _ -> [x| acc]
+        case acc do
+          [] -> [String.upcase(x)]
+          ["_"| rest] -> [String.upcase(x)| rest]
+          [_| _rest] -> [x| acc]
+
         end
       end
     )
     |> Enum.reverse()
     |> Enum.join()
+    |> String.trim_trailing("_")
+  end
+
+
+  @spec add_to_cosmos_json(String.t(), String.t(), String.t(), list()) :: :ok | {:error, String.t()}
+  def add_to_cosmos_json(name, description, default_value, dial_values) do
+    with {:ok, raw_json} <- File.read("cosmos/dials.json"),
+          {:ok, dials_config} <- Jason.decode(raw_json)
+    do
+      new_dial = %{
+        "name" => name,
+        "description" => description,
+        "default-value" => default_value,
+        "values" => dial_values
+      }
+
+      new_config = dials_config ++ [new_dial]
+
+      {:ok, new_config_string} = Jason.encode(new_config, pretty: true)
+
+      :ok = File.write("cosmos/dials.json", new_config_string)
+    else
+      err -> err
+    end
   end
 end
