@@ -5,7 +5,7 @@ defmodule Routes.Specs.SportDisciplineTopic do
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       platform: Webcore,
       query_params_allowlist: ["page"],
-      personalisation: "test_only"
+      personalisation: "on"
     }
   end
 end
