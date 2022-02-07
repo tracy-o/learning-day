@@ -1,7 +1,7 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event, CircuitBreaker}
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
@@ -42,7 +42,8 @@ defmodule Belfrage.RouteState do
     {:ok,
      Map.merge(specs, %{
        counter: Counter.init(),
-       long_counter: Counter.init()
+       long_counter: Counter.init(),
+       throughput: 100
      })}
   end
 
@@ -77,9 +78,19 @@ defmodule Belfrage.RouteState do
   end
 
   @impl GenServer
-  def handle_info(:long_reset, state) do
+  def handle_info(:long_reset, state = %{throughput: throughput}) do
     Process.send_after(self(), :long_reset, long_interval())
-    state = %{state | long_counter: Counter.init()}
+
+    next_throughput =
+      state
+      |> CircuitBreaker.threshold_exceeded?()
+      |> CircuitBreaker.next_throughput(throughput)
+
+    Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
+      route_spec: state.route_state_id
+    })
+
+    state = %{state | long_counter: Counter.init(), throughput: next_throughput}
     {:noreply, state}
   end
 

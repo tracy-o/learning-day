@@ -2,8 +2,9 @@ defmodule Belfrage.RouteStateTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import Belfrage.Test.RoutingHelper
+  import Process, only: [send: 3]
 
-  alias Belfrage.{Struct, RouteState, RouteSpec}
+  alias Belfrage.{Struct, RouteState, RouteSpec, RouteStateRegistry}
 
   @failure_status_code Enum.random(500..504)
 
@@ -36,8 +37,7 @@ defmodule Belfrage.RouteStateTest do
   }
 
   setup do
-    start_route_state()
-    :ok
+    {:ok, pid: start_route_state()}
   end
 
   test "returns a state pointer" do
@@ -115,11 +115,9 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets counter after a specific time" do
-    # Set the interval just for this specifc test and restart the route_state
-    stop_route_state()
+    # Set the interval just for this specifc test
     interval = 100
     set_env(:short_counter_reset_interval, interval)
-    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -132,11 +130,9 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets long_counter after a specific time" do
-    # Set the interval just for this specifc test and restart the route_state
-    stop_route_state()
+    # Set the interval just for this specifc test
     interval = 100
     set_env(:long_counter_reset_interval, interval)
-    start_route_state()
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
     {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -181,15 +177,69 @@ defmodule Belfrage.RouteStateTest do
                [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @route_state_id}}}, :state, 0]}}
   end
 
-  defp start_route_state() do
-    start_supervised!({RouteState, @route_state_id})
+  test ":throughput value is initialised as expected" do
+    pid =
+      RouteStateRegistry.find_or_start(%Struct{
+        private: %Struct.Private{route_state_id: @route_state_id}
+      })
+
+    assert match?(%{throughput: 100}, :sys.get_state(pid))
   end
 
-  defp stop_route_state() do
-    # TODO: Replace with stop_supervised! once we upgrade to Elixir 1.12.
-    # stop_supervisor currently returns an error if the process that is stopped
-    # is temporary, like the route_state process here.
-    stop_supervised(RouteState)
+  describe ":throughput value is updated in the state as expected" do
+    test "when the error count exceeeds threshold", %{pid: pid} do
+      replace_throughput(pid, 60)
+
+      replace_counts(pid, "pwa-lambda-function", %{501 => 300, :errors => 300})
+
+      send(pid, :long_reset, [])
+
+      assert match?(%{throughput: 0}, :sys.get_state(pid))
+    end
+
+    test "when the error count does not exceeed threshold and throughput is at maximum", %{pid: pid} do
+      replace_throughput(pid, 100)
+
+      replace_counts(pid, "pwa-lambda-function", %{501 => 100, :errors => 100})
+
+      send(pid, :long_reset, [])
+
+      assert match?(%{throughput: 100}, :sys.get_state(pid))
+    end
+
+    test "when the error count does not exceeed threshold and throughput is not at maximum", %{pid: pid} do
+      replace_throughput(pid, 0)
+
+      replace_counts(pid, "pwa-lambda-function", %{501 => 100, :errors => 100})
+
+      send(pid, :long_reset, [])
+
+      assert match?(%{throughput: 20}, :sys.get_state(pid))
+
+      send(pid, :long_reset, [])
+
+      assert match?(%{throughput: 60}, :sys.get_state(pid))
+
+      send(pid, :long_reset, [])
+
+      assert match?(%{throughput: 100}, :sys.get_state(pid))
+    end
+  end
+
+  defp replace_throughput(pid, throughput) do
+    :sys.replace_state(pid, fn state ->
+      %{state | throughput: throughput}
+    end)
+  end
+
+  defp replace_counts(pid, origin, counts) do
+    :sys.replace_state(pid, fn state ->
+      %{state | long_counter: %{origin => counts}}
+    end)
+  end
+
+  defp start_route_state() do
+    start_supervised!({RouteState, @route_state_id})
   end
 
   defp set_env(name, value) do

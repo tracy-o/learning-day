@@ -31,7 +31,8 @@ defmodule Belfrage.RouteSpec do
             signature_keys: %{skip: [], add: []},
             default_language: "en-GB",
             language_from_cookie: false,
-            circuit_breaker_error_threshold: nil
+            circuit_breaker_error_threshold: nil,
+            throughput: 100
 
   def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
     route_attrs = get_route_attrs(name, env)
