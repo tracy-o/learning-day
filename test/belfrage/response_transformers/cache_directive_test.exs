@@ -4,33 +4,75 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Struct
+  alias Belfrage.Test.StubHelper
 
-  defp set_ttl_multiplier(value) do
-    stub(Belfrage.Dials.ServerMock, :state, fn
-      :ttl_multiplier ->
-        Belfrage.Dials.TtlMultiplier.transform(value)
-    end)
+  defp set_non_webcore_ttl_multiplier(value) do
+    StubHelper.stub_dial(:non_webcore_ttl_multiplier, value)
   end
 
   defp set_webcore_ttl_multiplier(value) do
-    stub(Belfrage.Dials.ServerMock, :state, fn
-      :webcore_ttl_multiplier ->
-        Belfrage.Dials.WebcoreTtlMultiplier.transform(value)
-    end)
+    StubHelper.stub_dial(:webcore_ttl_multiplier, value)
   end
 
-  describe "&call/1 with default multipliers" do
-    setup do
-      set_ttl_multiplier("default")
-      :ok
-    end
+  describe "call/1 with varying Webcore multipliers" do
+    for webcore_value <- ["very-short", "short", "default", "long", "very-long", "longest"] do
+      @webcore_value webcore_value
+      @webcore_multiplier Belfrage.Dials.WebcoreTtlMultiplier.transform(@webcore_value)
 
+      test "Given a max-age of 5 and a #{@webcore_value} webcore_ttl_multiplier, the correct value is returned" do
+        set_webcore_ttl_multiplier(@webcore_value)
+
+        %{response: response} =
+          CacheDirective.call(%Struct{
+            response: %Struct.Response{
+              headers: %{
+                "cache-control" => "private, max-age=5"
+              }
+            },
+            private: %Struct.Private{
+              platform: Webcore
+            }
+          })
+
+        assert response.cache_directive.cacheability == "private"
+        assert response.cache_directive.max_age == round(5 * @webcore_multiplier)
+      end
+    end
+  end
+
+  describe "call/1 with varying non-Webcore multipliers" do
+    for non_webcore_value <- ["very-short", "short", "default", "long", "very-long", "longest"] do
+      @non_webcore_value non_webcore_value
+      @non_webcore_multiplier Belfrage.Dials.NonWebcoreTtlMultiplier.transform(@non_webcore_value)
+
+      test "Given a max-age and a #{@non_webcore_value} non_webcore_ttl_multiplier, #{@non_webcore_multiplier} times the original max-age is returned" do
+        set_non_webcore_ttl_multiplier(@non_webcore_value)
+
+        %{response: response} =
+          CacheDirective.call(%Struct{
+            response: %Struct.Response{
+              headers: %{
+                "cache-control" => "public, max-age=30"
+              }
+            },
+            private: %Struct.Private{
+              platform: NonWebcore
+            }
+          })
+
+        assert response.cache_directive.cacheability == "public"
+        assert response.cache_directive.max_age == round(30 * @non_webcore_multiplier)
+      end
+    end
+  end
+
+  describe "call/1 with edge cases" do
     test "Given no cache_control response header, nothing is changed" do
       assert CacheDirective.call(%Struct{}) == %Struct{}
     end
 
     test "Given a cache control with no max-age, the max-age remains unprovided" do
-      struct =
+      %{response: response} =
         CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
@@ -39,175 +81,85 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
           }
         })
 
-      assert struct.response.cache_directive.max_age == nil
-      assert struct.response.cache_directive.cacheability == "private"
-    end
-
-    test "Given a max-age, with default multipliers, the max-age remains unchanged" do
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 30
+      assert response.cache_directive.max_age == nil
+      assert response.cache_directive.cacheability == "private"
     end
   end
 
-  describe "&call/1 with altered ttl_multiplier" do
+  describe "call/1 with a personalised request" do
     setup do
-      set_ttl_multiplier("default")
+      set_non_webcore_ttl_multiplier("default")
       :ok
     end
 
-    test "Given a max-age and a private ttl_multiplier, the max-age is set to 0 and the cacheability is set to private" do
-      set_ttl_multiplier("private")
-
-      struct =
+    test "Given a cache-control set to public, the cacheabilty is set to 'private' and the max_age is set to 0" do
+      %{response: response} =
         CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "public, max-age=30"
             }
+          },
+          private: %Struct.Private{
+            personalised_request: true
           }
         })
 
-      assert struct.response.cache_directive.max_age == 0
-      assert struct.response.cache_directive.cacheability == "private"
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 0
     end
 
-    test "Given a max-age and a long ttl_multiplier, 3 times the original max-age is returned" do
-      set_ttl_multiplier("long")
+    test "Given a cache-control set to private, the cacheabilty remains as 'private' the and max_age is unchanged" do
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          response: %Struct.Response{
+            headers: %{
+              "cache-control" => "private, max-age=30"
+            }
+          },
+          private: %Struct.Private{
+            personalised_request: true
+          }
+        })
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 90
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 30
     end
 
-    test "Given a max-age and a super_long ttl_multiplier, 10 times the original max-age is returned" do
-      set_ttl_multiplier("super_long")
+    test "Given a cache-control set to public and a Webcore platform, the cacheabilty is set to 'private' and the max_age is set to 0" do
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          response: %Struct.Response{
+            headers: %{
+              "cache-control" => "public, max-age=30"
+            }
+          },
+          private: %Struct.Private{
+            personalised_request: true,
+            platform: Webcore
+          }
+        })
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               }
-             }).response.cache_directive.max_age == 300
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 0
     end
 
-    test "Given no max-age, and a long ttl_multiplier, the max-age remains unprovided" do
-      set_ttl_multiplier("long")
+    test "Given a cache-control set to private and a Webcore platform, the cacheabilty remains as 'private' the and max_age is unchanged" do
+      %{response: response} =
+        CacheDirective.call(%Struct{
+          response: %Struct.Response{
+            headers: %{
+              "cache-control" => "private, max-age=30"
+            }
+          },
+          private: %Struct.Private{
+            personalised_request: true,
+            platform: Webcore
+          }
+        })
 
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "private"
-                 }
-               }
-             }).response.cache_directive.max_age == nil
-    end
-  end
-
-  describe "&call/1 with altered webcore_ttl_multiplier" do
-    setup do
-      set_webcore_ttl_multiplier("one")
-      :ok
-    end
-
-    test "Given a max-age, a non Webcore platform the ttl_multiplier is used and 3 times the original max-age is returned" do
-      set_ttl_multiplier("long")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: NotWebcore}
-             }).response.cache_directive.max_age == 90
-    end
-
-    test "Given a max-age, a Webcore platform and a one webcore_ttl_multiplier the original max-age is returned" do
-      set_webcore_ttl_multiplier("one")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 30
-    end
-
-    test "Given a max-age, a Webcore platform and a half webcore_ttl_multiplier, 0.5 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("half")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 15
-    end
-
-    test "Given a max-age, a Webcore platform and a three-quarters webcore_ttl_multiplier, 0.75 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("three-quarters")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 23
-    end
-
-    test "Given a max-age, a Webcore platform and a two webcore_ttl_multiplier, 2 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("two")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 60
-    end
-
-    test "Given a max-age, a Webcore platform and a four webcore_ttl_multiplier, 4 times the original max-age is returned" do
-      set_webcore_ttl_multiplier("four")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "public, max-age=30"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == 120
-    end
-
-    test "Given no max-age, a Webcore platform and a four webcore_ttl_multiplier the max-age remains unprovided" do
-      set_webcore_ttl_multiplier("four")
-
-      assert CacheDirective.call(%Struct{
-               response: %Struct.Response{
-                 headers: %{
-                   "cache-control" => "private"
-                 }
-               },
-               private: %Struct.Private{platform: Webcore}
-             }).response.cache_directive.max_age == nil
+      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.max_age == 30
     end
   end
 end

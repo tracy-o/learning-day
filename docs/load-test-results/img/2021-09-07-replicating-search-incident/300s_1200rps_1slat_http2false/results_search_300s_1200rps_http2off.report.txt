@@ -1,0 +1,14 @@
+Requests      [total, rate, throughput]  359999, 1199.82, 638.99
+Duration      [total, attack, wait]      5m26.527879234s, 5m0.043127867s, 26.484751367s
+Latencies     [mean, 50, 95, 99, max]    9.613452265s, 5.228787748s, 30.486982162s, 33.021743758s, 42.832403111s
+Bytes In      [total, mean]              13787390212, 38298.41
+Bytes Out     [total, mean]              0, 0.00
+Success       [ratio]                    57.96%
+Status Codes  [code:count]               0:100438  200:208648  500:50913  
+Error Set:
+500 Internal Server Error
+Get https://www.belfrage-playground.test.api.bbc.co.uk/search?q=unsiidwtxtncihucjhntrtaujhdoroszttvbdtfuincgwqfaad: EOF
+Get https://www.belfrage-playground.test.api.bbc.co.uk/search?q=kthvtljpydiifvmsfvbusatednqpaaarlgwxhztaorzqfphmbk: EOF
+Get https://www.belfrage-playground.test.api.bbc.co.uk/search?q=zclvlnphsynzgjahdofnlkhesefhqkehetbovzxzzpwhjwcqke: EOF
+Get https://www.belfrage-playground.test.api.bbc.co.uk/search?q=tujvodqwmezuhytxajyjikxrzytdgffpmybbkdgtskadhwfbdy: EOF
+Get https://www.belfrage-playground.test.api.bbc.co.uk/search?q=kxqmdljiwovkmuesemtgazpvkiudiwdfwtutpdbeigebeypqwr: EOF

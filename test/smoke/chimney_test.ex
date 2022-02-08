@@ -12,10 +12,9 @@ defmodule BelfrageChimneySmokeTest do
   @moduletag :smoke_test
   @moduletag :chimney
 
-  @belfrage_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["belfrage"]
-  @cedric_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["cedric-belfrage"]
-  @bruce_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["bruce-belfrage"]
-  @sally_header Application.get_env(:smoke, :endpoint_to_stack_id_mapping)["sally-belfrage"]
+  @cedric_header Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]["cedric-belfrage"]
+  @bruce_header Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]["bruce-belfrage"]
+  @sally_header Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]["sally-belfrage"]
 
   setup do
     %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
@@ -23,15 +22,20 @@ defmodule BelfrageChimneySmokeTest do
 
   describe "GTM tests" do
     @describetag stack: "gtm"
-    test "GTM /sport/videos/48521428", %{smoke_env: smoke_env} do
+
+    @tag spec: "SportVideos"
+    @tag platform: "Webcore"
+    test "GTM /sport/av/cricket/48521428", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host(smoke_env)
 
-      resp = Helper.get_route(endpoint, "/sport/videos/48521428")
+      resp = Helper.get_route(endpoint, "/sport/av/cricket/48521428")
 
       assert resp.status_code == 200
       assert Helper.header_item_exists(resp.headers, @bruce_header)
     end
 
+    @tag spec: "WorldServiceTajik"
+    @tag platform: "MozartNews"
     test "GTM .com /tajik", %{smoke_env: smoke_env} do
       endpoint = Helper.gtm_host_com(smoke_env)
       resp = Helper.get_route(endpoint, "/tajik")
@@ -43,6 +47,9 @@ defmodule BelfrageChimneySmokeTest do
 
   describe "CDN" do
     @describetag stack: "cdn"
+    @describetag spec: "FablData"
+    @describetag platform: "Fabl"
+
     test "web", %{smoke_env: smoke_env} do
       endpoint = Helper.cdn_web_host(smoke_env)
 

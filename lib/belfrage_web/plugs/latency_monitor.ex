@@ -7,11 +7,11 @@ defmodule BelfrageWeb.Plugs.LatencyMonitor do
 
   def call(conn, _opts) do
     request_id = conn.private.request_id
-    checkpoint(request_id, :request_start)
+    checkpoint(request_id, :request_received)
 
     register_before_send(conn, fn
       conn = %Plug.Conn{status: status} when status in [200, :ok] ->
-        checkpoint(request_id, :response_end)
+        checkpoint(request_id, :response_sent)
         conn
 
       conn ->

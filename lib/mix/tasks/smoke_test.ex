@@ -26,6 +26,10 @@ defmodule Mix.Tasks.SmokeTest do
 
       mix smoke_test --only chimney
 
+  Perform personalisation check (6 tests)
+
+      mix smoke_test --only personalisation
+
   Using other `mix test` options, e.g. increase verbosity and outputs all test
   details with timing, as well as identify the slowest (3) tests
 
@@ -76,7 +80,7 @@ defmodule Mix.Tasks.SmokeTest do
 
     {env_args, cli_args} = parse_env_opts(parsed_args)
 
-    env_args <> "MIX_ENV=smoke_test mix test #{join_params(cli_args)} --formatter JoeFormatter"
+    (env_args <> "MIX_ENV=smoke_test mix test #{join_params(cli_args)} --formatter JoeFormatter")
     |> run()
   end
 

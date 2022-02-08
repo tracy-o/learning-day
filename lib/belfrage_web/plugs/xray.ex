@@ -1,59 +1,49 @@
-defmodule BelfrageWeb.Plugs.XRay do
+defmodule BelfrageWeb.Plugs.Xray do
   @behaviour Plug
-  import Plug.Conn, only: [register_before_send: 2]
+  import Plug.Conn, only: [register_before_send: 2, assign: 3]
+  alias Belfrage.Xray
 
   @skip_paths ["/status"]
-  @xray Application.get_env(:belfrage, :xray)
 
   @impl true
   def init(opts), do: opts
 
-  def build_trace_id_header(segment) do
-    sampled_value = if @xray.sampled?(segment), do: '1', else: '0'
-
-    "Root=" <> segment.trace.root <> ";Parent=" <> segment.id <> ";Sampled=#{sampled_value}"
-  end
-
   @impl true
-  def call(conn = %Plug.Conn{request_path: request_path}, _) when request_path not in @skip_paths do
-    trace = @xray.new_trace()
+  def call(conn = %Plug.Conn{request_path: request_path}, opts) when request_path not in @skip_paths do
+    xray = Keyword.get(opts, :xray, Xray)
 
     segment =
-      trace
-      |> @xray.start_tracing("Belfrage")
-      |> @xray.add_annotations(%{
-        request_id: conn.private.request_id
-      })
-      |> @xray.set_http_request(%{
-        method: conn.method,
-        path: request_path
-      })
+      xray.start_tracing("Belfrage")
+      |> xray.add_annotations(%{request_id: conn.private.request_id})
+      |> xray.add_metadata(%{xray: xray})
+      |> xray.set_http_request(%{method: conn.method, path: request_path})
 
     conn
-    |> Plug.Conn.put_private(:xray_trace_id, build_trace_id_header(segment))
-    |> register_before_send(&on_request_completed(&1, segment))
+    |> assign(:xray_segment, segment)
+    |> register_before_send(&on_request_completed(&1, segment, xray))
   end
 
-  @impl true
-  def call(conn, _opts) do
-    conn
-  end
+  def call(conn, _opts), do: conn
 
-  defp on_request_completed(conn, segment) do
-    segment
-    |> @xray.set_http_response(%{
-      status: conn.status,
-      content_length: content_length(conn)
-    })
-    |> @xray.finish_tracing()
+  defp on_request_completed(conn, segment, xray) do
+    segment =
+      segment
+      |> xray.finish()
+      |> xray.set_http_response(%{
+        status: conn.status,
+        content_length: content_length(conn)
+      })
+
+    xray.send(segment)
 
     conn
+    |> assign(:xray_segment, segment)
   end
 
   defp content_length(conn) do
     case Plug.Conn.get_resp_header(conn, "content-length") do
       [content_length] -> content_length
-      _other -> "not-reporting"
+      _other -> 0
     end
   end
 end

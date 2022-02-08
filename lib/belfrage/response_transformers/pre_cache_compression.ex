@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   belfrage internal cache.
   """
 
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, Metrics}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -37,15 +37,17 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   defp gzip_response_body(
          struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}
        ) do
-    Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
+    Metrics.duration(:pre_cache_compression, fn ->
+      Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
 
-    Belfrage.Event.record(:log, :info, %{
-      msg: "Content was pre-cache compressed",
-      path: path,
-      platform: platform
-    })
+      Belfrage.Event.record(:log, :info, %{
+        msg: "Content was pre-cache compressed",
+        path: path,
+        platform: platform
+      })
 
-    response_headers = Map.put(struct.response.headers, "content-encoding", "gzip")
-    Struct.add(struct, :response, %{body: :zlib.gzip(struct.response.body), headers: response_headers})
+      response_headers = Map.put(struct.response.headers, "content-encoding", "gzip")
+      Struct.add(struct, :response, %{body: :zlib.gzip(struct.response.body), headers: response_headers})
+    end)
   end
 end

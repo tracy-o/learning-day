@@ -1,34 +1,23 @@
 defmodule Belfrage.Clients.LambdaTest do
-  alias Belfrage.Clients.Lambda
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
-  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
-  setup do
-    pid = start_supervised!(Belfrage.Credentials.Refresh)
+  alias Belfrage.Clients.Lambda
 
-    :sys.get_state(pid)
-
-    :ok
-  end
+  @credentials %Belfrage.AWS.Credentials{}
 
   describe "Belfrage.Clients.Lambda.call/3" do
-    test "Given a working function name, role arn, and payload it authenticates and calls the lambda and returns the response" do
+    test "Given a working function name and payload it authenticates and calls the lambda and returns the response" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:ok, "<h1>A Page</h1>"}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
+      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
                {:ok, "<h1>A Page</h1>"}
     end
 
-    test "Given a role we cannot assume we return the :failed_to_assume_role error" do
-      assert Lambda.call("the-wrong-role", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
-               {:error, :credentials_not_found}
-    end
-
-    test "Given a working role, but an incorrect function name we return the :failed_to_invoke_lambda error" do
+    test "Given an incorrect function name we return the :invoke_failure error" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:error,
@@ -38,26 +27,26 @@ defmodule Belfrage.Clients.LambdaTest do
           }}}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "not-a-real-lambda", %{some: "data"}, "larry-the-lambda-request") ==
-               {:error, :failed_to_invoke_lambda}
+      assert Lambda.call(@credentials, "not-a-real-lambda", %{some: "data"}, "larry-the-lambda-request") ==
+               {:error, :invoke_failure}
     end
 
-    test "Given a working role, a correct function name and the lambda timesout we return the :failed_to_invoke_lambda error" do
+    test "Given a correct function name and the lambda timesout we return the :invoke_timeout error" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:error, :timeout}
       end)
 
       assert Lambda.call(
-               "webcore-lambda-role-arn",
+               @credentials,
                "pwa-lambda-function:timeout",
                %{some: "data"},
                "larry-the-lambda-request"
              ) ==
-               {:error, :failed_to_invoke_lambda}
+               {:error, :invoke_timeout}
     end
 
-    test "Given a working role, a correct function name, but a non-existant alias we return the :function_not_found error" do
+    test "Given a correct function name, but a non-existant alias we return the :function_not_found error" do
       Belfrage.AWSMock
       |> expect(:request, fn %ExAws.Operation.JSON{service: :lambda}, _opts ->
         {:error,
@@ -69,7 +58,7 @@ defmodule Belfrage.Clients.LambdaTest do
       end)
 
       assert Lambda.call(
-               "webcore-lambda-role-arn",
+               @credentials,
                "pwa-lambda-function:unknown-alias",
                %{some: "data"},
                "larry-the-lambda-request"
@@ -92,64 +81,10 @@ defmodule Belfrage.Clients.LambdaTest do
         {:ok, "<h1>trace_id option provided</h1>"}
       end)
 
-      assert Lambda.call("webcore-lambda-role-arn", "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request",
+      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request",
                xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
              ) ==
                {:ok, "<h1>trace_id option provided</h1>"}
-    end
-  end
-
-  describe "ExAWS request callback" do
-    @generic_response {:ok,
-                       %Belfrage.Clients.HTTP.Response{
-                         status_code: 200,
-                         headers: [{"content-type", "application/json"}],
-                         body: "{}"
-                       }}
-
-    test "Lambda request function uses http client to send POST" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :post,
-                               url: "https://www.example.com/foo",
-                               payload: ~s({"some": "data"}),
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             } ->
-        @generic_response
-      end)
-
-      Lambda.request(:post, "https://www.example.com/foo", ~s({"some": "data"}))
-    end
-
-    test "Lambda request function does pass through query strings" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :post,
-                               url: "https://www.example.com/foo?some-qs=hello",
-                               payload: ~s({"some": "data"}),
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             } ->
-        @generic_response
-      end)
-
-      Lambda.request(:post, "https://www.example.com/foo?some-qs=hello", ~s({"some": "data"}))
-    end
-
-    test "Lambda request handles get" do
-      Belfrage.Clients.HTTPMock
-      |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
-                               method: :get,
-                               url: "https://www.example.com/foo?some-qs=hello",
-                               payload: "",
-                               headers: %{},
-                               timeout: @lambda_timeout
-                             } ->
-        @generic_response
-      end)
-
-      Lambda.request(:get, "https://www.example.com/foo?some-qs=hello")
     end
   end
 end

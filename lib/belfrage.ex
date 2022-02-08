@@ -1,42 +1,24 @@
 defmodule Belfrage do
-  alias Belfrage.{Processor, Struct}
+  alias Belfrage.{Processor, Struct, Cascade}
 
   @callback handle(Struct.t()) :: Struct.t()
 
   def handle(struct = %Struct{}) do
     struct
-    |> Belfrage.Concurrently.start()
-    |> Belfrage.Concurrently.run(fn struct ->
+    |> Cascade.build()
+    |> Cascade.fan_out(fn struct ->
       struct
-      |> prepare_request()
-      |> check_cache()
+      |> Processor.pre_request_pipeline()
+      |> Processor.fetch_early_response_from_cache()
     end)
-    |> Belfrage.Concurrently.pick_early_response()
-    |> generate_response()
+    |> Cascade.result_or(&no_cached_response/1)
+    |> Processor.post_response_pipeline()
   end
 
-  defp prepare_request(struct) do
-    struct
-    |> Processor.get_loop()
-    |> Processor.allowlists()
-    |> Processor.personalisation()
-    |> Processor.generate_request_hash()
-  end
-
-  defp check_cache(struct), do: Processor.fetch_early_response_from_cache(struct)
-
-  defp generate_response(struct = %Struct{response: %Struct.Response{http_status: http_status}})
-       when http_status != nil do
-    struct
-    |> Processor.init_post_response_pipeline()
-  end
-
-  defp generate_response(structs) do
-    structs
-    |> Belfrage.Concurrently.run(&Processor.request_pipeline/1)
-    |> Belfrage.Concurrently.pick_early_response()
-    |> Processor.perform_call()
+  defp no_cached_response(cascade) do
+    cascade
+    |> Cascade.fan_out(&Processor.request_pipeline/1)
+    |> Cascade.result_or(&Cascade.dispatch/1)
     |> Processor.response_pipeline()
-    |> Processor.init_post_response_pipeline()
   end
 end

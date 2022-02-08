@@ -13,13 +13,12 @@ Source2: bake-scripts.tar.gz
 Source3: belfrage-status-cfn-signal.sh
 Source4: cloudformation-signal.service
 Source5: cloudwatch
+Source6: component-cron
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
 
 Requires: cosmos-ca-chains cosmos-ca-tools
-Requires: bbc-statsd-cloudwatch
-Requires: bbc-error-pages
 Requires: amazon-cloudwatch-agent
 Requires: cfn-signal
 Requires: component-logger
@@ -53,6 +52,8 @@ touch %{buildroot}/var/log/component/app.log
 touch %{buildroot}/var/log/component/cloudwatch.log
 mkdir -p %{buildroot}/etc/logrotate.d
 cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
+mkdir -p %{buildroot}/etc/cron.d
+cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
 
 %post
 systemctl enable belfrage
@@ -60,11 +61,13 @@ systemctl enable cloudformation-signal
 /bin/chown -R component:component /home/component
 /bin/chown -R component:component /var/log/component
 cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
+touch /etc/cron.d/component-cron
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
 %attr(0644, root, root) /etc/logrotate.d/cloudwatch
+%attr(0644, root, root) /etc/cron.d/component-cron
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service

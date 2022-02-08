@@ -20,13 +20,5 @@
   "amazon-cloudwatch-agent": {
     "type": "mirrorlist",
     "url": "https://repository.api.bbci.co.uk/amazon-cloudwatch-agent/revisions/head"
-  },
-  "bbc-statsd-cloudwatch": {
-    "type": "mirrorlist",
-    "url": "https://repository.api.bbci.co.uk/bbc-statsd-cloudwatch-el7/revisions/head"
-  },
-  "bbc-error-pages": {
-    "type": "mirrorlist",
-    "url": "https://repository.api.bbci.co.uk/bbc-error-pages/revisions/head"
   }
 }

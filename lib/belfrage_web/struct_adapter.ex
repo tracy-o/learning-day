@@ -4,8 +4,8 @@ defmodule BelfrageWeb.StructAdapter do
   alias Plug.Conn
   import Plug.Conn
 
-  def adapt(conn = %Conn{private: %{xray_trace_id: xray_trace_id, bbc_headers: bbc_headers}}, loop_id) do
-    Stump.metadata(loop_id: loop_id)
+  def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, route_state_id) do
+    Stump.metadata(route_state_id: route_state_id)
 
     %Struct{
       request: %Request{
@@ -23,13 +23,12 @@ defmodule BelfrageWeb.StructAdapter do
         subdomain: subdomain(conn),
         edge_cache?: bbc_headers.cache,
         cdn?: bbc_headers.cdn,
-        xray_trace_id: xray_trace_id,
+        xray_segment: conn.assigns[:xray_segment],
         accept_encoding: accept_encoding(conn),
         is_uk: bbc_headers.is_uk,
         is_advertise: bbc_headers.is_advertise,
         req_svc_chain: bbc_headers.req_svc_chain,
         request_id: conn.private.request_id,
-        x_cdn: bbc_headers.x_cdn,
         x_candy_audience: bbc_headers.x_candy_audience,
         x_candy_override: bbc_headers.x_candy_override,
         x_candy_preview_guid: bbc_headers.x_candy_preview_guid,
@@ -43,7 +42,7 @@ defmodule BelfrageWeb.StructAdapter do
         user_agent: bbc_headers.user_agent
       },
       private: %Private{
-        loop_id: loop_id,
+        route_state_id: route_state_id,
         overrides: conn.private.overrides,
         production_environment: conn.private.production_environment,
         preview_mode: conn.private.preview_mode

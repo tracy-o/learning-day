@@ -1,9 +1,18 @@
 defmodule Belfrage.Metrics.LatencyMonitor do
+  alias Belfrage.{Metrics.Statix, Event}
   use GenServer
 
   @default_cleanup_rate 10_000
   @cleanup_ttl 30_000
-  @valid_checkpoints [:request_start, :request_end, :response_start, :response_end]
+  @valid_checkpoints [
+    :request_received,
+    :early_response_received,
+    :origin_request_sent,
+    :origin_response_received,
+    :fallback_request_sent,
+    :fallback_response_received,
+    :response_sent
+  ]
 
   def start_link(opts \\ []) do
     rate = Keyword.get(opts, :cleanup_rate, @default_cleanup_rate)
@@ -18,6 +27,10 @@ defmodule Belfrage.Metrics.LatencyMonitor do
 
   def discard(request_id) do
     GenServer.cast(__MODULE__, {:discard, request_id})
+  end
+
+  def get_checkpoints(request_id) do
+    GenServer.call(__MODULE__, {:get_checkpoints, request_id})
   end
 
   @impl GenServer
@@ -39,13 +52,13 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   def handle_info(_, state), do: {:noreply, state}
 
   @impl GenServer
-  def handle_cast({:checkpoint, :response_end, request_id, time}, state) do
+  def handle_cast({:checkpoint, :response_sent, request_id, time}, state) do
     request_times = Map.get(state, request_id)
 
     state =
       if request_times do
         request_times
-        |> Map.put(:response_end, time)
+        |> Map.put(:response_sent, time)
         |> send_metrics()
 
         remove_request_id(state, request_id)
@@ -69,26 +82,55 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   @impl GenServer
   def handle_cast({:discard, request_id}, state), do: {:noreply, remove_request_id(state, request_id)}
 
-  defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
-
-  defp send_metrics(%{request_start: req_start, request_end: req_end, response_start: res_start, response_end: res_end}) do
-    request_latency = compute_latency(req_start, req_end)
-    response_latency = compute_latency(res_start, res_end)
-    combined_latency = request_latency + response_latency
-
-    Belfrage.Metrics.Statix.timing("web.latency.internal.request", request_latency)
-    Belfrage.Metrics.Statix.timing("web.latency.internal.response", response_latency)
-    Belfrage.Metrics.Statix.timing("web.latency.internal.combined", combined_latency)
-
-    {:ok, true}
+  @impl GenServer
+  def handle_call({:get_checkpoints, request_id}, _from, state) do
+    {:reply, Map.get(state, request_id), state}
   end
 
-  defp send_metrics(_), do: {:error, :incomplete_times}
+  defp remove_request_id(state, request_id), do: Map.delete(state, request_id)
 
-  defp compute_latency(start_time, end_time), do: end_time - start_time
+  defp send_metrics(checkpoints) do
+    request = request_latency(checkpoints)
+    response = response_latency(checkpoints)
+
+    if request && response do
+      Statix.timing("web.latency.internal.request", request, tags: Event.global_dimensions())
+      Statix.timing("web.latency.internal.response", response, tags: Event.global_dimensions())
+      Statix.timing("web.latency.internal.combined", request + response, tags: Event.global_dimensions())
+    end
+  end
+
+  defp request_latency(checkpoints) do
+    start = checkpoints[:request_received]
+    finish = checkpoints[:early_response_received] || checkpoints[:origin_request_sent]
+
+    if start && finish do
+      finish - start
+    end
+  end
+
+  defp response_latency(checkpoints) do
+    start = checkpoints[:early_response_received] || checkpoints[:origin_response_received]
+    finish = checkpoints[:response_sent]
+
+    if start && finish do
+      finish - start - fallback_latency(checkpoints)
+    end
+  end
+
+  defp fallback_latency(checkpoints) do
+    start = checkpoints[:fallback_request_sent]
+    finish = checkpoints[:fallback_response_received]
+
+    if start && finish do
+      finish - start
+    else
+      0
+    end
+  end
 
   defp keep_request?(times, min_start_time) do
-    times[:request_start] && times[:request_start] > min_start_time
+    Map.has_key?(times, :request_received) && times[:request_received] > min_start_time
   end
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000

@@ -17,7 +17,7 @@ defmodule Benchmark.WebcoreResponseBuild do
   """
 
   import Fixtures.Lambda
-  alias Belfrage.Services.Webcore.Response
+  alias Belfrage.Services.Webcore
 
   # TODO: create a behaviour via template method design pattern
   def run([iteration]), do: experiment(iteration |> String.to_integer())
@@ -50,10 +50,10 @@ defmodule Benchmark.WebcoreResponseBuild do
     setup(iteration, step_size_kb)
     |> Enum.map(fn {size_kb, {a, b, c, d}} ->
       [
-        {"build #{size_kb}kb resp", fn -> Response.build({:ok, a}) end},
-        {"build #{size_kb}kb gzip resp", fn -> Response.build({:ok, b}) end},
-        {"build #{size_kb}kb base64 resp", fn -> Response.build({:ok, c}) end},
-        {"build #{size_kb}kb gzip base64 resp", fn -> Response.build({:ok, d}) end}
+        {"build #{size_kb}kb resp", fn -> Webcore.build_response({:ok, a}) end},
+        {"build #{size_kb}kb gzip resp", fn -> Webcore.build_response({:ok, b}) end},
+        {"build #{size_kb}kb base64 resp", fn -> Webcore.build_response({:ok, c}) end},
+        {"build #{size_kb}kb gzip base64 resp", fn -> Webcore.build_response({:ok, d}) end}
       ]
     end)
     |> List.flatten()

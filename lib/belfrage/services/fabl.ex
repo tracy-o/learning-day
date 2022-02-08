@@ -3,6 +3,7 @@ defmodule Belfrage.Services.Fabl do
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
+  alias Belfrage.Xray
   alias Belfrage.Helpers.QueryParams
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
@@ -56,7 +57,7 @@ defmodule Belfrage.Services.Fabl do
          headers: build_headers(request),
          request_id: request_id
        },
-       :fabl
+       :Fabl
      ), struct}
   end
 
@@ -66,7 +67,7 @@ defmodule Belfrage.Services.Fabl do
   defp build_headers(%Struct.Request{
          raw_headers: raw_headers,
          req_svc_chain: req_svc_chain,
-         xray_trace_id: nil
+         xray_segment: nil
        }) do
     Map.merge(raw_headers, %{
       "accept-encoding" => "gzip",
@@ -78,13 +79,13 @@ defmodule Belfrage.Services.Fabl do
   defp build_headers(%Struct.Request{
          raw_headers: raw_headers,
          req_svc_chain: req_svc_chain,
-         xray_trace_id: xray_trace_id
+         xray_segment: segment
        }) do
     Map.merge(raw_headers, %{
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
       "req-svc-chain" => req_svc_chain,
-      "x-amzn-trace-id" => xray_trace_id
+      "x-amzn-trace-id" => Xray.build_trace_id_header(segment)
     })
   end
 end

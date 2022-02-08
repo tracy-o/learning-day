@@ -1,5 +1,5 @@
 defmodule BelfrageTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
@@ -7,12 +7,15 @@ defmodule BelfrageTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Clients.LambdaMock
+  alias Belfrage.Metrics.LatencyMonitor
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
+  @route_state_id "SportArticlePage"
+
   @get_request_struct %Struct{
     private: %Private{
-      loop_id: "SportVideos",
+      route_state_id: @route_state_id,
       production_environment: "test"
     },
     request: %Request{
@@ -32,19 +35,23 @@ defmodule BelfrageTest do
       request_id: "pete-the-post-request"
     },
     private: %Private{
-      loop_id: "SportVideos",
+      route_state_id: @route_state_id,
       production_environment: "test"
     }
   }
 
   @web_core_lambda_response {:ok, %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
   @web_core_404_lambda_response {:ok, %{"body" => "404 - not found", "headers" => %{}, "statusCode" => 404}}
+  @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
+
+  setup do
+    start_supervised!({Belfrage.RouteState, @route_state_id})
+    :ok
+  end
 
   test "GET request invokes lambda service with Lambda transformer" do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-
     LambdaMock
-    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:test",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
                         _request_id = "gerald-the-get-request",
@@ -56,12 +63,11 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode, invokes lambda with the lambda alias" do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
     struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
-    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
                         _request_id = "gerald-the-get-request",
@@ -73,12 +79,11 @@ defmodule BelfrageTest do
   end
 
   test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
     struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
     struct = Struct.add(struct, :private, %{preview_mode: "on"})
 
     LambdaMock
-    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
                         _request_id = "gerald-the-get-request",
@@ -93,10 +98,8 @@ defmodule BelfrageTest do
   end
 
   test "POST request invokes lambda service with Lambda transformer" do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-
     LambdaMock
-    |> expect(:call, fn _role_arn = "webcore-lambda-role-arn",
+    |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:test",
                         _payload = %{
                           body: ~s({"some": "data please"}),
@@ -113,7 +116,7 @@ defmodule BelfrageTest do
 
   @redirect_request_struct %Struct{
     private: %Private{
-      loop_id: "SportVideos"
+      route_state_id: "SportVideos"
     },
     request: %Request{
       path: "/_web_core",
@@ -126,19 +129,58 @@ defmodule BelfrageTest do
   }
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
-    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.ServerStub)
-
     LambdaMock
-    |> expect(:call, 0, fn _role_arn, _func_name, _payload, _request_id, _opts -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _credentials, _func_name, _payload, _request_id, _opts -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 
     assert response_struct.response.http_status == 302
   end
 
+  test "increments the route_state when request has 200 status" do
+    LambdaMock
+    |> expect(:call, 1, fn _credentials,
+                           _lambda_func = "pwa-lambda-function:test",
+                           _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                           _request_id = "gerald-the-get-request",
+                           _opts = [] ->
+      @web_core_lambda_response
+    end)
+
+    Belfrage.handle(@get_request_struct)
+
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+
+    assert state.counter == %{
+             "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
+           }
+  end
+
+  test "increments the route_state when request has 500 status" do
+    LambdaMock
+    |> expect(:call, 1, fn _credentials,
+                           _lambda_func = "pwa-lambda-function:test",
+                           _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                           _request_id = "gerald-the-get-request",
+                           _opts = [] ->
+      @web_core_500_lambda_response
+    end)
+
+    Belfrage.handle(@get_request_struct)
+
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+
+    assert state.counter == %{
+             :errors => 1,
+             "pwa-lambda-function:test" => %{500 => 1, :errors => 1}
+           }
+  end
+
   describe "with seeded cache" do
     setup do
-      struct = Struct.add(@get_request_struct, :request, %{path: "/_seeded_cache"})
+      struct =
+        @get_request_struct
+        |> Struct.add(:request, %{path: "/_seeded_cache"})
 
       put_into_cache(%Struct{
         struct
@@ -177,6 +219,72 @@ defmodule BelfrageTest do
              } = Belfrage.handle(struct)
 
       refute Map.has_key?(headers, "content-encoding")
+    end
+
+    test "records latency checkpoint", %{struct: struct} do
+      start_supervised!(LatencyMonitor)
+
+      Belfrage.handle(struct)
+
+      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      assert checkpoints[:early_response_received]
+    end
+
+    test "increments the route_state, when fetching from cache", %{struct: struct} do
+      LambdaMock
+      |> expect(:call, 0, fn _credentials,
+                             _lambda_func = "pwa-lambda-function:test",
+                             _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                             _request_id = "gerald-the-get-request",
+                             _opts = [] ->
+        flunk("This should never be called")
+      end)
+
+      Belfrage.handle(struct)
+
+      {:ok, state} = Belfrage.RouteState.state(struct)
+
+      assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
+    end
+  end
+
+  describe "seeded with stale cache" do
+    setup do
+      struct =
+        @get_request_struct
+        |> Struct.add(:request, %{path: "/_stale_seeded_cache"})
+
+      put_into_cache_as_stale(%Struct{
+        struct
+        | response: %Response{
+            body: :zlib.gzip(~s({"hi": "bonjour"})),
+            headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
+            http_status: 200,
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+          }
+      })
+
+      %{struct: struct}
+    end
+
+    test "increments the route_state, when fetching from fallback", %{struct: struct} do
+      LambdaMock
+      |> expect(:call, 1, fn _credentials,
+                             _lambda_func = "pwa-lambda-function:test",
+                             _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                             _request_id = "gerald-the-get-request",
+                             _opts = [] ->
+        @web_core_500_lambda_response
+      end)
+
+      Belfrage.handle(struct)
+
+      {:ok, state} = Belfrage.RouteState.state(struct)
+
+      assert state.counter == %{
+               :errors => 1,
+               "pwa-lambda-function:test" => %{500 => 1, :errors => 1, :fallback => 1}
+             }
     end
   end
 end

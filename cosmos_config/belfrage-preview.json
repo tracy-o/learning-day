@@ -57,10 +57,17 @@
   },
   {
     "values": {
-      "test": "https://programmes-frontend.stage.api.bbc.co.uk",
+      "test": "https://programmes-frontend.test.api.bbc.co.uk",
       "live": "https://programmes-frontend.api.bbc.co.uk"
     },
     "name": "PROGRAMMES_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://morph-router.test.api.bbci.co.uk",
+      "live": "https://morph-router.api.bbci.co.uk"
+    },
+    "name": "MORPH_ROUTER_ENDPOINT"
   },
   {
     "values": {

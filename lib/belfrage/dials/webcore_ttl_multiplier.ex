@@ -4,17 +4,20 @@ defmodule Belfrage.Dials.WebcoreTtlMultiplier do
   @behaviour Belfrage.Dial
 
   @impl Belfrage.Dial
-  def transform("half"), do: 0.5
+  def transform("very-short"), do: 1 / 3
 
   @impl Belfrage.Dial
-  def transform("three-quarters"), do: 0.75
+  def transform("short"), do: 2 / 3
 
   @impl Belfrage.Dial
-  def transform("one"), do: 1
+  def transform("default"), do: 1
 
   @impl Belfrage.Dial
-  def transform("two"), do: 2
+  def transform("long"), do: 6
 
   @impl Belfrage.Dial
-  def transform("four"), do: 4
+  def transform("very-long"), do: 12
+
+  @impl Belfrage.Dial
+  def transform("longest"), do: 24
 end

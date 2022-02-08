@@ -5,26 +5,13 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   alias Belfrage.Transformers.CircuitBreaker
   alias Belfrage.Struct
 
-  def enable_circuit_breaker_dial() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :circuit_breaker ->
-      Belfrage.Dials.CircuitBreaker.transform("true")
-    end)
-  end
-
-  def disable_circuit_breaker_dial() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :circuit_breaker ->
-      Belfrage.Dials.CircuitBreaker.transform("false")
-    end)
-  end
-
   test "long_counter with no errors will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         long_counter: %{"https://origin.bbc.co.uk/" => %{}},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+        pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -38,14 +25,13 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
-  test "long_counter with no information at all will not add circuit breaker response" do
+  test "a nil throughput will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+        throughput: nil,
+        pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -59,14 +45,13 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
-  test "long_counter containing errors under threshold will not add circuit breaker response" do
+  test "throughput of 100 will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, :errors => 4}},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+        throughput: 100,
+        pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -80,16 +65,15 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
-  test "long_counter containing errors over threshold will return struct with response section with 500 status" do
-    enable_circuit_breaker_dial()
+  test "thoughput of 0 will return struct with response section with 500 status" do
+    stub_dial(:circuit_breaker, "true")
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+        throughput: 0,
+        pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -97,23 +81,20 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
              :stop_pipeline,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 http_status: 500,
-                 headers: %{
-                   "content-length" => "0"
-                 }
+                 http_status: 500
                }
              }
            } = CircuitBreaker.call([], struct)
   end
 
   test "when circuit breaker is active, the origin represents this" do
-    enable_circuit_breaker_dial()
+    stub_dial(:circuit_breaker, "true")
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
+        throughput: 0,
         pipeline: ["CircuitBreaker"],
         circuit_breaker_error_threshold: 5
       }
@@ -130,15 +111,14 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "when circuit breaker is active, the response body is returned as an empty string" do
-    enable_circuit_breaker_dial()
+    stub_dial(:circuit_breaker, "true")
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
+        throughput: 0,
+        pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -153,11 +133,11 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   end
 
   test "multiple origins will not add circuit breaker response when no errors for current origin" do
-    enable_circuit_breaker_dial()
+    stub_dial(:circuit_breaker, "true")
 
     struct = %Struct{
       private: %Struct.Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
         long_counter: %{
           "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
@@ -179,40 +159,13 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
            } = CircuitBreaker.call([], struct)
   end
 
-  test "multiple origins will return struct with http 500 response when no errors for current origin" do
-    enable_circuit_breaker_dial()
-
-    struct = %Struct{
-      private: %Struct.Private{
-        loop_id: "SportVideos",
-        origin: "https://origin2.bbc.co.uk/",
-        long_counter: %{
-          "https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1},
-          "https://origin2.bbc.co.uk/" => %{501 => 6, :errors => 6},
-          "https://origin3.bbc.co.uk/" => %{501 => 2, :errors => 2}
-        },
-        pipeline: ["CircuitBreaker"],
-        circuit_breaker_error_threshold: 5
-      }
-    }
-
-    assert {
-             :stop_pipeline,
-             %Struct{
-               response: %Struct.Response{
-                 http_status: 500
-               }
-             }
-           } = CircuitBreaker.call([], struct)
-  end
-
   describe "when circuit breaker is active but disabled in dial" do
     test "no circuit breaker response should be returned" do
-      disable_circuit_breaker_dial()
+      stub_dial(:circuit_breaker, "false")
 
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "https://origin.bbc.co.uk/",
           long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
           pipeline: ["CircuitBreaker"],
@@ -234,11 +187,11 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
     end
 
     test "no circuit breaker response should be returned for multiple origins route" do
-      disable_circuit_breaker_dial()
+      stub_dial(:circuit_breaker, "false")
 
       struct = %Struct{
         private: %Struct.Private{
-          loop_id: "SportVideos",
+          route_state_id: "SportVideos",
           origin: "https://origin2.bbc.co.uk/",
           long_counter: %{
             "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},

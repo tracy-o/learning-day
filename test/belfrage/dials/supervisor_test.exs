@@ -1,114 +1,57 @@
 defmodule Belfrage.Dials.SupervisorTest do
-  use ExUnit.Case, async: false
-  use Test.Support.Helper, :mox
+  use ExUnit.Case
 
-  import ExUnit.CaptureLog
-  import Belfrage.Dials.Supervisor
-  import Fixtures.Dials
+  alias Belfrage.Dials
 
-  @dials_poller Belfrage.Dials.Poller
-  @dials_supervisor :test_dials_supervisor
-
-  setup do
-    start_supervised!({Belfrage.Dials.Supervisor, name: @dials_supervisor})
-
-    :ok
-  end
-
-  test "dials supervisor is alive" do
-    assert Process.whereis(@dials_supervisor) |> Process.alive?()
-  end
-
-  test "dial_config/0 returns dials config data in {module, atom name, default value} tuple format" do
-    dial_handlers_config = Application.get_env(:belfrage, :dial_handlers)
-
-    cosmos_file_defaults =
-      for {name, module} <- dial_handlers_config do
-        {module, Enum.find(cosmos_dials_data(), fn dial -> dial["name"] == name end)["default-value"]}
-      end
-
-    expected_data =
-      for {name, module} <- dial_handlers_config do
-        {module, String.to_atom(name), cosmos_file_defaults[module]}
-      end
-
-    assert expected_data -- dial_config() == []
-  end
-
-  test "dials poller is running as part of the dials supervision tree" do
-    children =
-      Supervisor.which_children(@dials_supervisor)
-      |> Enum.map(&elem(&1, 0))
-
-    assert @dials_poller in children
-  end
-
-  test "dials are running as part of the dials supervision tree" do
-    children =
-      Supervisor.which_children(@dials_supervisor)
-      |> Enum.map(&elem(&1, 0))
-
-    for {_module, name, _default} <- dial_config() do
-      assert name in children
+  test "dials are started with the configured default value" do
+    for {module, name, default_value} <- Dials.Supervisor.dial_config() do
+      assert Dials.LiveServer.state(name) == apply(module, :transform, [default_value])
     end
   end
 
-  for {module, name, default} <- [dial_config() |> hd] do
-    @name name
-    @module module
-    @default default
-    @test_dial :"test_#{to_string(name)}"
+  describe "dial_config/0" do
+    test "returns dials config data in {module, atom name, default value} tuple format" do
+      cosmos_dials_config = read_cosmos_dials_config()
 
-    describe "when a dial crashes" do
-      setup do
-        start_supervised({Belfrage.Dials.Server, {@module, @test_dial, @default}})
-        :ok
-      end
+      expected_data =
+        for {name, module} <- Application.get_env(:belfrage, :dial_handlers) do
+          default_value =
+            cosmos_dials_config
+            |> Enum.find(&(&1["name"] == name))
+            |> Map.fetch!("default-value")
 
-      test "it should restart" do
-        pid = Process.whereis(@test_dial)
-        Process.exit(pid, :kill)
-        Process.sleep(10)
+          {module, String.to_atom(name), default_value}
+        end
 
-        new_pid = Process.whereis(@test_dial)
-
-        refute is_nil(new_pid)
-        refute new_pid == pid, "Dial did not crash, so this test is invalid."
-      end
-
-      test "it should log error" do
-        assert capture_log(fn ->
-                 GenServer.cast(@test_dial, {:dials_changed, %{to_string(@test_dial) => "this crashes the dial"}})
-                 :timer.sleep(75)
-               end) =~ "terminating\n** (FunctionClauseError) no function clause matching"
-      end
-
-      test "it should restart with default state" do
-        Process.whereis(@test_dial) |> Process.exit(:kill)
-        Process.sleep(10)
-
-        expected_default = apply(@module, :transform, [@default])
-        assert expected_default == :sys.get_state(@test_dial) |> elem(2)
-      end
+      assert expected_data -- Dials.Supervisor.dial_config() == []
     end
   end
 
-  describe "when dials changed, dials supervisor notifies" do
-    for {module, name, default} <- [dial_config() |> hd] do
-      @name name
-      @module module
-      @default default
+  describe "notify/2" do
+    test "updates dial value" do
+      [{module, name, current_value} | _] = Dials.Supervisor.dial_config()
+      different_value = get_different_dial_value(to_string(name), current_value)
 
-      test "a dial of new dial value" do
-        new_state_value = other_dial_state(to_string(@name), @default)
-        new_state = apply(@module, :transform, [new_state_value])
-        current_state = Belfrage.Dials.Server.state(@name)
+      Dials.Supervisor.notify(:dials_changed, %{to_string(name) => different_value})
+      assert Dials.LiveServer.state(name) == apply(module, :transform, [different_value])
 
-        Belfrage.Dials.Supervisor.notify(:dials_changed, %{to_string(@name) => new_state_value})
-
-        assert new_state != current_state
-        assert new_state == Belfrage.Dials.Server.state(@name)
-      end
+      # Change the value back to what it was
+      Dials.Supervisor.notify(:dials_changed, %{to_string(name) => current_value})
+      assert Dials.LiveServer.state(name) == apply(module, :transform, [current_value])
     end
+  end
+
+  defp read_cosmos_dials_config() do
+    "cosmos/dials.json"
+    |> File.read!()
+    |> Jason.decode!()
+  end
+
+  def get_different_dial_value(dial, current_value) do
+    read_cosmos_dials_config()
+    |> Enum.find(&(&1["name"] == dial))
+    |> Map.fetch!("values")
+    |> Enum.find(&(&1["value"] != current_value))
+    |> Map.fetch!("value")
   end
 end

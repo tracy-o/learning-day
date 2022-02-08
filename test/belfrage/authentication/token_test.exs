@@ -3,14 +3,8 @@ defmodule Belfrage.Authentication.TokenTest do
   use Test.Support.Helper, :mox
   import ExUnit.CaptureLog
 
-  alias Belfrage.Authentication.{Jwk, Token}
+  alias Belfrage.Authentication.Token
   alias Fixtures.AuthToken, as: T
-
-  setup do
-    start_supervised!(Jwk)
-
-    :ok
-  end
 
   describe "parse/1" do
     test "with valid user_attributes access token" do
@@ -81,11 +75,9 @@ defmodule Belfrage.Authentication.TokenTest do
     end
 
     test "no public key" do
-      :sys.replace_state(Jwk, fn _state -> %{"keys" => []} end)
-
       log =
         capture_log(fn ->
-          assert Token.parse(T.valid_access_token()) == {false, %{}}
+          assert Token.parse(T.invalid_key_token()) == {false, %{}}
         end)
 
       assert log =~ ~s(Public key not found)

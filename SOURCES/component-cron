@@ -1,0 +1,1 @@
+*/15 * * * * component /usr/sbin/logrotate /etc/logrotate.d/component

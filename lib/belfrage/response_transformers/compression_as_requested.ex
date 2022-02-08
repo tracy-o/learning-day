@@ -1,5 +1,5 @@
 defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, Metrics}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -21,8 +21,10 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
   defp contains_gzip?(string), do: String.contains?(string, "gzip")
 
   defp decompress_body(struct) do
-    response_headers = Map.delete(struct.response.headers, "content-encoding")
-    Belfrage.Event.record(:metric, :increment, "web.response.uncompressed")
-    Struct.add(struct, :response, %{body: :zlib.gunzip(struct.response.body), headers: response_headers})
+    Metrics.duration(:decompress_response, fn ->
+      response_headers = Map.delete(struct.response.headers, "content-encoding")
+      Belfrage.Event.record(:metric, :increment, "web.response.uncompressed")
+      Struct.add(struct, :response, %{body: :zlib.gunzip(struct.response.body), headers: response_headers})
+    end)
   end
 end

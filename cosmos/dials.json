@@ -1,51 +1,63 @@
 [
   {
-    "name": "ttl_multiplier",
-    "description": "(Non Webcore) This dial sets the value by which we multiply the max-age part of the cache-control response header",
+    "name": "webcore_ttl_multiplier",
+    "description": "The value selected is used to multiply the max-age value for the cache-control on Webcore",
     "default-value": "default",
     "values": [
       {
-        "value": "private",
-        "description": "Use this to simulate a world with fully personalised pages, bypassing the Varnish caching"
+        "value": "very-short",
+        "description": "Multiplies the max-age by one third for Webcore (max-age * 1/3)"
+      },
+      {
+        "value": "short",
+        "description": "Multiplies the max-age by two thirds for Webcore (max-age * 2/3)"
       },
       {
         "value": "default",
-        "description": "Use this to pass through the max-age value unchanged"
+        "description": "The max-age remains unchanged"
       },
       {
         "value": "long",
-        "description": "Use this to triple the max-age to alleviate excessive load, such as when recovering from a complete failure"
+        "description": "Multiplies the max-age by six for Webcore (max-age * 6)"
       },
       {
-        "value": "super_long",
-        "description": "Use this to 10x the max-age in case of extreme instability of the platform"
+        "value": "very-long",
+        "description": "Multiplies the max-age by twelve for Webcore (max-age * 12)"
+      },
+      {
+        "value": "longest",
+        "description": "Multiplies the max-age by twenty-four for Webcore (max-age * 24)"
       }
     ]
   },
   {
-    "name": "webcore_ttl_multiplier",
-    "description": "The value selected is used to multiply the max-age value for the cache-control on Webcore",
-    "default-value": "one",
+    "name": "non_webcore_ttl_multiplier",
+    "description": "The value selected is used to multiply the max-age value for the cache-control on non-Webcore",
+    "default-value": "default",
     "values": [
       {
-        "value": "half",
-        "description": "Multiplies the max-age by half for Webcore"
+        "value": "very-short",
+        "description": "Multiplies the max-age by half for non-Webcore (max-age * 0.5)"
       },
       {
-        "value": "three-quarters",
-        "description": "Multiplies the max-age by three quarters for Webcore"
+        "value": "short",
+        "description": "Multiplies the max-age by three quarters for non-Webcore (max-age * 0.75)"
       },
       {
-        "value": "one",
+        "value": "default",
         "description": "The max-age remains unchanged"
       },
       {
-        "value": "two",
-        "description": "Multiplies the max-age by two for Webcore"
+        "value": "long",
+        "description": "Multiplies the max-age by two for non-Webcore (max-age * 2)"
       },
       {
-        "value": "four",
-        "description": "Multiplies the max-age by four for Webcore"
+        "value": "very-long",
+        "description": "Multiplies the max-age by four for non-Webcore (max-age * 4)"
+      },
+      {
+        "value": "longest",
+        "description": "Multiplies the max-age by six for non-Webcore (max-age * 6)"
       }
     ]
   },
@@ -90,7 +102,7 @@
   {
     "name": "personalisation",
     "description": "This enables or disables personalisation at a global level.",
-    "default-value": "off",
+    "default-value": "on",
     "values": [
       {
         "value": "on",
@@ -159,6 +171,36 @@
       {
         "value": "inactive",
         "description": "Enables the sending of requests to Webcore"
+      }
+    ]
+  },
+  {
+    "name": "datalab_machine_recommendations",
+    "description": "Controls if the SFV page fetches onward journeys from Datalab machine-driven recommendations",
+    "default-value": "enabled",
+    "values": [
+      {
+        "value": "enabled",
+        "description": "Enables Datalab machine-driven recommendations"
+      },
+      {
+        "value": "disabled",
+        "description": "Disables Datalab machine-driven recommendations"
+      }
+    ]
+  },
+  {
+    "name": "chameleon",
+    "description": "Controls if the Chameleon navigation bar is displayed",
+    "default-value": "on",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enables Chameleon navigation bar"
+      },
+      {
+        "value": "off",
+        "description": "Disables Chameleon navigation bar"
       }
     ]
   }

@@ -11,13 +11,13 @@ defmodule Belfrage.Supervisor do
   def children(env: env) do
     [
       {BelfrageWeb.Router, router_options(env)},
-      Belfrage.LoopsRegistry,
-      Belfrage.LoopsSupervisor,
+      Belfrage.RouteStateRegistry,
+      Belfrage.RouteStateSupervisor,
       {Belfrage.Authentication.Supervisor, [env: env]},
-      {Belfrage.Credentials.Supervisor, [env: env]},
       {Belfrage.Dials.Supervisor, [env: env]},
       {Belfrage.Metrics.Supervisor, [env: env]},
-      {Cachex, name: :cache, limit: cachex_limit()}
+      {Cachex, name: :cache, limit: cachex_limit()},
+      Belfrage.Services.Webcore.Supervisor
     ] ++ http_router(env)
   end
 
@@ -40,8 +40,6 @@ defmodule Belfrage.Supervisor do
   defp router_options(env) do
     case env do
       :test -> [scheme: :http, port: 7081]
-      :end_to_end -> [scheme: :http, port: 7082]
-      :routes_test -> [scheme: :http, port: 7083]
       :smoke_test -> [scheme: :http, port: 7084]
       :dev -> [scheme: :http, port: 7080]
       :prod -> [scheme: :http, port: 7080]

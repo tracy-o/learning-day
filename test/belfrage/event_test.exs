@@ -27,16 +27,16 @@ defmodule Belfrage.EventTest do
       assert event.dimensions == %{request_id: "req-6789"}
     end
 
-    test "uses passed loop_id option as dimension" do
-      event = Event.new(:log, :debug, :msg, loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123"}
+    test "uses passed route_state_id option as dimension" do
+      event = Event.new(:log, :debug, :msg, route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123"}
 
-      event = Event.new(:log, :debug, :msg, request_id: "req-12345", loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123", request_id: "req-12345"}
+      event = Event.new(:log, :debug, :msg, request_id: "req-12345", route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-12345"}
 
       Stump.metadata(request_id: "req-6789")
-      event = Event.new(:log, :debug, :msg, loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123", request_id: "req-6789"}
+      event = Event.new(:log, :debug, :msg, route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-6789"}
     end
   end
 
@@ -68,16 +68,16 @@ defmodule Belfrage.EventTest do
       assert event.dimensions == %{request_id: "req-6789"}
     end
 
-    test "uses passed loop_id option as dimension" do
-      event = Event.new(:metric, :increment, "some_metric", loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123"}
+    test "uses passed route_state_id option as dimension" do
+      event = Event.new(:metric, :increment, "some_metric", route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123"}
 
-      event = Event.new(:metric, :increment, "some_metric", request_id: "req-12345", loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123", request_id: "req-12345"}
+      event = Event.new(:metric, :increment, "some_metric", request_id: "req-12345", route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-12345"}
 
       Stump.metadata(request_id: "req-6789")
-      event = Event.new(:metric, :increment, "some_metric", loop_id: "loop-123")
-      assert event.dimensions == %{loop_id: "loop-123", request_id: "req-6789"}
+      event = Event.new(:metric, :increment, "some_metric", route_state_id: "route_state-123")
+      assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-6789"}
     end
   end
 end

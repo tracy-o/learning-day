@@ -3,15 +3,9 @@ defmodule Belfrage.Authentication.SessionStateTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Authentication.SessionState
-  alias Belfrage.Authentication.Jwk
   alias Belfrage.Struct.Request
 
   @token Fixtures.AuthToken.valid_access_token()
-
-  setup do
-    start_supervised!(Jwk)
-    :ok
-  end
 
   describe "authenticated?/1" do
     test "returns true if ckns_id cookie is set" do

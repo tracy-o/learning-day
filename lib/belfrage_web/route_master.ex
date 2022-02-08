@@ -1,8 +1,7 @@
 defmodule BelfrageWeb.RouteMaster do
-  alias BelfrageWeb.{View, StructAdapter}
+  alias Plug.Conn
+  alias BelfrageWeb.{Response, StructAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
-
-  @belfrage Application.get_env(:belfrage, :belfrage, Belfrage)
 
   defmacro __using__(_opts) do
     quote do
@@ -23,10 +22,32 @@ defmodule BelfrageWeb.RouteMaster do
   end
 
   def yield(id, conn) do
-    conn
-    |> StructAdapter.adapt(id)
-    |> @belfrage.handle()
-    |> View.render(conn)
+    conn = Conn.assign(conn, :route_spec, id)
+
+    try do
+      struct = StructAdapter.adapt(conn, id)
+
+      conn
+      |> Conn.assign(:struct, Belfrage.handle(struct))
+      |> Response.put()
+    catch
+      # Unwrap an internal Belfrage error to extract %Struct{} from it
+      _, error = %Belfrage.WrapperError{} ->
+        conn = Conn.assign(conn, :struct, error.struct)
+        reraise(conn, error.kind, error.reason, error.stack)
+
+      kind, reason ->
+        reraise(conn, kind, reason, __STACKTRACE__)
+    end
+  end
+
+  defp reraise(conn, kind, reason, stack) do
+    # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
+    # which now contains the name of the route spec and the struct, so that
+    # we could use that data when generating an error response or tracking
+    # metrics.
+    wrapper = %Conn.WrapperError{conn: conn, kind: kind, reason: reason, stack: stack}
+    :erlang.raise(kind, wrapper, stack)
   end
 
   defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do
@@ -84,7 +105,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defmacro return_404() do
     quote do
-      View.not_found(var!(conn))
+      Response.not_found(var!(conn))
     end
   end
 
@@ -92,7 +113,7 @@ defmodule BelfrageWeb.RouteMaster do
     quote do
       catch_all_get_exists =
         Enum.find(@routes, fn {matcher, args} ->
-          matcher == "/*any" and args[:only_on] == Application.get_env(:belfrage, :production_environment)
+          matcher == "/*any" and args[:only_on] == @production_environment
         end)
 
       unless catch_all_get_exists do
@@ -102,7 +123,7 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       match _ do
-        View.unsupported_method(var!(conn))
+        Response.unsupported_method(var!(conn))
       end
     end
   end
@@ -125,11 +146,11 @@ defmodule BelfrageWeb.RouteMaster do
         @routes
         |> Enum.flat_map(fn
           {matcher, args = %{using: using}} when is_list(using) ->
-            Enum.map(using, fn loop_id ->
+            Enum.map(using, fn route_state_id ->
               args =
                 args
                 |> Map.put_new(:only_on, nil)
-                |> Map.put(:using, loop_id)
+                |> Map.put(:using, route_state_id)
 
               {matcher, args}
             end)
@@ -158,9 +179,7 @@ defmodule BelfrageWeb.RouteMaster do
 
         get(to_string(uri_from.path), host: uri_from.host) do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
-
-          StructAdapter.adapt(var!(conn), "redirect")
-          |> View.redirect(var!(conn), unquote(status), new_location)
+          Response.redirect(var!(conn), StructAdapter.adapt(var!(conn), "redirect"), unquote(status), new_location)
         end
       end
 
@@ -173,9 +192,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
+        if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        if env == Application.get_env(:belfrage, :production_environment) do
           get rewrite(matcher) do
             yield(unquote(id), var!(conn))
           end
@@ -183,9 +202,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env_proxy_pass, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
+        if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        if env == Application.get_env(:belfrage, :production_environment) do
           get rewrite(matcher) do
             matched_env = var!(conn).private[:production_environment] == unquote(env)
             origin_simulator = var!(conn).private.bbc_headers.origin_simulator
@@ -194,7 +213,7 @@ defmodule BelfrageWeb.RouteMaster do
             cond do
               matched_env and origin_simulator -> yield(unquote(id), var!(conn))
               matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
-              true -> View.not_found(var!(conn))
+              true -> Response.not_found(var!(conn))
             end
           end
         end
@@ -209,9 +228,9 @@ defmodule BelfrageWeb.RouteMaster do
       end
 
       var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, env, block ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
+        if env == @production_environment do
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        if env == Application.get_env(:belfrage, :production_environment) do
           get rewrite(matcher) do
             unquote(block) || yield(unquote(id), var!(conn))
           end

@@ -9,7 +9,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     @behaviour CacheStrategy
 
     def store(%Struct{}), do: {:ok, true}
-    def fetch(%Struct{}), do: {:ok, :fresh, %Struct.Response{body: "<h1>Hello</h1>"}}
+    def fetch(%Struct{}), do: {:ok, {:fresh_strategy, :fresh}, %Struct.Response{body: "<h1>Hello</h1>"}}
     def metric_identifier(), do: "fresh_response_strategy"
   end
 
@@ -17,7 +17,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     @behaviour CacheStrategy
 
     def store(%Struct{}), do: {:ok, true}
-    def fetch(%Struct{}), do: {:ok, :stale, %Struct.Response{body: "<h1>Hello</h1>"}}
+    def fetch(%Struct{}), do: {:ok, {:stale_strategy, :stale}, %Struct.Response{body: "<h1>Hello</h1>"}}
     def metric_identifier(), do: "stale_response_strategy"
   end
 
@@ -54,7 +54,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       strategies = [FreshStrategy, NotFoundStrategy]
       accepted_freshness = [:fresh]
 
-      assert {:ok, :fresh, %Struct.Response{body: "<h1>Hello</h1>"}} ==
+      assert {:ok, {:fresh_strategy, :fresh}, %Struct.Response{body: "<h1>Hello</h1>"}} ==
                MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
 
@@ -80,7 +80,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       strategies = [NotFoundStrategy, StaleStrategy]
       accepted_freshness = [:fresh, :stale]
 
-      assert {:ok, :stale, %Struct.Response{body: "<h1>Hello</h1>"}} ==
+      assert {:ok, {:stale_strategy, :stale}, %Struct.Response{body: "<h1>Hello</h1>"}} ==
                MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
   end

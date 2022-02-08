@@ -4,7 +4,7 @@ defmodule Belfrage.DialConfig do
   defmacro __before_compile__(env) do
     Module.register_attribute(env.module, :dial_defaults, accumulate: true)
 
-    Application.app_dir(:belfrage, "priv/static/dials.json")
+    "cosmos/dials.json"
     |> File.read!()
     |> Jason.decode!()
     |> Enum.each(fn dial ->

@@ -1,72 +1,58 @@
-defmodule Belfrage.Authentication.Jwk do
-  @moduledoc "Periodically refreshes public certificates to verify session tokens"
+defmodule Belfrage.Authentication.JWK do
+  use Agent
 
-  use GenServer
-  use Belfrage.Authentication.JwkStaticKeys
+  @static_keys_filenames %{
+    "https://access.api.bbc.com/v1/oauth/connect/jwk_uri" => "jwk_live.json",
+    "https://access.test.api.bbc.com/v1/oauth/connect/jwk_uri" => "jwk_test.json",
+    "https://access.stage.api.bbc.com/v1/oauth/connect/jwk_uri" => "jwk_stage.json",
+    "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri" => "jwk_int.json"
+  }
 
-  @authentication_client Application.get_env(:belfrage, :authentication_client)
-  @refresh_rate 3_600_000
+  def start_link(opts \\ []) do
+    static_keys =
+      Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
+      |> static_keys_file_name()
+      |> read_static_keys()
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+    Agent.start_link(fn -> static_keys end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
-  @spec get_keys :: any
-  def get_keys() do
-    GenServer.call(__MODULE__, :state) |> Map.get("keys", [])
-  end
+  def get(agent \\ __MODULE__, alg, kid) do
+    key =
+      agent
+      |> Agent.get(& &1)
+      |> Enum.find(fn key -> key["alg"] == alg && key["kid"] == kid end)
 
-  def get_key(alg, kid) do
-    Enum.find_value(get_keys(), {:error, :public_key_not_found}, fn key ->
-      key["kid"] == kid && key["alg"] == alg && {:ok, alg, key}
-    end)
-    |> case do
-      {:ok, alg, key} ->
-        Belfrage.Event.record(:log, :debug, %{
-          msg: "Public key found",
-          kid: kid,
-          alg: alg
-        })
+    if key do
+      {:ok, alg, key}
+    else
+      Belfrage.Event.record(:log, :error, %{
+        msg: "Public key not found",
+        kid: kid,
+        alg: alg
+      })
 
-        {:ok, alg, key}
-
-      {:error, :public_key_not_found} ->
-        Belfrage.Event.record(:log, :error, %{
-          msg: "Public key not found",
-          kid: kid,
-          alg: alg
-        })
-
-        {:error, :public_key_not_found}
+      {:error, :public_key_not_found}
     end
   end
 
-  def refresh_now() do
-    Process.send(__MODULE__, :refresh, [])
+  def update(agent \\ __MODULE__, keys) when is_list(keys) do
+    Agent.update(agent, fn _current_keys -> keys end)
   end
 
-  @impl GenServer
-  def init(_opts) do
-    send(self(), :refresh)
-    {:ok, get_static_keys()}
+  def read_static_keys(file_name) do
+    :belfrage
+    |> Application.app_dir("priv/static/#{file_name}")
+    |> File.read!()
+    |> Jason.decode!()
+    |> Map.fetch!("keys")
   end
 
-  @impl GenServer
-  def handle_info(:refresh, existing_state) do
-    schedule_work()
-
-    case @authentication_client.get_jwk_keys() do
-      {:ok, jwk_keys} -> {:noreply, jwk_keys}
-      {:error, _reason} -> {:noreply, existing_state}
+  defp static_keys_file_name(uri) do
+    if Mix.env() == :test do
+      "jwk_fixtures.json"
+    else
+      Map.fetch!(@static_keys_filenames, uri)
     end
-  end
-
-  @impl GenServer
-  def handle_call(:state, _from, jwk_keys) do
-    {:reply, jwk_keys, jwk_keys}
-  end
-
-  defp schedule_work do
-    Process.send_after(__MODULE__, :refresh, @refresh_rate)
   end
 end

@@ -53,8 +53,7 @@ end
 
 release :belfrage do
   set overlays: [
-    {:copy, "rel/runtime_config.exs", "etc/runtime_config.exs"},
-    {:copy, "lib/routes/routefile.ex", "etc/routefile.ex"}
+    {:copy, "rel/runtime_config.exs", "etc/runtime_config.exs"}
   ]
 
   set config_providers: [
@@ -65,4 +64,5 @@ release :belfrage do
   set applications: [
     :runtime_tools
   ]
+
 end

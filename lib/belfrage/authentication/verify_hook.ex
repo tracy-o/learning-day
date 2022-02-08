@@ -19,7 +19,7 @@ defmodule Belfrage.Authentication.VerifyHook do
   end
 
   defp public_key(%{"kid" => kid, "alg" => alg, "typ" => "JWT"}) do
-    Belfrage.Authentication.Jwk.get_key(alg, kid)
+    Belfrage.Authentication.JWK.get(alg, kid)
   end
 
   defp public_key(_header), do: {:error, :invalid_token_header}

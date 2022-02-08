@@ -7,8 +7,9 @@ defmodule Belfrage.ProcessorTest do
 
   alias Belfrage.{Processor, Struct}
   alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.Metrics.LatencyMonitor
 
-  defmodule Module.concat([Routes, Specs, SomePersonalisedLoop]) do
+  defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
     def specs do
       %{
         platform: Webcore,
@@ -17,23 +18,23 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Processor.get_loop/1" do
-    @struct %Struct{private: %Private{loop_id: "SportVideos"}}
+  describe "Processor.get_route_state/1" do
+    @struct %Struct{private: %Private{route_state_id: "SportVideos"}}
 
-    test "adds loop information to Struct.private" do
+    test "adds route_state information to Struct.private" do
       assert %Struct{
                request: _request,
                private: %Private{
-                 loop_id: "SportVideos",
+                 route_state_id: "SportVideos",
                  origin: origin,
                  counter: counter,
                  pipeline: pipeline
                }
-             } = Processor.get_loop(@struct)
+             } = Processor.get_route_state(@struct)
 
-      assert origin != nil, "Expected an origin value to be provided by the loop"
-      assert counter != nil, "Expected a counter value to be provided by the loop"
-      assert pipeline != nil, "Expected a pipeline value to be provided by the loop"
+      assert origin != nil, "Expected an origin value to be provided by the route_state"
+      assert counter != nil, "Expected a counter value to be provided by the route_state"
+      assert pipeline != nil, "Expected a pipeline value to be provided by the route_state"
     end
 
     test "keeps Struct.Private default values when merging in routespec data" do
@@ -42,7 +43,7 @@ defmodule Belfrage.ProcessorTest do
                private: %Private{
                  cookie_allowlist: cookie_allowlist
                }
-             } = Processor.get_loop(@struct)
+             } = Processor.get_route_state(@struct)
 
       assert cookie_allowlist == []
     end
@@ -51,7 +52,7 @@ defmodule Belfrage.ProcessorTest do
   describe "Processor.request_pipeline/1" do
     @struct %Struct{
       private: %Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
         pipeline: ["MyTransformer1"]
@@ -70,7 +71,7 @@ defmodule Belfrage.ProcessorTest do
   describe "Processor.request_pipeline/1 with empty pipeline" do
     @struct %Struct{
       private: %Private{
-        loop_id: "SportVideos",
+        route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
         pipeline: []
@@ -82,26 +83,6 @@ defmodule Belfrage.ProcessorTest do
                request: _request,
                private: _private
              } = Processor.request_pipeline(@struct)
-    end
-  end
-
-  describe "Processor.init_post_response_pipeline/1" do
-    @resp_struct %Struct{
-      private: %Private{
-        loop_id: "SportVideos",
-        origin: "https://origin.bbc.co.uk/"
-      },
-      response: %Response{body: :zlib.gzip("a response"), http_status: 501}
-    }
-
-    test "increments status" do
-      Belfrage.LoopsRegistry.find_or_start(@resp_struct)
-      Processor.init_post_response_pipeline(@resp_struct)
-
-      assert {:ok,
-              %{
-                counter: %{"https://origin.bbc.co.uk/" => %{501 => 1, :errors => 1}}
-              }} = Belfrage.Loop.state(@resp_struct)
     end
   end
 
@@ -191,7 +172,17 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "does not use cached response for personalised requests", %{struct: struct, cached_response: cached_response} do
-      struct = Struct.add(struct, :private, %{personalised: true})
+      struct = Struct.add(struct, :private, %{personalised_request: true})
+
+      %{response: response} = Processor.fetch_early_response_from_cache(struct)
+      refute response.body == cached_response.body
+    end
+
+    test "does not use cached response for routes requesting not to be cached", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
+      struct = Struct.add(struct, :private, %{caching_enabled: false})
 
       %{response: response} = Processor.fetch_early_response_from_cache(struct)
       refute response.body == cached_response.body
@@ -200,7 +191,11 @@ defmodule Belfrage.ProcessorTest do
 
   describe "fetch_fallback_from_cache/1" do
     setup do
-      struct = %Struct{request: %Request{request_hash: unique_cache_key()}, response: %Response{http_status: 200}}
+      struct = %Struct{
+        request: %Request{request_hash: unique_cache_key(), request_id: UUID.uuid4()},
+        response: %Response{http_status: 200}
+      }
+
       response = %Response{http_status: 200, body: "Cached response"}
       response = put_into_cache(%Struct{struct | response: response})
       %{struct: struct, cached_response: response}
@@ -214,46 +209,87 @@ defmodule Belfrage.ProcessorTest do
       refute response.body == cached_response.body
     end
 
-    test "uses cached response as fallback for failed response", %{struct: struct, cached_response: cached_response} do
+    test "uses response in local cache as fallback for failed response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response == cached_response
     end
 
-    test "uses stale cached response as fallback", %{struct: struct} do
-      cached_response = make_cached_reponse_stale(struct.request.request_hash)
+    test "uses stale response in local cache as fallback", %{struct: struct} do
+      cached_response = make_cached_response_stale(struct.request.request_hash)
 
       struct = Struct.add(struct, :response, %{http_status: 500})
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
-      assert response == cached_response
+      assert response == %{cached_response | fallback: true, cache_type: :local}
+    end
+
+    test "uses response in distributed cache as fallback for failed response", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
+      clear_cache()
+
+      expect(Belfrage.Clients.CCPMock, :fetch, fn _struct ->
+        {:ok, cached_response}
+      end)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      %{response: response} = Processor.fetch_fallback_from_cache(struct)
+      assert response.body == cached_response.body
+      assert response.fallback == true
+      assert response.cache_type == :distributed
     end
 
     test "makes the response private if request is personalised", %{struct: struct, cached_response: cached_response} do
       struct =
         struct
         |> Struct.add(:response, %{http_status: 500})
-        |> Struct.add(:private, %{personalised: true})
+        |> Struct.add(:private, %{personalised_request: true})
 
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response.body == cached_response.body
       assert response.cache_directive.cacheability == "private"
     end
+
+    test "tracks latency checkpoints when fetching fallback", %{struct: struct} do
+      start_supervised!(LatencyMonitor)
+
+      struct = Struct.add(struct, :response, %{http_status: 500})
+      Processor.fetch_fallback_from_cache(struct)
+
+      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      assert checkpoints[:fallback_request_sent]
+      assert checkpoints[:fallback_response_received]
+      assert checkpoints[:fallback_response_received] > checkpoints[:fallback_request_sent]
+    end
   end
 
   describe "use_fallback?/1" do
-    test "returns true for server errors and most client errors" do
-      assert Processor.use_fallback?(%Response{http_status: 500})
-      assert Processor.use_fallback?(%Response{http_status: 503})
+    def struct_fixture(status: status, caching_enabled: caching_enabled) do
+      %Struct{response: %Response{http_status: status}, private: %Private{caching_enabled: caching_enabled}}
+    end
 
-      assert Processor.use_fallback?(%Response{http_status: 400})
-      assert Processor.use_fallback?(%Response{http_status: 403})
-      assert Processor.use_fallback?(%Response{http_status: 429})
+    test "returns true for server errors and most client errors" do
+      assert Processor.use_fallback?(struct_fixture(status: 500, caching_enabled: true))
+      assert Processor.use_fallback?(struct_fixture(status: 503, caching_enabled: true))
+
+      assert Processor.use_fallback?(struct_fixture(status: 400, caching_enabled: true))
+      assert Processor.use_fallback?(struct_fixture(status: 403, caching_enabled: true))
+      assert Processor.use_fallback?(struct_fixture(status: 429, caching_enabled: true))
     end
 
     test "returns false for some client errors" do
-      refute Processor.use_fallback?(%Response{http_status: 404})
-      refute Processor.use_fallback?(%Response{http_status: 410})
-      refute Processor.use_fallback?(%Response{http_status: 451})
+      refute Processor.use_fallback?(struct_fixture(status: 404, caching_enabled: true))
+      refute Processor.use_fallback?(struct_fixture(status: 410, caching_enabled: true))
+      refute Processor.use_fallback?(struct_fixture(status: 451, caching_enabled: true))
+    end
+
+    test "returns false if struct.private.caching_enabled is false" do
+      refute Processor.use_fallback?(struct_fixture(status: 500, caching_enabled: false))
+      refute Processor.use_fallback?(struct_fixture(status: 404, caching_enabled: false))
     end
   end
 end

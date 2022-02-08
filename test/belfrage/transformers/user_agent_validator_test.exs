@@ -1,77 +1,27 @@
 defmodule Belfrage.Transformers.UserAgentValidatorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Belfrage.Transformers.UserAgentValidator
   alias Belfrage.Struct
+  alias Belfrage.Struct.Request
 
-  @rest []
-
-  defp incoming_request(path, user_agent) do
-    %Struct{
-      request: %Struct.Request{
-        method: :get,
-        path: path,
-        user_agent: user_agent,
-        req_svc_chain: "Belfrage"
-      }
-    }
-  end
-
-  describe "when a UserAgent is received and the value is MozartFetcher" do
-    test "we receive :ok and the pipeline continues" do
-      struct = incoming_request("/", "MozartFetcher")
-
-      assert {:ok, ^struct} = UserAgentValidator.call(@rest, struct)
+  for user_agent <- ~w(MozartFetcher MozartCli fabl) do
+    test "request with user agent '#{user_agent}' is permitted" do
+      struct = %Struct{request: %Request{user_agent: unquote(user_agent)}}
+      assert UserAgentValidator.call([], struct) == {:ok, struct}
     end
   end
 
-  describe "when a UserAgent is received and the value is MozartCli" do
-    test "we receive :ok and the pipeline continues" do
-      struct = incoming_request("/", "MozartCli")
+  for user_agent <- ["foo", ""] do
+    test "request with user agent '#{user_agent}' results in error 400" do
+      struct = %Struct{request: %Request{user_agent: unquote(user_agent), req_svc_chain: "Belfrage"}}
 
-      assert {:ok, ^struct} = UserAgentValidator.call(@rest, struct)
-    end
-  end
-
-  describe "when a UserAgent is received and the value is not allowed" do
-    test "we receive :stop_pipeline and the struct" do
-      struct = incoming_request("/", "NaughtyVivaldiFetcher")
-
-      assert {:stop_pipeline, _struct} = UserAgentValidator.call(@rest, struct)
-    end
-
-    test "we return a 400 in the struct response" do
-      struct = incoming_request("/", "NaughtyVivaldiFetcher")
-      {_, struct} = UserAgentValidator.call(@rest, struct)
-
-      assert %Struct.Response{
-               http_status: 400,
-               headers: %{
-                 "req-svc-chain" => "Belfrage",
-                 "cache-control" => "private"
-               }
-             } = struct.response
-    end
-  end
-
-  describe "when an empty UserAgent string is received it returns a 400" do
-    test "we receive :stop_pipeline and the struct" do
-      struct = incoming_request("/", "")
-
-      assert {:stop_pipeline, _struct} = UserAgentValidator.call(@rest, struct)
-    end
-
-    test "we return a 400 in the struct response" do
-      struct = incoming_request("/", "")
-      {_, struct} = UserAgentValidator.call(@rest, struct)
-
-      assert %Struct.Response{
-               http_status: 400,
-               headers: %{
-                 "req-svc-chain" => "Belfrage",
-                 "cache-control" => "private"
-               }
-             } = struct.response
+      assert UserAgentValidator.call([], struct) ==
+               {:stop_pipeline,
+                Struct.add(struct, :response, %{
+                  http_status: 400,
+                  headers: %{"cache-control" => "private", "req-svc-chain" => "Belfrage"}
+                })}
     end
   end
 end

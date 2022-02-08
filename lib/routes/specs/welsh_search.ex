@@ -1,5 +1,12 @@
 defmodule Routes.Specs.WelshSearch do
-  def specs(production_env) do
-    Map.merge(Routes.Specs.Search.specs(production_env), %{default_language: "cy"})
+  def specs do
+    %{
+      owner: "D+ESearchAndNavigationDev@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
+      pipeline: ["ComToUKRedirect"],
+      platform: Webcore,
+      query_params_allowlist: ["q", "page", "scope", "filter"],
+      default_language: "cy"
+    }
   end
 end

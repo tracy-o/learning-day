@@ -1,13 +1,13 @@
 defmodule Belfrage.MixProject do
   use Mix.Project
 
-  @test_envs ~w(test end_to_end routes_test smoke_test)a
+  @test_envs ~w(test smoke_test)a
 
   def project do
     [
       app: :belfrage,
-      version: "0.1.0",
-      elixir: "~> 1.7",
+      version: "0.2.0",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -28,16 +28,11 @@ defmodule Belfrage.MixProject do
 
   defp aliases do
     [
-      test: ["test --no-start"],
-      test_e2e: ["cmd MIX_ENV=end_to_end mix test --color"],
-      routes_test: ["cmd MIX_ENV=routes_test mix test --color"],
       # for smoke_test, see lib/mix/tasks/smoke_test.ex
       t: ["format", "cmd mix test --force --color"]
     ]
   end
 
-  defp test_pattern(mix_env) when mix_env == :end_to_end, do: "end_to_end/*_test.ex"
-  defp test_pattern(mix_env) when mix_env == :routes_test, do: "routes/*_test.ex"
   defp test_pattern(mix_env) when mix_env == :smoke_test, do: "smoke/**/*.ex"
   defp test_pattern(_mix_env), do: "*_test.exs"
 

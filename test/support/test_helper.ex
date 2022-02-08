@@ -1,13 +1,11 @@
 defmodule Test.Support.Helper do
   def setup_stubs do
-    Mox.stub_with(Belfrage.Helpers.FileIOMock, Belfrage.Helpers.FileIOStub)
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
-    Mox.stub_with(Belfrage.XrayMock, Belfrage.XrayStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
     Mox.stub_with(Belfrage.Clients.AuthenticationMock, Belfrage.Clients.AuthenticationStub)
-    Mox.stub_with(Belfrage.MonitorMock, Belfrage.MonitorStub)
     Mox.stub_with(Belfrage.Authentication.Validator.ExpiryMock, Belfrage.Authentication.Validator.ExpiryStub)
     Mox.stub_with(Belfrage.EventMock, Belfrage.EventStub)
+    Mox.stub_with(Belfrage.Dials.ServerMock, Belfrage.Dials.LiveServer)
   end
 
   defmacro assert_gzipped(compressed, should_be) do
@@ -42,6 +40,8 @@ defmodule Test.Support.Helper do
   def mox do
     quote do
       import Mox
+      import Belfrage.Test.StubHelper
+
       setup :set_mox_from_context
       setup :verify_on_exit!
 
@@ -60,17 +60,27 @@ defmodule Test.Support.Helper do
   def get_route(endpoint, path, "WorldService" <> _language) do
     host_header =
       case String.contains?(endpoint, ".test.") do
-        true -> "www.test.bbc.co.uk"
-        false -> "www.bbc.co.uk"
+        true -> "www.test.bbc.com"
+        false -> "www.bbc.com"
       end
 
-    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", host_header}], %{request_timeout: 10_000})
+    request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+  end
+
+  # ContainerEnvelope* route specs use `UserAgentValidator` that checks that a
+  # certain user-agent header is present, otherwise a 400 response is returned
+  def get_route(endpoint, path, "ContainerEnvelope" <> _spec) do
+    request_route(endpoint, path, [{"x-forwarded-host", endpoint}, {"user-agent", "MozartFetcher"}])
   end
 
   def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
 
   def get_route(endpoint, path) do
-    MachineGun.get!("https://#{endpoint}#{path}", [{"x-forwarded-host", endpoint}], %{request_timeout: 10_000})
+    request_route(endpoint, path, [{"x-forwarded-host", endpoint}])
+  end
+
+  defp request_route(endpoint, path, headers) do
+    MachineGun.get!("https://#{endpoint}#{path}", headers, %{request_timeout: 10_000})
   end
 
   def header_item_exists(headers, header_id) do
@@ -98,4 +108,15 @@ defmodule Test.Support.Helper do
 
   def cdn_news_host("test"), do: "news-app.test.api.bbc.co.uk"
   def cdn_news_host("live"), do: "news-app.api.bbc.co.uk"
+
+  def wait_for(condition, tries \\ 100) do
+    unless condition.() do
+      if tries > 0 do
+        Process.sleep(1)
+        wait_for(condition, tries - 1)
+      else
+        ExUnit.Assertions.flunk("Function passed to `wait_for` never returned `true`")
+      end
+    end
+  end
 end

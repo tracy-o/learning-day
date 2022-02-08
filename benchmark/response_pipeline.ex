@@ -26,7 +26,7 @@ defmodule Benchmark.ResponsePipeline do
 
   alias Belfrage.Struct
   alias Belfrage.Processor
-  alias Belfrage.Services.Webcore.Response
+  alias Belfrage.Services.Webcore
 
   # TODO: see webcore_response_build.ex
 
@@ -40,7 +40,7 @@ defmodule Benchmark.ResponsePipeline do
 
   def setup(iteration \\ 1, step_size_kb \\ 1) do
     struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], loop_id: "ProxyPass"}
+      private: %Struct.Private{pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
     }
 
     for i <- 1..iteration, into: %{} do
@@ -49,8 +49,8 @@ defmodule Benchmark.ResponsePipeline do
       {
         size_kb,
         {
-          struct_with_resp(struct, Response.build({:ok, lambda_resp(size_kb)})),
-          struct_with_resp(struct, Response.build({:ok, gzip_base64_lambda_resp(size_kb)}))
+          struct_with_resp(struct, Webcore.build_response({:ok, lambda_resp(size_kb)})),
+          struct_with_resp(struct, Webcore.build_response({:ok, gzip_base64_lambda_resp(size_kb)}))
         }
       }
     end

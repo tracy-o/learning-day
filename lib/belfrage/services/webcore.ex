@@ -1,44 +1,89 @@
 defmodule Belfrage.Services.Webcore do
-  alias Belfrage.{Clients, Struct}
+  alias Belfrage.{Struct, Event, Metrics}
+  alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
+  alias Belfrage.Xray
 
   @behaviour Service
-
-  @xray Application.get_env(:belfrage, :xray)
-  @lambda_client Application.get_env(:belfrage, :lambda_client, Clients.Lambda)
+  @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
-  def dispatch(struct) do
-    Struct.add(
-      struct,
-      :response,
-      build_webcore_response(struct)
-    )
+  def dispatch(struct = %Struct{private: private = %Private{}}) do
+    response =
+      with {:ok, response} <- call_lambda(struct),
+           {:ok, response} <- build_response(response) do
+        Metrics.event(~w(webcore response)a, %{status_code: response.http_status, route_spec: private.route_state_id})
+        response
+      else
+        {:error, error_code} ->
+          Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.route_state_id})
+
+          if error_code == :function_not_found && private.preview_mode == "on" do
+            %Response{http_status: 404, body: "404 - not found"}
+          else
+            %Response{http_status: 500}
+          end
+      end
+
+    Struct.add(struct, :response, response)
   end
 
-  defp build_webcore_response(struct) do
-    @xray.subsegment_with_struct_annotations("webcore-service", struct, fn ->
+  defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
+    metadata = %{
+      route_spec: private.route_state_id,
+      struct: struct
+    }
+
+    Metrics.duration(~w(webcore request)a, metadata, fn ->
       @lambda_client.call(
-        arn(struct),
-        struct.private.origin,
+        Webcore.Credentials.get(),
+        private.origin,
         Webcore.Request.build(struct),
-        struct.request.request_id,
-        invoke_lambda_options(struct)
+        request.request_id,
+        lambda_options(struct.request)
       )
-      |> Webcore.Response.build()
     end)
   end
 
-  defp arn(_) do
-    Application.fetch_env!(:belfrage, :webcore_lambda_role_arn)
+  defp lambda_options(request = %Struct.Request{}) do
+    if request.xray_segment do
+      trace_id = Xray.build_trace_id_header(request.xray_segment)
+      [xray_trace_id: trace_id]
+    else
+      []
+    end
   end
 
-  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: nil}}) do
-    []
+  def build_response(response = %{"body" => body, "headers" => headers, "statusCode" => status_code}) do
+    headers =
+      headers
+      |> Enum.map(fn {key, value} -> {key, to_string(value)} end)
+      |> Map.new()
+
+    body =
+      if response["isBase64Encoded"] do
+        # b64fast doesn't return an error when the input is not actually Base64
+        # encoded, it just attempts to decode it anyway.
+        :b64fast.decode64(body)
+      else
+        body
+      end
+
+    {:ok,
+     %Response{
+       http_status: status_code,
+       headers: headers,
+       body: body
+     }}
   end
 
-  defp invoke_lambda_options(%Struct{request: %Struct.Request{xray_trace_id: xray_trace_id}}) do
-    [xray_trace_id: xray_trace_id]
+  def build_response(invalid_response) do
+    Event.record(:log, :debug, %{
+      msg: "Received an invalid response from web core",
+      web_core_response: invalid_response
+    })
+
+    {:error, :invalid_web_core_contract}
   end
 end

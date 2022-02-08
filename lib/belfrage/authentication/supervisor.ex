@@ -1,23 +1,26 @@
 defmodule Belfrage.Authentication.Supervisor do
   use Supervisor
 
-  def start_link(init_arg) do
-    Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
+  alias Belfrage.Authentication.{BBCID, JWK}
+
+  def start_link(_arg \\ nil) do
+    Supervisor.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   @impl true
-  def init(args) do
-    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
+  def init(_arg) do
+    children =
+      [BBCID, BBCID.AvailabilityPoller, JWK]
+      |> add_jwk_poller()
+
+    Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
   end
 
-  defp children(env: :test) do
-    []
-  end
-
-  defp children(_env) do
-    [
-      Belfrage.Authentication.Jwk,
-      Belfrage.Authentication.Flagpole
-    ]
+  defp add_jwk_poller(children) do
+    if Application.get_env(:belfrage, :jwk_polling_enabled) do
+      children ++ [JWK.Poller]
+    else
+      children
+    end
   end
 end

@@ -2,7 +2,10 @@ defmodule Belfrage.Cache.Local do
   @behaviour Belfrage.Behaviours.CacheStrategy
 
   alias Belfrage.Behaviours.CacheStrategy
-  import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
+  alias Belfrage.Struct
+  alias Belfrage.Struct.Request
+  alias Belfrage.Timer
+  alias Belfrage.Metrics
 
   @doc """
   Fetches a response from the local cache. In order to implement an LRU caching
@@ -18,16 +21,19 @@ defmodule Belfrage.Cache.Local do
   - [2] https://github.com/bbc/belfrage/pull/821/commits/761d3d68ca9a30b0b6a543ed4ff42b268ac14565
   """
   @impl CacheStrategy
-  def fetch(%Belfrage.Struct{request: %{request_id: request_id, request_hash: request_hash}}, cache \\ :cache) do
-    Cachex.touch(cache, request_hash)
+  def fetch(%Struct{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
+    try do
+      caching_module.touch(:cache, request_hash)
 
-    checkpoint(request_id, :request_end)
-    # TODO: this temporary variable is inefficient, potentially use Kernel.tap/2
-    # when available. https://github.com/bbc/belfrage/pull/844#discussion_r628017111
-    result = Cachex.get(cache, request_hash)
-    checkpoint(request_id, :response_start)
-
-    format_cache_result(result)
+      :cache
+      |> caching_module.get(request_hash)
+      |> format_cache_result()
+    catch
+      :exit, cause ->
+        Metrics.event([:cache, :local, :fetch_exit])
+        Belfrage.Event.record(:log, :error, %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
+        {:ok, :content_not_found}
+    end
   end
 
   @impl CacheStrategy
@@ -38,15 +44,29 @@ defmodule Belfrage.Cache.Local do
             cache_last_updated: cache_last_updated
           }
         },
-        cache \\ :cache
+        # Options are:
+        #   :cache_name - The name of the cache to be used
+        #   :make_stale - Whether or not to make the cache entry stale
+        opts \\ []
       ) do
     if cacheable?(max_age) && stale?(cache_last_updated, max_age) do
-      Cachex.put(
-        cache,
-        struct.request.request_hash,
-        %{struct.response | cache_last_updated: Belfrage.Timer.now_ms()},
-        ttl: struct.private.fallback_ttl
-      )
+      %{cache_name: cache, make_stale: make_stale} = Enum.into(opts, %{cache_name: :cache, make_stale: false})
+
+      if make_stale do
+        Cachex.put(
+          cache,
+          struct.request.request_hash,
+          %{struct.response | cache_last_updated: Timer.make_stale(Timer.now_ms(), max_age)},
+          ttl: struct.private.fallback_ttl
+        )
+      else
+        Cachex.put(
+          cache,
+          struct.request.request_hash,
+          %{struct.response | cache_last_updated: Timer.now_ms()},
+          ttl: struct.private.fallback_ttl
+        )
+      end
     else
       {:ok, false}
     end
@@ -63,8 +83,8 @@ defmodule Belfrage.Cache.Local do
     %{max_age: max_age} = response.cache_directive
 
     case stale?(last_updated, max_age) do
-      true -> {:ok, :stale, response}
-      false -> {:ok, :fresh, response}
+      true -> {:ok, {:local, :stale}, response}
+      false -> {:ok, {:local, :fresh}, response}
     end
   end
 

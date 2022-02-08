@@ -1,126 +1,181 @@
 defmodule Belfrage.Processor do
   alias Belfrage.{
-    LoopsRegistry,
+    RouteStateRegistry,
     Struct,
-    Loop,
+    RouteState,
     Pipeline,
     RequestHash,
-    ServiceProvider,
     Cache,
     ResponseTransformers,
     Allowlist,
     Event,
     Personalisation,
-    CacheControl
+    CacheControl,
+    Metrics,
+    Language,
+    WrapperError
   }
 
-  alias Struct.{Response, Private}
+  alias Struct.{Request, Response, Private}
+  alias Belfrage.Metrics.LatencyMonitor
 
-  def get_loop(struct = %Struct{}) do
-    LoopsRegistry.find_or_start(struct)
+  def pre_request_pipeline(struct = %Struct{}) do
+    pipeline = [
+      &get_route_state/1,
+      &allowlists/1,
+      &personalisation/1,
+      &language/1,
+      &generate_request_hash/1
+    ]
 
-    case Loop.state(struct) do
-      {:ok, loop} -> Map.put(struct, :private, Map.merge(struct.private, loop))
-      _ -> loop_state_failure()
-    end
+    WrapperError.wrap(pipeline, struct)
+  end
+
+  def get_route_state(struct = %Struct{}) do
+    Metrics.duration(:set_request_route_state_data, fn ->
+      RouteStateRegistry.find_or_start(struct)
+
+      case RouteState.state(struct) do
+        {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
+        _ -> route_state_state_failure()
+      end
+    end)
   end
 
   def personalisation(struct = %Struct{}) do
-    Struct.add(struct, :private, %{personalised: Personalisation.personalised_request?(struct)})
+    Metrics.duration(:check_if_personalised_request, fn ->
+      Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
+    end)
+  end
+
+  def language(struct) do
+    Language.add_signature(struct)
   end
 
   def allowlists(struct) do
-    struct
-    |> Allowlist.QueryParams.filter()
-    |> Allowlist.Cookies.filter()
-    |> Allowlist.Headers.filter()
+    Metrics.duration(:filter_request_data, fn ->
+      struct
+      |> Allowlist.QueryParams.filter()
+      |> Allowlist.Cookies.filter()
+      |> Allowlist.Headers.filter()
+    end)
   end
 
   def generate_request_hash(struct = %Struct{}) do
-    RequestHash.put(struct)
+    Metrics.duration(:generate_request_hash, fn ->
+      RequestHash.put(struct)
+    end)
   end
 
   def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
-    if private.personalised do
-      struct
+    if private.caching_enabled && !private.personalised_request do
+      WrapperError.wrap(&do_fetch_early_response_from_cache/1, struct)
     else
-      Cache.fetch(struct, [:fresh])
+      struct
     end
   end
 
+  defp do_fetch_early_response_from_cache(struct = %Struct{}) do
+    struct =
+      Metrics.duration(:fetch_early_response_from_cache, fn ->
+        Cache.fetch(struct, [:fresh])
+      end)
+
+    if struct.response.http_status do
+      latency_checkpoint(struct, :early_response_received)
+      RouteState.inc(struct)
+    end
+
+    struct
+  end
+
   def request_pipeline(struct = %Struct{}) do
+    Metrics.duration(:request_pipeline, fn ->
+      WrapperError.wrap(&process_request_pipeline/1, struct)
+    end)
+  end
+
+  defp process_request_pipeline(struct = %Struct{}) do
     case Pipeline.process(struct) do
       {:ok, struct} -> struct
       {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
     end
   end
 
-  def perform_call(struct = %Struct{response: %Response{http_status: code}}) when is_number(code) do
-    struct
-  end
-
-  # when only one struct
-  def perform_call([struct = %Struct{private: %Private{origin: origin}}]) do
-    ServiceProvider.service_for(origin).dispatch(struct)
-  end
-
-  @doc """
-  When a list of structs, call the cascade service
-  """
-  def perform_call(structs) do
-    Belfrage.Services.Cascade.dispatch(structs)
-  end
-
   def response_pipeline(struct = %Struct{}) do
+    pipeline = [
+      &inc_route_state/1,
+      &maybe_log_response_status/1,
+      &ResponseTransformers.CacheDirective.call/1,
+      &ResponseTransformers.ResponseHeaderGuardian.call/1,
+      &ResponseTransformers.PreCacheCompression.call/1,
+      &Cache.store/1,
+      &fetch_fallback_from_cache/1
+    ]
+
+    WrapperError.wrap(pipeline, struct)
+  end
+
+  defp inc_route_state(struct = %Struct{}) do
+    RouteState.inc(struct)
     struct
-    |> maybe_log_response_status()
-    |> ResponseTransformers.CacheDirective.call()
-    |> ResponseTransformers.ResponseHeaderGuardian.call()
-    |> ResponseTransformers.PreCacheCompression.call()
-    |> Cache.store()
-    |> fetch_fallback_from_cache()
   end
 
   def fetch_fallback_from_cache(struct = %Struct{}) do
-    if use_fallback?(struct.response) do
-      struct
-      |> Cache.fetch([:fresh, :stale])
-      |> make_fallback_private_if_personalised_request()
+    if use_fallback?(struct) do
+      struct =
+        struct
+        |> latency_checkpoint(:fallback_request_sent)
+        |> Cache.fetch([:fresh, :stale])
+        |> latency_checkpoint(:fallback_response_received)
+
+      if struct.response.http_status == 200 do
+        struct
+        |> inc_route_state()
+        |> Cache.store()
+        |> make_fallback_private_if_personalised_request()
+      else
+        struct
+      end
     else
       struct
     end
   end
 
-  def use_fallback?(%Response{http_status: status}) do
-    status >= 400 && status not in [404, 410, 451]
+  def use_fallback?(%Struct{
+        response: %Response{http_status: status},
+        private: %Private{caching_enabled: caching_enabled}
+      }) do
+    status >= 400 and status not in [404, 410, 451] and caching_enabled
+  end
+
+  defp latency_checkpoint(struct = %Struct{request: request = %Request{}}, checkpoint) do
+    LatencyMonitor.checkpoint(request.request_id, checkpoint)
+    struct
   end
 
   defp make_fallback_private_if_personalised_request(
          struct = %Struct{
-           response: response = %Response{},
            private: private = %Private{}
          }
        ) do
-    if response.http_status == 200 && private.personalised do
+    if private.personalised_request do
       Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
     else
       struct
     end
   end
 
-  def init_post_response_pipeline(struct = %Struct{}) do
-    Loop.inc(struct)
-
-    struct
-    |> ResponseTransformers.CompressionAsRequested.call()
+  def post_response_pipeline(struct = %Struct{}) do
+    WrapperError.wrap(&ResponseTransformers.CompressionAsRequested.call/1, struct)
   end
 
-  defp loop_state_failure do
-    Belfrage.Event.record(:metric, :increment, "error.loop.state")
+  defp route_state_state_failure do
+    Belfrage.Event.record(:metric, :increment, "error.route_state.state")
 
-    Belfrage.Event.record(:log, :error, "Error retrieving loop state")
+    Belfrage.Event.record(:log, :error, "Error retrieving route_state state")
 
-    raise "Failed to load loop state."
+    raise "Failed to load route_state state."
   end
 
   defp maybe_log_response_status(struct = %Struct{response: %Response{http_status: http_status}})

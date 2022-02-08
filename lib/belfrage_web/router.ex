@@ -7,24 +7,36 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.ProductionEnvironment
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
+  alias Belfrage.{Event, Metrics}
 
-  @routefile Application.get_env(:belfrage, :routefile)
-
+  plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
-  plug(BelfrageWeb.Plugs.ResponseMetrics)
-  plug(BelfrageWeb.Plugs.XRay)
+  plug(BelfrageWeb.Plugs.Xray, builder_opts())
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AccessLogs)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
   plug(PreviewMode)
+  plug(:log_invalid_utf8)
   plug(:fetch_query_params)
   plug(BelfrageWeb.Plugs.Overrides)
   plug(Plugs.PathLogger)
   plug(:match)
   plug(:dispatch)
+
+  def call(conn, opts) do
+    conn
+    |> assign(:plug_pipeline_start_time, System.monotonic_time())
+    |> assign(:routefile, opts[:routefile])
+    |> super(opts)
+  end
+
+  def dispatch(conn, opts) do
+    Metrics.stop(:plug_pipeline, conn.assigns.plug_pipeline_start_time)
+    super(conn, opts)
+  end
 
   get "/status" do
     send_resp(conn, 200, "I'm ok thanks")
@@ -42,7 +54,7 @@ defmodule BelfrageWeb.Router do
     send_resp(conn, 405, "")
   end
 
-  match(_, to: @routefile)
+  match(_, to: BelfrageWeb.RoutefilePointer)
 
   def child_spec(scheme: scheme, port: port) do
     Plug.Cowboy.child_spec(
@@ -51,7 +63,7 @@ defmodule BelfrageWeb.Router do
         Enum.concat(
           [
             port: port,
-            protocol_options: [max_keepalive: 5_000_000, max_header_value_length: 16_384]
+            protocol_options: [max_keepalive: 5_000_000, max_header_value_length: 16_384, idle_timeout: 10_000]
           ],
           options(scheme)
         ),
@@ -75,19 +87,19 @@ defmodule BelfrageWeb.Router do
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
     status = router_status(reason)
 
-    case status do
-      400 ->
-        BelfrageWeb.View.not_found(conn)
+    Event.record(:log, :error, %{
+      msg: "Router Service returned a #{status} status",
+      kind: kind,
+      reason: reason,
+      stack: Exception.format_stacktrace(stack),
+      request_path: conn.request_path,
+      query_string: conn.query_string
+    })
 
-      _ ->
-        Belfrage.Event.record(:log, :error, %{
-          msg: "Router Service returned a #{status} status",
-          kind: kind,
-          reason: reason,
-          stack: Exception.format_stacktrace(stack)
-        })
-
-        BelfrageWeb.View.internal_server_error(conn)
+    if status == 400 do
+      BelfrageWeb.Response.not_found(conn)
+    else
+      BelfrageWeb.Response.internal_server_error(conn)
     end
   end
 
@@ -97,5 +109,33 @@ defmodule BelfrageWeb.Router do
 
   defp router_status(_) do
     500
+  end
+
+  defp log_invalid_utf8(conn, _opts) do
+    if invalid_utf8?(conn.request_path) do
+      Event.record(:log, :warn, %{
+        msg: "Invalid UTF8 character in request path",
+        request_path: conn.request_path,
+        query_string: conn.query_string
+      })
+    end
+
+    if invalid_utf8?(conn.query_string) do
+      Event.record(:log, :warn, %{
+        msg: "Invalid UTF8 character in query string",
+        request_path: conn.request_path,
+        query_string: conn.query_string
+      })
+    end
+
+    conn
+  end
+
+  defp invalid_utf8?(url_encoded_string) do
+    try do
+      !(url_encoded_string |> URI.decode() |> String.valid?())
+    rescue
+      ArgumentError -> false
+    end
   end
 end

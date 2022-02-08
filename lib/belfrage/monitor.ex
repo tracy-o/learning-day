@@ -3,11 +3,11 @@ defmodule Belfrage.Monitor do
 
   @dial Application.get_env(:belfrage, :dial)
 
-  def record_loop(loop_state) do
+  def record_route_state(route_state_state) do
     case @dial.state(:monitor_enabled) do
       true ->
         Belfrage.Nodes.monitor_nodes()
-        |> Enum.each(&send_to_monitor_node(&1, loop_state))
+        |> Enum.each(&send_to_monitor_node(&1, route_state_state))
 
       false ->
         {:ok, false}
@@ -27,12 +27,12 @@ defmodule Belfrage.Monitor do
     end
   end
 
-  defp send_to_monitor_node(node, loop_state) do
-    :erlang.send_nosuspend({:message_interface, node}, cast_msg({:store, message_content(loop_state)}))
+  defp send_to_monitor_node(node, route_state_state) do
+    :erlang.send_nosuspend({:message_interface, node}, cast_msg({:store, message_content(route_state_state)}))
   end
 
-  defp message_content(loop_state) do
-    {recorded_at(), node(), get_stack_name(), loop_state}
+  defp message_content(route_state_state) do
+    {recorded_at(), node(), get_stack_name(), route_state_state}
   end
 
   defp recorded_at do

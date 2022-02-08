@@ -32,7 +32,6 @@ defmodule BelfrageWeb.StructAdapterTest do
           cache: 0,
           cdn: false,
           req_svc_chain: "BELFRAGE",
-          x_cdn: 0,
           x_candy_audience: nil,
           x_candy_override: nil,
           x_candy_preview_guid: nil,
@@ -58,7 +57,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "Adds www as the subdomain to the struct" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
@@ -68,7 +67,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the subdomain is not www, it adds the subdomain of the host to the struct" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
@@ -78,7 +77,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the host header is empty, we default to www" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
@@ -88,7 +87,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the host header is not binary, we default to www" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://www.belfrage.com/_web_core")
@@ -98,7 +97,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the request contains a query string it is added to the struct" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core?page=6")
@@ -109,7 +108,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "When the request does not have a query string it adds an empty map to the struct" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core")
@@ -120,7 +119,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "when the path has path parameters" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://test-branch.belfrage.com/_web_core/article-1234")
@@ -131,7 +130,7 @@ defmodule BelfrageWeb.StructAdapterTest do
   end
 
   test "Adds the production_environment to the struct" do
-    id = "SomeLoop"
+    id = "SomeRouteState"
 
     conn =
       conn(:get, "https://www.belfrage.com/sport/videos/12345678")
@@ -142,7 +141,7 @@ defmodule BelfrageWeb.StructAdapterTest do
 
   describe "accept_encoding value" do
     test "when an Accept-Encoding header is provided, the value is stored in struct.request" do
-      id = "SomeLoop"
+      id = "SomeRouteState"
 
       conn =
         conn(:get, "/")
@@ -153,7 +152,7 @@ defmodule BelfrageWeb.StructAdapterTest do
     end
 
     test "when an Accept-Encoding header is not provided" do
-      id = "SomeLoop"
+      id = "SomeRouteState"
 
       conn =
         conn(:get, "/")
@@ -168,7 +167,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "/")
       |> build_request(%{is_uk: true})
 
-    assert true == StructAdapter.adapt(conn, SomeLoop).request.is_uk
+    assert true == StructAdapter.adapt(conn, SomeRouteState).request.is_uk
   end
 
   test "when the bbc_headers host is nil, uses host from the conn" do
@@ -176,7 +175,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       conn(:get, "/")
       |> build_request(%{host: nil})
 
-    assert StructAdapter.adapt(conn, SomeLoop).request.host == "www.example.com"
+    assert StructAdapter.adapt(conn, SomeRouteState).request.host == "www.example.com"
   end
 
   test "adds raw_headers to the struct.request" do
@@ -185,7 +184,7 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> build_request()
       |> put_req_header("a-custom-header", "with this value")
 
-    assert StructAdapter.adapt(conn, SomeLoop).request.raw_headers == %{
+    assert StructAdapter.adapt(conn, SomeRouteState).request.raw_headers == %{
              "a-custom-header" => "with this value"
            }
   end
@@ -196,6 +195,6 @@ defmodule BelfrageWeb.StructAdapterTest do
       |> build_request()
       |> put_req_header("a-custom-header", "with this value")
 
-    assert StructAdapter.adapt(conn, SomeLoop).request.request_id == "req-123456"
+    assert StructAdapter.adapt(conn, SomeRouteState).request.request_id == "req-123456"
   end
 end

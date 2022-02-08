@@ -3,14 +3,12 @@ defmodule Belfrage.Event do
   Record metrics & logs.
   """
 
-  @dimension_opts [:request_id, :loop_id]
-
-  @monitor_api Application.get_env(:belfrage, :monitor_api)
+  @dimension_opts [:request_id, :route_state_id]
 
   @callback record(atom(), any(), any(), any()) :: any()
   @callback record(atom(), any(), any()) :: any()
 
-  alias Belfrage.Event
+  alias Belfrage.{Event, Metrics.Statix}
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
 
   @doc """
@@ -20,7 +18,7 @@ defmodule Belfrage.Event do
   ## Supported options
 
   * `:request_id` - Sets/overrides `request_id` event attribute and dimension.
-  * `:loop_id` - Adds passed value to the event's dimensions.
+  * `:route_state_id` - Adds passed value to the event's dimensions.
 
   Also when adding a log message:
 
@@ -43,18 +41,22 @@ defmodule Belfrage.Event do
   end
 
   def record(:log, level, msg, opts) do
-    new(:log, level, msg, opts)
-    |> @monitor_api.record_event()
+    event = new(:log, level, msg, opts)
+    monitor_api().record_event(event)
 
     Stump.log(level, msg)
     Stump.log(level, msg, cloudwatch: true)
   end
 
   def record(:metric, type, metric, opts) do
-    new(:metric, type, metric, opts)
-    |> @monitor_api.record_event()
+    event = new(:metric, type, metric, opts)
+    monitor_api().record_event(event)
 
-    apply(Belfrage.Metrics.Statix, type, [metric, value(opts)])
+    apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
+  end
+
+  def global_dimensions() do
+    ["BBCEnvironment:" <> Application.get_env(:belfrage, :production_environment)]
   end
 
   def new(log_or_metric, name, payload, opts \\ [])
@@ -101,5 +103,9 @@ defmodule Belfrage.Event do
       Belfrage.Event.record(:metric, :timing, unquote(key), value: diff / 1_000)
       result
     end
+  end
+
+  defp monitor_api do
+    Application.get_env(:belfrage, :monitor_api)
   end
 end
