@@ -1776,7 +1776,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   end
 
   def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}})
-      when id in @mozart_live_ids or id in @mozart_test_ids do
+      when id in @mozart_live_ids do
     then(
       ["CircuitBreaker"],
       Struct.add(struct, :private, %{

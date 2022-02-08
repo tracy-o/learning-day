@@ -30,15 +30,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
     }
   }
 
-  setup do
-    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
-      Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
-    end)
-
-    :ok
-  end
-
-  test "if the Topic ID is in the Mozart allow list the platform is Mozart" do
+  test "if the Topic ID is in the Mozart allowlist the platform is Mozart" do
     assert {
              :ok,
              %Struct{
