@@ -145,24 +145,6 @@ defroutefile "Main" do
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
   redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
 
-  #  News Topics
-
-  redirect("/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302)
-  redirect("/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302)
-  redirect("/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302)
-  redirect("/news/topics/ck7edpjq0d5t/*any", to: "/news/uk-politics-48448557", status: 302)
-  redirect("/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302)
-  redirect("/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302)
-  redirect("/news/topics/c77jz3mdmgzt/*any", to: "/news/uk-northern-ireland-38323577", status: 302)
-  redirect("/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302)
-  redirect("/news/topics/c8nq32jw8mwt/*any", to: "/news/business-22434141", status: 302)
-  redirect("/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302)
-  redirect("/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302)
-  redirect("/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302)
-  redirect("/news/topics/cp7r8vgl24lt/*any", to: "/news/world-middle-east-48433977", status: 302)
-  redirect("/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302)
-  redirect("/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302)
-
   redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
@@ -334,6 +316,24 @@ defroutefile "Main" do
   handle "/news/articles/:optimo_id", using: "StorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+
+  #  News Topics
+
+  redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
+  redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
+  redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
+  redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/uk-politics-48448557", status: 302
+  redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
+  redirect "/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302
+  redirect "/news/topics/c77jz3mdmgzt/*any", to: "/news/uk-northern-ireland-38323577", status: 302
+  redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
+  redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/business-22434141", status: 302
+  redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
+  redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
+  redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
+  redirect "/news/topics/cp7r8vgl24lt/*any", to: "/news/world-middle-east-48433977", status: 302
+  redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
+  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
 
   # News indexes
   handle "/news/also_in_the_news", using: "News", examples: ["/news/also_in_the_news"]
