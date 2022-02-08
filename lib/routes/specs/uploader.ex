@@ -1,10 +1,9 @@
 defmodule Routes.Specs.TopicPage do
   def specs(production_env) do
     %{
-      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
+      owner: "D&EHomeParticipationTeam@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",
       platform: Webcore,
-      query_params_allowlist: ["page"],
       pipeline: pipeline(production_env),
       personalisation: "on"
     }
