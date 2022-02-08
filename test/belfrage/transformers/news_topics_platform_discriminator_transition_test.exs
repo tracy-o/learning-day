@@ -30,7 +30,13 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
     }
   }
 
-  test "if the Topic ID is in the Mozart allowlist the platform is Mozart" do
+  setup do
+    stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
+
+    :ok
+  end
+
+  test "if the Topic ID is in the Mozart allow list the platform is Mozart" do
     assert {
              :ok,
              %Struct{
