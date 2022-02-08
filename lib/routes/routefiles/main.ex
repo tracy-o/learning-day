@@ -547,7 +547,7 @@ defroutefile "Main" do
   redirect "/hindi/media-52093366", to: "/hindi/podcasts/p05525mc", status: 301
   redirect "/hindi/media-55217505", to: "/hindi/podcasts/p08s9wv2", status: 301
   redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
-  redirect "/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
+  redirect "/kyrgyz/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
   redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
   redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
   redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
