@@ -33,7 +33,7 @@ defmodule Belfrage.Personalisation do
     bbc_id = Keyword.get(opts, :bbc_id, BBCID)
 
     case route_state_id do
-      PersonalisedContainerData ->
+      "PersonalisedContainerData" ->
         @dial.state(:news_articles_personalisation) && @dial.state(:personalisation) && bbc_id.available?()
 
       _ ->
