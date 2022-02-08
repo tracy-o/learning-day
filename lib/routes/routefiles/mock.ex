@@ -72,6 +72,8 @@ defroutefile "Mock", "test" do
 
   handle("/language-from-cookie", using: "LanguageFromCookieRouteState", examples: [])
 
+  handle("/personalised-news-article-page", using: "PersonalisedContainerData", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
