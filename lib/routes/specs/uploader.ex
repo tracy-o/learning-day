@@ -1,4 +1,4 @@
-defmodule Routes.Specs.TopicPage do
+defmodule Routes.Specs.Uploader do
   def specs(production_env) do
     %{
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
