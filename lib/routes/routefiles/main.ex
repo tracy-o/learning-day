@@ -276,14 +276,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
-    ]
-  end
-
-  #  News Topics
+#  News Topics
 
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
@@ -300,6 +293,13 @@ defroutefile "Main" do
   redirect "/news/topics/cp7r8vgl24lt/*any", to: "/news/world-middle-east-48433977", status: 302
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
   redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
+
+  handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+    ]
+  end
 
   handle "/news/topics/:id", using: "NewsTopics", examples: [] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
