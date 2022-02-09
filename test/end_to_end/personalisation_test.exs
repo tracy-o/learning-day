@@ -130,6 +130,37 @@ defmodule EndToEnd.PersonalisationTest do
     end
   end
 
+  describe "personalisation on and news_articles_personalisation is off" do
+    test "request personalised news article" do
+      stub_dials(personalisation: "on", news_articles_personalisation: "off")
+
+      expect_non_personalised_origin_request()
+
+      response =
+        build_request("/personalised-news-article-page")
+        |> personalise_request()
+        |> make_request()
+        |> assert_successful_response()
+
+      refute vary_header(response) =~ "x-id-oidc-signedin"
+    end
+
+    test "request other personalised page" do
+      stub_dials(personalisation: "on", news_articles_personalisation: "off")
+
+      token = AuthToken.valid_access_token()
+      expect_personalised_origin_request(token)
+
+      response =
+        build_request()
+        |> personalise_request(token)
+        |> make_request()
+        |> assert_successful_response()
+
+      assert vary_header(response) =~ "x-id-oidc-signedin"
+    end
+  end
+
   describe "non-personalised route" do
     test "authenticated request" do
       expect_non_personalised_origin_request()
