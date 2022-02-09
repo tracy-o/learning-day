@@ -51,7 +51,10 @@ defmodule BelfrageWeb.Router do
   end
 
   options _ do
-    send_resp(conn, 405, "")
+    conn
+    |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
+    |> put_resp_header("access-control-allow-origin", "*")
+    |> send_resp(204, "")
   end
 
   match(_, to: BelfrageWeb.RoutefilePointer)

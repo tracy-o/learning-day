@@ -7,11 +7,18 @@ defmodule BelfrageWeb.RouterTest do
   alias BelfrageWeb.Router
 
   describe "OPTIONS" do
-    test "will return a 405" do
+    test "will return a 204" do
       conn = conn(:options, "/")
       conn = Router.call(conn, [])
 
-      assert conn.status == 405
+      assert conn.status == 204
+
+      assert conn.resp_headers == [
+               {"cache-control", "max-age=0, private, must-revalidate"},
+               {"access-control-allow-methods", "GET, OPTIONS"},
+               {"access-control-allow-origin", "*"}
+             ]
+
       assert conn.resp_body == ""
     end
   end
