@@ -54,6 +54,7 @@ defmodule BelfrageWeb.Router do
     conn
     |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
     |> put_resp_header("access-control-allow-origin", "*")
+    |> put_resp_header("cache-control", "max-age=60, public")
     |> send_resp(204, "")
   end
 

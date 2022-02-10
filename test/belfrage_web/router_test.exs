@@ -14,7 +14,7 @@ defmodule BelfrageWeb.RouterTest do
       assert conn.status == 204
 
       assert conn.resp_headers == [
-               {"cache-control", "max-age=0, private, must-revalidate"},
+               {"cache-control", "max-age=60, public"},
                {"access-control-allow-methods", "GET, OPTIONS"},
                {"access-control-allow-origin", "*"}
              ]
