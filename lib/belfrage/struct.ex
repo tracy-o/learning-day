@@ -85,6 +85,7 @@ defmodule Belfrage.Struct.Private do
             caching_enabled: true,
             features: %{},
             mvt: %{},
+            mvt_vary: "",
             language_from_cookie: false,
             throughput: 100
 
