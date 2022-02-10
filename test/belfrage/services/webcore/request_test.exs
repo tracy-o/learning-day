@@ -196,25 +196,24 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       Request.build(struct_with_features)
   end
 
-  test "does not adds mvt playground header on live" do
-    struct_with_environment = %Struct{
-      private: %Struct.Private{
-        production_environment: "live"
-      }
-    }
+  test "does not add mvt headers when none set" do
+    struct_with_environment = %Struct{}
 
     refute Request.build(struct_with_environment)
            |> Map.get(:headers)
-           |> Map.has_key?("mvt-box_colour_change")
+           |> Map.keys()
+           |> Enum.map(&to_string/1)
+           |> Enum.any?(fn header -> String.starts_with?(header, "mvt-") end)
   end
 
-  test "adds mvt playground header when not on live" do
-    struct_with_environment = %Struct{
+  test "adds mvt headers when set" do
+    struct_with_mvt = %Struct{
       private: %Struct.Private{
-        production_environment: "test"
+        mvt: %{"mvt-button_colour" => {1, "experiment;red"}, "mvt-sidebar" => {5, "feature;false"}}
       }
     }
 
-    assert %{headers: %{"mvt-box_colour_change": "red"}} = Request.build(struct_with_environment)
+    assert %{headers: %{"mvt-button_colour" => "experiment;red", "mvt-sidebar" => "feature;false"}} =
+             Request.build(struct_with_mvt)
   end
 end
