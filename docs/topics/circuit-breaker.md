@@ -4,12 +4,14 @@ The circuit breaker is designed to protect Belfrage, and up-stream services thro
 ***
 
 ### How can I use the circuit breaker?
-For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform or routspec pipieline, as shown:
+For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform or routspec pipieline and should have the `circuit_breaker_error_threshold` key/value as shown:
 
 ```
 defmodule Routes.Platforms.Programmes do
   def specs(production_env) do
-    ...
+    %{
+      circuit_breaker_error_threshold: 500
+    }
   end
 
   defp pipeline("live") do
@@ -20,6 +22,7 @@ defmodule Routes.Platforms.Programmes do
 end
 
 ```
+The value for `circuit_breaker_error_threshold` is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then the circuit breaker will be triggered.
 
 The circuit breaker dial, found in the dials section for each belfrage stack must be set to 'true' to enable circuit breaker usage.
 
@@ -54,28 +57,11 @@ The circuit breaker is activated on a Belfrage server by server basis. If the ci
 ### When does the circuit breaker reset?
 The error counts for all routes resets to 0 every minute from when the application was started. 
 
-Each route is now given a throughput value, which is initialised at 100% and is decreased depending on how many requests are to be sent to the origin instead of being circuit broken. With 100% being all requests go to the origin and 0% meaning none reach the origin and are all circuit broken.
+Each route is now given a throughput value, which is initialised at 100% and is set to 0% when the circuit breaker is triggered. With 100% being all requests go to the origin and 0% meaning none reach the origin and are all circuit broken. 
 
-Having a set of throughput values (0%, 20%, 60%, 100%) gives us the ability to 'ramp down' the circuit breaker for routes which begin to return fewer errors. 
+The throughput value will then increment through a set of values each minute (0%, 20%, 60%, 100%) until it returns to 100%. If the error count rises over the `circuit_breaker_error_threshold` value, the throughput is reset to 0.
 
-***
-
-### How do I configure the circuit breaker thresholds?
-Set the `circuit_breaker_error_threshold` value in your routespec. For example:
-```
-defmodule Routes.Specs.NewsArticlePage do
-  def specs do
-    %{
-      owner: "DENewsCardiff@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
-      platform: Webcore,
-      circuit_breaker_error_threshold: 500
-    }
-  end
-end
-```
-
-The value is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then the circuit breaker will be triggered.
+Having a set of throughput values gives us the ability to 'ramp down' the circuit breaker for routes which begin to return fewer errors. 
 
 ***
 
@@ -97,6 +83,18 @@ An active circuit breaker on one preview environment, will not effect another pr
 ***
 
 ### How do I know if the circuit breaker has triggered on my route?
-The belfrage team will be alerted to an active circuit breaker and will notify the relavant team.
+The belfrage team will be alerted to an active circuit breaker and will notify the relevant team if live issues need addressing.
 
 You are now able to see the number of circuit breaker activations per routespec on Belfrage Grafana dashboards.
+
+
+### Diagrams
+![non-circuit-broken-request](docs/img/non-circuit-broken-request.png "Non circuit broken request")
+
+![circuit-broken-request](docs/img/circuit-broken-request.png "Circuit broken request")
+
+![threshold-scenario1](docs/img/threshold-scenario1.png "Temporary origin fault flips circuit breaker")
+
+![threshold-scenario2](docs/img/threshold-scenario2.png "A prolonged origin fault")
+
+
