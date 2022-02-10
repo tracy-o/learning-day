@@ -89,12 +89,12 @@ You are now able to see the number of circuit breaker activations per routespec 
 
 
 ### Diagrams
-![non-circuit-broken-request](docs/img/non-circuit-broken-request.png "Non circuit broken request")
+![non-circuit-broken-request](../img/non-circuit-broken-request.png "Non circuit broken request")
 
-![circuit-broken-request](docs/img/circuit-broken-request.png "Circuit broken request")
+![circuit-broken-request](../img/circuit-broken-request.png "Circuit broken request")
 
-![threshold-scenario1](docs/img/threshold-scenario1.png "Temporary origin fault flips circuit breaker")
+![threshold-scenario1](../img/threshold-scenario1.png "Temporary origin fault flips circuit breaker")
 
-![threshold-scenario2](docs/img/threshold-scenario2.png "A prolonged origin fault")
+![threshold-scenario2](../img/threshold-scenario2.png "A prolonged origin fault")
 
 
