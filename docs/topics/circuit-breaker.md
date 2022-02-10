@@ -85,7 +85,7 @@ An active circuit breaker on one preview environment, will not effect another pr
 ### How do I know if the circuit breaker has triggered on my route?
 The belfrage team will be alerted to an active circuit breaker and will notify the relevant team if live issues need addressing.
 
-You are now able to see the number of circuit breaker activations per routespec on Belfrage Grafana dashboards.
+You are now able to see the number of circuit breaker activations per routespec on [Belfrage Grafana dashboards](https://grafana.news.tools.bbc.co.uk/d/belfrage-dashboards/belfrage-dashboards-md?orgId=1).
 
 
 ### Diagrams
