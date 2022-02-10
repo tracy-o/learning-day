@@ -15,7 +15,7 @@ defmodule Belfrage.Transformers.MvtMapper do
     1..20
     |> Enum.filter(fn i -> Map.has_key?(headers, "bbc-mvt-#{i}") end)
     |> Enum.into(%{}, fn i ->
-      [type, name, value] = String.split(Map.get(headers, "bbc-mvt-#{i}"), ";")
+      [type, name, value] = Map.get(headers, "bbc-mvt-#{i}") |> String.split(";")
       {"mvt-#{name}", {i, "#{type};#{value}"}}
     end)
   end
