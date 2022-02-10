@@ -12,16 +12,11 @@ defmodule Belfrage.Transformers.MvtMapper do
   def call(rest, struct), do: then(rest, struct)
 
   defp map_mvt_headers(headers) do
-    Enum.reduce(1..20, %{}, fn i, mvt ->
-      header = Map.get(headers, "bbc-mvt-#{i}")
-
-      if header != nil do
-        [type, name, value] = String.split(header, ";")
-        value = Enum.join([type, value], ";")
-        Map.put(mvt, "mvt-#{name}", {i, value})
-      else
-        mvt
-      end
+    1..20
+    |> Enum.filter(fn i -> Map.has_key?(headers, "bbc-mvt-#{i}") end)
+    |> Enum.into(%{}, fn i ->
+      [type, name, value] = String.split(Map.get(headers, "bbc-mvt-#{i}"), ";")
+      {"mvt-#{name}", {i, "#{type};#{value}"}}
     end)
   end
 end
