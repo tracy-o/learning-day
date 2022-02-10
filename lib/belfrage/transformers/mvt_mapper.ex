@@ -8,9 +8,6 @@ defmodule Belfrage.Transformers.MvtMapper do
     then(rest, struct)
   end
 
-  @impl true
-  def call(rest, struct), do: then(rest, struct)
-
   defp map_mvt_headers(headers) do
     1..20
     |> Enum.filter(fn i -> Map.has_key?(headers, "bbc-mvt-#{i}") end)
