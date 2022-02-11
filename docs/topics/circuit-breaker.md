@@ -6,23 +6,20 @@ The circuit breaker is designed to protect Belfrage, and up-stream services thro
 ### How can I use the circuit breaker?
 For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform or routspec pipieline and should have the `circuit_breaker_error_threshold` key/value as shown:
 
-```
-defmodule Routes.Platforms.Programmes do
-  def specs(production_env) do
+```elixir
+defmodule Routes.Specs.MyRouteSpec do
+  def specs do
     %{
-      circuit_breaker_error_threshold: 500
+      circuit_breaker_error_threshold: 500,
+      pipeline: ["CircuitBreaker"]
     }
   end
-
-  defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
-  end
-
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
 
 ```
 The value for `circuit_breaker_error_threshold` is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then the circuit breaker will be triggered.
+
+It is worth noting that if a routespec is attached to a platform that already has these key/value pairs included then ther routespec will inherit this behaviour, we can see this in this example [news routespec](../../lib/routes/specs/news.ex), [news platform](../../lib/routes/platforms/mozart_news.ex).
 
 The circuit breaker dial, found in the dials section for each belfrage stack must be set to 'true' to enable circuit breaker usage.
 
