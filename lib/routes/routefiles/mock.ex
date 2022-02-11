@@ -74,6 +74,8 @@ defroutefile "Mock", "test" do
 
   handle("/personalised-news-article-page", using: "PersonalisedContainerData", examples: [])
 
+  handle("/mvt", using: "WebCoreMvtPlayground", examples: ["/mvt"])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()

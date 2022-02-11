@@ -5,17 +5,35 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   @impl true
   def call(
         struct = %Struct{
-          private: %Struct.Private{mvt: mvt_headers},
+          private: %Struct.Private{headers_allowlist: headers_allowlist, mvt: mvt_headers},
           response: %Struct.Response{headers: headers}
         }
       ) do
     vary_header = Map.get(headers, "vary")
 
     if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
-      Struct.add(struct, :private, %{mvt_vary: map_mvt_headers(vary_header, mvt_headers)})
+      numeric_mvt_headers = map_mvt_headers(vary_header, mvt_headers)
+
+      Struct.add(struct, :private, %{
+        headers_allowlist: filter_mvt_headers(headers_allowlist, numeric_mvt_headers),
+        mvt_vary: numeric_mvt_headers
+      })
     else
-      struct
+      Struct.add(struct, :private, %{
+        headers_allowlist: filter_mvt_headers(headers_allowlist, [])
+      })
     end
+  end
+
+  defp filter_mvt_headers(headers_allowlist, numeric_mvt_headers) do
+    headers_allowlist
+    |> Enum.filter(fn header ->
+      if String.contains?(header, "mvt-") do
+        Enum.member?(numeric_mvt_headers, header)
+      else
+        header
+      end
+    end)
   end
 
   defp map_mvt_headers(vary_header, mvt_headers) do
