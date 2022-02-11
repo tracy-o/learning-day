@@ -6,10 +6,12 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   def call(
         struct = %Struct{
           private: %Struct.Private{mvt: mvt_headers},
-          response: %Struct.Response{headers: %{"vary" => vary_header}}
+          response: %Struct.Response{headers: headers}
         }
       ) do
-    if :binary.match(vary_header, "mvt") != :nomatch do
+    vary_header = Map.get(headers, "vary")
+
+    if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
       Struct.add(struct, :private, %{mvt_vary: map_mvt_headers(vary_header, mvt_headers)})
     else
       struct
