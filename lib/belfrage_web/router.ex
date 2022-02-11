@@ -50,7 +50,7 @@ defmodule BelfrageWeb.Router do
     |> send_file(200, robots_txt_path)
   end
 
-  options "/wc-data*_any" do
+  options "/wc-data/*_any" do
     conn
     |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
     |> put_resp_header("access-control-allow-origin", "*")
