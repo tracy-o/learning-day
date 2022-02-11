@@ -1,11 +1,35 @@
 # Circuit Breaker
-
 The circuit breaker is designed to protect Belfrage, and up-stream services through periods of high latency or elevated error rates.
+
+***
+
+### How can I use the circuit breaker?
+For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform or routspec pipieline and should have the `circuit_breaker_error_threshold` key/value as shown:
+
+```elixir
+defmodule Routes.Specs.MyRouteSpec do
+  def specs do
+    %{
+      circuit_breaker_error_threshold: 500,
+      pipeline: ["CircuitBreaker"]
+    }
+  end
+end
+
+```
+The value for `circuit_breaker_error_threshold` is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then the circuit breaker will be triggered.
+
+It is worth noting that if a routespec is attached to a platform that already has these key/value pairs included then ther routespec will inherit this behaviour, we can see this in this example [news routespec](../../lib/routes/specs/news.ex), [news platform](../../lib/routes/platforms/mozart_news.ex).
+
+The circuit breaker dial, found in the dials section for each belfrage stack must be set to 'true' to enable circuit breaker usage.
+
+***
 
 ### What triggers the circuit breaker?
 Belfrage tracks the number of errors returned from HTTP requests. An error is classed as a response with status code between `500..504` or a `408`.
-
 If the up-stream service is a lambda, failure to invoke the lambda, will also count as an error.
+
+When a route receives more errors in 60 seconds than what is defined in the `circuit_breaker_error_threshold` key within it's routespec (As shown below), the circuit breaker is turned on.
 
 ***
 
@@ -28,29 +52,13 @@ The circuit breaker is activated on a Belfrage server by server basis. If the ci
 ***
 
 ### When does the circuit breaker reset?
-The error counts resets to 0 every minute from when the application was started.
+The error counts for all routes resets to 0 every minute from when the application was started. 
 
-For example, if a circuit breaker is triggered 25 seconds into that minute's period, the circuit breaker will be active for the remaining 35 seconds.
+Each route is now given a throughput value, which is initialised at 100% and is set to 0% when the circuit breaker is triggered. With 100% being all requests go to the origin and 0% meaning none reach the origin and are all circuit broken. 
 
-***
+The throughput value will then increment through a set of values each minute (0%, 20%, 60%, 100%) until it returns to 100%. If the error count rises over the `circuit_breaker_error_threshold` value, the throughput is reset to 0.
 
-### How do I configure the circuit breaker thresholds?
-
-Set the `circuit_breaker_error_threshold` value in your routespec. For example:
-```
-defmodule Routes.Specs.NewsArticlePage do
-  def specs do
-    %{
-      owner: "DENewsCardiff@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
-      platform: Webcore,
-      circuit_breaker_error_threshold: 500
-    }
-  end
-end
-```
-
-The value is the limit of erroneous responses you accept per 1 minute period. If this number is exceeded, then for the remainder of that minute the circuit breaker will be triggered.
+Having a set of throughput values gives us the ability to 'ramp down' the circuit breaker for routes which begin to return fewer errors. 
 
 ***
 
@@ -60,7 +68,6 @@ As the "error" count is stored against a composite key of the routespec and the 
 ***
 
 ### Many route matchers are using my routespec, how will the circuit breaker behave?
-
 If multiple route matchers specify the same routespec, and the circuit breaker is activated, then any requests to a route matcher using that routespec that are routed to the same origin, will be circuit broken.
 
 It is for this reason, that it is bad practice to use one routespec for many route matchers.
@@ -73,6 +80,33 @@ An active circuit breaker on one preview environment, will not effect another pr
 ***
 
 ### How do I know if the circuit breaker has triggered on my route?
-Currently the process is that the Belfrage team will be alerted, and we will then reach out to your team.
+The belfrage team will be alerted to an active circuit breaker and will notify the relevant team if live issues need addressing.
 
-We have a [ticket](https://jira.dev.bbc.co.uk/browse/RESFRAME-4093) to enable granular, per-routespec alarms that would then notify a slack channel of your choosing if the circuit breaker is triggered for one of the routes you own. If you are keen to see this feature, please add a comment to the ticket, and it will be taken into consideration when prioritising our tickets.
+You are now able to see the number of circuit breaker activations per routespec on [Belfrage Grafana dashboards](https://grafana.news.tools.bbc.co.uk/d/belfrage-dashboards/belfrage-dashboards-md?orgId=1).
+
+
+### Diagrams
+
+Non circuit broken request
+
+![non-circuit-broken-request](../img/non-circuit-broken-request.png "Non circuit broken request")
+
+***
+
+Circuit broken request
+
+![circuit-broken-request](../img/circuit-broken-request.png "Circuit broken request")
+
+***
+
+Temporary origin fault flips circuit breaker
+
+![threshold-scenario1](../img/threshold-scenario1.png "Temporary origin fault flips circuit breaker")
+
+***
+
+A prolonged origin fault
+
+![threshold-scenario2](../img/threshold-scenario2.png "A prolonged origin fault")
+
+
