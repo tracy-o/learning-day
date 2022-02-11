@@ -30,6 +30,5 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
       end
     end)
     |> Enum.reject(&is_nil/1)
-    |> Enum.join(",")
   end
 end

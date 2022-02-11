@@ -147,6 +147,18 @@ defmodule BelfrageWeb.Response.Headers.VaryTest do
     end
   end
 
+  describe "mvt headers" do
+    test "does not vary on mvt headers when not available" do
+      refute String.contains?(vary_header(%Struct{}), "mvt-")
+    end
+
+    test "varies on mvt headers when they are available" do
+      struct = %Struct{private: %Private{mvt_vary: ["bbc-mvt-1", "bbc-mvt-5"]}}
+      assert "bbc-mvt-1" in vary_headers(struct)
+      assert "bbc-mvt-5" in vary_headers(struct)
+    end
+  end
+
   defp vary_header(struct) do
     conn(:get, "/") |> Vary.add_header(struct) |> get_resp_header("vary") |> hd()
   end

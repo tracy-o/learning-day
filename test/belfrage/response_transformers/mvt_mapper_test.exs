@@ -17,7 +17,7 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
         }
       })
 
-    assert struct_with_mvt_vary.private.mvt_vary == "bbc-mvt-1,bbc-mvt-5"
+    assert struct_with_mvt_vary.private.mvt_vary == ["bbc-mvt-1", "bbc-mvt-5"]
   end
 
   test "generates mvt_vary value based on returned mvt headers ignoring additional mvt response values" do
@@ -33,6 +33,6 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
         }
       })
 
-    assert struct_with_mvt_vary.private.mvt_vary == "bbc-mvt-1,bbc-mvt-5"
+    assert struct_with_mvt_vary.private.mvt_vary == ["bbc-mvt-1", "bbc-mvt-5"]
   end
 end

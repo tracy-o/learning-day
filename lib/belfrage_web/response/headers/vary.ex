@@ -27,6 +27,7 @@ defmodule BelfrageWeb.Response.Headers.Vary do
     |> base_headers()
     |> Kernel.++(route_headers(struct))
     |> Kernel.++(adverts_headers(edge_cache?, platform))
+    |> Kernel.++(mvt_headers(struct))
     |> Enum.join(",")
   end
 
@@ -69,6 +70,9 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   # defp adverts_headers(true, :"Elixir.Simorgh"), do: "X-BBC-Edge-IsUK"
   defp adverts_headers(false, :"Elixir.Simorgh"), do: ["X-Ip_is_advertise_combined"]
   defp adverts_headers(_, _), do: []
+
+  defp mvt_headers(%Struct{private: %Private{mvt_vary: ""}}), do: []
+  defp mvt_headers(%Struct{private: %Private{mvt_vary: mvt_vary}}), do: mvt_vary
 
   defp country(edge_cache: true), do: "X-BBC-Edge-Country"
   defp country(edge_cache: false), do: "X-Country"
