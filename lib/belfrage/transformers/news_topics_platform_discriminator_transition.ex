@@ -4,6 +4,23 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   """
   use Belfrage.Transformers.Transformer
 
+  @mozart_test_ids [
+    # Oil - BBC News
+    "c2x6gdkj24kt",
+    # Gold - BBC News
+    "cdj5gpy2el9t",
+    # Natural gas - BBC News
+    "cdj5gpyedz6t",
+    # Pound Sterling (GBP) - BBC News
+    "cg83gy20ynpt",
+    # Euro (EUR) - BBC News
+    "c34v29kj722t",
+    # US Dollar (USD) - BBC News
+    "crnvl9k9790t",
+    # Japanese Yen (JPY) - BBC News
+    "c34v29ky0zkt"
+  ]
+
   @mozart_live_ids [
     # Page cannot be found - BBC News
     "cvv4m4mqkymt",
@@ -1739,49 +1756,56 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
     "c008ql15d7dt"
   ]
 
-  @mozart_test_ids [
-    # Oil - BBC News
-    "c2x6gdkj24kt",
-    # Gold - BBC News
-    "cdj5gpy2el9t",
-    # Natural gas - BBC News
-    "cdj5gpyedz6t",
-    # Pound Sterling (GBP) - BBC News
-    "cg83gy20ynpt",
-    # Euro (EUR) - BBC News
-    "c34v29kj722t",
-    # US Dollar (USD) - BBC News
-    "crnvl9k9790t",
-    # Japanese Yen (JPY) - BBC News
-    "c34v29ky0zkt"
-  ]
+  defp is_mozart_id(id) do
+    application_env = Application.get_env(:belfrage, :production_environment)
+
+    if application_env === "live" do
+      id in @mozart_live_ids
+    else
+      id in @mozart_test_ids
+    end
+  end
+
+  defp is_mozart_platform(id, struct) do
+    if is_mozart_id(id) do
+      Struct.add(struct, :private, %{
+        platform: MozartNews
+      })
+    else
+      struct
+    end
+  end
 
   def call(
         _rest,
         struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "slug" => _slug}}}
+      ) do
+    if is_mozart_id(id) do
+      then(
+        [],
+        Struct.add(struct, :private, %{
+          platform: MozartNews
+        })
       )
-      when id not in @mozart_live_ids or id not in @mozart_test_ids do
-    {
-      :redirect,
-      Struct.add(struct, :response, %{
-        http_status: 302,
-        headers: %{
-          "location" => "/news/topics/#{id}",
-          "x-bbc-no-scheme-rewrite" => "1",
-          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-        },
-        body: "Redirecting"
-      })
-    }
+    else
+      {
+        :redirect,
+        Struct.add(struct, :response, %{
+          http_status: 302,
+          headers: %{
+            "location" => "/news/topics/#{id}",
+            "x-bbc-no-scheme-rewrite" => "1",
+            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+          },
+          body: "Redirecting"
+        })
+      }
+    end
   end
 
-  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}})
-      when id in @mozart_live_ids or id in @mozart_test_ids do
-    then(
-      ["CircuitBreaker"],
-      Struct.add(struct, :private, %{
-        platform: MozartNews
-      })
-    )
+  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
+    then(rest, is_mozart_platform(id, struct))
   end
+
+  def call(_rest, struct), do: then([], struct)
 end

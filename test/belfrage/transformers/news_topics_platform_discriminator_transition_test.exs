@@ -5,80 +5,60 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   alias Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition
   alias Belfrage.Struct
 
-  @webcore_topic_id %Struct{
-    private: %Struct.Private{
-      platform: Webcore
-    },
-    request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "ck7l4e11g49t"}
-    }
-  }
-
-  @mozart_topic_id %Struct{
-    private: %Struct.Private{
-      origin: Application.get_env(:belfrage, :mozart_endpoint),
-      platform: MozartNews
-    },
-    request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "c50znx8v8y4t"}
-    }
-  }
-
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
 
     :ok
   end
 
-  test "if the Topic ID is in the Mozart allow list the platform is Mozart" do
+  test "if the Topic ID is in the Mozart allowlist the platform is Mozart" do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: ["CircuitBreaker"]
-               },
                private: %Struct.Private{
                  platform: MozartNews
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "c50znx8v8y4t"}
                }
              }
-           } = NewsTopicsPlatformDiscriminatorTransition.call([], @mozart_topic_id)
+           } =
+             NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
+               request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}}
+             })
   end
 
-  describe "path contains a slug" do
-    setup do
-      %{
-        webcore_topic_id:
-          Struct.add(@webcore_topic_id, :request, %{path_params: %{"id" => "ck7l4e11g49t", "slug" => "custard-cream"}})
-      }
-    end
-
-    test "Topic ID not in Mozart allow list, a redirect will be issued without the slug", %{
-      webcore_topic_id: webcore_topic_id
-    } do
+  describe "when the path contains a slug" do
+    test "and the Topic ID not in the Mozart allowlist, a redirect will be issued without the slug" do
       assert {:redirect,
               %Struct{
                 response: %Struct.Response{
                   http_status: 302,
                   headers: %{
-                    "location" => "/news/topics/ck7l4e11g49t",
+                    "location" => "/news/topics/cl16knzkz9yt",
                     "x-bbc-no-scheme-rewrite" => "1",
                     "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                   },
                   body: "Redirecting"
                 }
-              }} = NewsTopicsPlatformDiscriminatorTransition.call([], webcore_topic_id)
+              }} =
+               NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
+                 request: %Struct.Request{
+                   path: "/_some_path",
+                   path_params: %{"id" => "cl16knzkz9yt", "slug" => "some-slug"}
+                 }
+               })
+    end
+
+    test "and the Topic ID is in the Mozart allowlist, no redirect is issued" do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: MozartNews
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
+                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}}
+               })
     end
   end
 end
