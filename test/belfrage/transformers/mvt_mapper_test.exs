@@ -18,4 +18,17 @@ defmodule Belfrage.Transformers.MvtMapperTest do
                struct.private.mvt
     end
   end
+
+  describe "when there are no mvt headers" do
+    test "the mvt map is empty" do
+      {:ok, struct} =
+        MvtMapper.call([], %Struct{
+          request: %Belfrage.Struct.Request{
+            raw_headers: %{"a" => "header"}
+          }
+        })
+
+      assert %{} == struct.private.mvt
+    end
+  end
 end
