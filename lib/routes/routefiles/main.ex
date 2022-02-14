@@ -181,9 +181,11 @@ defroutefile "Main" do
   handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
   handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
 
-
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
+
+  handle "/sport/preview", using: "SportHomePagePreview", only_on: "test", examples: ["/sport/preview"]
+  handle "/sport/test", using: "TestSportHomePage", only_on: "test", examples: ["/sport/test"]
 
   # data endpoints
 
