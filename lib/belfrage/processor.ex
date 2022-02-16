@@ -109,6 +109,7 @@ defmodule Belfrage.Processor do
       &ResponseTransformers.CacheDirective.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
       &ResponseTransformers.PreCacheCompression.call/1,
+      &ResponseTransformers.MvtMapper.call/1,
       &Cache.store/1,
       &fetch_fallback_from_cache/1
     ]

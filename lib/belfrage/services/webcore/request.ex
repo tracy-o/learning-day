@@ -18,7 +18,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> put_user_session_headers(struct.user_session)
     |> put_feature_header(struct.private)
-    |> put_mvt_playground_header(struct.private)
+    |> put_mvt_headers(struct.private)
   end
 
   defp base_headers(%Struct{request: request = %Request{}, private: private = %Private{}}) do
@@ -67,11 +67,11 @@ defmodule Belfrage.Services.Webcore.Request do
     end
   end
 
-  defp put_mvt_playground_header(headers, _private = %Private{production_environment: "live"}) do
-    headers
-  end
-
-  defp put_mvt_playground_header(headers, _private = %Private{}) do
-    Map.put(headers, :"mvt-box_colour_change", "red")
+  defp put_mvt_headers(headers, private = %Private{}) do
+    if private.mvt == %{} do
+      headers
+    else
+      Enum.into(private.mvt, headers, fn {k, {_, v}} -> {k, v} end)
+    end
   end
 end
