@@ -1081,6 +1081,10 @@ defroutefile "Main" do
 
   handle "/participation-test/follow", using: "ParticipationTestFollow", only_on: "test", examples: ["/participation-test/follow"]
 
+  # Uploader
+
+  handle "/send/:id", using: "Uploader", examples: ["/send/u39697902"]
+
   # topics
 
   handle "/topics", using: "TopicPage", examples: ["/topics"]
