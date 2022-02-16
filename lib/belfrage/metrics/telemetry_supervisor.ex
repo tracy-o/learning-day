@@ -126,6 +126,14 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         measurement: :throughput,
         event_name: "belfrage.circuit_breaker.throughput",
         tags: [:BBCEnvironment, :route_spec]
+      ),
+      counter("circuit_breaker.applied",
+        event_name: "belfrage.circuit_breaker.applied",
+        tags: [:BBCEnvironment, :route_spec]
+      ),
+      counter("circuit_breaker.open",
+        event_name: "belfrage.circuit_breaker.open",
+        tags: [:BBCEnvironment, :route_spec]
       )
     ]
   end

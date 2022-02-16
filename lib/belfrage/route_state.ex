@@ -86,6 +86,8 @@ defmodule Belfrage.RouteState do
       |> CircuitBreaker.threshold_exceeded?()
       |> CircuitBreaker.next_throughput(throughput)
 
+    circuit_breaker_open(next_throughput, state.route_state_id)
+
     Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
       route_spec: state.route_state_id
     })
@@ -101,4 +103,10 @@ defmodule Belfrage.RouteState do
   defp long_interval do
     Application.get_env(:belfrage, :long_counter_reset_interval)
   end
+
+  defp circuit_breaker_open(0, route_state_id) do
+    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: route_state_id})
+  end
+
+  defp circuit_breaker_open(_throughput, _route_state_id), do: false
 end

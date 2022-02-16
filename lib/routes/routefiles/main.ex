@@ -145,7 +145,6 @@ defroutefile "Main" do
   redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
   redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
 
-  redirect("/news/topics/cmj34zmwm1zt/climate-change", to: "/news/science-environment-56837908", status: 302)
   redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
@@ -276,6 +275,24 @@ defroutefile "Main" do
       !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
     ]
   end
+
+#  News Topics
+
+  redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
+  redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
+  redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
+  redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/uk-politics-48448557", status: 302
+  redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
+  redirect "/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302
+  redirect "/news/topics/c77jz3mdmgzt/*any", to: "/news/uk-northern-ireland-38323577", status: 302
+  redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
+  redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/business-22434141", status: 302
+  redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
+  redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
+  redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
+  redirect "/news/topics/cp7r8vgl24lt/*any", to: "/news/world-middle-east-48433977", status: 302
+  redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
+  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: [
@@ -530,6 +547,7 @@ defroutefile "Main" do
   redirect "/hindi/media-52093366", to: "/hindi/podcasts/p05525mc", status: 301
   redirect "/hindi/media-55217505", to: "/hindi/podcasts/p08s9wv2", status: 301
   redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
+  redirect "/kyrgyz/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
   redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
   redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
   redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
@@ -1712,7 +1730,7 @@ defroutefile "Main" do
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
-  handle "/games/*_any", using: "Games", only_on: "test", examples: ["/games/embed/genie-starter-pack"]
+  handle "/games/*_any", using: "Games", examples: ["/games/embed/genie-starter-pack"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
