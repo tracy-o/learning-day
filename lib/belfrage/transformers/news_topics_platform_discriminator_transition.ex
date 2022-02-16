@@ -3,14 +3,15 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   Alters the Platform for a subset of News Topics IDs that need to be served by Mozart.
   """
   use Belfrage.Transformers.Transformer
+  alias Belfrage.Transformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
 
-  @mozart_ids Application.get_env(:belfrage, :mozart_ids)
+  @mozart_news_topic_ids NewsTopicIds.get()
 
   def call(
         _rest,
         struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "slug" => _slug}}}
       ) do
-    if id in @mozart_ids do
+    if id in @mozart_news_topic_ids do
       then(
         ["CircuitBreaker"],
         Struct.add(struct, :private, %{
@@ -34,7 +35,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   end
 
   def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    if id in @mozart_ids do
+    if id in @mozart_news_topic_ids do
       then(
         ["CircuitBreaker"],
         Struct.add(struct, :private, %{

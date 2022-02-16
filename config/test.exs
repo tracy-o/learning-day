@@ -1,11 +1,5 @@
 use Mix.Config
 
-config :cachex, :limit,
-  size: 6,
-  policy: Cachex.Policy.LRW,
-  reclaim: 0.5,
-  options: []
-
 config :belfrage,
   errors_threshold: 20,
   http_client: Belfrage.Clients.HTTPMock,
@@ -43,20 +37,10 @@ config :belfrage,
   short_counter_reset_interval: 3_600_000,
   long_counter_reset_interval: 3_600_000,
   dials_startup_polling_delay: 3_600_000,
-  bbc_id_availability_poll_interval: 3_600_000,
-  mozart_ids: [
-    # Oil - BBC News
-    "c2x6gdkj24kt",
-    # Gold - BBC News
-    "cdj5gpy2el9t",
-    # Natural gas - BBC News
-    "cdj5gpyedz6t",
-    # Pound Sterling (GBP) - BBC News
-    "cg83gy20ynpt",
-    # Euro (EUR) - BBC News
-    "c34v29kj722t",
-    # US Dollar (USD) - BBC News
-    "crnvl9k9790t",
-    # Japanese Yen (JPY) - BBC News
-    "c34v29ky0zkt"
-  ]
+  bbc_id_availability_poll_interval: 3_600_000
+
+config :cachex, :limit,
+  size: 6,
+  policy: Cachex.Policy.LRW,
+  reclaim: 0.5,
+  options: []
