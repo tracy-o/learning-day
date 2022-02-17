@@ -280,6 +280,9 @@ defroutefile "Main" do
   handle "/news/localnews", using: "NewsLocalNews", examples: ["/news/localnews"]
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
 
+  # To be replaced with redirects
+  handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
+
   # News Topics
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
@@ -410,7 +413,6 @@ defroutefile "Main" do
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
   handle "/news/events/*_any", using: "News", examples: ["/news/events/scotland-decides/results"]
   handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
-  handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
   handle "/news/local_news_slice/*_any", using: "News", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
   handle "/news/northern_ireland/*_any", using: "News", examples: ["/news/northern_ireland/northern_ireland_politics"]
   handle "/news/politics/*_any", using: "News", examples: ["/news/politics/eu_referendum/results"]
