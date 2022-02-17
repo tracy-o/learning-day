@@ -276,8 +276,11 @@ defroutefile "Main" do
     ]
   end
 
-#  News Topics
+  # Local News
+  handle "/news/localnews", using: "NewsLocalNews", examples: ["/news/localnews"]
+  handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
 
+  # News Topics
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
@@ -350,7 +353,6 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "News", examples: ["/news/have_your_say"]
   handle "/news/health", using: "News", examples: ["/news/health"]
   handle "/news/in_pictures", using: "News", examples: ["/news/in_pictures"]
-  handle "/news/localnews", using: "News", examples: ["/news/localnews"]
   handle "/news/newsbeat", using: "News", examples: ["/news/newsbeat"]
   handle "/news/northern_ireland", using: "News", examples: ["/news/northern_ireland"]
   handle "/news/paradisepapers", using: "News", examples: ["/news/paradisepapers"]
