@@ -280,7 +280,7 @@ defroutefile "Main" do
   handle "/news/localnews", using: "NewsLocalNews", examples: ["/news/localnews"]
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
 
-  # To be replaced with redirects
+  # To be replaced with redirects https://jira.dev.bbc.co.uk/browse/RESFRAME-4543
   handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
 
   # News Topics
