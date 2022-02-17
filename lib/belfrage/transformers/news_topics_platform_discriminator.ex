@@ -5,175 +5,175 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   use Belfrage.Transformers.Transformer
 
   @webcore_ids [
-    # Allegra Stratton | BBC News
+    # Allegra Stratton
     "cl16knzkz9yt",
-    # Amol Rajan | BBC News
+    # Amol Rajan
     "cl16knz07e2t",
-    # Andrew Harding | BBC News
+    # Andrew Harding
     "c8qx38n5jzlt",
-    # Andrew Neil | BBC News
+    # Andrew Neil
     "c5yd7pzx95qt",
-    # Andrew North | BBC News
+    # Andrew North
     "c8qx38n5vy0t",
-    # Anthony Zurcher | BBC News
+    # Anthony Zurcher
     "cvrkv4x14jkt",
-    # Arif Ansari | BBC News
+    # Arif Ansari
     "cyzpjd57213t",
-    # Betsan Powys | BBC News
+    # Betsan Powys
     "cqypkzl5xvrt",
-    # Branwen Jeffreys | BBC News
+    # Branwen Jeffreys
     "c5yd7pzx3yyt",
-    # Brian Taylor | BBC News
+    # Brian Taylor
     "c2e418dqpkkt",
-    # Chris Cook | BBC News
+    # Chris Cook
     "c5yd7pzxne0t",
-    # Chris Jackson | BBC News
+    # Chris Jackson
     "c63d8496d2nt",
-    # Damian Grammaticas | BBC News
+    # Damian Grammaticas
     "cr3pkx7v1d1t",
-    # Danny Shaw | BBC News
+    # Danny Shaw
     "cd61kenlzv7t",
-    # David Cornock | BBC News
+    # David Cornock
     "c1l7jeydv1jt",
-    # David Gregory-Kumar | BBC News
+    # David Gregory-Kumar
     "c01e2673yydt",
-    # David Shukman | BBC News
+    # David Shukman
     "c5yd7pzxek8t",
-    # Deborah McGurran | BBC News
+    # Deborah McGurran
     "c63d8496r06t",
-    # Dominic Casciani | BBC News
+    # Dominic Casciani
     "cezlkpje5zkt",
-    # Douglas Fraser | BBC News
+    # Douglas Fraser
     "c63d8496ky9t",
-    # Duncan Weldon | BBC News
+    # Duncan Weldon
     "ckj6kvxqrppt",
-    # Emily Maitlis | BBC News
+    # Emily Maitlis
     "cr3pkx7vy68t",
-    # Faisal Islam | BBC News
+    # Faisal Islam
     "c909dyjvdk2t",
-    # Fergus Walsh, medical editor | BBC News
+    # Fergus Walsh, medical editor
     "c8xk6e03epdt",
-    # Gavin Hewitt | BBC News
+    # Gavin Hewitt
     "c5yd7pzxxrpt",
-    # Gordon Corera | BBC News
+    # Gordon Corera
     "cyzpjd57zpxt",
-    # Helen Thomas | BBC News
+    # Helen Thomas
     "c48de9xr454t",
-    # Hugh Pym | BBC News
+    # Hugh Pym
     "cezlkpjenj7t",
-    # James Landale | BBC News
+    # James Landale
     "c63d84969y6t",
-    # Jawad Iqbal | BBC News
+    # Jawad Iqbal
     "c1l7jeylnv1t",
-    # John Hess | BBC News
+    # John Hess
     "cvrkv4xr93pt",
-    # John Simpson | BBC News
+    # John Simpson
     "cj26k502xxzt",
-    # Jon Donnison | BBC News
+    # Jon Donnison
     "c48de9x8yrpt",
-    # Jon Sopel | BBC News
+    # Jon Sopel
     "cl16knz1d2lt",
-    # Jonathan Amos | BBC News
+    # Jonathan Amos
     "cj26k502561t",
-    # Jonathan Marcus | BBC News
+    # Jonathan Marcus
     "cne6kq5e00pt",
-    # Jonny Dymond | BBC News
+    # Jonny Dymond
     "cezlkpjzdjzt",
-    # Justin Rowlatt, climate editor | BBC News
+    # Justin Rowlatt, climate editor
     "cn5e8npr2l3t",
-    # Kamal Ahmed | BBC News
+    # Kamal Ahmed
     "czpd19nplk7t",
-    # Karishma Vaswani | BBC News
+    # Karishma Vaswani
     "c8qx38nq177t",
-    # Katty Kay | BBC News
+    # Katty Kay
     "c8qx38nqx4qt",
-    # Katya Adler | BBC News
+    # Katya Adler
     "cne6kq5evr5t",
-    # Laura Kuenssberg | BBC News
+    # Laura Kuenssberg
     "cvrkv4xr81qt",
-    # Lyse Doucet | BBC News
+    # Lyse Doucet
     "c2e418d0zxqt",
-    # Mark D'Arcy | BBC News
+    # Mark D'Arcy
     "cezlkpjzx2jt",
-    # Mark Devenport | BBC News
+    # Mark Devenport
     "c7d9y05d1lnt",
-    # Mark Easton | BBC News
+    # Mark Easton
     "c63d84937ejt",
-    # Mark Mardell | BBC News
+    # Mark Mardell
     "c37dl8076jxt",
-    # Martin Rosenbaum | BBC News
+    # Martin Rosenbaum
     "cx6p27961e1t",
-    # Mark Urban | BBC News
+    # Mark Urban
     "c1l7jeylzr3t",
-    # Martyn Oates | BBC News
+    # Martyn Oates
     "c5yd7pzy8d8t",
-    # Matt McGrath | BBC News
+    # Matt McGrath
     "cyzpjd5z4d3t",
-    # Michael Crick | BBC News
+    # Michael Crick
     "c7d9y05dy70t",
-    # Nicholas Watt | BBC News
+    # Nicholas Watt
     "cr3pkx73kv3t",
-    # Nick Bryant | BBC News
+    # Nick Bryant
     "c63d84936vyt",
-    # Nick Robinson | BBC News
+    # Nick Robinson
     "cvrkv4xrr7kt",
-    # Nick Servini | BBC News
+    # Nick Servini
     "c909dyj052rt",
-    # Nick Triggle | BBC News
+    # Nick Triggle
     "cne6kq5e5r0t",
-    # Nikki Fox, disability correspondent | BBC News
+    # Nikki Fox, disability correspondent
     "cmwjjp141ydt",
-    # Patrick Burns | BBC News
+    # Patrick Burns
     "cj26k50er7xt",
-    # Paul Barltrop | BBC News
+    # Paul Barltrop
     "cp86kdjq015t",
-    # Peter Henley | BBC News
+    # Peter Henley
     "cezlkpjn4v7t",
-    # Peter Hunt | BBC News
+    # Peter Hunt
     "c01e267d41jt",
-    # Phil Coomes | BBC News
+    # Phil Coomes
     "cne6kq53z8dt",
-    # Richard Moss | BBC News
+    # Richard Moss
     "c909dyj5y94t",
-    # Robert Peston | BBC News
+    # Robert Peston
     "cne6kq5300nt",
-    # Rory Cellan-Jones | BBC News
+    # Rory Cellan-Jones
     "c01e267dpvrt",
-    # Sarah Smith | BBC News
+    # Sarah Smith
     "cezlkpjn5x5t",
-    # Sean Coughlan | BBC News
+    # Sean Coughlan
     "cx6p2795jvqt",
-    # Simon Jack | BBC News
+    # Simon Jack
     "cl16knz857vt",
-    # Soutik Biswas | BBC News
+    # Soutik Biswas
     "c8qx38n91kkt",
-    # Tim Iredale | BBC News
+    # Tim Iredale
     "cp86kdjq6p0t",
-    # Tom Edwards | BBC News
+    # Tom Edwards
     "ckj6kvx762pt",
-    # Tom Feilden | BBC News
+    # Tom Feilden
     "c8qx38n9el2t",
-    # Tony Roe | BBC News
+    # Tony Roe
     "cj26k50e9pet",
-    # Vaughan Roderick | BBC News
+    # Vaughan Roderick
     "ckj6kvx7pdyt",
-    # Will Gompertz | BBC News
+    # Will Gompertz
     "cvrkv4xp7ret",
-    # Wyre Davies | BBC News
+    # Wyre Davies
     "cqypkzl0n79t",
-    # Ben Hunte, West Africa correspondent | BBC News
+    # Ben Hunte, West Africa correspondent
     "cl1gj7nz0l0t",
-    # Cherry Wilson, BBC News senior reporter | BBC News
+    # Cherry Wilson, BBC News senior reporter
     "cl1gj7x2986t",
-    # Dr Faye Kirkland | BBC News
+    # Dr Faye Kirkland
     "ck7l4e11g49t",
-    # BBC Trending | BBC News
+    # BBC Trending
     "cme72mv58q4t",
-    # The Papers | BBC News
+    # The Papers
     "cpml2v678pxt",
-    # Scotland's Newspaper review | BBC News
+    # Scotland's Newspaper review
     "cn7qzpd3gzgt",
-    # Northern Ireland Newspaper review | BBC News
+    # Northern Ireland Newspaper review
     "c4mr5v9znzqt"
   ]
 
