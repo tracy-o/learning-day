@@ -32,7 +32,8 @@ defmodule Belfrage.RouteSpec do
             default_language: "en-GB",
             language_from_cookie: false,
             circuit_breaker_error_threshold: nil,
-            throughput: 100
+            throughput: 100,
+            mvt_project_id: 0
 
   def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
     route_attrs = get_route_attrs(name, env)

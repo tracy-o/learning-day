@@ -5,10 +5,15 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   @impl true
   def call(
         struct = %Struct{
-          private: %Struct.Private{headers_allowlist: headers_allowlist, mvt: mvt_headers},
+          private: %Struct.Private{
+            headers_allowlist: headers_allowlist,
+            mvt: mvt_headers,
+            mvt_project_id: mvt_project_id
+          },
           response: %Struct.Response{headers: headers}
         }
-      ) do
+      )
+      when mvt_project_id > 0 do
     vary_header = Map.get(headers, "vary")
 
     if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
@@ -24,6 +29,9 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
       })
     end
   end
+
+  @impl true
+  def call(struct), do: struct
 
   defp filter_mvt_headers(headers_allowlist, numeric_mvt_headers) do
     headers_allowlist

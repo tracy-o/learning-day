@@ -6,7 +6,8 @@ defmodule Routes.Specs.WebCoreMvtPlayground do
       platform: Webcore,
       pipeline: ["MvtMapper"],
       headers_allowlist: mvt_headers(),
-      caching_enabled: false
+      caching_enabled: false,
+      mvt_project_id: 1
     }
   end
 
