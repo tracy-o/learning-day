@@ -6,7 +6,7 @@ defmodule EndToEnd.XrayTest do
   import Belfrage.Test.MetricsHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.HTTP
+  alias Belfrage.{Clients.HTTP, RouteState}
 
   @moduletag :end_to_end
 
@@ -20,10 +20,15 @@ defmodule EndToEnd.XrayTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.RouteStateSupervisor.kill_all()
+    :ok
   end
 
   describe "request goes through webcore service" do
+    setup do
+      start_supervised!({RouteState, "SomeRouteState"})
+      :ok
+    end
+
     test "a webcore.request.stop event is emmited (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
@@ -50,6 +55,11 @@ defmodule EndToEnd.XrayTest do
   end
 
   describe "hitting the fabl endpoint" do
+    setup do
+      start_supervised!({RouteState, "SomeFablRouteState"})
+      :ok
+    end
+
     test "when start_trace/1 is successful, fabl headers contain x-amzn-trace-id" do
       Belfrage.Clients.HTTPMock
       |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->

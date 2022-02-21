@@ -2,6 +2,7 @@ defmodule NonUtf8QueryStringTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
   use Test.Support.Helper, :mox
 
@@ -17,10 +18,12 @@ defmodule NonUtf8QueryStringTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.RouteStateSupervisor.kill_all()
+    :ok
   end
 
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -44,6 +47,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "Given a query string with a multi byte character, it still passes this on to the origin" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -67,6 +72,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "Given a query string with no value, it still passes this on to the origin" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -90,6 +97,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "query string with invalid utf characters results in a 404" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     conn = conn(:get, "/200-ok-response?query=%f6")
 
     assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
@@ -99,6 +108,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "path params with invalid utf chars result in 500 for requests to WebCore" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     conn = conn(:get, "/format/rewrite/fo%a0")
 
     # Actually call ExAws to trigger the error on JSON-encoding the lambda
@@ -122,6 +133,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "path params with invalid utf chars don't raise an error for non-Webcore requests" do
+    start_supervised!({RouteState, "SomeFablRouteState"})
+
     fabl_url = URI.decode("#{Application.get_env(:belfrage, :fabl_endpoint)}/module/fo%a0")
 
     expect(HTTPMock, :execute, fn %HTTP.Request{url: ^fabl_url}, :Fabl ->
@@ -133,6 +146,8 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "malformed URI" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     conn = conn(:get, "/200-ok-response?query=%")
 
     assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end

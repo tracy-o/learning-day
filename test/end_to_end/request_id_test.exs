@@ -2,6 +2,7 @@ defmodule EndToEnd.RequestIdTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
@@ -15,6 +16,8 @@ defmodule EndToEnd.RequestIdTest do
   }
 
   test "returns the request id header" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
       {:ok, @lambda_response}

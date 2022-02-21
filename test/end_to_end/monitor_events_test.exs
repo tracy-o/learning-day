@@ -5,12 +5,14 @@ defmodule EndToEnd.MonitorEventsTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
 
   @moduletag :end_to_end
 
   setup do
     original_monitor_api = Application.get_env(:belfrage, :monitor_api)
     Application.put_env(:belfrage, :monitor_api, Belfrage.MonitorMock)
+    start_supervised!({RouteState, "SomeRouteState"})
 
     on_exit(fn ->
       Application.put_env(:belfrage, :monitor_api, original_monitor_api)

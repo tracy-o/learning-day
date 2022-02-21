@@ -5,6 +5,7 @@ defmodule Routes.RoutefileTest do
   import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   alias Routes.Routefiles.Test, as: Routefile
 
   @moduletag :routes_test
@@ -66,6 +67,7 @@ defmodule Routes.RoutefileTest do
       stub_origins()
 
       @examples
+      |> start_route_states()
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, %{using: route_state_id}, example} ->
         conn = make_call(:get, example)
@@ -82,6 +84,8 @@ defmodule Routes.RoutefileTest do
     end
 
     test "proxy-pass examples are routed correctly" do
+      start_supervised!({RouteState, "ProxyPass"})
+
       @examples
       |> Enum.filter(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, _, example} ->
@@ -223,5 +227,25 @@ defmodule Routes.RoutefileTest do
       true ->
         :ok
     end
+  end
+
+  defp start_route_states(examples) do
+    examples
+    |> Enum.map(&route_state_id/1)
+    |> Enum.uniq()
+    |> Enum.each(&start_route_state/1)
+
+    examples
+  end
+
+  defp route_state_id({_matcher, %{using: route_state_id}, _example}) do
+    route_state_id
+  end
+
+  defp start_route_state(route_state_id) do
+    start_supervised!(%{
+      id: String.to_atom(route_state_id),
+      start: {RouteState, :start_link, [route_state_id]}
+    })
   end
 end

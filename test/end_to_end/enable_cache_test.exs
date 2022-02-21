@@ -2,12 +2,14 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
 
   setup do
     :ets.delete_all_objects(:cache)
+    start_supervised!({RouteState, "CacheDisabled"})
     :ok
   end
 

@@ -6,6 +6,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   alias Routes.Routefiles.Mock, as: Routefile
   alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
+  alias Belfrage.RouteState
 
   defp put_bbc_headers(conn, origin_simulator \\ nil) do
     conn
@@ -38,6 +39,11 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "handle/2" do
+    setup do
+      start_supervised!({RouteState, "SomeRouteState"})
+      :ok
+    end
+
     test "successful match" do
       stub_origins()
 
@@ -54,6 +60,11 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "calling handle with do block" do
+    setup do
+      start_supervised!({RouteState, "SomeRouteState"})
+      :ok
+    end
+
     test "when 404 check is truthy 404 is returned" do
       conn =
         conn(:get, "/premature-404")
@@ -83,6 +94,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with only_on option" do
     test "when the environments match, will yield request" do
+      start_supervised!({RouteState, "SomeRouteState"})
       stub_origins()
 
       conn =
@@ -97,6 +109,8 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match and no other matching route will return a 404" do
+      start_supervised!({RouteState, "SomeRouteState"})
+
       conn =
         conn(:get, "/only-on")
         |> put_bbc_headers()
@@ -110,6 +124,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match, will match similar route from other environment" do
+      start_supervised!({RouteState, "SomeMozartRouteState"})
       stub_origins()
 
       conn =
@@ -127,6 +142,8 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with only_on option with a block" do
     test "when the environments match, will yield request and execute block" do
+      start_supervised!({RouteState, "SomeRouteState"})
+
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
@@ -140,6 +157,8 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match and no other matching route will return a 404" do
+      start_supervised!({RouteState, "SomeRouteState"})
+
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
@@ -152,6 +171,8 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match, will match similar route from other environment ans execute block" do
+      start_supervised!({RouteState, "SomeMozartRouteState"})
+
       conn =
         conn(:get, "/only-on-with-block-multi-env")
         |> put_bbc_headers()
@@ -516,6 +537,11 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "matching proxy_pass routes" do
+    setup do
+      start_supervised!({RouteState, "ProxyPass"})
+      :ok
+    end
+
     test "200 is returned when on the test env and origin_simulator header is set" do
       origin_simulator_header = "true"
       route = "/some-route-for-proxy-pass"

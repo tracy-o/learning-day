@@ -2,6 +2,7 @@ defmodule EndToEnd.LambdaTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   import Test.Support.Helper, only: [assert_valid_request_hash: 1]
@@ -18,7 +19,8 @@ defmodule EndToEnd.LambdaTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.RouteStateSupervisor.kill_all()
+    start_supervised!({RouteState, "SomeRouteState"})
+    :ok
   end
 
   test "a successful response from a lambda e2e" do

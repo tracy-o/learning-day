@@ -7,10 +7,16 @@ defmodule EndToEnd.CascadeTest do
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP}
+  alias Belfrage.RouteState
   alias Plug.Conn
   alias Fixtures.AuthToken
 
   @cascade_route "/cascade"
+
+  setup do
+    start_supervised!({RouteState, "SomeMozartRouteState"})
+    :ok
+  end
 
   test "first non-404 response from origins in the cascade is used" do
     expect_request_to_origin(:lambda, status: 200, body: "Lambda response")

@@ -2,11 +2,14 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
 
   setup do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     %{
       lambda_response: %{
         "headers" => %{

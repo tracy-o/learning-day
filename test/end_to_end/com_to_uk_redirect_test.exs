@@ -4,8 +4,14 @@ defmodule EndToEndTest.ComToUKRedirectTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
 
   @moduletag :end_to_end
+
+  setup do
+    start_supervised!({RouteState, "SomeRouteStateComToUK"})
+    :ok
+  end
 
   test "redirect to .co.uk when host is .com" do
     conn =
