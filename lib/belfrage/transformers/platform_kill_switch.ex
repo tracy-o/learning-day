@@ -13,7 +13,7 @@ defmodule Belfrage.Transformers.PlatformKillSwitch do
     if killswitch_active?(platform) do
       {:stop_pipeline, Struct.add(struct, :response, %{http_status: 500})}
     else
-      then(rest, struct)
+      then_do(rest, struct)
     end
   end
 

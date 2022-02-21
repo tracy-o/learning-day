@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.LambdaOriginAlias do
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
     if validate_alias(subdomain) do
-      then(
+      then_do(
         rest,
         Struct.add(struct, :private, %{
           origin: "#{private.origin}:#{lambda_alias(private.preview_mode, subdomain, private.production_environment)}"

@@ -19,7 +19,7 @@ defmodule Belfrage.Transformers.ComToUKRedirect do
         }
 
       false ->
-        then(rest, struct)
+        then_do(rest, struct)
     end
   end
 

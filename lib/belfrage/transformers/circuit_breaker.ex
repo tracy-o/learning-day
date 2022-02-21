@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.CircuitBreaker do
   def call(rest, struct) do
     case Belfrage.CircuitBreaker.maybe_apply(struct, @dial.state(:circuit_breaker)) do
       {:applied, applied_struct} -> {:stop_pipeline, applied_struct}
-      {:not_applied, not_applied_struct} -> then(rest, not_applied_struct)
+      {:not_applied, not_applied_struct} -> then_do(rest, not_applied_struct)
     end
   end
 end

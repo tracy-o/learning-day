@@ -36,8 +36,8 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   end
 
   def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    then(rest, maybe_update_origin(id, struct))
+    then_do(rest, maybe_update_origin(id, struct))
   end
 
-  def call(_rest, struct), do: then([], struct)
+  def call(_rest, struct), do: then_do([], struct)
 end

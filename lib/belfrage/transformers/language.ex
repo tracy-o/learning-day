@@ -5,7 +5,7 @@ defmodule Belfrage.Transformers.Language do
 
   @impl true
   def call(rest, struct) do
-    then(
+    then_do(
       rest,
       Belfrage.Struct.add(struct, :request, %{language: Language.set(struct)})
     )

@@ -8,7 +8,7 @@ defmodule Belfrage.Transformers.TrailingSlashRedirector do
     if trailing_slash?(struct.request.path) do
       redirect(struct)
     else
-      then(rest, struct)
+      then_do(rest, struct)
     end
   end
 

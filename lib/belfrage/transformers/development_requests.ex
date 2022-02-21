@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.DevelopmentRequests do
 
   @impl true
   def call(rest, struct) do
-    then(development_transformers(struct) ++ rest, struct)
+    then_do(development_transformers(struct) ++ rest, struct)
   end
 
   def development_transformers(struct) do
