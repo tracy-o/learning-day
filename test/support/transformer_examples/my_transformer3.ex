@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.MyTransformer3 do
   @impl true
   def call(rest, struct = %Struct{}) do
     if 1 == 2 do
-      then(rest, struct)
+      then_do(rest, struct)
     else
       {:error, struct, "error processing pipeline, I'm doing something specific with this"}
     end

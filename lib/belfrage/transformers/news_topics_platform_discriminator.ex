@@ -112,7 +112,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   end
 
   def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id in @webcore_ids do
-    then(
+    then_do(
       ["Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"],
       Struct.add(struct, :private, %{
         platform: Webcore,
@@ -121,5 +121,5 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     )
   end
 
-  def call(_rest, struct), do: then(["CircuitBreaker"], struct)
+  def call(_rest, struct), do: then_do(["CircuitBreaker"], struct)
 end

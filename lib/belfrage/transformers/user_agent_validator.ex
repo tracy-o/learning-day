@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.UserAgentValidator do
   @impl true
   def call(rest, struct = %Struct{request: request = %Request{}}) do
     if request.user_agent in @valid_user_agents do
-      then(rest, struct)
+      then_do(rest, struct)
     else
       {
         :stop_pipeline,

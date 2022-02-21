@@ -11,11 +11,11 @@ defmodule Belfrage.Transformers.TransformerTest do
     struct = %Struct{private: %Struct.Private{pipeline: ["HTTPredirect", "CircuitBreaker"]}}
 
     assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}} =
-             Subject.then(struct.private.pipeline, struct)
+             Subject.then_do(struct.private.pipeline, struct)
   end
 
   test "when there are no more transformers in the list it returns {:ok, struct}" do
     struct = %Struct{private: %Struct.Private{pipeline: []}}
-    assert {:ok, _struct} = Subject.then([], struct)
+    assert {:ok, _struct} = Subject.then_do([], struct)
   end
 end

@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.Transformer do
     end
   end
 
-  def then([next | rest], struct) do
+  def then_do([next | rest], struct) do
     apply(
       String.to_existing_atom(@namespace <> "." <> next),
       :call,
@@ -17,5 +17,5 @@ defmodule Belfrage.Transformers.Transformer do
     )
   end
 
-  def then([], struct), do: {:ok, struct}
+  def then_do([], struct), do: {:ok, struct}
 end

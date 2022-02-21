@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.MockTransformer do
   @impl true
   def call(rest, struct) do
     send(self(), :mock_transformer_called)
-    then(rest, struct)
+    then_do(rest, struct)
   end
 end
 
