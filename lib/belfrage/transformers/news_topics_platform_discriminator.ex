@@ -197,7 +197,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
   end
 
   def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id not in @webcore_ids do
-    then(
+    then_do(
       ["CircuitBreaker"],
       Struct.add(struct, :private, %{
         platform: MozartNews

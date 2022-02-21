@@ -24,7 +24,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
         }
 
       to_mozart_news?(struct) ->
-        then(
+        then_do(
           ["CircuitBreaker"],
           Struct.add(struct, :private, %{
             platform: MozartNews
@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
         )
 
       true ->
-        then([], struct)
+        then_do([], struct)
     end
   end
 
