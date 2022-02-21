@@ -466,11 +466,11 @@ defroutefile "Main" do
 
   handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
 
-  handle "/cymrufyw/etholiad/2022/cymru/cygnor", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor"]
+  handle "/cymrufyw/etholiad/2022/cymru/cynghorau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau"]
 
-  handle "/cymrufyw/etholiad/2022/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor/W10000006"] do
+  handle "/cymrufyw/etholiad/2022/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau/W10000006"] do
     return_404 if: [
-                 !String.match?(division_name, ~r/^(cygnor)$/),
+                 !String.match?(division_name, ~r/^(cynghorau)$/),
                  !String.match?(division_id, ~r/^[W][0-9]{8}$/)
                ]
   end
