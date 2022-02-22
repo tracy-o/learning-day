@@ -7,17 +7,19 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
 
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
-
-    :ok
+    %{mozart_news_endpoint: Application.get_env(:belfrage, :mozart_news_endpoint)}
   end
 
   describe "when the path does not contain a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform is Mozart" do
+    test "if the Topic ID is in the Mozart allowlist the platform is Mozart", %{
+      mozart_news_endpoint: mozart_news_endpoint
+    } do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: MozartNews
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint
                  }
                }
              } =
@@ -42,12 +44,15 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   end
 
   describe "when the path contains a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform is Mozart" do
+    test "if the Topic ID is in the Mozart allowlist the platform is Mozart", %{
+      mozart_news_endpoint: mozart_news_endpoint
+    } do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: MozartNews
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint
                  }
                }
              } =
