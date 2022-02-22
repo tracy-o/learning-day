@@ -126,13 +126,13 @@ defmodule BelfrageWeb.Response.Headers.VaryTest do
   end
 
   describe "advertise headers" do
-    test "varies on X-Ip_is_advertise_combined when platform is Simorgh and request not edge cache" do
-      struct = %Struct{request: %Request{edge_cache?: false}, private: %Private{platform: Simorgh}}
+    test "varies on X-Ip_is_advertise_combined when platform is MozartSimorgh and request not edge cache" do
+      struct = %Struct{request: %Request{edge_cache?: false}, private: %Private{platform: MozartSimorgh}}
       assert "X-Ip_is_advertise_combined" in vary_headers(struct)
     end
 
-    test "does not vary on X-Ip_is_advertise_combined when platform is Simorgh and request edge cache" do
-      struct = %Struct{request: %Request{edge_cache?: true}, private: %Private{platform: Simorgh}}
+    test "does not vary on X-Ip_is_advertise_combined when platform is MozartSimorgh and request edge cache" do
+      struct = %Struct{request: %Request{edge_cache?: true}, private: %Private{platform: MozartSimorgh}}
       refute "X-Ip_is_advertise_combined" in vary_headers(struct)
     end
 

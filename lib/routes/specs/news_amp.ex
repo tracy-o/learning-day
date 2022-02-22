@@ -3,7 +3,7 @@ defmodule Routes.Specs.NewsAmp do
     %{
       owner: "#support-simorgh",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-      platform: Simorgh
+      platform: MozartSimorgh
     }
   end
 end
