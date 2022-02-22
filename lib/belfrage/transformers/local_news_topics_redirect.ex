@@ -28,7 +28,6 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
       |> Map.get("location_id_and_name")
       |> String.split("-")
       |> List.first()
-      |> String.to_atom()
       |> LocationTopicMappings.get_topic_id()
 
     IO.iodata_to_binary([

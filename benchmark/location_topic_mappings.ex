@@ -23,7 +23,7 @@ defmodule Benchmark.LocationTopicMappings do
 
     Benchee.run(
       %{
-        "LocationTopicMappings.get_topic_id/1" => fn -> LocationTopicMappings.get_topic_id(:"#{location_id}") end
+        "LocationTopicMappings.get_topic_id/1" => fn -> LocationTopicMappings.get_topic_id(location_id) end
       },
       time: 10,
       memory_time: 2
