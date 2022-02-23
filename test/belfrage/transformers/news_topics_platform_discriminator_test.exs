@@ -8,21 +8,49 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
 
-    :ok
+    %{
+      mozart_news_endpoint: Application.get_env(:belfrage, :mozart_news_endpoint),
+      pwa_lambda_function: Application.get_env(:belfrage, :pwa_lambda_function)
+    }
   end
 
-  test "if the Topic ID is not in the Webcore allow list the platform will be altered to Mozart" do
-    assert {
-             :ok,
-             %Struct{
-               private: %Struct.Private{
-                 platform: MozartNews
+  describe "path does not contain a slug" do
+    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News", %{
+      mozart_news_endpoint: mozart_news_endpoint
+    } do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint
+                 }
                }
-             }
-           } =
-             NewsTopicsPlatformDiscriminator.call([], %Struct{
-               request: %Struct.Request{path_params: %{"id" => "some-id"}}
-             })
+             } =
+               NewsTopicsPlatformDiscriminator.call([], %Struct{
+                 request: %Struct.Request{path_params: %{"id" => "some-id"}}
+               })
+    end
+
+    test "Topic ID in webcore allowlist, the platform and origin will be altered to Webcore", %{
+      pwa_lambda_function: pwa_lambda_function
+    } do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: Webcore,
+                   origin: ^pwa_lambda_function
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminator.call(
+                 [],
+                 struct(%Struct{
+                   request: %Struct.Request{path_params: %{"id" => "c4mr5v9znzqt"}}
+                 })
+               )
+    end
   end
 
   describe "path contains a slug" do
@@ -41,6 +69,23 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
               }} =
                NewsTopicsPlatformDiscriminator.call([], %Struct{
                  request: %Struct.Request{path_params: %{"id" => "c4mr5v9znzqt", "slug" => "some-slug"}}
+               })
+    end
+
+    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News", %{
+      mozart_news_endpoint: mozart_news_endpoint
+    } do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminator.call([], %Struct{
+                 request: %Struct.Request{path_params: %{"id" => "some-id", "slug" => "some-slug"}}
                })
     end
   end
