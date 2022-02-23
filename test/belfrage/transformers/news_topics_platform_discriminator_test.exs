@@ -37,16 +37,31 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: nil,
-                   origin: nil
+                   platform: SomePlatform,
+                   origin: "https://some.example.origin:test"
                  }
                }
              } =
                NewsTopicsPlatformDiscriminator.call(
-                 [],
-                 struct(%Struct{
-                   request: %Struct.Request{path_params: %{"id" => "c4mr5v9znzqt"}}
-                 })
+                 [
+                   "Personalisation",
+                   "LambdaOriginAlias",
+                   "Language",
+                   "PlatformKillSwitch",
+                   "Chameleon",
+                   "CircuitBreaker",
+                   "DevelopmentRequests"
+                 ],
+                 %Struct{
+                   private: %Struct.Private{
+                     origin: "https://some.example.origin",
+                     platform: SomePlatform,
+                     production_environment: "test"
+                   },
+                   request: %Struct.Request{
+                     path_params: %{"id" => "c4mr5v9znzqt"}
+                   }
+                 }
                )
     end
   end

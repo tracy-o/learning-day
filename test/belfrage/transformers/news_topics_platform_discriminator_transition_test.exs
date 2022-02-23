@@ -28,19 +28,37 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                })
     end
 
-    test "if the Topic ID is in not in the Mozart allowlist the platform and origin are unchanged" do
+    test "if the Topic ID is in not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: nil,
-                   origin: nil
+                   platform: SomePlatform,
+                   origin: "https://some.example.origin:test"
                  }
                }
              } =
-               NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "some-id"}}
-               })
+               NewsTopicsPlatformDiscriminatorTransition.call(
+                 [
+                   "Personalisation",
+                   "LambdaOriginAlias",
+                   "Language",
+                   "PlatformKillSwitch",
+                   "Chameleon",
+                   "CircuitBreaker",
+                   "DevelopmentRequests"
+                 ],
+                 %Struct{
+                   private: %Struct.Private{
+                     origin: "https://some.example.origin",
+                     platform: SomePlatform,
+                     production_environment: "test"
+                   },
+                   request: %Struct.Request{
+                     path_params: %{"id" => "some-id"}
+                   }
+                 }
+               )
     end
   end
 

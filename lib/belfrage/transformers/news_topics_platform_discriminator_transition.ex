@@ -7,7 +7,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
 
   @mozart_news_topic_ids NewsTopicIds.get()
 
-  def call(_rest, struct) do
+  def call(rest, struct) do
     cond do
       redirect?(struct) ->
         {
@@ -33,7 +33,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
         )
 
       true ->
-        then_do([], struct)
+        then_do(rest, struct)
     end
   end
 

@@ -177,7 +177,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "c4mr5v9znzqt"
   ]
 
-  def call(_rest, struct) do
+  def call(rest, struct) do
     cond do
       redirect?(struct) ->
         {
@@ -203,7 +203,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
         )
 
       true ->
-        then_do([], struct)
+        then_do(rest, struct)
     end
   end
 
