@@ -202,15 +202,6 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
           })
         )
 
-      to_webcore?(struct) ->
-        then_do(
-          ["CircuitBreaker"],
-          Struct.add(struct, :private, %{
-            platform: Webcore,
-            origin: Application.get_env(:belfrage, :pwa_lambda_function)
-          })
-        )
-
       true ->
         then_do([], struct)
     end
@@ -218,10 +209,6 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
 
   defp redirect?(struct) do
     struct.request.path_params["id"] in @webcore_ids and Map.has_key?(struct.request.path_params, "slug")
-  end
-
-  defp to_webcore?(struct) do
-    struct.request.path_params["id"] in @webcore_ids and not Map.has_key?(struct.request.path_params, "slug")
   end
 
   defp to_mozart_news?(struct) do

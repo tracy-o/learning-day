@@ -32,15 +32,13 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                })
     end
 
-    test "Topic ID in webcore allowlist, the platform and origin will be altered to Webcore", %{
-      pwa_lambda_function: pwa_lambda_function
-    } do
+    test "Topic ID in webcore allowlist, the platform and origin will be unchanged" do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: Webcore,
-                   origin: ^pwa_lambda_function
+                   platform: nil,
+                   origin: nil
                  }
                }
              } =
