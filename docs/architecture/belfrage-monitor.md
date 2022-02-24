@@ -1,8 +1,7 @@
 # Belfrage Monitor has been deprecated and retired.
-We retired monitor as it was not being used and was not adding any value for us. 
+**We retired monitor as it was not being used and was no longer adding as much value for us. 
 Monitor may return in the future but for now it will remain inactive.
-
-Feel free to read on, but keep in mind that monitor is no longer active.
+Feel free to read on, but keep in mind that monitor is no longer active.**
 ---
 ### Summary
 A separate Elixir app named "Monitor", receives introspective runtime events from Belfrage. This is done via lightweight OTP message passing. It helps developers to debug requests, analyse the state of Belfrage without impacting the main flow of traffic, and share this data with any technology or team who desires it.
