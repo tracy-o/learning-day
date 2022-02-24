@@ -70,7 +70,6 @@ defmodule Belfrage.RouteState do
 
   @impl GenServer
   def handle_info(:short_reset, state) do
-    Belfrage.Monitor.record_route_state(state)
     Process.send_after(self(), :short_reset, short_interval())
     state = %{state | counter: Counter.init()}
 
