@@ -5,8 +5,6 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   use Belfrage.Transformers.Transformer
   alias Belfrage.Transformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
 
-  @mozart_news_topic_ids NewsTopicIds.get()
-
   def call(rest, struct) do
     cond do
       redirect?(struct) ->
@@ -38,10 +36,10 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   end
 
   defp redirect?(struct) do
-    Map.has_key?(struct.request.path_params, "slug") and struct.request.path_params["id"] not in @mozart_news_topic_ids
+    Map.has_key?(struct.request.path_params, "slug") and struct.request.path_params["id"] not in NewsTopicIds.get()
   end
 
   defp to_mozart_news?(struct) do
-    struct.request.path_params["id"] in @mozart_news_topic_ids
+    struct.request.path_params["id"] in NewsTopicIds.get()
   end
 end
