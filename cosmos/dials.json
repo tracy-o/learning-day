@@ -160,21 +160,6 @@
     ]
   },
   {
-    "name": "monitor_enabled",
-    "description": "This enables the sending of data to Monitor",
-    "default-value": "true",
-    "values": [
-      {
-        "value": "true",
-        "description": "Enables the sending of messages to Monitor"
-      },
-      {
-        "value": "false",
-        "description": "Disables the sending of messsages to Monitor"
-      }
-    ]
-  },
-  {
     "name": "webcore_kill_switch",
     "description": "If active this will block requests to the Webcore platform, still allowing other platforms to work as expected",
     "default-value": "inactive",
