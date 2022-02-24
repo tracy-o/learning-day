@@ -177,31 +177,41 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
     "c4mr5v9znzqt"
   ]
 
-  def call(
-        _rest,
-        struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "slug" => _slug}}}
-      )
-      when id in @webcore_ids do
-    {
-      :redirect,
-      Struct.add(struct, :response, %{
-        http_status: 302,
-        headers: %{
-          "location" => "/news/topics/#{id}",
-          "x-bbc-no-scheme-rewrite" => "1",
-          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-        },
-        body: "Redirecting"
-      })
-    }
+  def call(rest, struct) do
+    cond do
+      redirect?(struct) ->
+        {
+          :redirect,
+          Struct.add(struct, :response, %{
+            http_status: 302,
+            headers: %{
+              "location" => "/news/topics/#{struct.request.path_params["id"]}",
+              "x-bbc-no-scheme-rewrite" => "1",
+              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+            },
+            body: "Redirecting"
+          })
+        }
+
+      to_mozart_news?(struct) ->
+        then_do(
+          ["CircuitBreaker"],
+          Struct.add(struct, :private, %{
+            platform: MozartNews,
+            origin: Application.get_env(:belfrage, :mozart_news_endpoint)
+          })
+        )
+
+      true ->
+        then_do(rest, struct)
+    end
   end
 
-  def call(_rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) when id not in @webcore_ids do
-    then_do(
-      ["CircuitBreaker"],
-      Struct.add(struct, :private, %{
-        platform: MozartNews
-      })
-    )
+  defp redirect?(struct) do
+    struct.request.path_params["id"] in @webcore_ids and Map.has_key?(struct.request.path_params, "slug")
+  end
+
+  defp to_mozart_news?(struct) do
+    struct.request.path_params["id"] not in @webcore_ids
   end
 end

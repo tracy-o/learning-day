@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   end
 
   describe "when the path does not contain a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform is Mozart", %{
+    test "if the Topic ID is in the Mozart allowlist the platform and origin is Mozart", %{
       mozart_news_endpoint: mozart_news_endpoint
     } do
       assert {
@@ -28,23 +28,42 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                })
     end
 
-    test "if the Topic ID is in not in the Mozart allowlist the platform is unchanged" do
+    test "if the Topic ID is in not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: nil
+                   platform: SomePlatform,
+                   origin: "https://some.example.origin:test"
                  }
                }
              } =
-               NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "some-id"}}
-               })
+               NewsTopicsPlatformDiscriminatorTransition.call(
+                 [
+                   "Personalisation",
+                   "LambdaOriginAlias",
+                   "Language",
+                   "PlatformKillSwitch",
+                   "Chameleon",
+                   "CircuitBreaker",
+                   "DevelopmentRequests"
+                 ],
+                 %Struct{
+                   private: %Struct.Private{
+                     origin: "https://some.example.origin",
+                     platform: SomePlatform,
+                     production_environment: "test"
+                   },
+                   request: %Struct.Request{
+                     path_params: %{"id" => "some-id"}
+                   }
+                 }
+               )
     end
   end
 
   describe "when the path contains a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform is Mozart", %{
+    test "if the Topic ID is in the Mozart allowlist the platform and origin will be altered to Mozart News", %{
       mozart_news_endpoint: mozart_news_endpoint
     } do
       assert {
@@ -61,7 +80,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                })
     end
 
-    test "and the Topic ID not in the Mozart allowlist, a redirect will be issued without the slug" do
+    test "if the Topic ID not in the Mozart allowlist, a redirect will be issued without the slug" do
       assert {:redirect,
               %Struct{
                 response: %Struct.Response{
