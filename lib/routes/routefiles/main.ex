@@ -693,6 +693,12 @@ defroutefile "Main" do
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
+  handle "/pidgin/topics/:id", using: "WorldServicePidgin", only_on: "test", examples: ["/pidgin/topics/cjjdj66rm"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+  end
+  handle "/pidgin/topics/:id.amp", using: "WorldServicePidgin", only_on: "test", examples: ["/pidgin/topics/cjjdj66rm.amp"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+  end
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin"]
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
