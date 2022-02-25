@@ -66,8 +66,8 @@ defmodule BelfrageWeb.Response.Headers.Vary do
 
   # TODO Remove duplication of headers - so commenting out for now
   # TODO Sort headers and also allow these to be specified as part of route/platform
-  # defp adverts_headers(true, :"Elixir.Simorgh"), do: "X-BBC-Edge-IsUK"
-  defp adverts_headers(false, :"Elixir.Simorgh"), do: ["X-Ip_is_advertise_combined"]
+  # defp adverts_headers(true, :"Elixir.MozartSimorgh"), do: "X-BBC-Edge-IsUK"
+  defp adverts_headers(false, :"Elixir.MozartSimorgh"), do: ["X-Ip_is_advertise_combined"]
   defp adverts_headers(_, _), do: []
 
   defp country(edge_cache: true), do: "X-BBC-Edge-Country"

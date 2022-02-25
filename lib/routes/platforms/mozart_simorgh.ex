@@ -1,4 +1,4 @@
-defmodule Routes.Platforms.Simorgh do
+defmodule Routes.Platforms.MozartSimorgh do
   def specs(production_env) do
     %{
       origin: Application.get_env(:belfrage, :mozart_news_endpoint),
