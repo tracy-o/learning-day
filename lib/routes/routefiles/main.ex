@@ -282,6 +282,7 @@ defroutefile "Main" do
 #  News Topics
 
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
+  redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
