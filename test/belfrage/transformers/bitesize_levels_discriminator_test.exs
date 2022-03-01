@@ -13,8 +13,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
     request: %Struct.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "zr48q6f"}
+      path: "/_web_core"
     }
   }
 
@@ -26,8 +25,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
     request: %Struct.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "abc123xyz789"}
+      path: "/_web_core"
     }
   }
 
@@ -55,8 +53,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
                request: %Struct.Request{
                  scheme: :http,
                  host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "zr48q6f"}
+                 path: "/_web_core"
                }
              }
            } = BitesizeLevelsDiscriminator.call([], @webcore_test_data)
@@ -81,8 +78,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
                request: %Struct.Request{
                  scheme: :http,
                  host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "abc123xyz789"}
+                 path: "/_web_core"
                }
              }
            } = BitesizeLevelsDiscriminator.call([], @morph_live_data)

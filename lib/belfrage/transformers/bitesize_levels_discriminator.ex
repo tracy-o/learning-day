@@ -1,36 +1,24 @@
 defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
   @moduledoc """
-  Alters the Platform and Origin for a subset of Bitesize Levels IDs that need to be served by Webcore.
+  Alters the Platform depending on the environment.
   """
   use Belfrage.Transformers.Transformer
 
-  @webcore_live_ids []
-
-  defp is_webcore_id(id) do
+  defp maybe_update_origin(struct) do
     application_env = Application.get_env(:belfrage, :production_environment)
 
     if application_env === "live" do
-      id in @webcore_live_ids
+      Struct.add(struct, :private, %{
+        platform: Webcore,
+        origin: Application.get_env(:belfrage, :pwa_lambda_function)
+      })
     else
-      true
+      struct
     end
   end
 
-  defp maybe_update_origin(id, struct) do
-    case is_webcore_id(id) do
-      true ->
-        Struct.add(struct, :private, %{
-          platform: Webcore,
-          origin: Application.get_env(:belfrage, :pwa_lambda_function)
-        })
-
-      _ ->
-        struct
-    end
-  end
-
-  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    then_do(rest, maybe_update_origin(id, struct))
+  def call(rest, struct) do
+    then_do(rest, maybe_update_origin(struct))
   end
 
   def call(_rest, struct), do: then_do([], struct)
