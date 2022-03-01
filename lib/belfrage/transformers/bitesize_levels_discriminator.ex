@@ -4,18 +4,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
   """
   use Belfrage.Transformers.Transformer
 
-  @webcore_test_ids [
-      z98jmp3,
-      z8w76sg,
-      zr48q6f,
-      zjmj92p,
-      z4kw2hv,
-      z3hbg7h,
-      z6gw2hv, 
-      z8w76sg,
-      z4js6v4
-  ]
-
   @webcore_live_ids []
 
   defp is_webcore_id(id) do
@@ -24,7 +12,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
     if application_env === "live" do
       id in @webcore_live_ids
     else
-      id in @webcore_test_ids
+      true
     end
   end
 
