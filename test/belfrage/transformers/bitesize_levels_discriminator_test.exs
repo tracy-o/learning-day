@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
   alias Belfrage.Transformers.BitesizeLevelsDiscriminator
   alias Belfrage.Struct
 
-  @webcore_test_data %Struct{
+  @morph_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
       platform: MorphRouter,
@@ -56,7 +56,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
                  path: "/_web_core"
                }
              }
-           } = BitesizeLevelsDiscriminator.call([], @webcore_test_data)
+           } = BitesizeLevelsDiscriminator.call([], @morph_test_data)
   end
 
   test "if the environment is LIVE, the platform will remain as MorphRouter" do
