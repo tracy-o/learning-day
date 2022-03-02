@@ -8,12 +8,12 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
     application_env = Application.get_env(:belfrage, :production_environment)
 
     if application_env === "live" do
+      struct
+    else
       Struct.add(struct, :private, %{
         platform: Webcore,
         origin: Application.get_env(:belfrage, :pwa_lambda_function)
       })
-    else
-      struct
     end
   end
 

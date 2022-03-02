@@ -1,19 +1,17 @@
-defmodule Routes.Specs.BitesizeLevels do
-  def specs("live") do
+defmodule Routes.Specs.BitesizeLevels do 
+  def specs(production_env) do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      pipeline: ["BitesizeLevelsDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker"]
+      pipeline: pipeline(production_env)
     }
   end
 
-  def specs(_production_env) do
-    %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: MorphRouter,
-      language_from_cookie: true,
-      pipeline: ["BitesizeLevelsDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "DevelopmentRequests", "Language", "CircuitBreaker"]
-    }
+  def pipeline("live") do 
+    ["BitesizeLevelsDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker"]
+  end
+  def pipeline(_production_environment) do
+   ["BitesizeLevelsDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "DevelopmentRequests", "Language", "CircuitBreaker"]
   end
 end
