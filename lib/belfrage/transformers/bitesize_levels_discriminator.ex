@@ -4,22 +4,21 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
   """
   use Belfrage.Transformers.Transformer
 
-  defp maybe_update_origin(struct) do
-    application_env = Application.get_env(:belfrage, :production_environment)
-
-    if application_env === "live" do
-      struct
+  def call(rest, struct) do
+    if to_webcore?() do
+      then_do(
+        rest,
+        Struct.add(struct, :private, %{
+          platform: Webcore,
+          origin: Application.get_env(:belfrage, :pwa_lambda_function)
+        })
+      )
     else
-      Struct.add(struct, :private, %{
-        platform: Webcore,
-        origin: Application.get_env(:belfrage, :pwa_lambda_function)
-      })
+      then_do(rest, struct)
     end
   end
 
-  def call(rest, struct) do
-    then_do(rest, maybe_update_origin(struct))
+  defp to_webcore?() do
+    Application.get_env(:belfrage, :production_environment) != "live"
   end
-
-  def call(_rest, struct), do: then_do([], struct)
 end
