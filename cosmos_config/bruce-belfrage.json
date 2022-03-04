@@ -57,8 +57,8 @@
   },
   {
     "values": {
-      "test": "https://www.test.bbc.com",
-      "live": "https://www.bbc.com"
+      "test": "http://internal.simorgh.test.api.bbci.co.uk",
+      "live": "http://internal.simorgh.api.bbci.co.uk"
     },
     "name": "SIMORGH_ENDPOINT"
   },
