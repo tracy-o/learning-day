@@ -30,6 +30,7 @@ config :belfrage,
   mozart_news_endpoint: "https://mozart-news.example.com",
   mozart_sport_endpoint: "https://mozart-sport.example.com",
   mozart_weather_endpoint: "https://mozart-weather.example.com",
+  simorgh_endpoint: "https://simorgh.example.com",
   programmes_endpoint: "https://programmes.example.com",
 
   # Arbitrary long values so that the corresponding operations are never
