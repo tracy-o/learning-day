@@ -57,6 +57,13 @@
   },
   {
     "values": {
+      "test": "http://internal.simorgh.test.api.bbci.co.uk",
+      "live": "http://internal.simorgh.api.bbci.co.uk"
+    },
+    "name": "SIMORGH_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "https://programmes-frontend.test.api.bbc.co.uk",
       "live": "https://programmes-frontend.api.bbc.co.uk"
     },
