@@ -21,15 +21,6 @@ defmodule Belfrage.RouteStateSupervisor do
     end
   end
 
-  def kill_all(name \\ __MODULE__) do
-    DynamicSupervisor.which_children(name)
-    |> Enum.each(&kill_child/1)
-  end
-
-  defp kill_child({_, pid, _, _}) do
-    Process.exit(pid, :stop)
-  end
-
   defp start_child(supervisor, name) do
     DynamicSupervisor.start_child(
       supervisor,
