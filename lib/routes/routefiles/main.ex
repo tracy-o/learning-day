@@ -148,11 +148,15 @@ defroutefile "Main" do
   redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
   redirect("/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
+  redirect("/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
   redirect("/news/election", to: "/news/politics", status: 302)
   redirect("/news/election/2021", to: "/news/politics", status: 302)
   redirect("/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
   redirect("/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
   redirect("/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
+  redirect("/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
+  redirect("/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
+  redirect("/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
   redirect("/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302)
 
 
