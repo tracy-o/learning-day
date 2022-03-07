@@ -1,8 +1,8 @@
 defmodule Routes.Specs.NewsLocalNews do
   def specs do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      owner: "DENewsCardiff@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/display/news/Location+topic+page+run+book",
       platform: MozartNews
     }
   end
