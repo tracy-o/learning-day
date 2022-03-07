@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceVietnamese do
   def specs(production_env) do
     %{
-      platform: Simorgh,
+      platform: MozartSimorgh,
       pipeline: pipeline(production_env),
       query_params_allowlist: ["alternativeJsLoading", "batch"]
     }

@@ -6,7 +6,8 @@ defmodule Routes.Specs.WelshSearch do
       pipeline: ["ComToUKRedirect"],
       platform: Webcore,
       query_params_allowlist: ["q", "page", "scope", "filter"],
-      default_language: "cy"
+      default_language: "cy",
+      caching_enabled: false
     }
   end
 end

@@ -185,6 +185,9 @@ defroutefile "Main" do
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
 
+  handle "/homepage/sport/preview", using: "SportHomePagePreview", only_on: "test", examples: ["/homepage/sport/preview"]
+  handle "/homepage/sport/test", using: "TestSportHomePage", only_on: "test", examples: ["/homepage/sport/test"]
+
   # data endpoints
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
@@ -254,11 +257,11 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/news/election/:year/:polity/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/councils/E06000001", "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/S06000001"] do
+  handle "/news/election/:year/:polity/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/england/councils/E06000001", "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/S06000001", "/news/election/2022/england/mayors/E06000001"] do
     return_404 if: [
                  !String.match?(year, ~r/^20(22)$/),
                  !String.match?(polity, ~r/^(england|wales|scotland)$/),
-                 !String.match?(division_name, ~r/^(councils)$/),
+                 !String.match?(division_name, ~r/^(councils|mayors)$/),
                  !String.match?(division_id, ~r/^[SWE][0-9]{8}$/)
                ]
   end
@@ -284,6 +287,8 @@ defroutefile "Main" do
   handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
 
   # News Topics
+  redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
+  redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
@@ -469,11 +474,11 @@ defroutefile "Main" do
 
   handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
 
-  handle "/cymrufyw/etholiad/2022/cymru/cygnor", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor"]
+  handle "/cymrufyw/etholiad/2022/cymru/cynghorau", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau"]
 
-  handle "/cymrufyw/etholiad/2022/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cygnor/W10000006"] do
+  handle "/cymrufyw/etholiad/2022/cymru/:division_name/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau/W10000006"] do
     return_404 if: [
-                 !String.match?(division_name, ~r/^(cygnor)$/),
+                 !String.match?(division_name, ~r/^(cynghorau)$/),
                  !String.match?(division_id, ~r/^[W][0-9]{8}$/)
                ]
   end
@@ -522,10 +527,10 @@ defroutefile "Main" do
   handle "/devx-test/personalisation", using: "DevXPersonalisation", only_on: "test", examples: ["/devx-test/personalisation"]
 
   # Container API
-  handle "/container/envelope/editorial-text/*any", using: "ContainerEnvelopeEditorialText", examples: ["/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2"]
-  handle "/container/envelope/election-banner/*any", using: "ContainerEnvelopeElectionBanner", examples: ["/container/envelope/election-banner/logoOnly/true"]
+  handle "/container/envelope/editorial-text/*any", using: "ContainerEnvelopeEditorialText", examples: ["/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2", "/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2?static=true&mode=testData"]
+  handle "/container/envelope/election-banner/*any", using: "ContainerEnvelopeElectionBanner", examples: ["/container/envelope/election-banner/logoOnly/true", "/container/envelope/election-banner/assetUri/%2Fnews/hasFetcher/true?static=true&mode=testData"]
   handle "/container/envelope/page-link/*any", using: "ContainerEnvelopePageLink", examples: ["/container/envelope/page-link/linkHref/%23belfrage/linkLabel/Belfrage%20Test"]
-  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true"]
+  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", examples: ["/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true", "/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData"]
   handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
   handle "/container/envelope/*any", using: "ContainerEnvelope", examples: ["/container/envelope/global-footer/hasFetcher/true"]
 
@@ -1729,7 +1734,7 @@ defroutefile "Main" do
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
   handle "/bitesize/subjects", using: "BitesizeTransition", examples: ["/bitesize/subjects"]
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
-  handle "/bitesize/levels/z98jmp3", using: "BitesizeTransition", examples: ["/bitesize/levels/z98jmp3"]
+  handle "/bitesize/levels/:id", using: "BitesizeLevels", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games

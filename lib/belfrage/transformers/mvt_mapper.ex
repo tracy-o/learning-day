@@ -5,7 +5,7 @@ defmodule Belfrage.Transformers.MvtMapper do
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
     struct = Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers)})
 
-    then(rest, struct)
+    then_do(rest, struct)
   end
 
   defp map_mvt_headers(headers) do

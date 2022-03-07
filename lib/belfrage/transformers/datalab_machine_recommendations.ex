@@ -13,6 +13,6 @@ defmodule Belfrage.Transformers.DatalabMachineRecommendations do
     struct =
       Struct.add(struct, :private, %{features: Map.put(private.features, :datalab_machine_recommendations, value)})
 
-    then(rest, struct)
+    then_do(rest, struct)
   end
 end

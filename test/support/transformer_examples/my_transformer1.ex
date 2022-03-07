@@ -5,6 +5,6 @@ defmodule Belfrage.Transformers.MyTransformer1 do
   def call(rest, struct = %Struct{}) do
     struct = Map.merge(struct, %{sample_change: "foo"})
 
-    then(rest, struct)
+    then_do(rest, struct)
   end
 end

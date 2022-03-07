@@ -22,5 +22,5 @@ defmodule Belfrage.Transformers.HTTPredirect do
   end
 
   @impl true
-  def call(rest, struct), do: then(rest, struct)
+  def call(rest, struct), do: then_do(rest, struct)
 end

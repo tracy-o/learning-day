@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.Personalisation do
 
   @impl true
   def call(rest, struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
-    then(rest, struct)
+    then_do(rest, struct)
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule Belfrage.Transformers.Personalisation do
     if reauthentication_required?(session_state) do
       redirect(struct)
     else
-      then(rest, struct)
+      then_do(rest, struct)
     end
   end
 

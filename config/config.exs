@@ -31,12 +31,12 @@ config :machine_gun,
   Fabl: secure_machine_gun_config,
   MorphRouter: secure_machine_gun_config,
   MozartNews: default_machine_gun_config,
+  MozartSimorgh: default_machine_gun_config,
   MozartSport: default_machine_gun_config,
   MozartWeather: default_machine_gun_config,
   OriginSimulator: default_machine_gun_config,
   Programmes: default_machine_gun_config,
   S3: default_machine_gun_config,
-  Simorgh: default_machine_gun_config,
   Webcore: default_machine_gun_config
 
 config :ex_aws,

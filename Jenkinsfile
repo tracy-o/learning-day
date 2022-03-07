@@ -41,6 +41,11 @@ node {
     docker.image(dockerImage).inside("-u root -e MIX_ENV=test") {
       sh 'mix deps.get'
       sh 'mix test'
+    }
+  }
+
+  stage('Code Analysis Checks') {
+    docker.image(dockerImage).inside("-u root -e MIX_ENV=test") {
       sh 'mix format --check-formatted'
       sh 'mix credo'
     }

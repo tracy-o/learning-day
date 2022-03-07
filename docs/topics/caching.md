@@ -31,7 +31,7 @@ If Belfrage is unable to find fresh cached content it will then make request(s) 
 
 Belfrage will then try to store this response in cache depending on a few factors such as if caching is enabled for that request. Finally, if the response is an error (for the purpose of serving a fallback, it has to have a status code >=400 and not 404, 401 or 451) and caching is enabled, we attempt to find any cached response (fresh or stale) and serve it as a fallback. If we got the cached response from S3, we add it to the local cache so that on the following request to the same page we could find the fallback quicker.
 
-Fallback TTL is currently configured as 6h.
+Fallback TTL is currently configured as 7 days, which can be found in `"ExpirationInDays"` under `"LifecycleConfiguration"` defined within the [cloud formation](https://github.com/bbc/frameworks-infra/blob/master/belfrage/belfrage-ccp/stacks/s3bucket.json) for our S3 caching bucket.
 
 ## Personalisation
 Personalised pages will not be able to use the cache feature. The fallback option will still be available. When a personalised route is requested the cache directive is set to private so the personalised response is not stored in cache; however, when a personalised request fails, we can return a non-personalised version in the form of a fallback.

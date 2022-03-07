@@ -10,7 +10,7 @@ defmodule Belfrage.Transformers.WorldServiceRedirect do
   def call(rest, struct) do
     case should_redirect?(struct.request.host) do
       true -> redirect(redirect_url(struct.request), struct)
-      _ -> then(rest, struct)
+      _ -> then_do(rest, struct)
     end
   end
 

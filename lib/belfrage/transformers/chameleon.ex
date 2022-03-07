@@ -11,6 +11,6 @@ defmodule Belfrage.Transformers.Chameleon do
     value = @dial.state(:chameleon)
     struct = Struct.add(struct, :private, %{features: Map.put(private.features, :chameleon, value)})
 
-    then(rest, struct)
+    then_do(rest, struct)
   end
 end
