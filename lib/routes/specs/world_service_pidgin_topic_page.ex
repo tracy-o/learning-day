@@ -3,7 +3,6 @@ defmodule Routes.Specs.WorldServicePidginTopicPage do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["alternativeJsLoading", "batch"]
     }
   end
 
