@@ -5,8 +5,14 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   import Belfrage.Test.PersonalisationHelper
 
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
 
   @moduletag :end_to_end
+
+  setup do
+    start_supervised!({RouteState, "MySession"})
+    :ok
+  end
 
   test "when no token provided" do
     response_conn = conn(:get, "/my/session") |> Router.call([])

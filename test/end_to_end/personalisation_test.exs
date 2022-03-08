@@ -5,12 +5,16 @@ defmodule EndToEnd.PersonalisationTest do
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.{Clients.LambdaMock, RouteState}
   alias Fixtures.AuthToken
 
   @moduletag :end_to_end
 
-  setup :clear_cache
+  setup do
+    clear_cache()
+    start_supervised!({RouteState, "SomeRouteState"})
+    :ok
+  end
 
   @response %{
     "headers" => %{

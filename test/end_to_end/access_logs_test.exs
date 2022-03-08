@@ -6,6 +6,7 @@ defmodule EndToEnd.AccessLogsTest do
   import ExUnit.CaptureLog
 
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
@@ -13,6 +14,8 @@ defmodule EndToEnd.AccessLogsTest do
   setup :clear_cache
 
   test "requests are logged" do
+    start_supervised!({RouteState, "SomeRouteState"})
+
     stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _request_id, _opts ->
       {:ok,
        %{

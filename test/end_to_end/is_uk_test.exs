@@ -2,6 +2,7 @@ defmodule IsUKTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
@@ -16,7 +17,8 @@ defmodule IsUKTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    Belfrage.RouteStateSupervisor.kill_all()
+    start_supervised!({RouteState, "SomeRouteState"})
+    :ok
   end
 
   test "edge is_uk headers set to no" do

@@ -14,8 +14,6 @@ defmodule Belfrage.BelfrageCacheTest do
   }
 
   setup do
-    Belfrage.RouteStateSupervisor.kill_all()
-
     put_into_cache(cache_key("fresh"), @cache_seeded_response)
 
     stale_response = %{

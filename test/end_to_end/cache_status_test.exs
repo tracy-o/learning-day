@@ -2,14 +2,18 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Belfrage.Test.CachingHelper, only: [clear_cache: 1, make_cached_response_stale: 1]
+  import Belfrage.Test.CachingHelper, only: [clear_cache: 0, make_cached_response_stale: 1]
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.{Clients.LambdaMock, RouteState}
 
   @moduletag :end_to_end
 
-  setup :clear_cache
+  setup do
+    clear_cache()
+    start_supervised!({RouteState, "SomeRouteState"})
+    :ok
+  end
 
   test "cache miss" do
     stub_lambda()
