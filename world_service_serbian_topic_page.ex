@@ -3,6 +3,7 @@ defmodule Routes.Specs.WorldServiceSerbianTopicPage do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
+      headers_allowlist: ["cookie-ckps_serbian"]
     }
   end
 
