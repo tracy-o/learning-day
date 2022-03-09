@@ -155,8 +155,10 @@ defroutefile "Main" do
   redirect("/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
   redirect("/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302)
 
-  redirect("https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 301)
+  redirect("https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302)
   redirect("https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
+  redirect("https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302)
+  redirect("https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
 
   # Home Page
 
