@@ -881,10 +881,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian"]
-  handle "/serbian/new_topics/:id", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/new_topics/cyr/c95y35941vrt", "/serbian/new_topics/lat/c95y35941vrt"] do
+  handle "/serbian/new_topics/:id", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/cyr/new_topics/c95y35941vrt", "/serbian/lat/new_topics/c95y35941vrt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
-  handle "/serbian/new_topics/:id.amp", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/new_topics/cyr/c95y35941vrt.amp", "/serbian/new_topics/lat/c95y35941vrt.amp"] do
+  handle "/serbian/new_topics/:id.amp", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/cyr/new_topics/c95y35941vrt.amp", "/serbian/lat/new_topics/c95y35941vrt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
@@ -1058,10 +1058,10 @@ defroutefile "Main" do
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
-  handle "/zhongwen/new_topics/:id", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/new_topics/simp/c95y35941vrt", "/zhongwen/new_topics/trad/c95y35941vrt"] do
+  handle "/zhongwen/new_topics/:id", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/simp/new_topics/c95y35941vrt", "/zhongwen/trad/new_topics/c95y35941vrt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
-  handle "/zhongwen/new_topics/:id.amp", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/new_topics/simp/c95y35941vrt.amp", "/zhongwen/new_topics/trad/c95y35941vrt.amp"] do
+  handle "/zhongwen/new_topics/:id.amp", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/simp/new_topics/c95y35941vrt.amp", "/zhongwen/trad/new_topics/c95y35941vrt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
