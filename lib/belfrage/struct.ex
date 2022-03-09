@@ -66,7 +66,6 @@ defmodule Belfrage.Struct.Private do
             candidate_route_state_ids: [],
             origin: nil,
             counter: %{},
-            long_counter: %{},
             circuit_breaker_error_threshold: nil,
             pipeline: [],
             overrides: %{},

@@ -19,12 +19,12 @@ defmodule Belfrage.CircuitBreaker do
   end
 
   def threshold_exceeded?(%Struct{
-        private: %{origin: origin, long_counter: counts, circuit_breaker_error_threshold: threshold}
+        private: %{origin: origin, counter: counts, circuit_breaker_error_threshold: threshold}
       }) do
     error_count(origin, counts) > threshold
   end
 
-  def threshold_exceeded?(%{origin: origin, long_counter: counts, circuit_breaker_error_threshold: threshold}) do
+  def threshold_exceeded?(%{origin: origin, counter: counts, circuit_breaker_error_threshold: threshold}) do
     error_count(origin, counts) > threshold
   end
 

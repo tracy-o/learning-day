@@ -51,8 +51,7 @@ config :ex_aws, :retries,
   max_backoff_in_ms: 200
 
 config :belfrage,
-  short_counter_reset_interval: 5_000,
-  long_counter_reset_interval: 60_000,
+  route_state_reset_interval: 60_000,
   fetch_route_state_timeout: 250,
   dials_location: "/etc/cosmos-dials/dials.json",
   dials_startup_polling_delay: 0,

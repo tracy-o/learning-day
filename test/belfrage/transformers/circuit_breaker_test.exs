@@ -5,12 +5,12 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
   alias Belfrage.Transformers.CircuitBreaker
   alias Belfrage.Struct
 
-  test "long_counter with no errors will not add circuit breaker response" do
+  test "counter with no errors will not add circuit breaker response" do
     struct = %Struct{
       private: %Struct.Private{
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
-        long_counter: %{"https://origin.bbc.co.uk/" => %{}},
+        counter: %{"https://origin.bbc.co.uk/" => %{}},
         pipeline: ["CircuitBreaker"]
       }
     }
@@ -139,7 +139,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
       private: %Struct.Private{
         route_state_id: "SportVideos",
         origin: "https://origin2.bbc.co.uk/",
-        long_counter: %{
+        counter: %{
           "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
           "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
           "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}
@@ -167,7 +167,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         private: %Struct.Private{
           route_state_id: "SportVideos",
           origin: "https://origin.bbc.co.uk/",
-          long_counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
+          counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
           pipeline: ["CircuitBreaker"],
           circuit_breaker_error_threshold: 5
         }
@@ -193,7 +193,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         private: %Struct.Private{
           route_state_id: "SportVideos",
           origin: "https://origin2.bbc.co.uk/",
-          long_counter: %{
+          counter: %{
             "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
             "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
             "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}

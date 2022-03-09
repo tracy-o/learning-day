@@ -48,7 +48,7 @@ defmodule Belfrage.RouteStateTest do
       |> Map.from_struct()
 
     assert RouteState.state(@legacy_request_struct) ==
-             {:ok, Map.merge(route_spec, %{route_state_id: @route_state_id, counter: %{}, long_counter: %{}})}
+             {:ok, Map.merge(route_spec, %{route_state_id: @route_state_id, counter: %{}})}
   end
 
   describe "returns a different count per origin" do
@@ -129,21 +129,6 @@ defmodule Belfrage.RouteStateTest do
     assert false == Map.has_key?(state.counter, :error), "RouteState should have reset"
   end
 
-  test "resets long_counter after a specific time" do
-    # Set the interval just for this specifc test
-    interval = 100
-    set_env(:long_counter_reset_interval, interval)
-
-    for _ <- 1..30, do: RouteState.inc(@resp_struct)
-    {:ok, state} = RouteState.state(@legacy_request_struct)
-    assert state.counter.errors == 30
-
-    Process.sleep(interval + 1)
-
-    {:ok, state} = RouteState.state(@legacy_request_struct)
-    assert false == Map.has_key?(state.long_counter, :error), "RouteState should have reset"
-  end
-
   describe "when in fallback" do
     test "it only increments the fallback counter" do
       for _ <- 1..30, do: RouteState.inc(@fallback_resp_struct)
@@ -192,7 +177,7 @@ defmodule Belfrage.RouteStateTest do
 
       replace_counts(pid, "pwa-lambda-function", %{501 => 300, :errors => 300})
 
-      send(pid, :long_reset, [])
+      send(pid, :reset, [])
 
       assert match?(%{throughput: 0}, :sys.get_state(pid))
     end
@@ -202,7 +187,7 @@ defmodule Belfrage.RouteStateTest do
 
       replace_counts(pid, "pwa-lambda-function", %{501 => 100, :errors => 100})
 
-      send(pid, :long_reset, [])
+      send(pid, :reset, [])
 
       assert match?(%{throughput: 100}, :sys.get_state(pid))
     end
@@ -212,15 +197,15 @@ defmodule Belfrage.RouteStateTest do
 
       replace_counts(pid, "pwa-lambda-function", %{501 => 100, :errors => 100})
 
-      send(pid, :long_reset, [])
+      send(pid, :reset, [])
 
       assert match?(%{throughput: 20}, :sys.get_state(pid))
 
-      send(pid, :long_reset, [])
+      send(pid, :reset, [])
 
       assert match?(%{throughput: 60}, :sys.get_state(pid))
 
-      send(pid, :long_reset, [])
+      send(pid, :reset, [])
 
       assert match?(%{throughput: 100}, :sys.get_state(pid))
     end
@@ -234,7 +219,7 @@ defmodule Belfrage.RouteStateTest do
 
   defp replace_counts(pid, origin, counts) do
     :sys.replace_state(pid, fn state ->
-      %{state | long_counter: %{origin => counts}}
+      %{state | counter: %{origin => counts}}
     end)
   end
 
