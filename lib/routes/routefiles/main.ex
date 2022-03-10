@@ -826,19 +826,19 @@ defroutefile "Main" do
 
   handle "/persian.amp", using: "WorldServicePersian", examples: ["/persian.amp"]
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
-  handle "/persian/new_topics/:id", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c95y35941vrt"] do
+  handle "/persian/new_topics/:id", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/persian/new_topics/c95y35941vrt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
-  handle "/persian/new_topics/:id.amp", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c95y35941vrt.amp"] do
+  handle "/persian/new_topics/:id.amp", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/persian/new_topics/c95y35941vrt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
-  handle "/pidgin/new_topics/:id", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/persian/new_topics/c5qvp8wr36dt"] do
+  handle "/pidgin/new_topics/:id", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c5qvp8wr36dt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
-  handle "/pidgin/new_topics/:id.amp", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/persian/new_topics/c5qvp8wr36dt.amp"] do
+  handle "/pidgin/new_topics/:id.amp", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c5qvp8wr36dt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin"]
