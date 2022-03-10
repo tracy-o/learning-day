@@ -777,12 +777,6 @@ defroutefile "Main" do
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
 
-  handle "/mundo/new_topics/:id", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/new_topics/cdr5613yzwqt"] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-  end
-  handle "/mundo/new_topics/:id.amp", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/new_topics/cdr5613yzwqt.amp"] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-  end
   handle "/mundo/mvt/*_any", using: "WorldServiceMvtPoc", only_on: "test", examples: ["/mundo/mvt/testing"]
 
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
