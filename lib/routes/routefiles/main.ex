@@ -1067,7 +1067,7 @@ defroutefile "Main" do
   handle "/zhongwen/new_topics/trad/:id", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/simp/new_topics/c0dg90z8nqxt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
-  handle "/zhongwen/new_topics/trad:id.amp", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/simp/new_topics/c0dg90z8nqxt.amp"] do
+  handle "/zhongwen/trad/new_topics/:id.amp", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/trad/new_topics/c0dg90z8nqxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
