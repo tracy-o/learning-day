@@ -196,6 +196,8 @@ defroutefile "Main" do
   handle "/homepage/sport/preview", using: "SportHomePagePreview", only_on: "test", examples: ["/homepage/sport/preview"]
   handle "/homepage/sport/test", using: "TestSportHomePage", only_on: "test", examples: ["/homepage/sport/test"]
 
+  handle "/sport/alpha/homepage", using: "SportAlphaHomePage", examples: ["/sport/alpha/homepage"]
+
   # data endpoints
 
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
