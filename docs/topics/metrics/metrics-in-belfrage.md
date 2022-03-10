@@ -8,10 +8,10 @@ or origins, monitoring the health of Belfrage, tracking its performance, etc.
 
 Currently in Belfrage we have a mixture of approaches to tracking:
 
-* We use `Belfrage.Event` module for tracking some things which sends data to
-  Belfrage Monitor app, but also uses the library called `Statix` to send it to
-  AWS CloudWatch. `Statix` sends data using `StatsD` protocol to AWS CloudWatch
-  Agent which in turn sends it to AWS CloudWatch.
+* We use `Belfrage.Event` module for tracking some things which used to send
+  data to the now defunct Monitor, but also uses the library called `Statix` to
+  send it to AWS CloudWatch. `Statix` sends data using `StatsD` protocol to AWS
+  CloudWatch Agent which in turn sends it to AWS CloudWatch.
 * We use `Statix` directly in some other places.
 * We use `:telemetry` to track certain things (mostly things like Erlang VM
   stats or 3rd party libraries like Cowboy): we listen to `:telemetry` events

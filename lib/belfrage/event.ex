@@ -31,8 +31,9 @@ defmodule Belfrage.Event do
 
   ## Dimensions
 
-  Please note that event dimensions are only passed to Belfrage Monitor and not
-  to CloudWatch currently.
+  Dimensions are passed through to cloudwatch in order to keep our scripted
+  dashboards populated.
+
   """
   def record(type, level, msg, opts \\ [])
 
