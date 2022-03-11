@@ -197,4 +197,31 @@ defmodule BelfrageWeb.StructAdapterTest do
 
     assert StructAdapter.adapt(conn, SomeRouteState).request.request_id == "req-123456"
   end
+
+  describe "Adds app? to struct.request" do
+    test "with a value of true when the host matches" do
+      Enum.each(["https://news-app.test.api.bbc.co.uk", "https://sport-app.test.api.bbc.co.uk"], fn url ->
+        conn(:get, url)
+        |> build_request()
+        |> StructAdapter.adapt(id)
+        |> Map.get(:request)
+        |> Map.get(:app?)
+        |> assert()
+      end)
+    end
+
+    test "with a value of false when the host does not match" do
+      Enum.each(
+        ["https://news.test.api.bbc.co.uk", "https://test.app.api.bbc.co.uk"],
+        fn url ->
+          conn(:get, url)
+          |> build_request()
+          |> StructAdapter.adapt(id)
+          |> Map.get(:request)
+          |> Map.get(:app?)
+          |> refute()
+        end
+      )
+    end
+  end
 end

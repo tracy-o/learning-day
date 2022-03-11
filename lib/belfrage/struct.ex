@@ -38,7 +38,8 @@ defmodule Belfrage.Struct.Request do
     cookie_ckps_chinese: %{},
     cookie_ckps_serbian: %{},
     origin: nil,
-    referer: nil
+    referer: nil,
+    app?: false
   ]
 
   @type t :: %__MODULE__{}
