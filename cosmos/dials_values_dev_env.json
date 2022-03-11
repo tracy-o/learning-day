@@ -1,13 +1,12 @@
 {
 	"webcore_ttl_multiplier": "default",
-	"non_webcore_ttl_multiplier":"default",
-	"logging_level":"debug",
-	"circuit_breaker":"false",
-	"personalisation":"on",
-	"news_articles_personalisation":"on",
+	"non_webcore_ttl_multiplier": "default",
+	"logging_level": "debug",
+	"circuit_breaker": "false",
+	"personalisation": "on",
+	"news_articles_personalisation": "on",
 	"obit_mode": "off",
 	"ccp_enabled": "true",
-	"monitor_enabled": "true",
 	"webcore_kill_switch": "inactive",
 	"datalab_machine_recommendations": "enabled",
 	"chameleon": "off"

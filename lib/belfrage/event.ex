@@ -31,8 +31,9 @@ defmodule Belfrage.Event do
 
   ## Dimensions
 
-  Please note that event dimensions are only passed to Belfrage Monitor and not
-  to CloudWatch currently.
+  Dimensions are passed through to cloudwatch in order to keep our scripted
+  dashboards populated.
+
   """
   def record(type, level, msg, opts \\ [])
 
@@ -41,17 +42,11 @@ defmodule Belfrage.Event do
   end
 
   def record(:log, level, msg, opts) do
-    event = new(:log, level, msg, opts)
-    monitor_api().record_event(event)
-
     Stump.log(level, msg)
     Stump.log(level, msg, cloudwatch: true)
   end
 
   def record(:metric, type, metric, opts) do
-    event = new(:metric, type, metric, opts)
-    monitor_api().record_event(event)
-
     apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
   end
 
@@ -103,9 +98,5 @@ defmodule Belfrage.Event do
       Belfrage.Event.record(:metric, :timing, unquote(key), value: diff / 1_000)
       result
     end
-  end
-
-  defp monitor_api do
-    Application.get_env(:belfrage, :monitor_api)
   end
 end

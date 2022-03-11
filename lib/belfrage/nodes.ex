@@ -1,6 +1,4 @@
 defmodule Belfrage.Nodes do
-  def monitor_nodes, do: filter_by_node_name(Node.list(), "monitor")
-
   @doc ~S"""
   Selects nodes by name.
 
