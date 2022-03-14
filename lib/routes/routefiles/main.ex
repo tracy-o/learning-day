@@ -959,7 +959,6 @@ defroutefile "Main" do
   end
   handle "/swahili/send/:id", using: "UploaderWorldService", examples: ["/swahili/send/u39697902"]
   handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili"]
-  handle "/tajik/send/:id", using: "UploaderWorldService", examples: ["/tajik/send/u39697902"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik"]
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
