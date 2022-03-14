@@ -1,5 +1,13 @@
 defmodule Routes.Specs.Uploader do
-  def specs do
+  def specs("live") do
+    %{
+      owner: "D&EHomeParticipationTeam@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",
+      platform: MorphRouter
+    }
+  end
+
+  def specs(_production_env) do
     %{
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",

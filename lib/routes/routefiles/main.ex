@@ -588,6 +588,7 @@ defroutefile "Main" do
   handle "/afaanoromoo/new_topics/:id.amp", using: "WorldServiceAfaanoromooTopicPage", only_on: "test", examples: ["/afaanoromoo/new_topics/c7zp5z9n3x5t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/afaanoromoo/send/:id", using: "UploaderWorldService", examples: ["/afaanoromoo/send/u39697902"]
   handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
@@ -600,6 +601,7 @@ defroutefile "Main" do
   handle "/afrique/new_topics/:id.amp", using: "WorldServiceAfriqueTopicPage", only_on: "test", examples: ["/afrique/new_topics/c9ny75kpxlkt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/afrique/send/:id", using: "UploaderWorldService", examples: ["/afrique/send/u39697902"]
   handle "/afrique/*_any", using: "WorldServiceAfrique", examples: ["/afrique"]
   handle "/amharic.amp", using: "WorldServiceAmharic", examples: ["/amharic.amp"]
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
@@ -609,6 +611,7 @@ defroutefile "Main" do
   handle "/amharic/new_topics/:id.amp", using: "WorldServiceAmharicTopicPage", only_on: "test", examples: ["/amharic/new_topics/c06gq8wdrjyt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/amharic/send/:id", using: "UploaderWorldService", examples: ["/amharic/send/u39697902"]
   handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic"]
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
@@ -626,6 +629,7 @@ defroutefile "Main" do
   handle "/arabic/new_topics/:id.amp", using: "WorldServiceArabicTopicPage", only_on: "test", examples: ["/arabic/new_topics/c340qj374j6t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/arabic/send/:id", using: "UploaderWorldService", examples: ["/arabic/send/u39697902"]
   handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic"]
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
@@ -638,6 +642,7 @@ defroutefile "Main" do
   handle "/azeri/new_topics/:id.amp", using: "WorldServiceAzeriTopicPage", only_on: "test", examples: ["/azeri/new_topics/c1gdq32g3ddt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/azeri/send/:id", using: "UploaderWorldService", examples: ["/azeri/send/u39697902"]
   handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri"]
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
@@ -651,6 +656,7 @@ defroutefile "Main" do
   handle "/bengali/new_topics/:id.amp", using: "WorldServiceBengaliTopicPage", only_on: "test", examples: ["/bengali/new_topics/c2dwq2nd40xt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/bengali/send/:id", using: "UploaderWorldService", examples: ["/bengali/send/u39697902"]
   handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali"]
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
@@ -664,6 +670,7 @@ defroutefile "Main" do
   handle "/burmese/new_topics/:id.amp", using: "WorldServiceBurmeseTopicPage", only_on: "test", examples: ["/burmese/new_topics/c404v08p1wxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/burmese/send/:id", using: "UploaderWorldService", examples: ["/burmese/send/u39697902"]
   handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese"]
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
@@ -676,6 +683,7 @@ defroutefile "Main" do
   handle "/gahuza/new_topics/:id.amp", using: "WorldServiceGahuzaTopicPage", only_on: "test", examples: ["/gahuza/new_topics/c7zp5z0yd0xt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/gahuza/send/:id", using: "UploaderWorldService", examples: ["/gahuza/send/u39697902"]
   handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza"]
   handle "/gujarati.amp", using: "WorldServiceGujarati", examples: ["/gujarati.amp"]
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
@@ -685,6 +693,7 @@ defroutefile "Main" do
   handle "/gujarati/new_topics/:id.amp", using: "WorldServiceGujaratiTopicPage", only_on: "test", examples: ["/gujarati/new_topics/c2dwqj95d30t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/gujarati/send/:id", using: "UploaderWorldService", examples: ["/gujarati/send/u39697902"]
   handle "/gujarati/*_any", using: "WorldServiceGujarati", examples: ["/gujarati"]
 
   redirect "/hausa/mobile/*any", to: "/hausa", status: 301
@@ -697,6 +706,7 @@ defroutefile "Main" do
   handle "/hausa/new_topics/:id.amp", using: "WorldServiceHausaTopicPage", only_on: "test", examples: ["/hausa/new_topics/c5qvpxkx1j7t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/hausa/send/:id", using: "UploaderWorldService", examples: ["/hausa/send/u39697902"]
   handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa"]
 
   redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
@@ -710,6 +720,7 @@ defroutefile "Main" do
   handle "/hindi/new_topics/:id.amp", using: "WorldServiceHindiTopicPage", only_on: "test", examples: ["/hindi/new_topics/c6vzy709wvxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/hindi/send/:id", using: "UploaderWorldService", examples: ["/hindi/send/u39697902"]
   handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi"]
   handle "/igbo.amp", using: "WorldServiceIgbo", examples: ["/igbo.amp"]
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
@@ -719,6 +730,7 @@ defroutefile "Main" do
   handle "/igbo/new_topics/:id.amp", using: "WorldServiceIgboTopicPage", only_on: "test", examples: ["/igbo/new_topics/c340qr24xggt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/igbo/send/:id", using: "UploaderWorldService", examples: ["/igbo/send/u39697902"]
   handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo"]
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
@@ -731,6 +743,7 @@ defroutefile "Main" do
   handle "/indonesia/new_topics/:id.amp", using: "WorldServiceIndonesiaTopicPage", only_on: "test", examples: ["/indonesia/new_topics/c340qrk1znxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/indonesia/send/:id", using: "UploaderWorldService", examples: ["/indonesia/send/u39697902"]
   handle "/indonesia/*_any", using: "WorldServiceIndonesia", examples: ["/indonesia"]
   handle "/japanese.amp", using: "WorldServiceJapanese", examples: ["/japanese.amp"]
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
@@ -740,6 +753,7 @@ defroutefile "Main" do
   handle "/japanese/new_topics/:id.amp", using: "WorldServiceJapaneseTopicPage", only_on: "test", examples: ["/japanese/new_topics/c340qrn7pp0t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/japanese/send/:id", using: "UploaderWorldService", examples: ["/japanese/send/u39697902"]
   handle "/japanese/*_any", using: "WorldServiceJapanese", examples: ["/japanese"]
   handle "/korean.amp", using: "WorldServiceKorean", examples: ["/korean.amp"]
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
@@ -749,6 +763,7 @@ defroutefile "Main" do
   handle "/korean/new_topics/:id.amp", using: "WorldServiceKoreanTopicPage", only_on: "test", examples: ["/korean/new_topics/c17q6yp3jx4t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/korean/send/:id", using: "UploaderWorldService", examples: ["/korean/send/u39697902"]
   handle "/korean/*_any", using: "WorldServiceKorean", examples: ["/korean"]
 
   redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
@@ -761,6 +776,7 @@ defroutefile "Main" do
   handle "/kyrgyz/new_topics/:id.amp", using: "WorldServiceKyrgyzTopicPage", only_on: "test", examples: ["/kyrgyz/new_topics/c0109l9xrpnt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
@@ -770,6 +786,7 @@ defroutefile "Main" do
   handle "/marathi/new_topics/:id.amp", using: "WorldServiceMarathiTopicPage", only_on: "test", examples: ["/marathi/new_topics/c2dwqjwqqqjt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/marathi/send/:id", using: "UploaderWorldService", examples: ["/marathi/send/u39697902"]
   handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi"]
 
   ## World Service - Olympic Redirects
@@ -792,6 +809,7 @@ defroutefile "Main" do
   handle "/mundo/new_topics/:id.amp", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/new_topics/cdr5613yzwqt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/mundo/send/:id", using: "UploaderWorldService", examples: ["/mundo/send/u39697902"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo"]
 
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
@@ -805,6 +823,7 @@ defroutefile "Main" do
   handle "/nepali/new_topics/:id.amp", using: "WorldServiceNepaliTopicPage", only_on: "test", examples: ["/nepali/new_topics/c340q4p5136t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/nepali/send/:id", using: "UploaderWorldService", examples: ["/nepali/send/u39697902"]
   handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali"]
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
@@ -818,6 +837,7 @@ defroutefile "Main" do
   handle "/pashto/new_topics/:id.amp", using: "WorldServicePashtoTopicPage", only_on: "test", examples: ["/pashto/new_topics/c8y94yr7y9rt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/pashto/send/:id", using: "UploaderWorldService", examples: ["/pashto/send/u39697902"]
   handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto"]
 
   redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
@@ -831,6 +851,7 @@ defroutefile "Main" do
   handle "/persian/new_topics/:id.amp", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/persian/new_topics/c95y35941vrt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/persian/send/:id", using: "UploaderWorldService", examples: ["/persian/send/u39697902"]
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
@@ -840,6 +861,7 @@ defroutefile "Main" do
   handle "/pidgin/new_topics/:id.amp", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c5qvp8wr36dt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/pidgin/send/:id", using: "UploaderWorldService", examples: ["/pidgin/send/u39697902"]
   handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin"]
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
@@ -853,6 +875,7 @@ defroutefile "Main" do
   handle "/portuguese/new_topics/:id.amp", using: "WorldServicePortugueseTopicPage", only_on: "test", examples: ["/portuguese/new_topics/c1gdqg5dr8nt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/portuguese/send/:id", using: "UploaderWorldService", examples: ["/portuguese/send/u39697902"]
   handle "/portuguese/*_any", using: "WorldServicePortuguese", examples: ["/portuguese"]
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
@@ -862,6 +885,7 @@ defroutefile "Main" do
   handle "/punjabi/new_topics/:id.amp", using: "WorldServicePunjabiTopicPage", only_on: "test", examples: ["/punjabi/new_topics/c0w258dd62mt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/punjabi/send/:id", using: "UploaderWorldService", examples: ["/punjabi/send/u39697902"]
   handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi"]
 
   ## World Service - Russian Partners Redirects
@@ -879,6 +903,7 @@ defroutefile "Main" do
   handle "/russian/new_topics/:id.amp", using: "WorldServiceRussianTopicPage", only_on: "test", examples: ["/russian/new_topics/c50nzm54vzmt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/russian/send/:id", using: "UploaderWorldService", examples: ["/russian/send/u39697902"]
   handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian"]
   handle "/serbian/cyr/new_topics/:id", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/cyr/new_topics/c5wzvzzz5vrt"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
@@ -892,6 +917,7 @@ defroutefile "Main" do
   handle "/serbian/lat/new_topics/:id.amp", using: "WorldServiceSerbianTopicPage", only_on: "test", examples: ["/serbian/lat/new_topics/c5wzvzzz5vrt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/serbian/send/:id", using: "UploaderWorldService", examples: ["/serbian/send/u39697902"]
   handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
 
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
@@ -905,6 +931,7 @@ defroutefile "Main" do
   handle "/sinhala/new_topics/:id.amp", using: "WorldServiceSinhalaTopicPage", only_on: "test", examples: ["/sinhala/new_topics/c2dwqd311xyt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/sinhala/send/:id", using: "UploaderWorldService", examples: ["/sinhala/send/u39697902"]
   handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala"]
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
@@ -917,6 +944,7 @@ defroutefile "Main" do
   handle "/somali/new_topics/:id.amp", using: "WorldServiceSomaliTopicPage", only_on: "test", examples: ["/somali/new_topics/cz74k7jd8n8t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/somali/send/:id", using: "UploaderWorldService", examples: ["/somali/send/u39697902"]
   handle "/somali/*_any", using: "WorldServiceSomali", examples: ["/somali"]
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
@@ -929,7 +957,9 @@ defroutefile "Main" do
   handle "/swahili/new_topics/:id.amp", using: "WorldServiceSwahiliTopicPage", only_on: "test", examples: ["/swahili/new_topics/c06gq663n6jt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/swahili/send/:id", using: "UploaderWorldService", examples: ["/swahili/send/u39697902"]
   handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili"]
+  handle "/tajik/send/:id", using: "UploaderWorldService", examples: ["/tajik/send/u39697902"]
   handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik"]
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
@@ -943,6 +973,7 @@ defroutefile "Main" do
   handle "/tamil/new_topics/:id.amp", using: "WorldServiceTamilTopicPage", only_on: "test", examples: ["/tamil/new_topics/c06gq6gnzdgt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/tamil/send/:id", using: "UploaderWorldService", examples: ["/tamil/send/u39697902"]
   handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil"]
   handle "/telugu.amp", using: "WorldServiceTelugu", examples: ["/telugu.amp"]
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
@@ -952,6 +983,7 @@ defroutefile "Main" do
   handle "/telugu/new_topics/:id.amp", using: "WorldServiceTeluguTopicPage", only_on: "test", examples: ["/telugu/new_topics/c5qvp16w7dnt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/telugu/send/:id", using: "UploaderWorldService", examples: ["/telugu/send/u39697902"]
   handle "/telugu/*_any", using: "WorldServiceTelugu", examples: ["/telugu"]
   handle "/thai.amp", using: "WorldServiceThai", examples: ["/thai.amp"]
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
@@ -961,6 +993,7 @@ defroutefile "Main" do
   handle "/thai/new_topics/:id.amp", using: "WorldServiceThaiTopicPage", only_on: "test", examples: ["/thai/new_topics/c340qx429k7t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/thai/send/:id", using: "UploaderWorldService", examples: ["/thai/send/u39697902"]
   handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai"]
   handle "/tigrinya.amp", using: "WorldServiceTigrinya", examples: ["/tigrinya.amp"]
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
@@ -970,6 +1003,7 @@ defroutefile "Main" do
   handle "/tigrinya/new_topics/:id.amp", using: "WorldServiceTigrinyaTopicPage", only_on: "test", examples: ["/tigrinya/new_topics/c1gdqrg28zxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/tigrinya/send/:id", using: "UploaderWorldService", examples: ["/tigrinya/send/u39697902"]
   handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
@@ -983,6 +1017,7 @@ defroutefile "Main" do
   handle "/turkce/new_topics/:id.amp", using: "WorldServiceTurkceTopicPage", only_on: "test", examples: ["/turkce/new_topics/c2dwqnwkvnqt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/turkce/send/:id", using: "UploaderWorldService", examples: ["/turkce/send/u39697902"]
   handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce"]
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
@@ -1000,6 +1035,7 @@ defroutefile "Main" do
   handle "/ukchina/trad/new_topics/:id.amp", using: "WorldServiceUkchinaTopicPage", only_on: "test", examples: ["/ukchina/trad/new_topics/c1nq04kp0r0t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/ukchina/send/:id", using: "UploaderWorldService", examples: ["/ukchina/send/u39697902"]
   handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
 
   redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
@@ -1012,6 +1048,7 @@ defroutefile "Main" do
   handle "/ukrainian/new_topics/:id.amp", using: "WorldServiceUkrainianTopicPage", only_on: "test", examples: ["/ukrainian/new_topics/c340qxwr67yt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/ukrainian/send/:id", using: "UploaderWorldService", examples: ["/ukrainian/send/u39697902"]
   handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian"]
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
@@ -1025,6 +1062,7 @@ defroutefile "Main" do
   handle "/urdu/new_topics/:id.amp", using: "WorldServiceUrduTopicPage", only_on: "test", examples: ["/urdu/new_topics/c44pxlmy60mt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/urdu/send/:id", using: "UploaderWorldService", examples: ["/urdu/send/u39697902"]
   handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu"]
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
@@ -1037,6 +1075,7 @@ defroutefile "Main" do
   handle "/uzbek/new_topics/:id.amp", using: "WorldServiceUzbekTopicPage", only_on: "test", examples: ["/uzbek/new_topics/c340q0q55jvt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/uzbek/send/:id", using: "UploaderWorldService", examples: ["/uzbek/send/u39697902"]
   handle "/uzbek/*_any", using: "WorldServiceUzbek", examples: ["/uzbek"]
 
   redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
@@ -1049,6 +1088,7 @@ defroutefile "Main" do
   handle "/vietnamese/new_topics/:id.amp", using: "WorldServiceVietnameseTopicPage", only_on: "test", examples: ["/vietnamese/new_topics/c340q0gkg4kt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/vietnamese/send/:id", using: "UploaderWorldService", examples: ["/vietnamese/send/u39697902"]
   handle "/vietnamese/*_any", using: "WorldServiceVietnamese", examples: ["/vietnamese"]
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
@@ -1058,6 +1098,7 @@ defroutefile "Main" do
   handle "/yoruba/new_topics/:id.amp", using: "WorldServiceYorubaTopicPage", only_on: "test", examples: ["/yoruba/new_topics/c12jqpnxn44t.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/yoruba/send/:id", using: "UploaderWorldService", examples: ["/yoruba/send/u39697902"]
   handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba"]
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
@@ -1075,6 +1116,7 @@ defroutefile "Main" do
   handle "/zhongwen/trad/new_topics/:id.amp", using: "WorldServiceZhongwenTopicPage", only_on: "test", examples: ["/zhongwen/trad/new_topics/c0dg90z8nqxt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+  handle "/zhongwen/send/:id", using: "UploaderWorldService", examples: ["/zhongwen/send/u39697902"]
   handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
 
   handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
