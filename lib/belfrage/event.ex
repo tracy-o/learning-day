@@ -41,7 +41,7 @@ defmodule Belfrage.Event do
     Stump.log(level, msg, cloudwatch: true)
   end
 
-  def record(:log, level, msg, opts) do
+  def record(:log, level, msg, _opts) do
     Stump.log(level, msg)
     Stump.log(level, msg, cloudwatch: true)
   end
