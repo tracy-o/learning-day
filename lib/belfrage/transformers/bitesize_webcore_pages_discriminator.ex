@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.BitesizeLevelsDiscriminator do
+defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminator do
   @moduledoc """
   Alters the Platform depending on the environment.
   """

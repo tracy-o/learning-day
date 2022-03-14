@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
+defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-  alias Belfrage.Transformers.BitesizeLevelsDiscriminator
+  alias Belfrage.Transformers.BitesizeWebcorePagesDiscriminator
   alias Belfrage.Struct
 
   @morph_test_data %Struct{
@@ -56,7 +56,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
                  path: "/_web_core"
                }
              }
-           } = BitesizeLevelsDiscriminator.call([], @morph_test_data)
+           } = BitesizeWebcorePagesDiscriminator.call([], @morph_test_data)
   end
 
   test "if the environment is LIVE, the platform will remain as MorphRouter" do
@@ -81,6 +81,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsDiscriminatorTest do
                  path: "/_web_core"
                }
              }
-           } = BitesizeLevelsDiscriminator.call([], @morph_live_data)
+           } = BitesizeWebcorePagesDiscriminator.call([], @morph_live_data)
   end
 end
