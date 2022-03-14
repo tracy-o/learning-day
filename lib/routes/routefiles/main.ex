@@ -289,8 +289,14 @@ defroutefile "Main" do
     ]
   end
 
-#  News Topics
+  # Local News
+  handle "/news/localnews", using: "NewsLocalNews", examples: ["/news/localnews"]
+  handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
 
+  # To be replaced with redirects https://jira.dev.bbc.co.uk/browse/RESFRAME-4543
+  handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
+
+  # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
@@ -365,7 +371,6 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "News", examples: ["/news/have_your_say"]
   handle "/news/health", using: "News", examples: ["/news/health"]
   handle "/news/in_pictures", using: "News", examples: ["/news/in_pictures"]
-  handle "/news/localnews", using: "News", examples: ["/news/localnews"]
   handle "/news/newsbeat", using: "News", examples: ["/news/newsbeat"]
   handle "/news/northern_ireland", using: "News", examples: ["/news/northern_ireland"]
   handle "/news/paradisepapers", using: "News", examples: ["/news/paradisepapers"]
@@ -423,8 +428,6 @@ defroutefile "Main" do
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
   handle "/news/events/*_any", using: "News", examples: ["/news/events/scotland-decides/results"]
   handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
-  handle "/news/localnews/*_any", using: "News", examples: ["/news/localnews/2643743-london/0"]
-  handle "/news/localnewsdata/*_any", using: "News", examples: ["/news/localnewsdata/promoted-content/2644688/0"]
   handle "/news/local_news_slice/*_any", using: "News", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
   handle "/news/northern_ireland/*_any", using: "News", examples: ["/news/northern_ireland/northern_ireland_politics"]
   handle "/news/politics/*_any", using: "News", examples: ["/news/politics/eu_referendum/results"]
