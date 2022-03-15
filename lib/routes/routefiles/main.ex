@@ -1951,7 +1951,7 @@ defroutefile "Main" do
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
   # WebCore Hub
-  handle "/webcore/*_any", using: "WebCoreHub", examples: ["/webcore", "/webcore/tutorials", "/webcore/tutorials/getting-started"]
+  redirect("/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302)
 
   # News Beat
 
