@@ -1,18 +1,13 @@
 defmodule Belfrage.Personalisation do
-  alias Belfrage.{Struct, RouteSpec}
+  alias Belfrage.{Struct, RouteSpec, Metrics}
   alias Belfrage.Struct.{Request, Private}
   alias Belfrage.Authentication.{BBCID, SessionState}
 
   @dial Application.get_env(:belfrage, :dial)
 
-  def transform_route_spec(spec = %RouteSpec{}) do
+  def maybe_put_personalised_route(spec = %RouteSpec{}) do
     if personalised_route_spec?(spec) do
-      %RouteSpec{
-        spec
-        | personalised_route: true,
-          headers_allowlist: spec.headers_allowlist ++ ["x-id-oidc-signedin"],
-          cookie_allowlist: spec.cookie_allowlist ++ ["ckns_atkn", "ckns_id"]
-      }
+      %RouteSpec{spec | personalised_route: true}
     else
       spec
     end
@@ -55,5 +50,41 @@ defmodule Belfrage.Personalisation do
 
   def applicable_request?(%Request{host: host}) do
     String.ends_with?(host, "bbc.co.uk")
+  end
+
+  def maybe_put_personalised_request(struct = %Struct{}) do
+    Metrics.duration(:check_if_personalised_request, fn ->
+      if personalised_request?(struct) do
+        Struct.add(struct, :private, %{personalised_request: true})
+      else
+        struct
+      end
+    end)
+  end
+
+  def append_allowlists(struct = %Struct{}) do
+    cond do
+      append_allowlists_for_web_request?(struct) ->
+        Struct.add(struct, :private, %{
+          headers_allowlist: struct.private.headers_allowlist ++ ["x-id-oidc-signedin"],
+          cookie_allowlist: struct.private.cookie_allowlist ++ ["ckns_atkn", "ckns_id"]
+        })
+
+      append_allowlists_for_app_request?(struct) ->
+        Struct.add(struct, :private, %{
+          headers_allowlist: struct.private.headers_allowlist ++ ["authorization", "x-authentication-provider"]
+        })
+
+      true ->
+        struct
+    end
+  end
+
+  defp append_allowlists_for_app_request?(struct = %Struct{}) do
+    struct.private.personalised_route and struct.request.app?
+  end
+
+  defp append_allowlists_for_web_request?(struct = %Struct{}) do
+    struct.private.personalised_route and not struct.request.app?
   end
 end

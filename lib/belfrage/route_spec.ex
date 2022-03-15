@@ -41,7 +41,7 @@ defmodule Belfrage.RouteSpec do
     route_attrs.platform
     |> get_platform_spec(env)
     |> update_with_route_attrs(route_attrs)
-    |> Personalisation.transform_route_spec()
+    |> Personalisation.maybe_put_personalised_route()
   end
 
   defp get_route_attrs(name, env) do
