@@ -39,7 +39,8 @@ defmodule BelfrageWeb.StructAdapter do
         cookie_ckps_serbian: bbc_headers.cookie_ckps_serbian,
         origin: bbc_headers.origin,
         referer: bbc_headers.referer,
-        user_agent: bbc_headers.user_agent
+        user_agent: bbc_headers.user_agent,
+        app?: app?(conn)
       },
       private: %Private{
         route_state_id: route_state_id,
@@ -72,5 +73,11 @@ defmodule BelfrageWeb.StructAdapter do
       [accept_encoding] -> accept_encoding
       [] -> nil
     end
+  end
+
+  defp app?(conn) do
+    conn
+    |> subdomain()
+    |> String.contains?("app")
   end
 end
