@@ -2,7 +2,7 @@
 
 First, make any changes required to the `.conf` files in either `/live` or `/test`, usually this is only adding new domains.
 
-Next run:
+Next run: (replace `test` for `live` as required)
 
 ```
 openssl req -new -newkey rsa:2048 -nodes -sha256 -config certs/test/belfrage.test.api.bbc.co.uk.conf -keyout belfrage.test.api.bbc.co.uk.key -out belfrage.test.api.bbc.co.uk.csr
