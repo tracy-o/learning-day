@@ -1,5 +1,5 @@
 defmodule EndToEnd.ProxyOnJoan do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
