@@ -2047,7 +2047,7 @@ defroutefile "Main" do
 
   # Bitesize
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
-  handle "/bitesize/subjects", using: "BitesizeTransition", examples: ["/bitesize/subjects"]
+  handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
