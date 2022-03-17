@@ -9,10 +9,11 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   def call(conn, _opts) do
     Plug.Conn.get_req_header(conn, "req-svc-chain")
     |> to_string()
-    |> String.contains?("BELFRAGE")
+    |> String.split(",")
+    |> Enum.count(&is_belfrage/1)
     |> case do
-      true -> send_404(conn)
-      false -> conn
+      count when count > 2 -> send_404(conn)
+      _ -> conn
     end
   end
 
@@ -26,4 +27,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
     |> BelfrageWeb.Response.not_found()
     |> Plug.Conn.halt()
   end
+
+  def is_belfrage("BELFRAGE"), do: true
+  def is_belfrage(_service), do: false
 end
