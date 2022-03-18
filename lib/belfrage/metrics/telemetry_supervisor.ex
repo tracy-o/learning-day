@@ -78,7 +78,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
   end
 
   defp cachex_metrics() do
-    for measurement <- ~w(evictions expirations hits misses)a do
+    for measurement <- ~w(evictions expirations hits misses updates writes)a do
       last_value([:cachex, measurement],
         measurement: measurement,
         event_name: "belfrage.cachex.stats",
