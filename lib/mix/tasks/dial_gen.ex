@@ -15,6 +15,7 @@ defmodule Mix.Tasks.DialGen do
 
     parse_dial_name(dial_name)
     add_to_cosmos_json("jeff", "a_desc", "on", [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}])
+    add_to_dev_env("jeff", "on")
   end
 
   defp parse_dial_name(arg) do
@@ -63,7 +64,16 @@ defmodule Mix.Tasks.DialGen do
   end
 
 
-  @spec add_to_cosmos_json(String.t(), String.t(), String.t(), list()) :: :ok | {:error, String.t()}
+  def add_to_dev_env(name, default_value) do
+    with {:ok, raw_json} <- File.read("cosmos/dials_values_dev_env.json"),
+      {:ok, dev_values} <- Jason.decode(raw_json) do
+        {:ok, dev_values_string} = Map.put(dev_values, name, default_value)
+        |> Jason.encode(pretty: true)
+
+        :ok = File.write("cosmos/dials_values_dev_env.json", dev_values_string)
+      end
+  end
+
   def add_to_cosmos_json(name, description, default_value, dial_values) do
     with {:ok, raw_json} <- File.read("cosmos/dials.json"),
           {:ok, dials_config} <- Jason.decode(raw_json)
