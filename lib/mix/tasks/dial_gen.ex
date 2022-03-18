@@ -17,6 +17,12 @@ defmodule Mix.Tasks.DialGen do
     add_to_cosmos_json("jeff", "a_desc", "on", [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}])
     add_to_dev_env("jeff", "on")
     # add_to_config("jeff", "Jeff")
+
+
+    # after all this I think its better If I ditch the AST approach, and just
+    # write my own parser on the plain text which just searches for
+    # `dial_handlers:`
+
     add_to_belfrage_config("jeff", Jeff)
   end
 
@@ -64,20 +70,6 @@ defmodule Mix.Tasks.DialGen do
     |> Enum.join()
     |> String.trim_trailing("_")
   end
-
-
-  # def add_to_config(name, module_name) do
-  #   with {:ok, source_code} <- File.read("config/config.exs"),
-  #     {:ok, config_ast} <- Code.string_to_quoted(source_code) do
-  #       IO.inspect(get_dial_handlers(config_ast))
-
-  #   end
-
-    # dial_handlers = Application.get_env(:belfrage, :dial_handlers)
-    # full_module_name = String.to_atom("Belfrage.Dials.#{module_name}")
-    # dial_handlers = Map.put(dial_handlers, name, full_module_name)
-    # Application.put_env(:belfrage, :dial_handlers, dial_handlers)
-  # end
 
   def add_to_dev_env(name, default_value) do
     with {:ok, raw_json} <- File.read("cosmos/dials_values_dev_env.json"),
