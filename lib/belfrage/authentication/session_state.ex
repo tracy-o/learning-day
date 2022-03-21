@@ -3,18 +3,18 @@ defmodule Belfrage.Authentication.SessionState do
   alias Belfrage.Authentication.Token
 
   def authenticated?(request = %Request{}) do
-    request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1"
+    (request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1") && !request.app?
   end
 
   def build(request = %Request{}) do
-    token = request.cookies["ckns_atkn"]
+    token = get_token(request)
     authenticated = authenticated?(request)
 
     cond do
       request.path == "/full-stack-test/a/ft" && token == "FAKETOKEN" ->
         build_fake_session(token)
 
-      authenticated && token ->
+        (authenticated && token) || (request.app? && token) ->
         build_session(token)
 
       authenticated ->
@@ -80,5 +80,21 @@ defmodule Belfrage.Authentication.SessionState do
 
   defp account_url do
     Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
+  end
+
+  defp get_token(request = %Request{}) do
+    if request.app? do
+      request.raw_headers["authorization"]
+      |> extract_token()
+    else
+      request.cookies["ckns_atkn"]
+    end
+  end
+
+  defp extract_token(auth_header_value) do
+    case auth_header_value do
+      "Bearer " <> token -> token
+      _ -> nil
+    end
   end
 end

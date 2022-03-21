@@ -8,14 +8,19 @@ defmodule Belfrage.Authentication.SessionStateTest do
   @token Fixtures.AuthToken.valid_access_token()
 
   describe "authenticated?/1" do
-    test "returns true if ckns_id cookie is set" do
+    test "returns false for default request" do
       refute SessionState.authenticated?(%Request{})
+    end
+
+    test "returns false if x-id-oidc-signedin header is not set to '1'" do
+      refute SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "0"}})
+    end
+
+    test "returns true if ckns_id cookie is set" do
       assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}})
     end
 
-    test "returns true if x-id-oidc-signedin header is set to '1'" do
-      refute SessionState.authenticated?(%Request{})
-      refute SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "0"}})
+    test "returns true if and x-id-oidc-signedin header is set to '1'" do
       assert SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "1"}})
     end
   end
@@ -151,6 +156,59 @@ defmodule Belfrage.Authentication.SessionStateTest do
                authentication_env: "int",
                session_token: nil,
                authenticated: false,
+               valid_session: false,
+               user_attributes: %{}
+             }
+    end
+
+    test "returns valid session for app request when valid 'authorization' header is set" do
+      request = %Request{
+        path: "/",
+        app?: true,
+        raw_headers: %{"authorization" => "Bearer #{@token}"}
+      }
+
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
+
+      assert SessionState.build(request) == %{
+               authentication_env: "int",
+               session_token: @token,
+               authenticated: true,
+               valid_session: true,
+               user_attributes: user_attributes
+             }
+    end
+
+    test "returns invalid state for app request when 'authorization' header is not set" do
+      request = %Request{
+        path: "/",
+        app?: true,
+        cookies: %{"ckns_atkn" => @token},
+        raw_headers: %{"x-id-oidc-signedin" => "1"}
+      }
+
+      assert SessionState.build(request) == %{
+               authentication_env: "int",
+               session_token: nil,
+               authenticated: false,
+               valid_session: false,
+               user_attributes: %{}
+             }
+    end
+
+    test "returns invalid state with session token for app request when invalid authorization token is set" do
+      token = "some-token"
+
+      request = %Request{
+        path: "/",
+        app?: true,
+        raw_headers: %{"authorization" => "Bearer #{token}"}
+      }
+
+      assert SessionState.build(request) == %{
+               authentication_env: "int",
+               session_token: token,
+               authenticated: true,
                valid_session: false,
                user_attributes: %{}
              }
