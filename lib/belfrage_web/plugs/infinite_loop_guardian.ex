@@ -7,14 +7,23 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    Plug.Conn.get_req_header(conn, "req-svc-chain")
-    |> to_string()
-    |> String.split(",")
-    |> Enum.count(&is_belfrage/1)
-    |> case do
-      count when count > 2 -> send_404(conn)
-      _ -> conn
+    if loop_detected?(conn) do
+      send_404(conn)
+    else
+      conn
     end
+  end
+
+  defp loop_detected?(conn) do
+    case {bruce_stack?(), req_chain_count(conn)} do
+      {true, count} when count > 2 -> true
+      {false, count} when count > 1 -> true
+      _ -> false
+    end
+  end
+
+  defp bruce_stack?() do
+    Application.get_env(:belfrage, :stack_id) == "bruce"
   end
 
   defp send_404(conn) do
@@ -26,6 +35,13 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
     conn
     |> BelfrageWeb.Response.not_found()
     |> Plug.Conn.halt()
+  end
+
+  defp req_chain_count(conn) do
+    Plug.Conn.get_req_header(conn, "req-svc-chain")
+    |> to_string()
+    |> String.split(",")
+    |> Enum.count(&is_belfrage/1)
   end
 
   def is_belfrage("BELFRAGE"), do: true
