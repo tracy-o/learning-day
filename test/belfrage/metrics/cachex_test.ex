@@ -1,8 +1,6 @@
 defmodule Belfrage.Metrics.CachexTest do
   use ExUnit.Case, async: true
 
-  import Telemetry.Metrics
-
   test "expose expected metrics from cachex" do
     cache = String.to_atom("cache#{System.unique_integer()}")
     {:ok, _pid} = Cachex.start_link(cache, stats: true)
@@ -83,9 +81,5 @@ defmodule Belfrage.Metrics.CachexTest do
     expected_size = byte_size(expected_payload)
     {:ok, {_host, _port, payload}} = :gen_udp.recv(socket, expected_size, 1000)
     assert payload == expected_payload
-  end
-
-  defp refute_reported(socket) do
-    assert {:error, :timeout} = :gen_udp.recv(socket, 0, 1000)
   end
 end
