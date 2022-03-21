@@ -61,9 +61,7 @@ defmodule EndToEnd.ProxyOnJoan do
     end
   end
 
-  # \
-
-  def set_stack_id(stack_id) do
+  defp set_stack_id(stack_id) do
     prev_stack_id = Application.get_env(:belfrage, :stack_id)
     Application.put_env(:belfrage, :stack_id, stack_id)
 
