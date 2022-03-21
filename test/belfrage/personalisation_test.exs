@@ -7,7 +7,7 @@ defmodule Belfrage.PersonalisationTest do
   alias Belfrage.RouteSpec
   alias Belfrage.Struct
 
-  describe "transform_route_spec/1" do
+  describe "maybe_put_personalised_route/1" do
     @route_spec %RouteSpec{
       owner: "An owner",
       runbook: "A run book",
@@ -15,52 +15,65 @@ defmodule Belfrage.PersonalisationTest do
       pipeline: ["a", "really", "long", "pipeline"]
     }
 
-    test "adds personalisation attrs if personalisation is 'on'" do
-      spec = Map.put(@route_spec, :personalisation, "on")
-      result = Personalisation.transform_route_spec(spec)
-      assert result.headers_allowlist == ["x-id-oidc-signedin"]
-      assert result.cookie_allowlist == ["ckns_atkn", "ckns_id"]
-      assert result.personalised_route
+    test "sets :personalised_route to true when personalisation is on" do
+      spec = %Belfrage.RouteSpec{@route_spec | personalisation: "on"}
+      assert Personalisation.maybe_put_personalised_route(spec) == %Belfrage.RouteSpec{spec | personalised_route: true}
     end
 
-    test "adds personalisation attrs if personalisation is 'test_only' and prod env is test" do
-      assert Application.get_env(:belfrage, :production_environment) == "test"
+    test "does not set :personalised_route to true when personalisation is off" do
+      spec = %Belfrage.RouteSpec{@route_spec | personalisation: "off"}
+      assert Personalisation.maybe_put_personalised_route(spec) == spec
+    end
+  end
 
-      spec = Map.put(@route_spec, :personalisation, "test_only")
-      result = Personalisation.transform_route_spec(spec)
-      assert result.headers_allowlist == ["x-id-oidc-signedin"]
-      assert result.cookie_allowlist == ["ckns_atkn", "ckns_id"]
-      assert result.personalised_route
+  describe "maybe_put_personalised_request/1" do
+    test "sets :personalised_request to true when request is personalised" do
+      enable_personalisation()
+
+      struct =
+        %Struct{}
+        |> set_host("bbc.co.uk")
+        |> set_personalised_route(true)
+        |> authenticate_request()
+
+      assert Personalisation.maybe_put_personalised_request(struct) ==
+               Struct.add(struct, :private, %{personalised_request: true})
     end
 
-    test "does not add personalisation attrs if personalisation is 'test_only' and prod env is not test" do
-      original_env = Application.get_env(:belfrage, :production_environment)
-      Application.put_env(:belfrage, :production_environment, "live")
-      on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
+    test "does not set :personalised_request to true when request is not personalised" do
+      enable_personalisation()
+      struct = set_host(%Struct{}, "bbc.co.uk")
 
-      spec = Map.put(@route_spec, :personalisation, "test_only")
-      result = Personalisation.transform_route_spec(spec)
-      assert result == spec
+      assert Personalisation.maybe_put_personalised_request(struct) == struct
+    end
+  end
+
+  describe "append_allowlists/1" do
+    test "does not append allowlists when personalisation is off and request is not from app" do
+      struct = %Struct{request: %Struct.Request{app?: false}, private: %Struct.Private{personalised_route: false}}
+      assert Personalisation.append_allowlists(struct) == struct
     end
 
-    test "does not add personalisation attrs if personalisation is some other value" do
-      assert Personalisation.transform_route_spec(@route_spec) == @route_spec
-
-      spec = Map.put(@route_spec, :personalisation, "off")
-      assert Personalisation.transform_route_spec(spec) == spec
+    test "does not append allowlists when personalisation is off and request is from app" do
+      struct = %Struct{request: %Struct.Request{app?: true}, private: %Struct.Private{personalised_route: false}}
+      assert Personalisation.append_allowlists(struct) == struct
     end
 
-    test "merges personalisation headers and cookies with existing ones" do
-      spec =
-        Map.merge(@route_spec, %{
-          personalisation: "on",
-          headers_allowlist: ["some_header"],
-          cookie_allowlist: ["some_cookie"]
-        })
+    test "appends correct allowlists when personalisation is on and request is from app" do
+      struct = %Struct{request: %Struct.Request{app?: true}, private: %Struct.Private{personalised_route: true}}
 
-      result = Personalisation.transform_route_spec(spec)
-      assert result.headers_allowlist == ["some_header", "x-id-oidc-signedin"]
-      assert result.cookie_allowlist == ["some_cookie", "ckns_atkn", "ckns_id"]
+      assert Personalisation.append_allowlists(struct) ==
+               Struct.add(struct, :private, %{headers_allowlist: ["authorization", "x-authentication-provider"]})
+    end
+
+    test "appends allowlists when personalisation is on and request is not from app" do
+      struct = %Struct{private: %Struct.Private{personalised_route: true}}
+
+      assert Personalisation.append_allowlists(struct) ==
+               Struct.add(struct, :private, %{
+                 cookie_allowlist: ["ckns_atkn", "ckns_id"],
+                 headers_allowlist: ["x-id-oidc-signedin"]
+               })
     end
   end
 

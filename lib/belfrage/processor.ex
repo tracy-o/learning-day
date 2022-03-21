@@ -23,7 +23,7 @@ defmodule Belfrage.Processor do
     pipeline = [
       &get_route_state/1,
       &allowlists/1,
-      &personalisation/1,
+      &Personalisation.maybe_put_personalised_request/1,
       &language/1,
       &generate_request_hash/1
     ]
@@ -42,12 +42,6 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  def personalisation(struct = %Struct{}) do
-    Metrics.duration(:check_if_personalised_request, fn ->
-      Struct.add(struct, :private, %{personalised_request: Personalisation.personalised_request?(struct)})
-    end)
-  end
-
   def language(struct) do
     Language.add_signature(struct)
   end
@@ -55,6 +49,7 @@ defmodule Belfrage.Processor do
   def allowlists(struct) do
     Metrics.duration(:filter_request_data, fn ->
       struct
+      |> Personalisation.append_allowlists()
       |> Allowlist.QueryParams.filter()
       |> Allowlist.Cookies.filter()
       |> Allowlist.Headers.filter()
