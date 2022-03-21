@@ -45,6 +45,7 @@ defmodule Belfrage.Metrics.CachexTest do
       )
     )
 
+    # wait for entry to expire and trigger a cleanup
     Process.sleep(100)
     Cachex.purge(cache)
 
