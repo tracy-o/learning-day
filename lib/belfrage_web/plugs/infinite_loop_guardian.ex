@@ -44,6 +44,6 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
     |> Enum.count(&is_belfrage/1)
   end
 
-  def is_belfrage("BELFRAGE"), do: true
-  def is_belfrage(_service), do: false
+  defp is_belfrage("BELFRAGE"), do: true
+  defp is_belfrage(_service), do: false
 end
