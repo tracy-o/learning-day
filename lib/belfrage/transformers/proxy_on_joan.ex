@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.ProxyOnJoan do
     We have now introduced a new Belfrage stack called Joan which will sit
     infront of Mozart. It will take `/news/*` traffic and proxy it to Mozart.
 
-    We have to make Joans behaviour differ so that all of its traffic is send
+    We have to make Joans behaviour differ so that all of its traffic is sen
     directly to Mozart. Otherwise we could end up with a situation where Joan
     Belfrage acts exactly like Bruce belfrage and tried to forward a request to
     Pres rather than giving to Mozart.
@@ -22,7 +22,10 @@ defmodule Belfrage.Transformers.ProxyOnJoan do
     if stack_id() == "joan" do
       then_do(
         rest,
-        put_in(struct.private.origin, Application.get_env(:belfrage, :mozart_news_endpoint))
+        Struct.add(struct, :private, %{
+          platform: MozartNews,
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint)
+        })
       )
     else
       then_do(rest, struct)
