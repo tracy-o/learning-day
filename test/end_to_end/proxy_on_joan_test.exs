@@ -24,27 +24,26 @@ defmodule EndToEnd.ProxyOnJoan do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeRouteState"})
     :ok
   end
 
-  describe "a request with webcore platform on Joan" do
+  describe "a NewsArticlesPage request on Joan" do
     setup do
       set_stack_id("joan")
       :ok
     end
 
-    test "should change the origin to the mozart news enpoint" do
-      url = "https://mozart-news.example.com:test/200-ok-response"
-      HTTPMock |> expect(:execute, 1, fn request = %HTTP.Request{url: url}, :Webcore -> @http_response end)
+    test "should change the origin to the mozart news endpoint" do
+      url = "https://mozart-news.example.com:test/proxy-on-joan"
+      HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: url}, _pool -> @http_response end)
 
       conn =
-        conn(:get, "/200-ok-response")
+        conn(:get, "/proxy-on-joan")
         |> Router.call([])
     end
   end
 
-  describe "a request with a webcore platform on Bruce" do
+  describe "a NewsArticlesPage request on Bruce" do
     setup do
       set_stack_id("bruce")
       :ok
@@ -57,10 +56,12 @@ defmodule EndToEnd.ProxyOnJoan do
       end)
 
       conn =
-        conn(:get, "/200-ok-response")
+        conn(:get, "/proxy-on-joan")
         |> Router.call([])
     end
   end
+
+  # \
 
   def set_stack_id(stack_id) do
     prev_stack_id = Application.get_env(:belfrage, :stack_id)

@@ -65,7 +65,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState"},
               {"belfrage-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,ProxyOnJoan,TrailingSlashRedirector,HTTPredirect"}
+               "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
     assert response_body == @lambda_response["body"]
@@ -114,7 +114,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState"},
               {"belfrage-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,ProxyOnJoan,TrailingSlashRedirector,HTTPredirect"}
+               "DevelopmentRequests,CircuitBreaker,Chameleon,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,TrailingSlashRedirector,HTTPredirect"}
             ], response_body} = sent_resp(conn)
 
     assert @lambda_response["body"] == response_body
