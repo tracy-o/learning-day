@@ -24,7 +24,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     vm_metrics() ++
       cowboy_metrics() ++
       poolboy_metrics() ++
-      cachex_metrics() ++
+      Belfrage.Metrics.Cachex.metrics() ++
       latency_metrics() ++
       request_metrics() ++
       route_state_metrics() ++
@@ -75,16 +75,6 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         tags: [:BBCEnvironment]
       )
     ]
-  end
-
-  defp cachex_metrics() do
-    for measurement <- ~w(evictions expirations hits misses updates writes)a do
-      last_value([:cachex, measurement],
-        measurement: measurement,
-        event_name: "belfrage.cachex.stats",
-        tags: [:cache_name, :BBCEnvironment]
-      )
-    end
   end
 
   defp latency_metrics() do
