@@ -1,8 +1,8 @@
 defmodule Routes.Specs.Weather do
   def specs do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      owner: "DEWeather@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
       platform: MozartWeather,
       headers_allowlist: ["cookie-ckps_language"]
     }

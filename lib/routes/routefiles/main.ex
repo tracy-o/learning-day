@@ -1988,8 +1988,8 @@ defroutefile "Main" do
   handle "/sport/*_any", using: "Sport", examples: []
 
   # Weather
-
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
+  handle "/weather/coast-and-sea/*_any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
   handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
 
   # WebCore Hub
