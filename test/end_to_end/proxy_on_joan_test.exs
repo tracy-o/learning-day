@@ -2,7 +2,6 @@ defmodule EndToEnd.ProxyOnJoan do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   alias Belfrage.Clients.HTTPMock
   alias Belfrage.Clients.HTTP
   use Test.Support.Helper, :mox
@@ -35,11 +34,10 @@ defmodule EndToEnd.ProxyOnJoan do
 
     test "should change the origin to the mozart news endpoint" do
       url = "https://mozart-news.example.com:test/proxy-on-joan"
-      HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: url}, _pool -> @http_response end)
+      HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: ^url}, _pool -> @http_response end)
 
-      conn =
-        conn(:get, "/proxy-on-joan")
-        |> Router.call([])
+      conn(:get, "/proxy-on-joan")
+      |> Router.call([])
     end
   end
 
@@ -55,9 +53,8 @@ defmodule EndToEnd.ProxyOnJoan do
         {:ok, @lambda_response}
       end)
 
-      conn =
-        conn(:get, "/proxy-on-joan")
-        |> Router.call([])
+      conn(:get, "/proxy-on-joan")
+      |> Router.call([])
     end
   end
 
