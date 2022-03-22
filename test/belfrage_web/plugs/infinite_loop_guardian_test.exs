@@ -11,10 +11,10 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       :ok
     end
 
-    test "returns a 404 if req-svc-chain contains 3 instances of 'BELFRAGE'" do
+    test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/foo/bar/123.json")
-        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE,MOZART,BELFRAGE")
+        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
                InfiniteLoopGuardian.call(conn, _opts = [])
@@ -23,10 +23,10 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       assert {"bid", "bruce"} in resp_headers
     end
 
-    test "continues if req-svc-chain contains 2 instances of 'BELFRAGE'" do
+    test "continues if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/foo/bar/123.json")
-        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
+        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
     end
@@ -38,10 +38,10 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       :ok
     end
 
-    test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE'" do
+    test "returns a 404 if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/foo/bar/123.json")
-        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
+        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
                InfiniteLoopGuardian.call(conn, _opts = [])
@@ -50,10 +50,10 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       assert {"bid", "not-bruce"} in resp_headers
     end
 
-    test "continues if req-svc-chain contains 1 instances of 'BELFRAGE'" do
+    test "continues if req-svc-chain contains 0 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/foo/bar/123.json")
-        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
+        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
     end
