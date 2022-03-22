@@ -43,7 +43,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
 
   defp news_route?(conn) do
     # is true for /news and /news/* request paths
-    String.match?(conn.request_path, ~r(^/news$|^/news/[[:alnum:][:punct:]]*$))
+    String.starts_with?(conn.request_path, "/news")
   end
 
   defp is_belfrage("BELFRAGE"), do: true
