@@ -76,24 +76,6 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     end
   end
 
-  test "doesn't check routes which don't match '/news' or '/news/*'" do
-    # Because it doesn't check the routes the request should always continue
-    routes = [
-      "/new",
-      "news",
-      "/sport/news",
-      "/newstoday"
-    ]
-
-    for route <- routes do
-      conn =
-        conn(:get, route)
-        |> Plug.Conn.put_req_header("req-svc-chain", "BELFRAGE")
-
-      assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, [])
-    end
-  end
-
   test "continues if there is no req-svc-chain header" do
     conn = conn(:get, "/news")
 
