@@ -60,6 +60,7 @@ node {
       buildStack(branchName, "belfrage-preview")
       buildStack(branchName, "bruce-belfrage")
       buildStack(branchName, "cedric-belfrage")
+      buildStack(branchName, "joan-belfrage")
       buildStack(branchName, "sally-belfrage")
     }
   }
