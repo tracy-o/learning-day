@@ -15,12 +15,8 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   end
 
   defp loop_detected?(conn) do
-    case {news_route?(conn), bruce_stack?(), req_chain_count(conn)} do
-      {true, true, count} when count > 1 -> true
-      {true, true, count} when count > 0 -> false
-      {_, _, count} when count > 0 -> true
-      _ -> false
-    end
+    count = req_chain_count(conn)
+    if news_route?(conn) and bruce_stack?(), do: count > 1, else: count > 0
   end
 
   defp bruce_stack?() do
