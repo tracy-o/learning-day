@@ -15,9 +15,9 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   end
 
   defp loop_detected?(conn) do
-    case {bruce_stack?(), req_chain_count(conn)} do
-      {true, count} when count > 1 -> true
-      {false, count} when count > 0 -> true
+    case {news_route?(conn), bruce_stack?(), req_chain_count(conn)} do
+      {true, true, count} when count > 1 -> true
+      {true, false, count} when count > 0 -> true
       _ -> false
     end
   end
@@ -42,6 +42,11 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
     |> to_string()
     |> String.split(",")
     |> Enum.count(&is_belfrage/1)
+  end
+
+  defp news_route?(conn) do
+    # is true for /news and /news/* request paths
+    String.match?(conn.request_path, ~r(^/news$|^/news/[[:alnum:][:punct:]]*$))
   end
 
   defp is_belfrage("BELFRAGE"), do: true

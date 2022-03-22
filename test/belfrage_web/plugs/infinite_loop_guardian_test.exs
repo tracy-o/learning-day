@@ -13,7 +13,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE'" do
       conn =
-        conn(:get, "/foo/bar/123.json")
+        conn(:get, "/news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -25,7 +25,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
     test "continues if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
-        conn(:get, "/foo/bar/123.json")
+        conn(:get, "/news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
@@ -40,7 +40,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
     test "returns a 404 if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
-        conn(:get, "/foo/bar/123.json")
+        conn(:get, "/news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -52,22 +52,57 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
     test "continues if req-svc-chain contains 0 instances of 'BELFRAGE'" do
       conn =
-        conn(:get, "/foo/bar/123.json")
+        conn(:get, "/news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
     end
   end
 
+  test "checks routes which match '/news' or '/news/*'" do
+    # Test is set up so that if the route matches, an infinite loop is detected
+
+    routes = [
+      "/news",
+      "/news/something/1234"
+    ]
+
+    for route <- routes do
+      conn =
+        conn(:get, route)
+        |> Plug.Conn.put_req_header("req-svc-chain", "BELFRAGE")
+
+      assert %Plug.Conn{status: 404, halted: true} = InfiniteLoopGuardian.call(conn, [])
+    end
+  end
+
+  test "doesn't check routes which don't match '/news' or '/news/*'" do
+    # Because it doesn't check the routes the request should always continue
+    routes = [
+      "/new",
+      "news",
+      "/sport/news",
+      "/newstoday"
+    ]
+
+    for route <- routes do
+      conn =
+        conn(:get, route)
+        |> Plug.Conn.put_req_header("req-svc-chain", "BELFRAGE")
+
+      assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, [])
+    end
+  end
+
   test "continues if there is no req-svc-chain header" do
-    conn = conn(:get, "/foo/bar/123.json")
+    conn = conn(:get, "/news")
 
     assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
   end
 
   test "continues if req-svc-chain does not contain 'BELFRAGE'" do
     conn =
-      conn(:get, "/foo/bar/123.json")
+      conn(:get, "/news")
       |> Plug.Conn.put_req_header("req-svc-chain", "GTM,MOZART")
 
     assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
