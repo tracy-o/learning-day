@@ -55,12 +55,11 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   end
 
   defp remove_signed_in_header(headers, %Struct{request: request, private: private = %Private{}}) do
-    if private.personalised_route &&
-         !(Personalisation.applicable_request?(request) &&
-             Personalisation.enabled?(route_state_id: private.route_state_id)) do
-      List.delete(headers, "x-id-oidc-signedin")
-    else
+    if private.personalised_route and Personalisation.applicable_request?(request) and
+         Personalisation.enabled?(route_state_id: private.route_state_id) do
       headers
+    else
+      List.delete(headers, "x-id-oidc-signedin")
     end
   end
 
