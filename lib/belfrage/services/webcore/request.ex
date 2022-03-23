@@ -62,7 +62,11 @@ defmodule Belfrage.Services.Webcore.Request do
     if private.features == %{} do
       headers
     else
-      value = private.features |> Enum.map(&Tuple.to_list/1) |> Enum.map(&Enum.join(&1, "=")) |> Enum.join(",")
+      value =
+        private.features
+        |> Enum.map(&Tuple.to_list/1)
+        |> Enum.map_join(",", &Enum.join(&1, "="))
+
       Map.put(headers, :"ctx-features", value)
     end
   end
