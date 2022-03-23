@@ -10,13 +10,16 @@ default_machine_gun_config = %{
   pool_queue: false,
   pool_timeout: 300_000,
   # Gun connection options
-  conn_opts: %{}
+  conn_opts: %{
+    transport_opts: [verify: :verify_peer]
+  }
 }
 
 secure_machine_gun_config = %{
   default_machine_gun_config
   | conn_opts: %{
       transport_opts: [
+        {:verify, :verify_peer},
         {:cacertfile, System.get_env("CLIENT_CERT_CA")},
         {:certfile, System.get_env("CLIENT_CERT")},
         {:keyfile, System.get_env("CLIENT_CERT_KEY")}
