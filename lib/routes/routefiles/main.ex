@@ -189,7 +189,7 @@ defroutefile "Main" do
   handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
   handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
 
-
+  handle "/sport", using: "SportHomePage", only_on: "test", examples: ["/sport"]
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
 
