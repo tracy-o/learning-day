@@ -11,7 +11,7 @@ default_machine_gun_config = %{
   pool_timeout: 300_000,
   # Gun connection options
   conn_opts: %{
-    transport_opts: [verify: :verify_peer]
+    transport_opts: [verify: :verify_none]
   }
 }
 
