@@ -1632,7 +1632,7 @@ defroutefile "Main" do
 
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportMajorIndexPage", examples: ["/sport.app"]
-  handle "/sport", using: "SportMajorIndexPage", examples: ["/sport"]
+  handle "/sport", using: "SportMajorIndexPage", examples: []
   handle "/sport/africa.app", using: "SportIndexPage", examples: ["/sport/africa.app"]
   handle "/sport/africa", using: "SportIndexPage", examples: ["/sport/africa"]
   handle "/sport/american-football.app", using: "SportIndexPage", examples: ["/sport/american-football.app"]
