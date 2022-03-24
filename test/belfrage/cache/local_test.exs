@@ -141,22 +141,6 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert ets_updated > response.cache_last_updated
     end
-
-    test "depends on state of cache_enabled dial" do
-      stub_dial(:cache_enabled, "false")
-
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("abc123")},
-        response: %Struct.Response{
-          headers: %{"content-type" => "application/json"},
-          body: "hello!",
-          http_status: 200,
-          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
-        }
-      }
-
-      assert {:ok, false} == Cache.Local.store(struct)
-    end
   end
 
   describe "Fetches a cached response" do
@@ -180,14 +164,6 @@ defmodule Belfrage.Cache.LocalTest do
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
               }} = Cache.Local.fetch(struct)
-    end
-
-    test "depends on state of cache_enabled dial" do
-      stub_dial(:cache_enabled, "false")
-
-      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
-
-      assert {:ok, :content_not_found} == Cache.Local.fetch(struct)
     end
   end
 
@@ -234,6 +210,61 @@ defmodule Belfrage.Cache.LocalTest do
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
               }} = Cache.Local.fetch(struct_without_response)
+    end
+  end
+
+  describe "local caching is dependant on the cache_enabled dial" do
+    test "storing a reponse when cache_enabled is true" do
+      stub_dial(:cache_enabled, "true")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, true} == Cache.Local.store(struct)
+    end
+
+    test "storing a reponse when cache_enabled is false" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, false} == Cache.Local.store(struct)
+    end
+
+    test "fetching a response when cache_enabled is true" do
+      stub_dial(:cache_enabled, "true")
+
+      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+
+      assert {:ok, {:local, :fresh},
+              %Belfrage.Struct.Response{
+                body: "hello!",
+                headers: %{"content-type" => "application/json"},
+                http_status: 200
+              }} = Cache.Local.fetch(struct)
+    end
+
+    test "fetching a response when cache_enabled is false" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+
+      assert {:ok, :content_not_found} == Cache.Local.fetch(struct)
     end
   end
 end
