@@ -189,7 +189,6 @@ defroutefile "Main" do
   handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
   handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
 
-
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
 
@@ -1632,7 +1631,8 @@ defroutefile "Main" do
 
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportMajorIndexPage", examples: ["/sport.app"]
-  handle "/sport", using: "SportMajorIndexPage", examples: ["/sport"]
+  handle "/sport", using: "SportHomePage", only_on: "test", examples: ["/sport"]
+  handle "/sport", using: "SportMajorIndexPage", examples: []
   handle "/sport/africa.app", using: "SportIndexPage", examples: ["/sport/africa.app"]
   handle "/sport/africa", using: "SportIndexPage", examples: ["/sport/africa"]
   handle "/sport/american-football.app", using: "SportIndexPage", examples: ["/sport/american-football.app"]
