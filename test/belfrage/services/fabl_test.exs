@@ -50,7 +50,7 @@ defmodule Belfrage.Services.FablTest do
   }
 
   describe "Fabl service" do
-    test "get returns a successful response for a non personalised request" do
+    test "get handles a non personalised request and returns a successful response" do
       Clients.HTTPMock
       |> expect(
         :execute,
@@ -76,7 +76,7 @@ defmodule Belfrage.Services.FablTest do
              } = Fabl.dispatch(struct)
     end
 
-    test "get returns a successful response for a valid personalised request" do
+    test "get handles a valid personalised request and returns a successful response" do
       Clients.HTTPMock
       |> expect(
         :execute,
