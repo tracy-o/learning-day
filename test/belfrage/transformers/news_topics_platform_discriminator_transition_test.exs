@@ -11,20 +11,23 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   end
 
   describe "when the path does not contain a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform and origin is Mozart", %{
-      mozart_news_endpoint: mozart_news_endpoint
-    } do
+    test "if the Topic ID is in the Mozart allowlist the platform and origin is Mozart and the route will be set to not personalised",
+         %{
+           mozart_news_endpoint: mozart_news_endpoint
+         } do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
                    platform: MozartNews,
-                   origin: ^mozart_news_endpoint
+                   origin: ^mozart_news_endpoint,
+                   personalised_route: false
                  }
                }
              } =
                NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}}
+                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
+                 private: %Struct.Private{personalised_route: true}
                })
     end
 
@@ -63,20 +66,23 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   end
 
   describe "when the path contains a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform and origin will be altered to Mozart News", %{
-      mozart_news_endpoint: mozart_news_endpoint
-    } do
+    test "if the Topic ID is in the Mozart allowlist the platform and origin will be altered to Mozart News and the route will be set to not personalised",
+         %{
+           mozart_news_endpoint: mozart_news_endpoint
+         } do
       assert {
                :ok,
                %Struct{
                  private: %Struct.Private{
                    platform: MozartNews,
-                   origin: ^mozart_news_endpoint
+                   origin: ^mozart_news_endpoint,
+                   personalised_route: false
                  }
                }
              } =
                NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}}
+                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
+                 private: %Struct.Private{personalised_route: true}
                })
     end
 
