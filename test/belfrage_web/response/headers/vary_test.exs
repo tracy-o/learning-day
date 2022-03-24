@@ -72,13 +72,13 @@ defmodule BelfrageWeb.Response.Headers.VaryTest do
       refute "cookie" in vary_headers(struct)
     end
 
-    test "vary personalised requests on x-id-oidc-signedin" do
+    test "don't vary personalised requests to non-personalised routes on x-id-oidc-signedin" do
       struct = %Struct{
         request: %Request{host: "bbc.co.uk"},
         private: %Private{headers_allowlist: ["x-id-oidc-signedin"], personalised_request: true}
       }
 
-      assert "x-id-oidc-signedin" in vary_headers(struct)
+      refute "x-id-oidc-signedin" in vary_headers(struct)
     end
 
     test "vary requests to personalised routes on x-id-oidc-signedin if personalisation is enabled" do
@@ -118,6 +118,19 @@ defmodule BelfrageWeb.Response.Headers.VaryTest do
         private: %Private{
           headers_allowlist: ["x-id-oidc-signedin"],
           personalised_route: true
+        }
+      }
+
+      refute "x-id-oidc-signedin" in vary_headers(struct)
+    end
+
+    test "don't vary requests to non-personalised routes on x-id-oidc-signedin" do
+      struct = %Struct{
+        request: %Request{
+          host: "bbc.co.uk"
+        },
+        private: %Private{
+          headers_allowlist: ["x-id-oidc-signedin"]
         }
       }
 
