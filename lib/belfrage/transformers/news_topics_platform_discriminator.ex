@@ -198,7 +198,8 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
           ["CircuitBreaker"],
           Struct.add(struct, :private, %{
             platform: MozartNews,
-            origin: Application.get_env(:belfrage, :mozart_news_endpoint)
+            origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+            personalised_route: false
           })
         )
 
