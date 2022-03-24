@@ -3,6 +3,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
   alias Belfrage.Services.Fabl.Request
   alias Belfrage.Clients
   alias Belfrage.Struct
+  alias Belfrage.Xray
   use Belfrage.Test.XrayHelper
 
   setup do
@@ -180,14 +181,15 @@ defmodule Belfrage.Services.Fabl.RequestTest do
 
   describe "X-Ray trace id" do
     test "builds a request with a x-amzn-trace-id when segment present", %{invalid_session: struct} do
-      struct_with_segment = put_in(struct.request.xray_segment, build_segment(sampled: true))
+      x_ray_segment = build_segment(sampled: true)
+      struct_with_segment = put_in(struct.request.xray_segment, x_ray_segment)
 
       assert %Clients.HTTP.Request{
                headers: %{
                  "accept-encoding" => "gzip",
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
-                 "x-amzn-trace-id" => "Root=1-623cd586-5475f6f52f306e59f393ad7d;Parent=26de069a9801413b;Sampled=1"
+                 "x-amzn-trace-id" => Xray.build_trace_id_header(x_ray_segment)
                },
                method: :get,
                payload: "",
