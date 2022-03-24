@@ -7,6 +7,22 @@ defmodule Belfrage.Services.FablTest do
   use Test.Support.Helper, :mox
   use Belfrage.Test.XrayHelper
 
+  @valid_session %Struct.UserSession{
+    authentication_env: "int",
+    session_token: "a-valid-session-token",
+    authenticated: true,
+    valid_session: true,
+    user_attributes: %{age_bracket: "o18", allow_personalisation: true}
+  }
+
+  @unauthenticated_session %Struct.UserSession{
+    authentication_env: "int",
+    session_token: nil,
+    authenticated: false,
+    valid_session: false,
+    user_attributes: %{}
+  }
+
   @get_struct %Struct{
     private: %Struct.Private{
       origin: "https://fabl.test.api.bbci.co.uk"
@@ -34,7 +50,7 @@ defmodule Belfrage.Services.FablTest do
   }
 
   describe "Fabl service" do
-    test "get returns a response" do
+    test "get returns a successful response for a non personalised request" do
       Clients.HTTPMock
       |> expect(
         :execute,
@@ -49,13 +65,41 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
+      struct = Struct.add(@get_struct, :user_session, @unauthenticated_session)
+
       assert %Struct{
                response: %Struct.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = Fabl.dispatch(@get_struct)
+             } = Fabl.dispatch(struct)
+    end
+
+    test "get returns a successful response for a valid personalised request" do
+      Clients.HTTPMock
+      |> expect(
+        :execute,
+        fn %Belfrage.Clients.HTTP.Request{
+             method: :get,
+             url: "https://fabl.test.api.bbci.co.uk/module/example-module",
+             payload: "",
+             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
+           },
+           :Fabl ->
+          @ok_response
+        end
+      )
+
+      struct = Struct.add(@get_struct, :user_session, @valid_session)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = Fabl.dispatch(struct)
     end
 
     test "origin returns a 500 response" do

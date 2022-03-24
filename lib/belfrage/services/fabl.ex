@@ -3,6 +3,7 @@ defmodule Belfrage.Services.Fabl do
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
+  alias Belfrage.Struct.UserSession
   alias Belfrage.Xray
   alias Belfrage.Helpers.QueryParams
 
@@ -47,14 +48,15 @@ defmodule Belfrage.Services.Fabl do
   defp execute_request(
          struct = %Struct{
            request: request = %Struct.Request{method: "GET", path: path, path_params: params, request_id: request_id},
-           private: private
+           private: private,
+           user_session: user_session
          }
        ) do
     {@http_client.execute(
        %Clients.HTTP.Request{
          method: :get,
          url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
-         headers: build_headers(request),
+         headers: build_headers(request, user_session),
          request_id: request_id
        },
        :Fabl
@@ -64,7 +66,14 @@ defmodule Belfrage.Services.Fabl do
   defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
   defp module_path(_path), do: "/module/"
 
-  defp build_headers(%Struct.Request{
+  defp build_headers(request, user_session) do
+    request
+    |> base_headers()
+    |> IO.inspect()
+    |> put_user_session_headers(user_session)
+  end
+
+  defp base_headers(%Struct.Request{
          raw_headers: raw_headers,
          req_svc_chain: req_svc_chain,
          xray_segment: nil
@@ -76,7 +85,7 @@ defmodule Belfrage.Services.Fabl do
     })
   end
 
-  defp build_headers(%Struct.Request{
+  defp base_headers(%Struct.Request{
          raw_headers: raw_headers,
          req_svc_chain: req_svc_chain,
          xray_segment: segment
@@ -87,5 +96,29 @@ defmodule Belfrage.Services.Fabl do
       "req-svc-chain" => req_svc_chain,
       "x-amzn-trace-id" => Xray.build_trace_id_header(segment)
     })
+  end
+
+  defp put_user_session_headers(headers, user_session = %UserSession{}) do
+    if user_session.valid_session do
+      headers
+      |> Map.put(:authorization, "Bearer #{user_session.session_token}")
+      |> Map.put(:"x-authentication-provider", "idv5")
+      |> Map.put(:"pers-env", user_session.authentication_env)
+      |> put_user_attributes(user_session.user_attributes)
+    else
+      headers
+    end
+  end
+
+  defp put_user_attributes(headers, user_attributes) do
+    case user_attributes do
+      %{age_bracket: age_bracket, allow_personalisation: allow_personalisation} ->
+        headers
+        |> Map.put(:"ctx-pii-age-bracket", age_bracket)
+        |> Map.put(:"ctx-pii-allow-personalisation", to_string(allow_personalisation))
+
+      _ ->
+        headers
+    end
   end
 end
