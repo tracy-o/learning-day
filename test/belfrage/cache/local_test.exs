@@ -1,5 +1,7 @@
 defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
+
   import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper
 
@@ -20,6 +22,8 @@ defmodule Belfrage.Cache.LocalTest do
   end
 
   setup do
+    stub_dial(:cache_enabled, "true")
+
     put_into_cache(cache_key("fresh"), Fixtures.Struct.successful_response())
 
     put_into_cache(cache_key("stale"), %{
@@ -137,6 +141,22 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert ets_updated > response.cache_last_updated
     end
+
+    test "depends on state of cache_enabled dial" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, false} == Cache.Local.store(struct)
+    end
   end
 
   describe "Fetches a cached response" do
@@ -160,6 +180,14 @@ defmodule Belfrage.Cache.LocalTest do
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
               }} = Cache.Local.fetch(struct)
+    end
+
+    test "depends on state of cache_enabled dial" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+
+      assert {:ok, :content_not_found} == Cache.Local.fetch(struct)
     end
   end
 
