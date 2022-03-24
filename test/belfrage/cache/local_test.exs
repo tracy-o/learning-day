@@ -214,7 +214,7 @@ defmodule Belfrage.Cache.LocalTest do
   end
 
   describe "local caching is dependant on the cache_enabled dial" do
-    test "storing a reponse when cache_enabled is true" do
+    test "it successfully stores the response when dial is true" do
       stub_dial(:cache_enabled, "true")
 
       struct = %Struct{
@@ -230,7 +230,7 @@ defmodule Belfrage.Cache.LocalTest do
       assert {:ok, true} == Cache.Local.store(struct)
     end
 
-    test "storing a reponse when cache_enabled is false" do
+    test "it does not store the response when dial is false" do
       stub_dial(:cache_enabled, "false")
 
       struct = %Struct{
@@ -246,7 +246,7 @@ defmodule Belfrage.Cache.LocalTest do
       assert {:ok, false} == Cache.Local.store(struct)
     end
 
-    test "fetching a response when cache_enabled is true" do
+    test "it successfully fetches a response when dial is true" do
       stub_dial(:cache_enabled, "true")
 
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
@@ -259,7 +259,7 @@ defmodule Belfrage.Cache.LocalTest do
               }} = Cache.Local.fetch(struct)
     end
 
-    test "fetching a response when cache_enabled is false" do
+    test "it does not fetch a response when dial is false" do
       stub_dial(:cache_enabled, "false")
 
       struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
