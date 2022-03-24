@@ -14,11 +14,28 @@ defmodule Belfrage.Transformers.Personalisation do
     session_state = SessionState.build(struct.request)
     struct = Struct.add(struct, :user_session, session_state)
 
-    if reauthentication_required?(session_state) do
-      redirect(struct)
-    else
-      then_do(rest, struct)
+    cond do
+      return_401?(struct) ->
+        {:stop_pipeline, put_http_status_code(struct, 401)}
+
+      redirect?(struct) ->
+        redirect(struct)
+
+      true ->
+        then_do(rest, struct)
     end
+  end
+
+  defp return_401?(struct) do
+    reauthentication_required?(struct.user_session) and struct.request.app?
+  end
+
+  defp redirect?(struct) do
+    reauthentication_required?(struct.user_session) and not struct.request.app?
+  end
+
+  defp put_http_status_code(struct, code) when is_number(code) do
+    Struct.add(struct, :response, %{http_status: code})
   end
 
   defp reauthentication_required?(session_state) do

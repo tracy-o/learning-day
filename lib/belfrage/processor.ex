@@ -142,7 +142,7 @@ defmodule Belfrage.Processor do
         response: %Response{http_status: status},
         private: %Private{caching_enabled: caching_enabled}
       }) do
-    status >= 400 and status not in [404, 410, 451] and caching_enabled
+    status >= 400 and status not in [401, 404, 410, 451] and caching_enabled
   end
 
   defp latency_checkpoint(struct = %Struct{request: request = %Request{}}, checkpoint) do
