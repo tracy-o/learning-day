@@ -1,10 +1,10 @@
 defmodule Belfrage.Cache.StoreTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
+
   import Belfrage.Test.CachingHelper
 
   alias Belfrage.{Struct, CacheControl}
-
-  use Test.Support.Helper, :mox
 
   setup do
     %{
@@ -26,6 +26,7 @@ defmodule Belfrage.Cache.StoreTest do
       expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
 
       on_exit(fn ->
+        stub_dial(:cache_enabled, "true")
         assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(struct)
       end)
 
@@ -94,6 +95,7 @@ defmodule Belfrage.Cache.StoreTest do
       expect(Belfrage.Clients.CCPMock, :put, fn _struct -> :ok end)
 
       on_exit(fn ->
+        stub_dial(:cache_enabled, "true")
         assert {:ok, {:local, :fresh}, %Struct.Response{}} = Belfrage.Cache.Local.fetch(struct)
 
         :ok
@@ -139,6 +141,7 @@ defmodule Belfrage.Cache.StoreTest do
       expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
 
       on_exit(fn ->
+        stub_dial(:cache_enabled, "true")
         assert {:ok, {:local, :stale}, %Struct.Response{}} = Belfrage.Cache.Local.fetch(struct)
 
         :ok
