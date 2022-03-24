@@ -73,89 +73,108 @@ defmodule Belfrage.Services.Fabl.RequestTest do
     }
   end
 
-  test "builds a non-personalised request", %{unauthenticated_session: struct} do
-    assert %Clients.HTTP.Request{
-             headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
-  end
+  describe "personalisation related requests" do
+    test "builds a non-personalised request", %{unauthenticated_session: struct} do
+      assert %Clients.HTTP.Request{
+               headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
 
-  test "builds a personalised request with user attribute headers", %{valid_session: struct} do
-    assert %Clients.HTTP.Request{
-             headers: %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "Belfrage",
-               "user-agent" => "Belfrage",
-               :authorization => "Bearer a-valid-session-token",
-               :"ctx-pii-age-bracket" => "o18",
-               :"ctx-pii-allow-personalisation" => "true",
-               :"pers-env" => "int",
-               :"x-authentication-provider" => "idv5"
-             },
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
-  end
+    test "builds a personalised request with user attribute headers", %{valid_session: struct} do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage",
+                 :authorization => "Bearer a-valid-session-token",
+                 :"ctx-pii-age-bracket" => "o18",
+                 :"ctx-pii-allow-personalisation" => "true",
+                 :"pers-env" => "int",
+                 :"x-authentication-provider" => "idv5"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
 
-  # Should this set allow personalisation and not set the age bracket?
-  test "builds a personalised request with partial user attribute headers", %{
-    valid_session_with_partial_user_attributes: struct
-  } do
-    assert %Clients.HTTP.Request{
-             headers: %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "Belfrage",
-               "user-agent" => "Belfrage",
-               :authorization => "Bearer a-valid-session-token",
-               :"pers-env" => "int",
-               :"x-authentication-provider" => "idv5"
-             },
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
-  end
+    # Should this set allow personalisation and not set the age bracket?
+    test "builds a personalised request with partial user attribute headers", %{
+      valid_session_with_partial_user_attributes: struct
+    } do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage",
+                 :authorization => "Bearer a-valid-session-token",
+                 :"pers-env" => "int",
+                 :"x-authentication-provider" => "idv5"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
 
-  test "builds a personalised request without user attribute headers", %{valid_session_without_user_attributes: struct} do
-    assert %Clients.HTTP.Request{
-             headers: %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "Belfrage",
-               "user-agent" => "Belfrage",
-               :authorization => "Bearer a-valid-session-token",
-               :"pers-env" => "int",
-               :"x-authentication-provider" => "idv5"
-             },
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
-  end
+    test "builds a personalised request without user attribute headers", %{
+      valid_session_without_user_attributes: struct
+    } do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage",
+                 :authorization => "Bearer a-valid-session-token",
+                 :"pers-env" => "int",
+                 :"x-authentication-provider" => "idv5"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
 
-  test "builds a non personalised request", %{invalid_session: struct} do
-    assert %Clients.HTTP.Request{
-             headers: %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "Belfrage",
-               "user-agent" => "Belfrage"
-             },
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
+    test "builds a non personalised request", %{invalid_session: struct} do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
+
+    test "builds a non personalised request from an invalid session", %{invalid_session: struct} do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
   end
 
   test "builds a non personalised request from an invalid session", %{invalid_session: struct} do
