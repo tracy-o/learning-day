@@ -3,6 +3,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
   alias Belfrage.Services.Fabl.Request
   alias Belfrage.Clients
   alias Belfrage.Struct
+  use Belfrage.Test.XrayHelper
 
   setup do
     valid_session = %Struct.UserSession{
@@ -177,18 +178,23 @@ defmodule Belfrage.Services.Fabl.RequestTest do
     end
   end
 
-  test "builds a non personalised request from an invalid session", %{invalid_session: struct} do
-    assert %Clients.HTTP.Request{
-             headers: %{
-               "accept-encoding" => "gzip",
-               "req-svc-chain" => "Belfrage",
-               "user-agent" => "Belfrage"
-             },
-             method: :get,
-             payload: "",
-             request_id: "arequestid",
-             timeout: 6000,
-             url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-           } == Request.build(struct)
+  describe "X-Ray trace id" do
+    test "builds a request with a x-amzn-trace-id when segment present", %{invalid_session: struct} do
+      struct_with_segment = put_in(struct.request.xray_segment, build_segment(sampled: true))
+
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage",
+                 "x-amzn-trace-id" => "Root=1-623cd586-5475f6f52f306e59f393ad7d;Parent=26de069a9801413b;Sampled=1"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct_with_segment)
+    end
   end
 end
