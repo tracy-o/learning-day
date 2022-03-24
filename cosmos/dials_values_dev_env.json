@@ -9,5 +9,6 @@
 	"ccp_enabled": "true",
 	"webcore_kill_switch": "inactive",
 	"datalab_machine_recommendations": "enabled",
-	"chameleon": "off"
+	"chameleon": "off",
+	"cache_enabled": "true"
 }
