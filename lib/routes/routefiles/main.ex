@@ -199,9 +199,9 @@ defroutefile "Main" do
 
   # data endpoints
 
-  handle "/fd/p/preview/:module_name", using: "PersonalisedFablData", only_on: "test", examples: []
+  handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
-  handle "/fd/p/:module_name", using: "PersonalisedFablData", only_on: "test", examples: []
+  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
   handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"]
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
