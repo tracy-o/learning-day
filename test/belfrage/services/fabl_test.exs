@@ -84,7 +84,16 @@ defmodule Belfrage.Services.FablTest do
              method: :get,
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
-             headers: %{"accept-encoding" => "gzip", "user-agent" => "Belfrage", "req-svc-chain" => "BELFRAGE"}
+             headers: %{
+               :authorization => "Bearer a-valid-session-token",
+               :"ctx-pii-age-bracket" => "o18",
+               :"ctx-pii-allow-personalisation" => "true",
+               :"pers-env" => "int",
+               :"x-authentication-provider" => "idv5",
+               "accept-encoding" => "gzip",
+               "req-svc-chain" => "BELFRAGE",
+               "user-agent" => "Belfrage"
+             }
            },
            :Fabl ->
           @ok_response
