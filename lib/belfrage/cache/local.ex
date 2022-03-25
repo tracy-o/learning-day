@@ -1,5 +1,6 @@
 defmodule Belfrage.Cache.Local do
   @behaviour Belfrage.Behaviours.CacheStrategy
+  @dial Application.get_env(:belfrage, :dial)
 
   alias Belfrage.Behaviours.CacheStrategy
   alias Belfrage.Struct
@@ -22,17 +23,21 @@ defmodule Belfrage.Cache.Local do
   """
   @impl CacheStrategy
   def fetch(%Struct{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
-    try do
-      caching_module.touch(:cache, request_hash)
+    if @dial.state(:cache_enabled) do
+      try do
+        caching_module.touch(:cache, request_hash)
 
-      :cache
-      |> caching_module.get(request_hash)
-      |> format_cache_result()
-    catch
-      :exit, cause ->
-        Metrics.event([:cache, :local, :fetch_exit])
-        Belfrage.Event.record(:log, :error, %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
-        {:ok, :content_not_found}
+        :cache
+        |> caching_module.get(request_hash)
+        |> format_cache_result()
+      catch
+        :exit, cause ->
+          Metrics.event([:cache, :local, :fetch_exit])
+          Belfrage.Event.record(:log, :error, %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
+          {:ok, :content_not_found}
+      end
+    else
+      {:ok, :content_not_found}
     end
   end
 
@@ -49,7 +54,7 @@ defmodule Belfrage.Cache.Local do
         #   :make_stale - Whether or not to make the cache entry stale
         opts \\ []
       ) do
-    if cacheable?(max_age) && stale?(cache_last_updated, max_age) do
+    if cacheable?(max_age) && stale?(cache_last_updated, max_age) && @dial.state(:cache_enabled) do
       %{cache_name: cache, make_stale: make_stale} = Enum.into(opts, %{cache_name: :cache, make_stale: false})
 
       if make_stale do

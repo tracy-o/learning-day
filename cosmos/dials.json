@@ -203,5 +203,20 @@
         "description": "Disables Chameleon navigation bar"
       }
     ]
+  },
+  {
+    "name": "cache_enabled",
+    "description": "This enables local caching on belfrage instances",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "Local caching is enabled and belfrage will serve pages from local cache"
+      },
+      {
+        "value": "false",
+        "description": "Local caching is disabled and belfrage will not serve pages from local cache, fallback cache is uneffected"
+      }
+    ]
   }
 ]

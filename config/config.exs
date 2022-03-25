@@ -85,7 +85,8 @@ config :belfrage,
     "ccp_enabled" => Belfrage.Dials.CcpEnabled,
     "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
     "datalab_machine_recommendations" => Belfrage.Dials.DatalabMachineRecommendations,
-    "chameleon" => Belfrage.Dials.Chameleon
+    "chameleon" => Belfrage.Dials.Chameleon,
+    "cache_enabled" => Belfrage.Dials.CacheEnabled
   },
   pool_metric_rate: 10_000,
   authentication: %{

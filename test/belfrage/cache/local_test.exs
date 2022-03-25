@@ -1,5 +1,7 @@
 defmodule Belfrage.Cache.LocalTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
+
   import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper
 
@@ -20,6 +22,8 @@ defmodule Belfrage.Cache.LocalTest do
   end
 
   setup do
+    stub_dial(:cache_enabled, "true")
+
     put_into_cache(cache_key("fresh"), Fixtures.Struct.successful_response())
 
     put_into_cache(cache_key("stale"), %{
@@ -206,6 +210,61 @@ defmodule Belfrage.Cache.LocalTest do
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
               }} = Cache.Local.fetch(struct_without_response)
+    end
+  end
+
+  describe "local caching is dependant on the cache_enabled dial" do
+    test "it successfully stores the response when dial is true" do
+      stub_dial(:cache_enabled, "true")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, true} == Cache.Local.store(struct)
+    end
+
+    test "it does not store the response when dial is false" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: cache_key("abc123")},
+        response: %Struct.Response{
+          headers: %{"content-type" => "application/json"},
+          body: "hello!",
+          http_status: 200,
+          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+        }
+      }
+
+      assert {:ok, false} == Cache.Local.store(struct)
+    end
+
+    test "it successfully fetches a response when dial is true" do
+      stub_dial(:cache_enabled, "true")
+
+      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+
+      assert {:ok, {:local, :fresh},
+              %Belfrage.Struct.Response{
+                body: "hello!",
+                headers: %{"content-type" => "application/json"},
+                http_status: 200
+              }} = Cache.Local.fetch(struct)
+    end
+
+    test "it does not fetch a response when dial is false" do
+      stub_dial(:cache_enabled, "false")
+
+      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+
+      assert {:ok, :content_not_found} == Cache.Local.fetch(struct)
     end
   end
 end
