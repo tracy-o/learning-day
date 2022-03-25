@@ -3,8 +3,7 @@ defmodule Belfrage.Services.Fabl do
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
-  alias Belfrage.Xray
-  alias Belfrage.Helpers.QueryParams
+  alias Belfrage.Services.Fabl.Request
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
@@ -17,6 +16,13 @@ defmodule Belfrage.Services.Fabl do
       |> execute_request()
       |> handle_response()
     end
+  end
+
+  defp execute_request(struct) do
+    {@http_client.execute(
+       Request.build(struct),
+       :Fabl
+     ), struct}
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
@@ -41,51 +47,6 @@ defmodule Belfrage.Services.Fabl do
       msg: "Fabl Service request error",
       reason: reason,
       struct: Struct.loggable(struct)
-    })
-  end
-
-  defp execute_request(
-         struct = %Struct{
-           request: request = %Struct.Request{method: "GET", path: path, path_params: params, request_id: request_id},
-           private: private
-         }
-       ) do
-    {@http_client.execute(
-       %Clients.HTTP.Request{
-         method: :get,
-         url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
-         headers: build_headers(request),
-         request_id: request_id
-       },
-       :Fabl
-     ), struct}
-  end
-
-  defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
-  defp module_path(_path), do: "/module/"
-
-  defp build_headers(%Struct.Request{
-         raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_segment: nil
-       }) do
-    Map.merge(raw_headers, %{
-      "accept-encoding" => "gzip",
-      "user-agent" => "Belfrage",
-      "req-svc-chain" => req_svc_chain
-    })
-  end
-
-  defp build_headers(%Struct.Request{
-         raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_segment: segment
-       }) do
-    Map.merge(raw_headers, %{
-      "accept-encoding" => "gzip",
-      "user-agent" => "Belfrage",
-      "req-svc-chain" => req_svc_chain,
-      "x-amzn-trace-id" => Xray.build_trace_id_header(segment)
     })
   end
 end
