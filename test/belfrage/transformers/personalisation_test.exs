@@ -38,7 +38,7 @@ defmodule Belfrage.Transformers.PersonalisationTest do
       refute struct.user_session.authenticated
     end
 
-    test "user is authenticated, session is invalid", %{struct: struct} do
+    test "user is authenticated, web session is invalid", %{struct: struct} do
       assert {:redirect, struct} = Personalisation.call([], struct)
       assert struct.user_session.authenticated
       refute struct.user_session.valid_session
@@ -53,6 +53,22 @@ defmodule Belfrage.Transformers.PersonalisationTest do
                },
                body: "Redirecting"
              }
+    end
+
+    test "user is authenticated, app session is invalid", %{struct: struct} do
+      struct = Struct.add(struct, :request, %{app?: true})
+
+      assert {
+               :stop_pipeline,
+               struct = %Belfrage.Struct{
+                 response: %Belfrage.Struct.Response{
+                   http_status: 401
+                 }
+               }
+             } = Personalisation.call([], struct)
+
+      assert struct.user_session.authenticated
+      refute struct.user_session.valid_session
     end
 
     test "user is authenticated, session is valid", %{struct: struct} do

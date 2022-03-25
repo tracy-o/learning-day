@@ -282,6 +282,7 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "returns false for some client errors" do
+      refute Processor.use_fallback?(struct_fixture(status: 401, caching_enabled: true))
       refute Processor.use_fallback?(struct_fixture(status: 404, caching_enabled: true))
       refute Processor.use_fallback?(struct_fixture(status: 410, caching_enabled: true))
       refute Processor.use_fallback?(struct_fixture(status: 451, caching_enabled: true))
