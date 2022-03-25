@@ -27,6 +27,26 @@ defmodule Belfrage.XrayTest do
            } = Xray.start_tracing("test_name")
   end
 
+  test "a segment is created from a valid 'x-amzn-trace-id'" do
+    trace_header = "Root=1-623d5deb-c665a073bf9119f7e042cb54;Parent=1c5533f5a9918e36;Sampled=0"
+
+    assert {:ok,
+            %Segment{
+              name: "from_trace_header",
+              trace: %Trace{
+                root: "1-623d5deb-c665a073bf9119f7e042cb54",
+                parent: "1c5533f5a9918e36",
+                sampled: false
+              }
+            }} = Xray.parse_header("from_trace_header", trace_header)
+  end
+
+  test "a segment returns an error when parsing invalid 'x-amzn-trace-id'" do
+    trace_header = "Root=1-623d5deb-c665a073bf9119f7e042cb54Parent=1c5533f5a9918e36;Sampled=0"
+
+    assert {:error, :invalid} == Xray.parse_header("invalid_header", trace_header)
+  end
+
   describe "a segment when being sampled" do
     setup do
       %{segment: build_segment(sampled: true)}

@@ -15,6 +15,7 @@ defmodule Belfrage.Test.XrayHelper do
         alias AwsExRay.{Trace, Segment}
 
         def start_tracing(name), do: build_segment(sampled: true, name: name)
+        defdelegate parse_header(name, trace_header), to: Belfrage.Xray
         defdelegate start_subsegment(segment, name), to: Belfrage.Xray
         defdelegate set_start_time(subsegment, start_time), to: Belfrage.Xray
         defdelegate add_annotations(segment, annotations), to: Belfrage.Xray
