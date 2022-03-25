@@ -14,7 +14,7 @@ defmodule Belfrage.Authentication.SessionState do
       request.path == "/full-stack-test/a/ft" && token == "FAKETOKEN" ->
         build_fake_session(token)
 
-        (authenticated && token) || (request.app? && token) ->
+      (authenticated && token) || (request.app? && token) ->
         build_session(token)
 
       authenticated ->
