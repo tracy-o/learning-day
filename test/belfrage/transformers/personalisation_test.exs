@@ -55,8 +55,50 @@ defmodule Belfrage.Transformers.PersonalisationTest do
              }
     end
 
-    test "user is authenticated, app session is invalid", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{app?: true})
+    test "user is authenticated, session is valid", %{struct: struct} do
+      token = Fixtures.AuthToken.valid_access_token()
+      struct = personalise_request(struct, token)
+
+      assert {:ok, struct} = Personalisation.call([], struct)
+      assert struct.user_session.authenticated
+      assert struct.user_session.valid_session
+      assert struct.user_session.session_token == token
+    end
+
+    test "app session is not authenticated nor valid" do
+      struct = %Struct{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          app?: true
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
+
+      assert {:ok, struct} = Personalisation.call([], struct)
+
+      refute struct.user_session.authenticated
+      refute struct.user_session.valid_session
+    end
+
+    test "app session is authenticated but invalid" do
+      struct = %Struct{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{"authorization" => "Bearer some-token"},
+          app?: true
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
 
       assert {
                :stop_pipeline,
@@ -71,11 +113,25 @@ defmodule Belfrage.Transformers.PersonalisationTest do
       refute struct.user_session.valid_session
     end
 
-    test "user is authenticated, session is valid", %{struct: struct} do
+    test "app session is authenticated and valid" do
       token = Fixtures.AuthToken.valid_access_token()
-      struct = personalise_request(struct, token)
+
+      struct = %Struct{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{"authorization" => "Bearer #{token}"},
+          app?: true
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
 
       assert {:ok, struct} = Personalisation.call([], struct)
+
       assert struct.user_session.authenticated
       assert struct.user_session.valid_session
       assert struct.user_session.session_token == token
