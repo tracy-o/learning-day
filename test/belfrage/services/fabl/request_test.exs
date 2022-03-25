@@ -61,7 +61,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
         }
       },
       private: %Struct.Private{
-        origin: "https://fabl.test.api.bbci.co.uk"
+        origin: "https://fabl.test.api.bbci.co.uk",
+        personalised_route: true
       }
     }
 
@@ -75,7 +76,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
     }
   end
 
-  describe "personalisation related requests" do
+  describe "personalised route requests" do
     test "builds a non-personalised request", %{unauthenticated_session: struct} do
       assert %Clients.HTTP.Request{
                headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
@@ -83,7 +84,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct)
     end
 
@@ -103,7 +104,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct)
     end
 
@@ -124,7 +125,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct)
     end
 
@@ -144,7 +145,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct)
     end
 
@@ -159,7 +160,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct)
     end
 
@@ -170,6 +171,21 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage"
                },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
+             } == Request.build(struct)
+    end
+  end
+
+  describe "non-personalised route requests" do
+    test "builds a non-personalised request", %{unauthenticated_session: struct} do
+      struct = Struct.add(struct, :private, %{personalised_route: false})
+
+      assert %Clients.HTTP.Request{
+               headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
                method: :get,
                payload: "",
                request_id: "arequestid",
@@ -195,7 +211,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                payload: "",
                request_id: "arequestid",
                timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
              } == Request.build(struct_with_segment)
     end
   end
