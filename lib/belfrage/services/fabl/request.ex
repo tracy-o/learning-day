@@ -11,14 +11,18 @@ defmodule Belfrage.Services.Fabl.Request do
       }) do
     %Clients.HTTP.Request{
       method: :get,
-      url: private.origin <> module_path(path) <> params["name"] <> QueryParams.encode(request.query_params),
+      url:
+        private.origin <>
+          module_path(path, private.personalised_route) <> params["name"] <> QueryParams.encode(request.query_params),
       headers: build_headers(request, user_session),
       request_id: request_id
     }
   end
 
-  defp module_path("/fd/preview/" <> _rest_of_path), do: "/preview/module/"
-  defp module_path(_path), do: "/module/"
+  defp module_path("/fd/preview/" <> _rest_of_path, true), do: "/preview/personalised-module/"
+  defp module_path(_path, true), do: "/personalised-module/"
+  defp module_path("/fd/preview/" <> _rest_of_path, false), do: "/preview/module/"
+  defp module_path(_path, false), do: "/module/"
 
   defp build_headers(request, user_session) do
     request
