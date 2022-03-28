@@ -3,6 +3,7 @@ defmodule Belfrage.Services.HTTPTest do
   alias Belfrage.Services.HTTP
   alias Belfrage.Struct
   alias Belfrage.Metrics.LatencyMonitor
+  alias Belfrage.Test.XrayHelper
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
@@ -300,6 +301,39 @@ defmodule Belfrage.Services.HTTPTest do
              } = HTTP.dispatch(struct)
     end
 
+    test "when xray_segment present, 'x-amzn-trace-id' us used" do
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.co.uk",
+          platform: SomePlatform
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_some_path",
+          country: "gb",
+          host: "www.bbc.co.uk",
+          edge_cache?: true,
+          scheme: :https,
+          is_uk: true,
+          xray_segment: XrayHelper.build_segment(sampled: false)
+        }
+      }
+
+      Clients.HTTPMock
+      |> expect(:execute, fn %Clients.HTTP.Request{headers: %{"x-amzn-trace-id" => trace_header}}, _pool ->
+        assert_xray_trace(trace_header)
+        @ok_response
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
+
     test "tracks latency checkpoints" do
       start_supervised!(LatencyMonitor)
 
@@ -314,6 +348,15 @@ defmodule Belfrage.Services.HTTPTest do
       assert checkpoints[:origin_request_sent]
       assert checkpoints[:origin_response_received]
       assert checkpoints[:origin_response_received] > checkpoints[:origin_request_sent]
+    end
+
+    defp assert_xray_trace(trace_header) do
+      split_trace =
+        trace_header
+        |> String.split(";")
+        |> Enum.map(&String.split(&1, "="))
+
+      assert [["Root", _root], ["Parent", _parent], ["Sampled", _sampled]] = split_trace
     end
 
     defp stub_request() do
