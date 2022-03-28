@@ -48,8 +48,7 @@ defmodule Belfrage.Services.Webcore do
 
   defp lambda_options(request = %Struct.Request{}) do
     if request.xray_segment do
-      trace_id = Xray.build_trace_id_header(request.xray_segment)
-      [xray_trace_id: trace_id]
+      [xray_trace_id: Xray.build_trace_id_header(request.xray_segment)]
     else
       []
     end
