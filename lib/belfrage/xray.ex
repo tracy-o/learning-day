@@ -4,6 +4,7 @@ defmodule Belfrage.Xray do
   alias AwsExRay.Subsegment
   alias AwsExRay.Client
   alias AwsExRay.Record.{HTTPResponse, HTTPRequest, Error}
+  alias Belfrage.Xray.ParseTrace
 
   @type name :: String.t()
   @type annotations :: map()
@@ -20,7 +21,15 @@ defmodule Belfrage.Xray do
     |> Segment.new(name)
   end
 
-  @spec start_subsegment(Trace.t(), name) :: Subsegment.t()
+  @spec parse_header(name, String.t()) :: {:ok, Segment.t()} | {:error, :invalid}
+  def parse_header(name, trace_header) do
+    case ParseTrace.parse(trace_header) do
+      {:ok, trace} -> {:ok, Segment.new(trace, name)}
+      {:error, :invalid} -> {:error, :invalid}
+    end
+  end
+
+  @spec start_subsegment(Segment.t(), name) :: Subsegment.t()
   def start_subsegment(segment = %Segment{}, name) do
     if_sampled(segment, fn ->
       Subsegment.new(%{segment.trace | parent: segment.id}, name, :none)

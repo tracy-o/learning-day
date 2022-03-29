@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.Plugs.Xray do
   @behaviour Plug
-  import Plug.Conn, only: [register_before_send: 2, assign: 3]
+  import Plug.Conn, only: [register_before_send: 2, assign: 3, get_req_header: 2]
   alias Belfrage.Xray
 
   @skip_paths ["/status"]
@@ -11,12 +11,7 @@ defmodule BelfrageWeb.Plugs.Xray do
   @impl true
   def call(conn = %Plug.Conn{request_path: request_path}, opts) when request_path not in @skip_paths do
     xray = Keyword.get(opts, :xray, Xray)
-
-    segment =
-      xray.start_tracing("Belfrage")
-      |> xray.add_annotations(%{request_id: conn.private.request_id})
-      |> xray.add_metadata(%{xray: xray})
-      |> xray.set_http_request(%{method: conn.method, path: request_path})
+    segment = build_segment(conn, "Belfrage", xray)
 
     conn
     |> assign(:xray_segment, segment)
@@ -24,6 +19,34 @@ defmodule BelfrageWeb.Plugs.Xray do
   end
 
   def call(conn, _opts), do: conn
+
+  defp build_segment(conn, name, xray) do
+    segment =
+      case get_req_header(conn, "x-amzn-trace-id") do
+        [trace_header] -> try_parse_header(name, trace_header, xray)
+        _ -> xray.start_tracing(name)
+      end
+
+    segment
+    |> xray.add_annotations(%{request_id: conn.private.request_id})
+    |> xray.add_metadata(%{xray: xray})
+    |> xray.set_http_request(%{method: conn.method, path: conn.request_path})
+  end
+
+  defp try_parse_header(name, trace_header, xray) do
+    case xray.parse_header(name, trace_header) do
+      {:ok, segment} ->
+        segment
+
+      {:error, :invalid} ->
+        Stump.log(
+          :error,
+          "failed to create segment with 'x-amzn-trace-id' header: #{trace_header}"
+        )
+
+        xray.start_tracing(name)
+    end
+  end
 
   defp on_request_completed(conn, segment, xray) do
     segment =
