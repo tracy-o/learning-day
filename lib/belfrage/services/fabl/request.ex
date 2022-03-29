@@ -27,13 +27,13 @@ defmodule Belfrage.Services.Fabl.Request do
   defp build_headers(request, user_session) do
     request
     |> base_headers()
+    |> put_xray_header(request.xray_segment)
     |> put_user_session_headers(user_session)
   end
 
   defp base_headers(%Request{
          raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_segment: nil
+         req_svc_chain: req_svc_chain
        }) do
     Map.merge(raw_headers, %{
       "accept-encoding" => "gzip",
@@ -42,17 +42,12 @@ defmodule Belfrage.Services.Fabl.Request do
     })
   end
 
-  defp base_headers(%Request{
-         raw_headers: raw_headers,
-         req_svc_chain: req_svc_chain,
-         xray_segment: segment
-       }) do
-    Map.merge(raw_headers, %{
-      "accept-encoding" => "gzip",
-      "user-agent" => "Belfrage",
-      "req-svc-chain" => req_svc_chain,
-      "x-amzn-trace-id" => Xray.build_trace_id_header(segment)
-    })
+  defp put_xray_header(headers, segment) do
+    if segment do
+      Map.put(headers, "x-amzn-trace-id", Xray.build_trace_id_header(segment))
+    else
+      headers
+    end
   end
 
   defp put_user_session_headers(headers, user_session = %UserSession{}) do

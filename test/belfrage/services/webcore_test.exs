@@ -11,30 +11,43 @@ defmodule Belfrage.Services.WebcoreTest do
 
   @successful_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
 
-  test "call the lambda client" do
-    struct = %Struct{
-      request: %Request{
-        request_id: "request-id",
-        xray_segment: build_segment(sampled: false, name: "Belfrage")
-      },
-      private: %Private{
-        route_state_id: "SomeRouteSpec",
-        origin: "lambda-arn"
-      }
+  @default_struct %Struct{
+    request: %Request{
+      request_id: "request-id",
+      xray_segment: build_segment(sampled: false, name: "Belfrage")
+    },
+    private: %Private{
+      route_state_id: "SomeRouteSpec",
+      origin: "lambda-arn"
     }
+  }
 
+  test "call the lambda client" do
     credentials = Webcore.Credentials.get()
-    request = Webcore.Request.build(struct)
+    request = Webcore.Request.build(@default_struct)
 
     expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", [xray_trace_id: _trace_id] ->
       @successful_response
     end)
 
     assert_metric({~w(webcore response)a, %{status_code: 200, route_spec: "SomeRouteSpec"}}, fn ->
-      assert %Struct{response: response} = Webcore.dispatch(struct)
+      assert %Struct{response: response} = Webcore.dispatch(@default_struct)
       assert response.http_status == 200
       assert response.body == "OK"
     end)
+  end
+
+  test "still calls the lambda client, when xray_segment is nil" do
+    nil_segment_struct = put_in(@default_struct.request.xray_segment, nil)
+
+    credentials = Webcore.Credentials.get()
+    request = Webcore.Request.build(nil_segment_struct)
+
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", _options = [] ->
+      @successful_response
+    end)
+
+    Webcore.dispatch(nil_segment_struct)
   end
 
   test "tracks the duration of the lambda call" do

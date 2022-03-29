@@ -6,6 +6,7 @@ defmodule Belfrage.Services.HTTP do
   alias Belfrage.Struct.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
+  alias Belfrage.Xray
 
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
@@ -59,6 +60,7 @@ defmodule Belfrage.Services.HTTP do
     edge_headers(request)
     |> Map.merge(default_headers(request))
     |> Map.merge(request.raw_headers)
+    |> Map.merge(xray_header(request))
     |> Enum.reject(fn {_k, v} -> is_nil(v) end)
     |> Map.new()
   end
@@ -98,6 +100,14 @@ defmodule Belfrage.Services.HTTP do
       "origin" => request.origin,
       "referer" => request.referer
     }
+  end
+
+  defp xray_header(%Request{xray_segment: segment = %AwsExRay.Segment{}}) do
+    %{"x-amzn-trace-id" => Xray.build_trace_id_header(segment)}
+  end
+
+  defp xray_header(_) do
+    %{}
   end
 
   defp scheme(:https), do: "https"
