@@ -56,7 +56,7 @@ defmodule BelfrageChimneySmokeTest do
       resp =
         Helper.get_route(
           endpoint,
-          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"
+          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
         )
 
       assert resp.status_code == 200
@@ -70,7 +70,7 @@ defmodule BelfrageChimneySmokeTest do
       resp =
         Helper.get_route(
           endpoint,
-          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"
+          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
         )
 
       assert resp.status_code == 200
@@ -84,7 +84,7 @@ defmodule BelfrageChimneySmokeTest do
       resp =
         Helper.get_route(
           endpoint,
-          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=2&platform=ios"
+          "/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
         )
 
       assert resp.status_code == 200
