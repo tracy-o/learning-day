@@ -27,6 +27,7 @@ At the time of writing, stacks designed to serve live requests are:
     - [Cosmos](https://cosmos.tools.bbc.co.uk/services/joan-belfrage)
     - [Live endpoint](https://joan.belfrage.api.bbc.co.uk/)
     - [Test endpoint](https://joan.belfrage.test.api.bbc.co.uk/)
+    - [Architecture Diagram](../img/joan-belf-arch.png)
 
 
 Other stacks running belfrage are:
