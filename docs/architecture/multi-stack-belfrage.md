@@ -3,9 +3,31 @@
 Belfrage operates across multiple stacks. We have a set of stacks used for damage limitation when rolling out new releases, and another set of stacks used for varying reasons.
 
 At the time of writing, stacks designed to serve live requests are:
-- [bruce-belfrage](https://cosmos.tools.bbc.co.uk/services/bruce-belfrage)
-- [cedric-belfrage](https://cosmos.tools.bbc.co.uk/services/cedric-belfrage)
-- [sally-belfrage](https://cosmos.tools.bbc.co.uk/services/sally-belfrage)
+- bruce-belfrage
+    - Bruce is the main stack for webcore traffic 
+    - [Cosmos](https://cosmos.tools.bbc.co.uk/services/bruce-belfrage)
+    - [Live endpoint](https://bruce.belfrage.api.bbc.co.uk/)
+    - [Test endpoint](https://bruce.belfrage.test.api.bbc.co.uk/)
+
+- cedric-belfrage
+    - Cedric serves CDN traffic from Akamai
+    - [Cosmos](https://cosmos.tools.bbc.co.uk/services/cedric-belfrage)
+    - [Live endpoint](https://cedric.belfrage.api.bbc.co.uk/)
+    - [Test endpoint](https://cedric.belfrage.test.api.bbc.co.uk/)
+    - [Confluence](https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+CDN)
+
+- sally-belfrage
+    - Sally serves world service traffic 
+    - [Cosmos](https://cosmos.tools.bbc.co.uk/services/sally-belfrage)
+    - [Live endpoint](https://sally.belfrage.api.bbc.co.uk/)
+    - [Test endpoint](https://sally.belfrage.test.api.bbc.co.uk/)
+
+- joan-belfrage
+    - Joan is a proxy for news traffic between GTM and Mozart 
+    - [Cosmos](https://cosmos.tools.bbc.co.uk/services/joan-belfrage)
+    - [Live endpoint](https://joan.belfrage.api.bbc.co.uk/)
+    - [Test endpoint](https://joan.belfrage.test.api.bbc.co.uk/)
+
 
 Other stacks running belfrage are:
 - [belfrage-preview](https://cosmos.tools.bbc.co.uk/services/belfrage-preview)
