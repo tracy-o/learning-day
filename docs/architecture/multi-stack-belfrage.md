@@ -41,8 +41,11 @@ Here is a ticket which has links to the varying PRs required to setup a new stac
 
 Links that may help:
 - https://jira.dev.bbc.co.uk/browse/RESFRAME-4096
+    - Ticket to create Sally, one of our stacks. Contains links to all required PRs
 - https://jira.dev.bbc.co.uk/browse/RESFRAME-3400
+    - Original Multistack ticket. Contains list of required updated areas.
 - https://confluence.dev.bbc.co.uk/display/BELFRAGE/Creating+new+Belfrage+stacks
+    -More documentation relating to creating a stack.
 
 
 Some necessary considerations for creating a new stack:
