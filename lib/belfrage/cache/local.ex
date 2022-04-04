@@ -44,6 +44,7 @@ defmodule Belfrage.Cache.Local do
   @impl CacheStrategy
   def store(
         struct = %Belfrage.Struct{
+          private: %Belfrage.Struct.Private{personalised_route: personalised_route},
           response: %Belfrage.Struct.Response{
             cache_directive: %Belfrage.CacheControl{max_age: max_age},
             cache_last_updated: cache_last_updated
@@ -57,21 +58,16 @@ defmodule Belfrage.Cache.Local do
     if cacheable?(max_age) && stale?(cache_last_updated, max_age) && @dial.state(:cache_enabled) do
       %{cache_name: cache, make_stale: make_stale} = Enum.into(opts, %{cache_name: :cache, make_stale: false})
 
-      if make_stale do
-        Cachex.put(
-          cache,
-          struct.request.request_hash,
-          %{struct.response | cache_last_updated: Timer.make_stale(Timer.now_ms(), max_age)},
-          ttl: struct.private.fallback_ttl
-        )
-      else
-        Cachex.put(
-          cache,
-          struct.request.request_hash,
-          %{struct.response | cache_last_updated: Timer.now_ms()},
-          ttl: struct.private.fallback_ttl
-        )
-      end
+      Cachex.put(
+        cache,
+        struct.request.request_hash,
+        %{
+          struct.response
+          | personalised_route: personalised_route,
+            cache_last_updated: maybe_make_stale(Timer.now_ms(), max_age, make_stale)
+        },
+        ttl: struct.private.fallback_ttl
+      )
     else
       {:ok, false}
     end
@@ -101,5 +97,13 @@ defmodule Belfrage.Cache.Local do
 
   defp stale?(last_updated, max_age) do
     Belfrage.Timer.stale?(last_updated, max_age)
+  end
+
+  defp maybe_make_stale(time, max_age, make_stale) do
+    if make_stale do
+      Timer.make_stale(time, max_age)
+    else
+      time
+    end
   end
 end
