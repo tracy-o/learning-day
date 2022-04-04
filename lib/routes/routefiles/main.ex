@@ -272,8 +272,14 @@ defroutefile "Main" do
     return_404 if: [
                  !String.match?(year, ~r/^20(22)$/),
                  !String.match?(polity, ~r/^(england|wales|scotland)$/),
-                 !String.match?(division_name, ~r/^(councils|mayors)$/),
+                 !String.match?(division_name, ~r/^(councils)$/),
                  !String.match?(division_id, ~r/^[SWE][0-9]{8}$/)
+               ]
+  end
+
+  handle "/news/election/2022/england/mayors/:division_id", using: "NewsElectionResults", examples: [ "/news/election/2022/england/mayors/E06000001"] do
+    return_404 if: [
+                 !String.match?(division_id, ~r/^[E][0-9]{8}$/)
                ]
   end
 
