@@ -780,6 +780,14 @@ defroutefile "Main" do
   handle "/kyrgyz/new_topics/:id.amp", using: "WorldServiceKyrgyzTopicPage", only_on: "test", examples: ["/kyrgyz/new_topics/c0109l9xrpnt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+
+  handle "/kyrgyz/new_articles/:id", using: "WorldServiceKyrgyzArticlePage", only_on: "test", examples: ["/kyrgyz/new_articles/cgvd84xmq35o"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/kyrgyz/new_articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", only_on: "test", examples: ["/kyrgyz/new_articles/cgvd84xmq35o.amp"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
