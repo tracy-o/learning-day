@@ -49,18 +49,9 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^lambda_function,
                  platform: Webcore
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "u4033755"}
                }
              }
            } = UploaderPlatformDiscriminator.call([], @webcore_live_data)
