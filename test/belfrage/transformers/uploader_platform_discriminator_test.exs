@@ -66,18 +66,9 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
                  platform: MorphRouter
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "abc123xyz789"}
                }
              }
            } = UploaderPlatformDiscriminator.call([], @morph_live_data)
