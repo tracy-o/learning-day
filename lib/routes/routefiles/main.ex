@@ -781,13 +781,13 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
-  handle "/kyrgyz/new_articles/:id", using: "WorldServiceKyrgyzArticlePage", only_on: "test", examples: ["/kyrgyz/new_articles/cgvd84xmq35o"] do
+  handle "/mundo/new_articles/:id", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/kyrgyz/new_articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", only_on: "test", examples: ["/kyrgyz/new_articles/cgvd84xmq35o.amp"] do
+  handle "/mundo/new_articles/:id.amp", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/kyrgyz/new_articles/:id.json", using: "WorldServiceKyrgyzArticlePage", only_on: "test", examples: ["/kyrgyz/new_articles/cgvd84xmq35o.json"] do
+  handle "/mundo/new_articles/:id.json", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.json"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
