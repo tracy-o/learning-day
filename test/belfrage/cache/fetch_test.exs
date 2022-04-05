@@ -15,7 +15,7 @@ defmodule Belfrage.Cache.FetchTest do
         request: %Request{request_hash: unique_cache_key()}
       }
 
-      response = %Response{body: "Cached response"}
+      response = %Response{body: "Cached response", personalised_route: true}
       response = put_into_cache(%Struct{struct | response: response})
       %{struct: struct, cached_response: response}
     end
@@ -28,6 +28,7 @@ defmodule Belfrage.Cache.FetchTest do
 
       assert response.body == cached_response.body
       assert private.origin == :belfrage_cache
+      assert private.personalised_route == true
       assert response.fallback == false
       assert response.cache_type == nil
     end

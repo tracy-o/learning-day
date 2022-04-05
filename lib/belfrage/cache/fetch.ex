@@ -5,7 +5,9 @@ defmodule Belfrage.Cache.Fetch do
     Belfrage.Cache.MultiStrategy.fetch(struct, accepted_freshness)
     |> case do
       {:ok, {:local, :fresh}, response} ->
-        Struct.add(struct, :response, response) |> Struct.add(:private, %{origin: :belfrage_cache})
+        struct
+        |> Struct.add(:response, response)
+        |> Struct.add(:private, %{origin: :belfrage_cache, personalised_route: response.personalised_route})
 
       {:ok, {cache_type, :stale}, response} ->
         Statix.increment("web.response.fallback", 1, tags: Event.global_dimensions())

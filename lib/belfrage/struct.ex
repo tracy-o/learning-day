@@ -52,7 +52,8 @@ defmodule Belfrage.Struct.Response do
             body: "",
             cache_directive: %Belfrage.CacheControl{cacheability: "private"},
             cache_last_updated: nil,
-            cache_type: nil
+            cache_type: nil,
+            personalised_route: false
 
   @type t :: %__MODULE__{}
 

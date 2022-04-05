@@ -35,17 +35,21 @@ defmodule Belfrage.Cache.LocalTest do
   end
 
   describe "storing responses" do
-    test "a new response" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("abc123")},
-        response: %Struct.Response{
-          headers: %{"content-type" => "application/json"},
-          body: "hello!",
-          http_status: 200,
-          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+    setup do
+      %{
+        struct: %Struct{
+          request: %Struct.Request{request_hash: cache_key("abc123")},
+          response: %Struct.Response{
+            headers: %{"content-type" => "application/json"},
+            body: "hello!",
+            http_status: 200,
+            cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
+          }
         }
       }
+    end
 
+    test "a new response", %{struct: struct} do
       assert {:ok, true} == Cache.Local.store(struct)
 
       assert [
@@ -63,17 +67,20 @@ defmodule Belfrage.Cache.LocalTest do
       refute Timer.stale?(cache_last_updated, max_age)
     end
 
-    test "a new response as stale" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("abc123")},
-        response: %Struct.Response{
-          headers: %{"content-type" => "application/json"},
-          body: "hello!",
-          http_status: 200,
-          cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
-        }
-      }
+    test "a new response for a personalised route", %{struct: struct} do
+      struct = Struct.add(struct, :private, %{personalised_route: true})
 
+      assert {:ok, true} == Cache.Local.store(struct, make_stale: true)
+
+      assert [
+               {:entry, _key, _cachex_determined_last_update, _cachex_expires_in,
+                %Belfrage.Struct.Response{
+                  personalised_route: true
+                }}
+             ] = :ets.lookup(:cache, cache_key("abc123"))
+    end
+
+    test "a new response as stale", %{struct: struct} do
       assert {:ok, true} == Cache.Local.store(struct, make_stale: true)
 
       assert [
