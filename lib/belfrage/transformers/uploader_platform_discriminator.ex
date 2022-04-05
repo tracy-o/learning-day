@@ -23,7 +23,7 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminator do
     end
   end
 
-  defp maybe_update_platform_and_origin(id, struct) do
+  defp update_platform_and_origin(id, struct) do
     case is_webcore_id(id) do
       true ->
         Struct.add(struct, :private, %{
@@ -37,7 +37,7 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminator do
   end
 
   def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    then_do(rest, maybe_update_platform_and_origin(id, struct))
+    then_do(rest, update_platform_and_origin(id, struct))
   end
 
   def call(_rest, struct), do: then_do([], struct)
