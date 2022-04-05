@@ -59,7 +59,7 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
                  path_params: %{"id" => "u4033755"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_live_data)
+           } = UploaderPlatformDiscriminator.call([], @webcore_live_data)
   end
 
   test "if the Campaign ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
@@ -85,6 +85,6 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @morph_live_data)
+           } = UploaderPlatformDiscriminator.call([], @morph_live_data)
   end
 end
