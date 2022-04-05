@@ -16,7 +16,6 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminator do
   ]
 
   defp is_webcore_id(id) do
-    application_env = Application.get_env(:belfrage, :production_environment)
     id in @webcore_live_campaign_ids
   end
 
