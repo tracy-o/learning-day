@@ -105,30 +105,4 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
              }
            } = UploaderPlatformDiscriminator.call([], @morph_live_data)
   end
-
-  test "if the Campaign ID is in the Live Webcore allow list, the origin and platform will remain the same on test" do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, "test")
-    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
-    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function)
-  
-    assert {
-             :ok,
-             %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
-               private: %Struct.Private{
-                 origin: ^lambda_function,
-                 platform: Webcore
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "u4033755"}
-               }
-             }
-           } = UploaderPlatformDiscriminator.call([], @webcore_test_data)
-  end
 end
