@@ -4,31 +4,17 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
   alias Belfrage.Transformers.UploaderPlatformDiscriminator
   alias Belfrage.Struct
 
-  @webcore_test_data %Struct{
+  @webcore_live_data %Struct{
     private: %Struct.Private{
-      origin: "https://morph-router.test.api.bbci.co.uk",
+      origin: "https://morph-router.api.bbci.co.uk",
       platform: MorphRouter,
-      production_environment: "test"
+      production_environment: "live"
     },
     request: %Struct.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
-      path_params: %{"id" => "zm8fhbk"}
-    }
-  }
-
-  @morph_test_data %Struct{
-    private: %Struct.Private{
-      origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
-      production_environment: "test"
-    },
-    request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "abc123xyz789"}
+      path_params: %{"id" => "u4033755"}
     }
   }
 
@@ -73,7 +59,7 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
                  path_params: %{"id" => "u4033755"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_live_data)
   end
 
   test "if the Campaign ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
