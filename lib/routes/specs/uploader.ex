@@ -4,7 +4,7 @@ defmodule Routes.Specs.Uploader do
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",
       platform: MorphRouter,
-      pipeline: ["UploaderPlatformDiscriminator", "HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "CircuitBreaker"]
+      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "UploaderPlatformDiscriminator", "CircuitBreaker"]
     }
   end
 
