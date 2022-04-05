@@ -32,20 +32,6 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminatorTest do
     }
   }
 
-  @webcore_test_data %Struct{
-    private: %Struct.Private{
-      origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
-      production_environment: "test"
-    },
-    request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
-      path: "/_web_core",
-      path_params: %{"id" => "u4033755"}
-    }
-  }
-
   setup do
     stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
       Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
