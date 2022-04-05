@@ -3,6 +3,7 @@ defmodule Routes.Specs.WorldServiceHausaTopicPage do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
+      query_params_allowlist: ["page"],
     }
   end
 
