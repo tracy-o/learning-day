@@ -781,16 +781,6 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
 
-  handle "/mundo/new_articles/:id", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/mundo/new_articles/:id.amp", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.amp"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/mundo/new_articles/:id.json", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.json"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
@@ -824,6 +814,15 @@ defroutefile "Main" do
   handle "/mundo/new_topics/:id.amp", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/new_topics/cdr5613yzwqt.amp"] do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
   end
+
+  handle "/mundo/new_articles/:id", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/mundo/new_articles/:id.amp", using: "WorldServiceMundoArticlePage", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.amp"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/mundo/new_articles/:id.json", using: "WorldServiceMundo", only_on: "test", examples: ["/mundo/new_articles/ce42wzqr2mko.json"]
+
   handle "/mundo/send/:id", using: "UploaderWorldService", examples: ["/mundo/send/u39697902"]
   handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo"]
 
