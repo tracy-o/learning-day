@@ -112,7 +112,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
       |> make_request()
 
     [cache_control] = get_resp_header(conn, "cache-control")
-    assert cache_control == "private, stale-if-error=90, stale-while-revalidate=30"
+    assert cache_control == "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"
     assert conn.status == 200
     assert conn.resp_body == "<h1>Hello</h1>"
   end
