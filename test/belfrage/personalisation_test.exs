@@ -144,6 +144,26 @@ defmodule Belfrage.PersonalisationTest do
       refute Personalisation.personalised_request?(struct)
     end
 
+    test "returns true if personalisation is enabled and request is made with auth header by app user to personalised route on bbc.co.uk" do
+      enable_personalisation()
+
+      struct =
+        %Struct{}
+        |> Struct.add(:request, %{app?: true})
+        |> set_host("bbc.co.uk")
+        |> set_personalised_route(true)
+        |> personalise_app_request("some-value")
+
+      assert Personalisation.personalised_request?(struct)
+
+      refute struct |> unpersonalise_app_request() |> Personalisation.personalised_request?()
+      refute struct |> set_personalised_route(false) |> Personalisation.personalised_request?()
+      refute struct |> set_host("bbc.com") |> Personalisation.personalised_request?()
+
+      disable_personalisation()
+      refute Personalisation.personalised_request?(struct)
+    end
+
     defp set_host(struct, host) do
       Struct.add(struct, :request, %{host: host})
     end

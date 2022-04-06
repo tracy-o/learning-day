@@ -3,7 +3,11 @@ defmodule Belfrage.Authentication.SessionState do
   alias Belfrage.Authentication.Token
 
   def authenticated?(request = %Request{}) do
-    (request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1") && !request.app?
+    if request.app? do
+      request.raw_headers["authorization"]
+    else
+      request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1"
+    end
   end
 
   def build(request = %Request{}) do
@@ -14,7 +18,7 @@ defmodule Belfrage.Authentication.SessionState do
       request.path == "/full-stack-test/a/ft" && token == "FAKETOKEN" ->
         build_fake_session(token)
 
-      (authenticated && token) || (request.app? && token) ->
+      authenticated && token ->
         build_session(token)
 
       authenticated ->
