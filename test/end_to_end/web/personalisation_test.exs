@@ -85,7 +85,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
       |> assert_successful_response()
 
     [cache_control] = get_resp_header(response, "cache-control")
-    assert cache_control == "private"
+    assert cache_control =~ "public"
   end
 
   test "internal error in Belfrage" do
