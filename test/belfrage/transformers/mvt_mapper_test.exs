@@ -31,4 +31,33 @@ defmodule Belfrage.Transformers.MvtMapperTest do
       assert %{} == struct.private.mvt
     end
   end
+
+  describe "mvt depends on mvt_enabled dial" do
+    test "when dial is enabled, mvt map contains expected keys and values" do
+      stub_dial(:mvt_enabled, "true")
+
+      {:ok, struct} =
+        MvtMapper.call([], %Struct{
+          request: %Belfrage.Struct.Request{
+            raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-5" => "feature;sidebar;false"}
+          }
+        })
+
+      assert %{"mvt-button_colour" => {1, "experiment;red"}, "mvt-sidebar" => {5, "feature;false"}} ==
+               struct.private.mvt
+    end
+
+    test "when dial is disabled, mvt map is empty" do
+      stub_dial(:mvt_enabled, "false")
+
+      {:ok, struct} =
+        MvtMapper.call([], %Struct{
+          request: %Belfrage.Struct.Request{
+            raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-5" => "feature;sidebar;false"}
+          }
+        })
+
+      assert %{} == struct.private.mvt
+    end
+  end
 end

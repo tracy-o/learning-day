@@ -1,9 +1,15 @@
 defmodule Belfrage.Transformers.MvtMapper do
   use Belfrage.Transformers.Transformer
+  @dial Application.get_env(:belfrage, :dial)
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
-    struct = Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers)})
+    struct =
+      if @dial.state(:mvt_enabled) do
+        Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers)})
+      else
+        struct
+      end
 
     then_do(rest, struct)
   end
