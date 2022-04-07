@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :belfrage,
   production_environment: "live",
