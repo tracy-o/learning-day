@@ -10,5 +10,6 @@
 	"webcore_kill_switch": "inactive",
 	"datalab_machine_recommendations": "enabled",
 	"chameleon": "off",
-	"cache_enabled": "true"
+	"cache_enabled": "true",
+	"mvt_enabled": "true"
 }
