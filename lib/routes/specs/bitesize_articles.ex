@@ -4,7 +4,7 @@ defmodule Routes.Specs.BitesizeArticles do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      pipeline: ["BitesizeArticlesPlatformDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker", "ComToUKRedirect"]
+      pipeline: ["BitesizeArticlesPlatformDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker"]
     }
   end
 

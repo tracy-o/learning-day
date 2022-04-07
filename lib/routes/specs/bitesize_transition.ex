@@ -11,7 +11,6 @@ defmodule Routes.Specs.BitesizeTransition do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
-      pipeline: ["ComToUKRedirect"],
       language_from_cookie: true
     }
   end
