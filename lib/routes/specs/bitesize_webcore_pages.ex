@@ -9,9 +9,9 @@ defmodule Routes.Specs.BitesizeWebcorePages do
   end
 
   def pipeline("live") do 
-    ["BitesizeWebcorePagesDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker"]
+    ["BitesizeWebcorePagesDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "Language", "CircuitBreaker", "ComToUKRedirect"]
   end
   def pipeline(_production_environment) do
-   ["BitesizeWebcorePagesDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "DevelopmentRequests", "Language", "CircuitBreaker"]
+   ["BitesizeWebcorePagesDiscriminator", "HTTPredirect", "LambdaOriginAlias", "TrailingSlashRedirector", "DevelopmentRequests", "Language", "CircuitBreaker", "ComToUKRedirect"]
   end
 end
