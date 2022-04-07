@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
   end
 
-  describe "mvt depends on mvt_enabled dial" do
+  describe "for mvt_enabled dial state" do
     test "when dial is enabled, mvt map contains expected keys and values" do
       stub_dial(:mvt_enabled, "true")
 
