@@ -16,7 +16,7 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline(_production_env) do
-    pipeline("live") ++ ["DevelopmentRequests"]
+    pipeline("live") ++ ["Personalisation", "DevelopmentRequests"]
   end
 
   defp headers_allowlist("live"), do: []
