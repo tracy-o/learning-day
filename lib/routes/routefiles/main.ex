@@ -260,10 +260,14 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/:year/northern-ireland/:division_name/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001", "/news/election/2022/northern-ireland/constituencies/N06000001"] do
+  handle "/news/election/2017/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001"] do
     return_404 if: [
-                 !String.match?(year, ~r/^20(17|22)$/),
-                 !String.match?(division_name, ~r/^(constituencies)$/),
+                 !String.match?(division_id, ~r/^[N][0-9]{8}$/)
+               ]
+  end
+
+  handle "/news/election/2022/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", examples: ["/news/election/2022/northern-ireland/constituencies/N06000001"] do
+    return_404 if: [
                  !String.match?(division_id, ~r/^[N][0-9]{8}$/)
                ]
   end
