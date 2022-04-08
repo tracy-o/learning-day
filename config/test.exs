@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :belfrage,
   errors_threshold: 20,

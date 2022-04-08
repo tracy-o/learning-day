@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :belfrage,
   origin_simulator: "http://test-compo-1chgcj5evn9oo-f0a64863a5d33db4.elb.eu-west-1.amazonaws.com",
