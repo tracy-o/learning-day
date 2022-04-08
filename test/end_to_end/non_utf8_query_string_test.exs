@@ -148,7 +148,7 @@ defmodule NonUtf8QueryStringTest do
   test "malformed URI" do
     start_supervised!({RouteState, "SomeRouteState"})
 
-    conn = conn(:get, "/200-ok-response?query=%c0")
+    conn = conn(:get, "/200-ok-response?query=%")
 
     assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
 

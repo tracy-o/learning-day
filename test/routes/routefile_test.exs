@@ -45,8 +45,9 @@ defmodule Routes.RoutefileTest do
           specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
 
           with :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
-               :ok <- validate_transformers(matcher, specs, env) do
-            validate_platform_transformers(matcher, specs, env)
+               :ok <- validate_transformers(matcher, specs, env),
+               :ok <- validate_platform_transformers(matcher, specs, env) do
+            :ok
           end
         end)
       end
@@ -75,7 +76,9 @@ defmodule Routes.RoutefileTest do
           :ok
         else
           {:error,
-           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
+           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{
+             conn.assigns.route_spec
+           }"}
         end
       end)
     end
@@ -92,7 +95,9 @@ defmodule Routes.RoutefileTest do
           :ok
         else
           {:error,
-           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{conn.resp_body}"}
+           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{
+             conn.resp_body
+           }"}
         end
       end)
     end
@@ -161,7 +166,8 @@ defmodule Routes.RoutefileTest do
 
     unless errors == [] do
       errors
-      |> Enum.map_join(&"* #{&1}", "\n")
+      |> Enum.map(&"* #{&1}")
+      |> Enum.join("\n")
       |> flunk()
     end
   end
@@ -210,7 +216,9 @@ defmodule Routes.RoutefileTest do
     cond do
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{
+           inspect(duplicate_transformers)
+         }"}
 
       missing_transformers != [] ->
         {:error,
