@@ -3,6 +3,7 @@ defmodule Routes.Specs.WorldServiceUkchinaTopicPage do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
+      query_params_allowlist: ["page"],
       headers_allowlist: ["cookie-ckps_chinese"]
     }
   end
