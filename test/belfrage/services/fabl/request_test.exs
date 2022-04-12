@@ -94,11 +94,11 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "accept-encoding" => "gzip",
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
-                 :authorization => "Bearer a-valid-session-token",
-                 :"ctx-pii-age-bracket" => "o18",
-                 :"ctx-pii-allow-personalisation" => "true",
-                 :"pers-env" => "int",
-                 :"x-authentication-provider" => "idv5"
+                 "authorization" => "Bearer a-valid-session-token",
+                 "ctx-pii-age-bracket" => "o18",
+                 "ctx-pii-allow-personalisation" => "true",
+                 "pers-env" => "int",
+                 "x-authentication-provider" => "idv5"
                },
                method: :get,
                payload: "",
@@ -117,9 +117,9 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "accept-encoding" => "gzip",
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
-                 :authorization => "Bearer a-valid-session-token",
-                 :"pers-env" => "int",
-                 :"x-authentication-provider" => "idv5"
+                 "authorization" => "Bearer a-valid-session-token",
+                 "pers-env" => "int",
+                 "x-authentication-provider" => "idv5"
                },
                method: :get,
                payload: "",
@@ -137,9 +137,9 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "accept-encoding" => "gzip",
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
-                 :authorization => "Bearer a-valid-session-token",
-                 :"pers-env" => "int",
-                 :"x-authentication-provider" => "idv5"
+                 "authorization" => "Bearer a-valid-session-token",
+                 "pers-env" => "int",
+                 "x-authentication-provider" => "idv5"
                },
                method: :get,
                payload: "",

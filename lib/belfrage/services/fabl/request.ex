@@ -53,9 +53,9 @@ defmodule Belfrage.Services.Fabl.Request do
   defp put_user_session_headers(headers, user_session = %UserSession{}) do
     if user_session.valid_session do
       headers
-      |> Map.put(:authorization, "Bearer #{user_session.session_token}")
-      |> Map.put(:"x-authentication-provider", "idv5")
-      |> Map.put(:"pers-env", user_session.authentication_env)
+      |> Map.put("authorization", "Bearer #{user_session.session_token}")
+      |> Map.put("x-authentication-provider", "idv5")
+      |> Map.put("pers-env", user_session.authentication_env)
       |> put_user_attributes(user_session.user_attributes)
     else
       headers
@@ -66,8 +66,8 @@ defmodule Belfrage.Services.Fabl.Request do
     case user_attributes do
       %{age_bracket: age_bracket, allow_personalisation: allow_personalisation} ->
         headers
-        |> Map.put(:"ctx-pii-age-bracket", age_bracket)
-        |> Map.put(:"ctx-pii-allow-personalisation", to_string(allow_personalisation))
+        |> Map.put("ctx-pii-age-bracket", age_bracket)
+        |> Map.put("ctx-pii-allow-personalisation", to_string(allow_personalisation))
 
       _ ->
         headers

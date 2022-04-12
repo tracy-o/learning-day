@@ -85,11 +85,11 @@ defmodule Belfrage.Services.FablTest do
              url: "https://fabl.test.api.bbci.co.uk/module/example-module",
              payload: "",
              headers: %{
-               :authorization => "Bearer a-valid-session-token",
-               :"ctx-pii-age-bracket" => "o18",
-               :"ctx-pii-allow-personalisation" => "true",
-               :"pers-env" => "int",
-               :"x-authentication-provider" => "idv5",
+               "authorization" => "Bearer a-valid-session-token",
+               "ctx-pii-age-bracket" => "o18",
+               "ctx-pii-allow-personalisation" => "true",
+               "pers-env" => "int",
+               "x-authentication-provider" => "idv5",
                "accept-encoding" => "gzip",
                "req-svc-chain" => "BELFRAGE",
                "user-agent" => "Belfrage"
