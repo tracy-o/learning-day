@@ -1,6 +1,8 @@
 defmodule Belfrage.Supervisor do
   use Supervisor
 
+  @http_pool_size 512
+
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
@@ -29,7 +31,7 @@ defmodule Belfrage.Supervisor do
     [
       name: Finch,
       pools: %{
-        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512]
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: @http_pool_size]
       }
     ]
   end
