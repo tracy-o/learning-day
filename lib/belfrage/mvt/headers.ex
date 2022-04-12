@@ -19,6 +19,6 @@ defmodule Belfrage.Mvt.Headers do
   end
 
   def set(agent \\ __MODULE__, header_list) do
-    Agent.update(agent, fn state -> header_list end)
+    Agent.update(agent, fn _state -> header_list end)
   end
 end

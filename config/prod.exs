@@ -7,7 +7,10 @@ config :belfrage,
   http_cert_ca: System.get_env("SERVICE_CERT_CA"),
   not_found_page: "/var/www/html/errors/404-data-ssl.html",
   not_supported_page: "/var/www/html/errors/405-data-ssl.html",
-  internal_error_page: "/var/www/html/errors/500-data-ssl.html"
+  internal_error_page: "/var/www/html/errors/500-data-ssl.html",
+  mvt: %{
+    slots_file_location: "https://live-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/production.json"
+  }
 
 config :statix,
   pool_size: 6
