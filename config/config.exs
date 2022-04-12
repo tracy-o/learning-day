@@ -86,7 +86,8 @@ config :belfrage,
     "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
     "datalab_machine_recommendations" => Belfrage.Dials.DatalabMachineRecommendations,
     "chameleon" => Belfrage.Dials.Chameleon,
-    "cache_enabled" => Belfrage.Dials.CacheEnabled
+    "cache_enabled" => Belfrage.Dials.CacheEnabled,
+    "mvt_enabled" => Belfrage.Dials.MvtEnabled
   },
   pool_metric_rate: 10_000,
   authentication: %{
