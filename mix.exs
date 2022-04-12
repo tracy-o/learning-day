@@ -60,6 +60,7 @@ defmodule Belfrage.MixProject do
       {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
       {:machine_gun, git: "https://github.com/bbc/machine_gun.git"},
+      {:finch, "~> 0.0"},
       {:mox, "~> 1.0.0", only: @test_envs},
       {:plug_cowboy, "~> 2.5"},
       {:stump, "~> 1.7"},

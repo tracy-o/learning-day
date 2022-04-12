@@ -36,7 +36,6 @@ config :machine_gun,
   MozartWeather: default_machine_gun_config,
   OriginSimulator: default_machine_gun_config,
   Programmes: default_machine_gun_config,
-  S3: default_machine_gun_config,
   Simorgh: default_machine_gun_config,
   Webcore: default_machine_gun_config
 

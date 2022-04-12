@@ -1,6 +1,8 @@
 defmodule Belfrage.Supervisor do
   use Supervisor
 
+  @http_pool_size 512
+
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
@@ -10,6 +12,7 @@ defmodule Belfrage.Supervisor do
   # {Cachex, [name: :cache, limit: cachex_limit()]}
   def children(env: env) do
     [
+      {Finch, finch_opts()},
       {BelfrageWeb.Router, router_options(env)},
       Belfrage.RouteStateRegistry,
       Belfrage.RouteStateSupervisor,
@@ -19,6 +22,18 @@ defmodule Belfrage.Supervisor do
       {Cachex, name: :cache, limit: cachex_limit(), stats: true},
       Belfrage.Services.Webcore.Supervisor
     ] ++ http_router(env)
+  end
+
+  defp finch_opts() do
+    bucket = Application.get_env(:belfrage, :ccp_s3_bucket)
+    region = Application.get_env(:ex_aws, :region)
+
+    [
+      name: Finch,
+      pools: %{
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: @http_pool_size]
+      }
+    ]
   end
 
   @impl true
