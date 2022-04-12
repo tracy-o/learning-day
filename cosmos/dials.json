@@ -221,7 +221,7 @@
   },
   {
     "name": "mvt_enabled",
-    "description": "This enables multivariate testing (MVT) on belfrage instances",
+    "description": "This enables multivariate testing (MVT)",
     "default-value": "true",
     "values": [
       {
