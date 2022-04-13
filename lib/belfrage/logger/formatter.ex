@@ -46,7 +46,7 @@ defmodule Belfrage.Logger.Formatter do
     Keyword.drop(metadata, [:erl_level, :time, :application, :file, :line, :function, :module, :domain, :gl, :pid, :mfa])
   end
 
-  defp to_json(%{__struct__: _} = val) do
+  defp to_json(val = %{__struct__: _}) do
     to_json(Map.from_struct(val))
   end
 
