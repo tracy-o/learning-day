@@ -54,34 +54,36 @@ defmodule Belfrage.Clients.CCPTest do
     end
 
     test "correctly sends GET request to S3", %{s3_response_body: s3_response_body} do
-      expected_s3_request =
-        Finch.build(
-          :get,
-          "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
-        )
+      expected_s3_request = %Belfrage.Clients.HTTP.Request{
+        headers: %{},
+        method: :get,
+        payload: "",
+        timeout: 1000,
+        url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
+      }
 
-      FinchMock
-      |> expect(:request, fn ^expected_s3_request, _name, _opts ->
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn ^expected_s3_request, :S3 ->
         {:ok,
-         %Finch.Response{
-           status: 200,
+         Belfrage.Clients.HTTP.Response.new(%{
+           status_code: 200,
            body: s3_response_body,
            headers: []
-         }}
+         })}
       end)
 
       CCP.fetch("request-hash-123")
     end
 
     test "converts binary format of erlang terms in response, to erlang terms", %{s3_response_body: s3_response_body} do
-      FinchMock
-      |> expect(:request, fn _req, _name, _opts ->
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn _request, :S3 ->
         {:ok,
-         %Finch.Response{
-           status: 200,
+         Belfrage.Clients.HTTP.Response.new(%{
+           status_code: 200,
            body: s3_response_body,
            headers: []
-         }}
+         })}
       end)
 
       fallback_response = :erlang.binary_to_term(s3_response_body)
@@ -90,37 +92,37 @@ defmodule Belfrage.Clients.CCPTest do
   end
 
   test "when item does not exist in S3" do
-    FinchMock
-    |> expect(:request, fn _req, _name, _opts ->
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :S3 ->
       {:ok,
-       %Finch.Response{
-         status: 403,
+       Belfrage.Clients.HTTP.Response.new(%{
+         status_code: 403,
          body: "",
          headers: []
-       }}
+       })}
     end)
 
     assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
   end
 
   test "S3 returns unexpected status code" do
-    FinchMock
-    |> expect(:request, fn _req, _name, _opts ->
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :S3 ->
       {:ok,
-       %Finch.Response{
-         status: 202,
+       Belfrage.Clients.HTTP.Response.new(%{
+         status_code: 202,
          body: "",
          headers: []
-       }}
+       })}
     end)
 
     assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
   end
 
   test "when HTTP client returns an error" do
-    FinchMock
-    |> expect(:request, fn _req, _name, _opts ->
-      {:error, %Mint.TransportError{reason: :timeout}}
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :S3 ->
+      {:error, %Belfrage.Clients.HTTP.Error{reason: :timeout}}
     end)
 
     assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
