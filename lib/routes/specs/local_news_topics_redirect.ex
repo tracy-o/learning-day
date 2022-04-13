@@ -1,8 +1,8 @@
 defmodule Routes.Specs.LocalNewsTopicsRedirect do
   def specs do
     %{
-      owner: "An owner",
-      runbook: "Some runbook",
+      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       pipeline: ["LocalNewsTopicsRedirect"],
       platform: Webcore
     }
