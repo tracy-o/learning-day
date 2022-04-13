@@ -1,4 +1,4 @@
-defmodule Routes.Specs.LocalNewsTopicsRedirect do
+defmodule Routes.Specs.NewsLocalNewsRedirect do
   def specs do
     %{
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
