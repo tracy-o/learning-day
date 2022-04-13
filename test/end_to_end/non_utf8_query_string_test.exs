@@ -124,6 +124,7 @@ defmodule NonUtf8QueryStringTest do
       )
     end)
 
+    # TODO the invalid string is actually causing the logger to fail (because the string is not a valid string!)
     assert_raise Plug.Conn.WrapperError, "** (ErlangError) Erlang error: {:invalid_string, <<102, 111, 160>>}", fn ->
       Router.call(conn, [])
     end

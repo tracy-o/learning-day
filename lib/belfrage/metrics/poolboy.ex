@@ -3,9 +3,9 @@ defmodule Belfrage.Metrics.Poolboy do
   This module is called by `:telemetry_poller` to periodically collect metrics
   of `:poolboy` pools.
   """
+  require Logger
 
   alias Belfrage.Metrics
-  alias Belfrage.Event
 
   @max_pool_saturation 100
 
@@ -64,10 +64,10 @@ defmodule Belfrage.Metrics.Poolboy do
     pool_saturation(available, overflow, monitors)
   catch
     :exit, {:timeout, {:gen_server, :call, [^pid_or_name, :status]}} ->
-      Event.record(:log, :error, %{
-        msg:
-          "The :poolboy.status/1 call timed out during the saturation calculation of the pool: #{inspect(pid_or_name)}"
-      })
+      Logger.log(
+        :error,
+        "The :poolboy.status/1 call timed out during the saturation calculation of the pool: #{inspect(pid_or_name)}"
+      )
 
       @max_pool_saturation
   end

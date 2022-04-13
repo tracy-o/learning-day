@@ -1,4 +1,6 @@
 defmodule Belfrage.Processor do
+  require Logger
+
   alias Belfrage.{
     RouteStateRegistry,
     Struct,
@@ -8,7 +10,6 @@ defmodule Belfrage.Processor do
     Cache,
     ResponseTransformers,
     Allowlist,
-    Event,
     Personalisation,
     CacheControl,
     Metrics,
@@ -169,14 +170,14 @@ defmodule Belfrage.Processor do
   defp route_state_state_failure do
     Belfrage.Event.record(:metric, :increment, "error.route_state.state")
 
-    Belfrage.Event.record(:log, :error, "Error retrieving route_state state")
+    Logger.log(:error, "Error retrieving route_state state")
 
     raise "Failed to load route_state state."
   end
 
   defp maybe_log_response_status(struct = %Struct{response: %Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
-    Event.record(:log, :warn, "#{http_status} error from origin", cloudwatch: true)
+    Logger.log(:warn, "#{http_status} error from origin", cloudwatch: true)
     struct
   end
 

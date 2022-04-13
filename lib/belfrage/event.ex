@@ -2,6 +2,7 @@ defmodule Belfrage.Event do
   @moduledoc """
   Record metrics & logs.
   """
+  require Logger
 
   @dimension_opts [:request_id, :route_state_id]
 
@@ -36,15 +37,6 @@ defmodule Belfrage.Event do
 
   """
   def record(type, level, msg, opts \\ [])
-
-  def record(:log, level, msg, cloudwatch: true) do
-    Stump.log(level, msg, cloudwatch: true)
-  end
-
-  def record(:log, level, msg, _opts) do
-    Stump.log(level, msg)
-    Stump.log(level, msg, cloudwatch: true)
-  end
 
   def record(:metric, type, metric, opts) do
     apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
@@ -85,7 +77,7 @@ defmodule Belfrage.Event do
   defp build_dimensions(opts) do
     opts
     |> Keyword.take(@dimension_opts)
-    |> Enum.into(Stump.metadata())
+    |> Enum.into(Map.new(Logger.metadata()))
   end
 
   defmacro record(key, do: yield) do

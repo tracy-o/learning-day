@@ -1,5 +1,6 @@
 defmodule Belfrage.Services.Webcore do
-  alias Belfrage.{Struct, Event, Metrics}
+  require Logger
+  alias Belfrage.{Struct, Metrics}
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
@@ -78,8 +79,7 @@ defmodule Belfrage.Services.Webcore do
   end
 
   def build_response(invalid_response) do
-    Event.record(:log, :debug, %{
-      msg: "Received an invalid response from web core",
+    Logger.log(:debug, "Received an invalid response from web core", %{
       web_core_response: invalid_response
     })
 

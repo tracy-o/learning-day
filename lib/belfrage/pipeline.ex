@@ -1,4 +1,5 @@
 defmodule Belfrage.Pipeline do
+  require Logger
   alias Belfrage.Struct
 
   def process(struct = %Struct{private: %Struct.Private{pipeline: [first | rest]}}) do
@@ -21,8 +22,7 @@ defmodule Belfrage.Pipeline do
   defp call_500(struct, msg) do
     Belfrage.Event.record(:metric, :increment, "error.pipeline.process")
 
-    Belfrage.Event.record(:log, :error, %{
-      msg: "Transformer returned an early error",
+    Logger.log(:error, "Transformer returned an early error", %{
       struct: Struct.loggable(struct)
     })
 
@@ -32,8 +32,7 @@ defmodule Belfrage.Pipeline do
   def handle_error(struct) do
     Belfrage.Event.record(:metric, :increment, "error.pipeline.process.unhandled")
 
-    Belfrage.Event.record(:log, :error, %{
-      msg: "Transformer did not return a valid response tuple",
+    Logger.log(:error, "Transformer did not return a valid response tuple", %{
       struct: Struct.loggable(struct)
     })
 

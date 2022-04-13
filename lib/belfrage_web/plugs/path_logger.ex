@@ -7,7 +7,7 @@ defmodule BelfrageWeb.Plugs.PathLogger do
   def init(opts), do: opts
 
   def call(conn = %{request_path: path}, _opts) do
-    Stump.metadata(path: path)
+    Logger.metadata(path: path)
     conn
   end
 end

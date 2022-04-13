@@ -62,7 +62,6 @@ defmodule Belfrage.MixProject do
       {:machine_gun, git: "https://github.com/bbc/machine_gun.git"},
       {:mox, "~> 1.0.0", only: @test_envs},
       {:plug_cowboy, "~> 2.5"},
-      {:stump, "~> 1.7"},
       {:sweet_xml, "~> 0.6"},
       {:cachex, "~> 3.1"},
       {:poison, "~> 4.0", override: true},

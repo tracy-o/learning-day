@@ -3,6 +3,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   - Parses the Cache-Control header, and saves result to `struct.response.cache_directive`
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
+  require Logger
 
   alias Belfrage.{CacheControl, Struct, Struct.Private, Metrics.Statix, Event}
   alias Belfrage.Behaviours.ResponseTransformer
@@ -59,7 +60,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   end
 
   defp cache_directive(cache_control = %Belfrage.CacheControl{cacheability: "public"}, _ttl_multiplier, true) do
-    Stump.log(
+    Logger.log(
       :info,
       "The request is personalised, however the response cache-control header is set to \"public\" - setting cacheability to \"private\""
     )

@@ -3,6 +3,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
   This module gets credentials for accessing the Webcore lambda by assuming the
   configured IAM role.
   """
+  require Logger
 
   alias Belfrage.{AWS, Event, Metrics}
   @aws Application.get_env(:belfrage, :aws)
@@ -32,7 +33,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
               }
           end
 
-        Event.record(:log, :error, error_data)
+        Logger.log(:error, "", error_data)
         Event.record(:metric, :increment, "clients.lambda.assume_role_failure")
 
         {:error, :failed_to_fetch_credentials}

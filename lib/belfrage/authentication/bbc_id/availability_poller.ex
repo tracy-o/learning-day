@@ -5,6 +5,8 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   process.
   """
 
+  require Logger
+
   use GenServer
 
   alias Belfrage.Authentication.BBCID
@@ -50,7 +52,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
       {:ok, availability}
     else
       :error ->
-        Stump.log(:warn, "Couldn't determine BBC ID availability from IDCTA config: #{inspect(config)}",
+        Logger.log(:warn, "Couldn't determine BBC ID availability from IDCTA config: #{inspect(config)}",
           cloudwatch: true
         )
 

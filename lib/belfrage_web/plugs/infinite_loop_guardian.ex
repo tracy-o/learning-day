@@ -3,6 +3,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   Prevents infinite redirect loops between
   Belfrage and Mozart
   """
+  require Logger
 
   def init(opts), do: opts
 
@@ -23,8 +24,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   end
 
   defp send_404(conn) do
-    Belfrage.Event.record(:log, :error, %{
-      msg: "Returned a 404 as infinite Belfrage/Mozart loop detected",
+    Logger.log(:error, "Returned a 404 as infinite Belfrage/Mozart loop detected", %{
       request_path: conn.request_path
     })
 

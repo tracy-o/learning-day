@@ -21,7 +21,7 @@ defmodule Belfrage.EventTest do
     end
 
     test "uses request_id from logger metadata" do
-      Stump.metadata(request_id: "req-6789")
+      Logger.metadata(request_id: "req-6789")
       event = Event.new(:log, :debug, :msg)
       assert event.request_id == "req-6789"
       assert event.dimensions == %{request_id: "req-6789"}
@@ -34,7 +34,7 @@ defmodule Belfrage.EventTest do
       event = Event.new(:log, :debug, :msg, request_id: "req-12345", route_state_id: "route_state-123")
       assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-12345"}
 
-      Stump.metadata(request_id: "req-6789")
+      Logger.metadata(request_id: "req-6789")
       event = Event.new(:log, :debug, :msg, route_state_id: "route_state-123")
       assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-6789"}
     end
@@ -62,7 +62,7 @@ defmodule Belfrage.EventTest do
     end
 
     test "uses request_id from logger metadata" do
-      Stump.metadata(request_id: "req-6789")
+      Logger.metadata(request_id: "req-6789")
       event = Event.new(:metric, :increment, "some_metric")
       assert event.request_id == "req-6789"
       assert event.dimensions == %{request_id: "req-6789"}
@@ -75,7 +75,7 @@ defmodule Belfrage.EventTest do
       event = Event.new(:metric, :increment, "some_metric", request_id: "req-12345", route_state_id: "route_state-123")
       assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-12345"}
 
-      Stump.metadata(request_id: "req-6789")
+      Logger.metadata(request_id: "req-6789")
       event = Event.new(:metric, :increment, "some_metric", route_state_id: "route_state-123")
       assert event.dimensions == %{route_state_id: "route_state-123", request_id: "req-6789"}
     end

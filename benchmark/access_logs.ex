@@ -6,9 +6,10 @@ defmodule Benchmark.AccessLogs do
 
   ### To run this experiment
   ```
-  	$ mix benchmark access_logs
+        $ mix benchmark access_logs
   ```
   """
+  require Logger
 
   import Plug.Conn
   import Plug.Test, only: [conn: 2]
@@ -117,7 +118,7 @@ defmodule Benchmark.AccessLogs do
   end
 
   defp record(conn) do
-    Belfrage.Event.record(:log, :info, %{
+    Logger.log(:info, "", %{
       path: conn.request_path,
       status: conn.status,
       method: conn.method,

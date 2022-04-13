@@ -1,4 +1,5 @@
 defmodule Belfrage.Authentication.JWK do
+  require Logger
   use Agent
 
   @static_keys_filenames %{
@@ -26,8 +27,7 @@ defmodule Belfrage.Authentication.JWK do
     if key do
       {:ok, alg, key}
     else
-      Belfrage.Event.record(:log, :error, %{
-        msg: "Public key not found",
+      Logger.log(:error, "Public key not found", %{
         kid: kid,
         alg: alg
       })

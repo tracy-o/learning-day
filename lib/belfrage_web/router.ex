@@ -1,4 +1,5 @@
 defmodule BelfrageWeb.Router do
+  require Logger
   use Plug.Router
   use Plug.ErrorHandler
   use Statix
@@ -7,7 +8,7 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.ProductionEnvironment
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
-  alias Belfrage.{Event, Metrics}
+  alias Belfrage.{Metrics}
 
   plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
   plug(Plugs.InfiniteLoopGuardian)
@@ -95,8 +96,7 @@ defmodule BelfrageWeb.Router do
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
     status = router_status(reason)
 
-    Event.record(:log, :error, %{
-      msg: "Router Service returned a #{status} status",
+    Logger.error("Router Service returned a #{status} status", %{
       kind: kind,
       reason: reason,
       stack: Exception.format_stacktrace(stack),
@@ -121,16 +121,14 @@ defmodule BelfrageWeb.Router do
 
   defp log_invalid_utf8(conn, _opts) do
     if invalid_utf8?(conn.request_path) do
-      Event.record(:log, :warn, %{
-        msg: "Invalid UTF8 character in request path",
+      Logger.log(:warn, "Invalid UTF8 character in request path", %{
         request_path: conn.request_path,
         query_string: conn.query_string
       })
     end
 
     if invalid_utf8?(conn.query_string) do
-      Event.record(:log, :warn, %{
-        msg: "Invalid UTF8 character in query string",
+      Logger.log(:warn, "Invalid UTF8 character in query string", %{
         request_path: conn.request_path,
         query_string: conn.query_string
       })
