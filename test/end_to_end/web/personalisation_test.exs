@@ -1,4 +1,4 @@
-defmodule EndToEnd.PersonalisationTest do
+defmodule EndToEnd.Web.PersonalisationTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
