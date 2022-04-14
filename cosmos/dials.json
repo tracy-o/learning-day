@@ -233,5 +233,35 @@
         "description": "Multivariate testing is disabled"
       }
     ]
+  },
+  {
+    "name": "election_banner_ni_story",
+    "description": "This switches on/off the Northern Ireland story election banner",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "The Northern Ireland story election banner will be enabled"
+      },
+      {
+        "value": "off",
+        "description": "The Northern Ireland story election banner will be disabled"
+      }
+    ]
+  },
+  {
+    "name": "election_banner_council_story",
+    "description": "This switches on/off the council story election banner",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "The council story election banner will be enabled"
+      },
+      {
+        "value": "off",
+        "description": "The council story election banner will be disabled"
+      }
+    ]
   }
 ]

@@ -87,7 +87,9 @@ config :belfrage,
     "datalab_machine_recommendations" => Belfrage.Dials.DatalabMachineRecommendations,
     "chameleon" => Belfrage.Dials.Chameleon,
     "cache_enabled" => Belfrage.Dials.CacheEnabled,
-    "mvt_enabled" => Belfrage.Dials.MvtEnabled
+    "mvt_enabled" => Belfrage.Dials.MvtEnabled,
+    "election_banner_ni_story" => Belfrage.Dials.ElectionBannerNiStory,
+    "election_banner_council_story" => Belfrage.Dials.ElectionBannerCouncilStory
   },
   pool_metric_rate: 10_000,
   authentication: %{
