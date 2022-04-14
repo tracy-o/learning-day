@@ -23,7 +23,7 @@ defmodule Belfrage.Transformers.ElectionBannerNiStoryTest do
   end
 
   describe "when the ElectionBannerNiStory dial is off" do
-    test "election-banner-ni-story: 'on' exists in headers" do
+    test "election-banner-ni-story: 'off' exists in headers" do
       stub_dial(:election_banner_ni_story, "off")
 
       {:ok, struct} = ElectionBannerNiStory.call([], @struct)
