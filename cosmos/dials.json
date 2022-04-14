@@ -233,5 +233,20 @@
         "description": "Multivariate testing is disabled"
       }
     ]
+  },
+  {
+    "name": "election_banner_ni_story",
+    "description": "This enables the election_banner_ni_story header being sent downstream",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "The election_banner_ni_story will be sent downstream"
+      },
+      {
+        "value": "off",
+        "description": "The election_banner_ni_story will not be sent downstream"
+      }
+    ]
   }
 ]
