@@ -24,6 +24,6 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
   end
 
   defp stub_jwk_api(response) do
-    stub(JsonClient, :get, fn _url, "jwk", :AccountAuthentication -> response end)
+    stub(JsonClient, :get, fn _url, JWK.Poller, :AccountAuthentication -> response end)
   end
 end

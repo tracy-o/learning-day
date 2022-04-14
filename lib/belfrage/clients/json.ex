@@ -4,18 +4,18 @@ defmodule Belfrage.Clients.Json do
   @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  @callback get(url :: String.t(), api_name :: String.t(), pool_name :: Atom.t()) :: {:ok, map()} | {:error, term()}
+  @callback get(url :: String.t(), api :: Atom.t(), pool_name :: Atom.t()) :: {:ok, map()} | {:error, term()}
 
-  def get(url, api_name, pool_name) do
-    case make_request(url, api_name, pool_name) do
-      {:ok, data} -> decode(data, api_name)
+  def get(url, api, pool_name) do
+    case make_request(url, api, pool_name) do
+      {:ok, data} -> decode(data, api)
       {:error, reason} -> {:error, reason}
     end
   end
 
-  defp make_request(url, api_name, pool_name) do
+  defp make_request(url, api, pool_name) do
     response =
-      Metrics.duration([:request, String.to_atom(api_name)], fn ->
+      Metrics.duration([:request, String.to_atom(api.name)], fn ->
         @http_client.execute(
           %Clients.HTTP.Request{
             method: :get,
@@ -28,48 +28,43 @@ defmodule Belfrage.Clients.Json do
         )
       end)
 
-    handle_response(response, api_name)
+    handle_response(response, api)
   end
 
-  defp handle_response(http_response, api_name)
+  defp handle_response(http_response, api)
 
-  defp handle_response({:ok, %Clients.HTTP.Response{status_code: 200, body: body}}, "jwk") do
-    Stump.log(:info, "JWK keys fetched successfully", cloudwatch: true)
+  defp handle_response({:ok, %Clients.HTTP.Response{status_code: 200, body: body}}, api) do
+    Stump.log(:info, api.success_message, cloudwatch: true)
     {:ok, body}
   end
 
-  defp handle_response({:ok, %Clients.HTTP.Response{status_code: 200, body: body}}, "idcta_config") do
-    Stump.log(:info, "IDCTA config fetched successfully", cloudwatch: true)
-    {:ok, body}
-  end
-
-  defp handle_response({:ok, %Clients.HTTP.Response{status_code: status_code}}, api_name) do
-    Stump.log(:warn, "Non 200 Status Code (#{status_code}) from #{api_name}", cloudwatch: true)
+  defp handle_response({:ok, %Clients.HTTP.Response{status_code: status_code}}, api) do
+    Stump.log(:warn, "Non 200 Status Code (#{status_code}) from #{api.name}", cloudwatch: true)
     {:error, status_code}
   end
 
-  defp handle_response({:ok, _response}, api_name) do
-    Stump.log(:warn, "Unknown response from #{api_name}", cloudwatch: true)
+  defp handle_response({:ok, _response}, api) do
+    Stump.log(:warn, "Unknown response from #{api.name}", cloudwatch: true)
     {:error, "unknown response"}
   end
 
-  defp handle_response({:error, %Clients.HTTP.Error{reason: reason}}, api_name) do
-    Stump.log(:warn, "Error received from #{api_name}: #{reason}", cloudwatch: true)
+  defp handle_response({:error, %Clients.HTTP.Error{reason: reason}}, api) do
+    Stump.log(:warn, "Error received from #{api.name}: #{reason}", cloudwatch: true)
     {:error, reason}
   end
 
-  defp handle_response({:error, _http_error}, api_name) do
-    Stump.log(:warn, "Unknown error received from #{api_name}", cloudwatch: true)
+  defp handle_response({:error, _http_error}, api) do
+    Stump.log(:warn, "Unknown error received from #{api.name}", cloudwatch: true)
     {:error, "unknown http error"}
   end
 
-  defp decode(json_data, api_name) do
+  defp decode(json_data, api) do
     case @json_codec.decode(json_data) do
       {:ok, json} ->
         {:ok, json}
 
       {:error, _exception} ->
-        Stump.log(:warn, "Error while decoding data from #{api_name}", cloudwatch: true)
+        Stump.log(:warn, "Error while decoding data from #{api.name}", cloudwatch: true)
         {:error, "JSON decode error"}
     end
   end

@@ -22,12 +22,15 @@ defmodule Belfrage.Authentication.JWK.Poller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, %{"keys" => keys}} <- @client.get(@jwk_uri, "jwk", @http_pool) do
+    with {:ok, %{"keys" => keys}} <- @client.get(@jwk_uri, __MODULE__, @http_pool) do
       JWK.update(keys)
     end
 
     {:noreply, interval}
   end
+
+  def success_message, do: "JWK keys fetched successfully"
+  def name, do: "jwk"
 
   defp schedule_polling(delay \\ 0) do
     Process.send_after(self(), :poll, delay)

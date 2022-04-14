@@ -6,6 +6,7 @@ defmodule Belfrage.Client.JsonTest do
   import Belfrage.Test.MetricsHelper, only: [intercept_metric: 2]
 
   alias Belfrage.Clients.{HTTP, HTTPMock, Json, JsonStub}
+  alias Belfrage.Authentication.{JWK, BBCID}
 
   @authentication Application.get_env(:belfrage, :authentication)
 
@@ -38,8 +39,8 @@ defmodule Belfrage.Client.JsonTest do
       HTTPMock
       |> expect(:execute, fn ^expected_request, :AccountAuthentication -> @ok_response end)
 
-      assert JsonStub.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) ==
-               Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication)
+      assert JsonStub.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) ==
+               Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication)
     end
 
     test "for IDCTA Config requests it returns the config from the api" do
@@ -58,49 +59,49 @@ defmodule Belfrage.Client.JsonTest do
         {:ok, %HTTP.Response{status_code: 200, body: Jason.encode!(%{"id-availability": "RED"})}}
       end)
 
-      assert JsonStub.get(@authentication["idcta_config_uri"], "idcta_config", :AccountAuthentication) ==
-               Json.get(@authentication["idcta_config_uri"], "idcta_config", :AccountAuthentication)
+      assert JsonStub.get(@authentication["idcta_config_uri"], BBCID.AvailabilityPoller, :AccountAuthentication) ==
+               Json.get(@authentication["idcta_config_uri"], BBCID.AvailabilityPoller, :AccountAuthentication)
     end
 
     test "logs 200-status response" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @ok_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "JWK keys fetched successfully"
     end
 
     test "logs non 200-status response" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @not_200_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "Non 200 Status Code (500) from jwk"
     end
 
     test "logs unknown response" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @unknown_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "Unknown response from jwk"
     end
 
     test "logs error response" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @error_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "Error received from jwk: timeout"
     end
 
     test "logs unknown http error" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @error_unknown_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "Unknown error received from jwk"
     end
 
     test "handles malformed JSON" do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @malformed_json_response end)
 
-      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication) end) =~
+      assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
                "Error while decoding data from jwk"
     end
 
@@ -109,7 +110,7 @@ defmodule Belfrage.Client.JsonTest do
 
       metric =
         intercept_metric([:request, :jwk, :stop], fn ->
-          Json.get(@authentication["account_jwk_uri"], "jwk", :AccountAuthentication)
+          Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication)
         end)
 
       assert {_, %{duration: duration}, _} = metric
