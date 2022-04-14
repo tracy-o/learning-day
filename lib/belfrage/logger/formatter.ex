@@ -30,7 +30,7 @@ defmodule Belfrage.Logger.Formatter do
             # TODO The old logs would sometimes put things under the "metadata" key, and sometimes at the top-level.
             metadata: %{},
             # TODO sometimes we used "msg" and sometimes "message" when logging with Stump, pick one.
-            msg: :erlang.iolist_to_binary(message)
+            message: :erlang.iolist_to_binary(message)
           },
           to_json(Map.new(take_metadata(metadata)))
         )

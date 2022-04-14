@@ -151,7 +151,7 @@ defmodule Belfrage.Metrics.PoolboyTest do
 
       assert log =~ "\"level\":\"error\""
       assert log =~ "\"metadata\":{}"
-      assert log =~ "\"msg\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
+      assert log =~ "\"message\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
     end
   end
 
