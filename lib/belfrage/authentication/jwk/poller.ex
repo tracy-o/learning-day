@@ -3,7 +3,9 @@ defmodule Belfrage.Authentication.JWK.Poller do
 
   alias Belfrage.Authentication.JWK
 
-  @auth_client Application.get_env(:belfrage, :authentication_client)
+  @client Application.get_env(:belfrage, :json_client)
+  @jwk_uri Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
+  @http_pool :AccountAuthentication
   @interval 3_600_000
 
   def start_link(opts \\ []) do
@@ -20,7 +22,7 @@ defmodule Belfrage.Authentication.JWK.Poller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, %{"keys" => keys}} <- @auth_client.get_jwk_keys() do
+    with {:ok, %{"keys" => keys}} <- @client.get(@jwk_uri, "jwk", @http_pool) do
       JWK.update(keys)
     end
 

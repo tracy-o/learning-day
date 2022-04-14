@@ -7,7 +7,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
 
   alias Belfrage.Authentication.BBCID
   alias Belfrage.Authentication.BBCID.AvailabilityPoller
-  alias Belfrage.Clients.AuthenticationMock, as: AuthenticationClient
+  alias Belfrage.Clients.JsonMock, as: JsonClient
 
   test "fetches and updates the availability of BBC ID" do
     assert BBCID.available?()
@@ -43,6 +43,6 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
   end
 
   defp stub_idcta_config(config) do
-    stub(AuthenticationClient, :get_idcta_config, fn -> config end)
+    stub(JsonClient, :get, fn _uri, "idcta_config", :AccountAuthentication -> config end)
   end
 end
