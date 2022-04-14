@@ -21,7 +21,7 @@ defmodule Belfrage.Logger.Formatter do
 
   def format(level, message, timestamp, metadata) do
     [
-      Jason.encode!(
+      :jiffy.encode(
         Map.merge(
           %{
             # This is what stump was doing
@@ -43,7 +43,7 @@ defmodule Belfrage.Logger.Formatter do
 
   defp take_metadata(metadata) do
     # TODO omitting for match previous behaviour. It would be useful to log some of these in the future.
-    Keyword.drop(metadata, [:erl_level, :time, :application, :file, :line, :function, :module, :domain, :gl, :pid, :mfa])
+    Keyword.drop(metadata, [:erl_level, :time, :application, :file, :line, :function, :module, :domain, :gl, :pid, :mfa, :cloudwatch])
   end
 
   defp to_json(val = %{__struct__: _}) do
