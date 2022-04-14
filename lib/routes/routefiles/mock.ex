@@ -78,6 +78,10 @@ defroutefile "Mock", "test" do
 
   handle("/proxy-on-joan", using: "NewsArticlePage", examples: ["/proxy-on-joan"])
 
+  handle("/app-request/p/:name", using: "PersonalisedFablData", examples: [])
+
+  handle("/app-request/:name", using: "FablData", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()

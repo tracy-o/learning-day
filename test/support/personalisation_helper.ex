@@ -6,6 +6,8 @@ defmodule Belfrage.Test.PersonalisationHelper do
   alias Belfrage.Struct.Request
   alias Fixtures.AuthToken
 
+  @token AuthToken.valid_access_token()
+
   @doc """
   Make the passed request authenticated. Accepts a %Struct{}, %Struct.Request{}
   or %Plug.Conn{} so can be used in unit and end-to-end tests.
@@ -59,6 +61,40 @@ defmodule Belfrage.Test.PersonalisationHelper do
     conn
     |> authenticate_request()
     |> Conn.put_req_header("cookie", "ckns_atkn=#{token}")
+  end
+
+  def personalise_app_request(data, token \\ @token)
+
+  def personalise_app_request(struct = %Struct{}, token) do
+    Struct.add(struct, :request, personalise_app_request(struct.request, token))
+  end
+
+  def personalise_app_request(request = %Request{}, token) do
+    %Request{
+      request
+      | raw_headers: %{
+          "authorization" => "Bearer #{token}",
+          "x-authentication-provider" => "idv5"
+        }
+    }
+  end
+
+  def personalise_app_request(conn = %Conn{}, token) do
+    conn
+    |> Conn.put_req_header("authorization", "Bearer #{token}")
+    |> Conn.put_req_header("x-authentication-provider", "idv5")
+  end
+
+  def unpersonalise_app_request(struct = %Struct{}) do
+    Struct.add(struct, :request, unpersonalise_app_request(struct.request))
+  end
+
+  def unpersonalise_app_request(request = %Request{}) do
+    %Request{request | raw_headers: Map.drop(request.raw_headers, ["authorization"])}
+  end
+
+  def unpersonalise_app_request(conn = %Conn{}) do
+    Conn.delete_req_header(conn, "authorization")
   end
 
   @doc """
