@@ -12,5 +12,6 @@
 	"chameleon": "off",
 	"cache_enabled": "true",
 	"mvt_enabled": "true",
-	"election_banner_ni_story": "off"
+	"election_banner_ni_story": "off",
+	"election_banner_council_story": "off"
 }

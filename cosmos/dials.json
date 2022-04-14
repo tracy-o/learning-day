@@ -236,16 +236,31 @@
   },
   {
     "name": "election_banner_ni_story",
-    "description": "This enables the election_banner_ni_story header being sent downstream",
+    "description": "This sets the value of the election_banner_ni_story header being sent downstream",
     "default-value": "off",
     "values": [
       {
         "value": "on",
-        "description": "The election_banner_ni_story will be sent downstream"
+        "description": "The election_banner_ni_story will be sent downstream as 'on'"
       },
       {
         "value": "off",
-        "description": "The election_banner_ni_story will not be sent downstream"
+        "description": "The election_banner_ni_story will be sent downstream as 'off'"
+      }
+    ]
+  },
+  {
+    "name": "election_banner_council_story",
+    "description": "This sets the value of the election_banner_council_story header being sent downstream",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "The election_banner_council_story will be sent downstream as 'on'"
+      },
+      {
+        "value": "off",
+        "description": "The election_banner_council_story will be sent downstream as 'off'"
       }
     ]
   }
