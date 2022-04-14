@@ -43,7 +43,20 @@ defmodule Belfrage.Logger.Formatter do
 
   defp take_metadata(metadata) do
     # TODO omitting for match previous behaviour. It would be useful to log some of these in the future.
-    Keyword.drop(metadata, [:erl_level, :time, :application, :file, :line, :function, :module, :domain, :gl, :pid, :mfa, :cloudwatch])
+    Keyword.drop(metadata, [
+      :erl_level,
+      :time,
+      :application,
+      :file,
+      :line,
+      :function,
+      :module,
+      :domain,
+      :gl,
+      :pid,
+      :mfa,
+      :cloudwatch
+    ])
   end
 
   defp to_json(val = %{__struct__: _}) do
