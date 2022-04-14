@@ -53,6 +53,7 @@ defmodule Belfrage.MixProject do
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
       {:eljiffy, "~> 1.3.0"},
+      {:jason, "~> 1.0"},
       {:ex_aws, "~> 2.0", [env: :prod, repo: "hexpm", hex: "ex_aws"]},
       {:ex_aws_lambda, "~> 2.0.2"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
