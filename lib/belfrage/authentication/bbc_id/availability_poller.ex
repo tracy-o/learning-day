@@ -40,7 +40,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   def name, do: "idcta_config"
 
   defp get_availability() do
-    with {:ok, config} <- @client.get(@idcta_uri, "idcta_config", @http_pool) do
+    with {:ok, config} <- @client.get(@idcta_uri, __MODULE__, @http_pool) do
       fetch_availability_from_config(config)
     end
   end

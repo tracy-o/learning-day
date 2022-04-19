@@ -3,12 +3,12 @@ defmodule Belfrage.Clients.JsonStub do
   alias Belfrage.Authentication.{JWK, BBCID}
 
   @impl true
-  def get(url, JWK.Poller, :AccountAuthentication) do
+  def get(_url, JWK.Poller, :AccountAuthentication) do
     {:ok, %{"keys" => Fixtures.AuthToken.keys()}}
   end
 
   @impl true
-  def get(url, BBCID.AvailabilityPoller, :AccountAuthentication) do
+  def get(_url, BBCID.AvailabilityPoller, :AccountAuthentication) do
     {:ok, %{"id-availability" => "RED"}}
   end
 end
