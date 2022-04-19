@@ -5,7 +5,7 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [wait_for: 1]
 
-  alias Belfrage.Clients.AuthenticationMock, as: AuthenticationClient
+  alias Belfrage.Clients.JsonMock, as: JsonClient
   alias Belfrage.Authentication.JWK
   alias Belfrage.Authentication.JWK.Poller
 
@@ -24,6 +24,6 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
   end
 
   defp stub_jwk_api(response) do
-    stub(AuthenticationClient, :get_jwk_keys, fn -> response end)
+    stub(JsonClient, :get, fn _uri, JWK.Poller, :AccountAuthentication -> response end)
   end
 end

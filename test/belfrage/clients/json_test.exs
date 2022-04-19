@@ -67,7 +67,7 @@ defmodule Belfrage.Client.JsonTest do
       HTTPMock |> expect(:execute, fn _, :AccountAuthentication -> @ok_response end)
 
       assert capture_log(fn -> Json.get(@authentication["account_jwk_uri"], JWK.Poller, :AccountAuthentication) end) =~
-               "JWK keys fetched successfully"
+               "jwk polled successfully"
     end
 
     test "logs non 200-status response" do
