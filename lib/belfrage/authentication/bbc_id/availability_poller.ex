@@ -10,10 +10,8 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   alias Belfrage.Authentication.BBCID
 
   @interval Application.get_env(:belfrage, :bbc_id_availability_poll_interval)
+  @auth_client Application.get_env(:belfrage, :authentication_client)
   @availability_states %{"GREEN" => true, "RED" => false}
-  @client Application.get_env(:belfrage, :json_client)
-  @idcta_uri Application.get_env(:belfrage, :authentication)["idcta_config_uri"]
-  @http_pool :AccountAuthentication
 
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, Keyword.get(opts, :interval, @interval), name: Keyword.get(opts, :name, __MODULE__))
@@ -25,6 +23,16 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
     {:ok, interval}
   end
 
+  def get_availability() do
+    with {:ok, config} <- @auth_client.get_idcta_config() do
+      fetch_availability_from_config(config)
+    end
+  end
+
+  defp schedule_polling(interval) do
+    Process.send_after(self(), :poll, interval)
+  end
+
   @impl true
   def handle_info(:poll, interval) do
     schedule_polling(interval)
@@ -34,19 +42,6 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
     end
 
     {:noreply, interval}
-  end
-
-  def success_message, do: "IDCTA Config fetched successfully"
-  def name, do: "idcta_config"
-
-  defp get_availability() do
-    with {:ok, config} <- @client.get(@idcta_uri, __MODULE__, @http_pool) do
-      fetch_availability_from_config(config)
-    end
-  end
-
-  defp schedule_polling(interval) do
-    Process.send_after(self(), :poll, interval)
   end
 
   defp fetch_availability_from_config(config) do
