@@ -44,7 +44,8 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp log(reason, struct) do
-    Logger.log(:error, "Fabl Service request error", %{
+    Logger.log(:error, "", %{
+      msg: "Fabl Service request error",
       reason: reason,
       struct: Struct.loggable(struct)
     })

@@ -96,7 +96,8 @@ defmodule BelfrageWeb.Router do
   def handle_errors(conn, %{kind: kind, reason: reason, stack: stack}) do
     status = router_status(reason)
 
-    Logger.error("Router Service returned a #{status} status", %{
+    Logger.error("", %{
+      msg: "Router Service returned a #{status} status",
       kind: kind,
       reason: reason,
       stack: Exception.format_stacktrace(stack),
@@ -121,14 +122,16 @@ defmodule BelfrageWeb.Router do
 
   defp log_invalid_utf8(conn, _opts) do
     if invalid_utf8?(conn.request_path) do
-      Logger.log(:warn, "Invalid UTF8 character in request path", %{
+      Logger.log(:warn, "", %{
+        msg: "Invalid UTF8 character in request path",
         request_path: conn.request_path,
         query_string: conn.query_string
       })
     end
 
     if invalid_utf8?(conn.query_string) do
-      Logger.log(:warn, "Invalid UTF8 character in query string", %{
+      Logger.log(:warn, "", %{
+        msg: "Invalid UTF8 character in query string",
         request_path: conn.request_path,
         query_string: conn.query_string
       })

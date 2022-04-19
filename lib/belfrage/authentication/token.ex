@@ -30,8 +30,8 @@ defmodule Belfrage.Authentication.Token do
   end
 
   defp handle_decoding_error(message: message, claim: claim, claim_val: claim_val) do
-    Logger.log(:warn, "Claim validation failed", %{
-      details: message,
+    Logger.log(:warn, message, %{
+      msg: "Claim validation failed",
       claim_val: claim_val,
       claim: claim
     })

@@ -80,7 +80,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
 
       assert log =~ ~r/\"level\":\"info\"/
       assert log =~ ~r/\"metadata\":{}/
-      assert log =~ ~r/\"message\":\"Content was pre-cache compressed\"/
+      assert log =~ ~r/\"msg\":\"Content was pre-cache compressed\"/
       assert log =~ ~r/\"path\":\"\/non-compressed\/path\"/
       assert log =~ ~r/\"platform\":\"Elixir.SomePlatform\"/
     end

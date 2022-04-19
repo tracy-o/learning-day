@@ -48,7 +48,8 @@ defmodule Belfrage.Clients.CCP do
         Statix.increment("service.S3.response.#{status_code}", 1, tags: Event.global_dimensions())
         Event.record(:metric, :increment, "ccp.unexpected_response")
 
-        Logger.log(:error, "Received an unexpected response from S3.", %{
+        Logger.log(:error, "", %{
+          msg: "Received an unexpected response from S3.",
           response: response
         })
 
@@ -57,7 +58,8 @@ defmodule Belfrage.Clients.CCP do
       {:error, http_error} ->
         Event.record(:metric, :increment, "ccp.fetch_error")
 
-        Logger.log(:error, "Failed to fetch from S3.", %{
+        Logger.log(:error, "", %{
+          msg: "Failed to fetch from S3.",
           error: http_error
         })
 
@@ -93,7 +95,7 @@ defmodule Belfrage.Clients.CCP do
 
       false ->
         Belfrage.Event.record(:metric, :increment, "ccp.put_error")
-        Logger.log(:error, "Failed to send_nosuspend to CCP")
+        Logger.log(:error, "", %{msg: "Failed to send_nosuspend to CCP"})
         :error
     end
   end
@@ -107,7 +109,7 @@ defmodule Belfrage.Clients.CCP do
   end
 
   defp target_pid(unexpected_target) do
-    Logger.log(:error, "Unexpected ccp target", %{error: unexpected_target})
+    Logger.log(:error, "", %{msg: "Unexpected ccp target", error: unexpected_target})
   end
 
   defp cast_msg(req), do: {:"$gen_cast", req}

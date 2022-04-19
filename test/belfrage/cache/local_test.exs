@@ -184,7 +184,7 @@ defmodule Belfrage.Cache.LocalTest do
 
       assert captured_log =~ "level\":\"error\""
       assert captured_log =~ "\"metadata\":{}"
-      assert captured_log =~ "\"message\":\"Attempt to fetch from the local cache failed: :some_reason"
+      assert captured_log =~ "\"msg\":\"Attempt to fetch from the local cache failed: :some_reason"
     end
 
     test "the correct event is emitted", %{struct: struct, caching_module: caching_module} do

@@ -16,7 +16,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
 
   @impl true
   def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => content_encoding}}}) do
-    Logger.log(:error, "Cannot handle compression type", %{
+    Logger.log(:error, "", %{
+      msg: "Cannot handle compression type",
       content_encoding: content_encoding
     })
 
@@ -40,7 +41,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
     Metrics.duration(:pre_cache_compression, fn ->
       Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
 
-      Logger.log(:info, "Content was pre-cache compressed", %{
+      Logger.log(:info, "", %{
+        msg: "Content was pre-cache compressed",
         path: path,
         platform: platform
       })

@@ -28,7 +28,8 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   def routefile(cosmos_env, mix_env) do
-    Logger.log(:error, "Using Live Routefile as catch all", %{
+    Logger.log(:error, "", %{
+      msg: "Using Live Routefile as catch all",
       cosmos_env: cosmos_env,
       mix_env: mix_env
     })

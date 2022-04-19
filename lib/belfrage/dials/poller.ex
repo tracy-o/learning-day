@@ -39,7 +39,8 @@ defmodule Belfrage.Dials.Poller do
         Belfrage.Dials.Supervisor.notify(:dials_changed, dials)
 
       {:error, reason} ->
-        Logger.log(:error, "Unable to read dials", %{
+        Logger.log(:error, "", %{
+          msg: "Unable to read dials",
           reason: reason
         })
     end

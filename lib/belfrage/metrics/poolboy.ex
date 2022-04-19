@@ -66,7 +66,11 @@ defmodule Belfrage.Metrics.Poolboy do
     :exit, {:timeout, {:gen_server, :call, [^pid_or_name, :status]}} ->
       Logger.log(
         :error,
-        "The :poolboy.status/1 call timed out during the saturation calculation of the pool: #{inspect(pid_or_name)}"
+        "",
+        %{
+          msg:
+            "The :poolboy.status/1 call timed out during the saturation calculation of the pool: #{inspect(pid_or_name)}"
+        }
       )
 
       @max_pool_saturation
