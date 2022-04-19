@@ -2,10 +2,16 @@ defmodule Belfrage.Xray.ParseTrace do
   alias AwsExRay.Trace
 
   def parse(trace_header) do
-    trace_header
-    |> String.split(";")
-    |> Enum.map(&split_key_value/1)
-    |> parse_parts()
+    parts =
+      trace_header
+      |> String.split(";")
+      |> Enum.map(&split_key_value/1)
+
+    if no_errors(parts) do
+      parse_parts(parts)
+    else
+      {:error, :invalid}
+    end
   end
 
   defp split_key_value(part) do
@@ -18,18 +24,42 @@ defmodule Belfrage.Xray.ParseTrace do
 
   defp parse_parts(key_values) do
     case key_values do
-      [["Root", root], ["Parent", parent], ["Sampled", sampled]] ->
-        {:ok, Trace.with_params(root, sampled, parent)}
+      [["Root", root], ["Parent", parent], ["Sampled", sampled]| rest] ->
+        {:ok, {Trace.with_params(root, sampled, parent), filter_extra_data(rest)}}
 
-      [["Root", root], ["Sampled", sampled]] ->
-        {:ok, Trace.with_params(root, sampled, "")}
+      [["Root", root], ["Sampled", sampled] | rest] ->
+        {:ok, {Trace.with_params(root, sampled, ""), filter_extra_data(rest)}}
+
+      [["Root", root] | rest] ->
+        sampled = AwsExRay.Util.sample?()
+        {:ok, {Trace.with_params(root, sampled, ""), filter_extra_data(rest)}}
+
+      [["Self", _self], ["Root", root] | rest] ->
+        sampled = AwsExRay.Util.sample?()
+        {:ok, {Trace.with_params(root, sampled, ""), filter_extra_data(rest)}}
 
       _ ->
         {:error, :invalid}
     end
   end
 
+  defp no_errors(parts) do
+    not Enum.any?(parts, &error?/1)
+  end
+
+  defp filter_extra_data(rest) do
+    banned_keys = ["Self", "Root", "Parent", "Sampled"]
+
+    Enum.filter(rest,&is_banned(&1, banned_keys))
+  end
+
+  defp is_banned([key, _value], banned_keys), do: key not in banned_keys
+  defp is_banned(_, _banned_keys), do: false
+
   defp parse_sampled(["Sampled", "1"]), do: ["Sampled", true]
   defp parse_sampled(["Sampled", "0"]), do: ["Sampled", false]
   defp parse_sampled(_), do: :error
+
+  defp error?(:error), do: true
+  defp error?(_), do: false
 end
