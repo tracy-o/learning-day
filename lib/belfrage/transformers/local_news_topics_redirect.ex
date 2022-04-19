@@ -1,9 +1,10 @@
 defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
   use Belfrage.Transformers.Transformer
   alias Belfrage.Transformers.LocalNewsTopicsRedirect.LocationTopicMappings
+  alias Belfrage.Helpers.StatusCode
 
   @impl true
-  def call(rest, struct) do
+  def call(_rest, struct) do
     if redirect?(struct) do
       {
         :redirect,
@@ -18,7 +19,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
         })
       }
     else
-      then_do(rest, struct)
+      {:stop_pipeline, StatusCode.put(struct, 404)}
     end
   end
 
