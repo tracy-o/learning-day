@@ -37,9 +37,6 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
 
   defp redirect(request = %Struct.Request{}) do
     IO.iodata_to_binary([
-      to_string(request.scheme),
-      "://",
-      request.host,
       "/news/topics/#{topic_id(request.path_params)}",
       Belfrage.Helpers.QueryParams.encode(request.query_params)
     ])
