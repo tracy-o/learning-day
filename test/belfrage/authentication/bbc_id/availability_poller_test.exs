@@ -21,6 +21,6 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
   end
 
   defp stub_idcta_config(config) do
-    stub(JsonClient, :get, fn _uri, "idcta_config", :AccountAuthentication -> config end)
+    stub(JsonClient, :get, fn _uri, BBCID.AvailabilityPoller, :AccountAuthentication -> config end)
   end
 end
