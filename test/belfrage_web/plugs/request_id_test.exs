@@ -7,6 +7,6 @@ defmodule BelfrageWeb.Plugs.RequestIdTest do
     assert %Plug.Conn{private: %{request_id: request_id}} = BelfrageWeb.Plugs.RequestId.call(conn, _opts = [])
     assert String.length(request_id) > 30
 
-    assert %{request_id: request_id} == Stump.metadata()
+    assert [request_id: request_id] == Logger.metadata()
   end
 end

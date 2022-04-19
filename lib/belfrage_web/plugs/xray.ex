@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.Plugs.Xray do
   @behaviour Plug
+  require Logger
   import Plug.Conn, only: [register_before_send: 2, assign: 3, get_req_header: 2]
   alias Belfrage.Xray
 
@@ -39,7 +40,7 @@ defmodule BelfrageWeb.Plugs.Xray do
         segment
 
       {:error, :invalid} ->
-        Stump.log(
+        Logger.log(
           :error,
           "failed to create segment with 'x-amzn-trace-id' header: #{trace_header}"
         )

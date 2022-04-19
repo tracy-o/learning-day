@@ -22,13 +22,13 @@ defmodule Belfrage.Cascade do
   end
 
   def fan_out(cascade = %__MODULE__{}, callback) do
-    metadata = Stump.metadata() |> Enum.into([])
+    metadata = Logger.metadata()
 
     items =
       cascade.items
       |> Enum.map(fn struct ->
         Task.async(fn ->
-          Stump.metadata(metadata)
+          Logger.metadata(metadata)
           callback.(struct)
         end)
       end)

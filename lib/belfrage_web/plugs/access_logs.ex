@@ -1,4 +1,5 @@
 defmodule BelfrageWeb.Plugs.AccessLogs do
+  require Logger
   import Plug.Conn, only: [register_before_send: 2]
   alias Belfrage.Logger.HeaderRedactor
 
@@ -9,7 +10,7 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
   end
 
   defp write_access_log(conn) do
-    Belfrage.Event.record(:log, :info, %{
+    Logger.log(:info, "", %{
       path: conn.request_path,
       status: conn.status,
       method: conn.method,

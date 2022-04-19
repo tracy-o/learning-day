@@ -146,11 +146,13 @@ defmodule Belfrage.Metrics.PoolboyTest do
     end
 
     test "logs expected message when pool status call times out" do
-      captured_log =
-        capture_log(fn -> Poolboy.track_pool_aggregates(pools: [:some_pool], pool_client: TimingOutPoolClient) end)
+      log = capture_log(fn -> Poolboy.track_pool_aggregates(pools: [:some_pool], pool_client: TimingOutPoolClient) end)
 
-      assert captured_log =~
-               "level\":\"error\",\"metadata\":{},\"msg\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
+      assert log =~ "\"level\":\"error\""
+      assert log =~ "\"metadata\":{}"
+
+      assert log =~
+               "\"msg\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
     end
   end
 

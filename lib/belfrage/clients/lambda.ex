@@ -1,8 +1,9 @@
 defmodule Belfrage.Clients.Lambda do
+  require Logger
   require Belfrage.Xray
   import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
-  alias Belfrage.{AWS, Event}
+  alias Belfrage.{AWS}
 
   @aws Application.get_env(:belfrage, :aws)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
@@ -33,8 +34,7 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp function_not_found(response) do
-    Event.record(:log, :error, %{
-      message: "Lambda function not found",
+    Logger.log(:error, "Lambda function not found", %{
       response: response.body
     })
 
@@ -42,16 +42,13 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp failed_to_invoke_lambda(nil, nil) do
-    Event.record(:log, :error, %{
-      message: "Failed to Invoke Lambda"
-    })
+    Logger.log(:error, "Failed to Invoke Lambda")
 
     {:error, :invoke_failure}
   end
 
   defp failed_to_invoke_lambda(status_code, :timeout) do
-    Event.record(:log, :error, %{
-      message: "The Lambda Invokation timed out",
+    Logger.log(:error, "The Lambda Invokation timed out", %{
       status: status_code
     })
 
@@ -59,8 +56,7 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp failed_to_invoke_lambda(status_code, response) do
-    Belfrage.Event.record(:log, :error, %{
-      message: "Failed to Invoke Lambda",
+    Logger.log(:error, "Failed to Invoke Lambda", %{
       status: status_code,
       response: inspect(response)
     })

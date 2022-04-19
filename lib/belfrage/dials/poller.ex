@@ -2,6 +2,7 @@ defmodule Belfrage.Dials.Poller do
   @moduledoc """
   Periodically read the dials file and updates the dials with its contents
   """
+  require Logger
 
   use GenServer
 
@@ -38,7 +39,7 @@ defmodule Belfrage.Dials.Poller do
         Belfrage.Dials.Supervisor.notify(:dials_changed, dials)
 
       {:error, reason} ->
-        Belfrage.Event.record(:log, :error, %{
+        Logger.log(:error, "", %{
           msg: "Unable to read dials",
           reason: reason
         })

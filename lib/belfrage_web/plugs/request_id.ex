@@ -7,7 +7,7 @@ defmodule BelfrageWeb.Plugs.RequestId do
 
   def call(conn, _opts) do
     request_id = UUID.uuid4(:hex)
-    Stump.metadata(request_id: request_id)
+    Logger.metadata(request_id: request_id)
 
     Plug.Conn.put_private(conn, :request_id, request_id)
   end

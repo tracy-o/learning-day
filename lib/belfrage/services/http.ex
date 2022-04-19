@@ -1,4 +1,5 @@
 defmodule Belfrage.Services.HTTP do
+  require Logger
   require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
@@ -152,7 +153,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp log_error(reason, struct = %Struct{}) do
-    Belfrage.Event.record(:log, :error, %{
+    Logger.log(:error, "", %{
       msg: "HTTP Service request error",
       reason: reason,
       struct: Struct.loggable(struct)

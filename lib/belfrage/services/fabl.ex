@@ -1,4 +1,5 @@
 defmodule Belfrage.Services.Fabl do
+  require Logger
   require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
@@ -43,7 +44,7 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp log(reason, struct) do
-    Belfrage.Event.record(:log, :error, %{
+    Logger.log(:error, "", %{
       msg: "Fabl Service request error",
       reason: reason,
       struct: Struct.loggable(struct)

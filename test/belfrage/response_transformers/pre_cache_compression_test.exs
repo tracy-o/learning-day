@@ -63,20 +63,26 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         }
       }
 
-      assert capture_log(fn ->
-               assert %Struct{
-                        response: %Struct.Response{
-                          body: compressed_body,
-                          http_status: 200,
-                          headers: %{
-                            "content-encoding" => "gzip"
-                          }
-                        }
-                      } = PreCacheCompression.call(struct)
+      log =
+        capture_log(fn ->
+          assert %Struct{
+                   response: %Struct.Response{
+                     body: compressed_body,
+                     http_status: 200,
+                     headers: %{
+                       "content-encoding" => "gzip"
+                     }
+                   }
+                 } = PreCacheCompression.call(struct)
 
-               assert_gzipped(compressed_body, "I am some plain text")
-             end) =~
-               ~r/\"level\":\"info\",\"metadata\":{},\"msg\":\"Content was pre-cache compressed\",\"path\":\"\/non-compressed\/path\",\"platform\":\"Elixir.SomePlatform\"/
+          assert_gzipped(compressed_body, "I am some plain text")
+        end)
+
+      assert log =~ ~r/\"level\":\"info\"/
+      assert log =~ ~r/\"metadata\":{}/
+      assert log =~ ~r/\"msg\":\"Content was pre-cache compressed\"/
+      assert log =~ ~r/\"path\":\"\/non-compressed\/path\"/
+      assert log =~ ~r/\"platform\":\"Elixir.SomePlatform\"/
     end
   end
 

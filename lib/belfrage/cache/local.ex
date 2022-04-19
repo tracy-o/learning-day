@@ -1,4 +1,5 @@
 defmodule Belfrage.Cache.Local do
+  require Logger
   @behaviour Belfrage.Behaviours.CacheStrategy
   @dial Application.get_env(:belfrage, :dial)
 
@@ -33,7 +34,7 @@ defmodule Belfrage.Cache.Local do
       catch
         :exit, cause ->
           Metrics.event([:cache, :local, :fetch_exit])
-          Belfrage.Event.record(:log, :error, %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
+          Logger.log(:error, "", %{msg: "Attempt to fetch from the local cache failed: #{inspect(cause)}"})
           {:ok, :content_not_found}
       end
     else

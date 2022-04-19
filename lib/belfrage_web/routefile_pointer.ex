@@ -1,4 +1,5 @@
 defmodule BelfrageWeb.RoutefilePointer do
+  require Logger
   def init(_), do: :noop
 
   # We could use the conn.path_info[0] to split Routefiles  between news, sport, etc
@@ -27,7 +28,7 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   def routefile(cosmos_env, mix_env) do
-    Belfrage.Event.record(:log, :error, %{
+    Logger.log(:error, "", %{
       msg: "Using Live Routefile as catch all",
       cosmos_env: cosmos_env,
       mix_env: mix_env

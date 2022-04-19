@@ -1,4 +1,5 @@
 defmodule BelfrageWeb.Response.Headers.Via do
+  require Logger
   import Plug.Conn
 
   @behaviour BelfrageWeb.Response.Headers.Behaviour
@@ -24,7 +25,7 @@ defmodule BelfrageWeb.Response.Headers.Via do
   defp protocol_version(:"HTTP/2"), do: "2"
 
   defp protocol_version(protocol) do
-    Belfrage.Event.record(:log, :info, "No match for #{protocol} protocol. Match to increase performance.")
+    Logger.log(:info, "No match for #{protocol} protocol. Match to increase performance.")
 
     protocol
     |> Atom.to_string()

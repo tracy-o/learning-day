@@ -1,4 +1,5 @@
 defmodule Belfrage.Services.StubbedSession do
+  require Logger
   alias Belfrage.Behaviours.Service
   @behaviour Service
 
@@ -6,7 +7,7 @@ defmodule Belfrage.Services.StubbedSession do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record(:log, :debug, Struct.loggable(struct))
+    Logger.log(:debug, "", Map.from_struct(Struct.loggable(struct)))
 
     Struct.add(struct, :response, %Struct.Response{
       http_status: 200,

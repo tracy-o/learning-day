@@ -5,6 +5,7 @@ defmodule Belfrage.Clients.HTTP.Error do
   Converts error reasons from the 3rd party to a consistent
   set that Belfrage modules using the HTTP client can rely on.
   """
+  require Logger
   defstruct [:reason]
 
   @type t :: %__MODULE__{
@@ -42,7 +43,7 @@ defmodule Belfrage.Clients.HTTP.Error do
   def new(error = %MachineGun.Error{reason: reason}) do
     belfrage_http_reason = standardise_error_reason(reason)
 
-    Belfrage.Event.record(:log, :error, %{
+    Logger.log(:error, "", %{
       info: "Http error",
       third_party_reason: MachineGun.Error.message(error),
       belfrage_http_reason: belfrage_http_reason
