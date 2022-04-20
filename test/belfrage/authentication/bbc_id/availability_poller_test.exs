@@ -7,20 +7,24 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
 
   alias Belfrage.Authentication.BBCID
   alias Belfrage.Authentication.BBCID.AvailabilityPoller
-  alias Belfrage.Clients.JsonMock, as: JsonClient
+  alias Belfrage.Clients.{HTTP, HTTPMock}
 
   test "fetches and updates the availability of BBC ID" do
     assert BBCID.available?()
 
-    stub_idcta_config({:ok, %{"id-availability" => "RED"}})
+    expect(HTTPMock, :execute, fn _, _origin ->
+      payload = "{\"id-availability\": \"RED\"}"
+      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+    end)
+
     start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
     wait_for(fn -> not BBCID.available?() end)
 
-    stub_idcta_config({:ok, %{"id-availability" => "GREEN"}})
-    wait_for(fn -> BBCID.available?() end)
-  end
+    expect(HTTPMock, :execute, fn _, _origin ->
+      payload = "{\"id-availability\": \"GREEN\"}"
+      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+    end)
 
-  defp stub_idcta_config(config) do
-    stub(JsonClient, :get, fn _uri, AvailabilityPoller, :AccountAuthentication -> config end)
+    wait_for(fn -> BBCID.available?() end)
   end
 end
