@@ -58,13 +58,10 @@ defmodule Belfrage.Clients.Json do
   end
 
   defp decode(json_data, api) do
-    case @json_codec.decode(json_data) do
-      {:ok, json} ->
-        {:ok, json}
-
-      {:error, _exception} ->
-        Logger.log(:warn, "Error while decoding data from #{api.name}", cloudwatch: true)
-        {:error, "JSON decode error"}
-    end
+    {:ok, @json_codec.decode!(json_data)}
+  rescue
+    _exception ->
+      Logger.log(:warn, "Error while decoding data from #{api.name}", cloudwatch: true)
+      {:error, "JSON decode error"}
   end
 end
