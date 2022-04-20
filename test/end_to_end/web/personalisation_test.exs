@@ -46,6 +46,8 @@ defmodule EndToEnd.Web.PersonalisationTest do
       |> assert_successful_response()
 
     assert vary_header(response) =~ "x-id-oidc-signedin"
+    [cache_control] = get_resp_header(response, "cache-control")
+    assert cache_control == "private, stale-if-error=90, stale-while-revalidate=30"
   end
 
   test "invalid auth token" do
