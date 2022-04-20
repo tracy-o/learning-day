@@ -20,7 +20,7 @@ defmodule Belfrage.Pipeline do
   end
 
   defp call_500(struct, msg) do
-    Belfrage.Event.record(:metric, :increment, "error.pipeline.process")
+    :telemetry.execute([:belfrage, :error, :pipeline, :process], %{})
 
     Logger.log(:error, "", %{
       msg: "Transformer returned an early error",
@@ -31,7 +31,7 @@ defmodule Belfrage.Pipeline do
   end
 
   def handle_error(struct) do
-    Belfrage.Event.record(:metric, :increment, "error.pipeline.process.unhandled")
+    :telemetry.execute([:belfrage, :error, :pipeline, :process, :unhandled], %{})
 
     Logger.log(:error, "", %{
       msg: "Transformer did not return a valid response tuple",

@@ -32,13 +32,13 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.Fabl.timeout")
+    :telemetry.execute([:belfrage, :error, :service, :Fabl, :timeout], %{})
     log(:timeout, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.Fabl.request")
+    :telemetry.execute([:belfrage, :error, :service, :Fabl, :request], %{})
     log(error, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end

@@ -168,7 +168,7 @@ defmodule Belfrage.Processor do
   end
 
   defp route_state_state_failure do
-    Belfrage.Event.record(:metric, :increment, "error.route_state.state")
+    :telemetry.execute([:belfrage, :error, :route_state, :state], %{})
 
     Logger.log(:error, "Error retrieving route_state state")
 

@@ -135,21 +135,17 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
-    increment_metric("error.service.#{platform_name(private)}.timeout")
+    Belfrage.Event.record(:metric, :increment, "error.service.#{platform_name(private)}.timeout")
     log_error(:timeout, struct)
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
-    increment_metric("error.service.#{platform_name(private)}.request")
+    Belfrage.Event.record(:metric, :increment, "error.service.#{platform_name(private)}.request")
     log_error(error, struct)
   end
 
   defp platform_name(%Private{platform: platform}) do
     Module.split(platform) |> hd() |> String.to_atom()
-  end
-
-  defp increment_metric(metric) do
-    Belfrage.Event.record(:metric, :increment, metric)
   end
 
   defp log_error(reason, struct = %Struct{}) do
