@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
   """
   require Logger
 
-  alias Belfrage.{AWS, Event, Metrics}
+  alias Belfrage.{AWS, Metrics}
   @aws Application.get_env(:belfrage, :aws)
 
   def get() do
@@ -34,7 +34,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
           end
 
         Logger.log(:error, "", error_data)
-        Event.record(:metric, :increment, "clients.lambda.assume_role_failure")
+        :telemetry.execute([:belfrage, :clients, :lambda, :assume_role_failure], %{})
 
         {:error, :failed_to_fetch_credentials}
     end

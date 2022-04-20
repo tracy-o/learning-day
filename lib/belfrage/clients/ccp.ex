@@ -46,7 +46,7 @@ defmodule Belfrage.Clients.CCP do
 
       {:ok, response = %Clients.HTTP.Response{status_code: status_code}} ->
         Statix.increment("service.S3.response.#{status_code}", 1, tags: Event.global_dimensions())
-        Event.record(:metric, :increment, "ccp.unexpected_response")
+        :telemetry.execute([:belfrage, :ccp, :unexpected_response], %{})
 
         Logger.log(:error, "", %{
           msg: "Received an unexpected response from S3.",
@@ -56,7 +56,7 @@ defmodule Belfrage.Clients.CCP do
         {:ok, :content_not_found}
 
       {:error, http_error} ->
-        Event.record(:metric, :increment, "ccp.fetch_error")
+        :telemetry.execute([:belfrage, :ccp, :fetch_error], %{})
 
         Logger.log(:error, "", %{
           msg: "Failed to fetch from S3.",
@@ -94,7 +94,7 @@ defmodule Belfrage.Clients.CCP do
         :ok
 
       false ->
-        Belfrage.Event.record(:metric, :increment, "ccp.put_error")
+        :telemetry.execute([:belfrage, :ccp, :put_error], %{})
         Logger.log(:error, "", %{msg: "Failed to send_nosuspend to CCP"})
         :error
     end

@@ -93,7 +93,7 @@ defmodule BelfrageWeb.Response do
   end
 
   defp put_response(conn, _status, content) do
-    Belfrage.Event.record(:metric, :increment, "error.view.render.unhandled_content_type")
+    :telemetry.execute([:belfrage, :error, :view, :render, :unhandled_content_type], %{})
 
     Logger.log(:error, "", %{
       msg: "Unhandled content type in the response. Expects a String or Map.",
