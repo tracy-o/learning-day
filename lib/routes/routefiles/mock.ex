@@ -82,6 +82,8 @@ defroutefile "Mock", "test" do
 
   handle("/app-request/:name", using: "FablData", examples: [])
 
+  handle("/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
