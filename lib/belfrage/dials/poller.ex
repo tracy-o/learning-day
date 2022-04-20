@@ -56,7 +56,11 @@ defmodule Belfrage.Dials.Poller do
     file_path = Application.get_env(:belfrage, :dials_location)
 
     with {:ok, contents} <- File.read(file_path) do
-      @json_codec.decode(contents)
+      try do
+        {:ok, @json_codec.decode!(contents)}
+      rescue
+        exception -> {:error, exception}
+      end
     end
   end
 end

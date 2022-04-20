@@ -43,7 +43,7 @@ config :machine_gun,
 config :ex_aws,
   region: "eu-west-1",
   http_client: Belfrage.AWS.HttpClient,
-  json_codec: Eljiffy
+  json_codec: Json
 
 config :ex_aws, :retries,
   max_attempts: 1,
@@ -56,7 +56,7 @@ config :belfrage,
   dials_location: "/etc/cosmos-dials/dials.json",
   dials_startup_polling_delay: 0,
   errors_threshold: 100,
-  json_codec: Eljiffy,
+  json_codec: Json,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
   lambda_timeout: 3_600,
   default_timeout: 6_000,
