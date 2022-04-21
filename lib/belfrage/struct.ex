@@ -130,4 +130,8 @@ defmodule Belfrage.Struct do
       _value -> "REDACTED"
     end)
   end
+
+  def put_status(struct, code) when is_number(code) do
+    add(struct, :response, %{http_status: code})
+  end
 end

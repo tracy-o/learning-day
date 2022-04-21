@@ -19,7 +19,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
         })
       }
     else
-      {:stop_pipeline, StatusCode.put(struct, 404)}
+      {:stop_pipeline, Struct.put_status(struct, 404)}
     end
   end
 

@@ -3,7 +3,6 @@ defmodule Belfrage.Transformers.Personalisation do
 
   alias Belfrage.Struct
   alias Belfrage.Authentication.SessionState
-  alias Belfrage.Helpers.StatusCode
 
   @impl true
   def call(rest, struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
@@ -17,7 +16,7 @@ defmodule Belfrage.Transformers.Personalisation do
 
     cond do
       return_401?(struct) ->
-        {:stop_pipeline, StatusCode.put(struct, 401)}
+        {:stop_pipeline, Struct.put_status(struct, 401)}
 
       redirect?(struct) ->
         redirect(struct)
