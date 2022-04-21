@@ -24,11 +24,13 @@ defmodule Belfrage.Cache.FetchTest do
       struct: struct,
       cached_response: cached_response
     } do
+      struct = Struct.add(struct, :private, %{personalised_route: false, personalised_request: true})
       %Struct{response: response, private: private} = Fetch.fetch(struct, [:fresh])
 
       assert response.body == cached_response.body
       assert private.origin == :belfrage_cache
       assert private.personalised_route == true
+      assert private.personalised_request == false
       assert response.fallback == false
       assert response.cache_type == nil
     end

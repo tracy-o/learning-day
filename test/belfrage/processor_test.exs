@@ -243,7 +243,10 @@ defmodule Belfrage.ProcessorTest do
       assert response.cache_type == :distributed
     end
 
-    test "makes the response private if request is personalised", %{struct: struct, cached_response: cached_response} do
+    test "Updates request to non-personalised and makes the response public", %{
+      struct: struct,
+      cached_response: cached_response
+    } do
       struct =
         struct
         |> Struct.add(:response, %{http_status: 500})
@@ -251,7 +254,7 @@ defmodule Belfrage.ProcessorTest do
 
       %{response: response} = Processor.fetch_fallback_from_cache(struct)
       assert response.body == cached_response.body
-      assert response.cache_directive.cacheability == "private"
+      assert response.cache_directive.cacheability == "public"
     end
 
     test "tracks latency checkpoints when fetching fallback", %{struct: struct} do

@@ -7,7 +7,11 @@ defmodule Belfrage.Cache.Fetch do
       {:ok, {:local, :fresh}, response} ->
         struct
         |> Struct.add(:response, response)
-        |> Struct.add(:private, %{origin: :belfrage_cache, personalised_route: response.personalised_route})
+        |> Struct.add(:private, %{
+          origin: :belfrage_cache,
+          personalised_route: response.personalised_route,
+          personalised_request: false
+        })
 
       {:ok, {cache_type, :stale}, response} ->
         Statix.increment("web.response.fallback", 1, tags: Event.global_dimensions())
