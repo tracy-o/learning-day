@@ -14,7 +14,8 @@ config :belfrage, :smoke,
     "belfrage" => "www.belfrage.test.api.bbc.co.uk",
     "bruce-belfrage" => "bruce.belfrage.test.api.bbc.co.uk",
     "sally-belfrage" => "sally.belfrage.test.api.bbc.co.uk",
-    "cedric-belfrage" => "cedric.belfrage.test.api.bbc.co.uk"
+    "cedric-belfrage" => "cedric.belfrage.test.api.bbc.co.uk",
+    "joan-belfrage" => "joan.belfrage.test.api.bbc.co.uk"
   },
   live: %{
     "belfrage" => "www.belfrage.api.bbc.co.uk",

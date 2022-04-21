@@ -10,7 +10,7 @@ Deployments to live and deployments of a non-master branch must be completed man
 
 2. Use the diff to post a message on #belfrage and #help-belfrage with a summary of the changes, this allows anyone who has an interest in the deployment to know their changes are soon to go live. 
 
-3. It is now time to go through each belfrage stack on cosmos and use the 'promote to live' button, you can then double check the values used on the config page are the live values. It is best to deploy the stacks in order from least busy to the most busy so you can slowly ramp up the traffic. Currently, this order would be: WWW, Cedric, Sally, Bruce. Posting each of the [deployment terminals](https://cosmos.tools.bbc.co.uk/deployments/5639226) links into the thread of the message you sent previously.
+3. It is now time to go through each belfrage stack on cosmos and use the 'promote to live' button, you can then double check the values used on the config page are the live values. It is best to deploy the stacks in order from least busy to the most busy so you can slowly ramp up the traffic. Currently, this order would be: WWW, Joan, Cedric, Sally, Bruce. Posting each of the [deployment terminals](https://cosmos.tools.bbc.co.uk/deployments/5639226) links into the thread of the message you sent previously.
 
 4. Whilst each stack deployment is going through you want to keep your eye on a few places to ensure nothing out of the ordinary is occuring:   
     a. [Grafana](https://grafana.news.tools.bbc.co.uk/d/cZYVwjIWz/belfrage-dashboards?orgId=1) Any metric which looks to spike or severly drop and continue to do so after a significant time may be cause for concern.   
