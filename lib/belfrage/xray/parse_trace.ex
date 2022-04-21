@@ -24,7 +24,7 @@ defmodule Belfrage.Xray.ParseTrace do
 
   defp parse_parts(key_values) do
     case key_values do
-      [["Root", root], ["Parent", parent], ["Sampled", sampled]| rest] ->
+      [["Root", root], ["Parent", parent], ["Sampled", sampled] | rest] ->
         {:ok, {Trace.with_params(root, sampled, parent), filter_extra_data(rest)}}
 
       [["Root", root], ["Sampled", sampled] | rest] ->
@@ -50,7 +50,7 @@ defmodule Belfrage.Xray.ParseTrace do
   defp filter_extra_data(rest) do
     banned_keys = ["Self", "Root", "Parent", "Sampled"]
 
-    Enum.filter(rest,&is_banned(&1, banned_keys))
+    Enum.filter(rest, &is_banned(&1, banned_keys))
   end
 
   defp is_banned([key, _value], banned_keys), do: key not in banned_keys

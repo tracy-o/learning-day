@@ -82,11 +82,11 @@ defmodule BelfrageWeb.Plugs.XrayTest do
         |> split_header()
 
       assert [
-        ["Root", "1-623c0289-148af71fcd58836604a286a5"],
-        ["Parent", _],
-        ["Sampled", _],
-        ["ArbitraryKey", "ArbitraryValue"]
-      ] = header_parts
+               ["Root", "1-623c0289-148af71fcd58836604a286a5"],
+               ["Parent", _],
+               ["Sampled", _],
+               ["ArbitraryKey", "ArbitraryValue"]
+             ] = header_parts
     end
 
     test "the header comes straight from a client, xray header is parsed" do
@@ -146,13 +146,11 @@ defmodule BelfrageWeb.Plugs.XrayTest do
         |> split_header()
 
       assert [
-        ["Root", "1-623c0289-148af71fcd58836604a286a5"],
-        ["Parent", _],
-        ["Sampled", _],
-        ["ArbitraryKey", "ArbitraryValue"]
-      ] = header_parts
-
-
+               ["Root", "1-623c0289-148af71fcd58836604a286a5"],
+               ["Parent", _],
+               ["Sampled", _],
+               ["ArbitraryKey", "ArbitraryValue"]
+             ] = header_parts
     end
 
     test "a `Sample` key is added to the header" do

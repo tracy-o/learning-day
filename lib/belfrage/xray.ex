@@ -169,6 +169,7 @@ defmodule Belfrage.Xray do
     root = "Root=#{segment.trace.root}"
     parent = "Parent=#{segment.id}"
     sampled = "Sampled=#{sampled_value}"
+
     extra_data =
       (segment.metadata[:extra_header_data] || [])
       |> Enum.map(fn pair -> Enum.join(pair, "=") end)
