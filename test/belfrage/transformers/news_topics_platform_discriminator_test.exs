@@ -15,7 +15,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
   end
 
   describe "path does not contain a slug" do
-    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route will be set to not personalised",
+    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -25,13 +25,14 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                  private: %Struct.Private{
                    platform: MozartNews,
                    origin: ^mozart_news_endpoint,
-                   personalised_route: false
+                   personalised_route: false,
+                   personalised_request: false
                  }
                }
              } =
                NewsTopicsPlatformDiscriminator.call([], %Struct{
                  request: %Struct.Request{path_params: %{"id" => "some-id"}},
-                 private: %Struct.Private{personalised_route: true}
+                 private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
     end
 
@@ -88,7 +89,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                })
     end
 
-    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route will be set to not personalised",
+    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -98,13 +99,14 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                  private: %Struct.Private{
                    platform: MozartNews,
                    origin: ^mozart_news_endpoint,
-                   personalised_route: false
+                   personalised_route: false,
+                   personalised_request: false
                  }
                }
              } =
                NewsTopicsPlatformDiscriminator.call([], %Struct{
                  request: %Struct.Request{path_params: %{"id" => "some-id", "slug" => "some-slug"}},
-                 private: %Struct.Private{personalised_route: true}
+                 private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
     end
   end

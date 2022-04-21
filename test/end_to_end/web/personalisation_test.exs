@@ -5,7 +5,8 @@ defmodule EndToEnd.Web.PersonalisationTest do
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.LambdaMock, RouteState}
+  alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP}
+  alias Belfrage.RouteState
   alias Fixtures.AuthToken
 
   @moduletag :end_to_end
@@ -46,6 +47,8 @@ defmodule EndToEnd.Web.PersonalisationTest do
       |> assert_successful_response()
 
     assert vary_header(response) =~ "x-id-oidc-signedin"
+    [cache_control] = get_resp_header(response, "cache-control")
+    assert cache_control == "private, stale-if-error=90, stale-while-revalidate=30"
   end
 
   test "invalid auth token" do
@@ -86,6 +89,32 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
     [cache_control] = get_resp_header(response, "cache-control")
     assert cache_control == "private"
+  end
+
+  test "switch from personalised to non-personalised route and request" do
+    request = build_request("/personalised-to-non-personalised")
+
+    expect(HTTPMock, :execute, fn %{headers: _headers}, :MozartNews ->
+      response = %HTTP.Response{
+        headers: %{
+          "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"
+        },
+        status_code: 200,
+        body: "<h1>Hello</h1>"
+      }
+
+      {:ok, response}
+    end)
+
+    conn =
+      request
+      |> personalise_request()
+      |> make_request()
+
+    [cache_control] = get_resp_header(conn, "cache-control")
+    assert cache_control == "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"
+    assert conn.status == 200
+    assert conn.resp_body == "<h1>Hello</h1>"
   end
 
   test "internal error in Belfrage" do

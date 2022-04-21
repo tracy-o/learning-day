@@ -199,7 +199,8 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator do
           Struct.add(struct, :private, %{
             platform: MozartNews,
             origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-            personalised_route: false
+            personalised_route: false,
+            personalised_request: false
           })
         )
 
