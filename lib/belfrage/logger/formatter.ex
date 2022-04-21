@@ -65,7 +65,7 @@ defmodule Belfrage.Logger.Formatter do
 
   defp to_json(val) when is_map(val) do
     Enum.reduce(val, %{}, fn
-      {k, val}, acc -> Map.put(acc, k, to_json(val))
+      {k, val}, acc -> Map.put(acc, to_string(k), to_json(val))
     end)
   end
 
