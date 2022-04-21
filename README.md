@@ -64,6 +64,9 @@ for the account. You can set these however you wish - if in doubt you can use
 [cli-wormhole](https://github.com/bbc/cli-wormhole) and export them for
 mozart_dev account number `134209033928`.
 
+### Working with Belfrage locally
+It may be useful to also run origin-simulator locally to understand how belfrage communicates with other layers. For this, see [Origin-Simulator](https://github.com/bbc/origin_simulator)  
+
 ## See all the defined route matchers
 
 To produce a markdown table with all the defined route matchers:
