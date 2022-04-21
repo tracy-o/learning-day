@@ -16,7 +16,7 @@ defmodule Belfrage.Transformers.Personalisation do
 
     cond do
       return_401?(struct) ->
-        {:stop_pipeline, put_http_status_code(struct, 401)}
+        {:stop_pipeline, Struct.put_status(struct, 401)}
 
       redirect?(struct) ->
         redirect(struct)
@@ -32,10 +32,6 @@ defmodule Belfrage.Transformers.Personalisation do
 
   defp redirect?(struct) do
     reauthentication_required?(struct.user_session) and not struct.request.app?
-  end
-
-  defp put_http_status_code(struct, code) when is_number(code) do
-    Struct.add(struct, :response, %{http_status: code})
   end
 
   defp reauthentication_required?(session_state) do

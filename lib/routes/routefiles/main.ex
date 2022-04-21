@@ -295,8 +295,7 @@ defroutefile "Main" do
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
   handle "/news/localnews/locations", using: "NewsLocalNews", examples: ["/news/localnews/locations"]
   handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: ["/news/localnews/locations/sitemap.xml"]
-  # To be replaced with redirects https://jira.dev.bbc.co.uk/browse/RESFRAME-4543
-  handle "/news/localnews/*_any", using: "NewsLocalNews", examples: ["/news/localnews/2643743-london/0"]
+  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", examples: ["/news/localnews/2643743-london/0"]
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
