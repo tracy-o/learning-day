@@ -64,7 +64,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
     end
   end
 
-  # a `x-amzn-trace-id` header look like they're from an xray instrmented
+  # A `x-amzn-trace-id` header look like they're from an xray instrumented
   # application if they have at least Root,Sampled keys go to 'Tracing Header'
   # for more detail:
   # https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html
