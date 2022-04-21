@@ -24,8 +24,15 @@ defmodule Belfrage.Xray do
   @spec parse_header(name, String.t()) :: {:ok, Segment.t()} | {:error, :invalid}
   def parse_header(name, trace_header) do
     case ParseTrace.parse(trace_header) do
-      {:ok, trace} -> {:ok, Segment.new(trace, name)}
-      {:error, :invalid} -> {:error, :invalid}
+      {:ok, {trace, extra_data}} ->
+        segment =
+          Segment.new(trace, name)
+          |> add_extra_header_data(extra_data)
+
+        {:ok, segment}
+
+      {:error, :invalid} ->
+        {:error, :invalid}
     end
   end
 
@@ -159,7 +166,19 @@ defmodule Belfrage.Xray do
   def build_trace_id_header(segment) do
     sampled_value = if segment.trace.sampled, do: '1', else: '0'
 
-    "Root=" <> segment.trace.root <> ";Parent=" <> segment.id <> ";Sampled=#{sampled_value}"
+    root = "Root=#{segment.trace.root}"
+    parent = "Parent=#{segment.id}"
+    sampled = "Sampled=#{sampled_value}"
+    extra_data =
+      (segment.metadata[:extra_header_data] || [])
+      |> Enum.map(fn pair -> Enum.join(pair, "=") end)
+      |> Enum.join(";")
+
+    if extra_data == "" do
+      Enum.join([root, parent, sampled], ";")
+    else
+      Enum.join([root, parent, sampled, extra_data], ";")
+    end
   end
 
   defp if_sampled(trace = %Trace{}, func) do
@@ -194,5 +213,10 @@ defmodule Belfrage.Xray do
       "production_environment" => struct.private.production_environment,
       "runbook" => struct.private.runbook
     }
+  end
+
+  defp add_extra_header_data(segment, data) do
+    updated_metadata = Map.put(segment.metadata, :extra_header_data, data)
+    put_in(segment.metadata, updated_metadata)
   end
 end

@@ -28,7 +28,7 @@ defmodule Belfrage.XrayTest do
   end
 
   test "a segment is created from a valid 'x-amzn-trace-id'" do
-    trace_header = "Root=1-623d5deb-c665a073bf9119f7e042cb54;Parent=1c5533f5a9918e36;Sampled=0"
+    trace_header = "Root=1-623d5deb-c665a073bf9119f7e042cb54;Parent=1c5533f5a9918e36;Sampled=0;ExtraKey=ExtraData"
 
     assert {:ok,
             %Segment{
@@ -37,6 +37,9 @@ defmodule Belfrage.XrayTest do
                 root: "1-623d5deb-c665a073bf9119f7e042cb54",
                 parent: "1c5533f5a9918e36",
                 sampled: false
+              },
+              metadata: %{
+                extra_header_data: [["ExtraKey", "ExtraData"]]
               }
             }} = Xray.parse_header("from_trace_header", trace_header)
   end
@@ -256,6 +259,36 @@ defmodule Belfrage.XrayTest do
 
       assert json["trace_id"]
       assert json["name"] == "test_subsegment"
+    end
+  end
+
+  describe "build_trace_id_header/1" do
+    test "when containing trace, parent and sample" do
+      segment = %Segment{
+        id: "this-segment-id",
+        trace: %Trace{
+          root: "some-root",
+          parent: "previous-parent",
+          sampled: false
+        }
+      }
+
+      assert Xray.build_trace_id_header(segment) == "Root=some-root;Parent=this-segment-id;Sampled=0"
+    end
+
+    test "when containing arbitrary key value pairs" do
+      segment = %Segment{
+        id: "parent-id",
+        trace: %Trace{
+          root: "some-root",
+          sampled: false
+        },
+        metadata: %{
+          extra_header_data: [["A", "1"], ["B", "2"]]
+        }
+      }
+
+      assert Xray.build_trace_id_header(segment) == "Root=some-root;Parent=parent-id;Sampled=0;A=1;B=2"
     end
   end
 end
