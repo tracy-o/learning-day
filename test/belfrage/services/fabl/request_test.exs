@@ -97,7 +97,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "authorization" => "Bearer a-valid-session-token",
                  "ctx-pii-age-bracket" => "o18",
                  "ctx-pii-allow-personalisation" => "true",
-                 "pers-env" => "int",
+                 "ctx-pers-env" => "int",
                  "x-authentication-provider" => "idv5"
                },
                method: :get,
@@ -118,7 +118,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
                  "authorization" => "Bearer a-valid-session-token",
-                 "pers-env" => "int",
+                 "ctx-pers-env" => "int",
                  "x-authentication-provider" => "idv5"
                },
                method: :get,
@@ -138,7 +138,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                  "req-svc-chain" => "Belfrage",
                  "user-agent" => "Belfrage",
                  "authorization" => "Bearer a-valid-session-token",
-                 "pers-env" => "int",
+                 "ctx-pers-env" => "int",
                  "x-authentication-provider" => "idv5"
                },
                method: :get,
