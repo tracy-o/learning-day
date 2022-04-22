@@ -18,10 +18,9 @@ defmodule Belfrage.Clients.HTTP.ErrorTest do
         %MachineGun.Error{reason: :request_timeout}
         |> Belfrage.Clients.HTTP.Error.new()
       end)
-      |> Jason.decode!()
 
-    assert log["third_party_reason"] == ":request_timeout"
-    assert log["belfrage_http_reason"] == "timeout"
+    assert log =~ ~s("third_party_reason":":request_timeout")
+    assert log =~ ~s("belfrage_http_reason":"timeout")
   end
 
   test "logs error unknown to Belfrage" do
@@ -30,10 +29,9 @@ defmodule Belfrage.Clients.HTTP.ErrorTest do
         %MachineGun.Error{reason: :unexpected_reason}
         |> Belfrage.Clients.HTTP.Error.new()
       end)
-      |> Jason.decode!()
 
-    assert log["third_party_reason"] == ":unexpected_reason"
-    assert log["belfrage_http_reason"] == "nil"
+    assert log =~ ~s("third_party_reason":":unexpected_reason")
+    assert log =~ ~s("belfrage_http_reason":"nil")
   end
 
   test "logs error containing charlist message" do
@@ -42,9 +40,8 @@ defmodule Belfrage.Clients.HTTP.ErrorTest do
         %MachineGun.Error{reason: {:error_reason, 'This is a charlist message.'}}
         |> Belfrage.Clients.HTTP.Error.new()
       end)
-      |> Jason.decode!()
 
-    assert log["third_party_reason"] == "{:error_reason, 'This is a charlist message.'}"
-    assert log["belfrage_http_reason"] == "nil"
+    assert log =~ ~s("third_party_reason":"{:error_reason, 'This is a charlist message.'}")
+    assert log =~ ~s("belfrage_http_reason":"nil")
   end
 end
