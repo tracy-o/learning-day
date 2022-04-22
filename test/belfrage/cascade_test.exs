@@ -53,22 +53,16 @@ defmodule Belfrage.CascadeTest do
     test "executes the callback for each struct in the cascade asynchronously", %{cascade: cascade} do
       pid = self()
 
-      {time, _} =
-        :timer.tc(fn ->
-          Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
-            # Sleep for 10ms when processing each struct
-            Process.sleep(10)
-            send(pid, {:processed_struct_with_route_state_id, private.route_state_id})
-            struct
-          end)
-        end)
+      Cascade.fan_out(cascade, fn struct = %Struct{private: private = %Private{}} ->
+        send(pid, {:processed_struct_with_route_state_id, private.route_state_id, self()})
+        struct
+      end)
 
-      assert_received {:processed_struct_with_route_state_id, "RouteState1"}
-      assert_received {:processed_struct_with_route_state_id, "RouteState2"}
+      assert_received {:processed_struct_with_route_state_id, "RouteState1", pid1}
+      assert_received {:processed_struct_with_route_state_id, "RouteState2", pid2}
 
-      # Check that total execution time is less than 20ms, which proves that
-      # the structs were processed asynchronously.
-      assert time < 20_000
+      # Check that the structs were processed asynchronously.
+      assert pid1 != pid2
     end
 
     test "returns the struct with a response if there is one", %{cascade: cascade} do
