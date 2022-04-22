@@ -869,7 +869,7 @@ defroutefile "Main" do
   handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
-  handle "/pidgin/new_topics/:id", using: "WorldServicePidginTopicPage", only_on: "test", examples: ["/pidgin/new_topics/c5qvp8wr36dt", "/pidgin/new_topics/c5qvp8wr36dt?page=40"] do
+  handle "/pidgin/topics/:id", using: "WorldServicePidginTopicPage", examples: ["/pidgin/topics/c5qvp8wr36dt", "/pidgin/topics/c5qvp8wr36dt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
