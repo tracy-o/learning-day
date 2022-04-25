@@ -55,7 +55,7 @@ defmodule Belfrage.Services.Fabl.Request do
       headers
       |> Map.put("authorization", "Bearer #{user_session.session_token}")
       |> Map.put("x-authentication-provider", "idv5")
-      |> Map.put("pers-env", user_session.authentication_env)
+      |> Map.put("ctx-pers-env", user_session.authentication_env)
       |> put_user_attributes(user_session.user_attributes)
     else
       headers
