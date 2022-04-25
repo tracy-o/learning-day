@@ -21,14 +21,12 @@ defmodule Belfrage.Authentication.JWK.Poller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, %{"keys" => keys}} <- @client.get(jwk_uri(), __MODULE__, @http_pool) do
+    with {:ok, %{"keys" => keys}} <- @client.get(jwk_uri(), @http_pool, name: "jwk") do
       JWK.update(keys)
     end
 
     {:noreply, interval}
   end
-
-  def name, do: "jwk"
 
   defp jwk_uri, do: Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
 

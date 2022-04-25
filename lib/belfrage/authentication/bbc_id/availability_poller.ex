@@ -37,10 +37,8 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
     {:noreply, interval}
   end
 
-  def name, do: "idcta_config"
-
   defp get_availability() do
-    with {:ok, config} <- @client.get(idcta_uri(), __MODULE__, @http_pool) do
+    with {:ok, config} <- @client.get(idcta_uri(), @http_pool, name: "idcta_config") do
       fetch_availability_from_config(config)
     end
   end
