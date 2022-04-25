@@ -206,6 +206,17 @@ defmodule Belfrage.Services.Webcore.RequestTest do
            |> Enum.any?(fn header -> String.starts_with?(header, "mvt-") end)
   end
 
+  test "adds election dials when set" do
+    struct_with_election_headers = %Struct{
+      request: %Struct.Request{
+        raw_headers: %{"election-banner-council-story" => "on", "election-banner-ni-story" => "off"}
+      }
+    }
+
+    assert %{headers: %{:"election-banner-council-story" => "on", :"election-banner-ni-story" => "off"}} =
+             Request.build(struct_with_election_headers)
+  end
+
   test "adds mvt headers when set" do
     struct_with_mvt = %Struct{
       private: %Struct.Private{
