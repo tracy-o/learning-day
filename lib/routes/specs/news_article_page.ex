@@ -5,7 +5,7 @@ defmodule Routes.Specs.NewsArticlePage do
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
       platform: Webcore,
       circuit_breaker_error_threshold: 500,
-      pipeline: ["ProxyOnJoan", "ElectionBannerCouncilStory", "ElectionBannerNiStory"]
+      pipeline: ["ProxyOnJoan", "NewsArticleValidator", "ElectionBannerCouncilStory", "ElectionBannerNiStory"]
     }
   end
 end
