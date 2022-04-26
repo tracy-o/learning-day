@@ -32,6 +32,7 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminator do
     "u96629812",
     "u66056565",
     "u75060290",
+    "u109852224",
     "u96629812",
     "u44012869",
     "u102772985",
