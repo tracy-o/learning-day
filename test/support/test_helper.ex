@@ -1,4 +1,6 @@
 defmodule Test.Support.Helper do
+  import ExUnit.Callbacks, only: [on_exit: 1]
+
   def setup_stubs do
     Mox.stub_with(Belfrage.AWSMock, Belfrage.AWSStub)
     Mox.stub_with(Belfrage.Clients.CCPMock, Belfrage.Clients.CCPStub)
@@ -117,5 +119,12 @@ defmodule Test.Support.Helper do
         ExUnit.Assertions.flunk("Function passed to `wait_for` never returned `true`")
       end
     end
+  end
+
+  def set_stack_id(id) do
+    prev_id = Application.get_env(:belfrage, :stack_id)
+    Application.put_env(:belfrage, :stack_id, id)
+
+    on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_id) end)
   end
 end

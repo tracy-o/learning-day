@@ -5,6 +5,7 @@ defmodule EndToEnd.ProxyOnJoan do
   alias Belfrage.Clients.HTTPMock
   alias Belfrage.Clients.HTTP
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [set_stack_id: 1]
 
   @lambda_response %{
     "headers" => %{
@@ -56,12 +57,5 @@ defmodule EndToEnd.ProxyOnJoan do
       conn(:get, "/proxy-on-joan/49336140")
       |> Router.call([])
     end
-  end
-
-  defp set_stack_id(stack_id) do
-    prev_stack_id = Application.get_env(:belfrage, :stack_id)
-    Application.put_env(:belfrage, :stack_id, stack_id)
-
-    on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_stack_id) end)
   end
 end

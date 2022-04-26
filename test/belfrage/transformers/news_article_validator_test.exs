@@ -4,6 +4,8 @@ defmodule Belfrage.Transformers.NewsArticleValidatorTest do
   alias Belfrage.Transformers.NewsArticleValidator
   alias Belfrage.Struct
 
+  import Test.Support.Helper, only: [set_stack_id: 1]
+
   describe "call/2 when not on the joan stack" do
     setup do
       set_stack_id("cedric")
@@ -39,12 +41,5 @@ defmodule Belfrage.Transformers.NewsArticleValidatorTest do
 
       assert {:ok, ^struct} = NewsArticleValidator.call([], struct)
     end
-  end
-
-  defp set_stack_id(stack_id) do
-    prev_stack_id = Application.get_env(:belfrage, :stack_id)
-    Application.put_env(:belfrage, :stack_id, stack_id)
-
-    on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_stack_id) end)
   end
 end
