@@ -213,7 +213,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       }
     }
 
-    assert %{headers: %{:"election-banner-council-story" => "on", :"election-banner-ni-story" => "off"}} =
+    assert %{headers: %{"election-banner-council-story" => "on", "election-banner-ni-story" => "off"}} =
              Request.build(struct_with_election_headers)
   end
 
