@@ -88,7 +88,7 @@ defmodule Belfrage.Services.FablTest do
                "authorization" => "Bearer a-valid-session-token",
                "ctx-pii-age-bracket" => "o18",
                "ctx-pii-allow-personalisation" => "true",
-               "pers-env" => "int",
+               "ctx-pers-env" => "int",
                "x-authentication-provider" => "idv5",
                "accept-encoding" => "gzip",
                "req-svc-chain" => "BELFRAGE",
