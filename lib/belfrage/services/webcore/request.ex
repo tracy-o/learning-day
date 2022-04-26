@@ -16,6 +16,7 @@ defmodule Belfrage.Services.Webcore.Request do
   defp headers(struct = %Struct{}) do
     struct
     |> base_headers()
+    |> put_election_headers(struct.request)
     |> put_user_session_headers(struct.user_session)
     |> put_feature_header(struct.private)
     |> put_mvt_headers(struct.private)
@@ -30,6 +31,23 @@ defmodule Belfrage.Services.Webcore.Request do
       host: request.host,
       "ctx-route-spec": private.route_state_id
     }
+  end
+
+  defp put_election_headers(headers, %Request{raw_headers: raw_headers}) do
+    headers =
+      if raw_headers["election-banner-council-story"] do
+        headers
+        |> Map.put("election-banner-council-story", raw_headers["election-banner-council-story"])
+      else
+        headers
+      end
+
+    if raw_headers["election-banner-ni-story"] do
+      headers
+      |> Map.put("election-banner-ni-story", raw_headers["election-banner-ni-story"])
+    else
+      headers
+    end
   end
 
   defp put_user_session_headers(headers, user_session = %UserSession{}) do
