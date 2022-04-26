@@ -33,10 +33,10 @@ defmodule EndToEnd.ProxyOnJoan do
     end
 
     test "should change the origin to the mozart news endpoint" do
-      url = "https://mozart-news.example.com:test/proxy-on-joan"
+      url = "https://mozart-news.example.com:test/proxy-on-joan/49336140"
       HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: ^url}, _pool -> @http_response end)
 
-      conn(:get, "/proxy-on-joan")
+      conn(:get, "/proxy-on-joan/49336140")
       |> Router.call([])
     end
   end
@@ -53,7 +53,7 @@ defmodule EndToEnd.ProxyOnJoan do
         {:ok, @lambda_response}
       end)
 
-      conn(:get, "/proxy-on-joan")
+      conn(:get, "/proxy-on-joan/49336140")
       |> Router.call([])
     end
   end
