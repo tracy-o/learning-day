@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
   alias Belfrage.Helpers.QueryParams
 
   @impl true
-  def call(_rest, struct) do
+  def call(rest, struct) do
     if redirect?(struct) do
       {
         :redirect,
@@ -19,7 +19,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
         })
       }
     else
-      {:stop_pipeline, Struct.put_status(struct, 404)}
+      then_do(rest, struct)
     end
   end
 

@@ -27,23 +27,21 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirectTest do
             }} = LocalNewsTopicsRedirect.call([], struct)
   end
 
-  test "If the location ID is not in the mapping, a 404 will be issued" do
+  test "If the location ID is not in the mapping, continue to origin" do
     struct =
       request_struct(:https, "www.bbc.com", "/news/localnews/12345-somelocation/30", %{}, %{
         "location_id_and_name" => "12345-somelocation"
       })
 
-    assert {:stop_pipeline, %Struct{response: %Struct.Response{http_status: 404}}} =
-             LocalNewsTopicsRedirect.call([], struct)
+    assert {:ok, ^struct} = LocalNewsTopicsRedirect.call([], struct)
   end
 
-  test "If the path does not start with /news/localnews/, a 404 will be issued" do
+  test "If the path does not start with /news/localnews/, continue to origin" do
     struct =
       request_struct(:https, "www.bbc.com", "/some/path/6296650-somelocation/30", %{}, %{
         "location_id_and_name" => "6296650-somelocation"
       })
 
-    assert {:stop_pipeline, %Struct{response: %Struct.Response{http_status: 404}}} =
-             LocalNewsTopicsRedirect.call([], struct)
+    assert {:ok, ^struct} = LocalNewsTopicsRedirect.call([], struct)
   end
 end
