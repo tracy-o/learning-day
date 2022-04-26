@@ -7,7 +7,7 @@ defmodule Belfrage.Mvt.FilePoller do
   alias Belfrage.Mvt
 
   @client Application.get_env(:belfrage, :json_client)
-  @interval Application.get_env(:belfrage, :mvt)["slots_file_polling_interval"]
+  @interval Application.get_env(:belfrage, :mvt)[:slots_header_file_polling_interval]
   @http_pool :MvtFilePoller
 
   def start_link(opts \\ []) do
