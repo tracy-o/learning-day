@@ -3,19 +3,18 @@ defmodule Belfrage.Mvt.FilePollerTest do
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [wait_for: 1]
 
-  alias Belfrage.Mvt.{Filepoller, Headers}
+  alias Belfrage.Mvt.{FilePoller, Headers}
   alias Belfrage.Clients.{HTTP, HTTPMock}
 
   test "fetches and updates JWK keys from the API" do
-    assert Headers.get() == {:ok, []}
+    assert Headers.get() == []
 
     expect(HTTPMock, :execute, fn _, _origin ->
       {:ok, %HTTP.Response{status_code: 200, body: mvt_json_payload}}
     end)
 
-    Process.sleep(1)
     start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
-    wait_for(fn -> Headers.get() == {:ok, Jason.decode(mvt_json_payload)} end)
+    wait_for(fn -> Headers.get() == {:ok, Jason.decode(mvt_json_payload())} end)
   end
 
   defp mvt_json_payload do
