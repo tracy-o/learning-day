@@ -7,7 +7,7 @@ defmodule Belfrage.Xray.ParseTrace do
       |> String.split(";")
       |> Enum.map(&split_key_value/1)
 
-    if :error in parts do
+    if Enum.member?(parts, :error) do
       {:error, :invalid}
     else
       parse_parts(parts)
