@@ -7,10 +7,10 @@ defmodule Belfrage.Xray.ParseTrace do
       |> String.split(";")
       |> Enum.map(&split_key_value/1)
 
-    if no_errors(parts) do
-      parse_parts(parts)
-    else
+    if :error in parts do
       {:error, :invalid}
+    else
+      parse_parts(parts)
     end
   end
 
@@ -43,10 +43,6 @@ defmodule Belfrage.Xray.ParseTrace do
     end
   end
 
-  defp no_errors(parts) do
-    not Enum.any?(parts, &error?/1)
-  end
-
   defp filter_extra_data(rest) do
     banned_keys = ["Self", "Root", "Parent", "Sampled"]
 
@@ -59,7 +55,4 @@ defmodule Belfrage.Xray.ParseTrace do
   defp parse_sampled(["Sampled", "1"]), do: ["Sampled", true]
   defp parse_sampled(["Sampled", "0"]), do: ["Sampled", false]
   defp parse_sampled(_), do: :error
-
-  defp error?(:error), do: true
-  defp error?(_), do: false
 end
