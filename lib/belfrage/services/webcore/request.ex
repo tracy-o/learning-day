@@ -35,14 +35,14 @@ defmodule Belfrage.Services.Webcore.Request do
 
   defp put_election_headers(headers, %Request{raw_headers: raw_headers}) do
     headers =
-      if raw_headers["election-banner-council-story"] != nil do
+      if raw_headers["election-banner-council-story"] do
         headers
         |> Map.put("election-banner-council-story", raw_headers["election-banner-council-story"])
       else
         headers
       end
 
-    if raw_headers["election-banner-ni-story"] != nil do
+    if raw_headers["election-banner-ni-story"] do
       headers
       |> Map.put("election-banner-ni-story", raw_headers["election-banner-ni-story"])
     else
