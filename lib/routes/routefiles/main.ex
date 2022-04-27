@@ -782,10 +782,16 @@ defroutefile "Main" do
   end
 
   handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+    return_404 if: [
+      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/),
+      String.length(id) != 12
+    ]
   end
   handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo.amp"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+    return_404 if: [
+      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/),
+      String.length(id) != 12
+    ]
   end
 
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
