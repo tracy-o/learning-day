@@ -576,6 +576,9 @@ defroutefile "Main" do
   redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
+ 
+  ## World Service - Programme Redirects
+  redirect "/news/world-middle-east-27796850", to: "/programmes/w13xtvn3", status: 301
 
   ## World Service - "Access to News" Redirects
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
