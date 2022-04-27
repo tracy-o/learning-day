@@ -4,6 +4,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Plugs.InfiniteLoopGuardian
+  import Test.Support.Helper, only: [set_stack_id: 1]
 
   describe "stack is bruce belfrage" do
     setup do
@@ -113,12 +114,5 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       |> Plug.Conn.put_req_header("req-svc-chain", "GTM,MOZART")
 
     assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
-  end
-
-  defp set_stack_id(stack_id) do
-    prev_stack_id = Application.get_env(:belfrage, :stack_id)
-    Application.put_env(:belfrage, :stack_id, stack_id)
-
-    on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_stack_id) end)
   end
 end
