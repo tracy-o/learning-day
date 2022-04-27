@@ -5,6 +5,7 @@ defmodule EndToEnd.ProxyOnJoan do
   alias Belfrage.Clients.HTTPMock
   alias Belfrage.Clients.HTTP
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [set_stack_id: 1]
 
   @lambda_response %{
     "headers" => %{
@@ -33,10 +34,10 @@ defmodule EndToEnd.ProxyOnJoan do
     end
 
     test "should change the origin to the mozart news endpoint" do
-      url = "https://mozart-news.example.com:test/proxy-on-joan"
+      url = "https://mozart-news.example.com:test/proxy-on-joan/49336140"
       HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: ^url}, _pool -> @http_response end)
 
-      conn(:get, "/proxy-on-joan")
+      conn(:get, "/proxy-on-joan/49336140")
       |> Router.call([])
     end
   end
@@ -53,15 +54,8 @@ defmodule EndToEnd.ProxyOnJoan do
         {:ok, @lambda_response}
       end)
 
-      conn(:get, "/proxy-on-joan")
+      conn(:get, "/proxy-on-joan/49336140")
       |> Router.call([])
     end
-  end
-
-  defp set_stack_id(stack_id) do
-    prev_stack_id = Application.get_env(:belfrage, :stack_id)
-    Application.put_env(:belfrage, :stack_id, stack_id)
-
-    on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_stack_id) end)
   end
 end

@@ -73,4 +73,22 @@ defmodule Belfrage.Test.MetricsHelper do
       nil
     )
   end
+
+  # From https://github.com/beam-telemetry/telemetry_metrics_statsd/blob/main/test/telemetry_metrics_statsd_test.exs
+  def given_udp_port_opened() do
+    {:ok, socket} = :gen_udp.open(0, [:binary, active: false])
+    {:ok, port} = :inet.port(socket)
+    {socket, port}
+  end
+
+  def start_reporter(options) do
+    {:ok, pid} = TelemetryMetricsStatsd.start_link(options)
+    pid
+  end
+
+  def assert_reported(socket, expected_payload) do
+    expected_size = byte_size(expected_payload)
+    {:ok, {_host, _port, payload}} = :gen_udp.recv(socket, expected_size, 1000)
+    assert payload == expected_payload
+  end
 end

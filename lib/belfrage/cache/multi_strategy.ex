@@ -53,7 +53,9 @@ defmodule Belfrage.Cache.MultiStrategy do
 
     with {:ok, {strategy, freshness}, response} <- cache.fetch(struct),
          true <- freshness in accepted_freshness do
-      Event.record(:metric, :increment, "cache.#{cache_metric}.#{freshness}.hit")
+      :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), freshness, :hit], %{}, %{
+        route_spec: struct.private.route_state_id
+      })
 
       metric_on_stale_routespec(struct, cache_metric, freshness)
       {:halt, {:ok, {strategy, freshness}, response}}
@@ -63,7 +65,10 @@ defmodule Belfrage.Cache.MultiStrategy do
       # stale one exists.
 
       _content_not_found_or_not_accepted_freshness ->
-        Event.record(:metric, :increment, "cache.#{cache_metric}.miss")
+        :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), :miss], %{}, %{
+          route_spec: struct.private.route_state_id
+        })
+
         {:cont, {:ok, :content_not_found}}
     end
   end

@@ -29,14 +29,15 @@ defmodule Belfrage.Transformers.UploaderPlatformDiscriminator do
     "u39697902",
     "u65290961",
     "u39873202",
-    "u96629812",
+    "u19819112",
     "u66056565",
     "u75060290",
     "u109852224",
     "u96629812",
     "u44012869",
     "u102772985",
-    "u16896881"
+    "u16896881",
+    "u17667574"
   ]
 
   defp is_webcore_id(id) do

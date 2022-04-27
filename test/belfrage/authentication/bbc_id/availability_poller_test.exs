@@ -7,42 +7,24 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
 
   alias Belfrage.Authentication.BBCID
   alias Belfrage.Authentication.BBCID.AvailabilityPoller
-  alias Belfrage.Clients.AuthenticationMock, as: AuthenticationClient
+  alias Belfrage.Clients.{HTTP, HTTPMock}
 
   test "fetches and updates the availability of BBC ID" do
     assert BBCID.available?()
 
-    stub_idcta_config({:ok, %{"id-availability" => "RED"}})
+    expect(HTTPMock, :execute, fn _, _origin ->
+      payload = "{\"id-availability\": \"RED\"}"
+      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+    end)
+
     start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
     wait_for(fn -> not BBCID.available?() end)
 
-    stub_idcta_config({:ok, %{"id-availability" => "GREEN"}})
+    expect(HTTPMock, :execute, fn _, _origin ->
+      payload = "{\"id-availability\": \"GREEN\"}"
+      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+    end)
+
     wait_for(fn -> BBCID.available?() end)
-  end
-
-  describe "get_availability/0" do
-    test "returns true if status of flagpole in IDCTA config is GREEN" do
-      stub_idcta_config({:ok, %{"id-availability" => "GREEN"}})
-      assert AvailabilityPoller.get_availability() == {:ok, true}
-    end
-
-    test "returns false if status of flagpole in IDCTA config is RED" do
-      stub_idcta_config({:ok, %{"id-availability" => "RED"}})
-      assert AvailabilityPoller.get_availability() == {:ok, false}
-    end
-
-    test "returns error if status of flagpole is not present in IDCTA config" do
-      stub_idcta_config({:ok, %{}})
-      assert AvailabilityPoller.get_availability() == {:error, :availability_unknown}
-    end
-
-    test "returns error if status of flagpole is an unexpected value" do
-      stub_idcta_config({:ok, %{"id-availability" => "FOO"}})
-      assert AvailabilityPoller.get_availability() == {:error, :availability_unknown}
-    end
-  end
-
-  defp stub_idcta_config(config) do
-    stub(AuthenticationClient, :get_idcta_config, fn -> config end)
   end
 end
