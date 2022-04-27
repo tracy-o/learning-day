@@ -26,12 +26,12 @@ defmodule Belfrage.Mvt.HeadersTest do
     pid = start_supervised!({Headers, name: :mvt_headers_test})
     assert Headers.get(pid) == []
 
-    decoded_headers_from_s3 = [%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}]
+    decoded_headers_from_s3 = %{"header" => "bbc-mvt-1", "key" => "box_colour_change"}
 
     Headers.set(pid, decoded_headers_from_s3)
     assert Headers.get(pid) == decoded_headers_from_s3
 
-    new_headers = [%{"header" => "bbc-mvt-3", "key" => "fancy_new_buttons"}]
+    new_headers = %{"header" => "bbc-mvt-3", "key" => "fancy_new_buttons"}
 
     Headers.set(pid, new_headers)
     assert Headers.get(pid) == new_headers
