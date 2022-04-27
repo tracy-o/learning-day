@@ -108,7 +108,6 @@ config :belfrage,
   not_supported_page: "priv/static/default_error_pages/not_supported.html",
   internal_error_page: "priv/static/default_error_pages/internal_error.html",
   mvt: %{
-    slots_header_file_polling_interval: 600,
     slots_file_location: "https://test-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/development.json"
   }
 

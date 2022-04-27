@@ -5,9 +5,9 @@ defmodule Belfrage.Mvt.FilePoller do
 
   use GenServer
   alias Belfrage.Mvt
+  alias Belfrage.Clients
 
-  @client Application.get_env(:belfrage, :json_client)
-  @interval Application.get_env(:belfrage, :mvt)[:slots_header_file_polling_interval]
+  @interval 600
   @http_pool :MvtFilePoller
 
   def start_link(opts \\ []) do
@@ -28,7 +28,7 @@ defmodule Belfrage.Mvt.FilePoller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, headers_map} <- @client.get(slots_file_location(), @http_pool, name: "mvt_slots") do
+    with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots") do
       set_header_state(headers_map["projects"])
     end
 
