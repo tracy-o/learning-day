@@ -35,7 +35,7 @@ defmodule Belfrage.Mvt.FilePoller do
     {:noreply, interval}
   end
 
-  defp slots_file_location, do: Application.get_env(:belfrage, :mvt)["slots_file_location"]
+  defp slots_file_location, do: Application.get_env(:belfrage, :mvt)[:slots_file_location]
 
   defp set_header_state(headers) do
     Mvt.Headers.set(headers)
