@@ -2088,6 +2088,8 @@ defroutefile "Main" do
   handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
   redirect("/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302)
 
+  handle "/echo", using: "EchoSpec", only_on: "test", examples: ["/echo"]
+
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
   no_match()
