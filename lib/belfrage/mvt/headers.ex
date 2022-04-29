@@ -6,8 +6,8 @@ defmodule Belfrage.Mvt.Headers do
 
   use Agent
 
-  def start_link(opts \\ []) do
-    Agent.start_link(fn -> [] end, name: Keyword.get(opts, :name, __MODULE__))
+  def start_link(opts \\ %{}) do
+    Agent.start_link(fn -> %{} end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
   @doc """

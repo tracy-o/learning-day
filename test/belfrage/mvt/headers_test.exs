@@ -4,16 +4,16 @@ defmodule Belfrage.Mvt.HeadersTest do
   alias Belfrage.Mvt.Headers
 
   describe "get?/0" do
-    test "returns an empty list on startup" do
+    test "returns an empty map on startup" do
       pid = start_supervised!({Headers, name: :mvt_headers_test})
-      assert Headers.get(pid) == []
+      assert Headers.get(pid) == %{}
     end
   end
 
   describe "set/1" do
     test "sets the available headers and they can be retrieved as they were" do
       pid = start_supervised!({Headers, name: :mvt_headers_test})
-      assert Headers.get(pid) == []
+      assert Headers.get(pid) == %{}
 
       decoded_headers_from_s3 = %{"1" => [%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}]}
 
@@ -24,7 +24,7 @@ defmodule Belfrage.Mvt.HeadersTest do
 
   test "when headers are already set they will be overwritten" do
     pid = start_supervised!({Headers, name: :mvt_headers_test})
-    assert Headers.get(pid) == []
+    assert Headers.get(pid) == %{}
 
     decoded_headers_from_s3 = %{"header" => "bbc-mvt-1", "key" => "box_colour_change"}
 

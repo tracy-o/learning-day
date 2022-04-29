@@ -9,7 +9,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
   @mvt_json_payload File.read!("test/support/fixtures/mvt_slot_headers.json")
 
   test "fetches and updates Mvt Headers from S3" do
-    assert Headers.get() == []
+    assert Headers.get() == %{}
 
     expect(HTTPMock, :execute, fn _, _origin ->
       {:ok, %HTTP.Response{status_code: 200, body: @mvt_json_payload}}
