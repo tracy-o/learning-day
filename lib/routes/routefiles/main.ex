@@ -1602,6 +1602,9 @@ defroutefile "Main" do
   handle "/sport/top-4.app", using: "Sport", examples: ["/sport/top-4.app"]
   handle "/sport/top-4", using: "Sport", examples: ["/sport/top-4"]
 
+  ## Sport Alpha Trials
+  handle "/sport/alpha/football/league-two/table", using: "SportDataWebcore", examples: ["/sport/alpha/football/league-two/table"]
+
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
