@@ -28,34 +28,40 @@ defmodule Mix.Tasks.DialGen do
     generate_dial_test_module(dial_name, module_name)
   end
 
-  defp add_to_dev_env(name, default_value) do
-    with {:ok, raw_json} <- File.read("cosmos/dials_values_dev_env.json"),
-      {:ok, dev_values} <- Jason.decode(raw_json) do
-        {:ok, dev_values_string} = Map.put(dev_values, name, default_value)
-        |> Jason.encode(pretty: true)
-
-        :ok = File.write("cosmos/dials_values_dev_env.json", dev_values_string)
-    end
-  end
-
   defp add_to_cosmos_json(name, description, default_value, dial_values) do
     with {:ok, raw_json} <- File.read("cosmos/dials.json"),
           {:ok, dials_config} <- Jason.decode(raw_json)
     do
-      new_dial = %{
-        "name" => name,
-        "description" => description,
-        "default-value" => default_value,
-        "values" => dial_values
-      }
+      unless dial_exists?(dials_config, name) do
+        new_dial = %{
+          "name" => name,
+          "description" => description,
+          "default-value" => default_value,
+          "values" => dial_values
+        }
 
-      new_config = dials_config ++ [new_dial]
+        new_config = dials_config ++ [new_dial]
 
-      {:ok, new_config_string} = Jason.encode(new_config, pretty: true)
+        new_config_string = Jason.encode!(new_config, pretty: true)
 
-      :ok = File.write("cosmos/dials.json", new_config_string)
+        :ok = File.write("cosmos/dials.json", new_config_string)
+      end
+
     else
       err -> err
+    end
+  end
+
+  defp add_to_dev_env(name, default_value) do
+    with {:ok, raw_json} <- File.read("cosmos/dials_values_dev_env.json"),
+      {:ok, dev_values} <- Jason.decode(raw_json) do
+        unless dial_exists?(dev_values, name) do
+          dev_values_string =
+            Map.put(dev_values, name, default_value)
+            |> Jason.encode!(pretty: true)
+
+          :ok = File.write("cosmos/dials_values_dev_env.json", dev_values_string)
+        end
     end
   end
 
@@ -116,5 +122,13 @@ defmodule Mix.Tasks.DialGen do
     String.split(dial_name, "_")
     |> Enum.map(&String.capitalize/1)
     |> Enum.join()
+  end
+
+  defp dial_exists?(dial_config, name) when is_list(dial_config) do
+    Enum.any?(dial_config, fn elem -> Map.has_key?(elem, name) end)
+  end
+
+  defp dial_exists?(dev_values, name) when is_map(dev_values) do
+    Map.has_key?(dev_values, name)
   end
 end
