@@ -98,7 +98,7 @@ defmodule Mix.Tasks.DialGen do
   def add_to_dial_config(name, module_name) do
     require EEx
 
-    template_file = "lib/mix/tasks/dial_gen/dial_config.eex"
+    template_file = "lib/mix/tasks/dial_gen/dial_config_template.eex"
     dials_config_file = "config/dials.exs"
 
     dial_handlers =
