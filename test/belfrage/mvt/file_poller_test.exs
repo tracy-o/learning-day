@@ -6,46 +6,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
   alias Belfrage.Mvt.{FilePoller, Headers}
   alias Belfrage.Clients.{HTTP, HTTPMock}
 
-  @mvt_json_payload """
-   {
-     "1": [
-       {
-         "key": "box_colour_change",
-         "header": "bbc-mvt-1"
-       }
-     ],
-     "projects": {
-       "1": [
-         {
-           "key": "test_feature_1_test",
-           "header": "bbc-mvt-1"
-         },
-         {
-           "key": "test_experiment_1",
-           "header": "bbc-mvt-2"
-         },
-         {
-           "key": "test_experiment_2",
-           "header": "bbc-mvt-3"
-         }
-       ],
-       "2": [
-         {
-           "key": "test_feature_1_test",
-           "header": "bbc-mvt-1"
-         },
-         {
-           "key": "test_experiment_1",
-           "header": "bbc-mvt-2"
-         },
-         {
-           "key": "test_experiment_2",
-           "header": "bbc-mvt-3"
-         }
-       ]
-     }
-   }
-  """
+  @mvt_json_payload File.read!("test/support/fixtures/mvt_slot_headers.json")
 
   test "fetches and updates Mvt Headers from S3" do
     assert Headers.get() == []
