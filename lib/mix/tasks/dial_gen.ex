@@ -111,4 +111,30 @@ defmodule Mix.Tasks.DialGen do
 
     File.write!(dials_config_file, contents)
   end
+
+  def generate_dial_module(module_name, dial_name) do
+    template_file = "lib/mix/tasks/dial_gen/dial_template.eex"
+    filename = "lib/belfrage/dials/#{dial_name}.ex"
+
+    contents =
+      EEx.eval_file(template_file, module_name: "Belfrage.Dials.#{module_name}")
+      |> Code.format_string!()
+
+    File.write!(filename, contents)
+  end
+
+  def generate_dial_test_module(module_name, dial_name) do
+    template_file = "lib/mix/tasks/dial_gen/dial_test_tempate.eex"
+    filename = "test/belfrage/dials/#{dial_name}_test.exs"
+
+
+    module_name = "Belfrage.Dials.#{module_name}" |> IO.inspect()
+    test_module_name = "#{module_name}Test" |> IO.inspect()
+
+    contents =
+      EEx.eval_file(template_file, test_module_name: test_module_name, impl_module_name: module_name)
+      |> Code.format_string!()
+
+    File.write!(filename, contents)
+  end
 end
