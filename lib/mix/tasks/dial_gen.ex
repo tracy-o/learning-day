@@ -63,9 +63,11 @@ defmodule Mix.Tasks.DialGen do
     template_file = "lib/mix/tasks/dial_gen/dial_config_template.eex"
     dials_config_file = "config/dials.exs"
 
+    module = Module.concat([Belfrage,Dials,module_name])
+
     dial_handlers =
       Application.get_env(:belfrage, :dial_handlers)
-      |> Map.put(name, module_name)
+      |> Map.put(name, module)
 
     contents =
       EEx.eval_file(template_file, dial_handlers: inspect(dial_handlers))
@@ -88,7 +90,6 @@ defmodule Mix.Tasks.DialGen do
   defp generate_dial_test_module(dial_name, module_name) do
     template_file = "lib/mix/tasks/dial_gen/dial_test_tempate.eex"
     filename = "test/belfrage/dials/#{dial_name}_test.exs"
-
 
     module_name = "Belfrage.Dials.#{module_name}"
     test_module_name = "#{module_name}Test"
