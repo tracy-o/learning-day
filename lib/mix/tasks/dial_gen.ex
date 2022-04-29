@@ -3,68 +3,32 @@ defmodule Mix.Tasks.DialGen do
   @shortdoc "generates dial"
 
   use Mix.Task
+  require EEx
 
   @impl Mix.Task
   def run(args) do
-    parse(args)
-  end
-
-
-  defp parse(args) do
-    [dial_name | _rest] = args
-
-    {dial_name, dial_module_name} = parse_dial_name(dial_name)
-    add_to_cosmos_json("jeff", "a_desc", "on", [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}])
-    add_to_dev_env("jeff", "on")
-    add_to_dial_config("jeff", Belfrage.Dials.Jeff)
-  end
-
-  defp parse_dial_name(arg) do
-    lower_alpha = ((for n <- ?a..?z, do: n) |> to_string()) <> "_"
-
-    parsed_dial = String.graphemes(arg)
-    |> Enum.reduce_while(
-      [],fn x, acc ->
-        if String.contains?(lower_alpha, x) do
-          {:cont, [x| acc]}
-        else
-          {:halt, {:error, "invalid char '#{x}' in dial name"}}
-        end
-      end
-    )
-
-    case parsed_dial do
-      {:error, reason} ->
-        {:error, reason}
-
-      dial ->
-        parsed_dial = dial
-        |> Enum.reverse()
-        |> Enum.join()
-
-        {parsed_dial, dial_module_name(parsed_dial)}
+    with {:ok, dial_name} <- parse_args(args),
+         {:ok, valid_dial_name} <- validate(dial_name) do
+      generate_dial(valid_dial_name)
+    else
+      err -> IO.inspect(err)
     end
   end
 
-  def dial_module_name(dial_name) do
-    String.graphemes(dial_name)
-    |> Enum.reduce(
-      [],
-      fn x, acc ->
-        case acc do
-          [] -> [String.upcase(x)]
-          ["_"| rest] -> [String.upcase(x)| rest]
-          [_| _rest] -> [x| acc]
+  defp generate_dial(dial_name) do
+    module_name = dial_module_name(dial_name)
+    default_description = "I AM A GENERATED DESCRIPTION, CHANGE ME!"
+    default_values = [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}]
+    default_value = "on"
 
-        end
-      end
-    )
-    |> Enum.reverse()
-    |> Enum.join()
-    |> String.trim_trailing("_")
+    add_to_cosmos_json(dial_name, default_description, default_value, default_values)
+    add_to_dev_env(dial_name, default_value)
+    add_to_dial_config(dial_name, module_name)
+    generate_dial_module(dial_name, module_name)
+    generate_dial_test_module(dial_name, module_name)
   end
 
-  def add_to_dev_env(name, default_value) do
+  defp add_to_dev_env(name, default_value) do
     with {:ok, raw_json} <- File.read("cosmos/dials_values_dev_env.json"),
       {:ok, dev_values} <- Jason.decode(raw_json) do
         {:ok, dev_values_string} = Map.put(dev_values, name, default_value)
@@ -74,7 +38,7 @@ defmodule Mix.Tasks.DialGen do
     end
   end
 
-  def add_to_cosmos_json(name, description, default_value, dial_values) do
+  defp add_to_cosmos_json(name, description, default_value, dial_values) do
     with {:ok, raw_json} <- File.read("cosmos/dials.json"),
           {:ok, dials_config} <- Jason.decode(raw_json)
     do
@@ -95,9 +59,7 @@ defmodule Mix.Tasks.DialGen do
     end
   end
 
-  def add_to_dial_config(name, module_name) do
-    require EEx
-
+  defp add_to_dial_config(name, module_name) do
     template_file = "lib/mix/tasks/dial_gen/dial_config_template.eex"
     dials_config_file = "config/dials.exs"
 
@@ -112,7 +74,7 @@ defmodule Mix.Tasks.DialGen do
     File.write!(dials_config_file, contents)
   end
 
-  def generate_dial_module(module_name, dial_name) do
+  defp generate_dial_module(dial_name, module_name) do
     template_file = "lib/mix/tasks/dial_gen/dial_template.eex"
     filename = "lib/belfrage/dials/#{dial_name}.ex"
 
@@ -123,18 +85,35 @@ defmodule Mix.Tasks.DialGen do
     File.write!(filename, contents)
   end
 
-  def generate_dial_test_module(module_name, dial_name) do
+  defp generate_dial_test_module(dial_name, module_name) do
     template_file = "lib/mix/tasks/dial_gen/dial_test_tempate.eex"
     filename = "test/belfrage/dials/#{dial_name}_test.exs"
 
 
-    module_name = "Belfrage.Dials.#{module_name}" |> IO.inspect()
-    test_module_name = "#{module_name}Test" |> IO.inspect()
+    module_name = "Belfrage.Dials.#{module_name}"
+    test_module_name = "#{module_name}Test"
 
     contents =
       EEx.eval_file(template_file, test_module_name: test_module_name, impl_module_name: module_name)
       |> Code.format_string!()
 
     File.write!(filename, contents)
+  end
+
+  defp parse_args([dial_name]), do: {:ok, dial_name}
+  defp parse_args(_), do: {:error, "takes only one argument"}
+
+  defp validate(dial_name) do
+    if String.match?(dial_name, ~r/^([[:lower:]]|_)+$/) do
+      {:ok, dial_name}
+    else
+      {:error, "invalid dial name"}
+    end
+  end
+
+  defp dial_module_name(dial_name) do
+    String.split(dial_name, "_")
+    |> Enum.map(&String.capitalize/1)
+    |> Enum.join()
   end
 end
