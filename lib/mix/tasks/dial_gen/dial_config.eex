@@ -1,0 +1,4 @@
+use Mix.Config
+
+config :belfrage,
+    dial_handlers: <%= dial_handlers %>
