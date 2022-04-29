@@ -211,6 +211,239 @@ defmodule Belfrage.RouteStateTest do
     end
   end
 
+  describe "update/1" do
+    test "updates :mvt_seen as expected when no vary header exists", %{
+      pid: pid
+    } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
+                     100
+
+      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
+    end
+
+    test "updates :mvt_seen as expected when no MVT vary headers exist", %{
+      pid: pid
+    } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{"vary" => "something,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
+                     100
+
+      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
+    end
+
+    test "updates :mvt_seen as expected when response is fallback", %{
+      pid: pid
+    } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: true,
+          headers: %{"vary" => "something,mvt-button-colour,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", true}}},
+                     100
+
+      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{errors: 0, fallback: 1}}} = :sys.get_state(pid)
+    end
+
+    test "updates :mvt_seen in state as expected when response is not fallback and one MVT vary header is in response",
+         %{
+           pid: pid
+         } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{"vary" => "something,mvt-button-colour,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
+                     100
+
+      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
+               :sys.get_state(pid)
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
+                     100
+
+      assert %{mvt_seen: ["mvt-button-colour": dt2], counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}} =
+               :sys.get_state(pid)
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), dt2)
+      assert :gt == DateTime.compare(dt2, dt1)
+    end
+
+    test "updates :mvt_seen as expected for a different subsequent mvt vary header", %{
+      pid: pid
+    } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{"vary" => "something,mvt-button-colour,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
+                     100
+
+      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
+               :sys.get_state(pid)
+
+      RouteState.update(
+        Struct.add(struct, :response, %{
+          headers: %{"vary" => "something,mvt-sidebar-colour,something-else"}
+        })
+      )
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-sidebar-colour"]}}},
+                     100
+
+      assert %{
+               mvt_seen: ["mvt-sidebar-colour": dt2, "mvt-button-colour": ^dt1],
+               counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
+             } = :sys.get_state(pid)
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), dt2)
+      assert :gt == DateTime.compare(dt2, dt1)
+    end
+
+    test "updates :mvt_seen as expected for a different subsequent mvt vary header and the same subsequent mvt vary header",
+         %{
+           pid: pid
+         } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{"vary" => "something,mvt-button-colour,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
+                     100
+
+      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
+               :sys.get_state(pid)
+
+      RouteState.update(
+        Struct.add(struct, :response, %{
+          headers: %{"vary" => "something,mvt-button-colour,something-else,mvt-footer-colour,"}
+        })
+      )
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour", "mvt-footer-colour"]}}},
+                     100
+
+      assert %{
+               mvt_seen: ["mvt-footer-colour": dt3, "mvt-button-colour": dt2],
+               counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
+             } = :sys.get_state(pid)
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), dt3)
+      assert :eq == DateTime.compare(dt3, dt2)
+      assert :gt == DateTime.compare(dt2, dt1)
+    end
+
+    test "updates :mvt_seen as expected for a subsequent response with no mvt vary headers", %{
+      pid: pid
+    } do
+      :erlang.trace(pid, true, [:receive])
+
+      struct = %Struct{
+        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        response: %Struct.Response{
+          http_status: 200,
+          fallback: false,
+          headers: %{"vary" => "something,mvt-button-colour,something-else"}
+        }
+      }
+
+      RouteState.update(struct)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
+                     100
+
+      assert %{
+               mvt_seen: ["mvt-button-colour": datetime],
+               counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}
+             } = :sys.get_state(pid)
+
+      RouteState.update(
+        Struct.add(struct, :response, %{
+          headers: %{"vary" => "something,something-else"}
+        })
+      )
+
+      assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
+                     100
+
+      assert %{
+               mvt_seen: ["mvt-button-colour": ^datetime],
+               counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
+             } = :sys.get_state(pid)
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), datetime)
+    end
+  end
+
   defp replace_throughput(pid, throughput) do
     :sys.replace_state(pid, fn state ->
       %{state | throughput: throughput}
