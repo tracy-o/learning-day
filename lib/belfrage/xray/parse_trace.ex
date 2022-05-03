@@ -46,11 +46,11 @@ defmodule Belfrage.Xray.ParseTrace do
   defp filter_extra_data(rest) do
     banned_keys = ["Self", "Root", "Parent", "Sampled"]
 
-    Enum.filter(rest, &is_banned(&1, banned_keys))
+    Enum.filter(rest, &allowed_key?(&1, banned_keys))
   end
 
-  defp is_banned([key, _value], banned_keys), do: key not in banned_keys
-  defp is_banned(_, _banned_keys), do: false
+  defp allowed_key?([key, _value], banned_keys), do: key not in banned_keys
+  defp allowed_key?(_, _banned_keys), do: false
 
   defp parse_sampled(["Sampled", "1"]), do: ["Sampled", true]
   defp parse_sampled(["Sampled", "0"]), do: ["Sampled", false]
