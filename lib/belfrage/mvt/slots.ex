@@ -1,4 +1,4 @@
-defmodule Belfrage.Mvt.Headers do
+defmodule Belfrage.Mvt.Slots do
   @moduledoc """
   This process helps Belfrage keep in Sync with the Mvt Slot Supervisor and exposes a list of the currently allowed headers.
   This list of headers are polled periodically via the `Belfrage.Mvt.Filepoller` and this module updates the state of them, with functions to callback the list when required.
@@ -14,7 +14,7 @@ defmodule Belfrage.Mvt.Headers do
    This function returns a Map of the available headers that have been fetched from the Mvt Slots Supervisor.
    We attempt to update this Map every minute.
   """
-  def get(agent \\ __MODULE__) do
+  def available(agent \\ __MODULE__) do
     Agent.get(agent, & &1)
   end
 

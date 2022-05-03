@@ -38,6 +38,6 @@ defmodule Belfrage.Mvt.FilePoller do
   defp slots_file_location, do: Application.get_env(:belfrage, :mvt)[:slots_file_location]
 
   defp set_header_state(headers) do
-    Mvt.Headers.set(headers)
+    Mvt.Slots.set(headers)
   end
 end
