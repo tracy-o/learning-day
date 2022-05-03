@@ -781,13 +781,14 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo"] do
+  ## World Service - Kyrgyz Optimo article test
+  handle "/kyrgyz/articles/cvxepw6440zo", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo"] do
     return_404 if: [
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/),
       String.length(id) != 12
     ]
   end
-  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo.amp"] do
+  handle "/kyrgyz/articles/cvxepw6440zo.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo.amp"] do
     return_404 if: [
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/),
       String.length(id) != 12
