@@ -3,6 +3,7 @@ defmodule EndToEnd.MvtTest do
   use Plug.Test
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
+  alias Belfrage.Mvt
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
@@ -33,6 +34,8 @@ defmodule EndToEnd.MvtTest do
   setup do
     :ets.delete_all_objects(:cache)
     start_supervised!({RouteState, "WebCoreMvtPlayground"})
+    Mvt.Slots.set(%{"1" => [%{"header" => "bbc-mvt-1", "key" => "button_colour"}]})
+    on_exit(fn -> Mvt.Slots.set(%{}) end)
     :ok
   end
 
