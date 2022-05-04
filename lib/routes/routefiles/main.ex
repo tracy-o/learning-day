@@ -467,9 +467,7 @@ defroutefile "Main" do
   handle "/news/rss.xml", using: "News", examples: ["/news/rss.xml"]
   handle "/news/:id/rss.xml", using: "News", examples: ["/news/uk/rss.xml"]
 
-  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
-  end
+  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
   handle "/news/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/news/mvt/testing"]
 
