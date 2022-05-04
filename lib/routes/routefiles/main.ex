@@ -134,6 +134,13 @@ defroutefile "Main" do
   redirect("/news/mobile", to: "/news", status: 302)
   redirect("/news/popular/read", to: "/news", status: 302)
 
+  redirect("/news/help", to: "/news", status: 302)
+  redirect("/news/also_in_the_news", to: "/news", status: 302)
+  redirect("/news/cop26-alerts", to: "/news/help-58765412", status: 302)
+  redirect("/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302)
+  redirect("/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302)
+  redirect("/news/nie22-alerts", to: "/news/help-60495859", status: 302)
+
   redirect("/news/magazine", to: "/news/stories", status: 302)
 
   redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
@@ -359,7 +366,7 @@ defroutefile "Main" do
   end
 
   # News indexes
-  handle "/news/also_in_the_news", using: "News", examples: ["/news/also_in_the_news"]
+  handle "/news/access-to-news", using: "News", examples: ["/news/access-to-news"]
   handle "/news/business", using: "News", examples: ["/news/business"]
   handle "/news/components", using: "News", examples: ["/news/components"]
   handle "/news/coronavirus", using: "News", examples: ["/news/coronavirus"]
@@ -459,9 +466,7 @@ defroutefile "Main" do
   handle "/news/rss.xml", using: "News", examples: ["/news/rss.xml"]
   handle "/news/:id/rss.xml", using: "News", examples: ["/news/uk/rss.xml"]
 
-  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"] do
-    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
-  end
+  handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
   handle "/news/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/news/mvt/testing"]
 
