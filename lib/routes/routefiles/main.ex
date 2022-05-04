@@ -134,6 +134,13 @@ defroutefile "Main" do
   redirect("/news/mobile", to: "/news", status: 302)
   redirect("/news/popular/read", to: "/news", status: 302)
 
+  redirect("/news/help", to: "/news", status: 302)
+  redirect("/news/also_in_the_news", to: "/news", status: 302)
+  redirect("/news/cop26-alerts", to: "/news/help-58765412", status: 302)
+  redirect("/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302)
+  redirect("/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302)
+  redirect("/news/nie22-alerts", to: "/news/help-60495859", status: 302)
+
   redirect("/news/magazine", to: "/news/stories", status: 302)
 
   redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
@@ -359,6 +366,7 @@ defroutefile "Main" do
   end
 
   # News indexes
+  handle "/news/access-to-news", using: "News", examples: ["/news/access-to-news"]
   handle "/news/also_in_the_news", using: "News", examples: ["/news/also_in_the_news"]
   handle "/news/business", using: "News", examples: ["/news/business"]
   handle "/news/components", using: "News", examples: ["/news/components"]
