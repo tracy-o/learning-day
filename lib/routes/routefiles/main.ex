@@ -367,7 +367,6 @@ defroutefile "Main" do
 
   # News indexes
   handle "/news/access-to-news", using: "News", examples: ["/news/access-to-news"]
-  handle "/news/also_in_the_news", using: "News", examples: ["/news/also_in_the_news"]
   handle "/news/business", using: "News", examples: ["/news/business"]
   handle "/news/components", using: "News", examples: ["/news/components"]
   handle "/news/coronavirus", using: "News", examples: ["/news/coronavirus"]
