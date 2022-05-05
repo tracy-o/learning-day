@@ -24,6 +24,17 @@ secure_machine_gun_config = %{
     }
 }
 
+poller_machine_gun_config = %{
+  # Poolboy size
+  pool_size: 16,
+  # Poolboy max_overflow
+  pool_max_overflow: 64,
+  pool_queue: false,
+  pool_timeout: 300_000,
+  # Gun connection options
+  conn_opts: %{}
+}
+
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
@@ -34,7 +45,7 @@ config :machine_gun,
   MozartSimorgh: default_machine_gun_config,
   MozartSport: default_machine_gun_config,
   MozartWeather: default_machine_gun_config,
-  MvtFilePoller: default_machine_gun_config,
+  MvtFilePoller: poller_machine_gun_config,
   OriginSimulator: default_machine_gun_config,
   Programmes: default_machine_gun_config,
   S3: default_machine_gun_config,
