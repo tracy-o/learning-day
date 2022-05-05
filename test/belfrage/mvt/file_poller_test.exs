@@ -31,6 +31,6 @@ defmodule Belfrage.Mvt.FilePollerTest do
     start_supervised!({FilePoller, interval: 0, name: :fail_test_mvt_file_poller})
 
     Process.sleep(10)
-    wait_for(fn -> Slots.available() == %{} end)
+    assert Slots.available() == %{}
   end
 end
