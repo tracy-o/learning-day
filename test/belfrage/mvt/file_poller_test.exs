@@ -20,4 +20,17 @@ defmodule Belfrage.Mvt.FilePollerTest do
 
     wait_for(fn -> Slots.available() == project_headers end)
   end
+
+  test "if there is an error fetching the file it will not set the file" do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok, %HTTP.Response{status_code: 500, body: "{}"}}
+    end)
+
+    start_supervised!({FilePoller, interval: 0, name: :fail_test_mvt_file_poller})
+
+    Process.sleep(10)
+    wait_for(fn -> Slots.available() == %{} end)
+  end
 end
