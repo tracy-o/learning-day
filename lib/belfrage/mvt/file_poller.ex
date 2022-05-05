@@ -7,7 +7,7 @@ defmodule Belfrage.Mvt.FilePoller do
   alias Belfrage.Mvt
   alias Belfrage.Clients
 
-  @interval 600
+  @interval 60_000
   @http_pool :MvtFilePoller
 
   def start_link(opts \\ []) do
