@@ -6,7 +6,7 @@ defmodule Belfrage.Mvt.Slots do
 
   use Agent
 
-  def start_link(opts \\ %{}) do
+  def start_link(opts \\ []) do
     Agent.start_link(fn -> %{} end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
