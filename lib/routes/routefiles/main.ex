@@ -790,8 +790,13 @@ defroutefile "Main" do
     ]
   end
 
+  ## World Service - Kyrgyz Optimo article test
+  handle "/kyrgyz/articles/cvxepw6440zo", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo"]
+  handle "/kyrgyz/articles/cvxepw6440zo.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo.amp"]
+
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
+
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/new_topics/:id", using: "WorldServiceMarathiTopicPage", only_on: "test", examples: ["/marathi/new_topics/c2dwqjwqqqjt", "/marathi/new_topics/c2dwqjwqqqjt?page=40"] do
