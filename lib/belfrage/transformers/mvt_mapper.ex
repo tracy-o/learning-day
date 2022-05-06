@@ -18,27 +18,30 @@ defmodule Belfrage.Transformers.MvtMapper do
     then_do(rest, struct)
   end
 
-  def map_mvt_headers(req_headers, platform) do
+  defp map_mvt_headers(headers, platform) do
     slot = get_slot(platform)
 
-    reduction = fn i, acc ->
-      with [type, name, value] <- header_parts(req_headers, "bbc-mvt-#{i}"),
-           true <- match_slot?("bbc-mvt-#{i}", name, slot) do
-        Map.merge(acc, %{"mvt-#{name}" => {i, "#{type};#{value}"}})
-      else
-        _err -> acc
-      end
+    1..20
+    |> Enum.map(fn i -> {i, header_parts(i, headers)} end)
+    |> Enum.filter(&in_slot?(&1, slot))
+    |> Enum.into(%{}, fn {i, [type, name, value]} ->
+      {"mvt-#{name}", {i, "#{type};#{value}"}}
+    end)
+  end
+
+  defp in_slot?({i, parts}, slot) do
+    case parts do
+      [_type, name, _value] -> match_slot?("bbc-mvt-#{i}", name, slot)
+      _ -> false
     end
-
-    Enum.reduce(1..20, %{}, reduction)
   end
 
-  defp header_parts(req_headers, header_name) do
-    (req_headers[header_name] || "") |> String.split(";")
+  defp header_parts(i, headers) do
+    (headers["bbc-mvt-#{i}"] || "") |> String.split(";")
   end
 
-  defp match_slot?(header_name, experiment_name, slot) do
-    Enum.any?(slot, fn e -> e["header"] == header_name and e["key"] == experiment_name end)
+  defp match_slot?(header, experiment, slot) do
+    Enum.any?(slot, fn e -> e["header"] == header and e["key"] == experiment end)
   end
 
   defp get_slot(platform) do
