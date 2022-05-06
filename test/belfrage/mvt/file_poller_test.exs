@@ -7,11 +7,9 @@ defmodule Belfrage.Mvt.FilePollerTest do
 
   @mvt_json_payload File.read!("test/support/fixtures/mvt_slot_headers.json")
 
-  setup [:trace_slots_agent]
+  setup [:clear_slots_agent_state, :trace_slots_agent]
 
   test "fetches and updates Mvt Slots from S3", %{slots_agent_pid: slots_agent_pid} do
-    Slots.set(Belfrage.Mvt.Slots, %{})
-
     assert Slots.available() == %{}
 
     expect(HTTPMock, :execute, fn _, _origin ->
@@ -28,7 +26,6 @@ defmodule Belfrage.Mvt.FilePollerTest do
   test "if there is an error fetching the file it will not set the file content in the agent", %{
     slots_agent_pid: slots_agent_pid
   } do
-    Slots.set(Belfrage.Mvt.Slots, %{})
     assert Slots.available() == %{}
 
     expect(HTTPMock, :execute, fn _, _origin ->
@@ -41,7 +38,6 @@ defmodule Belfrage.Mvt.FilePollerTest do
   end
 
   test "if the file is malformed it will not set the file content in the agent", %{slots_agent_pid: slots_agent_pid} do
-    Slots.set(Belfrage.Mvt.Slots, %{})
     assert Slots.available() == %{}
 
     expect(HTTPMock, :execute, fn _, _origin ->
@@ -58,5 +54,9 @@ defmodule Belfrage.Mvt.FilePollerTest do
     :erlang.trace(pid, true, [:receive])
 
     {:ok, slots_agent_pid: pid}
+  end
+
+  def clear_slots_agent_state(_context) do
+    Slots.set(Belfrage.Mvt.Slots, %{})
   end
 end
