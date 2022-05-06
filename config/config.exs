@@ -26,9 +26,9 @@ secure_machine_gun_config = %{
 
 poller_machine_gun_config = %{
   # Poolboy size
-  pool_size: 16,
+  pool_size: 1,
   # Poolboy max_overflow
-  pool_max_overflow: 64,
+  pool_max_overflow: 8,
   pool_queue: false,
   pool_timeout: 300_000,
   # Gun connection options
