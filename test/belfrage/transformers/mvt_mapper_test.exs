@@ -20,6 +20,14 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     :ok
   end
 
+  defp set_all_slots(context) do
+    slots = Map.get(context, :slots, %{})
+    Mvt.Slots.set(slots)
+
+    on_exit(fn -> Mvt.Slots.set(%{}) end)
+    :ok
+  end
+
   describe "when the mvt dial is turned off" do
     setup [:mvt_dial]
 
@@ -90,6 +98,17 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     @tag slot: [%{"header" => "bbc-mvt-1", "key" => "button_colour"}]
     test "the header isn't added to the struct" do
       {:ok, struct} = MvtMapper.call([], build_struct([]))
+      assert struct.private.mvt == %{}
+    end
+  end
+
+  describe "when all slots are empty" do
+    setup [:mvt_dial, :set_all_slots]
+
+    @tag dial_state: "true"
+    @tag slots: %{}
+    test "the header isn't added to the struct" do
+      {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
     end
   end
