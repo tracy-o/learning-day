@@ -587,6 +587,9 @@ defroutefile "Main" do
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
+  ## World Service - Topic Redirects
+  redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
   ##    Mobile Redirects: /<service>/mobile/*any
