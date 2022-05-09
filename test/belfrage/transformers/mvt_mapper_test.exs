@@ -6,32 +6,11 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   alias Belfrage.Struct
   alias Belfrage.Mvt
 
-  defp mvt_dial(context) do
-    dial_state = Map.get(context, :dial_state)
-    stub_dial(:mvt_enabled, dial_state)
-    :ok
-  end
-
-  defp set_slot(context) do
-    slot = Map.get(context, :slot)
-    Mvt.Slots.set(%{"1" => slot})
-
-    on_exit(fn -> Mvt.Slots.set(%{}) end)
-    :ok
-  end
-
-  defp set_all_slots(context) do
-    slots = Map.get(context, :slots, %{})
-    Mvt.Slots.set(slots)
-
-    on_exit(fn -> Mvt.Slots.set(%{}) end)
-    :ok
-  end
-
   describe "when the mvt dial is turned off" do
-    setup [:mvt_dial]
+    setup do
+      stub_dial(:mvt_enabled, "false") && :ok
+    end
 
-    @tag dial_state: "false"
     test "no mvt headers will ever be mapped" do
       {:ok, struct} =
         MvtMapper.call(
@@ -46,13 +25,15 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when an mvt request header has a corresponding slot header" do
-    setup [:mvt_dial, :set_slot]
+    setup do
+      stub_dial(:mvt_enabled, "true")
 
-    @tag dial_state: "true"
-    @tag slot: [
-           %{"header" => "bbc-mvt-1", "key" => "button_colour"},
-           %{"header" => "bbc-mvt-3", "key" => "sidebar"}
-         ]
+      set_slot([
+        %{"header" => "bbc-mvt-1", "key" => "button_colour"},
+        %{"header" => "bbc-mvt-3", "key" => "sidebar"}
+      ])
+    end
+
     test "the header is mapped and added to the struct" do
       {:ok, struct} =
         MvtMapper.call(
@@ -70,10 +51,11 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when a mvt request header matches a slot header but not a slot key" do
-    setup [:mvt_dial, :set_slot]
+    setup do
+      stub_dial(:mvt_enabled, "true")
+      set_slot([%{"header" => "bbc-mvt-1", "key" => "you_wont_match_me"}])
+    end
 
-    @tag dial_state: "true"
-    @tag slot: [%{"header" => "bbc-mvt-1", "key" => "you_wont_match_me"}]
     test "the header isn't added to the struct" do
       {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
@@ -81,7 +63,10 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when an mvt request header doesn't have a corresponding slot header" do
-    setup [:mvt_dial, :set_slot]
+    setup do
+      stub_dial(:mvt_enabled, "true")
+      set_slot([])
+    end
 
     @tag dial_state: "true"
     @tag slot: []
@@ -92,10 +77,11 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when there is a slot header but no corresponding mvt request header" do
-    setup [:mvt_dial, :set_slot]
+    setup do
+      stub_dial(:mvt_enabled, "true")
+      set_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+    end
 
-    @tag dial_state: "true"
-    @tag slot: [%{"header" => "bbc-mvt-1", "key" => "button_colour"}]
     test "the header isn't added to the struct" do
       {:ok, struct} = MvtMapper.call([], build_struct([]))
       assert struct.private.mvt == %{}
@@ -103,10 +89,12 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when all slots are empty" do
-    setup [:mvt_dial, :set_all_slots]
+    setup do
+      stub_dial(:mvt_enabled, "true")
+      Mvt.Slots.set(%{})
+      :ok
+    end
 
-    @tag dial_state: "true"
-    @tag slots: %{}
     test "the header isn't added to the struct" do
       {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
@@ -114,11 +102,20 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   end
 
   describe "when there are no mvt request headers" do
+    setup do
+      stub_dial(:mvt_enabled, "true") && :ok
+    end
+
     test "the mvt map is empty" do
       {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"a" => "header"}))
 
       assert %{} == struct.private.mvt
     end
+  end
+
+  defp set_slot(slot) do
+    Mvt.Slots.set(%{"1" => slot})
+    on_exit(fn -> Mvt.Slots.set(%{}) end)
   end
 
   defp build_struct(opts) do
