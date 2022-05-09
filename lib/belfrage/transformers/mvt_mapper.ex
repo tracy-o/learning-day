@@ -8,9 +8,13 @@ defmodule Belfrage.Transformers.MvtMapper do
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
+    slot =
+      Mvt.Slots.available()
+      |> Map.get(@platform_mapping[struct.private.platform], [])
+
     struct =
       if @dial.state(:mvt_enabled) do
-        Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers, struct.private.platform)})
+        Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers, slot)})
       else
         struct
       end
@@ -18,9 +22,7 @@ defmodule Belfrage.Transformers.MvtMapper do
     then_do(rest, struct)
   end
 
-  defp map_mvt_headers(headers, platform) do
-    slot = get_slot(platform)
-
+  defp map_mvt_headers(headers, slot) do
     1..20
     |> Enum.map(fn i -> {i, header_parts(i, headers)} end)
     |> Enum.filter(&in_slot?(&1, slot))
@@ -29,25 +31,17 @@ defmodule Belfrage.Transformers.MvtMapper do
     end)
   end
 
-  defp in_slot?({i, parts}, slot) do
-    case parts do
-      [_type, name, _value] -> match_slot?("bbc-mvt-#{i}", name, slot)
-      _ -> false
-    end
-  end
-
   defp header_parts(i, headers) do
     (headers["bbc-mvt-#{i}"] || "") |> String.split(";")
   end
 
-  defp match_slot?(header, experiment, slot) do
-    Enum.any?(slot, fn e -> e["header"] == header and e["key"] == experiment end)
-  end
+  defp in_slot?({i, parts}, slot) do
+    case parts do
+      [_type, experiment_name, _value] ->
+        Enum.any?(slot, &(&1["header"] == "bbc-mvt-#{i}" and &1["key"] == experiment_name))
 
-  defp get_slot(platform) do
-    Mvt.Slots.available()
-    |> Map.get(slot_key(platform), [])
+      _ ->
+        false
+    end
   end
-
-  defp slot_key(platform), do: Map.get(@platform_mapping, platform)
 end
