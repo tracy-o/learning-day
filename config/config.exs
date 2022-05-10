@@ -24,6 +24,17 @@ secure_machine_gun_config = %{
     }
 }
 
+poller_machine_gun_config = %{
+  # Poolboy size
+  pool_size: 8,
+  # Poolboy max_overflow
+  pool_max_overflow: 36,
+  pool_queue: false,
+  pool_timeout: 300_000,
+  # Gun connection options
+  conn_opts: %{}
+}
+
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
@@ -34,6 +45,7 @@ config :machine_gun,
   MozartSimorgh: default_machine_gun_config,
   MozartSport: default_machine_gun_config,
   MozartWeather: default_machine_gun_config,
+  MvtFilePoller: poller_machine_gun_config,
   OriginSimulator: default_machine_gun_config,
   Programmes: default_machine_gun_config,
   S3: default_machine_gun_config,
@@ -105,7 +117,10 @@ config :belfrage,
   jwk_polling_enabled: true,
   not_found_page: "priv/static/default_error_pages/not_found.html",
   not_supported_page: "priv/static/default_error_pages/not_supported.html",
-  internal_error_page: "priv/static/default_error_pages/internal_error.html"
+  internal_error_page: "priv/static/default_error_pages/internal_error.html",
+  mvt: %{
+    slots_file_location: "https://test-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/development.json"
+  }
 
 config :cachex, :limit,
   size: 36_000,

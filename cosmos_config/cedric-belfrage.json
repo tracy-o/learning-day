@@ -180,5 +180,12 @@
       "live": "https://idcta.api.bbc.co.uk/idcta/config"
     },
     "name": "IDCTA_CONFIG_URI"
+  },
+  {
+    "name": "MVT_SLOTS_URI",
+    "values": {
+      "test": "https://test-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/development.json",
+      "live": "https://live-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/production.json"
+    }
   }
 ]

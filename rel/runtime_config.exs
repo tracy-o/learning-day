@@ -18,7 +18,8 @@ use Mix.Config
   {"ACCOUNT_ISS", :custom},
   {"ACCOUNT_JWK_URI", :custom},
   {"SESSION_URL", :custom},
-  {"IDCTA_CONFIG_URI", :custom}
+  {"IDCTA_CONFIG_URI", :custom},
+  {"MVT_SLOTS_URI", :custom}
 ]
 |> Enum.each(fn {config_key, set_type} ->
   if System.get_env(config_key) == nil do
@@ -39,4 +40,7 @@ config :belfrage,
     "session_url" => System.get_env("SESSION_URL"),
     "idcta_config_uri" => System.get_env("IDCTA_CONFIG_URI"),
     "jwt_expiry_window" => 4200
+  },
+  mvt: %{
+    slots_file_location: System.get_env("MVT_SLOTS_URI")
   }
