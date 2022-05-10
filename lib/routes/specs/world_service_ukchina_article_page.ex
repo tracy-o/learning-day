@@ -1,4 +1,4 @@
-defmodule Routes.Specs.WorldServiceUkchinaArticlePage do
+defmodule Routes.Specs.WorldServiceUkChinaArticlePage do
   def specs(production_env) do
     %{
       platform: Simorgh,

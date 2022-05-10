@@ -1536,25 +1536,25 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/ukchina/articles/:id/simp", using: "WorldServiceUkchinaArticlePage", examples: [] do
+  handle "/ukchina/articles/:id/simp", using: "WorldServiceUkChinaArticlePage", examples: [] do
     return_404 if: [
       String.length(id) != 12,
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
     ]
   end
-  handle "/ukchina/articles/:id/simp.amp", using: "WorldServiceUkchinaArticlePage", examples: [] do
+  handle "/ukchina/articles/:id/simp.amp", using: "WorldServiceUkChinaArticlePage", examples: [] do
     return_404 if: [
       String.length(id) != 12,
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
     ]
   end
-  handle "/ukchina/articles/:id/trad", using: "WorldServiceUkchinaArticlePage", examples: [] do
+  handle "/ukchina/articles/:id/trad", using: "WorldServiceUkChinaArticlePage", examples: [] do
     return_404 if: [
       String.length(id) != 12,
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
     ]
   end
-  handle "/ukchina/articles/:id/trad.amp", using: "WorldServiceUkchinaArticlePage", examples: [] do
+  handle "/ukchina/articles/:id/trad.amp", using: "WorldServiceUkChinaArticlePage", examples: [] do
     return_404 if: [
       String.length(id) != 12,
       !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
