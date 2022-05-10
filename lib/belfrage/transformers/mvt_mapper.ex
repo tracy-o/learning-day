@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.MvtMapper do
 
   @dial Application.get_env(:belfrage, :dial)
 
-  @platform_mapping %{Webcore => "1", MozartSimourgh => "2"}
+  @platform_mapping %{Webcore => "1", Simorgh => "2"}
 
   @impl true
   def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
@@ -38,10 +38,14 @@ defmodule Belfrage.Transformers.MvtMapper do
   defp in_slot?({i, parts}, slot) do
     case parts do
       [_type, experiment_name, _value] ->
-        Enum.any?(slot, &(&1["header"] == "bbc-mvt-#{i}" and &1["key"] == experiment_name))
+        Enum.any?(slot, fn experiment -> match_experiment?(experiment, i, experiment_name) end)
 
       _ ->
         false
     end
+  end
+
+  defp match_experiment?(experiment, i, name) do
+    experiment["header"] == "bbc-mvt-#{i}" and experiment["key"] == name
   end
 end
