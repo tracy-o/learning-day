@@ -24,11 +24,11 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
   end
 
-  describe "when an mvt request header has a corresponding slot header" do
+  describe "when an mvt request header has a corresponding project slot" do
     setup do
       stub_dial(:mvt_enabled, "true")
 
-      set_slot([
+      set_slots([
         %{"header" => "bbc-mvt-1", "key" => "button_colour"},
         %{"header" => "bbc-mvt-3", "key" => "sidebar"}
       ])
@@ -53,7 +53,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   describe "when a mvt request header matches a slot header but not a slot key" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slot([%{"header" => "bbc-mvt-1", "key" => "you_wont_match_me"}])
+      set_slots([%{"header" => "bbc-mvt-1", "key" => "you_wont_match_me"}])
     end
 
     test "the header isn't added to the struct" do
@@ -62,10 +62,10 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
   end
 
-  describe "when an mvt request header doesn't have a corresponding slot header" do
+  describe "when an mvt request header doesn't have a corresponding slot experiment" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slot([])
+      set_slots([])
     end
 
     @tag dial_state: "true"
@@ -76,10 +76,10 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
   end
 
-  describe "when there is a slot header but no corresponding mvt request header" do
+  describe "when there is a slot in the project but no corresponding mvt request header" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_slots([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
     end
 
     test "the header isn't added to the struct" do
@@ -113,8 +113,8 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
   end
 
-  defp set_slot(slot) do
-    Mvt.Slots.set(%{"1" => slot})
+  defp set_slots(project) do
+    Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Mvt.Slots.set(%{}) end)
   end
 
