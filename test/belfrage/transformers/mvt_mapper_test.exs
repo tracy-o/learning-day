@@ -68,8 +68,6 @@ defmodule Belfrage.Transformers.MvtMapperTest do
       set_slots([])
     end
 
-    @tag dial_state: "true"
-    @tag slot: []
     test "the header isn't added to the struct" do
       {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
