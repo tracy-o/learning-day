@@ -8,7 +8,8 @@ defmodule Belfrage.Transformers.MvtMapperTest do
 
   describe "when the mvt dial is turned off" do
     setup do
-      stub_dial(:mvt_enabled, "false") && :ok
+      stub_dial(:mvt_enabled, "false")
+      :ok
     end
 
     test "no mvt headers will ever be mapped" do
@@ -101,7 +102,8 @@ defmodule Belfrage.Transformers.MvtMapperTest do
 
   describe "when there are no mvt request headers" do
     setup do
-      stub_dial(:mvt_enabled, "true") && :ok
+      stub_dial(:mvt_enabled, "true")
+      :ok
     end
 
     test "the mvt map is empty" do
@@ -114,6 +116,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
   defp set_slots(project) do
     Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Mvt.Slots.set(%{}) end)
+    :ok
   end
 
   defp build_struct(opts) do
