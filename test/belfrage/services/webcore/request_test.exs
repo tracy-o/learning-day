@@ -231,10 +231,10 @@ defmodule Belfrage.Services.Webcore.RequestTest do
   test "adds the Obit Mode header when set" do
     struct_with_obit_mode_header = %Struct{
       request: %Struct.Request{
-        raw_headers: %{"obit-mode" => "true"}
+        raw_headers: %{"obit-mode" => "on"}
       }
     }
 
-    assert %{headers: %{"obm" => "true"}} = Request.build(struct_with_obit_mode_header)
+    assert %{headers: %{"obm" => "on"}} = Request.build(struct_with_obit_mode_header)
   end
 end
