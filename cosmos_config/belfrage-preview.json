@@ -180,7 +180,7 @@
       "live": "https://idcta.api.bbc.co.uk/idcta/config"
     },
     "name": "IDCTA_CONFIG_URI"
-  }
+  },
   {
     "name": "MVT_SLOTS_URI",
     "values": {
