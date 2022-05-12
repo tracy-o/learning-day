@@ -217,14 +217,13 @@ defmodule Belfrage.Services.Webcore.RequestTest do
              Request.build(struct_with_election_headers)
   end
 
-  test "adds mvt headers when set" do
-    struct_with_mvt = %Struct{
-      private: %Struct.Private{
-        mvt: %{"mvt-button_colour" => {1, "experiment;red"}, "mvt-sidebar" => {5, "feature;false"}}
+  test "adds the Obit Mode header when set" do
+    struct_with_obit_mode_header = %Struct{
+      request: %Struct.Request{
+        raw_headers: %{"obit-mode" => "true"}
       }
     }
 
-    assert %{headers: %{"mvt-button_colour" => "experiment;red", "mvt-sidebar" => "feature;false"}} =
-             Request.build(struct_with_mvt)
+    assert %{headers: %{"obm" => "true"}} = Request.build(struct_with_obit_mode_header)
   end
 end
