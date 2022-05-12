@@ -1,25 +1,21 @@
-defmodule Belfrage.Transformers.MvtMapper do
-  use Belfrage.Transformers.Transformer
+defmodule Belfrage.MvtMapper do
   alias Belfrage.Mvt
+  alias Belfrage.Struct
 
   @dial Application.get_env(:belfrage, :dial)
 
   @platform_mapping %{Webcore => "1", Simorgh => "2"}
 
-  @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
-    project_slots =
-      Mvt.Slots.available()
-      |> Map.get(@platform_mapping[struct.private.platform], [])
+  def map(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
+    if @dial.state(:mvt_enabled) do
+      project_slots =
+        Mvt.Slots.available()
+        |> Map.get(@platform_mapping[struct.private.platform], [])
 
-    struct =
-      if @dial.state(:mvt_enabled) do
-        Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers, project_slots)})
-      else
-        struct
-      end
-
-    then_do(rest, struct)
+      Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers, project_slots)})
+    else
+      struct
+    end
   end
 
   defp map_mvt_headers(headers, project_slots) do

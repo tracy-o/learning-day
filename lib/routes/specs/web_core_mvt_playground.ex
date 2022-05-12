@@ -4,7 +4,6 @@ defmodule Routes.Specs.WebCoreMvtPlayground do
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: Webcore,
-      pipeline: ["MvtMapper"],
       headers_allowlist: mvt_headers(),
       caching_enabled: false,
       mvt_project_id: 1

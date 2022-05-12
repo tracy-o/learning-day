@@ -13,6 +13,7 @@ defmodule Belfrage.Processor do
     Personalisation,
     CacheControl,
     Metrics,
+    MvtMapper,
     Language,
     WrapperError
   }
@@ -25,7 +26,8 @@ defmodule Belfrage.Processor do
       &get_route_state/1,
       &allowlists/1,
       &Personalisation.maybe_put_personalised_request/1,
-      &language/1,
+      &Language.add_signature/1,
+      &MvtMapper.map/1,
       &generate_request_hash/1
     ]
 
@@ -41,10 +43,6 @@ defmodule Belfrage.Processor do
         _ -> route_state_state_failure()
       end
     end)
-  end
-
-  def language(struct) do
-    Language.add_signature(struct)
   end
 
   def allowlists(struct) do

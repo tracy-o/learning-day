@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.MvtMapperTest do
+defmodule Belfrage.MvtMapperTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.MvtMapper
+  alias Belfrage.MvtMapper
   alias Belfrage.Struct
   alias Belfrage.Mvt
 
@@ -13,9 +13,8 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "no mvt headers will ever be mapped" do
-      {:ok, struct} =
-        MvtMapper.call(
-          [],
+      struct =
+        MvtMapper.map(
           build_struct(
             raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-3" => "feature;sidebar;false"}
           )
@@ -36,9 +35,8 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the header is mapped and added to the struct" do
-      {:ok, struct} =
-        MvtMapper.call(
-          [],
+      struct =
+        MvtMapper.map(
           build_struct(
             raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-3" => "feature;sidebar;false"}
           )
@@ -58,7 +56,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the header isn't added to the struct" do
-      {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
+      struct = MvtMapper.map(build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
     end
   end
@@ -70,7 +68,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the header isn't added to the struct" do
-      {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
+      struct = MvtMapper.map(build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
     end
   end
@@ -82,7 +80,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the header isn't added to the struct" do
-      {:ok, struct} = MvtMapper.call([], build_struct([]))
+      struct = MvtMapper.map(build_struct([]))
       assert struct.private.mvt == %{}
     end
   end
@@ -95,7 +93,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the header isn't added to the struct" do
-      {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
+      struct = MvtMapper.map(build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}))
       assert struct.private.mvt == %{}
     end
   end
@@ -107,7 +105,7 @@ defmodule Belfrage.Transformers.MvtMapperTest do
     end
 
     test "the mvt map is empty" do
-      {:ok, struct} = MvtMapper.call([], build_struct(raw_headers: %{"a" => "header"}))
+      struct = MvtMapper.map(build_struct(raw_headers: %{"a" => "header"}))
 
       assert %{} == struct.private.mvt
     end
