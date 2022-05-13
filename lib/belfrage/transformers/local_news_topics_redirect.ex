@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
   @impl true
   def call(rest, struct) do
     cond do
-      is_local_news?(struct) and topic_id(struct.request.path_params) -> 
+      is_local_news?(struct) and topic_id(struct.request.path_params) ->
         {
           :redirect,
           Struct.add(struct, :response, %{
@@ -15,11 +15,12 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
               "location" => redirect(struct.request),
               "x-bbc-no-scheme-rewrite" => "1",
               "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-              },
-              body: "Redirecting"
-              })
-            }
-      is_local_news?(struct) -> 
+            },
+            body: "Redirecting"
+          })
+        }
+
+      is_local_news?(struct) ->
         {
           :redirect,
           Struct.add(struct, :response, %{
@@ -32,6 +33,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
             body: "Redirecting"
           })
         }
+
       true ->
         then_do(rest, struct)
     end

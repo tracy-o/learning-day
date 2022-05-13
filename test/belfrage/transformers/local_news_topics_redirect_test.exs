@@ -33,18 +33,18 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirectTest do
         "location_id_and_name" => "12345-somelocation"
       })
 
-      assert {:redirect,
-              %Struct{
-                response: %Struct.Response{
-                  http_status: 302,
-                  headers: %{
-                    "location" => "/news/localnews",
-                    "x-bbc-no-scheme-rewrite" => "1",
-                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                  },
-                  body: "Redirecting"
-                }
-              }} = LocalNewsTopicsRedirect.call([], struct)
+    assert {:redirect,
+            %Struct{
+              response: %Struct.Response{
+                http_status: 302,
+                headers: %{
+                  "location" => "/news/localnews",
+                  "x-bbc-no-scheme-rewrite" => "1",
+                  "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                },
+                body: "Redirecting"
+              }
+            }} = LocalNewsTopicsRedirect.call([], struct)
   end
 
   test "If the path does not start with /news/localnews/, continue to origin" do
