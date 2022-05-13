@@ -11,7 +11,9 @@ defmodule Mix.Tasks.DialGen do
          {:ok, valid_dial_name} <- validate(dial_name) do
       generate_dial(valid_dial_name)
     else
-      err -> IO.inspect(err)
+      err -> err
+      # credo gives warning :(
+      # err -> IO.inspect(err)
     end
   end
 
@@ -69,7 +71,7 @@ defmodule Mix.Tasks.DialGen do
     template_file = "lib/mix/tasks/dial_gen/dial_config_template.eex"
     dials_config_file = "config/dials.exs"
 
-    module = Module.concat([Belfrage,Dials,module_name])
+    module = Module.concat([Belfrage, Dials, module_name])
 
     dial_handlers =
       Application.get_env(:belfrage, :dial_handlers)
