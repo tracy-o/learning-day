@@ -790,9 +790,18 @@ defroutefile "Main" do
     ]
   end
 
-  ## World Service - Kyrgyz Optimo article test
-  handle "/kyrgyz/articles/cvxepw6440zo", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo"]
-  handle "/kyrgyz/articles/cvxepw6440zo.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/cvxepw6440zo.amp"]
+  handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo"] do
+    return_404 if: [
+      String.length(id) != 12,
+      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+    ]
+  end
+  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo.amp"] do
+    return_404 if: [
+      String.length(id) != 12,
+      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+    ]
+  end
 
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
   handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
