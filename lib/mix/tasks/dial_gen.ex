@@ -19,28 +19,25 @@ defmodule Mix.Tasks.DialGen do
 
   defp generate_dial(dial_name) do
     module_name = dial_module_name(dial_name)
-    default_description = "I AM A GENERATED DESCRIPTION, CHANGE ME!"
-    default_values = [%{"value" => "on", "description" => "this turns me on"}, %{"value" => "off", "description" => "this turns me off"}]
     default_value = "on"
 
-    add_to_cosmos_json(dial_name, default_description, default_value, default_values)
+    add_to_cosmos_json(dial_name, default_value)
     add_to_dev_env(dial_name, default_value)
     add_to_dial_config(dial_name, module_name)
     generate_dial_module(dial_name, module_name)
     generate_dial_test_module(dial_name, module_name)
   end
 
-  defp add_to_cosmos_json(name, description, default_value, dial_values) do
+
+
+  defp add_to_cosmos_json(dial_name, default_value) do
     with {:ok, raw_json} <- File.read("cosmos/dials.json"),
-          {:ok, dials_config} <- Jason.decode(raw_json)
+          {:ok, dials_config} <- Jason.decode(raw_json, objects: :ordered_objects)
     do
-      unless dial_exists?(dials_config, name) do
-        new_dial = %{
-          "name" => name,
-          "description" => description,
-          "default-value" => default_value,
-          "values" => dial_values
-        }
+      unless dial_exists?(dials_config, dial_name) do
+        new_dial =
+          dial_json(dial_name, default_value)
+          |> Jason.decode!(objects: :ordered_objects)
 
         new_config = dials_config ++ [new_dial]
 
@@ -107,6 +104,24 @@ defmodule Mix.Tasks.DialGen do
       |> Code.format_string!()
 
     File.write!(filename, contents)
+  end
+
+  defp dial_json(dial_name, default_value) do
+    ~s({
+        "name": "#{dial_name}",
+        "description": "I AM A GENERATED DESCRIPTION, CHANGE ME!",
+        "default-value": "#{default_value}",
+        "values": [
+          {
+            "value": "on",
+            "description": "this turns me on"
+          },
+          {
+            "value": "off",
+            "description": "this turns me off"
+          }
+        ]
+      })
   end
 
   defp parse_args([dial_name]), do: {:ok, dial_name}
