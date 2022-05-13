@@ -5,26 +5,40 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
 
   @impl true
   def call(rest, struct) do
-    if redirect?(struct) do
-      {
-        :redirect,
-        Struct.add(struct, :response, %{
-          http_status: 302,
-          headers: %{
-            "location" => redirect(struct.request),
-            "x-bbc-no-scheme-rewrite" => "1",
-            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-          },
-          body: "Redirecting"
-        })
-      }
-    else
-      then_do(rest, struct)
+    cond do
+      is_local_news?(struct) and topic_id(struct.request.path_params) -> 
+        {
+          :redirect,
+          Struct.add(struct, :response, %{
+            http_status: 302,
+            headers: %{
+              "location" => redirect(struct.request),
+              "x-bbc-no-scheme-rewrite" => "1",
+              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+              },
+              body: "Redirecting"
+              })
+            }
+      is_local_news?(struct) -> 
+        {
+          :redirect,
+          Struct.add(struct, :response, %{
+            http_status: 302,
+            headers: %{
+              "location" => "/news/localnews",
+              "x-bbc-no-scheme-rewrite" => "1",
+              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+            },
+            body: "Redirecting"
+          })
+        }
+      true ->
+        then_do(rest, struct)
     end
   end
 
-  def redirect?(struct) do
-    String.starts_with?(struct.request.path, "/news/localnews/") and topic_id(struct.request.path_params)
+  defp is_local_news?(struct) do
+    String.starts_with?(struct.request.path, "/news/localnews/")
   end
 
   defp topic_id(path_params = %{}) do
