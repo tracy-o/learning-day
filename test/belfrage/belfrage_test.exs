@@ -137,7 +137,7 @@ defmodule BelfrageTest do
     assert response_struct.response.http_status == 302
   end
 
-  test "increments the route_state when request has 200 status" do
+  test "increments the route_state when request has 200 status and no MVT vary headers" do
     LambdaMock
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
@@ -154,6 +154,36 @@ defmodule BelfrageTest do
     assert state.counter == %{
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
            }
+  end
+
+  test "updates the route_state when request has 200 status and MVT vary headers" do
+    LambdaMock
+    |> expect(:call, 1, fn _credentials,
+                           _lambda_func = "pwa-lambda-function:test",
+                           _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
+                           _request_id = "gerald-the-get-request",
+                           _opts = [] ->
+      {:ok,
+       %{
+         "body" => "Some content",
+         "headers" => %{
+           "vary" => "something,mvt-button-colour,something-else,mvt-sidear-colour"
+         },
+         "statusCode" => 200
+       }}
+    end)
+
+    Belfrage.handle(@get_request_struct)
+
+    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+
+    assert state.counter == %{
+             "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
+           }
+
+    assert [{:"mvt-sidear-colour", dt1}, {:"mvt-button-colour", dt2}] = state.mvt_seen
+    assert dt2 == dt1
+    assert :gt == DateTime.compare(DateTime.utc_now(), dt1)
   end
 
   test "increments the route_state when request has 500 status" do
