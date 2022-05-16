@@ -100,7 +100,7 @@ defmodule Belfrage.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     pipeline = [
-      &inc_route_state/1,
+      &update_route_state/1,
       &maybe_log_response_status/1,
       &ResponseTransformers.CacheDirective.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
@@ -115,6 +115,11 @@ defmodule Belfrage.Processor do
 
   defp inc_route_state(struct = %Struct{}) do
     RouteState.inc(struct)
+    struct
+  end
+
+  defp update_route_state(struct = %Struct{}) do
+    RouteState.update(struct)
     struct
   end
 
