@@ -5,26 +5,36 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
 
   @impl true
   def call(rest, struct) do
-    if redirect?(struct) do
-      {
-        :redirect,
-        Struct.add(struct, :response, %{
-          http_status: 302,
-          headers: %{
-            "location" => redirect(struct.request),
-            "x-bbc-no-scheme-rewrite" => "1",
-            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-          },
-          body: "Redirecting"
-        })
-      }
-    else
-      then_do(rest, struct)
+    cond do
+      is_local_news?(struct) and topic_id(struct.request.path_params) ->
+        location = topic_id_location(struct.request)
+        redirect(struct, location)
+
+      is_local_news?(struct) ->
+        redirect(struct, "/news/localnews")
+
+      true ->
+        then_do(rest, struct)
     end
   end
 
-  def redirect?(struct) do
-    String.starts_with?(struct.request.path, "/news/localnews/") and topic_id(struct.request.path_params)
+  defp redirect(struct, location) do
+    {
+      :redirect,
+      Struct.add(struct, :response, %{
+        http_status: 302,
+        headers: %{
+          "location" => location,
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+        },
+        body: "Redirecting"
+      })
+    }
+  end
+
+  defp is_local_news?(struct) do
+    String.starts_with?(struct.request.path, "/news/localnews/")
   end
 
   defp topic_id(path_params = %{}) do
@@ -35,7 +45,7 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
     |> LocationTopicMappings.get_topic_id()
   end
 
-  defp redirect(request = %Struct.Request{}) do
+  defp topic_id_location(request = %Struct.Request{}) do
     "/news/topics/#{topic_id(request.path_params)}" <> QueryParams.encode(request.query_params)
   end
 end
