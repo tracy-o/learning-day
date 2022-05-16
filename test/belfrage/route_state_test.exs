@@ -231,7 +231,7 @@ defmodule Belfrage.RouteStateTest do
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
                      100
 
-      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
+      assert %{mvt_seen: %{}, counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
     end
 
     test "updates :mvt_seen as expected when no MVT vary headers exist", %{
@@ -253,7 +253,7 @@ defmodule Belfrage.RouteStateTest do
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
                      100
 
-      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
+      assert %{mvt_seen: %{}, counter: %{"https://some.origin" => %{:errors => 0, 200 => 1}}} = :sys.get_state(pid)
     end
 
     test "updates :mvt_seen as expected when response is fallback", %{
@@ -275,7 +275,7 @@ defmodule Belfrage.RouteStateTest do
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", true}}},
                      100
 
-      assert %{mvt_seen: [], counter: %{"https://some.origin" => %{errors: 0, fallback: 1}}} = :sys.get_state(pid)
+      assert %{mvt_seen: %{}, counter: %{"https://some.origin" => %{errors: 0, fallback: 1}}} = :sys.get_state(pid)
     end
 
     test "updates :mvt_seen in state as expected when response is not fallback and one MVT vary header is in response",
@@ -299,8 +299,9 @@ defmodule Belfrage.RouteStateTest do
                       {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
                      100
 
-      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
-               :sys.get_state(pid)
+      assert %{mvt_seen: mvt_seen, counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} = :sys.get_state(pid)
+      assert ["mvt-button-colour"] = Map.keys(mvt_seen)
+      orig_button_colour_datetime = mvt_seen["mvt-button-colour"]
 
       RouteState.update(struct)
 
@@ -308,11 +309,12 @@ defmodule Belfrage.RouteStateTest do
                       {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
                      100
 
-      assert %{mvt_seen: ["mvt-button-colour": dt2], counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}} =
-               :sys.get_state(pid)
+      assert %{mvt_seen: mvt_seen, counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}} = :sys.get_state(pid)
+      assert ["mvt-button-colour"] = Map.keys(mvt_seen)
+      new_button_colour_datetime = mvt_seen["mvt-button-colour"]
 
-      assert :gt == DateTime.compare(DateTime.utc_now(), dt2)
-      assert :gt == DateTime.compare(dt2, dt1)
+      assert :gt == DateTime.compare(DateTime.utc_now(), new_button_colour_datetime)
+      assert :gt == DateTime.compare(new_button_colour_datetime, orig_button_colour_datetime)
     end
 
     test "updates :mvt_seen as expected for a different subsequent mvt vary header", %{
@@ -335,8 +337,8 @@ defmodule Belfrage.RouteStateTest do
                       {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
                      100
 
-      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
-               :sys.get_state(pid)
+      assert %{mvt_seen: mvt_seen, counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} = :sys.get_state(pid)
+      assert ["mvt-button-colour"] == Map.keys(mvt_seen)
 
       RouteState.update(
         Struct.add(struct, :response, %{
@@ -349,12 +351,13 @@ defmodule Belfrage.RouteStateTest do
                      100
 
       assert %{
-               mvt_seen: ["mvt-sidebar-colour": dt2, "mvt-button-colour": ^dt1],
+               mvt_seen: mvt_seen,
                counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
              } = :sys.get_state(pid)
 
-      assert :gt == DateTime.compare(DateTime.utc_now(), dt2)
-      assert :gt == DateTime.compare(dt2, dt1)
+      assert ["mvt-button-colour", "mvt-sidebar-colour"] = Map.keys(mvt_seen)
+      assert :gt == DateTime.compare(DateTime.utc_now(), mvt_seen["mvt-sidebar-colour"])
+      assert :gt == DateTime.compare(mvt_seen["mvt-sidebar-colour"], mvt_seen["mvt-button-colour"])
     end
 
     test "updates :mvt_seen as expected for a different subsequent mvt vary header and the same subsequent mvt vary header",
@@ -378,8 +381,10 @@ defmodule Belfrage.RouteStateTest do
                       {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
                      100
 
-      assert %{mvt_seen: ["mvt-button-colour": dt1], counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} =
-               :sys.get_state(pid)
+      assert %{mvt_seen: mvt_seen, counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}} = :sys.get_state(pid)
+
+      assert ["mvt-button-colour"] == Map.keys(mvt_seen)
+      orig_button_colour_datetime = mvt_seen["mvt-button-colour"]
 
       RouteState.update(
         Struct.add(struct, :response, %{
@@ -392,13 +397,17 @@ defmodule Belfrage.RouteStateTest do
                      100
 
       assert %{
-               mvt_seen: ["mvt-footer-colour": dt3, "mvt-button-colour": dt2],
+               mvt_seen: mvt_seen,
                counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
              } = :sys.get_state(pid)
 
-      assert :gt == DateTime.compare(DateTime.utc_now(), dt3)
-      assert :eq == DateTime.compare(dt3, dt2)
-      assert :gt == DateTime.compare(dt2, dt1)
+      assert ["mvt-button-colour", "mvt-footer-colour"] = Map.keys(mvt_seen)
+      new_button_colour_datetime = mvt_seen["mvt-button-colour"]
+      footer_colour_datetime = mvt_seen["mvt-footer-colour"]
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), footer_colour_datetime)
+      assert :eq == DateTime.compare(footer_colour_datetime, new_button_colour_datetime)
+      assert :gt == DateTime.compare(new_button_colour_datetime, orig_button_colour_datetime)
     end
 
     test "updates :mvt_seen as expected for a subsequent response with no mvt vary headers", %{
@@ -422,9 +431,12 @@ defmodule Belfrage.RouteStateTest do
                      100
 
       assert %{
-               mvt_seen: ["mvt-button-colour": datetime],
+               mvt_seen: mvt_seen,
                counter: %{"https://some.origin" => %{200 => 1, :errors => 0}}
              } = :sys.get_state(pid)
+
+      assert ["mvt-button-colour"] == Map.keys(mvt_seen)
+      orig_button_colour_datetime = mvt_seen["mvt-button-colour"]
 
       RouteState.update(
         Struct.add(struct, :response, %{
@@ -436,11 +448,15 @@ defmodule Belfrage.RouteStateTest do
                      100
 
       assert %{
-               mvt_seen: ["mvt-button-colour": ^datetime],
+               mvt_seen: mvt_seen,
                counter: %{"https://some.origin" => %{200 => 2, :errors => 0}}
              } = :sys.get_state(pid)
 
-      assert :gt == DateTime.compare(DateTime.utc_now(), datetime)
+      assert ["mvt-button-colour"] == Map.keys(mvt_seen)
+      new_button_colour_datetime = mvt_seen["mvt-button-colour"]
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), new_button_colour_datetime)
+      assert :eq == DateTime.compare(new_button_colour_datetime, orig_button_colour_datetime)
     end
   end
 

@@ -14,7 +14,7 @@ defmodule Belfrage.Mvt.State do
   """
   def put_mvt_vary_headers(seen_headers, headers) do
     now = DateTime.utc_now()
-    Enum.reduce(headers, seen_headers, fn h, acc -> Keyword.put(acc, String.to_atom(h), now) end)
+    Enum.reduce(headers, seen_headers, fn h, acc -> Map.put(acc, h, now) end)
   end
 
   @doc """

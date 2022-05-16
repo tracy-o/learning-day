@@ -61,7 +61,7 @@ defmodule Belfrage.RouteState do
     {:ok,
      Map.merge(specs, %{
        counter: Counter.init(),
-       mvt_seen: [],
+       mvt_seen: %{},
        throughput: 100
      })}
   end

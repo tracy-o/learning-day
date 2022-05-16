@@ -167,7 +167,7 @@ defmodule BelfrageTest do
        %{
          "body" => "Some content",
          "headers" => %{
-           "vary" => "something,mvt-button-colour,something-else,mvt-sidear-colour"
+           "vary" => "something,mvt-button-colour,something-else,mvt-sidebar-colour"
          },
          "statusCode" => 200
        }}
@@ -181,9 +181,9 @@ defmodule BelfrageTest do
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
            }
 
-    assert [{:"mvt-sidear-colour", dt1}, {:"mvt-button-colour", dt2}] = state.mvt_seen
-    assert dt2 == dt1
-    assert :gt == DateTime.compare(DateTime.utc_now(), dt1)
+    assert ["mvt-button-colour", "mvt-sidebar-colour"] = Map.keys(state.mvt_seen)
+    assert state.mvt_seen["mvt-button-colour"] == state.mvt_seen["mvt-sidebar-colour"]
+    assert :gt == DateTime.compare(DateTime.utc_now(), state.mvt_seen["mvt-sidebar-colour"])
   end
 
   test "increments the route_state when request has 500 status" do

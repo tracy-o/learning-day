@@ -34,7 +34,7 @@ defmodule Belfrage.RouteSpec do
             circuit_breaker_error_threshold: nil,
             throughput: 100,
             mvt_project_id: 0,
-            mvt_seen: []
+            mvt_seen: %{}
 
   def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
     route_attrs = get_route_attrs(name, env)
