@@ -13,7 +13,7 @@ defmodule Belfrage.Processor do
     Personalisation,
     CacheControl,
     Metrics,
-    MvtMapper,
+    Mvt,
     Language,
     WrapperError
   }
@@ -27,7 +27,7 @@ defmodule Belfrage.Processor do
       &allowlists/1,
       &Personalisation.maybe_put_personalised_request/1,
       &Language.add_signature/1,
-      &MvtMapper.map/1,
+      &Mvt.Mapper.map/1,
       &generate_request_hash/1
     ]
 

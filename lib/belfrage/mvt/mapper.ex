@@ -1,4 +1,4 @@
-defmodule Belfrage.MvtMapper do
+defmodule Belfrage.Mvt.Mapper do
   alias Belfrage.Mvt
   alias Belfrage.Struct
 
