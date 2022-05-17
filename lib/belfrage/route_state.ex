@@ -1,7 +1,7 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event, CircuitBreaker}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event, CircuitBreaker, Mvt}
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
@@ -26,6 +26,26 @@ defmodule Belfrage.RouteState do
     GenServer.cast(via_tuple(name), {:inc, http_status, origin, fallback})
   end
 
+  @doc """
+  Checks that the response is not a fallback and that there are MVT vary headers.
+  If the above is true, then an {:update, http_status, origin, fallback, vary_headers}
+  message is sent. Otherwise inc/1 is called.
+  """
+  def update(
+        struct = %Struct{
+          private: %Struct.Private{route_state_id: name, origin: origin},
+          response: %Struct.Response{http_status: http_status, fallback: fallback}
+        }
+      ) do
+    case {fallback, Mvt.State.get_vary_headers(struct)} do
+      {false, vary_headers = [_ | _]} ->
+        GenServer.cast(via_tuple(name), {:update, http_status, origin, vary_headers})
+
+      _ ->
+        inc(struct)
+    end
+  end
+
   defp via_tuple(name) do
     RouteStateRegistry.via_tuple({__MODULE__, name})
   end
@@ -41,6 +61,7 @@ defmodule Belfrage.RouteState do
     {:ok,
      Map.merge(specs, %{
        counter: Counter.init(),
+       mvt_seen: %{},
        throughput: 100
      })}
   end
@@ -60,6 +81,15 @@ defmodule Belfrage.RouteState do
   @impl GenServer
   def handle_cast({:inc, http_status, origin, _fallback}, state) do
     state = %{state | counter: Counter.inc(state.counter, http_status, origin)}
+    {:noreply, state}
+  end
+
+  def handle_cast({:update, http_status, origin, mvt_vary_headers}, state) do
+    state = %{
+      state
+      | counter: Counter.inc(state.counter, http_status, origin),
+        mvt_seen: Mvt.State.put_mvt_vary_headers(state.mvt_seen, mvt_vary_headers)
+    }
 
     {:noreply, state}
   end
