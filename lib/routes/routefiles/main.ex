@@ -1543,31 +1543,6 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/ukchina/articles/:id/simp", using: "WorldServiceUkChinaArticlePage", examples: [] do
-    return_404 if: [
-      String.length(id) != 12,
-      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-    ]
-  end
-  handle "/ukchina/articles/:id/simp.amp", using: "WorldServiceUkChinaArticlePage", examples: [] do
-    return_404 if: [
-      String.length(id) != 12,
-      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-    ]
-  end
-  handle "/ukchina/articles/:id/trad", using: "WorldServiceUkChinaArticlePage", examples: [] do
-    return_404 if: [
-      String.length(id) != 12,
-      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-    ]
-  end
-  handle "/ukchina/articles/:id/trad.amp", using: "WorldServiceUkChinaArticlePage", examples: [] do
-    return_404 if: [
-      String.length(id) != 12,
-      !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-    ]
-  end
-
   handle "/ukchina/send/:id", using: "UploaderWorldService", examples: ["/ukchina/send/u39697902"]
   handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
 
