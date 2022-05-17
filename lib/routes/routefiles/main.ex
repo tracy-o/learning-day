@@ -1249,10 +1249,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", examples: ["/tamil/articles/c1x76pey3x3o"] do
+  handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", examples: ["/telugu/articles/c1x76pey3x3o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/telugu/articles/:id.amp", using: "WorldServiceTeluguArticlePage", examples: ["/tamil/articles/c1x76pey3x3o.amp"] do
+  handle "/telugu/articles/:id.amp", using: "WorldServiceTeluguArticlePage", examples: ["/telugu/articles/c1x76pey3x3o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
