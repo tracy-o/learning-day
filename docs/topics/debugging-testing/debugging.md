@@ -38,7 +38,7 @@ iex()> :dbg.start(); :dbg.tracer()
 
 To attach to a function:
 ```
-iex()> :dbg.tpl(MyModule, :my_func, function_arity, []); :dbg.p(:all, :c)
+iex()> :dbg.tpl(MyModule, :my_func, function_arity, [{:_, [], [{:return_trace}]}]); :dbg.p(:all, :c)
 ```
 
 Now open another tab, and remote into the instance again and do:
