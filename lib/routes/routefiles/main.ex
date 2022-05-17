@@ -609,10 +609,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/afaanoromoo/articles/:id", using: "WorldServiceArticlePage", examples: ["/afaanoromoo/articles/ce3nlgrelv1o"] do
+  handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage", examples: ["/afaanoromoo/articles/ce3nlgrelv1o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/afaanoromoo/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/afaanoromoo/articles/ce3nlgrelv1o.amp"] do
+  handle "/afaanoromoo/articles/:id.amp", using: "WorldServiceAfaanoromooArticlePage", examples: ["/afaanoromoo/articles/ce3nlgrelv1o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -630,10 +630,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/afrique/articles/:id", using: "WorldServiceArticlePage", examples: ["/afrique/articles/cx80n852v6mo"] do
+  handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage", examples: ["/afrique/articles/cx80n852v6mo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/afrique/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/afrique/articles/cx80n852v6mo.amp"] do
+  handle "/afrique/articles/:id.amp", using: "WorldServiceAfriqueArticlePage", examples: ["/afrique/articles/cx80n852v6mo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -649,10 +649,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/amharic/articles/:id", using: "WorldServiceArticlePage", examples: ["/amharic/articles/c0lgxqknqkdo"] do
+  handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage", examples: ["/amharic/articles/c0lgxqknqkdo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/amharic/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/amharic/articles/c0lgxqknqkdo.amp"] do
+  handle "/amharic/articles/:id.amp", using: "WorldServiceAmharicArticlePage", examples: ["/amharic/articles/c0lgxqknqkdo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -673,10 +673,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/arabic/articles/:id", using: "WorldServiceArticlePage", examples: ["/arabic/articles/c3elne7yr7po"] do
+  handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage", examples: ["/arabic/articles/c3elne7yr7po"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/arabic/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/arabic/articles/c3elne7yr7po.amp"] do
+  handle "/arabic/articles/:id.amp", using: "WorldServiceArabicArticlePage", examples: ["/arabic/articles/c3elne7yr7po.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -694,10 +694,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/azeri/articles/:id", using: "WorldServiceArticlePage", examples: ["/azeri/articles/cv0lm08kngmo"] do
+  handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage", examples: ["/azeri/articles/cv0lm08kngmo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/azeri/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/azeri/articles/cv0lm08kngmo.amp"] do
+  handle "/azeri/articles/:id.amp", using: "WorldServiceAzeriArticlePage", examples: ["/azeri/articles/cv0lm08kngmo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -716,10 +716,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/bengali/articles/:id", using: "WorldServiceArticlePage", examples: ["/bengali/articles/cv90149zq1eo"] do
+  handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage", examples: ["/bengali/articles/cv90149zq1eo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/bengali/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/bengali/articles/cv90149zq1eo.amp"] do
+  handle "/bengali/articles/:id.amp", using: "WorldServiceBengaliArticlePage", examples: ["/bengali/articles/cv90149zq1eo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -738,10 +738,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/burmese/articles/:id", using: "WorldServiceArticlePage", examples: ["/burmese/articles/c41px3vd4nxo"] do
+  handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage", examples: ["/burmese/articles/c41px3vd4nxo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/burmese/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/burmese/articles/c41px3vd4nxo.amp"] do
+  handle "/burmese/articles/:id.amp", using: "WorldServiceBurmeseArticlePage", examples: ["/burmese/articles/c41px3vd4nxo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -759,10 +759,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/gahuza/articles/:id", using: "WorldServiceArticlePage", examples: ["/gahuza/articles/cryd02nzn81o"] do
+  handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage", examples: ["/gahuza/articles/cryd02nzn81o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/gahuza/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/gahuza/articles/cryd02nzn81o.amp"] do
+  handle "/gahuza/articles/:id.amp", using: "WorldServiceGahuzaArticlePage", examples: ["/gahuza/articles/cryd02nzn81o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -777,10 +777,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/gujarati/articles/:id", using: "WorldServiceArticlePage", examples: ["/gujarati/articles/c2rnxj48elwo"] do
+  handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage", examples: ["/gujarati/articles/c2rnxj48elwo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/gujarati/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/gujarati/articles/c2rnxj48elwo.amp"] do
+  handle "/gujarati/articles/:id.amp", using: "WorldServiceGujaratiArticlePage", examples: ["/gujarati/articles/c2rnxj48elwo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -798,10 +798,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/hausa/articles/:id", using: "WorldServiceArticlePage", examples: ["/hausa/articles/c41rj1z261zo"] do
+  handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage", examples: ["/hausa/articles/c41rj1z261zo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/hausa/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/hausa/articles/c41rj1z261zo.amp"] do
+  handle "/hausa/articles/:id.amp", using: "WorldServiceHausaArticlePage", examples: ["/hausa/articles/c41rj1z261zo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -820,10 +820,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/hindi/articles/:id", using: "WorldServiceArticlePage", examples: ["/hindi/articles/cd80y3ezl8go"] do
+  handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage", examples: ["/hindi/articles/cd80y3ezl8go"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/hindi/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/hindi/articles/cd80y3ezl8go.amp"] do
+  handle "/hindi/articles/:id.amp", using: "WorldServiceHindiArticlePage", examples: ["/hindi/articles/cd80y3ezl8go.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -838,10 +838,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/igbo/articles/:id", using: "WorldServiceArticlePage", examples: ["/igbo/articles/ckjn8jnrn75o"] do
+  handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage", examples: ["/igbo/articles/ckjn8jnrn75o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/igbo/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/igbo/articles/ckjn8jnrn75o.amp"] do
+  handle "/igbo/articles/:id.amp", using: "WorldServiceIgboArticlePage", examples: ["/igbo/articles/ckjn8jnrn75o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -859,10 +859,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/indonesia/articles/:id", using: "WorldServiceArticlePage", examples: ["/indonesia/articles/cvd36dly8zdo"] do
+  handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage", examples: ["/indonesia/articles/cvd36dly8zdo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/indonesia/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/indonesia/articles/cvd36dly8zdo.amp"] do
+  handle "/indonesia/articles/:id.amp", using: "WorldServiceIndonesiaArticlePage", examples: ["/indonesia/articles/cvd36dly8zdo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -877,10 +877,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/japanese/articles/:id", using: "WorldServiceArticlePage", examples: ["/japanese/articles/cj4m7n5nrd8o"] do
+  handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage", examples: ["/japanese/articles/cj4m7n5nrd8o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/japanese/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/japanese/articles/cj4m7n5nrd8o.amp"] do
+  handle "/japanese/articles/:id.amp", using: "WorldServiceJapaneseArticlePage", examples: ["/japanese/articles/cj4m7n5nrd8o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -895,10 +895,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/korean/articles/:id", using: "WorldServiceArticlePage", examples: ["/korean/articles/crym1243d97o"] do
+  handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage", examples: ["/korean/articles/crym1243d97o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/korean/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/korean/articles/crym1243d97o.amp"] do
+  handle "/korean/articles/:id.amp", using: "WorldServiceKoreanArticlePage", examples: ["/korean/articles/crym1243d97o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -916,10 +916,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/kyrgyz/articles/:id", using: "WorldServiceArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo"] do
+  handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo.amp"] do
+  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", examples: ["/kyrgyz/articles/c88ld5g4xxxo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -935,10 +935,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/marathi/articles/:id", using: "WorldServiceArticlePage", examples: ["/marathi/articles/cvjxwvn04yjo"] do
+  handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage", examples: ["/marathi/articles/cvjxwvn04yjo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/marathi/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/marathi/articles/cvjxwvn04yjo.amp"] do
+  handle "/marathi/articles/:id.amp", using: "WorldServiceMarathiArticlePage", examples: ["/marathi/articles/cvjxwvn04yjo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -966,10 +966,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/mundo/articles/:id", using: "WorldServiceArticlePage", examples: ["/mundo/articles/ce42wzqr2mko"] do
+  handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage", examples: ["/mundo/articles/ce42wzqr2mko"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/mundo/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/mundo/articles/ce42wzqr2mko.amp"] do
+  handle "/mundo/articles/:id.amp", using: "WorldServiceMundoArticlePage", examples: ["/mundo/articles/ce42wzqr2mko.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -988,10 +988,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/nepali/articles/:id", using: "WorldServiceArticlePage", examples: ["/nepali/articles/c16ljg1v008o"] do
+  handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage", examples: ["/nepali/articles/c16ljg1v008o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/nepali/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/nepali/articles/c16ljg1v008o.amp"] do
+  handle "/nepali/articles/:id.amp", using: "WorldServiceNepaliArticlePage", examples: ["/nepali/articles/c16ljg1v008o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1010,10 +1010,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/pashto/articles/:id", using: "WorldServiceArticlePage", examples: ["/pashto/articles/c70970g2251o"] do
+  handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage", examples: ["/pashto/articles/c70970g2251o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/pashto/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/pashto/articles/c70970g2251o.amp"] do
+  handle "/pashto/articles/:id.amp", using: "WorldServicePashtoArticlePage", examples: ["/pashto/articles/c70970g2251o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1032,10 +1032,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/persian/articles/:id", using: "WorldServiceArticlePage", examples: ["/persian/articles/cld9872jgyjo"] do
+  handle "/persian/articles/:id", using: "WorldServicePersianArticlePage", examples: ["/persian/articles/cld9872jgyjo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/persian/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/persian/articles/cld9872jgyjo.amp"] do
+  handle "/persian/articles/:id.amp", using: "WorldServicePersianArticlePage", examples: ["/persian/articles/cld9872jgyjo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1050,10 +1050,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/pidgin/articles/:id", using: "WorldServiceArticlePage", examples: ["/pidgin/articles/cgwk9w4zlg8o"] do
+  handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage", examples: ["/pidgin/articles/cgwk9w4zlg8o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/pidgin/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/pidgin/articles/cgwk9w4zlg8o.amp"] do
+  handle "/pidgin/articles/:id.amp", using: "WorldServicePidginArticlePage", examples: ["/pidgin/articles/cgwk9w4zlg8o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1072,10 +1072,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/portuguese/articles/:id", using: "WorldServiceArticlePage", examples: ["/portuguese/articles/cpg5prg95lmo"] do
+  handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage", examples: ["/portuguese/articles/cpg5prg95lmo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/portuguese/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/portuguese/articles/cpg5prg95lmo.amp"] do
+  handle "/portuguese/articles/:id.amp", using: "WorldServicePortugueseArticlePage", examples: ["/portuguese/articles/cpg5prg95lmo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1090,10 +1090,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/punjabi/articles/:id", using: "WorldServiceArticlePage", examples: ["/punjabi/articles/c39p51156lyo"] do
+  handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage", examples: ["/punjabi/articles/c39p51156lyo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/punjabi/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/punjabi/articles/c39p51156lyo.amp"] do
+  handle "/punjabi/articles/:id.amp", using: "WorldServicePunjabiArticlePage", examples: ["/punjabi/articles/c39p51156lyo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1116,10 +1116,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/russian/articles/:id", using: "WorldServiceArticlePage", examples: ["/russian/articles/c6ygxgl53w9o"] do
+  handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage", examples: ["/russian/articles/c6ygxgl53w9o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/russian/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/russian/articles/c6ygxgl53w9o.amp"] do
+  handle "/russian/articles/:id.amp", using: "WorldServiceRussianArticlePage", examples: ["/russian/articles/c6ygxgl53w9o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1166,10 +1166,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/sinhala/articles/:id", using: "WorldServiceArticlePage", examples: ["/sinhala/articles/cldr38jnwd2o"] do
+  handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage", examples: ["/sinhala/articles/cldr38jnwd2o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/sinhala/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/sinhala/articles/cldr38jnwd2o.amp"] do
+  handle "/sinhala/articles/:id.amp", using: "WorldServiceSinhalaArticlePage", examples: ["/sinhala/articles/cldr38jnwd2o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1187,10 +1187,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/somali/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/somali/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/somali/articles/:id.amp", using: "WorldServiceSomaliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1208,10 +1208,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/swahili/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/swahili/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/swahili/articles/:id.amp", using: "WorldServiceSwahiliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1231,10 +1231,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/tamil/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/tamil/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/tamil/articles/:id.amp", using: "WorldServiceTamilArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1249,10 +1249,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/telugu/articles/:id", using: "WorldServiceArticlePage", examples: ["/tamil/articles/c1x76pey3x3o"] do
+  handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", examples: ["/tamil/articles/c1x76pey3x3o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/telugu/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/tamil/articles/c1x76pey3x3o.amp"] do
+  handle "/telugu/articles/:id.amp", using: "WorldServiceTeluguArticlePage", examples: ["/tamil/articles/c1x76pey3x3o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1267,10 +1267,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/thai/articles/:id", using: "WorldServiceArticlePage", examples: ["/thai/articles/czx7w3zyme1o"] do
+  handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage", examples: ["/thai/articles/czx7w3zyme1o"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/thai/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/thai/articles/czx7w3zyme1o.amp"] do
+  handle "/thai/articles/:id.amp", using: "WorldServiceThaiArticlePage", examples: ["/thai/articles/czx7w3zyme1o.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1285,10 +1285,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/tigrinya/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/tigrinya/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/tigrinya/articles/:id.amp", using: "WorldServiceTigrinyaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1307,10 +1307,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/turkce/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/turkce/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/turkce/articles/:id.amp", using: "WorldServiceTurkceArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1347,10 +1347,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/ukrainian/articles/:id", using: "WorldServiceArticlePage", examples: ["/ukrainian/articles/c8zv0eed9gko"] do
+  handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage", examples: ["/ukrainian/articles/c8zv0eed9gko"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/ukrainian/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/ukrainian/articles/c8zv0eed9gko.amp"] do
+  handle "/ukrainian/articles/:id.amp", using: "WorldServiceUkrainianArticlePage", examples: ["/ukrainian/articles/c8zv0eed9gko.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1369,10 +1369,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/urdu/articles/:id", using: "WorldServiceArticlePage", examples: ["/urdu/articles/cl02eep1rjqo"] do
+  handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage", examples: ["/urdu/articles/cl02eep1rjqo"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/urdu/articles/:id.amp", using: "WorldServiceArticlePage", examples: ["/urdu/articles/cl02eep1rjqo.amp"] do
+  handle "/urdu/articles/:id.amp", using: "WorldServiceUrduArticlePage", examples: ["/urdu/articles/cl02eep1rjqo.amp"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1390,10 +1390,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/uzbek/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/uzbek/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/uzbek/articles/:id.amp", using: "WorldServiceUzbekArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1411,10 +1411,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/vietnamese/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/vietnamese/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/vietnamese/articles/:id.amp", using: "WorldServiceVietnameseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
@@ -1429,10 +1429,10 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/yoruba/articles/:id", using: "WorldServiceArticlePage", examples: [] do
+  handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/yoruba/articles/:id.amp", using: "WorldServiceArticlePage", examples: [] do
+  handle "/yoruba/articles/:id.amp", using: "WorldServiceYorubaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
