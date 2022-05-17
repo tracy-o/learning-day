@@ -72,7 +72,11 @@ defmodule BelfrageWeb.RequestHeaders.Mapper do
     end
   end
 
-  # Special case
+  # This is a special case because the header results in two entries
+  # in the returned map and we can only have one function clause which
+  # matches it. So we either change the representation of the `@map'
+  # above to make generating the function clause possible, or we treat
+  # it as a special case.
   defp map_header(acc, "x-bbc-edge-isuk", value) do
     acc
     |> put_in([:is_uk, :edge], empty(value))
