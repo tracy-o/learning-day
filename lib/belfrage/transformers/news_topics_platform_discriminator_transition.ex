@@ -8,15 +8,15 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
   def call(rest, struct) do
     cond do
       is_mozart_topic?(struct) or is_id_guid?(struct) ->
-        then_do(
-          ["CircuitBreaker"],
+        struct =
           Struct.add(struct, :private, %{
             platform: MozartNews,
             origin: Application.get_env(:belfrage, :mozart_news_endpoint),
             personalised_route: false,
             personalised_request: false
           })
-        )
+
+        then_do(["CircuitBreaker"], struct)
 
       not is_mozart_topic?(struct) and has_slug?(struct) ->
         {
