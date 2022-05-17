@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
   end
 
   describe "when the path does not contain a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
+    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                })
     end
 
-    test "if the Topic ID is in not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
+    test "if the id is a Topic ID and is not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
       assert {
                :ok,
                %Struct{
@@ -64,10 +64,31 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                  }
                )
     end
+
+    test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
+         %{
+           mozart_news_endpoint: mozart_news_endpoint
+         } do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint,
+                   personalised_route: false,
+                   personalised_request: false
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
+                 request: %Struct.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
+                 private: %Struct.Private{personalised_route: true, personalised_request: true}
+               })
+    end
   end
 
   describe "when the path contains a slug" do
-    test "if the Topic ID is in the Mozart allowlist the platform and origin will be altered to Mozart News and the route and request will be set to not personalised",
+    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -88,7 +109,7 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                })
     end
 
-    test "if the Topic ID not in the Mozart allowlist, a redirect will be issued without the slug" do
+    test "if the id is a Topic ID and is not in the Mozart allowlist, a redirect will be issued without the slug" do
       assert {:redirect,
               %Struct{
                 response: %Struct.Response{
@@ -108,5 +129,28 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransitionTest do
                  }
                })
     end
+  end
+
+  test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
+       %{
+         mozart_news_endpoint: mozart_news_endpoint
+       } do
+    assert {
+             :ok,
+             %Struct{
+               private: %Struct.Private{
+                 platform: MozartNews,
+                 origin: ^mozart_news_endpoint,
+                 personalised_route: false,
+                 personalised_request: false
+               }
+             }
+           } =
+             NewsTopicsPlatformDiscriminatorTransition.call([], %Struct{
+               request: %Struct.Request{
+                 path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
+               },
+               private: %Struct.Private{personalised_route: true, personalised_request: true}
+             })
   end
 end
