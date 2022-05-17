@@ -30,7 +30,23 @@ defmodule Belfrage.Mvt.State do
     |> Enum.filter(&mvt_header?/1)
   end
 
+  @doc """
+  seen_headers consist of header-datetime key-value pairs.
+  Removes key-value pairs that have a datetime that are older
+  than the UTC datetime now minus the given interval.
+  """
+  def prune_vary_headers(seen_headers, interval) do
+    now = DateTime.utc_now()
+    :maps.filter(fn _h, dt -> not expired?(dt, interval, now) end, seen_headers)
+  end
+
   defp mvt_header?(header) do
     match?(<<"mvt-", _name::binary>>, header)
+  end
+
+  # Checks if the dt datetime minus the baseline_dt datetime
+  # is more than interval_ms, in seconds.
+  defp expired?(dt, interval_ms, baseline_dt) do
+    DateTime.diff(baseline_dt, dt, :second) > interval_ms / 1_000
   end
 end
