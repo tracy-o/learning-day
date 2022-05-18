@@ -2,14 +2,14 @@ defmodule Belfrage.Mvt.State do
   alias Belfrage.Struct
 
   @doc """
-  Updates a Keyword list of 'seen' headers with new headers.
-  The keys in the keyword list are the headers, and the values
+  Updates a Map of 'seen' headers with new headers.
+  The keys in the Map are the headers, and the values
   are datetimes. The new headers will be put into the
-  keyword list as follows:
+  Map as follows:
 
-  A new header will be added to the Keyword list as a key-value pair
+  A new header will be added to the Map as a key-value pair
   with the header as the key and a datetime as the value.
-  If the header is already in the Keyword list, the value of the
+  If the header is already in the Map, the value of the
   corresponding key-value pair will be updated to a have a later datetime.
   """
   def put_mvt_vary_headers(seen_headers, headers) do
