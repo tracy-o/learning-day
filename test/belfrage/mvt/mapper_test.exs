@@ -112,6 +112,42 @@ defmodule Belfrage.Mvt.MapperTest do
     end
   end
 
+  # When a header key has the format 'mvt-*' its considered an override header.
+  # Unlike bb-mvt-i headers (where 1 <= i <= 20) any string can be appended
+  # after the *. The header value should follow the format "#{type};#{value}"
+  # but no Checks or transformation are performed.
+  # These headers are only valid on test environments.
+  describe "when a header has the key 'mvt-*' and the environment is 'test'" do
+    setup do
+      set_environment("test")
+    end
+
+    test "apply override header mapping" do
+      struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
+
+      assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == struct.private.mvt
+    end
+  end
+
+  describe "when a header has the key 'mvt-*' and the environment is 'live" do
+    setup do
+      set_environment("live")
+    end
+
+    test "override headers are filtered out" do
+      struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
+
+      assert %{} == struct.private.mvt
+    end
+  end
+
+  defp set_environment(env) do
+    original_env = Application.get_env(:belfrage, :production_environment)
+    Application.put_env(:belfrage, :production_environment, env)
+    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
+    :ok
+  end
+
   defp set_slots(project) do
     Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Mvt.Slots.set(%{}) end)

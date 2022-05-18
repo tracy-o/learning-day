@@ -61,4 +61,57 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
 
     assert struct_with_no_mvt.private.headers_allowlist == []
   end
+
+  describe "mvt-* override header" do
+    test "if override header in mvt map and in vary, add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{"mvt-some_experiment" => {:override, "experiment;red"}}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-some_experiment,mvt-button_colour,mvt-sidebar,mvt-unknown"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == ["mvt-some_experiment"]
+    end
+
+    test "if override header in mvt map but not in vary, don't add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{"mvt-some_experiment" => {:override, "experiment;red"}}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-sidebar,mvt-unknown"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == []
+    end
+
+    test "if override header not in mvt map but in vary, don't add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-some_experiment"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == []
+    end
+  end
 end
