@@ -148,11 +148,12 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
     end
 
-    test "varies on raw_headers, when matches" do
-      struct_one = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
-      struct_two = struct_one
+    test "does not vary on raw_headers, when the same" do
+      struct =
+        @struct
+        |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
 
-      assert RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
+      assert RequestHash.generate(struct) == RequestHash.generate(struct)
     end
 
     test "varies on raw_headers, when differs" do
