@@ -4,7 +4,7 @@ defmodule Belfrage.RouteStateTest do
   import Belfrage.Test.RoutingHelper
   import Process, only: [send: 3]
 
-  alias Belfrage.{Struct, RouteState, RouteSpec, RouteStateRegistry}
+  alias Belfrage.{Struct, RouteState, RouteSpec}
 
   @failure_status_code Enum.random(500..504)
 
@@ -36,11 +36,9 @@ defmodule Belfrage.RouteStateTest do
     response: %Struct.Response{http_status: 200, fallback: true}
   }
 
-  setup do
-    {:ok, pid: start_route_state()}
-  end
-
   test "returns a state pointer" do
+    start_supervised!({RouteState, @route_state_id})
+
     route_spec =
       @route_state_id
       |> String.to_atom()
@@ -52,6 +50,8 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe "returns a different count per origin" do
+    setup :start_route_state
+
     test "when there are errors" do
       for _ <- 1..15 do
         RouteState.inc(@resp_struct)
@@ -115,6 +115,8 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets counter after a specific time" do
+    start_supervised!({RouteState, @route_state_id})
+
     # Set the interval just for this specifc test
     interval = 100
     set_env(:short_counter_reset_interval, interval)
@@ -130,6 +132,8 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe "when in fallback" do
+    setup :start_route_state
+
     test "it only increments the fallback counter" do
       for _ <- 1..30, do: RouteState.inc(@fallback_resp_struct)
       {:ok, state} = RouteState.state(@legacy_request_struct)
@@ -156,6 +160,8 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "exits when fetch_route_state_timeout reached" do
+    start_supervised!({RouteState, @route_state_id})
+
     assert catch_exit(RouteState.state(@resp_struct, 0)) ==
              {:timeout,
               {GenServer, :call,
@@ -163,15 +169,13 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test ":throughput value is initialised as expected" do
-    pid =
-      RouteStateRegistry.find_or_start(%Struct{
-        private: %Struct.Private{route_state_id: @route_state_id}
-      })
-
+    pid = start_supervised!({RouteState, @route_state_id})
     assert match?(%{throughput: 100}, :sys.get_state(pid))
   end
 
   describe ":throughput value is updated in the state as expected" do
+    setup :start_route_state
+
     test "when the error count exceeeds threshold", %{pid: pid} do
       replace_throughput(pid, 60)
 
@@ -212,6 +216,8 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe "update/1 only updates http status code" do
+    setup :start_route_state
+
     test "when no vary header exists", %{
       pid: pid
     } do
@@ -278,7 +284,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe "update/1 increments http status code counter when response is not fallback and MVT headers are in response, and updates :mvt_seen" do
-    setup :update_mvt_seen_with_button_colour_header
+    setup [:start_route_state, :update_mvt_seen_with_button_colour_header]
 
     test "with one header-datetime key-value pair when MVT vary header is in response",
          %{pid: pid, header_datetime: button_colour_datetime} do
@@ -354,6 +360,41 @@ defmodule Belfrage.RouteStateTest do
     end
   end
 
+  describe ":mvt seen is pruned as expected" do
+    setup [:set_ten_sec_mvt_vary_header_ttl, :set_ten_ms_route_state_reset_interval, :start_route_state]
+
+    test "when some mvt vary headers have a timestamp older than the interval", %{pid: pid} do
+      now = DateTime.utc_now()
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-one" => now,
+          "mvt-two" => datetime_minus(now, 20, :second),
+          "mvt-three" => datetime_minus(now, 500, :millisecond),
+          "mvt-four" => datetime_minus(now, 300, :second),
+          "mvt-five" => datetime_minus(now, 5, :second)
+        })
+      end)
+
+      Process.sleep(20)
+
+      assert %{mvt_seen: mvt_seen} = :sys.get_state(pid)
+      assert ["mvt-five", "mvt-one", "mvt-three"] == Map.keys(mvt_seen)
+    end
+  end
+
+  defp datetime_minus(datetime, amount, unit) do
+    datetime |> DateTime.add(-amount, unit, Calendar.UTCOnlyTimeZoneDatabase)
+  end
+
+  defp set_ten_sec_mvt_vary_header_ttl(_context) do
+    set_env(:mvt_vary_header_ttl, 10_000)
+  end
+
+  defp set_ten_ms_route_state_reset_interval(_context) do
+    set_env(:route_state_reset_interval, 10)
+  end
+
   defp replace_throughput(pid, throughput) do
     :sys.replace_state(pid, fn state ->
       %{state | throughput: throughput}
@@ -366,8 +407,8 @@ defmodule Belfrage.RouteStateTest do
     end)
   end
 
-  defp start_route_state() do
-    start_supervised!({RouteState, @route_state_id})
+  defp start_route_state(_context) do
+    {:ok, pid: start_supervised!({RouteState, @route_state_id})}
   end
 
   defp set_env(name, value) do

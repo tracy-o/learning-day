@@ -105,16 +105,25 @@ defmodule Belfrage.RouteState do
 
     circuit_breaker_open(next_throughput, state.route_state_id)
 
+    mvt_seen =
+      state
+      |> Map.get(:mvt_seen)
+      |> Mvt.State.prune_vary_headers(mvt_vary_header_ttl())
+
     Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
       route_spec: state.route_state_id
     })
 
-    state = %{state | counter: Counter.init(), throughput: next_throughput}
+    state = %{state | counter: Counter.init(), throughput: next_throughput, mvt_seen: mvt_seen}
     {:noreply, state}
   end
 
   defp route_state_reset_interval do
     Application.get_env(:belfrage, :route_state_reset_interval)
+  end
+
+  defp mvt_vary_header_ttl() do
+    Application.get_env(:belfrage, :mvt_vary_header_ttl)
   end
 
   defp circuit_breaker_open(0, route_state_id) do
