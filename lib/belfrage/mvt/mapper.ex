@@ -12,7 +12,13 @@ defmodule Belfrage.Mvt.Mapper do
         Mvt.Slots.available()
         |> Map.get(@platform_mapping[struct.private.platform], [])
 
-      Struct.add(struct, :private, %{mvt: map_mvt_headers(raw_headers, project_slots)})
+      mvt_map =
+        Map.merge(
+          map_mvt_headers(raw_headers, project_slots),
+          map_override_headers(raw_headers)
+        )
+
+      Struct.add(struct, :private, %{mvt: mvt_map})
     else
       struct
     end
@@ -25,6 +31,16 @@ defmodule Belfrage.Mvt.Mapper do
     |> Enum.into(%{}, fn {i, [type, name, value]} ->
       {"mvt-#{name}", {i, "#{type};#{value}"}}
     end)
+  end
+
+  defp map_override_headers(headers) do
+    if test_env?() do
+      headers
+      |> Enum.filter(fn {name, _v} -> match?(<<"mvt-", _rest::binary>>, name) end)
+      |> Enum.into(%{}, fn {name, value} -> {name, {:override, value}} end)
+    else
+      %{}
+    end
   end
 
   defp header_parts(i, headers) do
@@ -43,5 +59,9 @@ defmodule Belfrage.Mvt.Mapper do
 
   defp match_slot?(slot, i, slot_name) do
     slot["header"] == "bbc-mvt-#{i}" and slot["key"] == slot_name
+  end
+
+  defp test_env?() do
+    Application.get_env(:belfrage, :production_environment) == "test"
   end
 end
