@@ -37,7 +37,7 @@ defmodule Belfrage.RouteState do
           response: %Struct.Response{http_status: http_status, fallback: fallback}
         }
       ) do
-    case {fallback, Mvt.State.get_vary_headers(struct)} do
+    case {fallback, Mvt.State.get_vary_headers(struct.response)} do
       {false, vary_headers = [_ | _]} ->
         GenServer.cast(via_tuple(name), {:update, http_status, origin, vary_headers})
 

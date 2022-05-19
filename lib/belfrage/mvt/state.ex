@@ -18,13 +18,13 @@ defmodule Belfrage.Mvt.State do
   end
 
   @doc """
-  Gets the MVT vary headers from the vary header in the Struct response.
+  Gets the MVT vary headers from the vary header in the Struct Response.
   A list is returned.
   If there are no MVT vary headers, or there is no vary header,
   then an empty list is returned.
   """
-  def get_vary_headers(struct = %Struct{}) do
-    struct.response.headers
+  def get_vary_headers(response = %Struct.Response{}) do
+    response.headers
     |> Map.get("vary", "")
     |> String.split(",", trim: true)
     |> Enum.filter(&mvt_header?/1)
