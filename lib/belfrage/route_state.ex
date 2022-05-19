@@ -46,7 +46,7 @@ defmodule Belfrage.RouteState do
     end
   end
 
-  defp via_tuple(name) do
+  def via_tuple(name) do
     RouteStateRegistry.via_tuple({__MODULE__, name})
   end
 

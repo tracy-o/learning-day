@@ -1,5 +1,5 @@
 defmodule Belfrage.Mvt.State do
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, RouteState}
 
   @doc """
   Updates a Map of 'seen' headers with new headers.
@@ -31,6 +31,50 @@ defmodule Belfrage.Mvt.State do
   end
 
   @doc """
+  Removes any headers prefixed with \"bbc-mvt-\"
+  with header value that does not match any
+  headers in :mvt_seen in the state of the RouteState.
+
+  For example, given the raw headers:
+
+      %{"foo" => "bar",
+        "bbc-mvt-1" => "experiment;button_colour;red",
+        "bbc-mvt-2" => "experiment;sidebar_colour;red"}
+
+  If we have the following headers in :mvt_seen in the
+  RouteState process state given by route_state_id:
+
+      %{"mvt-button_colour" => ~U[2022-05-20 12:25:30.420932Z]}
+
+  The following map should be returned:
+
+      %{"foo" => "bar",
+        "bbc-mvt-1" => "experiment;button_colour;red"}
+  """
+  def filter_mvt_headers(headers, route_state_id) do
+    seen_headers = get_seen_headers(route_state_id)
+
+    :maps.filter(
+      fn header, value ->
+        not bbc_mvt_header?(header) or Enum.member?(seen_headers, prefixed_experiment(value))
+      end,
+      headers
+    )
+  end
+
+  defp get_seen_headers(route_state_id) do
+    case routestate_state(route_state_id) do
+      {:ok, state} ->
+        state
+        |> Map.get(:mvt_seen)
+        |> Map.keys()
+
+      _ ->
+        []
+    end
+  end
+
+  @doc """
   seen_headers consist of header-datetime key-value pairs.
   Removes key-value pairs that have a datetime that are older
   than the UTC datetime now minus the given interval.
@@ -41,12 +85,37 @@ defmodule Belfrage.Mvt.State do
   end
 
   defp mvt_header?(header) do
-    match?(<<"mvt-", _name::binary>>, header)
+    String.starts_with?(header, "mvt-")
+  end
+
+  defp bbc_mvt_header?(header) do
+    String.starts_with?(header, "bbc-mvt-")
+  end
+
+  defp prefixed_experiment(v) do
+    case String.split(v, ";", trim: true) do
+      [_type, experiment, _variant] ->
+        "mvt-" <> experiment
+
+      _ ->
+        :invalid_bbc_mvt_header_value_format
+    end
   end
 
   # Checks if the dt datetime minus the baseline_dt datetime
   # is more than interval_ms, in seconds.
   defp expired?(dt, interval_ms, baseline_dt) do
     DateTime.diff(baseline_dt, dt, :second) > interval_ms / 1_000
+  end
+
+  # Similar to RouteState.state/1 but takes a route_state_id as the first argument,
+  # and returns {:error, value} if the GenServer.call/3 fails rather than exiting the caller process.
+  defp routestate_state(route_state_id, timeout \\ Application.get_env(:belfrage, :fetch_route_state_timeout)) do
+    try do
+      GenServer.call(RouteState.via_tuple(route_state_id), :state, timeout)
+    catch
+      :exit, value ->
+        {:error, value}
+    end
   end
 end

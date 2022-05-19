@@ -1,9 +1,10 @@
 defmodule Belfrage.RequestHashTest do
   use ExUnit.Case, async: true
   import Belfrage.Test.PersonalisationHelper
+  import Test.Support.Helper, only: [set_env: 2]
 
   alias Belfrage.RequestHash
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, RouteState}
 
   @struct %Struct{
     request: %Struct.Request{
@@ -148,7 +149,7 @@ defmodule Belfrage.RequestHashTest do
       refute RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
     end
 
-    test "does not vary on raw_headers, when the same" do
+    test "request hash does not vary when the request is the same" do
       struct =
         @struct
         |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
@@ -161,6 +162,171 @@ defmodule Belfrage.RequestHashTest do
       struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
 
       refute RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
+    end
+
+    test "does not vary on raw MVT header when it is not in :mvt_seen in RouteState state" do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
+      end)
+
+      assert RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;sidebar_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar"
+                   }
+                 }
+               })
+    end
+
+    test "does not vary on raw MVT header with datetime older than :mvt_vary_header_ttl after a :reset msg is sent" do
+      set_env(:mvt_vary_header_ttl, 10_000)
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+      now = DateTime.utc_now()
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.add(now, -20, :second)})
+      end)
+
+      send(pid, :reset)
+
+      assert RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar"
+                   }
+                 }
+               })
+    end
+
+    test "does not vary on raw MVT header when no RouteState can be found" do
+      assert RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar"
+                   }
+                 }
+               })
+    end
+
+    test "varies on different experiment values for MVT header in :mvt_seen in RouteState state" do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
+      end)
+
+      refute RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar",
+                     "bbc-mvt-1" => "experiment;button_colour;green"
+                   }
+                 }
+               })
+    end
+
+    test "varies on raw MVT header in :mvt_seen in RouteState state" do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
+      end)
+
+      refute RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar"
+                   }
+                 }
+               })
+    end
+
+    test "varies on different raw MVT headers in :mvt_seen in RouteState state" do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-button_colour" => DateTime.utc_now(),
+          "mvt-sidebar_colour" => DateTime.utc_now()
+        })
+      end)
+
+      refute RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar",
+                     "bbc-mvt-1" => "experiment;sidebar_colour;red"
+                   }
+                 },
+                 private: %Struct.Private{
+                   route_state_id: "SomeRouteState"
+                 }
+               })
     end
 
     test "never vary on cookie header" do

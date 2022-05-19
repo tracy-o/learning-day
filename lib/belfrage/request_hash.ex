@@ -1,5 +1,5 @@
 defmodule Belfrage.RequestHash do
-  alias Belfrage.Struct
+  alias Belfrage.{Struct, Mvt}
   alias Belfrage.Struct.Private
 
   @signature_keys [
@@ -39,24 +39,26 @@ defmodule Belfrage.RequestHash do
   defp take_signature_keys(struct = %Struct{}) do
     struct.request
     |> Map.take(signature_keys(struct.private))
-    |> filter_headers()
+    |> filter_headers(struct.private.route_state_id)
   end
 
   defp signature_keys(%Private{signature_keys: %{add: add, skip: skip}}) do
     (@signature_keys ++ add) -- skip
   end
 
-  defp filter_headers(keys) do
+  defp filter_headers(keys, route_state_id) do
     case keys do
       %{raw_headers: headers} when headers != %{} ->
-        %{keys | raw_headers: Map.take(headers, signature_headers(headers))}
+        %{keys | raw_headers: signature_headers(headers, route_state_id)}
 
       _ ->
         keys
     end
   end
 
-  defp signature_headers(headers) do
-    Map.keys(headers) -- @ignore_headers
+  defp signature_headers(headers, route_state_id) do
+    headers
+    |> Mvt.State.filter_mvt_headers(route_state_id)
+    |> Map.drop(@ignore_headers)
   end
 end

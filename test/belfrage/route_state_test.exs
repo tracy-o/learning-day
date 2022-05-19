@@ -384,6 +384,11 @@ defmodule Belfrage.RouteStateTest do
     end
   end
 
+  test "via_tuple/1 returns expected tuple" do
+    assert RouteState.via_tuple("SomeRouteStateId") ==
+             {:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, "SomeRouteStateId"}}}
+  end
+
   defp datetime_minus(datetime, amount, unit) do
     datetime |> DateTime.add(-amount, unit, Calendar.UTCOnlyTimeZoneDatabase)
   end
