@@ -17,11 +17,11 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
     vary_header = Map.get(headers, "vary")
 
     if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
-      numeric_mvt_headers = map_mvt_headers(vary_header, mvt_headers)
+      mapped_mvt_headers = map_mvt_headers(vary_header, mvt_headers)
 
       Struct.add(struct, :private, %{
-        headers_allowlist: filter_mvt_headers(headers_allowlist, numeric_mvt_headers),
-        mvt_vary: numeric_mvt_headers
+        headers_allowlist: filter_mvt_headers(headers_allowlist, mapped_mvt_headers),
+        mvt_vary: mapped_mvt_headers
       })
     else
       Struct.add(struct, :private, %{
@@ -33,11 +33,11 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   @impl true
   def call(struct), do: struct
 
-  defp filter_mvt_headers(headers_allowlist, numeric_mvt_headers) do
+  defp filter_mvt_headers(headers_allowlist, mapped_mvt_headers) do
     headers_allowlist
     |> Enum.filter(fn header ->
       if String.contains?(header, "mvt-") do
-        Enum.member?(numeric_mvt_headers, header)
+        Enum.member?(mapped_mvt_headers, header)
       else
         header
       end
@@ -45,16 +45,19 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   end
 
   defp map_mvt_headers(vary_header, mvt_headers) do
+    test_env? = Application.get_env(:belfrage, :production_environment) == "test"
+
     vary_header
     |> String.split(",")
     |> Enum.map(&String.trim/1)
-    |> Enum.filter(fn header -> String.starts_with?(header, "mvt-") end)
-    |> Enum.map(fn header ->
-      case Map.get(mvt_headers, header) do
-        {i, _} -> "bbc-mvt-#{i}"
-        nil -> nil
-      end
-    end)
+    |> Enum.filter(fn header_name -> String.starts_with?(header_name, "mvt-") end)
+    |> Enum.map(fn header_name -> {header_name, Map.get(mvt_headers, header_name)} end)
+    |> Enum.map(fn header -> do_header_map(header, test_env?) end)
     |> Enum.reject(&is_nil/1)
   end
+
+  defp do_header_map(header, test_env?)
+  defp do_header_map({_header_name, {i, _mvt_value}}, _) when is_integer(i), do: "bbc-mvt-#{i}"
+  defp do_header_map({header_name, {:override, _}}, true), do: header_name
+  defp do_header_map(_, _), do: nil
 end
