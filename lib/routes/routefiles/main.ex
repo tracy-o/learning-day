@@ -246,10 +246,11 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021", only_on: "test", examples: ["/news/election/2021/england/councils/E06000023", "/news/election/2021/england/mayors/E12000007"] do
+  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021", examples: ["/news/election/2021/england/councils/E06000023", "/news/election/2021/england/mayors/E47000001"] do
     return_404 if: [
       !String.match?(division_name, ~r/^(councils|mayors)$/),
-      !String.match?(division_id, ~r/^[E][0-9]{8}$/)
+      !String.match?(division_id, ~r/^[E][0-9]{8}$/),
+      String.match?(division_id, ~r/E12000007/)
     ]
   end
 
