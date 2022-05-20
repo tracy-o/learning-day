@@ -3,6 +3,7 @@ defmodule Belfrage.RouteStateTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.RoutingHelper
   import Process, only: [send: 3]
+  import Test.Support.Helper, only: [set_env: 2]
 
   alias Belfrage.{Struct, RouteState, RouteSpec}
 
@@ -405,12 +406,6 @@ defmodule Belfrage.RouteStateTest do
 
   defp start_route_state(_context) do
     {:ok, pid: start_supervised!({RouteState, @route_state_id})}
-  end
-
-  defp set_env(name, value) do
-    original_value = Application.get_env(:belfrage, name)
-    Application.put_env(:belfrage, name, value)
-    on_exit(fn -> Application.put_env(:belfrage, name, original_value) end)
   end
 
   defp update_mvt_seen_with_button_colour_header(context = %{pid: pid}) do
