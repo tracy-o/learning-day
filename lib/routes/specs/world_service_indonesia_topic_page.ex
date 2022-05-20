@@ -7,6 +7,6 @@ defmodule Routes.Specs.WorldServiceIndonesiaTopicPage do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceTopicsRedirect" ,"WorldServiceRedirect", "CircuitBreaker"]
+  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceTopicsRedirect", "WorldServiceRedirect", "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
