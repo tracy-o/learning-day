@@ -361,7 +361,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe ":mvt seen is pruned as expected" do
-    setup [:set_ten_sec_mvt_vary_header_ttl, :set_ten_ms_route_state_reset_interval, :start_route_state]
+    setup [:set_ten_sec_mvt_vary_header_ttl, :start_route_state]
 
     test "when some mvt vary headers have a timestamp older than the interval", %{pid: pid} do
       now = DateTime.utc_now()
@@ -376,7 +376,7 @@ defmodule Belfrage.RouteStateTest do
         })
       end)
 
-      Process.sleep(20)
+      send(pid, :reset)
 
       assert %{mvt_seen: mvt_seen} = :sys.get_state(pid)
       assert ["mvt-five", "mvt-one", "mvt-three"] == Map.keys(mvt_seen)
@@ -389,10 +389,6 @@ defmodule Belfrage.RouteStateTest do
 
   defp set_ten_sec_mvt_vary_header_ttl(_context) do
     set_env(:mvt_vary_header_ttl, 10_000)
-  end
-
-  defp set_ten_ms_route_state_reset_interval(_context) do
-    set_env(:route_state_reset_interval, 10)
   end
 
   defp replace_throughput(pid, throughput) do
