@@ -1,10 +1,12 @@
 defmodule EndToEnd.MvtTest do
   use ExUnit.Case
   use Plug.Test
+  use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [set_environment: 1]
+
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   alias Belfrage.Mvt
-  use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
 
@@ -34,13 +36,6 @@ defmodule EndToEnd.MvtTest do
       "statusCode" => 200,
       "body" => "<h1>Hello from the Lambda!</h1>"
     }
-  end
-
-  defp set_environment(env) do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, env)
-    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
-    :ok
   end
 
   defp set_mvt_slot(slots) do

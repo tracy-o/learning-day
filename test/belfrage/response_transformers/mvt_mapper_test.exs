@@ -1,7 +1,8 @@
 defmodule Belfrage.ResponseTransformers.MvtMapperTest do
-  alias Belfrage.Struct
   use ExUnit.Case
+  import Test.Support.Helper, only: [set_environment: 1]
 
+  alias Belfrage.Struct
   alias Belfrage.ResponseTransformers.MvtMapper
 
   test "generates mvt_vary value based on returned mvt headers" do
@@ -140,12 +141,5 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
 
       assert struct_with_mvt_vary.private.mvt_vary == []
     end
-  end
-
-  defp set_environment(env) do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, env)
-    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
-    :ok
   end
 end

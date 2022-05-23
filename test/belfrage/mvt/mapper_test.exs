@@ -1,6 +1,7 @@
 defmodule Belfrage.Mvt.MapperTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [set_environment: 1]
 
   alias Belfrage.Struct
   alias Belfrage.Mvt
@@ -113,9 +114,9 @@ defmodule Belfrage.Mvt.MapperTest do
   end
 
   # When a header key has the format 'mvt-*' its considered an override header.
-  # Unlike bb-mvt-i headers (where 1 <= i <= 20) any string can be appended
+  # Unlike bbc-mvt-i headers (where 1 <= i <= 20) any string can be appended
   # after the *. The header value should follow the format "#{type};#{value}"
-  # but no Checks or transformation are performed.
+  # but no checks or transformation are performed.
   # These headers are only valid on test environments.
   describe "when a header has the key 'mvt-*' and the environment is 'test'" do
     setup do
@@ -139,13 +140,6 @@ defmodule Belfrage.Mvt.MapperTest do
 
       assert %{} == struct.private.mvt
     end
-  end
-
-  defp set_environment(env) do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, env)
-    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
-    :ok
   end
 
   defp set_slots(project) do

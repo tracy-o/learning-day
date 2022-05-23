@@ -69,7 +69,7 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
   end
 
-  def build_struct(opts) do
+  defp build_struct(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
     mvt_project_id = Keyword.get(opts, :mvt_project_id, 0)
 
