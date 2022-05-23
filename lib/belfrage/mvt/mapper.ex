@@ -56,8 +56,4 @@ defmodule Belfrage.Mvt.Mapper do
   defp match_slot?(slot, i, slot_name) do
     slot["header"] == "bbc-mvt-#{i}" and slot["key"] == slot_name
   end
-
-  defp test_env?() do
-    Application.get_env(:belfrage, :production_environment) == "test"
-  end
 end

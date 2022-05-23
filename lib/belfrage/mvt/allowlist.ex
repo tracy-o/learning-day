@@ -1,6 +1,5 @@
 defmodule Belfrage.Mvt.Allowlist do
   alias Belfrage.Struct
-  alias Belfrage.Struct.Private
 
   def add(struct) do
     raw_headers = struct.request.raw_headers
@@ -15,7 +14,7 @@ defmodule Belfrage.Mvt.Allowlist do
   end
 
   defp mvt_headers(project_id) do
-    if project_id != 0 do
+    if project_id > 0 do
       1..20
       |> Enum.map(fn i -> "bbc-mvt-#{i}" end)
       |> Enum.concat(["bbc-mvt-complete"])
