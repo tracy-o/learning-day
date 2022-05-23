@@ -16,6 +16,7 @@ defmodule Belfrage.Services.Webcore.Request do
   defp headers(struct = %Struct{}) do
     struct
     |> base_headers()
+    |> put_obit_mode_headers(struct.request)
     |> put_election_headers(struct.request)
     |> put_user_session_headers(struct.user_session)
     |> put_feature_header(struct.private)
@@ -31,6 +32,14 @@ defmodule Belfrage.Services.Webcore.Request do
       host: request.host,
       "ctx-route-spec": private.route_state_id
     }
+  end
+
+  defp put_obit_mode_headers(headers, %Request{raw_headers: raw_headers}) do
+    if raw_headers["obit-mode"] do
+      Map.put(headers, "obm", raw_headers["obit-mode"])
+    else
+      headers
+    end
   end
 
   defp put_election_headers(headers, %Request{raw_headers: raw_headers}) do

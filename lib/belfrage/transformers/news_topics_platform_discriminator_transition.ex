@@ -7,7 +7,18 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
 
   def call(rest, struct) do
     cond do
-      redirect?(struct) ->
+      is_mozart_topic?(struct) or is_id_guid?(struct) ->
+        struct =
+          Struct.add(struct, :private, %{
+            platform: MozartNews,
+            origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+            personalised_route: false,
+            personalised_request: false
+          })
+
+        then_do(["CircuitBreaker"], struct)
+
+      not is_mozart_topic?(struct) and has_slug?(struct) ->
         {
           :redirect,
           Struct.add(struct, :response, %{
@@ -21,27 +32,20 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTransition do
           })
         }
 
-      to_mozart_news?(struct) ->
-        then_do(
-          ["CircuitBreaker"],
-          Struct.add(struct, :private, %{
-            platform: MozartNews,
-            origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-            personalised_route: false,
-            personalised_request: false
-          })
-        )
-
       true ->
         then_do(rest, struct)
     end
   end
 
-  defp redirect?(struct) do
-    Map.has_key?(struct.request.path_params, "slug") and struct.request.path_params["id"] not in NewsTopicIds.get()
+  defp is_mozart_topic?(struct) do
+    struct.request.path_params["id"] in NewsTopicIds.get()
   end
 
-  defp to_mozart_news?(struct) do
-    struct.request.path_params["id"] in NewsTopicIds.get()
+  defp is_id_guid?(struct) do
+    String.match?(struct.request.path_params["id"], ~r/^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/)
+  end
+
+  defp has_slug?(struct) do
+    Map.has_key?(struct.request.path_params, "slug")
   end
 end
