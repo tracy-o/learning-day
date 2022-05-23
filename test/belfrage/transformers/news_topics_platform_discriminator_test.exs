@@ -7,15 +7,11 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
 
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
-
-    %{
-      mozart_news_endpoint: Application.get_env(:belfrage, :mozart_news_endpoint),
-      pwa_lambda_function: Application.get_env(:belfrage, :pwa_lambda_function)
-    }
+    %{mozart_news_endpoint: Application.get_env(:belfrage, :mozart_news_endpoint)}
   end
 
-  describe "path does not contain a slug" do
-    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route and request will be set to not personalised",
+  describe "when the path does not contain a slug" do
+    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -31,12 +27,12 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                }
              } =
                NewsTopicsPlatformDiscriminator.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "some-id"}},
+                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
                  private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
     end
 
-    test "Topic ID in webcore allowlist, the platform and origin will be unchanged" do
+    test "if the id is a Topic ID and is not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
       assert {
                :ok,
                %Struct{
@@ -63,33 +59,13 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                      production_environment: "test"
                    },
                    request: %Struct.Request{
-                     path_params: %{"id" => "c4mr5v9znzqt"}
+                     path_params: %{"id" => "some-id"}
                    }
                  }
                )
     end
-  end
 
-  describe "path contains a slug" do
-    test "Topic ID in webcore allowlist, a redirect will be issued without the slug" do
-      assert {:redirect,
-              %Struct{
-                response: %Struct.Response{
-                  http_status: 302,
-                  headers: %{
-                    "location" => "/news/topics/c4mr5v9znzqt",
-                    "x-bbc-no-scheme-rewrite" => "1",
-                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-                  },
-                  body: "Redirecting"
-                }
-              }} =
-               NewsTopicsPlatformDiscriminator.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "c4mr5v9znzqt", "slug" => "some-slug"}}
-               })
-    end
-
-    test "if the Topic ID is not in the Webcore allow list the platform and origin will be altered to Mozart News and the route and request will be set to not personalised",
+    test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
          %{
            mozart_news_endpoint: mozart_news_endpoint
          } do
@@ -105,9 +81,76 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                }
              } =
                NewsTopicsPlatformDiscriminator.call([], %Struct{
-                 request: %Struct.Request{path_params: %{"id" => "some-id", "slug" => "some-slug"}},
+                 request: %Struct.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
                  private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
     end
+  end
+
+  describe "when the path contains a slug" do
+    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
+         %{
+           mozart_news_endpoint: mozart_news_endpoint
+         } do
+      assert {
+               :ok,
+               %Struct{
+                 private: %Struct.Private{
+                   platform: MozartNews,
+                   origin: ^mozart_news_endpoint,
+                   personalised_route: false,
+                   personalised_request: false
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminator.call([], %Struct{
+                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
+                 private: %Struct.Private{personalised_route: true, personalised_request: true}
+               })
+    end
+
+    test "if the id is a Topic ID and is not in the Mozart allowlist, a redirect will be issued without the slug" do
+      assert {:redirect,
+              %Struct{
+                response: %Struct.Response{
+                  http_status: 302,
+                  headers: %{
+                    "location" => "/news/topics/cl16knzkz9yt",
+                    "x-bbc-no-scheme-rewrite" => "1",
+                    "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+                  },
+                  body: "Redirecting"
+                }
+              }} =
+               NewsTopicsPlatformDiscriminator.call([], %Struct{
+                 request: %Struct.Request{
+                   path: "/_some_path",
+                   path_params: %{"id" => "cl16knzkz9yt", "slug" => "some-slug"}
+                 }
+               })
+    end
+  end
+
+  test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
+       %{
+         mozart_news_endpoint: mozart_news_endpoint
+       } do
+    assert {
+             :ok,
+             %Struct{
+               private: %Struct.Private{
+                 platform: MozartNews,
+                 origin: ^mozart_news_endpoint,
+                 personalised_route: false,
+                 personalised_request: false
+               }
+             }
+           } =
+             NewsTopicsPlatformDiscriminator.call([], %Struct{
+               request: %Struct.Request{
+                 path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
+               },
+               private: %Struct.Private{personalised_route: true, personalised_request: true}
+             })
   end
 end
