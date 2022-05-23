@@ -102,19 +102,67 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
   end
 
-  describe "if no mvt_project_id is set" do
-    test "no mvt headers are added" do
+  describe "if no mvt_project_id is set and on test" do
+    setup do
+      set_environment("test")
+    end
+
+    test "no bbc-mvt-i headers are added" do
       struct =
         build_struct(
           raw_headers: %{
-            "bbc-mvt-1" => "experiment;name;some_value",
+            "bbc-mvt-1" => "experiment;name;some_value"
+          },
+          mvt_project_id: 0
+        )
+        |> Allowlist.add()
+
+      refute "bbc-mvt-1" in struct.private.headers_allowlist
+    end
+
+    test "override mvt headers are added" do
+      struct =
+        build_struct(
+          raw_headers: %{
             "mvt-some_override" => "experiment;name;some_value"
           },
           mvt_project_id: 0
         )
+        |> Allowlist.add()
+
+      assert "mvt-some_override" in struct.private.headers_allowlist
+    end
+  end
+
+  describe "if no mvt_project_id is set and on live" do
+    setup do
+      set_environment("live")
+    end
+
+    test "no bbc-mvt-i headers are added" do
+      struct =
+        build_struct(
+          raw_headers: %{
+            "bbc-mvt-1" => "experiment;name;some_value"
+          },
+          mvt_project_id: 0
+        )
+        |> Allowlist.add()
 
       refute "bbc-mvt-1" in struct.private.headers_allowlist
-      refute "mvt-some-override" in struct.private.headers_allowlist
+    end
+
+    test "no override mvt headers are added" do
+      struct =
+        build_struct(
+          raw_headers: %{
+            "mvt-some_override" => "experiment;name;some_value"
+          },
+          mvt_project_id: 0
+        )
+        |> Allowlist.add()
+
+      refute "mvt-some_override" in struct.private.headers_allowlist
     end
   end
 

@@ -7,13 +7,11 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
         struct = %Struct{
           private: %Struct.Private{
             headers_allowlist: headers_allowlist,
-            mvt: mvt_headers,
-            mvt_project_id: mvt_project_id
+            mvt: mvt_headers
           },
           response: %Struct.Response{headers: headers}
         }
-      )
-      when mvt_project_id > 0 do
+      ) do
     vary_header = Map.get(headers, "vary")
 
     if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
