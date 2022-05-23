@@ -56,8 +56,16 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
     |> Enum.reject(&is_nil/1)
   end
 
-  defp do_header_map(header, test_env?)
-  defp do_header_map({_header_name, {i, _mvt_value}}, _) when is_integer(i), do: "bbc-mvt-#{i}"
-  defp do_header_map({header_name, {:override, _}}, true), do: header_name
-  defp do_header_map(_, _), do: nil
+  defp do_header_map(header, test_env?) do
+    case header do
+      {_header_name, {i, _mvt_value}} when is_integer(i) ->
+        "bbc-mvt-#{i}"
+
+      {header_name, {i, _mvt_value}} when i == :override and test_env? ->
+        header_name
+
+      _ ->
+        nil
+    end
+  end
 end
