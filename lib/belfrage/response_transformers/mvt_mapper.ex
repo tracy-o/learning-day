@@ -45,23 +45,21 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
   end
 
   defp map_mvt_headers(vary_header, mvt_headers) do
-    test_env? = Application.get_env(:belfrage, :production_environment) == "test"
-
     vary_header
     |> String.split(",")
     |> Enum.map(&String.trim/1)
     |> Enum.filter(fn header_name -> String.starts_with?(header_name, "mvt-") end)
     |> Enum.map(fn header_name -> {header_name, Map.get(mvt_headers, header_name)} end)
-    |> Enum.map(fn header -> do_header_map(header, test_env?) end)
+    |> Enum.map(fn header -> do_header_map(header) end)
     |> Enum.reject(&is_nil/1)
   end
 
-  defp do_header_map(header, test_env?) do
+  defp do_header_map(header) do
     case header do
       {_header_name, {i, _mvt_value}} when is_integer(i) ->
         "bbc-mvt-#{i}"
 
-      {header_name, {i, _mvt_value}} when i == :override and test_env? ->
+      {header_name, {i, _mvt_value}} when i == :override ->
         header_name
 
       _ ->

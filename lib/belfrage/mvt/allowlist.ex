@@ -22,7 +22,11 @@ defmodule Belfrage.Mvt.Allowlist do
   end
 
   defp mvt_override_headers(raw_headers) do
-    Enum.filter(raw_headers, fn {name, _} -> String.starts_with?(name, "mvt-") end)
-    |> Enum.map(fn {name, _val} -> name end)
+    if Application.get_env(:belfrage, :production_environment) == "test" do
+      Enum.filter(raw_headers, fn {name, _} -> String.starts_with?(name, "mvt-") end)
+      |> Enum.map(fn {name, _val} -> name end)
+    else
+      []
+    end
   end
 end

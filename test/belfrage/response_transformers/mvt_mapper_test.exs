@@ -1,6 +1,5 @@
 defmodule Belfrage.ResponseTransformers.MvtMapperTest do
   use ExUnit.Case
-  import Test.Support.Helper, only: [set_environment: 1]
 
   alias Belfrage.Struct
   alias Belfrage.ResponseTransformers.MvtMapper
@@ -63,11 +62,10 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
     assert struct_with_no_mvt.private.headers_allowlist == []
   end
 
+  # we will assume the environment is test here as `Belfrage.Mvt.Allowlist`
+  # should filter out override headers when not on test. If we don't send an
+  # override header there is no way we should recieve one either.
   describe "mvt-* override header on test environment" do
-    setup do
-      set_environment("test")
-    end
-
     test "if override header in mvt map and in vary, add to mvt_vary" do
       struct_with_mvt_vary =
         MvtMapper.call(%Struct{
@@ -112,29 +110,6 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
           response: %Struct.Response{
             headers: %{
               "vary" => "mvt-some_experiment"
-            }
-          }
-        })
-
-      assert struct_with_mvt_vary.private.mvt_vary == []
-    end
-  end
-
-  describe "override header on live environment" do
-    setup do
-      set_environment("live")
-    end
-
-    test "if override header in mvt map and the vary, don't add to mvt header" do
-      struct_with_mvt_vary =
-        MvtMapper.call(%Struct{
-          private: %Struct.Private{
-            mvt_project_id: 1,
-            mvt: %{"mvt-some_experiment" => {:override, "experiment;red"}}
-          },
-          response: %Struct.Response{
-            headers: %{
-              "vary" => "mvt-some_experiment,mvt-button_colour,mvt-sidebar,mvt-unknown"
             }
           }
         })

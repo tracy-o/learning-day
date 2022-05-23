@@ -1,7 +1,6 @@
 defmodule Belfrage.Mvt.MapperTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [set_environment: 1]
 
   alias Belfrage.Struct
   alias Belfrage.Mvt
@@ -113,32 +112,14 @@ defmodule Belfrage.Mvt.MapperTest do
     end
   end
 
-  # When a header key has the format 'mvt-*' its considered an override header.
-  # Unlike bbc-mvt-i headers (where 1 <= i <= 20) any string can be appended
-  # after the *. The header value should follow the format "#{type};#{value}"
-  # but no checks or transformation are performed.
-  # These headers are only valid on test environments.
   describe "when a header has the key 'mvt-*' and the environment is 'test'" do
-    setup do
-      set_environment("test")
-    end
+    # we will assume the environment is test here as `Belfrage.Mvt.Allowlist`
+    # should filter out override headers when not on test.
 
     test "apply override header mapping" do
       struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
 
       assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == struct.private.mvt
-    end
-  end
-
-  describe "when a header has the key 'mvt-*' and the environment is 'live" do
-    setup do
-      set_environment("live")
-    end
-
-    test "override headers are filtered out" do
-      struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
-
-      assert %{} == struct.private.mvt
     end
   end
 

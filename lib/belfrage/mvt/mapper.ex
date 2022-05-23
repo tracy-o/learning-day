@@ -34,13 +34,9 @@ defmodule Belfrage.Mvt.Mapper do
   end
 
   defp map_override_headers(headers) do
-    if test_env?() do
-      headers
-      |> Enum.filter(fn {name, _v} -> match?(<<"mvt-", _rest::binary>>, name) end)
-      |> Enum.into(%{}, fn {name, value} -> {name, {:override, value}} end)
-    else
-      %{}
-    end
+    headers
+    |> Enum.filter(fn {name, _v} -> match?(<<"mvt-", _rest::binary>>, name) end)
+    |> Enum.into(%{}, fn {name, value} -> {name, {:override, value}} end)
   end
 
   defp header_parts(i, headers) do

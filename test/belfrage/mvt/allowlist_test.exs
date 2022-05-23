@@ -1,5 +1,6 @@
 defmodule Belfrage.Mvt.AllowlistTest do
   use ExUnit.Case
+  import Test.Support.Helper, only: [set_environment: 1]
 
   alias Belfrage.Struct
   alias Belfrage.Struct.{Private, Request}
@@ -38,7 +39,16 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
   end
 
-  describe "mvt override headers in format mvt-*" do
+  # When a header key has the format 'mvt-*' its considered an override header.
+  # Unlike bbc-mvt-i headers (where 1 <= i <= 20) any string can be appended
+  # after the *. The header value should follow the format "#{type};#{value}"
+  # but no checks or transformation are performed.
+  # These headers are only valid on test environments.
+  describe "mvt override headers in format mvt-* and environment is test" do
+    setup do
+      set_environment("test")
+    end
+
     test "all bbc-mvt-i headers are added to allowlist" do
       struct =
         build_struct(
@@ -66,6 +76,45 @@ defmodule Belfrage.Mvt.AllowlistTest do
 
       raw_headers = Processor.allowlists(struct).request.raw_headers
       assert raw_headers == override_headers
+    end
+  end
+
+  describe "mvt override headers in format mvt-* and environment is live" do
+    setup do
+      set_environment("live")
+    end
+
+    test "none of the headers are added to the allowlist" do
+      struct =
+        build_struct(
+          raw_headers: %{
+            "mvt-some_override" => "experiment;name;some_value",
+            "mvt-another_override" => "experiment;name;some_value",
+            "invalid-override" => "experiment;name;some_value"
+          },
+          mvt_project_id: 1
+        )
+        |> Allowlist.add()
+
+      refute "mvt-some_override" in struct.private.headers_allowlist
+      refute "mvt-another_override" in struct.private.headers_allowlist
+      refute "invalid-override" in struct.private.headers_allowlist
+    end
+  end
+
+  describe "if no mvt_project_id is set" do
+    test "no mvt headers are added" do
+      struct =
+        build_struct(
+          raw_headers: %{
+            "bbc-mvt-1" => "experiment;name;some_value",
+            "mvt-some_override" => "experiment;name;some_value"
+          },
+          mvt_project_id: 0
+        )
+
+      refute "bbc-mvt-1" in struct.private.headers_allowlist
+      refute "mvt-some-override" in struct.private.headers_allowlist
     end
   end
 
