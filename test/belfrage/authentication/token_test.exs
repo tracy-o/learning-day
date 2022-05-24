@@ -44,26 +44,6 @@ defmodule Belfrage.Authentication.TokenTest do
       assert log =~ ~s(Invalid token header)
     end
 
-    test "invalid token issuer" do
-      log =
-        capture_log(fn ->
-          assert Token.parse(T.invalid_token_issuer()) == {false, %{}}
-        end)
-
-      assert log =~ ~s("claim":"iss")
-      assert log =~ ~s(Claim validation failed)
-    end
-
-    test "invalid token aud" do
-      log =
-        capture_log(fn ->
-          assert Token.parse(T.invalid_token_aud()) == {false, %{}}
-        end)
-
-      assert log =~ ~s("claim":"aud")
-      assert log =~ ~s(Claim validation failed)
-    end
-
     test "invalid token name" do
       log =
         capture_log(fn ->
