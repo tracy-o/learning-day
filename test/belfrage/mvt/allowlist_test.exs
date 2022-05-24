@@ -49,7 +49,7 @@ defmodule Belfrage.Mvt.AllowlistTest do
       set_environment("test")
     end
 
-    test "all bbc-mvt-i headers are added to allowlist" do
+    test "all mvt-* headers are added to allowlist" do
       struct =
         build_struct(
           raw_headers: %{
