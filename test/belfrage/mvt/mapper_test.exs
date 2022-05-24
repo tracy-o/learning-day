@@ -112,6 +112,17 @@ defmodule Belfrage.Mvt.MapperTest do
     end
   end
 
+  describe "when a header has the key 'mvt-*' and the environment is 'test'" do
+    # we will assume the environment is test here as `Belfrage.Mvt.Allowlist`
+    # should filter out override headers when not on test.
+
+    test "apply override header mapping" do
+      struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
+
+      assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == struct.private.mvt
+    end
+  end
+
   defp set_slots(project) do
     Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Mvt.Slots.set(%{}) end)

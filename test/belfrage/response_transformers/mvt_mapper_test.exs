@@ -1,7 +1,7 @@
 defmodule Belfrage.ResponseTransformers.MvtMapperTest do
-  alias Belfrage.Struct
   use ExUnit.Case
 
+  alias Belfrage.Struct
   alias Belfrage.ResponseTransformers.MvtMapper
 
   test "generates mvt_vary value based on returned mvt headers" do
@@ -60,5 +60,61 @@ defmodule Belfrage.ResponseTransformers.MvtMapperTest do
     struct_with_no_mvt = MvtMapper.call(%Struct{})
 
     assert struct_with_no_mvt.private.headers_allowlist == []
+  end
+
+  # we will assume the environment is test here as `Belfrage.Mvt.Allowlist`
+  # should filter out override headers when not on test. If we don't send an
+  # override header there is no way we should recieve one either.
+  describe "mvt-* override header on test environment" do
+    test "if override header in mvt map and in vary, add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{"mvt-some_experiment" => {:override, "experiment;red"}}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-some_experiment,mvt-button_colour,mvt-sidebar,mvt-unknown"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == ["mvt-some_experiment"]
+    end
+
+    test "if override header in mvt map but not in vary, don't add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{"mvt-some_experiment" => {:override, "experiment;red"}}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-sidebar,mvt-unknown"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == []
+    end
+
+    test "if override header not in mvt map but in vary, don't add to mvt_vary" do
+      struct_with_mvt_vary =
+        MvtMapper.call(%Struct{
+          private: %Struct.Private{
+            mvt_project_id: 1,
+            mvt: %{}
+          },
+          response: %Struct.Response{
+            headers: %{
+              "vary" => "mvt-some_experiment"
+            }
+          }
+        })
+
+      assert struct_with_mvt_vary.private.mvt_vary == []
+    end
   end
 end

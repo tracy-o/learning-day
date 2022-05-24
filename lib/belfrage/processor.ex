@@ -49,6 +49,7 @@ defmodule Belfrage.Processor do
     Metrics.duration(:filter_request_data, fn ->
       struct
       |> Personalisation.append_allowlists()
+      |> Mvt.Allowlist.add()
       |> Allowlist.QueryParams.filter()
       |> Allowlist.Cookies.filter()
       |> Allowlist.Headers.filter()
