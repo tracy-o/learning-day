@@ -1907,6 +1907,9 @@ defroutefile "Main" do
   ## Sport Visual Journalism
   handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
+  # Temporary for MVT test verification experiment
+  handle "/sport/av/cricket/55430917", using: "SportVideosMvt", examples: ["/sport/av/cricket/55430917"]
+
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
   handle "/sport/av/:id", using: "SportVideos", examples: ["/sport/av/51107180"] do
