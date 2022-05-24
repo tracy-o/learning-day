@@ -127,4 +127,11 @@ defmodule Test.Support.Helper do
 
     on_exit(fn -> Application.put_env(:belfrage, :stack_id, prev_id) end)
   end
+
+  def set_environment(env) do
+    original_env = Application.get_env(:belfrage, :production_environment)
+    Application.put_env(:belfrage, :production_environment, env)
+    on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
+    :ok
+  end
 end
