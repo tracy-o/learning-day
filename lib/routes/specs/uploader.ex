@@ -5,7 +5,7 @@ defmodule Routes.Specs.Uploader do
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=300173395",
       platform: Webcore,
       personalisation: "on",
-      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "CircuitBreaker"]
+      pipeline: ["ComToUKRedirect"]
     }
   end
 end
