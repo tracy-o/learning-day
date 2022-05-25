@@ -4,7 +4,7 @@ defmodule Routes.Specs.BitesizeGuides do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
+      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
     }
   end
 
@@ -13,7 +13,7 @@ defmodule Routes.Specs.BitesizeGuides do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
+      pipeline: ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
     }
   end
 end

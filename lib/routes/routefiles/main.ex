@@ -2410,9 +2410,9 @@ defroutefile "Main" do
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
   handle "/bitesize/guides/:id/revision/:revisionId", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
-  # handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/test"]
-  # handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/audio"]
-  # handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/video"]
+  handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/test"]
+  handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/audio"]
+  handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/video"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
