@@ -5,7 +5,7 @@ defmodule Routes.Specs.SportVideosMvt do
       runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
       platform: Webcore,
       query_params_allowlist: query_params_allowlist(production_env),
-      mvt_project_id: 19730466715,
+      mvt_project_id: 1,
       caching_enabled: false,
       pipeline: ["DatalabMachineRecommendations"]
     }
