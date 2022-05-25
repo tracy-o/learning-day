@@ -301,6 +301,51 @@ defmodule Belfrage.Services.HTTPTest do
              } = HTTP.dispatch(struct)
     end
 
+    test "when advertise is set, the bbc adverts header is used" do
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.com",
+          platform: SomePlatform
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_some_path",
+          country: "kg",
+          host: "www.bbc.com",
+          edge_cache?: true,
+          scheme: :https,
+          is_uk: false,
+          is_advertise: true
+        }
+      }
+
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.com/_some_path",
+          payload: "",
+          headers: %{
+            "accept-encoding" => "gzip",
+            "x-bbc-edge-cache" => "1",
+            "x-bbc-edge-country" => "kg",
+            "x-bbc-edge-host" => "www.bbc.com",
+            "x-bbc-edge-scheme" => "https",
+            "bbc-adverts" => true,
+            "user-agent" => "Belfrage"
+          }
+        },
+        @ok_response
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
+
     test "when xray_segment present, 'x-amzn-trace-id' us used" do
       struct = %Struct{
         private: %Struct.Private{
