@@ -31,11 +31,14 @@ defmodule EndToEnd.AccessLogsTest do
 
     captured_log =
       capture_log(fn ->
-        conn(:get, "/200-ok-response")
+        conn(:get, "/200-ok-response?query=querystring")
         |> put_req_header("access-log-req-header", "yes")
         |> Router.call([])
       end)
 
+    IO.inspect captured_log 
+
+    assert captured_log =~ "query_string", "querystring"
     assert captured_log =~ "/200-ok-response", "Failed to log request path"
     assert captured_log =~ "200", "Failed to log response status code"
     assert captured_log =~ "GET", "Failed to log request method"
