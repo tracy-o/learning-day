@@ -36,8 +36,6 @@ defmodule EndToEnd.AccessLogsTest do
         |> Router.call([])
       end)
 
-    IO.inspect captured_log 
-
     assert captured_log =~ "query_string", "querystring"
     assert captured_log =~ "/200-ok-response", "Failed to log request path"
     assert captured_log =~ "200", "Failed to log response status code"
