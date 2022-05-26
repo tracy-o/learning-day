@@ -330,7 +330,7 @@ defmodule Belfrage.Services.HTTPTest do
             "x-bbc-edge-country" => "kg",
             "x-bbc-edge-host" => "www.bbc.com",
             "x-bbc-edge-scheme" => "https",
-            "bbc-adverts" => true,
+            "bbc-adverts" => "true",
             "user-agent" => "Belfrage"
           }
         },
