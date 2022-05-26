@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
+defmodule Belfrage.Transformers.WorldServiceTopicsGuid do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do

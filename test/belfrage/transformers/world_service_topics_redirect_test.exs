@@ -1,7 +1,7 @@
-defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
+defmodule Belfrage.Transformers.WorldServiceTopicsGuidTest do
   use ExUnit.Case
 
-  alias Belfrage.Transformers.WorldServiceTopicsRedirect
+  alias Belfrage.Transformers.WorldServiceTopicsGuid
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
 
@@ -12,7 +12,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
     end
 
@@ -22,7 +22,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
     end
 
@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
     end
   end
@@ -44,7 +44,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "simorgh", platform: Simorgh})}
     end
 
@@ -54,7 +54,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "simorgh", platform: Simorgh})}
     end
 
@@ -64,7 +64,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
         private: %Private{origin: "simorgh", platform: Simorgh}
       }
 
-      assert WorldServiceTopicsRedirect.call([], struct) ==
+      assert WorldServiceTopicsGuid.call([], struct) ==
                {:ok, Struct.add(struct, :private, %{origin: "simorgh", platform: Simorgh})}
     end
   end
