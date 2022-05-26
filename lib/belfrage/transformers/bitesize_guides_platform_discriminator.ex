@@ -5,7 +5,10 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminator do
   use Belfrage.Transformers.Transformer
 
   @webcore_test_ids [
-    "zw3bfcw"
+    "zw3bfcw",
+    "zwsffg8",
+    "zcvy6yc",
+    "zw7xfcw"
   ]
 
   @webcore_live_ids []
