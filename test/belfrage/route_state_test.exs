@@ -3,6 +3,7 @@ defmodule Belfrage.RouteStateTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.RoutingHelper
   import Process, only: [send: 3]
+  import Test.Support.Helper, only: [set_env: 2]
 
   alias Belfrage.{Struct, RouteState, RouteSpec}
 
@@ -361,7 +362,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   describe ":mvt seen is pruned as expected" do
-    setup [:set_ten_sec_mvt_vary_header_ttl, :set_ten_ms_route_state_reset_interval, :start_route_state]
+    setup [:set_ten_sec_mvt_vary_header_ttl, :start_route_state]
 
     test "when some mvt vary headers have a timestamp older than the interval", %{pid: pid} do
       now = DateTime.utc_now()
@@ -376,11 +377,16 @@ defmodule Belfrage.RouteStateTest do
         })
       end)
 
-      Process.sleep(20)
+      send(pid, :reset)
 
       assert %{mvt_seen: mvt_seen} = :sys.get_state(pid)
       assert ["mvt-five", "mvt-one", "mvt-three"] == Map.keys(mvt_seen)
     end
+  end
+
+  test "via_tuple/1 returns expected tuple" do
+    assert RouteState.via_tuple("SomeRouteStateId") ==
+             {:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, "SomeRouteStateId"}}}
   end
 
   defp datetime_minus(datetime, amount, unit) do
@@ -389,10 +395,6 @@ defmodule Belfrage.RouteStateTest do
 
   defp set_ten_sec_mvt_vary_header_ttl(_context) do
     set_env(:mvt_vary_header_ttl, 10_000)
-  end
-
-  defp set_ten_ms_route_state_reset_interval(_context) do
-    set_env(:route_state_reset_interval, 10)
   end
 
   defp replace_throughput(pid, throughput) do
@@ -409,12 +411,6 @@ defmodule Belfrage.RouteStateTest do
 
   defp start_route_state(_context) do
     {:ok, pid: start_supervised!({RouteState, @route_state_id})}
-  end
-
-  defp set_env(name, value) do
-    original_value = Application.get_env(:belfrage, name)
-    Application.put_env(:belfrage, name, value)
-    on_exit(fn -> Application.put_env(:belfrage, name, original_value) end)
   end
 
   defp update_mvt_seen_with_button_colour_header(context = %{pid: pid}) do

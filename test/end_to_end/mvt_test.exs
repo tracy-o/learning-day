@@ -189,5 +189,48 @@ defmodule EndToEnd.MvtTest do
 
       refute String.contains?(vary_header, "mvt-some_experiment")
     end
+
+    test "keys for cached responses only vary on previously seen MVT vary headers in response" do
+      expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
+
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
+      |> Router.call([])
+
+      assert cached_responses() == 1
+
+      expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
+
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
+      |> Router.call([])
+
+      assert cached_responses() == 2
+
+      # Check that the lambda is not called and as such a cached
+      # response is fetched, as the request signature will be the
+      # same in the third request - even though a new MVT feature
+      # is present in the request headers.
+      Belfrage.Clients.LambdaMock
+      |> expect(:call, 0, fn _lambda_name, _role_arn, %{headers: _headers}, _request_id, _opts ->
+        flunk("Should never be called.")
+      end)
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
+        |> put_req_header("bbc-mvt-2", "feature;sidebar;false")
+        |> Router.call([])
+
+      assert cached_responses() == 2
+
+      assert 200 == response.status
+    end
+  end
+
+  defp cached_responses() do
+    :cache
+    |> :ets.tab2list()
+    |> Enum.count()
   end
 end
