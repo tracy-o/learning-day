@@ -156,18 +156,6 @@
     ]
   },
   {
-    "name": "ACCOUNT_ISS",
-    "default-value": "https://access.api.bbc.com/bbcidv5/oauth2",
-    "options": [
-      {
-        "value": "https://access.test.api.bbc.com/bbcidv5/oauth2"
-      },
-      {
-        "value": "https://access.api.bbc.com/bbcidv5/oauth2"
-      }
-    ]
-  },
-  {
     "values": {
       "test": "https://session.test.bbc.co.uk",
       "live": "https://session.bbc.co.uk"
