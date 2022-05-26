@@ -2,7 +2,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsGuid do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do
-    if redirect_to_mozart?(struct) do
+    if topics_guid?(struct) do
       then_do(
         rest,
         Struct.add(struct, :private, %{
@@ -15,7 +15,11 @@ defmodule Belfrage.Transformers.WorldServiceTopicsGuid do
     end
   end
 
-  defp redirect_to_mozart?(struct) do
-    !String.match?(struct.request.path, ~r/^\/[[:alnum:]]+\/topics\/[[:alnum:]]{12}\?{0,1}/)
+  defp topics_guid?(struct) do
+    if struct.request.path_params["id"] do
+      String.length(struct.request.path_params["id"]) != 12
+    else
+      false
+    end
   end
 end
