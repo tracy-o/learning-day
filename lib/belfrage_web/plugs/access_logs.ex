@@ -15,7 +15,8 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
       status: conn.status,
       method: conn.method,
       req_headers: HeaderRedactor.redact(conn.req_headers),
-      resp_headers: HeaderRedactor.redact(conn.resp_headers)
+      resp_headers: HeaderRedactor.redact(conn.resp_headers),
+      query_string: conn.query_string
     })
 
     conn

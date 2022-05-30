@@ -1,8 +1,6 @@
 defmodule Belfrage.Authentication.Validator do
   use Joken.Config, default_signer: nil
 
-  alias __MODULE__
-
   add_hook(Belfrage.Authentication.VerifyHook)
 
   @expiry_validator Application.get_env(:belfrage, :expiry_validator)
@@ -10,21 +8,13 @@ defmodule Belfrage.Authentication.Validator do
   @impl Joken.Config
   def token_config do
     default_claims(skip: [:aud, :iss, :exp])
-    |> add_claim("aud", nil, &(&1 == auth_config()["aud"]))
     |> add_claim("tokenName", nil, &(&1 == "access_token"))
     |> add_claim("exp", nil, &is_valid_expiry?/1)
-    |> Map.put("iss", %Joken.Claim{generate: nil, validate: &is_valid_issuer?/3})
   end
 
   defp is_valid_expiry?(expiry) do
-    @expiry_validator.valid?(auth_config()["jwt_expiry_window"], expiry)
-  end
+    auth_config = Application.get_env(:belfrage, :authentication)
 
-  defp is_valid_issuer?(_issuer_in_claim, claims, _) do
-    Validator.Issuer.valid?(auth_config()["iss"], claims)
-  end
-
-  defp auth_config do
-    Application.get_env(:belfrage, :authentication)
+    @expiry_validator.valid?(auth_config["jwt_expiry_window"], expiry)
   end
 end

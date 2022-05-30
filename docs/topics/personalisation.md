@@ -80,8 +80,6 @@ type is currently supported.
 
 The following claims are validated:
 
-* iss = https://access.api.bbc.com/bbcidv5/oauth2
-* aud = Account
 * tokenName = access_token
 * exp is later than current time + configured expiry threshold (currently 70
   minutes), i.e. that the token hasn't expired and won't expire within the

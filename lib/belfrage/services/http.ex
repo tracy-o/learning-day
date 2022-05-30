@@ -100,7 +100,7 @@ defmodule Belfrage.Services.HTTP do
       "cookie-ckps-serbian" => request.cookie_ckps_serbian,
       "origin" => request.origin,
       "referer" => request.referer,
-      "bbc-adverts" => request.is_advertise
+      "bbc-adverts" => "#{request.is_advertise}"
     }
   end
 
