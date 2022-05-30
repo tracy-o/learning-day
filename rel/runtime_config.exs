@@ -15,7 +15,6 @@ use Mix.Config
   {"STACK_NAME", :default},
   {"STACK_ID", :default},
   {"CCP_S3_BUCKET", :default},
-  {"ACCOUNT_ISS", :custom},
   {"ACCOUNT_JWK_URI", :custom},
   {"SESSION_URL", :custom},
   {"IDCTA_CONFIG_URI", :custom},
