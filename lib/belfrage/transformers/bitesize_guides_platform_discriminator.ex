@@ -13,6 +13,12 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminator do
 
   @webcore_live_ids []
 
+  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
+    then_do(rest, maybe_update_origin(id, struct))
+  end
+
+  def call(_rest, struct), do: then_do([], struct)
+
   defp is_webcore_id(id) do
     application_env = Application.get_env(:belfrage, :production_environment)
 
@@ -24,21 +30,13 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminator do
   end
 
   defp maybe_update_origin(id, struct) do
-    case is_webcore_id(id) do
-      true ->
-        Struct.add(struct, :private, %{
-          platform: Webcore,
-          origin: Application.get_env(:belfrage, :pwa_lambda_function)
-        })
-
-      _ ->
-        struct
+    if is_webcore_id(id) do
+      Struct.add(struct, :private, %{
+        platform: Webcore,
+        origin: Application.get_env(:belfrage, :pwa_lambda_function)
+      })
+    else
+      struct
     end
   end
-
-  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    then_do(rest, maybe_update_origin(id, struct))
-  end
-
-  def call(_rest, struct), do: then_do([], struct)
 end

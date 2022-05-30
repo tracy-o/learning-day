@@ -59,18 +59,9 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^lambda_function,
                  platform: Webcore
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "zw3bfcw"}
                }
              }
            } = BitesizeGuidesPlatformDiscriminator.call([], @webcore_test_data)
@@ -82,18 +73,9 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
                  platform: MorphRouter
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "abc123xyz789"}
                }
              }
            } = BitesizeGuidesPlatformDiscriminator.call([], @morph_test_data)
@@ -108,18 +90,9 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
                  platform: MorphRouter
-               },
-               request: %Struct.Request{
-                 scheme: :http,
-                 host: "www.bbc.co.uk",
-                 path: "/_web_core",
-                 path_params: %{"id" => "abc123xyz789"}
                }
              }
            } = BitesizeGuidesPlatformDiscriminator.call([], @morph_live_data)
