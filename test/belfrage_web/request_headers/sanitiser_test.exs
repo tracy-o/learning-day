@@ -86,6 +86,23 @@ defmodule BelfrageWeb.RequestHeaders.SanitiserTest do
     end
   end
 
+  describe "is_advertise headers" do
+    test "uses edge header when edge_cache is true" do
+      assert Sanitiser.is_advertise(%{edge: "yes", varnish: nil}, true) == false
+      assert Sanitiser.is_advertise(%{edge: "no", varnish: "yes"}, true) == true
+    end
+
+    test "uses varnish header when edge cache is false" do
+      assert Sanitiser.is_advertise(%{edge: "no", varnish: "yes"}, false) == true
+      assert Sanitiser.is_advertise(%{edge: "yes", varnish: "no"}, false) == false
+    end
+
+    test "is false when neither headers are set" do
+      assert Sanitiser.is_advertise(%{edge: nil, varnish: nil}, true) == false
+      assert Sanitiser.is_advertise(%{edge: nil, varnish: nil}, false) == false
+    end
+  end
+
   describe "scheme headers" do
     test "uses edge scheme when set" do
       assert Sanitiser.scheme(%{edge: "https"}, false) == :https

@@ -29,7 +29,7 @@ defmodule BelfrageWeb.RequestHeaders.Sanitiser do
   def is_uk(%{varnish: "yes"}, false), do: true
   def is_uk(_headers, _cache), do: false
 
-  def is_advertise(%{edge: "yes"}, true), do: true
+  def is_advertise(%{edge: "no"}, true), do: true
   def is_advertise(%{varnish: "yes"}, false), do: true
   def is_advertise(_headers, _cache), do: false
 
