@@ -88,7 +88,7 @@ defmodule Belfrage.RouteState do
     state = %{
       state
       | counter: Counter.inc(state.counter, http_status, origin),
-        mvt_seen: Mvt.State.put_mvt_vary_headers(state.mvt_seen, mvt_vary_headers)
+        mvt_seen: Mvt.State.put_vary_headers(state.mvt_seen, mvt_vary_headers)
     }
 
     {:noreply, state}

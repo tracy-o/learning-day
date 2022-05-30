@@ -58,7 +58,7 @@ defmodule Belfrage.RequestHash do
 
   defp signature_headers(headers, route_state_id) do
     headers
-    |> Mvt.State.filter_mvt_headers(route_state_id)
+    |> Mvt.State.filter_headers(route_state_id)
     |> Map.drop(@ignore_headers)
   end
 end

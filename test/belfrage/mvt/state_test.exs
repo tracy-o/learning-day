@@ -43,10 +43,10 @@ defmodule Belfrage.Mvt.StateTest do
     end
   end
 
-  describe "filter_mvt_headers/2" do
+  describe "filter_headers/2" do
     test "drops all bbc-mvt- headers when no route state can be found" do
       assert %{"foo" => "bar"} ==
-               Mvt.State.filter_mvt_headers(
+               Mvt.State.filter_headers(
                  %{"foo" => "bar", "bbc-mvt-1" => "some;header;value"},
                  "some_route_state_id"
                )
@@ -79,7 +79,7 @@ defmodule Belfrage.Mvt.StateTest do
       start_supervised!({TestRouteState, "SomeTestRouteState"})
 
       assert %{"foo" => "bar"} ==
-               Mvt.State.filter_mvt_headers(
+               Mvt.State.filter_headers(
                  %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "some;button_colour;value",
@@ -98,7 +98,7 @@ defmodule Belfrage.Mvt.StateTest do
       end)
 
       assert %{"foo" => "bar", "bbc-mvt-1" => "some;button_colour;value"} ==
-               Mvt.State.filter_mvt_headers(
+               Mvt.State.filter_headers(
                  %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "some;button_colour;value",
@@ -120,7 +120,7 @@ defmodule Belfrage.Mvt.StateTest do
       end)
 
       assert %{"foo" => "bar", "bbc-mvt-1" => "some;button_colour;value"} ==
-               Mvt.State.filter_mvt_headers(
+               Mvt.State.filter_headers(
                  %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "some;button_colour;value",

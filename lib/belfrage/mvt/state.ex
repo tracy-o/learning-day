@@ -12,7 +12,7 @@ defmodule Belfrage.Mvt.State do
   If the header is already in the Map, the value of the
   corresponding key-value pair will be updated to a have a later datetime.
   """
-  def put_mvt_vary_headers(seen_headers, headers) do
+  def put_vary_headers(seen_headers, headers) do
     now = DateTime.utc_now()
     Enum.reduce(headers, seen_headers, fn h, acc -> Map.put(acc, h, now) end)
   end
@@ -51,7 +51,7 @@ defmodule Belfrage.Mvt.State do
       %{"foo" => "bar",
         "bbc-mvt-1" => "experiment;button_colour;red"}
   """
-  def filter_mvt_headers(headers, route_state_id) do
+  def filter_headers(headers, route_state_id) do
     seen_headers = get_seen_headers(route_state_id)
 
     :maps.filter(
