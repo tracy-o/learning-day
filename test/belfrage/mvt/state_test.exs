@@ -7,6 +7,48 @@ defmodule Belfrage.Mvt.StateTest do
   alias Belfrage.{Mvt, RouteState}
   alias Belfrage.Struct.Response
 
+  describe "put_vary_headers/2" do
+    test "puts no header when none are supplied" do
+      %{} = Mvt.State.put_vary_headers(%{}, [])
+    end
+
+    test "puts one header when one is supplied" do
+      %{"some-header" => datetime} = Mvt.State.put_vary_headers(%{}, ["some-header"])
+      assert :gt == DateTime.compare(DateTime.utc_now(), datetime)
+    end
+
+    test "puts multiple headers when supplied" do
+      %{
+        "some-header" => some_datetime,
+        "some-other-header" => some_other_datetime,
+        "another-header" => another_datetime
+      } = Mvt.State.put_vary_headers(%{}, ["some-header", "some-other-header", "another-header"])
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), some_datetime)
+      assert some_datetime == some_other_datetime
+      assert some_other_datetime == another_datetime
+    end
+
+    test "overwrites existing headers when supplied" do
+      now = DateTime.utc_now()
+
+      %{
+        "some-header" => some_datetime,
+        "some-other-header" => some_other_datetime,
+        "another-header" => another_datetime
+      } =
+        Mvt.State.put_vary_headers(%{"some-header" => now, "some-other-header" => now, "another-header" => now}, [
+          "some-header",
+          "some-other-header"
+        ])
+
+      assert :gt == DateTime.compare(DateTime.utc_now(), some_datetime)
+      assert :gt == DateTime.compare(some_datetime, now)
+      assert some_datetime == some_other_datetime
+      refute some_other_datetime == another_datetime
+    end
+  end
+
   describe "get_vary_headers/1" do
     test "gets single mvt vary header" do
       ["mvt-button-colour"] =
