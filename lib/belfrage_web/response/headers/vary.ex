@@ -1,19 +1,16 @@
 defmodule BelfrageWeb.Response.Headers.Vary do
   import Plug.Conn
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Private
-  alias Belfrage.Personalisation
-  alias Belfrage.Language
+  alias Belfrage.{Struct, Struct.Private, Struct.Request, Personalisation, Language}
 
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, struct = %Struct{request: request}) do
+  def add_header(conn, struct = %Struct{request: %Request{host: host, cdn?: cdn?}}) do
     put_resp_header(
       conn,
       "vary",
-      vary_headers(struct, request.cdn?)
+      vary_headers(struct, cdn_or_polling(host, cdn?))
     )
   end
 
@@ -75,4 +72,10 @@ defmodule BelfrageWeb.Response.Headers.Vary do
 
   defp is_uk(true), do: "X-BBC-Edge-IsUK"
   defp is_uk(false), do: "X-IP_Is_UK_Combined"
+
+  defp cdn_or_polling(nil, cdn?), do: cdn?
+
+  defp cdn_or_polling(host, cdn?) do
+    String.contains?(host, "polling") || cdn?
+  end
 end

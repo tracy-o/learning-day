@@ -67,6 +67,28 @@ defmodule BelfrageWeb.Response.Headers.VaryTest do
       refute "another_header" in headers
     end
 
+    test "does not vary on route headers, when host contains polling and cdn is true" do
+      struct = %Struct{
+        request: %Request{cdn?: true, host: "polling.test.bbc.co.uk"},
+        private: %{headers_allowlist: ["one_header", "another_header"]}
+      }
+
+      headers = vary_headers(struct)
+      refute "one_header" in headers
+      refute "another_header" in headers
+    end
+
+    test "does not vary on route headers, when host contains polling and cdn is false" do
+      struct = %Struct{
+        request: %Request{cdn?: false, host: "polling.test.bbc.co.uk"},
+        private: %{headers_allowlist: ["one_header", "another_header"]}
+      }
+
+      headers = vary_headers(struct)
+      refute "one_header" in headers
+      refute "another_header" in headers
+    end
+
     test "never vary on cookie" do
       struct = %Struct{private: %Private{headers_allowlist: ["cookie"]}}
       refute "cookie" in vary_headers(struct)
