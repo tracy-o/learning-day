@@ -240,6 +240,34 @@ defmodule Belfrage.RequestHashTest do
                })
     end
 
+    test "does not vary on different experiment values when MVT headers not in :mvt_seen in RouteState state" do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{"mvt-sidebar_colour" => DateTime.utc_now()})
+      end)
+
+      assert RequestHash.generate(%Struct{
+               request: %Struct.Request{
+                 raw_headers: %{
+                   "foo" => "bar",
+                   "bbc-mvt-1" => "experiment;button_colour;red"
+                 }
+               },
+               private: %Struct.Private{
+                 route_state_id: "SomeRouteState"
+               }
+             }) ==
+               RequestHash.generate(%Struct{
+                 request: %Struct.Request{
+                   raw_headers: %{
+                     "foo" => "bar",
+                     "bbc-mvt-1" => "experiment;button_colour;green"
+                   }
+                 }
+               })
+    end
+
     test "varies on different experiment values for MVT header in :mvt_seen in RouteState state" do
       pid = start_supervised!({RouteState, "SomeRouteState"})
 
