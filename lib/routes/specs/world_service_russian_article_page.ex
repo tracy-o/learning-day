@@ -6,6 +6,6 @@ defmodule Routes.Specs.WorldServiceRussianArticlePage do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", "CircuitBreaker"]
+  defp pipeline("live"), do: ["WorldServiceRedirect"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
