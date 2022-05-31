@@ -3454,7 +3454,138 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminator.NewsTopicIds do
     # Wyre Forest District Council
     "c95egxg00kpt",
     # York City Council
-    "cpzqml8lgpkt"
+    "cpzqml8lgpkt",
+
+    #### African Nations Topics
+
+    # Algeria 
+    "cp7r8vglgyet",
+    # Angola 
+    "cjnwl8q4q58t",
+    # Benin 
+    "ce1qrvlelw0t",
+    # Botswana 
+    "c77jz3mdqypt",
+    # Burkina Faso 
+    "ce1qrvlelrrt",
+    # Burundi 
+    "ce1qrvlel07t",
+    # Cabo Verde / Cape Verde
+    "cmj34zmwmnet",
+    # Cameroon 
+    "clm1wxp5p5jt",
+    # Central African Republic 
+    "cdl8n2ede23t",
+    # Chad 
+    "c302m85q5zmt",
+    # Comoros 
+    "cx1m7zg0gnlt",
+    # Congo-Brazzaville
+    "c1038wnxnlmt",
+    # Côte d'Ivoire / ivory coast
+    "cywd23g0gpgt",
+    # Democratic Republic of the Congo
+    "cvenzmgylgwt",
+    # Djibouti 
+    "cq23pdgvrnrt",
+    # Egypt 
+    "c302m85q5xzt",
+    # Equatorial Guinea 
+    "cg41ylwvw0et",
+    # Eritrea 
+    "cz4pr2gdgjyt",
+    # Eswatini 
+    "cjnwl8q4xjlt",
+    # Ethiopia 
+    "cwlw3xz047jt",
+    # Gabon 
+    "crr7mlg0vm2t",
+    # Gambia 
+    "cdl8n2edeydt",
+    # Ghana 
+    "cnx753jejjlt",
+    # Guinea 
+    "cmj34zmwm72t",
+    # Guinea-Bissau 
+    "cvenzmgygd5t",
+    # Kenya 
+    "c40rjmqdlzzt",
+    # Lesotho 
+    "cwlw3xz0z14t",
+    # Liberia 
+    "c77jz3md70rt",
+    # Libya 
+    "ce1qrvlel1mt",
+    # Madagascar 
+    "c1038wnx0llt",
+    # Malawi 
+    "clm1wxp5pert",
+    # Mali 
+    "cq23pdgvrqwt",
+    # Mauritania 
+    "cnx753jejv7t",
+    # Mauritius 
+    "cdl8n2edxept",
+    # Morocco 
+    "cx1m7zg0gylt",
+    # Mozambique 
+    "cjnwl8q4x1lt",
+    # Namibia 
+    "clm1wxp5pret",
+    # Niger 
+    "cvenzmgygmgt",
+    # Nigeria 
+    "c50znx8v132t",
+    # Rwanda 
+    "cwlw3xz0zdet",
+    # Sao Tome and Principe 
+    "cnx753jejext",
+    # Senegal 
+    "cnx753jej07t",
+    # Seychelles 
+    "clm1wxp5nmlt",
+    # Sierra Leone 
+    "c302m85q5mlt",
+    # Somaliland
+    "c77jz3mdm8vt",
+    # Somalia 
+    "cnx753jejqwt",
+    # South Africa 
+    "cq23pdgvyl7t",
+    # South Sudan 
+    "c302m85q54lt",
+    # Sudan 
+    "cq23pdgvgm8t",
+    # Togo 
+    "cx1m7zg0gj4t",
+    # Tanzania 
+    "cjnwl8q4qdrt",
+    # Tunisia 
+    "cwlw3xz0lmvt",
+    # Uganda 
+    "cmj34zmwme4t",
+    # Western Sahara
+    "cz4pr2gdg3yt",
+    # Zambia 
+    "cdl8n2edezlt",
+    # Zimbabwe 
+    "crr7mlg0rpvt",
+    # African music                 
+    "cz4pr2gd40jt",
+    # Africa-China relations                 
+    "c0261kv6p3gt",
+    # African art         
+    "c008ql151n8t",
+    # Ceuta
+    "cl86nk72kx4t",
+    # Melilla
+    "cyn9qg272z5t",
+    # Technology in Africa
+    "cdl8n2edxgpt",
+    # Women's rights in Africa                           
+    "cywd23g0gvgt",
+    # Zanzibar
+    "c40rjmqdq38t"
   ]
 
   def get() do
