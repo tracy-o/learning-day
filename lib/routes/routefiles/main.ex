@@ -1815,6 +1815,7 @@ defroutefile "Main" do
 
   ## Sport rss feed redirects
   handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 301}]
+  handle "/sport/c4285a9a-9865-2343-af3a-8653f7b70734/rss.xml", using: "KarangaTest", only_on: "test", examples: ["/sport/c4285a9a-9865-2343-af3a-8653f7b70734/rss.xml"]
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: [{"/sport/football/rss.xml", 301}, {"/sport/england/rss.xml", 301}]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: [{"/sport/football/teams/liverpool/rss.xml", 301}]
