@@ -224,6 +224,9 @@ defmodule EndToEnd.MvtTest do
 
       assert cached_responses() == 2
 
+      [vary_header] = get_resp_header(response, "vary")
+      assert String.contains?(vary_header, "bbc-mvt-1")
+      refute String.contains?(vary_header, "bbc-mvt-2")
       assert 200 == response.status
     end
   end

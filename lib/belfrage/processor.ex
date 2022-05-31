@@ -104,7 +104,6 @@ defmodule Belfrage.Processor do
       &ResponseTransformers.CacheDirective.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
       &ResponseTransformers.PreCacheCompression.call/1,
-      &ResponseTransformers.MvtMapper.call/1,
       &Cache.store/1,
       &fetch_fallback_from_cache/1
     ]
@@ -168,7 +167,12 @@ defmodule Belfrage.Processor do
   end
 
   def post_response_pipeline(struct = %Struct{}) do
-    WrapperError.wrap(&ResponseTransformers.CompressionAsRequested.call/1, struct)
+    pipeline = [
+      &ResponseTransformers.MvtMapper.call/1,
+      &ResponseTransformers.CompressionAsRequested.call/1
+    ]
+
+    WrapperError.wrap(pipeline, struct)
   end
 
   defp route_state_state_failure do
