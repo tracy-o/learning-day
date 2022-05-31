@@ -30,6 +30,7 @@ config :belfrage,
   mozart_weather_endpoint: "https://mozart-weather.example.com",
   simorgh_endpoint: "https://simorgh.example.com",
   programmes_endpoint: "https://programmes.example.com",
+  karanga_endpoint: "https://broker.karanga.test.api.bbci.co.uk",
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
