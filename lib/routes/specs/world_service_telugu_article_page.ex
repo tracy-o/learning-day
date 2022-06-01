@@ -1,8 +1,7 @@
 defmodule Routes.Specs.WorldServiceTeluguArticlePage do
-  def specs(production_env) do
+  def specs do
     %{
-      platform: Simorgh,
-      pipeline: pipeline(production_env),
+      platform: Simorgh
     }
   end
 end

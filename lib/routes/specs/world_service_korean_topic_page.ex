@@ -3,7 +3,7 @@ defmodule Routes.Specs.WorldServiceKoreanTopicPage do
     %{
       platform: Simorgh,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["page"],
+      query_params_allowlist: ["page"]
     }
   end
 
