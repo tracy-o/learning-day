@@ -5,7 +5,4 @@ defmodule Routes.Specs.WorldServiceYorubaArticlePage do
       pipeline: pipeline(production_env),
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceRedirect"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

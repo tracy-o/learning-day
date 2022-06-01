@@ -6,7 +6,4 @@ defmodule Routes.Specs.WorldServiceZhongwenArticlePage do
       headers_allowlist: ["cookie-ckps_chinese"]
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceRedirect"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

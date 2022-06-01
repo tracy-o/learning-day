@@ -7,6 +7,5 @@ defmodule Routes.Specs.WorldServiceSwahiliTopicPage do
     }
   end
 
-  defp pipeline("live"), do: ["WorldServiceTopicsGuid", "WorldServiceRedirect"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
+  defp pipeline("live"), do: ["WorldServiceTopicsGuid"]
 end

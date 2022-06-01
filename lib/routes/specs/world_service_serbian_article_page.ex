@@ -6,7 +6,4 @@ defmodule Routes.Specs.WorldServiceSerbianArticlePage do
       headers_allowlist: ["cookie-ckps_serbian"]
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceRedirect"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
