@@ -64,6 +64,7 @@ config :ex_aws, :retries,
 
 config :belfrage,
   route_state_reset_interval: 60_000,
+  mvt_vary_header_ttl: 3_600_000,
   fetch_route_state_timeout: 250,
   dials_location: "/etc/cosmos-dials/dials.json",
   dials_startup_polling_delay: 0,

@@ -99,12 +99,11 @@ defmodule Belfrage.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     pipeline = [
-      &inc_route_state/1,
+      &update_route_state/1,
       &maybe_log_response_status/1,
       &ResponseTransformers.CacheDirective.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
       &ResponseTransformers.PreCacheCompression.call/1,
-      &ResponseTransformers.MvtMapper.call/1,
       &Cache.store/1,
       &fetch_fallback_from_cache/1
     ]
@@ -114,6 +113,11 @@ defmodule Belfrage.Processor do
 
   defp inc_route_state(struct = %Struct{}) do
     RouteState.inc(struct)
+    struct
+  end
+
+  defp update_route_state(struct = %Struct{}) do
+    RouteState.update(struct)
     struct
   end
 
@@ -163,7 +167,12 @@ defmodule Belfrage.Processor do
   end
 
   def post_response_pipeline(struct = %Struct{}) do
-    WrapperError.wrap(&ResponseTransformers.CompressionAsRequested.call/1, struct)
+    pipeline = [
+      &ResponseTransformers.MvtMapper.call/1,
+      &ResponseTransformers.CompressionAsRequested.call/1
+    ]
+
+    WrapperError.wrap(pipeline, struct)
   end
 
   defp route_state_state_failure do
