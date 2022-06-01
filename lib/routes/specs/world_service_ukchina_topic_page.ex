@@ -1,12 +1,10 @@
 defmodule Routes.Specs.WorldServiceUkchinaTopicPage do
-  def specs(production_env) do
+  def specs do
     %{
       platform: Simorgh,
-      pipeline: pipeline(production_env),
+      pipeline: ["WorldServiceTopicsGuid"],
       query_params_allowlist: ["page"],
       headers_allowlist: ["cookie-ckps_chinese"]
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceTopicsGuid"]
 end

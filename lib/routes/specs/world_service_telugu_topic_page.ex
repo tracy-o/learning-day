@@ -1,11 +1,9 @@
 defmodule Routes.Specs.WorldServiceTeluguTopicPage do
-  def specs(production_env) do
+  def specs do
     %{
       platform: Simorgh,
-      pipeline: pipeline(production_env),
+      pipeline: ["WorldServiceTopicsGuid"],
       query_params_allowlist: ["page"]
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceTopicsGuid"]
 end
