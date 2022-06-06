@@ -1,7 +1,7 @@
 defmodule Belfrage.Mvt.MapperTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-
+  import Test.Support.Helper, only: [set_slots: 1]
   alias Belfrage.Struct
   alias Belfrage.Mvt
 
@@ -49,13 +49,13 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when a mvt request header matches a slot header but not a slot key" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slots([%{"header" => "bbc-mvt-1", "key" => "you_wont_match_me"}])
+      set_slots([%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}])
     end
 
-    test "the header isn't added to the struct" do
+    test "the slot key is added to the struct with a nil \"type;value\"" do
       struct = build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}) |> Mvt.Mapper.map()
 
-      assert struct.private.mvt == %{}
+      assert struct.private.mvt == %{"mvt-box_colour_change" => {1, nil}}
     end
   end
 
@@ -80,9 +80,9 @@ defmodule Belfrage.Mvt.MapperTest do
       set_slots([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
     end
 
-    test "the header isn't added to the struct" do
+    test "the header is added to the struct with a nil \"type;value\"" do
       struct = build_struct([]) |> Mvt.Mapper.map()
-      assert struct.private.mvt == %{}
+      assert struct.private.mvt == %{"mvt-button_colour" => {1, nil}}
     end
   end
 
@@ -121,12 +121,6 @@ defmodule Belfrage.Mvt.MapperTest do
 
       assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == struct.private.mvt
     end
-  end
-
-  defp set_slots(project) do
-    Mvt.Slots.set(%{"1" => project})
-    on_exit(fn -> Mvt.Slots.set(%{}) end)
-    :ok
   end
 
   defp build_struct(opts) do

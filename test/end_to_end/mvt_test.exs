@@ -233,6 +233,33 @@ defmodule EndToEnd.MvtTest do
     assert 200 == response.status
   end
 
+  test "MVT header from origin is set in vary header if in slots but not request headers" do
+    set_mvt_slot([%{"header" => "bbc-mvt-2", "key" => "button_colour"}])
+
+    expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
+
+    response =
+      conn(:get, "/mvt")
+      |> Router.call([])
+
+    [vary_header] = get_resp_header(response, "vary")
+    assert String.contains?(vary_header, "bbc-mvt-2")
+    assert 200 == response.status
+  end
+
+  test "MVT header from origin is set in vary header if in slots and request headers" do
+    expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
+
+    response =
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
+      |> Router.call([])
+
+    [vary_header] = get_resp_header(response, "vary")
+    refute String.contains?(vary_header, "bbc-mvt-2")
+    assert 200 == response.status
+  end
+
   defp cached_responses() do
     :cache
     |> :ets.tab2list()
