@@ -2032,7 +2032,13 @@ defroutefile "Main" do
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
 
   ## Live WebCore
-  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt"]
+  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"] do
+    return_404 if: [
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+    ]
+end
+
+
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
