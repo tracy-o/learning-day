@@ -2027,9 +2027,6 @@ defroutefile "Main" do
   ## Sport Alpha Trials
   handle "/sport/alpha/football/league-two/table", using: "SportDataWebcore", examples: ["/sport/alpha/football/league-two/table"]
 
-  ## Sport League Two Table
-  handle "/sport/football/league-two/table", using: "SportDataWebcore", examples: ["/sport/football/league-two/table"]
-
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
@@ -2253,8 +2250,10 @@ defroutefile "Main" do
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures"]
 
+
   ## Sport League Two Table page
   handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
 
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
