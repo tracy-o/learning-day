@@ -2032,7 +2032,7 @@ defroutefile "Main" do
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
 
   ## Live WebCore
-  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"]
+  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"] do
   return_404 if: [
   !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
 ]
