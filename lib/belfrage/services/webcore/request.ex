@@ -98,7 +98,13 @@ defmodule Belfrage.Services.Webcore.Request do
     if private.mvt == %{} do
       headers
     else
-      Enum.into(private.mvt, headers, fn {k, {_, v}} -> {k, v} end)
+      Enum.reduce(private.mvt, headers, fn {k, {_, v}}, acc ->
+        if v do
+          Map.put(acc, k, v)
+        else
+          acc
+        end
+      end)
     end
   end
 end
