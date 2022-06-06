@@ -1,13 +1,10 @@
 defmodule Routes.Specs.WorldServiceZhongwenTopicPage do
-  def specs(production_env) do
+  def specs do
     %{
       platform: Simorgh,
-      pipeline: pipeline(production_env),
+      pipeline: ["WorldServiceTopicsGuid"],
       query_params_allowlist: ["page"],
       headers_allowlist: ["cookie-ckps_chinese"]
     }
   end
-
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceTopicsGuid", "WorldServiceRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

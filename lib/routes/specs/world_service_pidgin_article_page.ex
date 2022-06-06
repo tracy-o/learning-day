@@ -1,11 +1,7 @@
 defmodule Routes.Specs.WorldServicePidginArticlePage do
-  def specs(production_env) do
+  def specs do
     %{
-      platform: Simorgh,
-      pipeline: pipeline(production_env),
+      platform: Simorgh
     }
   end
-
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
