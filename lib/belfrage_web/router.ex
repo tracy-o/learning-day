@@ -51,6 +51,14 @@ defmodule BelfrageWeb.Router do
     |> send_file(200, robots_txt_path)
   end
 
+  options "/news/breaking-news/audience/:audience" when audience in ~w(domestic us international asia) do
+    conn
+    |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
+    |> put_resp_header("access-control-allow-origin", "*")
+    |> put_resp_header("cache-control", "max-age=60, public")
+    |> send_resp(204, "")
+  end
+
   options "/wc-data/*_any" do
     conn
     |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
