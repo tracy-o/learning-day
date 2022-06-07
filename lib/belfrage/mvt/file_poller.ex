@@ -16,11 +16,11 @@ defmodule Belfrage.Mvt.FilePoller do
 
   @impl true
   def init(interval) do
-    schedule_polling(interval)
+    schedule_polling()
     {:ok, interval}
   end
 
-  defp schedule_polling(interval) do
+  defp schedule_polling(interval \\ 0) do
     Process.send_after(self(), :poll, interval)
   end
 
