@@ -88,23 +88,6 @@ config :belfrage,
   stack_name: "belfrage-stack",
   stack_id: "local",
   redirect_statuses: [301, 302, 307, 308],
-  dial_handlers: %{
-    "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
-    "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier,
-    "non_webcore_ttl_multiplier" => Belfrage.Dials.NonWebcoreTtlMultiplier,
-    "logging_level" => Belfrage.Dials.LoggingLevel,
-    "personalisation" => Belfrage.Dials.Personalisation,
-    "news_articles_personalisation" => Belfrage.Dials.NewsArticlesPersonalisation,
-    "obit_mode" => Belfrage.Dials.ObitMode,
-    "ccp_enabled" => Belfrage.Dials.CcpEnabled,
-    "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
-    "datalab_machine_recommendations" => Belfrage.Dials.DatalabMachineRecommendations,
-    "chameleon" => Belfrage.Dials.Chameleon,
-    "cache_enabled" => Belfrage.Dials.CacheEnabled,
-    "mvt_enabled" => Belfrage.Dials.MvtEnabled,
-    "election_banner_ni_story" => Belfrage.Dials.ElectionBannerNiStory,
-    "election_banner_council_story" => Belfrage.Dials.ElectionBannerCouncilStory
-  },
   pool_metric_rate: 10_000,
   authentication: %{
     "account_jwk_uri" => "https://access.int.api.bbc.com/v1/oauth/connect/jwk_uri",
@@ -148,4 +131,5 @@ config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 512
 
+import_config "dials.exs"
 import_config "#{Mix.env()}.exs"
