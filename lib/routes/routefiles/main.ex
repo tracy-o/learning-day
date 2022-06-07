@@ -239,6 +239,16 @@ defroutefile "Main" do
 
   handle "/news", using: "NewsHomePage", examples: ["/news"]
 
+  handle "/news/breaking-news/audience", using: "BreakingNews", examples: [] do
+    return_404 if: true
+  end
+
+  handle "/news/breaking-news/audience/:audience", using: "BreakingNews", examples: ["/news/breaking-news/audience/domestic", "/news/breaking-news/audience/us", "/news/breaking-news/audience/international", "/news/breaking-news/audience/asia"] do
+    return_404 if: [
+      !String.match?(audience, ~r/^(domestic|us|international|asia)$/)
+    ]
+  end
+
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
