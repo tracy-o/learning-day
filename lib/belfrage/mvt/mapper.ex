@@ -3,15 +3,14 @@ defmodule Belfrage.Mvt.Mapper do
   alias Belfrage.Struct
 
   @dial Application.get_env(:belfrage, :dial)
-
   @platform_mapping %{Webcore => "1", Simorgh => "2"}
+  @max_slots 20
 
   def map(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
     if @dial.state(:mvt_enabled) do
       project_slots =
         Mvt.Slots.available()
-        |> Map.get(@platform_mapping[struct.private.platform], [])
-        |> normalise_project_slots()
+        |> Map.get(@platform_mapping[struct.private.platform], %{})
 
       mvt_map =
         Map.merge(
@@ -25,23 +24,8 @@ defmodule Belfrage.Mvt.Mapper do
     end
   end
 
-  # Changes project slot format so that the key-value pairs can be compared
-  # to the MVT raw request headers. For example, the project_slots:
-  #
-  #     [%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}]
-  #
-  # Will be normalised to:
-  #
-  #     %{"bbc-mvt-1", "box_colour_change"}
-  #
-  defp normalise_project_slots(project_slots) do
-    Enum.into(project_slots, %{}, fn %{"header" => key, "key" => value} ->
-      {key, value}
-    end)
-  end
-
   # Takes the raw request headers and the projects slots and
-  # makes an 'MVT map'. It iterates from 1 to 20, and:
+  # makes an 'MVT map'. It iterates from 1 to @max_slots, and:
   #
   # * If the nth MVT slot does not exist then we do not add any thing to the MVT map.
   #
@@ -58,7 +42,7 @@ defmodule Belfrage.Mvt.Mapper do
   #   If the parsed MVT name does not match the nth slot MVT name then we add the
   #   MVT name and index to the MVT map.
   defp map_mvt_headers(raw_headers, project_slots) do
-    Enum.reduce(1..20, %{}, fn n, acc ->
+    Enum.reduce(1..@max_slots, %{}, fn n, acc ->
       raw_header = raw_headers["bbc-mvt-#{n}"]
       slot_mvt_name = project_slots["bbc-mvt-#{n}"]
 

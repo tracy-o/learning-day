@@ -17,10 +17,21 @@ defmodule Belfrage.Mvt.FilePollerTest do
     end)
 
     file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
-    project_headers = Jason.decode!(@mvt_json_payload)["projects"]
 
     assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
-    assert Slots.available() == project_headers
+
+    assert Slots.available() == %{
+             "1" => %{
+               "bbc-mvt-1" => "test_feature_1_test",
+               "bbc-mvt-2" => "test_experiment_1",
+               "bbc-mvt-3" => "test_experiment_2"
+             },
+             "2" => %{
+               "bbc-mvt-1" => "test_feature_1_test",
+               "bbc-mvt-2" => "test_experiment_1",
+               "bbc-mvt-3" => "test_experiment_2"
+             }
+           }
   end
 
   test "if there is an error fetching the file it will not set the file content in the agent", %{

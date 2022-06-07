@@ -53,7 +53,7 @@ defmodule EndToEnd.MvtTest do
   describe "when on live environment and lambda returns expected vary header" do
     setup do
       set_environment("live")
-      set_mvt_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_mvt_slot(%{"bbc-mvt-1" => "button_colour"})
     end
 
     test "the response will vary on the mapped numeric mvt header" do
@@ -88,7 +88,7 @@ defmodule EndToEnd.MvtTest do
   describe "when on live environment and lambda returns vary header which doesn't match any mvt header" do
     setup do
       set_environment("live")
-      set_mvt_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_mvt_slot(%{"bbc-mvt-1" => "button_colour"})
     end
 
     test "the response will not vary on the mapped numeric mvt header" do
@@ -124,7 +124,7 @@ defmodule EndToEnd.MvtTest do
   describe "when on test enironment and lambda returns expected vary header" do
     setup do
       set_environment("test")
-      set_mvt_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_mvt_slot(%{"bbc-mvt-1" => "button_colour"})
     end
 
     test "the response will vary on the mapped numeric mvt header" do
@@ -159,7 +159,7 @@ defmodule EndToEnd.MvtTest do
   describe "when on test environment and lambda returns vary header which doesn't match mvt header" do
     setup do
       set_environment("test")
-      set_mvt_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_mvt_slot(%{"bbc-mvt-1" => "button_colour"})
     end
 
     test "the response will not vary on the mapped numeric mvt header" do
@@ -192,7 +192,7 @@ defmodule EndToEnd.MvtTest do
   end
 
   test "keys for cached responses only vary on previously seen MVT vary headers in response" do
-    set_mvt_slot([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+    set_mvt_slot(%{"bbc-mvt-1" => "button_colour"})
 
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
@@ -234,7 +234,7 @@ defmodule EndToEnd.MvtTest do
   end
 
   test "MVT header from origin is set in vary header if in slots but not request headers" do
-    set_mvt_slot([%{"header" => "bbc-mvt-2", "key" => "button_colour"}])
+    set_mvt_slot(%{"bbc-mvt-2" => "button_colour"})
 
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 

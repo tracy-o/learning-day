@@ -29,7 +29,9 @@ defmodule Belfrage.Mvt.FilePoller do
     schedule_polling(interval)
 
     with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots") do
-      set_header_state(headers_map["projects"])
+      headers_map["projects"]
+      |> normalise_projects()
+      |> set_header_state()
     end
 
     {:noreply, interval}
@@ -39,5 +41,26 @@ defmodule Belfrage.Mvt.FilePoller do
 
   defp set_header_state(headers) do
     Mvt.Slots.set(headers)
+  end
+
+  defp normalise_projects(projects) do
+    for {project, slots} <- projects, into: %{} do
+      {project, normalise_slots(slots)}
+    end
+  end
+
+  # Changes the format of projects slots so that the key-value pairs can be compared
+  # to the MVT raw request headers. For example, the project_slots:
+  #
+  #     [%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}]
+  #
+  # Will be normalised to:
+  #
+  #     %{"bbc-mvt-1", "box_colour_change"}
+  #
+  defp normalise_slots(slots) do
+    Enum.into(slots, %{}, fn %{"header" => key, "key" => value} ->
+      {key, value}
+    end)
   end
 end

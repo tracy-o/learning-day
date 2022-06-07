@@ -26,10 +26,7 @@ defmodule Belfrage.Mvt.MapperTest do
     setup do
       stub_dial(:mvt_enabled, "true")
 
-      set_slots([
-        %{"header" => "bbc-mvt-1", "key" => "button_colour"},
-        %{"header" => "bbc-mvt-3", "key" => "sidebar"}
-      ])
+      set_slots(%{"bbc-mvt-1" => "button_colour", "bbc-mvt-3" => "sidebar"})
     end
 
     test "the header is mapped and added to the struct" do
@@ -49,7 +46,7 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when a mvt request header matches a slot header but not a slot key" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slots([%{"header" => "bbc-mvt-1", "key" => "box_colour_change"}])
+      set_slots(%{"bbc-mvt-1" => "box_colour_change"})
     end
 
     test "the slot key is added to the struct with a nil \"type;value\"" do
@@ -62,7 +59,7 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when an mvt request header doesn't have a corresponding slot experiment" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slots([])
+      set_slots(%{})
     end
 
     test "the header isn't added to the struct" do
@@ -77,7 +74,7 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when there is a slot in the project but no corresponding mvt request header" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slots([%{"header" => "bbc-mvt-1", "key" => "button_colour"}])
+      set_slots(%{"bbc-mvt-1" => "button_colour"})
     end
 
     test "the header is added to the struct with a nil \"type;value\"" do
