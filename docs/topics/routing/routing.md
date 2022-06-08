@@ -64,7 +64,7 @@ To restrict the route to test infrastructure, add `only-on: "test"` to the match
 An route matcher for only deploying to test would look something like this:
 
 ```
-  handle "/sport/football/league-two/table", only_on: "test", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", only_on: "test", examples: ["/sport/football/league-two/table"]
 ```
 
 A route matcher can also define validations, like:
