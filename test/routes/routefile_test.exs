@@ -6,7 +6,7 @@ defmodule Routes.RoutefileTest do
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
-  alias Routes.Routefiles.Test, as: Routefile
+  alias Routes.Routefiles.Main.Test, as: Routefile
 
   @moduletag :routes_test
 
