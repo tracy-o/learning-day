@@ -60,6 +60,38 @@ defmodule Belfrage.Mvt.FilePollerTest do
     refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
   end
 
+  test "if the file has valid JSON but does not have a \"projects\" key, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok, %HTTP.Response{status_code: 200, body: "{\"foo\": \"bar\"}"}}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but contains an invalid slot format, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": {\"1\": [{\"some_key\": \"test_experiment_1\",\"header\": \"bbc-mvt-2\"}]}}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
   def trace_slots_agent(_context) do
     pid = Process.whereis(Belfrage.Mvt.Slots)
     :erlang.trace(pid, true, [:receive])

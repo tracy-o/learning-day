@@ -28,10 +28,10 @@ defmodule Belfrage.Mvt.FilePoller do
   def handle_info(:poll, interval) do
     schedule_polling(interval)
 
-    with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots") do
-      headers_map["projects"]
-      |> normalise_projects()
-      |> set_header_state()
+    with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots"),
+         {:ok, projects} <- Map.fetch(headers_map, "projects"),
+         {:ok, normalised_projects} <- normalise_projects(projects) do
+      set_header_state(normalised_projects)
     end
 
     {:noreply, interval}
@@ -44,8 +44,16 @@ defmodule Belfrage.Mvt.FilePoller do
   end
 
   defp normalise_projects(projects) do
-    for {project, slots} <- projects, into: %{} do
-      {project, normalise_slots(slots)}
+    try do
+      normalised_projects =
+        for {project, slots} <- projects, into: %{} do
+          {project, normalise_slots(slots)}
+        end
+
+      {:ok, normalised_projects}
+    rescue
+      FunctionClauseError ->
+        {:error, :invalid_slot_format}
     end
   end
 
