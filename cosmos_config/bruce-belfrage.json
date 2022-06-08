@@ -78,6 +78,13 @@
   },
   {
     "values": {
+      "test": "https://broker.karanga.test.api.bbci.co.uk",
+      "live": "https://broker.karanga.api.bbci.co.uk"
+    },
+    "name": "KARANGA_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
       "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
     },
