@@ -16,7 +16,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 200, body: @mvt_json_payload}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
 
@@ -43,9 +43,10 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 500, body: "{foo: \"bar\"}"}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
   end
 
   test "if the file is malformed it will not set the file content in the agent", %{slots_agent_pid: slots_agent_pid} do
@@ -55,9 +56,10 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 500, body: "malformed json"}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
   end
 
   test "if the file has valid JSON but does not have a \"projects\" key, it will not send a message to the Slots Agent",
