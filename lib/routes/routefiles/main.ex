@@ -615,7 +615,7 @@ defroutefile "Main" do
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/manifest.json"]
   handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/sw.js"]
-  handle "/afaanoromoo/new_topics/:id", using: "WorldServiceAfaanoromooTopicPage", only_on: "test", examples: ["/afaanoromoo/new_topics/c7zp5z9n3x5t", "/afaanoromoo/new_topics/c7zp5z9n3x5t?page=40"] do
+  handle "/afaanoromoo/topics/:id", using: "WorldServiceAfaanoromooTopicPage", only_on: "test", examples: ["/afaanoromoo/topics/c7zp5z9n3x5t", "/afaanoromoo/topics/c7zp5z9n3x5t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -638,7 +638,7 @@ defroutefile "Main" do
   handle "/afrique.json", using: "WorldServiceAfrique", examples: ["/afrique.json"]
   handle "/afrique/manifest.json", using: "WorldServiceAfriqueAssets", examples: ["/afrique/manifest.json"]
   handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets", examples: ["/afrique/sw.js"]
-  handle "/afrique/new_topics/:id", using: "WorldServiceAfriqueTopicPage", only_on: "test", examples: ["/afrique/new_topics/c9ny75kpxlkt", "/afrique/new_topics/c9ny75kpxlkt?page=40"] do
+  handle "/afrique/topics/:id", using: "WorldServiceAfriqueTopicPage", only_on: "test", examples: ["/afrique/topics/c9ny75kpxlkt", "/afrique/topics/c9ny75kpxlkt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -659,7 +659,7 @@ defroutefile "Main" do
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
   handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets", examples: ["/amharic/manifest.json"]
   handle "/amharic/sw.js", using: "WorldServiceAmharicAssets", examples: ["/amharic/sw.js"]
-  handle "/amharic/new_topics/:id", using: "WorldServiceAmharicTopicPage", only_on: "test", examples: ["/amharic/new_topics/c06gq8wdrjyt", "/amharic/new_topics/c06gq8wdrjyt?page=40"] do
+  handle "/amharic/topics/:id", using: "WorldServiceAmharicTopicPage", only_on: "test", examples: ["/amharic/topics/c06gq8wdrjyt", "/amharic/topics/c06gq8wdrjyt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -708,7 +708,7 @@ defroutefile "Main" do
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets", examples: ["/azeri/manifest.json"]
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets", examples: ["/azeri/sw.js"]
-  handle "/azeri/new_topics/:id", using: "WorldServiceAzeriTopicPage", only_on: "test", examples: ["/azeri/new_topics/c1gdq32g3ddt", "/azeri/new_topics/c1gdq32g3ddt?page=40"] do
+  handle "/azeri/topics/:id", using: "WorldServiceAzeriTopicPage", only_on: "test", examples: ["/azeri/topics/c1gdq32g3ddt", "/azeri/topics/c1gdq32g3ddt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -732,7 +732,7 @@ defroutefile "Main" do
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
   handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets", examples: ["/bengali/manifest.json"]
   handle "/bengali/sw.js", using: "WorldServiceBengaliAssets", examples: ["/bengali/sw.js"]
-  handle "/bengali/new_topics/:id", using: "WorldServiceBengaliTopicPage", only_on: "test", examples: ["/bengali/new_topics/c2dwq2nd40xt", "/bengali/new_topics/c2dwq2nd40xt?page=40"] do
+  handle "/bengali/topics/:id", using: "WorldServiceBengaliTopicPage", only_on: "test", examples: ["/bengali/topics/c2dwq2nd40xt", "/bengali/topics/c2dwq2nd40xt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -756,7 +756,7 @@ defroutefile "Main" do
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets", examples: ["/burmese/manifest.json"]
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets", examples: ["/burmese/sw.js"]
-  handle "/burmese/new_topics/:id", using: "WorldServiceBurmeseTopicPage", only_on: "test", examples: ["/burmese/new_topics/c404v08p1wxt", "/burmese/new_topics/c404v08p1wxt?page=40"] do
+  handle "/burmese/topics/:id", using: "WorldServiceBurmeseTopicPage", only_on: "test", examples: ["/burmese/topics/c404v08p1wxt", "/burmese/topics/c404v08p1wxt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -779,7 +779,7 @@ defroutefile "Main" do
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
   handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/manifest.json"]
   handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/sw.js"]
-  handle "/gahuza/new_topics/:id", using: "WorldServiceGahuzaTopicPage", only_on: "test", examples: ["/gahuza/new_topics/c7zp5z0yd0xt", "/gahuza/new_topics/c7zp5z0yd0xt?page=40"] do
+  handle "/gahuza/topics/:id", using: "WorldServiceGahuzaTopicPage", only_on: "test", examples: ["/gahuza/topics/c7zp5z0yd0xt", "/gahuza/topics/c7zp5z0yd0xt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -799,7 +799,7 @@ defroutefile "Main" do
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/manifest.json"]
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/sw.js"]
-  handle "/gujarati/new_topics/:id", using: "WorldServiceGujaratiTopicPage", only_on: "test", examples: ["/gujarati/new_topics/c2dwqj95d30t", "/gujarati/new_topics/c2dwqj95d30t?page=40"] do
+  handle "/gujarati/topics/:id", using: "WorldServiceGujaratiTopicPage", only_on: "test", examples: ["/gujarati/topics/c2dwqj95d30t", "/gujarati/topics/c2dwqj95d30t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -822,7 +822,7 @@ defroutefile "Main" do
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
   handle "/hausa/manifest.json", using: "WorldServiceHausaAssets", examples: ["/hausa/manifest.json"]
   handle "/hausa/sw.js", using: "WorldServiceHausaAssets", examples: ["/hausa/sw.js"]
-  handle "/hausa/new_topics/:id", using: "WorldServiceHausaTopicPage", only_on: "test", examples: ["/hausa/new_topics/c5qvpxkx1j7t", "/hausa/new_topics/c5qvpxkx1j7t?page=40"] do
+  handle "/hausa/topics/:id", using: "WorldServiceHausaTopicPage", only_on: "test", examples: ["/hausa/topics/c5qvpxkx1j7t", "/hausa/topics/c5qvpxkx1j7t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -846,7 +846,7 @@ defroutefile "Main" do
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
   handle "/hindi/manifest.json", using: "WorldServiceHindiAssets", examples: ["/hindi/manifest.json"]
   handle "/hindi/sw.js", using: "WorldServiceHindiAssets", examples: ["/hindi/sw.js"]
-  handle "/hindi/new_topics/:id", using: "WorldServiceHindiTopicPage", only_on: "test", examples: ["/hindi/new_topics/c6vzy709wvxt", "/hindi/new_topics/c6vzy709wvxt?page=40"] do
+  handle "/hindi/topics/:id", using: "WorldServiceHindiTopicPage", only_on: "test", examples: ["/hindi/topics/c6vzy709wvxt", "/hindi/topics/c6vzy709wvxt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -866,7 +866,7 @@ defroutefile "Main" do
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", examples: ["/igbo/manifest.json"]
   handle "/igbo/sw.js", using: "WorldServiceIgboAssets", examples: ["/igbo/sw.js"]
-  handle "/igbo/new_topics/:id", using: "WorldServiceIgboTopicPage", only_on: "test", examples: ["/igbo/new_topics/c340qr24xggt", "/igbo/new_topics/c340qr24xggt?page=40"] do
+  handle "/igbo/topics/:id", using: "WorldServiceIgboTopicPage", only_on: "test", examples: ["/igbo/topics/c340qr24xggt", "/igbo/topics/c340qr24xggt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -889,7 +889,7 @@ defroutefile "Main" do
   handle "/indonesia.json", using: "WorldServiceIndonesia", examples: ["/indonesia.json"]
   handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/manifest.json"]
   handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/sw.js"]
-  handle "/indonesia/new_topics/:id", using: "WorldServiceIndonesiaTopicPage", only_on: "test", examples: ["/indonesia/new_topics/c340qrk1znxt", "/indonesia/new_topics/c340qrk1znxt?page=40"] do
+  handle "/indonesia/topics/:id", using: "WorldServiceIndonesiaTopicPage", only_on: "test", examples: ["/indonesia/topics/c340qrk1znxt", "/indonesia/topics/c340qrk1znxt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -909,7 +909,7 @@ defroutefile "Main" do
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
   handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets", examples: ["/japanese/manifest.json"]
   handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets", examples: ["/japanese/sw.js"]
-  handle "/japanese/new_topics/:id", using: "WorldServiceJapaneseTopicPage", only_on: "test", examples: ["/japanese/new_topics/c340qrn7pp0t", "/japanese/new_topics/c340qrn7pp0t?page=40"] do
+  handle "/japanese/topics/:id", using: "WorldServiceJapaneseTopicPage", only_on: "test", examples: ["/japanese/topics/c340qrn7pp0t", "/japanese/topics/c340qrn7pp0t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -929,7 +929,7 @@ defroutefile "Main" do
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
   handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", examples: ["/korean/manifest.json"]
   handle "/korean/sw.js", using: "WorldServiceKoreanAssets", examples: ["/korean/sw.js"]
-  handle "/korean/new_topics/:id", using: "WorldServiceKoreanTopicPage", only_on: "test", examples: ["/korean/new_topics/c17q6yp3jx4t", "/korean/new_topics/c17q6yp3jx4t?page=40"] do
+  handle "/korean/topics/:id", using: "WorldServiceKoreanTopicPage", only_on: "test", examples: ["/korean/topics/c17q6yp3jx4t", "/korean/topics/c17q6yp3jx4t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -952,7 +952,7 @@ defroutefile "Main" do
   handle "/kyrgyz.json", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.json"]
   handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/manifest.json"]
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/sw.js"]
-  handle "/kyrgyz/new_topics/:id", using: "WorldServiceKyrgyzTopicPage", only_on: "test", examples: ["/kyrgyz/new_topics/c0109l9xrpnt", "/kyrgyz/new_topics/c0109l9xrpnt?page=40"] do
+  handle "/kyrgyz/topics/:id", using: "WorldServiceKyrgyzTopicPage", only_on: "test", examples: ["/kyrgyz/topics/c0109l9xrpnt", "/kyrgyz/topics/c0109l9xrpnt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -973,7 +973,7 @@ defroutefile "Main" do
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets", examples: ["/marathi/manifest.json"]
   handle "/marathi/sw.js", using: "WorldServiceMarathiAssets", examples: ["/marathi/sw.js"]
-  handle "/marathi/new_topics/:id", using: "WorldServiceMarathiTopicPage", only_on: "test", examples: ["/marathi/new_topics/c2dwqjwqqqjt", "/marathi/new_topics/c2dwqjwqqqjt?page=40"] do
+  handle "/marathi/topics/:id", using: "WorldServiceMarathiTopicPage", only_on: "test", examples: ["/marathi/topics/c2dwqjwqqqjt", "/marathi/topics/c2dwqjwqqqjt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1006,7 +1006,7 @@ defroutefile "Main" do
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/manifest.json", using: "WorldServiceMundoAssets", examples: ["/mundo/manifest.json"]
   handle "/mundo/sw.js", using: "WorldServiceMundoAssets", examples: ["/mundo/sw.js"]
-  handle "/mundo/new_topics/:id", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/new_topics/cdr5613yzwqt", "/mundo/new_topics/cdr5613yzwqt?page=40"] do
+  handle "/mundo/topics/:id", using: "WorldServiceMundoTopicPage", only_on: "test", examples: ["/mundo/topics/cdr5613yzwqt", "/mundo/topics/cdr5613yzwqt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1030,7 +1030,7 @@ defroutefile "Main" do
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets", examples: ["/nepali/manifest.json"]
   handle "/nepali/sw.js", using: "WorldServiceNepaliAssets", examples: ["/nepali/sw.js"]
-  handle "/nepali/new_topics/:id", using: "WorldServiceNepaliTopicPage", only_on: "test", examples: ["/nepali/new_topics/c340q4p5136t", "/nepali/new_topics/c340q4p5136t?page=40"] do
+  handle "/nepali/topics/:id", using: "WorldServiceNepaliTopicPage", only_on: "test", examples: ["/nepali/topics/c340q4p5136t", "/nepali/topics/c340q4p5136t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1122,7 +1122,7 @@ defroutefile "Main" do
   handle "/portuguese.json", using: "WorldServicePortuguese", examples: ["/portuguese.json"]
   handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets", examples: ["/portuguese/manifest.json"]
   handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets", examples: ["/portuguese/sw.js"]
-  handle "/portuguese/new_topics/:id", using: "WorldServicePortugueseTopicPage", only_on: "test", examples: ["/portuguese/new_topics/c1gdqg5dr8nt", "/portuguese/new_topics/c1gdqg5dr8nt?page=40"] do
+  handle "/portuguese/topics/:id", using: "WorldServicePortugueseTopicPage", only_on: "test", examples: ["/portuguese/topics/c1gdqg5dr8nt", "/portuguese/topics/c1gdqg5dr8nt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1142,7 +1142,7 @@ defroutefile "Main" do
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", examples: ["/punjabi/manifest.json"]
   handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets", examples: ["/punjabi/sw.js"]
-  handle "/punjabi/new_topics/:id", using: "WorldServicePunjabiTopicPage", only_on: "test", examples: ["/punjabi/new_topics/c0w258dd62mt", "/punjabi/new_topics/c0w258dd62mt?page=40"] do
+  handle "/punjabi/topics/:id", using: "WorldServicePunjabiTopicPage", only_on: "test", examples: ["/punjabi/topics/c0w258dd62mt", "/punjabi/topics/c0w258dd62mt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1170,7 +1170,7 @@ defroutefile "Main" do
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/manifest.json", using: "WorldServiceRussianAssets", examples: ["/russian/manifest.json"]
   handle "/russian/sw.js", using: "WorldServiceRussianAssets", examples: ["/russian/sw.js"]
-  handle "/russian/new_topics/:id", using: "WorldServiceRussianTopicPage", only_on: "test", examples: ["/russian/new_topics/c50nzm54vzmt", "/russian/new_topics/c50nzm54vzmt?page=40"] do
+  handle "/russian/topics/:id", using: "WorldServiceRussianTopicPage", only_on: "test", examples: ["/russian/topics/c50nzm54vzmt", "/russian/topics/c50nzm54vzmt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1225,7 +1225,7 @@ defroutefile "Main" do
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/manifest.json"]
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/sw.js"]
-  handle "/sinhala/new_topics/:id", using: "WorldServiceSinhalaTopicPage", only_on: "test", examples: ["/sinhala/new_topics/c2dwqd311xyt", "/sinhala/new_topics/c2dwqd311xyt?page=40"] do
+  handle "/sinhala/topics/:id", using: "WorldServiceSinhalaTopicPage", only_on: "test", examples: ["/sinhala/topics/c2dwqd311xyt", "/sinhala/topics/c2dwqd311xyt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1248,7 +1248,7 @@ defroutefile "Main" do
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
   handle "/somali/manifest.json", using: "WorldServiceSomaliAssets", examples: ["/somali/manifest.json"]
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets", examples: ["/somali/sw.js"]
-  handle "/somali/new_topics/:id", using: "WorldServiceSomaliTopicPage", only_on: "test", examples: ["/somali/new_topics/cz74k7jd8n8t", "/somali/new_topics/cz74k7jd8n8t?page=40"] do
+  handle "/somali/topics/:id", using: "WorldServiceSomaliTopicPage", only_on: "test", examples: ["/somali/topics/cz74k7jd8n8t", "/somali/topics/cz74k7jd8n8t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1271,7 +1271,7 @@ defroutefile "Main" do
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", examples: ["/swahili/sw.js"]
-  handle "/swahili/new_topics/:id", using: "WorldServiceSwahiliTopicPage", only_on: "test", examples: ["/swahili/new_topics/c06gq663n6jt", "/swahili/new_topics/c06gq663n6jt?page=40"] do
+  handle "/swahili/topics/:id", using: "WorldServiceSwahiliTopicPage", only_on: "test", examples: ["/swahili/topics/c06gq663n6jt", "/swahili/topics/c06gq663n6jt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1296,7 +1296,7 @@ defroutefile "Main" do
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/manifest.json", using: "WorldServiceTamilAssets", examples: ["/tamil/manifest.json"]
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets", examples: ["/tamil/sw.js"]
-  handle "/tamil/new_topics/:id", using: "WorldServiceTamilTopicPage", only_on: "test", examples: ["/tamil/new_topics/c06gq6gnzdgt", "/tamil/new_topics/c06gq6gnzdgt?page=40"] do
+  handle "/tamil/topics/:id", using: "WorldServiceTamilTopicPage", only_on: "test", examples: ["/tamil/topics/c06gq6gnzdgt", "/tamil/topics/c06gq6gnzdgt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1316,7 +1316,7 @@ defroutefile "Main" do
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", examples: ["/telugu/manifest.json"]
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", examples: ["/telugu/sw.js"]
-  handle "/telugu/new_topics/:id", using: "WorldServiceTeluguTopicPage", only_on: "test", examples: ["/telugu/new_topics/c5qvp16w7dnt", "/telugu/new_topics/c5qvp16w7dnt?page=40"] do
+  handle "/telugu/topics/:id", using: "WorldServiceTeluguTopicPage", only_on: "test", examples: ["/telugu/topics/c5qvp16w7dnt", "/telugu/topics/c5qvp16w7dnt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1336,7 +1336,7 @@ defroutefile "Main" do
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets", examples: ["/thai/manifest.json"]
   handle "/thai/sw.js", using: "WorldServiceThaiAssets", examples: ["/thai/sw.js"]
-  handle "/thai/new_topics/:id", using: "WorldServiceThaiTopicPage", only_on: "test", examples: ["/thai/new_topics/c340qx429k7t", "/thai/new_topics/c340qx429k7t?page=40"] do
+  handle "/thai/topics/:id", using: "WorldServiceThaiTopicPage", only_on: "test", examples: ["/thai/topics/c340qx429k7t", "/thai/topics/c340qx429k7t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1356,7 +1356,7 @@ defroutefile "Main" do
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/manifest.json"]
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/sw.js"]
-  handle "/tigrinya/new_topics/:id", using: "WorldServiceTigrinyaTopicPage", only_on: "test", examples: ["/tigrinya/new_topics/c1gdqrg28zxt", "/tigrinya/new_topics/c1gdqrg28zxt?page=40"] do
+  handle "/tigrinya/topics/:id", using: "WorldServiceTigrinyaTopicPage", only_on: "test", examples: ["/tigrinya/topics/c1gdqrg28zxt", "/tigrinya/topics/c1gdqrg28zxt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1380,7 +1380,7 @@ defroutefile "Main" do
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", examples: ["/turkce/manifest.json"]
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", examples: ["/turkce/sw.js"]
-  handle "/turkce/new_topics/:id", using: "WorldServiceTurkceTopicPage", only_on: "test", examples: ["/turkce/new_topics/c2dwqnwkvnqt", "/turkce/new_topics/c2dwqnwkvnqt?page=40"] do
+  handle "/turkce/topics/:id", using: "WorldServiceTurkceTopicPage", only_on: "test", examples: ["/turkce/topics/c2dwqnwkvnqt", "/turkce/topics/c2dwqnwkvnqt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1422,7 +1422,7 @@ defroutefile "Main" do
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/manifest.json"]
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/sw.js"]
-  handle "/ukrainian/new_topics/:id", using: "WorldServiceUkrainianTopicPage", only_on: "test", examples: ["/ukrainian/new_topics/c340qxwr67yt", "/ukrainian/new_topics/c340qxwr67yt?page=40"] do
+  handle "/ukrainian/topics/:id", using: "WorldServiceUkrainianTopicPage", only_on: "test", examples: ["/ukrainian/topics/c340qxwr67yt", "/ukrainian/topics/c340qxwr67yt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1469,7 +1469,7 @@ defroutefile "Main" do
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
   handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", examples: ["/uzbek/manifest.json"]
   handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", examples: ["/uzbek/sw.js"]
-  handle "/uzbek/new_topics/:id", using: "WorldServiceUzbekTopicPage", only_on: "test", examples: ["/uzbek/new_topics/c340q0q55jvt", "/uzbek/new_topics/c340q0q55jvt?page=40"] do
+  handle "/uzbek/topics/:id", using: "WorldServiceUzbekTopicPage", only_on: "test", examples: ["/uzbek/topics/c340q0q55jvt", "/uzbek/topics/c340q0q55jvt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1492,7 +1492,7 @@ defroutefile "Main" do
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
   handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/manifest.json"]
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/sw.js"]
-  handle "/vietnamese/new_topics/:id", using: "WorldServiceVietnameseTopicPage", only_on: "test", examples: ["/vietnamese/new_topics/c340q0gkg4kt", "/vietnamese/new_topics/c340q0gkg4kt?page=40"] do
+  handle "/vietnamese/topics/:id", using: "WorldServiceVietnameseTopicPage", only_on: "test", examples: ["/vietnamese/topics/c340q0gkg4kt", "/vietnamese/topics/c340q0gkg4kt?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1512,7 +1512,7 @@ defroutefile "Main" do
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", examples: ["/yoruba/manifest.json"]
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", examples: ["/yoruba/sw.js"]
-  handle "/yoruba/new_topics/:id", using: "WorldServiceYorubaTopicPage", only_on: "test", examples: ["/yoruba/new_topics/c12jqpnxn44t", "/yoruba/new_topics/c12jqpnxn44t?page=40"] do
+  handle "/yoruba/topics/:id", using: "WorldServiceYorubaTopicPage", only_on: "test", examples: ["/yoruba/topics/c12jqpnxn44t", "/yoruba/topics/c12jqpnxn44t?page=40"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
