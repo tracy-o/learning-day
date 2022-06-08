@@ -2252,8 +2252,8 @@ defroutefile "Main" do
 
 
   ## Sport League Two Table page
-  handle "/sport/football/league-two/table.app", only-on: "test", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
-  handle "/sport/football/league-two/table", only-on: "test", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
+  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
 
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
