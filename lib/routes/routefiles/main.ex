@@ -1078,7 +1078,7 @@ defroutefile "Main" do
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
   handle "/persian/manifest.json", using: "WorldServicePersianAssets", examples: ["/persian/manifest.json"]
   handle "/persian/sw.js", using: "WorldServicePersianAssets", examples: ["/persian/sw.js"]
-  handle "/persian/new_topics/:id", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/persian/new_topics/c95y35941vrt", "/persian/new_topics/c95y35941vrt?page=2"] do
+  handle "/persian/new_topics/:id", using: "WorldServicePersianTopicPage", only_on: "test", examples: ["/persian/new_topics/cnq68798yw0t", "/persian/new_topics/cnq68798yw0t?page=2"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
