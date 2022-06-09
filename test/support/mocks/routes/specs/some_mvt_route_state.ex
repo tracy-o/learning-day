@@ -1,8 +1,8 @@
 defmodule Routes.Specs.SomeMvtRouteState do
   def specs do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      owner: "Some person",
+      runbook: "Some runbook",
       platform: Webcore,
       caching_enabled: true,
       mvt_project_id: 1
