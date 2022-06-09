@@ -2406,6 +2406,7 @@ end
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
+  handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/womens-european-championship"]
 
 ## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"]
