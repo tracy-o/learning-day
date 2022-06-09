@@ -9,7 +9,8 @@ defmodule Mix.Tasks.Routespecs do
   def run([env]) do
     IO.puts("# Belfrage #{env} RouteSpecs\n")
 
-    routefile = Routes.Routefiles.Test
+    # TODO: Update how we reference the routefile to include others
+    routefile = Routes.Routefiles.Main.Test
 
     routefile.routes()
     |> Enum.uniq_by(fn {_matcher, attrs} -> attrs.using end)

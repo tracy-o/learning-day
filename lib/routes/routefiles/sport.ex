@@ -1361,4 +1361,6 @@ defroutefile "Sport" do
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
+
+  no_match()
 end
