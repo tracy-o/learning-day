@@ -1406,7 +1406,7 @@ defroutefile "Main" do
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
-  handle "/ukchina/trad/new_topics/:id", using: "WorldServiceUkchinaTopicPage", only_on: "test", examples: ["/ukchina/trad/new_topics/c1nq04kp0r0t", "/ukchina/trad/new_topics/c1nq04kp0r0t?page=2"] do
+  handle "/ukchina/trad/new_topics/:id", using: "WorldServiceUkchinaTopicPage", only_on: "test", examples: ["/ukchina/trad/new_topics/cgqnyy07pqyt", "/ukchina/trad/new_topics/cgqnyy07pqyt?page=2"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
