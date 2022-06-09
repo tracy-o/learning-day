@@ -74,7 +74,7 @@ defroutefile "Mock", "test" do
 
   handle("/personalised-news-article-page", using: "PersonalisedContainerData", examples: [])
 
-  handle("/mvt", using: "WebCoreMvtPlayground", examples: ["/mvt"])
+  handle("/mvt", using: "SomeMvtRouteState", examples: ["/mvt"])
 
   handle("/proxy-on-joan/:id", using: "NewsArticlePage", examples: ["/proxy-on-joan/49336140"])
 

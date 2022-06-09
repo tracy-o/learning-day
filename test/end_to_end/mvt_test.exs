@@ -46,7 +46,7 @@ defmodule EndToEnd.MvtTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "WebCoreMvtPlayground"})
+    start_supervised!({RouteState, "SomeMvtRouteState"})
     :ok
   end
 
