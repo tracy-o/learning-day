@@ -4,6 +4,8 @@ defmodule Belfrage.Clients.CCPTest do
   alias Belfrage.Clients.CCP
   alias Belfrage.{Struct, Struct.Request, Struct.Response}
 
+  @s3_timeout Application.get_env(:belfrage, :s3_http_client_timeout)
+
   describe "put/2" do
     test "sends request and request hash as cast" do
       struct = %Struct{
@@ -58,7 +60,7 @@ defmodule Belfrage.Clients.CCPTest do
         headers: %{},
         method: :get,
         payload: "",
-        timeout: 1000,
+        timeout: @s3_timeout,
         url: "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
       }
 
