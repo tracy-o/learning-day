@@ -38,9 +38,10 @@ defmodule BelfrageWeb.RoutefilePointer do
   end
 
   defp product(_conn = %{path_info: [product | _rest]}) do
+    product = product |> String.split(".") |> List.first()
+
     case product do
       "sport" -> "Sport"
-      "sport.app" -> "Sport"
       _ -> "Main"
     end
   end
