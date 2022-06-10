@@ -25,7 +25,7 @@ defmodule Belfrage.Cache.Distributed do
   end
 
   defp should_store?(false, _fallback_write_sample), do: false
-  defp should_store?(true, fallback_write_sample), do: random(0..100) < fallback_write_sample * 100
+  defp should_store?(true, fallback_write_sample), do: random(0..99) < fallback_write_sample * 100
 
   @impl CacheStrategy
   def metric_identifier, do: "distributed"
