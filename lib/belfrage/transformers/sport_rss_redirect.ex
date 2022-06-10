@@ -2,7 +2,7 @@ defmodule Belfrage.Transformers.SportRssRedirect do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do
-    case should_redirect?(struct.request.host) do
+    case should_redirect?(struct.request.subdomain) do
       true -> redirect(redirect_url(struct.request), struct)
       _ -> then_do(rest, struct)
     end
@@ -16,7 +16,7 @@ defmodule Belfrage.Transformers.SportRssRedirect do
     {
       :redirect,
       Struct.add(struct, :response, %{
-        http_status: 301,
+        http_status: 302,
         headers: %{
           "location" => redirect_url,
           "x-bbc-no-scheme-rewrite" => "1",
@@ -27,7 +27,6 @@ defmodule Belfrage.Transformers.SportRssRedirect do
     }
   end
 
-  defp should_redirect?(host) do
-    host == "www.bbc.co.uk"
-  end
+  defp should_redirect?("www"), do: true
+  defp should_redirect?(_), do: false
 end
