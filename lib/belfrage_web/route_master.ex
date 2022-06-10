@@ -134,7 +134,13 @@ defmodule BelfrageWeb.RouteMaster do
   # plus the port etc.
   defmacro redirect(from, to: location, status: status) do
     quote do
-      var!(add_redirect, BelfrageWeb.RouteMaster).(unquote(from), unquote(location), unquote(status))
+      var!(add_redirect, BelfrageWeb.RouteMaster).(unquote(from), unquote(location), unquote(status), 60)
+    end
+  end
+
+  defmacro redirect(from, to: location, status: status, ttl: ttl) do
+    quote do
+      var!(add_redirect, BelfrageWeb.RouteMaster).(unquote(from), unquote(location), unquote(status), unquote(ttl))
     end
   end
 
@@ -164,7 +170,7 @@ defmodule BelfrageWeb.RouteMaster do
 
   defp defs() do
     quote unquote: false do
-      var!(add_redirect, BelfrageWeb.RouteMaster) = fn from, location, status ->
+      var!(add_redirect, BelfrageWeb.RouteMaster) = fn from, location, status, ttl ->
         matcher = BelfrageWeb.ReWrite.prepare(location) |> Macro.escape()
 
         redirect_statuses = Application.get_env(:belfrage, :redirect_statuses)
@@ -179,7 +185,14 @@ defmodule BelfrageWeb.RouteMaster do
 
         get(to_string(uri_from.path), host: uri_from.host) do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
-          Response.redirect(var!(conn), StructAdapter.adapt(var!(conn), "redirect"), unquote(status), new_location)
+
+          Response.redirect(
+            var!(conn),
+            StructAdapter.adapt(var!(conn), "redirect"),
+            unquote(status),
+            new_location,
+            unquote(ttl)
+          )
         end
       end
 
