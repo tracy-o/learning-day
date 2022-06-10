@@ -1905,9 +1905,18 @@ defroutefile "Main" do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
+  ## TODO: Migrate redirects from Mozart https://github.com/bbc/mozart-routing/blob/master/src/lib/mozart_routing/middlewares/sport_redirector.rb#L16-L772
+  ## Be aware that previously https://feeds.bbci.co.uk/sport/alpine-skiing/rss.xml would have 404ed, now it will redirect
   ## Sport rss feed redirects
+  redirect "/sport/alpine-skiing/rss.xml", to: "https://feeds.bbci.co.uk/sport/4d38153b-987e-4497-b959-8be7c968d4d1/rss.xml", status: 301
+  redirect "/sport/football/champions-league/rss.xml", to: "https://feeds.bbci.co.uk/sport/1e5c6e40-0b48-cb44-86ae-be47f66aac8a/rss.xml", status: 301
+  redirect "/sport/cricket/teams/australia/rss.xml", to: "https://feeds.bbci.co.uk/sport/9d794c09-c573-4a97-9a0e-9518888f19ed/rss.xml", status: 301
+
+  ## Sport rss feeds
   handle "/sport/c4285a9a-9865-2343-af3a-8653f7b70734/rss.xml", using: "KarangaTest", only_on: "test", examples: ["/sport/c4285a9a-9865-2343-af3a-8653f7b70734/rss.xml"]
   handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 301}]
+  
+  ## TODO: Will need a separate transformer/discriminator to send a subset of requests to FABL
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: [{"/sport/football/rss.xml", 301}, {"/sport/england/rss.xml", 301}]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/champions-league/rss.xml", 301}, {"/sport/cricket/womens/rss.xml", 301}]
   handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: [{"/sport/football/teams/liverpool/rss.xml", 301}]
