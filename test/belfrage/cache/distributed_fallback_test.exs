@@ -55,7 +55,7 @@ defmodule Belfrage.Cache.DistributedTest do
       }
 
       Belfrage.Clients.CCPMock
-        |> expect(:put, 100, fn ^struct -> :ok end)
+      |> expect(:put, 100, fn ^struct -> :ok end)
 
       for _n <- 1..100 do
         Distributed.store(struct)
@@ -72,7 +72,7 @@ defmodule Belfrage.Cache.DistributedTest do
       Belfrage.Clients.CCPMock
       |> expect(:put, 50, fn ^struct -> :ok end)
 
-      :rand.seed(:exsss, {8,234,102})
+      :rand.seed(:exsss, {8, 234, 102})
 
       for _n <- 1..100 do
         Distributed.store(struct)
@@ -89,7 +89,7 @@ defmodule Belfrage.Cache.DistributedTest do
       }
 
       Belfrage.Clients.CCPMock
-        |> expect(:put, 0, fn ^struct -> :ok end)
+      |> expect(:put, 0, fn ^struct -> :ok end)
 
       for _n <- 1..100 do
         Distributed.store(struct)
