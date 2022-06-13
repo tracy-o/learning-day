@@ -2269,6 +2269,12 @@ end
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures"]
 
+
+  ## Sport League Two Table page
+
+  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", only_on: "test", examples: ["/sport/football/league-two/table.app"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", only_on: "test", examples: ["/sport/football/league-two/table"]
+
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
   handle "/sport/football/tables", using: "SportFootballDataPage", examples: ["/sport/football/tables"]
@@ -2443,7 +2449,6 @@ end
 
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
-
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
