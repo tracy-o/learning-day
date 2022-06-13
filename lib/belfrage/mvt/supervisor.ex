@@ -3,14 +3,19 @@ defmodule Belfrage.Mvt.Supervisor do
 
   alias Belfrage.Mvt.{FilePoller, Slots}
 
-  def start_link(_arg \\ nil) do
-    Supervisor.start_link(__MODULE__, nil, name: __MODULE__)
+  def start_link(opts \\ nil) do
+    Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   @impl true
-  def init(_arg) do
-    children = [FilePoller, Slots]
+  def init(opts) do
+    Supervisor.init(children(opts), strategy: :one_for_one, max_restarts: 40)
+  end
 
-    Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
+  defp children(opts) do
+    case Keyword.get(opts, :env) do
+      :test -> [Slots]
+      _env -> [FilePoller, Slots]
+    end
   end
 end

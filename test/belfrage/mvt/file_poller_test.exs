@@ -1,4 +1,5 @@
 defmodule Belfrage.Mvt.FilePollerTest do
+  import ExUnit.CaptureLog
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
@@ -16,11 +17,22 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 200, body: @mvt_json_payload}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
-    project_headers = Jason.decode!(@mvt_json_payload)["projects"]
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
-    assert Slots.available() == project_headers
+
+    assert Slots.available() == %{
+             "1" => %{
+               "bbc-mvt-1" => "test_feature_1_test",
+               "bbc-mvt-2" => "test_experiment_1",
+               "bbc-mvt-3" => "test_experiment_2"
+             },
+             "2" => %{
+               "bbc-mvt-1" => "test_feature_1_test",
+               "bbc-mvt-2" => "test_experiment_1",
+               "bbc-mvt-3" => "test_experiment_2"
+             }
+           }
   end
 
   test "if there is an error fetching the file it will not set the file content in the agent", %{
@@ -32,9 +44,10 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 500, body: "{foo: \"bar\"}"}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
   end
 
   test "if the file is malformed it will not set the file content in the agent", %{slots_agent_pid: slots_agent_pid} do
@@ -44,9 +57,99 @@ defmodule Belfrage.Mvt.FilePollerTest do
       {:ok, %HTTP.Response{status_code: 500, body: "malformed json"}}
     end)
 
-    file_poller_pid = start_supervised!({FilePoller, interval: 0, name: :test_mvt_file_poller})
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
     refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON but does not have a \"projects\" key, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok, %HTTP.Response{status_code: 200, body: "{\"foo\": \"bar\"}"}}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but the value is not a map, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": [\"something\"]"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but the value is an empty map, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": %{}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but contains an invalid slot format, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": {\"1\": [{\"some_key\": \"test_experiment_1\",\"header\": \"bbc-mvt-2\"}]}}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but a project contains an invalid slot format, the expected log is output" do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": {\"1\": [{\"some_key\": \"test_experiment_1\",\"header\": \"bbc-mvt-2\"}]}}"
+       }}
+    end)
+
+    log =
+      capture_log(fn ->
+        start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+        Process.sleep(100)
+      end)
+
+    assert log =~
+             "\"msg\":\"Error normalising MVT slots - the actual format does not match the expected format.\""
   end
 
   def trace_slots_agent(_context) do
