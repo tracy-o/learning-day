@@ -486,8 +486,6 @@ defroutefile "Main" do
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
-  handle "/news/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/news/mvt/testing"]
-
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
   handle "/news/*_any", using: "News", examples: [{"/news/contact-us/editorial", 302}]
 
@@ -2443,9 +2441,6 @@ end
   handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
-
-  handle "/sport/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/sport/mvt/testing"]
-  handle "/sport/mvt-playground/:id", using: "WebCoreMvtPlayground", only_on: "test", examples: ["/sport/mvt-playground/1"]
 
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
