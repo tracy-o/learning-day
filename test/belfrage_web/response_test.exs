@@ -103,20 +103,20 @@ defmodule BelfrageWeb.ResponseTest do
 
   describe "redirect/4" do
     test "returns a redirect" do
-      conn = redirect(301, "http://example.com")
+      conn = redirect(301, "http://example.com", 60)
       assert conn.status == 301
       assert get_resp_header(conn, "location") == ["http://example.com"]
     end
 
     test "returns error 400 if location header contains a new line" do
-      conn = redirect(301, "http://example.com\n")
+      conn = redirect(301, "http://example.com\n", 60)
       assert conn.status == 400
       assert conn.resp_body == "<h1>400</h1>\n<!-- Belfrage -->"
       assert get_resp_header(conn, "location") == []
     end
 
-    defp redirect(status, location) do
-      BelfrageWeb.Response.redirect(build_conn(), %Struct{}, status, location)
+    defp redirect(status, location, ttl) do
+      BelfrageWeb.Response.redirect(build_conn(), %Struct{}, status, location, ttl)
     end
   end
 
