@@ -575,6 +575,7 @@ defroutefile "Main" do
   # World Service
 
   ## World Service - Podcast Redirects
+  redirect "/arabic/climate-change", to: "/arabic/podcasts/p0c9wp0l", status: 301
   redirect "/arabic/media-45669761", to: "/arabic/podcasts/p02pc9qc", status: 301
   redirect "/arabic/xlevels", to: "/arabic/podcasts/p09w8yvk", status: 301
   redirect "/arabic/morahakaty", to: "/arabic/podcasts/p0b3xdrj", status: 301
@@ -606,6 +607,7 @@ defroutefile "Main" do
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
   ## World Service - Topic Redirects
+  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
   ## World Service - Simorgh and ARES
