@@ -31,7 +31,7 @@ defmodule Belfrage.Mvt.FilePoller do
 
     with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots"),
          {:ok, projects} <- Map.fetch(headers_map, "projects"),
-         {:ok, normalised_projects} <- normalise_projects(projects) do
+         {:ok, normalised_projects} when normalised_projects != %{} <- normalise_projects(projects) do
       set_header_state(normalised_projects)
     end
 

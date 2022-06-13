@@ -77,6 +77,42 @@ defmodule Belfrage.Mvt.FilePollerTest do
     assert Process.alive?(file_poller_pid)
   end
 
+  test "if the file has valid JSON and \"projects\" key, but the value is not a map, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": [\"something\"]"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but the value is an empty map, it will not send a message to the Slots Agent",
+       %{slots_agent_pid: slots_agent_pid} do
+    assert Slots.available() == %{}
+
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body: "{\"projects\": %{}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    refute_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+    assert Process.alive?(file_poller_pid)
+  end
+
   test "if the file has valid JSON and \"projects\" key, but contains an invalid slot format, it will not send a message to the Slots Agent",
        %{slots_agent_pid: slots_agent_pid} do
     assert Slots.available() == %{}
