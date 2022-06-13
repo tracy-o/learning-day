@@ -6,6 +6,7 @@ defmodule Belfrage.Mvt.FilePoller do
   use GenServer
   alias Belfrage.Mvt
   alias Belfrage.Clients
+  require Logger
 
   @interval 60_000
   @http_pool :MvtFilePoller
@@ -43,6 +44,10 @@ defmodule Belfrage.Mvt.FilePoller do
     Mvt.Slots.set(headers)
   end
 
+  # Attempts to normalise each project entry using normalise_slots/1.
+  # If a slot entry in a project does not match the expected format,
+  # a FunctionClauseError error will be thrown from the normalise_slots/1
+  # function, rescued here, and a message highlighting the error will be logged.
   defp normalise_projects(projects) do
     try do
       normalised_projects =
@@ -53,6 +58,14 @@ defmodule Belfrage.Mvt.FilePoller do
       {:ok, normalised_projects}
     rescue
       FunctionClauseError ->
+        Logger.log(
+          :error,
+          "",
+          %{
+            msg: "Error normalising MVT slots - the actual format does not match the expected format."
+          }
+        )
+
         {:error, :invalid_slot_format}
     end
   end
