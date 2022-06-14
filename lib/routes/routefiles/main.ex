@@ -1400,6 +1400,9 @@ defroutefile "Main" do
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
 
+  handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
+  handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
+
   handle "/ukchina/simp/new_topics/:id", using: "WorldServiceUkchinaTopicPage", only_on: "test", examples: ["/ukchina/simp/new_topics/c1nq04kp0r0t", "/ukchina/simp/new_topics/c1nq04kp0r0t?page=2"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
