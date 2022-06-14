@@ -1,24 +1,22 @@
-defmodule Belfrage.Transformers.SportRssRedirect do
+defmodule Belfrage.Transformers.RssFeedRedirect do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do
     case should_redirect?(struct.request.subdomain) do
-      true -> redirect(redirect_url(struct.request), struct)
+      true -> redirect(struct)
       _ -> then_do(rest, struct)
     end
   end
 
-  defp redirect_url(request) do
-    "https://feeds.bbci.co.uk" <> request.path
-  end
+  defp should_redirect?(subdomain), do: subdomain != "feeds"
 
-  defp redirect(redirect_url, struct) do
+  defp redirect(struct) do
     {
       :redirect,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{
-          "location" => redirect_url,
+          "location" => "https://feeds.bbci.co.uk" <> struct.request.path,
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, max-age=60"
         },
@@ -26,7 +24,4 @@ defmodule Belfrage.Transformers.SportRssRedirect do
       })
     }
   end
-
-  defp should_redirect?("www"), do: true
-  defp should_redirect?(_), do: false
 end
