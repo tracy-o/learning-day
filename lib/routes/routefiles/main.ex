@@ -2270,8 +2270,8 @@ end
 
   ## Sport League Two Table page
 
-  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", only_on: "test", examples: ["/sport/football/league-two/table.app"]
-  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", only_on: "test", examples: ["/sport/football/league-two/table"]
+  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
 
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
