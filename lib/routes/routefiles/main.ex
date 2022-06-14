@@ -1399,6 +1399,7 @@ defroutefile "Main" do
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
+
   handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
   handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
 
