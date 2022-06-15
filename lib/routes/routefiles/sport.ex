@@ -23,7 +23,7 @@ defroutefile "Sport" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/sport/:discipline/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: [] do
+  handle "/sport/:discipline/articles/:optimo_id", using: "StorytellingPage", examples: [] do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
