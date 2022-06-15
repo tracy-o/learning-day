@@ -2689,7 +2689,6 @@ defroutefile "Main" do
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/premier-league/rss.xml"]
   handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss", examples: ["/sport/football/european-championship/2016/rss.xml"]
-  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/unknown/rss.xml"]
 
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
