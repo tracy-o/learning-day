@@ -3,7 +3,7 @@ defmodule BelfrageWeb.Response do
   import Plug.Conn
 
   alias Plug.Conn
-  alias Belfrage.{Struct, Metrics}
+  alias Belfrage.{CacheControl, Struct, Metrics}
   alias Belfrage.Struct.Response
   alias BelfrageWeb.Response.Headers
   alias BelfrageWeb.Response.Internal
@@ -62,18 +62,29 @@ defmodule BelfrageWeb.Response do
     error(conn, 405)
   end
 
-  def redirect(conn = %Conn{}, struct = %Struct{}, status, new_location) do
+  def redirect(conn = %Conn{}, struct = %Struct{}, status, new_location, ttl) do
     case :binary.match(new_location, ["\n", "\r"]) do
       {_, _} ->
         error(conn, 400)
 
       :nomatch ->
         conn = put_resp_header(conn, "location", new_location)
-        struct = %Struct{struct | response: %Response{http_status: status}}
-        response = Internal.new(struct, conn)
+
+        struct = %Struct{
+          struct
+          | response: %Response{
+              http_status: status,
+              cache_directive: %CacheControl{
+                cacheability: "public",
+                max_age: ttl,
+                stale_while_revalidate: 60,
+                stale_if_error: 90
+              }
+            }
+        }
 
         conn
-        |> assign(:struct, %Struct{struct | response: response})
+        |> assign(:struct, struct)
         |> put()
     end
   end

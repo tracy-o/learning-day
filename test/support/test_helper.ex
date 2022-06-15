@@ -140,4 +140,10 @@ defmodule Test.Support.Helper do
     Application.put_env(:belfrage, name, value)
     on_exit(fn -> Application.put_env(:belfrage, name, original_value) end)
   end
+
+  def set_slots(project) do
+    Belfrage.Mvt.Slots.set(%{"1" => project})
+    on_exit(fn -> Belfrage.Mvt.Slots.set(%{}) end)
+    :ok
+  end
 end

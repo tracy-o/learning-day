@@ -206,14 +206,19 @@ defmodule Belfrage.Services.Webcore.RequestTest do
            |> Enum.any?(fn header -> String.starts_with?(header, "mvt-") end)
   end
 
-  test "adds mvt headers when set" do
+  test "adds mvt headers when set with \"type;value\"" do
     struct_with_mvt = %Struct{
       private: %Struct.Private{
-        mvt: %{"mvt-button_colour" => {1, "experiment;red"}, "mvt-sidebar" => {5, "feature;false"}}
+        mvt: %{
+          "mvt-button_colour" => {1, nil},
+          "mvt-sidebar" => {3, "feature;false"},
+          "mvt-banner_colour" => {4, nil},
+          "mvt-footer_colour" => {7, "experiment;red"}
+        }
       }
     }
 
-    assert %{headers: %{"mvt-button_colour" => "experiment;red", "mvt-sidebar" => "feature;false"}} =
+    assert %{headers: %{"mvt-sidebar" => "feature;false", "mvt-footer_colour" => "experiment;red"}} =
              Request.build(struct_with_mvt)
   end
 

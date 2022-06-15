@@ -486,8 +486,6 @@ defroutefile "Main" do
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
-  handle "/news/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/news/mvt/testing"]
-
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
   handle "/news/*_any", using: "News", examples: [{"/news/contact-us/editorial", 302}]
 
@@ -575,6 +573,7 @@ defroutefile "Main" do
   # World Service
 
   ## World Service - Podcast Redirects
+  redirect "/arabic/climate-change", to: "/arabic/podcasts/p0c9wp0l", status: 301
   redirect "/arabic/media-45669761", to: "/arabic/podcasts/p02pc9qc", status: 301
   redirect "/arabic/xlevels", to: "/arabic/podcasts/p09w8yvk", status: 301
   redirect "/arabic/morahakaty", to: "/arabic/podcasts/p0b3xdrj", status: 301
@@ -606,6 +605,7 @@ defroutefile "Main" do
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
   ## World Service - Topic Redirects
+  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
   ## World Service - Simorgh and ARES
@@ -1400,6 +1400,9 @@ defroutefile "Main" do
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
 
+  handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
+  handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
+
   handle "/ukchina/simp/new_topics/:id", using: "WorldServiceUkchinaTopicPage", only_on: "test", examples: ["/ukchina/simp/new_topics/c1nq04kp0r0t", "/ukchina/simp/new_topics/c1nq04kp0r0t?page=2"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1869,9 +1872,17 @@ defroutefile "Main" do
 
   # Sport Optimo Articles
   redirect "/sport/articles", to: "/sport", status: 302
+  redirect "/sport/:discipline/articles", to: "/sport/:discipline", status: 302
 
   handle "/sport/articles/:optimo_id", using: "StorytellingPage", examples: ["/sport/articles/cx94820kl0mo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/sport/:discipline/articles/:optimo_id", using: "StorytellingPage", only_on: "test", examples: [] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
   end
 
   redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 301
@@ -3035,6 +3046,12 @@ end
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures"]
 
+
+  ## Sport League Two Table page
+
+  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
+
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
   handle "/sport/football/tables", using: "SportFootballDataPage", examples: ["/sport/football/tables"]
@@ -3204,12 +3221,8 @@ end
   handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
   handle "/sport/tennis/:id", using: "SportMajorStoryPage", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
 
-  handle "/sport/mvt/*_any", using: "WebCoreMvtPoc", only_on: "test", examples: ["/sport/mvt/testing"]
-  handle "/sport/mvt-playground/:id", using: "WebCoreMvtPlayground", only_on: "test", examples: ["/sport/mvt-playground/1"]
-
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
-
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []
