@@ -2,13 +2,12 @@ defmodule Belfrage.Transformers.RssFeedRedirect do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do
-    case should_redirect?(struct.request.subdomain) do
-      true -> redirect(struct)
-      _ -> then_do(rest, struct)
+    if struct.request.subdomain == "feeds" do
+      then_do(rest, struct)
+    else
+      redirect(struct)
     end
   end
-
-  defp should_redirect?(subdomain), do: subdomain != "feeds"
 
   defp redirect(struct) do
     {
