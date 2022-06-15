@@ -1,4 +1,7 @@
-defmodule Routes.RoutefileTest do
+# This is a copy of RoutefileTest.
+# TODO: look at how we can run tests on all routefiles.
+
+defmodule Routes.SportRoutefileTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
@@ -6,7 +9,7 @@ defmodule Routes.RoutefileTest do
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
-  alias Routes.Routefiles.Main.Test, as: Routefile
+  alias Routes.Routefiles.Sport.Test, as: Routefile
 
   @moduletag :routes_test
 

@@ -6,7 +6,8 @@ defmodule Belfrage.SmokeTest do
 
   @moduletag :smoke_test
 
-  Routes.Routefiles.Test.routes()
+  # TODO: Update how we reference the routes
+  (Routes.Routefiles.Main.Test.routes() ++ Routes.Routefiles.Sport.Test.routes())
   |> Enum.filter(fn {_route_matcher, %{using: route_state_id, only_on: only_env}} ->
     not (route_state_id in @ignore_specs) and only_env != "test"
   end)
