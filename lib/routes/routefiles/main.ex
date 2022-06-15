@@ -2673,11 +2673,12 @@ defroutefile "Main" do
   redirect "/sport/rugby-union/teams/worcester/rss.xml", to: "https://feeds.bbci.co.uk/sport/f9bcd500-e383-408f-9177-6d8468d6ae35/rss.xml", status: 301
 
   ## Sport RSS feeds
-  handle "/sport/rss.xml", using: "SportRss", examples: []
+  handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
   ## TODO: Will need a separate transformer/discriminator to send a subset of requests to FABL
-  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: []
-  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: []
-  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: []
+  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
+  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/premier-league/rss.xml"]
+  handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss", examples: ["/sport/football/european-championship/2016/rss.xml"]
+  handle "/sport/:discipline/teams/:team/rss.xml", using: "SportRss", examples: ["/sport/football/teams/unknown/rss.xml"]
 
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
