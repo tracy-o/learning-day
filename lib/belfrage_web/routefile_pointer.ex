@@ -37,6 +37,8 @@ defmodule BelfrageWeb.RoutefilePointer do
     Module.concat(["Routes", "Routefiles", product(conn), "Live"])
   end
 
+  defp product(_conn = %{path_info: []}), do: "Main"
+
   defp product(_conn = %{path_info: [product | _rest]}) do
     product = product |> String.split(".") |> List.first()
 

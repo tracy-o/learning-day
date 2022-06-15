@@ -7,6 +7,10 @@ defmodule BelfrageWeb.RoutefilePointerTest do
     test "Cosmos test will return the Main Test Routefile" do
       assert RoutefilePointer.routefile_module(%{path_info: ["news"]}, "test", :dev) == Routes.Routefiles.Main.Test
     end
+
+    test "Cosmos test will return the Main Test Routefile for homepage" do
+      assert RoutefilePointer.routefile_module(%{path_info: []}, "test", :dev) == Routes.Routefiles.Main.Test
+    end
   end
 
   describe "on Mix.env :dev and Sport" do
