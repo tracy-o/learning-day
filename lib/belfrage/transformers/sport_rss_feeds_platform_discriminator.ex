@@ -15,15 +15,15 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminator do
           platform: Fabl,
           origin: Application.get_env(:belfrage, :fabl_endpoint)
         })
-      
+
       struct =
         Struct.add(struct, :request, %{
           path: "/fd/preview/:name",
           path_params: %{
-            "name" => "rss",
+            "name" => "rss"
           },
           query_params: %{
-            "guid" => "4d38153b-987e-4497-b959-8be7c968d4d1",
+            "guid" => struct.request.path_params["discipline"]
           },
           raw_headers: %{
             "ctx-unwrapped" => "1"
