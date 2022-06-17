@@ -25,12 +25,8 @@ defmodule Belfrage.Dials.Supervisor do
   dial state and provides a dedicated message queue.
   """
   @impl true
-  def init(args) do
-    Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
-  end
-
-  def children(_env) do
-    dial_children() ++ [Belfrage.Dials.Poller]
+  def init(opts) do
+    Supervisor.init(children(opts), strategy: :one_for_one, max_restarts: 40)
   end
 
   @doc """
@@ -40,6 +36,14 @@ defmodule Belfrage.Dials.Supervisor do
   def notify(:dials_changed, dials_data) do
     for {_dial_mod, dial_name, _default} <- dial_config() do
       GenServer.cast(dial_name, {:dials_changed, dials_data})
+    end
+  end
+
+  defp children(opts) do
+    if Keyword.get(opts, :env) in [:dev, :test] do
+      dial_children()
+    else
+      dial_children() ++ [Belfrage.Dials.Poller]
     end
   end
 

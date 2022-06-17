@@ -18,12 +18,10 @@ config :belfrage,
   production_environment: "test",
   preview_mode: "off",
   webcore_credentials_source: Belfrage.Services.Webcore.Credentials.Env,
-  webcore_credentials_polling_enabled: false,
   webcore_credentials_session_token: System.get_env("AWS_SESSION_TOKEN"),
   webcore_credentials_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
   webcore_credentials_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-  dials_location: "cosmos/dials_values_dev_env.json",
-  jwk_polling_enabled: false
+  dials_location: "cosmos/dials_values_dev_env.json"
 
 config :belfrage, :benchmark,
   dir: "benchmark",

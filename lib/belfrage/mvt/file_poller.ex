@@ -3,39 +3,22 @@ defmodule Belfrage.Mvt.FilePoller do
   This process periodically fetches a JSON file containing headers used for MVT slots allocation.
   """
 
-  use GenServer
+  use Belfrage.Poller, interval: 60_000
   alias Belfrage.Mvt
   alias Belfrage.Clients
   require Logger
 
-  @interval 60_000
   @http_pool :MvtFilePoller
 
-  def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, Keyword.get(opts, :interval, @interval), name: Keyword.get(opts, :name, __MODULE__))
-  end
-
-  @impl true
-  def init(interval) do
-    schedule_polling()
-    {:ok, interval}
-  end
-
-  defp schedule_polling(interval \\ 0) do
-    Process.send_after(self(), :poll, interval)
-  end
-
-  @impl true
-  def handle_info(:poll, interval) do
-    schedule_polling(interval)
-
+  @impl Belfrage.Poller
+  def poll() do
     with {:ok, headers_map} <- Clients.Json.get(slots_file_location(), @http_pool, name: "mvt_slots"),
          {:ok, projects} <- Map.fetch(headers_map, "projects"),
          {:ok, normalised_projects} when normalised_projects != %{} <- normalise_projects(projects) do
       set_header_state(normalised_projects)
     end
 
-    {:noreply, interval}
+    :ok
   end
 
   defp slots_file_location, do: Application.get_env(:belfrage, :mvt)[:slots_file_location]
