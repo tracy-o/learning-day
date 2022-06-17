@@ -1,11 +1,12 @@
 # TLS Termination Loadtest Report
 
-The purpose of the loadtest is to measure the performance differences between terminating tls connection on the load balancer as we currently do and terminating the tls connection on the instance.
+The purpose of these loadtests is to measure the performance differences between terminating TLS connection on the load balancer as we currently do and terminating the TLS connection on the instance while also verifying client certificates.
 
 ## ;TLDR
-Terminating tls on the instance is much less performant.
-- When using on instance tls termination we can reach between 3000-3200 rps
-- When using tls termination from the load balancer (without client side verification) you can comfortably reach over 10000 rps.
+Terminating TLS on the instance is much less performant.
+- When using on instance TLS termination we can reach between 3000-3200 rps
+- When using TLS termination from the load balancer (without client side verification) you can comfortably reach over 10000 rps.
+- That over 3x better performance
 
 ## Loadtest Configuration
 Loadtest Instance:
@@ -25,7 +26,7 @@ Belfage Endpoint:
 
 1000rps 60 Second Duration
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=1000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_30s_rate_1000_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=1000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_30s_rate_1000_results.bin | vegeta report
 Requests      [total, rate, throughput]  60000, 1000.02, 999.64
 Duration      [total, attack, wait]      1m0.02130855s, 59.999006474s, 22.302076ms
 Latencies     [mean, 50, 95, 99, max]    1.207779ms, 854.022µs, 1.476699ms, 1.669382ms, 134.496653ms
@@ -37,7 +38,7 @@ Status Codes  [code:count]               200:60000
 
 2000rps 60 Second Duration
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=2000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60s_rate_2000_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=2000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60s_rate_2000_results.bin | vegeta report
 Requests      [total, rate, throughput]  120000, 2000.02, 1997.45
 Duration      [total, attack, wait]      1m0.076574619s, 59.999507797s, 77.066822ms
 Latencies     [mean, 50, 95, 99, max]    4.32007ms, 1.403732ms, 1.931045ms, 104.143851ms, 411.418215ms
@@ -49,7 +50,7 @@ Status Codes  [code:count]               200:120000
 
 3000rps 60 Second Duration
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60s_rate_3000_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3000 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60s_rate_3000_results.bin | vegeta report
 Requests      [total, rate, throughput]  180000, 3000.02, 2994.09
 Duration      [total, attack, wait]      1m0.113786761s, 59.999683136s, 114.103625ms
 Latencies     [mean, 50, 95, 99, max]    14.494389ms, 1.087984ms, 104.303961ms, 250.060326ms, 768.822561ms
@@ -67,7 +68,7 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: http2: server sent GOAWAY an
 I ran this one again just to see if it was reproducible. It seemed to be flakey either having a good 200 ratio or a bad one.
 
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3200 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60_rate_3200_try_2_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3200 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60_rate_3200_try_2_results.bin | vegeta report
 Requests      [total, rate, throughput]  192000, 3200.01, 97.58
 Duration      [total, attack, wait]      1m27.689760674s, 59.999723996s, 27.690036678s
 Latencies     [mean, 50, 95, 99, max]    22.123382843s, 27.496770332s, 30.036221126s, 30.067300678s, 43.791432447s
@@ -85,7 +86,7 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: read tcp 10.114.163.200:4110
 
 
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3200 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60_rate_3200_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3200 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60_rate_3200_results.bin | vegeta report
 Requests      [total, rate, throughput]  192000, 3200.03, 2844.54
 Duration      [total, attack, wait]      1m7.491118078s, 59.999523532s, 7.491594546s
 Latencies     [mean, 50, 95, 99, max]    34.054909ms, 1.36129ms, 219.21747ms, 350.177615ms, 30.000090475s
@@ -103,7 +104,7 @@ At this point the many more 500 started to appear, and often it would take the i
 
 3300rps
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3300 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60_rate_3300_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3300 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60_rate_3300_results.bin | vegeta report
 Requests      [total, rate, throughput]  198000, 3300.02, 117.41
 Duration      [total, attack, wait]      1m29.999783552s, 59.999705142s, 30.00007841s
 Latencies     [mean, 50, 95, 99, max]    22.265468419s, 28.167599791s, 30.034717862s, 30.064932765s, 43.213857032s
@@ -120,7 +121,7 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: write tcp 10.114.163.200:204
 
 3500rps
 ```
-echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3500 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee tls_term_d_60s_rate_3500_results.bin | vegeta report
+echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=60s -rate=3500 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee TLS_term_d_60s_rate_3500_results.bin | vegeta report
 Requests      [total, rate, throughput]  210000, 3500.02, 105.04
 Duration      [total, attack, wait]      1m26.539058407s, 59.999732857s, 26.53932555s
 Latencies     [mean, 50, 95, 99, max]    22.08446065s, 26.652264703s, 30.036786119s, 30.082739463s, 53.808350548s
@@ -137,18 +138,23 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: net/http: request canceled w
 
 Its not clear what is causing the application to become overloaded. When we look at the CPU metrics we can see that in the most extreme cases only around 60% of CPU is being used.
 
+See the CPU for the 3000rps 60s loadtest below.
 ![CPU for 3000rps 60s loadtest](./img/2022-06-13-tls-termination/tls_term_3000rps_cpu.png)
 
-Also analysing the latency over the course of the loadtests show that suggests there is some underlying issue causing latency spikes. There is often a single 500 which leads to a latency spike which is more pronounced the higher the load.
+Also analysing the latency over the course of the loadtests suggests there is some underlying issue causing latency spikes. There is often a single 500 which leads to a latency spike which is more pronounced the higher the load.
 
+3100rps 60s
 ![Shows small spikes after 500](./img/2022-06-13-tls-termination/tls_term_3100rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3100rps_plot.html)
 
+3200rps 60s, notice the scale is different because of some freak 500s with 30s latency..
+For more detail view the interactive version in the link under the graph.
 ![More pronounced spikes with higher load](./img/2022-06-13-tls-termination/tls_term_3200rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3200rps_plot.html)
 
-When the load test completely fails (around 5% success ratio) we can see that there is some kind of ceiling that is reached at the 3 second mark. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
+When the load test completely fails (when success ratio is below 5%) we can see that there is some kind of ceiling that is reached at the 3 second mark. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
 
+3200 rps 60s trial 2
 ![picture of strange breaking behaviour](./img/2022-06-13-tls-termination/tls_term_3200rps_try_2_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3200rps_plot_try2.html)
 
@@ -238,14 +244,14 @@ but when we hit 15,000rps the load can't be handled so well.
 
 
 ## Comparing the Loadtests and Future Work
-We can comfortably reach 3000rps with tls termination on the instance with client side verification. We can handle at least 10,000rps when we terminate tls on the instance. **So terminating tls on the instance without client side verification is over 3x more performant.**
+We can comfortably reach 3000rps with TLS termination on the instance with client side verification. We can handle at least 10,000rps when we terminate TLS on the load balancer with no client side verification. **So terminating TLS on the load balancer without client side verification is over 3x more performant.**
 
 Also its interesting to see that CPU isn't the bottleneck on performance as even in the most extreme instance terminating loadtests reached 60% CPU usage. So there must be another bottleneck.
 
 Future work could include:
-- Finding out what causes the slowdown peer verifying client side certificates or terminating on the instance.
-- Also loadtesting Belfrage with an nginx instance in-front to terminate the instance in a more performant way.
-- Look deeper into understanding what the bottleneck is with instance termination if its not the CPU
+- Finding out what causes the slow down on the instance. Peer verifying client side certificates or terminating on the instance.
+- Loadtesting Belfrage with an nginx instance in-front to terminate the TLS connection in a more performant way.
+- Look deeper into understanding what the bottleneck is with TLS termination on the instance if its not the CPU.
 
 
 
