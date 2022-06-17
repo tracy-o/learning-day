@@ -76,6 +76,6 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   defp cdn_or_polling(nil, cdn?), do: cdn?
 
   defp cdn_or_polling(host, cdn?) do
-    String.contains?(host, "polling") || cdn?
+    String.contains?(host, "polling") || String.contains?(host, "feeds") || cdn?
   end
 end
