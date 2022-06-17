@@ -16,7 +16,7 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
                  origin: ^fabl_endpoint
                },
                request: %Struct.Request{
-                 path: "/fd/preview/:name",
+                 path: "/fd/preview/rss",
                  path_params: %{
                    "name" => "rss"
                  },

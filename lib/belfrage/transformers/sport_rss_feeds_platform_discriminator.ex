@@ -11,14 +11,13 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminator do
   def call(rest, struct) do
     if struct.request.path_params["discipline"] in @fabl_feeds do
       struct =
-        Struct.add(struct, :private, %{
+        struct
+        |> Struct.add(:private, %{
           platform: Fabl,
           origin: Application.get_env(:belfrage, :fabl_endpoint)
         })
-
-      struct =
-        Struct.add(struct, :request, %{
-          path: "/fd/preview/:name",
+        |> Struct.add(:request, %{
+          path: "/fd/preview/rss",
           path_params: %{
             "name" => "rss"
           },
