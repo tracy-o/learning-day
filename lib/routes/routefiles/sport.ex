@@ -829,6 +829,7 @@ defroutefile "Sport" do
   redirect "/sport/rugby-union/teams/worcester/rss.xml", to: "https://feeds.bbci.co.uk/sport/f9bcd500-e383-408f-9177-6d8468d6ae35/rss.xml", status: 301, ttl: 3600
 
   ## Sport RSS feeds
+  handle "/sport/_guid/:discipline/rss.xml", using: "SportRssGuid", examples: ["/sport/_guid/4d38153b-987e-4497-b959-8be7c968d4d1/rss.xml"]
   handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
   ## TODO: Will need a separate transformer/discriminator to send a subset of requests to FABL
   handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
