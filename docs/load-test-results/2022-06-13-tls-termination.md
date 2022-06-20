@@ -1,9 +1,9 @@
 # TLS Termination Loadtest Report
 
 The purpose of these loadtests is to measure the performance differences between:
-- terminating TLS connections on the load balancer (as we currently do)
-- terminating TLS connections on the instance
-- terminating TLS connections on the instance while also verifying client certificates
+- Terminating TLS connections on the load balancer (as we currently do)
+- Terminating TLS connections on the instance
+- Terminating TLS connections on the instance while also verifying client certificates
 
 ## ;TLDR
 Terminating TLS on the instance is much less performant.
@@ -101,7 +101,7 @@ Get https://cedric.belfrage.test.api.bbc.co.uk/status: net/http: request cancele
 Get https://cedric.belfrage.test.api.bbc.co.uk/status: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
 ```
 
-Here you can see that when not verifying client certificate. **The performance doesn't start to degrade until we reach 15,000rps** and even then it degrades somewhat more gracefully.
+**Here the performance doesn't start to degrade until we reach 15,000rps** and even then it degrades somewhat more gracefully.
 
 master branch comfortably handling load of 10,000rps
 ![](./img/2022-06-13-tls-termination/master_10000rps_stable_plot.png)
@@ -157,7 +157,7 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: http2: server sent GOAWAY an
 ```
 
 
-3200 rps 60s
+3200rps 60s
 
 I ran this one again just to see if it was reproducible. It seemed to be flakey either having a good 200 ratio or a bad one.
 
@@ -192,7 +192,8 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: http2: server sent GOAWAY an
 Get https://www.belfrage.test.api.bbc.co.uk/status: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
 ```
 
-3300-3500 rps 60 s
+3300-3500rps 60s
+
 At this point the many more 500 started to appear, and often it would take the instance offline, which was unrecoverable without a full redeploy.
 
 3300rps 60s
@@ -240,12 +241,14 @@ Also analysing the latency over the course of the loadtests suggests there is so
 ![Shows small spikes after 500](./img/2022-06-13-tls-termination/tls_term_3100rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3100rps_plot.html)
 
-3200rps 60s, notice the scale is different because of some freak 500s with 30s latency.
+3200rps 60s
+
+Notice the scale is different because of some freak 500s with 30s latency.
 For more detail view the interactive version in the link under the graph.
 ![More pronounced spikes with higher load](./img/2022-06-13-tls-termination/tls_term_3200rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3200rps_plot.html)
 
-When the load test completely fails (when success ratio is below 5%) we can see that there is some kind of ceiling that is reached at the 30 second mark. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
+When the load test completely fails (when success ratio is below 5%) we can see that there is some kind of ceiling that is reached at 30s latency on the y-axis. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
 
 3200 rps 60s trial 2
 ![picture of strange breaking behaviour](./img/2022-06-13-tls-termination/tls_term_3200rps_try_2_plot.png)
@@ -381,10 +384,11 @@ Get https://www.belfrage.test.api.bbc.co.uk/status: http2: server sent GOAWAY an
 Get https://www.belfrage.test.api.bbc.co.uk/status: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
 ```
 
-Looking to the latency graphs we also see behaviour similar to the previous loadtests with peer verification. The loadtest doesn't seem cpu bound as the CPU reaches around 60% usage with 3800rps. We also see the familiar spikes after a 500, just like with the peer verification load tests. The breaking behaviour is almost identical, so it seems to be breaking the same way.
+Looking at the latency graphs we also see behaviour similar to the previous loadtests with peer verification. The loadtest doesn't seem cpu bound as the CPU reaches around 60% usage with 3800rps. We also see the familiar spikes after a 500, just like with the peer verification load tests. The breaking behaviour for the 3900rps is almost identical to the breaking 3200rps client verification load test, so it seems to be breaking the same way.
 
 3800rps 60s
 ![](./img/2022-06-13-tls-termination/no_peer_tls_term_3800rps_60s_plot.png)
+[see interactively](./data/2022-06-13-tls-termination/no_peer_tls_term_3800rps_60s_results.html)
 
 
 3800rps 240s
@@ -392,6 +396,7 @@ Looking to the latency graphs we also see behaviour similar to the previous load
 
 3900rps 60s
 ![](./img/2022-06-13-tls-termination/no_peer_tls_term_3900rps_60s_plot.png)
+[see interactively](./data/2022-06-13-tls-termination/no_peer_tls_term_3900rps_60s_results.html)
 
 
 
@@ -406,7 +411,7 @@ To summarise the max request per second reached in each scenario:
 
 **So terminating TLS on the Load Balancer is over 2x more performant.**
 
-Also its interesting to see that CPU isn't the bottleneck on performance as even in the most extreme instance terminating loadtests reached 60% CPU usage. So there must be another bottleneck.
+Also its interesting to see that the CPU isn't the bottleneck on performance as even in the most extreme cases loadtests which terminated on the instance reached 60% CPU usage. So there must be another bottleneck.
 
 Its also clear that using peer verification does impact performance. However the greater performance is due to the termination of TLS on the instance.
 
@@ -414,6 +419,124 @@ Future work could include:
 - Loadtesting Belfrage with an nginx instance in-front to terminate the TLS connection in a more performant way.
 - Look deeper into understanding what the bottleneck is with TLS termination on the instance if its not the CPU.
 
+---
+## Appendix
+TLS config for client peer verification
+
+```elixir
+# cowboy_https_config.ex
+
+defmodule BelfrageWeb.Router.CowboyHttps do
+  require Logger
+
+  def config() do
+    [
+      certfile: Application.get_env(:belfrage, :tmp_http_cert),
+      keyfile: Application.get_env(:belfrage, :tmp_http_cert_key),
+      cacertfile: Application.get_env(:belfrage, :tmp_http_cert_ca),
+      cacerts: cacerts(),
+      verify: :verify_peer,
+      partial_chain: &partial_chain(cacerts(), &1),
+      customize_hostname_check: [
+        match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+      ],
+      secure_renegotiate: true,
+      reuse_sessions: false,
+      fail_if_no_peer_cert: true,
+      otp_app: :belfrage
+    ]
+  end
+
+  defp cacerts() do
+    cacerts = Application.get_env(:belfrage, :tmp_http_cacerts)
+
+    case cacerts do
+      nil ->
+        Logger.log(:error, "no tmp_http_cacerts set in config")
+        :error
+
+      [] ->
+        Logger.log(:error, "tmp_http_cacerts is empty")
+        :error
+
+      certs when is_list(certs) ->
+        Enum.map(certs, fn c ->
+          File.read!(c) |> X509.Certificate.from_pem!() |> X509.Certificate.to_der()
+        end)
+    end
+  end
+
+  def partial_chain(cacerts, certs) do
+    certs = Enum.map(certs, &{&1, :public_key.pkix_decode_cert(&1, :otp)})
+    cacerts = Enum.map(cacerts, &:public_key.pkix_decode_cert(&1, :otp))
+
+    trusted =
+      Enum.find_value(certs, fn {der, cert} ->
+        trusted? =
+          Enum.find(cacerts, fn cacert ->
+            extract_public_key_info(cacert) == extract_public_key_info(cert)
+          end)
+
+        if trusted?, do: der
+      end)
+
+    if trusted do
+      {:trusted_ca, trusted}
+    else
+      :unknown_ca
+    end
+  end
+
+  defp extract_public_key_info(cert) do
+    cert
+    |> X509.Certificate.subject()
+  end
+end
+```
+
+```elixir
+# config/prod.exs
+
+import Config
+
+config :belfrage,
+  production_environment: "live",
+  http_cert: System.get_env("SERVICE_CERT"),
+  http_cert_key: System.get_env("SERVICE_CERT_KEY"),
+  http_cert_ca: System.get_env("SERVICE_CERT_CA"),
+  not_found_page: "/var/www/html/errors/404-data-ssl.html",
+  not_supported_page: "/var/www/html/errors/405-data-ssl.html",
+  internal_error_page: "/var/www/html/errors/500-data-ssl.html",
+  tmp_http_cert: "/etc/pki/tls/certs/service_chain.crt", # <- These 3 lines the IMPORTANT ones
+  tmp_http_cert_key: "/etc/pki/tls/private/service.key",
+  tmp_http_cert_ca: "/etc/pki/cosmos/current/service-devs.crt",
+  tmp_http_cacerts: [
+    "/etc/pki/ca-trust/source/anchors/bbc-ca-staff.pem",
+    # this got client certs working on the instance
+    # the curl on the client was this 'curl --cert /etc/pki/tls/certs/client_chain.crt --key /etc/pki/tls/private/client.key --cacert /etc/pki/cosmos/current/client.crt https://www.belfrage.test.api.bbc.co.uk/status -v'
+    # vegeta command is 'echo "GET https://www.belfrage.test.api.bbc.co.uk/status" | vegeta attack -duration=5s -rate=10 -max-body=0 -cert=/etc/pki/tls/certs/client_chain.crt -key=/etc/pki/tls/private/client.key | tee results.bin | vegeta report'
+    "/etc/pki/ca-trust/source/anchors/cloud-development-servers-and-services.pem"
+  ]
+
+config :statix,
+  pool_size: 6
+
+config :logger,
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, Belfrage.Metrics.CrashTracker]
+
+config :logger, :file,
+  path: System.get_env("LOG_PATH"),
+  format: {Belfrage.Logger.Formatter, :app},
+  level: :error,
+  metadata: :all
+
+config :logger, :cloudwatch,
+  path: System.get_env("LOG_PATH_CLOUDWATCH"),
+  format: {Belfrage.Logger.Formatter, :cloudwatch},
+  level: :warn,
+  metadata: :all,
+  metadata_filter: [cloudwatch: true]
+```
 
 
 
