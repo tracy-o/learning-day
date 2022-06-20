@@ -1,11 +1,11 @@
 # TLS Termination Loadtest Report
 
-The purpose of these loadtests is to measure the performance differences between terminating TLS connection on the load balancer as we currently do and terminating the TLS connection on the instance while also verifying client certificates.
+The purpose of these loadtests is to measure the performance differences between terminating TLS connections on the load balancer as we currently do and terminating TLS connections on the instance while also verifying client certificates.
 
 ## ;TLDR
 Terminating TLS on the instance is much less performant.
 - When using on instance TLS termination we can reach between 3000-3200 rps
-- When using TLS termination from the load balancer (without client side verification) you can comfortably reach over 10000 rps.
+- When using TLS termination from the load balancer (without client side verification) we can comfortably reach over 10000 rps.
 - That over 3x better performance
 
 ## Loadtest Configuration
@@ -147,12 +147,12 @@ Also analysing the latency over the course of the loadtests suggests there is so
 ![Shows small spikes after 500](./img/2022-06-13-tls-termination/tls_term_3100rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3100rps_plot.html)
 
-3200rps 60s, notice the scale is different because of some freak 500s with 30s latency..
+3200rps 60s, notice the scale is different because of some freak 500s with 30s latency.
 For more detail view the interactive version in the link under the graph.
 ![More pronounced spikes with higher load](./img/2022-06-13-tls-termination/tls_term_3200rps_plot.png)
 [see interactively](./data/2022-06-13-tls-termination/tls_term_3200rps_plot.html)
 
-When the load test completely fails (when success ratio is below 5%) we can see that there is some kind of ceiling that is reached at the 3 second mark. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
+When the load test completely fails (when success ratio is below 5%) we can see that there is some kind of ceiling that is reached at the 30 second mark. Its not clear what is causing this. (I'm open to suggestions) but the behaviour in general looks very erratic and strange.
 
 3200 rps 60s trial 2
 ![picture of strange breaking behaviour](./img/2022-06-13-tls-termination/tls_term_3200rps_try_2_plot.png)
@@ -161,7 +161,7 @@ When the load test completely fails (when success ratio is below 5%) we can see 
 ## Loadtests with TLS Termination on the Load Balancer
 - Stack: cedric test Belfrage stack
 - Branch:  `master` `c911c3011d019f7370f55fdc51f09a35a54ddcbc`
-- Using this branch you can access cedric belfrage just with url (no certs)
+- Using this branch you can access cedric belfrage just with a url (no certs)
 - The stack was set to only have 1 instance and not to scale
 
 
