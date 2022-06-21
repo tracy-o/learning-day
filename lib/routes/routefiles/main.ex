@@ -1933,6 +1933,7 @@ defroutefile "Main" do
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/z8tnvcw"]
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
