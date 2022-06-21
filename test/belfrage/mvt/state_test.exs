@@ -4,8 +4,8 @@ defmodule Belfrage.Mvt.StateTest do
 
   import Test.Support.Helper, only: [set_env: 2]
 
-  alias Belfrage.{Mvt, RouteState}
-  alias Belfrage.Struct.Response
+  alias Belfrage.{Mvt, RouteState, Struct}
+  alias Belfrage.Struct.{Response, Private}
 
   describe "put_vary_headers/2" do
     test "puts no header when none are supplied" do
@@ -171,6 +171,115 @@ defmodule Belfrage.Mvt.StateTest do
                  },
                  "SomeRouteState"
                )
+    end
+  end
+
+  describe "all_vary_headers_seen?/2" do
+    setup do
+      pid = start_supervised!({RouteState, "SomeRouteState"})
+      {:ok, route_state_pid: pid}
+    end
+
+    test "returns true if all of the MVT vary headers in the response are in :mvt_seen in the state of the RouteState",
+         %{route_state_pid: pid} do
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-button_colour" => DateTime.utc_now(),
+          "mvt-box_colour_enabled" => DateTime.utc_now(),
+          "mvt-sidebar_colour" => DateTime.utc_now()
+        })
+      end)
+
+      assert Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
+    end
+
+    test "returns true if no MVT vary headers are in the response",
+         %{route_state_pid: pid} do
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-button_colour" => DateTime.utc_now(),
+          "mvt-box_colour_enabled" => DateTime.utc_now(),
+          "mvt-sidebar_colour" => DateTime.utc_now()
+        })
+      end)
+
+      assert Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "something"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
+    end
+
+    test "returns false if no MVT vary headers in the response are in MVT seen",
+         %{route_state_pid: pid} do
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-button_colour" => DateTime.utc_now(),
+          "mvt-box_colour_enabled" => DateTime.utc_now(),
+          "mvt-sidebar_colour" => DateTime.utc_now()
+        })
+      end)
+
+      refute Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "mvt-banner_colour,something"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
+    end
+
+    test "returns false if only some MVT vary headers in the response are in MVT seen",
+         %{route_state_pid: pid} do
+      :sys.replace_state(pid, fn state ->
+        Map.put(state, :mvt_seen, %{
+          "mvt-button_colour" => DateTime.utc_now(),
+          "mvt-box_colour_enabled" => DateTime.utc_now(),
+          "mvt-sidebar_colour" => DateTime.utc_now()
+        })
+      end)
+
+      refute Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "mvt-banner_colour,something,mvt-button_colour"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
+    end
+
+    test "returns false if there are no MVT headers in :mvt_seen" do
+      refute Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
+    end
+
+    test "returns true if no MVT vary headers are in the response or in :mvt_seen" do
+      assert Mvt.State.all_vary_headers_seen?(%Struct{
+               response: %Response{
+                 headers: %{
+                   "vary" => "something"
+                 }
+               },
+               private: %Private{route_state_id: "SomeRouteState"}
+             })
     end
   end
 end

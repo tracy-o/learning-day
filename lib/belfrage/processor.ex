@@ -99,6 +99,12 @@ defmodule Belfrage.Processor do
 
   def response_pipeline(struct = %Struct{}) do
     pipeline = [
+      # ResponseTransformers.CachingEnabled.call/1 will inspect :mvt_seen,
+      # which is updated by &update_route_state/1. Therefore we
+      # need to call the former before the latter, as we would
+      # like to get the state of :mvt_seen before it is
+      # updated.
+      &ResponseTransformers.CachingEnabled.call/1,
       &update_route_state/1,
       &maybe_log_response_status/1,
       &ResponseTransformers.CacheDirective.call/1,

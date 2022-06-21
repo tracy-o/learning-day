@@ -11,9 +11,8 @@ defmodule EndToEnd.MvtTest do
   @moduletag :end_to_end
 
   defp expect_lambda_call(opts) do
-    times_called = Keyword.get(opts, :times_called, 1)
-    expected_headers = Keyword.get(opts, :headers, %{})
-    vary_response = Keyword.get(opts, :vary_response)
+    %{times_called: times_called, expected_headers: expected_headers, vary_response: vary_response, max_age: max_age} =
+      Enum.into(opts, %{times_called: 1, expected_headers: %{}, vary_response: "", max_age: 30})
 
     Belfrage.Clients.LambdaMock
     |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _request_id, _opts ->
@@ -21,16 +20,16 @@ defmodule EndToEnd.MvtTest do
         assert actual_headers[expected_key] == expected_value
       end
 
-      {:ok, lambda_response(vary_response: vary_response)}
+      {:ok, lambda_response(vary_response: vary_response, max_age: max_age)}
     end)
   end
 
   defp lambda_response(opts) do
-    vary_response = Keyword.get(opts, :vary_response, "")
+    %{vary_response: vary_response, max_age: max_age} = Enum.into(opts, %{vary_response: "", max_age: 30})
 
     %{
       "headers" => %{
-        "cache-control" => "public, max-age=30",
+        "cache-control" => "public, max-age=#{max_age}",
         "vary" => vary_response
       },
       "statusCode" => 200,
@@ -46,8 +45,8 @@ defmodule EndToEnd.MvtTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeMvtRouteState"})
-    :ok
+    pid = start_supervised!({RouteState, "SomeMvtRouteState"})
+    {:ok, route_state_pid: pid}
   end
 
   describe "when on live environment and lambda returns expected vary header" do
@@ -200,7 +199,7 @@ defmodule EndToEnd.MvtTest do
     |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
     |> Router.call([])
 
-    assert cached_responses() == 1
+    assert cached_responses() == 0
 
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
@@ -208,7 +207,7 @@ defmodule EndToEnd.MvtTest do
     |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
     |> Router.call([])
 
-    assert cached_responses() == 2
+    assert cached_responses() == 1
 
     # Check that the lambda is not called and as such a cached
     # response is fetched, as the request signature will be the
@@ -225,7 +224,7 @@ defmodule EndToEnd.MvtTest do
       |> put_req_header("bbc-mvt-2", "feature;sidebar;false")
       |> Router.call([])
 
-    assert cached_responses() == 2
+    assert cached_responses() == 1
 
     [vary_header] = get_resp_header(response, "vary")
     assert String.contains?(vary_header, "bbc-mvt-1")
@@ -257,6 +256,54 @@ defmodule EndToEnd.MvtTest do
 
     [vary_header] = get_resp_header(response, "vary")
     refute String.contains?(vary_header, "bbc-mvt-2")
+    assert 200 == response.status
+  end
+
+  test "Response is not cached if all MVT headers in response vary are not in :mvt_seen", %{
+    route_state_pid: pid
+  } do
+    :sys.replace_state(pid, fn state ->
+      Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
+    end)
+
+    set_mvt_slot(%{"bbc-mvt-2" => "button_colour"})
+
+    expect_lambda_call(
+      times_called: 1,
+      vary_response: "mvt-box_colour_change,something,mvt-banner_colour,something_else"
+    )
+
+    response =
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
+      |> Router.call([])
+
+    assert cached_responses() == 0
+
+    [cache_control] = get_resp_header(response, "cache-control")
+    assert String.contains?(cache_control, "public")
+
+    assert 200 == response.status
+  end
+
+  test "Response is not cached if there are MVT headers in response vary but nothing in :mvt_seen" do
+    set_mvt_slot(%{"bbc-mvt-2" => "button_colour"})
+
+    expect_lambda_call(
+      times_called: 1,
+      vary_response: "mvt-box_colour_change,something,mvt-banner_colour,something_else"
+    )
+
+    response =
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
+      |> Router.call([])
+
+    assert cached_responses() == 0
+
+    [cache_control] = get_resp_header(response, "cache-control")
+    assert String.contains?(cache_control, "public")
+
     assert 200 == response.status
   end
 
