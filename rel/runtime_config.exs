@@ -11,6 +11,7 @@ use Mix.Config
   {"SIMORGH_ENDPOINT", :default},
   {"MORPH_ROUTER_ENDPOINT", :default},
   {"KARANGA_ENDPOINT", :default},
+  {"ARES_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
   {"STACK_NAME", :default},
