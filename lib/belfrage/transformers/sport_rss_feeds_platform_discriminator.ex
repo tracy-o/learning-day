@@ -17,7 +17,7 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminator do
           origin: Application.get_env(:belfrage, :fabl_endpoint)
         })
         |> Struct.add(:request, %{
-          path: "/fd/preview/rss",
+          path: "/fd/rss",
           path_params: %{
             "name" => "rss"
           },
