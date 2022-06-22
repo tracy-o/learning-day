@@ -216,6 +216,11 @@ defmodule Belfrage.RouteStateTest do
     end
   end
 
+  test ":mvt_seen value is initialised as expected" do
+    pid = start_supervised!({RouteState, @route_state_id})
+    assert match?(%{mvt_seen: %{}}, :sys.get_state(pid))
+  end
+
   describe "update/1 only updates http status code" do
     setup :start_route_state
 

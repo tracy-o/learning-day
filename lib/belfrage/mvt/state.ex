@@ -62,6 +62,19 @@ defmodule Belfrage.Mvt.State do
     )
   end
 
+  @doc """
+  Returns true if all of the MVT vary headers in the response are in :mvt_seen in
+  the state of the RouteState. Otherwise returns false.
+  """
+  def all_vary_headers_seen?(struct) do
+    seen_headers = get_seen_headers(struct.private.route_state_id)
+    vary_headers = get_vary_headers(struct.response)
+
+    Enum.all?(vary_headers, fn vary_header ->
+      Enum.member?(seen_headers, vary_header)
+    end)
+  end
+
   defp get_seen_headers(route_state_id) do
     case routestate_state(route_state_id) do
       {:ok, state} ->
