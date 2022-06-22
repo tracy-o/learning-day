@@ -1,5 +1,9 @@
 use Mix.Config
 
+# karanga_endpoint: "https://broker.karanga.test.api.bbci.co.uk",
+#   philippa_endpoint: "https://philippa-producer.test.api.bbci.co.uk",
+#   trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
+
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :default},
   {"PWA_LAMBDA_FUNCTION", :default},
@@ -12,6 +16,9 @@ use Mix.Config
   {"MORPH_ROUTER_ENDPOINT", :default},
   {"KARANGA_ENDPOINT", :default},
   {"ARES_ENDPOINT", :default},
+  {"PHILIPPA_ENDPOINT", :default},
+  {"TREVOR_ENDPOINT", :default},
+  {"WALTER_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
   {"STACK_NAME", :default},
