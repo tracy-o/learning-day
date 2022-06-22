@@ -92,6 +92,27 @@
   },
   {
     "values": {
+      "test": "https://philippa-producer.test.api.bbci.co.uk/",
+      "live": "https://philippa-producer.api.bbci.co.uk/"
+    },
+    "name": "PHILIPPA_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://trevor-producer.test.api.bbci.co.uk/",
+      "live": "https://trevor-producer.api.bbci.co.uk/"
+    },
+    "name": "TREVOR_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "http://walter-producer.test.api.bbci.co.uk/",
+      "live": "http://walter-producer.api.bbci.co.uk/"
+    },
+    "name": "WALTER_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole",
       "live": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole"
     },
