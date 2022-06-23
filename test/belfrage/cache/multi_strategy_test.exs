@@ -1,5 +1,6 @@
 defmodule Belfrage.Cache.MultiStrategyTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
   alias Belfrage.Cache.MultiStrategy
@@ -29,14 +30,31 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     def metric_identifier(), do: "not_found_strategy"
   end
 
-  describe "correct cache strategies to match the requested freshness" do
-    test "when only fresh pages are allowed" do
-      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches_for_freshness([:fresh])
+  describe "correct cache strategies to match the requested freshness and fallback_write_sample" do
+    test "when only fresh pages are allowed and fallback_write_sample is greater than 0" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 1})
+
+      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches([:fresh], struct)
     end
 
-    test "when fresh and stale pages are allowed the local and distributed strategies are returned in correct order" do
+    test "when only fresh pages are allowed and fallback_write_sample is 0" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 0})
+
+      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches([:fresh], struct)
+    end
+
+    test "when fresh and stale pages are allowed and fallback_write_sample is greater than 0 the local and distributed strategies are returned in correct order" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 1})
+
       assert [Belfrage.Cache.Local, Belfrage.Cache.Distributed] ==
-               MultiStrategy.valid_caches_for_freshness([:fresh, :stale])
+               MultiStrategy.valid_caches([:fresh, :stale], struct)
+    end
+
+    test "when fresh and stale pages are allowed and fallback_write_sample is 0 only the local strategy is returned" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 0})
+
+      assert [Belfrage.Cache.Local] ==
+               MultiStrategy.valid_caches([:fresh, :stale], struct)
     end
   end
 

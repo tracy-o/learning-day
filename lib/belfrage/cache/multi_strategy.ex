@@ -15,6 +15,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   alias Belfrage.{Cache.Local, Cache.Distributed, Metrics.Statix, Event}
 
   @default_result {:ok, :content_not_found}
+  @dial Application.get_env(:belfrage, :dial)
 
   @doc """
   Tries the Local and Distributed caches
@@ -23,7 +24,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   """
   def fetch(struct, accepted_freshness) do
     accepted_freshness
-    |> valid_caches_for_freshness()
+    |> valid_caches(struct)
     |> fetch(struct, accepted_freshness)
   end
 
@@ -35,17 +36,26 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   def store(struct) do
-    Local.store(struct)
-    Distributed.store(struct)
+    if @dial.state(:ccp_enabled) do
+      Local.store(struct)
+      Distributed.store(struct)
+    else
+      Local.store(struct)
+    end
 
     :ok
   end
 
-  def valid_caches_for_freshness(accepted_freshness) do
-    case :stale in accepted_freshness do
-      true -> [Local, Distributed]
-      false -> [Local]
+  def valid_caches(accepted_freshness, struct) do
+    if should_use_distributed?(accepted_freshness, struct) do
+      [Local, Distributed]
+    else
+      [Local]
     end
+  end
+
+  defp should_use_distributed?(accepted_freshness, struct) do
+    @dial.state(:ccp_enabled) and :stale in accepted_freshness and struct.private.fallback_write_sample > 0
   end
 
   defp execute_fetch(cache, struct, accepted_freshness) do
