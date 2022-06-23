@@ -5,7 +5,6 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminator do
   use Belfrage.Transformers.Transformer
 
   @fabl_feeds [
-    "4d38153b-987e-4497-b959-8be7c968d4d1",
     "9d794c09-c573-4a97-9a0e-9518888f19ed",
     "65e7e652-4bcc-4d48-a19c-241f58d830ba",
     "311fec37-a12a-46d5-9b6a-f485c7413077",
