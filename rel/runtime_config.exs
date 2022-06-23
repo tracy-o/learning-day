@@ -1,9 +1,5 @@
 use Mix.Config
 
-# karanga_endpoint: "https://broker.karanga.test.api.bbci.co.uk",
-#   philippa_endpoint: "https://philippa-producer.test.api.bbci.co.uk",
-#   trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
-
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :default},
   {"PWA_LAMBDA_FUNCTION", :default},

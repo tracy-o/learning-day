@@ -1,11 +1,3 @@
-
-# Does it makes sense to have 1 classic apps platform?
-# philippa -> 335rps, walter -> 1200rps, trevor -> as much as 2200 rps
-# we have vastly varying rps on each endpoint, so it would make sense to have a different error_threshold for each?
-# We could put this in the app host mapping, but then it would be doing a little more than host mapping
-
-
-
 defmodule Routes.Platforms.ClassicApps do
   def specs(production_env) do
     %{
