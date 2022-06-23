@@ -31,6 +31,9 @@ config :belfrage,
   simorgh_endpoint: "https://simorgh.example.com",
   programmes_endpoint: "https://programmes.example.com",
   karanga_endpoint: "https://broker.karanga.test.api.bbci.co.uk",
+  philippa_endpoint: "https://philippa-producer.test.api.bbci.co.uk",
+  trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
+  walter_endpoint: "http://walter-producer.test.api.bbci.co.uk",
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

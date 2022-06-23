@@ -319,7 +319,7 @@ defroutefile "Main" do
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
   handle "/news/localnews/locations", using: "NewsLocalNews", examples: ["/news/localnews/locations"]
   handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: ["/news/localnews/locations/sitemap.xml"]
-  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", only_on: "test", examples: ["/news/localnews/2643743-london/0"]
+  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", examples: ["/news/localnews/2643743-london/0"]
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
@@ -1933,6 +1933,8 @@ defroutefile "Main" do
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/z8tnvcw"]
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
+  handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
