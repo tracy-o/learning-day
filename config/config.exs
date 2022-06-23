@@ -38,6 +38,7 @@ poller_machine_gun_config = %{
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
+  ClassicApps: default_machine_gun_config,
   AWS: default_machine_gun_config,
   Ares: secure_machine_gun_config,
   Fabl: secure_machine_gun_config,
