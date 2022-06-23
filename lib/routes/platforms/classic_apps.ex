@@ -1,3 +1,8 @@
+# This platform is used in conjunction with the AppSubdomainMapper transformer.
+#
+# The AppSubdomainMapper transformer overwrites the circuit_breaker_error_threshold and the origin
+# based upon the subdomain of the request.
+
 defmodule Routes.Platforms.ClassicApps do
   def specs(production_env) do
     %{
