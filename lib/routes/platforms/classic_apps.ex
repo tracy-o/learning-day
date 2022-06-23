@@ -13,7 +13,8 @@ defmodule Routes.Platforms.ClassicApps do
       owner: "#data-systems",
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
       pipeline: pipeline(production_env),
-      circuit_breaker_error_threshold: 200 # REMOVE ME: decide reasonable error threshold for trevor walter & philippa
+      circuit_breaker_error_threshold: 1000,
+      fallback_write_sample: 0.0
     }
   end
 
