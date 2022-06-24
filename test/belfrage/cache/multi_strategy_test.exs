@@ -118,7 +118,7 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       MultiStrategy.store(struct)
     end
 
-    test "when ccp_enabled dial is true, distributed cache is not used" do
+    test "when ccp_enabled dial is false, distributed cache is not used" do
       stub_dial(:ccp_enabled, "false")
 
       struct = %Struct{
