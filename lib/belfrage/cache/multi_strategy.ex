@@ -55,7 +55,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   defp should_use_distributed?(accepted_freshness, struct) do
-    stale in accepted_freshness and struct.private.fallback_write_sample > 0 and @dial.state(:ccp_enabled)
+    :stale in accepted_freshness and struct.private.fallback_write_sample > 0 and @dial.state(:ccp_enabled)
   end
 
   defp execute_fetch(cache, struct, accepted_freshness) do

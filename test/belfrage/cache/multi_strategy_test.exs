@@ -102,4 +102,34 @@ defmodule Belfrage.Cache.MultiStrategyTest do
                MultiStrategy.fetch(strategies, struct, accepted_freshness)
     end
   end
+
+  describe "store/1" do
+    test "when ccp_enabled dial is true, distributed cache is used" do
+      stub_dial(:ccp_enabled, "true")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "multi-strategy-cache-test"},
+        response: %Struct.Response{body: "<p>Hello</p>"}
+      }
+
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 1, fn ^struct -> :ok end)
+
+      MultiStrategy.store(struct)
+    end
+
+    test "when ccp_enabled dial is true, distributed cache is not used" do
+      stub_dial(:ccp_enabled, "false")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "multi-strategy-cache-test"},
+        response: %Struct.Response{body: "<p>Hello</p>"}
+      }
+
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 0, fn ^struct -> :ok end)
+
+      MultiStrategy.store(struct)
+    end
+  end
 end
