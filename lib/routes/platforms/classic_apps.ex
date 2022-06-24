@@ -15,6 +15,6 @@ defmodule Routes.Platforms.ClassicApps do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "AppSubdomainMapper", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
