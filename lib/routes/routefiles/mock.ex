@@ -84,6 +84,9 @@ defroutefile "Mock", "test" do
 
   handle("/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", examples: [])
 
+  # will remove and use real route spec in RESFRAME-4718
+  handle("/classic-apps-route", using: "SomeClassicAppsRouteSpec", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()
