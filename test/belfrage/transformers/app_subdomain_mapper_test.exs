@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
   alias Belfrage.Struct.{Private, Request, Response}
 
   describe "when subdomain is 'news-app-classic'" do
-    test "point to trevor, set circuit_breaker_error_threshold to 500" do
+    test "point to trevor, set circuit_breaker_error_threshold to 15,000" do
       trevor_endpoint = Application.get_env(:belfrage, :trevor_endpoint)
 
       struct = %Struct{
@@ -29,7 +29,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
   end
 
   describe "when subdomain is 'news-app-global-classic'" do
-    test "point to walter, set circuit_breaker_error_threshold to 500" do
+    test "point to walter, set circuit_breaker_error_threshold to 8,000" do
       walter_endpoint = Application.get_env(:belfrage, :walter_endpoint)
 
       struct = %Struct{
@@ -52,7 +52,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
   end
 
   describe "when subdomain is 'news-app-ws-classic'" do
-    test "point to philippa, set circuit_breaker_error_threshold to 500" do
+    test "point to philippa, set circuit_breaker_error_threshold to 1,500" do
       philippa_endpoint = Application.get_env(:belfrage, :philippa_endpoint)
 
       struct = %Struct{
