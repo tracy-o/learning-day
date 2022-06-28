@@ -602,6 +602,9 @@ defroutefile "Main" do
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
 
+  redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
+  redirect "/serbian/cyr/extra/ebxujaequt/rat-silovanje-bosna", to: "/serbian/lat/extra/ebxujaequt/rat-silovanje-bosna", status: 301
+
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
