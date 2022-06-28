@@ -23,7 +23,7 @@ At the time of writing, stacks designed to serve live requests are:
     - [Test endpoint](https://sally.belfrage.test.api.bbc.co.uk/)
 
 - sydney-belfrage
-    - Sydney serves world service traffic 
+    - Sydney serves Apps CDN traffic
     - [Cosmos](https://cosmos.tools.bbc.co.uk/services/sydney-belfrage)
     - [Live endpoint](https://sydney.belfrage.api.bbc.co.uk/)
     - [Test endpoint](https://sydney.belfrage.test.api.bbc.co.uk/)
