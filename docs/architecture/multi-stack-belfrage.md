@@ -22,6 +22,12 @@ At the time of writing, stacks designed to serve live requests are:
     - [Live endpoint](https://sally.belfrage.api.bbc.co.uk/)
     - [Test endpoint](https://sally.belfrage.test.api.bbc.co.uk/)
 
+- sydney-belfrage
+    - Sydney serves world service traffic 
+    - [Cosmos](https://cosmos.tools.bbc.co.uk/services/sydney-belfrage)
+    - [Live endpoint](https://sydney.belfrage.api.bbc.co.uk/)
+    - [Test endpoint](https://sydney.belfrage.test.api.bbc.co.uk/)
+
 - joan-belfrage
     - Joan is a proxy for news traffic between GTM and Mozart 
     - [Cosmos](https://cosmos.tools.bbc.co.uk/services/joan-belfrage)
