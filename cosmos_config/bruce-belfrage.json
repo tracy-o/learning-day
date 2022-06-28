@@ -106,8 +106,8 @@
   },
   {
     "values": {
-      "test": "http://walter-producer.test.api.bbci.co.uk",
-      "live": "http://walter-producer.api.bbci.co.uk"
+      "test": "https://walter-producer.test.api.bbci.co.uk",
+      "live": "https://walter-producer.api.bbci.co.uk"
     },
     "name": "WALTER_ENDPOINT"
   }, 
