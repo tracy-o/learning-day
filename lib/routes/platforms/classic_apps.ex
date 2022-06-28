@@ -1,7 +1,9 @@
 # This platform is used in conjunction with the AppSubdomainMapper transformer.
 #
-# The AppSubdomainMapper transformer overwrites the circuit_breaker_error_threshold and the origin
-# based upon the subdomain of the request.
+# The AppSubdomainMapper transformer overwrites the circuit breaker error
+# threshold and the origin based upon the subdomain of the request.
+# Also notice there is no HTTPredirect or TrailingSlashRedirector, this is
+# because we always expect apps to give us a valid URL.
 
 defmodule Routes.Platforms.ClassicApps do
   def specs(production_env) do
@@ -15,6 +17,6 @@ defmodule Routes.Platforms.ClassicApps do
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "AppSubdomainMapper", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["AppSubdomainMapper", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
