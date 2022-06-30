@@ -939,8 +939,15 @@ defroutefile "Sport" do
     ]
   end
 
-  handle "/sport/videos/:id", using: "SportVideos", examples: [{"/sport/videos/49104905", 301}] do
-    return_404 if: String.length(id) != 8
+  handle "/sport/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/videos/ck1n88jk5rjo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/football/videos/c5qr976rqvno?mode=testData"] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
   end
 
   ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
