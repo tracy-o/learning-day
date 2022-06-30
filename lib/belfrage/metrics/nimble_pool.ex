@@ -10,6 +10,11 @@ defmodule Belfrage.Metrics.NimblePool do
         measurement: :available_workers,
         event_name: "belfrage.nimble_pool.status",
         tags: [:pool_name, :BBCEnvironment]
+      ),
+      last_value("nimble_pool.queued_requests.count",
+        measurement: :queued_requests,
+        event_name: "belfrage.nimble_pool.status",
+        tags: [:pool_name, :BBCEnvironment]
       )
     ]
   end
@@ -19,12 +24,15 @@ defmodule Belfrage.Metrics.NimblePool do
   end
 
   defp track(pid) do
-    %{lazy: lazy, resources: resources, state: {pool, %{}}} = :sys.get_state(pid)
+    %{queue: queue, lazy: lazy, resources: resources, state: {pool, %{}}} = :sys.get_state(pid)
 
     Metrics.measurement(
       [:nimble_pool, :status],
       %{
-        available_workers: lazy + :queue.len(resources)
+        available_workers: lazy + :queue.len(resources),
+        # WARNING: This is an O(N) measurement that is unbounded
+        # as there is no upper bound on the number of queued requests.
+        queued_requests: :queue.len(queue)
       },
       %{
         pool_name: pool_name(pool)
