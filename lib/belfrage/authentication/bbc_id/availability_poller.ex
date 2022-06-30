@@ -7,34 +7,21 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
 
   require Logger
 
-  use GenServer
+  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:bbc_id_availability]
 
   alias Belfrage.Authentication.BBCID
 
-  @interval Application.get_env(:belfrage, :bbc_id_availability_poll_interval)
   @availability_states %{"GREEN" => true, "RED" => false}
   @client Application.get_env(:belfrage, :json_client)
   @http_pool :AccountAuthentication
 
-  def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, Keyword.get(opts, :interval, @interval), name: Keyword.get(opts, :name, __MODULE__))
-  end
-
   @impl true
-  def init(interval) do
-    schedule_polling(interval)
-    {:ok, interval}
-  end
-
-  @impl true
-  def handle_info(:poll, interval) do
-    schedule_polling(interval)
-
+  def poll() do
     with {:ok, availability} <- get_availability() do
       BBCID.set_availability(availability)
     end
 
-    {:noreply, interval}
+    :ok
   end
 
   defp get_availability() do
@@ -44,10 +31,6 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   end
 
   defp idcta_uri, do: Application.get_env(:belfrage, :authentication)["idcta_config_uri"]
-
-  defp schedule_polling(interval) do
-    Process.send_after(self(), :poll, interval)
-  end
 
   defp fetch_availability_from_config(config) do
     with {:ok, state} <- Map.fetch(config, "id-availability"),

@@ -13,9 +13,10 @@ defmodule Belfrage.Mvt.Supervisor do
   end
 
   defp children(opts) do
-    case Keyword.get(opts, :env) do
-      :test -> [Slots]
-      _env -> [FilePoller, Slots]
+    if Keyword.get(opts, :env) in [:dev, :test] do
+      [Slots]
+    else
+      [Slots, FilePoller]
     end
   end
 end

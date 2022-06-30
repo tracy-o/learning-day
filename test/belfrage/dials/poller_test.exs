@@ -12,11 +12,12 @@ defmodule Belfrage.Dials.PollerTest do
     assert DialsServer.state(:logging_level) == :error
 
     overwrite_dials_config(~s({"logging_level": "debug"}))
-    start_supervised!({Poller, startup_polling_delay: 0, polling_interval: 0, name: :test_dials_poller})
+    start_supervised!(Poller)
 
     wait_for(fn -> DialsServer.state(:logging_level) == :debug end)
 
     overwrite_dials_config(~s({"logging_level": "error"}))
+
     wait_for(fn -> DialsServer.state(:logging_level) == :error end)
   end
 

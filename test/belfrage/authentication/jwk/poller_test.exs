@@ -17,7 +17,7 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
       {:ok, %HTTP.Response{status_code: 200, body: payload}}
     end)
 
-    start_supervised!({Poller, interval: 0, name: :test_jwk_poller})
+    start_supervised!(Poller)
     wait_for(fn -> JWK.get("foo", "bar") |> elem(0) == :ok end)
 
     expect(HTTPMock, :execute, fn _, _origin ->

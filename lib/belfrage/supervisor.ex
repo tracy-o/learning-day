@@ -19,7 +19,7 @@ defmodule Belfrage.Supervisor do
       {Belfrage.Metrics.Supervisor, [env: env]},
       {Belfrage.Mvt.Supervisor, [env: env]},
       {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-      Belfrage.Services.Webcore.Supervisor
+      {Belfrage.Services.Webcore.Supervisor, [env: env]}
     ] ++ http_router(env)
   end
 

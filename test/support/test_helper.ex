@@ -146,4 +146,15 @@ defmodule Test.Support.Helper do
     on_exit(fn -> Belfrage.Mvt.Slots.set(%{}) end)
     :ok
   end
+
+  @doc """
+  Takes a process ID and an interval in milliseconds.
+  The function sleeps for the duration of the interval,
+  and then returns true if the process is still alive and
+  false if it is not.
+  """
+  def alive_after?(pid, interval_ms \\ 100) do
+    Process.sleep(interval_ms)
+    Process.alive?(pid)
+  end
 end
