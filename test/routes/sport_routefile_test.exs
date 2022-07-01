@@ -48,9 +48,8 @@ defmodule Routes.SportRoutefileTest do
           specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
 
           with :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
-               :ok <- validate_transformers(matcher, specs, env),
-               :ok <- validate_platform_transformers(matcher, specs, env) do
-            :ok
+               :ok <- validate_transformers(matcher, specs, env) do
+            validate_platform_transformers(matcher, specs, env)
           end
         end)
       end
@@ -169,8 +168,7 @@ defmodule Routes.SportRoutefileTest do
 
     unless errors == [] do
       errors
-      |> Enum.map(&"* #{&1}")
-      |> Enum.join("\n")
+      |> Enum.map_join("\n", &"* #{&1}")
       |> flunk()
     end
   end
