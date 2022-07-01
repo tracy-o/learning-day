@@ -301,6 +301,22 @@ defroutefile "Main" do
                ]
   end
 
+  handle "/news/election/2019/uk/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/results"]
+
+  handle "/news/election/2019/uk/constituencies", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/constituencies"]
+
+  handle "/news/election/2019/uk/constituencies/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/constituencies/E92000001", "/news/election/2019/uk/constituencies/S83000001", "/news/election/2019/uk/constituencies/W76000005", "/news/election/2019/uk/constituencies/N12000001"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^[NSWE][0-9]{8}$/)
+    ]
+  end
+
+  handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/regions/E92000001", "/news/election/2019/uk/regions/W92000004", "/news/election/2019/uk/regions/S92000003", "/news/election/2019/uk/regions/N92000002"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^(E92000001|W92000004|S92000003|N92000002)$/)
+    ]
+  end
+
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
