@@ -1,4 +1,4 @@
-defmodule Routes.Specs.ClassicAppPsNaidheachdan do
+defmodule Routes.Specs.ClassicAppNaidheachdan do
   def specs do
     %{
       owner: "#data-systems",

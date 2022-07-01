@@ -1,4 +1,4 @@
-defmodule Routes.Specs.ClassicAppWsMundo do
+defmodule Routes.Specs.ClassicAppArabic do
   def specs do
     %{
       owner: "#data-systems",
