@@ -52,7 +52,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     assert cache_status_header(conn) == "STALE"
   end
 
-  test "ensure 202's don't cache" do
+  test "ensure 202's don't cache and headers are respected" do
     stub_http(202)
 
     conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
@@ -62,6 +62,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
     assert conn.status == 202
     assert cache_status_header(conn) == "MISS"
+    assert String.contains?(cache_control_heaeder(conn), "public")
   end
 
   defp stub_lambda() do
@@ -96,7 +97,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
       :ok,
       %Clients.HTTP.Response{
         status_code: status,
-        headers: %{},
+        headers: %{"cache-control" => "public, stale-if-error=90, stale-while-revalidate=30"},
         body: ""
       }
     }
@@ -108,5 +109,9 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
 
   defp cache_status_header(conn) do
     get_resp_header(conn, "belfrage-cache-status") |> hd()
+  end
+
+  defp cache_control_heaeder(conn) do
+    get_resp_header(conn, "cache-control") |> hd()
   end
 end
