@@ -41,7 +41,8 @@ config :belfrage,
     jwk: 50,
     dials: 50,
     credentials: 50,
-    bbc_id_availability: 50
+    bbc_id_availability: 50,
+    mvt_file: 50
   ]
 
 config :cachex, :limit,

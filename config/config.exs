@@ -106,7 +106,8 @@ config :belfrage,
     jwk: 3_600_000,
     dials: 5_000,
     credentials: 600_000,
-    bbc_id_availability: 10_000
+    bbc_id_availability: 10_000,
+    mvt_file: 60_000
   ]
 
 config :cachex, :limit,

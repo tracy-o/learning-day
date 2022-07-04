@@ -3,7 +3,7 @@ defmodule Belfrage.Mvt.FilePoller do
   This process periodically fetches a JSON file containing headers used for MVT slots allocation.
   """
 
-  use Belfrage.Poller, interval: 60_000
+  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:mvt_file]
   alias Belfrage.Mvt
   alias Belfrage.Clients
   require Logger
