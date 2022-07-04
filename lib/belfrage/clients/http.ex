@@ -24,13 +24,25 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   defp perform_request(request = %HTTP.Request{}, pool_group) do
-    @machine_gun.request(
-      request.method,
-      request.url,
-      request.payload,
-      Enum.into(request.headers, []),
-      build_options(request, pool_group)
-    )
+    case pool_group do
+      pool_group when pool_group in [:OriginSimulator, :Programmes] ->
+        Finch.build(
+          request.method,
+          request.url,
+          Enum.into(request.headers, []),
+          request.payload
+        )
+        |> FinchAPI.request(Finch, receive_timeout: request.timeout)
+
+      _ ->
+        @machine_gun.request(
+          request.method,
+          request.url,
+          request.payload,
+          Enum.into(request.headers, []),
+          build_options(request, pool_group)
+        )
+    end
   end
 
   @doc """
@@ -48,6 +60,15 @@ defmodule Belfrage.Clients.HTTP do
        status_code: machine_response.status_code,
        body: machine_response.body,
        headers: machine_response.headers
+     })}
+  end
+
+  defp format_response({:ok, finch_response = %Finch.Response{}}) do
+    {:ok,
+     HTTP.Response.new(%{
+       status_code: finch_response.status,
+       body: finch_response.body,
+       headers: finch_response.headers
      })}
   end
 

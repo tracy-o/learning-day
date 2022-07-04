@@ -26,7 +26,7 @@ defmodule Belfrage.Clients.CCP do
         :get,
         "https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}"
       )
-      |> finch_impl().request(Finch,
+      |> FinchAPI.request(Finch,
         receive_timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
       )
 
@@ -63,10 +63,6 @@ defmodule Belfrage.Clients.CCP do
 
         {:ok, :content_not_found}
     end
-  end
-
-  defp finch_impl() do
-    Application.get_env(:belfrage, :finch_impl, Finch)
   end
 
   @spec put(Struct.t()) :: :ok | :error
