@@ -11,58 +11,68 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
 
   @moduletag :end_to_end
 
-  setup do
-    clear_cache()
-    start_supervised!({RouteState, "SomeRouteState"})
-    :ok
+  describe "cache scenarios" do
+    setup do
+      clear_cache()
+      start_supervised!({RouteState, "SomeRouteState"})
+      :ok
+    end
+
+    test "cache miss" do
+      stub_lambda()
+
+      conn = make_request()
+      assert conn.status == 200
+      assert cache_status_header(conn) == "MISS"
+    end
+
+    test "cache hit" do
+      stub_lambda()
+
+      conn = make_request()
+      assert conn.status == 200
+      assert cache_status_header(conn) == "MISS"
+
+      conn = make_request()
+      assert conn.status == 200
+      assert cache_status_header(conn) == "HIT"
+    end
+
+    test "cache response used as fallback" do
+      stub_lambda()
+
+      conn = make_request()
+      assert conn.status == 200
+      assert cache_status_header(conn) == "MISS"
+
+      make_cached_response_stale(conn)
+      stub_lambda_error()
+
+      conn = make_request()
+      assert conn.status == 200
+      assert cache_status_header(conn) == "STALE"
+    end
   end
 
-  test "cache miss" do
-    stub_lambda()
+  describe "ensure certain status codes don't cache and headers are respected from origin" do
+    setup do
+      clear_cache()
+      start_supervised!({RouteState, "SomeClassicAppsRouteSpec"})
+      :ok
+    end
 
-    conn = make_request()
-    assert conn.status == 200
-    assert cache_status_header(conn) == "MISS"
-  end
+    test "202's" do
+      stub_http(202)
 
-  test "cache hit" do
-    stub_lambda()
+      conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      assert conn.status == 202
+      assert cache_status_header(conn) == "MISS"
 
-    conn = make_request()
-    assert conn.status == 200
-    assert cache_status_header(conn) == "MISS"
-
-    conn = make_request()
-    assert conn.status == 200
-    assert cache_status_header(conn) == "HIT"
-  end
-
-  test "cached response used as fallback" do
-    stub_lambda()
-
-    conn = make_request()
-    assert conn.status == 200
-    assert cache_status_header(conn) == "MISS"
-
-    make_cached_response_stale(conn)
-    stub_lambda_error()
-
-    conn = make_request()
-    assert conn.status == 200
-    assert cache_status_header(conn) == "STALE"
-  end
-
-  test "ensure 202's don't cache and headers are respected" do
-    stub_http(202)
-
-    conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
-    assert conn.status == 202
-    assert cache_status_header(conn) == "MISS"
-
-    conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
-    assert conn.status == 202
-    assert cache_status_header(conn) == "MISS"
-    assert String.contains?(cache_control_heaeder(conn), "public")
+      conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      assert conn.status == 202
+      assert cache_status_header(conn) == "MISS"
+      assert String.contains?(cache_control_heaeder(conn), "public")
+    end
   end
 
   defp stub_lambda() do
