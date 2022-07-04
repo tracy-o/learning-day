@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Webcore.Credentials.Poller do
   `Belfrage.Services.Webcore.Credentials` process.
   """
 
-  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:credentials]
+  use Belfrage.Poller, interval: Application.compile_env!(:belfrage, :poller_intervals)[:credentials]
 
   alias Belfrage.Services.Webcore.Credentials
 

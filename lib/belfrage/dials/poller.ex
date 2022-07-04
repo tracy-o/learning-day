@@ -2,7 +2,7 @@ defmodule Belfrage.Dials.Poller do
   @moduledoc """
   Periodically read the dials file and updates the dials with its contents
   """
-  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:dials]
+  use Belfrage.Poller, interval: Application.compile_env!(:belfrage, :poller_intervals)[:dials]
 
   require Logger
 
