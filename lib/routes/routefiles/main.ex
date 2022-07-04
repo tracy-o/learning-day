@@ -1967,7 +1967,7 @@ defroutefile "Main" do
   handle "/content/cps/sport/live/*any", using: "ClassicAppSportLive", examples: ["/content/cps/sport/live/football/59369278", "/content/cps/sport/live/formula1/58748830"]
   handle "/content/cps/sport/football/*any", using: "ClassicAppSportFootball", examples: ["/content/cps/sport/football/59372826", "/content/cps/sport/football/58643317"]
   handle "/content/cps/sport/av/football/*any", using: "ClassicAppSportFootballAv", examples: ["/content/cps/sport/av/football/59346509"]
-  handle "/content/cps/sport/*any", using: "ClassicAppSport", examples: ["/content/cps/sport/rugby-union/59369204", "/content/cps/sport/tennis/59328440"]
+  handle "/content/cps/sport/*any", using: "ClassicAppSportCps", examples: ["/content/cps/sport/rugby-union/59369204", "/content/cps/sport/tennis/59328440"]
 
   handle "/content/cps/newsround/*any", using: "ClassicAppNewsround", examples: ["/content/cps/newsround/45274517"]
   handle "/content/cps/naidheachdan/*any", using: "ClassicAppNaidheachdan", examples: ["/content/cps/naidheachdan/59371990", "/content/cps/naidheachdan/front_page", "/content/cps/naidheachdan/dachaigh"]
@@ -1989,6 +1989,7 @@ defroutefile "Main" do
   handle "/content/:service/*any", using: "ClassicAppService", examples: []
   handle "/content/*any", using: "ClassicApp", examples: []
   handle "/static/*any", using: "ClassicAppStaticContent", examples: ["/static/LE/android/1.5.0/config.json", "/static/MUNDO/ios/5.19.0/layouts.zip"]
+  handle "/flagpoles/*any", using: "ClassicAppFlagpole", examples: ["flagpoles/ads"]
 
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
