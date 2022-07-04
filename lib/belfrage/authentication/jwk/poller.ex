@@ -1,5 +1,5 @@
 defmodule Belfrage.Authentication.JWK.Poller do
-  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:jwk]
+  use Belfrage.Poller, interval: Application.compile_env!(:belfrage, :poller_intervals)[:jwk]
   alias Belfrage.Authentication.JWK
 
   @http_pool :AccountAuthentication

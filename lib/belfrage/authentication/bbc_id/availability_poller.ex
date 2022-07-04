@@ -7,7 +7,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
 
   require Logger
 
-  use Belfrage.Poller, interval: Application.get_env(:belfrage, :poller_intervals)[:bbc_id_availability]
+  use Belfrage.Poller, interval: Application.compile_env!(:belfrage, :poller_intervals)[:bbc_id_availability]
 
   alias Belfrage.Authentication.BBCID
 

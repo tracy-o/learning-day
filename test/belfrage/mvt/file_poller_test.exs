@@ -131,25 +131,141 @@ defmodule Belfrage.Mvt.FilePollerTest do
     assert Process.alive?(file_poller_pid)
   end
 
-  test "if the file has valid JSON and \"projects\" key, but a project contains an invalid slot format, the expected log is output" do
-    assert Slots.available() == %{}
+  describe "if the file has valid JSON and \"projects\" key, but a project contains an invalid slot format, the expected log is output" do
+    test "when the \"key\" key is not present" do
+      assert Slots.available() == %{}
 
+      expect(HTTPMock, :execute, fn _, _origin ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"projects\": {\"1\": [{\"header\": \"bbc-mvt-2\", \"validFrom\": \"2020-01-01T00:00:00.000Z\"}]}}"
+         }}
+      end)
+
+      log =
+        capture_log(fn ->
+          start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+          Process.sleep(100)
+        end)
+
+      assert log =~
+               "\"msg\":\"Error processing MVT slot - the expected format: %{\\\"header\\\" => key, \\\"key\\\" => value, \\\"validFrom\\\" => string} does not match the actual format"
+    end
+
+    test "when the \"validFrom\" key is not present" do
+      assert Slots.available() == %{}
+
+      expect(HTTPMock, :execute, fn _, _origin ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"projects\": {\"1\": [{\"header\": \"bbc-mvt-2\", \"key\": \"some_value\"}]}}"
+         }}
+      end)
+
+      log =
+        capture_log(fn ->
+          start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+          Process.sleep(100)
+        end)
+
+      assert log =~
+               "\"msg\":\"Error processing MVT slot - the expected format: %{\\\"header\\\" => key, \\\"key\\\" => value, \\\"validFrom\\\" => string} does not match the actual format"
+    end
+
+    test "when neither the \"validFrom\" or \"key\" keys are present" do
+      assert Slots.available() == %{}
+
+      expect(HTTPMock, :execute, fn _, _origin ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"projects\": {\"1\": [{\"some_key\": \"some_value\"}]}}"
+         }}
+      end)
+
+      log =
+        capture_log(fn ->
+          start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+          Process.sleep(100)
+        end)
+
+      assert log =~
+               "\"msg\":\"Error processing MVT slot - the expected format: %{\\\"header\\\" => key, \\\"key\\\" => value, \\\"validFrom\\\" => string} does not match the actual format"
+    end
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but a slot has a validFrom datetime in the future it is removed",
+       %{slots_agent_pid: slots_agent_pid} do
     expect(HTTPMock, :execute, fn _, _origin ->
       {:ok,
        %HTTP.Response{
          status_code: 200,
-         body: "{\"projects\": {\"1\": [{\"some_key\": \"test_experiment_1\",\"header\": \"bbc-mvt-2\"}]}}"
+         body:
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"#{
+             future_iso8601(5)
+           }\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{past_iso8601(5)}\"}]}}"
        }}
     end)
 
-    log =
-      capture_log(fn ->
-        start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
-        Process.sleep(100)
-      end)
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
 
-    assert log =~
-             "\"msg\":\"Error normalising MVT slots - the actual format does not match the expected format.\""
+    assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+
+    assert Slots.available() == %{
+             "1" => %{
+               "bbc-mvt-2" => "test_experiment_2"
+             }
+           }
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but a slot has a null validFrom datetime it is removed",
+       %{slots_agent_pid: slots_agent_pid} do
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body:
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"null\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{
+             past_iso8601(5)
+           }\"}]}}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+
+    assert Slots.available() == %{
+             "1" => %{
+               "bbc-mvt-2" => "test_experiment_2"
+             }
+           }
+  end
+
+  test "if the file has valid JSON and \"projects\" key, but a slot has an empty-string validFrom datetime it is removed",
+       %{slots_agent_pid: slots_agent_pid} do
+    expect(HTTPMock, :execute, fn _, _origin ->
+      {:ok,
+       %HTTP.Response{
+         status_code: 200,
+         body:
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{
+             past_iso8601(5)
+           }\"}]}}"
+       }}
+    end)
+
+    file_poller_pid = start_supervised!({FilePoller, interval: 200, name: :test_mvt_file_poller})
+
+    assert_receive {:trace, ^slots_agent_pid, :receive, {_, {^file_poller_pid, _}, {:update, _}}}, 100
+
+    assert Slots.available() == %{
+             "1" => %{
+               "bbc-mvt-2" => "test_experiment_2"
+             }
+           }
   end
 
   def trace_slots_agent(_context) do
@@ -161,5 +277,17 @@ defmodule Belfrage.Mvt.FilePollerTest do
 
   def clear_slots_agent_state(_context) do
     Slots.set(Belfrage.Mvt.Slots, %{})
+  end
+
+  defp future_iso8601(n) do
+    DateTime.utc_now()
+    |> DateTime.add(n, :second, Calendar.UTCOnlyTimeZoneDatabase)
+    |> DateTime.to_iso8601()
+  end
+
+  defp past_iso8601(n) do
+    DateTime.utc_now()
+    |> DateTime.add(-n, :second, Calendar.UTCOnlyTimeZoneDatabase)
+    |> DateTime.to_iso8601()
   end
 end
