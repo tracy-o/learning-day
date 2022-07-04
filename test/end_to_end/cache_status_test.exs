@@ -64,11 +64,11 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     test "202's" do
       stub_http_response(202)
 
-      conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      conn = make_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
       assert conn.status == 202
       assert cache_status_header(conn) == "MISS"
 
-      conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      conn = make_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
       assert conn.status == 202
       assert cache_status_header(conn) == "MISS"
       assert String.contains?(cache_control_heaeder(conn), "public")

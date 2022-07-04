@@ -27,7 +27,7 @@ defmodule EndToEnd.App.RouteTest do
       stub_origin_request(@response, 1)
 
       conn =
-        conn(:get, "http://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
+        conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
       assert conn.assigns.struct.private.origin == Application.get_env(:belfrage, :trevor_endpoint)
@@ -39,7 +39,7 @@ defmodule EndToEnd.App.RouteTest do
       stub_origin_request(@response, 0)
 
       conn =
-        conn(:get, "http://invalid-host.test.api.bbci.co.uk/classic-apps-route")
+        conn(:get, "https://invalid-host.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
       assert {400, _headers, _body} = sent_resp(conn)
