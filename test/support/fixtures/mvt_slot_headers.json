@@ -5,34 +5,40 @@
       "header": "bbc-mvt-1"
     }
   ],
-	"projects": {
-		"1": [
-			{
-					"key": "test_feature_1_test",
-					"header": "bbc-mvt-1"
-			},
-			{
-					"key": "test_experiment_1",
-					"header": "bbc-mvt-2"
-			},
-			{
-					"key": "test_experiment_2",
-					"header": "bbc-mvt-3"
-			}
-		],
-		"2": [
-			{
-					"key": "test_feature_1_test",
-					"header": "bbc-mvt-1"
-			},
-			{
-					"key": "test_experiment_1",
-					"header": "bbc-mvt-2"
-			},
-			{
-					"key": "test_experiment_2",
-					"header": "bbc-mvt-3"
-			}
-		]
-	}
+  "projects": {
+    "1": [
+      {
+        "key": "test_feature_1_test",
+        "header": "bbc-mvt-1",
+        "validFrom": "2020-01-01T00:00:00.000Z"
+      },
+      {
+        "key": "test_experiment_1",
+        "header": "bbc-mvt-2",
+        "validFrom": "2020-01-01T00:00:01.000Z"
+      },
+      {
+        "key": "test_experiment_2",
+        "header": "bbc-mvt-3",
+        "validFrom": "2020-01-01T00:00:00.000Z"
+      }
+    ],
+    "2": [
+      {
+        "key": "test_feature_1_test",
+        "header": "bbc-mvt-1",
+        "validFrom": "2020-01-01T00:00:00.000Z"
+      },
+      {
+        "key": "test_experiment_1",
+        "header": "bbc-mvt-2",
+        "validFrom": "2020-01-01T00:00:00.000Z"
+      },
+      {
+        "key": "test_experiment_2",
+        "header": "bbc-mvt-3",
+        "validFrom": "2020-01-01T00:00:00.000Z"
+      }
+    ]
+  }
 }
