@@ -3,7 +3,7 @@ import Config
 import_config "test.exs"
 
 config :belfrage, :smoke,
-  ignore_specs: ["ProxyPass", "ArchiveArticles", "NewsSearch"],
+  ignore_specs: ["ProxyPass", "ArchiveArticles"],
   endpoint_to_stack_id_mapping: %{
     "belfrage" => %{:id => "bid", :value => "www"},
     "bruce-belfrage" => %{:id => "bid", :value => "bruce"},
