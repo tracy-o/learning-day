@@ -62,7 +62,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     end
 
     test "202's" do
-      stub_http(202)
+      stub_http_response(202)
 
       conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
       assert conn.status == 202
@@ -98,11 +98,11 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     end)
   end
 
-  def stub_http(status) do
+  defp stub_http_response(status) do
     stub(HTTPMock, :execute, fn _, _ -> http_response(status) end)
   end
 
-  def http_response(status) do
+  defp http_response(status) do
     {
       :ok,
       %Clients.HTTP.Response{
