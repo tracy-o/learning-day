@@ -1989,7 +1989,7 @@ defroutefile "Main" do
   handle "/content/:service/*any", using: "ClassicAppService", examples: []
   handle "/content/*any", using: "ClassicApp", examples: []
   handle "/static/*any", using: "ClassicAppStaticContent", examples: ["/static/LE/android/1.5.0/config.json", "/static/MUNDO/ios/5.19.0/layouts.zip"]
-  handle "/flagpoles/*any", using: "ClassicAppFlagpole", examples: ["flagpoles/ads"]
+  handle "/flagpoles/*any", using: "ClassicAppFlagpole", examples: ["/flagpoles/ads"]
 
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
