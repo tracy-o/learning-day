@@ -5,7 +5,9 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0, make_cached_response_stale: 1]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.LambdaMock, RouteState}
+  alias Belfrage.RouteState
+  alias Belfrage.Clients
+  alias Belfrage.Clients.{LambdaMock, HTTPMock}
 
   @moduletag :end_to_end
 
@@ -50,6 +52,18 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     assert cache_status_header(conn) == "STALE"
   end
 
+  test "ensure 202's don't cache" do
+    stub_http(202)
+
+    conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+    assert conn.status == 202
+    assert cache_status_header(conn) == "MISS"
+
+    conn = make_request("http://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+    assert conn.status == 202
+    assert cache_status_header(conn) == "MISS"
+  end
+
   defp stub_lambda() do
     stub_lambda(
       {:ok,
@@ -73,8 +87,23 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     end)
   end
 
-  defp make_request() do
-    conn(:get, "/200-ok-response") |> Router.call([])
+  def stub_http(status) do
+    stub(HTTPMock, :execute, fn _, _ -> http_response(status) end)
+  end
+
+  def http_response(status) do
+    {
+      :ok,
+      %Clients.HTTP.Response{
+        status_code: status,
+        headers: %{},
+        body: ""
+      }
+    }
+  end
+
+  defp make_request(path \\ "/200-ok-response") do
+    conn(:get, path) |> Router.call([])
   end
 
   defp cache_status_header(conn) do
