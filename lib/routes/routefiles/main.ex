@@ -429,8 +429,8 @@ defroutefile "Main" do
   handle "/news/the_reporters", using: "News", examples: ["/news/the_reporters"]
   handle "/news/uk", using: "NewsUk", examples: ["/news/uk"]
   handle "/news/wales", using: "NewsUk", examples: ["/news/wales"]
-  handle "/news/world", using: "News", examples: ["/news/world"]
-  handle "/news/world_radio_and_tv", using: "News", examples: ["/news/world_radio_and_tv"]
+  handle "/news/world", using: "NewsWorld", examples: ["/news/world"]
+  handle "/news/world_radio_and_tv", using: "NewsWorld", examples: ["/news/world_radio_and_tv"]
 
   # News feature indexes (FIX assets)
   handle "/news/business-11428889", using: "NewsBusiness", examples: ["/news/business-11428889"]
