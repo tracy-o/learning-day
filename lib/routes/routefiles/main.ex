@@ -452,10 +452,10 @@ defroutefile "Main" do
   handle "/news/uk-northern-ireland-38323577", using: "News", examples: ["/news/uk-northern-ireland-38323577"]
   handle "/news/uk-northern-ireland-55401938", using: "News", examples: ["/news/uk-northern-ireland-55401938"]
   handle "/news/uk-politics-48448557", using: "News", examples: ["/news/uk-politics-48448557"]
-  handle "/news/world-43160365", using: "News", examples: ["/news/world-43160365"]
-  handle "/news/world-48623037", using: "News", examples: ["/news/world-48623037"]
-  handle "/news/world-middle-east-48433977", using: "News", examples: ["/news/world-middle-east-48433977"]
-  handle "/news/world-us-canada-15949569", using: "News", examples: ["/news/world-us-canada-15949569"]
+  handle "/news/world-43160365", using: "NewsWorld", examples: ["/news/world-43160365"]
+  handle "/news/world-48623037", using: "NewsWorld", examples: ["/news/world-48623037"]
+  handle "/news/world-middle-east-48433977", using: "NewsWorld", examples: ["/news/world-middle-east-48433977"]
+  handle "/news/world-us-canada-15949569", using: "NewsWorld", examples: ["/news/world-us-canada-15949569"]
 
   # News archive assets
   handle "/news/10284448/ticker.sjson", using: "News", examples: ["/news/10284448/ticker.sjson"]
@@ -485,8 +485,8 @@ defroutefile "Main" do
   handle "/news/special/*_any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
   handle "/news/technology/*_any", using: "News", examples: ["/news/technology/31153361"]
   handle "/news/wales/*_any", using: "News", examples: ["/news/wales/south_east_wales"]
-  handle "/news/world/*_any", using: "News", examples: ["/news/world/europe"]
-  handle "/news/world_radio_and_tv/*_any", using: "News", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
+  handle "/news/world/*_any", using: "NewsWorld", examples: ["/news/world/europe"]
+  handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News", examples: [] do
