@@ -192,8 +192,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       }
     }
 
-    %{headers: %{"ctx-features": "chameleon=off"}} =
-      Request.build(struct_with_features)
+    %{headers: %{"ctx-features": "chameleon=off"}} = Request.build(struct_with_features)
   end
 
   test "does not add mvt headers when none set" do
