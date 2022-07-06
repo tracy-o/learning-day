@@ -458,10 +458,10 @@ defroutefile "Main" do
   handle "/news/world-us-canada-15949569", using: "NewsWorld", examples: ["/news/world-us-canada-15949569"]
 
   # News archive assets
-  handle "/news/10284448/ticker.sjson", using: "News", examples: ["/news/10284448/ticker.sjson"]
-  handle "/news/1/*_any", using: "News", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
-  handle "/news/2/*_any", using: "News", examples: ["/news/2/text_only.stm"]
-  handle "/news/sport1/*_any", using: "News", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+  handle "/news/10284448/ticker.sjson", using: "NewsArchive", examples: ["/news/10284448/ticker.sjson"]
+  handle "/news/1/*_any", using: "NewsArchive", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
+  handle "/news/2/*_any", using: "NewsArchive", examples: ["/news/2/text_only.stm"]
+  handle "/news/sport1/*_any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
 
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
