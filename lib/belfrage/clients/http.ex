@@ -7,6 +7,7 @@ defmodule Belfrage.Clients.HTTP do
   """
   alias Belfrage.{Clients.HTTP, Metrics.Statix, Event}
   @machine_gun Application.get_env(:belfrage, :machine_gun)
+  @finch_pool_timeout Application.get_env(:finch, :pool_timeout)
 
   @type request_type :: :get | :post
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
@@ -32,7 +33,11 @@ defmodule Belfrage.Clients.HTTP do
           Enum.into(request.headers, []),
           request.payload
         )
-        |> FinchAPI.request(Finch, receive_timeout: request.timeout)
+        |> FinchAPI.request(
+          Finch,
+          receive_timeout: request.timeout,
+          pool_timeout: @finch_pool_timeout
+        )
 
       _ ->
         @machine_gun.request(
