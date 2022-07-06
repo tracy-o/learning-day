@@ -46,6 +46,6 @@ defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
   end
 
   defp topic_id_location(request = %Struct.Request{}) do
-    "/news/topics/#{topic_id(request.path_params)}" <> QueryParams.encode(request.query_params)
+    "/news/topics/#{topic_id(request.path_params)}"
   end
 end
