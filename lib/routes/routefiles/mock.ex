@@ -34,6 +34,8 @@ defroutefile "Mock", "test" do
   handle("/fabl/:name", using: "SomeFablRouteState", examples: ["/fabl/xray"])
 
   handle("/200-ok-response", using: "SomeRouteState", examples: ["/200-ok-response"])
+  
+  handle("/202-ok-response", using: "SomeClassicAppsRouteSpec", examples: ["/202-ok-response"])
 
   handle("/downstream-not-found", using: "SomeRouteState", examples: ["/downstream-not-found"])
 
