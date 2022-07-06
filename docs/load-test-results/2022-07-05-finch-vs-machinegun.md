@@ -139,7 +139,7 @@ We can see that in a high latency environment Finch and MachineGun perform simil
 
 Finch performing slightly slower (1.34s vs 1.06s 95th percentile latency) under heavy load and having a slightly lower success ratio (48% vs 55%).
 
-Some of this could be explained by Finches 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of machine guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison.
+Some of this could be explained by Finches 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of machine guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison. Also there are other levers we could pull to increase performance such as increasing the `count` per pool. (see [here](https://github.com/bbc/belfrage/pull/1484))
 
 We can also see that the CPU usage with Finch is much lower than Machine Gun (37% vs 56%). There are two factors which could contribute to this. One is the Machine Gun overflow workers which we already know are inefficient, the other is Finch's superior performance.
 
