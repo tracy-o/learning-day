@@ -24,28 +24,26 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   defp perform_request(request = %HTTP.Request{}, pool_group) do
-    case pool_group do
-      pool_group when pool_group in [:OriginSimulator, :Programmes] ->
-        Finch.build(
-          request.method,
-          request.url,
-          Enum.into(request.headers, []),
-          request.payload
-        )
-        |> FinchAPI.request(
-          Finch,
-          receive_timeout: request.timeout,
-          pool_timeout: finch_pool_timeout()
-        )
-
-      _ ->
-        @machine_gun.request(
-          request.method,
-          request.url,
-          request.payload,
-          Enum.into(request.headers, []),
-          build_options(request, pool_group)
-        )
+    if pool_group in [:OriginSimulator, :Programmes] do
+      Finch.build(
+        request.method,
+        request.url,
+        Enum.into(request.headers, []),
+        request.payload
+      )
+      |> FinchAPI.request(
+        Finch,
+        receive_timeout: request.timeout,
+        pool_timeout: finch_pool_timeout()
+      )
+    else
+      @machine_gun.request(
+        request.method,
+        request.url,
+        request.payload,
+        Enum.into(request.headers, []),
+        build_options(request, pool_group)
+      )
     end
   end
 
