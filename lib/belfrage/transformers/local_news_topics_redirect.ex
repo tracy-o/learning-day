@@ -1,7 +1,6 @@
 defmodule Belfrage.Transformers.LocalNewsTopicsRedirect do
   use Belfrage.Transformers.Transformer
   alias Belfrage.Transformers.LocalNewsTopicsRedirect.LocationTopicMappings
-  alias Belfrage.Helpers.QueryParams
 
   @impl true
   def call(rest, struct) do
