@@ -36,7 +36,6 @@ defmodule Belfrage.Supervisor do
           size: 512,
           conn_opts: [
             transport_opts: [
-              {:cacertfile, System.get_env("CLIENT_CERT_CA")},
               {:verify, :verify_none}
             ]
           ]
