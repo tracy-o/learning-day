@@ -472,7 +472,7 @@ defroutefile "Main" do
   handle "/news/correspondents/*_any", using: "News", examples: ["/news/correspondents/philcoomes"]
   handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
-  handle "/news/events/*_any", using: "News", examples: ["/news/events/scotland-decides/results"]
+  handle "/news/events/*_any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
   handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
   handle "/news/local_news_slice/*_any", using: "News", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
   handle "/news/northern_ireland/*_any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
