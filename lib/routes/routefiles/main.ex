@@ -497,7 +497,7 @@ defroutefile "Main" do
     return_404 if: true
   end
 
-  handle "/news/:id.amp", using: "News", examples: ["/news/business-58847275.amp"]
+  handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
   handle "/news/:id.json", using: "News", examples: ["/news/business-58847275.json"]
 
   handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
