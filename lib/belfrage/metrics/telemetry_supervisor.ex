@@ -14,10 +14,32 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         metrics: telemetry_metrics(),
         global_tags: [BBCEnvironment: Application.get_env(:belfrage, :production_environment)],
         formatter: :datadog
+      },
+      {
+        TelemetryMetricsPrometheus,
+        metrics: prometheus_metrics
       }
     ]
 
     Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
+  end
+
+  defp prometheus_metrics do
+    [
+      counter(
+        "web.request.count",
+        event_name: "belfrage.plug.start"
+      ),
+      distribution(
+        "belfrage.request.duration",
+        event_name: "belfrage.plug.stop",
+        tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
+        unit: {:native, :millisecond},
+        tags: [:status_code, :route_spec],
+        reporter_options: [buckets: [10, 100, 500, 1_000, 5_000, 20_000]]
+      ),
+      last_value("vm.memory.total", unit: {:byte, :kilobyte})
+    ]
   end
 
   defp telemetry_metrics do
