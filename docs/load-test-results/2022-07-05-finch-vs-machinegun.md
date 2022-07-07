@@ -3,8 +3,8 @@
 - Finch is a project which combines nimblepool with the mint HTTP client.
 
 We want to move to Finch because:
-- in previous load tests (see [testing-finch-http-client](./2021-09-20-testing-finch-http-client.md)) we've found that finch is more performant that machine gun.
-- Machine Gun is a sticking point in us upgrading it OTP 24 meaning we can't use the ASM JIT on Belfrage yet.
+- In previous load tests (see [testing-finch-http-client](./2021-09-20-testing-finch-http-client.md)) we've found that finch is more performant that machine gun.
+- Machine Gun is a sticking point in us upgrading to OTP 24 meaning we can't use the ASM JIT on Belfrage yet.
 - Finch is promising as it's performance focused and uses nimble_pool created by Jose Valim.
 
 The goal of these load tests is to determine **is it safe to roll out Finch as our HTTP client in production?**
@@ -15,7 +15,7 @@ The goal of these load tests is to determine **is it safe to roll out Finch as o
 - Instance Type: c5.2xlarge
 - Scaling: Limited to 1 instance
 
-The origin is configured with 1 second latency to return the `/news` page fo the BBC website.
+The origin was configured with 1 second latency to return the `/news` page for the BBC website.
 ```
 [
     {
@@ -81,7 +81,7 @@ The binary of long load tests are too large to produce a graph. So I ran a short
 
 Finch was configured to use 512 workers for the `OriginSimulator` endpoint.
 
-The origin is configured with 1 second latency to return the `/news` page for the BBC website.
+The origin was configured with 1 second latency to return the `/news` page for the BBC website.
 ```
 [
     {
@@ -141,13 +141,13 @@ The binary of long load tests are too large to produce a graph. So I ran a short
 
 
 ## Discussion
-We can see that in a high latency environment Finch and MachineGun perform similarly.
+We can see that in a high latency environment Finch and Machine Gun perform similarly.
 
 Finch performing slightly slower (1.34s vs 1.06s 99th percentile latency) under heavy load and having a slightly lower success ratio (48% vs 55%).
 
-Some of this could be explained by Finches 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of machine guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison. Also there are other levers we could pull to increase performance such as increasing the `count` per pool. (see [here](https://github.com/bbc/belfrage/pull/1484))
+Some of this could be explained by Finch's 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of Machine Guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison. Also there are other levers we could pull to increase performance in Finch such as increasing the `count` per pool. (see [here](https://github.com/bbc/belfrage/pull/1484))
 
-We can also see that the CPU usage with Finch is much lower than Machine Gun (37% vs 56%). There are two factors which could contribute to this. One is the Machine Gun overflow workers which we already know are inefficient, the other is Finch's superior performance.
+We also see that the CPU usage with Finch is much lower than Machine Gun's (37% vs 56%). There are two factors which could contribute to this. One is the Machine Gun overflow workers which we already know are inefficient, the other is Finch's superior performance.
 
 ## Conclusion
 The goal of these load tests was to answer: **Is Finch safe for production?** I think **the answer to this is yes**. Even with low latency origins it performs similarly to Machine Gun, while using less CPU. If we are happy having Machine Gun in production we should be happy using Finch. 
