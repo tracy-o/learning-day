@@ -1190,8 +1190,8 @@ defroutefile "Sport" do
   handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
 
   ## Sport Premier League Table page
-  handle "/sport/football/premier-league/table.app", using: "SportFootballDataPage", examples: ["/sport/football/premier-league/table.app"]
-  handle "/sport/football/premier-league/table", using: "SportFootballPremierLeagueStandingsTablePage", examples: ["/sport/football/premier-league/table"]
+  handle "/sport/football/premier-league/table.app", using: "SportFootballDataPage", only_on: "test", examples: ["/sport/football/premier-league/table.app"]
+  handle "/sport/football/premier-league/table", using: "SportFootballPremierLeagueStandingsTablePage", only_on: "test", examples: ["/sport/football/premier-league/table"]
 
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
