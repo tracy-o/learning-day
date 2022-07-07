@@ -30,7 +30,16 @@ defmodule Belfrage.Supervisor do
     [
       name: Finch,
       pools: %{
-        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512]
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
+        Application.get_env(:belfrage, :origin_simulator) => [size: 512],
+        Application.get_env(:belfrage, :programmes_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ]
       }
     ]
   end

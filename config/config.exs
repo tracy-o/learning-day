@@ -35,6 +35,9 @@ poller_machine_gun_config = %{
   conn_opts: %{}
 }
 
+config :finch,
+  pool_timeout: 300_000
+
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
