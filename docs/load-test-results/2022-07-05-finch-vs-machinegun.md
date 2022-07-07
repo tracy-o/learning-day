@@ -12,6 +12,8 @@ The goal of these load tests is to determine **is it safe to roll out Finch as o
 ## Load Tests using Machine Gun
 - Stack: www test Belfrage stack
 - Branch:  `master` `87cf5036389c666fe7944fc843decad94448ec73`
+- Instance Type: c5.2xlarge
+- Scaling: Limited to 1 instance
 
 The origin is configured with 1 second latency to return the `/news` page fo the BBC website.
 ```
@@ -74,6 +76,8 @@ The binary of long load tests are too large to produce a graph. So I ran a short
 ## Load Tests using Finch 
 - Stack: www test Belfrage stack
 - Branch:  `RESFRAME-4763-finch-programmes` `042a63eaedf3dbf2cd47fa0b61c6a4a29f079dff`
+- Instance Type: c5.2xlarge
+- Scaling: Limited to 1 instance
 
 Finch was configured to use 512 workers for the `OriginSimulator` endpoint.
 
@@ -126,6 +130,8 @@ Responses
 CPU
 ![](./img/2022-07-05-finch-vs-machinegun/finch_600s_700rps_cpu.png)
 
+Pool Workers
+![](./img/2022-07-05-finch-vs-machinegun/finch_600s_700rps_workers.png)
 
 ### 700 RPS 120 Seconds
 The binary of long load tests are too large to produce a graph. So I ran a shorter load test in order to visualise latency and client status over time.
@@ -137,7 +143,7 @@ The binary of long load tests are too large to produce a graph. So I ran a short
 ## Discussion
 We can see that in a high latency environment Finch and MachineGun perform similarly.
 
-Finch performing slightly slower (1.34s vs 1.06s 95th percentile latency) under heavy load and having a slightly lower success ratio (48% vs 55%).
+Finch performing slightly slower (1.34s vs 1.06s 99th percentile latency) under heavy load and having a slightly lower success ratio (48% vs 55%).
 
 Some of this could be explained by Finches 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of machine guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison. Also there are other levers we could pull to increase performance such as increasing the `count` per pool. (see [here](https://github.com/bbc/belfrage/pull/1484))
 
