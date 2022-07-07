@@ -489,11 +489,11 @@ defroutefile "Main" do
   handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
 
   # 404 matchers
-  handle "/news/favicon.ico", using: "NewsFavicon", examples: [] do
+  handle "/news/favicon.ico", using: "News", examples: [] do
     return_404 if: true
   end
 
-  handle "/news/av/favicon.ico", using: "NewsFavicon", examples: [] do
+  handle "/news/av/favicon.ico", using: "News", examples: [] do
     return_404 if: true
   end
 
