@@ -170,7 +170,7 @@ defmodule BelfrageWeb.RouteMaster do
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
         get rewrite(matcher) do
-          Belfrage.yield(unquote(id), var!(conn))
+          BelfrageWeb.yield(unquote(id), var!(conn))
         end
       end
 
@@ -179,7 +179,7 @@ defmodule BelfrageWeb.RouteMaster do
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
-            Belfrage.yield(unquote(id), var!(conn))
+            BelfrageWeb.yield(unquote(id), var!(conn))
           end
         end
       end
@@ -194,8 +194,8 @@ defmodule BelfrageWeb.RouteMaster do
             replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
 
             cond do
-              matched_env and origin_simulator -> Belfrage.yield(unquote(id), var!(conn))
-              matched_env and replayed_traffic -> Belfrage.yield(unquote(id), var!(conn))
+              matched_env and origin_simulator -> BelfrageWeb.yield(unquote(id), var!(conn))
+              matched_env and replayed_traffic -> BelfrageWeb.yield(unquote(id), var!(conn))
               true -> Response.not_found(var!(conn))
             end
           end
@@ -206,7 +206,7 @@ defmodule BelfrageWeb.RouteMaster do
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
         get rewrite(matcher) do
-          unquote(block) || Belfrage.yield(unquote(id), var!(conn))
+          unquote(block) || BelfrageWeb.yield(unquote(id), var!(conn))
         end
       end
 
@@ -215,7 +215,7 @@ defmodule BelfrageWeb.RouteMaster do
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
-            unquote(block) || Belfrage.yield(unquote(id), var!(conn))
+            unquote(block) || BelfrageWeb.yield(unquote(id), var!(conn))
           end
         end
       end
