@@ -1,5 +1,4 @@
 defmodule BelfrageWeb.RouteMaster do
-  alias Plug.Conn
   alias BelfrageWeb.{Response, StructAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
@@ -19,35 +18,6 @@ defmodule BelfrageWeb.RouteMaster do
 
       @before_compile BelfrageWeb.RouteMaster
     end
-  end
-
-  def yield(id, conn) do
-    conn = Conn.assign(conn, :route_spec, id)
-
-    try do
-      struct = StructAdapter.adapt(conn, id)
-
-      conn
-      |> Conn.assign(:struct, Belfrage.handle(struct))
-      |> Response.put()
-    catch
-      # Unwrap an internal Belfrage error to extract %Struct{} from it
-      _, error = %Belfrage.WrapperError{} ->
-        conn = Conn.assign(conn, :struct, error.struct)
-        reraise(conn, error.kind, error.reason, error.stack)
-
-      kind, reason ->
-        reraise(conn, kind, reason, __STACKTRACE__)
-    end
-  end
-
-  defp reraise(conn, kind, reason, stack) do
-    # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
-    # which now contains the name of the route spec and the struct, so that
-    # we could use that data when generating an error response or tracking
-    # metrics.
-    wrapper = %Conn.WrapperError{conn: conn, kind: kind, reason: reason, stack: stack}
-    :erlang.raise(kind, wrapper, stack)
   end
 
   defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do
@@ -200,7 +170,7 @@ defmodule BelfrageWeb.RouteMaster do
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
         get rewrite(matcher) do
-          yield(unquote(id), var!(conn))
+          Belfrage.yield(unquote(id), var!(conn))
         end
       end
 
@@ -209,7 +179,7 @@ defmodule BelfrageWeb.RouteMaster do
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
-            yield(unquote(id), var!(conn))
+            Belfrage.yield(unquote(id), var!(conn))
           end
         end
       end
@@ -224,8 +194,8 @@ defmodule BelfrageWeb.RouteMaster do
             replayed_traffic = var!(conn).private.bbc_headers.replayed_traffic
 
             cond do
-              matched_env and origin_simulator -> yield(unquote(id), var!(conn))
-              matched_env and replayed_traffic -> yield(unquote(id), var!(conn))
+              matched_env and origin_simulator -> Belfrage.yield(unquote(id), var!(conn))
+              matched_env and replayed_traffic -> Belfrage.yield(unquote(id), var!(conn))
               true -> Response.not_found(var!(conn))
             end
           end
@@ -236,7 +206,7 @@ defmodule BelfrageWeb.RouteMaster do
         @routes [{matcher, Enum.into(args, %{})} | @routes]
 
         get rewrite(matcher) do
-          unquote(block) || yield(unquote(id), var!(conn))
+          unquote(block) || Belfrage.yield(unquote(id), var!(conn))
         end
       end
 
@@ -245,7 +215,7 @@ defmodule BelfrageWeb.RouteMaster do
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
-            unquote(block) || yield(unquote(id), var!(conn))
+            unquote(block) || Belfrage.yield(unquote(id), var!(conn))
           end
         end
       end
