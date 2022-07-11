@@ -74,7 +74,7 @@ defmodule Belfrage.Clients.HTTP do
      })}
   end
 
-  defp format_response({:error, error = %MachineGun.Error{}}) do
+  defp format_response({:error, error}) do
     {:error, HTTP.Error.new(error)}
   end
 
