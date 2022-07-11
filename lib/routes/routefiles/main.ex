@@ -2006,7 +2006,7 @@ defroutefile "Main" do
   handle "/content/cps/:product/*any", using: "ClassicAppProducts", examples: []
   handle "/content/cps/*any", using: "ClassicAppCps", examples: []
 
-  handle "/content/ldp/*any", using: "ClassicAppLdp", examples: ["/content/ldp/de648736-7268-454c-a7b1-dbff416f2865"]
+  handle "/content/ldp/:guid", using: "ClassicAppFablLdp", examples: ["/content/ldp/de648736-7268-454c-a7b1-dbff416f2865"]
   handle "/content/most_popular/*any", using: "ClassicAppMostPopular", examples: ["/content/most_popular/news"]
   handle "/content/ww/*any", using: "ClassicAppWw", examples: ["/content/ww/travel/module/homepage"]
   handle "/content/news/*any", using: "ClassicAppNews", examples: []
