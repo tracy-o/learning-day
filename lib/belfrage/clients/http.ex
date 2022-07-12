@@ -24,7 +24,7 @@ defmodule Belfrage.Clients.HTTP do
   end
 
   defp perform_request(request = %HTTP.Request{}, pool_group) do
-    if pool_group in [:OriginSimulator, :Programmes, :Simorgh] do
+    if pool_group in [:OriginSimulator, :Programmes, :MozartWeather, :Simorgh] do
       Finch.build(
         request.method,
         request.url,
