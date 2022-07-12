@@ -67,6 +67,12 @@ CPU
 Pool workers
 ![](./img/2022-07-05-finch-vs-machinegun/machinegun_600s_700rps_workers.png)
 
+Origin Simulator Response Timings
+![](./img/2022-07-05-finch-vs-machinegun/machinegun_originsimulator_timings.png)
+
+VM Queue
+![](./img/2022-07-05-finch-vs-machinegun/machinegun_queue_length.png)
+
 ### 700 RPS 120 Seconds
 The binary of long load tests are too large to produce a graph. So I ran a shorter load test in order to visualise latency and client status over time.
 
@@ -123,7 +129,6 @@ Get https://www.belfrage.test.api.bbc.co.uk/news: http2: server sent GOAWAY and 
 ...
 ```
 
-
 Responses
 ![](./img/2022-07-05-finch-vs-machinegun/finch_600s_700rps_responses.png)
 
@@ -131,7 +136,13 @@ CPU
 ![](./img/2022-07-05-finch-vs-machinegun/finch_600s_700rps_cpu.png)
 
 Pool Workers
-![](./img/2022-07-05-finch-vs-machinegun/finch_600s_700rps_workers.png)
+![](./img/2022-07-05-finch-vs-machinegun/nimblepool_graph.png)
+
+Origin Simulator Response Timings
+![](./img/2022-07-05-finch-vs-machinegun/finch_originsimulator_timings.png)
+
+VM Queue
+![](./img/2022-07-05-finch-vs-machinegun/finch_queue_length.png)
 
 ### 700 RPS 120 Seconds
 The binary of long load tests are too large to produce a graph. So I ran a shorter load test in order to visualise latency and client status over time.
@@ -139,11 +150,29 @@ The binary of long load tests are too large to produce a graph. So I ran a short
 ![](./img/2022-07-05-finch-vs-machinegun/finch_1s_l_120s_d_700rps_30s_timeout_results_plot.png)
 
 
+### Comparative Graphs
+Here if possible we put the load tests side by side to make it easier to visually compare them. The first peak is the Machine Gun load test, the second peak is the finch load test.
+
+Responses
+![](./img/2022-07-05-finch-vs-machinegun/comparison_responses.png)
+
+CPU
+![](./img/2022-07-05-finch-vs-machinegun/comparison_cpu.png)
+
+Origin Simulator Timings
+![](./img/2022-07-05-finch-vs-machinegun/comparison_origin_simulator%20_timings.png)
+
+VM Queue
+![](./img/2022-07-05-finch-vs-machinegun/comparison_origin_simulator_queue_length.png)
+
 
 ## Discussion
 We can see that in a high latency environment Finch and Machine Gun perform similarly.
 
-Finch performing slightly slower (1.34s vs 1.06s 99th percentile latency) under heavy load and having a slightly lower success ratio (48% vs 55%).
+Finches max latency is significantly higher than Machine Gun's (1.75s vs 2s approx) However its 99 percentile latency is only about 0.3s difference (1.34s vs 1.06) so this poor performance is only in extreme cases.
+Finch also has a slightly lower success ratio (48% vs 55%) and has a longer VM queue while under load.
+
+We can also see the VM Run Queue length is higher (1 vs 10). However I don't think this an issue as it just means that 10 tasks are waiting to be processed by the BEAM VM process scheduler. If the queue increase until the end of the load test then we would know that there were too many tasks to schedule, but the recovery of the queue length indicates it was transient.
 
 Some of this could be explained by Finch's 512 worker configuration as opposed to Machine Guns 512 workers with 4096 overflow workers. We can see that all of Machine Guns workers and about 200 overflow workers are in use. Meaning its not quite an equal comparison. Also there are other levers we could pull to increase performance in Finch such as increasing the `count` per pool. (see [here](https://github.com/bbc/belfrage/pull/1484))
 
