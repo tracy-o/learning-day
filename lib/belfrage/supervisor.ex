@@ -40,6 +40,17 @@ defmodule Belfrage.Supervisor do
               {:verify, :verify_none}
             ]
           ]
+        ],
+        Application.get_env(:belfrage, :fabl_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:cacertfile, Application.get_env(:finch, :cacertfile)},
+              {:certfile, Application.get_env(:finch, :certfile)},
+              {:keyfile, Application.get_env(:finch, :keyfile)},
+              {:verify, :verify_none}
+            ]
+          ]
         ]
       }
     ]
