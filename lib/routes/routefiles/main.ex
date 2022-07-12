@@ -246,6 +246,8 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
+
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
@@ -309,8 +311,6 @@ defroutefile "Main" do
       !String.match?(division_id, ~r/^[NSWE][0-9]{8}$/)
     ]
   end
-
-  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
   handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/regions/E92000001", "/news/election/2019/uk/regions/W92000004", "/news/election/2019/uk/regions/S92000003", "/news/election/2019/uk/regions/N92000002"] do
     return_404 if: [
