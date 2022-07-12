@@ -462,11 +462,11 @@ defroutefile "Main" do
   handle "/news/1/*_any", using: "NewsArchive", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
   handle "/news/2/*_any", using: "NewsArchive", examples: ["/news/2/text_only.stm"]
   handle "/news/sport1/*_any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+  handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
 
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/bigscreen/*_any", using: "News", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
   handle "/news/blogs/*_any", using: "News", examples: ["/news/blogs/the_papers"]
   handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
   handle "/news/correspondents/*_any", using: "NewsUk", examples: ["/news/correspondents/philcoomes"]
