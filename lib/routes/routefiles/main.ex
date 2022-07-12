@@ -310,6 +310,9 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"] do
+  end
+
   handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/regions/E92000001", "/news/election/2019/uk/regions/W92000004", "/news/election/2019/uk/regions/S92000003", "/news/election/2019/uk/regions/N92000002"] do
     return_404 if: [
       !String.match?(division_id, ~r/^(E92000001|W92000004|S92000003|N92000002)$/)
