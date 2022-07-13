@@ -48,7 +48,7 @@ defmodule Belfrage.Supervisor do
               {:cacertfile, Application.get_env(:finch, :cacertfile)},
               {:certfile, Application.get_env(:finch, :certfile)},
               {:keyfile, Application.get_env(:finch, :keyfile)},
-              {:verify, :verify_none}
+              {:verify, :verify_peer}
             ]
           ]
         ]
