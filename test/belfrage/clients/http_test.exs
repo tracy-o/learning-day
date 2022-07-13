@@ -184,7 +184,11 @@ defmodule Belfrage.Clients.HTTPTest do
       %{request: example_request}
     end
 
-    for pool_group <- [:OriginSimulator, :Programmes] do
+    for pool_group <- [
+          :OriginSimulator,
+          :Programmes,
+          :Simorgh
+        ] do
       test "#{pool_group} uses finch client", %{request: request} do
         FinchMock
         |> expect(:request, 1, fn _built_request, _supervisor, _opts ->
@@ -205,7 +209,6 @@ defmodule Belfrage.Clients.HTTPTest do
           :MozartSport,
           :MozartWeather,
           :MozartSimorgh,
-          :Simorgh,
           :Webcore
         ] do
       test "#{pool_group} uses machine_gun client", %{request: request} do
