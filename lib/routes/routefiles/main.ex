@@ -1963,20 +1963,36 @@ defroutefile "Main" do
 
   # Bitesize
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
+ 
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/z8tnvcw"]
   handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
+  
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
+  
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
+  
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
+  
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
+  
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
   handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision"]
   handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw7xfcw/test"]
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
+  
+  handle "/bitesize/preview/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
+  handle "/bitesize/preview/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
+  handle "/bitesize/preview/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
+  handle "/bitesize/preview/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
+  handle "/bitesize/preview/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
+  
+  redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
+  
   handle "/bitesize/topics/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/z82hsbk"]
+  
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
