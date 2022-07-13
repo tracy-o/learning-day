@@ -1983,11 +1983,11 @@ defroutefile "Main" do
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
   
-  handle "/bitesize/preview/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/preview/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
-  handle "/bitesize/preview/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
-  handle "/bitesize/preview/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
-  handle "/bitesize/preview/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
+  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
+  handle "/bitesize/preview/guides/:id/revision", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
+  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
+  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
+  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
   
   redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
   
