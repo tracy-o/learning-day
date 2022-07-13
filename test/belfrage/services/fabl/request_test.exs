@@ -149,6 +149,92 @@ defmodule Belfrage.Services.Fabl.RequestTest do
              } == Request.build(struct)
     end
 
+    test ~s(path prefixed with "/fd/preview" is updated to "/preview/personalised-module/" when route is personalised) do
+      assert %Clients.HTTP.Request{
+               url: "https://fabl.test.api.bbci.co.uk/preview/personalised-module/foobar?q=something"
+             } =
+               Request.build(%Struct{
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/fd/preview/",
+                   request_id: "arequestid",
+                   path_params: %{
+                     "name" => "foobar"
+                   },
+                   query_params: %{
+                     "q" => "something"
+                   }
+                 },
+                 private: %Struct.Private{
+                   origin: "https://fabl.test.api.bbci.co.uk",
+                   personalised_route: true
+                 }
+               })
+    end
+
+    test ~s(path not prefixed with "/fd/preview/" is updated to "/personalised-module/" when route is personalised) do
+      assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"} =
+               Request.build(%Struct{
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/fd/example-module",
+                   request_id: "arequestid",
+                   path_params: %{
+                     "name" => "foobar"
+                   },
+                   query_params: %{
+                     "q" => "something"
+                   }
+                 },
+                 private: %Struct.Private{
+                   origin: "https://fabl.test.api.bbci.co.uk",
+                   personalised_route: true
+                 }
+               })
+    end
+
+    test ~s(path prefixed with "/fd/preview" is updated to "/preview/module/" when route is not personalised) do
+      assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/preview/module/foobar?q=something"} =
+               Request.build(%Struct{
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/fd/preview/",
+                   request_id: "arequestid",
+                   path_params: %{
+                     "name" => "foobar"
+                   },
+                   query_params: %{
+                     "q" => "something"
+                   }
+                 },
+                 private: %Struct.Private{
+                   origin: "https://fabl.test.api.bbci.co.uk",
+                   personalised_route: false
+                 }
+               })
+    end
+
+    test ~s(path not prefixed with "/fd/preview" is updated to "/module/" when route is not personalised) do
+      assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"} =
+               Request.build(%Struct{
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/something",
+                   request_id: "arequestid",
+                   path_params: %{
+                     "name" => "foobar"
+                   },
+                   query_params: %{
+                     "q" => "something"
+                   }
+                 },
+                 private: %Struct.Private{
+                   origin: "https://fabl.test.api.bbci.co.uk",
+                   personalised_route: false
+                 }
+               })
+    end
+
     test "builds a non personalised request", %{invalid_session: struct} do
       assert %Clients.HTTP.Request{
                headers: %{
