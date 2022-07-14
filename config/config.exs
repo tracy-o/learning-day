@@ -36,7 +36,10 @@ poller_machine_gun_config = %{
 }
 
 config :finch,
-  pool_timeout: 300_000
+  pool_timeout: 300_000,
+  cacertfile: System.get_env("CLIENT_CERT_CA"),
+  certfile: System.get_env("CLIENT_CERT"),
+  keyfile: System.get_env("CLIENT_CERT_KEY")
 
 config :machine_gun,
   default: default_machine_gun_config,
