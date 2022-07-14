@@ -191,7 +191,10 @@ defmodule Belfrage.Clients.HTTPTest do
           :MozartSport,
           :MozartWeather,
           :Simorgh,
-          :Fabl
+          :Fabl,
+          :AWS,
+          :AccountAuthentication,
+          :MvtFilePoller
         ] do
       test "#{pool_group} uses finch client", %{request: request} do
         FinchMock

@@ -32,7 +32,10 @@ defmodule Belfrage.Clients.HTTP do
          :MozartSimorgh,
          :MozartWeather,
          :Simorgh,
-         :Fabl
+         :Fabl,
+         :AWS,
+         :AccountAuthentication,
+         :MvtFilePoller
        ] do
       Finch.build(
         request.method,
