@@ -498,7 +498,7 @@ defroutefile "Main" do
   end
 
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
-  handle "/news/:id.json", using: "News", examples: ["/news/business-58847275.json"]
+  handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
 
   handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
   handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
