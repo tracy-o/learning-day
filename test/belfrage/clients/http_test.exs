@@ -188,7 +188,8 @@ defmodule Belfrage.Clients.HTTPTest do
           :OriginSimulator,
           :Programmes,
           :MozartWeather,
-          :Simorgh
+          :Simorgh,
+          :Fabl
         ] do
       test "#{pool_group} uses finch client", %{request: request} do
         FinchMock
@@ -203,7 +204,6 @@ defmodule Belfrage.Clients.HTTPTest do
     for pool_group <- [
           :Ares,
           :ClassicApp,
-          :Fabl,
           :Karanga,
           :MorphRouter,
           :MozartNews,
