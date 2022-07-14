@@ -205,6 +205,7 @@ defroutefile "Main" do
 
   # data endpoints
 
+  handle "/fd/p/mytopics-page", using: "MyTopicsPage", examples: []
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
