@@ -12,7 +12,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
       Struct.add(struct, :response, %{
         http_status: 301,
         headers: %{
-          "location" => location(struct.request.path_params),
+          "location" => location(struct.request.path_params, struct.request.path),
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, max-age=60"
         },
@@ -21,11 +21,11 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
     }
   end
 
-  defp location(%{"page" => page, "id" => id, "service" => service, "variant" => variant}) do
-    "/#{service}/#{variant}/topics/#{id}?page=#{page}"
+  defp location(%{"page" => page, "id" => id}, path) do
+    base_path(path) <> "/topics/#{id}?page=#{page}"
   end
 
-  defp location(%{"page" => page, "id" => id, "service" => service}) do
-    "/#{service}/topics/#{id}?page=#{page}"
+  defp base_path(path) do
+    String.split(path, "/topics") |> hd()
   end
 end

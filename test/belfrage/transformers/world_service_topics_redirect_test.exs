@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.WorldService.WorldServiceTopicsRedirectTest do
+defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
   use ExUnit.Case
 
   alias Belfrage.Transformers.WorldServiceTopicsRedirect
@@ -20,7 +20,10 @@ defmodule Belfrage.Transformers.WorldService.WorldServiceTopicsRedirectTest do
              }
            } =
              WorldServiceTopicsRedirect.call([], %Struct{
-               request: %Struct.Request{path_params: %{"page" => "5", "service" => "pidgin", "id" => "cqywjyzk2vyt"}}
+               request: %Struct.Request{
+                 path: "/pidgin/topics/cqywjyzk2vyt/page/5",
+                 path_params: %{"page" => "5", "id" => "cqywjyzk2vyt"}
+               }
              })
   end
 
@@ -41,7 +44,8 @@ defmodule Belfrage.Transformers.WorldService.WorldServiceTopicsRedirectTest do
            } =
              WorldServiceTopicsRedirect.call([], %Struct{
                request: %Struct.Request{
-                 path_params: %{"page" => "5", "service" => "serbian", "variant" => "cyr", "id" => "cqwvxvvw9qrt"}
+                 path: "/serbian/cyr/topics/cqwvxvvw9qrt/page/5",
+                 path_params: %{"page" => "5", "id" => "cqwvxvvw9qrt"}
                }
              })
   end
