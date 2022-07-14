@@ -16,14 +16,15 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
 
   def redirect_url(request) do
     "https://" <>
-      String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.encode(request.query_params)
+      String.replace(request.host, "/page/*any", "?page=*any") <>
+      request.path <> QueryParams.encode(request.query_params)
   end
 
   def redirect(redirect_url, struct) do
     {
       :redirect,
       Struct.add(struct, :response, %{
-        http_status: 302,
+        http_status: 301,
         headers: %{
           "location" => redirect_url,
           "x-bbc-no-scheme-rewrite" => "1",
