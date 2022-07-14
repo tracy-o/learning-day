@@ -973,6 +973,16 @@ defroutefile "Sport" do
 
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
 
+    
+  ## Alpha Football Live - TIPO IDs
+  handle "/sport/alpha/football/live/:tipo_id", using: "SportAlphaFootballLivePage", only_on: "test", examples: ["/sport/alpha/football/live/c1v596ken6vt", "/sport/alpha/football/live/c45ek2qpd5et&page=6", "/sport/alpha/football/live/cz4jkz9ml62t", "/sport/alpha/football/live/cqyxrd44rlvt"] do
+    return_404 if: [
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
+      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+    ]
+  end
+
+  
   handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
   handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
