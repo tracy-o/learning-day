@@ -1,8 +1,8 @@
 defmodule Routes.Specs.SportLivePage do
   def specs do
     %{
-      owner: "#help-sport",
-      runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Live+Run+Book",
+      owner: "#help-live",
+      runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Run+Book",
       platform: MozartSport
     }
   end
