@@ -12,7 +12,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
       Struct.add(struct, :response, %{
         http_status: 301,
         headers: %{
-          "location" => location(struct.request.path_params, struct.request.path),
+          "location" => location(struct.request),
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, max-age=60"
         },
@@ -21,7 +21,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
     }
   end
 
-  defp location(%{"page" => page, "id" => id}, path) do
+  defp location(%Struct.Request{path: path, path_params: %{"page" => page, "id" => id}}) do
     base_path(path) <> "/topics/#{id}?page=#{page}"
   end
 
