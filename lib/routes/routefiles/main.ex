@@ -1299,6 +1299,13 @@ defroutefile "Main" do
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", examples: ["/swahili/sw.js"]
+  handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: ["/swahili/topics/c06gq663n6jt/page/2"] do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
   handle "/swahili/topics/:id", using: "WorldServiceSwahiliTopicPage", examples: ["/swahili/topics/c06gq663n6jt", "/swahili/topics/c06gq663n6jt?page=2"] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
