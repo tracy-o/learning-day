@@ -955,18 +955,6 @@ defroutefile "Sport" do
   handle "/sport/internal/player-rater/:event_id", using: "Sport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
   handle "/sport/internal/ranked-list/:slug", using: "Sport", examples: ["/sport/internal/ranked-list/lions-2021-XV?morph_env=live&renderer_env=live"]
 
-  ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
-  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
-  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
-    
-  ## Alpha Football Live - TIPO IDs
-  handle "/sport/alpha/football/live/:tipo_id", using: "SportAlphaFootballLivePage", only_on: "test", examples: ["/sport/alpha/football/live/c1v596ken6vt", "/sport/alpha/football/live/c45ek2qpd5et?page=6", "/sport/alpha/football/live/cz4jkz9ml62t?mode=testData", "/sport/alpha/football/live/cqyxrd44rlvt?mode=testData&page=2"] do
-    return_404 if: [
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
-    ]
-  end
-
   ## Sport Top 4
   handle "/sport/alpha/top-4.app", using: "Sport", examples: ["/sport/alpha/top-4.app"]
   handle "/sport/alpha/top-4", using: "Sport", examples: ["/sport/alpha/top-4"]
@@ -979,6 +967,11 @@ defroutefile "Sport" do
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
+
+  ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
+  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
+
+  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
 
   handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
