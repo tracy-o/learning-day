@@ -518,6 +518,8 @@ defroutefile "Main" do
 
   redirect "/cymrufyw/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 302
 
+  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
+
   handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau/W09000001", "/cymrufyw/etholiad/2021/cymru/rhanbarthau/W10000006"] do
@@ -537,7 +539,14 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
+  handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/etholaethau/W09000001"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    ]
+  end
+
+  handle "/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004"]
+
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
   handle "/cymrufyw/gogledd-orllewin", using: "Cymrufyw", examples: ["/cymrufyw/gogledd-orllewin"]
   handle "/cymrufyw/gogledd-ddwyrain", using: "Cymrufyw", examples: ["/cymrufyw/gogledd-ddwyrain"]
@@ -1964,36 +1973,36 @@ defroutefile "Main" do
 
   # Bitesize
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
- 
+
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/z8tnvcw"]
   handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
-  
+
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
-  
+
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
-  
+
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
-  
+
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
-  
+
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
   handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision"]
   handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw7xfcw/test"]
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
-  
+
   handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
   handle "/bitesize/preview/guides/:id/revision", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
   handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
   handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
   handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
-  
+
   redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
-  
+
   handle "/bitesize/topics/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/z82hsbk"]
-  
+
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
