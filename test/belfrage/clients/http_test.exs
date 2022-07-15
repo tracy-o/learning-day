@@ -187,6 +187,8 @@ defmodule Belfrage.Clients.HTTPTest do
     for pool_group <- [
           :OriginSimulator,
           :Programmes,
+          :MozartNews,
+          :MozartSport,
           :MozartWeather,
           :Simorgh,
           :Fabl
@@ -206,9 +208,6 @@ defmodule Belfrage.Clients.HTTPTest do
           :ClassicApp,
           :Karanga,
           :MorphRouter,
-          :MozartNews,
-          :MozartSport,
-          :MozartSimorgh,
           :Webcore
         ] do
       test "#{pool_group} uses machine_gun client", %{request: request} do

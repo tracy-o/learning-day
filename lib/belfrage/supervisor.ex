@@ -34,6 +34,8 @@ defmodule Belfrage.Supervisor do
         Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
         Application.get_env(:belfrage, :origin_simulator) => [size: 512],
         Application.get_env(:belfrage, :mozart_weather_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :mozart_news_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :mozart_sport_endpoint) => [size: 512],
         Application.get_env(:belfrage, :programmes_endpoint) => [
           size: 512,
           conn_opts: [
