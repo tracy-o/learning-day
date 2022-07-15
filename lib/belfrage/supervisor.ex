@@ -32,7 +32,14 @@ defmodule Belfrage.Supervisor do
       pools: %{
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
         "https://sts.eu-west-1.amazonaws.com" => [size: 512],
-        endpoint(Application.get_env(:belfrage, :authentication)["account_jwk_uri"]) => [size: 512],
+        endpoint(Application.get_env(:belfrage, :authentication)["account_jwk_uri"]) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
         endpoint(Application.get_env(:belfrage, :authentication)["idcta_config_uri"]) => [size: 512],
         endpoint(Application.get_env(:belfrage, :mvt)[:slots_file_location]) => [size: 512],
         Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
