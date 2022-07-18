@@ -36,12 +36,12 @@ defmodule EndToEnd.EtagTest do
       assert [@etag] == get_resp_header(conn, "etag")
     end
 
-    test ~s(and no "if-none-match" request header is present, etag is not added to response) do
+    test ~s(and no "if-none-match" request header is present, etag is added to response) do
       conn =
         conn(:get, "/etag-support")
         |> Router.call([])
 
-      assert [] == get_resp_header(conn, "etag")
+      assert [@etag] == get_resp_header(conn, "etag")
     end
   end
 

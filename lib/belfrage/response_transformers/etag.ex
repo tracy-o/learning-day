@@ -6,29 +6,23 @@ defmodule Belfrage.ResponseTransformers.Etag do
   Etag support is specified per route spec by the "put_etag" field.
   This field is then merged into the Struct, and found at struct.private.put_etag.
 
-  If struct.private.put_etag is not true or an "if-none-match" header is not present
-  in the reqeust then we simply return the original struct.
+  If struct.private.put_etag is not true then we simply return the original struct.
 
-  If struct.private.put_etag is true and an "if-none-match" header is present in the
-  request, then we generate an etag from the response body, and:
+  If struct.private.put_etag is true then we generate an etag from the response body, and:
 
-  * If the generated etag is equal to the etag supplied by the client, we set the response
-    body to an empty string, the http_status to 304, and add an "etag" response header with
-    a value equal to the generated etag.
-
-  * If the generated etag is not equal to the etag supplied by the client, then we simply
+  * If the generated etag is equal to the etag supplied by the client in the "if-none-match"
+    request header, we set the response body to an empty string, the http_status to 304, and
     add an "etag" response header with a value equal to the generated etag.
+
+  * If the generated etag is not equal to the etag supplied by the client in the "if-none-match"
+    request header, including the scenario in which no client etag is present and is therefore nil,
+    then we simply add an "etag" response header with a value equal to the generated etag.
   """
   @impl true
-  def call(
-        struct = %Struct{
-          request: %Struct.Request{raw_headers: %{"if-none-match" => client_etag}},
-          private: %Struct.Private{put_etag: true}
-        }
-      ) do
+  def call(struct = %Struct{private: %Struct.Private{put_etag: true}}) do
     etag = generate_etag(struct.response.body)
 
-    if etag == client_etag do
+    if etag == struct.request.raw_headers["if-none-match"] do
       not_modified_response(struct, etag)
     else
       add_etag_header(struct, etag)
