@@ -165,4 +165,60 @@ defmodule Belfrage.Clients.HTTPTest do
                })
     end
   end
+
+  # These are temporary tests that we will eventually delete once the switch to
+  # using Finch (rather than MachineGun) is completed.
+  #
+  # When you move a new pool/origin over move the pool name from the bottom
+  # pool_group to the top pool_group.
+
+  describe "current state of finch migration" do
+    setup do
+      example_request = %HTTP.Request{
+        method: :get,
+        url: "http://example.com?foo=bar",
+        headers: [{"content-length", "0"}],
+        timeout: 500
+      }
+
+      %{request: example_request}
+    end
+
+    for pool_group <- [
+          :OriginSimulator,
+          :Programmes,
+          :MozartWeather,
+          :Simorgh,
+          :Fabl
+        ] do
+      test "#{pool_group} uses finch client", %{request: request} do
+        FinchMock
+        |> expect(:request, 1, fn _built_request, _supervisor, _opts ->
+          {:ok, %Finch.Response{body: "", headers: [], status: 200}}
+        end)
+
+        assert {:ok, %HTTP.Response{}} = HTTP.execute(request, unquote(pool_group))
+      end
+    end
+
+    for pool_group <- [
+          :Ares,
+          :ClassicApp,
+          :Karanga,
+          :MorphRouter,
+          :MozartNews,
+          :MozartSport,
+          :MozartSimorgh,
+          :Webcore
+        ] do
+      test "#{pool_group} uses machine_gun client", %{request: request} do
+        Belfrage.Clients.HTTP.MachineGunMock
+        |> expect(:request, 1, fn _method, _url, _payload, _headers, _opts ->
+          {:ok, %MachineGun.Response{status_code: 200, body: "", headers: []}}
+        end)
+
+        assert {:ok, %HTTP.Response{}} = HTTP.execute(request, unquote(pool_group))
+      end
+    end
+  end
 end

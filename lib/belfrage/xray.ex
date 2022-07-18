@@ -172,8 +172,7 @@ defmodule Belfrage.Xray do
 
     extra_data =
       (segment.metadata[:extra_header_data] || [])
-      |> Enum.map(fn pair -> Enum.join(pair, "=") end)
-      |> Enum.join(";")
+      |> Enum.map_join(";", fn pair -> Enum.join(pair, "=") end)
 
     if extra_data == "" do
       Enum.join([root, parent, sampled], ";")

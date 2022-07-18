@@ -175,21 +175,6 @@
     ]
   },
   {
-    "name": "datalab_machine_recommendations",
-    "description": "Controls if the SFV page fetches onward journeys from Datalab machine-driven recommendations",
-    "default-value": "enabled",
-    "values": [
-      {
-        "value": "enabled",
-        "description": "Enables Datalab machine-driven recommendations"
-      },
-      {
-        "value": "disabled",
-        "description": "Disables Datalab machine-driven recommendations"
-      }
-    ]
-  },
-  {
     "name": "chameleon",
     "description": "Controls if the Chameleon navigation bar is displayed",
     "default-value": "off",

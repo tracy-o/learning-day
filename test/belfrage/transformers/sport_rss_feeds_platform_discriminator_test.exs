@@ -16,12 +16,12 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
                  origin: ^fabl_endpoint
                },
                request: %Struct.Request{
-                 path: "/fd/preview/rss",
+                 path: "/fd/rss",
                  path_params: %{
                    "name" => "rss"
                  },
                  query_params: %{
-                   "guid" => "4d38153b-987e-4497-b959-8be7c968d4d1"
+                   "guid" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"
                  },
                  raw_headers: %{
                    "ctx-unwrapped" => "1"
@@ -30,7 +30,7 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
              }
            } =
              SportRssFeedsPlatformDiscriminator.call([], %Struct{
-               request: %Struct.Request{path_params: %{"discipline" => "4d38153b-987e-4497-b959-8be7c968d4d1"}}
+               request: %Struct.Request{path_params: %{"discipline" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"}}
              })
   end
 

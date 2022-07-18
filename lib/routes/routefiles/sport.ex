@@ -829,10 +829,8 @@ defroutefile "Sport" do
   redirect "/sport/rugby-union/teams/worcester/rss.xml", to: "https://feeds.bbci.co.uk/sport/f9bcd500-e383-408f-9177-6d8468d6ae35/rss.xml", status: 301, ttl: 3600
 
   ## Sport RSS feeds
-  handle "/sport/_guid/:discipline/rss.xml", using: "SportRssGuid", examples: ["/sport/_guid/4d38153b-987e-4497-b959-8be7c968d4d1/rss.xml"]
   handle "/sport/rss.xml", using: "SportRss", examples: ["/sport/rss.xml"]
-  ## TODO: Will need a separate transformer/discriminator to send a subset of requests to FABL
-  handle "/sport/:discipline/rss.xml", using: "SportRss", examples: ["/sport/football/rss.xml"]
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", examples: ["/sport/football/rss.xml"]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: ["/sport/football/premier-league/rss.xml"]
   handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss", examples: ["/sport/football/european-championship/2016/rss.xml"]
 
@@ -941,8 +939,15 @@ defroutefile "Sport" do
     ]
   end
 
-  handle "/sport/videos/:id", using: "SportVideos", examples: [{"/sport/videos/49104905", 301}] do
-    return_404 if: String.length(id) != 8
+  handle "/sport/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/videos/ck1n88jk5rjo?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/football/videos/c5qr976rqvno?mode=testData"] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
   end
 
   ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
@@ -1184,6 +1189,10 @@ defroutefile "Sport" do
   handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", examples: ["/sport/football/league-two/table.app"]
   handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", examples: ["/sport/football/league-two/table"]
 
+  ## Sport Premier League Table page
+  handle "/sport/football/premier-league/table.app", using: "SportFootballDataPage", examples: ["/sport/football/premier-league/table.app"]
+  handle "/sport/football/premier-league/table", using: "SportFootballPremierLeagueStandingsTablePage", examples: ["/sport/football/premier-league/table"]
+
   ## Sport Football Table pages
   handle "/sport/football/tables.app", using: "SportFootballDataPage", examples: ["/sport/football/tables.app"]
   handle "/sport/football/tables", using: "SportFootballDataPage", examples: ["/sport/football/tables"]
@@ -1355,7 +1364,6 @@ defroutefile "Sport" do
 
   handle "/sport/:discipline/:id.app", using: "SportStoryPage", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
-
 
   # Sport catch-all
   handle "/sport/*_any", using: "Sport", examples: []

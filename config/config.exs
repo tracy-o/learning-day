@@ -35,10 +35,18 @@ poller_machine_gun_config = %{
   conn_opts: %{}
 }
 
+config :finch,
+  pool_timeout: 300_000,
+  cacertfile: System.get_env("CLIENT_CERT_CA"),
+  certfile: System.get_env("CLIENT_CERT"),
+  keyfile: System.get_env("CLIENT_CERT_KEY")
+
 config :machine_gun,
   default: default_machine_gun_config,
   AccountAuthentication: default_machine_gun_config,
+  ClassicApps: default_machine_gun_config,
   AWS: default_machine_gun_config,
+  Ares: secure_machine_gun_config,
   Fabl: secure_machine_gun_config,
   Karanga: default_machine_gun_config,
   MorphRouter: secure_machine_gun_config,
@@ -68,7 +76,6 @@ config :belfrage,
   mvt_vary_header_ttl: 3_600_000,
   fetch_route_state_timeout: 250,
   dials_location: "/etc/cosmos-dials/dials.json",
-  dials_startup_polling_delay: 0,
   errors_threshold: 100,
   json_codec: Json,
   origin_simulator: System.get_env("ORIGIN_SIMULATOR"),
@@ -77,7 +84,6 @@ config :belfrage,
   s3_http_client_timeout: 400,
   machine_gun: Belfrage.Clients.HTTP.MachineGun,
   webcore_credentials_source: Belfrage.Services.Webcore.Credentials.STS,
-  webcore_credentials_polling_enabled: true,
   aws: Belfrage.AWS,
   ccp_client: Belfrage.Clients.CCP,
   dial: Belfrage.Dials.LiveServer,
@@ -96,14 +102,19 @@ config :belfrage,
     "idcta_config_uri" => "https://idcta.test.api.bbc.co.uk/idcta/config",
     "jwt_expiry_window" => 4200
   },
-  bbc_id_availability_poll_interval: 10_000,
-  jwk_polling_enabled: true,
   not_found_page: "priv/static/default_error_pages/not_found.html",
   not_supported_page: "priv/static/default_error_pages/not_supported.html",
   internal_error_page: "priv/static/default_error_pages/internal_error.html",
   mvt: %{
     slots_file_location: "https://test-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/development.json"
-  }
+  },
+  poller_intervals: [
+    jwk: 3_600_000,
+    dials: 5_000,
+    credentials: 600_000,
+    bbc_id_availability: 10_000,
+    mvt_file: 60_000
+  ]
 
 config :cachex, :limit,
   size: 36_000,

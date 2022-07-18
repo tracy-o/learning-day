@@ -137,8 +137,7 @@ defmodule Mix.Tasks.DialGen do
 
   defp dial_module_name(dial_name) do
     String.split(dial_name, "_")
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join()
+    |> Enum.map_join("", &String.capitalize/1)
   end
 
   defp dial_exists?(dial_config, name) when is_list(dial_config) do

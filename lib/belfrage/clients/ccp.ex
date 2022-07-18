@@ -3,10 +3,9 @@ defmodule Belfrage.Clients.CCP do
   The interface to the Belfrage Central Cache Processor (CCP)
   """
   require Logger
-  alias Belfrage.{Clients, Struct, Struct.Request, Metrics.Statix, Event}
+  alias Belfrage.{Struct, Struct.Request, Metrics.Statix, Event}
 
   @s3_not_found_response_code 403
-  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
 
   @type target :: pid() | {:global, atom()}
   @callback fetch(String.t()) ::
@@ -23,28 +22,27 @@ defmodule Belfrage.Clients.CCP do
     before_time = System.monotonic_time(:millisecond)
 
     ccp_response =
-      @http_client.execute(
-        %Clients.HTTP.Request{
-          method: :get,
-          url: ~s(https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}),
-          timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
-        },
-        :S3
+      Finch.build(
+        :get,
+        "https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}"
+      )
+      |> FinchAPI.request(Finch,
+        receive_timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
       )
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
     Statix.timing("service.S3.request.timing", timing, tags: Event.global_dimensions())
 
     case ccp_response do
-      {:ok, %Clients.HTTP.Response{status_code: 200, body: cached_body}} ->
+      {:ok, %Finch.Response{status: 200, body: cached_body}} ->
         Statix.increment("service.S3.response.200", 1, tags: Event.global_dimensions())
         {:ok, cached_body |> :erlang.binary_to_term()}
 
-      {:ok, %Clients.HTTP.Response{status_code: @s3_not_found_response_code}} ->
+      {:ok, %Finch.Response{status: @s3_not_found_response_code}} ->
         Statix.increment("service.S3.response.not_found", 1, tags: Event.global_dimensions())
         {:ok, :content_not_found}
 
-      {:ok, response = %Clients.HTTP.Response{status_code: status_code}} ->
+      {:ok, response = %Finch.Response{status: status_code}} ->
         Statix.increment("service.S3.response.#{status_code}", 1, tags: Event.global_dimensions())
         :telemetry.execute([:belfrage, :ccp, :unexpected_response], %{})
 

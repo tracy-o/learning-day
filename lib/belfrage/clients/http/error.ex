@@ -54,6 +54,30 @@ defmodule Belfrage.Clients.HTTP.Error do
     }
   end
 
+  def new(error = %Mint.HTTPError{}) do
+    Logger.log(:error, "", %{
+      info: "Http error",
+      third_party_reason: Exception.message(error),
+      belfrage_http_reason: :not_yet_implemented
+    })
+
+    %__MODULE__{
+      reason: nil
+    }
+  end
+
+  def new(error = %Mint.TransportError{}) do
+    Logger.log(:error, "", %{
+      info: "Http error",
+      third_party_reason: Exception.message(error),
+      belfrage_http_reason: :not_yet_implemented
+    })
+
+    %__MODULE__{
+      reason: nil
+    }
+  end
+
   def new(_error), do: %__MODULE__{}
 
   defp standardise_error_reason(reason) when is_atom(reason) do

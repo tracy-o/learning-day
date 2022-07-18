@@ -35,6 +35,8 @@ defroutefile "Mock", "test" do
 
   handle("/200-ok-response", using: "SomeRouteState", examples: ["/200-ok-response"])
 
+  handle("/202-ok-response", using: "SomeClassicAppsRouteSpec", examples: ["/202-ok-response"])
+
   handle("/downstream-not-found", using: "SomeRouteState", examples: ["/downstream-not-found"])
 
   handle("/downstream-broken", using: "SomeRouteState", examples: ["/downstream-broken"])
@@ -83,6 +85,11 @@ defroutefile "Mock", "test" do
   handle("/app-request/:name", using: "FablData", examples: [])
 
   handle("/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", examples: [])
+
+  # will remove and use real route spec in RESFRAME-4718
+  handle("/classic-apps-route", using: "SomeClassicAppsRouteSpec", examples: [])
+
+  handle("/content/ldp/:guid", using: "ClassicAppFablLdp", examples: [])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 

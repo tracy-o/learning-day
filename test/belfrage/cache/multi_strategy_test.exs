@@ -1,5 +1,6 @@
 defmodule Belfrage.Cache.MultiStrategyTest do
   use ExUnit.Case, async: true
+  use Test.Support.Helper, :mox
 
   alias Belfrage.Struct
   alias Belfrage.Cache.MultiStrategy
@@ -29,14 +30,31 @@ defmodule Belfrage.Cache.MultiStrategyTest do
     def metric_identifier(), do: "not_found_strategy"
   end
 
-  describe "correct cache strategies to match the requested freshness" do
-    test "when only fresh pages are allowed" do
-      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches_for_freshness([:fresh])
+  describe "correct cache strategies to match the requested freshness and fallback_write_sample" do
+    test "when only fresh pages are allowed and fallback_write_sample is greater than 0" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 1})
+
+      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches([:fresh], struct)
     end
 
-    test "when fresh and stale pages are allowed the local and distributed strategies are returned in correct order" do
+    test "when only fresh pages are allowed and fallback_write_sample is 0" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 0})
+
+      assert [Belfrage.Cache.Local] == MultiStrategy.valid_caches([:fresh], struct)
+    end
+
+    test "when fresh and stale pages are allowed and fallback_write_sample is greater than 0 the local and distributed strategies are returned in correct order" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 1})
+
       assert [Belfrage.Cache.Local, Belfrage.Cache.Distributed] ==
-               MultiStrategy.valid_caches_for_freshness([:fresh, :stale])
+               MultiStrategy.valid_caches([:fresh, :stale], struct)
+    end
+
+    test "when fresh and stale pages are allowed and fallback_write_sample is 0 only the local strategy is returned" do
+      struct = Struct.add(%Struct{}, :private, %{fallback_write_sample: 0})
+
+      assert [Belfrage.Cache.Local] ==
+               MultiStrategy.valid_caches([:fresh, :stale], struct)
     end
   end
 
@@ -82,6 +100,36 @@ defmodule Belfrage.Cache.MultiStrategyTest do
 
       assert {:ok, {:stale_strategy, :stale}, %Struct.Response{body: "<h1>Hello</h1>"}} ==
                MultiStrategy.fetch(strategies, struct, accepted_freshness)
+    end
+  end
+
+  describe "store/1" do
+    test "when ccp_enabled dial is true, distributed cache is used" do
+      stub_dial(:ccp_enabled, "true")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "multi-strategy-cache-test"},
+        response: %Struct.Response{body: "<p>Hello</p>"}
+      }
+
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 1, fn ^struct -> :ok end)
+
+      MultiStrategy.store(struct)
+    end
+
+    test "when ccp_enabled dial is false, distributed cache is not used" do
+      stub_dial(:ccp_enabled, "false")
+
+      struct = %Struct{
+        request: %Struct.Request{request_hash: "multi-strategy-cache-test"},
+        response: %Struct.Response{body: "<p>Hello</p>"}
+      }
+
+      Belfrage.Clients.CCPMock
+      |> expect(:put, 0, fn ^struct -> :ok end)
+
+      MultiStrategy.store(struct)
     end
   end
 end

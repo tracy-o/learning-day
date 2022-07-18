@@ -1,18 +1,15 @@
 defmodule Belfrage.Services.Webcore.Credentials do
   @moduledoc """
   This module maintains the credentials for calling the Webcore lambda
-  function. It gets them from the configured credentials source on startup.
+  function.
   """
 
   use Agent
 
   alias Belfrage.AWS
 
-  @source Application.get_env(:belfrage, :webcore_credentials_source)
-
   def start_link(opts \\ []) do
-    {:ok, credentials} = @source.get()
-    Agent.start_link(fn -> credentials end, name: Keyword.get(opts, :name, __MODULE__))
+    Agent.start_link(fn -> %AWS.Credentials{} end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
   def get(agent \\ __MODULE__) do

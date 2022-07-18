@@ -24,6 +24,7 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
     vm_metrics() ++
       cowboy_metrics() ++
       poolboy_metrics() ++
+      Belfrage.Metrics.NimblePool.metrics() ++
       Belfrage.Metrics.Cachex.metrics() ++
       latency_metrics() ++
       request_metrics() ++

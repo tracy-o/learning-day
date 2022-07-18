@@ -29,9 +29,12 @@ defmodule Belfrage.Metrics.Supervisor do
       {:telemetry_poller,
        [
          measurements: [
+           # Poolboy Metrics
            {Metrics.Poolboy, :track_machine_gun_pools, []},
            {Metrics.Poolboy, :track, [:aws_ex_ray_client_pool, "AwsExRayUDPClient"]},
-           {Metrics.Poolboy, :track_pool_aggregates, []}
+           {Metrics.Poolboy, :track_pool_aggregates, []},
+           # NimblePool Metrics
+           {Metrics.NimblePool, :track_pools, []}
          ],
          period: :timer.seconds(5),
          name: :belfrage_telemetry_poller

@@ -205,6 +205,7 @@ defroutefile "Main" do
 
   # data endpoints
 
+  handle "/fd/p/mytopics-page", using: "MyTopicsPage", examples: []
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
@@ -226,7 +227,6 @@ defroutefile "Main" do
   handle "/bitesize/search", using: "Search", examples: ["/bitesize/search"]
   handle "/sounds/search", using: "Search", examples: ["/sounds/search"]
   handle "/pres-test/new-chwilio", using: "WelshNewSearch", only_on: "test", examples: ["/pres-test/new-chwilio"]
-  handle "/news/search", using: "NewsSearch", examples: ["/news/search"]
 
   # News
 
@@ -246,6 +246,8 @@ defroutefile "Main" do
       !String.match?(audience, ~r/^(domestic|us|international|asia)$/)
     ]
   end
+
+  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
@@ -299,6 +301,22 @@ defroutefile "Main" do
                  !String.match?(division_name, ~r/^(constituencies|councils|mayors)$/),
                  !String.match?(division_id, ~r/^[NSWE][0-9]{8}$/)
                ]
+  end
+
+  handle "/news/election/2019/uk/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/results"]
+
+  handle "/news/election/2019/uk/constituencies", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/constituencies"]
+
+  handle "/news/election/2019/uk/constituencies/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/constituencies/E92000001", "/news/election/2019/uk/constituencies/S83000001", "/news/election/2019/uk/constituencies/W76000005", "/news/election/2019/uk/constituencies/N12000001"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^[NSWE][0-9]{8}$/)
+    ]
+  end
+
+  handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2019/uk/regions/E92000001", "/news/election/2019/uk/regions/W92000004", "/news/election/2019/uk/regions/S92000003", "/news/election/2019/uk/regions/N92000002"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^(E92000001|W92000004|S92000003|N92000002)$/)
+    ]
   end
 
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
@@ -374,6 +392,10 @@ defroutefile "Main" do
     return_404 if: true
   end
 
+  handle "/news/videos/:optimo_id", using: "NewsVideos", only_on: "test", examples: ["/news/videos/cemgppexd28o?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
 
@@ -382,90 +404,90 @@ defroutefile "Main" do
   end
 
   # News indexes
-  handle "/news/access-to-news", using: "News", examples: ["/news/access-to-news"]
-  handle "/news/business", using: "News", examples: ["/news/business"]
-  handle "/news/components", using: "News", examples: ["/news/components"]
-  handle "/news/coronavirus", using: "News", examples: ["/news/coronavirus"]
-  handle "/news/disability", using: "News", examples: ["/news/disability"]
-  handle "/news/education", using: "News", examples: ["/news/education"]
-  handle "/news/england", using: "News", examples: ["/news/england"]
-  handle "/news/entertainment_and_arts", using: "News", examples: ["/news/entertainment_and_arts"]
-  handle "/news/explainers", using: "News", examples: ["/news/explainers"]
-  handle "/news/front_page", using: "News", examples: ["/news/front_page"]
-  handle "/news/front-page-service-worker.js", using: "News", examples: ["/news/front-page-service-worker.js"]
-  handle "/news/have_your_say", using: "News", examples: ["/news/have_your_say"]
-  handle "/news/health", using: "News", examples: ["/news/health"]
-  handle "/news/in_pictures", using: "News", examples: ["/news/in_pictures"]
-  handle "/news/newsbeat", using: "News", examples: ["/news/newsbeat"]
-  handle "/news/northern_ireland", using: "News", examples: ["/news/northern_ireland"]
-  handle "/news/paradisepapers", using: "News", examples: ["/news/paradisepapers"]
-  handle "/news/politics", using: "News", examples: ["/news/politics"]
-  handle "/news/reality_check", using: "News", examples: ["/news/reality_check"]
-  handle "/news/science_and_environment", using: "News", examples: ["/news/science_and_environment"]
-  handle "/news/scotland", using: "News", examples: ["/news/scotland"]
-  handle "/news/stories", using: "News", examples: ["/news/stories"]
-  handle "/news/technology", using: "News", examples: ["/news/technology"]
-  handle "/news/the_reporters", using: "News", examples: ["/news/the_reporters"]
-  handle "/news/uk", using: "News", examples: ["/news/uk"]
-  handle "/news/wales", using: "News", examples: ["/news/wales"]
-  handle "/news/world", using: "News", examples: ["/news/world"]
-  handle "/news/world_radio_and_tv", using: "News", examples: ["/news/world_radio_and_tv"]
+  handle "/news/access-to-news", using: "NewsIndex", examples: ["/news/access-to-news"]
+  handle "/news/business", using: "NewsIndex", examples: ["/news/business"]
+  handle "/news/components", using: "NewsComponents", examples: ["/news/components"]
+  handle "/news/coronavirus", using: "NewsIndex", examples: ["/news/coronavirus"]
+  handle "/news/disability", using: "NewsIndex", examples: ["/news/disability"]
+  handle "/news/education", using: "NewsIndex", examples: ["/news/education"]
+  handle "/news/england", using: "NewsIndex", examples: ["/news/england"]
+  handle "/news/entertainment_and_arts", using: "NewsIndex", examples: ["/news/entertainment_and_arts"]
+  handle "/news/explainers", using: "NewsIndex", examples: ["/news/explainers"]
+  handle "/news/front_page", using: "NewsIndex", examples: ["/news/front_page"]
+  handle "/news/front-page-service-worker.js", using: "NewsIndex", examples: ["/news/front-page-service-worker.js"]
+  handle "/news/have_your_say", using: "NewsIndex", examples: ["/news/have_your_say"]
+  handle "/news/health", using: "NewsIndex", examples: ["/news/health"]
+  handle "/news/in_pictures", using: "NewsIndex", examples: ["/news/in_pictures"]
+  handle "/news/newsbeat", using: "NewsIndex", examples: ["/news/newsbeat"]
+  handle "/news/northern_ireland", using: "NewsIndex", examples: ["/news/northern_ireland"]
+  handle "/news/paradisepapers", using: "NewsIndex", examples: ["/news/paradisepapers"]
+  handle "/news/politics", using: "NewsIndex", examples: ["/news/politics"]
+  handle "/news/reality_check", using: "NewsIndex", examples: ["/news/reality_check"]
+  handle "/news/science_and_environment", using: "NewsIndex", examples: ["/news/science_and_environment"]
+  handle "/news/scotland", using: "NewsIndex", examples: ["/news/scotland"]
+  handle "/news/stories", using: "NewsIndex", examples: ["/news/stories"]
+  handle "/news/technology", using: "NewsIndex", examples: ["/news/technology"]
+  handle "/news/the_reporters", using: "NewsIndex", examples: ["/news/the_reporters"]
+  handle "/news/uk", using: "NewsIndex", examples: ["/news/uk"]
+  handle "/news/wales", using: "NewsIndex", examples: ["/news/wales"]
+  handle "/news/world", using: "NewsIndex", examples: ["/news/world"]
+  handle "/news/world_radio_and_tv", using: "NewsIndex", examples: ["/news/world_radio_and_tv"]
 
   # News feature indexes (FIX assets)
-  handle "/news/business-11428889", using: "News", examples: ["/news/business-11428889"]
-  handle "/news/business-12686570", using: "News", examples: ["/news/business-12686570"]
-  handle "/news/business-15521824", using: "News", examples: ["/news/business-15521824"]
-  handle "/news/business-22434141", using: "News", examples: ["/news/business-22434141"]
-  handle "/news/business-22449886", using: "News", examples: ["/news/business-22449886"]
-  handle "/news/business-33712313", using: "News", examples: ["/news/business-33712313"]
-  handle "/news/business-38507481", using: "News", examples: ["/news/business-38507481"]
-  handle "/news/business-41188875", using: "News", examples: ["/news/business-41188875"]
-  handle "/news/business-45489065", using: "News", examples: ["/news/business-45489065"]
-  handle "/news/business-46985441", using: "News", examples: ["/news/business-46985441"]
-  handle "/news/business-46985442", using: "News", examples: ["/news/business-46985442"]
-  handle "/news/education-46131593", using: "News", examples: ["/news/education-46131593"]
-  handle "/news/uk-england-47486169", using: "News", examples: ["/news/uk-england-47486169"]
-  handle "/news/science-environment-56837908", using: "News", examples: ["/news/science-environment-56837908"]
-  handle "/news/technology-22774341", using: "News", examples: ["/news/technology-22774341"]
-  handle "/news/uk-55220521", using: "News", examples: ["/news/uk-55220521"]
-  handle "/news/uk-northern-ireland-38323577", using: "News", examples: ["/news/uk-northern-ireland-38323577"]
-  handle "/news/uk-northern-ireland-55401938", using: "News", examples: ["/news/uk-northern-ireland-55401938"]
-  handle "/news/uk-politics-48448557", using: "News", examples: ["/news/uk-politics-48448557"]
-  handle "/news/world-43160365", using: "News", examples: ["/news/world-43160365"]
-  handle "/news/world-48623037", using: "News", examples: ["/news/world-48623037"]
-  handle "/news/world-middle-east-48433977", using: "News", examples: ["/news/world-middle-east-48433977"]
-  handle "/news/world-us-canada-15949569", using: "News", examples: ["/news/world-us-canada-15949569"]
+  handle "/news/business-11428889", using: "NewsBusiness", examples: ["/news/business-11428889"]
+  handle "/news/business-12686570", using: "NewsBusiness", examples: ["/news/business-12686570"]
+  handle "/news/business-15521824", using: "NewsBusiness", examples: ["/news/business-15521824"]
+  handle "/news/business-22434141", using: "NewsBusiness", examples: ["/news/business-22434141"]
+  handle "/news/business-22449886", using: "NewsBusiness", examples: ["/news/business-22449886"]
+  handle "/news/business-33712313", using: "NewsBusiness", examples: ["/news/business-33712313"]
+  handle "/news/business-38507481", using: "NewsBusiness", examples: ["/news/business-38507481"]
+  handle "/news/business-41188875", using: "NewsBusiness", examples: ["/news/business-41188875"]
+  handle "/news/business-45489065", using: "NewsBusiness", examples: ["/news/business-45489065"]
+  handle "/news/business-46985441", using: "NewsBusiness", examples: ["/news/business-46985441"]
+  handle "/news/business-46985442", using: "NewsBusiness", examples: ["/news/business-46985442"]
+  handle "/news/education-46131593", using: "NewsEducation", examples: ["/news/education-46131593"]
+  handle "/news/uk-england-47486169", using: "NewsUk", examples: ["/news/uk-england-47486169"]
+  handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", examples: ["/news/science-environment-56837908"]
+  handle "/news/technology-22774341", using: "NewsScienceAndTechnology", examples: ["/news/technology-22774341"]
+  handle "/news/uk-55220521", using: "NewsUk", examples: ["/news/uk-55220521"]
+  handle "/news/uk-northern-ireland-38323577", using: "NewsUk", examples: ["/news/uk-northern-ireland-38323577"]
+  handle "/news/uk-northern-ireland-55401938", using: "NewsUk", examples: ["/news/uk-northern-ireland-55401938"]
+  handle "/news/uk-politics-48448557", using: "NewsUk", examples: ["/news/uk-politics-48448557"]
+  handle "/news/world-43160365", using: "NewsWorld", examples: ["/news/world-43160365"]
+  handle "/news/world-48623037", using: "NewsWorld", examples: ["/news/world-48623037"]
+  handle "/news/world-middle-east-48433977", using: "NewsWorld", examples: ["/news/world-middle-east-48433977"]
+  handle "/news/world-us-canada-15949569", using: "NewsWorld", examples: ["/news/world-us-canada-15949569"]
 
   # News archive assets
-  handle "/news/10284448/ticker.sjson", using: "News", examples: ["/news/10284448/ticker.sjson"]
-  handle "/news/1/*_any", using: "News", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
-  handle "/news/2/*_any", using: "News", examples: ["/news/2/text_only.stm"]
-  handle "/news/sport1/*_any", using: "News", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+  handle "/news/10284448/ticker.sjson", using: "NewsArchive", examples: ["/news/10284448/ticker.sjson"]
+  handle "/news/1/*_any", using: "NewsArchive", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
+  handle "/news/2/*_any", using: "NewsArchive", examples: ["/news/2/text_only.stm"]
+  handle "/news/sport1/*_any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+  handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
 
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/bigscreen/*_any", using: "News", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
   handle "/news/blogs/*_any", using: "News", examples: ["/news/blogs/the_papers"]
-  handle "/news/business/*_any", using: "News", examples: ["/news/business/companies"]
-  handle "/news/correspondents/*_any", using: "News", examples: ["/news/correspondents/philcoomes"]
-  handle "/news/england/*_any", using: "News", examples: ["/news/england/regions"]
+  handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
+  handle "/news/correspondents/*_any", using: "NewsUk", examples: ["/news/correspondents/philcoomes"]
+  handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
-  handle "/news/events/*_any", using: "News", examples: ["/news/events/scotland-decides/results"]
+  handle "/news/events/*_any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
   handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
-  handle "/news/local_news_slice/*_any", using: "News", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
-  handle "/news/northern_ireland/*_any", using: "News", examples: ["/news/northern_ireland/northern_ireland_politics"]
-  handle "/news/politics/*_any", using: "News", examples: ["/news/politics/eu_referendum/results"]
+  handle "/news/local_news_slice/*_any", using: "NewsUk", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
+  handle "/news/northern_ireland/*_any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
+  handle "/news/politics/*_any", using: "NewsUk", examples: ["/news/politics/eu_referendum/results"]
   handle "/news/resources/*_any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
-  handle "/news/rss/*_any", using: "News", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
-  handle "/news/science-environment/*_any", using: "News", examples: ["/news/science-environment/18552512"]
-  handle "/news/scotland/*_any", using: "News", examples: ["/news/scotland/glasgow_and_west"]
+  handle "/news/rss/*_any", using: "NewsRss", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
+  handle "/news/science-environment/*_any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
+  handle "/news/scotland/*_any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
   handle "/news/slides/*_any", using: "News", examples: ["/news/slides/dress/3/yes-you-can-go-to-the-ball"]
   handle "/news/special/*_any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
-  handle "/news/technology/*_any", using: "News", examples: ["/news/technology/31153361"]
-  handle "/news/wales/*_any", using: "News", examples: ["/news/wales/south_east_wales"]
-  handle "/news/world/*_any", using: "News", examples: ["/news/world/europe"]
-  handle "/news/world_radio_and_tv/*_any", using: "News", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
+  handle "/news/technology/*_any", using: "NewsScienceAndTechnology", examples: ["/news/technology/31153361"]
+  handle "/news/wales/*_any", using: "NewsUk", examples: ["/news/wales/south_east_wales"]
+  handle "/news/world/*_any", using: "NewsWorld", examples: ["/news/world/europe"]
+  handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News", examples: [] do
@@ -476,11 +498,11 @@ defroutefile "Main" do
     return_404 if: true
   end
 
-  handle "/news/:id.amp", using: "News", examples: ["/news/business-58847275.amp"]
-  handle "/news/:id.json", using: "News", examples: ["/news/business-58847275.json"]
+  handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
+  handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
 
-  handle "/news/rss.xml", using: "News", examples: ["/news/rss.xml"]
-  handle "/news/:id/rss.xml", using: "News", examples: ["/news/uk/rss.xml"]
+  handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
+  handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
@@ -495,6 +517,8 @@ defroutefile "Main" do
   redirect "/cymrufyw/amp/:topic/:id", to: "/cymrufyw/:topic/:id.amp", status: 301
 
   redirect "/cymrufyw/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 302
+
+  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
 
   handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
@@ -515,7 +539,14 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
+  handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/etholaethau/W09000001"] do
+    return_404 if: [
+      !String.match?(division_id, ~r/^W[0-9]{8}$/)
+    ]
+  end
+
+  handle "/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004", using: "CymrufywEtholiadCanlyniadau", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004"]
+
   handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", examples: ["/cymrufyw/gwleidyddiaeth"]
   handle "/cymrufyw/gogledd-orllewin", using: "Cymrufyw", examples: ["/cymrufyw/gogledd-orllewin"]
   handle "/cymrufyw/gogledd-ddwyrain", using: "Cymrufyw", examples: ["/cymrufyw/gogledd-ddwyrain"]
@@ -534,6 +565,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", only_on: "test", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
 
   # Naidheachdan
@@ -549,6 +584,10 @@ defroutefile "Main" do
 
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", only_on: "test", examples: ["/naidheachdan/bhidio/cvpvqqp83g0o?mode=testData"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   handle "/naidheachdan/*_any", using: "Naidheachdan", examples: []
@@ -601,6 +640,9 @@ defroutefile "Main" do
   ## World Service - "Access to News" Redirects
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
+
+  redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
+  redirect "/serbian/cyr/extra/ebxujaequt/rat-silovanje-bosna", to: "/serbian/lat/extra/ebxujaequt/rat-silovanje-bosna", status: 301
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
@@ -1931,24 +1973,79 @@ defroutefile "Main" do
 
   # Bitesize
   handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
+
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/z8tnvcw"]
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
+
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
+
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
+
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
+
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
+
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
   handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision"]
   handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw7xfcw/test"]
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
+
+  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
+  handle "/bitesize/preview/guides/:id/revision", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
+  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
+  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
+  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
+
+  redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
+
   handle "/bitesize/topics/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/z82hsbk"]
   handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
   handle "/games/*_any", using: "Games", examples: ["/games/embed/genie-starter-pack"]
+
+
+  # Classic Apps
+
+  handle "/content/cps/news/front_page", using: "ClassicAppNewsFrontpage", examples: ["/content/cps/news/front_page"]
+  handle "/content/cps/news/live/*any", using: "ClassicAppNewsLive", examples: ["/content/cps/news/live/world-africa-47639452"]
+  handle "/content/cps/news/av/*any", using: "ClassicAppNewsAv", examples: ["/content/cps/news/av/world-europe-59368718"]
+  handle "/content/cps/news/articles/*any", using: "ClassicAppNewsArticles", examples: ["/content/cps/news/articles/c7pp03pz8dro"]
+  handle "/content/cps/news/video_and_audio/*any", using: "ClassicAppNewsAudioVideo", examples: ["/content/cps/news/video_and_audio/ten_to_watch", "/content/cps/news/video_and_audio/top_stories"]
+  handle "/content/cps/news/*any", using: "ClassicAppNewsCps", examples: ["/content/cps/news/world-europe-59368718", "/content/cps/news/uk-england-london-59333481"]
+
+  handle "/content/cps/sport/front-page", using: "ClassicAppSportFrontpage", examples: ["/content/cps/sport/front-page"]
+  handle "/content/cps/sport/live/*any", using: "ClassicAppSportLive", examples: ["/content/cps/sport/live/football/59369278", "/content/cps/sport/live/formula1/58748830"]
+  handle "/content/cps/sport/football/*any", using: "ClassicAppSportFootball", examples: ["/content/cps/sport/football/59372826", "/content/cps/sport/football/58643317"]
+  handle "/content/cps/sport/av/football/*any", using: "ClassicAppSportFootballAv", examples: ["/content/cps/sport/av/football/59346509"]
+  handle "/content/cps/sport/*any", using: "ClassicAppSportCps", examples: ["/content/cps/sport/rugby-union/59369204", "/content/cps/sport/tennis/59328440"]
+
+  handle "/content/cps/newsround/*any", using: "ClassicAppNewsround", examples: ["/content/cps/newsround/45274517"]
+  handle "/content/cps/naidheachdan/*any", using: "ClassicAppNaidheachdan", examples: ["/content/cps/naidheachdan/59371990", "/content/cps/naidheachdan/front_page", "/content/cps/naidheachdan/dachaigh"]
+  handle "/content/cps/mundo/*any", using: "ClassicAppMundo", examples: ["/content/cps/mundo/vert-cap-59223070?createdBy=mundo&language=es", "/content/cps/mundo/noticias-59340165?createdBy=mundo&language=es"]
+  handle "/content/cps/arabic/*any", using: "ClassicAppArabic", examples: ["/content/cps/arabic/live?createdBy=arabic&language=ar", "/content/cps/arabic/art-and-culture-59307957?createdBy=arabic&language=ar"]
+  handle "/content/cps/russian/*any", using: "ClassicAppRussianCps", examples: ["/content/cps/russian/front_page?createdBy=russian&language=ru", "/content/cps/russian/news?createdBy=russian&language=ru", "/content/cps/russian/features-58536209?createdBy=russian&language=ru"]
+  handle "/content/cps/hindi/*any", using: "ClassicAppHindi", examples: ["/content/cps/hindi/india?createdBy=hindi&language=hi", "/content/cps/hindi/india-59277161?createdBy=hindi&language=hi"]
+  handle "/content/cps/learning_english/*any", using: "ClassicAppLearningEnglish", examples: ["/content/cps/learning_english/home", "/content/cps/learning_english/6-minute-english-59142810"]
+  handle "/content/cps/:product/*any", using: "ClassicAppProducts", examples: []
+  handle "/content/cps/*any", using: "ClassicAppCps", examples: []
+
+  handle "/content/ldp/:guid", using: "ClassicAppFablLdp", examples: ["/content/ldp/de648736-7268-454c-a7b1-dbff416f2865"]
+  handle "/content/most_popular/*any", using: "ClassicAppMostPopular", examples: ["/content/most_popular/news"]
+  handle "/content/ww/*any", using: "ClassicAppWw", examples: ["/content/ww/travel/module/homepage"]
+  handle "/content/news/*any", using: "ClassicAppNews", examples: []
+  handle "/content/sport/*any", using: "ClassicAppSport", examples: []
+  handle "/content/russian/*any", using: "ClassicAppRussian", examples: ["/content/russian/video?createdBy=russian&language=ru"]
+  handle "/content/:hash", using: "ClassicAppId", examples: ["/content/a2aad340841e6e878b0f7aff2ecfe8a8"]
+  handle "/content/:service/*any", using: "ClassicAppService", examples: []
+  handle "/content/*any", using: "ClassicApp", examples: []
+  handle "/static/*any", using: "ClassicAppStaticContent", examples: ["/static/LE/android/1.5.0/config.json", "/static/MUNDO/ios/5.19.0/layouts.zip"]
+  handle "/flagpoles/*any", using: "ClassicAppFlagpole", examples: ["/flagpoles/ads"]
+
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]

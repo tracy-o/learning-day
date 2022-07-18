@@ -13,13 +13,11 @@ config :belfrage,
   aws: Belfrage.AWSMock,
   xray: Belfrage.XrayMock,
   ccp_client: Belfrage.Clients.CCPMock,
+  finch_impl: FinchMock,
   ccp_s3_bucket: "belfrage-distributed-cache-test",
   dial: Belfrage.Dials.ServerMock,
   expiry_validator: Belfrage.Authentication.Validator.ExpiryMock,
   event: Belfrage.EventMock,
-  jwk_polling_enabled: false,
-  webcore_credentials_source: Belfrage.Services.Webcore.Credentials.Env,
-  webcore_credentials_polling_enabled: false,
   webcore_credentials_session_token: "stub-access-key-id",
   webcore_credentials_access_key_id: "stub-secret-access-key",
   webcore_credentials_secret_access_key: "stub-session-token",
@@ -31,13 +29,21 @@ config :belfrage,
   simorgh_endpoint: "https://simorgh.example.com",
   programmes_endpoint: "https://programmes.example.com",
   karanga_endpoint: "https://broker.karanga.test.api.bbci.co.uk",
+  philippa_endpoint: "https://philippa-producer.test.api.bbci.co.uk",
+  trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
+  walter_endpoint: "https://walter-producer.test.api.bbci.co.uk",
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
   short_counter_reset_interval: 3_600_000,
   long_counter_reset_interval: 3_600_000,
-  dials_startup_polling_delay: 3_600_000,
-  bbc_id_availability_poll_interval: 3_600_000
+  poller_intervals: [
+    jwk: 50,
+    dials: 50,
+    credentials: 50,
+    bbc_id_availability: 50,
+    mvt_file: 50
+  ]
 
 config :cachex, :limit,
   size: 6,

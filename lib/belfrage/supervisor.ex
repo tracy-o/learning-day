@@ -10,6 +10,7 @@ defmodule Belfrage.Supervisor do
   # {Cachex, [name: :cache, limit: cachex_limit()]}
   def children(env: env) do
     [
+      {Finch, finch_opts()},
       {BelfrageWeb.Router, router_options(env)},
       Belfrage.RouteStateRegistry,
       Belfrage.RouteStateSupervisor,
@@ -18,8 +19,49 @@ defmodule Belfrage.Supervisor do
       {Belfrage.Metrics.Supervisor, [env: env]},
       {Belfrage.Mvt.Supervisor, [env: env]},
       {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-      Belfrage.Services.Webcore.Supervisor
+      {Belfrage.Services.Webcore.Supervisor, [env: env]}
     ] ++ http_router(env)
+  end
+
+  defp finch_opts() do
+    bucket = Application.get_env(:belfrage, :ccp_s3_bucket)
+    region = Application.get_env(:ex_aws, :region)
+
+    [
+      name: Finch,
+      pools: %{
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
+        Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :origin_simulator) => [size: 512],
+        Application.get_env(:belfrage, :mozart_weather_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
+        Application.get_env(:belfrage, :programmes_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
+        Application.get_env(:belfrage, :fabl_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:cacertfile, Application.get_env(:finch, :cacertfile)},
+              {:certfile, Application.get_env(:finch, :certfile)},
+              {:keyfile, Application.get_env(:finch, :keyfile)},
+              {:verify, :verify_peer}
+            ]
+          ]
+        ]
+      }
+    ]
   end
 
   @impl true
