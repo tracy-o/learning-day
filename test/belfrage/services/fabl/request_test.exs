@@ -66,13 +66,32 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       }
     }
 
+    struct_without_name_path_param = %Struct{
+      request: %Struct.Request{
+        method: "GET",
+        path: "/fd/p/mytopics-page",
+        request_id: "arequestid",
+        req_svc_chain: "Belfrage",
+        query_params: %{
+          "q" => "something"
+        }
+      },
+      private: %Struct.Private{
+        origin: "https://fabl.test.api.bbci.co.uk",
+        personalised_route: true
+      }
+    }
+
     %{
       valid_session: Struct.add(struct, :user_session, valid_session),
+      valid_session_no_name_param: Struct.add(struct_without_name_path_param, :user_session, valid_session),
       valid_session_without_user_attributes: Struct.add(struct, :user_session, valid_session_without_user_attributes),
       valid_session_with_partial_user_attributes:
         Struct.add(struct, :user_session, valid_session_with_partial_user_attributes),
       invalid_session: Struct.add(struct, :user_session, invalid_session),
-      unauthenticated_session: Struct.add(struct, :user_session, unauthenticated_session)
+      unauthenticated_session: Struct.add(struct, :user_session, unauthenticated_session),
+      unauthenticated_session_no_name_param:
+        Struct.add(struct_without_name_path_param, :user_session, unauthenticated_session)
     }
   end
 
@@ -277,6 +296,41 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
+             } == Request.build(struct)
+    end
+  end
+
+  describe "requests without name param" do
+    test "personalised", %{valid_session_no_name_param: struct_without_name_path_param} do
+      assert %Clients.HTTP.Request{
+               headers: %{
+                 "accept-encoding" => "gzip",
+                 "req-svc-chain" => "Belfrage",
+                 "user-agent" => "Belfrage",
+                 "authorization" => "Bearer a-valid-session-token",
+                 "ctx-pii-age-bracket" => "o18",
+                 "ctx-pii-allow-personalisation" => "true",
+                 "ctx-pers-env" => "int",
+                 "x-authentication-provider" => "idv5"
+               },
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/mytopics-page?q=something"
+             } == Request.build(struct_without_name_path_param)
+    end
+
+    test "non personalised", %{unauthenticated_session_no_name_param: struct_without_name_path_param} do
+      struct = Struct.add(struct_without_name_path_param, :private, %{personalised_route: false})
+
+      assert %Clients.HTTP.Request{
+               headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
+               method: :get,
+               payload: "",
+               request_id: "arequestid",
+               timeout: 6000,
+               url: "https://fabl.test.api.bbci.co.uk/personalised-module/mytopics-page?q=something"
              } == Request.build(struct)
     end
   end
