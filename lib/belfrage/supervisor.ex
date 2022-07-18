@@ -33,7 +33,14 @@ defmodule Belfrage.Supervisor do
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
         Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
         Application.get_env(:belfrage, :origin_simulator) => [size: 512],
-        Application.get_env(:belfrage, :mozart_weather_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :mozart_weather_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
         Application.get_env(:belfrage, :programmes_endpoint) => [
           size: 512,
           conn_opts: [
