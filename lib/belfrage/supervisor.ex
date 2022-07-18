@@ -102,7 +102,7 @@ defmodule Belfrage.Supervisor do
     end
   end
 
-  def endpoint(url) do
+  defp endpoint(url) do
     url = URI.parse(url)
 
     "#{url.scheme}://#{url.host}"
