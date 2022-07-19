@@ -61,6 +61,9 @@ defroutefile "Sport" do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
+  ## Sport redirects
+  redirect "/sport/football/conference", to: "/sport/football/national-league", status: 301
+
   ## Sport RSS feed redirects - disciplines
   redirect "/sport/alpine-skiing/rss.xml", to: "https://feeds.bbci.co.uk/sport/4d38153b-987e-4497-b959-8be7c968d4d1/rss.xml", status: 301, ttl: 3600
   redirect "/sport/archery/rss.xml", to: "https://feeds.bbci.co.uk/sport/b9a58a01-0c74-8b47-972f-68f922ebd90a/rss.xml", status: 301, ttl: 3600
