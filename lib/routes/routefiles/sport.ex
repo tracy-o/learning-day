@@ -61,8 +61,7 @@ defroutefile "Sport" do
   redirect "/sport/correspondents/russellfuller", to: "/sport/topics/c5yd7pzqx6pt", status: 301
   redirect "/sport/correspondents/tomenglish", to: "/sport/topics/cd61kend6lzt", status: 301
 
-  ## Sport redirects
-  redirect "/sport/football/conference", to: "/sport/football/national-league", status: 301
+
 
   ## Sport RSS feed redirects - disciplines
   redirect "/sport/alpine-skiing/rss.xml", to: "https://feeds.bbci.co.uk/sport/4d38153b-987e-4497-b959-8be7c968d4d1/rss.xml", status: 301, ttl: 3600
@@ -890,6 +889,8 @@ defroutefile "Sport" do
   redirect "/sport/get-inspired/fa-peoples-cup", to: "/sport/get-inspired", status: 301
   redirect "/sport/get-inspired/unsung-heroes.app", to: "/sport/get-inspired.app", status: 301
   redirect "/sport/get-inspired/unsung-heroes", to: "/sport/get-inspired", status: 301
+  redirect "/sport/football/conference", to: "/sport/football/national-league", status: 301
+  redirect "/sport/football/conference.app", to: "/sport/football/national-league.app", status: 301
 
   ## Sport unsupported data page redirects
   redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
