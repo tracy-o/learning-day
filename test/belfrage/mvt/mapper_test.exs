@@ -5,6 +5,8 @@ defmodule Belfrage.Mvt.MapperTest do
   alias Belfrage.Struct
   alias Belfrage.Mvt
 
+  setup :clear_slots_agent_state
+
   describe "when the mvt dial is turned off" do
     setup do
       stub_dial(:mvt_enabled, "false")
@@ -25,8 +27,8 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when an mvt request header has a corresponding project slot" do
     setup do
       stub_dial(:mvt_enabled, "true")
-
       set_slots(%{"bbc-mvt-1" => "button_colour", "bbc-mvt-3" => "sidebar"})
+      :ok
     end
 
     test "the header is mapped and added to the struct" do
@@ -47,6 +49,7 @@ defmodule Belfrage.Mvt.MapperTest do
     setup do
       stub_dial(:mvt_enabled, "true")
       set_slots(%{"bbc-mvt-1" => "box_colour_change"})
+      :ok
     end
 
     test "the slot key is added to the struct with a nil \"type;value\"" do
@@ -59,7 +62,7 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when an mvt request header doesn't have a corresponding slot experiment" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      set_slots(%{})
+      :ok
     end
 
     test "the header isn't added to the struct" do
@@ -75,6 +78,7 @@ defmodule Belfrage.Mvt.MapperTest do
     setup do
       stub_dial(:mvt_enabled, "true")
       set_slots(%{"bbc-mvt-1" => "button_colour"})
+      :ok
     end
 
     test "the header is added to the struct with a nil \"type;value\"" do
@@ -86,7 +90,6 @@ defmodule Belfrage.Mvt.MapperTest do
   describe "when all slots are empty" do
     setup do
       stub_dial(:mvt_enabled, "true")
-      Mvt.Slots.set(%{})
       :ok
     end
 
@@ -132,5 +135,10 @@ defmodule Belfrage.Mvt.MapperTest do
         platform: platform
       }
     }
+  end
+
+  defp clear_slots_agent_state(_context) do
+    Mvt.Slots.set(%{})
+    :ok
   end
 end
