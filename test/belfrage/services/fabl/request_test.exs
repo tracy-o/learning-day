@@ -89,9 +89,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       valid_session_with_partial_user_attributes:
         Struct.add(struct, :user_session, valid_session_with_partial_user_attributes),
       invalid_session: Struct.add(struct, :user_session, invalid_session),
-      unauthenticated_session: Struct.add(struct, :user_session, unauthenticated_session),
-      unauthenticated_session_no_name_param:
-        Struct.add(struct_without_name_path_param, :user_session, unauthenticated_session)
+      unauthenticated_session: Struct.add(struct, :user_session, unauthenticated_session)
     }
   end
 
@@ -319,19 +317,6 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/mytopics-page?q=something"
              } == Request.build(struct_without_name_path_param)
-    end
-
-    test "non personalised", %{unauthenticated_session_no_name_param: struct_without_name_path_param} do
-      struct = Struct.add(struct_without_name_path_param, :private, %{personalised_route: false})
-
-      assert %Clients.HTTP.Request{
-               headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
-               method: :get,
-               payload: "",
-               request_id: "arequestid",
-               timeout: 6000,
-               url: "https://fabl.test.api.bbci.co.uk/personalised-module/mytopics-page?q=something"
-             } == Request.build(struct)
     end
   end
 
