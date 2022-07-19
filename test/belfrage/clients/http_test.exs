@@ -187,9 +187,14 @@ defmodule Belfrage.Clients.HTTPTest do
     for pool_group <- [
           :OriginSimulator,
           :Programmes,
+          :MozartNews,
+          :MozartSport,
           :MozartWeather,
           :Simorgh,
-          :Fabl
+          :Fabl,
+          :AWS,
+          :AccountAuthentication,
+          :MvtFilePoller
         ] do
       test "#{pool_group} uses finch client", %{request: request} do
         FinchMock
@@ -206,9 +211,6 @@ defmodule Belfrage.Clients.HTTPTest do
           :ClassicApp,
           :Karanga,
           :MorphRouter,
-          :MozartNews,
-          :MozartSport,
-          :MozartSimorgh,
           :Webcore
         ] do
       test "#{pool_group} uses machine_gun client", %{request: request} do

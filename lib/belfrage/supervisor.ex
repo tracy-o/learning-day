@@ -31,8 +31,35 @@ defmodule Belfrage.Supervisor do
       name: Finch,
       pools: %{
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
+        "https://sts.#{region}.amazonaws.com" => [size: 512],
+        endpoint(Application.get_env(:belfrage, :authentication)["account_jwk_uri"]) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
+        endpoint(Application.get_env(:belfrage, :authentication)["idcta_config_uri"]) => [size: 512],
+        endpoint(Application.get_env(:belfrage, :mvt)[:slots_file_location]) => [size: 512],
         Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
         Application.get_env(:belfrage, :origin_simulator) => [size: 512],
+        Application.get_env(:belfrage, :mozart_news_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
+        Application.get_env(:belfrage, :mozart_sport_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
         Application.get_env(:belfrage, :mozart_weather_endpoint) => [
           size: 512,
           conn_opts: [
@@ -87,5 +114,11 @@ defmodule Belfrage.Supervisor do
       :dev -> [scheme: :http, port: 7080]
       :prod -> [scheme: :http, port: 7080]
     end
+  end
+
+  defp endpoint(url) do
+    url = URI.parse(url)
+
+    "#{url.scheme}://#{url.host}"
   end
 end
