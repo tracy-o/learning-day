@@ -9,9 +9,9 @@ defmodule Belfrage.Metrics.NimblePoolTest do
       {socket, port} = given_udp_port_opened()
 
       start_reporter(
-        metrics: Belfrage.Metrics.NimblePool.metrics(),
+        metrics: Belfrage.Metrics.Statsd.nimble_pool_metrics(),
         formatter: :datadog,
-        global_tags: [BBCEnvironment: "test"],
+        global_tags: [BBCEnvironment: "live"],
         port: port
       )
 
@@ -37,7 +37,8 @@ defmodule Belfrage.Metrics.NimblePoolTest do
         socket,
         Enum.join(
           [
-            "nimble_pool.available_workers.count:1|g|#pool_name:localhost,BBCEnvironment:test\nnimble_pool.queued_requests.count:0|g|#pool_name:localhost,BBCEnvironment:test"
+            "nimble_pool.available_workers.count:1|g|#BBCEnvironment:live,pool_name:localhost",
+            "nimble_pool.queued_requests.count:0|g|#BBCEnvironment:live,pool_name:localhost"
           ],
           "\n"
         )
@@ -61,7 +62,8 @@ defmodule Belfrage.Metrics.NimblePoolTest do
         socket,
         Enum.join(
           [
-            "nimble_pool.available_workers.count:0|g|#pool_name:localhost,BBCEnvironment:test\nnimble_pool.queued_requests.count:0|g|#pool_name:localhost,BBCEnvironment:test"
+            "nimble_pool.available_workers.count:0|g|#BBCEnvironment:live,pool_name:localhost",
+            "nimble_pool.queued_requests.count:0|g|#BBCEnvironment:live,pool_name:localhost"
           ],
           "\n"
         )
@@ -91,7 +93,8 @@ defmodule Belfrage.Metrics.NimblePoolTest do
         socket,
         Enum.join(
           [
-            "nimble_pool.available_workers.count:0|g|#pool_name:localhost,BBCEnvironment:test\nnimble_pool.queued_requests.count:1|g|#pool_name:localhost,BBCEnvironment:test"
+            "nimble_pool.available_workers.count:0|g|#BBCEnvironment:live,pool_name:localhost",
+            "nimble_pool.queued_requests.count:1|g|#BBCEnvironment:live,pool_name:localhost"
           ],
           "\n"
         )
@@ -115,7 +118,8 @@ defmodule Belfrage.Metrics.NimblePoolTest do
         socket,
         Enum.join(
           [
-            "nimble_pool.available_workers.count:0|g|#pool_name:localhost,BBCEnvironment:test\nnimble_pool.queued_requests.count:2|g|#pool_name:localhost,BBCEnvironment:test"
+            "nimble_pool.available_workers.count:0|g|#BBCEnvironment:live,pool_name:localhost",
+            "nimble_pool.queued_requests.count:2|g|#BBCEnvironment:live,pool_name:localhost"
           ],
           "\n"
         )

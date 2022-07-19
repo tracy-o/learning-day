@@ -1,23 +1,7 @@
 defmodule Belfrage.Metrics.NimblePool do
   alias Belfrage.Metrics
 
-  import Telemetry.Metrics
   alias Belfrage.Metrics
-
-  def metrics() do
-    [
-      last_value("nimble_pool.available_workers.count",
-        measurement: :available_workers,
-        event_name: "belfrage.nimble_pool.status",
-        tags: [:pool_name, :BBCEnvironment]
-      ),
-      last_value("nimble_pool.queued_requests.count",
-        measurement: :queued_requests,
-        event_name: "belfrage.nimble_pool.status",
-        tags: [:pool_name, :BBCEnvironment]
-      )
-    ]
-  end
 
   def track_pools(supervisor \\ Finch.PoolSupervisor) do
     Enum.each(nimble_pool_pids(supervisor), &track/1)
