@@ -879,6 +879,8 @@ defroutefile "Sport" do
   ## Sport Index redirects
   redirect "/sport/football/african.app", to: "/sport/africa.app", status: 301
   redirect "/sport/football/african", to: "/sport/africa", status: 301
+  redirect "/sport/football/conference.app", to: "/sport/football/national-league.app", status: 301
+  redirect "/sport/football/conference", to: "/sport/football/national-league", status: 301
   redirect "/sport/front-page.app", to: "/sport.app", status: 301
   redirect "/sport/front-page", to: "/sport", status: 301
   redirect "/sport/get-inspired/bodypositive.app", to: "/sport/get-inspired.app", status: 301
@@ -887,8 +889,6 @@ defroutefile "Sport" do
   redirect "/sport/get-inspired/fa-peoples-cup", to: "/sport/get-inspired", status: 301
   redirect "/sport/get-inspired/unsung-heroes.app", to: "/sport/get-inspired.app", status: 301
   redirect "/sport/get-inspired/unsung-heroes", to: "/sport/get-inspired", status: 301
-  redirect "/sport/football/conference.app", to: "/sport/football/national-league.app", status: 301
-  redirect "/sport/football/conference", to: "/sport/football/national-league", status: 301
 
   ## Sport unsupported data page redirects
   redirect "/sport/disability-sport/paralympics-2012.app", to: "/sport/disability-sport.app", status: 301
