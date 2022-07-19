@@ -13,16 +13,17 @@ defmodule Belfrage.Services.Fabl.Request do
       method: :get,
       url:
         private.origin <>
-          module_path(path, private.personalised_route) <> params["name"] <> QueryParams.encode(request.query_params),
+          build_path(path, private.personalised_route, params["name"]) <> QueryParams.encode(request.query_params),
       headers: build_headers(request, user_session),
       request_id: request_id
     }
   end
 
-  defp module_path("/fd/preview/" <> _rest_of_path, true), do: "/preview/personalised-module/"
-  defp module_path(_path, true), do: "/personalised-module/"
-  defp module_path("/fd/preview/" <> _rest_of_path, false), do: "/preview/module/"
-  defp module_path(_path, false), do: "/module/"
+  defp build_path("/fd/p/mytopics-page", _personalised, _name), do: "/personalised-module/mytopics-page"
+  defp build_path("/fd/preview/" <> _rest_of_path, true, name), do: "/preview/personalised-module/#{name}"
+  defp build_path(_path, true, name), do: "/personalised-module/#{name}"
+  defp build_path("/fd/preview/" <> _rest_of_path, false, name), do: "/preview/module/#{name}"
+  defp build_path(_path, false, name), do: "/module/#{name}"
 
   defp build_headers(request, user_session) do
     request
