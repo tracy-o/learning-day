@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Refactor.LongQuoteBlocks
 defmodule Belfrage.Metrics do
   @moduledoc """
   This module should be used to emit telemetry events instead of calling
