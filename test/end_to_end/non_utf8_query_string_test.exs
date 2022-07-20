@@ -151,9 +151,9 @@ defmodule NonUtf8QueryStringTest do
 
     conn = conn(:get, "/200-ok-response?query=%")
 
-    assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
+    assert_raise Plug.Conn.WrapperError, fn -> Router.call(conn, []) end
 
     {status, _headers, _body} = sent_resp(conn)
-    assert status == 404
+    assert status == 500
   end
 end
