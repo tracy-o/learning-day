@@ -20,6 +20,7 @@ defmodule Belfrage.Services.Fabl.Request do
   end
 
   defp build_path("/fd/p/mytopics-page", _personalised, _name), do: "/personalised-module/mytopics-page"
+  defp build_path("/fd/p/mytopics-follows", _personalised, _name), do: "/personalised-module/mytopics-follows"
   defp build_path("/fd/preview/" <> _rest_of_path, true, name), do: "/preview/personalised-module/#{name}"
   defp build_path(_path, true, name), do: "/personalised-module/#{name}"
   defp build_path("/fd/preview/" <> _rest_of_path, false, name), do: "/preview/module/#{name}"
