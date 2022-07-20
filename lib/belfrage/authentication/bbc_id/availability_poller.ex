@@ -38,7 +38,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
       {:ok, availability}
     else
       :error ->
-        Logger.log(:warn, "Couldn't determine BBC ID availability from IDCTA config: #{inspect(config)}",
+        Logger.log(:error, "Couldn't determine BBC ID availability from IDCTA config: #{inspect(config)}",
           cloudwatch: true
         )
 
