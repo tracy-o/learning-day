@@ -192,6 +192,7 @@ defmodule Belfrage.Clients.HTTPTest do
           :MozartWeather,
           :Simorgh,
           :Fabl,
+          :Webcore,
           :AWS,
           :AccountAuthentication,
           :MvtFilePoller
@@ -210,8 +211,7 @@ defmodule Belfrage.Clients.HTTPTest do
           :Ares,
           :ClassicApp,
           :Karanga,
-          :MorphRouter,
-          :Webcore
+          :MorphRouter
         ] do
       test "#{pool_group} uses machine_gun client", %{request: request} do
         Belfrage.Clients.HTTP.MachineGunMock

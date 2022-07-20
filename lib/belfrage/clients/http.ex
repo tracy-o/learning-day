@@ -33,6 +33,7 @@ defmodule Belfrage.Clients.HTTP do
          :MozartWeather,
          :Simorgh,
          :Fabl,
+         :Webcore,
          :AWS,
          :AccountAuthentication,
          :MvtFilePoller
