@@ -9,7 +9,7 @@ defmodule Belfrage.SmokeTest do
   # TODO: Update how we reference the routes
   (Routes.Routefiles.Main.Test.routes() ++ Routes.Routefiles.Sport.Test.routes())
   |> Enum.filter(fn {_route_matcher, %{using: route_state_id, only_on: only_env}} ->
-    not (route_state_id in @ignore_specs) and only_env != "test"
+    route_state_id not in @ignore_specs and only_env != "test"
   end)
   |> Enum.each(fn {route_matcher, matcher_spec} ->
     @matcher_spec Macro.escape(matcher_spec)

@@ -78,9 +78,7 @@ defmodule Routes.SportRoutefileTest do
           :ok
         else
           {:error,
-           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{
-             conn.assigns.route_spec
-           }"}
+           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
         end
       end)
     end
@@ -97,9 +95,7 @@ defmodule Routes.SportRoutefileTest do
           :ok
         else
           {:error,
-           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{
-             conn.resp_body
-           }"}
+           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{conn.resp_body}"}
         end
       end)
     end
@@ -217,9 +213,7 @@ defmodule Routes.SportRoutefileTest do
     cond do
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{
-           inspect(duplicate_transformers)
-         }"}
+         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
       missing_transformers != [] ->
         {:error,

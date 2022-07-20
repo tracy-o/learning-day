@@ -203,9 +203,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
        %HTTP.Response{
          status_code: 200,
          body:
-           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"#{
-             future_iso8601(5)
-           }\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{past_iso8601(5)}\"}]}}"
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"#{future_iso8601(5)}\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{past_iso8601(5)}\"}]}}"
        }}
     end)
 
@@ -227,9 +225,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
        %HTTP.Response{
          status_code: 200,
          body:
-           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"null\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{
-             past_iso8601(5)
-           }\"}]}}"
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"null\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{past_iso8601(5)}\"}]}}"
        }}
     end)
 
@@ -251,9 +247,7 @@ defmodule Belfrage.Mvt.FilePollerTest do
        %HTTP.Response{
          status_code: 200,
          body:
-           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{
-             past_iso8601(5)
-           }\"}]}}"
+           "{\"projects\": {\"1\": [{\"key\": \"test_experiment_1\",\"header\": \"bbc-mvt-1\", \"validFrom\":\"\"}, {\"key\": \"test_experiment_2\",\"header\": \"bbc-mvt-2\", \"validFrom\":\"#{past_iso8601(5)}\"}]}}"
        }}
     end)
 
