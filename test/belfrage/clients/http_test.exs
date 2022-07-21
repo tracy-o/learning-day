@@ -187,7 +187,7 @@ defmodule Belfrage.Clients.HTTPTest do
     for pool_group <- [
           :OriginSimulator,
           :Programmes,
-          :ClassicApp,
+          :ClassicApps,
           :Karanga,
           :MozartNews,
           :MozartSport,

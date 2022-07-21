@@ -27,7 +27,7 @@ defmodule Belfrage.Clients.HTTP do
     if pool_group in [
          :OriginSimulator,
          :Programmes,
-         :ClassicApp,
+         :ClassicApps,
          :Karanga,
          :MozartNews,
          :MozartSport,
