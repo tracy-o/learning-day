@@ -33,9 +33,9 @@ defmodule Belfrage.Supervisor do
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
         "https://sts.#{region}.amazonaws.com" => [size: 512],
         "https://lambda.#{region}.amazonaws.com" => [size: 512],
-        Application.get_env(:belfrage, :philippa_endpoint) => [size: 512],
-        Application.get_env(:belfrage, :trevor_endpoint) => [size: 512],
-        Application.get_env(:belfrage, :walter_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :philippa_endpoint) => [size: 1024],
+        Application.get_env(:belfrage, :trevor_endpoint) => [size: 1024],
+        Application.get_env(:belfrage, :walter_endpoint) => [size: 1024],
         Application.get_env(:belfrage, :karanga_endpoint) => [
           size: 512,
           conn_opts: [
