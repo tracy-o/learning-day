@@ -33,6 +33,10 @@ defmodule Belfrage.Supervisor do
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
         "https://sts.#{region}.amazonaws.com" => [size: 512],
         "https://lambda.#{region}.amazonaws.com" => [size: 512],
+        Application.get_env(:belfrage, :philippa_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :trevor_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :walter_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :karanga_endpoint) => [size: 512],
         endpoint(Application.get_env(:belfrage, :authentication)["account_jwk_uri"]) => [
           size: 512,
           conn_opts: [
@@ -77,7 +81,29 @@ defmodule Belfrage.Supervisor do
             ]
           ]
         ],
+        Application.get_env(:belfrage, :ares_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:cacertfile, Application.get_env(:finch, :cacertfile)},
+              {:certfile, Application.get_env(:finch, :certfile)},
+              {:keyfile, Application.get_env(:finch, :keyfile)},
+              {:verify, :verify_peer}
+            ]
+          ]
+        ],
         Application.get_env(:belfrage, :fabl_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:cacertfile, Application.get_env(:finch, :cacertfile)},
+              {:certfile, Application.get_env(:finch, :certfile)},
+              {:keyfile, Application.get_env(:finch, :keyfile)},
+              {:verify, :verify_peer}
+            ]
+          ]
+        ],
+        Application.get_env(:belfrage, :morph_router_endpoint) => [
           size: 512,
           conn_opts: [
             transport_opts: [
