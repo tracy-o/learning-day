@@ -12,6 +12,11 @@ defmodule Belfrage.Transformers.AppSubdomainMapper do
   # we fetch is stored in S3 so we would only anticipate a high error rate if
   # AWS services became unavailable or were misconfigured.
 
+  # the full host name for these subdomains are:
+  # - news-app-classic.test.api.bbci.co.uk
+  # - news-app-global-classic.test.api.bbci.co.uk
+  # - news-app-ws-classic.test.api.bbci.co.uk
+
   def call(rest, struct) do
     case struct.request.subdomain do
       "news-app-classic" ->
