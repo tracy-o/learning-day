@@ -3,7 +3,7 @@ defmodule Belfrage.Logger.HeaderRedactor do
   Redacts personal or unnecessary information from headers when logging
   """
 
-  @redacted_headers ["cookie", "ssl", "content-security-policy", "feature-policy", "report-to"]
+  @redacted_headers ["cookie", "ssl", "content-security-policy", "feature-policy", "report-to", "authorization"]
 
   def redact(headers = %{}) do
     Enum.map(headers, &maybe_redact/1)
