@@ -17,14 +17,14 @@ defmodule EndToEnd.EtagTest do
   setup :expect_http_response
 
   describe "when etags are supported" do
-    test ~s(and a matching "if-none-match" request header is present, etag is added to response and response is set to not-modified) do
+    test ~s(and a matching "if-none-match" request header is present, etag is added to response) do
       conn =
         conn(:get, "/etag-support")
         |> put_req_header("if-none-match", @etag)
         |> Router.call([])
 
       assert [@etag] == get_resp_header(conn, "etag")
-      assert {304, _headers, ""} = sent_resp(conn)
+      assert {200, _headers, _body} = sent_resp(conn)
     end
 
     test ~s(and a non-matching "if-none-match" request header is present, etag is added to response) do
@@ -34,6 +34,7 @@ defmodule EndToEnd.EtagTest do
         |> Router.call([])
 
       assert [@etag] == get_resp_header(conn, "etag")
+      assert {200, _headers, _body} = sent_resp(conn)
     end
 
     test ~s(and no "if-none-match" request header is present, etag is added to response) do
@@ -42,6 +43,7 @@ defmodule EndToEnd.EtagTest do
         |> Router.call([])
 
       assert [@etag] == get_resp_header(conn, "etag")
+      assert {200, _headers, _body} = sent_resp(conn)
     end
   end
 
@@ -53,6 +55,7 @@ defmodule EndToEnd.EtagTest do
         |> Router.call([])
 
       assert [] == get_resp_header(conn, "etag")
+      assert {200, _headers, _body} = sent_resp(conn)
     end
 
     test ~s(and a "non-matching" "if-none-match" request header is present, etag is not added to response) do
@@ -62,6 +65,7 @@ defmodule EndToEnd.EtagTest do
         |> Router.call([])
 
       assert [] == get_resp_header(conn, "etag")
+      assert {200, _headers, _body} = sent_resp(conn)
     end
 
     test ~s(and no "if-none-match" request header is present, etag is not added to response) do
@@ -70,6 +74,7 @@ defmodule EndToEnd.EtagTest do
         |> Router.call([])
 
       assert [] == get_resp_header(conn, "etag")
+      assert {200, _headers, _body} = sent_resp(conn)
     end
   end
 
