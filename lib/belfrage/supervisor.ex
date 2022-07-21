@@ -36,7 +36,14 @@ defmodule Belfrage.Supervisor do
         Application.get_env(:belfrage, :philippa_endpoint) => [size: 512],
         Application.get_env(:belfrage, :trevor_endpoint) => [size: 512],
         Application.get_env(:belfrage, :walter_endpoint) => [size: 512],
-        Application.get_env(:belfrage, :karanga_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :karanga_endpoint) => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:verify, :verify_none}
+            ]
+          ]
+        ],
         endpoint(Application.get_env(:belfrage, :authentication)["account_jwk_uri"]) => [
           size: 512,
           conn_opts: [
