@@ -187,11 +187,16 @@ defmodule Belfrage.Clients.HTTPTest do
     for pool_group <- [
           :OriginSimulator,
           :Programmes,
+          :ClassicApps,
+          :Karanga,
           :MozartNews,
           :MozartSport,
+          :MozartSimorgh,
           :MozartWeather,
           :Simorgh,
           :Fabl,
+          :Ares,
+          :MorphRouter,
           :Webcore,
           :AWS,
           :AccountAuthentication,
@@ -207,12 +212,7 @@ defmodule Belfrage.Clients.HTTPTest do
       end
     end
 
-    for pool_group <- [
-          :Ares,
-          :ClassicApp,
-          :Karanga,
-          :MorphRouter
-        ] do
+    for pool_group <- [] do
       test "#{pool_group} uses machine_gun client", %{request: request} do
         Belfrage.Clients.HTTP.MachineGunMock
         |> expect(:request, 1, fn _method, _url, _payload, _headers, _opts ->
