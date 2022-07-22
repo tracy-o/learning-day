@@ -17,14 +17,14 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
       },
       {
         TelemetryMetricsPrometheus,
-        metrics: prometheus_metrics
+        metrics: prometheus_metrics()
       }
     ]
 
     Supervisor.init(children, strategy: :one_for_one, max_restarts: 40)
   end
 
-  defp prometheus_metrics do
+  defp prometheus_metrics() do
     [
       counter(
         "web.request.count",
