@@ -11,18 +11,18 @@ defmodule Belfrage.Clients.HTTP do
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
   @callback execute(HTTP.Request.t(), Atom) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}
 
-  def execute(request = %HTTP.Request{}) do
-    execute(request, :default)
-  end
+  def execute(request = %HTTP.Request{}), do: do_execute(request)
 
-  def execute(request = %HTTP.Request{}, pool_group) do
+  def execute(request = %HTTP.Request{}, _pool), do: do_execute(request)
+
+  def do_execute(request = %HTTP.Request{}) do
     request
-    |> perform_request(pool_group)
+    |> perform_request()
     |> format_response()
     |> metric_response()
   end
 
-  defp perform_request(request = %HTTP.Request{}, pool_group) do
+  defp perform_request(request = %HTTP.Request{}) do
     try do
       Finch.build(
         request.method,
