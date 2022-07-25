@@ -3,16 +3,16 @@ defmodule Belfrage.ResponseTransformers.Etag do
   @behaviour Belfrage.Behaviours.ResponseTransformer
 
   @doc """
-  Etag support is specified per route spec by the "put_etag" field.
-  This field is then merged into the Struct, and found at struct.private.put_etag.
+  Etag support is specified per route spec by the "etag" field.
+  This field is then merged into the Struct, and found at struct.private.etag.
 
-  If struct.private.put_etag is not true then we simply return the original struct.
+  If struct.private.etag is not true then we simply return the original struct.
 
-  If struct.private.put_etag is true then we generate an etag from the response body, and
+  If struct.private.etag is true then we generate an etag from the response body, and
   add an "etag" response header with a value equal to the generated etag.
   """
   @impl true
-  def call(struct = %Struct{private: %Struct.Private{put_etag: true}}) do
+  def call(struct = %Struct{private: %Struct.Private{etag: true}}) do
     struct.response.body
     |> generate_etag()
     |> add_etag_header(struct)

@@ -91,7 +91,7 @@ defmodule Belfrage.Struct.Private do
             language_from_cookie: false,
             throughput: 100,
             fallback_write_sample: 1,
-            put_etag: false
+            etag: false
 
   @type t :: %__MODULE__{}
 end

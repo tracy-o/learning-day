@@ -4,7 +4,7 @@ defmodule Routes.Specs.NoEtagSupport do
       owner: "Some owner",
       runbook: "Some runbook",
       platform: MozartNews,
-      put_etag: false
+      etag: false
     }
   end
 end

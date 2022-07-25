@@ -5,7 +5,7 @@ defmodule Routes.Specs.EtagSupport do
       runbook: "Some runbook",
       platform: MozartNews,
       headers_allowlist: ["if-none-match"],
-      put_etag: true
+      etag: true
     }
   end
 end
