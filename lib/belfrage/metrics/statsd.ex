@@ -1,5 +1,6 @@
 defmodule Belfrage.Metrics.Statsd do
   use Belfrage.Metrics,
+    backend: :statsd,
     metrics: [
       :vm_metrics,
       :cowboy_metrics,

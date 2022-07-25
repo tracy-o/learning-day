@@ -77,9 +77,12 @@ defmodule Belfrage.Metrics do
   end
 
   defmacro __using__(opts) do
+    backend = Keyword.get(opts, :backend)
     metrics = Keyword.get(opts, :metrics)
 
     quote do
+      @backend unquote(backend)
+
       def metrics do
         unquote(metrics)
         |> Enum.flat_map(fn metric ->
@@ -176,10 +179,24 @@ defmodule Belfrage.Metrics do
       return_binary_response
     ),
           fn name ->
-            summary("belfrage.latency.#{name}",
+            metric_name =
+              case @backend do
+                :statsd -> "belfrage.latency.#{name}"
+                :prometheus -> "belfrage.latency"
+              end
+
+            summary(metric_name,
               event_name: "belfrage.#{name}.stop",
               measurement: :duration,
-              unit: {:native, :microsecond}
+              unit: {:native, :microsecond},
+              tags:
+                case @backend do
+                  :statsd -> []
+                  :prometheus -> [:function_name]
+                end,
+              tag_values: fn _meta ->
+                %{function_name: name}
+              end
             )
           end
         )
@@ -187,9 +204,23 @@ defmodule Belfrage.Metrics do
 
       def request_metrics() do
         Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
-          summary("belfrage.request.#{name}.duration",
+          metric_name =
+            case @backend do
+              :statsd -> "belfrage.request.#{name}.duration"
+              :prometheus -> "belfrage.request.duration"
+            end
+
+          summary(metric_name,
             event_name: "belfrage.request.#{name}.stop",
-            unit: {:native, :millisecond}
+            unit: {:native, :millisecond},
+            tags:
+              case @backend do
+                :statsd -> []
+                :prometheus -> [:authentication_type]
+              end,
+            tag_values: fn _meta ->
+              %{authentication_type: name}
+            end
           )
         end)
       end

@@ -1,5 +1,6 @@
 defmodule Belfrage.Metrics.Prometheus do
   use Belfrage.Metrics,
+    backend: :prometheus,
     metrics: [
       :vm_metrics,
       :cowboy_metrics,
