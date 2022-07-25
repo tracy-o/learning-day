@@ -91,6 +91,10 @@ defroutefile "Mock", "test" do
 
   handle("/content/ldp/:guid", using: "ClassicAppFablLdp", examples: [])
 
+  handle("/etag-support", using: "EtagSupport", examples: [])
+
+  handle("/no-etag-support", using: "NoEtagSupport", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()

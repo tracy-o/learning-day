@@ -90,7 +90,8 @@ defmodule Belfrage.Struct.Private do
             mvt_vary: [],
             language_from_cookie: false,
             throughput: 100,
-            fallback_write_sample: 1
+            fallback_write_sample: 1,
+            etag: false
 
   @type t :: %__MODULE__{}
 end
