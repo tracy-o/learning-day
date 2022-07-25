@@ -210,7 +210,16 @@ defroutefile "Main" do
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
-  handle "/fd/:name", using: "FablData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
+
+  handle "/fd/sport-app-allsport", using: "SportData", examples: []
+  handle "/fd/sport-app-followables", using: "SportData", examples: []
+  handle "/fd/sport-app-images", using: "SportData", examples: []
+  handle "/fd/sport-app-menu", using: "SportData", examples: []
+  handle "/fd/sport-app-notification-data", using: "SportData", examples: []
+  handle "/fd/sport-app-page", using: "SportData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
+  handle "/fd/topic-mapping", using: "SportData", examples: []
+
+  handle "/fd/:name", using: "FablData", examples: []
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
   handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", examples: []

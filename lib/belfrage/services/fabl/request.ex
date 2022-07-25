@@ -19,6 +19,14 @@ defmodule Belfrage.Services.Fabl.Request do
     }
   end
 
+  defp build_path("/fd/sport-app-allsport", _personalised, _name), do: "/module/sport-app-allsport"
+  defp build_path("/fd/sport-app-followables", _personalised, _name), do: "/module/sport-app-followables"
+  defp build_path("/fd/sport-app-images", _personalised, _name), do: "/module/sport-app-images"
+  defp build_path("/fd/sport-app-menu", _personalised, _name), do: "/module/sport-app-menu"
+  defp build_path("/fd/sport-app-notification-data", _personalised, _name), do: "/module/sport-app-notification-data"
+  defp build_path("/fd/sport-app-page", _personalised, _name), do: "/module/sport-app-page"
+  defp build_path("/fd/topic-mapping", _personalised, _name), do: "/module/topic-mapping"
+
   defp build_path("/fd/p/mytopics-page", _personalised, _name), do: "/personalised-module/mytopics-page"
   defp build_path("/fd/p/mytopics-follows", _personalised, _name), do: "/personalised-module/mytopics-follows"
   defp build_path("/fd/preview/" <> _rest_of_path, true, name), do: "/preview/personalised-module/#{name}"
