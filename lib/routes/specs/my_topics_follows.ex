@@ -6,7 +6,8 @@ defmodule Routes.Specs.MyTopicsFollows do
       platform: Fabl,
       personalisation: "on",
       fallback_write_sample: 0,
-      caching_enabled: false
+      caching_enabled: false,
+      etag: true
     }
   end
 end
