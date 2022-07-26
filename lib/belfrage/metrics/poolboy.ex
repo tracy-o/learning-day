@@ -9,15 +9,6 @@ defmodule Belfrage.Metrics.Poolboy do
 
   @max_pool_saturation 100
 
-  def track_machine_gun_pools() do
-    pids = http_client_pool_pids()
-
-    Enum.each(pids, fn pid ->
-      {:registered_name, name} = Process.info(pid, :registered_name)
-      track(pid, name |> to_string() |> String.split("@") |> hd())
-    end)
-  end
-
   def track(pid_or_name, pool_name) do
     {_state_name, available, overflow, _monitors} = :poolboy.status(pid_or_name)
 
@@ -45,13 +36,7 @@ defmodule Belfrage.Metrics.Poolboy do
   end
 
   def list_pools() do
-    [:aws_ex_store_pool, :aws_ex_ray_client_pool] ++ http_client_pool_pids()
-  end
-
-  defp http_client_pool_pids() do
-    MachineGun.Supervisor
-    |> Supervisor.which_children()
-    |> Enum.map(fn {:undefined, pid, :worker, [:poolboy]} -> pid end)
+    [:aws_ex_store_pool, :aws_ex_ray_client_pool]
   end
 
   defp pool_saturation(available, overflow, monitors) do
