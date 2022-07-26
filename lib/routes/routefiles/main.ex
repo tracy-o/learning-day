@@ -211,13 +211,13 @@ defroutefile "Main" do
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
 
-  handle "/fd/sport-app-allsport", using: "SportData", examples: []
-  handle "/fd/sport-app-followables", using: "SportData", examples: []
-  handle "/fd/sport-app-images", using: "SportData", examples: []
-  handle "/fd/sport-app-menu", using: "SportData", examples: []
-  handle "/fd/sport-app-notification-data", using: "SportData", examples: []
-  handle "/fd/sport-app-page", using: "SportData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
-  handle "/fd/topic-mapping", using: "SportData", examples: []
+  handle "/fd/sport-app-allsport", using: "SportData", examples: ["/fd/sport-app-allsport?env=live&edition=domestic"]
+  handle "/fd/sport-app-followables", using: "SportData", examples: ["/fd/sport-app-followables?env=live&edition=domestic"]
+  handle "/fd/sport-app-images", using: "SportData", examples: ["/fd/sport-app-images"]
+  handle "/fd/sport-app-menu", using: "SportData", examples: ["/fd/sport-app-menu?edition=domestic&platform=ios&env=live"]
+  handle "/fd/sport-app-notification-data", using: "SportData", examples: ["/fd/sport-app-notification-data"]
+  handle "/fd/sport-app-page", using: "SportData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios", "/fd/sport-app-page?page=https%3A%2F%2Fwww.bbc.co.uk%2Fsport&v=11&platform=ios&edition=domestic"]
+  handle "/fd/topic-mapping", using: "SportData", examples: ["/fd/topic-mapping?product=sport&followable=true&alias=false", "/fd/topic-mapping?product=sport&route=/sport&edition=domestic"]
 
   handle "/fd/:name", using: "FablData", examples: []
 
