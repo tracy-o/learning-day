@@ -187,13 +187,7 @@ defmodule Fixtures.SmokeTestReportOutput do
           state:
             {:failed,
              [
-               {:error, %MachineGun.Error{reason: :econnrefused},
-                [
-                  {MachineGun, :request!, 5, [file: 'lib/machine_gun.ex', line: 79]},
-                  {:"Elixir.Belfrage.SmokeTest.Schoolreport.3d13829a85304d2db66bd513bec88a9f",
-                   :"test Schoolreport /schoolreport/*_any against test bruce-belfrage /schoolreport", 1,
-                   [file: 'test/smoke/smoke_test.ex', line: 25]}
-                ]}
+               {:error, %ArgumentError{message: "Some error"}, []}
              ]},
           tags: %{
             async: true,

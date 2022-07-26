@@ -58,7 +58,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
     failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
 
     expected = %{
-      "Schoolreport" => ["Failed to send smoke test request. Contact us in #help-belfrage slack channel."],
+      "Schoolreport" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."],
       "Weather" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."]
     }
 
