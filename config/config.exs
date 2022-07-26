@@ -2,64 +2,11 @@
 # and its dependencies with the aid of the Mix.Config module.
 import Config
 
-default_machine_gun_config = %{
-  # Poolboy size
-  pool_size: 512,
-  # Poolboy max_overflow
-  pool_max_overflow: 4096,
-  pool_queue: false,
-  pool_timeout: 300_000,
-  # Gun connection options
-  conn_opts: %{}
-}
-
-secure_machine_gun_config = %{
-  default_machine_gun_config
-  | conn_opts: %{
-      transport_opts: [
-        {:cacertfile, System.get_env("CLIENT_CERT_CA")},
-        {:certfile, System.get_env("CLIENT_CERT")},
-        {:keyfile, System.get_env("CLIENT_CERT_KEY")}
-      ]
-    }
-}
-
-poller_machine_gun_config = %{
-  # Poolboy size
-  pool_size: 8,
-  # Poolboy max_overflow
-  pool_max_overflow: 36,
-  pool_queue: false,
-  pool_timeout: 300_000,
-  # Gun connection options
-  conn_opts: %{}
-}
-
 config :finch,
   pool_timeout: 300_000,
   cacertfile: System.get_env("CLIENT_CERT_CA"),
   certfile: System.get_env("CLIENT_CERT"),
   keyfile: System.get_env("CLIENT_CERT_KEY")
-
-config :machine_gun,
-  default: default_machine_gun_config,
-  AccountAuthentication: default_machine_gun_config,
-  ClassicApps: default_machine_gun_config,
-  AWS: default_machine_gun_config,
-  Ares: secure_machine_gun_config,
-  Fabl: secure_machine_gun_config,
-  Karanga: default_machine_gun_config,
-  MorphRouter: secure_machine_gun_config,
-  MozartNews: default_machine_gun_config,
-  MozartSimorgh: default_machine_gun_config,
-  MozartSport: default_machine_gun_config,
-  MozartWeather: default_machine_gun_config,
-  MvtFilePoller: poller_machine_gun_config,
-  OriginSimulator: default_machine_gun_config,
-  Programmes: default_machine_gun_config,
-  S3: default_machine_gun_config,
-  Simorgh: default_machine_gun_config,
-  Webcore: default_machine_gun_config
 
 config :ex_aws,
   region: "eu-west-1",
@@ -82,7 +29,6 @@ config :belfrage,
   lambda_timeout: 3_600,
   default_timeout: 6_000,
   s3_http_client_timeout: 400,
-  machine_gun: Belfrage.Clients.HTTP.MachineGun,
   webcore_credentials_source: Belfrage.Services.Webcore.Credentials.STS,
   aws: Belfrage.AWS,
   ccp_client: Belfrage.Clients.CCP,
