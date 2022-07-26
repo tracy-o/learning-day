@@ -158,8 +158,10 @@ defmodule Belfrage.Metrics do
       end
 
       def latency_metrics() do
-        Enum.map(
-          ~w(
+        case @backend do
+          :statsd ->
+            Enum.map(
+              ~w(
       plug_pipeline
       process_request_headers
       set_request_route_state_data
@@ -178,51 +180,46 @@ defmodule Belfrage.Metrics do
       return_json_response
       return_binary_response
     ),
-          fn name ->
-            metric_name =
-              case @backend do
-                :statsd -> "belfrage.latency.#{name}"
-                :prometheus -> "belfrage.latency"
-              end
-
-            summary(metric_name,
-              event_name: "belfrage.#{name}.stop",
-              measurement: :duration,
-              unit: {:native, :microsecond},
-              tags:
-                case @backend do
-                  :statsd -> []
-                  :prometheus -> [:function_name]
-                end,
-              tag_values: fn _meta ->
-                %{function_name: name}
+              fn name ->
+                summary("belfrage.latency.#{name}",
+                  event_name: "belfrage.#{name}.stop",
+                  measurement: :duration,
+                  unit: {:native, :microsecond}
+                )
               end
             )
-          end
-        )
+
+          :prometheus ->
+            raise "TODO need to emit a new event for this to work"
+
+            summary("belfrage.latency",
+              event_name: "belfrage.latency.stop",
+              measurement: :duration,
+              unit: {:native, :microsecond},
+              tags: [:function_name]
+            )
+        end
       end
 
       def request_metrics() do
-        Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
-          metric_name =
-            case @backend do
-              :statsd -> "belfrage.request.#{name}.duration"
-              :prometheus -> "belfrage.request.duration"
-            end
+        case @backend do
+          :statsd ->
+            Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
+              summary("belfrage.request.#{name}.duration",
+                event_name: "belfrage.request.#{name}.stop",
+                unit: {:native, :millisecond}
+              )
+            end)
 
-          summary(metric_name,
-            event_name: "belfrage.request.#{name}.stop",
-            unit: {:native, :millisecond},
-            tags:
-              case @backend do
-                :statsd -> []
-                :prometheus -> [:authentication_type]
-              end,
-            tag_values: fn _meta ->
-              %{authentication_type: name}
-            end
-          )
-        end)
+          :prometheus ->
+            raise "TODO need to emit a new event for this to work"
+
+            summary("belfrage.request.duration",
+              event_name: "belfrage.request.stop",
+              unit: {:native, :millisecond},
+              tags: [:authentication_type]
+            )
+        end
       end
 
       def route_state_metrics() do

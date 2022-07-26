@@ -7,8 +7,8 @@ defmodule Belfrage.Metrics.Prometheus do
       :poolboy_metrics,
       :nimble_pool_metrics,
       :cachex_metrics,
-      :latency_metrics
-      # :request_metrics,
+      # :latency_metrics # TODO won't work till we emit new events
+      # :request_metrics, # TODO won't work till we emit new events
       # :route_state_metrics,
       # :cache_metrics,
       # :service_metrics,
