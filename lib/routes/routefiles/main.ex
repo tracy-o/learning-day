@@ -1866,7 +1866,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes", using: "Programmes", examples: ["/programmes"]
+  handle "/programmes", using: "ProgrammesHomePage", examples: ["/programmes"]
 
   # /programmes catch all
   handle "/programmes/*_any", using: "Programmes", examples: []
