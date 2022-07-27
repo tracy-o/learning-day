@@ -29,7 +29,7 @@ defmodule Belfrage.Metrics.Statsd do
   end
 
   defp apply_metric(type, metric_name, opts) do
-    opts = Keyword.update(opts, :tags, [], fn tags -> [:BBCEnvironment | tags] end)
+    opts = Keyword.update(opts, :tags, [:BBCEnvironment], fn tags -> [:BBCEnvironment | tags] end)
     apply(Telemetry.Metrics, type, [metric_name, opts])
   end
 end
