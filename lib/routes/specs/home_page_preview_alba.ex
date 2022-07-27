@@ -5,7 +5,7 @@ defmodule Routes.Specs.HomePagePreviewAlba do
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
       platform: Webcore,
       default_language: "gd",
-      personalisation: "test_only"
+      personalisation: "on"
     }
   end
 end

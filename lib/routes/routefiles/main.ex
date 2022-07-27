@@ -187,12 +187,12 @@ defroutefile "Main" do
 
   handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
 
-  handle "/homepage/preview", using: "HomePagePreview", only_on: "test", examples: ["/homepage/preview"]
-  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", only_on: "test", examples: ["/homepage/preview/scotland"]
-  handle "/homepage/preview/wales", using: "HomePagePreviewWales", only_on: "test", examples: ["/homepage/preview/wales"]
-  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", only_on: "test", examples: ["/homepage/preview/northernireland"]
-  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", only_on: "test", examples: ["/homepage/preview/cymru"]
-  handle "/homepage/preview/alba", using: "HomePagePreviewAlba", only_on: "test", examples: ["/homepage/preview/alba"]
+  handle "/homepage/preview", using: "HomePagePreview", examples: ["/homepage/preview"]
+  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", examples: ["/homepage/preview/scotland"]
+  handle "/homepage/preview/wales", using: "HomePagePreviewWales", examples: ["/homepage/preview/wales"]
+  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", examples: ["/homepage/preview/northernireland"]
+  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", examples: ["/homepage/preview/cymru"]
+  handle "/homepage/preview/alba", using: "HomePagePreviewAlba", examples: ["/homepage/preview/alba"]
 
   handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
   handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
@@ -200,7 +200,7 @@ defroutefile "Main" do
   handle "/sportproto", using: "SportHomePage", only_on: "test", examples: ["/sportproto"]
   handle "/sporttipo", using: "SportTipo", examples: ["/sporttipo"]
 
-  handle "/homepage/sport/preview", using: "SportHomePagePreview", only_on: "test", examples: ["/homepage/sport/preview"]
+  handle "/homepage/sport/preview", using: "SportHomePagePreview", examples: ["/homepage/sport/preview"]
   handle "/homepage/sport/test", using: "TestSportHomePage", only_on: "test", examples: ["/homepage/sport/test"]
 
   # data endpoints
