@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
              :redirect,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 http_status: 301,
+                 http_status: 302,
                  body: "Redirecting",
                  headers: %{
                    "location" => "/pidgin/topics/cqywjyzk2vyt",
@@ -32,7 +32,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirectTest do
              :redirect,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
-                 http_status: 301,
+                 http_status: 302,
                  body: "Redirecting",
                  headers: %{
                    "location" => "/serbian/cyr/topics/cqwvxvvw9qrt",
