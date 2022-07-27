@@ -10,7 +10,7 @@ defmodule Belfrage.Transformers.WorldServiceTopicsRedirect do
     {
       :redirect,
       Struct.add(struct, :response, %{
-        http_status: 301,
+        http_status: 302,
         headers: %{
           "location" => location(struct.request),
           "x-bbc-no-scheme-rewrite" => "1",
