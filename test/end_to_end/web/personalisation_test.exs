@@ -89,6 +89,8 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
     [cache_control] = get_resp_header(response, "cache-control")
     assert cache_control =~ "public"
+
+    assert ["STALE"] = get_resp_header(response, "belfrage-cache-status")
   end
 
   test "switch from personalised to non-personalised route and request" do

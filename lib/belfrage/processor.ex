@@ -132,7 +132,7 @@ defmodule Belfrage.Processor do
       struct =
         struct
         |> latency_checkpoint(:fallback_request_sent)
-        |> Cache.fetch([:fresh, :stale])
+        |> Cache.fetch([:fresh, :stale], fallback: true)
         |> latency_checkpoint(:fallback_response_received)
 
       if struct.response.http_status == 200 do
