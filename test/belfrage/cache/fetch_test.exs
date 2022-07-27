@@ -35,6 +35,19 @@ defmodule Belfrage.Cache.FetchTest do
       assert response.cache_type == nil
     end
 
+    test "returns a struct with expected values when fetching a fresh response from the local cache and fallback opt. is true",
+         %{
+           struct: struct,
+           cached_response: cached_response
+         } do
+      %Struct{response: response, private: private} = Fetch.fetch(struct, [:fresh], fallback: true)
+
+      assert response.body == cached_response.body
+      assert private.origin == :belfrage_cache
+      assert response.fallback == true
+      assert response.cache_type == nil
+    end
+
     test "returns a struct with expected values when fetching a stale response from the local cache", %{
       struct: struct
     } do
