@@ -14,17 +14,15 @@ defmodule Belfrage.Clients.HTTPTest do
 
   describe "successful requests" do
     test ":post request" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn :post,
-                             "http://example.com/do-something",
-                             ~s({"comment": "Hello"}),
-                             [{"content-length", "0"}],
-                             %{request_timeout: 500} ->
+      FinchMock
+      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 300_000] ->
+        assert request.method == "POST"
+
         {:ok,
-         %MachineGun.Response{
-           status_code: 200,
+         %Finch.Response{
+           status: 200,
            body: ~s(<p>done something</p>),
-           headers: %{"accept-encoding" => "application/json"}
+           headers: [{"accept-encoding", "application/json"}]
          }}
       end)
 
@@ -47,13 +45,11 @@ defmodule Belfrage.Clients.HTTPTest do
     end
 
     test ":get request" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn :get,
-                             "http://example.com?foo=bar",
-                             "",
-                             [{"content-length", "0"}],
-                             %{request_timeout: 500} ->
-        {:ok, %MachineGun.Response{status_code: 200, body: ~s(<p>some content</p>), headers: []}}
+      FinchMock
+      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 300_000] ->
+        assert request.method == "GET"
+
+        {:ok, %Finch.Response{status: 200, body: ~s(<p>some content</p>), headers: []}}
       end)
 
       result =
@@ -75,12 +71,7 @@ defmodule Belfrage.Clients.HTTPTest do
   end
 
   describe "failed requests" do
-    test "bad url scheme" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: :bad_url_scheme}}
-      end)
-
+    test "no scheme, bad url scheme" do
       assert {:error, %HTTP.Error{reason: :bad_url_scheme}} ==
                HTTP.execute(%HTTP.Request{
                  method: :get,
@@ -90,25 +81,30 @@ defmodule Belfrage.Clients.HTTPTest do
                })
     end
 
-    test "bad url" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: :bad_url}}
-      end)
-
-      assert {:error, %HTTP.Error{reason: :bad_url}} ==
+    test "invalid scheme, bad url scheme" do
+      assert {:error, %HTTP.Error{reason: :bad_url_scheme}} ==
                HTTP.execute(%HTTP.Request{
                  method: :get,
-                 url: "http://@($%£*$%£$*HF£$HF*£$F",
+                 url: "ftp://example.com",
+                 headers: [{"content-length", "0"}],
+                 timeout: 500
+               })
+    end
+
+    test "bad url scheme" do
+      assert {:error, %HTTP.Error{reason: :bad_url_scheme}} ==
+               HTTP.execute(%HTTP.Request{
+                 method: :get,
+                 url: "example.com",
                  headers: [{"content-length", "0"}],
                  timeout: 500
                })
     end
 
     test "pool timeout" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: :pool_timeout}}
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        exit({:timeout, {NimblePool, :checkout, [:pids]}})
       end)
 
       assert {:error, %HTTP.Error{reason: :pool_timeout}} ==
@@ -121,9 +117,9 @@ defmodule Belfrage.Clients.HTTPTest do
     end
 
     test "request timeout" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: :request_timeout}}
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
       end)
 
       assert {:error, %HTTP.Error{reason: :timeout}} ==
@@ -136,91 +132,33 @@ defmodule Belfrage.Clients.HTTPTest do
     end
 
     test "unexpected format of error reason" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: %{error: "Oh no, this isn't good"}}}
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: {:error, "unexpected format"}}}
       end)
 
       assert {:error, %HTTP.Error{reason: nil}} ==
                HTTP.execute(%HTTP.Request{
                  method: :get,
-                 url: "example.com",
+                 url: "http://example.com",
                  headers: [{"content-length", "0"}],
                  timeout: 500
                })
     end
 
     test "unexpected error reason" do
-      Belfrage.Clients.HTTP.MachineGunMock
-      |> expect(:request, fn _method, _url, _payload, _headers, _opts ->
-        {:error, %MachineGun.Error{reason: :something_broke}}
+      FinchMock
+      |> expect(:request, fn _request, _finch, _opts ->
+        {:error, %Mint.TransportError{reason: "something broke"}}
       end)
 
       assert {:error, %HTTP.Error{reason: nil}} ==
                HTTP.execute(%HTTP.Request{
                  method: :get,
-                 url: "example.com",
+                 url: "http://example.com",
                  headers: [{"content-length", "0"}],
                  timeout: 500
                })
-    end
-  end
-
-  # These are temporary tests that we will eventually delete once the switch to
-  # using Finch (rather than MachineGun) is completed.
-  #
-  # When you move a new pool/origin over move the pool name from the bottom
-  # pool_group to the top pool_group.
-
-  describe "current state of finch migration" do
-    setup do
-      example_request = %HTTP.Request{
-        method: :get,
-        url: "http://example.com?foo=bar",
-        headers: [{"content-length", "0"}],
-        timeout: 500
-      }
-
-      %{request: example_request}
-    end
-
-    for pool_group <- [
-          :OriginSimulator,
-          :Programmes,
-          :ClassicApps,
-          :Karanga,
-          :MozartNews,
-          :MozartSport,
-          :MozartSimorgh,
-          :MozartWeather,
-          :Simorgh,
-          :Fabl,
-          :Ares,
-          :MorphRouter,
-          :Webcore,
-          :AWS,
-          :AccountAuthentication,
-          :MvtFilePoller
-        ] do
-      test "#{pool_group} uses finch client", %{request: request} do
-        FinchMock
-        |> expect(:request, 1, fn _built_request, _supervisor, _opts ->
-          {:ok, %Finch.Response{body: "", headers: [], status: 200}}
-        end)
-
-        assert {:ok, %HTTP.Response{}} = HTTP.execute(request, unquote(pool_group))
-      end
-    end
-
-    for pool_group <- [] do
-      test "#{pool_group} uses machine_gun client", %{request: request} do
-        Belfrage.Clients.HTTP.MachineGunMock
-        |> expect(:request, 1, fn _method, _url, _payload, _headers, _opts ->
-          {:ok, %MachineGun.Response{status_code: 200, body: "", headers: []}}
-        end)
-
-        assert {:ok, %HTTP.Response{}} = HTTP.execute(request, unquote(pool_group))
-      end
     end
   end
 end

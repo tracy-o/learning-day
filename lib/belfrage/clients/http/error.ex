@@ -9,82 +9,40 @@ defmodule Belfrage.Clients.HTTP.Error do
   defstruct [:reason]
 
   @type t :: %__MODULE__{
-          reason: :timeout | :pool_timeout | :bad_url | :bad_url_scheme | nil
+          reason: :timeout | :pool_timeout | :bad_url_scheme | nil
         }
-
-  # Map the 3rd party http library error reasons, to
-  # the Belfrage HTTP.Error reasons
-  @map_reason_codes [
-    request_timeout: :timeout,
-    pool_timeout: :pool_timeout,
-    bad_url: :bad_url,
-    bad_url_scheme: :bad_url_scheme
-  ]
 
   @doc ~S"""
   Create Belfrage HTTP error struct with converted
   3rd party error reason into a Belfrage error
   reason.
-
-  ## Examples
-
-      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :request_timeout})
-      %Belfrage.Clients.HTTP.Error{reason: :timeout}
-
-      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :pool_timeout})
-      %Belfrage.Clients.HTTP.Error{reason: :pool_timeout}
-
-      iex> Belfrage.Clients.HTTP.Error.new(%MachineGun.Error{reason: :unexpected_reason})
-      %Belfrage.Clients.HTTP.Error{reason: nil}
-
-      iex> Belfrage.Clients.HTTP.Error.new(%{error: :unexpected_error_format})
-      %Belfrage.Clients.HTTP.Error{reason: nil}
   """
-  def new(error = %MachineGun.Error{reason: reason}) do
-    belfrage_http_reason = standardise_error_reason(reason)
+  def new(reason) do
+    new(:error, reason)
+  end
 
+  def new(error_type, reason) do
     Logger.log(:error, "", %{
       info: "Http error",
-      third_party_reason: MachineGun.Error.message(error),
-      belfrage_http_reason: belfrage_http_reason
+      third_party_reason: third_party_reason(error_type, reason),
+      belfrage_http_reason: format_error(reason)
     })
 
     %__MODULE__{
-      reason: belfrage_http_reason
+      reason: format_error(reason)
     }
   end
 
-  def new(error = %Mint.HTTPError{}) do
-    Logger.log(:error, "", %{
-      info: "Http error",
-      third_party_reason: Exception.message(error),
-      belfrage_http_reason: :not_yet_implemented
-    })
+  defp third_party_reason(:error, reason) when is_struct(reason), do: Exception.message(reason)
+  defp third_party_reason(:error, reason), do: "errored with reason: #{inspect(reason)}"
+  defp third_party_reason(:exit, reason), do: "exited with reason: #{inspect(reason)}"
+  defp third_party_reason(:throw, reason), do: "threw error with reason: #{inspect(reason)}"
 
-    %__MODULE__{
-      reason: nil
-    }
-  end
-
-  def new(error = %Mint.TransportError{}) do
-    Logger.log(:error, "", %{
-      info: "Http error",
-      third_party_reason: Exception.message(error),
-      belfrage_http_reason: :not_yet_implemented
-    })
-
-    %__MODULE__{
-      reason: nil
-    }
-  end
-
-  def new(_error), do: %__MODULE__{}
-
-  defp standardise_error_reason(reason) when is_atom(reason) do
-    Keyword.get(@map_reason_codes, reason, nil)
-  end
-
-  defp standardise_error_reason(_), do: nil
+  defp format_error({:timeout, {NimblePool, :checkout, _pids}}), do: :pool_timeout
+  defp format_error(%ArgumentError{message: "scheme is required for url:" <> _rest}), do: :bad_url_scheme
+  defp format_error(%ArgumentError{message: "invalid scheme" <> _rest}), do: :bad_url_scheme
+  defp format_error(%Mint.TransportError{reason: :timeout}), do: :timeout
+  defp format_error(_reason), do: nil
 end
 
 defimpl String.Chars, for: Belfrage.Clients.HTTP.Error do

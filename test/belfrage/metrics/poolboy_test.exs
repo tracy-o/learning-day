@@ -19,19 +19,6 @@ defmodule Belfrage.Metrics.PoolboyTest do
     end
   end
 
-  describe "track_machine_gun_pools/0" do
-    test "tracks children of MachineGun.Supervisor" do
-      pool_name = "test-pool"
-      pool_pid = start_machine_gun_pool(pool_name)
-      on_exit(fn -> stop_machine_gun_pool(pool_pid) end)
-
-      assert_metric(
-        {[:poolboy, :status], %{available_workers: 1, overflow_workers: 0}, %{pool_name: pool_name}},
-        fn -> Poolboy.track_machine_gun_pools() end
-      )
-    end
-  end
-
   describe "track/2" do
     test "emits the number of available and overflow workers, and saturation" do
       pool_name = :test_poolboy_pool
@@ -154,15 +141,6 @@ defmodule Belfrage.Metrics.PoolboyTest do
       assert log =~
                "\"msg\":\"The :poolboy.status/1 call timed out during the saturation calculation of the pool: :some_pool"
     end
-  end
-
-  defp start_machine_gun_pool(name, pool_size \\ 1) do
-    {:ok, pid} = MachineGun.Supervisor.start(:"#{name}@localhost:1234", "localhost", 1234, pool_size, 0, :lifo, [])
-    pid
-  end
-
-  defp stop_machine_gun_pool(pid) do
-    DynamicSupervisor.terminate_child(MachineGun.Supervisor, pid)
   end
 
   defp start_pool(opts) do

@@ -81,7 +81,7 @@ defmodule Test.Support.Helper do
   end
 
   defp request_route(endpoint, path, headers) do
-    MachineGun.get!("https://#{endpoint}#{path}", headers, %{request_timeout: 10_000})
+    Finch.build(:get, "https://#{endpoint}#{path}", headers) |> Finch.request(Finch, receive_timeout: 10_000)
   end
 
   def header_item_exists(headers, header_id) do
