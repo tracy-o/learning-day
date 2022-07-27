@@ -17,9 +17,7 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
       fabl_endpoint = Application.get_env(:belfrage, :fabl_endpoint)
 
       url =
-        "#{fabl_endpoint}/module/abl-classic?createdBy=#{created_by}&foo=bar&language=#{language}&subjectId=#{
-          subject_id
-        }"
+        "#{fabl_endpoint}/module/abl-classic?createdBy=#{created_by}&foo=bar&language=#{language}&subjectId=#{subject_id}"
 
       expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: ^url}, _pool ->
         {:ok,
