@@ -9,7 +9,7 @@ defmodule Belfrage.Metrics.CachexTest do
     {socket, port} = given_udp_port_opened()
 
     start_reporter(
-      metrics: Belfrage.Metrics.Cachex.metrics(),
+      metrics: Belfrage.Metrics.Statsd.cachex_metrics(),
       formatter: :datadog,
       global_tags: [BBCEnvironment: "live"],
       port: port
@@ -23,8 +23,8 @@ defmodule Belfrage.Metrics.CachexTest do
       socket,
       Enum.join(
         [
-          "cachex.hits:0|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.misses:1|g|#cache_name:#{cache},BBCEnvironment:live"
+          "cachex.hits:0|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
       )
@@ -39,9 +39,9 @@ defmodule Belfrage.Metrics.CachexTest do
       socket,
       Enum.join(
         [
-          "cachex.hits:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.misses:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.writes:1|g|#cache_name:#{cache},BBCEnvironment:live"
+          "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
       )
@@ -57,11 +57,11 @@ defmodule Belfrage.Metrics.CachexTest do
       socket,
       Enum.join(
         [
-          "cachex.evictions:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.expirations:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.hits:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.misses:1|g|#cache_name:#{cache},BBCEnvironment:live",
-          "cachex.writes:1|g|#cache_name:#{cache},BBCEnvironment:live"
+          "cachex.evictions:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.expirations:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
       )

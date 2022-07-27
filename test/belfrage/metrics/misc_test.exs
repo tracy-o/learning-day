@@ -35,7 +35,7 @@ defmodule Belfrage.Metrics.MiscTest do
 
   test "no duplicate metrics" do
     names =
-      for metric <- Belfrage.Metrics.Misc.metrics() do
+      for metric <- Belfrage.Metrics.Statsd.misc_metrics() do
         metric.name
       end
 
@@ -46,7 +46,7 @@ defmodule Belfrage.Metrics.MiscTest do
     {socket, port} = given_udp_port_opened()
 
     start_reporter(
-      metrics: Belfrage.Metrics.Misc.metrics(),
+      metrics: Belfrage.Metrics.Statsd.misc_metrics(),
       formatter: :datadog,
       global_tags: [BBCEnvironment: "live"],
       port: port
