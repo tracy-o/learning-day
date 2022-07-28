@@ -5,8 +5,8 @@ defmodule Belfrage.Transformers.BBCOriginHeader do
   alias Belfrage.Struct.Private
 
   @impl true
-  def call(rest, struct) do
-    struct.response.headers = Map.put(struct.response.headers, :bbc-origin, Enum.join([request.scheme, request.host], "://"))
+  def call(rest, struct = %Struct{request: %Struct.Request{scheme: scheme, host: host}}) do
+    request = Map.put(request, :bbc-origin, Enum.join(scheme, host, "://"))
 
     then_do(rest, struct)
   end
