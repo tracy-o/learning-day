@@ -1405,6 +1405,9 @@ defroutefile "Main" do
   ## World Service - Russian Partners Redirects
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
 
+  ## World Service - Russian Newsletter Redirects
+  redirect "/russian/institutional/2012/09/000000_newsletter", to: "/russian/resources/idt-b34bb7dd-f094-4722-92eb-cf7aff8cc1bc", status: 301
+
   redirect "/russian/mobile/*any", to: "/russian", status: 301
   redirect "/russia", to: "/russian", status: 301
 
