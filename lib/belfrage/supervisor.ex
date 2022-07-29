@@ -55,10 +55,10 @@ defmodule Belfrage.Supervisor do
         ],
         endpoint(Application.get_env(:belfrage, :authentication)["idcta_config_uri"]) => [size: 512],
         endpoint(Application.get_env(:belfrage, :mvt)[:slots_file_location]) => [size: 512],
-        Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
+        Application.get_env(:belfrage, :simorgh_endpoint) => [size: 0],
         Application.get_env(:belfrage, :origin_simulator) => [size: 512],
         Application.get_env(:belfrage, :mozart_news_endpoint) => [
-          size: 512,
+          size: 1024,
           conn_opts: [
             transport_opts: [
               {:verify, :verify_none}
