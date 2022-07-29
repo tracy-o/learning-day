@@ -101,7 +101,7 @@ defmodule Belfrage.Services.HTTP do
       "origin" => request.origin,
       "referer" => request.referer,
       "bbc-adverts" => "#{request.is_advertise}",
-      "bbc-origin" => Enum.join(request.scheme, request.host, "://")
+      "bbc-origin" => Enum.join([request.scheme, request.host], "://")
     }
   end
 
