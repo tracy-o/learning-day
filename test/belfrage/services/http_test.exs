@@ -68,7 +68,8 @@ defmodule Belfrage.Services.HTTPTest do
             "x-country" => "gb",
             "user-agent" => "Belfrage",
             "x-forwarded-host" => "www.bbc.co.uk",
-            "req-svc-chain" => "BELFRAGE"
+            "req-svc-chain" => "BELFRAGE",
+            "bbc-origin" => "https://www.bbc.co.uk"
           }
         },
         @ok_response
