@@ -33,7 +33,7 @@ defmodule Belfrage.Supervisor do
         :default => [size: 512, conn_opts: [transport_opts: {:verify, :verify_none}]],
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
         "https://sts.#{region}.amazonaws.com" => [size: 512],
-        "https://lambda.#{region}.amazonaws.com" => [size: 512],
+        "https://lambda.#{region}.amazonaws.com" => [size: 1024],
         Application.get_env(:belfrage, :philippa_endpoint) => [size: 1024],
         Application.get_env(:belfrage, :trevor_endpoint) => [size: 1024],
         Application.get_env(:belfrage, :walter_endpoint) => [size: 1024],
