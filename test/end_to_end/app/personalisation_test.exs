@@ -3,6 +3,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
+  import Test.Support.Helper, only: [set_environment: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
@@ -12,12 +13,6 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   @moduletag :end_to_end
 
-  setup do
-    clear_cache()
-    start_supervised!({RouteState, "SomeRouteState"})
-    :ok
-  end
-
   @response HTTP.Response.new(%{
               status_code: 200,
               body: "<h1>Hello from Fabl!</h1>",
@@ -26,81 +21,116 @@ defmodule EndToEnd.App.PersonalisationTest do
               }
             })
 
-  test "non-personalised request" do
-    expect_non_personalised_origin_request()
+  describe "personalised route " do
+    setup do
+      clear_cache()
+      start_supervised!({RouteState, "PersonalisedFablData"})
+      :ok
+    end
 
-    response =
-      build_request()
-      |> make_request()
-      |> assert_successful_response()
+    test "non-personalised request" do
+      expect_non_personalised_origin_request()
 
-    assert vary_header(response) =~ "authorization,x-authentication-provider"
-  end
+      response =
+        build_request()
+        |> make_request()
+        |> assert_successful_response()
 
-  test "personalised request" do
-    expect_personalised_origin_request()
+      assert vary_header(response) =~ "authorization,x-authentication-provider"
+    end
 
-    response =
-      build_request()
-      |> personalise_app_request(@token)
-      |> make_request()
-      |> assert_successful_response()
+    test "personalised request" do
+      expect_personalised_origin_request()
 
-    assert vary_header(response) =~ "authorization,x-authentication-provider"
-  end
+      response =
+        build_request()
+        |> personalise_app_request(@token)
+        |> make_request()
+        |> assert_successful_response()
 
-  test "invalid auth token" do
-    expect_no_origin_request()
+      assert vary_header(response) =~ "authorization,x-authentication-provider"
+    end
 
-    conn =
-      build_request()
-      |> personalise_app_request("some-token")
-      |> make_request()
+    test "invalid auth token" do
+      expect_no_origin_request()
 
-    assert conn.status == 401
-  end
+      conn =
+        build_request()
+        |> personalise_app_request("some-token")
+        |> make_request()
 
-  test "does not use non-personalised cached response as fallback" do
-    request = build_request()
+      assert conn.status == 401
+    end
 
-    # Store non-personalised response in cache
-    response = Map.put(@response, :headers, %{"cache-control" => "public, max-age=60"})
-    stub_origin_request({:ok, response})
+    test "does not use non-personalised cached response as fallback" do
+      request = build_request()
 
-    request
-    |> make_request()
-    |> assert_successful_response()
+      # Store non-personalised response in cache
+      response = Map.put(@response, :headers, %{"cache-control" => "public, max-age=60"})
+      stub_origin_request({:ok, response})
 
-    # Simulate origin failure
-    stub_origin_request({:error, :boom})
-
-    conn =
       request
-      |> personalise_app_request(@token)
       |> make_request()
+      |> assert_successful_response()
 
-    assert conn.status == 500
-    {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
-  end
+      # Simulate origin failure
+      stub_origin_request({:error, :boom})
 
-  test "internal error in Belfrage" do
-    # Simulate an error by making origin return an unexpected response
-    stub_origin_request({:foo, :bar})
+      conn =
+        request
+        |> personalise_app_request(@token)
+        |> make_request()
 
-    request =
-      build_request()
-      |> personalise_app_request(@token)
+      assert conn.status == 500
+      {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
+    end
 
-    assert_raise(Plug.Conn.WrapperError, fn -> make_request(request) end)
+    test "internal error in Belfrage" do
+      # Simulate an error by making origin return an unexpected response
+      stub_origin_request({:foo, :bar})
 
-    {status, headers, _body} = sent_resp(request)
-    assert status == 500
-    assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in headers
+      request =
+        build_request()
+        |> personalise_app_request(@token)
+
+      assert_raise(Plug.Conn.WrapperError, fn -> make_request(request) end)
+
+      {status, headers, _body} = sent_resp(request)
+      assert status == 500
+      assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in headers
+    end
+
+    test "personalisation on and news_articles_personalisation is off" do
+      stub_dials(personalisation: "on", news_articles_personalisation: "off")
+      expect_personalised_origin_request()
+
+      response =
+        build_request()
+        |> personalise_app_request(@token)
+        |> make_request()
+        |> assert_successful_response()
+
+      assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+    end
+
+    test "personalisation off and news_articles_personalisation is on" do
+      stub_dials(personalisation: "off", news_articles_personalisation: "on")
+      expect_personalised_origin_request()
+
+      response =
+        build_request()
+        |> personalise_app_request(@token)
+        |> make_request()
+        |> assert_successful_response()
+
+      assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+    end
   end
 
   describe "personalisation is disabled" do
     setup do
       stub_dial(:personalisation, "off")
+      start_supervised!({RouteState, "PersonalisedFablData"})
       :ok
     end
 
@@ -128,33 +158,13 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
   end
 
-  test "personalisation on and news_articles_personalisation is off" do
-    stub_dials(personalisation: "on", news_articles_personalisation: "off")
-    expect_personalised_origin_request()
-
-    response =
-      build_request()
-      |> personalise_app_request(@token)
-      |> make_request()
-      |> assert_successful_response()
-
-    assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
-  end
-
-  test "personalisation off and news_articles_personalisation is on" do
-    stub_dials(personalisation: "off", news_articles_personalisation: "on")
-    expect_personalised_origin_request()
-
-    response =
-      build_request()
-      |> personalise_app_request(@token)
-      |> make_request()
-      |> assert_successful_response()
-
-    assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
-  end
-
   describe "non-personalised route" do
+    setup do
+      clear_cache()
+      start_supervised!({RouteState, "FablData"})
+      :ok
+    end
+
     test "authenticated request" do
       expect_non_personalised_origin_request()
 
