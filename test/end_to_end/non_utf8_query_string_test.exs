@@ -96,15 +96,32 @@ defmodule NonUtf8QueryStringTest do
     assert {200, _headers, _body} = sent_resp(conn)
   end
 
-  test "query string with invalid utf characters results in a 404" do
+  test "query string with invalid utf characters results in a 200" do
     start_supervised!({RouteState, "SomeRouteState"})
 
-    conn = conn(:get, "/200-ok-response?query=%f6")
+    LambdaMock
+    |> expect(:call, fn _credentials,
+                        _lambda_function_name,
+                        %{
+                          body: "",
+                          headers: %{country: "gb"},
+                          httpMethod: "GET",
+                          path: "/200-ok-response",
+                          pathParameters: %{},
+                          queryStringParameters: %{"query" => <<246>>}
+                        },
+                        _request_id,
+                        _opts ->
+      {:ok, @lambda_response}
+    end)
 
-    assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
+    conn =
+      :get
+      |> conn("/200-ok-response?query=%f6")
+      |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)
-    assert status == 404
+    assert status == 200
   end
 
   test "path params with invalid utf chars result in 500 for requests to WebCore" do
@@ -149,11 +166,28 @@ defmodule NonUtf8QueryStringTest do
   test "malformed URI" do
     start_supervised!({RouteState, "SomeRouteState"})
 
-    conn = conn(:get, "/200-ok-response?query=%%E0%%")
+    LambdaMock
+    |> expect(:call, fn _credentials,
+                        _lambda_function_name,
+                        %{
+                          body: "",
+                          headers: %{country: "gb"},
+                          httpMethod: "GET",
+                          path: "/200-ok-response",
+                          pathParameters: %{},
+                          queryStringParameters: %{"query" => <<37, 224, 37, 37>>}
+                        },
+                        _request_id,
+                        _opts ->
+      {:ok, @lambda_response}
+    end)
 
-    assert_raise Plug.Conn.InvalidQueryError, fn -> Router.call(conn, []) end
+    conn =
+      :get
+      |> conn("/200-ok-response?query=%%E0%%")
+      |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)
-    assert status == 404
+    assert status == 200
   end
 end
