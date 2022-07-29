@@ -10,10 +10,10 @@ defmodule Routes.Specs.ClassicAppFablLdp do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "ClassicAppFablLdp", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "ClassicAppFablLdp", "Personalisation", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
-    pipeline("live") ++ ["Personalisation", "DevelopmentRequests"]
+    pipeline("live") ++ ["DevelopmentRequests"]
   end
 end

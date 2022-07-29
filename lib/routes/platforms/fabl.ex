@@ -12,11 +12,11 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "Personalisation", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
-    pipeline("live") ++ ["Personalisation", "DevelopmentRequests"]
+    pipeline("live") ++ ["DevelopmentRequests"]
   end
 
   defp headers_allowlist("live"), do: []
