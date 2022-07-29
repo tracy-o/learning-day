@@ -39,5 +39,15 @@ defmodule BelfrageWeb.Response.Headers.CacheStatusTest do
 
       assert ["STALE"] == get_resp_header(conn, "belfrage-cache-status")
     end
+
+    test "the warning header has the value '111'" do
+      struct = %Struct{response: %Struct.Response{fallback: true}}
+
+      conn =
+        conn(:get, "/")
+        |> CacheStatus.add_header(struct)
+
+      assert ["111"] == get_resp_header(conn, "warning")
+    end
   end
 end

@@ -51,6 +51,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
       conn = make_request()
       assert conn.status == 200
       assert cache_status_header(conn) == "STALE"
+      assert get_resp_header(conn, "warning") |> hd() == "111"
     end
   end
 

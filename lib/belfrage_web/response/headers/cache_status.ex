@@ -7,6 +7,7 @@ defmodule BelfrageWeb.Response.Headers.CacheStatus do
   @impl true
   def add_header(conn, %Struct{response: %Struct.Response{fallback: true}}) do
     put_resp_header(conn, "belfrage-cache-status", "STALE")
+    |> put_resp_header("warning", "111")
   end
 
   @impl true
