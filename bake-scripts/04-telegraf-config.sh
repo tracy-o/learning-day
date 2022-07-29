@@ -18,7 +18,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   flush_jitter = "0s"
   precision = "0s"
   hostname = ""
-  omit_hostname = false
+  omit_hostname = true
 
 [[outputs.cloudwatch]]
   region = "eu-west-1"
@@ -26,6 +26,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 
 [[inputs.prometheus]]
   urls = ["http://127.0.0.1:9568/metrics"]
+  tagexclude = ["url"]
 
 [[inputs.cpu]]
   percpu = true
