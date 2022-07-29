@@ -18,7 +18,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   flush_jitter = "0s"
   precision = "0s"
   hostname = ""
-  omit_hostname = false
+  omit_hostname = true
 
 [[outputs.cloudwatch]]
   region = "eu-west-1"
