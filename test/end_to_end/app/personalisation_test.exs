@@ -127,6 +127,41 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
   end
 
+  describe "personalised route and expired auth. token" do
+    setup do
+      clear_cache()
+      :ok
+    end
+
+    test "invalid auth token on test prod. env." do
+      set_environment("test")
+      start_supervised!({RouteState, "PersonalisedFablData"})
+
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> personalise_app_request(AuthToken.expired_access_token())
+        |> make_request()
+
+      assert conn.status == 401
+    end
+
+    test "expired auth token on live prod. env." do
+      set_environment("live")
+      start_supervised!({RouteState, "PersonalisedFablData"})
+
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> personalise_app_request(AuthToken.expired_access_token())
+        |> make_request()
+
+      assert conn.status == 401
+    end
+  end
+
   describe "personalisation is disabled" do
     setup do
       stub_dial(:personalisation, "off")
