@@ -26,6 +26,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 
 [[inputs.prometheus]]
   urls = ["http://127.0.0.1:9568/metrics"]
+  tagexclude = ["url"]
 
 [[inputs.cpu]]
   percpu = true
