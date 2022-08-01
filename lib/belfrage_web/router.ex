@@ -107,7 +107,7 @@ defmodule BelfrageWeb.Router do
     Logger.error("", %{
       msg: "Router Service returned a #{status} status",
       kind: kind,
-      reason: reason,
+      reason: inspect(reason),
       stack: Exception.format_stacktrace(stack),
       request_path: conn.request_path,
       query_string: conn.query_string
