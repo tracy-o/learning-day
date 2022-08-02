@@ -33,19 +33,27 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   totalcpu = true
   collect_cpu_time = false
   report_active = false
+  tagexclude = ["host"]
 
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+  tagexclude = ["path", "fstype", "mode", "host", "device"]
 
 [[inputs.diskio]]
+  tagexclude = ["host"]
 
 [[inputs.kernel]]
+  tagexclude = ["host"]
 
 [[inputs.mem]]
+  tagexclude = ["host"]
 
 [[inputs.processes]]
+  tagexclude = ["host"]
 
 [[inputs.swap]]
+  tagexclude = ["host"]
 
 [[inputs.system]]
+  tagexclude = ["host"]
 EOF
