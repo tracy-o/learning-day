@@ -31,7 +31,7 @@ defmodule Belfrage.Supervisor do
       name: Finch,
       pools: %{
         :default => [size: 512, conn_opts: [transport_opts: {:verify, :verify_none}]],
-        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 512],
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 1024],
         "https://sts.#{region}.amazonaws.com" => [size: 512],
         "https://lambda.#{region}.amazonaws.com" => [size: 1024],
         Application.get_env(:belfrage, :philippa_endpoint) => [size: 1024],
