@@ -22,7 +22,7 @@ defmodule EndToEnd.ErrorHandlingTest do
   def make_call() do
     # For simplicity make LambdaMock raise an exception, but it could be an
     # exception in any code executed during the request lifecycle
-    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _request_id, _opts ->
+    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
       raise "Boom"
     end)
 

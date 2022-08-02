@@ -35,7 +35,6 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => "science café"}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -60,7 +59,6 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => "€100"}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -85,7 +83,6 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => ""}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -110,7 +107,6 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => <<246>>}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -131,7 +127,7 @@ defmodule NonUtf8QueryStringTest do
 
     # Actually call ExAws to trigger the error on JSON-encoding the lambda
     # payload
-    stub(LambdaMock, :call, fn _arn, function, payload, _request_id, opts ->
+    stub(LambdaMock, :call, fn _arn, function, payload, opts ->
       function
       |> Belfrage.AWS.Lambda.invoke(payload, %{}, opts)
       |> Belfrage.AWS.request(
@@ -177,7 +173,6 @@ defmodule NonUtf8QueryStringTest do
                           pathParameters: %{},
                           queryStringParameters: %{"query" => <<37, 224, 37, 37>>}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)

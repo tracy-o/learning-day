@@ -161,7 +161,7 @@ defmodule EndToEnd.CascadeTest do
   end
 
   defp expect_request_to_origin(:lambda, opts) do
-    expect(LambdaMock, :call, fn _role_arn, _func_arn, payload, _request_id, _opts ->
+    expect(LambdaMock, :call, fn _role_arn, _func_arn, payload, _opts ->
       if callback = opts[:callback] do
         callback.(payload)
       end
@@ -195,7 +195,7 @@ defmodule EndToEnd.CascadeTest do
   end
 
   defp expect_no_request_to_origin(:lambda) do
-    expect(LambdaMock, :call, 0, fn _role_arn, _func_arn, _payload, _request_id, _opts ->
+    expect(LambdaMock, :call, 0, fn _role_arn, _func_arn, _payload, _opts ->
       flunk("Lambda should not be called")
     end)
   end

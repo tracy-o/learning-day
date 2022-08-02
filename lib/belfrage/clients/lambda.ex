@@ -7,9 +7,9 @@ defmodule Belfrage.Clients.Lambda do
   @aws Application.get_env(:belfrage, :aws)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
-  @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), String.t(), List.t()) :: Tuple.t()
+  @callback call(any, any, any, any) :: any
 
-  def call(credentials = %AWS.Credentials{}, function, payload, _request_id, opts \\ []) do
+  def call(credentials = %AWS.Credentials{}, function, payload, opts \\ []) do
     lambda_response =
       @aws.request(
         AWS.Lambda.invoke(function, payload, %{}, opts),

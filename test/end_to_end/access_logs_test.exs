@@ -16,7 +16,7 @@ defmodule EndToEnd.AccessLogsTest do
   test "requests are logged" do
     start_supervised!({RouteState, "SomeRouteState"})
 
-    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _request_id, _opts ->
+    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
       {:ok,
        %{
          "headers" => %{

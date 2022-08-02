@@ -44,7 +44,6 @@ defmodule EndToEnd.LambdaTest do
                           pathParameters: %{},
                           queryStringParameters: %{}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -79,7 +78,6 @@ defmodule EndToEnd.LambdaTest do
                         %{
                           queryStringParameters: %{"query" => %{"hi" => "foo"}}
                         },
-                        _request_id,
                         _opts ->
       {:ok, @lambda_response}
     end)
@@ -90,7 +88,7 @@ defmodule EndToEnd.LambdaTest do
 
   test "a failed response from a lambda e2e" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function_name, _payload, _request_id, _opts ->
+    |> expect(:call, fn _role_arn, _function_name, _payload, _opts ->
       response =
         @lambda_response
         |> Map.put("statusCode", 500)

@@ -45,7 +45,6 @@ defmodule Belfrage.Services.Webcore do
         Webcore.Credentials.get(),
         private.origin,
         Webcore.Request.build(struct),
-        request.request_id,
         lambda_options(struct.request)
       )
     end)

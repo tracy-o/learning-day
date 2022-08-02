@@ -13,7 +13,7 @@ defmodule Belfrage.Clients.LambdaTest do
         {:ok, "<h1>A Page</h1>"}
       end)
 
-      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request") ==
+      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}) ==
                {:ok, "<h1>A Page</h1>"}
     end
 
@@ -27,7 +27,7 @@ defmodule Belfrage.Clients.LambdaTest do
           }}}
       end)
 
-      assert Lambda.call(@credentials, "not-a-real-lambda", %{some: "data"}, "larry-the-lambda-request") ==
+      assert Lambda.call(@credentials, "not-a-real-lambda", %{some: "data"}) ==
                {:error, :invoke_failure}
     end
 
@@ -37,13 +37,7 @@ defmodule Belfrage.Clients.LambdaTest do
         {:error, :timeout}
       end)
 
-      assert Lambda.call(
-               @credentials,
-               "pwa-lambda-function:timeout",
-               %{some: "data"},
-               "larry-the-lambda-request"
-             ) ==
-               {:error, :invoke_timeout}
+      assert Lambda.call(@credentials, "pwa-lambda-function:timeout", %{some: "data"}) == {:error, :invoke_timeout}
     end
 
     test "Given a correct function name, but a non-existant alias we return the :function_not_found error" do
@@ -60,8 +54,7 @@ defmodule Belfrage.Clients.LambdaTest do
       assert Lambda.call(
                @credentials,
                "pwa-lambda-function:unknown-alias",
-               %{some: "data"},
-               "larry-the-lambda-request"
+               %{some: "data"}
              ) ==
                {:error, :function_not_found}
     end
@@ -81,9 +74,7 @@ defmodule Belfrage.Clients.LambdaTest do
         {:ok, "<h1>trace_id option provided</h1>"}
       end)
 
-      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}, "larry-the-lambda-request",
-               xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy"
-             ) ==
+      assert Lambda.call(@credentials, "pwa-lambda-function", %{some: "data"}, xray_trace_id: "1-xxxx-yyyyyyyyyyyyyyyy") ==
                {:ok, "<h1>trace_id option provided</h1>"}
     end
   end

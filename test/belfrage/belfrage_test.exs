@@ -54,7 +54,6 @@ defmodule BelfrageTest do
     |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:test",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -70,7 +69,6 @@ defmodule BelfrageTest do
     |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -86,7 +84,6 @@ defmodule BelfrageTest do
     |> expect(:call, fn _credentials,
                         _lambda_func = "pwa-lambda-function:example-branch",
                         _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                        _request_id = "gerald-the-get-request",
                         _opts = [] ->
       @web_core_404_lambda_response
     end)
@@ -106,7 +103,6 @@ defmodule BelfrageTest do
                           headers: %{country: "gb"},
                           httpMethod: "POST"
                         },
-                        _request_id = "pete-the-post-request",
                         _opts = [] ->
       @web_core_lambda_response
     end)
@@ -130,7 +126,7 @@ defmodule BelfrageTest do
 
   test "A HTTP request redirects to https, and doesn't call the lambda" do
     LambdaMock
-    |> expect(:call, 0, fn _credentials, _func_name, _payload, _request_id, _opts -> :this_should_not_be_called end)
+    |> expect(:call, 0, fn _credentials, _func_name, _payload, _opts -> :this_should_not_be_called end)
 
     response_struct = Belfrage.handle(@redirect_request_struct)
 
@@ -142,7 +138,6 @@ defmodule BelfrageTest do
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
                            _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                           _request_id = "gerald-the-get-request",
                            _opts = [] ->
       @web_core_lambda_response
     end)
@@ -161,7 +156,6 @@ defmodule BelfrageTest do
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
                            _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                           _request_id = "gerald-the-get-request",
                            _opts = [] ->
       {:ok,
        %{
@@ -191,7 +185,6 @@ defmodule BelfrageTest do
     |> expect(:call, 1, fn _credentials,
                            _lambda_func = "pwa-lambda-function:test",
                            _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                           _request_id = "gerald-the-get-request",
                            _opts = [] ->
       @web_core_500_lambda_response
     end)
@@ -263,7 +256,6 @@ defmodule BelfrageTest do
       |> expect(:call, 0, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
                              _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                             _request_id = "gerald-the-get-request",
                              _opts = [] ->
         flunk("This should never be called")
       end)
@@ -300,7 +292,6 @@ defmodule BelfrageTest do
       |> expect(:call, 1, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
                              _payload = %{body: nil, headers: %{country: "gb"}, httpMethod: "GET"},
-                             _request_id = "gerald-the-get-request",
                              _opts = [] ->
         @web_core_500_lambda_response
       end)

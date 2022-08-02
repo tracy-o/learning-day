@@ -37,7 +37,7 @@ defmodule Belfrage.Test.StubHelper do
       {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
     end)
 
-    Mox.stub(Belfrage.Clients.LambdaMock, :call, fn _creds, _arn, _payload, _req_id, _opts ->
+    Mox.stub(Belfrage.Clients.LambdaMock, :call, fn _creds, _arn, _payload, _opts ->
       {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
     end)
   end
