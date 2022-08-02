@@ -24,7 +24,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
   describe "when caching is disabled in the routespec" do
     test "the response isn't stored in the cache" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
+      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _opts ->
         {:ok, @cacheable_lambda_response}
       end)
 
@@ -35,7 +35,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
     test "the cache is never checked for a response" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
+      |> expect(:call, 1, fn _role_arn, _lambda_function, _payload, _opts ->
         {:ok, @cacheable_lambda_response}
       end)
 
@@ -46,7 +46,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
     test "returns a miss from cache" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, 2, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
+      |> expect(:call, 2, fn _role_arn, _lambda_function, _payload, _opts ->
         {:ok, @cacheable_lambda_response}
       end)
 

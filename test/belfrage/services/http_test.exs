@@ -380,16 +380,14 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     test "tracks latency checkpoints" do
-      start_supervised!(LatencyMonitor)
-
       request_id = UUID.uuid4(:hex)
       struct = Struct.add(@get_struct, :request, %{request_id: request_id})
 
       stub_request()
-      response = HTTP.dispatch(struct)
-      assert_successful_response(response)
+      struct = HTTP.dispatch(struct)
+      assert_successful_response(struct)
 
-      checkpoints = LatencyMonitor.get_checkpoints(request_id)
+      checkpoints = LatencyMonitor.get_checkpoints(struct)
       assert checkpoints[:origin_request_sent]
       assert checkpoints[:origin_response_received]
       assert checkpoints[:origin_response_received] > checkpoints[:origin_request_sent]

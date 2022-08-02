@@ -26,7 +26,7 @@ defmodule Belfrage.Services.WebcoreTest do
     credentials = Webcore.Credentials.get()
     request = Webcore.Request.build(@default_struct)
 
-    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", [xray_trace_id: _trace_id] ->
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, [xray_trace_id: _trace_id] ->
       @successful_response
     end)
 
@@ -43,7 +43,7 @@ defmodule Belfrage.Services.WebcoreTest do
     credentials = Webcore.Credentials.get()
     request = Webcore.Request.build(nil_segment_struct)
 
-    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, "request-id", _options = [] ->
+    expect(LambdaMock, :call, fn ^credentials, "lambda-arn", ^request, _options = [] ->
       @successful_response
     end)
 
@@ -127,7 +127,7 @@ defmodule Belfrage.Services.WebcoreTest do
   end
 
   defp stub_lambda(response) do
-    stub(LambdaMock, :call, fn _credentials, _arn, _request, _request_id, _opts ->
+    stub(LambdaMock, :call, fn _credentials, _arn, _request, _opts ->
       response
     end)
   end

@@ -32,7 +32,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
 
   test "when cache header is private from lambda origin, stale-while-revalidate is added to cache-control" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
+    |> expect(:call, fn _role_arn, _function, _payload, _opts ->
       {:ok, @lambda_response}
     end)
 
@@ -53,7 +53,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
 
   test "when Pres 500s with private cache control, Belfrage keeps cache-control as private" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _role_arn, _function, _payload, _request_id, _opts ->
+    |> expect(:call, fn _role_arn, _function, _payload, _opts ->
       {:ok, @lambda_private_error_response}
     end)
 

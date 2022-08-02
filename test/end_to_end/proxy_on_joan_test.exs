@@ -50,7 +50,7 @@ defmodule EndToEnd.ProxyOnJoan do
 
     test "the origin should stay as the pwa lambda" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, 1, fn _credentials, "pwa-lambda-function:test", _payload, _request_id, _opts ->
+      |> expect(:call, 1, fn _credentials, "pwa-lambda-function:test", _payload, _opts ->
         {:ok, @lambda_response}
       end)
 

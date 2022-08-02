@@ -23,7 +23,7 @@ defmodule AccessControlAllowOriginTest do
 
   test "when request is from the cdn" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->
+    |> expect(:call, fn _lambda_name, _role_arn, _headers, _opts ->
       {:ok, @lambda_response}
     end)
 
@@ -39,7 +39,7 @@ defmodule AccessControlAllowOriginTest do
 
   test "when request is not from the cdn" do
     Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _lambda_name, _role_arn, _headers, _request_id, _opts ->
+    |> expect(:call, fn _lambda_name, _role_arn, _headers, _opts ->
       {:ok, @lambda_response}
     end)
 

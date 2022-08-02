@@ -84,7 +84,7 @@ defmodule EndToEnd.ResponseHeadersTest do
   end
 
   defp stub_webcore_response(opts) do
-    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _request_id, _opts ->
+    stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
       {:ok,
        %{
          "headers" => %{

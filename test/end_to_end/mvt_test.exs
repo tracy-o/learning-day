@@ -15,7 +15,7 @@ defmodule EndToEnd.MvtTest do
       Enum.into(opts, %{times_called: 1, expected_headers: %{}, vary_response: "", max_age: 30})
 
     Belfrage.Clients.LambdaMock
-    |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _request_id, _opts ->
+    |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _opts ->
       for {expected_key, expected_value} <- expected_headers do
         assert actual_headers[expected_key] == expected_value
       end
@@ -214,7 +214,7 @@ defmodule EndToEnd.MvtTest do
     # same in the third request - even though a new MVT feature
     # is present in the request headers.
     Belfrage.Clients.LambdaMock
-    |> expect(:call, 0, fn _lambda_name, _role_arn, %{headers: _headers}, _request_id, _opts ->
+    |> expect(:call, 0, fn _lambda_name, _role_arn, %{headers: _headers}, _opts ->
       flunk("Should never be called.")
     end)
 

@@ -25,7 +25,6 @@ defmodule Belfrage.Metrics.Supervisor do
   defp children(_env) do
     [
       Metrics.TelemetrySupervisor,
-      Metrics.LatencyMonitor,
       {:telemetry_poller,
        [
          measurements: [

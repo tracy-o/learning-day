@@ -94,7 +94,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   end
 
   defp stub_lambda(response) do
-    stub(LambdaMock, :call, fn _role_arn, _lambda_function, _payload, _request_id, _opts ->
+    stub(LambdaMock, :call, fn _role_arn, _lambda_function, _payload, _opts ->
       response
     end)
   end

@@ -15,10 +15,10 @@ defmodule Belfrage.Services.HTTP do
 
   @impl Service
   def dispatch(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
-    result =
-      request
-      |> build_request(private.origin)
-      |> execute_request(private)
+    built_request = request |> build_request(private.origin)
+    struct = LatencyMonitor.checkpoint(struct, :origin_request_sent)
+    result = built_request |> execute_request(private)
+    struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
 
     response =
       case result do
@@ -124,10 +124,7 @@ defmodule Belfrage.Services.HTTP do
     platform = platform_name(private)
 
     Belfrage.Event.record "function.timing.service.#{platform}.request" do
-      LatencyMonitor.checkpoint(request.request_id, :origin_request_sent)
-      response = @http_client.execute(request, platform)
-      LatencyMonitor.checkpoint(request.request_id, :origin_response_received)
-      response
+      @http_client.execute(request, platform)
     end
   end
 

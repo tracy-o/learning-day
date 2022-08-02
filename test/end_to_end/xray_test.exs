@@ -31,7 +31,7 @@ defmodule EndToEnd.XrayTest do
 
     test "a webcore.request.stop event is emmited (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
         {:ok, @lambda_response}
       end)
 
@@ -44,7 +44,7 @@ defmodule EndToEnd.XrayTest do
 
     test "has trace_id in the opts" do
       Belfrage.Clients.LambdaMock
-      |> expect(:call, fn _lambda_name, _role_arn, _payload, _request_id, [xray_trace_id: trace_id] ->
+      |> expect(:call, fn _lambda_name, _role_arn, _payload, [xray_trace_id: trace_id] ->
         assert trace_id
         {:ok, @lambda_response}
       end)

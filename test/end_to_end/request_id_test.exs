@@ -19,7 +19,7 @@ defmodule EndToEnd.RequestIdTest do
     start_supervised!({RouteState, "SomeRouteState"})
 
     Belfrage.Clients.LambdaMock
-    |> stub(:call, fn _lambda_name, _role_arn, _payload, _request_id, _opts ->
+    |> stub(:call, fn _lambda_name, _role_arn, _payload, _opts ->
       {:ok, @lambda_response}
     end)
 

@@ -18,7 +18,7 @@ defmodule Belfrage.Processor do
     WrapperError
   }
 
-  alias Struct.{Request, Response, Private}
+  alias Struct.{Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
   def pre_request_pipeline(struct = %Struct{}) do
@@ -77,11 +77,12 @@ defmodule Belfrage.Processor do
       end)
 
     if struct.response.http_status do
-      latency_checkpoint(struct, :early_response_received)
+      struct = LatencyMonitor.checkpoint(struct, :early_response_received)
       RouteState.inc(struct)
+      struct
+    else
+      struct
     end
-
-    struct
   end
 
   def request_pipeline(struct = %Struct{}) do
@@ -131,9 +132,9 @@ defmodule Belfrage.Processor do
     if use_fallback?(struct) do
       struct =
         struct
-        |> latency_checkpoint(:fallback_request_sent)
+        |> LatencyMonitor.checkpoint(:fallback_request_sent)
         |> Cache.fetch([:fresh, :stale], fallback: true)
-        |> latency_checkpoint(:fallback_response_received)
+        |> LatencyMonitor.checkpoint(:fallback_response_received)
 
       if struct.response.http_status == 200 do
         struct
@@ -153,11 +154,6 @@ defmodule Belfrage.Processor do
         private: %Private{caching_enabled: caching_enabled}
       }) do
     status >= 400 and status not in [401, 404, 410, 451] and caching_enabled
-  end
-
-  defp latency_checkpoint(struct = %Struct{request: request = %Request{}}, checkpoint) do
-    LatencyMonitor.checkpoint(request.request_id, checkpoint)
-    struct
   end
 
   defp make_fallback_private_if_personalised_request(

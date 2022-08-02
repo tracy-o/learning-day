@@ -222,14 +222,14 @@ defmodule EndToEnd.Web.PersonalisationTest do
   end
 
   defp expect_origin_request(fun, opts \\ []) do
-    expect(LambdaMock, :call, fn _role_arn, _function_arn, request, _request_id, _opts ->
+    expect(LambdaMock, :call, fn _role_arn, _function_arn, request, _opts ->
       fun.(request)
       Keyword.get(opts, :response, {:ok, @response})
     end)
   end
 
   defp expect_no_origin_request() do
-    expect(LambdaMock, :call, 0, fn _role_arn, _function_arn, _request, _request_id, _opts -> nil end)
+    expect(LambdaMock, :call, 0, fn _role_arn, _function_arn, _request, _opts -> nil end)
   end
 
   defp expect_non_personalised_origin_request() do

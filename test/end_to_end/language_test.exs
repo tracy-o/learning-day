@@ -20,7 +20,7 @@ defmodule EndToEnd.LanguageTest do
     expected_headers = Keyword.get(opts, :headers, %{})
 
     Belfrage.Clients.LambdaMock
-    |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _request_id, _opts ->
+    |> expect(:call, times_called, fn _lambda_name, _role_arn, %{headers: actual_headers}, _opts ->
       for {expected_key, expected_value} <- expected_headers do
         assert actual_headers[expected_key] == expected_value
       end
