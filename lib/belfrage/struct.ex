@@ -71,6 +71,7 @@ defmodule Belfrage.Struct.Private do
             circuit_breaker_error_threshold: nil,
             pipeline: [],
             overrides: %{},
+            checkpoints: %{},
             query_params_allowlist: [],
             headers_allowlist: [],
             cookie_allowlist: [],
@@ -135,5 +136,13 @@ defmodule Belfrage.Struct do
 
   def put_status(struct, code) when is_number(code) do
     add(struct, :response, %{http_status: code})
+  end
+
+  def put_checkpoint(struct, name, value) do
+    update_in(struct.private.checkpoints, &Map.put(&1, name, value))
+  end
+
+  def get_checkpoints(struct) do
+    struct.private.checkpoints
   end
 end

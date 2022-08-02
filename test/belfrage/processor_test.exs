@@ -259,12 +259,10 @@ defmodule Belfrage.ProcessorTest do
     end
 
     test "tracks latency checkpoints when fetching fallback", %{struct: struct} do
-      start_supervised!(LatencyMonitor)
-
       struct = Struct.add(struct, :response, %{http_status: 500})
-      Processor.fetch_fallback_from_cache(struct)
+      struct = Processor.fetch_fallback_from_cache(struct)
 
-      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      checkpoints = LatencyMonitor.get_checkpoints(struct)
       assert checkpoints[:fallback_request_sent]
       assert checkpoints[:fallback_response_received]
       assert checkpoints[:fallback_response_received] > checkpoints[:fallback_request_sent]

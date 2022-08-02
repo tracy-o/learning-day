@@ -5,12 +5,15 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
   alias Belfrage.Xray
+  alias Belfrage.Metrics.LatencyMonitor
 
   @behaviour Service
   @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{private: private = %Private{}}) do
+    struct = LatencyMonitor.checkpoint(struct, :origin_request_sent)
+
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
@@ -27,6 +30,7 @@ defmodule Belfrage.Services.Webcore do
           end
       end
 
+    struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
     Struct.add(struct, :response, response)
   end
 

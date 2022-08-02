@@ -1,7 +1,6 @@
 defmodule Belfrage.Clients.Lambda do
   require Logger
   require Belfrage.Xray
-  import Belfrage.Metrics.LatencyMonitor, only: [checkpoint: 2]
 
   alias Belfrage.{AWS}
 
@@ -10,9 +9,7 @@ defmodule Belfrage.Clients.Lambda do
 
   @callback call(String.t(), String.t(), Belfrage.Struct.Request.t(), String.t(), List.t()) :: Tuple.t()
 
-  def call(credentials = %AWS.Credentials{}, function, payload, request_id, opts \\ []) do
-    checkpoint(request_id, :origin_request_sent)
-
+  def call(credentials = %AWS.Credentials{}, function, payload, _request_id, opts \\ []) do
     lambda_response =
       @aws.request(
         AWS.Lambda.invoke(function, payload, %{}, opts),
@@ -22,7 +19,6 @@ defmodule Belfrage.Clients.Lambda do
         http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
       )
 
-    checkpoint(request_id, :origin_response_received)
 
     case lambda_response do
       {:ok, body} -> {:ok, body}

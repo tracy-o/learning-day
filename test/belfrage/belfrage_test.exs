@@ -252,11 +252,9 @@ defmodule BelfrageTest do
     end
 
     test "records latency checkpoint", %{struct: struct} do
-      start_supervised!(LatencyMonitor)
+      struct = Belfrage.handle(struct)
 
-      Belfrage.handle(struct)
-
-      checkpoints = LatencyMonitor.get_checkpoints(struct.request.request_id)
+      checkpoints = LatencyMonitor.get_checkpoints(struct)
       assert checkpoints[:early_response_received]
     end
 

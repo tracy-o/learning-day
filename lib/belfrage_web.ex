@@ -2,12 +2,15 @@ defmodule BelfrageWeb do
   alias BelfrageWeb.{StructAdapter, Response}
   alias Belfrage
   alias Plug.Conn
+  alias Belfrage.Metrics.LatencyMonitor
 
   def yield(id, conn) do
     conn = Conn.assign(conn, :route_spec, id)
 
     try do
-      struct = StructAdapter.adapt(conn, id)
+      struct =
+        StructAdapter.adapt(conn, id)
+        |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
       conn
       |> Conn.assign(:struct, Belfrage.handle(struct))
