@@ -15,7 +15,8 @@ defmodule BelfrageWeb.Plugs.LatencyMonitor do
       conn = %Plug.Conn{status: status} when status in [200, :ok] ->
         conn.assigns[:struct]
         |> case do
-          nil -> nil
+          nil ->
+            nil
 
           struct ->
             LatencyMonitor.checkpoint(struct, :response_sent)

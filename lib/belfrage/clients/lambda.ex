@@ -19,7 +19,6 @@ defmodule Belfrage.Clients.Lambda do
         http_opts: [timeout: @lambda_timeout, pool_name: :Webcore]
       )
 
-
     case lambda_response do
       {:ok, body} -> {:ok, body}
       {:error, {:http_error, 404, response}} -> function_not_found(response)
