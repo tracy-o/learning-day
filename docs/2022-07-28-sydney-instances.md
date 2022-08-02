@@ -462,8 +462,18 @@ Public content loadtest results hitting one page with 100ms latency and a `max-a
 | 4000 | 68            | 87.7          | 100                 | 0                                          |
 | 4500 | 82            | 90.3          | 95.77               | 7.88 *                                      |
 
-
 \* At these points the latency monitor develops a message queue million of messages long. This means the CPU returns to 10%-20% after the load test, rather than near 0%.  The only ways to get rid of this is to redeploy or restart the `LatencyMonitor` process.
+
+
+#### Comparing Public and Private Performance
+![](./load-test-results/img/2022-07-28-sydney-instances/public-vs-private-chart.svg)
+- blue line: private content, 0% cache hit
+- red line: public max-age=5, 98% cache hit
+[see interactively here](./load-test-results/data/2022-07-28-sydney-instance/priv-vs-pub-interactive.html)
+
+This graph shows us the bounds of Belfrage's performance w.r.t caching. We know that all typical Belfrage performance should lie between these two lines. The steeper the line the lower the cache hit ratio. 
+
+Here you can also see the bi-modal nature of our application. It seems that there is a linear trend until we reach 80%-85% after which another trend starts. From the data we have its not clear if this second trend is linear or not. So Belfrage behaves differently when CPU usage is high. The source of this is mysterious, but this is probably due to some optimisation occurring within the BEAM VM. As [this](https://stressgrid.com/blog/beam_cpu_usage/) article suggests. It may be from waiting processes using less cpu cycles when under high load.
 
 ### How many instances should we have on Sydney?
 We can calculate the upper and lower bound of instances in order to satisfy the load of 5000rps.

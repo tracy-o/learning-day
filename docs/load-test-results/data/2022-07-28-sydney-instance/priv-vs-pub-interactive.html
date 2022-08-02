@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .error {
+        color: red;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.17.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 400, "continuousHeight": 300}}, "layer": [{"mark": "line", "encoding": {"color": {"value": "blue"}, "x": {"field": "RPS", "type": "quantitative"}, "y": {"field": "Private Content CPU Usage", "type": "quantitative"}}, "selection": {"selector014": {"type": "interval", "bind": "scales", "encodings": ["x", "y"]}}}, {"mark": "line", "encoding": {"color": {"value": "red"}, "x": {"field": "RPS", "type": "quantitative"}, "y": {"field": "Public Content max-age=5 CPU Usage", "type": "quantitative"}}}], "data": {"name": "data-4de9de7a1aeedaa08718cd99dd162be5"}, "$schema": "https://vega.github.io/schema/vega-lite/v4.17.0.json", "datasets": {"data-4de9de7a1aeedaa08718cd99dd162be5": [{"RPS": 250, "Public Content max-age=5 CPU Usage": 5.49, "Private Content CPU Usage": 8.95}, {"RPS": 500, "Public Content max-age=5 CPU Usage": 13.0, "Private Content CPU Usage": 24.5}, {"RPS": 750, "Public Content max-age=5 CPU Usage": 18.8, "Private Content CPU Usage": 44.5}, {"RPS": 1000, "Public Content max-age=5 CPU Usage": 27.9, "Private Content CPU Usage": 52.7}, {"RPS": 1500, "Public Content max-age=5 CPU Usage": 43.5, "Private Content CPU Usage": 82.3}, {"RPS": 2000, "Public Content max-age=5 CPU Usage": 53.9, "Private Content CPU Usage": 87.3}, {"RPS": 2500, "Public Content max-age=5 CPU Usage": 66.3, "Private Content CPU Usage": 89.2}, {"RPS": 3000, "Public Content max-age=5 CPU Usage": 76.4, "Private Content CPU Usage": 91.7}, {"RPS": 3500, "Public Content max-age=5 CPU Usage": 85.1, "Private Content CPU Usage": null}, {"RPS": 4000, "Public Content max-age=5 CPU Usage": 87.7, "Private Content CPU Usage": null}, {"RPS": 4500, "Public Content max-age=5 CPU Usage": 90.3, "Private Content CPU Usage": null}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div class="error" style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
