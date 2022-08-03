@@ -10,7 +10,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
 
   def get() do
     request = AWS.STS.assume_role(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")
-    result = Metrics.duration([:request, :assume_webcore_lambda_role], fn -> @aws.request(request) end)
+    result = Metrics.request_span(:assume_webcore_lambda_role, fn -> @aws.request(request) end)
 
     case result do
       {:ok, %{body: credentials}} ->

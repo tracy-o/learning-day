@@ -19,19 +19,6 @@ defmodule Belfrage.Metrics do
   @spec measurement(event_name(), measurements(), metadata()) :: :ok
   def measurement(name, measurements, metadata \\ %{}), do: event(name, measurements, metadata)
 
-  # TODO remove after statsd to prometheus migration
-  def latency_span(name, func) do
-    :telemetry.span([:belfrage, name], %{}, fn ->
-      result =
-        :telemetry.span([:belfrage, :latency], %{}, fn ->
-          result = func.()
-          {result, %{function_name: name}}
-        end)
-
-      {result, %{}}
-    end)
-  end
-
   @doc """
   Measure duration of execution of the passed function. Emits the same event as
   `stop/3`.
@@ -86,5 +73,33 @@ defmodule Belfrage.Metrics do
 
   defp suffix_name(name, suffix) do
     List.wrap(name) ++ [suffix]
+  end
+
+  ### PROMETHEUS MIGRATION
+
+  # TODO remove after statsd to prometheus migration
+  def latency_span(name, func) do
+    :telemetry.span([:belfrage, name], %{}, fn ->
+      result =
+        :telemetry.span([:belfrage, :latency], %{}, fn ->
+          result = func.()
+          {result, %{function_name: name}}
+        end)
+
+      {result, %{}}
+    end)
+  end
+
+  # TODO remove after statsd to prometheus migration
+  def request_span(name, func) do
+    :telemetry.span([:belfrage, :request, name], %{}, fn ->
+      result =
+        :telemetry.span([:belfrage, :request], %{}, fn ->
+          result = func.()
+          {result, %{authentication_type: name}}
+        end)
+
+      {result, %{}}
+    end)
   end
 end
