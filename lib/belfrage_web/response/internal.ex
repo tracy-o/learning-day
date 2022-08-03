@@ -18,7 +18,7 @@ defmodule BelfrageWeb.Response.Internal do
              )
 
   def new(struct = %Struct{}, conn = %Conn{}) do
-    Metrics.duration(:generate_internal_response, fn ->
+    Metrics.latency_span(:generate_internal_response, fn ->
       {content_type, body} = body(struct.response, conn)
 
       %Response{

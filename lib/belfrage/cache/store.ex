@@ -6,14 +6,14 @@ defmodule Belfrage.Cache.Store do
   def store(struct) do
     cond do
       store_in_local_and_distributed_cache?(struct) ->
-        Metrics.duration(:cache_response, fn ->
+        Metrics.latency_span(:cache_response, fn ->
           MultiStrategy.store(struct)
         end)
 
         struct
 
       store_in_local_cache?(struct) ->
-        Metrics.duration(:cache_response, fn ->
+        Metrics.latency_span(:cache_response, fn ->
           Local.store(struct, make_stale: true)
         end)
 

@@ -1,5 +1,5 @@
 defmodule Belfrage.Metrics.Statsd do
-  use Belfrage.Metrics,
+  use Belfrage.MetricsMigration,
     backend: :statsd,
     metrics: [
       :vm_metrics,
@@ -11,8 +11,10 @@ defmodule Belfrage.Metrics.Statsd do
       :request_metrics,
       :route_state_metrics,
       :cache_metrics,
-      :service_metrics,
+      :webcore_metrics,
+      :webcore_legacy_metrics,
       :plug_metrics,
+      :plug_legacy_metrics,
       :misc_metrics
     ]
 

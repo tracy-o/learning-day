@@ -8,7 +8,6 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.ProductionEnvironment
   alias BelfrageWeb.PreviewMode
   alias BelfrageWeb.Plugs
-  alias Belfrage.{Metrics}
 
   plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
   plug(Plugs.InfiniteLoopGuardian)
@@ -34,8 +33,15 @@ defmodule BelfrageWeb.Router do
     |> super(opts)
   end
 
+  defp stop(name, start_time) do
+    duration = System.monotonic_time(:nanosecond) - start_time
+
+    :telemetry.execute([:belfrage, name, :stop], %{duration: duration})
+    :telemetry.execute([:belfrage, :latency, :stop], %{duration: duration}, %{function_name: name})
+  end
+
   def dispatch(conn, opts) do
-    Metrics.stop(:plug_pipeline, conn.assigns.plug_pipeline_start_time)
+    stop(:plug_pipeline, conn.assigns.plug_pipeline_start_time)
     super(conn, opts)
   end
 

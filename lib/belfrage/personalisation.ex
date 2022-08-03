@@ -53,7 +53,7 @@ defmodule Belfrage.Personalisation do
   end
 
   def maybe_put_personalised_request(struct = %Struct{}) do
-    Metrics.duration(:check_if_personalised_request, fn ->
+    Metrics.latency_span(:check_if_personalised_request, fn ->
       if personalised_request?(struct) do
         Struct.add(struct, :private, %{personalised_request: true})
       else

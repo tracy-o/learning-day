@@ -21,7 +21,7 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
   defp contains_gzip?(string), do: String.contains?(string, "gzip")
 
   defp decompress_body(struct) do
-    Metrics.duration(:decompress_response, fn ->
+    Metrics.latency_span(:decompress_response, fn ->
       response_headers = Map.delete(struct.response.headers, "content-encoding")
       :telemetry.execute([:belfrage, :web, :response, :uncompressed], %{})
       Struct.add(struct, :response, %{body: :zlib.gunzip(struct.response.body), headers: response_headers})

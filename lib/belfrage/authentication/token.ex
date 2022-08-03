@@ -3,7 +3,7 @@ defmodule Belfrage.Authentication.Token do
   alias Belfrage.Metrics
 
   def parse(cookie) do
-    Metrics.duration(:parse_session_token, fn ->
+    Metrics.latency_span(:parse_session_token, fn ->
       case decode(cookie) do
         {:ok, token} ->
           extract_user_attributes(token)
