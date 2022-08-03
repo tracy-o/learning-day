@@ -158,7 +158,6 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: reque
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Cpu.png)
 
-Origin Simulator Pool
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000VmMemory.png)
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Mailbox.png)
@@ -523,20 +522,20 @@ Public content loadtest results hitting one page with 100ms latency and a `max-a
 
 This graph shows us the bounds of Belfrage's performance w.r.t caching. We know that all typical Belfrage performance should lie between these two lines. The steeper the line the lower the cache hit ratio. 
 
-Here you can also see the bi-modal nature of our application. It seems that there is a linear trend until we reach 80%-85% after which another trend starts. From the data we have its not clear if this second trend is linear or not. So Belfrage behaves differently when CPU usage is high. The source of this is mysterious, but this is probably due to some optimisation occurring within the BEAM VM. As [this](https://stressgrid.com/blog/beam_cpu_usage/) article suggests. It may be from waiting processes using less cpu cycles when under high load.
+Here you can also see the bi-modal nature of our application. It seems that there is a linear trend until we reach 80%-85% after which another trend starts. From the data we have its not clear if this second trend is linear or not. The source of this is mysterious, but this is probably due to some optimisation occurring within the BEAM VM. As [this](https://stressgrid.com/blog/beam_cpu_usage/) article suggests. It may be from waiting processes using less cpu cycles when under high load.
 
 ### How many instances should we have on Sydney?
 We can calculate the upper and lower bound of instances in order to satisfy the load of 5000rps.
 
 We can do this using this formula, where:
-rps_typical = the typical rps for a given cpu utilisation X
-rps_lower = the rps with private content (cache_ratio = 0) at given cpu utilisation X
-rps_upper = the rps with public content (cache_ratio ~= 1) at given cpi utilisation X
+rps_typical = the typical rps for a given cpu utilisation X </br>
+rps_lower = the rps with private content (cache_ratio = 0) at given cpu utilisation X </br>
+rps_upper = the rps with public content (cache_ratio ~= 1) at given cpi utilisation X </br>
 cache_ratio = cache ratio we expect from the instance. 0 being no cache 1 being 100% cache hit.
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/instance-equation.svg)
 
-Assuming we want belfrage to typically have 20% CPU usage then we can see from our results that each instance can handle about 430rps when the requests are private. `5000 / 430 ~= 12` **That's 12 instances when all the content is private**. This is the upper bound of instances. We also know each belfrage instance can handle 2500rps of private content comfortably. So **we can expect these instances to handle up to 30,000 rps spikes of private content.**
+Assuming we want belfrage to typically have 20% CPU usage, then we can see from our results that each instance can handle about 430rps when the requests are private. `5000 / 430 ~= 12` **That's 12 instances when all the content is private**. This is the upper bound of instances. We also know each belfrage instance can handle 2500rps of private content comfortably. So **we can expect these instances to handle up to 30,000 rps spikes of private content.**
 
 If we assume the content is very cacheable (near 100% cache hit) then belfrage can handle 780rps at 20% CPU. `5000 / 780 ~= 7` (rounding up) **That's 7 instances when the content is highly cacheable**. This is the lower bound of instances. Belfrage can handle 3000rps of highly cacheable request. So **we would expect these instance to handle up to 21,000 rps spikes of highly cacheable content.**
 
