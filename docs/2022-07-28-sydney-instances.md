@@ -4,7 +4,8 @@ The purposes of these loadtests are twofold:
 - to determine the base instances on sydney
 - to see how our performance has changed since introducing [Finch](https://jira.dev.bbc.co.uk/browse/RESFRAME-4765), [OPT 24](https://jira.dev.bbc.co.uk/browse/RESFRAME-4503) and  [increasing the somaxconn value](https://jira.dev.bbc.co.uk/browse/RESFRAME-4791)
 
-Sydney will serve apps traffic. The average load of this stack will be upwards of 5000rps. We need to be sure we can handle it. This apps traffic will not have GTM in front of us, so we may experience more traffic spikes as we don't have a caching layer in-front of us.
+
+Sydney will serve apps traffic. The average load of this stack will be upwards of 5000rps. We need to be sure we can handle it. We will have a CDN (akamai) in front of us which is configured for 90% offload. But we may still experience traffic spikes.
 
 In order to know how many instances we should have by default on Sydney, we need to evaluate the max load a single instance of belfrage can comfortably handle.
 
@@ -12,9 +13,54 @@ The definition of 'comfortable' in this situation is when belfrage has ~= 90% CP
 
 With the new http client we also need to evaluate the worker configuration for this stack and the others. So we will also need to run load tests evaluating how the latency effects what rps we can achieve and the amount of pool workers we use.
 
-## RPS vs CPU Usage
-belfrage commit hash `4f3a4bb2e5cc21b2ec1b8132fac6292e39ecbbdc`
+## Test Setup
+### Loadtest Config
+Instance Type: c5.9xlarge
 
+
+### Belfrage Config
+- Instance Type: c5.2xlarge
+- Scaling limited to 1 instance
+- Branch:`RESFRAME-4820-sydney-load-test` 
+- Commit Hash: `4f3a4bb2e5cc21b2ec1b8132fac6292e39ecbbdc`
+
+changes from master:
+```
+$ git diff master..4f3a4bb2
+diff --git a/lib/belfrage/supervisor.ex b/lib/belfrage/supervisor.ex
+index ec8c8547..1dd4602e 100644
+--- a/lib/belfrage/supervisor.ex
++++ b/lib/belfrage/supervisor.ex
+@@ -56,7 +56,7 @@ defmodule Belfrage.Supervisor do
+         endpoint(Application.get_env(:belfrage, :authentication)["idcta_config_uri"]) => [size: 512],
+         endpoint(Application.get_env(:belfrage, :mvt)[:slots_file_location]) => [size: 512],
+         Application.get_env(:belfrage, :simorgh_endpoint) => [size: 512],
+-        Application.get_env(:belfrage, :origin_simulator) => [size: 512],
++        Application.get_env(:belfrage, :origin_simulator) => [size: 1024, count: 8],
+         Application.get_env(:belfrage, :mozart_news_endpoint) => [
+           size: 512,
+           conn_opts: [
+diff --git a/mix.exs b/mix.exs
+index 85d9dfd6..8f46e1fc 100644
+--- a/mix.exs
++++ b/mix.exs
+@@ -74,7 +74,7 @@ defmodule Belfrage.MixProject do
+       {:telemetry_metrics_prometheus, "~> 1.0"},
+       {:telemetry_metrics, "~> 0.5"},
+       {:telemetry_metrics_statsd, "~> 0.4"},
+-      {:observer_cli, "~> 1.5", only: :dev},
++      {:observer_cli, "~> 1.7", only: [:dev, :test, :prod]},
+       {:joken, "~> 2.0"},
+       {:cowlib, "~> 2.8", override: true},
+       {:b64fast, "~> 0.2.3"}
+```
+
+vegeta command format
+```
+$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=<<duration>> -rate=<<rate>> -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee results.bin | vegeta report
+```
+
+## RPS vs CPU Usage
 origin simulator configuration:
 ```
 {
@@ -32,11 +78,6 @@ origin simulator configuration:
     "cache-control": "private"
   }
 }
-```
-
-vegeta command format
-```
-$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=<<duration>> -rate=<<rate>> -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee results.bin | vegeta report
 ```
 
 300 seconds, 1500 rps, 100ms latency
@@ -117,19 +158,17 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: reque
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Cpu.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msPool.png)
+Origin Simulator Pool
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000VmMemory.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Mailbox.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000QueueLength.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msMailbox.png)
-
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Ram.png)
 
 
 ## Latency Vs Pool Workers
-belfrage commit hash `4f3a4bb2e5cc21b2ec1b8132fac6292e39ecbbdc`
-
 origin simulator configuration:
 ```
 {
@@ -147,11 +186,6 @@ origin simulator configuration:
     "cache-control": "private"
   }
 }
-```
-
-vegeta command format
-```
-$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=300 -rate=2500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee results.bin | vegeta report
 ```
 
 600 seconds 2500 rps 100ms latency
@@ -234,6 +268,7 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: reque
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msCpu.png)
 
+Origin Simulator Pool
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msPool.png)
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
@@ -242,9 +277,9 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: reque
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msMailbox.png)
 
-## Performance with public content
-belfrage commit hash `4f3a4bb2e5cc21b2ec1b8132fac6292e39ecbbdc`
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msRam.png)
 
+## Performance with public content
 origin simulator configuration:
 ```
 {
@@ -264,11 +299,7 @@ origin simulator configuration:
 }
 ```
 
-vegeta command format
-```
-$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=300s -rate=<<rate>> -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee results.bin | vegeta report
-```
-
+600 seconds 1500 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=1500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_1500_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 11:10:34 UTC 2022
@@ -281,6 +312,8 @@ Success       [ratio]                    100.00%
 Status Codes  [code:count]               200:900001
 Error Set:
 ```
+
+600 seconds 2000 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=2000 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_2000_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 11:35:01 UTC 2022
@@ -293,6 +326,8 @@ Success       [ratio]                    100.00%
 Status Codes  [code:count]               200:1200000
 Error Set:
 ```
+
+600 seconds 2500 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=2500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_2500_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 12:11:45 UTC 2022
@@ -306,6 +341,8 @@ Status Codes  [code:count]               0:1  200:1499999
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 3000 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=3000 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_3000_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 12:29:59 UTC 2022
@@ -319,6 +356,8 @@ Status Codes  [code:count]               0:2  200:1800000
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 3500 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=3500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_3500_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 12:45:34 UTC 2022
@@ -332,6 +371,8 @@ Status Codes  [code:count]               0:9  200:2099993
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 3500 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=3500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_3500_rps_100msl_ttl5_results2.bin | vegeta report
 Fri 29 Jul 13:22:48 UTC 2022
@@ -345,6 +386,8 @@ Status Codes  [code:count]               0:6  200:2099996
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 4000 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=4000 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_4000_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 13:47:01 UTC 2022
@@ -358,6 +401,8 @@ Status Codes  [code:count]               0:4  200:359172
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 4000 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=4000 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_4000_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 14:31:41 UTC 2022
@@ -371,6 +416,8 @@ Status Codes  [code:count]               0:8  200:2399992
 Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
+
+600 seconds 4500 rps 100ms latency
 ```
 [chris_hopkins01@ip-10-114-174-6 ~]$ date && echo "GET https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator" | vegeta attack -duration=600s -rate=4500 -max-body=0 -header "replayed-traffic:true" -header "accept-encoding:gzip" -http2=false | tee sydney_600s_4500_rps_100msl_ttl5_results.bin | vegeta report
 Fri 29 Jul 15:00:58 UTC 2022
@@ -411,8 +458,11 @@ net/http: request canceled (Client.Timeout exceeded while reading body)
 
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
 
+Origin Simulator Pool
 ![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Pool.png)
 The dip in workers her is due to a deployment of another branch in-between load tests which had 512 workers.
+
+![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Ram.png)
 
 
 
@@ -490,10 +540,12 @@ Assuming we want belfrage to typically have 20% CPU usage then we can see from o
 
 If we assume the content is very cacheable (near 100% cache hit) then belfrage can handle 780rps at 20% CPU. `5000 / 780 ~= 7` (rounding up) **That's 7 instances when the content is highly cacheable**. This is the lower bound of instances. Belfrage can handle 3000rps of highly cacheable request. So **we would expect these instance to handle up to 21,000 rps spikes of highly cacheable content.**
 
-**Seeing as we are not looking to cache this content initially we would expect to see around 12 instances on the Live Sydney stack.**
+We are looking to locally cache this content with `max-age=60`, but we have a CDN in front of us with 90% offload. So its hard to know how hard our cache will be hit. **How many instances we use will depend on the local cache hit ratio, but it will definitely be between 7-12**
+
+
 
 ### How has our performance improved?
-Before introducing Finch, changing the somaxconn and upgrading to OTP 24 (with the jit compiler) we could reliably get 1500rps per instance. Our goal for some time has been to get a single instance of belfrage able to handle 2000rps. We have surpassed this target. **We can now handle 2500rps of purely private content and 3000rps of highly cacheable content.** If we can fix the `LatencyMonitor` this will then become 3000rps of private content and 4000rps of highly cacheable content.
+Before introducing Finch, changing the somaxconn and upgrading to OTP 24 (with the jit compiler) we could reliably get 1500rps per instance. Our goal for some time has been to get a single instance of belfrage able to handle 2000rps. We have surpassed this target. **We can now handle 2500rps of purely private content and 3000rps of highly cacheable content.** If we can fix the `LatencyMonitor` and fully migrate from statsd push metrics to prometheus pull style metrics, then this will then become 3000rps of private content and 4000rps of highly cacheable content.
 
 
 
