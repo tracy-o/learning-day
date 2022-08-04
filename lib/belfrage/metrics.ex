@@ -77,6 +77,13 @@ defmodule Belfrage.Metrics do
 
   ### PROMETHEUS MIGRATION
 
+  def latency_stop(name, start_time) do
+    duration = System.monotonic_time(@time_unit) - start_time
+
+    :telemetry.execute([:belfrage, name, :stop], %{duration: duration})
+    :telemetry.execute([:belfrage, :latency, :stop], %{duration: duration}, %{function_name: name})
+  end
+
   # TODO remove after statsd to prometheus migration
   def latency_span(name, func) do
     :telemetry.span([:belfrage, name], %{}, fn ->
