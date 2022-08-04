@@ -34,7 +34,7 @@ defmodule Belfrage.Services.Webcore do
     Struct.add(struct, :response, response)
   end
 
-  defp call_lambda(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
+  defp call_lambda(struct = %Struct{request: %Request{}, private: private = %Private{}}) do
     metadata = %{
       route_spec: private.route_state_id,
       struct: struct
