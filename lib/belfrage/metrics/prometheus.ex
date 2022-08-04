@@ -12,9 +12,7 @@ defmodule Belfrage.Metrics.Prometheus do
       :route_state_metrics,
       :cache_metrics,
       :webcore_metrics,
-      # :webcore_legacy_metrics,
       :plug_metrics,
-      # :plug_legacy_metrics,
       :misc_metrics
     ]
 
