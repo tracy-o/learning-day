@@ -18,7 +18,7 @@ defmodule Belfrage.Clients.Json do
 
   defp make_request(url, pool_name, poller_name) do
     response =
-      Metrics.duration([:request, String.to_atom(poller_name)], fn ->
+      Metrics.request_span(String.to_atom(poller_name), fn ->
         @http_client.execute(
           %Clients.HTTP.Request{
             method: :get,

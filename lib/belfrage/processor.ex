@@ -35,7 +35,7 @@ defmodule Belfrage.Processor do
   end
 
   def get_route_state(struct = %Struct{}) do
-    Metrics.duration(:set_request_route_state_data, fn ->
+    Metrics.latency_span(:set_request_route_state_data, fn ->
       RouteStateRegistry.find_or_start(struct)
 
       case RouteState.state(struct) do
@@ -46,7 +46,7 @@ defmodule Belfrage.Processor do
   end
 
   def allowlists(struct) do
-    Metrics.duration(:filter_request_data, fn ->
+    Metrics.latency_span(:filter_request_data, fn ->
       struct
       |> Personalisation.append_allowlists()
       |> Mvt.Allowlist.add()
@@ -57,7 +57,7 @@ defmodule Belfrage.Processor do
   end
 
   def generate_request_hash(struct = %Struct{}) do
-    Metrics.duration(:generate_request_hash, fn ->
+    Metrics.latency_span(:generate_request_hash, fn ->
       RequestHash.put(struct)
     end)
   end
@@ -72,7 +72,7 @@ defmodule Belfrage.Processor do
 
   defp do_fetch_early_response_from_cache(struct = %Struct{}) do
     struct =
-      Metrics.duration(:fetch_early_response_from_cache, fn ->
+      Metrics.latency_span(:fetch_early_response_from_cache, fn ->
         Cache.fetch(struct, [:fresh])
       end)
 
@@ -86,7 +86,7 @@ defmodule Belfrage.Processor do
   end
 
   def request_pipeline(struct = %Struct{}) do
-    Metrics.duration(:request_pipeline, fn ->
+    Metrics.latency_span(:request_pipeline, fn ->
       WrapperError.wrap(&process_request_pipeline/1, struct)
     end)
   end

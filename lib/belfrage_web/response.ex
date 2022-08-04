@@ -90,7 +90,7 @@ defmodule BelfrageWeb.Response do
   end
 
   defp put_response(conn, status, content) when is_map(content) do
-    Metrics.duration(:return_json_response, fn ->
+    Metrics.latency_span(:return_json_response, fn ->
       conn
       |> put_resp_content_type("application/json")
       |> put_response(status, @json_codec.encode!(content))
@@ -98,7 +98,7 @@ defmodule BelfrageWeb.Response do
   end
 
   defp put_response(conn, status, content) when is_binary(content) do
-    Metrics.duration(:return_binary_response, fn ->
+    Metrics.latency_span(:return_binary_response, fn ->
       send_resp(conn, status, content)
     end)
   end
@@ -115,7 +115,7 @@ defmodule BelfrageWeb.Response do
   end
 
   defp add_response_headers(conn, struct) do
-    Metrics.duration(:set_response_headers, fn ->
+    Metrics.latency_span(:set_response_headers, fn ->
       struct.response.headers
       |> Enum.reduce(conn, fn
         {header_key, header_value}, conn when is_binary(header_value) ->

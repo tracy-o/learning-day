@@ -1,19 +1,19 @@
 defmodule Belfrage.Metrics.Prometheus do
-  use Belfrage.Metrics,
+  use Belfrage.MetricsMigration,
     backend: :prometheus,
     metrics: [
       :vm_metrics,
       :cowboy_metrics,
       :poolboy_metrics,
       :nimble_pool_metrics,
-      :cachex_metrics
-      # :latency_metrics # TODO won't work till we emit new events
-      # :request_metrics, # TODO won't work till we emit new events
-      # :route_state_metrics,
-      # :cache_metrics,
-      # :service_metrics,
-      # :plug_metrics,
-      # :misc_metrics
+      :cachex_metrics,
+      :latency_metrics,
+      :request_metrics,
+      :route_state_metrics,
+      :cache_metrics,
+      :webcore_metrics,
+      :plug_metrics,
+      :misc_metrics
     ]
 
   def last_value(metric_name, opts \\ []) do
