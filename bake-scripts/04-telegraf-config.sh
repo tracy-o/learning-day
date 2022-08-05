@@ -56,4 +56,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 
 [[inputs.system]]
   taginclude = ["stack_name", "BBCEnvironment"]
+
+[[inputs.net]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 EOF
