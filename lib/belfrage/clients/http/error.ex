@@ -42,6 +42,7 @@ defmodule Belfrage.Clients.HTTP.Error do
   defp format_error(%ArgumentError{message: "scheme is required for url:" <> _rest}), do: :bad_url_scheme
   defp format_error(%ArgumentError{message: "invalid scheme" <> _rest}), do: :bad_url_scheme
   defp format_error(%Mint.TransportError{reason: :timeout}), do: :timeout
+  defp format_error(%Mint.HTTPError{reason: {reason, _message}}), do: reason
   defp format_error(_reason), do: nil
 end
 

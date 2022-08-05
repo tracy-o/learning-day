@@ -26,6 +26,9 @@ defmodule Belfrage.Services.HTTP do
           track_response(private, response.status_code)
           %Response{http_status: response.status_code, body: response.body, headers: response.headers}
 
+        {:error, %Clients.HTTP.Error{reason: :invalid_request_target}} ->
+          %Response{http_status: 404, body: ""}
+
         {:error, error} ->
           track_error(struct, error)
           %Response{http_status: 500, body: ""}

@@ -156,6 +156,39 @@ defmodule Belfrage.Services.HTTPTest do
              } = HTTP.dispatch(@get_struct)
     end
 
+    test "invalid path" do
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/invalid\\path",
+          payload: "",
+          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
+        },
+        {:error, %Clients.HTTP.Error{reason: :invalid_request_target}}
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 404,
+                 body: ""
+               }
+             } =
+               HTTP.dispatch(%Struct{
+                 private: %Struct.Private{
+                   origin: "https://www.bbc.co.uk",
+                   platform: SomePlatform
+                 },
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/invalid\\path",
+                   query_params: %{},
+                   country: "gb",
+                   host: "www.bbc.co.uk",
+                   req_svc_chain: "BELFRAGE"
+                 }
+               })
+    end
+
     test "origin times out" do
       response = {:error, %Clients.HTTP.Error{reason: :timeout}}
 
