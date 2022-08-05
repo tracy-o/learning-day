@@ -33,19 +33,27 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   totalcpu = true
   collect_cpu_time = false
   report_active = false
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.diskio]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.kernel]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.mem]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.processes]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.swap]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 
 [[inputs.system]]
+  taginclude = ["stack_name", "BBCEnvironment"]
 EOF
