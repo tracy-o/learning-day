@@ -3,7 +3,6 @@ defmodule Routes.Specs.WorldServiceUkrainian do
     %{
       platform: MozartSimorgh,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["alternativeJsLoading", "batch"]
     }
   end
 

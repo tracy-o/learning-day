@@ -3,7 +3,6 @@ defmodule Routes.Specs.WorldServiceUkChina do
     %{
       platform: MozartSimorgh,
       pipeline: pipeline(production_env),
-      query_params_allowlist: ["alternativeJsLoading", "batch"],
       headers_allowlist: ["cookie-ckps_chinese"]
     }
   end

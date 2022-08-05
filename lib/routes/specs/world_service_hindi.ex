@@ -2,8 +2,7 @@ defmodule Routes.Specs.WorldServiceHindi do
   def specs(production_env) do
     %{
       platform: MozartSimorgh,
-      pipeline: pipeline(production_env),
-      query_params_allowlist: ["alternativeJsLoading", "batch"]
+      pipeline: pipeline(production_env)
     }
   end
 
