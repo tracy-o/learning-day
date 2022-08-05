@@ -3,7 +3,7 @@ defmodule Routes.Specs.WorldServiceBengaliTopicPage do
     %{
       platform: Simorgh,
       pipeline: ["WorldServiceTopicsGuid"],
-      query_params_allowlist: query_params_allowlist(production_env),
+      query_params_allowlist: query_params_allowlist(production_env)
     }
   end
 
