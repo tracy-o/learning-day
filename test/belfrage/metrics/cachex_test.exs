@@ -23,8 +23,12 @@ defmodule Belfrage.Metrics.CachexTest do
       socket,
       Enum.join(
         [
+          "cachex.evictions:0|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.expirations:0|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.hits:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-          "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}"
+          "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.writes:0|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
       )
@@ -39,8 +43,11 @@ defmodule Belfrage.Metrics.CachexTest do
       socket,
       Enum.join(
         [
+          "cachex.evictions:0|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.expirations:0|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
@@ -61,6 +68,7 @@ defmodule Belfrage.Metrics.CachexTest do
           "cachex.expirations:1|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
+          "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
           "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
         ],
         "\n"
