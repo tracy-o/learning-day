@@ -12,7 +12,7 @@ defmodule Routes.Platforms.MozartSimorgh do
   end
 
   defp query_params_allowlist("live"), do: []
-  defp query_params_allowlist(_production_env), do: ["renderer_env"]
+  defp query_params_allowlist(_production_env), do: ["renderer_env", "morph_env", "component_env"]
 
   defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

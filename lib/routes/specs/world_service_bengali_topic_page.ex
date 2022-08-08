@@ -1,5 +1,5 @@
 defmodule Routes.Specs.WorldServiceBengaliTopicPage do
-    def specs(production_env) do
+  def specs(production_env) do
     %{
       platform: Simorgh,
       pipeline: ["WorldServiceTopicsGuid"],
@@ -8,5 +8,5 @@ defmodule Routes.Specs.WorldServiceBengaliTopicPage do
   end
 
   defp query_params_allowlist("live"), do: ["page"]
-  defp query_params_allowlist(_production_env), do: ["page", "renderer_env"]
+  defp query_params_allowlist(_production_env), do: ["page", "renderer_env", "morph_env", "component_env"]
 end

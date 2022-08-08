@@ -8,5 +8,5 @@ defmodule Routes.Specs.WorldServiceAmharicTopicPage do
   end
 
   defp query_params_allowlist("live"), do: ["page"]
-  defp query_params_allowlist(_production_env), do: ["page", "renderer_env"]
+  defp query_params_allowlist(_production_env), do: ["page", "renderer_env", "morph_env", "component_env"]
 end
