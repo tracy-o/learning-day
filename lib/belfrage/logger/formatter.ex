@@ -55,8 +55,10 @@ defmodule Belfrage.Logger.Formatter do
       :gl,
       :pid,
       :mfa,
-      :cloudwatch
+      :cloudwatch,
+      :crash_reason
     ])
+    |> Keyword.put(:crash_reason, inspect(metadata[:crash_reason])
   end
 
   defp to_json(val = %{__struct__: _}) do
