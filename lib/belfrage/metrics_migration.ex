@@ -72,7 +72,7 @@ defmodule Belfrage.MetricsMigration do
       end
 
       def cachex_metrics() do
-        for measurement <- ~w(evictions expirations hits misses updates writes)a do
+        for measurement <- Belfrage.Metrics.Cachex.measurements() do
           last_value([:cachex, measurement],
             measurement: measurement,
             event_name: "belfrage.cachex.stats",
