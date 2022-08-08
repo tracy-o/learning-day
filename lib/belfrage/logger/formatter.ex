@@ -55,7 +55,8 @@ defmodule Belfrage.Logger.Formatter do
       :gl,
       :pid,
       :mfa,
-      :cloudwatch
+      :cloudwatch,
+      :crash_reason
     ])
   end
 
