@@ -103,8 +103,13 @@ defmodule Belfrage.Services.HTTP do
       "cookie-ckps-serbian" => request.cookie_ckps_serbian,
       "origin" => request.origin,
       "referer" => request.referer,
-      "bbc-adverts" => "#{request.is_advertise}"
+      "bbc-adverts" => "#{request.is_advertise}",
+      "bbc-origin" => bbc_origin(request)
     }
+  end
+
+  defp bbc_origin(request) do
+    Enum.join([scheme(request.scheme), request.host], "://")
   end
 
   defp xray_header(%Request{xray_segment: segment = %AwsExRay.Segment{}}) do
