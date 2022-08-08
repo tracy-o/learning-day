@@ -8,5 +8,5 @@ defmodule Routes.Specs.WorldServiceUrduTopicPage do
   end
 
   defp query_params_allowlist("live"), do: ["page"]
-  defp query_params_allowlist(_production_env), do: ["page", "renderer_env", "morph_env", "component_env"]
+  defp query_params_allowlist(_production_env), do: ["component_env",  "morph_env",  "page",  "renderer_env"]
 end
