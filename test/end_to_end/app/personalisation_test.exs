@@ -116,15 +116,13 @@ defmodule EndToEnd.App.PersonalisationTest do
 
     test "personalisation off and news_articles_personalisation is on" do
       stub_dials(personalisation: "off", news_articles_personalisation: "on")
-      expect_personalised_origin_request()
 
-      response =
+      conn =
         build_request()
         |> personalise_app_request(@token)
         |> make_request()
-        |> assert_successful_response()
 
-      assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+      assert conn.status == 503
     end
   end
 
@@ -166,26 +164,20 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "authenticated request" do
-      expect_non_personalised_origin_request()
-
-      response =
+      conn =
         build_request()
         |> personalise_app_request(@token)
         |> make_request()
-        |> assert_successful_response()
 
-      assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+      assert conn.status == 503
     end
 
     test "non-authenticated request" do
-      expect_non_personalised_origin_request()
-
-      response =
+      conn =
         build_request()
         |> make_request()
-        |> assert_successful_response()
 
-      assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+      assert conn.status == 503
     end
   end
 
