@@ -90,6 +90,7 @@ defmodule Belfrage.Metrics do
     end
   end
 
+  # See https://github.com/beam-telemetry/telemetry/blob/091121f6153840fd079e68940715a5c35c5aa445/src/telemetry.erl#L310
   defp multi_span(event_prefixes, start_metadata, span_function) do
     start_time = :erlang.monotonic_time()
 
@@ -97,29 +98,33 @@ defmodule Belfrage.Metrics do
       for event_prefix <- event_prefixes do
         event_prefix ++ [:start]
       end,
-      %{system_time: :erlang.system_time()},
+      %{monotonic_time: start_time, system_time: :erlang.system_time()},
       start_metadata
     )
 
     try do
       {result, %{} = stop_metadata} = span_function.()
 
+      stop_time = :erlang.monotonic_time()
+
       multi_execute(
         for event_prefix <- event_prefixes do
           event_prefix ++ [:stop]
         end,
-        %{duration: :erlang.monotonic_time() - start_time},
+        %{duration: stop_time - start_time, monotonic_time: stop_time},
         stop_metadata
       )
 
       result
     catch
       kind, reason ->
+        stop_time = :erlang.monotonic_time()
+
         multi_execute(
           for event_prefix <- event_prefixes do
             event_prefix ++ [:exception]
           end,
-          %{duration: :erlang.monotonic_time() - start_time},
+          %{duration: stop_time - start_time, monotonic_time: stop_time},
           %{start_metadata | kind: kind, reason: reason, stacktrace: __STACKTRACE__}
         )
 
