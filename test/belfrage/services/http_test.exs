@@ -189,6 +189,39 @@ defmodule Belfrage.Services.HTTPTest do
                })
     end
 
+    test "invalid header value" do
+      expect_request(
+        %Clients.HTTP.Request{
+          method: :get,
+          url: "https://www.bbc.co.uk/some-path",
+          payload: "",
+          headers: %{"accept-encoding" => "gzip", "x-country" => "not\0allowed", "user-agent" => "Belfrage"}
+        },
+        {:error, %Clients.HTTP.Error{reason: :invalid_header_value}}
+      )
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 400,
+                 body: ""
+               }
+             } =
+               HTTP.dispatch(%Struct{
+                 private: %Struct.Private{
+                   origin: "https://www.bbc.co.uk",
+                   platform: SomePlatform
+                 },
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/some-path",
+                   query_params: %{},
+                   country: "not\0allowed",
+                   host: "www.bbc.co.uk",
+                   req_svc_chain: "BELFRAGE"
+                 }
+               })
+    end
+
     test "origin times out" do
       response = {:error, %Clients.HTTP.Error{reason: :timeout}}
 
