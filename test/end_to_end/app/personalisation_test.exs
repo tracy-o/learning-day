@@ -21,9 +21,10 @@ defmodule EndToEnd.App.PersonalisationTest do
               }
             })
 
+  setup :clear_cache
+
   describe "personalised route " do
     setup do
-      clear_cache()
       start_supervised!({RouteState, "PersonalisedFablData"})
       :ok
     end
@@ -128,11 +129,6 @@ defmodule EndToEnd.App.PersonalisationTest do
   end
 
   describe "personalised route and expired auth. token" do
-    setup do
-      clear_cache()
-      :ok
-    end
-
     test "invalid auth token on test prod. env." do
       set_environment("test")
       start_supervised!({RouteState, "PersonalisedFablData"})
@@ -195,7 +191,6 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "non-personalised route" do
     setup do
-      clear_cache()
       start_supervised!({RouteState, "FablData"})
       :ok
     end
