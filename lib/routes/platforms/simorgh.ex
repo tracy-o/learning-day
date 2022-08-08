@@ -11,8 +11,8 @@ defmodule Routes.Platforms.Simorgh do
     }
   end
 
-  defp query_params_allowlist("live"), do: ["alternativeJsLoading", "amp", "batch", "before", "category_site", "component_id", "components", "config_path", "embeddingPageTitle", "embeddingPageUri", "id", "lang", "options", "presenter", "ptrt", "q", "redirect_location", "s", "search", "service", "show-service-calls", "start", "ticker", "anchor"]
-  defp query_params_allowlist(_production_env), do: "*"
+  defp query_params_allowlist("live"), do: []
+  defp query_params_allowlist(_production_env), do: ["component_env", "morph_env", "renderer_env"]
 
   defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
