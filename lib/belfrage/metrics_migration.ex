@@ -43,6 +43,14 @@ defmodule Belfrage.MetricsMigration do
           counter("request.personalised.unexpected_public_response",
             event_name: [:belfrage, :request, :personalised, :unexpected_public_response],
             measurement: :count
+          ),
+          counter("error.process.crash",
+            event_name: [:belfrage, :error, :process, :crash],
+            measurement: :count
+          ),
+          summary("function.timing.service.Fabl.request",
+            event_name: "belfrage.function.timing.service.Fabl.request",
+            measurement: :duration
           )
         ]
 
@@ -69,6 +77,24 @@ defmodule Belfrage.MetricsMigration do
                       measurement: :count
                     )
                   end
+                end ++
+                for status_code <- [] do
+                  counter("service.Fabl.response.#{status_code}",
+                    event_name: ["belfrage.service.Fabl.response.#{status_code}"],
+                    measurement: :count
+                  )
+                end ++
+                for platform <- [] do
+                  counter("#{platform}.pre_cache_compression",
+                    event_name: "belfrage.#{platform}.pre_cache_compression",
+                    measurement: :count
+                  )
+                end ++
+                for platform <- [] do
+                  summary("function.timing.#{platform}.request",
+                    event_name: "belfrage.function.timing.#{platform}.request",
+                    measurement: :duration
+                  )
                 end
 
             :prometheus ->
@@ -82,6 +108,16 @@ defmodule Belfrage.MetricsMigration do
                   event_name: [:belfrage, :cache, :stale, :hit],
                   measurement: :count,
                   tags: [:route_state, :cache_metric]
+                ),
+                counter("service.Fabl.response",
+                  event_name: [:belfrage, :Fabl, :response],
+                  measurement: :count,
+                  tags: [:status_code]
+                ),
+                counter("pre_cache_compression",
+                  event_name: [:belfrage, :pre_cache_compression],
+                  measurement: :count,
+                  tags: [:platform]
                 )
               ]
           end

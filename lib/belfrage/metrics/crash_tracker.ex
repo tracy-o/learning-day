@@ -7,8 +7,6 @@ defmodule Belfrage.Metrics.CrashTracker do
 
   @behaviour :gen_event
 
-  @event Application.get_env(:belfrage, :event)
-
   @impl true
   def init(opts), do: {:ok, opts}
 
@@ -16,7 +14,7 @@ defmodule Belfrage.Metrics.CrashTracker do
   def handle_event({:error, group_leader, {_logger, _message, _timestamp, metadata}}, state)
       when node(group_leader) == node() do
     if Keyword.has_key?(metadata, :crash_reason) do
-      @event.record(:metric, :increment, "error.process.crash")
+      :telemetry.execute([:belfrage, :error, :process, :crash], %{count: 1})
     end
 
     {:ok, state}

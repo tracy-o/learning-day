@@ -131,22 +131,43 @@ defmodule Belfrage.Services.HTTP do
   defp execute_request(request = %Clients.HTTP.Request{}, private = %Private{}) do
     platform = platform_name(private)
 
-    Belfrage.Event.record "function.timing.service.#{platform}.request" do
+    # TODO dynamic + span
+    Belfrage.Event.record_span "belfrage.function.timing.service.#{platform}.request" do
       @http_client.execute(request, platform)
     end
   end
 
   defp track_response(private = %Private{}, status) do
-    Belfrage.Event.record(:metric, :increment, "service.#{platform_name(private)}.response.#{status}")
+    Belfrage.Metrics.multi_execute(
+      ["belfrage.service.#{platform_name(private)}.response.#{status}", [:belfrage, :service, :response]],
+      %{count: 1},
+      %{platform: platform_name(private), status_code: status}
+    )
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.#{platform_name(private)}.timeout")
+    Belfrage.Metrics.multi_execute(
+      [
+        "belfrage.error.service.#{platform_name(private)}.timeout",
+        [:belfrage, :error, :service, :timeout]
+      ],
+      %{count: 1},
+      %{platform: platform_name(private)}
+    )
+
     log_error(:timeout, struct)
   end
 
   defp track_error(struct = %Struct{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
-    Belfrage.Event.record(:metric, :increment, "error.service.#{platform_name(private)}.request")
+    Belfrage.Metrics.multi_execute(
+      [
+        "belfrage.error.service.#{platform_name(private)}.request",
+        [:belfrage, :error, :service, :request]
+      ],
+      %{count: 1},
+      %{platform: platform_name(private)}
+    )
+
     log_error(error, struct)
   end
 

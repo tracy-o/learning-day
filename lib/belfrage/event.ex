@@ -46,14 +46,14 @@ defmodule Belfrage.Event do
     |> Enum.into(Map.new(Logger.metadata()))
   end
 
-  defmacro record(key, do: yield) do
+  defmacro record_span(key, do: yield) do
     quote do
       before_time = :os.timestamp()
       result = unquote(yield)
       after_time = :os.timestamp()
       diff = :timer.now_diff(after_time, before_time)
 
-      Belfrage.Event.record(:metric, :timing, unquote(key), value: diff / 1_000)
+      :telemetry.execute(unquote(key), %{duration: diff / 1_000})
       result
     end
   end

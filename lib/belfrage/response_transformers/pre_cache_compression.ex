@@ -39,7 +39,11 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
          struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
-      Belfrage.Event.record(:metric, :increment, "#{platform}.pre_cache_compression")
+      Belfrage.Metrics.multi_execute(
+        ["belfrage.#{platform}.pre_cache_compression", [:belfrage, :pre_cache_compression]],
+        %{count: 1},
+        %{platform: platform}
+      )
 
       Logger.log(:info, "", %{
         msg: "Content was pre-cache compressed",

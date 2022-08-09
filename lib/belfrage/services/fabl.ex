@@ -12,7 +12,7 @@ defmodule Belfrage.Services.Fabl do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record "function.timing.service.Fabl.request" do
+    Belfrage.Event.record_span "belfrage.function.timing.service.Fabl.request" do
       struct
       |> execute_request()
       |> handle_response()
@@ -27,7 +27,14 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "service.Fabl.response.#{status}")
+    Belfrage.Metrics.multi_execute(
+      ["belfrage.service.Fabl.response.#{status}", [:belfrage, :Fabl, :response]],
+      %{count: 1},
+      %{
+        status_code: status
+      }
+    )
+
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
