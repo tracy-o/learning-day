@@ -189,16 +189,21 @@ defmodule Belfrage.Services.HTTPTest do
                })
     end
 
+    defp dont_mock_http_client() do
+      previous = Application.get_env(:belfrage, :http_client)
+      Application.put_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
+
+      on_exit(fn ->
+        Application.put_env(:belfrage, :http_client, previous)
+      end)
+    end
+
     test "invalid header value" do
-      expect_request(
-        %Clients.HTTP.Request{
-          method: :get,
-          url: "https://www.bbc.co.uk/some-path",
-          payload: "",
-          headers: %{"accept-encoding" => "gzip", "x-country" => "not\0allowed", "user-agent" => "Belfrage"}
-        },
-        {:error, %Clients.HTTP.Error{reason: :invalid_header_value}}
-      )
+      dont_mock_http_client()
+
+      expect(FinchMock, :request, fn _req, _name, _opts ->
+        {:error, %Mint.HTTPError{reason: {:invalid_header_value, "referer", "oops"}}}
+      end)
 
       assert %Struct{
                response: %Struct.Response{
