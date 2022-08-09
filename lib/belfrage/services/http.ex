@@ -132,7 +132,7 @@ defmodule Belfrage.Services.HTTP do
     end
   end
 
-  defp http_impl()  do
+  defp http_impl() do
     Application.get_env(:belfrage, :http_client)
   end
 
