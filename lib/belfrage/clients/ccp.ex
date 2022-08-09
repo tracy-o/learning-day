@@ -3,7 +3,7 @@ defmodule Belfrage.Clients.CCP do
   The interface to the Belfrage Central Cache Processor (CCP)
   """
   require Logger
-  alias Belfrage.{Struct, Struct.Request, Event}
+  alias Belfrage.{Struct, Struct.Request}
 
   @s3_not_found_response_code 403
 

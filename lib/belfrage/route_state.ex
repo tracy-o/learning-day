@@ -1,7 +1,7 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Event, CircuitBreaker, Mvt}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, CircuitBreaker, Mvt}
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 

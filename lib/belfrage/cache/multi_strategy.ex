@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.{Cache.Local, Cache.Distributed, Event}
+  alias Belfrage.{Cache.Local, Cache.Distributed}
 
   @default_result {:ok, :content_not_found}
   @dial Application.get_env(:belfrage, :dial)

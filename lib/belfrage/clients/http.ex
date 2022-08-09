@@ -5,7 +5,7 @@ defmodule Belfrage.Clients.HTTP do
   Makes requests and formats responses using Belfrage's
   own HTTP Request, Response and Error structs.
   """
-  alias Belfrage.{Clients.HTTP, Event}
+  alias Belfrage.{Clients.HTTP}
 
   @type request_type :: :get | :post
   @callback execute(HTTP.Request.t()) :: {:ok, HTTP.Response.t()} | {:error, HTTP.Error.t()}

@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache.Fetch do
-  alias Belfrage.{Struct, Event, Struct.Response}
+  alias Belfrage.{Struct, Struct.Response}
 
   def fetch(struct, accepted_freshness, opts \\ []) do
     %{fallback: fallback} = Enum.into(opts, %{fallback: false})

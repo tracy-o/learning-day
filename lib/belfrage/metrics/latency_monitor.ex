@@ -1,6 +1,4 @@
 defmodule Belfrage.Metrics.LatencyMonitor do
-  alias Belfrage.{Event}
-
   @valid_checkpoints [
     :request_received,
     :early_response_received,

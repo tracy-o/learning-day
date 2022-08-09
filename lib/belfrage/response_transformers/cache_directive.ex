@@ -5,7 +5,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   """
   require Logger
 
-  alias Belfrage.{CacheControl, Struct, Struct.Private, Event}
+  alias Belfrage.{CacheControl, Struct, Struct.Private}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
