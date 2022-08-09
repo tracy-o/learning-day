@@ -2,6 +2,7 @@ defmodule Belfrage.Metrics.Statsd do
   use Belfrage.MetricsMigration,
     backend: :statsd,
     metrics: [
+      :statix_metrics,
       :vm_metrics,
       :cowboy_metrics,
       :poolboy_metrics,

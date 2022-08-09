@@ -14,6 +14,89 @@ defmodule Belfrage.MetricsMigration do
         end)
       end
 
+      def statix_metrics() do
+        a = [
+          counter("route_state.state.fetch.timeout",
+            event_name: [:belfrage, :route_state, :fetch, :timeout],
+            measurement: :count
+          ),
+          counter("http.pools.error.timeout",
+            event_name: [:belfrage, :http, :pools, :error, :timeout],
+            measurement: :count
+          ),
+          counter("http.client.error",
+            event_name: [:belfrage, :http, :client, :error],
+            measurement: :count
+          ),
+          summary("service.S3.request.timing",
+            event_name: [:belfrage, :service, :S3, :request, :timing],
+            measurement: :duration
+          ),
+          counter("service.S3.response.not_found",
+            event_name: [:belfrage, :service, :S3, :response, :not_found],
+            measurement: :count
+          ),
+          counter("web.response.fallback",
+            event_name: [:belfrage, :web, :response, :fallback],
+            measurement: :count
+          ),
+          counter("request.personalised.unexpected_public_response",
+            event_name: [:belfrage, :request, :personalised, :unexpected_public_response],
+            measurement: :count
+          )
+        ]
+
+        a0 =
+          case @backend do
+            :statsd ->
+              [
+                counter("service.S3.response.200",
+                  event_name: [:belfrage, :service, :S3, :response, :"200"],
+                  measurement: :count
+                )
+              ] ++
+                for status_code <- [] do
+                  # TODO get set of status codes
+                  counter("service.S3.response.#{status_code}",
+                    event_name: [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
+                    measurement: :count
+                  )
+                end ++
+                for route_state <- [] do
+                  for cache_metric <- [] do
+                    counter("cache.#{route_state}.#{cache_metric}.stale.hit",
+                      event_name: [:belfrage, :cache, route_state, cache_metric, :stale, :hit],
+                      measurement: :count
+                    )
+                  end
+                end
+
+            :prometheus ->
+              [
+                counter("service.S3.response",
+                  event_name: [:belfrage, :service, :S3, :response],
+                  measurement: :count,
+                  tags: [:status_code]
+                ),
+                counter("cache.stale.hit",
+                  event_name: [:belfrage, :cache, :stale, :hit],
+                  measurement: :count,
+                  tags: [:route_state, :cache_metric]
+                )
+              ]
+          end
+
+        b =
+          for type <- ~w(request response combined)a do
+            summary("web.latency.internal.#{type}",
+              event_name: [:belfrage, :web, :latency, :internal, type],
+              measurement: :duration
+            )
+          end
+
+        a ++ a0 ++ b
+      end
+
       def vm_metrics() do
         [
           last_value("vm.memory.total", unit: {:byte, :kilobyte}),

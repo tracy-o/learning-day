@@ -5,7 +5,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   """
   require Logger
 
-  alias Belfrage.{CacheControl, Struct, Struct.Private, Metrics.Statix, Event}
+  alias Belfrage.{CacheControl, Struct, Struct.Private, Event}
   alias Belfrage.Behaviours.ResponseTransformer
   @behaviour ResponseTransformer
 
@@ -65,7 +65,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
       "The request is personalised, however the response cache-control header is set to \"public\" - setting cacheability to \"private\""
     )
 
-    Statix.increment("request.personalised.unexpected_public_response", 1, tags: Event.global_dimensions())
+    :telemetry.execute([:belfrage, :request, :personalised, :unexpected_public_response], %{count: 1})
 
     %Belfrage.CacheControl{cache_control | cacheability: "private", max_age: 0}
   end

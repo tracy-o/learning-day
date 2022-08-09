@@ -9,42 +9,8 @@ defmodule Belfrage.Event do
   @callback record(atom(), any(), any(), any()) :: any()
   @callback record(atom(), any(), any()) :: any()
 
-  alias Belfrage.{Event, Metrics.Statix}
+  alias Belfrage.{Event}
   defstruct [:request_id, :type, :data, :timestamp, dimensions: %{}]
-
-  @doc """
-  Adds a message to the log when the first argument is `:log`, and records a
-  metric when it's `:metric`
-
-  ## Supported options
-
-  * `:request_id` - Sets/overrides `request_id` event attribute and dimension.
-  * `:route_state_id` - Adds passed value to the event's dimensions.
-
-  Also when adding a log message:
-
-  * `:cloudwatch` - When `true`, the message will only be logged on CloudWatch
-  and not passed to Belfrage monitor.
-
-  Also when recording a metric:
-
-  * `:value` - Sets the metrics value. Default value is `1`.
-
-  ## Dimensions
-
-  Dimensions are passed through to cloudwatch in order to keep our scripted
-  dashboards populated.
-
-  """
-  def record(type, level, msg, opts \\ [])
-
-  def record(:metric, type, metric, opts) do
-    apply(Statix, type, [metric, value(opts), [tags: global_dimensions()]])
-  end
-
-  def global_dimensions() do
-    ["BBCEnvironment:" <> Application.get_env(:belfrage, :production_environment)]
-  end
 
   def new(log_or_metric, name, payload, opts \\ [])
 

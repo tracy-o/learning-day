@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache.Fetch do
-  alias Belfrage.{Struct, Metrics.Statix, Event, Struct.Response}
+  alias Belfrage.{Struct, Event, Struct.Response}
 
   def fetch(struct, accepted_freshness, opts \\ []) do
     %{fallback: fallback} = Enum.into(opts, %{fallback: false})
@@ -8,7 +8,7 @@ defmodule Belfrage.Cache.Fetch do
     |> case do
       {:ok, {:local, :fresh}, response} ->
         if fallback do
-          Statix.increment("web.response.fallback", 1, tags: Event.global_dimensions())
+          :telemetry.execute([:belfrage, :web, :response, :fallback], %{count: 1})
 
           struct
           |> Struct.add(:private, %{
@@ -28,7 +28,7 @@ defmodule Belfrage.Cache.Fetch do
         end
 
       {:ok, {cache_type, :stale}, response} ->
-        Statix.increment("web.response.fallback", 1, tags: Event.global_dimensions())
+        :telemetry.execute([:belfrage, :web, :response, :fallback], %{count: 1})
         Struct.add(struct, :response, %Response{response | fallback: true, cache_type: cache_type})
 
       {:ok, :content_not_found} ->

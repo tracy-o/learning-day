@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.{Cache.Local, Cache.Distributed, Metrics.Statix, Event}
+  alias Belfrage.{Cache.Local, Cache.Distributed, Event}
 
   @default_result {:ok, :content_not_found}
   @dial Application.get_env(:belfrage, :dial)
@@ -84,7 +84,14 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   defp metric_on_stale_routespec(%Belfrage.Struct{private: %{route_state_id: route_state_id}}, cache_metric, :stale) do
-    Statix.increment("cache.#{route_state_id}.#{cache_metric}.stale.hit", 1, tags: Event.global_dimensions())
+    Belfrage.Metrics.multi_execute(
+      [[:belfrage, :cache, route_state_id, cache_metric, :stale, :hit], [:belfrage, :cache, :stale, :hit]],
+      %{count: 1},
+      %{
+        route_state: route_state_id,
+        cache_metric: cache_metric
+      }
+    )
   end
 
   defp metric_on_stale_routespec(_struct, _cache_metric, _freshness), do: nil
