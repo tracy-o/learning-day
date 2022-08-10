@@ -138,7 +138,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp http_impl() do
-    Application.get_env(:belfrage, :http_client)
+    Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
   end
 
   defp track_response(private = %Private{}, status) do
