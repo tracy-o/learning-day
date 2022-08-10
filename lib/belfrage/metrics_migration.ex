@@ -1,4 +1,5 @@
 # credo:disable-for-this-file Credo.Check.Refactor.LongQuoteBlocks
+# credo:disable-for-this-file Credo.Check.Refactor.CyclomaticComplexity
 defmodule Belfrage.MetricsMigration do
   defmacro __using__(opts) do
     backend = Keyword.get(opts, :backend)
@@ -6,6 +7,10 @@ defmodule Belfrage.MetricsMigration do
 
     quote do
       @backend unquote(backend)
+      @status_codes [200, 204, 301, 302, 400, 404, 405, 408, 500, 502] # TODO really?
+      @route_states [] # TODO
+      @platforms [] # TODO
+      @cache_metrics [:local, :distributed]
 
       def metrics do
         unquote(metrics)
@@ -14,83 +19,71 @@ defmodule Belfrage.MetricsMigration do
         end)
       end
 
-      def statix_metrics() do
-        a = [
-          counter("route_state.state.fetch.timeout",
-            event_name: [:belfrage, :route_state, :fetch, :timeout],
-            measurement: :count
-          ),
-          counter("http.pools.error.timeout",
-            event_name: [:belfrage, :http, :pools, :error, :timeout],
-            measurement: :count
-          ),
-          counter("http.client.error",
-            event_name: [:belfrage, :http, :client, :error],
-            measurement: :count
-          ),
-          summary("service.S3.request.timing",
-            event_name: [:belfrage, :service, :S3, :request, :timing],
-            measurement: :duration
-          ),
-          counter("service.S3.response.not_found",
-            event_name: [:belfrage, :service, :S3, :response, :not_found],
-            measurement: :count
-          ),
-          counter("web.response.fallback",
-            event_name: [:belfrage, :web, :response, :fallback],
-            measurement: :count
-          ),
-          counter("request.personalised.unexpected_public_response",
-            event_name: [:belfrage, :request, :personalised, :unexpected_public_response],
-            measurement: :count
-          ),
-          counter("error.process.crash",
-            event_name: [:belfrage, :error, :process, :crash],
-            measurement: :count
-          ),
-          summary("function.timing.service.Fabl.request",
-            event_name: "belfrage.function.timing.service.Fabl.request",
-            measurement: :duration
-          )
-        ]
+      def statix_static_metrics() do
+        dont_have_dimensions =
+          [
+            counter("route_state.state.fetch.timeout",
+              event_name: [:belfrage, :route_state, :fetch, :timeout],
+              measurement: :count
+            ),
+            counter("http.pools.error.timeout",
+              event_name: [:belfrage, :http, :pools, :error, :timeout],
+              measurement: :count
+            ),
+            counter("http.client.error",
+              event_name: [:belfrage, :http, :client, :error],
+              measurement: :count
+            ),
+            summary("service.S3.request.timing",
+              event_name: [:belfrage, :service, :S3, :request, :timing],
+              measurement: :duration
+            ),
+            counter("service.S3.response.not_found",
+              event_name: [:belfrage, :service, :S3, :response, :not_found],
+              measurement: :count
+            ),
+            counter("web.response.fallback",
+              event_name: [:belfrage, :web, :response, :fallback],
+              measurement: :count
+            ),
+            counter("request.personalised.unexpected_public_response",
+              event_name: [:belfrage, :request, :personalised, :unexpected_public_response],
+              measurement: :count
+            ),
+            counter("error.process.crash",
+              event_name: [:belfrage, :error, :process, :crash],
+              measurement: :count
+            ),
+            summary("function.timing.service.Fabl.request",
+              event_name: "belfrage.function.timing.service.Fabl.request",
+              measurement: :duration
+            )
+          ] ++
+            for type <- ~w(request response combined)a do
+              summary("web.latency.internal.#{type}",
+                event_name: [:belfrage, :web, :latency, :internal, type],
+                measurement: :duration
+              )
+            end
 
-        a0 =
+        have_dimensions =
           case @backend do
             :statsd ->
-              [
-                counter("service.S3.response.200",
-                  event_name: [:belfrage, :service, :S3, :response, :"200"],
-                  measurement: :count
-                )
-              ] ++
-                for status_code <- [] do
-                  # TODO get set of status codes
-                  counter("service.S3.response.#{status_code}",
-                    event_name: [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
+              for route_state <- @route_states do
+                for cache_metric <- @cache_metrics do
+                  counter("cache.#{route_state}.#{cache_metric}.stale.hit",
+                    event_name: [:belfrage, :cache, route_state, cache_metric, :stale, :hit],
                     measurement: :count
                   )
-                end ++
-                for route_state <- [] do
-                  for cache_metric <- [] do
-                    counter("cache.#{route_state}.#{cache_metric}.stale.hit",
-                      event_name: [:belfrage, :cache, route_state, cache_metric, :stale, :hit],
-                      measurement: :count
-                    )
-                  end
-                end ++
-                for status_code <- [] do
-                  counter("service.Fabl.response.#{status_code}",
-                    event_name: ["belfrage.service.Fabl.response.#{status_code}"],
-                    measurement: :count
-                  )
-                end ++
-                for platform <- [] do
+                end
+              end ++
+                for platform <- @platforms do
                   counter("#{platform}.pre_cache_compression",
                     event_name: "belfrage.#{platform}.pre_cache_compression",
                     measurement: :count
                   )
                 end ++
-                for platform <- [] do
+                for platform <- @platforms do
                   summary("function.timing.#{platform}.request",
                     event_name: "belfrage.function.timing.#{platform}.request",
                     measurement: :duration
@@ -99,20 +92,10 @@ defmodule Belfrage.MetricsMigration do
 
             :prometheus ->
               [
-                counter("service.S3.response",
-                  event_name: [:belfrage, :service, :S3, :response],
-                  measurement: :count,
-                  tags: [:status_code]
-                ),
                 counter("cache.stale.hit",
                   event_name: [:belfrage, :cache, :stale, :hit],
                   measurement: :count,
                   tags: [:route_state, :cache_metric]
-                ),
-                counter("service.Fabl.response",
-                  event_name: [:belfrage, :Fabl, :response],
-                  measurement: :count,
-                  tags: [:status_code]
                 ),
                 counter("pre_cache_compression",
                   event_name: [:belfrage, :pre_cache_compression],
@@ -122,15 +105,39 @@ defmodule Belfrage.MetricsMigration do
               ]
           end
 
-        b =
-          for type <- ~w(request response combined)a do
-            summary("web.latency.internal.#{type}",
-              event_name: [:belfrage, :web, :latency, :internal, type],
-              measurement: :duration
-            )
-          end
+        dont_have_dimensions ++ have_dimensions
+      end
 
-        a ++ a0 ++ b
+      def statix_dynamic_metrics() do
+        case @backend do
+          :statsd ->
+            for status_code <- @status_codes do
+              counter("service.S3.response.#{status_code}",
+                event_name: [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
+                measurement: :count
+              )
+            end ++
+              for status_code <- @status_codes do
+                counter("service.Fabl.response.#{status_code}",
+                  event_name: ["belfrage.service.Fabl.response.#{status_code}"],
+                  measurement: :count
+                )
+              end
+
+          :prometheus ->
+            [
+              counter("service.S3.response",
+                event_name: [:belfrage, :service, :S3, :response],
+                measurement: :count,
+                tags: [:status_code]
+              ),
+              counter("service.Fabl.response",
+                event_name: [:belfrage, :Fabl, :response],
+                measurement: :count,
+                tags: [:status_code]
+              )
+            ]
+        end
       end
 
       def vm_metrics() do
@@ -324,7 +331,7 @@ defmodule Belfrage.MetricsMigration do
             unit: {:native, :millisecond}
           )
         ] ++
-          Enum.map([200, 301, 302, 400, 404, 500, 502], fn status_code ->
+          Enum.map(@status_codes, fn status_code ->
             counter(
               "service.lambda.response.#{status_code}",
               event_name: "belfrage.webcore.response",
@@ -407,7 +414,7 @@ defmodule Belfrage.MetricsMigration do
             keep: &(&1.conn.status == 200 && private_response?(&1.conn))
           )
         ] ++
-          Enum.flat_map([200, 204, 301, 302, 400, 404, 405, 408, 500], fn status ->
+          Enum.flat_map(@status_codes, fn status ->
             [
               counter(
                 "web.response.status.#{status}",
