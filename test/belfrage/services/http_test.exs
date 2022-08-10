@@ -190,6 +190,44 @@ defmodule Belfrage.Services.HTTPTest do
                })
     end
 
+    defp dont_mock_http_client() do
+      previous = Application.get_env(:belfrage, :http_client)
+      Application.put_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
+
+      on_exit(fn ->
+        Application.put_env(:belfrage, :http_client, previous)
+      end)
+    end
+
+    test "invalid header value" do
+      dont_mock_http_client()
+
+      expect(FinchMock, :request, fn _req, _name, _opts ->
+        {:error, %Mint.HTTPError{reason: {:invalid_header_value, "referer", "oops"}}}
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 400,
+                 body: ""
+               }
+             } =
+               HTTP.dispatch(%Struct{
+                 private: %Struct.Private{
+                   origin: "https://www.bbc.co.uk",
+                   platform: SomePlatform
+                 },
+                 request: %Struct.Request{
+                   method: "GET",
+                   path: "/some-path",
+                   query_params: %{},
+                   country: "not\0allowed",
+                   host: "www.bbc.co.uk",
+                   req_svc_chain: "BELFRAGE"
+                 }
+               })
+    end
+
     test "origin times out" do
       response = {:error, %Clients.HTTP.Error{reason: :timeout}}
 

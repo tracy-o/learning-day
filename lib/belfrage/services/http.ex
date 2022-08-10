@@ -9,8 +9,6 @@ defmodule Belfrage.Services.HTTP do
   alias Belfrage.Metrics.LatencyMonitor
   alias Belfrage.Xray
 
-  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
-
   @behaviour Service
 
   @impl Service
@@ -28,6 +26,9 @@ defmodule Belfrage.Services.HTTP do
 
         {:error, %Clients.HTTP.Error{reason: :invalid_request_target}} ->
           %Response{http_status: 404, body: ""}
+
+        {:error, %Clients.HTTP.Error{reason: :invalid_header_value}} ->
+          %Response{http_status: 400, body: ""}
 
         {:error, error} ->
           track_error(struct, error)
@@ -132,8 +133,12 @@ defmodule Belfrage.Services.HTTP do
     platform = platform_name(private)
 
     Belfrage.Event.record "function.timing.service.#{platform}.request" do
-      @http_client.execute(request, platform)
+      http_impl().execute(request, platform)
     end
+  end
+
+  defp http_impl() do
+    Application.get_env(:belfrage, :http_client)
   end
 
   defp track_response(private = %Private{}, status) do
