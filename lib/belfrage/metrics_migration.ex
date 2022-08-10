@@ -113,13 +113,13 @@ defmodule Belfrage.MetricsMigration do
           :statsd ->
             for status_code <- @status_codes do
               counter("service.S3.response.#{status_code}",
-                event_name: [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
+                event_name: "belfrage.service.S3.response.#{status_code}",
                 measurement: :count
               )
             end ++
               for status_code <- @status_codes do
                 counter("service.Fabl.response.#{status_code}",
-                  event_name: ["belfrage.service.Fabl.response.#{status_code}"],
+                  event_name: "belfrage.service.Fabl.response.#{status_code}",
                   measurement: :count
                 )
               end
