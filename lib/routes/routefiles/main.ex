@@ -2367,6 +2367,9 @@ defroutefile "Main" do
 
   # Classic Apps
 
+  handle "/content/trending/events", using: "ClassicApp", examples: [] do
+    return_404 if: true
+  end
   handle "/content/cps/news/front_page", using: "ClassicAppNewsFrontpage", examples: ["/content/cps/news/front_page"]
   handle "/content/cps/news/live/*any", using: "ClassicAppNewsLive", examples: ["/content/cps/news/live/world-africa-47639452"]
   handle "/content/cps/news/av/*any", using: "ClassicAppNewsAv", examples: ["/content/cps/news/av/world-europe-59368718"]
