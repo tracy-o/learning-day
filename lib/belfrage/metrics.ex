@@ -84,14 +84,14 @@ defmodule Belfrage.Metrics do
     :telemetry.execute([:belfrage, :latency, :stop], %{duration: duration}, %{function_name: name})
   end
 
-  defp multi_execute(events, measurements, metadata) do
+  def multi_execute(events, measurements, metadata) do
     for event <- events do
       :telemetry.execute(event, measurements, metadata)
     end
   end
 
   # See https://github.com/beam-telemetry/telemetry/blob/091121f6153840fd079e68940715a5c35c5aa445/src/telemetry.erl#L310
-  defp multi_span(event_prefixes, start_metadata, span_function) do
+  def multi_span(event_prefixes, start_metadata, span_function) do
     start_time = :erlang.monotonic_time()
 
     multi_execute(
@@ -125,7 +125,7 @@ defmodule Belfrage.Metrics do
             event_prefix ++ [:exception]
           end,
           %{duration: stop_time - start_time, monotonic_time: stop_time},
-          %{start_metadata | kind: kind, reason: reason, stacktrace: __STACKTRACE__}
+          Map.merge(start_metadata, %{kind: kind, reason: reason, stacktrace: __STACKTRACE__})
         )
 
         :erlang.raise(kind, reason, __STACKTRACE__)
