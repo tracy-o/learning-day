@@ -84,29 +84,67 @@ defmodule Belfrage.Metrics do
     :telemetry.execute([:belfrage, :latency, :stop], %{duration: duration}, %{function_name: name})
   end
 
+  def multi_execute(events, measurements, metadata) do
+    for event <- events do
+      :telemetry.execute(event, measurements, metadata)
+    end
+  end
+
+  # See https://github.com/beam-telemetry/telemetry/blob/091121f6153840fd079e68940715a5c35c5aa445/src/telemetry.erl#L310
+  def multi_span(event_prefixes, start_metadata, span_function) do
+    start_time = :erlang.monotonic_time()
+
+    multi_execute(
+      for event_prefix <- event_prefixes do
+        event_prefix ++ [:start]
+      end,
+      %{monotonic_time: start_time, system_time: :erlang.system_time()},
+      start_metadata
+    )
+
+    try do
+      {result, %{} = stop_metadata} = span_function.()
+
+      stop_time = :erlang.monotonic_time()
+
+      multi_execute(
+        for event_prefix <- event_prefixes do
+          event_prefix ++ [:stop]
+        end,
+        %{duration: stop_time - start_time, monotonic_time: stop_time},
+        stop_metadata
+      )
+
+      result
+    catch
+      kind, reason ->
+        stop_time = :erlang.monotonic_time()
+
+        multi_execute(
+          for event_prefix <- event_prefixes do
+            event_prefix ++ [:exception]
+          end,
+          %{duration: stop_time - start_time, monotonic_time: stop_time},
+          Map.merge(start_metadata, %{kind: kind, reason: reason, stacktrace: __STACKTRACE__})
+        )
+
+        :erlang.raise(kind, reason, __STACKTRACE__)
+    end
+  end
+
   # TODO remove after statsd to prometheus migration
   def latency_span(name, func) do
-    :telemetry.span([:belfrage, name], %{}, fn ->
-      result =
-        :telemetry.span([:belfrage, :latency], %{}, fn ->
-          result = func.()
-          {result, %{function_name: name}}
-        end)
-
-      {result, %{}}
+    multi_span([[:belfrage, name], [:belfrage, :latency]], %{}, fn ->
+      result = func.()
+      {result, %{function_name: name}}
     end)
   end
 
   # TODO remove after statsd to prometheus migration
   def request_span(name, func) do
-    :telemetry.span([:belfrage, :request, name], %{}, fn ->
-      result =
-        :telemetry.span([:belfrage, :request], %{}, fn ->
-          result = func.()
-          {result, %{authentication_type: name}}
-        end)
-
-      {result, %{}}
+    multi_span([[:belfrage, :request, name], [:belfrage, :request]], %{}, fn ->
+      result = func.()
+      {result, %{authentication_type: name}}
     end)
   end
 end
