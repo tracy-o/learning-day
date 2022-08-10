@@ -6,7 +6,8 @@ defmodule Routes.Platforms.Webcore do
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       pipeline: pipeline(production_env),
       circuit_breaker_error_threshold: 200,
-      query_params_allowlist: query_params_allowlist(production_env)
+      query_params_allowlist: query_params_allowlist(production_env),
+      mvt_project_id: 1
     }
   end
 
