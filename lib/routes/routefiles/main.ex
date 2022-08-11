@@ -371,12 +371,16 @@ defroutefile "Main" do
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(slug, ~r/^([a-z0-9-]+)$/)
+      !String.match?(slug, ~r/^([a-z0-9-]+)$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-4][0-9]|50)$/)
     ]
   end
 
   handle "/news/topics/:id", using: "NewsTopics", examples: [] do
-    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-4][0-9]|50)$/)
+    ]
   end
 
   redirect "/news/amp/:id", to: "/news/:id.amp", status: 301
@@ -2259,7 +2263,10 @@ defroutefile "Main" do
   handle "/topics", using: "TopicPage", examples: ["/topics"]
 
   handle "/topics/:id", using: "TopicPage", examples: ["/topics/c583y7zk042t"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+    return_404 if: [
+      !String.match?(id, ~r/^c[\w]{10}t$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    ]
   end
 
   ## Live WebCore

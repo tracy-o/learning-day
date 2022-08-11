@@ -1266,85 +1266,276 @@ defroutefile "Sport" do
 
   ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+    return_404 if: [
+      !String.match?(id, ~r/^c[\w]{10}t$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    ]
   end
 
-  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"]
+  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test", examples: ["/sport/topics-test-blitzball"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
 
-  handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"]
-  handle "/sport/archery", using: "SportDisciplineTopic", examples: ["/sport/archery"]
-  handle "/sport/badminton", using: "SportDisciplineTopic", examples: ["/sport/badminton"]
-  handle "/sport/baseball", using: "SportDisciplineTopic", examples: ["/sport/baseball"]
-  handle "/sport/biathlon", using: "SportDisciplineTopic", examples: ["/sport/biathlon"]
-  handle "/sport/bobsleigh", using: "SportDisciplineTopic", examples: ["/sport/bobsleigh"]
-  handle "/sport/bowls", using: "SportDisciplineTopic", examples: ["/sport/bowls"]
-  handle "/sport/canoeing", using: "SportDisciplineTopic", examples: ["/sport/canoeing"]
-  handle "/sport/cross-country-skiing", using: "SportDisciplineTopic", examples: ["/sport/cross-country-skiing"]
-  handle "/sport/curling", using: "SportDisciplineTopic", examples: ["/sport/curling"]
-  handle "/sport/darts", using: "SportDisciplineTopic", examples: ["/sport/darts"]
-  handle "/sport/diving", using: "SportDisciplineTopic", examples: ["/sport/diving"]
-  handle "/sport/equestrian", using: "SportDisciplineTopic", examples: ["/sport/equestrian"]
-  handle "/sport/fencing", using: "SportDisciplineTopic", examples: ["/sport/fencing"]
-  handle "/sport/figure-skating", using: "SportDisciplineTopic", examples: ["/sport/figure-skating"]
-  handle "/sport/freestyle-skiing", using: "SportDisciplineTopic", examples: ["/sport/freestyle-skiing"]
-  handle "/sport/gymnastics", using: "SportDisciplineTopic", examples: ["/sport/gymnastics"]
-  handle "/sport/handball", using: "SportDisciplineTopic", examples: ["/sport/handball"]
-  handle "/sport/hockey", using: "SportDisciplineTopic", examples: ["/sport/hockey"]
-  handle "/sport/ice-hockey", using: "SportDisciplineTopic", examples: ["/sport/ice-hockey"]
-  handle "/sport/judo", using: "SportDisciplineTopic", examples: ["/sport/judo"]
-  handle "/sport/karate", using: "SportDisciplineTopic", examples: ["/sport/karate"]
-  handle "/sport/luge", using: "SportDisciplineTopic", examples: ["/sport/luge"]
-  handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", examples: ["/sport/modern-pentathlon"]
-  handle "/sport/nordic-combined", using: "SportDisciplineTopic", examples: ["/sport/nordic-combined"]
-  handle "/sport/rowing", using: "SportDisciplineTopic", examples: ["/sport/rowing"]
-  handle "/sport/rugby-sevens", using: "SportDisciplineTopic", examples: ["/sport/rugby-sevens"]
-  handle "/sport/sailing", using: "SportDisciplineTopic", examples: ["/sport/sailing"]
-  handle "/sport/shooting", using: "SportDisciplineTopic", examples: ["/sport/shooting"]
-  handle "/sport/short-track-skating", using: "SportDisciplineTopic", examples: ["/sport/short-track-skating"]
-  handle "/sport/skateboarding", using: "SportDisciplineTopic", examples: ["/sport/skateboarding"]
-  handle "/sport/skeleton", using: "SportDisciplineTopic", examples: ["/sport/skeleton"]
-  handle "/sport/ski-jumping", using: "SportDisciplineTopic", examples: ["/sport/ski-jumping"]
-  handle "/sport/snowboarding", using: "SportDisciplineTopic", examples: ["/sport/snowboarding"]
-  handle "/sport/speed-skating", using: "SportDisciplineTopic", examples: ["/sport/speed-skating"]
-  handle "/sport/sport-climbing", using: "SportDisciplineTopic", examples: ["/sport/sport-climbing"]
-  handle "/sport/squash", using: "SportDisciplineTopic", examples: ["/sport/squash"]
-  handle "/sport/surfing", using: "SportDisciplineTopic", examples: ["/sport/surfing"]
-  handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", examples: ["/sport/synchronised-swimming"]
-  handle "/sport/table-tennis", using: "SportDisciplineTopic", examples: ["/sport/table-tennis"]
-  handle "/sport/taekwondo", using: "SportDisciplineTopic", examples: ["/sport/taekwondo"]
-  handle "/sport/triathlon", using: "SportDisciplineTopic", examples: ["/sport/triathlon"]
-  handle "/sport/volleyball", using: "SportDisciplineTopic", examples: ["/sport/volleyball"]
-  handle "/sport/water-polo", using: "SportDisciplineTopic", examples: ["/sport/water-polo"]
-  handle "/sport/weightlifting", using: "SportDisciplineTopic", examples: ["/sport/weightlifting"]
-  handle "/sport/wrestling", using: "SportDisciplineTopic", examples: ["/sport/wrestling"]
+  handle "/sport/alpine-skiing", using: "SportDisciplineTopic", examples: ["/sport/alpine-skiing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
 
-  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/rugby-league/teams/wigan"]
+  handle "/sport/archery", using: "SportDisciplineTopic", examples: ["/sport/archery"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
 
-  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", examples: ["/sport/cricket/the-hundred"]
-  handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"]
-  handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"]
-  handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"]
-  handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/french-ligue-one"]
-  handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/german-bundesliga"]
-  handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/italian-serie-a"]
-  handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-cup"]
-  handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-one"]
-  handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-two"]
-  handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/national-league"]
-  handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/portuguese-primeira-liga"]
-  handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-challenge-cup"]
-  handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-championship"]
-  handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-cup"]
-  handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-cup"]
-  handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-one"]
-  handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-two"]
-  handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-premiership"]
-  handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"]
-  handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"]
-  handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"]
-  handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/womens-european-championship"]
+  handle "/sport/badminton", using: "SportDisciplineTopic", examples: ["/sport/badminton"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
 
-## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart
+  handle "/sport/baseball", using: "SportDisciplineTopic", examples: ["/sport/baseball"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/biathlon", using: "SportDisciplineTopic", examples: ["/sport/biathlon"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/bobsleigh", using: "SportDisciplineTopic", examples: ["/sport/bobsleigh"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/bowls", using: "SportDisciplineTopic", examples: ["/sport/bowls"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/canoeing", using: "SportDisciplineTopic", examples: ["/sport/canoeing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/cross-country-skiing", using: "SportDisciplineTopic", examples: ["/sport/cross-country-skiing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/curling", using: "SportDisciplineTopic", examples: ["/sport/curling"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/darts", using: "SportDisciplineTopic", examples: ["/sport/darts"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/diving", using: "SportDisciplineTopic", examples: ["/sport/diving"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/equestrian", using: "SportDisciplineTopic", examples: ["/sport/equestrian"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/fencing", using: "SportDisciplineTopic", examples: ["/sport/fencing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/figure-skating", using: "SportDisciplineTopic", examples: ["/sport/figure-skating"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/freestyle-skiing", using: "SportDisciplineTopic", examples: ["/sport/freestyle-skiing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/gymnastics", using: "SportDisciplineTopic", examples: ["/sport/gymnastics"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/handball", using: "SportDisciplineTopic", examples: ["/sport/handball"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/hockey", using: "SportDisciplineTopic", examples: ["/sport/hockey"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/ice-hockey", using: "SportDisciplineTopic", examples: ["/sport/ice-hockey"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/judo", using: "SportDisciplineTopic", examples: ["/sport/judo"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/karate", using: "SportDisciplineTopic", examples: ["/sport/karate"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/luge", using: "SportDisciplineTopic", examples: ["/sport/luge"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", examples: ["/sport/modern-pentathlon"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/nordic-combined", using: "SportDisciplineTopic", examples: ["/sport/nordic-combined"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/rowing", using: "SportDisciplineTopic", examples: ["/sport/rowing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/rugby-sevens", using: "SportDisciplineTopic", examples: ["/sport/rugby-sevens"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/sailing", using: "SportDisciplineTopic", examples: ["/sport/sailing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/shooting", using: "SportDisciplineTopic", examples: ["/sport/shooting"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/short-track-skating", using: "SportDisciplineTopic", examples: ["/sport/short-track-skating"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/skateboarding", using: "SportDisciplineTopic", examples: ["/sport/skateboarding"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/skeleton", using: "SportDisciplineTopic", examples: ["/sport/skeleton"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/ski-jumping", using: "SportDisciplineTopic", examples: ["/sport/ski-jumping"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/snowboarding", using: "SportDisciplineTopic", examples: ["/sport/snowboarding"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/speed-skating", using: "SportDisciplineTopic", examples: ["/sport/speed-skating"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/sport-climbing", using: "SportDisciplineTopic", examples: ["/sport/sport-climbing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/squash", using: "SportDisciplineTopic", examples: ["/sport/squash"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/surfing", using: "SportDisciplineTopic", examples: ["/sport/surfing"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", examples: ["/sport/synchronised-swimming"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/table-tennis", using: "SportDisciplineTopic", examples: ["/sport/table-tennis"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/taekwondo", using: "SportDisciplineTopic", examples: ["/sport/taekwondo"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/triathlon", using: "SportDisciplineTopic", examples: ["/sport/triathlon"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/volleyball", using: "SportDisciplineTopic", examples: ["/sport/volleyball"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/water-polo", using: "SportDisciplineTopic", examples: ["/sport/water-polo"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/weightlifting", using: "SportDisciplineTopic", examples: ["/sport/weightlifting"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  handle "/sport/wrestling", using: "SportDisciplineTopic", examples: ["/sport/wrestling"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  
+  # Sports Team Pages
+  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", examples: ["/sport/football/teams/liverpool"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+
+  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", examples: ["/sport/cricket/the-hundred"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/champions-league"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/dutch-eredivisie"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/french-ligue-one"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/german-bundesliga"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/italian-serie-a"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-cup"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-one"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/league-two"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/national-league"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/portuguese-primeira-liga"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-challenge-cup"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-championship"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-cup"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-cup"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-one"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-league-two"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/scottish-premiership"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/spanish-la-liga"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/us-major-league"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/welsh-premier-league"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+  handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/womens-european-championship"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+
+  ## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart
   handle "/sport/:id.amp", using: "SportAmp", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"]
   handle "/sport/:id.json", using: "SportAmp", examples: ["/sport/50562296.json?morph_env=live&renderer_env=live"]
   handle "/sport/:discipline/:id.amp", using: "SportAmp", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"]
