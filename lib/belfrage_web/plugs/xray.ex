@@ -107,7 +107,7 @@ defmodule BelfrageWeb.Plugs.Xray do
       trace_header
       |> String.split(";")
       |> Enum.map(fn pair -> String.split(pair, "=") end)
-      |> Map.new(fn [k, v] -> {k, v} end)
+      |> create_map_if_valid()
     else
       %{}
     end
@@ -118,5 +118,13 @@ defmodule BelfrageWeb.Plugs.Xray do
       [content_length] -> content_length
       _other -> 0
     end
+  end
+
+  defp create_map_if_valid([_x1, _x2] = map) do
+    Map.new(map, fn [k, v] -> {k, v} end)
+  end
+
+  defp create_map_if_valid(_) do
+    %{}
   end
 end
