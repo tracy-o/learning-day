@@ -71,4 +71,63 @@ defmodule Belfrage.MetricsTest do
       assert duration > 0
     end
   end
+
+  test "multi_span emits start and stop events" do
+    id = :test_multi_span
+    pid = self()
+
+    :telemetry.attach_many(
+      id,
+      [
+        [:a, :start],
+        [:a, :stop],
+        [:b, :start],
+        [:b, :stop]
+      ],
+      fn event_name, measurements, _metadata, _config ->
+        send(pid, {event_name, measurements})
+      end,
+      %{}
+    )
+
+    Belfrage.Metrics.multi_span([[:a], [:b]], %{}, fn -> {nil, %{}} end)
+    :telemetry.detach(id)
+
+    assert_receive {[:a, :start], %{}}
+    assert_receive {[:b, :start], %{}}
+    assert_receive {[:a, :stop], %{duration: _}}
+    assert_receive {[:b, :stop], %{duration: _}}
+  end
+
+  test "multi_span emits start and exception events" do
+    id = :test_multi_span_exception
+    pid = self()
+
+    :telemetry.attach_many(
+      id,
+      [
+        [:a, :start],
+        [:a, :exception],
+        [:b, :start],
+        [:b, :exception]
+      ],
+      fn event_name, measurements, _metadata, _config ->
+        send(pid, {event_name, measurements})
+      end,
+      %{}
+    )
+
+    try do
+      Belfrage.Metrics.multi_span([[:a], [:b]], %{}, fn -> raise "oops" end)
+    rescue
+      _ -> nil
+    else
+      _ -> :telemetry.detach(id)
+    end
+
+    assert_receive {[:a, :start], %{}}
+    assert_receive {[:b, :start], %{}}
+    assert_receive {[:a, :exception], %{duration: _}}
+    assert_receive {[:b, :exception], %{duration: _}}
+  end
 end
