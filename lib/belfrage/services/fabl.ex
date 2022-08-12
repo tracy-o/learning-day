@@ -1,6 +1,5 @@
 defmodule Belfrage.Services.Fabl do
   require Logger
-  require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
@@ -12,11 +11,14 @@ defmodule Belfrage.Services.Fabl do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record_span "belfrage.function.timing.service.Fabl.request" do
-      struct
-      |> execute_request()
-      |> handle_response()
-    end
+    :telemetry.span([:belfrage, :function, :timing, :service, :Fabl, :request], %{}, fn ->
+      {
+        struct
+        |> execute_request()
+        |> handle_response(),
+        %{}
+      }
+    end)
   end
 
   defp execute_request(struct) do

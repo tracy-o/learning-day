@@ -12,6 +12,7 @@ defmodule Belfrage.MetricsMigration do
     Path.expand("../routes/platforms", __DIR__)
     |> File.ls!()
     |> Enum.map(&Path.basename(&1, ".ex"))
+    |> Enum.map(&Macro.camelize/1)
   end
 
   defmacro __using__(opts) do
@@ -66,12 +67,14 @@ defmodule Belfrage.MetricsMigration do
             counter("error.process.crash",
               event_name: [:belfrage, :error, :process, :crash],
               measurement: :count
-            ),
-            summary("function.timing.service.Fabl.request",
-              event_name: "belfrage.function.timing.service.Fabl.request",
-              measurement: :duration
             )
           ] ++
+            for platform <- @platforms do
+              summary("function.timing.service.#{platform}.request",
+                event_name: "belfrage.function.timing.service.#{platform}.request.stop",
+                measurement: :duration
+              )
+            end ++
             for type <- ~w(request response combined)a do
               summary("web.latency.internal.#{type}",
                 event_name: [:belfrage, :web, :latency, :internal, type],

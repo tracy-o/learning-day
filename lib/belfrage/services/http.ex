@@ -1,6 +1,5 @@
 defmodule Belfrage.Services.HTTP do
   require Logger
-  require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
@@ -132,9 +131,9 @@ defmodule Belfrage.Services.HTTP do
   defp execute_request(request = %Clients.HTTP.Request{}, private = %Private{}) do
     platform = platform_name(private)
 
-    Belfrage.Event.record_span "belfrage.function.timing.service.#{platform}.request" do
-      http_impl().execute(request, platform)
-    end
+    :telemetry.span([:belfrage, :function, :timing, :service, platform, :request], %{}, fn ->
+      {http_impl().execute(request, platform), %{}}
+    end)
   end
 
   defp http_impl() do
