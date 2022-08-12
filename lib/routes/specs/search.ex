@@ -6,8 +6,7 @@ defmodule Routes.Specs.Search do
       pipeline: ["ComToUKRedirect"],
       platform: Webcore,
       query_params_allowlist: ["q", "page"],
-      caching_enabled: false,
-      mvt_project_id: 1
+      caching_enabled: false
     }
   end
 end
