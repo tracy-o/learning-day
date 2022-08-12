@@ -1,15 +1,28 @@
 # credo:disable-for-this-file Credo.Check.Refactor.LongQuoteBlocks
 # credo:disable-for-this-file Credo.Check.Refactor.CyclomaticComplexity
 defmodule Belfrage.MetricsMigration do
+  def route_specs_from_file_names() do
+    Path.expand("../routes/specs", __DIR__)
+    |> File.ls!()
+    |> Enum.map(&Path.basename(&1, ".ex"))
+    |> Enum.map(&Macro.camelize/1)
+  end
+
+  def platforms_from_file_names() do
+    Path.expand("../routes/platforms", __DIR__)
+    |> File.ls!()
+    |> Enum.map(&Path.basename(&1, ".ex"))
+  end
+
   defmacro __using__(opts) do
     backend = Keyword.get(opts, :backend)
     metrics = Keyword.get(opts, :metrics)
 
     quote do
       @backend unquote(backend)
-      @status_codes [200, 204, 301, 302, 400, 404, 405, 408, 500, 502] # TODO really?
-      @route_states [] # TODO
-      @platforms [] # TODO
+      @status_codes [200, 204, 301, 302, 400, 404, 405, 408, 500, 502]
+      @route_states unquote(__MODULE__).route_specs_from_file_names()
+      @platforms unquote(__MODULE__).platforms_from_file_names()
       @cache_metrics [:local, :distributed]
 
       def metrics do
@@ -69,13 +82,12 @@ defmodule Belfrage.MetricsMigration do
         have_dimensions =
           case @backend do
             :statsd ->
-              for route_state <- @route_states do
-                for cache_metric <- @cache_metrics do
-                  counter("cache.#{route_state}.#{cache_metric}.stale.hit",
-                    event_name: [:belfrage, :cache, route_state, cache_metric, :stale, :hit],
-                    measurement: :count
-                  )
-                end
+              for route_state <- @route_states,
+                  cache_metric <- @cache_metrics do
+                counter("cache.#{route_state}.#{cache_metric}.stale.hit",
+                  event_name: "belfrage.cache.#{route_state}.#{cache_metric}.stale.hit",
+                  measurement: :count
+                )
               end ++
                 for platform <- @platforms do
                   counter("#{platform}.pre_cache_compression",
