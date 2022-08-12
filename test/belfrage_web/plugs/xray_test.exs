@@ -132,6 +132,20 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
       assert conn.assigns[:xray_segment].trace.root == root
     end
+
+    test "invalid headers are thrown away" do
+      root = "1-623c0289-148af71fcd58836604a286a5"
+      xray_header = "Root=#{root},ArbitraryKey=ArbitraryValue"
+
+      conn =
+        make_request_with([
+          ["x-amzn-trace-id", xray_header],
+          ["req-svc-chain", "Not-BELFRAGE"]
+        ])
+
+      assert Belfrage.Xray.build_trace_id_header(conn.assigns[:xray_segment]) == nil
+      #assert conn.assigns[:xray_segment] == nil
+    end
   end
 
   describe "call/2 when 'x-amzn-trace-id' is a partial trace header" do
