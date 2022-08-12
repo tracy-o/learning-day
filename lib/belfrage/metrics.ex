@@ -147,8 +147,4 @@ defmodule Belfrage.Metrics do
       {result, %{authentication_type: name}}
     end)
   end
-
-  # TODO in another PR
-  def multi_execute(_event_prefixes, _measurements, _metadata) do
-  end
 end
