@@ -120,11 +120,9 @@ defmodule BelfrageWeb.Plugs.Xray do
     end
   end
 
-  defp create_map_if_valid([_x1, _x2] = map) do
-    Map.new(map, fn [k, v] -> {k, v} end)
-  end
-
-  defp create_map_if_valid(_) do
-    %{}
+  defp create_map_if_valid(pairs) do
+    pairs
+    |> Enum.filter(&match?([_, _], &1))
+    |> Map.new(fn [k, v] -> {k, v} end)
   end
 end
