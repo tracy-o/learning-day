@@ -103,7 +103,12 @@ defmodule Belfrage.Services.HTTP do
       "cookie-ckps-chinese" => request.cookie_ckps_chinese,
       "cookie-ckps-serbian" => request.cookie_ckps_serbian,
       "origin" => request.origin,
-      "referer" => request.referer,
+      "referer" =>
+        if request.referer do
+          URI.encode(request.referer)
+        else
+          nil
+        end,
       "bbc-adverts" => "#{request.is_advertise}",
       "bbc-origin" => bbc_origin(request)
     }
