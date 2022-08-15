@@ -132,20 +132,6 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
       assert conn.assigns[:xray_segment].trace.root == root
     end
-
-    test "invalid headers are thrown away" do
-      root = "1-623c0289-148af71fcd58836604a286a5"
-      xray_header = "Root=#{root},ArbitraryKey=ArbitraryValue"
-
-      conn =
-        make_request_with([
-          ["x-amzn-trace-id", xray_header],
-          ["req-svc-chain", "Not-BELFRAGE"]
-        ])
-
-      assert Belfrage.Xray.build_trace_id_header(conn.assigns[:xray_segment]) == nil
-      #assert conn.assigns[:xray_segment] == nil
-    end
   end
 
   describe "call/2 when 'x-amzn-trace-id' is a partial trace header" do
@@ -226,7 +212,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
     end
   end
 
-  describe "call/2 when 'x-amzn-trace-id' is malformed, starts new trace" do
+  describe "call/2 when 'x-amzn-trace-id' data is malformed, starts new trace" do
     setup do
       root = "1-623c0289-148af71fcd58836604a286a5"
       parent = "9d27b4c4bd4b7140"
@@ -235,6 +221,32 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       xray_header = "Root=#{root};Parent=#{parent};Sampled=#{sampled}"
 
       conn = make_request_with([["x-amzn-trace-id", xray_header]])
+
+      %{conn: conn, root: root, parent: parent, sampled: sampled}
+    end
+
+    test "the root is different", %{conn: conn, root: root} do
+      assert conn.assigns[:xray_segment].trace.root != root
+    end
+
+    test "the parent is empty", %{conn: conn} do
+      assert conn.assigns[:xray_segment].trace.parent == ""
+    end
+
+    test "the sample is a true or false", %{conn: conn} do
+      assert is_boolean(conn.assigns[:xray_segment].trace.sampled)
+    end
+  end
+
+  describe "call/2 when 'x-amzn-trace-id' structure is malformed, starts new trace" do
+    setup do
+      root = "1-623c0289-148af71fcd58836604a286a5"
+      parent = "9d27b4c4bd4b7140"
+      # this being the part which malforms the header
+      sampled = "1"
+      xray_header = "Root=#{root},Parent=#{parent},Sampled=#{sampled}"
+
+      conn = make_request_with([["x-amzn-trace-id", xray_header], ["req-svc-chain", "Not-BELFRAGE"]])
 
       %{conn: conn, root: root, parent: parent, sampled: sampled}
     end
