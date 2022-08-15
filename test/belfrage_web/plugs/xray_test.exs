@@ -242,8 +242,8 @@ defmodule BelfrageWeb.Plugs.XrayTest do
     setup do
       root = "1-623c0289-148af71fcd58836604a286a5"
       parent = "9d27b4c4bd4b7140"
-      # this being the part which malforms the header
       sampled = "1"
+      # This is the malformed part, the commas should be semi-colons
       xray_header = "Root=#{root},Parent=#{parent},Sampled=#{sampled}"
 
       conn = make_request_with([["x-amzn-trace-id", xray_header], ["req-svc-chain", "Not-BELFRAGE"]])
