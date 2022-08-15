@@ -15,7 +15,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   metric_buffer_limit = 10000
   collection_jitter = "0s"
   flush_interval = "10s"
-  flush_jitter = "0s"
+  flush_jitter = "5s"
   precision = "0s"
   hostname = ""
   omit_hostname = true
