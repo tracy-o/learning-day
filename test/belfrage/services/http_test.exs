@@ -190,7 +190,7 @@ defmodule Belfrage.Services.HTTPTest do
                })
     end
 
-    defp dont_mock_http_client() do
+    defp do_not_mock_http_client() do
       previous = Application.get_env(:belfrage, :http_client)
       Application.put_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
@@ -199,30 +199,55 @@ defmodule Belfrage.Services.HTTPTest do
       end)
     end
 
-    test "invalid header value" do
-      dont_mock_http_client()
+    defp do_not_mock_finch() do
+      previous = Application.get_env(:belfrage, :finch_impl)
+      Application.put_env(:belfrage, :finch_impl, Finch)
 
-      expect(FinchMock, :request, fn _req, _name, _opts ->
-        {:error, %Mint.HTTPError{reason: {:invalid_header_value, "referer", "oops"}}}
+      on_exit(fn ->
+        Application.put_env(:belfrage, :finch_impl, previous)
       end)
+    end
 
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 400,
-                 body: ""
-               }
-             } =
+    defp random_port() do
+      with {:ok, socket} <- :gen_udp.open(0, [:binary, active: false]),
+           {:ok, port} <- :inet.port(socket) do
+        port
+      end
+    end
+
+    test "can handle non-ascii characters in header value" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+
+      defmodule MyApp do
+        import Plug.Conn
+
+        def init(_), do: []
+
+        def call(conn, _opts) do
+          send_resp(conn, 200, get_req_header(conn, "referer"))
+        end
+      end
+
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: MyApp, options: [port: port]})
+
+      referer = "https://fa.wikipedia.org/wiki/۲۰۰۸"
+      urlencoded_referer = URI.encode(referer)
+
+      assert %Struct{response: %Struct.Response{http_status: 200, body: ^urlencoded_referer}} =
                HTTP.dispatch(%Struct{
                  private: %Struct.Private{
-                   origin: "https://www.bbc.co.uk",
+                   origin: "http://localhost:#{port}",
                    platform: SomePlatform
                  },
                  request: %Struct.Request{
                    method: "GET",
                    path: "/some-path",
                    query_params: %{},
-                   country: "not\0allowed",
-                   host: "www.bbc.co.uk",
+                   referer: referer,
+                   host: "localhost",
                    req_svc_chain: "BELFRAGE"
                  }
                })
