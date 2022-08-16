@@ -2344,8 +2344,11 @@ defroutefile "Main" do
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
 
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", only_on: "test", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
 
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
+  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
+
 
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
   handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
@@ -2366,6 +2369,7 @@ defroutefile "Main" do
 
   handle "/bitesize/topics/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/z82hsbk"]
   handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
+
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
