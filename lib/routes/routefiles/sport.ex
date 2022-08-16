@@ -975,8 +975,8 @@ defroutefile "Sport" do
   end
 
   ## Sport BBC Live - LIVEXP-322 Temporary Redirect for app route testing
-    handle "/sport/internal/LIVEXP322", using: "SportAlphaFootballLivePage", examples: ["/sport/internal/LIVEXP322"] do
-    return_404
+  handle "/sport/internal/LIVEXP322", using: "SportAlphaFootballLivePage", examples: ["/sport/internal/LIVEXP322"] do
+    return_404()
   end
   redirect "/sport/internal/LIVEXP322.app", to: "/sport/alpha/football/live/cq04k1zenzmt", status: 302
 
