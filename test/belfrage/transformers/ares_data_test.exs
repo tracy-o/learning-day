@@ -26,26 +26,6 @@ defmodule Belfrage.Transformers.AresDataTest do
     assert {:ok, ^struct} = AresData.call([], struct)
   end
 
-  test "does not modify Struct if origin response body does not contain assetType and section" do
-    url = "#{@fabl_endpoint}/module/ares-data?path=%2Fsome%2Fpath"
-
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Fabl ->
-        {:ok, %Clients.HTTP.Response{status_code: 200, body: "{\"status\": \"500\"}"}}
-      end
-    )
-
-    struct = %Struct{request: %Struct.Request{path: "/some/path"}}
-
-    assert {:ok, ^struct} = AresData.call([], struct)
-  end
-
   test "does not modify Struct if origin response body does not contain section" do
     url = "#{@fabl_endpoint}/module/ares-data?path=%2Fsome%2Fpath"
 
@@ -57,7 +37,7 @@ defmodule Belfrage.Transformers.AresDataTest do
            url: ^url
          },
          :Fabl ->
-        {:ok, %Clients.HTTP.Response{status_code: 200, body: "{\"status\": \"200\", \"assetType\": \"STY\"}"}}
+        {:ok, %Clients.HTTP.Response{status_code: 200, body: "{\"assetType\": \"STY\"}"}}
       end
     )
 
@@ -77,7 +57,7 @@ defmodule Belfrage.Transformers.AresDataTest do
            url: ^url
          },
          :Fabl ->
-        {:ok, %Clients.HTTP.Response{status_code: 200, body: "{\"status\": \"200\", \"section\": \"business\"}"}}
+        {:ok, %Clients.HTTP.Response{status_code: 200, body: "{\"section\": \"business\"}"}}
       end
     )
 
@@ -100,7 +80,7 @@ defmodule Belfrage.Transformers.AresDataTest do
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
-           body: "{\"status\": \"200\", \"section\": \"business\", \"assetType\": \"STY\"}"
+           body: "{\"section\": \"business\", \"assetType\": \"STY\"}"
          }}
       end
     )
