@@ -7,7 +7,8 @@ defmodule Belfrage.Transformers.BitesizeArticlesPlatformDiscriminator do
   @webcore_test_ids [
     "zm8fhbk",
     "zjykkmn",
-    "zj8yydm"
+    "zj8yydm",
+    "zwdtrwx"
   ]
 
   @webcore_live_ids []
