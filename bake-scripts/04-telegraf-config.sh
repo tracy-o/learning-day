@@ -23,6 +23,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 [[outputs.cloudwatch]]
   region = "eu-west-1"
   namespace = "Belfrage"
+  write_statistics = true
 
 [[inputs.prometheus]]
   urls = ["http://127.0.0.1:9568/metrics"]
