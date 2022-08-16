@@ -2344,10 +2344,10 @@ defroutefile "Main" do
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
 
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
-  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", only_on: "test", examples: ["bitesize/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", only_on: "test", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
 
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
-  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test", examples: ["bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
 
 
   handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
