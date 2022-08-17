@@ -1,6 +1,4 @@
 defmodule Belfrage.Metrics.LatencyMonitor do
-  alias Belfrage.{Metrics.Statix, Event}
-
   @valid_checkpoints [
     :request_received,
     :early_response_received,
@@ -34,9 +32,9 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     response = response_latency(checkpoints)
 
     if request && response do
-      Statix.timing("web.latency.internal.request", request, tags: Event.global_dimensions())
-      Statix.timing("web.latency.internal.response", response, tags: Event.global_dimensions())
-      Statix.timing("web.latency.internal.combined", request + response, tags: Event.global_dimensions())
+      :telemetry.execute([:belfrage, :web, :latency, :internal, :request], %{duration: request})
+      :telemetry.execute([:belfrage, :web, :latency, :internal, :response], %{duration: response})
+      :telemetry.execute([:belfrage, :web, :latency, :internal, :combined], %{duration: request + response})
     end
   end
 

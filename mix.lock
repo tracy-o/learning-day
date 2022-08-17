@@ -41,7 +41,6 @@
   "recon": {:hex, :recon, "2.5.1", "430ffa60685ac1efdfb1fe4c97b8767c92d0d92e6e7c3e8621559ba77598678a", [:mix, :rebar3], [], "hexpm", "5721c6b6d50122d8f68cccac712caa1231f97894bab779eff5ff0f886cb44648"},
   "secure_random": {:hex, :secure_random, "0.5.1", "c5532b37c89d175c328f5196a0c2a5680b15ebce3e654da37129a9fe40ebf51b", [:mix], [], "hexpm", "1b9754f15e3940a143baafd19da12293f100044df69ea12db5d72878312ae6ab"},
   "sleeplocks": {:hex, :sleeplocks, "1.1.1", "3d462a0639a6ef36cc75d6038b7393ae537ab394641beb59830a1b8271faeed3", [:rebar3], [], "hexpm", "84ee37aeff4d0d92b290fff986d6a95ac5eedf9b383fadfd1d88e9b84a1c02e1"},
-  "statix": {:hex, :statix, "1.4.0", "c822abd1e60e62828e8460e932515d0717aa3c089b44cc3f795d43b94570b3a8", [:mix], [], "hexpm", "507373cc80925a9b6856cb14ba17f6125552434314f6613c907d295a09d1a375"},
   "sweet_xml": {:hex, :sweet_xml, "0.6.6", "fc3e91ec5dd7c787b6195757fbcf0abc670cee1e4172687b45183032221b66b8", [:mix], [], "hexpm", "2e1ec458f892ffa81f9f8386e3f35a1af6db7a7a37748a64478f13163a1f3573"},
   "tabula": {:hex, :tabula, "2.2.2", "14ae0db481b3e21feb95e28f968e30092b0ec706eacc837f1b3d4f8c4b86fca0", [:mix], [], "hexpm", "1d0b58a5af3491264538dfdd38e24dc8364d350f424ffe191d66cacd4b3a2d09"},
   "telemetry": {:hex, :telemetry, "0.4.3", "a06428a514bdbc63293cd9a6263aad00ddeb66f608163bdec7c8995784080818", [:rebar3], [], "hexpm", "eb72b8365ffda5bed68a620d1da88525e326cb82a75ee61354fc24b844768041"},

@@ -57,7 +57,6 @@ defmodule Belfrage.MixProject do
       {:ex_aws, "~> 2.0", [env: :prod, repo: "hexpm", hex: "ex_aws"]},
       {:ex_aws_lambda, "~> 2.0.2"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
-      {:statix, ">= 1.1.0"},
       {:aws_ex_ray, "~> 0.1.15"},
       {:logger_file_backend, "~> 0.0.10"},
       {:finch, "~> 0.12.0"},

@@ -2,7 +2,6 @@ defmodule BelfrageWeb.Router do
   require Logger
   use Plug.Router
   use Plug.ErrorHandler
-  use Statix
 
   alias BelfrageWeb.RequestHeaders
   alias BelfrageWeb.ProductionEnvironment

@@ -2,6 +2,8 @@ defmodule Belfrage.Metrics.Prometheus do
   use Belfrage.MetricsMigration,
     backend: :prometheus,
     metrics: [
+      :statix_static_metrics,
+      :statix_dynamic_metrics,
       :vm_metrics,
       :cowboy_metrics,
       :poolboy_metrics,

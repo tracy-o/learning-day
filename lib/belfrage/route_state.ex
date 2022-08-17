@@ -1,7 +1,7 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, Metrics.Statix, Event, CircuitBreaker, Mvt}
+  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, CircuitBreaker, Mvt}
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
@@ -14,7 +14,7 @@ defmodule Belfrage.RouteState do
       GenServer.call(via_tuple(name), :state, timeout)
     catch
       :exit, value ->
-        Statix.increment("route_state.state.fetch.timeout", 1, tags: Event.global_dimensions())
+        :telemetry.execute([:belfrage, :route_state, :fetch, :timeout], %{count: 1})
         Kernel.exit(value)
     end
   end

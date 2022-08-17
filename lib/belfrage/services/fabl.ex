@@ -1,6 +1,5 @@
 defmodule Belfrage.Services.Fabl do
   require Logger
-  require Belfrage.Event
 
   alias Belfrage.Behaviours.Service
   alias Belfrage.{Clients, Struct}
@@ -12,11 +11,14 @@ defmodule Belfrage.Services.Fabl do
 
   @impl Service
   def dispatch(struct = %Struct{}) do
-    Belfrage.Event.record "function.timing.service.Fabl.request" do
-      struct
-      |> execute_request()
-      |> handle_response()
-    end
+    :telemetry.span([:belfrage, :function, :timing, :service, :Fabl, :request], %{}, fn ->
+      {
+        struct
+        |> execute_request()
+        |> handle_response(),
+        %{}
+      }
+    end)
   end
 
   defp execute_request(struct) do
@@ -27,7 +29,14 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
-    Belfrage.Event.record(:metric, :increment, "service.Fabl.response.#{status}")
+    Belfrage.Metrics.multi_execute(
+      ["belfrage.service.Fabl.response.#{status}", [:belfrage, :Fabl, :response]],
+      %{count: 1},
+      %{
+        status_code: status
+      }
+    )
+
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 

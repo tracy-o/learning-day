@@ -3,7 +3,7 @@ defmodule Belfrage.Clients.CCP do
   The interface to the Belfrage Central Cache Processor (CCP)
   """
   require Logger
-  alias Belfrage.{Struct, Struct.Request, Metrics.Statix, Event}
+  alias Belfrage.{Struct, Struct.Request}
 
   @s3_not_found_response_code 403
 
@@ -31,19 +31,32 @@ defmodule Belfrage.Clients.CCP do
       )
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
-    Statix.timing("service.S3.request.timing", timing, tags: Event.global_dimensions())
+    :telemetry.execute([:belfrage, :service, :S3, :request, :timing], %{duration: timing})
 
     case ccp_response do
       {:ok, %Finch.Response{status: 200, body: cached_body}} ->
-        Statix.increment("service.S3.response.200", 1, tags: Event.global_dimensions())
+        Belfrage.Metrics.multi_execute(
+          [[:belfrage, :service, :S3, :response, :"200"], [:belfrage, :service, :S3, :response]],
+          %{count: 1},
+          %{status_code: 200}
+        )
+
         {:ok, cached_body |> :erlang.binary_to_term()}
 
       {:ok, %Finch.Response{status: @s3_not_found_response_code}} ->
-        Statix.increment("service.S3.response.not_found", 1, tags: Event.global_dimensions())
+        :telemetry.execute([:belfrage, :service, :S3, :response, :not_found], %{count: 1})
         {:ok, :content_not_found}
 
       {:ok, response = %Finch.Response{status: status_code}} ->
-        Statix.increment("service.S3.response.#{status_code}", 1, tags: Event.global_dimensions())
+        Belfrage.Metrics.multi_execute(
+          [
+            [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
+            [:belfrage, :service, :S3, :response]
+          ],
+          %{count: 1},
+          %{status_code: status_code}
+        )
+
         :telemetry.execute([:belfrage, :ccp, :unexpected_response], %{})
 
         Logger.log(:error, "", %{
