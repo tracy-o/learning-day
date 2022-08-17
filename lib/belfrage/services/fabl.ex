@@ -30,10 +30,11 @@ defmodule Belfrage.Services.Fabl do
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
     Belfrage.Metrics.multi_execute(
-      ["belfrage.service.Fabl.response.#{status}", [:belfrage, :Fabl, :response]],
+      ["belfrage.service.Fabl.response.#{status}", "belfrage.service.response"],
       %{count: 1},
       %{
-        status_code: status
+        status_code: status,
+        platform: :Fabl
       }
     )
 
