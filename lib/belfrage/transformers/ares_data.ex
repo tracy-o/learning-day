@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.AresData do
   """
   @impl true
   def call(rest, struct = %Struct{}) do
-    with {:ok, %HTTP.Response{status_code: 200, body: payload}} <- execute_request(struct.request.path),
+    with {:ok, %HTTP.Response{status_code: 200, body: payload}} <- fetch_metadata(struct.request.path),
          {:ok, data} <- extract_data(payload) do
       new_metadata = Map.merge(struct.private.metadata, data)
       then_do(rest, Struct.add(struct, :private, %{metadata: new_metadata}))
@@ -46,7 +46,7 @@ defmodule Belfrage.Transformers.AresData do
   #     The query string passed to the FABL API is converted using the NodeJS querystring.parse() function.
   #
   # [1] https://github.com/bbc/fabl-modules/tree/efd29deb89a728eda7a213ebb7eda99af3ce638e#inbox_tray-module-inputs
-  defp execute_request(path) do
+  defp fetch_metadata(path) do
     origin = Application.get_env(:belfrage, :fabl_endpoint)
 
     @http_client.execute(
