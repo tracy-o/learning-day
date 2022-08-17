@@ -132,9 +132,9 @@ defmodule Belfrage.MetricsMigration do
                 measurement: :count
               )
             end ++
-              for status_code <- @status_codes do
-                counter("service.Fabl.response.#{status_code}",
-                  event_name: "belfrage.service.Fabl.response.#{status_code}",
+              for platform <- @platforms, status_code <- @status_codes do
+                counter("service.#{platform}.response.#{status_code}",
+                  event_name: "belfrage.service.#{platform}.response.#{status_code}",
                   measurement: :count
                 )
               end
@@ -142,14 +142,14 @@ defmodule Belfrage.MetricsMigration do
           :prometheus ->
             [
               counter("service.S3.response",
-                event_name: [:belfrage, :service, :S3, :response],
+                event_name: "belfrage.service.S3.response",
                 measurement: :count,
                 tags: [:status_code]
               ),
-              counter("service.Fabl.response",
-                event_name: [:belfrage, :Fabl, :response],
+              counter("service.response",
+                event_name: "belfrage.service.response",
                 measurement: :count,
-                tags: [:status_code]
+                tags: [:status_code, :platform]
               )
             ]
         end
