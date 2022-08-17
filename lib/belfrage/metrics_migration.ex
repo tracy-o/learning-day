@@ -72,7 +72,8 @@ defmodule Belfrage.MetricsMigration do
             for platform <- @platforms do
               summary("function.timing.service.#{platform}.request",
                 event_name: "belfrage.function.timing.service.#{platform}.request.stop",
-                measurement: :duration
+                measurement: :duration,
+                unit: {:native, :millisecond}
               )
             end ++
             for type <- ~w(request response combined)a do
@@ -101,7 +102,8 @@ defmodule Belfrage.MetricsMigration do
                 for platform <- @platforms do
                   summary("function.timing.#{platform}.request",
                     event_name: "belfrage.function.timing.#{platform}.request",
-                    measurement: :duration
+                    measurement: :duration,
+                    unit: {:native, :millisecond}
                   )
                 end
 
