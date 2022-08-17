@@ -212,7 +212,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
     end
   end
 
-  describe "call/2 when 'x-amzn-trace-id' is malformed, starts new trace" do
+  describe "call/2 when 'x-amzn-trace-id' data is malformed, starts new trace" do
     setup do
       root = "1-623c0289-148af71fcd58836604a286a5"
       parent = "9d27b4c4bd4b7140"
@@ -221,6 +221,32 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       xray_header = "Root=#{root};Parent=#{parent};Sampled=#{sampled}"
 
       conn = make_request_with([["x-amzn-trace-id", xray_header]])
+
+      %{conn: conn, root: root, parent: parent, sampled: sampled}
+    end
+
+    test "the root is different", %{conn: conn, root: root} do
+      assert conn.assigns[:xray_segment].trace.root != root
+    end
+
+    test "the parent is empty", %{conn: conn} do
+      assert conn.assigns[:xray_segment].trace.parent == ""
+    end
+
+    test "the sample is a true or false", %{conn: conn} do
+      assert is_boolean(conn.assigns[:xray_segment].trace.sampled)
+    end
+  end
+
+  describe "call/2 when 'x-amzn-trace-id' structure is malformed, starts new trace" do
+    setup do
+      root = "1-623c0289-148af71fcd58836604a286a5"
+      parent = "9d27b4c4bd4b7140"
+      sampled = "1"
+      # This is the malformed part, the commas should be semi-colons
+      xray_header = "Root=#{root},Parent=#{parent},Sampled=#{sampled}"
+
+      conn = make_request_with([["x-amzn-trace-id", xray_header], ["req-svc-chain", "Not-BELFRAGE"]])
 
       %{conn: conn, root: root, parent: parent, sampled: sampled}
     end
