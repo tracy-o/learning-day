@@ -55,4 +55,8 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
       Struct.add(struct, :response, %{body: :zlib.gzip(struct.response.body), headers: response_headers})
     end)
   end
+
+  defp platform_name(%Struct.Private{platform: platform}) do
+    Module.split(platform) |> hd() |> String.to_atom()
+  end
 end
