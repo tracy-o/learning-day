@@ -147,7 +147,10 @@ defmodule Belfrage.Services.HTTP do
 
   defp track_response(private = %Private{}, status) do
     Belfrage.Metrics.multi_execute(
-      ["belfrage.service.#{platform_name(private)}.response.#{status}", [:belfrage, :service, :response]],
+      [
+        [:belfrage, :service, platform_name(private), :response, String.to_atom(to_string(status))],
+        [:belfrage, :service, :response]
+      ],
       %{count: 1},
       %{platform: platform_name(private), status_code: status}
     )
@@ -156,7 +159,7 @@ defmodule Belfrage.Services.HTTP do
   defp track_error(struct = %Struct{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
     Belfrage.Metrics.multi_execute(
       [
-        "belfrage.error.service.#{platform_name(private)}.timeout",
+        [:belfrage, :error, :service, platform_name(private), :timeout],
         [:belfrage, :error, :service, :timeout]
       ],
       %{count: 1},
@@ -169,7 +172,7 @@ defmodule Belfrage.Services.HTTP do
   defp track_error(struct = %Struct{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
     Belfrage.Metrics.multi_execute(
       [
-        "belfrage.error.service.#{platform_name(private)}.request",
+        [:belfrage, :error, :service, platform_name(private), :request],
         [:belfrage, :error, :service, :request]
       ],
       %{count: 1},
