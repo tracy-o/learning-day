@@ -36,13 +36,13 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   end
 
   defp gzip_response_body(
-         struct = %Struct{request: %Struct.Request{path: path}, private: %Struct.Private{platform: platform}}
+         struct = %Struct{request: %Struct.Request{path: path}, private: private = %Struct.Private{platform: platform}}
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
       Belfrage.Metrics.multi_execute(
-        ["belfrage.#{platform}.pre_cache_compression", [:belfrage, :pre_cache_compression]],
+        [[:belfrage, platform, :pre_cache_compression], [:belfrage, :pre_cache_compression]],
         %{count: 1},
-        %{platform: platform}
+        %{platform: platform_name(private)}
       )
 
       Logger.log(:info, "", %{
