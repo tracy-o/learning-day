@@ -454,8 +454,14 @@ defmodule Belfrage.MetricsMigration do
           :statsd ->
             for platform <- @platforms do
               [
-                counter("error.service.#{platform}.timeout", event_name: "belfrage.error.service.#{platform}.timeout"),
-                counter("error.service.#{platform}.timeout", event_name: "belfrage.error.service.#{platform}.request")
+                counter("error.service.#{platform}.timeout",
+                  event_name: "belfrage.error.service.#{platform}.timeout",
+                  measurement: :count
+                ),
+                counter("error.service.#{platform}.timeout",
+                  event_name: "belfrage.error.service.#{platform}.request",
+                  measurement: :count
+                )
               ]
             end
             |> :lists.flatten()
@@ -464,10 +470,12 @@ defmodule Belfrage.MetricsMigration do
             [
               counter("error.service.timeout",
                 event_name: "belfrage.error.service.timeout",
+                measurement: :count,
                 tags: [:platform]
               ),
               counter("error.service.request",
                 event_name: "belfrage.error.service.request",
+                measurement: :count,
                 tags: [:platform]
               )
             ]
