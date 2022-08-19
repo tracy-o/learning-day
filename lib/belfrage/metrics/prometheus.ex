@@ -15,6 +15,7 @@ defmodule Belfrage.Metrics.Prometheus do
       :cache_metrics,
       :webcore_metrics,
       :plug_metrics,
+      :service_error_metrics,
       :misc_metrics
     ]
 

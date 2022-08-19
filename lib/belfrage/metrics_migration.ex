@@ -449,6 +449,31 @@ defmodule Belfrage.MetricsMigration do
           end)
       end
 
+      def service_error_metrics() do
+        case @backend do
+          :statsd ->
+            for platform <- @platforms do
+              [
+                counter("error.service.#{platform}.timeout", event_name: "belfrage.error.service.#{platform}.timeout"),
+                counter("error.service.#{platform}.timeout", event_name: "belfrage.error.service.#{platform}.request")
+              ]
+            end
+            |> :lists.flatten()
+
+          :prometheus ->
+            [
+              counter("error.service.timeout",
+                event_name: "belfrage.error.service.timeout",
+                tags: [:platform]
+              ),
+              counter("error.service.request",
+                event_name: "belfrage.error.service.request",
+                tags: [:platform]
+              )
+            ]
+        end
+      end
+
       def misc_metrics() do
         cache_metrics =
           for cache_metric <- [:local, :distributed] do
@@ -465,8 +490,6 @@ defmodule Belfrage.MetricsMigration do
             "error.pipeline.process",
             "error.pipeline.process.unhandled",
             "error.route_state.state",
-            "error.service.Fabl.timeout",
-            "error.service.Fabl.request",
             "clients.lambda.assume_role_failure",
             "invalid_content_encoding_from_origin",
             "web.response.uncompressed",
