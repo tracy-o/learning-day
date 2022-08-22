@@ -580,7 +580,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  redirect "/cymrufyw/fideo/", to: "/cymrufyw", status: 301
+  redirect "/cymrufyw/fideo", to: "/cymrufyw", status: 301
 
   handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
