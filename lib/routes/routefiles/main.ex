@@ -651,9 +651,9 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - "Access to News" Redirects
+  redirect “/arabic/middleeast/2013/11/131114_shia_ashura_rituals”, to: “/arabic/middleeast-62442578", status: 301
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
-
   redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
   redirect "/serbian/cyr/extra/ebxujaequt/rat-silovanje-bosna", to: "/serbian/lat/extra/ebxujaequt/rat-silovanje-bosna", status: 301
 
