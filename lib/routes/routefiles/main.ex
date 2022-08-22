@@ -405,7 +405,7 @@ defroutefile "Main" do
     return_404 if: true
   end
 
-  handle "/news/videos/:optimo_id", using: "NewsVideos", only_on: "test", examples: ["/news/videos/cemgppexd28o?mode=testData"] do
+  handle "/news/videos/:optimo_id", using: "NewsVideos", examples: ["/news/videos/cemgppexd28o?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -578,7 +578,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", only_on: "test", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
+  handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -599,7 +599,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", only_on: "test", examples: ["/naidheachdan/bhidio/cvpvqqp83g0o?mode=testData"] do
+  handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", examples: ["/naidheachdan/bhidio/cvpvqqp83g0o?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
