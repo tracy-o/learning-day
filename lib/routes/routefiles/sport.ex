@@ -974,12 +974,6 @@ defroutefile "Sport" do
     ]
   end
 
-  ## Sport BBC Live - LIVEXP-322 Temporary Redirect for app route testing
-  handle "/sport/internal/LIVEXP322", using: "SportAlphaFootballLivePage", examples: [] do
-    return_404()
-  end
-  redirect "/sport/internal/LIVEXP322.app", to: "/sport/alpha/football/live/cq04k1zenzmt", status: 302
-
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
   handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
