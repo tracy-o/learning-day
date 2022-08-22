@@ -405,6 +405,8 @@ defroutefile "Main" do
     return_404 if: true
   end
 
+  redirect "/news/videos", to: "/news", status: 301
+
   handle "/news/videos/:optimo_id", using: "NewsVideos", examples: ["/news/videos/cemgppexd28o?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
@@ -578,6 +580,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  redirect "/cymrufyw/fideo/", to: "/cymrufyw", status: 301
+
   handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
@@ -598,6 +602,8 @@ defroutefile "Main" do
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
+
+ redirect "/naidheachdan/bhidio", to: "/naidheachdan", status: 301
 
   handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", examples: ["/naidheachdan/bhidio/cvpvqqp83g0o?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
