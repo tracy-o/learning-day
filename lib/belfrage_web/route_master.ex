@@ -26,15 +26,51 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
+  defmacro handle(matcher, [using: id, platform: platform, examples: _examples] = args, do: block) do
+    quote bind_quoted: [
+            id: id,
+            platform: platform,
+            matcher: matcher,
+            args: args,
+            block: Macro.escape(block, unquote: false)
+          ] do
+      var!(add_route_with_block, BelfrageWeb.RouteMaster).(matcher, {id, platform}, args, block)
+    end
+  end
+
   defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args) do
     quote do
       var!(add_route_for_env, BelfrageWeb.RouteMaster).(unquote(matcher), unquote(id), unquote(args), unquote(env))
     end
   end
 
+  defmacro handle(matcher, [using: id, platform: platform, only_on: env, examples: _examples] = args) do
+    quote do
+      var!(add_route_for_env, BelfrageWeb.RouteMaster).(
+        unquote(matcher),
+        {unquote(id), unquote(platform)},
+        unquote(args),
+        unquote(env)
+      )
+    end
+  end
+
   defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args, do: block) do
     quote bind_quoted: [id: id, matcher: matcher, args: args, env: env, block: Macro.escape(block, unquote: false)] do
       var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster).(matcher, id, args, env, block)
+    end
+  end
+
+  defmacro handle(matcher, [using: id, only_on: env, platform: platform, examples: _examples] = args, do: block) do
+    quote bind_quoted: [
+            id: id,
+            platform: platform,
+            matcher: matcher,
+            args: args,
+            env: env,
+            block: Macro.escape(block, unquote: false)
+          ] do
+      var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster).(matcher, {id, platform}, args, env, block)
     end
   end
 
@@ -52,6 +88,12 @@ defmodule BelfrageWeb.RouteMaster do
   defmacro handle(matcher, [using: id, examples: _examples] = args) do
     quote do
       var!(add_route, BelfrageWeb.RouteMaster).(unquote(matcher), unquote(id), unquote(args))
+    end
+  end
+
+  defmacro handle(matcher, [using: id, platform: platform, examples: _examples] = args) do
+    quote do
+      var!(add_route, BelfrageWeb.RouteMaster).(unquote(matcher), {unquote(id), unquote(platform)}, unquote(args))
     end
   end
 
@@ -166,22 +208,40 @@ defmodule BelfrageWeb.RouteMaster do
         end
       end
 
-      var!(add_route, BelfrageWeb.RouteMaster) = fn matcher, id, args ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
+      var!(add_route, BelfrageWeb.RouteMaster) = fn
+        matcher, {id, platform}, args ->
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        get rewrite(matcher) do
-          BelfrageWeb.yield(unquote(id), var!(conn))
-        end
-      end
+          get rewrite(matcher) do
+            BelfrageWeb.yield(unquote(id), unquote(platform), var!(conn))
+          end
 
-      var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
-        if env == @production_environment do
+        matcher, id, args ->
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
             BelfrageWeb.yield(unquote(id), var!(conn))
           end
-        end
+      end
+
+      var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn
+        matcher, {id, platform}, args, env ->
+          if env == @production_environment do
+            @routes [{matcher, Enum.into(args, %{})} | @routes]
+
+            get rewrite(matcher) do
+              BelfrageWeb.yield(unquote(id), unquote(platform), var!(conn))
+            end
+          end
+
+        matcher, id, args, env ->
+          if env == @production_environment do
+            @routes [{matcher, Enum.into(args, %{})} | @routes]
+
+            get rewrite(matcher) do
+              BelfrageWeb.yield(unquote(id), var!(conn))
+            end
+          end
       end
 
       var!(add_route_for_env_proxy_pass, BelfrageWeb.RouteMaster) = fn matcher, id, args, env ->
@@ -202,22 +262,40 @@ defmodule BelfrageWeb.RouteMaster do
         end
       end
 
-      var!(add_route_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, block ->
-        @routes [{matcher, Enum.into(args, %{})} | @routes]
+      var!(add_route_with_block, BelfrageWeb.RouteMaster) = fn
+        matcher, {id, platform}, args, block ->
+          @routes [{matcher, Enum.into(args, %{})} | @routes]
 
-        get rewrite(matcher) do
-          unquote(block) || BelfrageWeb.yield(unquote(id), var!(conn))
-        end
-      end
+          get rewrite(matcher) do
+            unquote(block) || BelfrageWeb.yield(unquote(id), unquote(platform), var!(conn))
+          end
 
-      var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster) = fn matcher, id, args, env, block ->
-        if env == @production_environment do
+        matcher, id, args, block ->
           @routes [{matcher, Enum.into(args, %{})} | @routes]
 
           get rewrite(matcher) do
             unquote(block) || BelfrageWeb.yield(unquote(id), var!(conn))
           end
-        end
+      end
+
+      var!(add_route_for_env_with_block, BelfrageWeb.RouteMaster) = fn
+        matcher, {id, platform}, args, env, block ->
+          if env == @production_environment do
+            @routes [{matcher, Enum.into(args, %{})} | @routes]
+
+            get rewrite(matcher) do
+              unquote(block) || BelfrageWeb.yield(unquote(id), unquote(platform), var!(conn))
+            end
+          end
+
+        matcher, id, args, env, block ->
+          if env == @production_environment do
+            @routes [{matcher, Enum.into(args, %{})} | @routes]
+
+            get rewrite(matcher) do
+              unquote(block) || BelfrageWeb.yield(unquote(id), var!(conn))
+            end
+          end
       end
     end
   end
