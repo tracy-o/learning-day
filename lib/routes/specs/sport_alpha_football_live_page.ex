@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportAlphaFootballLivePage do
+defmodule Routes.Specs.SportFootballLivePage do
     def specs do
       %{
         owner: "#help-live",
