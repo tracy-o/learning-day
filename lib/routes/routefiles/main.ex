@@ -572,6 +572,8 @@ defroutefile "Main" do
   handle "/cymrufyw/components", using: "Cymrufyw", examples: []
   handle "/cymrufyw/hafan", using: "Cymrufyw", examples: [{"/cymrufyw/hafan", 301}]
 
+  redirect "/cymrufyw/fideo", to: "/cymrufyw", status: 301
+
   handle "/cymrufyw/:id", using: "CymrufywArticlePage", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
@@ -579,8 +581,6 @@ defroutefile "Main" do
   handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
-
-  redirect "/cymrufyw/fideo", to: "/cymrufyw", status: 301
 
   handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", examples: ["/cymrufyw/fideo/cr9zddqg9jro?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -595,6 +595,9 @@ defroutefile "Main" do
   handle "/naidheachdan/components", using: "Naidheachdan", examples: []
   redirect "/naidheachdan/amp/:id", to: "/naidheachdan/:id.amp", status: 301
   redirect "/naidheachdan/amp/:topic/:id", to: "/naidheachdan/:topic/:id.amp", status: 301
+
+  redirect "/naidheachdan/bhidio", to: "/naidheachdan", status: 301
+
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
@@ -602,8 +605,6 @@ defroutefile "Main" do
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
-
-  redirect "/naidheachdan/bhidio", to: "/naidheachdan", status: 301
 
   handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", examples: ["/naidheachdan/bhidio/cvpvqqp83g0o?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
