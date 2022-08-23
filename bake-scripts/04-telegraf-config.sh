@@ -20,6 +20,14 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   hostname = ""
   omit_hostname = true
 
+[[aggregators.basicstats]]
+  ## The period on which to flush & clear the aggregator.
+  period = "60s"
+
+  ## If true, the original metric will be dropped by the
+  ## aggregator and will not get sent to the output plugins.
+  drop_original = true
+
 [[outputs.cloudwatch]]
   region = "eu-west-1"
   namespace = "Belfrage"
