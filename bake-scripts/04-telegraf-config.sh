@@ -9,7 +9,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   stack_name = "$COMPONENT_NAME"
 
 [agent]
-  interval = "1s"
+  interval = "60s"
   round_interval = true
   metric_batch_size = 1000
   metric_buffer_limit = 10000
@@ -22,7 +22,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 
 [[aggregators.basicstats]]
   ## The period on which to flush & clear the aggregator.
-  period = "60s"
+  period = "1s"
 
   ## If true, the original metric will be dropped by the
   ## aggregator and will not get sent to the output plugins.
