@@ -20,8 +20,6 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   hostname = ""
   omit_hostname = true
 
-[[processors.delta]]
-
 [[aggregators.basicstats]]
   ## The period on which to flush & clear the aggregator.
   period = "60s"
@@ -41,7 +39,6 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   urls = ["http://127.0.0.1:9568/metrics"]
   tagexclude = ["url"]
   metric_version = 2
-  report_deltas = "true"
 
 [[inputs.cpu]]
   percpu = true
