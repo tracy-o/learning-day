@@ -941,11 +941,15 @@ defroutefile "Sport" do
     ]
   end
 
-  handle "/sport/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/videos/ck1n88jk5rjo?mode=testData"] do
+  redirect "/sport/videos", to: "/sport", status: 301
+
+  handle "/sport/videos/:optimo_id", using: "SportVideos", examples: ["/sport/videos/ck1n88jk5rjo?mode=testData"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+  
+  redirect "/sport/:discipline/videos", to: "/sport/:discipline", status: 301
 
-  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", only_on: "test", examples: ["/sport/football/videos/c5qr976rqvno?mode=testData"] do
+  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", examples: ["/sport/football/videos/c5qr976rqvno?mode=testData"] do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
