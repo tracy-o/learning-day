@@ -30,6 +30,8 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   ## aggregator and will not get sent to the output plugins.
   drop_original = true
 
+  stats = ["count","min","max","mean","non_negative_diff","non_negative_rate", "sum"]
+
 [[outputs.cloudwatch]]
   region = "eu-west-1"
   namespace = "Belfrage"
