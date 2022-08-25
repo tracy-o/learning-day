@@ -1,8 +1,22 @@
-defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
+defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-  alias Belfrage.Transformers.BitesizeWebcorePagesDiscriminator
+  alias Belfrage.Transformers.BitesizeLevelsPlatformDiscriminator
   alias Belfrage.Struct
+
+  @webcore_test_data %Struct{
+    private: %Struct.Private{
+      origin: "https://morph-router.test.api.bbci.co.uk",
+      platform: MorphRouter,
+      production_environment: "test"
+    },
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      path_params: %{"id" => "zr48q6f"}
+    }
+  }
 
   @morph_test_data %Struct{
     private: %Struct.Private{
@@ -13,7 +27,8 @@ defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
     request: %Struct.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
-      path: "/_web_core"
+      path: "/_web_core",
+      path_params: %{"id" => "abc123xyz789"}
     }
   }
 
@@ -25,7 +40,8 @@ defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
     request: %Struct.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
-      path: "/_web_core"
+      path: "/_web_core",
+      path_params: %{"id" => "abc123xyz789"}
     }
   }
 
@@ -37,7 +53,7 @@ defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
     :ok
   end
 
-  test "for all level ids, the origin and platform will be altered to Webcore on test" do
+  test "if the Level ID is in the Test Webcore allow list, the origin and platform will be altered" do
     lambda_function = Application.get_env(:belfrage, :pwa_lambda_function)
 
     assert {
@@ -53,13 +69,37 @@ defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
                request: %Struct.Request{
                  scheme: :http,
                  host: "www.bbc.co.uk",
-                 path: "/_web_core"
+                 path: "/_web_core",
+                 path_params: %{"id" => "zr48q6f"}
                }
              }
-           } = BitesizeWebcorePagesDiscriminator.call([], @morph_test_data)
+           } = BitesizeLevelsPlatformDiscriminator.call([], @webcore_test_data)
   end
 
-  test "if the environment is LIVE, the platform will remain as MorphRouter" do
+  test "if the Level ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
+    morph_endpoint = "https://morph-router.test.api.bbci.co.uk"
+
+    assert {
+             :ok,
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: []
+               },
+               private: %Struct.Private{
+                 origin: ^morph_endpoint,
+                 platform: MorphRouter
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"id" => "abc123xyz789"}
+               }
+             }
+           } = BitesizeLevelsPlatformDiscriminator.call([], @morph_test_data)
+  end
+
+  test "if the Level ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
     original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
     on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
@@ -78,9 +118,10 @@ defmodule Belfrage.Transformers.BitesizeWebcorePagesDiscriminatorTest do
                request: %Struct.Request{
                  scheme: :http,
                  host: "www.bbc.co.uk",
-                 path: "/_web_core"
+                 path: "/_web_core",
+                 path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeWebcorePagesDiscriminator.call([], @morph_live_data)
+           } = BitesizeLevelsPlatformDiscriminator.call([], @morph_live_data)
   end
 end
