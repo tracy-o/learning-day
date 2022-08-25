@@ -568,9 +568,7 @@ defroutefile "Main" do
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/blogs/*_any", using: "News", examples: ["/news/blogs/the_papers"]
   handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
-  handle "/news/correspondents/*_any", using: "NewsUk", examples: ["/news/correspondents/philcoomes"]
   handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
   handle "/news/events/*_any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
