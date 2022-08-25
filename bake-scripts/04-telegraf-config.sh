@@ -19,6 +19,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   precision = "0s"
   hostname = ""
   omit_hostname = true
+  debug = true
 
 [[aggregators.basicstats]]
   ## The period on which to flush & clear the aggregator.
