@@ -18,13 +18,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminator do
   def call(_rest, struct), do: then_do([], struct)
 
   defp is_webcore_id(id) do
-    application_env = Application.get_env(:belfrage, :production_environment)
-
-    if application_env === "live" do
-      id in @webcore_live_ids
-    else
-      id in @webcore_test_ids
-    end
+   Application.get_env(:belfrage, :production_environment) != "live" and id in @webcore_test_ids
   end
 
   defp maybe_update_origin(id, struct) do
