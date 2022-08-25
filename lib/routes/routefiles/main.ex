@@ -367,6 +367,91 @@ defroutefile "Main" do
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
   redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
 
+  # News Correspondents
+  redirect "/news/correspondents/allegrastratton", to: "/news/topics/cl16knzkz9yt", status: 301, ttl: 3600
+  redirect "/news/correspondents/amolrajan", to: "/news/topics/cl16knz07e2t", status: 301, ttl: 3600
+  redirect "/news/correspondents/andrewharding", to: "/news/topics/c8qx38n5jzlt", status: 301, ttl: 3600
+  redirect "/news/correspondents/andrewneil", to: "/news/topics/c5yd7pzx95qt", status: 301, ttl: 3600
+  redirect "/news/correspondents/andrewnorth", to: "/news/topics/c8qx38n5vy0t", status: 301, ttl: 3600
+  redirect "/news/correspondents/anthonyzurcher", to: "/news/topics/cvrkv4x14jkt", status: 301, ttl: 3600
+  redirect "/news/correspondents/arifansari", to: "/news/topics/cyzpjd57213t", status: 301, ttl: 3600
+  redirect "/news/correspondents/betsanpowys", to: "/news/topics/cqypkzl5xvrt", status: 301, ttl: 3600
+  redirect "/news/correspondents/branwenjeffreys", to: "/news/topics/c5yd7pzx3yyt", status: 301, ttl: 3600
+  redirect "/news/correspondents/briantaylor", to: "/news/topics/c2e418dqpkkt", status: 301, ttl: 3600
+  redirect "/news/correspondents/chriscook", to: "/news/topics/c5yd7pzxne0t", status: 301, ttl: 3600
+  redirect "/news/correspondents/chrisjackson", to: "/news/topics/c63d8496d2nt", status: 301, ttl: 3600
+  redirect "/news/correspondents/damiangrammaticas", to: "/news/topics/cr3pkx7v1d1t", status: 301, ttl: 3600
+  redirect "/news/correspondents/dannyshaw", to: "/news/topics/cd61kenlzv7t", status: 301, ttl: 3600
+  redirect "/news/correspondents/davidcornock", to: "/news/topics/c1l7jeydv1jt", status: 301, ttl: 3600
+  redirect "/news/correspondents/davidgregorykumar", to: "/news/topics/c01e2673yydt", status: 301, ttl: 3600
+  redirect "/news/correspondents/davidshukman", to: "/news/topics/c5yd7pzxek8t", status: 301, ttl: 3600
+  redirect "/news/correspondents/deborahmcgurran", to: "/news/topics/c63d8496r06t", status: 301, ttl: 3600
+  redirect "/news/correspondents/dominiccasciani", to: "/news/topics/cezlkpje5zkt", status: 301, ttl: 3600
+  redirect "/news/correspondents/douglasfraser", to: "/news/topics/c63d8496ky9t", status: 301, ttl: 3600
+  redirect "/news/correspondents/duncanweldon", to: "/news/topics/ckj6kvxqrppt", status: 301, ttl: 3600
+  redirect "/news/correspondents/emilymaitlis", to: "/news/topics/cr3pkx7vy68t", status: 301, ttl: 3600
+  redirect "/news/correspondents/faisalislam", to: "/news/topics/c909dyjvdk2t", status: 301, ttl: 3600
+  redirect "/news/correspondents/ferguswalsh", to: "/news/topics/c8xk6e03epdt", status: 301, ttl: 3600
+  redirect "/news/correspondents/gavinhewitt", to: "/news/topics/c5yd7pzxxrpt", status: 301, ttl: 3600
+  redirect "/news/correspondents/gordoncorera", to: "/news/topics/cyzpjd57zpxt", status: 301, ttl: 3600
+  redirect "/news/correspondents/helenthomas", to: "/news/topics/c48de9xr454t", status: 301, ttl: 3600
+  redirect "/news/correspondents/hughpym", to: "/news/topics/cezlkpjenj7t", status: 301, ttl: 3600
+  redirect "/news/correspondents/jamesgallagher", to: "/news/topics/ck899zee5x2t", status: 301, ttl: 3600
+  redirect "/news/correspondents/jameslandale", to: "/news/topics/c63d84969y6t", status: 301, ttl: 3600
+  redirect "/news/correspondents/jawadiqbal", to: "/news/topics/c1l7jeylnv1t", status: 301, ttl: 3600
+  redirect "/news/correspondents/johnhess", to: "/news/topics/cvrkv4xr93pt", status: 301, ttl: 3600
+  redirect "/news/correspondents/johnsimpson", to: "/news/topics/cj26k502xxzt", status: 301, ttl: 3600
+  redirect "/news/correspondents/jondonnison", to: "/news/topics/c48de9x8yrpt", status: 301, ttl: 3600
+  redirect "/news/correspondents/jonsopel", to: "/news/topics/cl16knz1d2lt", status: 301, ttl: 3600
+  redirect "/news/correspondents/jonathanamos", to: "/news/topics/cj26k502561t", status: 301, ttl: 3600
+  redirect "/news/correspondents/jonathanmarcus", to: "/news/topics/cne6kq5e00pt", status: 301, ttl: 3600
+  redirect "/news/correspondents/jonnydymond", to: "/news/topics/cezlkpjzdjzt", status: 301, ttl: 3600
+  redirect "/news/correspondents/justinrowlatt", to: "/news/topics/cn5e8npr2l3t", status: 301, ttl: 3600
+  redirect "/news/correspondents/kamalahmed", to: "/news/topics/czpd19nplk7t", status: 301, ttl: 3600
+  redirect "/news/correspondents/karishmavaswani", to: "/news/topics/c8qx38nq177t", status: 301, ttl: 3600
+  redirect "/news/correspondents/kattykay", to: "/news/topics/c8qx38nqx4qt", status: 301, ttl: 3600
+  redirect "/news/correspondents/katyaadler", to: "/news/topics/cne6kq5evr5t", status: 301, ttl: 3600
+  redirect "/news/correspondents/laurakuenssberg", to: "/news/topics/cvrkv4xr81qt", status: 301, ttl: 3600
+  redirect "/news/correspondents/lysedoucet", to: "/news/topics/c2e418d0zxqt", status: 301, ttl: 3600
+  redirect "/news/correspondents/markdarcy", to: "/news/topics/cezlkpjzx2jt", status: 301, ttl: 3600
+  redirect "/news/correspondents/markdevenport", to: "/news/topics/c7d9y05d1lnt", status: 301, ttl: 3600
+  redirect "/news/correspondents/markeaston", to: "/news/topics/c63d84937ejt", status: 301, ttl: 3600
+  redirect "/news/correspondents/markmardell", to: "/news/topics/c37dl8076jxt", status: 301, ttl: 3600
+  redirect "/news/correspondents/martinrosenbaum", to: "/news/topics/cx6p27961e1t", status: 301, ttl: 3600
+  redirect "/news/correspondents/markurban", to: "/news/topics/c1l7jeylzr3t", status: 301, ttl: 3600
+  redirect "/news/correspondents/martynoates", to: "/news/topics/c5yd7pzy8d8t", status: 301, ttl: 3600
+  redirect "/news/correspondents/mattmcgrath", to: "/news/topics/cyzpjd5z4d3t", status: 301, ttl: 3600
+  redirect "/news/correspondents/michaelcrick", to: "/news/topics/c7d9y05dy70t", status: 301, ttl: 3600
+  redirect "/news/correspondents/nicholaswatt", to: "/news/topics/cr3pkx73kv3t", status: 301, ttl: 3600
+  redirect "/news/correspondents/nickbryant", to: "/news/topics/c63d84936vyt", status: 301, ttl: 3600
+  redirect "/news/correspondents/nickrobinson", to: "/news/topics/cvrkv4xrr7kt", status: 301, ttl: 3600
+  redirect "/news/correspondents/nickservini", to: "/news/topics/c909dyj052rt", status: 301, ttl: 3600
+  redirect "/news/correspondents/nicktriggle", to: "/news/topics/cne6kq5e5r0t", status: 301, ttl: 3600
+  redirect "/news/correspondents/nikkifox", to: "/news/topics/cmwjjp141ydt", status: 301, ttl: 3600
+  redirect "/news/correspondents/patrickburns", to: "/news/topics/cj26k50er7xt", status: 301, ttl: 3600
+  redirect "/news/correspondents/paulbarltrop", to: "/news/topics/cp86kdjq015t", status: 301, ttl: 3600
+  redirect "/news/correspondents/peterhenley", to: "/news/topics/cezlkpjn4v7t", status: 301, ttl: 3600
+  redirect "/news/correspondents/peterhunt", to: "/news/topics/c01e267d41jt", status: 301, ttl: 3600
+  redirect "/news/correspondents/philcoomes", to: "/news/topics/cne6kq53z8dt", status: 301, ttl: 3600
+  redirect "/news/correspondents/richardmoss", to: "/news/topics/c909dyj5y94t", status: 301, ttl: 3600
+  redirect "/news/correspondents/robertpeston", to: "/news/topics/cne6kq5300nt", status: 301, ttl: 3600
+  redirect "/news/correspondents/rorycellanjones", to: "/news/topics/c01e267dpvrt", status: 301, ttl: 3600
+  redirect "/news/correspondents/sarahsmith", to: "/news/topics/cezlkpjn5x5t", status: 301, ttl: 3600
+  redirect "/news/correspondents/seancoughlan", to: "/news/topics/cx6p2795jvqt", status: 301, ttl: 3600
+  redirect "/news/correspondents/simonjack", to: "/news/topics/cl16knz857vt", status: 301, ttl: 3600
+  redirect "/news/correspondents/soutikbiswas", to: "/news/topics/c8qx38n91kkt", status: 301, ttl: 3600
+  redirect "/news/correspondents/timiredale", to: "/news/topics/cp86kdjq6p0t", status: 301, ttl: 3600
+  redirect "/news/correspondents/tomedwards", to: "/news/topics/ckj6kvx762pt", status: 301, ttl: 3600
+  redirect "/news/correspondents/tomfeilden", to: "/news/topics/c8qx38n9el2t", status: 301, ttl: 3600
+  redirect "/news/correspondents/tonyroe", to: "/news/topics/cj26k50e9pet", status: 301, ttl: 3600
+  redirect "/news/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 301, ttl: 3600
+  redirect "/news/correspondents/willgompertz", to: "/news/topics/cvrkv4xp7ret", status: 301, ttl: 3600
+  redirect "/news/correspondents/wyredavies", to: "/news/topics/cqypkzl0n79t", status: 301, ttl: 3600
+
+  # News Blogs
+  redirect "/news/blogs/trending", to: "/news/topics/cme72mv58q4t", status: 301, ttl: 3600
+  redirect "/news/blogs/the_papers", to: "/news/topics/cpml2v678pxt", status: 301, ttl: 3600
+
   handle "/news/topics/:id/:slug", using: "NewsTopics", examples: [] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -483,9 +568,7 @@ defroutefile "Main" do
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/blogs/*_any", using: "News", examples: ["/news/blogs/the_papers"]
   handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
-  handle "/news/correspondents/*_any", using: "NewsUk", examples: ["/news/correspondents/philcoomes"]
   handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
   handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
   handle "/news/events/*_any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
