@@ -67,7 +67,7 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminatorTest do
            } = BitesizeGuidesPlatformDiscriminator.call([], @webcore_test_data)
   end
 
-  test "if the Guide ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
+  test "if on Test environment and the Guide ID is not in the whitelist, the origin and platform will remain the same" do
     morph_endpoint = "https://morph-router.test.api.bbci.co.uk"
 
     assert {
@@ -81,7 +81,7 @@ defmodule Belfrage.Transformers.BitesizeGuidesPlatformDiscriminatorTest do
            } = BitesizeGuidesPlatformDiscriminator.call([], @morph_test_data)
   end
 
-  test "if the Guide ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
+  test "if on Live environment and the Guide ID is not in the whitelist, the origin and platform will remain the same" do
     original_env = Application.get_env(:belfrage, :production_environment)
     Application.put_env(:belfrage, :production_environment, "live")
     on_exit(fn -> Application.put_env(:belfrage, :production_environment, original_env) end)
