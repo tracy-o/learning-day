@@ -9,7 +9,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   stack_name = "$COMPONENT_NAME"
 
 [agent]
-  interval = "60s"
+  interval = "10s"
   round_interval = true
   metric_batch_size = 1000
   metric_buffer_limit = 10000
