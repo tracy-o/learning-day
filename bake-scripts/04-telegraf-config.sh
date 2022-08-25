@@ -9,12 +9,12 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   stack_name = "$COMPONENT_NAME"
 
 [agent]
-  interval = "60s"
+  interval = "1s"
   round_interval = true
   metric_batch_size = 1000
   metric_buffer_limit = 10000
   collection_jitter = "0s"
-  flush_interval = "60s"
+  flush_interval = "1s"
   flush_jitter = "0s"
   precision = "0s"
   hostname = ""
