@@ -18,6 +18,20 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
     }
   }
 
+  @webcore_test_data_with_year %Struct{
+    private: %Struct.Private{
+      origin: "https://morph-router.test.api.bbci.co.uk",
+      platform: MorphRouter,
+      production_environment: "test"
+    },
+    request: %Struct.Request{
+      scheme: :http,
+      host: "www.bbc.co.uk",
+      path: "/_web_core",
+      path_params: %{"level_id" => "zr48q6f", "year_id" => "zmyxxyc"}
+    }
+  }
+
   @morph_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
@@ -123,5 +137,28 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
                }
              }
            } = BitesizeLevelsPlatformDiscriminator.call([], @morph_live_data)
+  end
+
+  test "if the Level ID and year Id is in the Test Webcore allow list, the origin and platform will be altered" do
+    lambda_function = Application.get_env(:belfrage, :pwa_lambda_function)
+
+    assert {
+             :ok,
+             %Struct{
+               debug: %Struct.Debug{
+                 pipeline_trail: []
+               },
+               private: %Struct.Private{
+                 origin: ^lambda_function,
+                 platform: Webcore
+               },
+               request: %Struct.Request{
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
+                 path: "/_web_core",
+                 path_params: %{"level_id" => "zr48q6f", "year_id" => "zmyxxyc"}
+               }
+             }
+           } = BitesizeLevelsPlatformDiscriminator.call([], @webcore_test_data_with_year)
   end
 end
