@@ -28,7 +28,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
-      path_params: %{"level_id" => "zr48q6f", "year_id" => "zmyxxyc"}
+      path_params: %{"id" => "zr48q6f", "year_id" => "zmyxxyc"}
     }
   }
 
@@ -156,7 +156,7 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
                  scheme: :http,
                  host: "www.bbc.co.uk",
                  path: "/_web_core",
-                 path_params: %{"level_id" => "zr48q6f", "year_id" => "zmyxxyc"}
+                 path_params: %{"id" => "zr48q6f", "year_id" => "zmyxxyc"}
                }
              }
            } = BitesizeLevelsPlatformDiscriminator.call([], @webcore_test_data_with_year)

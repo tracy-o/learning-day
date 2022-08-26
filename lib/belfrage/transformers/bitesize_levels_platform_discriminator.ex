@@ -26,12 +26,10 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminator do
 
   def call(
         rest,
-        struct = %Struct{request: %Struct.Request{path_params: %{"level_id" => level_id, "year_id" => year_id}}}
+        struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "year_id" => year_id}}}
       ) do
-    then_do(rest, maybe_update_origin(level_id, struct))
-
     if year_id in @valid_year_ids do
-      then_do(rest, maybe_update_origin(level_id, struct))
+      then_do(rest, maybe_update_origin(id, struct))
     end
   end
 
