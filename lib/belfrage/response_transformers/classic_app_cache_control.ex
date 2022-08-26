@@ -11,18 +11,33 @@ defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
           request: %Struct.Request{subdomain: subdomain},
           response: %Struct.Response{
             cache_directive: %Belfrage.CacheControl{cacheability: cacheability, max_age: max_age}
-          }
+          },
+          private: %Struct.Private{personalised_request: personalised_request}
         }
       )
       when subdomain in ["news-app-classic", "news-app-global-classic", "news-app-ws-classic"] do
-    if cacheability == "public" && max_age < 60 do
-      cache_directive = Map.put(struct.response.cache_directive, :max_age, 60)
+    cond do
+      cacheability == "public" && max_age < 60 ->
+        cache_directive = Map.put(struct.response.cache_directive, :max_age, 60)
 
-      Struct.add(struct, :response, %{
-        cache_directive: cache_directive
-      })
-    else
-      struct
+        Struct.add(struct, :response, %{
+          cache_directive: cache_directive
+        })
+
+      cacheability == "private" && personalised_request == false ->
+        cache_directive = %Belfrage.CacheControl{
+          cacheability: "public",
+          max_age: 60,
+          stale_while_revalidate: 60,
+          stale_if_error: 90
+        }
+
+        Struct.add(struct, :response, %{
+          cache_directive: cache_directive
+        })
+
+      true ->
+        struct
     end
   end
 
