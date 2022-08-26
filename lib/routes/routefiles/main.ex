@@ -2440,8 +2440,11 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
 
 
-  handle "/bitesize/levels/:id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z98jmp3"]
-  handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeWebcorePages", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
+  handle "/bitesize/levels/:id", using: "BitesizeLevels", examples: ["/bitesize/levels/zr48q6f"]
+  handle "/bitesize/levels/:level_id/year/:year_id", using: "BitesizeLevels", examples: ["/bitesize/levels/z3g4d2p/year/zmyxxyc"]
+
+  handle "/bitesize/preview/levels/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/levels/zgckjxs"]
+  handle "/bitesize/preview/levels/:level_id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"]
 
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
   handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision"]
