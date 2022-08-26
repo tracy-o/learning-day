@@ -9,6 +9,8 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminator do
     "z3g4d2p"
   ]
 
+  @webcore_live_ids []
+
   def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
     then_do(rest, maybe_update_origin(id, struct))
   end
@@ -16,7 +18,13 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminator do
   def call(_rest, struct), do: then_do([], struct)
 
   defp is_webcore_id(id) do
-    Application.get_env(:belfrage, :production_environment) != "live" and id in @webcore_test_ids
+    application_env = Application.get_env(:belfrage, :production_environment)
+
+    if application_env === "live" do
+      id in @webcore_live_ids
+    else
+      id in @webcore_test_ids
+    end
   end
 
   defp maybe_update_origin(id, struct) do
