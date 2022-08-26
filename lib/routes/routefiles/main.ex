@@ -2374,8 +2374,11 @@ defroutefile "Main" do
 
   redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
 
-  handle "/bitesize/topics/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/z82hsbk"]
-  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
+  handle "/bitesize/topics/:id", using: "BitesizeTopics", examples: ["/bitesize/topics/z82hsbk"]
+  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
+
+  handle "/bitesize/preview/topics/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
+  handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
 
   handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
