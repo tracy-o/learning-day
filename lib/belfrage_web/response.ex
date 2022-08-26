@@ -39,6 +39,17 @@ defmodule BelfrageWeb.Response do
     |> put_response(response.http_status, response.body)
   end
 
+  def error(conn = %Conn{private: %{bbc_headers: %{cdn: true}}}, status) do
+    struct =
+      conn.assigns
+      |> Map.get(:struct, %Struct{request: %Struct.Request{cdn?: true}})
+      |> Struct.add(:response, %{http_status: status, body: ""})
+
+    conn
+    |> assign(:struct, struct)
+    |> put()
+  end
+
   def error(conn = %Conn{}, status) do
     struct =
       conn.assigns
