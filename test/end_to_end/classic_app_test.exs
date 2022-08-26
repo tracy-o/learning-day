@@ -64,5 +64,17 @@ defmodule EndToEnd.ClassicAppTest do
       assert ["public, stale-if-error=90, stale-while-revalidate=60, max-age=60"] =
                get_resp_header(conn, "cache-control")
     end
+
+    test "not found response returns a 404 with only varying on accept-encoding" do
+      conn =
+        conn(
+          :get,
+          "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route-will-404-as-no-match"
+        )
+        |> put_req_header("x-bbc-edge-cdn", "1")
+        |> Router.call([])
+
+      assert ["Accept-Encoding"] = get_resp_header(conn, "vary")
+    end
   end
 end
