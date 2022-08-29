@@ -28,7 +28,10 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
          }}
       end)
 
-      conn(:get, "/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar")
+      conn(
+        :get,
+        "https://news-app-classic.test.api.bbci.co.uk/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar"
+      )
       |> Router.call([])
     end
 
@@ -40,14 +43,17 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
       expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: _url}, _pool ->
         {:ok,
          %HTTP.Response{
-           headers: %{"cache-control" => "public, max-age=60"},
+           headers: %{"cache-control" => "public, max-age=5"},
            status_code: 200,
            body: "OK"
          }}
       end)
 
       conn =
-        conn(:get, "/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar")
+        conn(
+          :get,
+          "https://news-app-classic.test.api.bbci.co.uk/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar"
+        )
         |> Router.call([])
 
       assert ["public, stale-if-error=90, stale-while-revalidate=30, max-age=60"] ==

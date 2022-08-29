@@ -109,6 +109,7 @@ defmodule Belfrage.Processor do
       &update_route_state/1,
       &maybe_log_response_status/1,
       &ResponseTransformers.CacheDirective.call/1,
+      &ResponseTransformers.ClassicAppCacheControl.call/1,
       &ResponseTransformers.ResponseHeaderGuardian.call/1,
       &ResponseTransformers.PreCacheCompression.call/1,
       &Cache.store/1,
