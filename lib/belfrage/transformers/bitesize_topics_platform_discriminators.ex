@@ -28,7 +28,6 @@ defmodule Belfrage.Transformers.BitesizeTopicsPlatformDiscriminator do
         rest,
         struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "year_id" => year_id}}}
       ) do
-
     if year_id in @valid_year_ids do
       then_do(rest, maybe_update_origin(id, struct))
     end
