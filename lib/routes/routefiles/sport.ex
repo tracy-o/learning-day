@@ -982,6 +982,16 @@ defroutefile "Sport" do
     ]
   end
 
+  ## Sport BBC Live - Webcore Football Live (App Route) - TIPO IDs
+  redirect "/sport/football/live/:tipo_id.app", to: "/sport/app-webview/football/live/:tipo_id", status: 302
+
+  handle "/sport/app-webview/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: ["/sport/app-webview/football/live/c45ek2qpd5et?page=6"] do
+    return_404 if: [
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
+      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+    ]
+  end
+
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
   handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
