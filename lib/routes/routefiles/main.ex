@@ -2346,7 +2346,7 @@ defroutefile "Main" do
 
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeSubjects", examples: ["/bitesize/subjects/z8tnvcw", "/bitesize/subjects/zbhy4wx"]
-  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjects", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjects", examples: ["/bitesize/preview/subjects/zjxhfg8/year/zjpqqp3"]
 
   handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/subjects/z8tnvcw", "/bitesize/subjects/zbhy4wx"]
   handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/subjects/zjxhfg8/year/zjpqqp3"]
