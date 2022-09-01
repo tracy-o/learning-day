@@ -696,6 +696,7 @@ defroutefile "Main" do
   handle "/naidheachdan/*_any", using: "Naidheachdan", examples: []
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
+  handle "/pres-test/personalisation/*any", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation/follow-suggestions"]
   handle "/pres-test/*any", using: "PresTest", only_on: "test", examples: ["/pres-test/greeting-loader"]
 
   handle "/devx-test/personalisation", using: "DevXPersonalisation", only_on: "test", examples: ["/devx-test/personalisation"]
@@ -2338,10 +2339,6 @@ defroutefile "Main" do
 
   # /schedules catch all
   handle "/schedules/*_any", using: "Schedules", examples: []
-
-  # Participation
-
-  handle "/participation-test/follow", using: "ParticipationTestFollow", only_on: "test", examples: ["/participation-test/follow"]
 
   # Uploader
 
