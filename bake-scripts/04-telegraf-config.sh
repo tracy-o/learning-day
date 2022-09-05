@@ -9,37 +9,24 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   stack_name = "$COMPONENT_NAME"
 
 [agent]
-  interval = "60s"
+  interval = "10s"
   round_interval = true
   metric_batch_size = 1000
   metric_buffer_limit = 10000
   collection_jitter = "0s"
-  flush_interval = "60s"
-  flush_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "5s"
   precision = "0s"
   hostname = ""
   omit_hostname = true
-  debug = true
-
-[[aggregators.basicstats]]
-  ## The period on which to flush & clear the aggregator.
-  period = "1s"
-
-  ## If true, the original metric will be dropped by the
-  ## aggregator and will not get sent to the output plugins.
-  drop_original = true
-
-  stats = ["count","min","max","mean","non_negative_diff","non_negative_rate", "sum"]
 
 [[outputs.cloudwatch]]
   region = "eu-west-1"
   namespace = "Belfrage"
-  write_statistics = true
 
 [[inputs.prometheus]]
   urls = ["http://127.0.0.1:9568/metrics"]
   tagexclude = ["url"]
-  metric_version = 2
 
 [[inputs.cpu]]
   percpu = true
