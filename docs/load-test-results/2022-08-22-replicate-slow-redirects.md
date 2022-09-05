@@ -3,6 +3,7 @@ On Saturday 30th July 2022 we received a large spike of requests for the route '
 The unexpected thing about this according to our internal latency measurement it was taking us 309ms to return a binary response, much less that we should have done considering 301s have no body.
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-responses.png)
+
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-simorgh-responses.png)
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-cache-cpu.png)
@@ -10,6 +11,7 @@ The unexpected thing about this according to our internal latency measurement it
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-internal-latency-tooltip.png)
 
 ## Loadtests
+At the time of the incident there were 3 instances in service. We are using 1 instance so the rps will be scaled accordingly.
 
 ### Origin
 There is no need to set up an origin for the following 3 tests as we are testing a single route. Even if we follow the redirect there will be minimal impact on downstream as belfrage will cache the response.
@@ -50,6 +52,10 @@ read tcp 10.114.167.183:23574->52.214.98.115:443: read: connection reset by peer
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-2000rps-internal-latency-tooltip.png)
 
+While we produced a similar 'Return Binary Response' latency with the incident in the loadtest, it doesn't accurately represent the incident. This is because in the incident redirects are not being followed as in this loadtest we do. This means that the cache for '/vietnamese' is being hit very hard which brings down the local cache causing belfrage to struggle.
+
+We need to see the slow 'Return Binary Response' while the client isn't following the redirects. That way the cache shouldn't be hit at all.
+
 ### Not Following Redirects 200s 2000rps
 ```
 $ date && echo "GET https://www.belfrage.test.api.bbc.co.uk/vietnamese/" | vegeta attack -duration=300s -rate=2000 -redirects=-1  -header "x-bbc-edge-host:www.test.bbc.com" -http2=false -max-body=0 -timeout=30s | tee vietnamese_300s_2000rps_dont_follow_redirects_results.bin | vegeta report
@@ -79,12 +85,14 @@ Get https://www.belfrage.test.api.bbc.co.uk/vietnamese/: net/http: request cance
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-2000rps-no-follow-redirects-internal-latency-tooltip.png)
 
-### '/vietnamese' and '/vietnamese/' at the same time
+When we don't follow redirects the internal latency of belfrage is nowhere near the same level as it was during the incident. Maybe there were a few legitimate 200s which had huge binary response times due to belfrage having to handle millions of 301's?
+
+### '/vietnamese' and '/vietnamese/' at the same time (public)
 In the event we saw many 301s and a small amount of 300s I wondered if the vast amounts of 301s was making the 200 responses slow, which would explain the slow internal latency for 'return binary response'.
 
 300s 2000rps to '/vietnamese/' (doesn't follow redirect)
 ```
-$ date && echo "GET https://www.belfrage.test.api.bbc.co.uk/vietnamese/" | vegeta attack -duration=300s -rate=100  -header "x-bbc-edge-host:www.test.bbc.com" -redirects=-1 -http2=false -max-body=0 -timeout=30s | tee vietnamese_300s_2000rps_combo_redirects_results.bin | vegeta report
+$ date && echo "GET https://www.belfrage.test.api.bbc.co.uk/vietnamese/" | vegeta attack -duration=2000s -rate=100  -header "x-bbc-edge-host:www.test.bbc.com" -redirects=-1 -http2=false -max-body=0 -timeout=30s | tee vietnamese_300s_2000rps_combo_redirects_results.bin | vegeta report
 Tue 23 Aug 09:37:11 UTC 2022
 Requests      [total, rate, throughput]  599639, 1950.17, 144.41
 Duration      [total, attack, wait]      5m29.818598099s, 5m7.480352814s, 22.338245285s
@@ -119,6 +127,21 @@ Get https://www.belfrage.test.api.bbc.co.uk/vietnamese: read tcp 10.114.158.105:
 500 Internal Server Error
 ```
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-responses.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-page-timings.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-ws-responses.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-cpu.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-cache.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-pool.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100rps-200s-public-internal-latency.png)
+
+Again we see a small amount of 200's while there is a sustained number of 301's is enough to disrupt the cache and raise 'Return Binary Response' latency to 200ms , but as stated before this is not what is primarily being looked for.
 
 ### '/vietnamese' and '/vietnamese/' at the same time (private content)
 In the previous test the cache is being hit hard, but in the recorded event the cache isn't being hit at all. To try to replicate this better I used the `replayed-traffic:true` header to direct requests to origin simulator with a `private` cache control header.
@@ -173,6 +196,22 @@ Error Set:
 Get https://www.belfrage.test.api.bbc.co.uk/vietnamese: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-responses.png)
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-page-timings.png)
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-ws-responses.png)
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-cpu.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-cache.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-origin-simulator-responses.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-origin-simulator-timings.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-pool.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-internal-latency.png)
+
+We can see here that the cache isn't being hit. However the 'Return Binary Response' is tiny in comparison to the observed incident.
