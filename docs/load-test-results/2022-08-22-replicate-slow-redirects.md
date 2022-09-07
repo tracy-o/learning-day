@@ -277,3 +277,8 @@ This seems to replicate the incident accurately this can be seen by:
 * CPU utilisation is similar
 * Spikes in Erlang VM metrics (System Counts, VM run queue lengths, Cache locksmith queue length)
 
+Using this load test format this was analysed further using `observer_cli`.
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-4000rps-300s-observer-cli.png)
+
+You can see that `cache_locksmith` and `cache_stats` have a very high reduction count, high memory and often has high message queue. For this reason I think this is the cause of the slowdown. I can't find the causal link but I think the checking of the cache for a response that isn't there is eating up the schedulers time.
