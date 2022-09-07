@@ -8,6 +8,10 @@ The unexpected thing about this according to our internal latency measurement it
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-cache-cpu.png)
 
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-erlang-vm.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-cowboy.png)
+
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-internal-latency-tooltip.png)
 
 ## Loadtests
@@ -215,3 +219,61 @@ Get https://www.belfrage.test.api.bbc.co.uk/vietnamese: net/http: request cancel
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-internal-latency.png)
 
 We can see here that the cache isn't being hit. However the 'Return Binary Response' is tiny in comparison to the observed incident.
+
+---
+
+### '/vietnamese/' 4000rps 300s with unique query strings, not following redirects
+
+The loadtest below generates a list of urls with randomised query strings
+to replicate the incident as closely as possible.
+
+load test
+```
+cat loadtest_no_follow_redirect && date && ./loadtest_no_follow_redirect
+#!/usr/bin/env bash
+
+d=300
+r=4000
+n=$(($d * $r))
+(let i=0
+while [ $i -lt $n ]; do
+let i++
+echo GET https://sally.belfrage.test.api.bbc.co.uk/vietnamese/?component_env=$i
+done) | vegeta attack -header "x-bbc-edge-host:www.test.bbc.com" -header "replayed-traffic:true" -http2=false -max-body=0 -timeout=30s -redirects=-1  -rate=$r -duration=${d}s | tee vietnamese_300s_4000rps_querystring_results.bin | vegeta report
+Tue  6 Sep 07:35:23 UTC 2022
+Requests      [total, rate, throughput]  1081297, 3662.80, 1915.62
+Duration      [total, attack, wait]      6m2.504984189s, 4m55.210425113s, 1m7.294559076s
+Latencies     [mean, 50, 95, 99, max]    24.891259429s, 2.814909092s, 1m38.108436159s, 1m46.345227116s, 2m52.38298375s
+Bytes In      [total, mean]              0, 0.00
+Bytes Out     [total, mean]              0, 0.00
+Success       [ratio]                    64.22%
+Status Codes  [code:count]               0:385308  301:694421  500:1568
+Error Set:
+Get https://sally.belfrage.test.api.bbc.co.uk/vietnamese/?component_env=62: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
+Get https://sally.belfrage.test.api.bbc.co.uk/vietnamese/?component_env=981: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
+```
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-responses.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-page-timings.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-os.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-2000rps-redirect-100-rps-200s-private-cpu.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-cache.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-erlang-vm.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-cowboy.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-internal-latency.png)
+
+![](./img/2022-08-22-replicate-slow-redirects/vietnamese-300s-4000rps-no-follow-redirects-internal-latency-tooltip.png)
+
+This seems to replicate the incident accurately this can be seen by:
+* 333ms 'Return Binary Response' internal latency (309ms in incident)
+* Cache spike similar relative size and practically no cache hits
+* CPU utilisation is similar
+* Spikes in Erlang VM metrics (System Counts, VM run queue lengths, Cache locksmith queue length)
+
