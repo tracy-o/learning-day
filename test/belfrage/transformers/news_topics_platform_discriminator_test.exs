@@ -48,7 +48,6 @@ defmodule Belfrage.Transformers.NewsTopicsPlatformDiscriminatorTest do
                    "LambdaOriginAlias",
                    "Language",
                    "PlatformKillSwitch",
-                   "Chameleon",
                    "CircuitBreaker",
                    "DevelopmentRequests"
                  ],
