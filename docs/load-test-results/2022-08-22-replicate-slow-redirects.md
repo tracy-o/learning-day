@@ -1,6 +1,6 @@
 # Replicating Slow Redirects
 On Saturday 30th July 2022 we received a large spike of requests for the route '/vietnamese/' the trailing slash in this route led to it being redirected to '/vietnamese'.
-This unexpectedly caused the internal latency metric 'Return Binary Response' to take as long as 309ms, much less that you would expect from a 301 with no body.
+This unexpectedly caused the internal latency metric 'Return Binary Response' to take as long as 309ms, much more than you would expect from a 301 with no body.
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-responses.png)
 
