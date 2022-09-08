@@ -1,6 +1,6 @@
 # Replicating Slow Redirects
 On Saturday 30th July 2022 we received a large spike of requests for the route '/vietnamese/' the trailing slash in this route led to it being redirected to '/vietnamese'.
-The unexpected thing about this according to our internal latency measurement it was taking us 309ms to return a binary response, much less that we should have done considering 301s have no body.
+This unexpectedly caused the internal latency metric 'Return Binary Response' to take as long as 309ms, much less that you would expect from a 301 with no body.
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-event-responses.png)
 
@@ -16,8 +16,11 @@ The unexpected thing about this according to our internal latency measurement it
 
 ## Loadtest
 RPS: 4000
+
 Duration: 300 seconds
+
 The load test client does not follow redirects
+
 Each request is performed with a unique query string which is allowed by vietnamese ws routes.
 
 load test
@@ -71,8 +74,8 @@ This seems to replicate the incident accurately this can be seen by:
 * CPU utilisation is similar
 * Spikes in Erlang VM metrics (System Counts, VM run queue lengths, Cache locksmith queue length)
 
-Using this load test format this was analysed further using `observer_cli`.
+Using this load test format, this was analysed further using `observer_cli`.
 
 ![](./img/2022-08-22-replicate-slow-redirects/vietnamese-4000rps-300s-observer-cli.png)
 
-You can see that `cache_locksmith` and `cache_stats` have a very high reduction count, high memory and often has high message queue. For this reason I think this is the cause of the slowdown. I can't find the causal link but I think the checking of the cache for a response that isn't there is eating up the schedulers time.
+You can see that `cache_locksmith` and `cache_stats` have a very high reduction count, high memory and often has a high message queue. For this reason I think this is the cause of the slowdown. I can't find the causal link but I think the checking of the cache for a response that isn't there is eating up the schedulers time.
