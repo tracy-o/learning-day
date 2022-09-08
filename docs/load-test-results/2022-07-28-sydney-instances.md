@@ -154,17 +154,17 @@ Error Set:
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Requests.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000Requests.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Cpu.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000Cpu.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000VmMemory.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000VmMemory.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Mailbox.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000Mailbox.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000QueueLength.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000QueueLength.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyRps1500-3000Ram.png)
+![](./img/2022-07-28-sydney-instances/SydneyRps1500-3000Ram.png)
 
 
 ## Latency Vs Pool Workers
@@ -263,20 +263,20 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: EOF
 Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
 ```
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msRequest.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msRequest.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msCpu.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msCpu.png)
 
 Origin Simulator Pool
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msPool.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msPool.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msMailbox.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msMailbox.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msRam.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msRam.png)
 
 ## Performance with public content
 origin simulator configuration:
@@ -443,25 +443,25 @@ Get https://sydney.belfrage.test.api.bbc.co.uk/origin-simulator: EOF (Client.Tim
 net/http: request canceled (Client.Timeout exceeded while reading body)
 ```
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Requests.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Requests.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500OriginRequest.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500OriginRequest.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Cpu.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Cpu.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Cache.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Cache.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msVmMemory.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Mailbox.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Mailbox.png)
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
+![](./img/2022-07-28-sydney-instances/SydneyLatency100-1000msQueueLength.png)
 
 Origin Simulator Pool
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Pool.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Pool.png)
 The dip in workers her is due to a deployment of another branch in-between load tests which had 512 workers.
 
-![](./load-test-results/img/2022-07-28-sydney-instances/SydneyPublic1500-4500Ram.png)
+![](./img/2022-07-28-sydney-instances/SydneyPublic1500-4500Ram.png)
 
 
 
@@ -515,7 +515,7 @@ Public content loadtest results hitting one page with 100ms latency and a `max-a
 
 
 #### Comparing Public and Private Performance
-![](./load-test-results/img/2022-07-28-sydney-instances/public-vs-private-chart.svg)
+![](./img/2022-07-28-sydney-instances/public-vs-private-chart.svg)
 - blue line: private content, 0% cache hit
 - red line: public max-age=5, 98% cache hit
 [see interactively here](./load-test-results/data/2022-07-28-sydney-instance/priv-vs-pub-interactive.html)
@@ -533,7 +533,7 @@ rps_lower = the rps with private content (cache_ratio = 0) at given cpu utilisat
 rps_upper = the rps with public content (cache_ratio ~= 1) at given cpi utilisation X </br>
 cache_ratio = cache ratio we expect from the instance. 0 being no cache 1 being 100% cache hit.
 
-![](./load-test-results/img/2022-07-28-sydney-instances/instance-equation.svg)
+![](./img/2022-07-28-sydney-instances/instance-equation.svg)
 
 Assuming we want belfrage to typically have 20% CPU usage, then we can see from our results that each instance can handle about 430rps when the requests are private. `5000 / 430 ~= 12` **That's 12 instances when all the content is private**. This is the upper bound of instances. We also know each belfrage instance can handle 2500rps of private content comfortably. So **we can expect these instances to handle up to 30,000 rps spikes of private content.**
 
