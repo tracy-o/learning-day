@@ -2422,7 +2422,7 @@ defroutefile "Main" do
   handle "/music", using: "Music", examples: []
 
   # Bitesize
-  handle "/bitesize/secondary", using: "BitesizeTransition", examples: ["/bitesize/secondary"]
+  handle "/bitesize/preview/secondary", using: "BitesizeTransition", examples: ["/bitesize/preview/secondary"]
 
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
   handle "/bitesize/subjects/:id", using: "BitesizeSubjects", examples: ["/bitesize/subjects/z8tnvcw", "/bitesize/subjects/zbhy4wx"]
