@@ -6,7 +6,6 @@ defmodule Belfrage.Struct.Request do
   @derive {Inspect, except: [:raw_headers, :cookies]}
   defstruct [
     :path,
-    :payload,
     :method,
     :country,
     :request_hash,

@@ -25,22 +25,6 @@ defmodule Belfrage.Services.HTTPTest do
     }
   }
 
-  @post_struct %Struct{
-    private: %Struct.Private{
-      origin: "https://www.bbc.co.uk",
-      platform: SomePlatform
-    },
-    request: %Struct.Request{
-      payload: ~s({"some": "data"}),
-      path: "/_some_path",
-      method: "POST",
-      country: "gb",
-      query_params: %{
-        "foo" => "bar"
-      }
-    }
-  }
-
   @ok_response {
     :ok,
     %Clients.HTTP.Response{
@@ -82,26 +66,6 @@ defmodule Belfrage.Services.HTTPTest do
                  headers: %{"content-type" => "application/json"}
                }
              } = HTTP.dispatch(@get_struct)
-    end
-
-    test "post returns a response" do
-      expect_request(
-        %Clients.HTTP.Request{
-          method: :post,
-          url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: ~s({"some": "data"}),
-          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-        },
-        @ok_response
-      )
-
-      assert %Struct{
-               response: %Struct.Response{
-                 http_status: 200,
-                 body: "{\"some\": \"body\"}",
-                 headers: %{"content-type" => "application/json"}
-               }
-             } = HTTP.dispatch(@post_struct)
     end
 
     test "origin returns a 500 response" do
