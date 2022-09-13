@@ -2358,7 +2358,9 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/topics/:id/rss.xml", using: "TopicRss", examples: ["/topics/c57jjx4233xt/rss.xml"]
+  handle "/topics/:id/rss.xml", using: "TopicRss", examples: ["/topics/c57jjx4233xt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
 
   ## Live WebCore
   handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"] do
