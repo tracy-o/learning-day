@@ -187,7 +187,7 @@ defroutefile "Main" do
 
   handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
   
-  handle "/homepage/news/preview", using: "NewsHomePagePreview", example: ["/homepage/news/preview"]
+  handle "/homepage/news/preview", using: "NewsHomePagePreview", only_on: "test", example: ["/homepage/news/preview"]
 
   handle "/homepage/preview", using: "HomePagePreview", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", examples: ["/homepage/preview/scotland"]
