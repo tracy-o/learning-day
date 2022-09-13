@@ -1,7 +1,7 @@
 defmodule Belfrage.Transformers.TopicRssFeeds do
   use Belfrage.Transformers.Transformer
 
-  def call(_rest, struct) do
+  def call(rest, struct) do
     struct = Struct.add(struct, :request, %{
       path: "/fd/rss",
       path_params: %{
@@ -15,6 +15,6 @@ defmodule Belfrage.Transformers.TopicRssFeeds do
       }
     })
 
-    then_do(["CircuitBreaker"], struct)
+    then_do(rest, struct)
   end
 end
