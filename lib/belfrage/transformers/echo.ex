@@ -17,11 +17,11 @@ defmodule Belfrage.Transformers.Echo do
 
   # Sleep duration in ms
   defp sleep_duration(struct) do
-    (struct.request.query_params["sleep"] || struct.request.raw_headers["sleep"] || "0")
+    (struct.request.query_params["latency"] || struct.request.raw_headers["latency"] || "0")
     |> String.to_integer()
   end
 
-  # Body size duration in kb
+  # Body size in kb
   defp body_size(struct) do
     input =
       (struct.request.query_params["size"] || struct.request.raw_headers["size"] || "0")

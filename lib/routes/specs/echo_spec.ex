@@ -5,8 +5,8 @@ defmodule Routes.Specs.EchoSpec do
         runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
         pipeline: ["Echo"],
         platform: Webcore,
-        query_params_allowlist: ["size", "sleep"],
-        headers_allowlist: ["size", "sleep"]
+        query_params_allowlist: ["latency", "size"],
+        headers_allowlist: ["latency", "size"]
       }
     end
   end
