@@ -9,7 +9,7 @@ defmodule Routes.Specs.TopicRss do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "TopicRssFeeds", "AppPersonalisation", "Personalisation", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "RssFeedRedirect", "TopicRssFeeds", "AppPersonalisation", "Personalisation", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
