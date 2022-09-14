@@ -73,7 +73,7 @@ defmodule Belfrage.MixProject do
       {:telemetry_metrics_prometheus, "~> 1.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_metrics_statsd, "~> 0.6"},
-      {:observer_cli, "~> 1.7"},
+      {:observer_cli, "~> 1.7", only: :dev},
       {:joken, "~> 2.5"},
       {:cowlib, "~> 2.8", override: true},
       {:b64fast, "~> 0.2.3"}
