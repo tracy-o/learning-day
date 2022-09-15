@@ -16,6 +16,21 @@ String buildVariables() {
   envVars
 }
 
+// This function is adapted from deployReleaseVersion() in:
+// https://github.com/bbc/devops-tools-jenkins/blob/646f31354a1c59baedd07384cca5a58fca548892/vars/BBCNews.groovy#L131-L141
+// however here we can also speficfy the environment we want to deploy to.
+def deployReleaseVersion(String cosmosService, String version, Boolean forceRelease=false, String environment="test") {
+    stage('Cosmos deploy') {
+        if (env.BRANCH_NAME == 'master' || forceRelease) {
+            docker.image('node:14.15').inside("-u root -v /etc/pki/tls:/etc/pki/tls"){
+            sh('npm install')
+            sh("npm install git+https://${GITHUB_TOKEN}:x-oauth-basic@github.com/bbc/cosmos-deploy.git#v3")
+            sh("./node_modules/.bin/cosmos-deploy promote ${cosmosService} ${environment} ${version}")
+            }
+        }
+    }
+}
+
 node {
   cleanWs()
   checkout scm
@@ -66,10 +81,10 @@ node {
     BBCNews.setRepositories(params.SERVICE, 'repositories.json')
     BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
     if (params.DEPLOYMENT_ENVIRONMENT == "live") {
-      BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "test")
-      BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "live")
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "test")
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "live")
     } else {
-      BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, params.DEPLOYMENT_ENVIRONMENT)
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, params.DEPLOYMENT_ENVIRONMENT)
     }
     
 
