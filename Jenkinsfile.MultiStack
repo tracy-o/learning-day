@@ -40,7 +40,7 @@ node {
     parameters([
         choice(choices: ['belfrage', 'belfrage-preview', 'bruce-belfrage', 'cedric-belfrage', 'joan-belfrage', 'sally-belfrage', 'sydney-belfrage'], description: 'The Cosmos Service to create a release for', name: 'SERVICE'),
         booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE'),
-        choice(choices: ['test', 'live'], description: 'The highest environment the release will be promoted to', name: 'DEPLOYMENT_ENVIRONMENT')
+        choice(choices: ['test', 'live'], description: 'The highest environment the release will be promoted to (chosing \'live\' deploys to test then live)', name: 'DEPLOYMENT_ENVIRONMENT')
     ])
   ])
 
