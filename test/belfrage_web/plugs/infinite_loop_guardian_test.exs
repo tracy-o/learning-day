@@ -27,7 +27,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with //news" do
       # This must include the hostname because with // it thinks the host is following
       conn =
-        conn(:get, "www.example.com//news")
+        conn(:get, "http://www.example.com//news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
