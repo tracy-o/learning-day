@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Webcore.Request do
   def build(struct) do
     %{
       headers: headers(struct),
-      body: struct.request.payload,
+      body: nil,
       httpMethod: struct.request.method,
       path: struct.request.path,
       queryStringParameters: struct.request.query_params,

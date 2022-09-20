@@ -31,7 +31,7 @@ defmodule EndToEnd.LambdaTest do
     |> expect(:call, fn ^credentials,
                         ^lambda_arn,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{
                             "accept-encoding": "gzip",
                             country: "gb",

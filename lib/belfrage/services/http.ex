@@ -43,9 +43,6 @@ defmodule Belfrage.Services.HTTP do
         "GET" ->
           %{method: :get}
 
-        "POST" ->
-          %{method: :post, payload: request.payload}
-
         method ->
           raise "Unsupported method: " <> method
       end

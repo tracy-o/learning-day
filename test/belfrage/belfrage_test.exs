@@ -26,20 +26,6 @@ defmodule BelfrageTest do
     }
   }
 
-  @post_request_struct %Struct{
-    request: %Request{
-      path: "/",
-      method: "POST",
-      payload: ~s({"some": "data please"}),
-      country: "gb",
-      request_id: "pete-the-post-request"
-    },
-    private: %Private{
-      route_state_id: @route_state_id,
-      production_environment: "test"
-    }
-  }
-
   @web_core_lambda_response {:ok, %{"body" => "Some content", "headers" => %{}, "statusCode" => 200}}
   @web_core_404_lambda_response {:ok, %{"body" => "404 - not found", "headers" => %{}, "statusCode" => 404}}
   @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
@@ -92,22 +78,6 @@ defmodule BelfrageTest do
 
     assert thing.response.http_status == 404
     assert thing.response.body == "404 - not found"
-  end
-
-  test "POST request invokes lambda service with Lambda transformer" do
-    LambdaMock
-    |> expect(:call, fn _credentials,
-                        _lambda_func = "pwa-lambda-function:test",
-                        _payload = %{
-                          body: ~s({"some": "data please"}),
-                          headers: %{country: "gb"},
-                          httpMethod: "POST"
-                        },
-                        _opts = [] ->
-      @web_core_lambda_response
-    end)
-
-    Belfrage.handle(@post_request_struct)
   end
 
   @redirect_request_struct %Struct{

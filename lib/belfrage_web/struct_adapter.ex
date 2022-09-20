@@ -1,16 +1,13 @@
 defmodule BelfrageWeb.StructAdapter do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
-  alias Plug.Conn
-  import Plug.Conn
 
-  def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}, route_state_id) do
+  def adapt(conn = %Plug.Conn{private: %{bbc_headers: bbc_headers}}, route_state_id) do
     Logger.metadata(route_state_id: route_state_id)
 
     %Struct{
       request: %Request{
         path: conn.request_path,
-        payload: body(conn),
         raw_headers: raw_headers(conn),
         method: conn.method,
         country: bbc_headers.country,
@@ -49,13 +46,6 @@ defmodule BelfrageWeb.StructAdapter do
         preview_mode: conn.private.preview_mode
       }
     }
-  end
-
-  defp body(conn) do
-    case read_body(conn) do
-      {:ok, body, _conn} -> body
-      _ -> nil
-    end
   end
 
   defp raw_headers(conn), do: Enum.into(conn.req_headers, %{})
