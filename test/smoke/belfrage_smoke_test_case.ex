@@ -28,11 +28,7 @@ defmodule Belfrage.SmokeTestCase do
       location_header = Helper.get_header(response.headers, "location")
       assert not is_nil(location_header) and String.length(location_header) > 0
     else
-      assert IO.inspect(
-               inot(is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length,
-                 label: :assert_body
-               )
-             )
+      assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
     end
 
     refute {"belfrage-cache-status", "STALE"} in response.headers
