@@ -70,7 +70,6 @@ defmodule Belfrage.MixProject do
       {:x509, "~> 0.8", only: :dev},
       {:telemetry, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:telemetry_metrics_prometheus, "~> 1.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_metrics_statsd, "~> 0.6"},
       {:observer_cli, "~> 1.7", only: :dev},

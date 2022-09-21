@@ -84,77 +84,43 @@ defmodule Belfrage.MetricsMigration do
             end
 
         have_dimensions =
-          case @backend do
-            :statsd ->
-              for route_state <- @route_states,
-                  cache_metric <- @cache_metrics do
-                counter("cache.#{route_state}.#{cache_metric}.stale.hit",
-                  event_name: "belfrage.cache.#{route_state}.#{cache_metric}.stale.hit",
-                  measurement: :count
-                )
-              end ++
-                for platform <- @platforms do
-                  counter("#{platform}.pre_cache_compression",
-                    event_name: "belfrage.#{platform}.pre_cache_compression",
-                    measurement: :count
-                  )
-                end ++
-                for platform <- @platforms do
-                  summary("function.timing.#{platform}.request",
-                    event_name: "belfrage.function.timing.#{platform}.request",
-                    measurement: :duration,
-                    unit: {:native, :millisecond}
-                  )
-                end
-
-            :prometheus ->
-              [
-                counter("cache.stale.hit",
-                  event_name: [:belfrage, :cache, :stale, :hit],
-                  measurement: :count,
-                  tags: [:route_state, :cache_metric]
-                ),
-                counter("pre_cache_compression",
-                  event_name: [:belfrage, :pre_cache_compression],
-                  measurement: :count,
-                  tags: [:platform]
-                )
-              ]
-          end
+          for route_state <- @route_states,
+              cache_metric <- @cache_metrics do
+            counter("cache.#{route_state}.#{cache_metric}.stale.hit",
+              event_name: "belfrage.cache.#{route_state}.#{cache_metric}.stale.hit",
+              measurement: :count
+            )
+          end ++
+            for platform <- @platforms do
+              counter("#{platform}.pre_cache_compression",
+                event_name: "belfrage.#{platform}.pre_cache_compression",
+                measurement: :count
+              )
+            end ++
+            for platform <- @platforms do
+              summary("function.timing.#{platform}.request",
+                event_name: "belfrage.function.timing.#{platform}.request",
+                measurement: :duration,
+                unit: {:native, :millisecond}
+              )
+            end
 
         dont_have_dimensions ++ have_dimensions
       end
 
       def statix_dynamic_metrics() do
-        case @backend do
-          :statsd ->
-            for status_code <- @status_codes do
-              counter("service.S3.response.#{status_code}",
-                event_name: "belfrage.service.S3.response.#{status_code}",
-                measurement: :count
-              )
-            end ++
-              for platform <- @platforms, status_code <- @status_codes do
-                counter("service.#{platform}.response.#{status_code}",
-                  event_name: "belfrage.service.#{platform}.response.#{status_code}",
-                  measurement: :count
-                )
-              end
-
-          :prometheus ->
-            [
-              counter("service.S3.response",
-                event_name: "belfrage.service.S3.response",
-                measurement: :count,
-                tags: [:status_code]
-              ),
-              counter("service.response",
-                event_name: "belfrage.service.response",
-                measurement: :count,
-                tags: [:status_code, :platform]
-              )
-            ]
-        end
+        for status_code <- @status_codes do
+          counter("service.S3.response.#{status_code}",
+            event_name: "belfrage.service.S3.response.#{status_code}",
+            measurement: :count
+          )
+        end ++
+          for platform <- @platforms, status_code <- @status_codes do
+            counter("service.#{platform}.response.#{status_code}",
+              event_name: "belfrage.service.#{platform}.response.#{status_code}",
+              measurement: :count
+            )
+          end
       end
 
       def vm_metrics() do
@@ -225,10 +191,8 @@ defmodule Belfrage.MetricsMigration do
       end
 
       def latency_metrics() do
-        case @backend do
-          :statsd ->
-            Enum.map(
-              ~w(
+        Enum.map(
+          ~w(
       plug_pipeline
       process_request_headers
       set_request_route_state_data
@@ -247,46 +211,23 @@ defmodule Belfrage.MetricsMigration do
       return_json_response
       return_binary_response
     ),
-              fn name ->
-                summary("belfrage.latency.#{name}",
-                  event_name: "belfrage.#{name}.stop",
-                  measurement: :duration,
-                  unit: {:native, :microsecond}
-                )
-              end
+          fn name ->
+            summary("belfrage.latency.#{name}",
+              event_name: "belfrage.#{name}.stop",
+              measurement: :duration,
+              unit: {:native, :microsecond}
             )
-
-          :prometheus ->
-            [
-              summary("belfrage.latency",
-                event_name: "belfrage.latency.stop",
-                measurement: :duration,
-                unit: {:native, :microsecond},
-                tags: [:function_name]
-              )
-            ]
-        end
+          end
+        )
       end
 
       def request_metrics() do
-        case @backend do
-          :statsd ->
-            Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
-              summary("belfrage.request.#{name}.duration",
-                event_name: "belfrage.request.#{name}.stop",
-                unit: {:native, :millisecond}
-              )
-            end)
-
-          :prometheus ->
-            [
-              summary("belfrage.request.duration",
-                event_name: "belfrage.request.stop",
-                unit: {:native, :millisecond},
-                tags: [:authentication_type]
-              )
-            ]
-        end
+        Enum.map(~w(idcta_config jwk assume_webcore_lambda_role), fn name ->
+          summary("belfrage.request.#{name}.duration",
+            event_name: "belfrage.request.#{name}.stop",
+            unit: {:native, :millisecond}
+          )
+        end)
       end
 
       def route_state_metrics() do
@@ -450,36 +391,19 @@ defmodule Belfrage.MetricsMigration do
       end
 
       def service_error_metrics() do
-        case @backend do
-          :statsd ->
-            for platform <- @platforms do
-              [
-                counter("error.service.#{platform}.timeout",
-                  event_name: "belfrage.error.service.#{platform}.timeout",
-                  measurement: :count
-                ),
-                counter("error.service.#{platform}.timeout",
-                  event_name: "belfrage.error.service.#{platform}.request",
-                  measurement: :count
-                )
-              ]
-            end
-            |> :lists.flatten()
-
-          :prometheus ->
-            [
-              counter("error.service.timeout",
-                event_name: "belfrage.error.service.timeout",
-                measurement: :count,
-                tags: [:platform]
-              ),
-              counter("error.service.request",
-                event_name: "belfrage.error.service.request",
-                measurement: :count,
-                tags: [:platform]
-              )
-            ]
+        for platform <- @platforms do
+          [
+            counter("error.service.#{platform}.timeout",
+              event_name: "belfrage.error.service.#{platform}.timeout",
+              measurement: :count
+            ),
+            counter("error.service.#{platform}.timeout",
+              event_name: "belfrage.error.service.#{platform}.request",
+              measurement: :count
+            )
+          ]
         end
+        |> :lists.flatten()
       end
 
       def misc_metrics() do
