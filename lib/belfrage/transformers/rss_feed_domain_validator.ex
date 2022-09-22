@@ -1,7 +1,7 @@
 defmodule Belfrage.Transformers.RssFeedDomainValidator do
   use Belfrage.Transformers.Transformer
 
-  def call(rest, struct = %Struct{request: request = %Request{}}) do
+  def call(rest, struct) do
     if struct.request.subdomain == "feeds" do
       then_do(rest, struct)
     else
