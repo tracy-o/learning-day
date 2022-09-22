@@ -258,6 +258,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2022/us/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/us/results"]
+
+  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/us/states/al"]
+
   handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
