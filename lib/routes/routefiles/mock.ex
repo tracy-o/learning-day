@@ -89,6 +89,8 @@ defroutefile "Mock", "test" do
   # will remove and use real route spec in RESFRAME-4718
   handle("/classic-apps-route", using: "SomeClassicAppsRouteSpec", examples: [])
 
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", examples: []
+
   handle("/content/ldp/:guid", using: "ClassicAppFablLdp", examples: [])
 
   handle("/etag-support", using: "EtagSupport", examples: [])
