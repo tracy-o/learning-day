@@ -14,7 +14,6 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
     Struct.add(struct, :response, %{body: ""})
   end
 
-  def call(struct) do
-    struct
-  end
+  @impl true
+  def call(struct), do: struct
 end
