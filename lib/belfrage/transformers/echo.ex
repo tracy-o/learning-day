@@ -3,7 +3,6 @@ defmodule Belfrage.Transformers.Echo do
 
   @impl true
   def call(_rest, struct) do
-    IO.inspect(struct)
     Process.sleep(struct |> sleep_duration())
 
     {
