@@ -271,7 +271,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021", examples: ["/news/election/2021/england/councils/E06000023", "/news/election/2021/england/mayors/E47000001"] do
+  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021", examples: ["/news/election/2021/england/councils/E06000023"] do
     return_404 if: [
       !String.match?(division_name, ~r/^(councils|mayors)$/),
       !String.match?(division_id, ~r/^[E][0-9]{8}$/),
@@ -310,7 +310,8 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/news/election/2022/:polity/:division_name/:division_id", using: "NewsElectionResults", examples: ["/news/election/2022/northern-ireland/constituencies/N06000001", "/news/election/2022/england/councils/E06000001", "/news/election/2022/wales/councils/W06000001", "/news/election/2022/scotland/councils/S06000001", "/news/election/2022/england/mayors/E06000001"] do
+  handle "/news/election/2022/:polity/:division_name/:division_id", using: "NewsElectionResults", examples: ["/news/election/2022/northern-ireland/constituencies/N06000001", "/news/election/2022/wales/councils/W06000001"] do
+
     return_404 if: [
                  !String.match?(polity, ~r/^(northern-ireland|england|wales|scotland)$/),
                  !String.match?(division_name, ~r/^(constituencies|councils|mayors)$/),
@@ -351,8 +352,9 @@ defroutefile "Main" do
   handle "/news/localnews", using: "NewsLocalNews", examples: ["/news/localnews"]
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
   handle "/news/localnews/locations", using: "NewsLocalNews", examples: ["/news/localnews/locations"]
-  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: ["/news/localnews/locations/sitemap.xml"]
-  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", examples: ["/news/localnews/2643743-london/0"]
+  # this route goes to mozart and 500s on live, may be we should remove it?
+  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: []
+  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", examples: [{"/news/localnews/2643743-london/0", 302}]
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
@@ -498,7 +500,7 @@ defroutefile "Main" do
 
   redirect "/news/videos", to: "/news", status: 301
 
-  handle "/news/videos/:optimo_id", using: "NewsVideos", examples: ["/news/videos/cemgppexd28o?mode=testData"] do
+  handle "/news/videos/:optimo_id", using: "NewsVideos", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -512,7 +514,7 @@ defroutefile "Main" do
   # News indexes
   handle "/news/access-to-news", using: "NewsIndex", examples: ["/news/access-to-news"]
   handle "/news/business", using: "NewsIndex", examples: ["/news/business"]
-  handle "/news/components", using: "NewsComponents", examples: ["/news/components"]
+  handle "/news/components", using: "NewsComponents", examples: []
   handle "/news/coronavirus", using: "NewsIndex", examples: ["/news/coronavirus"]
   handle "/news/disability", using: "NewsIndex", examples: ["/news/disability"]
   handle "/news/education", using: "NewsIndex", examples: ["/news/education"]
@@ -572,7 +574,7 @@ defroutefile "Main" do
   handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
 
   # News section matchers
-  handle "/news/ampstories/*_any", using: "News", examples: ["/news/ampstories/moonmess/index.html"]
+  handle "/news/ampstories/*_any", using: "News", examples: [] # /news/ampstories/index.html it not currently served by belfrage
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
   handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
   handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
@@ -586,12 +588,12 @@ defroutefile "Main" do
   handle "/news/rss/*_any", using: "NewsRss", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
   handle "/news/science-environment/*_any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
   handle "/news/scotland/*_any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
-  handle "/news/slides/*_any", using: "News", examples: ["/news/slides/dress/3/yes-you-can-go-to-the-ball"]
+  handle "/news/slides/*_any", using: "News", examples: []
   handle "/news/special/*_any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
   handle "/news/technology/*_any", using: "NewsScienceAndTechnology", examples: ["/news/technology/31153361"]
   handle "/news/wales/*_any", using: "NewsUk", examples: ["/news/wales/south_east_wales"]
   handle "/news/world/*_any", using: "NewsWorld", examples: ["/news/world/europe"]
-  handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: ["/news/world_radio_and_tv/apple-touch-icon-precomposed.png"]
+  handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: []
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News", examples: [] do
