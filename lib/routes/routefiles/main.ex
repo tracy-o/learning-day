@@ -2371,27 +2371,44 @@ defroutefile "Main" do
   # Weather
   handle("/weather", using: "WeatherHomePage", examples: ["/weather"])
 
-  handle "/weather/search", using: "Weather", examples: ["/weather/search"] do
+  handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search"] do
     return_404(
       if: [
-        !String.match?(conn.query_params["s"] || "weather_s", ~r/^.{0,100}$/),
+        !String.match?(conn.query_params["s"] || "s", ~r/^.{0,100}$/),
         !String.match?(conn.query_params["ptrt"] || "/weather/", ~r/^\/weather\/$/),
-        !String.match?(conn.query_params["page"] || "001", ~r/^\d{1,3}$/)
+        !String.match?(conn.query_params["page"] || "1", ~r/^\d{1,3}$/)
       ]
     )
   end
 
+  handle "/weather/outlook", using: "Weather", examples: ["/weather/outlook"]
+
+  handle "/weather/map", using: "Weather", examples: ["/weather/map"]
+
+  handle "/weather/warnings", using: "WeatherWarning", examples: ["/weather/warnings"]
+  handle "/weather/warnings/weather", using: "WeatherWarning", examples: ["/weather/warnings/weather"]
+  handle "/weather/warnings/floods", using: "WeatherWarning", examples: ["/weather/warnings/floods"]
+
+  handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
+  handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
+    return_404 if: !(String.to_integer(region_id) in 1..12)
+  end
+  handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
+    return_404(
+      if: [
+        !String.match?(tide_location_id || "111a", ~r/^\d{1,4}[a-f]?$/),
+        !(String.to_integer(region_id) in 1..12)
+      ]
+    )
+  end
+  handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea", examples: []
   handle("/weather/coast-and-sea/*_any",
     using: "WeatherCoastAndSea",
     examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
   )
 
-  handle "/weather/:location_id", using: "Weather", examples: ["/weather/2650225"] do
-    return_404(
-      if: [
-        !String.match?(location_id || "euw1", ~r/^([a-z0-9]{1,50})$/)
-      ]
-    )
+  handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
+    return_404 if: !(String.to_integer(status) in [404, 500])
   end
 
   handle "/weather/language/:language", using: "Weather", examples: ["/weather/language/en"] do
@@ -2403,47 +2420,28 @@ defroutefile "Main" do
     )
   end
 
-  handle "/weather/about/:cps_id", using: "Weather", examples: [] do
-    return_404(
-      if: [
-        !String.match?(cps_id || "001", ~r/^\d{1,12}$/)
-      ]
-    )
+  handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !String.match?(cps_id || "1", ~r/^\d{1,12}$/)
+  end
+  handle "/weather/features/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !String.match?(cps_id || "1", ~r/^\d{1,12}$/)
+  end
+  handle "/weather/feeds/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !String.match?(cps_id || "1", ~r/^\d{1,12}$/)
+  end
+  handle "/weather/forecast-video/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !String.match?(cps_id || "1", ~r/^\d{1,12}$/)
   end
 
-  handle "/weather/features/:cps_id", using: "Weather", examples: [] do
-    return_404(
-      if: [
-        !String.match?(cps_id || "001", ~r/^\d{1,12}$/)
-      ]
-    )
+  handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
+    return_404 if: !String.match?(location_id || "e", ~r/^([a-z0-9]{1,50})$/)
   end
-
-  handle "/weather/feeds/:cps_id", using: "Weather", examples: [] do
-    return_404(
-      if: [
-        !String.match?(cps_id || "001", ~r/^\d{1,12}$/)
-      ]
-    )
-  end
-
-  handle "/weather/forecast-video/:cps_id", using: "Weather", examples: [] do
-    return_404(
-      if: [
-        !String.match?(cps_id || "001", ~r/^\d{1,12}$/)
-      ]
-    )
-  end
-
-  handle "/weather/:location_id/:day", using: "Weather", examples: ["/weather/2650225/today"] do
-    return_404(
-      if: [
-        !String.match?(day || "none", ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
-      ]
-    )
+  handle "/weather/:location_id/:day", using: "WeatherLocation", examples: ["/weather/2650225/today"] do
+    return_404 if: !String.match?(day || "none", ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
   end
 
   handle("/weather/*_any", using: "Weather", examples: [])
+
   # WebCore Hub
   redirect("/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302)
 
