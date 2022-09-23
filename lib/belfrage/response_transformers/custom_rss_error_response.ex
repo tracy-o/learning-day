@@ -6,17 +6,15 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
   def call(
         struct = %Struct{
           private: %Struct.Private{platform: Fabl},
-          request: %Struct.Request{path: path},
+          request: %Struct.Request{path: "/fd/rss"},
           response: %Struct.Response{http_status: http_status}
         }
       )
       when http_status > 399 do
-    if String.ends_with?(path, "rss.xml") do
-      Struct.add(struct, :response, %{body: ""})
-    else
-      struct
-    end
+    Struct.add(struct, :response, %{body: ""})
   end
 
-  def call(struct), do: struct
+  def call(struct) do
+    struct
+  end
 end
