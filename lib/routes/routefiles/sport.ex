@@ -1134,11 +1134,11 @@ defroutefile "Sport" do
 
   ## Sport Calendars
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar", "/sport/formula1/calendar/2022-04", "/sport/formula1/calendar/2022-04.app"]
+  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar"] # flakey /sport/formula1/calendar/2022-04, /sport/formula1/calendar/2022-04.app
   handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
-  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar", "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"]
+  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar"] # flakey "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
-  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: ["/sport/winter-sports/calendar", "/sport/winter-sports/calendar/2022-04", "/sport/winter-sports/calendar/2022-04.app"]
+  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: [] # flakey /sport/winter-sports/calendar/2022-04.app, /sport/winter-sports/calendar/2022-04
 
   ## Sport Fixtures pages
   redirect "/sport/basketball/:tournament/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
@@ -1146,14 +1146,14 @@ defroutefile "Sport" do
   redirect "/sport/basketball/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
   redirect "/sport/basketball/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
 
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/nhl/fixtures.app"]
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", examples: [] # flakey /sport/ice-hockey/nhl/fixtures.app
   handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/nhl/fixtures"]
   handle "/sport/:discipline/fixtures.app", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures.app"]
   handle "/sport/:discipline/fixtures", using: "SportDataPage", examples: ["/sport/ice-hockey/fixtures"]
 
   ## Sport Horse Racing Results
   handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results", "/sport/horse-racing/uk-ireland/results/2021-02-26", "/sport/horse-racing/uk-ireland/results/2021-02-26.app"]
+  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results"] # flakey /sport/horse-racing/uk-ireland/results/2021-02-26, /sport/horse-racing/uk-ireland/results/2021-02-26.app
 
   ## Sport Formula 1 Pages
   redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
@@ -1178,7 +1178,7 @@ defroutefile "Sport" do
   redirect "/sport/basketball/results.app", to: "/sport/basketball/scores-fixtures", status: 301
   redirect "/sport/basketball/results", to: "/sport/basketball/scores-fixtures", status: 301
 
-  handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results.app"]
+  handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: [] # flakey /sport/athletics/british-championship/results.app
   handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
   handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app"]
   handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results"]
@@ -1204,7 +1204,7 @@ defroutefile "Sport" do
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures"]
-  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures.app"]
+  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: [] # /sport/rugby-league/super-league/scores-fixtures.app
   handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
   handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures"]
@@ -1229,9 +1229,9 @@ defroutefile "Sport" do
   ## Sport Table pages
   handle "/sport/:discipline/tables.app", using: "SportDataPage", examples: ["/sport/rugby-league/tables.app"]
   handle "/sport/:discipline/tables", using: "SportDataPage", examples: ["/sport/rugby-league/tables"]
-  handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/table.app"]
+  handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage", examples: [] #flakey /sport/rugby-league/super-league/table.app
   handle "/sport/:discipline/:tournament/table", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/table"]
-  handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/table.app"]
+  handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/table.app
   handle "/sport/:discipline/teams/:team/table", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/table"]
 
   ## Sport Cricket Averages
@@ -1570,7 +1570,7 @@ defroutefile "Sport" do
   handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356.app?morph_env=live&renderer_env=live"]
   handle "/sport/formula1/:id", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356?morph_env=live&renderer_env=live"]
   handle "/sport/golf/:id.app", using: "SportMajorStoryPage", examples: ["/sport/golf/56713156.app?morph_env=live&renderer_env=live"]
-  handle "/sport/golf/:id", using: "SportMajorStoryPage", examples: ["/sport/golf/56713156?morph_env=live&renderer_env=live"]
+  handle "/sport/golf/:id", using: "SportMajorStoryPage", examples: [] # flakey /sport/golf/56713156?morph_env=live&renderer_env=live
   handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320.app?morph_env=live&renderer_env=live"]
   handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320?morph_env=live&renderer_env=live"]
   handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage", examples: ["/sport/rugby-union/56719025.app?morph_env=live&renderer_env=live"]
