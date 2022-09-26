@@ -2331,7 +2331,10 @@ defroutefile "Main" do
 
   # /schedules
 
-  handle "/schedules/network/:network/on-now", using: "Schedules", examples: [{"/schedules/network/cbeebies/on-now", 302}] do
+  # Route example removed: {"/schedules/network/cbeebies/on-now", 302} it gave
+  # 302 while cbeebies channel broadcasting, but gave 200 with blank page
+  # outside of broadcast hours.
+  handle "/schedules/network/:network/on-now", using: "Schedules", examples: [] do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
