@@ -17,7 +17,12 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
-        Metrics.event(~w(webcore response)a, %{status_code: response.http_status, route_spec: private.route_state_id})
+        Metrics.multi_execute([[:belfage, :webcore, :response], [:belfrage, :platform, :response]], %{}, %{
+          platform: "Lambda",
+          status_code: response.http_status,
+          route_spec: private.route_state_id
+        })
+
         response
       else
         {:error, error_code} ->

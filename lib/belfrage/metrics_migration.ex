@@ -123,6 +123,27 @@ defmodule Belfrage.MetricsMigration do
           end
       end
 
+      def platform_metrics() do
+        [
+          counter("platform.response",
+            event_name: "belfrage.platform.response",
+            measurement: :count,
+            tags: [:status_code, :platform]
+          ),
+          counter(
+            "platform.response",
+            event_name: "belfrage.platform.response",
+            measurement: :count,
+            tags: [:platform, :route_spec, :status_code]
+          ),
+          counter("platform.response.pre_cache_compression",
+            event_name: "belfrage.platform.pre_cache_compression.response",
+            measurement: :count,
+            tags: [:platform]
+          )
+        ]
+      end
+
       def vm_metrics() do
         [
           last_value("vm.memory.total", unit: {:byte, :kilobyte}),
