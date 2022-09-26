@@ -44,12 +44,14 @@ defmodule Belfrage.Services.Fabl do
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
     :telemetry.execute([:belfrage, :error, :service, :Fabl, :timeout], %{})
     log(:timeout, struct)
+    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
     :telemetry.execute([:belfrage, :error, :service, :Fabl, :request], %{})
     log(error, struct)
+    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
