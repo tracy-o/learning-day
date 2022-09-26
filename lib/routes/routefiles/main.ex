@@ -10,167 +10,167 @@ import BelfrageWeb.Routefile
 defroutefile "Main" do
   # Vanity URLs
 
-  redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
-  redirect("http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://m.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://www.bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302)
-  redirect("http://bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302)
-  redirect("http://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://m.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://www.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://m.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://www.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://m.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://www.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://m.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://www.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://m.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://www.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://m.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://www.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://m.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://www.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://m.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://www.bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
-  redirect("http://bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
-  redirect("http://www.bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
-  redirect("http://bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
-  redirect("http://www.bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
-  redirect("http://bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
-  redirect("http://www.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://m.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://www.bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302)
-  redirect("http://bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302)
-  redirect("http://www.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://m.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://www.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://m.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://www.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://m.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://www.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://m.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://www.bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302)
-  redirect("http://bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302)
-  redirect("http://www.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://m.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://www.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://m.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://www.bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302)
-  redirect("http://bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302)
-  # redirect("http://www.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  # redirect("http://m.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  # redirect("http://bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  redirect("http://www.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://m.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://www.bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302)
-  redirect("http://bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302)
-  redirect("http://www.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://m.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://www.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://m.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://www.bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302)
-  redirect("http://bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302)
-  redirect("http://www.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://m.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://www.bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302)
-  redirect("http://bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302)
-  redirect("http://www.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://m.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://www.bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302)
-  redirect("http://bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302)
-  redirect("http://www.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://m.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://www.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://m.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://www.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://m.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://www.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://m.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://www.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://m.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://www.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://m.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://www.bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302)
-  redirect("http://bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302)
-  redirect("http://www.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://m.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
+  redirect "http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302
+  redirect "http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://m.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://www.bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302
+  redirect "http://bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302
+  redirect "http://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://m.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://www.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://m.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://www.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://m.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://www.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://m.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://www.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://m.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://www.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://m.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://www.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://m.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://www.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://m.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://www.bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302
+  redirect "http://bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302
+  redirect "http://www.bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302
+  redirect "http://bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302
+  redirect "http://www.bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302
+  redirect "http://bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302
+  redirect "http://www.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://m.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://www.bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302
+  redirect "http://bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302
+  redirect "http://www.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://m.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://www.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://m.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://www.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://m.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://www.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://m.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://www.bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302
+  redirect "http://bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302
+  redirect "http://www.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://m.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://www.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://m.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://www.bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302
+  redirect "http://bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302
+  # redirect "http://www.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  # redirect "http://m.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  # redirect "http://bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  redirect "http://www.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://m.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://www.bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302
+  redirect "http://bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302
+  redirect "http://www.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://m.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://www.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://m.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://www.bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302
+  redirect "http://bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302
+  redirect "http://www.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://m.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://www.bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302
+  redirect "http://bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302
+  redirect "http://www.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://m.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://www.bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302
+  redirect "http://bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302
+  redirect "http://www.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://m.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://www.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://m.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://www.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://m.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://www.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://m.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://www.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://m.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://www.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://m.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://www.bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302
+  redirect "http://bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302
+  redirect "http://www.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://m.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
 
-  redirect("/news/0", to: "/news", status: 302)
-  redirect("/news/2/hi", to: "/news", status: 302)
-  redirect("/news/mobile", to: "/news", status: 302)
-  redirect("/news/popular/read", to: "/news", status: 302)
+  redirect "/news/0", to: "/news", status: 302
+  redirect "/news/2/hi", to: "/news", status: 302
+  redirect "/news/mobile", to: "/news", status: 302
+  redirect "/news/popular/read", to: "/news", status: 302
 
-  redirect("/news/help", to: "/news", status: 302)
-  redirect("/news/also_in_the_news", to: "/news", status: 302)
-  redirect("/news/cop26-alerts", to: "/news/help-58765412", status: 302)
-  redirect("/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302)
-  redirect("/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302)
-  redirect("/news/nie22-alerts", to: "/news/help-60495859", status: 302)
+  redirect "/news/help", to: "/news", status: 302
+  redirect "/news/also_in_the_news", to: "/news", status: 302
+  redirect "/news/cop26-alerts", to: "/news/help-58765412", status: 302
+  redirect "/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302
+  redirect "/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302
+  redirect "/news/nie22-alerts", to: "/news/help-60495859", status: 302
 
-  redirect("/news/magazine", to: "/news/stories", status: 302)
+  redirect "/news/magazine", to: "/news/stories", status: 302
 
-  redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+  redirect "/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
 
-  redirect("/news/video_and_audio/international", to: "/news/av/10462520", status: 302)
-  redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
-  redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
+  redirect "/news/video_and_audio/international", to: "/news/av/10462520", status: 302
+  redirect "/news/video_and_audio/video", to: "/news/av/10318236", status: 302
+  redirect "/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302
   redirect "/news/world-middle-east-27796850", to: "/programmes/w13xtvn3", status: 301
 
-  redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
-  redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
-  redirect("/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
-  redirect("/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
-  redirect("/news/election", to: "/news/politics", status: 302)
-  redirect("/news/election/2021", to: "/news/politics", status: 302)
-  redirect("/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
-  redirect("/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
-  redirect("/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302)
+  redirect "/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
+  redirect "/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
+  redirect "/news/election", to: "/news/politics", status: 302
+  redirect "/news/election/2021", to: "/news/politics", status: 302
+  redirect "/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
+  redirect "/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
+  redirect "/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
+  redirect "/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
+  redirect "/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
+  redirect "/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
+  redirect "/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302
 
-  redirect("https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302)
-  redirect("https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
-  redirect("https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302)
-  redirect("https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
+  redirect "https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302
+  redirect "https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
+  redirect "https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302
+  redirect "https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
 
   # Home Page
 
@@ -482,7 +482,7 @@ defroutefile "Main" do
   handle "/news/:asset_id/embed", using: "NewsVideosEmbed", examples: [{"/news/health-54088206/embed", 302}, {"/news/uk-politics-54003483/embed?amp=1", 302}]
   handle "/news/:asset_id/embed/:pid", using: "NewsVideosEmbed", examples: [{"/news/health-54088206/embed/p08m8yx4", 302}, {"/news/health-54088206/embed/p08m8yx4?amp=1", 302}]
 
-  redirect("/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302)
+  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
 
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
@@ -2369,7 +2369,7 @@ defroutefile "Main" do
   end
 
   # Weather
-  handle("/weather", using: "WeatherHomePage", examples: ["/weather"])
+  handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
   handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search"] do
     return_404(
@@ -2385,9 +2385,9 @@ defroutefile "Main" do
 
   handle "/weather/map", using: "Weather", examples: ["/weather/map"]
 
-  handle "/weather/warnings", using: "WeatherWarning", examples: ["/weather/warnings"]
-  handle "/weather/warnings/weather", using: "WeatherWarning", examples: ["/weather/warnings/weather"]
-  handle "/weather/warnings/floods", using: "WeatherWarning", examples: ["/weather/warnings/floods"]
+  handle "/weather/warnings", using: "WeatherWarnings", examples: ["/weather/warnings"]
+  handle "/weather/warnings/weather", using: "WeatherWarnings", examples: ["/weather/warnings/weather"]
+  handle "/weather/warnings/floods", using: "WeatherWarnings", examples: ["/weather/warnings/floods"]
 
   handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
   handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
@@ -2402,10 +2402,7 @@ defroutefile "Main" do
     )
   end
   handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea", examples: []
-  handle("/weather/coast-and-sea/*_any",
-    using: "WeatherCoastAndSea",
-    examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
-  )
+  handle "/weather/coast-and-sea/*_any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
 
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
     return_404 if: !(String.to_integer(status) in [404, 500])
@@ -2440,17 +2437,17 @@ defroutefile "Main" do
     return_404 if: !String.match?(day || "none", ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
   end
 
-  handle("/weather/*_any", using: "Weather", examples: [])
+  handle "/weather/*_any", using: "Weather", examples: []
 
   # WebCore Hub
-  redirect("/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302)
+  redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302
 
   # News Beat
 
-  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+  redirect "/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat", to: "/news/newsbeat", status: 301
 
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
@@ -2599,7 +2596,7 @@ defroutefile "Main" do
 
   handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
   handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
-  redirect("/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302)
+  redirect "/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302
 
   handle "/echo", using: "EchoSpec", only_on: "test", examples: ["/echo"]
 

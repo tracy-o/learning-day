@@ -1,4 +1,4 @@
-defmodule Routes.Specs.WeatherWarning do
+defmodule Routes.Specs.WeatherWarnings do
     def specs do
       %{
         owner: "DEWeather@bbc.co.uk",
