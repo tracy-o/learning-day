@@ -328,6 +328,10 @@ defmodule Belfrage.MetricsMigration do
 
       def plug_metrics() do
         [
+          counter(
+            "belfrage.request.count",
+            event_name: "belfrage.plug.start"
+          ),
           summary(
             "belfrage.request.duration",
             event_name: "belfrage.plug.stop",
