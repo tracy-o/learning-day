@@ -29,8 +29,20 @@ defmodule Belfrage.Services.Webcore do
           Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.route_state_id})
 
           if error_code == :function_not_found && private.preview_mode == "on" do
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Lambda",
+              status_code: "404",
+              route_spec: private.route_state_id
+            })
+
             %Response{http_status: 404, body: "404 - not found"}
           else
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Lambda",
+              status_code: "500",
+              route_spec: private.route_state_id
+            })
+
             %Response{http_status: 500}
           end
       end
