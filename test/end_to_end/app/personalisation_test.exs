@@ -83,7 +83,7 @@ defmodule EndToEnd.App.PersonalisationTest do
         |> make_request()
 
       assert conn.status == 500
-      {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
+      assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
     end
 
     test "internal error in Belfrage" do
