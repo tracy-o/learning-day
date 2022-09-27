@@ -2374,7 +2374,7 @@ defroutefile "Main" do
   handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search"] do
     return_404(
       if: [
-        String.length(conn.query_params["s"] || "") not in 1..100,
+        String.length(conn.query_params["s"] || "") not in 0..100,
         !String.match?(conn.query_params["ptrt"] || "/weather/", ~r/^\/weather\/$/),
         !String.match?(conn.query_params["page"] || "1", ~r/^\d{1,3}$/)
       ]
