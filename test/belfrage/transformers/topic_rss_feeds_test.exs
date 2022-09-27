@@ -25,7 +25,7 @@ defmodule Belfrage.Transformers.TopicRssFeedsTest do
            } =
              TopicRssFeeds.call([], %Struct{
                request: %Struct.Request{
-                path: "/topics/testId/rss.xml" ,
+                 path: "/topics/testId/rss.xml",
                  path_params: %{"id" => "testId"}
                }
              })
