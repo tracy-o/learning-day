@@ -574,7 +574,7 @@ defroutefile "Main" do
   handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
 
   # News section matchers
-  handle "/news/ampstories/*_any", using: "News", examples: [] # /news/ampstories/index.html it not currently served by belfrage
+  handle "/news/ampstories/*_any", using: "News", examples: []
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
   handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
   handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
@@ -2331,10 +2331,7 @@ defroutefile "Main" do
 
   # /schedules
 
-  # Route example removed: {"/schedules/network/cbeebies/on-now", 302} it gave
-  # 302 while cbeebies channel broadcasting, but gave 200 with blank page
-  # outside of broadcast hours.
-  handle "/schedules/network/:network/on-now", using: "Schedules", examples: [] do
+  handle "/schedules/network/:network/on-now", using: "Schedules", examples: [{"/schedules/network/bbcone/on-now", 302}] do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
@@ -2458,7 +2455,7 @@ defroutefile "Main" do
   handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"]
 
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: [] # redirects to /bitesize/guides/zw3bfcw/revision/1
+  handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: [{"bitesize/guides/zw3bfcw/revision", 302}]
   handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw7xfcw/test"]
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
