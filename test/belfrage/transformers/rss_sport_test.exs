@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.RssSportTest do
+defmodule Belfrage.Transformers.SportRssPlatformTopicIdMappingTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.RssSport
+  alias Belfrage.Transformers.SportRssPlatformTopicIdMapping
   alias Belfrage.Struct
 
   test "when the path matches a key from the mapping object the request is pointed to the rss FABL module, with the correct query parameter" do
@@ -29,7 +29,7 @@ defmodule Belfrage.Transformers.RssSportTest do
                }
              }
            } =
-             RssSport.call([], %Struct{
+             SportRssPlatformTopicIdMapping.call([], %Struct{
                request: %Struct.Request{path: "/sport/rss.xml"}
              })
   end
@@ -46,7 +46,7 @@ defmodule Belfrage.Transformers.RssSportTest do
                }
              }
            } =
-             RssSport.call([], %Struct{
+             SportRssPlatformTopicIdMapping.call([], %Struct{
                private: %Struct.Private{
                  platform: Karanga,
                  origin: karanga_endpoint

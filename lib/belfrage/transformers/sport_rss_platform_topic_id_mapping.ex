@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.RssSport do
+defmodule Belfrage.Transformers.SportRssPlatformTopicIdMapping do
   @moduledoc """
   Does the mapping between path and topicId.
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
