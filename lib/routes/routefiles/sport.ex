@@ -972,8 +972,8 @@ defroutefile "Sport" do
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
-  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
-  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live
+  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: [] # flakey "/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"
+  handle "/sport/live/*_any", using: "SportLivePage", examples: [] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live, "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"
 
   ## Sport BBC Live - Webcore Football Live - TIPO IDs
   handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
