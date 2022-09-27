@@ -973,7 +973,7 @@ defroutefile "Sport" do
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
   handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: ["/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"]
-  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"]
+  handle "/sport/live/*_any", using: "SportLivePage", examples: ["/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live
 
   ## Sport BBC Live - Webcore Football Live - TIPO IDs
   handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
@@ -1041,7 +1041,7 @@ defroutefile "Sport" do
   handle "/sport/athletics", using: "SportMajorIndexPage", examples: ["/sport/athletics"]
   handle "/sport/basketball.app", using: "SportIndexPage", examples: ["/sport/basketball.app"]
   handle "/sport/basketball", using: "SportIndexPage", examples: ["/sport/basketball"]
-  handle "/sport/boxing.app", using: "SportIndexPage", examples: ["/sport/boxing.app"]
+  handle "/sport/boxing.app", using: "SportIndexPage", examples: [] # flakey /sport/boxing.app
   handle "/sport/boxing", using: "SportIndexPage", examples: ["/sport/boxing"]
   handle "/sport/commonwealth-games.app", using: "SportIndexPage", examples: ["/sport/commonwealth-games.app"]
   handle "/sport/commonwealth-games", using: "SportIndexPage", examples: ["/sport/commonwealth-games"]
@@ -1206,8 +1206,8 @@ defroutefile "Sport" do
   handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: [] # /sport/rugby-league/super-league/scores-fixtures.app
   handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures.app"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/scores-fixtures"]
+  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/scores-fixtures.app
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/scores-fixtures
 
   ## Sport League Two Table page
 
@@ -1232,7 +1232,7 @@ defroutefile "Sport" do
   handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage", examples: [] #flakey /sport/rugby-league/super-league/table.app
   handle "/sport/:discipline/:tournament/table", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/table"]
   handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/table.app
-  handle "/sport/:discipline/teams/:team/table", using: "SportDataPage", examples: ["/sport/rugby-league/teams/st-helens/table"]
+  handle "/sport/:discipline/teams/:team/table", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/table
 
   ## Sport Cricket Averages
   handle "/sport/cricket/averages.app", using: "SportDataPage", examples: ["/sport/cricket/averages.app"]
@@ -1569,7 +1569,7 @@ defroutefile "Sport" do
   handle "/sport/football/:id", using: "SportFootballStoryPage", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"]
   handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356.app?morph_env=live&renderer_env=live"]
   handle "/sport/formula1/:id", using: "SportFormula1StoryPage", examples: ["/sport/formula1/56604356?morph_env=live&renderer_env=live"]
-  handle "/sport/golf/:id.app", using: "SportMajorStoryPage", examples: ["/sport/golf/56713156.app?morph_env=live&renderer_env=live"]
+  handle "/sport/golf/:id.app", using: "SportMajorStoryPage", examples: [] # flakey /sport/golf/56713156.app?morph_env=live&renderer_env=live
   handle "/sport/golf/:id", using: "SportMajorStoryPage", examples: [] # flakey /sport/golf/56713156?morph_env=live&renderer_env=live
   handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320.app?morph_env=live&renderer_env=live"]
   handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage", examples: ["/sport/rugby-league/56730320?morph_env=live&renderer_env=live"]
