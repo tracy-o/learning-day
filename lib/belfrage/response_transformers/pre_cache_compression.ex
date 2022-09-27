@@ -40,7 +40,10 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
       Belfrage.Metrics.multi_execute(
-        [[:belfrage, platform_name(private), :pre_cache_compression], [:belfrage, :pre_cache_compression]],
+        [
+          [:belfrage, platform_name(private), :pre_cache_compression],
+          [:belfrage, :platform, :pre_cache_compression, :response]
+        ],
         %{count: 1},
         %{platform: platform_name(private)}
       )
