@@ -9,7 +9,8 @@ defmodule Belfrage.Transformers.TopicRssFeeds do
           "name" => "rss"
         },
         query_params: %{
-          "topicId" => struct.request.path_params["id"]
+          "topicId" => struct.request.path_params["id"],
+          "uri" => String.replace(struct.request.path,"/rss.xml", "")
         },
         raw_headers: %{
           "ctx-unwrapped" => "1"

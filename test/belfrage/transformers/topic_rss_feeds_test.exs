@@ -4,7 +4,7 @@ defmodule Belfrage.Transformers.TopicRssFeedsTest do
   alias Belfrage.Transformers.TopicRssFeeds
   alias Belfrage.Struct
 
-  test "point to rss FABL module and adds topicId query param to request" do
+  test "point to rss FABL module and adds topicId and uri query params to request" do
     assert {
              :ok,
              %Struct{
@@ -14,7 +14,8 @@ defmodule Belfrage.Transformers.TopicRssFeedsTest do
                    "name" => "rss"
                  },
                  query_params: %{
-                   "topicId" => "testId"
+                   "topicId" => "testId",
+                   "uri" => "/topics/testId"
                  },
                  raw_headers: %{
                    "ctx-unwrapped" => "1"
@@ -23,7 +24,10 @@ defmodule Belfrage.Transformers.TopicRssFeedsTest do
              }
            } =
              TopicRssFeeds.call([], %Struct{
-               request: %Struct.Request{path_params: %{"id" => "testId"}}
+               request: %Struct.Request{
+                path: "/topics/testId/rss.xml" ,
+                 path_params: %{"id" => "testId"}
+               }
              })
   end
 end
