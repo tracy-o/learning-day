@@ -21,7 +21,8 @@ defmodule Belfrage.Transformers.SportTopicRssFeedsPlatformDiscriminatorTest do
                    "name" => "rss"
                  },
                  query_params: %{
-                   "topicId" => "c22ymglr3x3t"
+                   "topicId" => "c22ymglr3x3t",
+                   "uri" => "/sport"
                  },
                  raw_headers: %{
                    "ctx-unwrapped" => "1"
