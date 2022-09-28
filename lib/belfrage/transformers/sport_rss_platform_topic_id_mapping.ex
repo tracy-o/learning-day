@@ -9,16 +9,8 @@ defmodule Belfrage.Transformers.SportRssPlatformTopicIdMapping do
     "/sport/rss.xml" => "c22ymglr3x3t"
   }
 
-  defp get_sport_feed_mapping_keys() do
-    Map.keys(@sport_feed_mapping)
-  end
-
-  defp get_topic_id(feed_path) do
-    Map.get(@sport_feed_mapping, feed_path)
-  end
-
   def call(rest, struct) do
-    if struct.request.path in get_sport_feed_mapping_keys() do
+    if struct.request.path in Map.keys(@sport_feed_mapping) do
       struct =
         struct
         |> Struct.add(:private, %{
@@ -31,7 +23,8 @@ defmodule Belfrage.Transformers.SportRssPlatformTopicIdMapping do
             "name" => "rss"
           },
           query_params: %{
-            "topicId" => get_topic_id(struct.request.path)
+            "topicId" => Map.get(@sport_feed_mapping, struct.request.path),
+            "uri" => String.replace(struct.request.path, "/rss.xml", "")
           },
           raw_headers: %{
             "ctx-unwrapped" => "1"
