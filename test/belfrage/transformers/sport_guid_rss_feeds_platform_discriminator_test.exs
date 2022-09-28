@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
+defmodule Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.SportRssFeedsPlatformDiscriminator
+  alias Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminator
   alias Belfrage.Struct
 
   test "when the guid matches the allowlist the request is pointed to the rss FABL module" do
@@ -29,7 +29,7 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
                }
              }
            } =
-             SportRssFeedsPlatformDiscriminator.call([], %Struct{
+             SportGuidRssFeedsPlatformDiscriminator.call([], %Struct{
                request: %Struct.Request{path_params: %{"discipline" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"}}
              })
   end
@@ -46,7 +46,7 @@ defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminatorTest do
                }
              }
            } =
-             SportRssFeedsPlatformDiscriminator.call([], %Struct{
+             SportGuidRssFeedsPlatformDiscriminator.call([], %Struct{
                private: %Struct.Private{
                  platform: Karanga,
                  origin: karanga_endpoint

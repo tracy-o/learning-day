@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.SportRssFeedsPlatformDiscriminator do
+defmodule Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
   """
