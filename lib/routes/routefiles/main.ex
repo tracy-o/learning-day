@@ -2407,7 +2407,6 @@ defroutefile "Main" do
   handle "/weather/coast-and-sea/*_any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
 
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
-    return_404 if: !(String.to_integer(status) in [404, 500])
     return_404 if: !in_range?(status, [404, 500])
   end
 
