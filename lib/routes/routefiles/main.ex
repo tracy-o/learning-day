@@ -2374,9 +2374,11 @@ defroutefile "Main" do
   handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search"] do
     return_404(
       if: [
-        String.length(conn.query_params["s"] || "") not in 0..100,
-        !String.match?(conn.query_params["ptrt"] || "/weather/", ~r/^\/weather\/$/),
-        !String.match?(conn.query_params["page"] || "1", ~r/^\d{1,3}$/)
+        !is_valid_length?(conn.query_params["s"], 0..100),
+        # serve_error(400, payload) if invalid_param?(params[:ptrt], /^\/weather\/$/) unless params[:ptrt].to_s == ''
+        # !matches?(conn.query_params["ptrt"] || "/weather/", ~r/^\/weather\/$/),
+        # conn.query_params["ptrt"] == "/weather/"
+        !in_range?(conn.query_params["page"] || "1", 1..999)
       ]
     )
   end
@@ -2391,13 +2393,13 @@ defroutefile "Main" do
 
   handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
   handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
-    return_404 if: !(String.to_integer(region_id) in 1..12)
+    return_404 if: !in_range?(region_id, 1..12)
   end
   handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
     return_404(
       if: [
-        !String.match?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
-        !(String.to_integer(region_id) in 1..12)
+        !matches?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
+        !in_range?(region_id, 1..12)
       ]
     )
   end
@@ -2406,35 +2408,36 @@ defroutefile "Main" do
 
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
     return_404 if: !(String.to_integer(status) in [404, 500])
+    return_404 if: !in_range?(status, [404, 500])
   end
 
   handle "/weather/language/:language", using: "Weather", examples: ["/weather/language/en"] do
     return_404(
       if: [
-        !String.match?(conn.query_params["redirect_location"] || "/weather", ~r/^[\/]/),
-        !String.match?(language, ~r/^([a-zA-Z]{2})$/)
+        !starts_with?(conn.query_params["redirect_location"] || "/weather", "/"),
+        !is_language?(language)
       ]
     )
   end
 
   handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !String.match?(cps_id, ~r/^\d{1,12}$/)
+    return_404 if: !in_range?(cps_id, 1..999999999999)
   end
   handle "/weather/features/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !String.match?(cps_id, ~r/^\d{1,12}$/)
+    return_404 if: !in_range?(cps_id, 1..999999999999)
   end
   handle "/weather/feeds/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !String.match?(cps_id, ~r/^\d{1,12}$/)
+    return_404 if: !in_range?(cps_id, 1..999999999999)
   end
   handle "/weather/forecast-video/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !String.match?(cps_id, ~r/^\d{1,12}$/)
+    return_404 if: !in_range?(cps_id, 1..999999999999)
   end
 
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
-    return_404 if: !String.match?(location_id, ~r/^([a-z0-9]{1,50})$/)
+    return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
   handle "/weather/:location_id/:day", using: "WeatherLocation", examples: ["/weather/2650225/today"] do
-    return_404 if: !String.match?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
+    return_404 if: !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
   end
 
   handle "/weather/*_any", using: "Weather", examples: []
