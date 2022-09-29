@@ -22,7 +22,7 @@ defmodule Belfrage.SmokeTestCase do
   def normalise_example({path, status_code}) when is_binary(path) and is_integer(status_code), do: {path, status_code}
 
   def assert_smoke_response(test_properties, response, expected_status_code) do
-    assert response.status_code == expected_status_code
+    assert response.status == expected_status_code
 
     if expected_status_code in @redirects_statuses do
       location_header = Helper.get_header(response.headers, "location")
@@ -34,6 +34,7 @@ defmodule Belfrage.SmokeTestCase do
     refute {"belfrage-cache-status", "STALE"} in response.headers
 
     expected_stack_id_header = Map.get(@stack_ids, test_properties.target)
+
     assert Helper.header_item_exists(response.headers, expected_stack_id_header)
   end
 
@@ -70,27 +71,31 @@ defmodule Belfrage.SmokeTestCase do
             test "#{path}", context do
               header_id = Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping][@target]
 
-              resp = Helper.get_route(@host, @path, @matcher_spec.using)
+              case Helper.get_route(@host, @path, @matcher_spec.using) do
+                {:ok, resp} ->
+                  cond do
+                    @smoke_env == "live" and @matcher_spec.only_on == "test" ->
+                      assert resp.status == 404
+                      assert Helper.header_item_exists(resp.headers, header_id)
 
-              cond do
-                @smoke_env == "live" and @matcher_spec.only_on == "test" ->
-                  assert resp.status_code == 404
-                  assert Helper.header_item_exists(resp.headers, header_id)
+                    true ->
+                      test_properties = %{
+                        using: @matcher_spec.using,
+                        smoke_env: @smoke_env,
+                        target: @target,
+                        host: @host,
+                        tld: tld(@host)
+                      }
 
-                true ->
-                  test_properties = %{
-                    using: @matcher_spec.using,
-                    smoke_env: @smoke_env,
-                    target: @target,
-                    host: @host,
-                    tld: tld(@host)
-                  }
+                      assert_smoke_response(
+                        test_properties,
+                        resp,
+                        @expected_status_code
+                      )
+                  end
 
-                  assert_smoke_response(
-                    test_properties,
-                    resp,
-                    @expected_status_code
-                  )
+                {:error, reason} ->
+                  assert false
               end
             end
           end
