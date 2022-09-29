@@ -12,7 +12,7 @@ defmodule Routes.Platforms.ClassicApps do
       owner: "#data-systems",
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
       pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective"],
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl"],
       circuit_breaker_error_threshold: 1000,
       fallback_write_sample: 0.0
     }

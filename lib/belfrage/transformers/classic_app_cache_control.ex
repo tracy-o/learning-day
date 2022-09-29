@@ -1,12 +1,13 @@
-defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
+defmodule Belfrage.Transformers.ClassicAppCacheControl do
   alias Belfrage.Struct
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Transformers.Transformer
 
   @doc """
   If the request is a classic app domain this overrides the cache control to be a minimum of 60s for public cacheability
   """
   @impl true
   def call(
+        rest,
         struct = %Struct{
           request: %Struct.Request{subdomain: subdomain},
           response: %Struct.Response{
@@ -20,9 +21,12 @@ defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
       cacheability == "public" && max_age < 60 ->
         cache_directive = Map.put(struct.response.cache_directive, :max_age, 60)
 
-        Struct.add(struct, :response, %{
-          cache_directive: cache_directive
-        })
+        then_do(
+          rest,
+          Struct.add(struct, :response, %{
+            cache_directive: cache_directive
+          })
+        )
 
       cacheability == "private" && personalised_request == false ->
         cache_directive = %Belfrage.CacheControl{
@@ -32,15 +36,18 @@ defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
           stale_if_error: 90
         }
 
-        Struct.add(struct, :response, %{
-          cache_directive: cache_directive
-        })
+        then_do(
+          rest,
+          Struct.add(struct, :response, %{
+            cache_directive: cache_directive
+          })
+        )
 
       true ->
-        struct
+        then_do(rest, struct)
     end
   end
 
   @impl true
-  def call(struct = %Struct{}), do: struct
+  def call(rest, struct = %Struct{}), do: then_do(rest, struct)
 end

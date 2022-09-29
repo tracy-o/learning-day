@@ -36,7 +36,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
                {"belfrage-pipeline-trail",
-                "CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
+                "ClassicAppCacheControl,CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
              ] = conn.resp_headers
     end
 
@@ -78,7 +78,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
                {"belfrage-pipeline-trail",
-                "CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
+                "ClassicAppCacheControl,CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
              ] = conn.resp_headers
     end
   end
