@@ -24,7 +24,9 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     |> do_send()
   end
 
-  def run(_), do: IO.puts("Please provide one argument, which is the path to the raw output file.")
+  def run(_) do
+    IO.puts("Please provide one argument, which is the path to the raw output file.")
+  end
 
   def failures_per_routespec(_test_results = %{failed_tests: failed_tests}) do
     Enum.reduce(failed_tests, %{}, fn failure, acc ->
