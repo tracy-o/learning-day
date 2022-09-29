@@ -5,6 +5,7 @@ defmodule Routes.Platforms.Karanga do
       owner: "",
       runbook: "https://confluence.dev.bbc.co.uk/display/wsresponsive/News+RSS+Feeds+Run+Book",
       pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective"],
       circuit_breaker_error_threshold: 200
     }
   end
