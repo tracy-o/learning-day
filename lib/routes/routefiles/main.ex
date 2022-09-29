@@ -353,7 +353,7 @@ defroutefile "Main" do
   handle "/news/localnews/faqs", using: "NewsLocalNews", examples: ["/news/localnews/faqs"]
   handle "/news/localnews/locations", using: "NewsLocalNews", examples: ["/news/localnews/locations"]
   # this route goes to mozart and 500s on live, may be we should remove it?
-  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: []
+  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", examples: ["/news/localnews/locations/sitemap.xml"]
   handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", examples: [{"/news/localnews/2643743-london/0", 302}]
 
   # News Topics
