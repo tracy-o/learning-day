@@ -4,6 +4,8 @@
 # What types of route matcher you can  use:
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
+# How to validate a route:
+# lib/belfrage_web/validators.ex
 
 import BelfrageWeb.Routefile
 
@@ -2371,13 +2373,10 @@ defroutefile "Main" do
   # Weather
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
-  handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search"] do
+  handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search/?s=", "/weather/search?s=london"] do
     return_404(
       if: [
         !is_valid_length?(conn.query_params["s"], 0..100),
-        # serve_error(400, payload) if invalid_param?(params[:ptrt], /^\/weather\/$/) unless params[:ptrt].to_s == ''
-        # !matches?(conn.query_params["ptrt"] || "/weather/", ~r/^\/weather\/$/),
-        # conn.query_params["ptrt"] == "/weather/"
         !in_range?(conn.query_params["page"] || "1", 1..999)
       ]
     )
