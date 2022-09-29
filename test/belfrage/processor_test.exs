@@ -13,7 +13,8 @@ defmodule Belfrage.ProcessorTest do
     def specs do
       %{
         platform: Webcore,
-        personalisation: "test_only"
+        personalisation: "test_only",
+        response_pipeline: ["CacheDirective"]
       }
     end
   end
@@ -94,6 +95,9 @@ defmodule Belfrage.ProcessorTest do
         headers: %{
           "connection" => "close"
         }
+      },
+      private: %Private{
+        response_pipeline: ["CacheDirective"]
       }
     }
 
@@ -112,6 +116,9 @@ defmodule Belfrage.ProcessorTest do
         headers: %{
           "connection" => "close"
         }
+      },
+      private: %Private{
+        response_pipeline: ["CacheDirective"]
       }
     }
 

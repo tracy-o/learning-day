@@ -99,7 +99,7 @@ defmodule Belfrage.Processor do
   end
 
   def process_response_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct, struct.private.response_pipeline) do
+    case Pipeline.process(struct, ["CacheDirective"]) do
       {:ok, struct} -> struct
       {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
     end
