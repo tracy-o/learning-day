@@ -9,6 +9,7 @@ defmodule Belfrage.RouteSpec do
             owner: nil,
             slack_channel: nil,
             pipeline: [],
+            response_pipeline: [],
             platform: nil,
             personalisation: nil,
             # TODO: This probably shouldn't be an attribute of RouteSpec. It

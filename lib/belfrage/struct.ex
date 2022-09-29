@@ -69,6 +69,7 @@ defmodule Belfrage.Struct.Private do
             counter: %{},
             circuit_breaker_error_threshold: nil,
             pipeline: [],
+            response_pipeline: [],
             overrides: %{},
             checkpoints: %{},
             query_params_allowlist: [],
