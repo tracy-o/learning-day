@@ -22,6 +22,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   # would also require them to invite moz to their slack channel. for more info
   # see here: https://github.com/bbc/belfrage/pull/670
   @results_slack_channel "belfrage-smoke-tests"
+  @results_slack_channel_link "<#C029V08H8NB>"
   @notification_slack_channel "team-belfrage"
 
   @slack_auth_token_env_var_name "SLACK_AUTH_TOKEN"
@@ -77,7 +78,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     total_tests = test_results.test_counter.test
 
     if failures > 0 do
-      "Smoke Test Failure: #{failures}/#{total_tests} (fallbacks=#{fallbacks})"
+      "Smoke Test Failure: #{failures}/#{total_tests} (fallbacks=#{fallbacks}) for details see #{@results_slack_channel_link}."
       |> build_slack_notification_message(@notification_slack_channel, slack_auth_token)
     else
       []
@@ -133,7 +134,10 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
       },
       payload:
         Jason.encode!(%{
-          text: message,
+          blocks: [%{
+            type: "section",
+            text: %{type: "mrkdwn", text: message}
+          }],
           channel: slack_channel
         })
     }
