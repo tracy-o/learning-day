@@ -18,9 +18,9 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   # test is failing.
   #
   # There is a mechanism to send messages to teams if their smoke tests are
-  # failing. This is done by specifying a 'slack_channel' in the routespec.
-  # It would also require them to invite moz to their slack channel.
-  # for more info see here: https://github.com/bbc/belfrage/pull/670
+  # failing. This is done by specifying a 'slack_channel' in the routespec. It
+  # would also require them to invite moz to their slack channel. for more info
+  # see here: https://github.com/bbc/belfrage/pull/670
   @results_slack_channel "belfrage-smoke-tests"
   @notification_slack_channel "team-belfrage"
 
