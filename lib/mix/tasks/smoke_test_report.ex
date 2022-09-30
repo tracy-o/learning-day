@@ -34,10 +34,14 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     test_results = :erlang.binary_to_term(File.read!(path_to_raw_input))
 
     test_results
+    |> notify_main_channel(slack_auth_token!())
+    |> send()
+
+    test_results
     |> failures_per_routespec()
     |> format_failure_messages()
     |> broadcast_results_to_teams(slack_auth_token!())
-    |> do_send()
+    |> send()
   end
 
   def run(_) do
@@ -67,11 +71,25 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     Enum.map(errors, &Message.format(failure, &1))
   end
 
-  def broadcast_results_to_teams(formatted_routespec_failures, slack_auth_token) do
-    Enum.map(formatted_routespec_failures, &build_slack_result_message(&1, slack_auth_token))
+  def notify_main_channel(test_results, slack_auth_token) do
+    failures = test_results.failure_counter
+    fallbacks = test_results.fallback_count
+    total_tests = test_results.test_counter.test
+
+    if failures > 0 do
+      "Smoke Test Failure: #{failures}/#{total_tests} (fallbacks=#{fallbacks})"
+      |> build_slack_notification_message(@notification_slack_channel, slack_auth_token)
+    else
+      []
+    end
   end
 
-  defp build_slack_result_message({routespec, failure_messages}, slack_auth_token) do
+  @spec broadcast_results_to_teams(any, any) :: list
+  def broadcast_results_to_teams(formatted_routespec_failures, slack_auth_token) do
+    Enum.map(formatted_routespec_failures, &build_result_message(&1, slack_auth_token))
+  end
+
+  defp build_result_message({routespec, failure_messages}, slack_auth_token) do
     slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @results_slack_channel
 
     msg = Enum.join(failure_messages, "\n\n")
@@ -104,7 +122,25 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     }
   end
 
-  defp do_send(http_requests) do
+  defp build_slack_notification_message(message, slack_channel, slack_auth_token) do
+    [
+      %Belfrage.Clients.HTTP.Request{
+      method: :post,
+      url: "https://slack.com/api/chat.postMessage",
+      headers: %{
+        "content-type" => "application/json",
+        "authorization" => "Bearer #{slack_auth_token}"
+      },
+      payload:
+        Jason.encode!(%{
+          text: message,
+          channel: slack_channel
+        })
+    }
+  ]
+  end
+
+  defp send(http_requests) do
     Enum.each(http_requests, &@http_client.execute/1)
   end
 

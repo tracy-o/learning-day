@@ -84,4 +84,20 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
              }
            ] == ReportSmokeTestResults.broadcast_results_to_teams(formatted_messages, slack_auth_token)
   end
+
+  test "notify_main_channel/1", %{output_with_failures: output} do
+    slack_auth_token = "foobar"
+    slack_channel = "team-belfrage"
+    message = "Smoke Test Failure: 3/6 (fallbacks=0)"
+
+    assert [
+             %Belfrage.Clients.HTTP.Request{
+               headers: %{"authorization" => "Bearer foobar", "content-type" => "application/json"},
+               method: :post,
+               timeout: 6000,
+               url: "https://slack.com/api/chat.postMessage",
+               payload: ~s({"channel":"#{slack_channel}","text":"#{message}"})
+             }
+           ] == ReportSmokeTestResults.notify_main_channel(output, slack_auth_token)
+  end
 end
