@@ -9,7 +9,7 @@ defmodule Belfrage.Transformers.ReplayedTrafficTest do
     private: %Struct.Private{
       origin: "an-origin-set-by-the-route_state",
       platform: SomePlatform,
-      pipeline: ["ReplayedTraffic"]
+      request_pipeline: ["ReplayedTraffic"]
     }
   }
 

@@ -31,7 +31,7 @@ defmodule Belfrage.Transformers.Echo do
       """
       Hey, ho!
       PATH:           #{struct.request.path}
-      PIPELINE:       #{struct.private.pipeline}
+      PIPELINE:       #{struct.private.request_pipeline}
       ROUTE_RELEASE:  #{Application.get_env(:belfrage, :route_rel)}
       """
     else

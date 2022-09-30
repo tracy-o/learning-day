@@ -11,7 +11,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{"https://origin.bbc.co.uk/" => %{}},
-        pipeline: ["CircuitBreaker"]
+        request_pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -31,7 +31,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         throughput: nil,
-        pipeline: ["CircuitBreaker"]
+        request_pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -51,7 +51,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         throughput: 100,
-        pipeline: ["CircuitBreaker"]
+        request_pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -73,7 +73,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
-        pipeline: ["CircuitBreaker"]
+        request_pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -95,7 +95,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
-        pipeline: ["CircuitBreaker"],
+        request_pipeline: ["CircuitBreaker"],
         circuit_breaker_error_threshold: 5
       }
     }
@@ -118,7 +118,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
-        pipeline: ["CircuitBreaker"]
+        request_pipeline: ["CircuitBreaker"]
       }
     }
 
@@ -144,7 +144,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
           "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
           "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}
         },
-        pipeline: ["CircuitBreaker"],
+        request_pipeline: ["CircuitBreaker"],
         circuit_breaker_error_threshold: 5
       }
     }
@@ -168,7 +168,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
           route_state_id: "SportVideos",
           origin: "https://origin.bbc.co.uk/",
           counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
-          pipeline: ["CircuitBreaker"],
+          request_pipeline: ["CircuitBreaker"],
           circuit_breaker_error_threshold: 5
         }
       }
@@ -198,7 +198,7 @@ defmodule Belfrage.Transformers.CircuitBreakerTest do
             "https://origin2.bbc.co.uk/" => %{501 => 4, :errors => 4},
             "https://origin3.bbc.co.uk/" => %{501 => 7, :errors => 7}
           },
-          pipeline: ["CircuitBreaker"],
+          request_pipeline: ["CircuitBreaker"],
           circuit_breaker_error_threshold: 5
         }
       }

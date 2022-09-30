@@ -4,7 +4,7 @@ defmodule Routes.Platforms.Simorgh do
       origin: Application.get_env(:belfrage, :simorgh_endpoint),
       owner: "DENewsSimorghDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200,

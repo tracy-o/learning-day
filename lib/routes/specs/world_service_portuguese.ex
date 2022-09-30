@@ -2,7 +2,7 @@ defmodule Routes.Specs.WorldServicePortuguese do
   def specs(production_env) do
     %{
       platform: MozartSimorgh,
-      pipeline: pipeline(production_env)
+      request_pipeline: pipeline(production_env)
     }
   end
 

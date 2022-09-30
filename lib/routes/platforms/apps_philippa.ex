@@ -4,7 +4,7 @@ defmodule Routes.Platforms.AppsPhilippa do
       origin: Application.get_env(:belfrage, :philippa_endpoint),
       owner: "#data-systems",
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
       circuit_breaker_error_threshold: 1_500,
       fallback_write_sample: 0.0
     }

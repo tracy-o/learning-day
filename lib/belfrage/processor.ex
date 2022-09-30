@@ -92,7 +92,7 @@ defmodule Belfrage.Processor do
   end
 
   defp process_request_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct, struct.private.pipeline) do
+    case Pipeline.process(struct, struct.private.request_pipeline) do
       {:ok, struct} -> struct
       {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
     end

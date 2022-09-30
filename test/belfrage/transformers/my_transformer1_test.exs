@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.MyTransformer1Test do
 
   @original_struct %Struct{
     private: %{
-      pipeline: ["MyTransformer1"]
+      request_pipeline: ["MyTransformer1"]
     }
   }
 

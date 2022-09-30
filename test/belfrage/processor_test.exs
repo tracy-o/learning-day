@@ -29,7 +29,7 @@ defmodule Belfrage.ProcessorTest do
                  route_state_id: "SportVideos",
                  origin: origin,
                  counter: counter,
-                 pipeline: pipeline
+                 request_pipeline: pipeline
                }
              } = Processor.get_route_state(@struct)
 
@@ -56,7 +56,7 @@ defmodule Belfrage.ProcessorTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
-        pipeline: ["MyTransformer1"]
+        request_pipeline: ["MyTransformer1"]
       }
     }
 
@@ -75,7 +75,7 @@ defmodule Belfrage.ProcessorTest do
         route_state_id: "SportVideos",
         origin: "https://origin.bbc.co.uk/",
         counter: %{},
-        pipeline: []
+        request_pipeline: []
       }
     }
 
