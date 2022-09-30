@@ -5,7 +5,7 @@ defmodule Routes.Platforms.OriginSimulator do
       owner: "belfrage-team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       pipeline: ["CircuitBreaker"],
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl"],
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian"],
       circuit_breaker_error_threshold: 200
     }
   end

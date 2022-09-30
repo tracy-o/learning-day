@@ -5,7 +5,7 @@ defmodule Routes.Platforms.Simorgh do
       owner: "DENewsSimorghDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
       pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl"],
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200,
       signature_keys: %{add: [:is_advertise], skip: [:country]}

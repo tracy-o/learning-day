@@ -1,4 +1,4 @@
-defmodule Belfrage.ResponseTransformers.ClassicAppCacheControlTest do
+defmodule Belfrage.Transformers.ClassicAppCacheControlTest do
   use ExUnit.Case
 
   alias Belfrage.Struct

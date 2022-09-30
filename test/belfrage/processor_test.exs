@@ -97,7 +97,7 @@ defmodule Belfrage.ProcessorTest do
         }
       },
       private: %Private{
-        response_pipeline: ["CacheDirective"]
+        response_pipeline: ["CacheDirective", "ResponseHeaderGuardian"]
       }
     }
 
