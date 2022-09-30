@@ -1,12 +1,12 @@
-defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
+defmodule Belfrage.Transformers.CustomRssErrorResponseTest do
   use ExUnit.Case
 
   alias Belfrage.Struct
-  alias Belfrage.ResponseTransformers.CustomRssErrorResponse
+  alias Belfrage.Transformers.CustomRssErrorResponse
 
   test "Amend FABL response on error" do
-    struct =
-      CustomRssErrorResponse.call(%Struct{
+    {:ok, struct} =
+      CustomRssErrorResponse.call([], %Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 500,
@@ -22,8 +22,8 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
   end
 
   test "Do not amend FABL response on success" do
-    struct =
-      CustomRssErrorResponse.call(%Struct{
+    {:ok, struct} =
+      CustomRssErrorResponse.call([], %Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 200,
@@ -39,8 +39,8 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
   end
 
   test "Do not amend Karanga responses on failure" do
-    struct =
-      CustomRssErrorResponse.call(%Struct{
+    {:ok, struct} =
+      CustomRssErrorResponse.call([], %Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 500,

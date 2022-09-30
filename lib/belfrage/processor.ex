@@ -116,7 +116,6 @@ defmodule Belfrage.Processor do
       &update_route_state/1,
       &maybe_log_response_status/1,
       &process_response_pipeline/1,
-      &ResponseTransformers.CustomRssErrorResponse.call/1,
       &ResponseTransformers.PreCacheCompression.call/1,
       &Cache.store/1,
       &fetch_fallback_from_cache/1
