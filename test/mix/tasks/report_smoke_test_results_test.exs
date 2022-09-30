@@ -88,7 +88,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
   test "notify_main_channel/1", %{output_with_failures: output} do
     slack_auth_token = "foobar"
     slack_channel = "team-belfrage"
-    message = "Smoke Test Failure: 3/6 (fallbacks=0) for details see <#C029V08H8NB>."
+    # message = ""
 
     assert [
              %Belfrage.Clients.HTTP.Request{
@@ -97,7 +97,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
                timeout: 6000,
                url: "https://slack.com/api/chat.postMessage",
                payload:
-                 ~s({"blocks":[{"text":{"text":"#{message}","type":"mrkdwn"},"type":"section"}],"channel":"#{slack_channel}"})
+                 ~s|{"blocks":[{"text":{"text":"Smoke Test Failure: 3/6 (fallbacks=0)\\nfor details see <#C029V08H8NB>.","type":"mrkdwn"},"type":"section"}],"channel":"#{slack_channel}"}|
              }
            ] == ReportSmokeTestResults.notify_main_channel(output, slack_auth_token)
   end
