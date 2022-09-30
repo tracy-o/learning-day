@@ -107,6 +107,7 @@ defmodule Belfrage.RouteSpec do
       route_attrs
       |> Map.merge(merge_allowlists(spec, route_attrs))
       |> Map.put(:pipeline, merge_pipelines(spec.pipeline, route_attrs[:pipeline]))
+      |> Map.put(:response_pipeline, merge_pipelines(spec.response_pipeline, route_attrs[:response_pipeline]))
 
     struct!(spec, route_overrides)
   end

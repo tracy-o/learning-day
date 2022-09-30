@@ -96,6 +96,14 @@ defmodule Belfrage.RouteSpecTest do
       assert spec.pipeline == ["Bar"]
     end
 
+    test "injects routespec response_pipeline if platform spec has placeholder" do
+      define_platform(OverwritePipelinePlatform, %{response_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Baz"]})
+      define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, response_pipeline: ["Bar"]})
+
+      spec = RouteSpec.specs_for(OverwritePipelineRoute)
+      assert spec.response_pipeline == ["Foo", "Bar", "Baz"]
+    end
+
     test "sets personalised_route attribute" do
       define_platform(PersonalisedPlatform, %{})
       define_route(PersonalisedRoute, %{platform: PersonalisedPlatform, personalisation: "on"})
