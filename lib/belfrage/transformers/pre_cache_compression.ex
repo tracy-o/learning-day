@@ -1,4 +1,4 @@
-defmodule Belfrage.ResponseTransformers.PreCacheCompression do
+defmodule Belfrage.Transformers.PreCacheCompression do
   @moduledoc """
   Ensures we always `gzip` compress the response body in the
   belfrage internal cache.
@@ -6,16 +6,15 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   require Logger
 
   alias Belfrage.{Struct, Metrics}
-  alias Belfrage.Behaviours.ResponseTransformer
-  @behaviour ResponseTransformer
+  use Belfrage.Transformers.Transformer
 
   @impl true
-  def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => "gzip"}}}) do
-    struct
+  def call(rest, struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => "gzip"}}}) do
+    then_do(rest, struct)
   end
 
   @impl true
-  def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => content_encoding}}}) do
+  def call(rest, struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => content_encoding}}}) do
     Logger.log(:error, "", %{
       msg: "Cannot handle compression type",
       content_encoding: content_encoding
@@ -23,15 +22,15 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
 
     :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{})
 
-    Struct.add(struct, :response, %{body: "", http_status: 415})
+    then_do(rest, Struct.add(struct, :response, %{body: "", http_status: 415}))
   end
 
   @impl true
-  def call(struct = %Struct{response: response = %Struct.Response{}}) do
+  def call(rest, struct = %Struct{response: response = %Struct.Response{}}) do
     if response.http_status == 200 and struct.response.body != "" do
-      gzip_response_body(struct)
+      then_do(rest, gzip_response_body(struct))
     else
-      struct
+      then_do(rest, struct)
     end
   end
 
