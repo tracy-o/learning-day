@@ -7,7 +7,23 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
-  @default_slack_channel "belfrage-smoke-tests"
+
+  # Result of smoke tests are only send if at least one test fails.
+  #
+  # When a failure occurs a notification is sent to the team-belfrage channel.
+  # This notification contains the total smoke test failures and a link to the
+  # #belfrage-smoke-tests channel to see what they are.
+  #
+  # In the #belfrage-smoke-test channel it shows each failure and why that smoke
+  # test is failing.
+  #
+  # There is a mechanism to send messages to teams if their smoke tests are
+  # failing. This is done by specifying a 'slack_channel' in the routespec.
+  # It would also require them to invite moz to their slack channel.
+  # for more info see here: https://github.com/bbc/belfrage/pull/670
+  @results_slack_channel "belfrage-smoke-tests"
+  @notification_slack_channel "team-belfrage"
+
   @slack_auth_token_env_var_name "SLACK_AUTH_TOKEN"
   @additional_slack_message_env_var_name "SLACK_MESSAGE"
 
@@ -56,7 +72,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   defp send_slack_message({routespec, failure_messages}, slack_auth_token) do
-    slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @default_slack_channel
+    slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @results_slack_channel
 
     msg = Enum.join(failure_messages, "\n\n")
 
@@ -115,7 +131,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   defp how_to_send_to_own_channel(channel) do
     case channel do
-      @default_slack_channel ->
+      @results_slack_channel ->
         [
           %{
             type: "actions",
