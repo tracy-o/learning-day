@@ -2405,14 +2405,20 @@ defroutefile "Main" do
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
 
-  # newsrounds routes appear to be using morphRouter
-  handle "/newsround.amp", using: "Newsround", examples: []
-  handle "/newsround.json", using: "Newsround", examples: []
-
+  # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 301
-
-  handle "/newsround/*_any", using: "Newsround", examples: []
+  handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                        # Is this route needed? Currently 404
+  handle "/newsround.json", using: "NewsroundAmp", examples: []                                                       # Is this route needed? Currently 404
+  handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
+  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: ["/newsround/unknown/61545299.amp"]            # Not sure if used
+  handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
+  handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/watch_newsround"]
+  handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/newsroundbsl"]
+  handle "/newsround/av/:id", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/av/43245617"]
+  handle "/newsround/:id", using: "NewsroundArticlePage", only_on: "test", examples: ["/newsround/61545299"]
+  handle "/newsround", using: "NewsroundHomePage", only_on: "test", examples: ["/newsround"]
+  handle "/newsround/*_any", using "NewsroundLegacy", examples: []                                                    # Use Morph as a catch-all
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
