@@ -68,10 +68,10 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   def broadcast_results_to_teams(formatted_routespec_failures, slack_auth_token) do
-    Enum.map(formatted_routespec_failures, &send_slack_message(&1, slack_auth_token))
+    Enum.map(formatted_routespec_failures, &build_slack_result_message(&1, slack_auth_token))
   end
 
-  defp send_slack_message({routespec, failure_messages}, slack_auth_token) do
+  defp build_slack_result_message({routespec, failure_messages}, slack_auth_token) do
     slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @results_slack_channel
 
     msg = Enum.join(failure_messages, "\n\n")
