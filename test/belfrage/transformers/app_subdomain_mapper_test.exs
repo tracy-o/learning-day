@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
   alias Belfrage.Struct.{Private, Request, Response}
 
   describe "when subdomain is 'news-app-classic'" do
-    test "point to trevor, set circuit_breaker_error_threshold to 15,000" do
+    test "point to trevor platform, set circuit_breaker_error_threshold to 15,000" do
       trevor_endpoint = Application.get_env(:belfrage, :trevor_endpoint)
 
       struct = %Struct{
@@ -22,7 +22,8 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
               %Struct{
                 private: %Private{
                   origin: ^trevor_endpoint,
-                  circuit_breaker_error_threshold: 15_000
+                  circuit_breaker_error_threshold: 15_000,
+                  platform: Routes.Platforms.AppsTrevor
                 }
               }} = AppSubdomainMapper.call([], struct)
     end
@@ -45,7 +46,8 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
               %Struct{
                 private: %Private{
                   origin: ^walter_endpoint,
-                  circuit_breaker_error_threshold: 8_000
+                  circuit_breaker_error_threshold: 8_000,
+                  platform: Routes.Platforms.AppsWalter
                 }
               }} = AppSubdomainMapper.call([], struct)
     end
@@ -68,7 +70,8 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
               %Struct{
                 private: %Private{
                   origin: ^philippa_endpoint,
-                  circuit_breaker_error_threshold: 1_500
+                  circuit_breaker_error_threshold: 1_500,
+                  platform: Routes.Platforms.AppsPhilippa
                 }
               }} = AppSubdomainMapper.call([], struct)
     end
