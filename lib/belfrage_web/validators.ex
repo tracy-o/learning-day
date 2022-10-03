@@ -9,7 +9,7 @@ defmodule BelfrageWeb.Validators do
   end
   ```
   """
-  
+
   @doc """
   ## Examples
     iex> in_range?("2", 1..999)
