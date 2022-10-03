@@ -2,6 +2,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapper do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct
+  alias Routes.Platforms.{AppsTrevor, AppsPhilippa, AppsWalter}
 
   # This transformer uses the request subdomain to decide which apps endpoint to
   # send a request to.
@@ -20,23 +21,24 @@ defmodule Belfrage.Transformers.AppSubdomainMapper do
   def call(rest, struct) do
     case struct.request.subdomain do
       "news-app-classic" ->
-        then_do(rest, change_endpoint(struct, :trevor_endpoint, 15_000))
+        then_do(rest, change_endpoint(struct, AppsTrevor, :trevor_endpoint, 15_000))
 
       "news-app-global-classic" ->
-        then_do(rest, change_endpoint(struct, :walter_endpoint, 8_000))
+        then_do(rest, change_endpoint(struct, AppsWalter, :walter_endpoint, 8_000))
 
       "news-app-ws-classic" ->
-        then_do(rest, change_endpoint(struct, :philippa_endpoint, 1_500))
+        then_do(rest, change_endpoint(struct, AppsPhilippa, :philippa_endpoint, 1_500))
 
       _ ->
         {:stop_pipeline, Struct.put_status(struct, 400)}
     end
   end
 
-  defp change_endpoint(struct, endpoint, threshold) do
+  defp change_endpoint(struct, platform, endpoint, threshold) do
     Struct.add(struct, :private, %{
+      circuit_breaker_error_threshold: threshold,
       origin: Application.get_env(:belfrage, endpoint),
-      circuit_breaker_error_threshold: threshold
+      platform: platform
     })
   end
 end
