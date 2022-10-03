@@ -10,7 +10,7 @@ defmodule Routes.Specs.BitesizeTopics do
   end
 
   def pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
+    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
   end
   def pipeline(_production_environment) do
    ["HTTPredirect", "TrailingSlashRedirector", "ComToUKRedirect", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
