@@ -2419,16 +2419,16 @@ defroutefile "Main" do
   end
 
   handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999999999999)
+    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/features/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999999999999)
+    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/feeds/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999999999999)
+    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/forecast-video/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999999999999)
+    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
   end
 
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
