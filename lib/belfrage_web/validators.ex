@@ -1,7 +1,7 @@
 defmodule BelfrageWeb.Validators do
   @moduledoc """
-  This file is for validating routes.
-  Example validator usage looks like this:
+  This file includes functions that can be used to assist capability teams with validating the requests made against their routes.
+  Examples of how the validators can be used can be seen below:
 
   ```
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
