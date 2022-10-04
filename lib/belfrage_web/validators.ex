@@ -30,7 +30,7 @@ defmodule BelfrageWeb.Validators do
     iex> integer_in_range?("405", [404, 500])
     false
   """
-  def integer_integer_in_range?(param, range) do
+  def integer_in_range?(param, range) do
     case Integer.parse(param) do
       {p, ""} -> p in range
       _ -> false
