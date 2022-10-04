@@ -78,7 +78,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     total_tests = test_results.test_counter.test
 
     if failures > 0 do
-      ~s|Smoke Test Failure: #{failures}/#{total_tests} (fallbacks=#{fallbacks})\nfor details see #{@results_slack_channel_link}.|
+      ~s|:fire::fire::fire: Smoke Test Failure: #{failures}/#{total_tests} (fallbacks=#{fallbacks}) :fire::fire::fire:\n\nfor details see #{@results_slack_channel_link}|
       |> build_slack_notification_message(@notification_slack_channel, slack_auth_token)
     else
       []
