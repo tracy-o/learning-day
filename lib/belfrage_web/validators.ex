@@ -5,32 +5,32 @@ defmodule BelfrageWeb.Validators do
 
   ```
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
-    return_404 if: !in_range?(status, [404, 500])
+    return_404 if: !integer_in_range?(status, [404, 500])
   end
   ```
   """
 
   @doc """
   ## Examples
-    iex> in_range?("2", 1..999)
+    iex> integer_in_range?("2", 1..999)
     true
 
-    iex> in_range?("a", 1..999)
+    iex> integer_in_range?("a", 1..999)
     false
 
-    iex> in_range?("1.5", 1..999)
+    iex> integer_in_range?("1.5", 1..999)
     false
 
-    iex> in_range?("404", [404, 500])
+    iex> integer_in_range?("404", [404, 500])
     true
 
-    iex> in_range?("500", [404, 500])
+    iex> integer_in_range?("500", [404, 500])
     true
 
-    iex> in_range?("405", [404, 500])
+    iex> integer_in_range?("405", [404, 500])
     false
   """
-  def in_range?(param, range) do
+  def integer_integer_in_range?(param, range) do
     case Integer.parse(param) do
       {p, ""} -> p in range
       _ -> false

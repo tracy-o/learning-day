@@ -2377,7 +2377,7 @@ defroutefile "Main" do
     return_404(
       if: [
         !is_valid_length?(conn.query_params["s"], 0..100),
-        !in_range?(conn.query_params["page"] || "1", 1..999)
+        !integer_in_range?(conn.query_params["page"] || "1", 1..999)
       ]
     )
   end
@@ -2392,13 +2392,13 @@ defroutefile "Main" do
 
   handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
   handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
-    return_404 if: !in_range?(region_id, 1..12)
+    return_404 if: !integer_in_range?(region_id, 1..12)
   end
   handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
     return_404(
       if: [
         !matches?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
-        !in_range?(region_id, 1..12)
+        !integer_in_range?(region_id, 1..12)
       ]
     )
   end
@@ -2406,7 +2406,7 @@ defroutefile "Main" do
   handle "/weather/coast-and-sea/*_any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
 
   handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
-    return_404 if: !in_range?(status, [404, 500])
+    return_404 if: !integer_in_range?(status, [404, 500])
   end
 
   handle "/weather/language/:language", using: "Weather", examples: ["/weather/language/en"] do
@@ -2419,16 +2419,16 @@ defroutefile "Main" do
   end
 
   handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/features/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/feeds/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/forecast-video/:cps_id", using: "WeatherCps", examples: [] do
-    return_404 if: !in_range?(cps_id, 1..999_999_999_999)
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
 
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
