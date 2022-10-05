@@ -11,6 +11,6 @@ defmodule Routes.Specs.NewsLive do
   end
 
   def pipeline(_production_environment) do
-    ["LivePagePlatformDiscriminator"]
+    ["NewsLivePlatformDiscriminator"]
   end
 end

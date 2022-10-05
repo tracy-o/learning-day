@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
+defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
   import Test.Support.Helper, only: [set_environment: 1]
   use ExUnit.Case
 
-  alias Belfrage.Transformers.LivePagePlatformDiscriminator
+  alias Belfrage.Transformers.NewsLivePlatformDiscriminator
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
 
@@ -15,8 +15,8 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
           path: "/news/live/c1v596ken6vt"
         },
         private: %Private{
-          origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
-          platform: Webcore
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+          platform: MozartNews
         }
       }
 
@@ -26,7 +26,7 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
     end
 
     test "origin and platform gets changed to webcore", %{struct: struct} do
-      assert LivePagePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call([], struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: Webcore,
@@ -44,7 +44,7 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
           path: "/news/live/c1v596ken6vt"
         },
         private: %Private{
-          origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
           platform: MozartNews
         }
       }
@@ -55,7 +55,7 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
     end
 
     test "origin and platform remains as MozartNews", %{struct: struct} do
-      assert LivePagePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call([], struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: MozartNews,
@@ -73,7 +73,7 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
           path: "/news/live/uk-55930940"
         },
         private: %Private{
-          origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
           platform: MozartNews
         }
       }
@@ -84,7 +84,7 @@ defmodule Belfrage.Transformers.LivePagePlatformDiscriminatorTest do
     end
 
     test "origin and platform is MozartNews", %{struct: struct} do
-      assert LivePagePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call([], struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: MozartNews,

@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.LivePagePlatformDiscriminator do
+defmodule Belfrage.Transformers.NewsLivePlatformDiscriminator do
   use Belfrage.Transformers.Transformer
 
   def call(rest, struct) do
