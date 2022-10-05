@@ -23,7 +23,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
                 private: %Private{
                   origin: ^trevor_endpoint,
                   circuit_breaker_error_threshold: 15_000,
-                  platform: Routes.Platforms.AppsTrevor
+                  platform: AppsTrevor
                 }
               }} = AppSubdomainMapper.call([], struct)
     end
@@ -47,7 +47,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
                 private: %Private{
                   origin: ^walter_endpoint,
                   circuit_breaker_error_threshold: 8_000,
-                  platform: Routes.Platforms.AppsWalter
+                  platform: AppsWalter
                 }
               }} = AppSubdomainMapper.call([], struct)
     end
@@ -71,7 +71,7 @@ defmodule Belfrage.Transformers.AppSubdomainMapperTest do
                 private: %Private{
                   origin: ^philippa_endpoint,
                   circuit_breaker_error_threshold: 1_500,
-                  platform: Routes.Platforms.AppsPhilippa
+                  platform: AppsPhilippa
                 }
               }} = AppSubdomainMapper.call([], struct)
     end

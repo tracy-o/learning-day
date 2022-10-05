@@ -2,7 +2,6 @@ defmodule Belfrage.Transformers.AppSubdomainMapper do
   use Belfrage.Transformers.Transformer
 
   alias Belfrage.Struct
-  alias Routes.Platforms.{AppsTrevor, AppsPhilippa, AppsWalter}
 
   # This transformer uses the request subdomain to decide which apps endpoint to
   # send a request to.
