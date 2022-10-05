@@ -23,7 +23,6 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_location()
     |> put_resp_content_type("text/plain")
     |> resp(301, "Redirecting")
-    Show resolved
   end
 
   defp put_location(conn) do
