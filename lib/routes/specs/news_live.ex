@@ -1,5 +1,5 @@
 defmodule Routes.Specs.NewsLive do
-  def specs(production_env) do
+  def specs(_production_env) do
     %{
       owner: "#help-live",
       runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Run+Book",
