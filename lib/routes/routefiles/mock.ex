@@ -97,6 +97,12 @@ defroutefile "Mock", "test" do
 
   handle("/no-etag-support", using: "NoEtagSupport", examples: [])
 
+  handle("/platform-selection-with-selector", using: "SomeRouteStateWithoutPlatformAttribute", platform: "AssetTypePlatformSelector", examples: [])
+
+  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "Webcore", examples: [])
+
+  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "MozartNews", examples: [])
+
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 
   no_match()

@@ -9,7 +9,7 @@ defmodule Belfrage.RouteSpecTest do
       define_platform(MergePlatform, %{caching_enabled: false, default_language: "foo"})
       define_route(MergeRoute, %{platform: MergePlatform, default_language: "bar", owner: "baz"})
 
-      spec = RouteSpec.specs_for(MergeRoute)
+      spec = RouteSpec.specs_for("MergeRoute")
       assert spec.platform == MergePlatform
       assert spec.owner == "baz"
       assert spec.default_language == "bar"
@@ -30,7 +30,7 @@ defmodule Belfrage.RouteSpecTest do
         cookie_allowlist: ["cookie2"]
       })
 
-      spec = RouteSpec.specs_for(MergeAllowlistRoute)
+      spec = RouteSpec.specs_for("MergeAllowlistRoute")
       assert spec.query_params_allowlist == ~w(param1 param2)
       assert spec.headers_allowlist == ~w(header1 header2)
       assert spec.cookie_allowlist == ~w(cookie1 cookie2)
@@ -50,7 +50,7 @@ defmodule Belfrage.RouteSpecTest do
         cookie_allowlist: ["cookie2"]
       })
 
-      spec = RouteSpec.specs_for(PlatformWildcardAllowlistRoute)
+      spec = RouteSpec.specs_for("PlatformWildcardAllowlistRoute")
       assert spec.query_params_allowlist == "*"
       assert spec.headers_allowlist == "*"
       assert spec.cookie_allowlist == "*"
@@ -70,7 +70,7 @@ defmodule Belfrage.RouteSpecTest do
         cookie_allowlist: "*"
       })
 
-      spec = RouteSpec.specs_for(RouteWildcardAllowlistRoute)
+      spec = RouteSpec.specs_for("RouteWildcardAllowlistRoute")
       assert spec.query_params_allowlist == "*"
       assert spec.headers_allowlist == "*"
       assert spec.cookie_allowlist == "*"
@@ -81,10 +81,10 @@ defmodule Belfrage.RouteSpecTest do
       define_route(NoPipelineRoute, %{platform: PipelinePlaceholderPlatform})
       define_route(PipelineRoute, %{platform: PipelinePlaceholderPlatform, pipeline: ["Baz1", "Baz2"]})
 
-      spec = RouteSpec.specs_for(NoPipelineRoute)
+      spec = RouteSpec.specs_for("NoPipelineRoute")
       assert spec.pipeline == ["Foo", "Bar"]
 
-      spec = RouteSpec.specs_for(PipelineRoute)
+      spec = RouteSpec.specs_for("PipelineRoute")
       assert spec.pipeline == ["Foo", "Baz1", "Baz2", "Bar"]
     end
 
@@ -92,7 +92,7 @@ defmodule Belfrage.RouteSpecTest do
       define_platform(OverwritePipelinePlatform, %{pipeline: ["Foo"]})
       define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, pipeline: ["Bar"]})
 
-      spec = RouteSpec.specs_for(OverwritePipelineRoute)
+      spec = RouteSpec.specs_for("OverwritePipelineRoute")
       assert spec.pipeline == ["Bar"]
     end
 
@@ -101,11 +101,11 @@ defmodule Belfrage.RouteSpecTest do
       define_route(PersonalisedRoute, %{platform: PersonalisedPlatform, personalisation: "on"})
       define_route(NonPersonalisedRoute, %{platform: PersonalisedPlatform, personalisation: "off"})
 
-      spec = RouteSpec.specs_for(PersonalisedRoute)
+      spec = RouteSpec.specs_for("PersonalisedRoute")
       assert spec.personalisation == "on"
       assert spec.personalised_route == true
 
-      spec = RouteSpec.specs_for(NonPersonalisedRoute)
+      spec = RouteSpec.specs_for("NonPersonalisedRoute")
       assert spec.personalisation == "off"
       assert spec.personalised_route == false
     end
