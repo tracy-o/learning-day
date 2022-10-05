@@ -64,7 +64,7 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
     end
   end
 
-  describe "NEWS - when CPS URL and discipline provided, show MozartNews on test" do
+  describe "NEWS - when CPS URL with asset ID provided, show MozartNews on test" do
     setup do
       set_environment("test")
 
@@ -93,7 +93,7 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
     end
   end
 
-  describe "NEWS - when CPS URL and discipline provided, show MozartNews on live" do
+  describe "NEWS - when CPS URL with asset ID provided, show MozartNews on live" do
     setup do
       set_environment("live")
 
