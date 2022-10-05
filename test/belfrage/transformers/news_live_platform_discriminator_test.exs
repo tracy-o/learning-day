@@ -6,7 +6,7 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private}
 
-  describe "NEWS - when with TIPO URL on TEST should show webcore" do
+  describe "NEWS - when with TIPO URL on TEST, show WebCore" do
     setup do
       set_environment("test")
 
@@ -35,7 +35,7 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
     end
   end
 
-  describe "NEWS - TIPO URL on LIVE should show MozartNews 'not found' page" do
+  describe "NEWS - when TIPO URL on LIVE, show MozartNews" do
     setup do
       set_environment("live")
 
@@ -64,7 +64,36 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
     end
   end
 
-  describe "NEWS - when with CPS URL and discipline provided show MozartNews on live" do
+  describe "NEWS - when CPS URL and discipline provided, show MozartNews on test" do
+    setup do
+      set_environment("test")
+
+      struct = %Struct{
+        request: %Request{
+          path: "/news/live/uk-55930940"
+        },
+        private: %Private{
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+          platform: MozartNews
+        }
+      }
+
+      %{
+        struct: struct
+      }
+    end
+
+    test "origin and platform is MozartNews", %{struct: struct} do
+      assert NewsLivePlatformDiscriminator.call([], struct) ==
+               {:ok,
+                Struct.add(struct, :private, %{
+                  platform: MozartNews,
+                  production_environment: "live"
+                })}
+    end
+  end
+
+  describe "NEWS - when CPS URL and discipline provided, show MozartNews on live" do
     setup do
       set_environment("live")
 
