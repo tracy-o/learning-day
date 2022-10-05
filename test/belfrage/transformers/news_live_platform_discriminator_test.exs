@@ -35,7 +35,7 @@ defmodule Belfrage.Transformers.NewsLivePlatformDiscriminatorTest do
     end
   end
 
-  describe "NEWS - when with TIPO URL on LIVE should show not MozartNews not found page" do
+  describe "NEWS - TIPO URL on LIVE should show MozartNews 'not found' page" do
     setup do
       set_environment("live")
 
