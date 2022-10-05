@@ -17,7 +17,7 @@ defmodule Routes.Specs.WorldServiceMvtPoc do
   end
 
   defp pipeline("live"),
-    do: ["HTTPredirect", "TrailingSlashRedirector", "WorldServiceRedirect", "MvtEcho", "CircuitBreaker"]
+    do: ["HTTPredirect", "WorldServiceRedirect", "MvtEcho", "CircuitBreaker"]
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

@@ -12,7 +12,7 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "AppPersonalisation", "Personalisation", "CircuitBreaker"]
+    ["HTTPredirect", "AppPersonalisation", "Personalisation", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do
