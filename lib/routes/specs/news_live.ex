@@ -9,8 +9,4 @@ defmodule Routes.Specs.NewsLive do
       query_params_allowlist: ["page"]
     }
   end
-
-  def pipeline(_production_environment) do
-    ["NewsLivePlatformDiscriminator"]
-  end
 end
