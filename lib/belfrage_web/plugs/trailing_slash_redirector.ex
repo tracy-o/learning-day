@@ -22,18 +22,20 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     conn
     |> put_location()
     |> put_resp_content_type("text/plain")
-    |> resp(301, "Redirecting")
+    |> send_resp(301, "")
+    |> halt()
   end
 
   defp put_location(conn) do
     conn
-    |> put_resp_header("location", build_uri(conn))
+    |> put_resp_header("location", remove_trailing(conn.request_path))
   end
-
-  defp build_uri(conn) do
-    conn
-    |> Map.replace!(:request_path, String.replace_trailing(conn.request_path, "/", ""))
-    |> request_url()
+  
+  defp remove_trailing(location) do
+    case String.replace_trailing(location, "/", "") do
+      "" -> "/"
+      location -> location 
+    end
   end
   
   defp trailing_slash?(%{ request_path: path }) do
