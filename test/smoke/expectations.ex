@@ -5,7 +5,7 @@ defmodule Belfrage.SmokeTestCase.Expectations do
 
   alias Test.Support.Helper
 
-  def expect_smoke_response(test_properties, response, expected_status_code) do
+  def expect_response(test_properties, response, expected_status_code) do
     cond do
       is_test_only_route(test_properties) ->
         expected_test_route(response, test_properties)
