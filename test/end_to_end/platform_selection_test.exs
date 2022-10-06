@@ -62,7 +62,7 @@ defmodule EndToEnd.PlatformSelectionTest do
 
   describe "When a route with a :platform attribute is used that is a selector" do
     test ~s(webcore platform is used when asset type in ["MAP", "CSP", "PGL", "STY"]) do
-      url = "#{@fabl_endpoint}/module/ares-data?path=%2Fplatform-selection-with-selector"
+      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       Enum.each(@webcore_asset_types, fn asset_type ->
         HTTPMock
@@ -76,7 +76,7 @@ defmodule EndToEnd.PlatformSelectionTest do
             {:ok,
              %HTTP.Response{
                status_code: 200,
-               body: "{\"section\": \"business\", \"assetType\": \"#{asset_type}\"}"
+               body: "{\"data\": {\"section\": \"business\", \"assetType\": \"#{asset_type}\"}}"
              }}
           end
         )
@@ -104,32 +104,30 @@ defmodule EndToEnd.PlatformSelectionTest do
     end
 
     test ~s(MozartNews platform is used when asset type not in ["MAP", "CSP", "PGL", "STY"]) do
-      url = "#{@fabl_endpoint}/module/ares-data?path=%2Fplatform-selection-with-selector"
+      ares_url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+
+      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
       HTTPMock
       |> expect(
         :execute,
         fn %HTTP.Request{
              method: :get,
-             url: ^url
+             url: ^ares_url
            },
            :Fabl ->
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"section\": \"business\", \"assetType\": \"SOME_OTHER_ASSET_TYPE\"}"
+             body: "{\"data\": {\"section\": \"business\", \"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
            }}
         end
       )
-
-      url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
-
-      HTTPMock
       |> expect(
         :execute,
         fn %HTTP.Request{
              method: :get,
-             url: ^url
+             url: ^mozart_url
            },
            :MozartNews ->
           {:ok,
@@ -153,7 +151,8 @@ defmodule EndToEnd.PlatformSelectionTest do
       assert_raise Plug.Conn.WrapperError,
                    "** (RuntimeError) Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /platform-selection-with-selector, reason: {:ok, %Belfrage.Clients.HTTP.Response{body: nil, headers: %{}, status_code: 500}}}",
                    fn ->
-                     url = "#{@fabl_endpoint}/module/ares-data?path=%2Fplatform-selection-with-selector"
+                     url =
+                       "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
                      HTTPMock
                      |> expect(
