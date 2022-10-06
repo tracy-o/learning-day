@@ -33,7 +33,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
 
   defp put_location(conn) do
     conn
-    |> put_resp_header("location", build_location(conn)) 
+    |> put_resp_header("location", build_location(conn))
   end
 
   defp build_location(conn) do
