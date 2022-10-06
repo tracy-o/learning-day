@@ -26,7 +26,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn = conn(:get, "/200-ok-response///")
     conn = Router.call(conn, [])
 
-    assert {301, headers, ""} = sent_resp(conn)
+    assert {301, headers, "Redirecting"} = sent_resp(conn)
     assert {"location", "/200-ok-response"} in headers
     assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers
   end
