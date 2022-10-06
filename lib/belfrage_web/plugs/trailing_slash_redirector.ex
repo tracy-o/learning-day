@@ -27,19 +27,32 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_resp_header("vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme")
     |> put_resp_header("req-svc-chain", "GTM,BELFRAGE")
     |> put_resp_header("cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60")
-    |> send_resp(301, "Redirecting")
+    |> send_resp(301, "")
     |> halt()
   end
 
   defp put_location(conn) do
     conn
-    |> put_resp_header("location", remove_trailing(conn.request_path))
+    |> put_resp_header("location", build_location(conn)) 
   end
 
-  defp remove_trailing(location) do
-    case String.replace_trailing(location, "/", "") do
-      "" -> "/"
-      location -> location
+  defp build_location(conn) do
+    conn
+    |> remove_trailing()
+    |> append_query_string()
+  end
+
+  defp append_query_string(conn) do
+    case conn.query_string do
+      "" -> conn.request_path
+      _ -> conn.request_path <> "?" <> conn.query_string
+    end
+  end
+
+  defp remove_trailing(conn) do
+    case String.replace_trailing(conn.request_path, "/", "") do
+      "" -> Map.put(conn, :request_path, "/")
+      location -> Map.put(conn, :request_path, location)
     end
   end
 
