@@ -22,6 +22,10 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     conn
     |> put_location()
     |> put_resp_content_type("text/plain")
+    |> put_resp_header("server", "Belfrage")
+    |> put_resp_header("via", "1.1 Belfrage")
+    |> put_resp_header("vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme")
+    |> put_resp_header("req-svc-chain", "GTM,BELFRAGE")
     |> send_resp(301, "")
     |> halt()
   end
