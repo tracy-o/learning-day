@@ -41,7 +41,6 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     assert {"server", "Belfrage"} in headers
     assert {"via", "1.1 Belfrage"} in headers
     assert {"x-bbc-no-scheme-rewrite", "1"} in headers
-    assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
   end
 
   test "keeps req-svc-chain values when provided" do
