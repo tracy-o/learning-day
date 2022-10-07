@@ -8,7 +8,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     |> resp(200, "not being redirected")
   end
 
-  test "no redirect when top level '/' in path " do
+  test "no redirect when top level '/' in path" do
     conn =
       incoming_request("/")
       |> TrailingSlashRedirector.call([])
