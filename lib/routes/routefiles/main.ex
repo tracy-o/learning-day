@@ -468,7 +468,9 @@ defroutefile "Main" do
   end
 
   handle "/news/topics/:id/rss.xml", using: "TopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
-    return_404 if: [!String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),]
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+    ]
   end
 
   redirect "/news/amp/:id", to: "/news/:id.amp", status: 301
