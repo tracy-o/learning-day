@@ -3,7 +3,7 @@ defmodule Belfrage.SmokeTestCase do
   alias Belfrage.SmokeTestCase.Expectations
   import ExUnit.Assertions
 
-  @retry_times 2
+  @retry_times 0
   @retry_interval 1_000
 
   def tld(host) do
@@ -96,8 +96,11 @@ defmodule Belfrage.SmokeTestCase do
                 {:ok, resp} ->
                   assert true
 
-                {:error, reason} ->
+                {:error, reason} when is_binary(reason) ->
                   assert false, reason
+
+                {:error, reason} ->
+                  assert false, inspect(reason)
               end
             end
           end
