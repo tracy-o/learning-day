@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   import Plug.Conn
+  alias BelfrageWeb.RequestHeaders.Sanitiser
 
   @moduledoc """
   Redirects a request with
@@ -25,10 +26,17 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_resp_header("server", "Belfrage")
     |> put_resp_header("via", "1.1 Belfrage")
     |> put_resp_header("vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme")
-    |> put_resp_header("req-svc-chain", "GTM,BELFRAGE")
+    |> put_resp_header("req-svc-chain", add_to_req_svc_chain(conn.private.bbc_headers))
     |> put_resp_header("cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60")
     |> send_resp(301, "")
     |> halt()
+  end
+
+  defp add_to_req_svc_chain(bbc_headers) do
+    case String.contains? bbc_headers.req_svc_chain, "BELFRAGE" do
+      true -> bbc_headers.req_svc_chain
+      false -> Sanitiser.req_svc_chain(bbc_headers, "")
+    end
   end
 
   defp put_location(conn) do
