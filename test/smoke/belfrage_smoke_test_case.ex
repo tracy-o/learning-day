@@ -32,12 +32,13 @@ defmodule Belfrage.SmokeTestCase do
   def retry_route(endpoint, path, spec, retry_check) do
     Enum.reduce_while(@retry_times..0, {:error, "no response"}, fn times, _prev_resp ->
       with {:ok, resp} <- Helper.get_route(endpoint, path, spec),
-           {true, _} <- retry_check.(resp) do
+           :ok <- retry_check.(resp) do
         {:halt, {:ok, resp}}
       else
         {_, reason} ->
           if times > 0 do
             IO.puts("[🐡] retry #{@retry_times - times + 1}/#{@retry_times}: #{path}")
+
             Process.sleep(@retry_interval)
             {:cont, {:error, reason}}
           else
@@ -81,6 +82,7 @@ defmodule Belfrage.SmokeTestCase do
             @tag stack: @target
             test "#{truncate_path(path)}", context do
               test_properties = %{
+                expected_status: @expected_status_code,
                 matcher: @matcher_spec,
                 smoke_env: @smoke_env,
                 target: @target,
@@ -89,7 +91,7 @@ defmodule Belfrage.SmokeTestCase do
               }
 
               retry_check = fn resp ->
-                Expectations.expect_response(test_properties, resp, @expected_status_code)
+                Expectations.expect_response(resp, test_properties)
               end
 
               case retry_route(@host, @path, @matcher_spec, retry_check) do
