@@ -28,7 +28,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     |> put_resp_header("x-bbc-no-scheme-rewrite", "1")
     |> put_resp_header("vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme")
     |> put_resp_header("req-svc-chain", add_to_req_svc_chain(conn.private.bbc_headers))
-    |> put_resp_header("cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60")
+    |> put_resp_header("cache-control", "public, max-age=60")
     |> send_resp(301, "")
     |> halt()
   end
