@@ -4,6 +4,8 @@
 # What types of route matcher you can  use:
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
+# How to validate a route:
+# lib/belfrage_web/validators.ex
 
 import BelfrageWeb.Routefile
 
