@@ -33,9 +33,10 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   end
 
   defp add_to_req_svc_chain(bbc_headers) do
-    case String.contains? bbc_headers.req_svc_chain, "BELFRAGE" do
-      true -> bbc_headers.req_svc_chain
-      false -> Sanitiser.req_svc_chain(bbc_headers, "")
+    cond do
+      String.ends_with?(bbc_headers.req_svc_chain, "BELFRAGE") -> bbc_headers.req_svc_chain
+      is_nil(bbc_headers.req_svc_chain) -> "BELFRAGE"
+      true -> Sanitiser.req_svc_chain(bbc_headers, "")
     end
   end
 

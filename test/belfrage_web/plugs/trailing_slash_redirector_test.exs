@@ -5,6 +5,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
 
   defp incoming_request(path) do
     conn(:get, path)
+    |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
     |> resp(200, "not being redirected")
   end
 
