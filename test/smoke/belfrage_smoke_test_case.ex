@@ -3,7 +3,7 @@ defmodule Belfrage.SmokeTestCase do
   alias Belfrage.SmokeTestCase.Expectations
   import ExUnit.Assertions
 
-  @retry_times 0
+  @retry_times 1
   @retry_interval 1_000
 
   def tld(host) do
@@ -30,22 +30,24 @@ defmodule Belfrage.SmokeTestCase do
   end
 
   def retry_route(endpoint, path, spec, retry_check) do
-    Enum.reduce_while(@retry_times..0, {:error, "no response"}, fn times, _prev_resp ->
-      with {:ok, resp} <- Helper.get_route(endpoint, path, spec),
-           :ok <- retry_check.(resp) do
-        {:halt, {:ok, resp}}
-      else
-        {_, reason} ->
-          if times > 0 do
-            IO.puts("[🐡] retry #{@retry_times - times + 1}/#{@retry_times}: #{path}")
+    do_retry({endpoint, path, spec}, retry_check, @retry_times)
+  end
 
-            Process.sleep(@retry_interval)
-            {:cont, {:error, reason}}
-          else
-            {:halt, {:error, reason}}
-          end
-      end
-    end)
+  defp do_retry({endpoint, path, spec}, retry_check, times) do
+    with {:ok, resp} <- Helper.get_route(endpoint, path, spec),
+         :ok <- retry_check.(resp) do
+      {:ok, resp}
+    else
+      {:error, reason} ->
+        if times > 0 do
+          Process.sleep(@retry_interval)
+
+          IO.puts("[🐡] error: #{inspect(reason)}, retry #{times + 1 - @retry_times}/#{@retry_times}: #{path}")
+          do_retry({endpoint, path, spec}, retry_check, {times - 1, {:error, reason}})
+        else
+          {:error, reason}
+        end
+    end
   end
 
   defmacro __using__(
