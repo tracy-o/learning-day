@@ -71,7 +71,7 @@ defmodule Belfrage.SmokeTestCase do
         @smoke_env smoke_env
         @host host
 
-        describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{target}" do
+        describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{@target}" do
           @describetag spec: @matcher_spec.using
           @describetag platform: Belfrage.RouteSpec.specs_for(@matcher_spec.using, smoke_env).platform
 
