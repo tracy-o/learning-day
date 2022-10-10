@@ -6,7 +6,6 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   Redirects a request with
   a request path and a trailing slash
   to one without a trailing slash.
-  NOTE : This doesn't take into account query strings
   """
 
   def init(opts), do: opts
@@ -34,8 +33,8 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
 
   defp add_to_req_svc_chain(bbc_headers) do
     cond do
-      String.ends_with?(bbc_headers.req_svc_chain, "BELFRAGE") -> bbc_headers.req_svc_chain
       is_nil(bbc_headers.req_svc_chain) -> "BELFRAGE"
+      String.ends_with?(bbc_headers.req_svc_chain, "BELFRAGE") -> bbc_headers.req_svc_chain
       true -> Sanitiser.req_svc_chain(bbc_headers, "")
     end
   end
