@@ -96,7 +96,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
                timeout: 6000,
                url: "https://slack.com/api/chat.postMessage",
                payload:
-                 ~s|{"blocks":[{"text":{"text":":fire::fire: Smoke Test Failure: 3/6 (fallbacks=0) :fire::fire:\\n\\nfor details see <#C029V08H8NB>","type":"mrkdwn"},"type":"section"}],"channel":"#{slack_channel}"}|
+                 ~s|{"blocks":[{"text":{"text":":dash: *Smoke Test Failure: 3/6* (fallbacks=0) :dash:\\n\\nfor details see <#C029V08H8NB>","type":"mrkdwn"},"type":"section"}],"channel":"#{slack_channel}"}|
              }
            ] == ReportSmokeTestResults.notify_main_channel(output, slack_auth_token)
   end
