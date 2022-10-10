@@ -339,10 +339,15 @@ defroutefile "Main" do
 
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
-  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
-    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+  # News Live - Both Morph and WebCore Traffic
+  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940", "/news/live/c1v596ken6vt"] do
+    return_404 if: [
+      !String.match?(asset_id, ~r/^(([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})|(c[a-z0-9]{10,}t))$/), # CPS & TIPO IDs
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it 
+    ]
   end
 
+  # News Live - Morph Traffic with Page ID
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
