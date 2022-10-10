@@ -96,7 +96,7 @@ defmodule Belfrage.SmokeTestCase do
                 Expectations.expect_response(resp, test_properties)
               end
 
-              case retry_route(@host, @path, @matcher_spec, retry_check) do
+              case retry_route(@host, @path, @matcher_spec.using, retry_check) do
                 {:ok, resp} ->
                   assert true
 
