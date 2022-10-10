@@ -2372,9 +2372,11 @@ defroutefile "Main" do
   end
 
   # Weather
+
+
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
-  handle "/weather/search", using: "WeatherSearch", examples: [{"/weather/search/?s=", 301}, "/weather/search?s=london"] do
+  handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search?s=london"] do
     return_404(
       if: [
         !is_valid_length?(conn.query_params["s"], 0..100),
@@ -2387,7 +2389,8 @@ defroutefile "Main" do
 
   handle "/weather/map", using: "Weather", examples: ["/weather/map"]
 
-  handle "/weather/warnings", using: "WeatherWarnings", examples: [{"/weather/warnings",302}]
+  redirect "/weather/warnings", to: "/weather/warnings/weather", status: 302
+
   handle "/weather/warnings/weather", using: "WeatherWarnings", examples: ["/weather/warnings/weather"]
   handle "/weather/warnings/floods", using: "WeatherWarnings", examples: ["/weather/warnings/floods"]
 
