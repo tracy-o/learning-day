@@ -2,8 +2,9 @@ defmodule Routes.Specs.NewsRss do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: MozartNews
+      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
+      platform: Karanga,
+      pipeline: ["RssFeedRedirect"]
     }
   end
 end
