@@ -43,7 +43,7 @@ defmodule Belfrage.SmokeTestCase do
           Process.sleep(@retry_interval)
 
           IO.puts("[🐡] error: #{inspect(reason)}, retry #{times + 1 - @retry_times}/#{@retry_times}: #{path}")
-          do_retry({endpoint, path, spec}, retry_check, {times - 1, {:error, reason}})
+          do_retry({endpoint, path, spec}, retry_check, times - 1)
         else
           {:error, reason}
         end
