@@ -11,7 +11,7 @@ defmodule Routes.Platforms.Programmes do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
+    ["HTTPredirect", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

@@ -94,7 +94,7 @@ defmodule EndToEnd.CascadeTest do
     expect_no_requests_to_origins()
 
     # Add a trailing slash to the request path to trigger a redirect by the
-    # `TrailingSlashRedirector` transformer
+    # `TrailingSlashRedirector` plug
     conn = make_request(@cascade_route <> "/")
     assert conn.status == 301
   end
