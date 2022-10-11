@@ -5,7 +5,7 @@ defmodule Routes.Specs.Search do
       runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
       pipeline: ["ComToUKRedirect"],
       platform: Webcore,
-      query_params_allowlist: ["q", "page"],
+      query_params_allowlist: ["q", "page", "d"],
       caching_enabled: false
     }
   end

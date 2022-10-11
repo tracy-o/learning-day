@@ -5,7 +5,7 @@ defmodule Routes.Specs.WelshSearch do
       runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
       pipeline: ["ComToUKRedirect"],
       platform: Webcore,
-      query_params_allowlist: ["q", "page"],
+      query_params_allowlist: ["q", "page", "d"],
       default_language: "cy",
       caching_enabled: false
     }
