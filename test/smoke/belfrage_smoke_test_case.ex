@@ -3,8 +3,8 @@ defmodule Belfrage.SmokeTestCase do
   alias Belfrage.SmokeTestCase.Expectations
   import ExUnit.Assertions
 
-  @retry_times 1
-  @retry_interval 1_000
+  @retry_times 2
+  @retry_interval 2_000
 
   def tld(host) do
     cond do
