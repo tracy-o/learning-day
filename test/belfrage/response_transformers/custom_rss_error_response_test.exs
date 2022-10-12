@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.CustomRssErrorResponseTest do
+defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
   use ExUnit.Case
 
   alias Belfrage.Struct
-  alias Belfrage.Transformers.CustomRssErrorResponse
+  alias Belfrage.ResponseTransformers.CustomRssErrorResponse
 
   test "Amend FABL response on error" do
     {:ok, struct} =

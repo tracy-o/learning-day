@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.ClassicAppCacheControlTest do
+defmodule Belfrage.ResponseTransformers.ClassicAppCacheControlTest do
   use ExUnit.Case
 
   alias Belfrage.Struct
-  alias Belfrage.Transformers.ClassicAppCacheControl
+  alias Belfrage.ResponseTransformers.ClassicAppCacheControl
 
   test "does not modify cache control when not a classic app host" do
     {:ok, struct_with_non_classic_app_host} =

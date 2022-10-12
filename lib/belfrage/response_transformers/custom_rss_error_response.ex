@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.CustomRssErrorResponse do
+defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
   alias Belfrage.Struct
   use Belfrage.Transformers.Transformer
 

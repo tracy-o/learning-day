@@ -73,9 +73,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^lambda_function,
                  platform: Webcore
@@ -96,9 +93,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
                  platform: MorphRouter
@@ -122,9 +116,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^morph_endpoint,
                  platform: MorphRouter
@@ -145,9 +136,6 @@ defmodule Belfrage.Transformers.BitesizeLevelsPlatformDiscriminatorTest do
     assert {
              :ok,
              %Struct{
-               debug: %Struct.Debug{
-                 pipeline_trail: []
-               },
                private: %Struct.Private{
                  origin: ^lambda_function,
                  platform: Webcore

@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.ResponseHeaderGuardian do
+defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   @moduledoc """
   Remove response headers that could result in
   clearly bad behaviour for Belfrage.

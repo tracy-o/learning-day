@@ -1,20 +1,20 @@
 defmodule Belfrage.PipelineTest do
   use ExUnit.Case
 
-  alias Belfrage.Pipeline, as: Subject
+  alias Belfrage.Pipeline
   alias Belfrage.Struct
 
   test "process producing a successful response" do
     original_struct = %Struct{private: %Struct.Private{request_pipeline: ["MockTransformer"]}}
 
-    assert {:ok, _struct} = Subject.process(original_struct, original_struct.private.request_pipeline)
+    assert {:ok, _struct} = Pipeline.process(original_struct, :request, original_struct.private.request_pipeline)
     assert_received(:mock_transformer_called)
   end
 
   test "when pipeline is stopped, no more transformers are called" do
     original_struct = %Struct{private: %Struct.Private{request_pipeline: ["MockTransformerStop", "MockTransformer"]}}
 
-    assert {:ok, _struct} = Subject.process(original_struct, original_struct.private.request_pipeline)
+    assert {:ok, _struct} = Pipeline.process(original_struct, :request, original_struct.private.request_pipeline)
     assert_received(:mock_transformer_stop_called)
     refute_received(:mock_transformer_called)
   end
@@ -24,7 +24,7 @@ defmodule Belfrage.PipelineTest do
       private: %Struct.Private{request_pipeline: ["MockTransformerRedirect", "MockTransformer"]}
     }
 
-    assert {:ok, _struct} = Subject.process(original_struct, original_struct.private.request_pipeline)
+    assert {:ok, _struct} = Pipeline.process(original_struct, :request, original_struct.private.request_pipeline)
     assert_received(:mock_transformer_redirect_called)
     refute_received(:mock_transformer_called)
   end
@@ -32,6 +32,7 @@ defmodule Belfrage.PipelineTest do
   test "process producing an error response" do
     original_struct = %Struct{private: %Struct.Private{request_pipeline: ["MyTransformer3"]}}
 
-    assert {:error, _struct, _msg} = Subject.process(original_struct, original_struct.private.request_pipeline)
+    assert {:error, _struct, _msg} =
+             Pipeline.process(original_struct, :request, original_struct.private.request_pipeline)
   end
 end

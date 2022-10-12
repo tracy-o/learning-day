@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.ClassicAppCacheControl do
+defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
   alias Belfrage.Struct
   use Belfrage.Transformers.Transformer
 

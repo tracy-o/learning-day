@@ -2,7 +2,7 @@ defmodule Belfrage.Transformers.ResponseHeaderGuardianTest do
   alias Belfrage.Struct
   use ExUnit.Case
 
-  alias Belfrage.Transformers.ResponseHeaderGuardian
+  alias Belfrage.ResponseTransformers.ResponseHeaderGuardian
 
   doctest ResponseHeaderGuardian, import: true
 

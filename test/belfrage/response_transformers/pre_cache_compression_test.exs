@@ -1,5 +1,5 @@
-defmodule Belfrage.Transformers.PreCacheCompressionTest do
-  alias Belfrage.Transformers.PreCacheCompression
+defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
+  alias Belfrage.ResponseTransformers.PreCacheCompression
   alias Belfrage.Struct
   use ExUnit.Case
   use Test.Support.Helper, :mox

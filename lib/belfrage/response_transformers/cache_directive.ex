@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.CacheDirective do
+defmodule Belfrage.ResponseTransformers.CacheDirective do
   @moduledoc """
   - Parses the Cache-Control header, and saves result to `struct.response.cache_directive`
   - Removes the Cache-Control response header, so it is not stored in the cache

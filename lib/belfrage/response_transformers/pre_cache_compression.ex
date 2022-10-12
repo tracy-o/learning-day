@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.PreCacheCompression do
+defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   @moduledoc """
   Ensures we always `gzip` compress the response body in the
   belfrage internal cache.

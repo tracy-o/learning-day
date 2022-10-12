@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.CacheDirectiveTest do
+defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.CacheDirective
+  alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Struct
   alias Belfrage.Test.StubHelper
 
