@@ -467,12 +467,6 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/topics/:id/rss.xml", using: "TopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
-    ]
-  end
-
   redirect "/news/amp/:id", to: "/news/:id.amp", status: 301
   redirect "/news/amp/:topic/:id", to: "/news/:topic/:id.amp", status: 301
 
@@ -583,7 +577,7 @@ defroutefile "Main" do
   handle "/news/northern_ireland/*_any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
   handle "/news/politics/*_any", using: "NewsUk", examples: ["/news/politics/eu_referendum/results"]
   handle "/news/resources/*_any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
-  handle "/news/rss/*_any", using: "NewsRss", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
+  handle "/news/rss/*_any", using: "NewsRssSection", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
   handle "/news/science-environment/*_any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
   handle "/news/scotland/*_any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
   handle "/news/slides/*_any", using: "News", examples: ["/news/slides/dress/3/yes-you-can-go-to-the-ball"]
@@ -607,6 +601,10 @@ defroutefile "Main" do
 
   handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
   handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
+
+  handle "/news/topics/:id/rss.xml", using: "TopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
