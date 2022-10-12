@@ -3,7 +3,8 @@ defmodule Routes.Specs.NewsroundVideoPage do
     %{
       owner: "childrensfutureweb@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
-      platform: Webcore
+      platform: Webcore,
+      pipeline: ["ComToUKRedirect"]
     }
   end
 end
