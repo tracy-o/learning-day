@@ -10,7 +10,7 @@ defmodule Belfrage.Transformers.TransformerTest do
 
     struct = %Struct{private: %Struct.Private{request_pipeline: ["HTTPredirect", "CircuitBreaker"]}}
 
-    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}} =
+    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{request_pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}} =
              Subject.then_do(struct.private.request_pipeline, struct)
   end
 

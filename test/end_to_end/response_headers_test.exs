@@ -35,8 +35,10 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
-               {"belfrage-pipeline-trail",
-                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
+               {"belfrage-request-pipeline-trail",
+                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
+               {"belfrage-response-pipeline-trail",
+                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
     end
 
@@ -77,8 +79,10 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
-               {"belfrage-pipeline-trail",
-                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective,DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"}
+               {"belfrage-request-pipeline-trail",
+                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
+               {"belfrage-response-pipeline-trail",
+                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
     end
   end

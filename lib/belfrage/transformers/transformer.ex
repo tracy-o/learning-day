@@ -22,7 +22,7 @@ defmodule Belfrage.Transformers.Transformer do
     apply(
       String.to_existing_atom(@namespace <> "." <> next),
       :call,
-      [rest, update_in(struct.debug.pipeline_trail, &[next | &1])]
+      [rest, update_in(struct.debug.request_pipeline_trail, &[next | &1])]
     )
   end
 

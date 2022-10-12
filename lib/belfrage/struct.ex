@@ -1,5 +1,6 @@
 defmodule Belfrage.Struct.Debug do
-  defstruct pipeline_trail: []
+  defstruct request_pipeline_trail: [],
+            response_pipeline_trail: []
 end
 
 defmodule Belfrage.Struct.Request do
