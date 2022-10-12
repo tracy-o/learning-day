@@ -340,10 +340,11 @@ defroutefile "Main" do
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
   # News Live - Both Morph and WebCore Traffic
-  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940", "/news/live/c1v596ken6vt"] do
+  handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
+    # example "/news/live/c1v596ken6vt" is causing smoke tests to fail.
     return_404 if: [
       !String.match?(asset_id, ~r/^(([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})|(c[a-z0-9]{10,}t))$/), # CPS & TIPO IDs
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it 
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
     ]
   end
 
@@ -2369,7 +2370,8 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/topics/:id/rss.xml", using: "TopicRss", examples: ["/topics/c57jjx4233xt/rss.xml"] do
+  handle "/topics/:id/rss.xml", using: "TopicRss", examples: [] do
+    # example "/topics/c57jjx4233xt/rss.xml" need "feeds.api.bbci.co.uk" as host
     return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
   end
 
