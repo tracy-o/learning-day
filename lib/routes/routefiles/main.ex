@@ -2388,7 +2388,7 @@ defroutefile "Main" do
   handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search?s=london"] do
     return_404(
       if: [
-        !is_valid_length?(conn.query_params["s"], 0..100),
+        !is_valid_length?(conn.query_params["s"] || "", 0..100),
         !integer_in_range?(conn.query_params["page"] || "1", 1..999)
       ]
     )
