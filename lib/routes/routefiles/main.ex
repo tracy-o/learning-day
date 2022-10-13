@@ -2489,14 +2489,15 @@ defroutefile "Main" do
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*_any", using: "Archive", examples: []
 
-  # newsrounds routes appear to be using morphRouter
-  handle "/newsround.amp", using: "Newsround", examples: []
-  handle "/newsround.json", using: "Newsround", examples: []
-
+  # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 301
-
-  handle "/newsround/*_any", using: "Newsround", examples: []
+  handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                        # Is this route needed? Currently 404
+  handle "/newsround.json", using: "NewsroundAmp", examples: []                                                       # Is this route needed? Currently 404
+  handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
+  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: ["/newsround/unknown/61545299.amp"]            # Not sure if used
+  handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
+  handle "/newsround/*_any", using: "NewsroundLegacy", examples: ["/newsround", "/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
