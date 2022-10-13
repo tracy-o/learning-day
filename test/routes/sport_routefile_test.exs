@@ -8,10 +8,8 @@ defmodule Routes.SportRoutefileTest do
   import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, Clients}
+  alias Belfrage.RouteState
   alias Routes.Routefiles.Sport.Test, as: Routefile
-
-  @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
 
   @platforms Routes.Platforms.list()
 
@@ -61,7 +59,7 @@ defmodule Routes.SportRoutefileTest do
             validate_required_attrs_in_route(matcher, route, env)
 
           {matcher, route = %{using: route_state_id, platform: platform}} ->
-            route_state_id = "#{platform}.#{route_state_id}"
+            route_state_id = "#{route_state_id}.#{platform}"
             route_spec_attrs = Belfrage.RouteSpec.get_route_spec_attrs(route_state_id, env)
             specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
 
@@ -105,22 +103,21 @@ defmodule Routes.SportRoutefileTest do
         {matcher, %{platform: platform, using: route_state_id}, example} when platform in @platforms ->
           conn = make_call(:get, example)
 
-          if conn.assigns.route_spec == "#{platform}.#{route_state_id}" do
+          if conn.assigns.route_spec == "#{route_state_id}.#{platform}" do
             :ok
           else
             {:error,
              "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
           end
 
-        {matcher, %{platform: platform, using: route_state_id}, example} ->
-          mock_selector_endpoint(platform, example)
+        {matcher, %{platform: _platform, using: route_state_id}, example} ->
           conn = make_call(:get, example)
 
-          if String.ends_with?(conn.assigns.route_spec, route_state_id) do
+          if String.starts_with?(conn.assigns.route_spec, route_state_id) do
             :ok
           else
             {:error,
-             "Example #{example} for route #{matcher} with a selector is not routed to a route spec ending in #{route_state_id}, but to #{conn.assigns.route_spec}"}
+             "Example #{example} for route #{matcher} that uses a platform selector is not routed to a route spec that starts with #{route_state_id}, but to #{conn.assigns.route_spec}"}
           end
 
         {matcher, %{using: route_state_id}, example} ->
@@ -230,7 +227,7 @@ defmodule Routes.SportRoutefileTest do
       # to later determine the platform suffix of the RouteSpec id.
       has_platform_suffix?(route) ->
         {:error,
-         "Route #{matcher} has a route spec that is suffixed with a :platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route.."}
+         "Route #{matcher} has a route spec that is suffixed with a Platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route."}
 
       # If the route and the RouteSpec both have a :platform key
       # then we return an error tuple, as we only expect
@@ -244,12 +241,12 @@ defmodule Routes.SportRoutefileTest do
          "Route #{matcher} has a :platform attribute when :platform is specified in route spec for #{env}.\n Please remove the :platform attribute in the route spec if it must be specified in the route.\n Otherwise remove the :platform attribute in the route."}
 
       # If the platform attribute has a :platform key
-      # that is neither a Platform nor a Selector ending
-      # in "Selector", then we raise a error. This is to
+      # that is neither a Platform nor a Platform Selector ending
+      # in "PlatformSelector", then we raise a error. This is to
       # enforce the said convention.
       has_platform_key?(route) and not selector_or_platform?(route.platform) ->
         {:error,
-         ~s(Route #{matcher} has a :platform attribute that is not a Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Selector that ends with "Selector".)}
+         ~s(Route #{matcher} has a :platform attribute that is not a Platform Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with "PlatformSelector".)}
 
       true ->
         :ok
@@ -265,15 +262,15 @@ defmodule Routes.SportRoutefileTest do
       # to later determine the platform suffix of the RouteSpec id.
       has_platform_suffix?(route) ->
         {:error,
-         "Route #{matcher} has a route spec that is suffixed with a :platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route.."}
+         "Route #{matcher} has a route spec that is suffixed with a Platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route."}
 
       # If the platform attribute has a :platform key
-      # that is neither a Platform nor a Selector ending
-      # in "Selector", then we raise a error. This is to
+      # that is neither a Platform nor a Platform Selector ending
+      # in "PlatformSelector", then we raise a error. This is to
       # enforce the said convention.
       has_platform_key?(route) and not selector_or_platform?(route.platform) ->
         {:error,
-         ~s(Route #{matcher} has a :platform attribute that is not a Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Selector that ends with "Selector".)}
+         ~s(Route #{matcher} has a :platform attribute that is not a Platform Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with "PlatformSelector".)}
 
       true ->
         :ok
@@ -346,7 +343,7 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp route_state_id({_matcher, %{using: route_state_id, platform: platform}, _example}) when platform in @platforms do
-    "#{platform}.#{route_state_id}"
+    "#{route_state_id}.#{platform}"
   end
 
   defp route_state_id({_matcher, %{using: _route_state_id, platform: _platform}, _example}) do
@@ -360,7 +357,7 @@ defmodule Routes.SportRoutefileTest do
   defp route_state_id(route = %{}) do
     case route do
       %{platform: platform, using: route_state_id} ->
-        "#{platform}.#{route_state_id}"
+        "#{route_state_id}.#{platform}"
 
       %{using: route_state_id} ->
         route_state_id
@@ -388,35 +385,10 @@ defmodule Routes.SportRoutefileTest do
   defp maybe_update_route_state_id(route = %{}) do
     case route do
       %{platform: platform, using: route_state_id} ->
-        Map.put(route, :using, "#{platform}.#{route_state_id}")
+        Map.put(route, :using, "#{route_state_id}.#{platform}")
 
       _route ->
         route
-    end
-  end
-
-  def mock_selector_endpoint(platform, path) do
-    case platform do
-      "AssetTypePlatformSelector" ->
-        query_params = Plug.Conn.Query.encode(%{path: path})
-        url = "#{@fabl_endpoint}/module/ares-data?#{query_params}"
-
-        Clients.HTTPMock
-        |> expect(
-          :execute,
-          2,
-          fn
-            %Clients.HTTP.Request{method: :get, url: ^url}, :Fabl ->
-              {:ok,
-               %Clients.HTTP.Response{status_code: 200, body: "{\"section\": \"business\", \"assetType\": \"ABC\"}"}}
-
-            _request, _platform ->
-              {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
-          end
-        )
-
-      _platform ->
-        nil
     end
   end
 end

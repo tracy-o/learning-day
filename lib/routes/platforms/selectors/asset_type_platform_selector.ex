@@ -43,8 +43,8 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelector do
 
   defp extract_asset_type(payload) do
     case Json.decode!(payload) do
-      %{"assetType" => asset_type, "section" => _section} -> {:ok, asset_type}
-      %{"assetType" => _asset_type} -> {:error, :no_section}
+      %{"data" => %{"assetType" => asset_type, "section" => _section}} -> {:ok, asset_type}
+      %{"data" => %{"assetType" => _asset_type}} -> {:error, :no_section}
       _ -> {:error, :no_asset_type}
     end
   end
