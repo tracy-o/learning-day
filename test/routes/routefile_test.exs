@@ -288,7 +288,7 @@ defmodule Routes.RoutefileTest do
   defp validate_transformers(matcher, spec, env) do
     invalid_transformers =
       Enum.filter(spec.request_pipeline, fn transformer ->
-        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, Transformers, transformer])))
+        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, RequestTransformers, transformer])))
       end)
 
     duplicate_transformers = Enum.uniq(spec.request_pipeline -- Enum.uniq(spec.request_pipeline))

@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.TransformerTest do
+defmodule Belfrage.TransformerTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.Transformer, as: Subject
+  alias Belfrage.Transformer, as: Subject
   alias Belfrage.Struct
 
   test "when there are transformers in the list it will call the next one, seen via the reverse ordering in the debug pipeline trail" do

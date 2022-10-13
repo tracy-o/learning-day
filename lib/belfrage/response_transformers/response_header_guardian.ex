@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   clearly bad behaviour for Belfrage.
   """
   alias Belfrage.Struct
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @impl true
   def call(rest, struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do

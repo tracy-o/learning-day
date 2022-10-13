@@ -1,4 +1,4 @@
-defmodule Belfrage.Transformers.ResponseHeaderGuardianTest do
+defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
   alias Belfrage.Struct
   use ExUnit.Case
 

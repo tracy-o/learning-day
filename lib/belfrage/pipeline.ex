@@ -3,7 +3,7 @@ defmodule Belfrage.Pipeline do
   alias Belfrage.Struct
 
   def process(struct, :request, _pipeline = [first | rest]) do
-    root_transformer = String.to_existing_atom("Elixir.Belfrage.Transformers.#{first}")
+    root_transformer = String.to_existing_atom("Elixir.Belfrage.RequestTransformers.#{first}")
     struct = update_in(struct.debug.request_pipeline_trail, &[first | &1])
 
     begin_pipeline(struct, root_transformer, rest)

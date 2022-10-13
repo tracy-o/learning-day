@@ -1,6 +1,6 @@
 defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
   alias Belfrage.Struct
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @doc """
   If the request is a classic app domain this overrides the cache control to be a minimum of 60s for public cacheability

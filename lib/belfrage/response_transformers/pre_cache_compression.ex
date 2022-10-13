@@ -6,7 +6,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   require Logger
 
   alias Belfrage.{Struct, Metrics}
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @impl true
   def call(rest, struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => "gzip"}}}) do

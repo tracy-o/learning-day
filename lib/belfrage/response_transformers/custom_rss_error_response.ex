@@ -1,6 +1,6 @@
 defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
   alias Belfrage.Struct
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @impl true
   def call(

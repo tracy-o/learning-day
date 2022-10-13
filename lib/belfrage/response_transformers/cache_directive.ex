@@ -6,7 +6,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   require Logger
 
   alias Belfrage.{CacheControl, Struct, Struct.Private}
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @dial Application.get_env(:belfrage, :dial)
 
