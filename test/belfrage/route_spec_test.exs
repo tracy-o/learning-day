@@ -90,18 +90,28 @@ defmodule Belfrage.RouteSpecTest do
     end
 
     test "overwrites pipeline if platform spec does not have placeholder" do
-      define_platform(OverwritePipelinePlatform, %{request_pipeline: ["Foo"]})
-      define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, request_pipeline: ["Bar"]})
+      define_platform(OverwriteRequestPipelinePlatform, %{request_pipeline: ["Foo"]})
 
-      spec = RouteSpec.specs_for("OverwritePipelineRoute")
+      define_route(OverwriteRequestPipelineRoute, %{
+        platform: OverwriteRequestPipelinePlatform,
+        request_pipeline: ["Bar"]
+      })
+
+      spec = RouteSpec.specs_for("OverwriteRequestPipelineRoute")
       assert spec.request_pipeline == ["Bar"]
     end
 
     test "injects routespec response_pipeline if platform spec has placeholder" do
-      define_platform(OverwritePipelinePlatform, %{response_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Baz"]})
-      define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, response_pipeline: ["Bar"]})
+      define_platform(OverwriteResponsePipelinePlatform, %{
+        response_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Baz"]
+      })
 
-      spec = RouteSpec.specs_for("OverwritePipelineRoute")
+      define_route(OverwriteResponsePipelineRoute, %{
+        platform: OverwriteResponsePipelinePlatform,
+        response_pipeline: ["Bar"]
+      })
+
+      spec = RouteSpec.specs_for("OverwriteResponsePipelineRoute")
       assert spec.response_pipeline == ["Foo", "Bar", "Baz"]
     end
 
