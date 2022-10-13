@@ -10,7 +10,7 @@ defmodule Belfrage.Transformer do
     end
   end
 
-  def then_do([next | rest], struct = %Belfrage.Struct{debug: %{response_pipeline_trail: [first | _]}}) do
+  def then_do([next | rest], struct = %Belfrage.Struct{debug: %{response_pipeline_trail: [_first | _]}}) do
     apply(
       String.to_existing_atom(@response_namespace <> "." <> next),
       :call,
