@@ -569,7 +569,7 @@ defroutefile "Main" do
   handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
   handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
 
-  handle "/news/topics/:id/rss.xml", using: "TopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
+  handle "/news/topics/:id/rss.xml", using: "NewsTopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
