@@ -18,7 +18,7 @@ defmodule Belfrage.Transformer do
     )
   end
 
-  def then_do([next | rest], struct) do
+  def then_do([next | rest], struct = %Belfrage.Struct{debug: %{request_pipeline_trail: _trail}}) do
     apply(
       String.to_existing_atom(@request_namespace <> "." <> next),
       :call,
