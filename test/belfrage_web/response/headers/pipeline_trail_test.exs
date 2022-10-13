@@ -54,6 +54,24 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
     end
   end
 
+  describe "when response pipeline trail exists in struct and production_environment is live" do
+    test "the response pipeline trail header is not set" do
+      input_conn = conn(:get, "/")
+
+      struct = %Struct{
+        private: %Struct.Private{production_environment: "live"},
+        debug: %Struct.Debug{
+          request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
+          response_pipeline_trail: ["CacheDirective"]
+        }
+      }
+
+      output_conn = PipelineTrail.add_header(input_conn, struct)
+
+      assert get_resp_header(output_conn, "belfrage-response-pipeline-trail") == []
+    end
+  end
+
   describe "when request pipeline trail is nil" do
     test "the request pipeline_trail header is not set" do
       input_conn = conn(:get, "/")
