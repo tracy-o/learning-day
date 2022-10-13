@@ -9,8 +9,7 @@ defmodule Routes.Specs.NewsroundLegacy do
     %{
       owner: "newsround-development@lists.forge.bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/CE/BBC+Newsround+Run+Book",
-      platform: MorphRouter,
-      pipeline: ["ComToUKRedirect"]
+      platform: MorphRouter
     }
   end
 end
