@@ -2497,7 +2497,8 @@ defroutefile "Main" do
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: ["/newsround/unknown/61545299.amp"]            # Not sure if used
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
-  handle "/newsround/*_any", using: "NewsroundLegacy", examples: ["/newsround", "/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
+  handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
+  handle "/newsround/*_any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
