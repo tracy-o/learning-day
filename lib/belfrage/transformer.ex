@@ -1,5 +1,5 @@
 defmodule Belfrage.Transformer do
-  @namespace "Elixir.Belfrage.RequestTransformers"
+  @request_namespace "Elixir.Belfrage.RequestTransformers"
   @response_namespace "Elixir.Belfrage.ResponseTransformers"
 
   defmacro __using__(_opts) do
@@ -20,7 +20,7 @@ defmodule Belfrage.Transformer do
 
   def then_do([next | rest], struct) do
     apply(
-      String.to_existing_atom(@namespace <> "." <> next),
+      String.to_existing_atom(@request_namespace <> "." <> next),
       :call,
       [rest, update_in(struct.debug.request_pipeline_trail, &[next | &1])]
     )
