@@ -70,7 +70,7 @@ defmodule Benchmark.AccessLogs do
       |> put_req_header("x-tcpinfo-rtt", "969")
       |> put_req_header("x-request-id", "ae275035d2d01ccd424c865e6f8f3ed9")
       |> put_resp_header(
-        "belfrage-pipeline-trail",
+        "belfrage-request-pipeline-trail",
         "DevelopmentRequests,CircuitBreaker,WorldServiceRedirect,HTTPredirect"
       )
       |> put_resp_header("routespec", "WorldServiceAfrique")

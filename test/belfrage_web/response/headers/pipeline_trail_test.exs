@@ -31,7 +31,7 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "belfrage-pipeline-trail") == []
+      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == []
     end
   end
 
