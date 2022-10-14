@@ -4,7 +4,8 @@ defmodule Routes.Platforms.MozartWeather do
       origin: Application.get_env(:belfrage, :mozart_weather_endpoint),
       owner: "DEWeather@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       headers_allowlist: ["cookie-ckps_language"],
       circuit_breaker_error_threshold: 200

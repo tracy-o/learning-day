@@ -1,9 +1,10 @@
 defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
   alias Belfrage.Struct
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Transformer
 
   @impl true
   def call(
+        rest,
         struct = %Struct{
           private: %Struct.Private{platform: Fabl},
           request: %Struct.Request{path: "/fd/rss"},
@@ -11,9 +12,9 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
         }
       )
       when http_status > 399 do
-    Struct.add(struct, :response, %{body: ""})
+    then_do(rest, Struct.add(struct, :response, %{body: ""}))
   end
 
   @impl true
-  def call(struct), do: struct
+  def call(rest, struct), do: then_do(rest, struct)
 end

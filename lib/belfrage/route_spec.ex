@@ -8,7 +8,8 @@ defmodule Belfrage.RouteSpec do
   defstruct route_state_id: nil,
             owner: nil,
             slack_channel: nil,
-            pipeline: [],
+            request_pipeline: [],
+            response_pipeline: [],
             platform: nil,
             personalisation: nil,
             # TODO: This probably shouldn't be an attribute of RouteSpec. It
@@ -105,7 +106,8 @@ defmodule Belfrage.RouteSpec do
     route_overrides =
       route_attrs
       |> Map.merge(merge_allowlists(spec, route_attrs))
-      |> Map.put(:pipeline, merge_pipelines(spec.pipeline, route_attrs[:pipeline]))
+      |> Map.put(:request_pipeline, merge_pipelines(spec.request_pipeline, route_attrs[:request_pipeline]))
+      |> Map.put(:response_pipeline, merge_pipelines(spec.response_pipeline, route_attrs[:response_pipeline]))
 
     struct!(spec, route_overrides)
   end

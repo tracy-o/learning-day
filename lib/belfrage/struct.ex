@@ -1,5 +1,6 @@
 defmodule Belfrage.Struct.Debug do
-  defstruct pipeline_trail: []
+  defstruct request_pipeline_trail: [],
+            response_pipeline_trail: []
 end
 
 defmodule Belfrage.Struct.Request do
@@ -68,7 +69,8 @@ defmodule Belfrage.Struct.Private do
             origin: nil,
             counter: %{},
             circuit_breaker_error_threshold: nil,
-            pipeline: [],
+            request_pipeline: [],
+            response_pipeline: [],
             overrides: %{},
             checkpoints: %{},
             query_params_allowlist: [],

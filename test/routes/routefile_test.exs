@@ -275,7 +275,7 @@ defmodule Routes.RoutefileTest do
   end
 
   defp validate_required_attrs_in_route_spec(matcher, spec, env) do
-    required_attrs = ~w[platform pipeline circuit_breaker_error_threshold origin]a
+    required_attrs = ~w[platform request_pipeline circuit_breaker_error_threshold origin]a
     missing_attrs = required_attrs -- Map.keys(spec)
 
     if missing_attrs != [] do
@@ -287,23 +287,23 @@ defmodule Routes.RoutefileTest do
 
   defp validate_transformers(matcher, spec, env) do
     invalid_transformers =
-      Enum.filter(spec.pipeline, fn transformer ->
-        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, Transformers, transformer])))
+      Enum.filter(spec.request_pipeline, fn transformer ->
+        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, RequestTransformers, transformer])))
       end)
 
-    duplicate_transformers = Enum.uniq(spec.pipeline -- Enum.uniq(spec.pipeline))
+    duplicate_transformers = Enum.uniq(spec.request_pipeline -- Enum.uniq(spec.request_pipeline))
 
     cond do
       invalid_transformers != [] ->
         {:error,
-         "Route #{matcher} contains invalid transformers in the pipeline on #{env}: #{inspect(invalid_transformers)}"}
+         "Route #{matcher} contains invalid transformers in the request_pipeline on #{env}: #{inspect(invalid_transformers)}"}
 
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
-      env == "live" && "DevelopmentRequests" in spec.pipeline ->
-        {:error, "Route #{matcher} contains DevelopmentRequests transformer in the pipeline on live"}
+      env == "live" && "DevelopmentRequests" in spec.request_pipeline ->
+        {:error, "Route #{matcher} contains DevelopmentRequests transformer in the request_pipeline on live"}
 
       true ->
         :ok
@@ -311,18 +311,18 @@ defmodule Routes.RoutefileTest do
   end
 
   defp validate_platform_transformers(matcher, spec, env) do
-    platform_transformers = Module.concat([Routes, Platforms, spec.platform]).specs(env).pipeline
+    platform_transformers = Module.concat([Routes, Platforms, spec.platform]).specs(env).request_pipeline
     duplicate_transformers = Enum.uniq(platform_transformers -- Enum.uniq(platform_transformers))
-    missing_transformers = (platform_transformers -- spec.pipeline) -- [:_routespec_pipeline_placeholder]
+    missing_transformers = (platform_transformers -- spec.request_pipeline) -- [:_routespec_pipeline_placeholder]
 
     cond do
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate platform transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
       missing_transformers != [] ->
         {:error,
-         "Route #{matcher} does't have platform transformers #{inspect(missing_transformers)} in the pipeline on #{env}"}
+         "Route #{matcher} does't have platform transformers #{inspect(missing_transformers)} in the request_pipeline on #{env}"}
 
       true ->
         :ok

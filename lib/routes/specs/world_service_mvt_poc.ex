@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceMvtPoc do
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: MozartSimorgh,
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
       headers_allowlist: mvt_headers(),
       caching_enabled: false
     }

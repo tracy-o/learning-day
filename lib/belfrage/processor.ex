@@ -92,9 +92,16 @@ defmodule Belfrage.Processor do
   end
 
   defp process_request_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct) do
+    case Pipeline.process(struct, :request, struct.private.request_pipeline) do
       {:ok, struct} -> struct
-      {:error, _struct, msg} -> raise "Pipeline failed #{msg}"
+      {:error, _struct, msg} -> raise "Request pipeline failure: #{msg}"
+    end
+  end
+
+  def process_response_pipeline(struct = %Struct{}) do
+    case Pipeline.process(struct, :response, struct.private.response_pipeline) do
+      {:ok, struct} -> struct
+      {:error, _struct, msg} -> raise "Response pipeline failure: #{msg}"
     end
   end
 
@@ -108,11 +115,7 @@ defmodule Belfrage.Processor do
       &ResponseTransformers.CachingEnabled.call/1,
       &update_route_state/1,
       &maybe_log_response_status/1,
-      &ResponseTransformers.CacheDirective.call/1,
-      &ResponseTransformers.ClassicAppCacheControl.call/1,
-      &ResponseTransformers.ResponseHeaderGuardian.call/1,
-      &ResponseTransformers.CustomRssErrorResponse.call/1,
-      &ResponseTransformers.PreCacheCompression.call/1,
+      &process_response_pipeline/1,
       &Cache.store/1,
       &fetch_fallback_from_cache/1
     ]

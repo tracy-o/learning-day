@@ -4,7 +4,7 @@ defmodule Routes.Specs.ClassicAppFablLdp do
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/FABL+Run+Book",
       platform: Fabl,
-      pipeline: pipeline(env),
+      request_pipeline: pipeline(env),
       etag: true
     }
   end

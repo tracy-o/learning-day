@@ -1,5 +1,5 @@
-defmodule Belfrage.Transformers.MockTransformer do
-  use Belfrage.Transformers.Transformer
+defmodule Belfrage.RequestTransformers.MockTransformer do
+  use Belfrage.Transformer
 
   @impl true
   def call(rest, struct) do
@@ -8,8 +8,8 @@ defmodule Belfrage.Transformers.MockTransformer do
   end
 end
 
-defmodule Belfrage.Transformers.MockTransformerStop do
-  use Belfrage.Transformers.Transformer
+defmodule Belfrage.RequestTransformers.MockTransformerStop do
+  use Belfrage.Transformer
 
   @impl true
   def call(_rest, struct) do
@@ -18,8 +18,8 @@ defmodule Belfrage.Transformers.MockTransformerStop do
   end
 end
 
-defmodule Belfrage.Transformers.MockTransformerRedirect do
-  use Belfrage.Transformers.Transformer
+defmodule Belfrage.RequestTransformers.MockTransformerRedirect do
+  use Belfrage.Transformer
 
   @impl true
   def call(_rest, struct) do

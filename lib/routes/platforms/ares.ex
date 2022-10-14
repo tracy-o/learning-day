@@ -4,7 +4,8 @@ defmodule Routes.Platforms.Ares do
       origin: Application.get_env(:belfrage, :ares_endpoint),
       owner: "DENewsSimorghDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200
     }
   end

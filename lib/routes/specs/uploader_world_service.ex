@@ -4,7 +4,7 @@ defmodule Routes.Specs.UploaderWorldService do
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",
       platform: MorphRouter,
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
     }
   end
 

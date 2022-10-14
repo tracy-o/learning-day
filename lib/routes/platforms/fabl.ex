@@ -4,7 +4,8 @@ defmodule Routes.Platforms.Fabl do
       origin: Application.get_env(:belfrage, :fabl_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/FABL+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       query_params_allowlist: "*",
       headers_allowlist: headers_allowlist(production_env),
       circuit_breaker_error_threshold: 200
