@@ -2012,7 +2012,6 @@ defroutefile "Main" do
     ]
   end
 
-  # TODO RSSFEEDFIX-31: should we support ukchina?
   handle "/ukchina/simp/topics/:id/rss.xml", using: "WorldServiceUkchinaTopicRss", examples: ["/ukchina/simp/topics/c1nq04kp0r0t/rss.xml"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
