@@ -1,5 +1,5 @@
-defmodule Routes.Specs.WorldServiceUkchinaHomePageRss do
-  def specs(env) do
+defmodule Routes.Specs.WorldServiceUkChinaHomePageRss do
+  def specs() do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
