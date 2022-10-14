@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.SportTopicRssFeedsPlatformDiscriminatorTest do
+defmodule Belfrage.RequestTransformers.SportTopicRssFeedsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.SportTopicRssFeedsPlatformDiscriminator
+  alias Belfrage.RequestTransformers.SportTopicRssFeedsPlatformDiscriminator
   alias Belfrage.Struct
 
   test "when the path matches a key from the mapping object the request is pointed to the rss FABL module, with the correct query parameter" do

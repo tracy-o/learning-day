@@ -1,9 +1,9 @@
-defmodule Belfrage.Transformers.SportTopicRssFeedsPlatformDiscriminator do
+defmodule Belfrage.RequestTransformers.SportTopicRssFeedsPlatformDiscriminator do
   @moduledoc """
   Does the mapping between path and topicId.
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
   """
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @sport_feed_mapping %{
     "/sport/rss.xml" => "c22ymglr3x3t"
