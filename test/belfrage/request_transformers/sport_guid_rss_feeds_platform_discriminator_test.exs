@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminatorTest do
+defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminator
+  alias Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator
   alias Belfrage.Struct
 
   test "when the guid matches the allowlist the request is pointed to the rss FABL module" do

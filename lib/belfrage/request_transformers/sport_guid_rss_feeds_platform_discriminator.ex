@@ -1,8 +1,8 @@
-defmodule Belfrage.Transformers.SportGuidRssFeedsPlatformDiscriminator do
+defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
   """
-  use Belfrage.Transformers.Transformer
+  use Belfrage.Transformer
 
   @fabl_feeds [
     # /sport/alpine-skiing
