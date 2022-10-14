@@ -1649,6 +1649,7 @@ defroutefile "Main" do
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/manifest.json", using: "WorldServiceRussianAssets", examples: ["/russian/manifest.json"]
   handle "/russian/sw.js", using: "WorldServiceRussianAssets", examples: ["/russian/sw.js"]
+  handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", examples: ["/russian/rss.xml"]
 
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
     return_404 if: [
@@ -1680,6 +1681,7 @@ defroutefile "Main" do
 
   handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", examples: ["/serbian/manifest.json"]
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", examples: ["/serbian/sw.js"]
+  handle "/serbian/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/rss.xml"]
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
     return_404 if: [
@@ -1737,6 +1739,7 @@ defroutefile "Main" do
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/manifest.json"]
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/sw.js"]
+  handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", examples: ["/sinhala/rss.xml"]
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
     return_404 if: [
@@ -1772,6 +1775,7 @@ defroutefile "Main" do
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
   handle "/somali/manifest.json", using: "WorldServiceSomaliAssets", examples: ["/somali/manifest.json"]
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets", examples: ["/somali/sw.js"]
+  handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", examples: ["/somali/rss.xml"]
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
     return_404 if: [
@@ -1807,6 +1811,8 @@ defroutefile "Main" do
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", examples: ["/swahili/sw.js"]
+  handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", examples: ["/swahili/rss.xml"]
+
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1843,6 +1849,7 @@ defroutefile "Main" do
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/manifest.json", using: "WorldServiceTamilAssets", examples: ["/tamil/manifest.json"]
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets", examples: ["/tamil/sw.js"]
+  handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", examples: ["/tamil/rss.xml"]
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
     return_404 if: [
@@ -1875,6 +1882,7 @@ defroutefile "Main" do
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", examples: ["/telugu/manifest.json"]
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", examples: ["/telugu/sw.js"]
+  handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", examples: ["/telugu/rss.xml"]
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
     return_404 if: [
@@ -1907,6 +1915,7 @@ defroutefile "Main" do
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets", examples: ["/thai/manifest.json"]
   handle "/thai/sw.js", using: "WorldServiceThaiAssets", examples: ["/thai/sw.js"]
+  handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", examples: ["/thai/rss.xml"]
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
     return_404 if: [
@@ -1939,6 +1948,7 @@ defroutefile "Main" do
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/manifest.json"]
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/sw.js"]
+  handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", examples: ["/tigrinya/rss.xml"]
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
     return_404 if: [
@@ -1975,6 +1985,7 @@ defroutefile "Main" do
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", examples: ["/turkce/manifest.json"]
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", examples: ["/turkce/sw.js"]
+  handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", examples: ["/turkce/rss.xml"]
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
     return_404 if: [
@@ -2009,6 +2020,7 @@ defroutefile "Main" do
 
   handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
   handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
+  handle "/ukchina/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/rss.xml"]
 
   handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukchina/simp/topics/c1nq04kp0r0t/page/2", 302}] do
     return_404 if: [
@@ -2052,6 +2064,7 @@ defroutefile "Main" do
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/manifest.json"]
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/sw.js"]
+  handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", examples: ["/ukrainian/rss.xml"]
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
     return_404 if: [
@@ -2088,6 +2101,7 @@ defroutefile "Main" do
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
   handle "/urdu/manifest.json", using: "WorldServiceUrduAssets", examples: ["/urdu/manifest.json"]
   handle "/urdu/sw.js", using: "WorldServiceUrduAssets", examples: ["/urdu/sw.js"]
+  handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", examples: ["/urdu/rss.xml"]
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
     return_404 if: [
@@ -2123,6 +2137,7 @@ defroutefile "Main" do
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
   handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", examples: ["/uzbek/manifest.json"]
   handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", examples: ["/uzbek/sw.js"]
+  handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss", examples: ["/uzbek/rss.xml"]
 
   handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/uzbek/topics/c340q0q55jvt/page/2", 302}] do
     return_404 if: [
@@ -2158,6 +2173,7 @@ defroutefile "Main" do
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
   handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/manifest.json"]
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/sw.js"]
+  handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", examples: ["/vietnamese/rss.xml"]
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
     return_404 if: [
@@ -2190,6 +2206,7 @@ defroutefile "Main" do
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", examples: ["/yoruba/manifest.json"]
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", examples: ["/yoruba/sw.js"]
+  handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", examples: ["/yoruba/rss.xml"]
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
     return_404 if: [
@@ -2224,6 +2241,7 @@ defroutefile "Main" do
 
   handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/manifest.json"]
   handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/sw.js"]
+  handle "/zhongwen/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/rss.xml"]
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
     return_404 if: [
