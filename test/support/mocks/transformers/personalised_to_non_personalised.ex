@@ -1,5 +1,5 @@
-defmodule Belfrage.Transformers.PersonalisedToNonPersonalised do
-  use Belfrage.Transformers.Transformer
+defmodule Belfrage.RequestTransformers.PersonalisedToNonPersonalised do
+  use Belfrage.Transformer
 
   def call(_rest, struct) do
     then_do(

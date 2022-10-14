@@ -1,4 +1,4 @@
-defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
+defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
   alias Belfrage.Struct
   use ExUnit.Case
 
@@ -7,8 +7,8 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
   doctest ResponseHeaderGuardian, import: true
 
   test "removes connection response header" do
-    result =
-      ResponseHeaderGuardian.call(%Struct{
+    {:ok, result} =
+      ResponseHeaderGuardian.call([], %Struct{
         response: %Struct.Response{
           headers: %{
             "content-type" => "application/json",
@@ -22,8 +22,8 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
   end
 
   test "removes transfer-encoding header" do
-    result =
-      ResponseHeaderGuardian.call(%Struct{
+    {:ok, result} =
+      ResponseHeaderGuardian.call([], %Struct{
         response: %Struct.Response{
           headers: %{
             "content-type" => "application/json",
@@ -38,7 +38,7 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
 
   test "does not affect any other response headers" do
     result =
-      ResponseHeaderGuardian.call(%Struct{
+      ResponseHeaderGuardian.call([], %Struct{
         response: %Struct.Response{
           body: "<p>some content</p>",
           http_status: 200,
@@ -48,14 +48,15 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardianTest do
         }
       })
 
-    assert %Struct{
-             response: %Struct.Response{
-               body: "<p>some content</p>",
-               http_status: 200,
-               headers: %{
-                 "content-type" => "application/json"
-               }
-             }
-           } = result
+    assert {:ok,
+            %Struct{
+              response: %Struct.Response{
+                body: "<p>some content</p>",
+                http_status: 200,
+                headers: %{
+                  "content-type" => "application/json"
+                }
+              }
+            }} = result
   end
 end

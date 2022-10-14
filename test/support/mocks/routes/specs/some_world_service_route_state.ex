@@ -4,7 +4,7 @@ defmodule Routes.Specs.SomeWorldServiceRouteState do
       owner: "Some guy",
       runbook: "Some runbook",
       platform: MozartSimorgh,
-      pipeline: ["WorldServiceRedirect"],
+      request_pipeline: ["WorldServiceRedirect"],
       query_params_allowlist: ["query"]
     }
   end

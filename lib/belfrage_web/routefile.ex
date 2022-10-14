@@ -4,6 +4,7 @@ defmodule BelfrageWeb.Routefile do
       for env <- unquote(routefile_envs()) do
         defmodule Module.concat(["Routes", "Routefiles", String.capitalize(unquote(name)), String.capitalize(env)]) do
           @production_environment env
+          import BelfrageWeb.Validators
           use BelfrageWeb.RouteMaster
           unquote(block)
         end
@@ -15,6 +16,7 @@ defmodule BelfrageWeb.Routefile do
     quote do
       defmodule Module.concat(["Routes", "Routefiles", unquote(name)]) do
         @production_environment unquote(env)
+        import BelfrageWeb.Validators
         use BelfrageWeb.RouteMaster
         unquote(block)
       end

@@ -1,13 +1,15 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
 
+  @platforms Routes.Platforms.list()
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
   defstruct route_state_id: nil,
             owner: nil,
             slack_channel: nil,
-            pipeline: [],
+            request_pipeline: [],
+            response_pipeline: [],
             platform: nil,
             personalisation: nil,
             # TODO: This probably shouldn't be an attribute of RouteSpec. It
@@ -39,7 +41,10 @@ defmodule Belfrage.RouteSpec do
             etag: false
 
   def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
-    route_attrs = get_route_attrs(name, env)
+    route_attrs =
+      name
+      |> get_route_spec_attrs(env)
+      |> maybe_put_platform()
 
     route_attrs.platform
     |> get_platform_spec(env)
@@ -47,11 +52,30 @@ defmodule Belfrage.RouteSpec do
     |> Personalisation.maybe_put_personalised_route()
   end
 
-  defp get_route_attrs(name, env) do
+  def get_route_spec_attrs(name, env) do
     [Routes, Specs, name]
     |> call_specs_func(env)
     |> Map.put(:route_state_id, name)
   end
+
+  # maybe_put_platform/1 Takes a "spec" map and checks the :route_spec_id value.
+  # If the :route_spec_id value has a Platform suffix
+  # then the spec map is updated with the corresponding
+  # platform atom.
+  # Otherwise the original spec is returned.
+  defp maybe_put_platform(spec) do
+    maybe_put_platform(@platforms, spec)
+  end
+
+  defp maybe_put_platform([platform | rest], spec) do
+    if String.ends_with?(spec.route_state_id, ".#{platform}") do
+      Map.put(spec, :platform, String.to_atom("Elixir.#{platform}"))
+    else
+      maybe_put_platform(rest, spec)
+    end
+  end
+
+  defp maybe_put_platform([], spec), do: spec
 
   defp call_specs_func(module_name, env) do
     module = Module.concat(module_name)
@@ -82,7 +106,8 @@ defmodule Belfrage.RouteSpec do
     route_overrides =
       route_attrs
       |> Map.merge(merge_allowlists(spec, route_attrs))
-      |> Map.put(:pipeline, merge_pipelines(spec.pipeline, route_attrs[:pipeline]))
+      |> Map.put(:request_pipeline, merge_pipelines(spec.request_pipeline, route_attrs[:request_pipeline]))
+      |> Map.put(:response_pipeline, merge_pipelines(spec.response_pipeline, route_attrs[:response_pipeline]))
 
     struct!(spec, route_overrides)
   end

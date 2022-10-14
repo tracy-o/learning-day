@@ -92,22 +92,22 @@
     },
     {
         "values": {
-            "test": "https://philippa-producer.test.api.bbci.co.uk",
-            "live": "https://philippa-producer.api.bbci.co.uk"
+            "test": "http://philippa-producer-internal.test.api.bbci.co.uk",
+            "live": "http://philippa-producer-internal.api.bbci.co.uk"
         },
         "name": "PHILIPPA_ENDPOINT"
     },
     {
         "values": {
-            "test": "https://trevor-producer.test.api.bbci.co.uk",
-            "live": "https://trevor-producer.api.bbci.co.uk"
+            "test": "http://trevor-producer-internal.test.api.bbci.co.uk",
+            "live": "http://trevor-producer-internal.api.bbci.co.uk"
         },
         "name": "TREVOR_ENDPOINT"
     },
     {
         "values": {
-            "test": "https://walter-producer.test.api.bbci.co.uk",
-            "live": "https://walter-producer.api.bbci.co.uk"
+            "test": "http://walter-producer-internal.test.api.bbci.co.uk",
+            "live": "http://walter-producer-internal.api.bbci.co.uk"
         },
         "name": "WALTER_ENDPOINT"
     },

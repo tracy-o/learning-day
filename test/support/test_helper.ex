@@ -67,10 +67,28 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", host_header}])
   end
 
+  def get_route(endpoint, path, "UploaderWorldService") do
+    host_header =
+      case String.contains?(endpoint, ".test.") do
+        true -> "www.test.bbc.com"
+        false -> "www.bbc.com"
+      end
+
+    request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+  end
+
   # ContainerEnvelope* route specs use `UserAgentValidator` that checks that a
   # certain user-agent header is present, otherwise a 400 response is returned
   def get_route(endpoint, path, "ContainerEnvelope" <> _spec) do
     request_route(endpoint, path, [{"x-forwarded-host", endpoint}, {"user-agent", "MozartFetcher"}])
+  end
+
+  def get_route(endpoint, path, "ClassicApp" <> _spec) do
+    request_route(endpoint, path, [{"host", "news-app-classic.api.bbci.co.uk"}])
+  end
+
+  def get_route(endpoint, path, "Bitesize" <> _spec) do
+    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
   end
 
   def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
@@ -80,7 +98,8 @@ defmodule Test.Support.Helper do
   end
 
   defp request_route(endpoint, path, headers) do
-    Finch.build(:get, "https://#{endpoint}#{path}", headers) |> Finch.request(Finch, receive_timeout: 10_000)
+    Finch.build(:get, "https://#{endpoint}#{path}", headers)
+    |> Finch.request(Finch, receive_timeout: 10_000)
   end
 
   def header_item_exists(headers, header_id) do

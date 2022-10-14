@@ -3,7 +3,7 @@ defmodule JoeFormatter do
   @moduledoc false
   use GenServer
   alias ExUnit.Test
-  import ExUnit.Formatter, only: [format_test_failure: 5, format_time: 2]
+  import ExUnit.Formatter, only: [format_test_failure: 5, format_times: 1]
 
   def init(opts) do
     {:ok, config} = ExUnit.CLIFormatter.init(opts)
@@ -35,7 +35,7 @@ defmodule JoeFormatter do
     {:noreply, %{config | test_counter: update_test_counter(config.test_counter, test)}}
   end
 
-  def handle_cast(_event = {:suite_finished, run_us, load_us}, config = %{trace: false}) do
+  def handle_cast(_event = {:suite_finished, time_us}, config = %{trace: false}) do
     write_raw_output(System.get_env("RAW_OUTPUT"), config)
 
     config.failed_tests
@@ -43,7 +43,7 @@ defmodule JoeFormatter do
     |> Enum.each(&print_failure(&1, config))
 
     IO.write("\n\n")
-    IO.puts(format_time(run_us, load_us))
+    IO.puts(format_times(time_us))
 
     report = [
       "#{config.test_counter[:test]}",
@@ -126,8 +126,8 @@ defmodule JoeFormatter do
     end)
   end
 
-  defp fallback?(%ExUnit.AssertionError{left: {"belfrage-cache-status", "STALE"}}) do
-    true
+  defp fallback?(%ExUnit.AssertionError{message: msg}) do
+    String.contains?(msg, "STALE")
   end
 
   defp fallback?(_error), do: false
@@ -155,7 +155,9 @@ defmodule JoeFormatter do
     end)
   end
 
-  defp write_raw_output(nil, _test_results), do: :ok
+  defp write_raw_output(nil, _test_results) do
+    :ok
+  end
 
   defp write_raw_output(path, test_results) do
     content = :erlang.term_to_binary(test_results)

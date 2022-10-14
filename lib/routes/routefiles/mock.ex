@@ -89,11 +89,19 @@ defroutefile "Mock", "test" do
   # will remove and use real route spec in RESFRAME-4718
   handle("/classic-apps-route", using: "SomeClassicAppsRouteSpec", examples: [])
 
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", examples: []
+
   handle("/content/ldp/:guid", using: "ClassicAppFablLdp", examples: [])
 
   handle("/etag-support", using: "EtagSupport", examples: [])
 
   handle("/no-etag-support", using: "NoEtagSupport", examples: [])
+
+  handle("/platform-selection-with-selector", using: "SomeRouteStateWithoutPlatformAttribute", platform: "AssetTypePlatformSelector", examples: [])
+
+  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "Webcore", examples: [])
+
+  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "MozartNews", examples: [])
 
   handle_proxy_pass("/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"])
 

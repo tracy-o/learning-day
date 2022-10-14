@@ -30,7 +30,7 @@ defmodule Belfrage.Services.Fabl do
 
   defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
     Belfrage.Metrics.multi_execute(
-      [[:belfrage, :service, :Fabl, :response, String.to_atom(to_string(status))], [:belfrage, :service, :response]],
+      [[:belfrage, :service, :Fabl, :response, String.to_atom(to_string(status))], [:belfrage, :platform, :response]],
       %{count: 1},
       %{
         status_code: status,
@@ -44,12 +44,14 @@ defmodule Belfrage.Services.Fabl do
   defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
     :telemetry.execute([:belfrage, :error, :service, :Fabl, :timeout], %{})
     log(:timeout, struct)
+    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 
   defp handle_response({{:error, error}, struct}) do
     :telemetry.execute([:belfrage, :error, :service, :Fabl, :request], %{})
     log(error, struct)
+    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 

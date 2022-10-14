@@ -4,7 +4,7 @@ defmodule Routes.Specs.SportRssGuid do
       owner: "#help-sport",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
       platform: Karanga,
-      pipeline: ["RssFeedRedirect", "SportRssFeedsPlatformDiscriminator"]
+      request_pipeline: ["RssFeedRedirect", "SportRssFeedsPlatformDiscriminator"]
     }
   end
 end

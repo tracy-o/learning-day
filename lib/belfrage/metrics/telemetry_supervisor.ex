@@ -13,10 +13,6 @@ defmodule Belfrage.Metrics.TelemetrySupervisor do
         metrics: Belfrage.Metrics.Statsd.metrics(),
         global_tags: [BBCEnvironment: Application.get_env(:belfrage, :production_environment)],
         formatter: :datadog
-      },
-      {
-        TelemetryMetricsPrometheus,
-        metrics: Belfrage.Metrics.Prometheus.metrics()
       }
     ]
 
