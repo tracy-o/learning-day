@@ -1,4 +1,4 @@
-defmodule Routes.Specs.WsTopicRss do
+defmodule Routes.Specs.WorldServiceUzbekTopicRss do
   def specs(env) do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
