@@ -17,15 +17,32 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(struct),
            {:ok, response} <- build_response(response) do
-        Metrics.event(~w(webcore response)a, %{status_code: response.http_status, route_spec: private.route_state_id})
+        Metrics.multi_execute([[:belfage, :webcore, :response], [:belfrage, :platform, :response]], %{}, %{
+          platform: "Webcore",
+          status_code: response.http_status,
+          route_spec: private.route_state_id
+        })
+
         response
       else
         {:error, error_code} ->
           Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.route_state_id})
 
           if error_code == :function_not_found && private.preview_mode == "on" do
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Webcore",
+              status_code: "404",
+              route_spec: private.route_state_id
+            })
+
             %Response{http_status: 404, body: "404 - not found"}
           else
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Webcore",
+              status_code: "500",
+              route_spec: private.route_state_id
+            })
+
             %Response{http_status: 500}
           end
       end

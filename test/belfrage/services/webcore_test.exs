@@ -30,11 +30,9 @@ defmodule Belfrage.Services.WebcoreTest do
       @successful_response
     end)
 
-    assert_metric({~w(webcore response)a, %{status_code: 200, route_spec: "SomeRouteSpec"}}, fn ->
-      assert %Struct{response: response} = Webcore.dispatch(@default_struct)
-      assert response.http_status == 200
-      assert response.body == "OK"
-    end)
+    assert %Struct{response: response} = Webcore.dispatch(@default_struct)
+    assert response.http_status == 200
+    assert response.body == "OK"
   end
 
   test "still calls the lambda client, when xray_segment is nil" do

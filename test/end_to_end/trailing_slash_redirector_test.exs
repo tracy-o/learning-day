@@ -28,7 +28,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"location", "/200-ok-response"} in headers
-    assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers
+    assert {"cache-control", "public, max-age=60"} in headers
   end
 
   test "keeps default response headers" do
@@ -40,7 +40,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     assert {301, headers, ""} = sent_resp(conn)
     assert {"server", "Belfrage"} in headers
     assert {"via", "1.1 Belfrage"} in headers
-    assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+    assert {"x-bbc-no-scheme-rewrite", "1"} in headers
   end
 
   test "keeps req-svc-chain values when provided" do

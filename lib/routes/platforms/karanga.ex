@@ -4,11 +4,12 @@ defmodule Routes.Platforms.Karanga do
       origin: Application.get_env(:belfrage, :karanga_endpoint),
       owner: "",
       runbook: "https://confluence.dev.bbc.co.uk/display/wsresponsive/News+RSS+Feeds+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200
     }
   end
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["HTTPredirect", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

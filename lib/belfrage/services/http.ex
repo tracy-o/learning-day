@@ -43,9 +43,6 @@ defmodule Belfrage.Services.HTTP do
         "GET" ->
           %{method: :get}
 
-        "POST" ->
-          %{method: :post, payload: request.payload}
-
         method ->
           raise "Unsupported method: " <> method
       end
@@ -149,7 +146,7 @@ defmodule Belfrage.Services.HTTP do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :service, platform_name(private), :response, String.to_atom(to_string(status))],
-        [:belfrage, :service, :response]
+        [:belfrage, :platform, :response]
       ],
       %{count: 1},
       %{platform: platform_name(private), status_code: status}
@@ -160,10 +157,10 @@ defmodule Belfrage.Services.HTTP do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :timeout],
-        [:belfrage, :error, :service, :timeout]
+        [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      %{platform: platform_name(private)}
+      %{platform: platform_name(private), status_code: "408"}
     )
 
     log_error(:timeout, struct)

@@ -25,7 +25,6 @@ Requires: component-logger
 Requires: belfrage-performance-tuning
 Requires: dial-agent
 Requires: xray
-Requires: telegraf
 
 %description
 Belfrage is a proxy pass translating incoming web requests

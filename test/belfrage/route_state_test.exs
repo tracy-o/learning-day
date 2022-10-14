@@ -42,7 +42,6 @@ defmodule Belfrage.RouteStateTest do
 
     route_spec =
       @route_state_id
-      |> String.to_atom()
       |> RouteSpec.specs_for()
       |> Map.from_struct()
 

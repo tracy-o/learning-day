@@ -15,6 +15,7 @@ defmodule Belfrage.Metrics.Statsd do
       :cache_metrics,
       :webcore_metrics,
       :webcore_legacy_metrics,
+      :platform_metrics,
       :plug_metrics,
       :plug_legacy_metrics,
       :service_error_metrics,

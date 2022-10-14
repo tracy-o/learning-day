@@ -16,6 +16,21 @@ String buildVariables() {
   envVars
 }
 
+// This function is adapted from deployReleaseVersion() in:
+// https://github.com/bbc/devops-tools-jenkins/blob/646f31354a1c59baedd07384cca5a58fca548892/vars/BBCNews.groovy#L131-L141
+// however here we can also speficfy the environment we want to deploy to.
+def deployReleaseVersion(String cosmosService, String version, Boolean forceRelease=false, String environment="test") {
+    stage('Cosmos deploy') {
+        if (env.BRANCH_NAME == 'master' || forceRelease) {
+            docker.image('node:14.15').inside("-u root -v /etc/pki/tls:/etc/pki/tls"){
+            sh('npm install')
+            sh("npm install git+https://${GITHUB_TOKEN}:x-oauth-basic@github.com/bbc/cosmos-deploy.git#v3")
+            sh("./node_modules/.bin/cosmos-deploy promote ${cosmosService} ${environment} ${version}")
+            }
+        }
+    }
+}
+
 node {
   cleanWs()
   checkout scm
@@ -24,7 +39,8 @@ node {
     buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7')),
     parameters([
         choice(choices: ['belfrage', 'belfrage-preview', 'bruce-belfrage', 'cedric-belfrage', 'joan-belfrage', 'sally-belfrage', 'sydney-belfrage'], description: 'The Cosmos Service to create a release for', name: 'SERVICE'),
-        booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE')
+        booleanParam(defaultValue: false, description: 'Force release from non-master branch', name: 'FORCE_RELEASE'),
+        choice(choices: ['test', 'live'], description: 'The highest environment the release will be promoted to (chosing \'live\' deploys to test then live)', name: 'DEPLOYMENT_ENVIRONMENT')
     ])
   ])
 
@@ -64,7 +80,13 @@ node {
     BBCNews.buildRPMWithMockAndVersion(params.SERVICE, 'belfrage.spec', version)
     BBCNews.setRepositories(params.SERVICE, 'repositories.json')
     BBCNews.cosmosRelease(params.SERVICE, 'RPMS/*.x86_64.rpm', params.FORCE_RELEASE)
-    BBCNews.deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE)
+    if (params.DEPLOYMENT_ENVIRONMENT == "live") {
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "test")
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, "live")
+    } else {
+      deployReleaseVersion(params.SERVICE, version, params.FORCE_RELEASE, params.DEPLOYMENT_ENVIRONMENT)
+    }
+    
 
   } catch(err) {
     if (env.BRANCH_NAME == "master") {

@@ -4,7 +4,7 @@ defmodule Routes.Specs.SomeMozartRouteState do
       owner: "An owner",
       runbook: "Some runbook",
       platform: MozartNews,
-      pipeline: ["HTTPredirect", "TrailingSlashRedirector"],
+      request_pipeline: ["HTTPredirect"],
       query_params_allowlist: ["page"]
     }
   end

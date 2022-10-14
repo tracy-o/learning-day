@@ -4,14 +4,15 @@ defmodule Routes.Platforms.Programmes do
       origin: Application.get_env(:belfrage, :programmes_endpoint),
       owner: "homedatacap@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=152098352",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200
     }
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
+    ["HTTPredirect", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

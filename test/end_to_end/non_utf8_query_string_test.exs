@@ -28,7 +28,7 @@ defmodule NonUtf8QueryStringTest do
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",
@@ -52,7 +52,7 @@ defmodule NonUtf8QueryStringTest do
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",
@@ -76,7 +76,7 @@ defmodule NonUtf8QueryStringTest do
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",
@@ -100,7 +100,7 @@ defmodule NonUtf8QueryStringTest do
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",
@@ -166,7 +166,7 @@ defmodule NonUtf8QueryStringTest do
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
                         %{
-                          body: "",
+                          body: nil,
                           headers: %{country: "gb"},
                           httpMethod: "GET",
                           path: "/200-ok-response",

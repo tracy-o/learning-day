@@ -17,6 +17,7 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.AccessLogs)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
+  plug(Plugs.TrailingSlashRedirector)
   plug(PreviewMode)
   plug(:log_invalid_utf8)
   plug(:fetch_query_params, validate_utf8: false)

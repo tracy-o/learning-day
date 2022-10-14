@@ -16,12 +16,13 @@ String buildVariables() {
   envVars
 }
 
-def buildStack(branch, stack_name) {
+def buildStack(branch, stack_name, environment="test") {
   build(
     job: "belfrage-multi-stack/$branch",
     parameters: [
       [$class: 'StringParameterValue', name: 'SERVICE', value: stack_name],
-      [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: false]
+      [$class: 'BooleanParameterValue', name: 'FORCE_RELEASE', value: false],
+      [$class: 'StringParameterValue', name: 'DEPLOYMENT_ENVIRONMENT', value: environment]
     ],
     propagate: false,
     wait: false
@@ -56,7 +57,7 @@ node {
     def branchName = jobNameList[2];
 
     node {
-      buildStack(branchName, "belfrage")
+      buildStack(branchName, "belfrage", "live")
       buildStack(branchName, "belfrage-preview")
       buildStack(branchName, "bruce-belfrage")
       buildStack(branchName, "cedric-belfrage")

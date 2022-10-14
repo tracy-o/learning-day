@@ -23,7 +23,7 @@ defmodule Benchmark.Pipeline do
 
   defp benchmark_request_pipeline do
     struct = %Struct{
-      private: %Struct.Private{pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
+      private: %Struct.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
     }
 
     Benchee.run(
@@ -38,7 +38,7 @@ defmodule Benchmark.Pipeline do
   defp benchmark_response_pipeline do
     struct =
       %Struct{
-        private: %Struct.Private{pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
+        private: %Struct.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
       }
       |> struct_with_gzip_resp()
 

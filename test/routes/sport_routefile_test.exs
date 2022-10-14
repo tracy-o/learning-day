@@ -11,6 +11,8 @@ defmodule Routes.SportRoutefileTest do
   alias Belfrage.RouteState
   alias Routes.Routefiles.Sport.Test, as: Routefile
 
+  @platforms Routes.Platforms.list()
+
   @moduletag :routes_test
 
   @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
@@ -44,13 +46,39 @@ defmodule Routes.SportRoutefileTest do
       test "route spec for #{env} is valid" do
         env = unquote(env)
 
-        validate(@routes, fn {matcher, %{using: route_state_id}} ->
-          specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
+        validate(@routes, fn
+          # If the :platform attribute is not an actual platform, then
+          # we simply validate the route as we cannot validate the
+          # route spec or transformers. This is because the :platform
+          # attribute is then expected to be a platform selector, which
+          # requires a %Struct to select the platform. Given that we
+          # are simply iterating through a list of routes, we do not
+          # have access to the %Struct and therefore cannot select the
+          # platform and build the route state id.
+          {matcher, route = %{platform: platform}} when platform not in @platforms ->
+            validate_required_attrs_in_route(matcher, route, env)
 
-          with :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
-               :ok <- validate_transformers(matcher, specs, env) do
-            validate_platform_transformers(matcher, specs, env)
-          end
+          {matcher, route = %{using: route_state_id, platform: platform}} ->
+            route_state_id = "#{route_state_id}.#{platform}"
+            route_spec_attrs = Belfrage.RouteSpec.get_route_spec_attrs(route_state_id, env)
+            specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
+
+            with :ok <- validate_required_attrs_in_route(matcher, route, route_spec_attrs, env),
+                 :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
+                 :ok <- validate_transformers(matcher, specs, env) do
+              validate_platform_transformers(matcher, specs, env)
+            end
+
+          {matcher, route = %{using: route_state_id}} ->
+            route_spec_attrs = Belfrage.RouteSpec.get_route_spec_attrs(route_state_id, env)
+            specs = Belfrage.RouteSpec.specs_for(route_state_id, env)
+            route = maybe_update_route_state_id(route)
+
+            with :ok <- validate_required_attrs_in_route(matcher, route, route_spec_attrs, env),
+                 :ok <- validate_required_attrs_in_route_spec(matcher, specs, env),
+                 :ok <- validate_transformers(matcher, specs, env) do
+              validate_platform_transformers(matcher, specs, env)
+            end
         end)
       end
     end
@@ -71,15 +99,36 @@ defmodule Routes.SportRoutefileTest do
       @examples
       |> start_route_states()
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
-      |> validate(fn {matcher, %{using: route_state_id}, example} ->
-        conn = make_call(:get, example)
+      |> validate(fn
+        {matcher, %{platform: platform, using: route_state_id}, example} when platform in @platforms ->
+          conn = make_call(:get, example)
 
-        if conn.assigns.route_spec == route_state_id do
-          :ok
-        else
-          {:error,
-           "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
-        end
+          if conn.assigns.route_spec == "#{route_state_id}.#{platform}" do
+            :ok
+          else
+            {:error,
+             "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
+          end
+
+        {matcher, %{platform: _platform, using: route_state_id}, example} ->
+          conn = make_call(:get, example)
+
+          if String.starts_with?(conn.assigns.route_spec, route_state_id) do
+            :ok
+          else
+            {:error,
+             "Example #{example} for route #{matcher} that uses a platform selector is not routed to a route spec that starts with #{route_state_id}, but to #{conn.assigns.route_spec}"}
+          end
+
+        {matcher, %{using: route_state_id}, example} ->
+          conn = make_call(:get, example)
+
+          if conn.assigns.route_spec == route_state_id do
+            :ok
+          else
+            {:error,
+             "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
+          end
       end)
     end
 
@@ -169,36 +218,95 @@ defmodule Routes.SportRoutefileTest do
     end
   end
 
+  defp validate_required_attrs_in_route(matcher, route, spec, env) do
+    cond do
+      # If the name of the RouteSpec in the :using attribute has a platform
+      # suffix, then we return an error tuple.
+      #
+      # This is because the :platform key in the route should be used
+      # to later determine the platform suffix of the RouteSpec id.
+      has_platform_suffix?(route) ->
+        {:error,
+         "Route #{matcher} has a route spec that is suffixed with a Platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route."}
+
+      # If the route and the RouteSpec both have a :platform key
+      # then we return an error tuple, as we only expect
+      # a :platform key in either or the other.
+      #
+      # This is because if present, the :platform key in the route
+      # is used to determine the :platform in the RouteSpec,
+      # and is not supposed to override it.
+      has_platform_key?(route) and has_platform_key?(spec) ->
+        {:error,
+         "Route #{matcher} has a :platform attribute when :platform is specified in route spec for #{env}.\n Please remove the :platform attribute in the route spec if it must be specified in the route.\n Otherwise remove the :platform attribute in the route."}
+
+      # If the platform attribute has a :platform key
+      # that is neither a Platform nor a Platform Selector ending
+      # in "PlatformSelector", then we raise a error. This is to
+      # enforce the said convention.
+      has_platform_key?(route) and not selector_or_platform?(route.platform) ->
+        {:error,
+         ~s(Route #{matcher} has a :platform attribute that is not a Platform Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with "PlatformSelector".)}
+
+      true ->
+        :ok
+    end
+  end
+
+  defp validate_required_attrs_in_route(matcher, route, env) do
+    cond do
+      # If the name of the RouteSpec in the :using attribute has a platform
+      # suffix, then we return an error tuple.
+      #
+      # This is because the :platform key in the route should be used
+      # to later determine the platform suffix of the RouteSpec id.
+      has_platform_suffix?(route) ->
+        {:error,
+         "Route #{matcher} has a route spec that is suffixed with a Platform for #{env}.\n Please remove the suffix and ensure that there is a :platform attribute in the route."}
+
+      # If the platform attribute has a :platform key
+      # that is neither a Platform nor a Platform Selector ending
+      # in "PlatformSelector", then we raise a error. This is to
+      # enforce the said convention.
+      has_platform_key?(route) and not selector_or_platform?(route.platform) ->
+        {:error,
+         ~s(Route #{matcher} has a :platform attribute that is not a Platform Selector or Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with "PlatformSelector".)}
+
+      true ->
+        :ok
+    end
+  end
+
   defp validate_required_attrs_in_route_spec(matcher, spec, env) do
-    required_attrs = ~w[platform pipeline circuit_breaker_error_threshold origin]a
+    required_attrs = ~w[platform request_pipeline circuit_breaker_error_threshold origin]a
     missing_attrs = required_attrs -- Map.keys(spec)
 
-    if missing_attrs == [] do
-      :ok
-    else
+    if missing_attrs != [] do
       {:error, "Route #{matcher} doesn't have required attrs #{inspect(missing_attrs)} in route spec for #{env}"}
+    else
+      :ok
     end
   end
 
   defp validate_transformers(matcher, spec, env) do
     invalid_transformers =
-      Enum.filter(spec.pipeline, fn transformer ->
-        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, Transformers, transformer])))
+      Enum.filter(spec.request_pipeline, fn transformer ->
+        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, RequestTransformers, transformer])))
       end)
 
-    duplicate_transformers = Enum.uniq(spec.pipeline -- Enum.uniq(spec.pipeline))
+    duplicate_transformers = Enum.uniq(spec.request_pipeline -- Enum.uniq(spec.request_pipeline))
 
     cond do
       invalid_transformers != [] ->
         {:error,
-         "Route #{matcher} contains invalid transformers in the pipeline on #{env}: #{inspect(invalid_transformers)}"}
+         "Route #{matcher} contains invalid transformers in the request_pipeline on #{env}: #{inspect(invalid_transformers)}"}
 
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
-      env == "live" && "DevelopmentRequests" in spec.pipeline ->
-        {:error, "Route #{matcher} contains DevelopmentRequests transformer in the pipeline on live"}
+      env == "live" && "DevelopmentRequests" in spec.request_pipeline ->
+        {:error, "Route #{matcher} contains DevelopmentRequests transformer in the request_pipeline on live"}
 
       true ->
         :ok
@@ -206,18 +314,18 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp validate_platform_transformers(matcher, spec, env) do
-    platform_transformers = Module.concat([Routes, Platforms, spec.platform]).specs(env).pipeline
+    platform_transformers = Module.concat([Routes, Platforms, spec.platform]).specs(env).request_pipeline
     duplicate_transformers = Enum.uniq(platform_transformers -- Enum.uniq(platform_transformers))
-    missing_transformers = (platform_transformers -- spec.pipeline) -- [:_routespec_pipeline_placeholder]
+    missing_transformers = (platform_transformers -- spec.request_pipeline) -- [:_routespec_pipeline_placeholder]
 
     cond do
       duplicate_transformers != [] ->
         {:error,
-         "Route #{matcher} contains duplicate platform transformers in the pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate platform transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
       missing_transformers != [] ->
         {:error,
-         "Route #{matcher} does't have platform transformers #{inspect(missing_transformers)} in the pipeline on #{env}"}
+         "Route #{matcher} does't have platform transformers #{inspect(missing_transformers)} in the request_pipeline on #{env}"}
 
       true ->
         :ok
@@ -228,13 +336,32 @@ defmodule Routes.SportRoutefileTest do
     examples
     |> Enum.map(&route_state_id/1)
     |> Enum.uniq()
+    |> Enum.filter(&(!is_nil(&1)))
     |> Enum.each(&start_route_state/1)
 
     examples
   end
 
+  defp route_state_id({_matcher, %{using: route_state_id, platform: platform}, _example}) when platform in @platforms do
+    "#{route_state_id}.#{platform}"
+  end
+
+  defp route_state_id({_matcher, %{using: _route_state_id, platform: _platform}, _example}) do
+    nil
+  end
+
   defp route_state_id({_matcher, %{using: route_state_id}, _example}) do
     route_state_id
+  end
+
+  defp route_state_id(route = %{}) do
+    case route do
+      %{platform: platform, using: route_state_id} ->
+        "#{route_state_id}.#{platform}"
+
+      %{using: route_state_id} ->
+        route_state_id
+    end
   end
 
   defp start_route_state(route_state_id) do
@@ -242,5 +369,26 @@ defmodule Routes.SportRoutefileTest do
       id: String.to_atom(route_state_id),
       start: {RouteState, :start_link, [route_state_id]}
     })
+  end
+
+  defp has_platform_suffix?(%{using: route_spec}) do
+    Enum.any?(@platforms, &String.ends_with?(route_spec, ".#{&1}"))
+  end
+
+  defp has_platform_key?(%{platform: _}), do: true
+  defp has_platform_key?(%{}), do: false
+
+  defp selector_or_platform?(selector_or_platform) do
+    String.ends_with?(selector_or_platform, "PlatformSelector") or Enum.member?(@platforms, selector_or_platform)
+  end
+
+  defp maybe_update_route_state_id(route = %{}) do
+    case route do
+      %{platform: platform, using: route_state_id} ->
+        Map.put(route, :using, "#{route_state_id}.#{platform}")
+
+      _route ->
+        route
+    end
   end
 end

@@ -4,7 +4,8 @@ defmodule Routes.Platforms.MozartSport do
       origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200
     }
@@ -13,6 +14,6 @@ defmodule Routes.Platforms.MozartSport do
   defp query_params_allowlist("live"), do: ["alternativeJsLoading", "amp", "batch", "before", "category_site", "component_id", "components", "config_path", "embeddingPageTitle", "embeddingPageUri", "lang", "options", "page", "presenter", "ptrt", "q", "redirect_location", "s", "search", "show-service-calls", "start", "ticker", "anchor"]
   defp query_params_allowlist(_production_env), do: "*"
 
-  defp pipeline("live"), do: ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
+  defp pipeline("live"), do: ["HTTPredirect", "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

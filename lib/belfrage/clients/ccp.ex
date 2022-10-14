@@ -36,9 +36,9 @@ defmodule Belfrage.Clients.CCP do
     case ccp_response do
       {:ok, %Finch.Response{status: 200, body: cached_body}} ->
         Belfrage.Metrics.multi_execute(
-          [[:belfrage, :service, :S3, :response, :"200"], [:belfrage, :service, :S3, :response]],
+          [[:belfrage, :service, :S3, :response, :"200"], [:belfrage, :platform, :response]],
           %{count: 1},
-          %{status_code: 200}
+          %{status_code: 200, platform: "S3"}
         )
 
         {:ok, cached_body |> :erlang.binary_to_term()}
@@ -51,10 +51,10 @@ defmodule Belfrage.Clients.CCP do
         Belfrage.Metrics.multi_execute(
           [
             [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
-            [:belfrage, :service, :S3, :response]
+            [:belfrage, :platform, :response]
           ],
           %{count: 1},
-          %{status_code: status_code}
+          %{status_code: status_code, platform: "S3"}
         )
 
         :telemetry.execute([:belfrage, :ccp, :unexpected_response], %{})
