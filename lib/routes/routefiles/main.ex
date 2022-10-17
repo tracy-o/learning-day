@@ -2384,7 +2384,7 @@ defroutefile "Main" do
   end
 
   # Weather
-  redirect "/weather/0/*_any", to: "/weather/*_any", status: 301
+  redirect "/weather/0/*any", to: "/weather/*any", status: 301
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
