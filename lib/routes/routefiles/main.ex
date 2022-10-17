@@ -396,6 +396,7 @@ defroutefile "Main" do
   redirect "/news/correspondents/briantaylor", to: "/news/topics/c2e418dqpkkt", status: 301, ttl: 3600
   redirect "/news/correspondents/chriscook", to: "/news/topics/c5yd7pzxne0t", status: 301, ttl: 3600
   redirect "/news/correspondents/chrisjackson", to: "/news/topics/c63d8496d2nt", status: 301, ttl: 3600
+  redirect "/news/correspondents/chrismason", to: "/news/topics/cddv4gjql21t", status: 301, ttl: 3600
   redirect "/news/correspondents/damiangrammaticas", to: "/news/topics/cr3pkx7v1d1t", status: 301, ttl: 3600
   redirect "/news/correspondents/dannyshaw", to: "/news/topics/cd61kenlzv7t", status: 301, ttl: 3600
   redirect "/news/correspondents/davidcornock", to: "/news/topics/c1l7jeydv1jt", status: 301, ttl: 3600
@@ -2383,7 +2384,7 @@ defroutefile "Main" do
   end
 
   # Weather
-
+  redirect "/weather/0/*_any", to: "/weather/*_any", status: 301
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
@@ -2401,10 +2402,11 @@ defroutefile "Main" do
   handle "/weather/map", using: "Weather", examples: ["/weather/map"]
 
   redirect "/weather/warnings", to: "/weather/warnings/weather", status: 302
-
   handle "/weather/warnings/weather", using: "WeatherWarnings", examples: ["/weather/warnings/weather"]
   handle "/weather/warnings/floods", using: "WeatherWarnings", examples: ["/weather/warnings/floods"]
 
+  redirect "/weather/coast_and_sea", to: "/weather/coast-and-sea", status: 301
+  redirect "/weather/coast_and_sea/shipping_forecast", to: "/weather/coast-and-sea/shipping-forecast", status: 301
   handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
   handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
     return_404 if: !integer_in_range?(region_id, 1..12)
