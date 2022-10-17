@@ -831,7 +831,7 @@ defroutefile "Sport" do
   redirect "/sport/rugby-union/teams/worcester/rss.xml", to: "https://feeds.bbci.co.uk/sport/f9bcd500-e383-408f-9177-6d8468d6ae35/rss.xml", status: 301, ttl: 3600
 
   ## Sport RSS feeds
-  handle "/sport/rss.xml", using: "SportRss", examples: [{"/sport/rss.xml", 302}]
+  handle "/sport/rss.xml", using: "SportRssTopic", examples: [{"/sport/rss.xml", 302}]
   handle "/sport/:discipline/rss.xml", using: "SportRssGuid", examples: [{"/sport/football/rss.xml", 302}]
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", examples: [{"/sport/football/premier-league/rss.xml", 302}]
   handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss", examples: [{"/sport/football/european-championship/2016/rss.xml", 302}]
