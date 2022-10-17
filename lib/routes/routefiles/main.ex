@@ -2405,6 +2405,7 @@ defroutefile "Main" do
   handle "/weather/warnings/floods", using: "WeatherWarnings", examples: ["/weather/warnings/floods"]
 
   redirect "/weather/coast_and_sea", to: "/weather/coast-and-sea", status: 301
+  redirect "/weather/coast_and_sea/shipping_forecast", to: "/weather/coast-and-sea/shipping-forecast", status: 301
   handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
   handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
     return_404 if: !integer_in_range?(region_id, 1..12)
