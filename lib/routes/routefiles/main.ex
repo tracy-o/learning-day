@@ -463,6 +463,7 @@ defroutefile "Main" do
   redirect "/news/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 301, ttl: 3600
   redirect "/news/correspondents/willgompertz", to: "/news/topics/cvrkv4xp7ret", status: 301, ttl: 3600
   redirect "/news/correspondents/wyredavies", to: "/news/topics/cqypkzl0n79t", status: 301, ttl: 3600
+  redirect "/news/correspondents/chrismason", to: "/news/topics/cddv4gjql21t", status: 301, ttl: 3600
 
   # News Blogs
   redirect "/news/blogs/trending", to: "/news/topics/cme72mv58q4t", status: 301, ttl: 3600
