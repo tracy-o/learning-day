@@ -94,15 +94,6 @@ defmodule BelfrageTest do
     }
   }
 
-  test "A HTTP request redirects to https, and doesn't call the lambda" do
-    LambdaMock
-    |> expect(:call, 0, fn _credentials, _func_name, _payload, _opts -> :this_should_not_be_called end)
-
-    response_struct = Belfrage.handle(@redirect_request_struct)
-
-    assert response_struct.response.http_status == 302
-  end
-
   test "increments the route_state when request has 200 status and no MVT vary headers" do
     LambdaMock
     |> expect(:call, 1, fn _credentials,

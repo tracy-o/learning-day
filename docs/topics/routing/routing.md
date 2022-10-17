@@ -88,7 +88,7 @@ defmodule Routes.Specs.SportVideos do
       owner: "sfv_team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: :webcore,
-      pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
+      pipeline: ["LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       query_params_allowlist: ["keyOne", "keyTwo"]
     }
   end
@@ -133,7 +133,7 @@ defmodule Routes.Specs.HomePagePersonalised do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
+    ["Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
