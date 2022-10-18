@@ -2050,13 +2050,6 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/ukchina/simp/topics/:id/rss.xml", using: "WorldServiceUkchinaTopicRss", examples: ["/ukchina/simp/topics/c1nq04kp0r0t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-  handle "/ukchina/trad/topics/:id/rss.xml", using: "WorldServiceUkchinaTopicRss", examples: ["/ukchina/trad/topics/cgqnyy07pqyt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
   handle "/ukchina/send/:id", using: "UploaderWorldService", examples: ["/ukchina/send/u39697902"]
   handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
 
