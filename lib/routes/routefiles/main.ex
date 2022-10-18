@@ -1681,7 +1681,8 @@ defroutefile "Main" do
 
   handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", examples: ["/serbian/manifest.json"]
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", examples: ["/serbian/sw.js"]
-  handle "/serbian/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/rss.xml"]
+  handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/lat/rss.xml"]
+  handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/cyr/rss.xml"]
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
     return_404 if: [
@@ -2020,7 +2021,8 @@ defroutefile "Main" do
 
   handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
   handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
-  handle "/ukchina/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/rss.xml"]
+  handle "/ukchina/simp/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/simp/rss.xml"]
+  handle "/ukchina/trad/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/trad/rss.xml"]
 
   handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukchina/simp/topics/c1nq04kp0r0t/page/2", 302}] do
     return_404 if: [
@@ -2241,7 +2243,8 @@ defroutefile "Main" do
 
   handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/manifest.json"]
   handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/sw.js"]
-  handle "/zhongwen/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/rss.xml"]
+  handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/simp/rss.xml"]
+  handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/trad/rss.xml"]
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
     return_404 if: [
