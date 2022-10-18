@@ -2021,8 +2021,6 @@ defroutefile "Main" do
 
   handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/manifest.json"]
   handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", examples: ["/ukchina/sw.js"]
-  handle "/ukchina/simp/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/simp/rss.xml"]
-  handle "/ukchina/trad/rss.xml", using: "WorldServiceUkChinaHomePageRss", examples: ["/ukchina/trad/rss.xml"]
 
   handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukchina/simp/topics/c1nq04kp0r0t/page/2", 302}] do
     return_404 if: [
