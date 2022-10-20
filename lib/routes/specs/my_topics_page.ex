@@ -7,6 +7,7 @@ defmodule Routes.Specs.MyTopicsPage do
       personalisation: "on",
       fallback_write_sample: 0,
       caching_enabled: false,
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "ETag"],
       etag: true
     }
   end
