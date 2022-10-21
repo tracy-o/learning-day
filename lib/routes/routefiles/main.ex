@@ -1900,7 +1900,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss", examples: [] do
+  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss", examples: ["/telugu/topics/c5qvp16w7dnt/rss.xml"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
