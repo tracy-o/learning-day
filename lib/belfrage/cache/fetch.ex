@@ -13,16 +13,14 @@ defmodule Belfrage.Cache.Fetch do
           struct
           |> Struct.add(:private, %{
             origin: :belfrage_cache,
-            personalised_route: response.personalised_route,
-            personalised_request: false
+            personalised_route: response.personalised_route
           })
           |> Struct.add(:response, %Response{response | fallback: true})
         else
           struct
           |> Struct.add(:private, %{
             origin: :belfrage_cache,
-            personalised_route: response.personalised_route,
-            personalised_request: false
+            personalised_route: response.personalised_route
           })
           |> Struct.add(:response, response)
         end

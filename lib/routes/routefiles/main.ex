@@ -776,6 +776,7 @@ defroutefile "Main" do
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/manifest.json"]
   handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/sw.js"]
+  handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", examples: ["/afaanoromoo/rss.xml"]
 
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afaanoromoo/topics/c7zp5z9n3x5t/page/2", 302}] do
     return_404 if: [
@@ -789,6 +790,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/afaanoromoo/topics/:id/rss.xml", using: "WorldServiceAfaanoromooTopicRss", examples: ["/afaanoromoo/topics/c7zp5z9n3x5t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)$/)
   end
 
   handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage", examples: [] do
@@ -807,8 +812,9 @@ defroutefile "Main" do
   handle "/afrique.json", using: "WorldServiceAfrique", examples: ["/afrique.json"]
   handle "/afrique/manifest.json", using: "WorldServiceAfriqueAssets", examples: ["/afrique/manifest.json"]
   handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets", examples: ["/afrique/sw.js"]
+  handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss", examples: ["/afrique/rss.xml"]
 
-   handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
+  handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -820,6 +826,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/afrique/topics/:id/rss.xml", using: "WorldServiceAfriqueTopicRss", examples: ["/afrique/topics/c9ny75kpxlkt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage", examples: [] do
@@ -836,6 +846,7 @@ defroutefile "Main" do
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
   handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets", examples: ["/amharic/manifest.json"]
   handle "/amharic/sw.js", using: "WorldServiceAmharicAssets", examples: ["/amharic/sw.js"]
+  handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss", examples: ["/amharic/rss.xml"]
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/amharic/topics/c06gq8wdrjyt/page/2", 302}] do
     return_404 if: [
@@ -849,6 +860,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss", examples: ["/amharic/topics/c06gq8wdrjyt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage", examples: [] do
@@ -870,6 +885,7 @@ defroutefile "Main" do
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
   handle "/arabic/manifest.json", using: "WorldServiceArabicAssets", examples: ["/arabic/manifest.json"]
   handle "/arabic/sw.js", using: "WorldServiceArabicAssets", examples: ["/arabic/sw.js"]
+  handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss", examples: ["/arabic/rss.xml"]
 
   handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/arabic/topics/c340qj374j6t/page/2", 302}] do
     return_404 if: [
@@ -883,6 +899,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/arabic/topics/:id/rss.xml", using: "WorldServiceArabicTopicRss", examples: ["/arabic/topics/c340qj374j6t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage", examples: [] do
@@ -901,8 +921,9 @@ defroutefile "Main" do
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets", examples: ["/azeri/manifest.json"]
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets", examples: ["/azeri/sw.js"]
+  handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss", examples: ["/azeri/rss.xml"]
 
-    handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
+  handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -914,6 +935,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/azeri/topics/:id/rss.xml", using: "WorldServiceAzeriTopicRss", examples: ["/azeri/topics/c1gdq32g3ddt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage", examples: [] do
@@ -933,6 +958,7 @@ defroutefile "Main" do
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
   handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets", examples: ["/bengali/manifest.json"]
   handle "/bengali/sw.js", using: "WorldServiceBengaliAssets", examples: ["/bengali/sw.js"]
+  handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss", examples: ["/bengali/rss.xml"]
 
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/bengali/topics/c2dwq2nd40xt/page/2", 302}] do
     return_404 if: [
@@ -946,6 +972,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/bengali/topics/:id/rss.xml", using: "WorldServiceBengaliTopicRss", examples: ["/bengali/topics/c2dwq2nd40xt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage", examples: [] do
@@ -965,6 +995,7 @@ defroutefile "Main" do
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets", examples: ["/burmese/manifest.json"]
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets", examples: ["/burmese/sw.js"]
+  handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss", examples: ["/burmese/rss.xml"]
 
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/burmese/topics/c404v08p1wxt/page/2", 302}] do
     return_404 if: [
@@ -978,6 +1009,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/burmese/topics/:id/rss.xml", using: "WorldServiceBurmeseTopicRss", examples: ["/burmese/topics/c404v08p1wxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage", examples: [] do
@@ -996,8 +1031,9 @@ defroutefile "Main" do
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
   handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/manifest.json"]
   handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/sw.js"]
+  handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss", examples: ["/gahuza/rss.xml"]
 
-   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
+  handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1009,6 +1045,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/gahuza/topics/:id/rss.xml", using: "WorldServiceGahuzaTopicRss", examples: ["/gahuza/topics/c7zp5z0yd0xt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage", examples: [] do
@@ -1024,6 +1064,7 @@ defroutefile "Main" do
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/manifest.json"]
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/sw.js"]
+  handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss", examples: ["/gujarati/rss.xml"]
 
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gujarati/topics/c2dwqj95d30t/page/2", 302}] do
     return_404 if: [
@@ -1037,6 +1078,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/gujarati/topics/:id/rss.xml", using: "WorldServiceGujaratiTopicRss", examples: ["/gujarati/topics/c2dwqj95d30t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage", examples: [] do
@@ -1055,6 +1100,7 @@ defroutefile "Main" do
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
   handle "/hausa/manifest.json", using: "WorldServiceHausaAssets", examples: ["/hausa/manifest.json"]
   handle "/hausa/sw.js", using: "WorldServiceHausaAssets", examples: ["/hausa/sw.js"]
+  handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss", examples: ["/hausa/rss.xml"]
 
   handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hausa/topics/c5qvpxkx1j7t/page/2", 302}] do
     return_404 if: [
@@ -1068,6 +1114,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/hausa/topics/:id/rss.xml", using: "WorldServiceHausaTopicRss", examples: ["/hausa/topics/c5qvpxkx1j7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage", examples: [] do
@@ -1087,6 +1137,7 @@ defroutefile "Main" do
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
   handle "/hindi/manifest.json", using: "WorldServiceHindiAssets", examples: ["/hindi/manifest.json"]
   handle "/hindi/sw.js", using: "WorldServiceHindiAssets", examples: ["/hindi/sw.js"]
+  handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss", examples: ["/hindi/rss.xml"]
 
   handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hindi/topics/c6vzy709wvxt/page/2", 302}] do
     return_404 if: [
@@ -1102,6 +1153,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/hindi/topics/:id/rss.xml", using: "WorldServiceHindiTopicRss", examples: ["/hindi/topics/c6vzy709wvxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1115,6 +1170,7 @@ defroutefile "Main" do
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", examples: ["/igbo/manifest.json"]
   handle "/igbo/sw.js", using: "WorldServiceIgboAssets", examples: ["/igbo/sw.js"]
+  handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss", examples: ["/igbo/rss.xml"]
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/igbo/topics/c340qr24xggt/page/2", 302}] do
     return_404 if: [
@@ -1129,6 +1185,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss", examples: ["/igbo/topics/c340qr24xggt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage", examples: [] do
@@ -1147,6 +1207,7 @@ defroutefile "Main" do
   handle "/indonesia.json", using: "WorldServiceIndonesia", examples: ["/indonesia.json"]
   handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/manifest.json"]
   handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/sw.js"]
+  handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss", examples: ["/indonesia/rss.xml"]
 
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/indonesia/topics/c340qrk1znxt/page/2", 302}] do
     return_404 if: [
@@ -1162,6 +1223,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/indonesia/topics/:id/rss.xml", using: "WorldServiceIndonesiaTopicRss", examples: ["/indonesia/topics/c340qrk1znxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1175,6 +1240,7 @@ defroutefile "Main" do
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
   handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets", examples: ["/japanese/manifest.json"]
   handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets", examples: ["/japanese/sw.js"]
+  handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss", examples: ["/japanese/rss.xml"]
 
   handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/japanese/topics/c340qrn7pp0t/page/2", 302}] do
     return_404 if: [
@@ -1190,6 +1256,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/japanese/topics/:id/rss.xml", using: "WorldServiceJapaneseTopicRss", examples: ["/japanese/topics/c340qrn7pp0t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1203,6 +1273,7 @@ defroutefile "Main" do
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
   handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", examples: ["/korean/manifest.json"]
   handle "/korean/sw.js", using: "WorldServiceKoreanAssets", examples: ["/korean/sw.js"]
+  handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss", examples: ["/korean/rss.xml"]
 
   handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/korean/topics/c17q6yp3jx4t/page/2", 302}] do
     return_404 if: [
@@ -1216,6 +1287,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/korean/topics/:id/rss.xml", using: "WorldServiceKoreanTopicRss", examples: ["/korean/topics/c17q6yp3jx4t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage", examples: [] do
@@ -1234,6 +1309,7 @@ defroutefile "Main" do
   handle "/kyrgyz.json", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.json"]
   handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/manifest.json"]
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/sw.js"]
+  handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", examples: ["/kyrgyz/rss.xml"]
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
     return_404 if: [
@@ -1247,6 +1323,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/kyrgyz/topics/:id/rss.xml", using: "WorldServiceKyrgyzTopicRss", examples: ["/kyrgyz/topics/c0109l9xrpnt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: [] do
@@ -1263,6 +1343,7 @@ defroutefile "Main" do
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets", examples: ["/marathi/manifest.json"]
   handle "/marathi/sw.js", using: "WorldServiceMarathiAssets", examples: ["/marathi/sw.js"]
+  handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss", examples: ["/marathi/rss.xml"]
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/marathi/topics/c2dwqjwqqqjt/page/2", 302}] do
     return_404 if: [
@@ -1276,6 +1357,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/marathi/topics/:id/rss.xml", using: "WorldServiceMarathiTopicRss", examples: ["/marathi/topics/c2dwqjwqqqjt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage", examples: [] do
@@ -1304,6 +1389,7 @@ defroutefile "Main" do
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/manifest.json", using: "WorldServiceMundoAssets", examples: ["/mundo/manifest.json"]
   handle "/mundo/sw.js", using: "WorldServiceMundoAssets", examples: ["/mundo/sw.js"]
+  handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss", examples: ["/mundo/rss.xml"]
 
   handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/mundo/topics/cdr5613yzwqt/page/2", 302}] do
     return_404 if: [
@@ -1317,6 +1403,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/mundo/topics/:id/rss.xml", using: "WorldServiceMundoTopicRss", examples: ["/mundo/topics/cdr5613yzwqt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage", examples: [] do
@@ -1336,6 +1426,7 @@ defroutefile "Main" do
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets", examples: ["/nepali/manifest.json"]
   handle "/nepali/sw.js", using: "WorldServiceNepaliAssets", examples: ["/nepali/sw.js"]
+  handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss", examples: ["/nepali/rss.xml"]
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/nepali/topics/c340q4p5136t/page/2", 302}] do
     return_404 if: [
@@ -1349,6 +1440,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/nepali/topics/:id/rss.xml", using: "WorldServiceNepaliTopicRss", examples: ["/nepali/topics/c340q4p5136t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage", examples: [] do
@@ -1368,6 +1463,7 @@ defroutefile "Main" do
   handle "/pashto.json", using: "WorldServicePashto", examples: ["/pashto.json"]
   handle "/pashto/manifest.json", using: "WorldServicePashtoAssets", examples: ["/pashto/manifest.json"]
   handle "/pashto/sw.js", using: "WorldServicePashtoAssets", examples: ["/pashto/sw.js"]
+  handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss", examples: ["/pashto/rss.xml"]
 
   handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pashto/topics/c8y94yr7y9rt/page/2", 302}] do
     return_404 if: [
@@ -1381,6 +1477,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/pashto/topics/:id/rss.xml", using: "WorldServicePashtoTopicRss", examples: ["/pashto/topics/c8y94yr7y9rt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage", examples: [] do
@@ -1400,6 +1500,7 @@ defroutefile "Main" do
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
   handle "/persian/manifest.json", using: "WorldServicePersianAssets", examples: ["/persian/manifest.json"]
   handle "/persian/sw.js", using: "WorldServicePersianAssets", examples: ["/persian/sw.js"]
+  handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss", examples: ["/persian/rss.xml"]
 
   handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/persian/topics/cnq68798yw0t/page/2", 302}] do
     return_404 if: [
@@ -1415,6 +1516,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/persian/topics/:id/rss.xml", using: "WorldServicePersianTopicRss", examples: ["/persian/topics/cnq68798yw0t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/persian/articles/:id", using: "WorldServicePersianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1428,6 +1533,7 @@ defroutefile "Main" do
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
   handle "/pidgin/manifest.json", using: "WorldServicePidginAssets", examples: ["/pidgin/manifest.json"]
   handle "/pidgin/sw.js", using: "WorldServicePidginAssets", examples: ["/pidgin/sw.js"]
+  handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss", examples: ["/pidgin/rss.xml"]
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pidgin/topics/c95y35941vrt/page/2", 302}] do
     return_404 if: [
@@ -1446,6 +1552,10 @@ defroutefile "Main" do
   handle "/pidgin/articles/cwl08rd38l6o", using: "WorldServicePidginArticleMvtPage", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o"]
   handle "/pidgin/articles/cwl08rd38l6o.amp", using: "WorldServicePidginArticleMvtPage", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o.amp"]
 
+  handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss", examples: ["/pidgin/topics/c95y35941vrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1463,6 +1573,7 @@ defroutefile "Main" do
   handle "/portuguese.json", using: "WorldServicePortuguese", examples: ["/portuguese.json"]
   handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets", examples: ["/portuguese/manifest.json"]
   handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets", examples: ["/portuguese/sw.js"]
+  handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss", examples: ["/portuguese/rss.xml"]
 
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/portuguese/topics/c1gdqg5dr8nt/page/2", 302}] do
     return_404 if: [
@@ -1478,6 +1589,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/portuguese/topics/:id/rss.xml", using: "WorldServicePortugueseTopicRss", examples: ["/portuguese/topics/c1gdqg5dr8nt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1491,6 +1606,7 @@ defroutefile "Main" do
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", examples: ["/punjabi/manifest.json"]
   handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets", examples: ["/punjabi/sw.js"]
+  handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss", examples: ["/punjabi/rss.xml"]
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/punjabi/topics/c0w258dd62mt/page/2", 302}] do
     return_404 if: [
@@ -1504,6 +1620,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/punjabi/topics/:id/rss.xml", using: "WorldServicePunjabiTopicRss", examples: ["/punjabi/topics/c0w258dd62mt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage", examples: [] do
@@ -1530,6 +1650,7 @@ defroutefile "Main" do
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/manifest.json", using: "WorldServiceRussianAssets", examples: ["/russian/manifest.json"]
   handle "/russian/sw.js", using: "WorldServiceRussianAssets", examples: ["/russian/sw.js"]
+  handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", examples: ["/russian/rss.xml"]
 
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
     return_404 if: [
@@ -1545,6 +1666,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/russian/topics/:id/rss.xml", using: "WorldServiceRussianTopicRss", examples: ["/russian/topics/c50nzm54vzmt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1557,6 +1682,8 @@ defroutefile "Main" do
 
   handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", examples: ["/serbian/manifest.json"]
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", examples: ["/serbian/sw.js"]
+  handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/lat/rss.xml"]
+  handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/cyr/rss.xml"]
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
     return_404 if: [
@@ -1584,6 +1711,13 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/serbian/cyr/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", examples: ["/serbian/cyr/topics/cqwvxvvw9qrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+  handle "/serbian/lat/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", examples: ["/serbian/lat/topics/c5wzvzzz5vrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/serbian/articles/:id/cyr", using: "WorldServiceSerbianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1607,6 +1741,7 @@ defroutefile "Main" do
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/manifest.json"]
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/sw.js"]
+  handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", examples: ["/sinhala/rss.xml"]
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
     return_404 if: [
@@ -1620,6 +1755,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/sinhala/topics/:id/rss.xml", using: "WorldServiceSinhalaTopicRss", examples: ["/sinhala/topics/c2dwqd311xyt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage", examples: [] do
@@ -1638,6 +1777,7 @@ defroutefile "Main" do
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
   handle "/somali/manifest.json", using: "WorldServiceSomaliAssets", examples: ["/somali/manifest.json"]
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets", examples: ["/somali/sw.js"]
+  handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", examples: ["/somali/rss.xml"]
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
     return_404 if: [
@@ -1651,6 +1791,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/somali/topics/:id/rss.xml", using: "WorldServiceSomaliTopicRss", examples: ["/somali/topics/cz74k7jd8n8t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage", examples: [] do
@@ -1669,6 +1813,8 @@ defroutefile "Main" do
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", examples: ["/swahili/sw.js"]
+  handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", examples: ["/swahili/rss.xml"]
+
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1681,6 +1827,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/swahili/topics/:id/rss.xml", using: "WorldServiceSwahiliTopicRss", examples: ["/swahili/topics/c06gq663n6jt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage", examples: [] do
@@ -1701,6 +1851,7 @@ defroutefile "Main" do
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/manifest.json", using: "WorldServiceTamilAssets", examples: ["/tamil/manifest.json"]
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets", examples: ["/tamil/sw.js"]
+  handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", examples: ["/tamil/rss.xml"]
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
     return_404 if: [
@@ -1716,6 +1867,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/tamil/topics/:id/rss.xml", using: "WorldServiceTamilTopicRss", examples: ["/tamil/topics/c06gq6gnzdgt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1729,6 +1884,7 @@ defroutefile "Main" do
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", examples: ["/telugu/manifest.json"]
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", examples: ["/telugu/sw.js"]
+  handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", examples: ["/telugu/rss.xml"]
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
     return_404 if: [
@@ -1744,6 +1900,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss", examples: [] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1757,6 +1917,7 @@ defroutefile "Main" do
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets", examples: ["/thai/manifest.json"]
   handle "/thai/sw.js", using: "WorldServiceThaiAssets", examples: ["/thai/sw.js"]
+  handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", examples: ["/thai/rss.xml"]
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
     return_404 if: [
@@ -1772,6 +1933,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/thai/topics/:id/rss.xml", using: "WorldServiceThaiTopicRss", examples: ["/thai/topics/c340qx429k7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1785,6 +1950,7 @@ defroutefile "Main" do
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/manifest.json"]
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/sw.js"]
+  handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", examples: ["/tigrinya/rss.xml"]
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
     return_404 if: [
@@ -1798,6 +1964,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/tigrinya/topics/:id/rss.xml", using: "WorldServiceTigrinyaTopicRss", examples: ["/tigrinya/topics/c1gdqrg28zxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage", examples: [] do
@@ -1817,6 +1987,7 @@ defroutefile "Main" do
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", examples: ["/turkce/manifest.json"]
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", examples: ["/turkce/sw.js"]
+  handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", examples: ["/turkce/rss.xml"]
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
     return_404 if: [
@@ -1830,6 +2001,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/turkce/topics/:id/rss.xml", using: "WorldServiceTurkceTopicRss", examples: ["/turkce/topics/c2dwqnwkvnqt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage", examples: [] do
@@ -1883,6 +2058,7 @@ defroutefile "Main" do
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/manifest.json"]
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/sw.js"]
+  handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", examples: ["/ukrainian/rss.xml"]
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
     return_404 if: [
@@ -1896,6 +2072,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/ukrainian/topics/:id/rss.xml", using: "WorldServiceUkrainianTopicRss", examples: ["/ukrainian/topics/c340qxwr67yt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage", examples: [] do
@@ -1915,6 +2095,7 @@ defroutefile "Main" do
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
   handle "/urdu/manifest.json", using: "WorldServiceUrduAssets", examples: ["/urdu/manifest.json"]
   handle "/urdu/sw.js", using: "WorldServiceUrduAssets", examples: ["/urdu/sw.js"]
+  handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", examples: ["/urdu/rss.xml"]
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
     return_404 if: [
@@ -1928,6 +2109,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/urdu/topics/:id/rss.xml", using: "WorldServiceUrduTopicRss", examples: ["/urdu/topics/c44pxlmy60mt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage", examples: [] do
@@ -1946,6 +2131,7 @@ defroutefile "Main" do
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
   handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", examples: ["/uzbek/manifest.json"]
   handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", examples: ["/uzbek/sw.js"]
+  handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss", examples: ["/uzbek/rss.xml"]
 
   handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/uzbek/topics/c340q0q55jvt/page/2", 302}] do
     return_404 if: [
@@ -1959,6 +2145,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/uzbek/topics/:id/rss.xml", using: "WorldServiceUzbekTopicRss", examples: ["/uzbek/topics/c340q0q55jvt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage", examples: [] do
@@ -1977,6 +2167,7 @@ defroutefile "Main" do
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
   handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/manifest.json"]
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/sw.js"]
+  handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", examples: ["/vietnamese/rss.xml"]
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
     return_404 if: [
@@ -1992,6 +2183,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/vietnamese/topics/:id/rss.xml", using: "WorldServiceVietnameseTopicRss", examples: ["/vietnamese/topics/c340q0gkg4kt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2005,6 +2200,7 @@ defroutefile "Main" do
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", examples: ["/yoruba/manifest.json"]
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", examples: ["/yoruba/sw.js"]
+  handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", examples: ["/yoruba/rss.xml"]
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
     return_404 if: [
@@ -2018,6 +2214,10 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/yoruba/topics/:id/rss.xml", using: "WorldServiceYorubaTopicRss", examples: ["/yoruba/topics/c12jqpnxn44t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage", examples: [] do
@@ -2035,6 +2235,8 @@ defroutefile "Main" do
 
   handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/manifest.json"]
   handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/sw.js"]
+  handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/simp/rss.xml"]
+  handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/trad/rss.xml"]
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
     return_404 if: [
@@ -2060,6 +2262,13 @@ defroutefile "Main" do
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
+  end
+
+  handle "/zhongwen/simp/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", examples: ["/zhongwen/simp/topics/c0dg90z8nqxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+  handle "/zhongwen/trad/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", examples: ["/zhongwen/trad/topics/cpydz21p02et/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
   handle "/zhongwen/articles/:id/simp", using: "WorldServiceZhongwenArticlePage", examples: [] do
@@ -2384,7 +2593,7 @@ defroutefile "Main" do
   end
 
   # Weather
-  redirect "/weather/0/*_any", to: "/weather/*_any", status: 301
+  redirect "/weather/0/*any", to: "/weather/*any", status: 301
 
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
