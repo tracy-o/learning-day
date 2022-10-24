@@ -3,6 +3,7 @@ defmodule EndToEnd.ErrorHandlingTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
+  import Test.Support.Helper, only: [build_https_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -26,7 +27,7 @@ defmodule EndToEnd.ErrorHandlingTest do
       raise "Boom"
     end)
 
-    conn = conn(:get, "/200-ok-response")
+    conn = conn(:get, build_https_request_uri("/200-ok-response"))
 
     assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Boom", fn ->
       Router.call(conn, [])

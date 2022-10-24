@@ -3,12 +3,13 @@ defmodule EndToEnd.RobotsTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
+  import Test.Support.Helper, only: [build_https_request_uri: 1]
 
   @moduletag :end_to_end
 
   test "returns the robots.txt file" do
     robots_content = File.read!("priv/static/robots.txt")
-    response_conn = conn(:get, "/robots.txt") |> Router.call([])
+    response_conn = conn(:get, build_https_request_uri("/robots.txt")) |> Router.call([])
 
     assert {200,
             [

@@ -3,7 +3,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
-  import Test.Support.Helper, only: [set_environment: 1]
+  import Test.Support.Helper, only: [set_environment: 1, build_https_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
@@ -238,7 +238,7 @@ defmodule EndToEnd.App.PersonalisationTest do
          path \\ "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
        ) do
     :get
-    |> conn(path)
+    |> conn(build_https_request_uri(path))
     |> Map.put(:host, "news-app.bbc.co.uk")
   end
 

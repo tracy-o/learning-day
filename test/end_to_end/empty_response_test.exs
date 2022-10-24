@@ -4,6 +4,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_https_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -28,7 +29,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
         {:ok, Map.put(lambda_response, "statusCode", 404)}
       end)
 
-      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+      response_conn = conn(:get, build_https_request_uri("/downstream-not-found")) |> Router.call([])
 
       assert {404, _resp_headers, "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end
@@ -39,7 +40,7 @@ defmodule BelfrageWeb.EmptyErrorResponseTest do
         {:ok, Map.put(lambda_response, "statusCode", 400)}
       end)
 
-      response_conn = conn(:get, "/downstream-not-found") |> Router.call([])
+      response_conn = conn(:get, build_https_request_uri("/downstream-not-found")) |> Router.call([])
 
       assert {400, _resp_headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
     end

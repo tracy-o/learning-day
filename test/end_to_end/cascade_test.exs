@@ -2,6 +2,7 @@ defmodule EndToEnd.CascadeTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_https_request_uri: 1]
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
   import Belfrage.Test.PersonalisationHelper
 
@@ -213,7 +214,7 @@ defmodule EndToEnd.CascadeTest do
 
   defp build_request(route \\ @cascade_route) do
     :get
-    |> conn(route)
+    |> conn(build_https_request_uri(route))
     |> Map.put(:host, "www.bbc.co.uk")
   end
 

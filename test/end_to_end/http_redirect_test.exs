@@ -4,6 +4,7 @@ defmodule EndToEnd.HttpRedirectTest do
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
+  import Test.Support.Helper, only: [build_https_request_uri: 1]
 
   @moduletag :end_to_end
 
