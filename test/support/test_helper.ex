@@ -121,6 +121,10 @@ defmodule Test.Support.Helper do
     end)
   end
 
+  def build_https_request_uri(path) do
+    "https://www.example.com" <> path
+  end
+
   def gtm_host("test"), do: "www.test.bbc.co.uk"
   def gtm_host("live"), do: "www.bbc.co.uk"
 
