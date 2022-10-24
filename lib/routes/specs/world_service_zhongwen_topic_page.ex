@@ -2,7 +2,7 @@ defmodule Routes.Specs.WorldServiceZhongwenTopicPage do
   def specs(production_env) do
     %{
       platform: Simorgh,
-      pipeline: ["WorldServiceTopicsGuid"],
+      request_pipeline: ["WorldServiceTopicsGuid"],
       query_params_allowlist: query_params_allowlist(production_env),
       headers_allowlist: ["cookie-ckps_chinese"]
     }

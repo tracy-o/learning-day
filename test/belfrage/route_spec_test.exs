@@ -77,23 +77,42 @@ defmodule Belfrage.RouteSpecTest do
     end
 
     test "replaces pipeline placeholder with route pipeline" do
-      define_platform(PipelinePlaceholderPlatform, %{pipeline: ["Foo", :_routespec_pipeline_placeholder, "Bar"]})
+      define_platform(PipelinePlaceholderPlatform, %{request_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Bar"]})
+
       define_route(NoPipelineRoute, %{platform: PipelinePlaceholderPlatform})
-      define_route(PipelineRoute, %{platform: PipelinePlaceholderPlatform, pipeline: ["Baz1", "Baz2"]})
+      define_route(PipelineRoute, %{platform: PipelinePlaceholderPlatform, request_pipeline: ["Baz1", "Baz2"]})
 
       spec = RouteSpec.specs_for("NoPipelineRoute")
-      assert spec.pipeline == ["Foo", "Bar"]
+      assert spec.request_pipeline == ["Foo", "Bar"]
 
       spec = RouteSpec.specs_for("PipelineRoute")
-      assert spec.pipeline == ["Foo", "Baz1", "Baz2", "Bar"]
+      assert spec.request_pipeline == ["Foo", "Baz1", "Baz2", "Bar"]
     end
 
     test "overwrites pipeline if platform spec does not have placeholder" do
-      define_platform(OverwritePipelinePlatform, %{pipeline: ["Foo"]})
-      define_route(OverwritePipelineRoute, %{platform: OverwritePipelinePlatform, pipeline: ["Bar"]})
+      define_platform(OverwriteRequestPipelinePlatform, %{request_pipeline: ["Foo"]})
 
-      spec = RouteSpec.specs_for("OverwritePipelineRoute")
-      assert spec.pipeline == ["Bar"]
+      define_route(OverwriteRequestPipelineRoute, %{
+        platform: OverwriteRequestPipelinePlatform,
+        request_pipeline: ["Bar"]
+      })
+
+      spec = RouteSpec.specs_for("OverwriteRequestPipelineRoute")
+      assert spec.request_pipeline == ["Bar"]
+    end
+
+    test "injects routespec response_pipeline if platform spec has placeholder" do
+      define_platform(OverwriteResponsePipelinePlatform, %{
+        response_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Baz"]
+      })
+
+      define_route(OverwriteResponsePipelineRoute, %{
+        platform: OverwriteResponsePipelinePlatform,
+        response_pipeline: ["Bar"]
+      })
+
+      spec = RouteSpec.specs_for("OverwriteResponsePipelineRoute")
+      assert spec.response_pipeline == ["Foo", "Bar", "Baz"]
     end
 
     test "sets personalised_route attribute" do

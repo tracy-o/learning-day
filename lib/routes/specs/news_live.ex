@@ -5,7 +5,7 @@ defmodule Routes.Specs.NewsLive do
       runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Run+Book",
       platform: MozartNews,
       circuit_breaker_error_threshold: 500,
-      pipeline: ["NewsLivePlatformDiscriminator"],
+      request_pipeline: ["NewsLivePlatformDiscriminator"],
       query_params_allowlist: ["page"]
     }
   end

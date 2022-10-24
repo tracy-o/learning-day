@@ -4,7 +4,7 @@ defmodule Routes.Specs.MySessionWebcorePlatform do
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
       platform: Webcore,
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
       personalisation: "test_only"
     }
   end

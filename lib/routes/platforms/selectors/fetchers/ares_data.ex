@@ -21,7 +21,8 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresData do
     @http_client.execute(
       %HTTP.Request{
         method: :get,
-        url: origin <> "/module/ares-data" <> QueryParams.encode(%{path: path}),
+        # This path needs to be updated when the Ares asset identifier module is merged into fabl-modules
+        url: origin <> "/preview/module/spike-ares-asset-identifier" <> QueryParams.encode(%{path: path}),
         timeout: 1_000
       },
       :Fabl

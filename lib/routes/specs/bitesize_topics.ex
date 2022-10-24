@@ -5,7 +5,7 @@ defmodule Routes.Specs.BitesizeTopics do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      pipeline: pipeline(production_env)
+      request_pipeline: pipeline(production_env)
     }
   end
 
