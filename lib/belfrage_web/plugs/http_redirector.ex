@@ -1,6 +1,11 @@
 defmodule BelfrageWeb.Plugs.HttpRedirector do
   import Plug.Conn
 
+  @moduledoc """
+  Redirects a request with a http scheme
+  to one with a https scheme.
+  """
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
@@ -25,7 +30,6 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
 
   defp set_location(conn) do
     redirect_url = String.replace(request_url(conn), "http", "https", global: false)
-    # Map.replace(conn, :scheme, :https)
     put_resp_header(conn, "location", redirect_url)
   end
 

@@ -3,6 +3,7 @@ defmodule EndToEnd.HttpRedirectTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
+  alias Belfrage.RouteState
 
   @moduletag :end_to_end
 
@@ -26,6 +27,11 @@ defmodule EndToEnd.HttpRedirectTest do
               {"x-bbc-no-scheme-rewrite", "1"},
               {"req-svc-chain", "BELFRAGE"}
             ], "Redirecting"} = sent_resp(response_conn)
+  end
+
+  setup do
+    start_supervised!({RouteState, "SomeRouteState"})
+    :ok
   end
 
   test "no redirect when scheme is https" do
