@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportRssTopic do
+defmodule Routes.Specs.SportTopicRss do
   def specs do
     %{
       owner: "#help-sport",
