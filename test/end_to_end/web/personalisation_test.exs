@@ -260,7 +260,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
   defp build_request(path \\ "/my/session/webcore-platform") do
     :get
     |> conn(build_https_request_uri(path))
-    |> Map.put(:host, "https://www.bbc.co.uk")
+    |> Map.put(:host, "www.bbc.co.uk")
   end
 
   defp build_request_to_non_personalised_route() do
