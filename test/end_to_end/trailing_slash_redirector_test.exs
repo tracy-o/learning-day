@@ -4,7 +4,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -15,7 +15,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
   test "a succesful redirect if there is multiple trailing slashes at the top level" do
     conn =
-      conn(:get, build_https_request_uri("///"))
+      conn(:get, build_request_uri(path: "///"))
       |> Map.put(:request_path, "///")
       |> Router.call([])
 
@@ -24,7 +24,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   end
 
   test "a succesful redirect if there is a trailing slash" do
-    conn = conn(:get, build_https_request_uri("/200-ok-response///"))
+    conn = conn(:get, build_request_uri(path: "/200-ok-response///"))
     conn = Router.call(conn, [])
 
     assert {301, headers, ""} = sent_resp(conn)
@@ -34,7 +34,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
   test "keeps default response headers" do
     conn =
-      conn(:get, build_https_request_uri("/200-ok-response///"))
+      conn(:get, build_request_uri(path: "/200-ok-response///"))
       |> put_req_header("req-svc-chain", "GTM")
       |> Router.call([])
 
@@ -46,7 +46,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
   test "keeps req-svc-chain values when provided" do
     conn =
-      conn(:get, build_https_request_uri("/200-ok-response///"))
+      conn(:get, build_request_uri(path: "/200-ok-response///"))
       |> put_req_header("req-svc-chain", "GTM")
       |> Router.call([])
 

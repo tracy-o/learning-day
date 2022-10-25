@@ -4,7 +4,7 @@ defmodule EndToEnd.LanguageTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -45,14 +45,14 @@ defmodule EndToEnd.LanguageTest do
       expect_lambda_call(times_called: 2)
 
       conn_ga =
-        conn(:get, build_https_request_uri("/200-ok-response"))
+        conn(:get, build_request_uri(path: "/200-ok-response"))
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
 
       :ets.delete_all_objects(:cache)
 
       conn_cy =
-        conn(:get, build_https_request_uri("/200-ok-response"))
+        conn(:get, build_request_uri(path: "/200-ok-response"))
         |> put_req_header("cookie-ckps_language", "cy")
         |> Router.call([])
 
@@ -62,7 +62,7 @@ defmodule EndToEnd.LanguageTest do
     test "the langauge header uses the default language" do
       expect_lambda_call(headers: %{language: "en-GB"})
 
-      conn(:get, build_https_request_uri("/200-ok-response"))
+      conn(:get, build_request_uri(path: "/200-ok-response"))
       |> put_req_header("cookie-ckps_language", "ga")
       |> Router.call([])
     end
@@ -71,7 +71,7 @@ defmodule EndToEnd.LanguageTest do
       expect_lambda_call()
 
       [vary_string] =
-        conn(:get, build_https_request_uri("/200-ok-response"))
+        conn(:get, build_request_uri(path: "/200-ok-response"))
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
         |> get_resp_header("vary")
@@ -90,12 +90,12 @@ defmodule EndToEnd.LanguageTest do
       expect_lambda_call(times_called: 2)
 
       conn_ga =
-        conn(:get, build_https_request_uri("/language-from-cookie"))
+        conn(:get, build_request_uri(path: "/language-from-cookie"))
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
 
       conn_cy =
-        conn(:get, build_https_request_uri("/language-from-cookie"))
+        conn(:get, build_request_uri(path: "/language-from-cookie"))
         |> put_req_header("cookie-ckps_language", "cy")
         |> Router.call([])
 
@@ -105,7 +105,7 @@ defmodule EndToEnd.LanguageTest do
     test "the language header contains the value from the cookie" do
       expect_lambda_call(headers: %{language: "ga"})
 
-      conn(:get, build_https_request_uri("/language-from-cookie"))
+      conn(:get, build_request_uri(path: "/language-from-cookie"))
       |> put_req_header("cookie-ckps_language", "ga")
       |> Router.call([])
     end
@@ -114,7 +114,7 @@ defmodule EndToEnd.LanguageTest do
       expect_lambda_call()
 
       [vary_string] =
-        conn(:get, build_https_request_uri("/language-from-cookie"))
+        conn(:get, build_request_uri(path: "/language-from-cookie"))
         |> put_req_header("cookie-ckps_language", "ga")
         |> Router.call([])
         |> get_resp_header("vary")

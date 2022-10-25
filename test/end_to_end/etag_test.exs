@@ -2,7 +2,7 @@ defmodule EndToEnd.EtagTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{HTTP, HTTPMock}
@@ -20,7 +20,7 @@ defmodule EndToEnd.EtagTest do
   describe "when etags are supported" do
     test ~s(and a matching "if-none-match" request header is present, etag is added to response) do
       conn =
-        conn(:get, build_https_request_uri("/etag-support"))
+        conn(:get, build_request_uri(path: "/etag-support"))
         |> put_req_header("if-none-match", @etag)
         |> Router.call([])
 
@@ -30,7 +30,7 @@ defmodule EndToEnd.EtagTest do
 
     test ~s(and a non-matching "if-none-match" request header is present, etag is added to response) do
       conn =
-        conn(:get, build_https_request_uri("/etag-support"))
+        conn(:get, build_request_uri(path: "/etag-support"))
         |> put_req_header("if-none-match", ~s("something"))
         |> Router.call([])
 
@@ -40,7 +40,7 @@ defmodule EndToEnd.EtagTest do
 
     test ~s(and no "if-none-match" request header is present, etag is added to response) do
       conn =
-        conn(:get, build_https_request_uri("/etag-support"))
+        conn(:get, build_request_uri(path: "/etag-support"))
         |> Router.call([])
 
       assert [@etag] == get_resp_header(conn, "etag")
@@ -51,7 +51,7 @@ defmodule EndToEnd.EtagTest do
   describe "when etags are not supported" do
     test ~s(and a "matching" "if-none-match" request header is present, etag is not added to response) do
       conn =
-        conn(:get, build_https_request_uri("/no-etag-support"))
+        conn(:get, build_request_uri(path: "/no-etag-support"))
         |> put_req_header("if-none-match", @etag)
         |> Router.call([])
 
@@ -61,7 +61,7 @@ defmodule EndToEnd.EtagTest do
 
     test ~s(and a "non-matching" "if-none-match" request header is present, etag is not added to response) do
       conn =
-        conn(:get, build_https_request_uri("/no-etag-support"))
+        conn(:get, build_request_uri(path: "/no-etag-support"))
         |> put_req_header("if-none-match", ~s("something"))
         |> Router.call([])
 
@@ -71,7 +71,7 @@ defmodule EndToEnd.EtagTest do
 
     test ~s(and no "if-none-match" request header is present, etag is not added to response) do
       conn =
-        conn(:get, build_https_request_uri("/no-etag-support"))
+        conn(:get, build_request_uri(path: "/no-etag-support"))
         |> Router.call([])
 
       assert [] == get_resp_header(conn, "etag")

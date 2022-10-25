@@ -4,7 +4,7 @@ defmodule VaryCacheByHost do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -26,10 +26,12 @@ defmodule VaryCacheByHost do
     end)
 
     %{
-      no_host_header: conn(:get, build_https_request_uri("/200-ok-response")) |> Map.put(:host, "belfrage.com"),
-      no_host_header_on_preview: conn(:get, build_https_request_uri("/200-ok-response")) |> Map.put(:host, "preview.com"),
-      edge_host: conn(:get, build_https_request_uri("/200-ok-response")) |> put_req_header("x-forwarded-host", "forwarded.com"),
-      forwarded_host: conn(:get, build_https_request_uri("/200-ok-response")) |> put_req_header("host", "host.com")
+      no_host_header: conn(:get, build_request_uri(path: "/200-ok-response")) |> Map.put(:host, "belfrage.com"),
+      no_host_header_on_preview:
+        conn(:get, build_request_uri(path: "/200-ok-response")) |> Map.put(:host, "preview.com"),
+      edge_host:
+        conn(:get, build_request_uri(path: "/200-ok-response")) |> put_req_header("x-forwarded-host", "forwarded.com"),
+      forwarded_host: conn(:get, build_request_uri(path: "/200-ok-response")) |> put_req_header("host", "host.com")
     }
   end
 

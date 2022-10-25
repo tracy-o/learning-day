@@ -3,7 +3,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.PersonalisationHelper
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -16,7 +16,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   end
 
   test "when no token provided" do
-    response_conn = conn(:get, build_https_request_uri("/my/session")) |> Router.call([])
+    response_conn = conn(:get, build_request_uri(path: "/my/session")) |> Router.call([])
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in resp_headers
@@ -25,7 +25,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
 
   test "valid access and identity token" do
     response_conn =
-      conn(:get, build_https_request_uri("/my/session"))
+      conn(:get, build_request_uri(path: "/my/session"))
       |> Map.put(:host, "https://www.bbc.co.uk")
       |> personalise_request()
       |> Router.call([])

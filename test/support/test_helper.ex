@@ -121,8 +121,15 @@ defmodule Test.Support.Helper do
     end)
   end
 
-  def build_https_request_uri(path) do
-    "https://www.example.com" <> path
+  def build_request_uri(opts \\ []) do
+    default = [scheme: "https", host: "www.example.com", path: "/", query_string: ""]
+    options = Keyword.merge(default, opts)
+
+    if options[:query_string] == "" do
+      options[:scheme] <> "://" <> options[:host] <> options[:path]
+    else
+      options[:scheme] <> "://" <> options[:host] <> options[:path] <> "?" <> options[:query_string]
+    end
   end
 
   def gtm_host("test"), do: "www.test.bbc.co.uk"

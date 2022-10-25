@@ -3,7 +3,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP}
@@ -259,7 +259,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
   defp build_request(path \\ "/my/session/webcore-platform") do
     :get
-    |> conn(build_https_request_uri(path))
+    |> conn(build_request_uri(path: path))
     |> Map.put(:host, "www.bbc.co.uk")
   end
 

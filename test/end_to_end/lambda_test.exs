@@ -5,7 +5,7 @@ defmodule EndToEnd.LambdaTest do
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
-  import Test.Support.Helper, only: [assert_valid_request_hash: 1, build_https_request_uri: 1]
+  import Test.Support.Helper, only: [assert_valid_request_hash: 1, build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -48,7 +48,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_https_request_uri("/200-ok-response"))
+    conn = conn(:get, build_request_uri(path: "/200-ok-response"))
     conn = Router.call(conn, [])
 
     assert {200,
@@ -84,7 +84,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_https_request_uri("/200-ok-response?query[hi]=foo"))
+    conn = conn(:get, build_request_uri(path: "/200-ok-response?query[hi]=foo"))
     Router.call(conn, [])
   end
 
@@ -98,7 +98,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, response}
     end)
 
-    conn = conn(:get, build_https_request_uri("/downstream-broken"))
+    conn = conn(:get, build_request_uri(path: "/downstream-broken"))
     conn = Router.call(conn, [])
 
     assert {500,

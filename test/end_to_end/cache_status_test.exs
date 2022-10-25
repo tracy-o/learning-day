@@ -3,7 +3,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0, make_cached_response_stale: 1]
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -116,7 +116,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   end
 
   defp make_request(path \\ "/200-ok-response") do
-    conn(:get, build_https_request_uri(path)) |> Router.call([])
+    conn(:get, build_request_uri(path: path)) |> Router.call([])
   end
 
   defp make_https_apps_request(path) do

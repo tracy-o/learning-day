@@ -4,7 +4,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailHeaderTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_https_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -24,7 +24,7 @@ defmodule BelfrageWeb.ResponseHeaders.PipelineTrailHeaderTest do
       {:ok, @lambda_response}
     end)
 
-    response_conn = conn(:get, build_https_request_uri("/200-ok-response")) |> Router.call([])
+    response_conn = conn(:get, build_request_uri(path: "/200-ok-response")) |> Router.call([])
 
     assert {200, _resp_headers, _body} = sent_resp(response_conn)
 
