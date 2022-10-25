@@ -119,7 +119,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     conn(:get, build_https_request_uri(path)) |> Router.call([])
   end
 
-  defp make_https_apps_request(path \\ "/200-ok-response") do
+  defp make_https_apps_request(path) do
     conn(:get, path) |> Router.call([])
   end
 
