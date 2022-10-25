@@ -582,6 +582,14 @@ defroutefile "Main" do
   handle "/news/sport1/*_any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
   handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
 
+  # News RSS feeds
+  handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
+  handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
+
+  handle "/news/topics/:id/rss.xml", using: "NewsTopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   # News section matchers
   handle "/news/ampstories/*_any", using: "News", examples: []
   handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
@@ -594,7 +602,7 @@ defroutefile "Main" do
   handle "/news/northern_ireland/*_any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
   handle "/news/politics/*_any", using: "NewsUk", examples: ["/news/politics/eu_referendum/results"]
   handle "/news/resources/*_any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
-  handle "/news/rss/*_any", using: "NewsRss", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
+  handle "/news/rss/*_any", using: "NewsRssSection", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
   handle "/news/science-environment/*_any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
   handle "/news/scotland/*_any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
   handle "/news/slides/*_any", using: "News", examples: []
@@ -615,9 +623,6 @@ defroutefile "Main" do
 
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
-
-  handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
-  handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
 
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
