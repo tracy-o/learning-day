@@ -26,7 +26,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   test "valid access and identity token" do
     response_conn =
       conn(:get, build_https_request_uri("/my/session"))
-      |> Map.put(:host, "www.bbc.co.uk")
+      |> Map.put(:host, "https://www.bbc.co.uk")
       |> personalise_request()
       |> Router.call([])
 
