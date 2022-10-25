@@ -5,9 +5,9 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
 
   defp incoming_request(scheme) do
     conn(:get, "/")
-    |> put_http_protocol(scheme)
+    |> Map.put(:scheme, scheme)
     |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
-    |> resp(200, "not being redirected")
+    |> resp(200, "")
   end
 
   test "redirect when protocol is insecure" do
@@ -16,7 +16,7 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
       |> HttpRedirector.call([])
 
     assert conn.status == 302
-    assert conn.resp_body == "Redirecting"
+    assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["https://" <> conn.host <> "/"]
   end
 
@@ -25,8 +25,8 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
       incoming_request(:https)
       |> HttpRedirector.call([])
 
-    assert conn.status == 302
-    assert conn.resp_body == "Redirecting"
-    assert get_resp_header(conn, "location") == ["https://" <> conn.host <> "/"]
+    assert conn.status == 200
+    assert conn.resp_body == ""
+    assert get_resp_header(conn, "location") == []
   end
 end

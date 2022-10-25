@@ -26,7 +26,7 @@ defmodule EndToEnd.HttpRedirectTest do
               {"server", "Belfrage"},
               {"x-bbc-no-scheme-rewrite", "1"},
               {"req-svc-chain", "BELFRAGE"}
-            ], "Redirecting"} = sent_resp(response_conn)
+            ], ""} = sent_resp(response_conn)
   end
 
   setup do
