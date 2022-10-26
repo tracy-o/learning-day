@@ -2711,10 +2711,10 @@ defroutefile "Main" do
   handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                        # Is this route needed? Currently 404
   handle "/newsround.json", using: "NewsroundAmp", examples: []                                                       # Is this route needed? Currently 404
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
-  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: ["/newsround/unknown/61545299.amp"]            # Not sure if used
+  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: []                                           # Not sure if used, Currently 404s with route /newsround/unknown/61545299.amp
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
-  handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
-  handle "/newsround/*_any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
+  handle "/newsround", using: "NewsroundLegacy", examples: [{"/newsround", 301}]
+  handle "/newsround/*_any", using: "NewsroundLegacy", examples: [{"/newsround/news/watch_newsround", 301} , {"/newsround/news/newsroundbsl", 301}, {"/newsround/61545299", 301}]  # Use Morph as a catch-all
 
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
