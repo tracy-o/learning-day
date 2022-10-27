@@ -903,28 +903,29 @@ defroutefile "Sport" do
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
   ## Sport unsupported data page redirects handled by Mozart
-  handle "/sport/commonwealth-games/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
-  handle "/sport/commonwealth-games/medals/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
-  handle "/sport/commonwealth-games/results/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
-  handle "/sport/commonwealth-games/schedule/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/schedule/sports/gymnastics", 302}, {"/sport/commonwealth-games/schedule/sports/volleyball.app", 302}]
-  handle "/sport/commonwealth-games/sports/*_any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
-  handle "/sport/football/european-championship/2012/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2012", 301}, {"/sport/football/european-championship/2012.app", 301}]
-  handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
-  handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
-  handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
-  handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
-  handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
-  handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
-  handle "/sport/paralympics/rio-2016/medals/*_any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/medals", 301}, {"/sport/paralympics/rio-2016/medals.app", 301}]
-  handle "/sport/paralympics/rio-2016/schedule/*_any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/schedule", 301}, {"/sport/paralympics/rio-2016/schedule.app", 301}]
-  handle "/sport/winter-olympics/home-nations/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/home-nations", 302}, {"/sport/winter-olympics/home-nations.app", 302}]
-  handle "/sport/winter-olympics/medals/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
-  handle "/sport/winter-olympics/results/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
-  handle "/sport/winter-olympics/schedule/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
-  handle "/sport/winter-olympics/sports/*_any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
+  handle "/sport/commonwealth-games/home-nations/*any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
+  handle "/sport/commonwealth-games/medals/*any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
+  handle "/sport/commonwealth-games/results/*any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
+  handle "/sport/commonwealth-games/schedule/*any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/schedule/sports/gymnastics", 302}, {"/sport/commonwealth-games/schedule/sports/volleyball.app", 302}]
+  handle "/sport/commonwealth-games/sports/*any", using: "SportRedirects", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
+  handle "/sport/football/european-championship/2012/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2012", 301}, {"/sport/football/european-championship/2012.app", 301}]
+  handle "/sport/football/european-championship/2016/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
+  handle "/sport/football/european-championship/euro-2016/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
+  handle "/sport/football/european-championship/schedule/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
+  handle "/sport/football/world-cup/schedule/*any", using: "SportRedirects", examples: [{"/sport/football/world-cup/schedule/group-stage", 302}, {"/sport/football/world-cup/schedule.app", 302}]
+  handle "/sport/olympics/2012/*any", using: "SportRedirects", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
+  handle "/sport/olympics/2016/*any", using: "SportRedirects", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
+  handle "/sport/olympics/rio-2016/*any", using: "SportRedirects", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
+  handle "/sport/paralympics/rio-2016/medals/*any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/medals", 301}, {"/sport/paralympics/rio-2016/medals.app", 301}]
+  handle "/sport/paralympics/rio-2016/schedule/*any", using: "SportRedirects", examples: [{"/sport/paralympics/rio-2016/schedule", 301}, {"/sport/paralympics/rio-2016/schedule.app", 301}]
+  handle "/sport/winter-olympics/home-nations/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/home-nations", 302}, {"/sport/winter-olympics/home-nations.app", 302}]
+  handle "/sport/winter-olympics/medals/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
+  handle "/sport/winter-olympics/results/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
+  handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
+  handle "/sport/winter-olympics/sports/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
 
   ## Sport Visual Journalism
-  handle "/sport/extra/*_any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
+  handle "/sport/extra/*any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
@@ -973,8 +974,8 @@ defroutefile "Sport" do
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
-  handle "/sport/live/football/*_any", using: "SportFootballLivePage", examples: [] # flakey "/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"
-  handle "/sport/live/*_any", using: "SportLivePage", examples: [] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live, "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"
+  handle "/sport/live/football/*any", using: "SportFootballLivePage", examples: [] # flakey "/sport/live/football/52581366.app?morph_env=live&renderer_env=live", "/sport/live/football/52581366?morph_env=live&renderer_env=live", "/sport/live/football/52581366/page/2?morph_env=live&renderer_env=live"
+  handle "/sport/live/*any", using: "SportLivePage", examples: [] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live, "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"
 
   ## Sport BBC Live - Webcore Football Live - TIPO IDs
   handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
@@ -996,12 +997,12 @@ defroutefile "Sport" do
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
-  handle "/sport/alpha/*_any", using: "SportAlpha", examples: []
+  handle "/sport/alpha/*any", using: "SportAlpha", examples: []
 
   ## Sport Live Guide
   handle "/sport/live-guide.app", using: "SportLiveGuide", examples: ["/sport/live-guide.app"]
   handle "/sport/live-guide", using: "SportLiveGuide", examples: ["/sport/live-guide"]
-  handle "/sport/live-guide/*_any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+  handle "/sport/live-guide/*any", using: "SportLiveGuide", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
 
   ## Sport Video Collections
   handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", examples: ["/sport/cricket/video.app"]
@@ -1135,11 +1136,11 @@ defroutefile "Sport" do
 
   ## Sport Calendars
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/formula1/calendar/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar"] # flakey /sport/formula1/calendar/2022-04, /sport/formula1/calendar/2022-04.app
+  handle "/sport/formula1/calendar/*any", using: "SportFormula1DataPage", examples: ["/sport/formula1/calendar"] # flakey /sport/formula1/calendar/2022-04, /sport/formula1/calendar/2022-04.app
   handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar.app"]
-  handle "/sport/horse-racing/calendar/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar"] # flakey "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"
+  handle "/sport/horse-racing/calendar/*any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/calendar"] # flakey "/sport/horse-racing/calendar/2021-05", "/sport/horse-racing/calendar/2021-05.app"
   handle "/sport/:discipline/calendar.app", using: "SportDataPage", examples: ["/sport/winter-sports/calendar.app"]
-  handle "/sport/:discipline/calendar/*_any", using: "SportDataPage", examples: [] # flakey /sport/winter-sports/calendar/2022-04.app, /sport/winter-sports/calendar/2022-04
+  handle "/sport/:discipline/calendar/*any", using: "SportDataPage", examples: [] # flakey /sport/winter-sports/calendar/2022-04.app, /sport/winter-sports/calendar/2022-04
 
   ## Sport Fixtures pages
   redirect "/sport/basketball/:tournament/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
@@ -1154,7 +1155,7 @@ defroutefile "Sport" do
 
   ## Sport Horse Racing Results
   handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results/*_any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results"] # flakey /sport/horse-racing/uk-ireland/results/2021-02-26, /sport/horse-racing/uk-ireland/results/2021-02-26.app
+  handle "/sport/horse-racing/:tournament/results/*any", using: "SportHorseRacingDataPage", examples: ["/sport/horse-racing/uk-ireland/results"] # flakey /sport/horse-racing/uk-ireland/results/2021-02-26, /sport/horse-racing/uk-ireland/results/2021-02-26.app
 
   ## Sport Formula 1 Pages
   redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
@@ -1167,7 +1168,7 @@ defroutefile "Sport" do
   handle "/sport/formula1/:season/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/results"]
   handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
   handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
-  handle "/sport/formula1/:season/:tournament/results/*_any", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
+  handle "/sport/formula1/:season/:tournament/results/*any", using: "SportFormula1DataPage", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
   handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
   handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage", examples: ["/sport/formula1/constructors-world-championship/standings"]
   handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
@@ -1186,11 +1187,11 @@ defroutefile "Sport" do
 
   ## Sport Football Scores-Fixtures pages
   handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/football/scores-fixtures/*_any", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures"]
+  handle "/sport/football/scores-fixtures/*any", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures"]
   handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/football/:tournament/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
+  handle "/sport/football/:tournament/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
   handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
-  handle "/sport/football/teams/:team/scores-fixtures/*_any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures"]
+  handle "/sport/football/teams/:team/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/teams/hull-city/scores-fixtures"]
 
   ## Sport Basketball Scores-Fixtures pages
   handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", examples: ["/sport/basketball/scores-fixtures"]
@@ -1204,11 +1205,11 @@ defroutefile "Sport" do
 
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures"]
+  handle "/sport/:discipline/scores-fixtures/*any", using: "SportDataPage", examples: ["/sport/rugby-league/scores-fixtures"]
   handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", examples: [] # /sport/rugby-league/super-league/scores-fixtures.app
-  handle "/sport/:discipline/:tournament/scores-fixtures/*_any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures"]
+  handle "/sport/:discipline/:tournament/scores-fixtures/*any", using: "SportDataPage", examples: ["/sport/rugby-league/super-league/scores-fixtures"]
   handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/scores-fixtures.app
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*_any", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/scores-fixtures
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*any", using: "SportDataPage", examples: [] # flakey /sport/rugby-league/teams/st-helens/scores-fixtures
 
   ## Sport League Two Table page
 
@@ -1262,13 +1263,13 @@ defroutefile "Sport" do
   ## Sport Tennis Pages
   handle "/sport/tennis/live-scores.app", using: "SportDataPage", examples: ["/sport/tennis/live-scores.app"]
   handle "/sport/tennis/live-scores", using: "SportDataPage", examples: ["/sport/tennis/live-scores"]
-  handle "/sport/tennis/live-scores/*_any", using: "SportDataPage", examples: []
+  handle "/sport/tennis/live-scores/*any", using: "SportDataPage", examples: []
   handle "/sport/tennis/order-of-play.app", using: "SportDataPage", examples: ["/sport/tennis/order-of-play.app"]
   handle "/sport/tennis/order-of-play", using: "SportDataPage", examples: ["/sport/tennis/order-of-play"]
-  handle "/sport/tennis/order-of-play/*_any", using: "SportDataPage", examples: []
+  handle "/sport/tennis/order-of-play/*any", using: "SportDataPage", examples: []
   handle "/sport/tennis/results.app", using: "SportDataPage", examples: ["/sport/tennis/results.app"]
   handle "/sport/tennis/results", using: "SportDataPage", examples: ["/sport/tennis/results"]
-  handle "/sport/tennis/results/*_any", using: "SportDataPage", examples: []
+  handle "/sport/tennis/results/*any", using: "SportDataPage", examples: []
 
   ## Sport Event Data Pages
   handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
@@ -1593,7 +1594,7 @@ defroutefile "Sport" do
   handle "/sport/:discipline/:id", using: "SportStoryPage", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
 
   # Sport catch-all
-  handle "/sport/*_any", using: "Sport", examples: []
+  handle "/sport/*any", using: "Sport", examples: []
 
   no_match()
 end
