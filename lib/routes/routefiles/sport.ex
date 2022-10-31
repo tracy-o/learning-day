@@ -912,7 +912,6 @@ defroutefile "Sport" do
   handle "/sport/football/european-championship/2016/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
   handle "/sport/football/european-championship/euro-2016/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
   handle "/sport/football/european-championship/schedule/*any", using: "SportRedirects", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
-  handle "/sport/football/world-cup/schedule/*any", using: "SportRedirects", examples: [{"/sport/football/world-cup/schedule/group-stage", 302}, {"/sport/football/world-cup/schedule.app", 302}]
   handle "/sport/olympics/2012/*any", using: "SportRedirects", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
   handle "/sport/olympics/2016/*any", using: "SportRedirects", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
   handle "/sport/olympics/rio-2016/*any", using: "SportRedirects", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
