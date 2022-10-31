@@ -1,4 +1,4 @@
-defmodule Routes.Specs.NewsroundAmp do
+defmodule Routes.Specs.NewsroundMozart do
   def specs do
     %{
       owner: "DENewsFrameworksTeam@bbc.co.uk",
