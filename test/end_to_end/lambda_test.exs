@@ -84,7 +84,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response?query[hi]=foo"))
+    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "query[hi]=foo"))
     Router.call(conn, [])
   end
 

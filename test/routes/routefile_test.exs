@@ -192,7 +192,7 @@ defmodule Routes.RoutefileTest do
   end
 
   defp make_call(method, path) do
-    conn(method, build_request_uri(path: path)) |> Router.call(routefile: Routefile)
+    conn(method, build_request_uri(path)) |> Router.call(routefile: Routefile)
   end
 
   defp validate(items, validator) do

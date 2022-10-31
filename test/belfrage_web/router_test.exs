@@ -26,7 +26,7 @@ defmodule BelfrageWeb.RouterTest do
     end)
 
     test "will return a 405" do
-      conn = conn(:options, build_request_uri(path: "/"))
+      conn = conn(:options, build_request_uri(path: "/", query: "s=london&a=b+c"))
       conn = Router.call(conn, [])
 
       assert conn.status == 405

@@ -235,10 +235,10 @@ defmodule EndToEnd.App.PersonalisationTest do
   end
 
   defp build_request(
-         path \\ "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+         uri \\ "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
        ) do
     :get
-    |> conn(build_request_uri(path: path))
+    |> conn(build_request_uri(uri))
     |> Map.put(:host, "news-app.bbc.co.uk")
   end
 

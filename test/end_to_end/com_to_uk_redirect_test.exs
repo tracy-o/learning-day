@@ -16,7 +16,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
   test "redirect to .co.uk when host is .com" do
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect"))
+      conn(:get, build_request_uri("/com-to-uk-redirect"))
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
       |> Router.call([])
 
@@ -27,7 +27,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
   test "redirect to .co.uk with correct query params" do
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar"))
+      conn(:get, build_request_uri("/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar"))
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
       |> Router.call([])
 
@@ -48,7 +48,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     end)
 
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar"))
+      conn(:get, build_request_uri("/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar"))
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.co.uk")
       |> Router.call([])
 

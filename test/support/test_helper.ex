@@ -122,13 +122,17 @@ defmodule Test.Support.Helper do
   end
 
   def build_request_uri(opts \\ []) do
-    default = [scheme: "https", host: "www.example.com", path: "/", query_string: ""]
-    options = Keyword.merge(default, opts)
-
-    if options[:query_string] == "" do
-      options[:scheme] <> "://" <> options[:host] <> options[:path]
+    if is_list(opts) do
+      default = [scheme: "https", host: "www.example.com", path: "/", query: ""]
+      options = Keyword.merge(default, opts)
+      struct(URI, options)
     else
-      options[:scheme] <> "://" <> options[:host] <> options[:path] <> "?" <> options[:query_string]
+      %URI{
+        scheme: "https",
+        path: "/",
+        host: "www.example.com"
+      }
+      |> URI.merge(URI.parse(opts))
     end
   end
 

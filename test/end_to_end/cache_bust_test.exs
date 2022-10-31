@@ -39,9 +39,9 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn(:get, build_request_uri(path: "/200-ok-response", query_string: "belfrage-cache-bust")) |> Router.call([])
-    conn(:get, build_request_uri(path: "/200-ok-response", query_string: "belfrage-cache-bust")) |> Router.call([])
-    conn(:get, build_request_uri(path: "/200-ok-response", query_string: "belfrage-cache-bust")) |> Router.call([])
+    conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
+    conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
+    conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
   end
 
   test "request hash is in cache bust format when cache bust override is set" do
@@ -50,8 +50,7 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn =
-      conn(:get, build_request_uri(path: "/200-ok-response", query_string: "belfrage-cache-bust")) |> Router.call([])
+    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
 
     assert [request_hash] = get_resp_header(conn, "bsig")
     assert String.starts_with?(request_hash, "cache-bust.")
