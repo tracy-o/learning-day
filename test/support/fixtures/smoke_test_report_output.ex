@@ -183,7 +183,7 @@ defmodule Fixtures.SmokeTestReportOutput do
           case: :"Elixir.Belfrage.SmokeTest.Schoolreport.3d13829a85304d2db66bd513bec88a9f",
           logs: "",
           module: :"Elixir.Belfrage.SmokeTest.Schoolreport.3d13829a85304d2db66bd513bec88a9f",
-          name: :"test Schoolreport /schoolreport/*_any against test bruce-belfrage /schoolreport",
+          name: :"test Schoolreport /schoolreport/*any against test bruce-belfrage /schoolreport",
           state:
             {:failed,
              [
@@ -192,17 +192,17 @@ defmodule Fixtures.SmokeTestReportOutput do
           tags: %{
             async: true,
             case: :"Elixir.Belfrage.SmokeTest.Schoolreport.3d13829a85304d2db66bd513bec88a9f",
-            describe: "Schoolreport /schoolreport/*_any against test bruce-belfrage",
+            describe: "Schoolreport /schoolreport/*any against test bruce-belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
             module: :"Elixir.Belfrage.SmokeTest.Schoolreport.3d13829a85304d2db66bd513bec88a9f",
             platform: MozartNews,
             registered: %{},
-            route: "/schoolreport/*_any",
+            route: "/schoolreport/*any",
             spec: "Schoolreport",
             stack: "bruce-belfrage",
-            test: :"test Schoolreport /schoolreport/*_any against test bruce-belfrage /schoolreport",
+            test: :"test Schoolreport /schoolreport/*any against test bruce-belfrage /schoolreport",
             test_type: :test
           },
           time: 1671
@@ -211,7 +211,7 @@ defmodule Fixtures.SmokeTestReportOutput do
           case: :"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5",
           logs: "",
           module: :"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5",
-          name: :"test Weather /weather/*_any against test bruce-belfrage /weather",
+          name: :"test Weather /weather/*any against test bruce-belfrage /weather",
           state:
             {:failed,
              [
@@ -219,24 +219,24 @@ defmodule Fixtures.SmokeTestReportOutput do
                 [
                   {FooBar, :request!, 5, [file: 'lib/foo_bar.ex', line: 79]},
                   {:"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5",
-                   :"test Weather /weather/*_any against test bruce-belfrage /weather", 1,
+                   :"test Weather /weather/*any against test bruce-belfrage /weather", 1,
                    [file: 'test/smoke/smoke_test.ex', line: 25]}
                 ]}
              ]},
           tags: %{
             async: true,
             case: :"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5",
-            describe: "Weather /weather/*_any against test bruce-belfrage",
+            describe: "Weather /weather/*any against test bruce-belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
             module: :"Elixir.Belfrage.SmokeTest.Weather.e95067fd147240e8a4e5bfbca66724f5",
             platform: MozartWeather,
             registered: %{},
-            route: "/weather/*_any",
+            route: "/weather/*any",
             spec: "Weather",
             stack: "bruce-belfrage",
-            test: :"test Weather /weather/*_any against test bruce-belfrage /weather",
+            test: :"test Weather /weather/*any against test bruce-belfrage /weather",
             test_type: :test
           },
           time: 56_425
@@ -264,7 +264,7 @@ defmodule Fixtures.SmokeTestReportOutput do
           case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
           logs: "",
           module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
-          name: :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik",
+          name: :"test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik",
           state:
             {:failed,
              [
@@ -282,24 +282,24 @@ defmodule Fixtures.SmokeTestReportOutput do
                   {Support.Smoke.Assertions, :assert_smoke_response, 4,
                    [file: 'test/support/smoke/assertions.ex', line: 11]},
                   {:"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
-                   :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik", 1,
+                   :"test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik", 1,
                    [file: 'test/smoke/smoke_test.ex', line: 25]}
                 ]}
              ]},
           tags: %{
             async: true,
             case: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
-            describe: "WorldServiceTajik /tajik/*_any against test bruce-belfrage",
+            describe: "WorldServiceTajik /tajik/*any against test bruce-belfrage",
             describe_line: 25,
             file: "/Users/bowerj09/belfrage/test/smoke/smoke_test.ex",
             line: 25,
             module: :"Elixir.Belfrage.SmokeTest.WorldServiceTajik.99ac5ee3baf34556a2b693425144859e",
             platform: MozartNews,
             registered: %{},
-            route: "/tajik/*_any",
+            route: "/tajik/*any",
             spec: "WorldServiceTajik",
             stack: "bruce-belfrage",
-            test: :"test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik",
+            test: :"test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik",
             test_type: :test
           },
           time: 715_236
