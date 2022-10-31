@@ -262,7 +262,7 @@ defroutefile "Main" do
 
   handle "/news/election/2022/us/results", using: "NewsElectionResults", examples: ["/news/election/2022/us/results"]
 
-  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", examples: ["/news/election/2022/us/states/al"]
+  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", examples: ["/news/election/2022/us/states/al"] do
     return_404 if: [
       !String.match?(state_id, [a-z]{2})
     ]
