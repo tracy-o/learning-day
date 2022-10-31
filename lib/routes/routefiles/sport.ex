@@ -912,7 +912,6 @@ defroutefile "Sport" do
   handle "/sport/football/european-championship/2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
   handle "/sport/football/european-championship/euro-2016/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
   handle "/sport/football/european-championship/schedule/*_any", using: "SportRedirects", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
-  handle "/sport/football/world-cup/schedule/*_any", using: "SportRedirects", examples: [{"/sport/football/world-cup/schedule/group-stage", 302}, {"/sport/football/world-cup/schedule.app", 302}]
   handle "/sport/olympics/2012/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
   handle "/sport/olympics/2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
   handle "/sport/olympics/rio-2016/*_any", using: "SportRedirects", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
@@ -1280,6 +1279,13 @@ defroutefile "Sport" do
   handle "/sport/rugby-league/match/:id", using: "SportDataPage", examples: ["/sport/rugby-league/match/EVP3489302"]
   handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735.app"]
   handle "/sport/rugby-union/match/:id", using: "SportDataPage", examples: ["/sport/rugby-union/match/EVP3551735"]
+
+  ## Sport Football World Cup
+  handle "/sport/football/world-cup/schedule", using: "SportFootballWorldCupSchedule", examples: ["/sport/football/world-cup/schedule"]
+  handle "/sport/app-webview/football/world-cup/schedule", using: "SportFootballWorldCupSchedule", examples: ["/sport/app-webview/football/world-cup/schedule"]
+  redirect "/sport/football/world-cup/schedule.app", to: "/sport/app-webview/football/world-cup/schedule", status: 302
+  # redirect old URLs from previous competitions - e.g., /group-stage, /knockout-stage
+  redirect "/sport/football/world-cup/schedule/*_any", to: "/sport/football/world-cup/schedule", status: 302
 
   ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", examples: ["/sport/topics/cd61kendv7et"] do
