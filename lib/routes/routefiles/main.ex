@@ -516,7 +516,7 @@ defroutefile "Main" do
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
 
-  handle "/news/articles/:optimo_id", using: "StorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
+  handle "/news/articles/:optimo_id", using: "NewsStorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -2684,7 +2684,7 @@ defroutefile "Main" do
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
 
-  handle "/articles/:optimo_id", using: "StorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
+  handle "/articles/:optimo_id", using: "NewsStorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 

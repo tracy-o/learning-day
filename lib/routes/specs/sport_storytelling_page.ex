@@ -1,4 +1,4 @@
-defmodule Routes.Specs.StorytellingPage do
+defmodule Routes.Specs.SportStorytellingPage do
   def specs do
     %{
       owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
