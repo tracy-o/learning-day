@@ -5,6 +5,7 @@ defmodule Routes.Platforms.AppsWalter do
       owner: "#data-systems",
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
       request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
       circuit_breaker_error_threshold: 8_000,
       fallback_write_sample: 0.0
     }
