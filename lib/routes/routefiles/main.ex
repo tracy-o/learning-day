@@ -2707,8 +2707,6 @@ defroutefile "Main" do
 
   # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
-  handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                      # Is this route needed? Currently 404
-  handle "/newsround.json", using: "NewsroundAmp", examples: []                                                     # Is this route needed? Currently 404
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp", examples: ["/newsround/articles/manifest.json"]
