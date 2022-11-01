@@ -2708,12 +2708,12 @@ defroutefile "Main" do
   # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 301
-  handle "/newsround.amp", using: "NewsroundMozart", examples: []                                                      # Is this route needed? Currently 404
-  handle "/newsround.json", using: "NewsroundMozart", examples: []                                                     # Is this route needed? Currently 404
-  handle "/newsround/:id.amp", using: "NewsroundMozart", examples: ["/newsround/61545299.amp"]
-  handle "/newsround/:topic/:id.amp", using: "NewsroundMozart", examples: []                                           # Not sure if used, Currently 404s with route /newsround/unknown/61545299.amp
-  handle "/newsround/:id.json", using: "NewsroundMozart", examples: ["/newsround/61545299.json"]
-  handle "/newsround/articles/manifest.json", using: "NewsroundMozart", examples: ["/newsround/articles/manifest.json"]
+  handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                      # Is this route needed? Currently 404
+  handle "/newsround.json", using: "NewsroundAmp", examples: []                                                     # Is this route needed? Currently 404
+  handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
+  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: []                                           # Not sure if used, Currently 404s with route /newsround/unknown/61545299.amp
+  handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
+  handle "/newsround/articles/manifest.json", using: "NewsroundAmp", examples: ["/newsround/articles/manifest.json"]
   handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
   handle "/newsround/*_any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
 
