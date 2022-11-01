@@ -176,7 +176,6 @@ defmodule Belfrage.Processor do
   def post_response_pipeline(struct = %Struct{}) do
     pipeline = [
       &ResponseTransformers.MvtMapper.call/1,
-      &ResponseTransformers.Etag.call/1,
       &ResponseTransformers.CompressionAsRequested.call/1
     ]
 
