@@ -2684,7 +2684,7 @@ defroutefile "Main" do
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
 
-  handle "/articles/:optimo_id", using: "NewsStorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
+  handle "/articles/:optimo_id", using: "StorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
