@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SportFootballMainScoresFixturesDataPageApps do
+defmodule Routes.Specs.SportFootballMainScoresFixturesDataPageInApps do
   def specs do
     %{
       owner: "#help-sport",

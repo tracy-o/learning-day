@@ -1185,8 +1185,8 @@ defroutefile "Sport" do
   handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results"]
 
   ## Sport Football Scores-Fixtures pages
-  handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPageApps", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/football/scores-fixtures/:date.app", using: "SportFootballMainScoresFixturesDataPageApps", examples: ["/sport/football/scores-fixtures/2022-10-01.app"]
+  handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPageInApps", examples: ["/sport/football/scores-fixtures.app"]
+  handle "/sport/football/scores-fixtures/:date.app", using: "SportFootballMainScoresFixturesDataPageInApps", examples: ["/sport/football/scores-fixtures/2022-10-01.app"]
   handle "/sport/football/scores-fixtures/*any", using: "SportFootballMainScoresFixturesDataPage", examples: ["/sport/football/scores-fixtures"]
   handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures.app"]
   handle "/sport/football/:tournament/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage", examples: ["/sport/football/champions-league/scores-fixtures"]
