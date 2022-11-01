@@ -125,7 +125,7 @@ defmodule Test.Support.Helper do
 
   def build_request_uri(opts) when is_list(opts) do
     default = [scheme: "https", host: "www.example.com", path: "/", query: ""]
-    struct(URI, Keyword.merge(default, opts))
+    struct!(URI, Keyword.merge(default, opts))
   end
 
   def build_request_uri(uri) when is_binary(uri) do
