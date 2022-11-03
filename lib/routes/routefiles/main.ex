@@ -215,7 +215,7 @@ defroutefile "Main" do
   handle "/fd/preview/abl", using: "AblData", examples: []
   handle "/fd/preview/spike-abl-core", using: "AblData", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
-  handle "/fd/abl", using: "AblData", examples: []
+  handle "/fd/abl", using: "AblData", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
 
   handle "/fd/sport-app-allsport", using: "SportData", examples: ["/fd/sport-app-allsport?env=live&edition=domestic"]

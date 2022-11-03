@@ -26,6 +26,9 @@ defmodule Belfrage.Services.Fabl.Request do
   defp build_path("/fd/sport-app-notification-data", _personalised, _name), do: "/module/sport-app-notification-data"
   defp build_path("/fd/sport-app-page", _personalised, _name), do: "/module/sport-app-page"
   defp build_path("/fd/topic-mapping", _personalised, _name), do: "/module/topic-mapping"
+  defp build_path("/fd/preview/abl", _personalised, _name), do: "/preview/module/abl"
+  defp build_path("/fd/preview/spike-abl-core", _personalised, _name), do: "/preview/module/spike-abl-core"
+  defp build_path("/fd/abl", _personalised, _name), do: "/module/abl"
 
   defp build_path("/fd/p/mytopics-page", _personalised, _name), do: "/personalised-module/mytopics-page"
   defp build_path("/fd/p/mytopics-follows", _personalised, _name), do: "/personalised-module/mytopics-follows"
