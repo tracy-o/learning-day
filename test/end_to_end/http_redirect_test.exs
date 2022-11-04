@@ -16,12 +16,12 @@ defmodule EndToEnd.HttpRedirectTest do
   }
 
   test "http redirects" do
-    response_conn = conn(:get, "http://www.example.com/") |> Router.call([])
+    response_conn = conn(:get, "http://www.example.com/foo-bar?query=query_string") |> Router.call([])
 
     assert {302,
             [
               {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
-              {"location", "https://www.example.com/"},
+              {"location", "https://www.example.com/foo-bar?query=query_string"},
               {"via", "1.1 Belfrage"},
               {"server", "Belfrage"},
               {"x-bbc-no-scheme-rewrite", "1"},
