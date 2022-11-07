@@ -2745,7 +2745,7 @@ defroutefile "Main" do
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
 
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
-  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", only_on: "test", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
 
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
   handle "/bitesize/preview/articles/:id/:game_version", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm/latest"]
