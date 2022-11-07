@@ -8,7 +8,6 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Metrics.LatencyMonitor
 
   @behaviour Service
-  @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{private: private = %Private{}}) do
@@ -58,7 +57,7 @@ defmodule Belfrage.Services.Webcore do
     }
 
     Metrics.duration(~w(webcore request)a, metadata, fn ->
-      @lambda_client.call(
+      lambda_client().call(
         Webcore.Credentials.get(),
         private.origin,
         Webcore.Request.build(struct),
@@ -106,4 +105,6 @@ defmodule Belfrage.Services.Webcore do
 
     {:error, :invalid_web_core_contract}
   end
+
+  defp lambda_client(), do: Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 end
