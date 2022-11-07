@@ -4,14 +4,13 @@ defmodule Belfrage.Clients.Lambda do
 
   alias Belfrage.{AWS}
 
-  @aws Application.get_env(:belfrage, :aws)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @callback call(any, any, any, any) :: any
 
   def call(credentials = %AWS.Credentials{}, function, payload, opts \\ []) do
     lambda_response =
-      @aws.request(
+      aws().request(
         AWS.Lambda.invoke(function, payload, %{}, opts),
         security_token: credentials.session_token,
         access_key_id: credentials.access_key_id,
@@ -58,4 +57,6 @@ defmodule Belfrage.Clients.Lambda do
 
     {:error, :invoke_failure}
   end
+
+  defp aws(), do: Application.get_env(:belfrage, :aws)
 end
