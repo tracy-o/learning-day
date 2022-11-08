@@ -198,6 +198,6 @@ defmodule NonUtf8QueryStringTest do
       |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)
-    assert status == 500
+    assert status == 404
   end
 end
