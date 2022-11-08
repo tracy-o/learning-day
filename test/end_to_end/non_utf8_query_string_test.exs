@@ -192,12 +192,12 @@ defmodule NonUtf8QueryStringTest do
     set_env(:lambda_client, Lambda)
     set_env(:aws, AWS)
 
-    assert_raise Plug.Conn.WrapperError,
-                 "** (ErlangError) Erlang error: {:invalid_string, <<237, 149, 180, 236>>}",
-                 fn ->
-                   :get
-                   |> conn("/200-ok-response?query=%ED%95%B4%EC")
-                   |> Router.call([])
-                 end
+    conn =
+      :get
+      |> conn("/200-ok-response?query=%ED%95%B4%EC")
+      |> Router.call([])
+
+    {status, _headers, _body} = sent_resp(conn)
+    assert status == 500
   end
 end

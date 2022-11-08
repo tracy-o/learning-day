@@ -8,7 +8,17 @@ defmodule Belfrage.Clients.Lambda do
 
   @callback call(any, any, any, any) :: any
 
-  def call(credentials = %AWS.Credentials{}, function, payload, opts \\ []) do
+  def call(credentials, function, payload, opts \\ [])
+
+  def call(%AWS.Credentials{}, function, payload, opts) do
+    if has_invalid_query_string?(payload) do
+      {:error, :invalid_query_string}
+    else
+      make_request(%AWS.Credentials{}, function, payload, opts)
+    end
+  end
+
+  def make_request(credentials = %AWS.Credentials{}, function, payload, opts) do
     lambda_response =
       aws().request(
         AWS.Lambda.invoke(function, payload, %{}, opts),
@@ -59,4 +69,10 @@ defmodule Belfrage.Clients.Lambda do
   end
 
   defp aws(), do: Application.get_env(:belfrage, :aws)
+
+  defp has_invalid_query_string?(%{queryStringParameters: query_string_params}) do
+    Enum.any?(query_string_params, fn {_k, v} -> not String.valid?(v) end)
+  end
+
+  defp has_invalid_query_string?(_payload), do: false
 end
