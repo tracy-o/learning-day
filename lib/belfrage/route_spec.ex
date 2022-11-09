@@ -38,7 +38,8 @@ defmodule Belfrage.RouteSpec do
             mvt_project_id: 0,
             mvt_seen: %{},
             fallback_write_sample: 1,
-            etag: false
+            etag: false,
+            xray_enabled: false
 
   def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
     route_attrs =
