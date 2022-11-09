@@ -11,7 +11,7 @@ defmodule Belfrage.Clients.Lambda do
   def call(credentials, function, payload, opts \\ [])
 
   def call(%AWS.Credentials{}, function, payload, opts) do
-    if has_invalid_query_string?(payload) do
+    if invalid_query_string?(payload) do
       {:error, :invalid_query_string}
     else
       make_request(%AWS.Credentials{}, function, payload, opts)
@@ -70,9 +70,13 @@ defmodule Belfrage.Clients.Lambda do
 
   defp aws(), do: Application.get_env(:belfrage, :aws)
 
-  defp has_invalid_query_string?(%{queryStringParameters: query_string_params}) do
+  # Takes a map - if the map contains a :queryStringParameters
+  # key, the value of which contains a key value pair where
+  # the value is an invalid string, this function returns true.
+  # Otherwise returns false.
+  defp invalid_query_string?(%{queryStringParameters: query_string_params}) do
     Enum.any?(query_string_params, fn {_k, v} -> not String.valid?(v) end)
   end
 
-  defp has_invalid_query_string?(_payload), do: false
+  defp invalid_query_string?(_payload), do: false
 end
