@@ -12,13 +12,14 @@ defmodule Routes.Platforms.MorphRouter do
       origin: Application.get_env(:belfrage, :morph_router_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/morph/Morph+Router+Run+Book",
-      pipeline: pipeline(production_env),
+      request_pipeline: pipeline(production_env),
+      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
     }
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "TrailingSlashRedirector", "CircuitBreaker"]
+    ["HTTPredirect", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

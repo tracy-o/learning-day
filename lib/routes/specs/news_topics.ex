@@ -5,7 +5,7 @@ defmodule Routes.Specs.NewsTopics do
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
       platform: Webcore,
       query_params_allowlist: ["page"],
-      pipeline: ["NewsTopicsPlatformDiscriminator"],
+      request_pipeline: ["NewsTopicsPlatformDiscriminator"],
       personalisation: "test_only"
     }
   end

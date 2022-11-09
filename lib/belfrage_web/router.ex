@@ -17,6 +17,7 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.AccessLogs)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
+  plug(Plugs.TrailingSlashRedirector)
   plug(PreviewMode)
   plug(:log_invalid_utf8)
   plug(:fetch_query_params, validate_utf8: false)
@@ -57,7 +58,7 @@ defmodule BelfrageWeb.Router do
     |> send_resp(204, "")
   end
 
-  options "/wc-data/*_any" do
+  options "/wc-data/*any" do
     conn
     |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
     |> put_resp_header("access-control-allow-origin", "*")

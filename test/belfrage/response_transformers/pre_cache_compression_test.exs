@@ -19,14 +19,15 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         }
       }
 
-      assert %Struct{
-               response: %Struct.Response{
-                 body: ^body,
-                 headers: %{
-                   "content-encoding" => "gzip"
-                 }
-               }
-             } = PreCacheCompression.call(struct)
+      assert {:ok,
+              %Struct{
+                response: %Struct.Response{
+                  body: ^body,
+                  headers: %{
+                    "content-encoding" => "gzip"
+                  }
+                }
+              }} = PreCacheCompression.call([], struct)
     end
 
     test "when encoding is not supported it should return a 415" do
@@ -39,12 +40,13 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         }
       }
 
-      assert %Struct{
-               response: %Struct.Response{
-                 body: "",
-                 http_status: 415
-               }
-             } = PreCacheCompression.call(struct)
+      assert {:ok,
+              %Struct{
+                response: %Struct.Response{
+                  body: "",
+                  http_status: 415
+                }
+              }} = PreCacheCompression.call([], struct)
     end
   end
 
@@ -65,15 +67,16 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
 
       log =
         capture_log(fn ->
-          assert %Struct{
-                   response: %Struct.Response{
-                     body: compressed_body,
-                     http_status: 200,
-                     headers: %{
-                       "content-encoding" => "gzip"
-                     }
-                   }
-                 } = PreCacheCompression.call(struct)
+          assert {:ok,
+                  %Struct{
+                    response: %Struct.Response{
+                      body: compressed_body,
+                      http_status: 200,
+                      headers: %{
+                        "content-encoding" => "gzip"
+                      }
+                    }
+                  }} = PreCacheCompression.call([], struct)
 
           assert_gzipped(compressed_body, "I am some plain text")
         end)
@@ -95,7 +98,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         }
       }
 
-      assert struct == PreCacheCompression.call(struct)
+      assert {:ok, struct} == PreCacheCompression.call([], struct)
     end
   end
 end

@@ -126,8 +126,8 @@ defmodule JoeFormatter do
     end)
   end
 
-  defp fallback?(%ExUnit.AssertionError{left: {"belfrage-cache-status", "STALE"}}) do
-    true
+  defp fallback?(%ExUnit.AssertionError{message: msg}) do
+    String.contains?(msg, "STALE")
   end
 
   defp fallback?(_error), do: false

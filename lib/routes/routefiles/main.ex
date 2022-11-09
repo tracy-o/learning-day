@@ -4,173 +4,175 @@
 # What types of route matcher you can  use:
 # https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
 #
+# How to validate a route:
+# lib/belfrage_web/validators.ex
 
 import BelfrageWeb.Routefile
 
 defroutefile "Main" do
   # Vanity URLs
 
-  redirect("http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302)
-  redirect("http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://m.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302)
-  redirect("http://www.bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302)
-  redirect("http://bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302)
-  redirect("http://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://m.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302)
-  redirect("http://www.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://m.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302)
-  redirect("http://www.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://m.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302)
-  redirect("http://www.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://m.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302)
-  redirect("http://www.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://m.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302)
-  redirect("http://www.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://m.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302)
-  redirect("http://www.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://m.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302)
-  redirect("http://www.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://m.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302)
-  redirect("http://www.bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
-  redirect("http://bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302)
-  redirect("http://www.bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
-  redirect("http://bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302)
-  redirect("http://www.bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
-  redirect("http://bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302)
-  redirect("http://www.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://m.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302)
-  redirect("http://www.bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302)
-  redirect("http://bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302)
-  redirect("http://www.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://m.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302)
-  redirect("http://www.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://m.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302)
-  redirect("http://www.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://m.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302)
-  redirect("http://www.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://m.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302)
-  redirect("http://www.bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302)
-  redirect("http://bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302)
-  redirect("http://www.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://m.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://www.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://m.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302)
-  redirect("http://www.bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302)
-  redirect("http://bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302)
-  # redirect("http://www.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  # redirect("http://m.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  # redirect("http://bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302)
-  redirect("http://www.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://m.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302)
-  redirect("http://www.bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302)
-  redirect("http://bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302)
-  redirect("http://www.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://m.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302)
-  redirect("http://www.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://m.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302)
-  redirect("http://www.bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302)
-  redirect("http://bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302)
-  redirect("http://www.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://m.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302)
-  redirect("http://www.bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302)
-  redirect("http://bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302)
-  redirect("http://www.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://m.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302)
-  redirect("http://www.bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302)
-  redirect("http://bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302)
-  redirect("http://www.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://m.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302)
-  redirect("http://www.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://m.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302)
-  redirect("http://www.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://m.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302)
-  redirect("http://www.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://m.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302)
-  redirect("http://www.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://m.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302)
-  redirect("http://www.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://m.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302)
-  redirect("http://www.bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302)
-  redirect("http://bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302)
-  redirect("http://www.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://m.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302)
-  redirect("http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
-  redirect("http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302)
+  redirect "http://www.bbcafaanoromoo.com/*any", to: "https://www.bbc.com/afaanoromoo/*any", status: 302
+  redirect "http://www.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://m.bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://bbcafrique.com/*any", to: "https://www.bbc.com/afrique/*any", status: 302
+  redirect "http://www.bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302
+  redirect "http://bbcamharic.com/*any", to: "https://www.bbc.com/amharic/*any", status: 302
+  redirect "http://www.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://m.bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://bbcarabic.com/*any", to: "https://www.bbc.com/arabic/*any", status: 302
+  redirect "http://www.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://m.bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://bbcazeri.com/*any", to: "https://www.bbc.com/azeri/*any", status: 302
+  redirect "http://www.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://m.bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://bbcbengali.com/*any", to: "https://www.bbc.com/bengali/*any", status: 302
+  redirect "http://www.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://m.bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://bbcburmese.com/*any", to: "https://www.bbc.com/burmese/*any", status: 302
+  redirect "http://www.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://m.bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://bbcgahuza.com/*any", to: "https://www.bbc.com/gahuza/*any", status: 302
+  redirect "http://www.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://m.bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://bbcgujarati.com/*any", to: "https://www.bbc.com/gujarati/*any", status: 302
+  redirect "http://www.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://m.bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://bbchausa.com/*any", to: "https://www.bbc.com/hausa/*any", status: 302
+  redirect "http://www.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://m.bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://bbchindi.com/*any", to: "https://www.bbc.com/hindi/*any", status: 302
+  redirect "http://www.bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302
+  redirect "http://bbcigbo.com/*any", to: "https://www.bbc.com/igbo/*any", status: 302
+  redirect "http://www.bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302
+  redirect "http://bbcindonesia.com/*any", to: "https://www.bbc.com/indonesia/*any", status: 302
+  redirect "http://www.bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302
+  redirect "http://bbckorean.com/*any", to: "https://www.bbc.com/korean/*any", status: 302
+  redirect "http://www.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://m.bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://bbckyrgyz.com/*any", to: "https://www.bbc.com/kyrgyz/*any", status: 302
+  redirect "http://www.bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302
+  redirect "http://bbcmarathi.com/*any", to: "https://www.bbc.com/marathi/*any", status: 302
+  redirect "http://www.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://m.bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://bbcmundo.com/*any", to: "https://www.bbc.com/mundo/*any", status: 302
+  redirect "http://www.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://m.bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://bbcnepali.com/*any", to: "https://www.bbc.com/nepali/*any", status: 302
+  redirect "http://www.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://m.bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://bbcpashto.com/*any", to: "https://www.bbc.com/pashto/*any", status: 302
+  redirect "http://www.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://m.bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://bbcpersian.com/*any", to: "https://www.bbc.com/persian/*any", status: 302
+  redirect "http://www.bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302
+  redirect "http://bbcpidgin.com/*any", to: "https://www.bbc.com/pidgin/*any", status: 302
+  redirect "http://www.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://m.bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://bbcportuguese.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://www.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://m.bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://bbcbrasil.com/*any", to: "https://www.bbc.com/portuguese/*any", status: 302
+  redirect "http://www.bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302
+  redirect "http://bbcpunjabi.com/*any", to: "https://www.bbc.com/punjabi/*any", status: 302
+  # redirect "http://www.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  # redirect "http://m.bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  # redirect "http://bbcrussian.com/*any", to: "https://www.bbc.com/russian/*any", status: 302
+  redirect "http://www.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://m.bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://bbcsinhala.com/*any", to: "https://www.bbc.com/sinhala/*any", status: 302
+  redirect "http://www.bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302
+  redirect "http://bbcserbian.com/*any", to: "https://www.bbc.com/serbian/*any", status: 302
+  redirect "http://www.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://m.bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://bbcsomali.com/*any", to: "https://www.bbc.com/somali/*any", status: 302
+  redirect "http://www.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://m.bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://bbcswahili.com/*any", to: "https://www.bbc.com/swahili/*any", status: 302
+  redirect "http://www.bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302
+  redirect "http://bbctajik.com/*any", to: "https://www.bbc.com/tajik/*any", status: 302
+  redirect "http://www.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://m.bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://bbctamil.com/*any", to: "https://www.bbc.com/tamil/*any", status: 302
+  redirect "http://www.bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302
+  redirect "http://bbctelugu.com/*any", to: "https://www.bbc.com/telugu/*any", status: 302
+  redirect "http://www.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://m.bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://bbcthai.com/*any", to: "https://www.bbc.com/thai/*any", status: 302
+  redirect "http://www.bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302
+  redirect "http://bbctigrinya.com/*any", to: "https://www.bbc.com/tigrinya/*any", status: 302
+  redirect "http://www.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://m.bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://bbcturkce.com/*any", to: "https://www.bbc.com/turkce/*any", status: 302
+  redirect "http://www.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://m.bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://bbcukchina.com/*any", to: "https://www.bbc.com/ukchina/*any", status: 302
+  redirect "http://www.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://m.bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://bbcukrainian.com/*any", to: "https://www.bbc.com/ukrainian/*any", status: 302
+  redirect "http://www.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://m.bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://bbcurdu.com/*any", to: "https://www.bbc.com/urdu/*any", status: 302
+  redirect "http://www.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://m.bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://bbcuzbek.com/*any", to: "https://www.bbc.com/uzbek/*any", status: 302
+  redirect "http://www.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://m.bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://bbcvietnamese.com/*any", to: "https://www.bbc.com/vietnamese/*any", status: 302
+  redirect "http://www.bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302
+  redirect "http://bbcyoruba.com/*any", to: "https://www.bbc.com/yoruba/*any", status: 302
+  redirect "http://www.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://m.bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://bbczhongwen.com/*any", to: "https://www.bbc.com/zhongwen/*any", status: 302
+  redirect "http://www.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://m.bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://bbcasiapacific.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://www.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://m.bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
+  redirect "http://bbcsouthasia.com/*any", to: "https://www.bbc.com/news/world/asia/*any", status: 302
 
-  redirect("/news/0", to: "/news", status: 302)
-  redirect("/news/2/hi", to: "/news", status: 302)
-  redirect("/news/mobile", to: "/news", status: 302)
-  redirect("/news/popular/read", to: "/news", status: 302)
+  redirect "/news/0", to: "/news", status: 302
+  redirect "/news/2/hi", to: "/news", status: 302
+  redirect "/news/mobile", to: "/news", status: 302
+  redirect "/news/popular/read", to: "/news", status: 302
 
-  redirect("/news/help", to: "/news", status: 302)
-  redirect("/news/also_in_the_news", to: "/news", status: 302)
-  redirect("/news/cop26-alerts", to: "/news/help-58765412", status: 302)
-  redirect("/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302)
-  redirect("/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302)
-  redirect("/news/nie22-alerts", to: "/news/help-60495859", status: 302)
+  redirect "/news/help", to: "/news", status: 302
+  redirect "/news/also_in_the_news", to: "/news", status: 302
+  redirect "/news/cop26-alerts", to: "/news/help-58765412", status: 302
+  redirect "/news/wales-election-2021-alerts", to: "/news/help-56680930", status: 302
+  redirect "/news/scotland-election-2021-alerts", to: "/news/help-56680931", status: 302
+  redirect "/news/nie22-alerts", to: "/news/help-60495859", status: 302
 
-  redirect("/news/magazine", to: "/news/stories", status: 302)
+  redirect "/news/magazine", to: "/news/stories", status: 302
 
-  redirect("/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
-  redirect("/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302)
+  redirect "/news/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/av/10318089", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/av/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
+  redirect "/news/video_and_audio/headlines/10318089/bbc-news-channel", to: "https://www.bbc.co.uk/tv/bbcnews", status: 302
 
-  redirect("/news/video_and_audio/international", to: "/news/av/10462520", status: 302)
-  redirect("/news/video_and_audio/video", to: "/news/av/10318236", status: 302)
-  redirect("/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302)
+  redirect "/news/video_and_audio/international", to: "/news/av/10462520", status: 302
+  redirect "/news/video_and_audio/video", to: "/news/av/10318236", status: 302
+  redirect "/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302
   redirect "/news/world-middle-east-27796850", to: "/programmes/w13xtvn3", status: 301
 
-  redirect("/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302)
-  redirect("/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302)
-  redirect("/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
-  redirect("/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302)
-  redirect("/news/election", to: "/news/politics", status: 302)
-  redirect("/news/election/2021", to: "/news/politics", status: 302)
-  redirect("/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
-  redirect("/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302)
-  redirect("/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302)
-  redirect("/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302)
+  redirect "/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
+  redirect "/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
+  redirect "/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
+  redirect "/news/election", to: "/news/politics", status: 302
+  redirect "/news/election/2021", to: "/news/politics", status: 302
+  redirect "/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
+  redirect "/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
+  redirect "/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
+  redirect "/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
+  redirect "/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
+  redirect "/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
+  redirect "/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302
 
-  redirect("https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302)
-  redirect("https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
-  redirect("https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302)
-  redirect("https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302)
+  redirect "https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302
+  redirect "https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
+  redirect "https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302
+  redirect "https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
 
   # Home Page
 
@@ -188,6 +190,7 @@ defroutefile "Main" do
   handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
 
   handle "/homepage/news/preview", using: "NewsHomePagePreview", only_on: "test", examples: ["/homepage/news/preview"]
+  handle "/homepage/news/test", using: "TestNewsHomePage", only_on: "test", examples: ["/homepage/news/test"]
 
   handle "/homepage/preview", using: "HomePagePreview", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", examples: ["/homepage/preview/scotland"]
@@ -210,7 +213,10 @@ defroutefile "Main" do
   handle "/fd/p/mytopics-page", using: "MyTopicsPage", examples: []
   handle "/fd/p/mytopics-follows", using: "MyTopicsFollows", examples: []
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
+  handle "/fd/preview/abl", using: "AblData", examples: []
+  handle "/fd/preview/spike-abl-core", using: "AblData", examples: []
   handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
+  handle "/fd/abl", using: "AblData", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
   handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
 
   handle "/fd/sport-app-allsport", using: "SportData", examples: ["/fd/sport-app-allsport?env=live&edition=domestic"]
@@ -258,9 +264,13 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/2022/us/results", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/us/results"]
+  handle "/news/election/2022/us/results", using: "NewsElectionResults", examples: ["/news/election/2022/us/results"]
 
-  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/us/states/al"]
+  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", examples: ["/news/election/2022/us/states/al"] do
+    return_404 if: [
+      !String.match?(state_id, ~r/^[a-z]{2}$/)
+    ]
+  end
 
   handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
@@ -337,10 +347,16 @@ defroutefile "Main" do
 
   handle "/news/election/*any", using: "NewsElection", examples: ["/news/election/2019"]
 
+  # News Live - Both Morph and WebCore Traffic
   handle "/news/live/:asset_id", using: "NewsLive", examples: ["/news/live/uk-55930940"] do
-    return_404 if: !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/)
+    # example "/news/live/c1v596ken6vt" is causing smoke tests to fail.
+    return_404 if: [
+      !String.match?(asset_id, ~r/^(([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})|(c[a-z0-9]{10,}t))$/), # CPS & TIPO IDs
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
+    ]
   end
 
+  # News Live - Morph Traffic with Page ID
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", examples: ["/news/live/uk-55930940/page/2"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
@@ -388,6 +404,7 @@ defroutefile "Main" do
   redirect "/news/correspondents/briantaylor", to: "/news/topics/c2e418dqpkkt", status: 301, ttl: 3600
   redirect "/news/correspondents/chriscook", to: "/news/topics/c5yd7pzxne0t", status: 301, ttl: 3600
   redirect "/news/correspondents/chrisjackson", to: "/news/topics/c63d8496d2nt", status: 301, ttl: 3600
+  redirect "/news/correspondents/chrismason", to: "/news/topics/cddv4gjql21t", status: 301, ttl: 3600
   redirect "/news/correspondents/damiangrammaticas", to: "/news/topics/cr3pkx7v1d1t", status: 301, ttl: 3600
   redirect "/news/correspondents/dannyshaw", to: "/news/topics/cd61kenlzv7t", status: 301, ttl: 3600
   redirect "/news/correspondents/davidcornock", to: "/news/topics/c1l7jeydv1jt", status: 301, ttl: 3600
@@ -484,7 +501,7 @@ defroutefile "Main" do
   handle "/news/:asset_id/embed", using: "NewsVideosEmbed", examples: [{"/news/health-54088206/embed", 302}, {"/news/uk-politics-54003483/embed?amp=1", 302}]
   handle "/news/:asset_id/embed/:pid", using: "NewsVideosEmbed", examples: [{"/news/health-54088206/embed/p08m8yx4", 302}, {"/news/health-54088206/embed/p08m8yx4?amp=1", 302}]
 
-  redirect("/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302)
+  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
 
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
@@ -494,7 +511,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/video_and_audio/*_any", using: "NewsVideoAndAudio", examples: [] do
+  handle "/news/video_and_audio/*any", using: "NewsVideoAndAudio", examples: [] do
     return_404 if: true
   end
 
@@ -507,7 +524,7 @@ defroutefile "Main" do
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", examples: []
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", examples: []
 
-  handle "/news/articles/:optimo_id", using: "StorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
+  handle "/news/articles/:optimo_id", using: "NewsStorytellingPage", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -568,32 +585,40 @@ defroutefile "Main" do
 
   # News archive assets
   handle "/news/10284448/ticker.sjson", using: "NewsArchive", examples: ["/news/10284448/ticker.sjson"]
-  handle "/news/1/*_any", using: "NewsArchive", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
-  handle "/news/2/*_any", using: "NewsArchive", examples: ["/news/2/text_only.stm"]
-  handle "/news/sport1/*_any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
-  handle "/news/bigscreen/*_any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
+  handle "/news/1/*any", using: "NewsArchive", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
+  handle "/news/2/*any", using: "NewsArchive", examples: ["/news/2/text_only.stm"]
+  handle "/news/sport1/*any", using: "NewsArchive", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
+  handle "/news/bigscreen/*any", using: "NewsArchive", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
+
+  # News RSS feeds
+  handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
+  handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
+
+  handle "/news/topics/:id/rss.xml", using: "NewsTopicRss", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
 
   # News section matchers
-  handle "/news/ampstories/*_any", using: "News", examples: []
-  handle "/news/av-embeds/*_any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/business/*_any", using: "NewsBusiness", examples: ["/news/business/companies"]
-  handle "/news/england/*_any", using: "NewsUk", examples: ["/news/england/regions"]
-  handle "/news/extra/*_any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
-  handle "/news/events/*_any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
-  handle "/news/iptv/*_any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
-  handle "/news/local_news_slice/*_any", using: "NewsUk", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
-  handle "/news/northern_ireland/*_any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
-  handle "/news/politics/*_any", using: "NewsUk", examples: ["/news/politics/eu_referendum/results"]
-  handle "/news/resources/*_any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
-  handle "/news/rss/*_any", using: "NewsRss", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
-  handle "/news/science-environment/*_any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
-  handle "/news/scotland/*_any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
-  handle "/news/slides/*_any", using: "News", examples: []
-  handle "/news/special/*_any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
-  handle "/news/technology/*_any", using: "NewsScienceAndTechnology", examples: ["/news/technology/31153361"]
-  handle "/news/wales/*_any", using: "NewsUk", examples: ["/news/wales/south_east_wales"]
-  handle "/news/world/*_any", using: "NewsWorld", examples: ["/news/world/europe"]
-  handle "/news/world_radio_and_tv/*_any", using: "NewsWorld", examples: []
+  handle "/news/ampstories/*any", using: "News", examples: []
+  handle "/news/av-embeds/*any", using: "News", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
+  handle "/news/business/*any", using: "NewsBusiness", examples: ["/news/business/companies"]
+  handle "/news/england/*any", using: "NewsUk", examples: ["/news/england/regions"]
+  handle "/news/extra/*any", using: "News", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
+  handle "/news/events/*any", using: "NewsUk", examples: ["/news/events/scotland-decides/results"]
+  handle "/news/iptv/*any", using: "News", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
+  handle "/news/local_news_slice/*any", using: "NewsUk", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
+  handle "/news/northern_ireland/*any", using: "NewsUk", examples: ["/news/northern_ireland/northern_ireland_politics"]
+  handle "/news/politics/*any", using: "NewsUk", examples: ["/news/politics/eu_referendum/results"]
+  handle "/news/resources/*any", using: "News", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
+  handle "/news/rss/*any", using: "NewsRssSection", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
+  handle "/news/science-environment/*any", using: "NewsScienceAndTechnology", examples: ["/news/science-environment/18552512"]
+  handle "/news/scotland/*any", using: "NewsUk", examples: ["/news/scotland/glasgow_and_west"]
+  handle "/news/slides/*any", using: "News", examples: []
+  handle "/news/special/*any", using: "News", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
+  handle "/news/technology/*any", using: "NewsScienceAndTechnology", examples: ["/news/technology/31153361"]
+  handle "/news/wales/*any", using: "NewsUk", examples: ["/news/wales/south_east_wales"]
+  handle "/news/world/*any", using: "NewsWorld", examples: ["/news/world/europe"]
+  handle "/news/world_radio_and_tv/*any", using: "NewsWorld", examples: []
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News", examples: [] do
@@ -607,13 +632,10 @@ defroutefile "Main" do
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
 
-  handle "/news/rss.xml", using: "NewsRss", examples: ["/news/rss.xml"]
-  handle "/news/:id/rss.xml", using: "NewsRss", examples: ["/news/uk/rss.xml"]
-
   handle "/news/:id", using: "NewsArticlePage", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
 
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
-  handle "/news/*_any", using: "News", examples: [{"/news/contact-us/editorial", 302}]
+  handle "/news/*any", using: "News", examples: [{"/news/contact-us/editorial", 302}]
 
   # Cymrufyw
 
@@ -677,7 +699,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/cymrufyw/*_any", using: "Cymrufyw", examples: ["/cymrufyw"]
+  handle "/cymrufyw/*any", using: "Cymrufyw", examples: ["/cymrufyw"]
 
   # Naidheachdan
 
@@ -701,7 +723,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/naidheachdan/*_any", using: "Naidheachdan", examples: []
+  handle "/naidheachdan/*any", using: "Naidheachdan", examples: []
 
   handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation"]
   handle "/pres-test/personalisation/*any", using: "PresTestPersonalised", only_on: "test", examples: ["/pres-test/personalisation/follow-suggestions"]
@@ -767,6 +789,7 @@ defroutefile "Main" do
   handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo.json"]
   handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/manifest.json"]
   handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets", examples: ["/afaanoromoo/sw.js"]
+  handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", examples: ["/afaanoromoo/rss.xml"]
 
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afaanoromoo/topics/c7zp5z9n3x5t/page/2", 302}] do
     return_404 if: [
@@ -782,6 +805,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/afaanoromoo/topics/:id/rss.xml", using: "WorldServiceAfaanoromooTopicRss", examples: ["/afaanoromoo/topics/c7zp5z9n3x5t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)$/)
+  end
+
   handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -790,7 +817,7 @@ defroutefile "Main" do
   end
 
   handle "/afaanoromoo/send/:id", using: "UploaderWorldService", examples: ["/afaanoromoo/send/u39697902"]
-  handle "/afaanoromoo/*_any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
+  handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
 
@@ -798,8 +825,9 @@ defroutefile "Main" do
   handle "/afrique.json", using: "WorldServiceAfrique", examples: ["/afrique.json"]
   handle "/afrique/manifest.json", using: "WorldServiceAfriqueAssets", examples: ["/afrique/manifest.json"]
   handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets", examples: ["/afrique/sw.js"]
+  handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss", examples: ["/afrique/rss.xml"]
 
-   handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
+  handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -813,6 +841,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/afrique/topics/:id/rss.xml", using: "WorldServiceAfriqueTopicRss", examples: ["/afrique/topics/c9ny75kpxlkt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -821,12 +853,13 @@ defroutefile "Main" do
   end
 
   handle "/afrique/send/:id", using: "UploaderWorldService", examples: ["/afrique/send/u39697902"]
-  handle "/afrique/*_any", using: "WorldServiceAfrique", examples: ["/afrique"]
+  handle "/afrique/*any", using: "WorldServiceAfrique", examples: ["/afrique"]
 
   handle "/amharic.amp", using: "WorldServiceAmharic", examples: ["/amharic.amp"]
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
   handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets", examples: ["/amharic/manifest.json"]
   handle "/amharic/sw.js", using: "WorldServiceAmharicAssets", examples: ["/amharic/sw.js"]
+  handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss", examples: ["/amharic/rss.xml"]
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/amharic/topics/c06gq8wdrjyt/page/2", 302}] do
     return_404 if: [
@@ -842,6 +875,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss", examples: ["/amharic/topics/c06gq8wdrjyt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -850,7 +887,7 @@ defroutefile "Main" do
   end
 
   handle "/amharic/send/:id", using: "UploaderWorldService", examples: ["/amharic/send/u39697902"]
-  handle "/amharic/*_any", using: "WorldServiceAmharic", examples: ["/amharic"]
+  handle "/amharic/*any", using: "WorldServiceAmharic", examples: ["/amharic"]
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
@@ -861,6 +898,7 @@ defroutefile "Main" do
   handle "/arabic.json", using: "WorldServiceArabic", examples: ["/arabic.json"]
   handle "/arabic/manifest.json", using: "WorldServiceArabicAssets", examples: ["/arabic/manifest.json"]
   handle "/arabic/sw.js", using: "WorldServiceArabicAssets", examples: ["/arabic/sw.js"]
+  handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss", examples: ["/arabic/rss.xml"]
 
   handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/arabic/topics/c340qj374j6t/page/2", 302}] do
     return_404 if: [
@@ -876,6 +914,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/arabic/topics/:id/rss.xml", using: "WorldServiceArabicTopicRss", examples: ["/arabic/topics/c340qj374j6t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -884,7 +926,7 @@ defroutefile "Main" do
   end
 
   handle "/arabic/send/:id", using: "UploaderWorldService", examples: ["/arabic/send/u39697902"]
-  handle "/arabic/*_any", using: "WorldServiceArabic", examples: ["/arabic"]
+  handle "/arabic/*any", using: "WorldServiceArabic", examples: ["/arabic"]
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
 
@@ -892,8 +934,9 @@ defroutefile "Main" do
   handle "/azeri.json", using: "WorldServiceAzeri", examples: ["/azeri.json"]
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets", examples: ["/azeri/manifest.json"]
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets", examples: ["/azeri/sw.js"]
+  handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss", examples: ["/azeri/rss.xml"]
 
-    handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
+  handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -907,6 +950,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/azeri/topics/:id/rss.xml", using: "WorldServiceAzeriTopicRss", examples: ["/azeri/topics/c1gdq32g3ddt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -915,7 +962,7 @@ defroutefile "Main" do
   end
 
   handle "/azeri/send/:id", using: "UploaderWorldService", examples: ["/azeri/send/u39697902"]
-  handle "/azeri/*_any", using: "WorldServiceAzeri", examples: ["/azeri"]
+  handle "/azeri/*any", using: "WorldServiceAzeri", examples: ["/azeri"]
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
   redirect "/bengali/mobile/*any", to: "/bengali", status: 301
@@ -924,6 +971,7 @@ defroutefile "Main" do
   handle "/bengali.json", using: "WorldServiceBengali", examples: ["/bengali.json"]
   handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets", examples: ["/bengali/manifest.json"]
   handle "/bengali/sw.js", using: "WorldServiceBengaliAssets", examples: ["/bengali/sw.js"]
+  handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss", examples: ["/bengali/rss.xml"]
 
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/bengali/topics/c2dwq2nd40xt/page/2", 302}] do
     return_404 if: [
@@ -939,6 +987,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/bengali/topics/:id/rss.xml", using: "WorldServiceBengaliTopicRss", examples: ["/bengali/topics/c2dwq2nd40xt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -947,7 +999,7 @@ defroutefile "Main" do
   end
 
   handle "/bengali/send/:id", using: "UploaderWorldService", examples: ["/bengali/send/u39697902"]
-  handle "/bengali/*_any", using: "WorldServiceBengali", examples: ["/bengali"]
+  handle "/bengali/*any", using: "WorldServiceBengali", examples: ["/bengali"]
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
@@ -956,6 +1008,7 @@ defroutefile "Main" do
   handle "/burmese.json", using: "WorldServiceBurmese", examples: ["/burmese.json"]
   handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets", examples: ["/burmese/manifest.json"]
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets", examples: ["/burmese/sw.js"]
+  handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss", examples: ["/burmese/rss.xml"]
 
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/burmese/topics/c404v08p1wxt/page/2", 302}] do
     return_404 if: [
@@ -971,6 +1024,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/burmese/topics/:id/rss.xml", using: "WorldServiceBurmeseTopicRss", examples: ["/burmese/topics/c404v08p1wxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -979,7 +1036,7 @@ defroutefile "Main" do
   end
 
   handle "/burmese/send/:id", using: "UploaderWorldService", examples: ["/burmese/send/u39697902"]
-  handle "/burmese/*_any", using: "WorldServiceBurmese", examples: ["/burmese"]
+  handle "/burmese/*any", using: "WorldServiceBurmese", examples: ["/burmese"]
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
 
@@ -987,8 +1044,9 @@ defroutefile "Main" do
   handle "/gahuza.json", using: "WorldServiceGahuza", examples: ["/gahuza.json"]
   handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/manifest.json"]
   handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets", examples: ["/gahuza/sw.js"]
+  handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss", examples: ["/gahuza/rss.xml"]
 
-   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
+  handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
@@ -1002,6 +1060,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/gahuza/topics/:id/rss.xml", using: "WorldServiceGahuzaTopicRss", examples: ["/gahuza/topics/c7zp5z0yd0xt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1010,11 +1072,12 @@ defroutefile "Main" do
   end
 
   handle "/gahuza/send/:id", using: "UploaderWorldService", examples: ["/gahuza/send/u39697902"]
-  handle "/gahuza/*_any", using: "WorldServiceGahuza", examples: ["/gahuza"]
+  handle "/gahuza/*any", using: "WorldServiceGahuza", examples: ["/gahuza"]
   handle "/gujarati.amp", using: "WorldServiceGujarati", examples: ["/gujarati.amp"]
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/manifest.json"]
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/sw.js"]
+  handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss", examples: ["/gujarati/rss.xml"]
 
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gujarati/topics/c2dwqj95d30t/page/2", 302}] do
     return_404 if: [
@@ -1030,6 +1093,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/gujarati/topics/:id/rss.xml", using: "WorldServiceGujaratiTopicRss", examples: ["/gujarati/topics/c2dwqj95d30t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1038,7 +1105,7 @@ defroutefile "Main" do
   end
 
   handle "/gujarati/send/:id", using: "UploaderWorldService", examples: ["/gujarati/send/u39697902"]
-  handle "/gujarati/*_any", using: "WorldServiceGujarati", examples: ["/gujarati"]
+  handle "/gujarati/*any", using: "WorldServiceGujarati", examples: ["/gujarati"]
 
   redirect "/hausa/mobile/*any", to: "/hausa", status: 301
 
@@ -1046,6 +1113,7 @@ defroutefile "Main" do
   handle "/hausa.json", using: "WorldServiceHausa", examples: ["/hausa.json"]
   handle "/hausa/manifest.json", using: "WorldServiceHausaAssets", examples: ["/hausa/manifest.json"]
   handle "/hausa/sw.js", using: "WorldServiceHausaAssets", examples: ["/hausa/sw.js"]
+  handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss", examples: ["/hausa/rss.xml"]
 
   handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hausa/topics/c5qvpxkx1j7t/page/2", 302}] do
     return_404 if: [
@@ -1061,6 +1129,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/hausa/topics/:id/rss.xml", using: "WorldServiceHausaTopicRss", examples: ["/hausa/topics/c5qvpxkx1j7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1069,7 +1141,7 @@ defroutefile "Main" do
   end
 
   handle "/hausa/send/:id", using: "UploaderWorldService", examples: ["/hausa/send/u39697902"]
-  handle "/hausa/*_any", using: "WorldServiceHausa", examples: ["/hausa"]
+  handle "/hausa/*any", using: "WorldServiceHausa", examples: ["/hausa"]
 
   redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
   redirect "/hindi/mobile/*any", to: "/hindi", status: 301
@@ -1078,6 +1150,7 @@ defroutefile "Main" do
   handle "/hindi.json", using: "WorldServiceHindi", examples: ["/hindi.json"]
   handle "/hindi/manifest.json", using: "WorldServiceHindiAssets", examples: ["/hindi/manifest.json"]
   handle "/hindi/sw.js", using: "WorldServiceHindiAssets", examples: ["/hindi/sw.js"]
+  handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss", examples: ["/hindi/rss.xml"]
 
   handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hindi/topics/c6vzy709wvxt/page/2", 302}] do
     return_404 if: [
@@ -1093,6 +1166,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/hindi/topics/:id/rss.xml", using: "WorldServiceHindiTopicRss", examples: ["/hindi/topics/c6vzy709wvxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1101,11 +1178,12 @@ defroutefile "Main" do
   end
 
   handle "/hindi/send/:id", using: "UploaderWorldService", examples: ["/hindi/send/u39697902"]
-  handle "/hindi/*_any", using: "WorldServiceHindi", examples: ["/hindi"]
+  handle "/hindi/*any", using: "WorldServiceHindi", examples: ["/hindi"]
   handle "/igbo.amp", using: "WorldServiceIgbo", examples: ["/igbo.amp"]
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", examples: ["/igbo/manifest.json"]
   handle "/igbo/sw.js", using: "WorldServiceIgboAssets", examples: ["/igbo/sw.js"]
+  handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss", examples: ["/igbo/rss.xml"]
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/igbo/topics/c340qr24xggt/page/2", 302}] do
     return_404 if: [
@@ -1122,6 +1200,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss", examples: ["/igbo/topics/c340qr24xggt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1130,7 +1212,7 @@ defroutefile "Main" do
   end
 
   handle "/igbo/send/:id", using: "UploaderWorldService", examples: ["/igbo/send/u39697902"]
-  handle "/igbo/*_any", using: "WorldServiceIgbo", examples: ["/igbo"]
+  handle "/igbo/*any", using: "WorldServiceIgbo", examples: ["/igbo"]
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
 
@@ -1138,6 +1220,7 @@ defroutefile "Main" do
   handle "/indonesia.json", using: "WorldServiceIndonesia", examples: ["/indonesia.json"]
   handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/manifest.json"]
   handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets", examples: ["/indonesia/sw.js"]
+  handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss", examples: ["/indonesia/rss.xml"]
 
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/indonesia/topics/c340qrk1znxt/page/2", 302}] do
     return_404 if: [
@@ -1153,6 +1236,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/indonesia/topics/:id/rss.xml", using: "WorldServiceIndonesiaTopicRss", examples: ["/indonesia/topics/c340qrk1znxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1161,11 +1248,12 @@ defroutefile "Main" do
   end
 
   handle "/indonesia/send/:id", using: "UploaderWorldService", examples: ["/indonesia/send/u39697902"]
-  handle "/indonesia/*_any", using: "WorldServiceIndonesia", examples: ["/indonesia"]
+  handle "/indonesia/*any", using: "WorldServiceIndonesia", examples: ["/indonesia"]
   handle "/japanese.amp", using: "WorldServiceJapanese", examples: ["/japanese.amp"]
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
   handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets", examples: ["/japanese/manifest.json"]
   handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets", examples: ["/japanese/sw.js"]
+  handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss", examples: ["/japanese/rss.xml"]
 
   handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/japanese/topics/c340qrn7pp0t/page/2", 302}] do
     return_404 if: [
@@ -1181,6 +1269,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/japanese/topics/:id/rss.xml", using: "WorldServiceJapaneseTopicRss", examples: ["/japanese/topics/c340qrn7pp0t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1189,11 +1281,12 @@ defroutefile "Main" do
   end
 
   handle "/japanese/send/:id", using: "UploaderWorldService", examples: ["/japanese/send/u39697902"]
-  handle "/japanese/*_any", using: "WorldServiceJapanese", examples: ["/japanese"]
+  handle "/japanese/*any", using: "WorldServiceJapanese", examples: ["/japanese"]
   handle "/korean.amp", using: "WorldServiceKorean", examples: ["/korean.amp"]
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
   handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", examples: ["/korean/manifest.json"]
   handle "/korean/sw.js", using: "WorldServiceKoreanAssets", examples: ["/korean/sw.js"]
+  handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss", examples: ["/korean/rss.xml"]
 
   handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/korean/topics/c17q6yp3jx4t/page/2", 302}] do
     return_404 if: [
@@ -1209,6 +1302,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/korean/topics/:id/rss.xml", using: "WorldServiceKoreanTopicRss", examples: ["/korean/topics/c17q6yp3jx4t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1217,7 +1314,7 @@ defroutefile "Main" do
   end
 
   handle "/korean/send/:id", using: "UploaderWorldService", examples: ["/korean/send/u39697902"]
-  handle "/korean/*_any", using: "WorldServiceKorean", examples: ["/korean"]
+  handle "/korean/*any", using: "WorldServiceKorean", examples: ["/korean"]
 
   redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
 
@@ -1225,6 +1322,7 @@ defroutefile "Main" do
   handle "/kyrgyz.json", using: "WorldServiceKyrgyz", examples: ["/kyrgyz.json"]
   handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/manifest.json"]
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", examples: ["/kyrgyz/sw.js"]
+  handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", examples: ["/kyrgyz/rss.xml"]
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
     return_404 if: [
@@ -1240,6 +1338,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/kyrgyz/topics/:id/rss.xml", using: "WorldServiceKyrgyzTopicRss", examples: ["/kyrgyz/topics/c0109l9xrpnt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1248,12 +1350,13 @@ defroutefile "Main" do
   end
 
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
-  handle "/kyrgyz/*_any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
+  handle "/kyrgyz/*any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
 
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
   handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets", examples: ["/marathi/manifest.json"]
   handle "/marathi/sw.js", using: "WorldServiceMarathiAssets", examples: ["/marathi/sw.js"]
+  handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss", examples: ["/marathi/rss.xml"]
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/marathi/topics/c2dwqjwqqqjt/page/2", 302}] do
     return_404 if: [
@@ -1269,6 +1372,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/marathi/topics/:id/rss.xml", using: "WorldServiceMarathiTopicRss", examples: ["/marathi/topics/c2dwqjwqqqjt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1277,7 +1384,7 @@ defroutefile "Main" do
   end
 
   handle "/marathi/send/:id", using: "UploaderWorldService", examples: ["/marathi/send/u39697902"]
-  handle "/marathi/*_any", using: "WorldServiceMarathi", examples: ["/marathi"]
+  handle "/marathi/*any", using: "WorldServiceMarathi", examples: ["/marathi"]
 
   ## World Service - Olympic Redirects
   redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
@@ -1289,12 +1396,13 @@ defroutefile "Main" do
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
 
-  handle "/mundo/mvt/*_any", using: "WorldServiceMvtPoc", only_on: "test", examples: ["/mundo/mvt/testing"]
+  handle "/mundo/mvt/*any", using: "WorldServiceMvtPoc", only_on: "test", examples: ["/mundo/mvt/testing"]
 
   handle "/mundo.amp", using: "WorldServiceMundo", examples: ["/mundo.amp"]
   handle "/mundo.json", using: "WorldServiceMundo", examples: ["/mundo.json"]
   handle "/mundo/manifest.json", using: "WorldServiceMundoAssets", examples: ["/mundo/manifest.json"]
   handle "/mundo/sw.js", using: "WorldServiceMundoAssets", examples: ["/mundo/sw.js"]
+  handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss", examples: ["/mundo/rss.xml"]
 
   handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/mundo/topics/cdr5613yzwqt/page/2", 302}] do
     return_404 if: [
@@ -1310,6 +1418,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/mundo/topics/:id/rss.xml", using: "WorldServiceMundoTopicRss", examples: ["/mundo/topics/cdr5613yzwqt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1318,7 +1430,7 @@ defroutefile "Main" do
   end
 
   handle "/mundo/send/:id", using: "UploaderWorldService", examples: ["/mundo/send/u39697902"]
-  handle "/mundo/*_any", using: "WorldServiceMundo", examples: ["/mundo"]
+  handle "/mundo/*any", using: "WorldServiceMundo", examples: ["/mundo"]
 
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
   redirect "/nepali/mobile/*any", to: "/nepali", status: 301
@@ -1327,6 +1439,7 @@ defroutefile "Main" do
   handle "/nepali.json", using: "WorldServiceNepali", examples: ["/nepali.json"]
   handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets", examples: ["/nepali/manifest.json"]
   handle "/nepali/sw.js", using: "WorldServiceNepaliAssets", examples: ["/nepali/sw.js"]
+  handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss", examples: ["/nepali/rss.xml"]
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/nepali/topics/c340q4p5136t/page/2", 302}] do
     return_404 if: [
@@ -1342,6 +1455,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/nepali/topics/:id/rss.xml", using: "WorldServiceNepaliTopicRss", examples: ["/nepali/topics/c340q4p5136t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1350,7 +1467,7 @@ defroutefile "Main" do
   end
 
   handle "/nepali/send/:id", using: "UploaderWorldService", examples: ["/nepali/send/u39697902"]
-  handle "/nepali/*_any", using: "WorldServiceNepali", examples: ["/nepali"]
+  handle "/nepali/*any", using: "WorldServiceNepali", examples: ["/nepali"]
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
   redirect "/pashto/mobile/*any", to: "/pashto", status: 301
@@ -1359,6 +1476,7 @@ defroutefile "Main" do
   handle "/pashto.json", using: "WorldServicePashto", examples: ["/pashto.json"]
   handle "/pashto/manifest.json", using: "WorldServicePashtoAssets", examples: ["/pashto/manifest.json"]
   handle "/pashto/sw.js", using: "WorldServicePashtoAssets", examples: ["/pashto/sw.js"]
+  handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss", examples: ["/pashto/rss.xml"]
 
   handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pashto/topics/c8y94yr7y9rt/page/2", 302}] do
     return_404 if: [
@@ -1374,6 +1492,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/pashto/topics/:id/rss.xml", using: "WorldServicePashtoTopicRss", examples: ["/pashto/topics/c8y94yr7y9rt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1382,7 +1504,7 @@ defroutefile "Main" do
   end
 
   handle "/pashto/send/:id", using: "UploaderWorldService", examples: ["/pashto/send/u39697902"]
-  handle "/pashto/*_any", using: "WorldServicePashto", examples: ["/pashto"]
+  handle "/pashto/*any", using: "WorldServicePashto", examples: ["/pashto"]
 
   redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
   redirect "/persian/mobile/*any", to: "/persian", status: 301
@@ -1391,6 +1513,7 @@ defroutefile "Main" do
   handle "/persian.json", using: "WorldServicePersian", examples: ["/persian.json"]
   handle "/persian/manifest.json", using: "WorldServicePersianAssets", examples: ["/persian/manifest.json"]
   handle "/persian/sw.js", using: "WorldServicePersianAssets", examples: ["/persian/sw.js"]
+  handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss", examples: ["/persian/rss.xml"]
 
   handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/persian/topics/cnq68798yw0t/page/2", 302}] do
     return_404 if: [
@@ -1406,6 +1529,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/persian/topics/:id/rss.xml", using: "WorldServicePersianTopicRss", examples: ["/persian/topics/cnq68798yw0t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/persian/articles/:id", using: "WorldServicePersianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1414,11 +1541,12 @@ defroutefile "Main" do
   end
 
   handle "/persian/send/:id", using: "UploaderWorldService", examples: ["/persian/send/u39697902"]
-  handle "/persian/*_any", using: "WorldServicePersian", examples: ["/persian"]
+  handle "/persian/*any", using: "WorldServicePersian", examples: ["/persian"]
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
   handle "/pidgin/manifest.json", using: "WorldServicePidginAssets", examples: ["/pidgin/manifest.json"]
   handle "/pidgin/sw.js", using: "WorldServicePidginAssets", examples: ["/pidgin/sw.js"]
+  handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss", examples: ["/pidgin/rss.xml"]
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pidgin/topics/c95y35941vrt/page/2", 302}] do
     return_404 if: [
@@ -1434,6 +1562,13 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/pidgin/articles/cwl08rd38l6o", using: "WorldServicePidginArticleMvtPage", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o"]
+  handle "/pidgin/articles/cwl08rd38l6o.amp", using: "WorldServicePidginArticleMvtPage", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o.amp"]
+
+  handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss", examples: ["/pidgin/topics/c95y35941vrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1442,7 +1577,7 @@ defroutefile "Main" do
   end
 
   handle "/pidgin/send/:id", using: "UploaderWorldService", examples: ["/pidgin/send/u39697902"]
-  handle "/pidgin/*_any", using: "WorldServicePidgin", examples: ["/pidgin"]
+  handle "/pidgin/*any", using: "WorldServicePidgin", examples: ["/pidgin"]
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
   redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
@@ -1451,6 +1586,7 @@ defroutefile "Main" do
   handle "/portuguese.json", using: "WorldServicePortuguese", examples: ["/portuguese.json"]
   handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets", examples: ["/portuguese/manifest.json"]
   handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets", examples: ["/portuguese/sw.js"]
+  handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss", examples: ["/portuguese/rss.xml"]
 
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/portuguese/topics/c1gdqg5dr8nt/page/2", 302}] do
     return_404 if: [
@@ -1466,6 +1602,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/portuguese/topics/:id/rss.xml", using: "WorldServicePortugueseTopicRss", examples: ["/portuguese/topics/c1gdqg5dr8nt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1474,11 +1614,12 @@ defroutefile "Main" do
   end
 
   handle "/portuguese/send/:id", using: "UploaderWorldService", examples: ["/portuguese/send/u39697902"]
-  handle "/portuguese/*_any", using: "WorldServicePortuguese", examples: ["/portuguese"]
+  handle "/portuguese/*any", using: "WorldServicePortuguese", examples: ["/portuguese"]
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", examples: ["/punjabi/manifest.json"]
   handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets", examples: ["/punjabi/sw.js"]
+  handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss", examples: ["/punjabi/rss.xml"]
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/punjabi/topics/c0w258dd62mt/page/2", 302}] do
     return_404 if: [
@@ -1494,6 +1635,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/punjabi/topics/:id/rss.xml", using: "WorldServicePunjabiTopicRss", examples: ["/punjabi/topics/c0w258dd62mt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1502,7 +1647,7 @@ defroutefile "Main" do
   end
 
   handle "/punjabi/send/:id", using: "UploaderWorldService", examples: ["/punjabi/send/u39697902"]
-  handle "/punjabi/*_any", using: "WorldServicePunjabi", examples: ["/punjabi"]
+  handle "/punjabi/*any", using: "WorldServicePunjabi", examples: ["/punjabi"]
 
   ## World Service - Russian Partners Redirects
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
@@ -1518,6 +1663,7 @@ defroutefile "Main" do
   handle "/russian.json", using: "WorldServiceRussian", examples: ["/russian.json"]
   handle "/russian/manifest.json", using: "WorldServiceRussianAssets", examples: ["/russian/manifest.json"]
   handle "/russian/sw.js", using: "WorldServiceRussianAssets", examples: ["/russian/sw.js"]
+  handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", examples: ["/russian/rss.xml"]
 
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
     return_404 if: [
@@ -1533,6 +1679,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/russian/topics/:id/rss.xml", using: "WorldServiceRussianTopicRss", examples: ["/russian/topics/c50nzm54vzmt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1541,10 +1691,12 @@ defroutefile "Main" do
   end
 
   handle "/russian/send/:id", using: "UploaderWorldService", examples: ["/russian/send/u39697902"]
-  handle "/russian/*_any", using: "WorldServiceRussian", examples: ["/russian"]
+  handle "/russian/*any", using: "WorldServiceRussian", examples: ["/russian"]
 
   handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", examples: ["/serbian/manifest.json"]
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", examples: ["/serbian/sw.js"]
+  handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/lat/rss.xml"]
+  handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss", examples: ["/serbian/cyr/rss.xml"]
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
     return_404 if: [
@@ -1572,6 +1724,13 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/serbian/cyr/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", examples: ["/serbian/cyr/topics/cqwvxvvw9qrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+  handle "/serbian/lat/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", examples: ["/serbian/lat/topics/c5wzvzzz5vrt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/serbian/articles/:id/cyr", using: "WorldServiceSerbianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1586,7 +1745,7 @@ defroutefile "Main" do
   end
 
   handle "/serbian/send/:id", using: "UploaderWorldService", examples: ["/serbian/send/u39697902"]
-  handle "/serbian/*_any", using: "WorldServiceSerbian", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
+  handle "/serbian/*any", using: "WorldServiceSerbian", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
 
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
   redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
@@ -1595,6 +1754,7 @@ defroutefile "Main" do
   handle "/sinhala.json", using: "WorldServiceSinhala", examples: ["/sinhala.json"]
   handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/manifest.json"]
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", examples: ["/sinhala/sw.js"]
+  handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", examples: ["/sinhala/rss.xml"]
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
     return_404 if: [
@@ -1610,6 +1770,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/sinhala/topics/:id/rss.xml", using: "WorldServiceSinhalaTopicRss", examples: ["/sinhala/topics/c2dwqd311xyt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1618,7 +1782,7 @@ defroutefile "Main" do
   end
 
   handle "/sinhala/send/:id", using: "UploaderWorldService", examples: ["/sinhala/send/u39697902"]
-  handle "/sinhala/*_any", using: "WorldServiceSinhala", examples: ["/sinhala"]
+  handle "/sinhala/*any", using: "WorldServiceSinhala", examples: ["/sinhala"]
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
 
@@ -1626,6 +1790,7 @@ defroutefile "Main" do
   handle "/somali.json", using: "WorldServiceSomali", examples: ["/somali.json"]
   handle "/somali/manifest.json", using: "WorldServiceSomaliAssets", examples: ["/somali/manifest.json"]
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets", examples: ["/somali/sw.js"]
+  handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", examples: ["/somali/rss.xml"]
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
     return_404 if: [
@@ -1641,6 +1806,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/somali/topics/:id/rss.xml", using: "WorldServiceSomaliTopicRss", examples: ["/somali/topics/cz74k7jd8n8t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1649,7 +1818,7 @@ defroutefile "Main" do
   end
 
   handle "/somali/send/:id", using: "UploaderWorldService", examples: ["/somali/send/u39697902"]
-  handle "/somali/*_any", using: "WorldServiceSomali", examples: ["/somali"]
+  handle "/somali/*any", using: "WorldServiceSomali", examples: ["/somali"]
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
 
@@ -1657,6 +1826,8 @@ defroutefile "Main" do
   handle "/swahili.json", using: "WorldServiceSwahili", examples: ["/swahili.json"]
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", examples: ["/swahili/sw.js"]
+  handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", examples: ["/swahili/rss.xml"]
+
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1671,6 +1842,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/swahili/topics/:id/rss.xml", using: "WorldServiceSwahiliTopicRss", examples: ["/swahili/topics/c06gq663n6jt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1679,8 +1854,8 @@ defroutefile "Main" do
   end
 
   handle "/swahili/send/:id", using: "UploaderWorldService", examples: ["/swahili/send/u39697902"]
-  handle "/swahili/*_any", using: "WorldServiceSwahili", examples: ["/swahili"]
-  handle "/tajik/*_any", using: "WorldServiceTajik", examples: ["/tajik"]
+  handle "/swahili/*any", using: "WorldServiceSwahili", examples: ["/swahili"]
+  handle "/tajik/*any", using: "WorldServiceTajik", examples: ["/tajik"]
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
   redirect "/tamil/mobile/*any", to: "/tamil", status: 301
@@ -1689,6 +1864,7 @@ defroutefile "Main" do
   handle "/tamil.json", using: "WorldServiceTamil", examples: ["/tamil.json"]
   handle "/tamil/manifest.json", using: "WorldServiceTamilAssets", examples: ["/tamil/manifest.json"]
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets", examples: ["/tamil/sw.js"]
+  handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", examples: ["/tamil/rss.xml"]
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
     return_404 if: [
@@ -1704,6 +1880,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/tamil/topics/:id/rss.xml", using: "WorldServiceTamilTopicRss", examples: ["/tamil/topics/c06gq6gnzdgt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1712,11 +1892,12 @@ defroutefile "Main" do
   end
 
   handle "/tamil/send/:id", using: "UploaderWorldService", examples: ["/tamil/send/u39697902"]
-  handle "/tamil/*_any", using: "WorldServiceTamil", examples: ["/tamil"]
+  handle "/tamil/*any", using: "WorldServiceTamil", examples: ["/tamil"]
   handle "/telugu.amp", using: "WorldServiceTelugu", examples: ["/telugu.amp"]
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", examples: ["/telugu/manifest.json"]
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", examples: ["/telugu/sw.js"]
+  handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", examples: ["/telugu/rss.xml"]
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
     return_404 if: [
@@ -1732,6 +1913,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss", examples: ["/telugu/topics/c5qvp16w7dnt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1740,11 +1925,12 @@ defroutefile "Main" do
   end
 
   handle "/telugu/send/:id", using: "UploaderWorldService", examples: ["/telugu/send/u39697902"]
-  handle "/telugu/*_any", using: "WorldServiceTelugu", examples: ["/telugu"]
+  handle "/telugu/*any", using: "WorldServiceTelugu", examples: ["/telugu"]
   handle "/thai.amp", using: "WorldServiceThai", examples: ["/thai.amp"]
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets", examples: ["/thai/manifest.json"]
   handle "/thai/sw.js", using: "WorldServiceThaiAssets", examples: ["/thai/sw.js"]
+  handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", examples: ["/thai/rss.xml"]
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
     return_404 if: [
@@ -1760,6 +1946,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/thai/topics/:id/rss.xml", using: "WorldServiceThaiTopicRss", examples: ["/thai/topics/c340qx429k7t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1768,11 +1958,12 @@ defroutefile "Main" do
   end
 
   handle "/thai/send/:id", using: "UploaderWorldService", examples: ["/thai/send/u39697902"]
-  handle "/thai/*_any", using: "WorldServiceThai", examples: ["/thai"]
+  handle "/thai/*any", using: "WorldServiceThai", examples: ["/thai"]
   handle "/tigrinya.amp", using: "WorldServiceTigrinya", examples: ["/tigrinya.amp"]
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/manifest.json"]
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/sw.js"]
+  handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", examples: ["/tigrinya/rss.xml"]
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
     return_404 if: [
@@ -1788,6 +1979,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/tigrinya/topics/:id/rss.xml", using: "WorldServiceTigrinyaTopicRss", examples: ["/tigrinya/topics/c1gdqrg28zxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1796,7 +1991,7 @@ defroutefile "Main" do
   end
 
   handle "/tigrinya/send/:id", using: "UploaderWorldService", examples: ["/tigrinya/send/u39697902"]
-  handle "/tigrinya/*_any", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
+  handle "/tigrinya/*any", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
   redirect "/turkce/cep/*any", to: "/turkce", status: 301
@@ -1805,6 +2000,7 @@ defroutefile "Main" do
   handle "/turkce.json", using: "WorldServiceTurkce", examples: ["/turkce.json"]
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", examples: ["/turkce/manifest.json"]
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", examples: ["/turkce/sw.js"]
+  handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", examples: ["/turkce/rss.xml"]
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
     return_404 if: [
@@ -1820,6 +2016,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/turkce/topics/:id/rss.xml", using: "WorldServiceTurkceTopicRss", examples: ["/turkce/topics/c2dwqnwkvnqt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1828,7 +2028,7 @@ defroutefile "Main" do
   end
 
   handle "/turkce/send/:id", using: "UploaderWorldService", examples: ["/turkce/send/u39697902"]
-  handle "/turkce/*_any", using: "WorldServiceTurkce", examples: ["/turkce"]
+  handle "/turkce/*any", using: "WorldServiceTurkce", examples: ["/turkce"]
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
@@ -1863,7 +2063,7 @@ defroutefile "Main" do
   end
 
   handle "/ukchina/send/:id", using: "UploaderWorldService", examples: ["/ukchina/send/u39697902"]
-  handle "/ukchina/*_any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
+  handle "/ukchina/*any", using: "WorldServiceUkChina", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
 
   redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
 
@@ -1871,6 +2071,7 @@ defroutefile "Main" do
   handle "/ukrainian.json", using: "WorldServiceUkrainian", examples: ["/ukrainian.json"]
   handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/manifest.json"]
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", examples: ["/ukrainian/sw.js"]
+  handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", examples: ["/ukrainian/rss.xml"]
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
     return_404 if: [
@@ -1886,6 +2087,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/ukrainian/topics/:id/rss.xml", using: "WorldServiceUkrainianTopicRss", examples: ["/ukrainian/topics/c340qxwr67yt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1894,7 +2099,7 @@ defroutefile "Main" do
   end
 
   handle "/ukrainian/send/:id", using: "UploaderWorldService", examples: ["/ukrainian/send/u39697902"]
-  handle "/ukrainian/*_any", using: "WorldServiceUkrainian", examples: ["/ukrainian"]
+  handle "/ukrainian/*any", using: "WorldServiceUkrainian", examples: ["/ukrainian"]
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
   redirect "/urdu/mobile/*any", to: "/urdu", status: 301
@@ -1903,6 +2108,7 @@ defroutefile "Main" do
   handle "/urdu.json", using: "WorldServiceUrdu", examples: ["/urdu.json"]
   handle "/urdu/manifest.json", using: "WorldServiceUrduAssets", examples: ["/urdu/manifest.json"]
   handle "/urdu/sw.js", using: "WorldServiceUrduAssets", examples: ["/urdu/sw.js"]
+  handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", examples: ["/urdu/rss.xml"]
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
     return_404 if: [
@@ -1918,6 +2124,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/urdu/topics/:id/rss.xml", using: "WorldServiceUrduTopicRss", examples: ["/urdu/topics/c44pxlmy60mt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1926,7 +2136,7 @@ defroutefile "Main" do
   end
 
   handle "/urdu/send/:id", using: "UploaderWorldService", examples: ["/urdu/send/u39697902"]
-  handle "/urdu/*_any", using: "WorldServiceUrdu", examples: ["/urdu"]
+  handle "/urdu/*any", using: "WorldServiceUrdu", examples: ["/urdu"]
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
 
@@ -1934,6 +2144,7 @@ defroutefile "Main" do
   handle "/uzbek.json", using: "WorldServiceUzbek", examples: ["/uzbek.json"]
   handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", examples: ["/uzbek/manifest.json"]
   handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", examples: ["/uzbek/sw.js"]
+  handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss", examples: ["/uzbek/rss.xml"]
 
   handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/uzbek/topics/c340q0q55jvt/page/2", 302}] do
     return_404 if: [
@@ -1949,6 +2160,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/uzbek/topics/:id/rss.xml", using: "WorldServiceUzbekTopicRss", examples: ["/uzbek/topics/c340q0q55jvt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1957,7 +2172,7 @@ defroutefile "Main" do
   end
 
   handle "/uzbek/send/:id", using: "UploaderWorldService", examples: ["/uzbek/send/u39697902"]
-  handle "/uzbek/*_any", using: "WorldServiceUzbek", examples: ["/uzbek"]
+  handle "/uzbek/*any", using: "WorldServiceUzbek", examples: ["/uzbek"]
 
   redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
 
@@ -1965,6 +2180,7 @@ defroutefile "Main" do
   handle "/vietnamese.json", using: "WorldServiceVietnamese", examples: ["/vietnamese.json"]
   handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/manifest.json"]
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", examples: ["/vietnamese/sw.js"]
+  handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", examples: ["/vietnamese/rss.xml"]
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
     return_404 if: [
@@ -1980,6 +2196,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/vietnamese/topics/:id/rss.xml", using: "WorldServiceVietnameseTopicRss", examples: ["/vietnamese/topics/c340q0gkg4kt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1988,11 +2208,12 @@ defroutefile "Main" do
   end
 
   handle "/vietnamese/send/:id", using: "UploaderWorldService", examples: ["/vietnamese/send/u39697902"]
-  handle "/vietnamese/*_any", using: "WorldServiceVietnamese", examples: ["/vietnamese"]
+  handle "/vietnamese/*any", using: "WorldServiceVietnamese", examples: ["/vietnamese"]
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", examples: ["/yoruba/manifest.json"]
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", examples: ["/yoruba/sw.js"]
+  handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", examples: ["/yoruba/rss.xml"]
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
     return_404 if: [
@@ -2008,6 +2229,10 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/yoruba/topics/:id/rss.xml", using: "WorldServiceYorubaTopicRss", examples: ["/yoruba/topics/c12jqpnxn44t/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2016,13 +2241,15 @@ defroutefile "Main" do
   end
 
   handle "/yoruba/send/:id", using: "UploaderWorldService", examples: ["/yoruba/send/u39697902"]
-  handle "/yoruba/*_any", using: "WorldServiceYoruba", examples: ["/yoruba"]
+  handle "/yoruba/*any", using: "WorldServiceYoruba", examples: ["/yoruba"]
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
   handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/manifest.json"]
   handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", examples: ["/zhongwen/sw.js"]
+  handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/simp/rss.xml"]
+  handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss", examples: ["/zhongwen/trad/rss.xml"]
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
     return_404 if: [
@@ -2050,6 +2277,13 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/zhongwen/simp/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", examples: ["/zhongwen/simp/topics/c0dg90z8nqxt/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+  handle "/zhongwen/trad/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", examples: ["/zhongwen/trad/topics/cpydz21p02et/rss.xml"] do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
   handle "/zhongwen/articles/:id/simp", using: "WorldServiceZhongwenArticlePage", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2064,12 +2298,12 @@ defroutefile "Main" do
   end
 
   handle "/zhongwen/send/:id", using: "UploaderWorldService", examples: ["/zhongwen/send/u39697902"]
-  handle "/zhongwen/*_any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
+  handle "/zhongwen/*any", using: "WorldServiceZhongwen", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
 
   handle "/ws/languages", using: "WsLanguages", examples: ["/ws/languages"]
-  handle "/ws/av-embeds/*_any", using: "WsAvEmbeds", examples: []
-  handle "/ws/includes/*_any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
-  handle "/worldservice/assets/images/*_any", using: "WsImages", examples: [{"/worldservice/assets/images/2012/07/12/120712163431_img_0328.jpg", 301}]
+  handle "/ws/av-embeds/*any", using: "WsAvEmbeds", examples: []
+  handle "/ws/includes/*any", using: "WsIncludes", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
+  handle "/worldservice/assets/images/*any", using: "WsImages", examples: [{"/worldservice/assets/images/2012/07/12/120712163431_img_0328.jpg", 301}]
 
   # /programmes
 
@@ -2131,7 +2365,7 @@ defroutefile "Main" do
 
   handle "/programmes/genres", using: "Programmes", examples: ["/programmes/genres"]
 
-  handle "/programmes/genres/*_any", using: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
+  handle "/programmes/genres/*any", using: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
 
   handle "/programmes/profiles/:key/:slug", using: "Programmes", examples: ["/programmes/profiles/5NGNHQKKXGsFfnkxPBzKPMW/alistair-lloyd"] do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
@@ -2273,7 +2507,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules/*_any", using: "ProgrammesLegacy", examples: [{"/programmes/p02str2y/schedules/2019/03/18", 301}] do
+  handle "/programmes/:pid/schedules/*any", using: "ProgrammesLegacy", examples: [{"/programmes/p02str2y/schedules/2019/03/18", 301}] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
@@ -2323,7 +2557,7 @@ defroutefile "Main" do
   handle "/programmes", using: "ProgrammesHomePage", examples: ["/programmes"]
 
   # /programmes catch all
-  handle "/programmes/*_any", using: "Programmes", examples: []
+  handle "/programmes/*any", using: "Programmes", examples: []
 
   # /schedules
 
@@ -2335,14 +2569,14 @@ defroutefile "Main" do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
-  handle "/schedules/:pid/*_any", using: "Schedules", examples: ["/schedules/p00fzl6v/2021/06/28", "/schedules/p05pkt1d/2020/w02", "/schedules/p05pkt1d/2020/01", {"/schedules/p05pkt1d/yesterday", 302}, "/schedules/p05pkt1d/2021"] do
+  handle "/schedules/:pid/*any", using: "Schedules", examples: ["/schedules/p00fzl6v/2021/06/28", "/schedules/p05pkt1d/2020/w02", "/schedules/p05pkt1d/2020/01", {"/schedules/p05pkt1d/yesterday", 302}, "/schedules/p05pkt1d/2021"] do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
   handle "/schedules", using: "Schedules", examples: ["/schedules"]
 
   # /schedules catch all
-  handle "/schedules/*_any", using: "Schedules", examples: []
+  handle "/schedules/*any", using: "Schedules", examples: []
 
   # Uploader
 
@@ -2359,6 +2593,11 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/topics/:id/rss.xml", using: "TopicRss", examples: [] do
+    # example "/topics/c57jjx4233xt/rss.xml" need "feeds.api.bbci.co.uk" as host
+    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+  end
+
   ## Live WebCore
   handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"] do
     return_404 if: [
@@ -2367,19 +2606,88 @@ defroutefile "Main" do
   end
 
   # Weather
+  redirect "/weather/0/*any", to: "/weather/*any", status: 301
+
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
-  handle "/weather/coast-and-sea/*_any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
-  handle "/weather/*_any", using: "Weather", examples: ["/weather/2650225"]
+
+  handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search?s=london"] do
+    return_404(
+      if: [
+        !is_valid_length?(conn.query_params["s"] || "", 0..100),
+        !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      ]
+    )
+  end
+
+  handle "/weather/outlook", using: "Weather", examples: ["/weather/outlook"]
+
+  handle "/weather/map", using: "Weather", examples: ["/weather/map"]
+
+  redirect "/weather/warnings", to: "/weather/warnings/weather", status: 302
+  handle "/weather/warnings/weather", using: "WeatherWarnings", examples: ["/weather/warnings/weather"]
+  handle "/weather/warnings/floods", using: "WeatherWarnings", examples: ["/weather/warnings/floods"]
+
+  redirect "/weather/coast_and_sea", to: "/weather/coast-and-sea", status: 301
+  redirect "/weather/coast_and_sea/shipping_forecast", to: "/weather/coast-and-sea/shipping-forecast", status: 301
+  handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables"]
+  handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea",  examples: ["/weather/coast-and-sea/tide-tables/1"] do
+    return_404 if: !integer_in_range?(region_id, 1..12)
+  end
+  handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
+    return_404(
+      if: [
+        !matches?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
+        !integer_in_range?(region_id, 1..12)
+      ]
+    )
+  end
+  handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea", examples: []
+  handle "/weather/coast-and-sea/*any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
+
+  handle "/weather/error/:status", using: "Weather", examples: ["/weather/error/404", "/weather/error/500"] do
+    return_404 if: !integer_in_range?(status, [404, 500])
+  end
+
+  handle "/weather/language/:language", using: "Weather", examples: [{"/weather/language/en", 301}] do
+    return_404(
+      if: [
+        !starts_with?(conn.query_params["redirect_location"] || "/weather", "/"),
+        !is_language?(language)
+      ]
+    )
+  end
+
+  handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/features/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/feeds/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/forecast-video/:cps_id", using: "WeatherCps", examples: [] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+
+  handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
+    return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
+  end
+  handle "/weather/:location_id/:day", using: "WeatherLocation", examples: ["/weather/2650225/today"] do
+    return_404 if: !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
+  end
+
+  handle "/weather/*any", using: "Weather", examples: []
 
   # WebCore Hub
-  redirect("/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302)
+  redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302
 
   # News Beat
 
-  redirect("/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301)
-  redirect("/newsbeat", to: "/news/newsbeat", status: 301)
+  redirect "/newsbeat/:asset_id", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat/articles/:asset_id", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat/article/:asset_id/:slug", to: "/news/newsbeat-:asset_id", status: 301
+  redirect "/newsbeat", to: "/news/newsbeat", status: 301
 
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
@@ -2391,43 +2699,39 @@ defroutefile "Main" do
   # Catch all
 
   # example test route: "/comments/embed/news/world-europe-23348005"
-  handle "/comments/embed/*_any", using: "CommentsEmbed", examples: []
+  handle "/comments/embed/*any", using: "CommentsEmbed", examples: []
 
   handle "/web/shell", using: "WebShell", examples: ["/web/shell"]
 
   handle "/my/session", using: "MySession", only_on: "test", examples: []
 
-  handle "/scotland/articles/*_any", using: "ScotlandArticles", examples: []
+  handle "/scotland/articles/*any", using: "ScotlandArticles", examples: []
   # TODO this may not be an actual required route
-  handle "/scotland/*_any", using: "Scotland", examples: []
+  handle "/scotland/*any", using: "Scotland", examples: []
 
-  handle "/archive/articles/*_any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
+  handle "/archive/articles/*any", using: "ArchiveArticles", examples: ["/archive/articles/sw.js"]
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
-  handle "/archive/*_any", using: "Archive", examples: []
+  handle "/archive/*any", using: "Archive", examples: []
 
-  # Newsround
+# Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
-  redirect "/newsround/amp/:topic/:id", to: "/newsround/:topic/:id.amp", status: 301
-  handle "/newsround.amp", using: "NewsroundAmp", examples: []                                                        # Is this route needed? Currently 404
-  handle "/newsround.json", using: "NewsroundAmp", examples: []                                                       # Is this route needed? Currently 404
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
-  handle "/newsround/:topic/:id.amp", using: "NewsroundAmp", examples: ["/newsround/unknown/61545299.amp"]            # Not sure if used
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
+  handle "/newsround/articles/manifest.json", using: "NewsroundAmp", examples: ["/newsround/articles/manifest.json"]
   handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/watch_newsround"]
   handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/newsroundbsl"]
   handle "/newsround/av/:id", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", only_on: "test", examples: ["/newsround/61545299"]
   handle "/newsround", using: "NewsroundHomePage", only_on: "test", examples: ["/newsround"]
-  handle "/newsround/*_any", using: "NewsroundLegacy", examples: []                                                    # Use Morph as a catch-all
-  
+  handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
+  handle "/newsround/*any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
+
   handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
-  handle "/wide/*_any", using: "Wide", examples: []
-
-  handle "/archivist/*_any", using: "Archivist", examples: []
+  handle "/archivist/*any", using: "Archivist", examples: []
 
   # TODO /proms/extra
-  handle "/proms/*_any", using: "Proms", examples: []
+  handle "/proms/*any", using: "Proms", examples: []
 
   handle "/music", using: "Music", examples: []
 
@@ -2444,9 +2748,10 @@ defroutefile "Main" do
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
 
   handle "/bitesize/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/articles/zjykkmn"]
-  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", only_on: "test", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
 
   handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
+  handle "/bitesize/preview/articles/:id/:game_version", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm/latest"]
   handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
 
 
@@ -2476,10 +2781,10 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
 
-  handle "/bitesize/*_any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
+  handle "/bitesize/*any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 
   # Games
-  handle "/games/*_any", using: "Games", examples: ["/games/embed/genie-starter-pack"]
+  handle "/games/*any", using: "Games", examples: ["/games/embed/genie-starter-pack"]
 
 
   # Classic Apps
@@ -2532,9 +2837,9 @@ defroutefile "Main" do
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
-  handle "/full-stack-test/a/*_any", using: "FullStackTestA", only_on: "test", examples: []
-  handle "/full-stack-test/b/*_any", using: "FullStackTestB", only_on: "test", examples: []
-  redirect("/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302)
+  handle "/full-stack-test/a/*any", using: "FullStackTestA", only_on: "test", examples: []
+  handle "/full-stack-test/b/*any", using: "FullStackTestB", only_on: "test", examples: []
+  redirect "/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302
 
   handle "/echo", using: "EchoSpec", only_on: "test", examples: ["/echo"]
 

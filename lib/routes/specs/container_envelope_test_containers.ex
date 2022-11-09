@@ -5,7 +5,7 @@ defmodule Routes.Specs.ContainerEnvelopeTestContainers do
       platform: Webcore,
       runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book#PresentationLayerRunBook-ContainerAPI",
       query_params_allowlist: ["q", "page", "static"],
-      pipeline: ["UserAgentValidator"]
+      request_pipeline: ["UserAgentValidator"]
     }
   end
 end

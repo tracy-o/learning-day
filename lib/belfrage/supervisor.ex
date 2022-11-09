@@ -31,9 +31,30 @@ defmodule Belfrage.Supervisor do
       name: Finch,
       pools: %{
         :default => [size: 512, conn_opts: [transport_opts: {:verify, :verify_none}]],
-        "https://#{bucket}.s3-#{region}.amazonaws.com" => [size: 1024],
-        "https://sts.#{region}.amazonaws.com" => [size: 512],
-        "https://lambda.#{region}.amazonaws.com" => [size: 1024],
+        "https://#{bucket}.s3-#{region}.amazonaws.com" => [
+          size: 1024,
+          conn_opts: [
+            transport_opts: [
+              {:inet6, true}
+            ]
+          ]
+        ],
+        "https://sts.#{region}.amazonaws.com" => [
+          size: 512,
+          conn_opts: [
+            transport_opts: [
+              {:inet6, true}
+            ]
+          ]
+        ],
+        "https://lambda.#{region}.amazonaws.com" => [
+          size: 1024,
+          conn_opts: [
+            transport_opts: [
+              {:inet6, true}
+            ]
+          ]
+        ],
         Application.get_env(:belfrage, :philippa_endpoint) => [size: 1024],
         Application.get_env(:belfrage, :trevor_endpoint) => [size: 1024],
         Application.get_env(:belfrage, :walter_endpoint) => [size: 1024],
@@ -61,7 +82,8 @@ defmodule Belfrage.Supervisor do
           size: 1024,
           conn_opts: [
             transport_opts: [
-              {:verify, :verify_none}
+              {:verify, :verify_none},
+              {:inet6, true}
             ]
           ]
         ],
@@ -69,7 +91,8 @@ defmodule Belfrage.Supervisor do
           size: 512,
           conn_opts: [
             transport_opts: [
-              {:verify, :verify_none}
+              {:verify, :verify_none},
+              {:inet6, true}
             ]
           ]
         ],
@@ -77,7 +100,8 @@ defmodule Belfrage.Supervisor do
           size: 512,
           conn_opts: [
             transport_opts: [
-              {:verify, :verify_none}
+              {:verify, :verify_none},
+              {:inet6, true}
             ]
           ]
         ],

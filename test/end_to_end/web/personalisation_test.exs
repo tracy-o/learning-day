@@ -88,7 +88,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
       |> assert_successful_response()
 
     [cache_control] = get_resp_header(response, "cache-control")
-    assert cache_control =~ "public"
+    assert cache_control == "private"
 
     assert ["STALE"] = get_resp_header(response, "belfrage-cache-status")
   end

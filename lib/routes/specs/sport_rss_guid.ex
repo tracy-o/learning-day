@@ -2,9 +2,9 @@ defmodule Routes.Specs.SportRssGuid do
   def specs do
     %{
       owner: "#help-sport",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
       platform: Karanga,
-      pipeline: ["RssFeedRedirect", "SportRssFeedsPlatformDiscriminator"]
+      request_pipeline: ["RssFeedRedirect", "SportGuidRssFeedsPlatformDiscriminator"]
     }
   end
 end

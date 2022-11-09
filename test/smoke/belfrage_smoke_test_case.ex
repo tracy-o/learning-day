@@ -1,10 +1,10 @@
 defmodule Belfrage.SmokeTestCase do
   alias Test.Support.Helper
+  alias Belfrage.SmokeTestCase.Expectations
   import ExUnit.Assertions
 
-  @stack_ids Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
-  @expected_minimum_content_length 30
-  @redirects_statuses Application.get_env(:belfrage, :redirect_statuses)
+  @retry_times 2
+  @retry_interval 2_000
 
   def tld(host) do
     cond do
@@ -21,21 +21,33 @@ defmodule Belfrage.SmokeTestCase do
 
   def normalise_example({path, status_code}) when is_binary(path) and is_integer(status_code), do: {path, status_code}
 
-  def assert_smoke_response(test_properties, response, expected_status_code) do
-    assert response.status == expected_status_code
-
-    if expected_status_code in @redirects_statuses do
-      location_header = Helper.get_header(response.headers, "location")
-      assert not is_nil(location_header) and String.length(location_header) > 0
+  def truncate_path(path) do
+    if String.length(path) > 100 do
+      "#{String.slice(path, 0, 25)}...#{String.slice(path, -25, 25)}"
     else
-      assert not is_nil(response.body) and String.length(response.body) > @expected_minimum_content_length
+      path
     end
+  end
 
-    refute {"belfrage-cache-status", "STALE"} in response.headers
+  def retry_route(endpoint, path, spec, retry_check) do
+    do_retry({endpoint, path, spec}, retry_check, @retry_times)
+  end
 
-    expected_stack_id_header = Map.get(@stack_ids, test_properties.target)
+  defp do_retry({endpoint, path, spec}, retry_check, times) do
+    with {:ok, resp} <- Helper.get_route(endpoint, path, spec),
+         :ok <- retry_check.(resp) do
+      {:ok, resp}
+    else
+      {:error, reason} ->
+        if times > 0 do
+          Process.sleep(@retry_interval)
 
-    assert Helper.header_item_exists(response.headers, expected_stack_id_header)
+          IO.puts("[🐡] error: #{inspect(reason)}, retry #{times + 1 - @retry_times}/#{@retry_times}: #{path}")
+          do_retry({endpoint, path, spec}, retry_check, times - 1)
+        else
+          {:error, reason}
+        end
+    end
   end
 
   defmacro __using__(
@@ -46,7 +58,9 @@ defmodule Belfrage.SmokeTestCase do
     quote do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
-      import Belfrage.SmokeTestCase, only: [tld: 1, targets_for: 1, normalise_example: 1, assert_smoke_response: 3]
+
+      import Belfrage.SmokeTestCase,
+        only: [truncate_path: 1, tld: 1, targets_for: 1, normalise_example: 1, retry_route: 4]
 
       @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
@@ -68,34 +82,29 @@ defmodule Belfrage.SmokeTestCase do
 
             @tag route: @route_matcher
             @tag stack: @target
-            test "#{path}", context do
-              header_id = Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping][@target]
+            test "#{truncate_path(path)}", context do
+              test_properties = %{
+                expected_status: @expected_status_code,
+                matcher: @matcher_spec,
+                smoke_env: @smoke_env,
+                target: @target,
+                host: @host,
+                tld: tld(@host)
+              }
 
-              case Helper.get_route(@host, @path, @matcher_spec.using) do
+              retry_check = fn resp ->
+                Expectations.expect_response(resp, test_properties)
+              end
+
+              case retry_route(@host, @path, @matcher_spec.using, retry_check) do
                 {:ok, resp} ->
-                  cond do
-                    @smoke_env == "live" and @matcher_spec.only_on == "test" ->
-                      assert resp.status == 404
-                      assert Helper.header_item_exists(resp.headers, header_id)
+                  assert true
 
-                    true ->
-                      test_properties = %{
-                        using: @matcher_spec.using,
-                        smoke_env: @smoke_env,
-                        target: @target,
-                        host: @host,
-                        tld: tld(@host)
-                      }
-
-                      assert_smoke_response(
-                        test_properties,
-                        resp,
-                        @expected_status_code
-                      )
-                  end
+                {:error, reason} when is_binary(reason) ->
+                  assert false, reason
 
                 {:error, reason} ->
-                  assert false
+                  assert false, inspect(reason)
               end
             end
           end

@@ -58,13 +58,17 @@ defmodule Test.Support.Helper do
   end
 
   def get_route(endpoint, path, "WorldService" <> _language) do
-    host_header =
-      case String.contains?(endpoint, ".test.") do
-        true -> "www.test.bbc.com"
-        false -> "www.bbc.com"
-      end
+    if String.ends_with?(path, "/rss.xml") do
+      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"}])
+    else
+      host_header =
+        case String.contains?(endpoint, ".test.") do
+          true -> "www.test.bbc.com"
+          false -> "www.bbc.com"
+        end
 
-    request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+      request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+    end
   end
 
   def get_route(endpoint, path, "UploaderWorldService") do
@@ -91,10 +95,18 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
   end
 
+  def get_route(endpoint, path, "NewsroundLegacy") do
+    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
+  end
+
   def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
 
   def get_route(endpoint, path) do
-    request_route(endpoint, path, [{"x-forwarded-host", endpoint}])
+    if String.ends_with?(path, "/rss.xml") do
+      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"}])
+    else
+      request_route(endpoint, path, [{"x-forwarded-host", endpoint}])
+    end
   end
 
   defp request_route(endpoint, path, headers) do

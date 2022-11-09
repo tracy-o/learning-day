@@ -12,7 +12,7 @@ defmodule Belfrage.PersonalisationTest do
       owner: "An owner",
       runbook: "A run book",
       platform: Webcore,
-      pipeline: ["a", "really", "long", "pipeline"]
+      request_pipeline: ["a", "really", "long", "pipeline"]
     }
 
     test "sets :personalised_route to true when personalisation is on" do

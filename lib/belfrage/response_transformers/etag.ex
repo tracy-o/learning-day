@@ -1,6 +1,6 @@
 defmodule Belfrage.ResponseTransformers.Etag do
   alias Belfrage.Struct
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Transformer
 
   @doc """
   Etag support is specified per route spec by the "etag" field.
@@ -12,14 +12,17 @@ defmodule Belfrage.ResponseTransformers.Etag do
   add an "etag" response header with a value equal to the generated etag.
   """
   @impl true
-  def call(struct = %Struct{private: %Struct.Private{etag: true}}) do
-    struct.response.body
-    |> generate_etag()
-    |> add_etag_header(struct)
+  def call(rest, struct = %Struct{private: %Struct.Private{etag: true}}) do
+    struct =
+      struct.response.body
+      |> generate_etag()
+      |> add_etag_header(struct)
+
+    then_do(rest, struct)
   end
 
   @impl true
-  def call(struct = %Struct{}), do: struct
+  def call(rest, struct = %Struct{}), do: then_do(rest, struct)
 
   defp generate_etag(binary) do
     etag =

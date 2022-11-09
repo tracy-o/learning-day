@@ -45,7 +45,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
       "WorldServiceTajik" => [
         "test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp\n\n```Expected `location` response header to be set for world service redirect.\n```",
         "test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json\n\n```Expected `location` response header to be set for world service redirect.\n```",
-        "test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik\n\n```Expected `location` response header to be set for world service redirect.\n```"
+        "test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik\n\n```Expected `location` response header to be set for world service redirect.\n```"
       ]
     }
 
@@ -83,5 +83,21 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
                  "{\"attachments\":[{\"blocks\":[{\"block_id\":\"smoke_test_failure_output\",\"text\":{\"text\":\"test ScotlandHomePage /scotland against test belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test cedric-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test bruce-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\",\"type\":\"mrkdwn\"},\"type\":\"section\"},{\"elements\":[{\"style\":\"primary\",\"text\":{\"emoji\":true,\"text\":\"Customise slack channel\",\"type\":\"plain_text\"},\"type\":\"button\",\"url\":\"https://github.com/bbc/belfrage/wiki/Direct-smoke-test-failures-to-your-own-slack-channels\"}],\"type\":\"actions\"}]}],\"channel\":\"belfrage-smoke-tests\",\"text\":\"*ScotlandHomePage - Belfrage Smoke Test Failures (3 total)*\"}"
              }
            ] == ReportSmokeTestResults.broadcast_results_to_teams(formatted_messages, slack_auth_token)
+  end
+
+  test "notify_main_channel/1", %{output_with_failures: output} do
+    slack_auth_token = "foobar"
+    slack_channel = "team-belfrage"
+
+    assert [
+             %Belfrage.Clients.HTTP.Request{
+               headers: %{"authorization" => "Bearer foobar", "content-type" => "application/json"},
+               method: :post,
+               timeout: 6000,
+               url: "https://slack.com/api/chat.postMessage",
+               payload:
+                 ~s|{"blocks":[{"text":{"text":":dash: *Smoke Test Failure: 3/6* (fallbacks=0) :dash:\\n\\nfor details see <#C029V08H8NB>","type":"mrkdwn"},"type":"section"}],"channel":"#{slack_channel}"}|
+             }
+           ] == ReportSmokeTestResults.notify_main_channel(output, slack_auth_token)
   end
 end

@@ -4,14 +4,17 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   clearly bad behaviour for Belfrage.
   """
   alias Belfrage.Struct
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Transformer
 
   @impl true
-  def call(struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
-    Map.put(struct, :response, %Struct.Response{
-      response
-      | headers: clean_headers(response_headers)
-    })
+  def call(rest, struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
+    struct =
+      Map.put(struct, :response, %Struct.Response{
+        response
+        | headers: clean_headers(response_headers)
+      })
+
+    then_do(rest, struct)
   end
 
   @doc ~S"""
