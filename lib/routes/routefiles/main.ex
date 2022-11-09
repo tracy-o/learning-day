@@ -2723,8 +2723,8 @@ defroutefile "Main" do
   handle "/newsround/av/:id", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", only_on: "test", examples: ["/newsround/61545299"]
   handle "/newsround", using: "NewsroundHomePage", only_on: "test", examples: ["/newsround"]
-  handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
-  handle "/newsround/*any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
+  handle "/newsround", using: "NewsroundLegacy", only_on: "live", examples: ["/newsround"]
+  handle "/newsround/*any", using: "NewsroundLegacy", only_on: "live", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299", "/newsround/av/43245617"]  # Use Morph as a catch-all
 
   handle "/schoolreport/*any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
