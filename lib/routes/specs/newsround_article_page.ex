@@ -4,7 +4,7 @@ defmodule Routes.Specs.NewsroundArticlePage do
       owner: "childrensfutureweb@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
       platform: Webcore,
-      pipeline: ["ComToUKRedirect"]
+      request_pipeline: ["ComToUKRedirect"]
     }
   end
 end
