@@ -2713,7 +2713,7 @@ defroutefile "Main" do
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*any", using: "Archive", examples: []
 
-# Newsround
+  # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
@@ -2726,8 +2726,10 @@ defroutefile "Main" do
   handle "/newsround", using: "NewsroundLegacy", examples: ["/newsround"]
   handle "/newsround/*any", using: "NewsroundLegacy", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299"]  # Use Morph as a catch-all
 
-  handle "/schoolreport/*_any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
+  handle "/schoolreport/*any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
+  handle "/wide/*any", using: "Wide", examples: []
+  
   handle "/archivist/*any", using: "Archivist", examples: []
 
   # TODO /proms/extra
