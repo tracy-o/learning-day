@@ -629,6 +629,12 @@ defroutefile "Main" do
     return_404 if: true
   end
 
+  # Trial news assets setup for an MVT AA test experiment
+  handle "/news/uk-63465237", using: "NewsArticleMvt", examples: ["/news/uk-63465237"]
+  handle "/news/uk-politics-63478120", using: "NewsArticleMvt", examples: ["/news/uk-politics-63478120"]
+  handle "/news/uk-england-london-63445355", using: "NewsArticleMvt", examples: ["/news/uk-england-london-63445355"]
+  handle "/news/business-63412380", using: "NewsArticleMvt", examples: ["/news/business-63412380"]
+
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
 
