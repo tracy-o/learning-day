@@ -31,7 +31,7 @@ defmodule Belfrage.Services.Webcore do
 
           :telemetry.execute([:belfrage, :platform, :response], %{}, %{
             platform: "Webcore",
-            status_code: "#{status_code}",
+            status_code: status_code,
             route_spec: private.route_state_id
           })
 
