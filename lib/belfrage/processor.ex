@@ -30,6 +30,7 @@ defmodule Belfrage.Processor do
       &Language.add_signature/1,
       &Mvt.Mapper.map/1,
       &Mvt.Headers.remove_original_headers/1,
+      &Belfrage.Xray.Enable.call/1,
       &generate_request_hash/1
     ]
 
