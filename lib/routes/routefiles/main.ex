@@ -2729,7 +2729,7 @@ defroutefile "Main" do
   handle "/schoolreport/*any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
   handle "/wide/*any", using: "Wide", examples: []
-  
+
   handle "/archivist/*any", using: "Archivist", examples: []
 
   # TODO /proms/extra
