@@ -19,6 +19,12 @@ defmodule EndToEnd.XrayTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
+  @http_response %HTTP.Response{
+    headers: %{"cache-control" => "public, max-age=60"},
+    status_code: 200,
+    body: ""
+  }
+
   setup do
     :ets.delete_all_objects(:cache)
     :ok
@@ -30,7 +36,7 @@ defmodule EndToEnd.XrayTest do
       :ok
     end
 
-    test "a webcore.request.stop event is emmited (triggers subsegment creation)" do
+    test "a webcore.request.stop event is emitted (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
         {:ok, @lambda_response}
@@ -69,12 +75,7 @@ defmodule EndToEnd.XrayTest do
         assert String.contains?(headers["x-amzn-trace-id"], "Root=")
         assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
 
-        {:ok,
-         %HTTP.Response{
-           headers: %{"cache-control" => "public, max-age=60"},
-           status_code: 200,
-           body: ""
-         }}
+        {:ok, @http_response}
       end)
 
       conn =
@@ -168,6 +169,25 @@ defmodule EndToEnd.XrayTest do
            Supervisor.which_children(AwsExRay.Client.UDPClientSupervisor),
          {:state, _pid, [udp_client_pid], _, _, _, _, _, :lifo} <- :sys.get_state(poolboy_pid) do
       udp_client_pid
+    end
+  end
+
+  describe "hitting route which is not have fabl or webcore as platform" do
+    setup do
+      start_supervised!({RouteState, "ProxyPass"})
+      :ok
+    end
+
+    test "no `x-amzn-trace-id` header is sent downstream" do
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn %HTTP.Request{headers: headers}, :OriginSimulator ->
+        refute Map.has_key?(headers, "x-amzn-trace-id")
+
+        {:ok, @http_response}
+      end)
+
+      conn = conn(:get, "/proxy-pass") |> Router.call([])
+      {200, _, _} = sent_resp(conn)
     end
   end
 end
