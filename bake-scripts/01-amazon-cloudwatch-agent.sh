@@ -57,6 +57,12 @@ cat > /etc/cloudwatch-agent-config.json <<EOF
       },
       "net": {
         "measurement": [
+          "bytes_recv",
+          "bytes_sent",
+          "drop_in",
+          "drop_out",
+          "err_in",
+          "err_out",
           "packets_recv",
           "packets_sent"
         ],
