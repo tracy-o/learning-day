@@ -194,7 +194,7 @@ defmodule NonUtf8QueryStringTest do
 
     conn =
       :get
-      |> conn("/200-ok-response?query=%ED%95%B4%EC")
+      |> conn(build_request_uri("/200-ok-response?query=%ED%95%B4%EC"))
       |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)

@@ -140,7 +140,7 @@ defmodule EndToEnd.PlatformSelectionTest do
       )
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, build_request_uri(path: "/platform-selection-with-selector"))
         |> Router.call([])
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
