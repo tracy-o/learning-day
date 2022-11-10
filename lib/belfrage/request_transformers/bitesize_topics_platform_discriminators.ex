@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
     "z82hsbk",
     "zwv39j6",
     "zhtcvk7",
-    "zgdmsbk",
+    "zgdmsbk"
   ]
 
   @webcore_live_ids [
