@@ -979,6 +979,7 @@ defroutefile "Sport" do
   ## Sport BBC Live - Webcore Football Live - TIPO IDs
   handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
     return_404 if: [
+      !String.match?(conn.query_params["post"] || "", ~r/^[(asset:),a-z, 0-9, :, -]{42}/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
       !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
     ]
@@ -989,6 +990,7 @@ defroutefile "Sport" do
 
   handle "/sport/app-webview/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
     return_404 if: [
+      !String.match?(conn.query_params["post"] || "", ~r/^[(asset:),a-z, 0-9, :, -]{42}/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
       !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
     ]
