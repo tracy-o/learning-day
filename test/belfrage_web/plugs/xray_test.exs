@@ -6,16 +6,21 @@ defmodule BelfrageWeb.Plugs.XrayTest do
   import Test.Support.Helper
 
   alias BelfrageWeb.Plugs
-  alias AwsExRay.Record.HTTPRequest
+  alias AwsExRay.Record.{HTTPRequest, HTTPResponse}
+
+  alias Belfrage.Struct
 
   describe "call/2 when tracing and no existing 'x-amzn-trace-id' header" do
     setup do
+      struct = Struct.add(%Struct{}, :request, %{xray_segment: :exists})
+
       conn =
-        conn(:get, "/some/route")
+        conn(:get, "/fabl/xray")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
+        |> Plug.Conn.assign(:struct, struct)
 
       %{conn: conn}
     end
@@ -46,12 +51,12 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert request == %HTTPRequest{
                segment_type: :segment,
                method: "GET",
-               url: "/some/route",
+               url: "/fabl/xray"
                user_agent: "Mozilla/5.0"
              }
     end
 
-    test "when response had been sent, finishes tracing", %{conn: conn} do
+    test "when response sent, finishes tracing", %{conn: conn} do
       conn =
         conn
         |> resp(200, "OK")
@@ -60,7 +65,16 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert conn.assigns[:xray_segment].end_time > 0
     end
 
-    test "when response had been sent, sends message to client", %{conn: conn} do
+    test "when response sent, sets http response", %{conn: conn} do
+      conn =
+        conn
+        |> resp(200, "OK")
+        |> send_resp()
+
+      assert %HTTPResponse{status: 200, length: 0} = conn.assigns[:xray_segment].http.response
+    end
+
+    test "when response sent, sends message to client", %{conn: conn} do
       conn
       |> resp(200, "OK")
       |> send_resp()
@@ -96,6 +110,46 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
     test "X-Ray segment name in conn matches env stack id", %{conn: conn} do
       assert conn.assigns[:xray_segment].name == "joan-belfrage"
+    end
+  end
+
+  describe "call/2 when `xray_enabled: false`, when response sent" do
+    setup do
+      struct = Struct.add(%Struct{}, :request, %{xray_segment: nil})
+
+      conn =
+        conn(:get, "/fabl/xray")
+        |> Plugs.RequestId.call([])
+        |> Plugs.Xray.call(xray: MockXray)
+        |> Plug.Conn.assign(:struct, struct)
+
+      %{conn: conn}
+    end
+
+    test "segment does not finish tracing", %{conn: conn} do
+      conn =
+        conn
+        |> resp(200, "OK")
+        |> send_resp()
+
+      assert conn.assigns[:xray_segment].end_time == 0.0
+    end
+
+    test "HTTP response is not set", %{conn: conn} do
+      conn =
+        conn
+        |> resp(200, "OK")
+        |> send_resp()
+
+      refute conn.assigns[:xray_segment].http.response
+    end
+
+    test "no xray data is sent to the xray API client", %{conn: conn} do
+      conn
+      |> resp(200, "OK")
+      |> send_resp()
+
+      refute_received {:mock_xray_client_data, _data}
     end
   end
 
@@ -306,7 +360,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
   end
 
   defp make_request_with(headers) do
-    conn = conn(:get, "/some/route")
+    conn = conn(:get, "/fabl/xray")
 
     Enum.reduce(headers, conn, fn [k, v], conn -> Plug.Conn.put_req_header(conn, k, v) end)
     |> Plugs.RequestId.call([])
