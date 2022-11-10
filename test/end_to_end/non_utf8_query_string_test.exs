@@ -5,7 +5,7 @@ defmodule NonUtf8QueryStringTest do
   alias Belfrage.{AWS, RouteState}
   alias Belfrage.Clients.{HTTP, HTTPMock, Lambda, LambdaMock}
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri:1, set_env: 2]
+  import Test.Support.Helper, only: [build_request_uri: 1, set_env: 2]
 
   @moduletag :end_to_end
 
