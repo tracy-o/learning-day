@@ -59,7 +59,7 @@ defmodule BelfrageWeb.Router do
     |> send_resp(204, "")
   end
 
-  options "/wc-data/*_any" do
+  options "/wc-data/*any" do
     conn
     |> put_resp_header("access-control-allow-methods", "GET, OPTIONS")
     |> put_resp_header("access-control-allow-origin", "*")

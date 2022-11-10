@@ -45,7 +45,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
       "WorldServiceTajik" => [
         "test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp\n\n```Expected `location` response header to be set for world service redirect.\n```",
         "test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json\n\n```Expected `location` response header to be set for world service redirect.\n```",
-        "test WorldServiceTajik /tajik/*_any against test bruce-belfrage /tajik\n\n```Expected `location` response header to be set for world service redirect.\n```"
+        "test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik\n\n```Expected `location` response header to be set for world service redirect.\n```"
       ]
     }
 

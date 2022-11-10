@@ -95,6 +95,10 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
   end
 
+  def get_route(endpoint, path, "NewsroundLegacy") do
+    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
+  end
+
   def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
 
   def get_route(endpoint, path) do

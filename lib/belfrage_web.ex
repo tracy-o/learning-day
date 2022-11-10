@@ -1,7 +1,7 @@
 defmodule BelfrageWeb do
   alias BelfrageWeb.{StructAdapter, Response}
   alias Plug.Conn
-  alias Belfrage.Metrics.LatencyMonitor
+  alias Belfrage.{Metrics.LatencyMonitor, Struct}
 
   @doc """
   Given an id corresponding to a route spec ID and a Conn:
@@ -74,14 +74,20 @@ defmodule BelfrageWeb do
         |> StructAdapter.Request.adapt()
         |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
-      id = build_route_state_id(id, platform_selector, struct.request)
+      case build_route_state_id(id, platform_selector, struct.request) do
+        {:ok, route_state_id} ->
+          struct = StructAdapter.Private.adapt(struct, conn.private, route_state_id)
 
-      struct = StructAdapter.Private.adapt(struct, conn.private, id)
+          conn
+          |> Conn.assign(:route_spec, id)
+          |> Conn.assign(:struct, Belfrage.handle(struct))
+          |> Response.put()
 
-      conn
-      |> Conn.assign(:route_spec, id)
-      |> Conn.assign(:struct, Belfrage.handle(struct))
-      |> Response.put()
+        {:error, status_code} ->
+          conn
+          |> Conn.assign(:struct, Struct.put_status(%Struct{}, status_code))
+          |> Response.put()
+      end
     catch
       # Unwrap an internal Belfrage error to extract %Struct{} from it
       _, error = %Belfrage.WrapperError{} ->
@@ -116,24 +122,12 @@ defmodule BelfrageWeb do
   # A route state id is "incomplete" if it does
   # not have a Platform suffix.
   defp build_route_state_id(ids, platform_selector, request) when is_list(ids) do
-    Enum.map(ids, &build_route_state_id(&1, platform_selector, request))
+    {:ok, Enum.map(ids, &build_route_state_id(&1, platform_selector, request))}
   end
 
   defp build_route_state_id(route_state_id, platform_selector, request) do
-    "#{route_state_id}.#{build_route_state_id(platform_selector, request)}"
-  end
-
-  # Here we iterate through a list of Platform strings, which
-  # are used to create function clauses that return the Platform
-  # string if the first argument to the function clause matches
-  # the said Platform.
-  for platform <- Routes.Platforms.list() do
-    defp build_route_state_id(unquote(platform), _request), do: unquote(platform)
-  end
-
-  defp build_route_state_id(selector, request) do
-    selector
-    |> Routes.Platforms.Selector.call(request)
-    |> Macro.to_string()
+    with {:ok, platform} <- Routes.Platforms.Selector.call(platform_selector, request) do
+      {:ok, "#{route_state_id}.#{platform}"}
+    end
   end
 end

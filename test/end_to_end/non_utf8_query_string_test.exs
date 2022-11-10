@@ -2,10 +2,10 @@ defmodule NonUtf8QueryStringTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
-  alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
+  alias Belfrage.{AWS, RouteState}
+  alias Belfrage.Clients.{HTTP, HTTPMock, Lambda, LambdaMock}
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
+  import Test.Support.Helper, only: [build_request_uri:1, set_env: 2]
 
   @moduletag :end_to_end
 
@@ -185,5 +185,19 @@ defmodule NonUtf8QueryStringTest do
 
     {status, _headers, _body} = sent_resp(conn)
     assert status == 200
+  end
+
+  test "invalid string" do
+    start_supervised!({RouteState, "SomeRouteState"})
+    set_env(:lambda_client, Lambda)
+    set_env(:aws, AWS)
+
+    conn =
+      :get
+      |> conn("/200-ok-response?query=%ED%95%B4%EC")
+      |> Router.call([])
+
+    {status, _headers, _body} = sent_resp(conn)
+    assert status == 404
   end
 end
