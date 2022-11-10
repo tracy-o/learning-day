@@ -15,10 +15,15 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
 
   @webcore_test_ids [
     "z82hsbk",
-    "zwv39j6"
+    "zwv39j6",
+    "zhtcvk7",
+    "zgdmsbk",
   ]
 
-  @webcore_live_ids []
+  @webcore_live_ids [
+    "zhtcvk7",
+    "zgdmsbk"
+  ]
 
   def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
     then_do(rest, maybe_update_origin(id, struct))
