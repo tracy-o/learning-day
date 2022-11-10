@@ -76,7 +76,7 @@ defmodule EndToEnd.PlatformSelectionTest do
             {:ok,
              %HTTP.Response{
                status_code: 200,
-               body: "{\"data\": {\"section\": \"business\", \"assetType\": \"#{asset_type}\"}}"
+               body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
              }}
           end
         )
@@ -119,7 +119,48 @@ defmodule EndToEnd.PlatformSelectionTest do
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"data\": {\"section\": \"business\", \"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+             body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+           }}
+        end
+      )
+      |> expect(
+        :execute,
+        fn %HTTP.Request{
+             method: :get,
+             url: ^mozart_url
+           },
+           :MozartNews ->
+          {:ok,
+           %HTTP.Response{
+             status_code: 200,
+             body: "<h1>Hello from MozartNews!</h1>"
+           }}
+        end
+      )
+
+      conn =
+        conn(:get, "/platform-selection-with-selector")
+        |> Router.call([])
+
+      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
+    end
+
+    test ~s(MozartNews platform is used when 404 response is returned) do
+      ares_url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+
+      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
+
+      HTTPMock
+      |> expect(
+        :execute,
+        fn %HTTP.Request{
+             method: :get,
+             url: ^ares_url
+           },
+           :Fabl ->
+          {:ok,
+           %HTTP.Response{
+             status_code: 404
            }}
         end
       )
@@ -147,30 +188,24 @@ defmodule EndToEnd.PlatformSelectionTest do
 
     test "When an asset type cannot be retrieved" do
       conn = conn(:get, "/platform-selection-with-selector")
+      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
-      assert_raise Plug.Conn.WrapperError,
-                   "** (RuntimeError) Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /platform-selection-with-selector, reason: {:ok, %Belfrage.Clients.HTTP.Response{body: nil, headers: %{}, status_code: 500}}}",
-                   fn ->
-                     url =
-                       "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      HTTPMock
+      |> expect(
+        :execute,
+        fn %HTTP.Request{
+             method: :get,
+             url: ^url
+           },
+           :Fabl ->
+          {:ok,
+           %HTTP.Response{
+             status_code: 500
+           }}
+        end
+      )
 
-                     HTTPMock
-                     |> expect(
-                       :execute,
-                       fn %HTTP.Request{
-                            method: :get,
-                            url: ^url
-                          },
-                          :Fabl ->
-                         {:ok,
-                          %HTTP.Response{
-                            status_code: 500
-                          }}
-                       end
-                     )
-
-                     Router.call(conn, [])
-                   end
+      Router.call(conn, [])
 
       assert {500, _headers, _body} = sent_resp(conn)
     end
