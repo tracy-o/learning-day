@@ -2,8 +2,8 @@ defmodule NonUtf8QueryStringTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.{AWS, RouteState}
-  alias Belfrage.Clients.{HTTP, HTTPMock, Lambda, LambdaMock}
+  alias Belfrage.RouteState
+  alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [build_request_uri: 1, set_env: 2]
 
