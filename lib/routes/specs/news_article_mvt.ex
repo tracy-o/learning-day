@@ -6,7 +6,7 @@ defmodule Routes.Specs.NewsArticleMvt do
       platform: Webcore,
       circuit_breaker_error_threshold: 1_000,
       mvt_project_id: 1,
-      request_pipeline: ["ProxyOnJoan", "NewsArticleValidator", "ObitMode"]
+      request_pipeline: ["NewsArticleValidator", "ObitMode"]
     }
   end
 end
