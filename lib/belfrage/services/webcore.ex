@@ -8,6 +8,7 @@ defmodule Belfrage.Services.Webcore do
   alias Belfrage.Metrics.LatencyMonitor
 
   @behaviour Service
+  @lambda_client Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
 
   @impl Service
   def dispatch(struct = %Struct{private: private = %Private{}}) do
@@ -27,15 +28,23 @@ defmodule Belfrage.Services.Webcore do
         {:error, error_code} ->
           Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.route_state_id})
 
-          {status_code, body} = status_from_error(error_code, private.preview_mode)
+          if error_code == :function_not_found && private.preview_mode == "on" do
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Webcore",
+              status_code: "404",
+              route_spec: private.route_state_id
+            })
 
-          :telemetry.execute([:belfrage, :platform, :response], %{}, %{
-            platform: "Webcore",
-            status_code: status_code,
-            route_spec: private.route_state_id
-          })
+            %Response{http_status: 404, body: "404 - not found"}
+          else
+            :telemetry.execute([:belfrage, :platform, :response], %{}, %{
+              platform: "Webcore",
+              status_code: "500",
+              route_spec: private.route_state_id
+            })
 
-          %Response{http_status: status_code, body: body}
+            %Response{http_status: 500}
+          end
       end
 
     struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
@@ -49,7 +58,7 @@ defmodule Belfrage.Services.Webcore do
     }
 
     Metrics.duration(~w(webcore request)a, metadata, fn ->
-      lambda_client().call(
+      @lambda_client.call(
         Webcore.Credentials.get(),
         private.origin,
         Webcore.Request.build(struct),
@@ -97,12 +106,4 @@ defmodule Belfrage.Services.Webcore do
 
     {:error, :invalid_web_core_contract}
   end
-
-  defp lambda_client(), do: Application.get_env(:belfrage, :lambda_client, Belfrage.Clients.Lambda)
-
-  defp status_from_error(:invalid_query_string, _preview_mode), do: {404, "404 - not found"}
-
-  defp status_from_error(:function_not_found, "on"), do: {404, "404 - not found"}
-
-  defp status_from_error(_error, _preview_mode), do: {500, ""}
 end
