@@ -214,7 +214,7 @@ defmodule EndToEnd.CascadeTest do
 
   defp build_request(path \\ @cascade_path) do
     :get
-    |> conn(build_request_uri(path))
+    |> conn(build_request_uri(path: path))
     |> Map.put(:host, "www.bbc.co.uk")
   end
 

@@ -127,19 +127,19 @@ defmodule Test.Support.Helper do
 
   def build_request_uri(opts \\ [])
 
-  def build_request_uri(opts) when is_list(opts) do
+  def build_request_uri(opts) do
     default = [scheme: "https", host: "www.example.com", path: "/", query: ""]
     struct!(URI, Keyword.merge(default, opts))
   end
 
-  def build_request_uri(uri) when is_binary(uri) do
-    %URI{
-      scheme: "https",
-      path: "/",
-      host: "www.example.com"
-    }
-    |> URI.merge(URI.parse(uri))
-  end
+  # def build_request_uri(uri) when is_binary(uri) do
+  #   %URI{
+  #     scheme: "https",
+  #     path: "/",
+  #     host: "www.example.com"
+  #   }
+  #   |> URI.merge(URI.parse(uri))
+  # end
 
   def gtm_host("test"), do: "www.test.bbc.co.uk"
   def gtm_host("live"), do: "www.bbc.co.uk"
