@@ -162,19 +162,8 @@ defmodule BelfrageWeb.RouteMaster do
 
       def routes do
         @routes
-        |> Enum.flat_map(fn
-          {matcher, args = %{using: using}} when is_list(using) ->
-            Enum.map(using, fn route_state_id ->
-              args =
-                args
-                |> Map.put_new(:only_on, nil)
-                |> Map.put(:using, route_state_id)
-
-              {matcher, args}
-            end)
-
-          {route, args} ->
-            [{route, Map.put_new(args, :only_on, nil)}]
+        |> Enum.map(fn {route, args} ->
+          {route, Map.put_new(args, :only_on, nil)}
         end)
       end
     end
