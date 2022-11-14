@@ -15,7 +15,8 @@ defmodule Belfrage.Processor do
     Metrics,
     Mvt,
     Language,
-    WrapperError
+    WrapperError,
+    ServiceProvider
   }
 
   alias Struct.{Response, Private}
@@ -97,6 +98,14 @@ defmodule Belfrage.Processor do
       {:ok, struct} -> struct
       {:error, _struct, msg} -> raise "Request pipeline failure: #{msg}"
     end
+  end
+
+  def perform_call(struct = %Struct{response: %Struct.Response{http_status: code}}) when is_number(code) do
+    struct
+  end
+
+  def perform_call(struct = %Struct{private: %Struct.Private{origin: origin}}) do
+    ServiceProvider.service_for(origin).dispatch(struct)
   end
 
   def process_response_pipeline(struct = %Struct{}) do
