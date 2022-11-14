@@ -212,10 +212,8 @@ defmodule EndToEnd.CascadeTest do
     expect_no_request_to_origin(:mozart)
   end
 
-  defp build_request(path \\ @cascade_path) do
-    :get
-    |> conn(build_request_uri(path: path))
-    |> Map.put(:host, "www.bbc.co.uk")
+  defp build_request(route \\ @cascade_path) do
+    conn(:get, build_request_uri(host: "www.bbc.co.uk", path: route))
   end
 
   defp make_request(route \\ @cascade_path)

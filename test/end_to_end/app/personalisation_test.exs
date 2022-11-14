@@ -245,7 +245,8 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   defp build_request_to_non_personalised_route() do
     build_request(
-      "/app-request/sport-app-page", "page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+      "/app-request/sport-app-page",
+      "page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
     )
   end
 
