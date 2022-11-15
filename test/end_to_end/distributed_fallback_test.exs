@@ -4,7 +4,6 @@ defmodule EndToEnd.DistributedTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -53,7 +52,7 @@ defmodule EndToEnd.DistributedTest do
         :ok
       end)
 
-      conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
+      conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
       assert [request_hash] = get_resp_header(conn, "bsig")
 
       assert_received({:ccp_request_hash_stored, ^request_hash})
@@ -72,7 +71,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust")) |> Router.call([])
+      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
     end
   end
 
@@ -88,7 +87,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "belfrage-cache-bust"))
+      conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
       Router.call(conn, [])
     end
   end

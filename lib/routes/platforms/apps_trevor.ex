@@ -11,6 +11,6 @@ defmodule Routes.Platforms.AppsTrevor do
     }
   end
 
-  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["HTTPredirect", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

@@ -2,7 +2,6 @@ defmodule EndToEndTest.ComToUKRedirectTest do
   use ExUnit.Case, async: false
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -16,7 +15,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
   test "redirect to .co.uk when host is .com" do
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect"))
+      conn(:get, "/com-to-uk-redirect")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
       |> Router.call([])
 
@@ -27,7 +26,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
 
   test "redirect to .co.uk with correct query params" do
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect", query: "q=ruby&page=3&not_allowed=bar"))
+      conn(:get, "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
       |> Router.call([])
 
@@ -48,7 +47,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     end)
 
     conn =
-      conn(:get, build_request_uri(path: "/com-to-uk-redirect", query: "q=ruby&page=3&not_allowed=bar"))
+      conn(:get, "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.co.uk")
       |> Router.call([])
 

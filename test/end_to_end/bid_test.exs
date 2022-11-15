@@ -4,7 +4,6 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -28,7 +27,7 @@ defmodule BelfrageWeb.ResponseHeaders.BIDTest do
       {:ok, @lambda_response}
     end)
 
-    response_conn = conn(:get, build_request_uri(path: "/200-ok-response")) |> Router.call([])
+    response_conn = conn(:get, "/200-ok-response") |> Router.call([])
 
     assert {200, resp_headers, _body} = sent_resp(response_conn)
     assert {"bid", Application.get_env(:belfrage, :stack_id)} in resp_headers

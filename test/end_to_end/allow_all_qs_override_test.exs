@@ -4,7 +4,6 @@ defmodule AllowAllQsOverrideTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -34,7 +33,7 @@ defmodule AllowAllQsOverrideTest do
       {:ok, @http_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/moz", query: "a=bar&b=foo"))
+    conn = conn(:get, "/moz?a=bar&b=foo")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
@@ -61,7 +60,7 @@ defmodule AllowAllQsOverrideTest do
       {:ok, @http_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/moz", query: "a=bar&b=foo&only_allow_this_on_live=123"))
+    conn = conn(:get, "/moz?a=bar&b=foo&only_allow_this_on_live=123")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)

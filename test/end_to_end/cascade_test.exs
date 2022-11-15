@@ -2,7 +2,6 @@ defmodule EndToEnd.CascadeTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
   import Belfrage.Test.PersonalisationHelper
 
@@ -12,7 +11,7 @@ defmodule EndToEnd.CascadeTest do
   alias Plug.Conn
   alias Fixtures.AuthToken
 
-  @cascade_path "/cascade"
+  @cascade_route "/cascade"
 
   setup do
     start_supervised!({RouteState, "SomeMozartRouteState"})
@@ -63,7 +62,7 @@ defmodule EndToEnd.CascadeTest do
     # The `q` query parameter will cause different request hashes for requests to
     # Lambda and Mozart and so the corresponding responses will be cached
     # separately. This is because the parameter is only whiltelisted for Mozart.
-    route = @cascade_path <> "?q=foo"
+    route = @cascade_route <> "?q=foo"
 
     # Populate the cache with a response from Lambda
     expect_request_to_origin(:lambda, status: 200, body: "Cached Lambda response", cache_control: "public, max-age=60")
@@ -96,7 +95,7 @@ defmodule EndToEnd.CascadeTest do
 
     # Add a trailing slash to the request path to trigger a redirect by the
     # `TrailingSlashRedirector` plug
-    conn = make_request(@cascade_path <> "/")
+    conn = make_request(@cascade_route <> "/")
     assert conn.status == 301
   end
 
@@ -104,7 +103,7 @@ defmodule EndToEnd.CascadeTest do
     # The `q` query parameter will cause different request hashes for requests to
     # Lambda and Mozart and so the corresponding responses will be cached
     # separately. This is because the parameter is only whiltelisted for Mozart.
-    route = @cascade_path <> "?q=foo"
+    route = @cascade_route <> "?q=foo"
 
     # Populate the cache with a stale response from Lambda
     expect_request_to_origin(:lambda, status: 200, body: "Cached Lambda response", cache_control: "public, max-age=-1")
@@ -212,11 +211,13 @@ defmodule EndToEnd.CascadeTest do
     expect_no_request_to_origin(:mozart)
   end
 
-  defp build_request(route \\ @cascade_path) do
-    conn(:get, build_request_uri(host: "www.bbc.co.uk", path: route))
+  defp build_request(route \\ @cascade_route) do
+    :get
+    |> conn(route)
+    |> Map.put(:host, "www.bbc.co.uk")
   end
 
-  defp make_request(route \\ @cascade_path)
+  defp make_request(route \\ @cascade_route)
 
   defp make_request(conn = %Conn{}) do
     Router.call(conn, [])
