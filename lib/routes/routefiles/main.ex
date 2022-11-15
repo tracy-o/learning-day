@@ -629,12 +629,6 @@ defroutefile "Main" do
     return_404 if: true
   end
 
-  # Trial news assets setup for initial MVT test experiment
-  handle "/news/uk-63465237", using: "NewsArticleMvt", examples: ["/news/uk-63465237"]
-  handle "/news/uk-politics-63478120", using: "NewsArticleMvt", examples: ["/news/uk-politics-63478120"]
-  handle "/news/uk-england-london-63445355", using: "NewsArticleMvt", examples: ["/news/uk-england-london-63445355"]
-  handle "/news/business-63412380", using: "NewsArticleMvt", examples: ["/news/business-63412380"]
-
   handle "/news/:id.amp", using: "NewsAmp", examples: ["/news/business-58847275.amp"]
   handle "/news/:id.json", using: "NewsAmp", examples: ["/news/business-58847275.json"]
 
@@ -2697,6 +2691,12 @@ defroutefile "Main" do
 
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
+
+  # Trial news assets setup for initial MVT test experiment
+  handle "/news/articles/cn3zl2drk0ko", using: "NewsArticleMvt", examples: ["/news/articles/cn3zl2drk0ko"]
+  handle "/news/articles/cyxjrk98x59o", using: "NewsArticleMvt", examples: ["/news/articles/cyxjrk98x59o"]
+  handle "/news/articles/ce5108j80gpo", using: "NewsArticleMvt", examples: ["/news/articles/ce5108j80gpo"]
+  handle "/news/articles/ce4xrgggdvgo", using: "NewsArticleMvt", examples: ["/news/articles/ce4xrgggdvgo"]
 
   handle "/articles/:optimo_id", using: "StorytellingPage", examples: ["/articles/c1vy1zrejnno"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
