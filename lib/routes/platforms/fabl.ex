@@ -13,7 +13,7 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline("live") do
-    [:_routespec_pipeline_placeholder, "AppPersonalisation", "Personalisation", "CircuitBreaker"]
+    ["HTTPredirect", :_routespec_pipeline_placeholder, "AppPersonalisation", "Personalisation", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

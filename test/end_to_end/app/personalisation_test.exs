@@ -3,7 +3,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
-  import Test.Support.Helper, only: [set_environment: 1, build_request_uri: 1]
+  import Test.Support.Helper, only: [set_environment: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
@@ -235,18 +235,16 @@ defmodule EndToEnd.App.PersonalisationTest do
   end
 
   defp build_request(
-         path \\ "/app-request/p/sport-app-page",
-         query \\ "page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+         path \\ "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
        ) do
     :get
-    |> conn(build_request_uri(path: path, query: query))
+    |> conn(path)
     |> Map.put(:host, "news-app.bbc.co.uk")
   end
 
   defp build_request_to_non_personalised_route() do
     build_request(
-      "/app-request/sport-app-page",
-      "page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+      "/app-request/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
     )
   end
 

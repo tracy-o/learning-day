@@ -3,7 +3,6 @@ defmodule EndToEnd.VaryAllowHeadersTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -34,16 +33,12 @@ defmodule EndToEnd.VaryAllowHeadersTest do
     test "vary header contains allow headers" do
       headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
 
-      [vary_header] =
-        conn(:get, build_request_uri(path: "/route-allow-headers")) |> Router.call([]) |> get_resp_header("vary")
-
+      [vary_header] = conn(:get, "/route-allow-headers") |> Router.call([]) |> get_resp_header("vary")
       assert vary_header =~ ",#{headers_allowlist |> Enum.join(",")}"
     end
 
     test "vary header does not contain cookie" do
-      [vary_header] =
-        conn(:get, build_request_uri(path: "/route-allow-headers")) |> Router.call([]) |> get_resp_header("vary")
-
+      [vary_header] = conn(:get, "/route-allow-headers") |> Router.call([]) |> get_resp_header("vary")
       refute vary_header =~ ",cookie"
     end
 
@@ -52,13 +47,13 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
       for allow_header <- headers_allowlist do
         [request_hash1] =
-          conn(:get, build_request_uri(path: "/route-allow-headers"))
+          conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "foo")
           |> Router.call([])
           |> get_resp_header("bsig")
 
         [request_hash2] =
-          conn(:get, build_request_uri(path: "/route-allow-headers"))
+          conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "bar")
           |> Router.call([])
           |> get_resp_header("bsig")
@@ -72,13 +67,13 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
       for allow_header <- headers_allowlist do
         [request_hash1] =
-          conn(:get, build_request_uri(path: "/route-allow-headers"))
+          conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "the_same_foo")
           |> Router.call([])
           |> get_resp_header("bsig")
 
         [request_hash2] =
-          conn(:get, build_request_uri(path: "/route-allow-headers"))
+          conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "the_same_foo")
           |> Router.call([])
           |> get_resp_header("bsig")
@@ -89,13 +84,13 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
     test "request hash does not vary on cookie" do
       [request_hash1] =
-        conn(:get, build_request_uri(path: "/route-allow-headers"))
+        conn(:get, "/route-allow-headers")
         |> put_req_header("cookie", "foo")
         |> Router.call([])
         |> get_resp_header("bsig")
 
       [request_hash2] =
-        conn(:get, build_request_uri(path: "/route-allow-headers"))
+        conn(:get, "/route-allow-headers")
         |> put_req_header("cookie", "bar")
         |> Router.call([])
         |> get_resp_header("bsig")

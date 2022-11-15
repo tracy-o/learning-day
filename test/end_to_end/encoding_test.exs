@@ -4,7 +4,7 @@ defmodule ContentEncodingTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [assert_gzipped: 2, build_request_uri: 1]
+  import Test.Support.Helper, only: [assert_gzipped: 2]
 
   @moduletag :end_to_end
 
@@ -25,7 +25,7 @@ defmodule ContentEncodingTest do
        }}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/proxy-pass")) |> put_req_header("accept-encoding", "gzip, deflate, br")
+    conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "gzip, deflate, br")
     conn = Router.call(conn, [])
 
     assert {200, headers, compressed_body} = sent_resp(conn)
@@ -44,7 +44,7 @@ defmodule ContentEncodingTest do
        }}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/proxy-pass")) |> put_req_header("accept-encoding", "deflate, br")
+    conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "deflate, br")
     conn = Router.call(conn, [])
 
     assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
@@ -67,7 +67,7 @@ defmodule ContentEncodingTest do
     end
 
     test "the response is not encoded (when response is from origin)" do
-      conn = conn(:get, build_request_uri(path: "/proxy-pass"))
+      conn = conn(:get, "/proxy-pass")
       conn = Router.call(conn, [])
 
       assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
@@ -76,12 +76,12 @@ defmodule ContentEncodingTest do
 
     test "the response is not encoded (when response is from cache)" do
       # seed the cache
-      conn(:get, build_request_uri(path: "/proxy-pass"))
+      conn(:get, "/proxy-pass")
       |> put_req_header("accept-encoding", "deflate, br")
       |> Router.call([])
 
       conn =
-        conn(:get, build_request_uri(path: "/proxy-pass"))
+        conn(:get, "/proxy-pass")
         |> Router.call([])
 
       assert {200, _headers, "<p>content</p>"} = sent_resp(conn)

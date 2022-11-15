@@ -24,7 +24,7 @@ defmodule EndToEnd.NotModifiedResponseTest do
       end)
 
       conn =
-        conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
+        conn(:get, "http://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
       assert {status_code, headers, body} = sent_resp(conn)
@@ -55,13 +55,13 @@ defmodule EndToEnd.NotModifiedResponseTest do
       end)
 
       conn =
-        conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
+        conn(:get, "http://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
       assert ["MISS"] == get_resp_header(conn, "belfrage-cache-status")
 
       conn =
-        conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
+        conn(:get, "http://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
       assert ["MISS"] == get_resp_header(conn, "belfrage-cache-status")

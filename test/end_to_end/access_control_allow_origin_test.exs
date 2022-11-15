@@ -4,7 +4,6 @@ defmodule AccessControlAllowOriginTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -29,7 +28,7 @@ defmodule AccessControlAllowOriginTest do
     end)
 
     conn =
-      conn(:get, build_request_uri(path: "/200-ok-response"))
+      conn(:get, "/200-ok-response")
       |> put_req_header("x-bbc-edge-cdn", "1")
 
     conn = Router.call(conn, [])
@@ -44,7 +43,7 @@ defmodule AccessControlAllowOriginTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response"))
+    conn = conn(:get, "/200-ok-response")
 
     conn = Router.call(conn, [])
 

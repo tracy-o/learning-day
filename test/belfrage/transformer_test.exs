@@ -8,9 +8,9 @@ defmodule Belfrage.TransformerTest do
   test "when there are transformers in the list it will call the next one, seen via the reverse ordering in the debug pipeline trail" do
     stub_dial(:circuit_breaker, "false")
 
-    struct = %Struct{private: %Struct.Private{request_pipeline: ["CircuitBreaker"]}}
+    struct = %Struct{private: %Struct.Private{request_pipeline: ["HTTPredirect", "CircuitBreaker"]}}
 
-    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{request_pipeline_trail: ["CircuitBreaker"]}}} =
+    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{request_pipeline_trail: ["CircuitBreaker", "HTTPredirect"]}}} =
              Subject.then_do(struct.private.request_pipeline, struct)
   end
 

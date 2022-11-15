@@ -3,7 +3,6 @@ defmodule EndToEndTest.PrivateCacheControlTest do
   use Plug.Test
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   use Test.Support.Helper, :mox
 
@@ -37,7 +36,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response"))
+    conn = conn(:get, "/200-ok-response")
     conn = Router.call(conn, [])
 
     assert {200, headers, _body} = sent_resp(conn)
@@ -45,7 +44,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
   end
 
   test "when belfrage 404s, stale-while-revalidate is added to cache-control" do
-    conn = conn(:get, build_request_uri(path: "/this-is-a-404"))
+    conn = conn(:get, "/this-is-a-404")
     conn = Router.call(conn, [])
 
     assert {404, headers, _body} = sent_resp(conn)
@@ -58,7 +57,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
       {:ok, @lambda_private_error_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/downstream-broken"))
+    conn = conn(:get, "/downstream-broken")
     conn = Router.call(conn, [])
 
     assert {500, headers, _body} = sent_resp(conn)

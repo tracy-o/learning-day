@@ -5,7 +5,6 @@ defmodule NonUtf8QueryStringTest do
   alias Belfrage.RouteState
   alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -40,7 +39,7 @@ defmodule NonUtf8QueryStringTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "query=science%20caf%C3%A9"))
+    conn = conn(:get, "/200-ok-response?query=science%20caf%C3%A9")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
@@ -64,7 +63,7 @@ defmodule NonUtf8QueryStringTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "query=%E2%82%AC100"))
+    conn = conn(:get, "/200-ok-response?query=%E2%82%AC100")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
@@ -88,7 +87,7 @@ defmodule NonUtf8QueryStringTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "query"))
+    conn = conn(:get, "/200-ok-response?query")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
@@ -114,7 +113,7 @@ defmodule NonUtf8QueryStringTest do
 
     conn =
       :get
-      |> conn(build_request_uri(path: "/200-ok-response", query: "query=%f6"))
+      |> conn("/200-ok-response?query=%f6")
       |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)
@@ -124,7 +123,7 @@ defmodule NonUtf8QueryStringTest do
   test "path params with invalid utf chars result in 500 for requests to WebCore" do
     start_supervised!({RouteState, "SomeRouteState"})
 
-    conn = conn(:get, build_request_uri(path: "/format/rewrite/fo%a0"))
+    conn = conn(:get, "/format/rewrite/fo%a0")
 
     # Actually call ExAws to trigger the error on JSON-encoding the lambda
     # payload
@@ -156,7 +155,7 @@ defmodule NonUtf8QueryStringTest do
       {:ok, %HTTP.Response{status_code: 200, body: "OK"}}
     end)
 
-    conn = conn(:get, build_request_uri(path: "/fabl/fo%a0")) |> Router.call([])
+    conn = conn(:get, "/fabl/fo%a0") |> Router.call([])
     assert conn.status == 200
   end
 
@@ -180,7 +179,7 @@ defmodule NonUtf8QueryStringTest do
 
     conn =
       :get
-      |> conn(build_request_uri(path: "/200-ok-response", query: "query=%%E0%%"))
+      |> conn("/200-ok-response?query=%%E0%%")
       |> Router.call([])
 
     {status, _headers, _body} = sent_resp(conn)

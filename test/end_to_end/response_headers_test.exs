@@ -3,7 +3,6 @@ defmodule EndToEnd.ResponseHeadersTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.LambdaMock, RouteState}
@@ -19,7 +18,7 @@ defmodule EndToEnd.ResponseHeadersTest do
   describe "default response headers" do
     test "200 response" do
       stub_webcore_response(status_code: 200)
-      conn = call(build_request_uri(path: "/200-ok-response"))
+      conn = call("/200-ok-response")
 
       assert conn.status == 200
       assert conn.resp_body == "OK"
@@ -37,14 +36,14 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
     end
 
     test "404 response" do
-      conn = call(build_request_uri(path: "/premature-404"))
+      conn = call("/premature-404")
 
       assert conn.status == 404
       assert conn.resp_body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
@@ -63,7 +62,7 @@ defmodule EndToEnd.ResponseHeadersTest do
 
     test "500 response" do
       stub_webcore_response(status_code: 500)
-      conn = call(build_request_uri(path: "/200-ok-response"))
+      conn = call("/200-ok-response")
 
       assert conn.status == 500
       assert conn.resp_body == "OK"
@@ -81,7 +80,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers

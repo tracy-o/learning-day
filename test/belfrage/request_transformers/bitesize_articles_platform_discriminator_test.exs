@@ -11,8 +11,8 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminatorTest
       production_environment: "test"
     },
     request: %Struct.Request{
-      scheme: :https,
-      host: "https://www.bbc.co.uk",
+      scheme: :http,
+      host: "www.bbc.co.uk",
       path: "/_web_core",
       path_params: %{"id" => "zm8fhbk"}
     }
@@ -64,8 +64,8 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminatorTest
                  platform: Webcore
                },
                request: %Struct.Request{
-                 scheme: :https,
-                 host: "https://www.bbc.co.uk",
+                 scheme: :http,
+                 host: "www.bbc.co.uk",
                  path: "/_web_core",
                  path_params: %{"id" => "zm8fhbk"}
                }

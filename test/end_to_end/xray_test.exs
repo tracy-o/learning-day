@@ -4,7 +4,6 @@ defmodule EndToEnd.XrayTest do
   use Test.Support.Helper, :mox
 
   import Belfrage.Test.MetricsHelper
-  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTP, RouteState}
@@ -38,7 +37,7 @@ defmodule EndToEnd.XrayTest do
 
       assert {_event, %{start_time: _start_time, duration: _duration}, _metadata} =
                intercept_metric(~w(webcore request stop)a, fn ->
-                 conn(:get, build_request_uri(path: "/200-ok-response"))
+                 conn(:get, "/200-ok-response")
                  |> Router.call([])
                end)
     end
@@ -50,7 +49,7 @@ defmodule EndToEnd.XrayTest do
         {:ok, @lambda_response}
       end)
 
-      conn(:get, build_request_uri(path: "/200-ok-response"))
+      conn(:get, "/200-ok-response")
       |> Router.call([])
     end
   end
@@ -77,7 +76,7 @@ defmodule EndToEnd.XrayTest do
          }}
       end)
 
-      conn = conn(:get, build_request_uri(path: "/fabl/xray")) |> Router.call([])
+      conn = conn(:get, "/fabl/xray") |> Router.call([])
       {200, _, _} = sent_resp(conn)
     end
   end
