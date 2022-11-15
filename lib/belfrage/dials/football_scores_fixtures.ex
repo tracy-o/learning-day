@@ -1,4 +1,6 @@
 defmodule Belfrage.Dials.FootballScoresFixtures do
+  @moduledoc false
+
   @behaviour Belfrage.Dial
 
   @impl Belfrage.Dial
