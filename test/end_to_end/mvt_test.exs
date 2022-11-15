@@ -2,7 +2,7 @@ defmodule EndToEnd.MvtTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [set_environment: 1]
+  import Test.Support.Helper, only: [set_environment: 1, build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -59,7 +59,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour,mvt-sidebar")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> Router.call([])
@@ -74,7 +74,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-some_experiment")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
         |> Router.call([])
 
@@ -94,7 +94,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-wrong_response")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> Router.call([])
@@ -110,7 +110,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-some_experiment")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
         |> Router.call([])
 
@@ -130,7 +130,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> Router.call([])
@@ -145,7 +145,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-some_experiment")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
         |> Router.call([])
 
@@ -165,7 +165,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-wrong_response")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> Router.call([])
@@ -180,7 +180,7 @@ defmodule EndToEnd.MvtTest do
       expect_lambda_call(times_called: 1, vary_response: "mvt-wrong_response")
 
       response =
-        conn(:get, "/mvt")
+        conn(:get, build_request_uri(path: "/mvt"))
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
         |> Router.call([])
 
@@ -195,7 +195,7 @@ defmodule EndToEnd.MvtTest do
 
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
-    conn(:get, "/mvt")
+    conn(:get, build_request_uri(path: "/mvt"))
     |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
     |> Router.call([])
 
@@ -203,7 +203,7 @@ defmodule EndToEnd.MvtTest do
 
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
-    conn(:get, "/mvt")
+    conn(:get, build_request_uri(path: "/mvt"))
     |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
     |> Router.call([])
 
@@ -219,7 +219,7 @@ defmodule EndToEnd.MvtTest do
     end)
 
     response =
-      conn(:get, "/mvt")
+      conn(:get, build_request_uri(path: "/mvt"))
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
       |> put_req_header("bbc-mvt-2", "feature;sidebar;false")
       |> Router.call([])
@@ -238,7 +238,7 @@ defmodule EndToEnd.MvtTest do
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
     response =
-      conn(:get, "/mvt")
+      conn(:get, build_request_uri(path: "/mvt"))
       |> Router.call([])
 
     [vary_header] = get_resp_header(response, "vary")
@@ -250,7 +250,7 @@ defmodule EndToEnd.MvtTest do
     expect_lambda_call(times_called: 1, vary_response: "mvt-button_colour")
 
     response =
-      conn(:get, "/mvt")
+      conn(:get, build_request_uri(path: "/mvt"))
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
       |> Router.call([])
 
@@ -274,7 +274,7 @@ defmodule EndToEnd.MvtTest do
     )
 
     response =
-      conn(:get, "/mvt")
+      conn(:get, build_request_uri(path: "/mvt"))
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
       |> Router.call([])
 
@@ -295,7 +295,7 @@ defmodule EndToEnd.MvtTest do
     )
 
     response =
-      conn(:get, "/mvt")
+      conn(:get, build_request_uri(path: "/mvt"))
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
       |> Router.call([])
 

@@ -2,6 +2,7 @@ defmodule EndToEndTest.FormatRewriterTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -28,7 +29,7 @@ defmodule EndToEndTest.FormatRewriterTest do
     end
 
     test "router handles literal segment" do
-      resp_conn = conn(:get, "/200-ok-response") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/200-ok-response")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["200-ok-response"] == resp_conn.path_info
@@ -38,7 +39,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles identifier segment" do
       # /format/rewrite/:discipline route
-      resp_conn = conn(:get, "/format/rewrite/cricket") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/cricket")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "cricket"] == resp_conn.path_info
@@ -48,7 +49,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles identifier segment in the middle of path" do
       # /format/rewrite/:discipline/av route
-      resp_conn = conn(:get, "/format/rewrite/cricket/av") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/cricket/av")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "cricket", "av"] == resp_conn.path_info
@@ -58,7 +59,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles multiple identifier segments" do
       # /format/rewrite/:discipline/av/:team route
-      resp_conn = conn(:get, "/format/rewrite/cricket/av/india") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/cricket/av/india")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "cricket", "av", "india"] == resp_conn.path_info
@@ -86,7 +87,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles identifier segment" do
       # /format/rewrite/:discipline.app route
-      resp_conn = conn(:get, "/format/rewrite/cricket.app") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/cricket.app")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "cricket", ".app"] == resp_conn.path_info
@@ -96,7 +97,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles multiple identifier segments" do
       # /format/rewrite/:discipline/av/:team.app route
-      resp_conn = conn(:get, "/format/rewrite/cricket/av/india.app") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/cricket/av/india.app")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "cricket", "av", "india", ".app"] == resp_conn.path_info
@@ -124,7 +125,7 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles identifier segment" do
       # /format/rewrite/:discipline.app route
-      resp_conn = conn(:get, "/format/rewrite/athletics.200m.app") |> Router.call([])
+      resp_conn = conn(:get, build_request_uri(path: "/format/rewrite/athletics.200m.app")) |> Router.call([])
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "athletics.200m", ".app"] == resp_conn.path_info
@@ -134,7 +135,9 @@ defmodule EndToEndTest.FormatRewriterTest do
 
     test "router handles multiple identifier segments" do
       # /format/rewrite/:discipline/av/:team.app route
-      resp_conn = conn(:get, "/format/rewrite/athletics.200m/av/india.delhi.app") |> Router.call([])
+      resp_conn =
+        conn(:get, build_request_uri(path: "/format/rewrite/athletics.200m/av/india.delhi.app")) |> Router.call([])
+
       {matched_route, _matched_fun} = resp_conn.private.plug_route
 
       assert ["format", "rewrite", "athletics.200m", "av", "india.delhi", ".app"] == resp_conn.path_info

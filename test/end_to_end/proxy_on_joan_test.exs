@@ -5,7 +5,7 @@ defmodule EndToEnd.ProxyOnJoan do
   alias Belfrage.Clients.HTTPMock
   alias Belfrage.Clients.HTTP
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [set_stack_id: 1]
+  import Test.Support.Helper, only: [set_stack_id: 1, build_request_uri: 1]
 
   @lambda_response %{
     "headers" => %{
@@ -37,7 +37,7 @@ defmodule EndToEnd.ProxyOnJoan do
       url = "https://mozart-news.example.com:test/proxy-on-joan/49336140"
       HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: ^url}, _pool -> @http_response end)
 
-      conn(:get, "/proxy-on-joan/49336140")
+      conn(:get, build_request_uri(path: "/proxy-on-joan/49336140"))
       |> Router.call([])
     end
   end
@@ -54,7 +54,7 @@ defmodule EndToEnd.ProxyOnJoan do
         {:ok, @lambda_response}
       end)
 
-      conn(:get, "/proxy-on-joan/49336140")
+      conn(:get, build_request_uri(path: "/proxy-on-joan/49336140"))
       |> Router.call([])
     end
   end

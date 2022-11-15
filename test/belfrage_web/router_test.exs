@@ -3,13 +3,14 @@ defmodule BelfrageWeb.RouterTest do
   use Plug.Test
 
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
 
   describe "OPTIONS" do
     Enum.each(["/wc-data", "/wc-data/container", "/wc-data/p/container"], fn path ->
       test "will return a 204 for #{path}" do
-        conn = conn(:options, unquote(path))
+        conn = conn(:options, build_request_uri(path: unquote(path)))
         conn = Router.call(conn, [])
 
         assert conn.status == 204
@@ -25,7 +26,7 @@ defmodule BelfrageWeb.RouterTest do
     end)
 
     test "will return a 405" do
-      conn = conn(:options, "/")
+      conn = conn(:options, build_request_uri(path: "/"))
       conn = Router.call(conn, [])
 
       assert conn.status == 405
@@ -35,7 +36,7 @@ defmodule BelfrageWeb.RouterTest do
 
   describe "GET /status" do
     test "will return 'OK'" do
-      conn = conn(:get, "/status")
+      conn = conn(:get, build_request_uri(path: "/status"))
       conn = Router.call(conn, [])
 
       assert conn.status == 200

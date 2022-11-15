@@ -4,6 +4,7 @@ defmodule IsUKTest do
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -33,7 +34,7 @@ defmodule IsUKTest do
     end)
 
     conn =
-      conn(:get, "/200-ok-response")
+      conn(:get, build_request_uri(path: "/200-ok-response"))
       |> put_req_header("x-bbc-edge-isuk", "no")
       |> put_req_header("x-bbc-edge-cache", "1")
 
@@ -54,7 +55,7 @@ defmodule IsUKTest do
     end)
 
     conn =
-      conn(:get, "/200-ok-response")
+      conn(:get, build_request_uri(path: "/200-ok-response"))
       |> put_req_header("x-bbc-edge-isuk", "yes")
       |> put_req_header("x-bbc-edge-cache", "1")
 
@@ -75,7 +76,7 @@ defmodule IsUKTest do
     end)
 
     conn =
-      conn(:get, "/200-ok-response")
+      conn(:get, build_request_uri(path: "/200-ok-response"))
       |> put_req_header("x-ip_is_uk_combined", "no")
 
     conn = Router.call(conn, [])
@@ -95,7 +96,7 @@ defmodule IsUKTest do
     end)
 
     conn =
-      conn(:get, "/200-ok-response")
+      conn(:get, build_request_uri(path: "/200-ok-response"))
       |> put_req_header("x-ip_is_uk_combined", "yes")
 
     conn = Router.call(conn, [])

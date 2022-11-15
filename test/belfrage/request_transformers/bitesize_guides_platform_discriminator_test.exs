@@ -11,8 +11,8 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
       production_environment: "test"
     },
     request: %Struct.Request{
-      scheme: :http,
-      host: "www.bbc.co.uk",
+      scheme: :https,
+      host: "https://www.bbc.co.uk",
       path: "/_web_core",
       path_params: %{"id" => "zw3bfcw"}
     }

@@ -19,7 +19,7 @@ defmodule Routes.Platforms.MorphRouter do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "CircuitBreaker"]
+    ["CircuitBreaker"]
   end
 
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]

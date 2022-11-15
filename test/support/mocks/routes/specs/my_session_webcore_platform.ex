@@ -10,7 +10,7 @@ defmodule Routes.Specs.MySessionWebcorePlatform do
   end
 
   defp pipeline("live") do
-    ["HTTPredirect", "Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
+    ["Personalisation", "LambdaOriginAlias", "CircuitBreaker", "Language"]
   end
 
   defp pipeline(_production_env) do

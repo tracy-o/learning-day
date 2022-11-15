@@ -15,6 +15,6 @@ defmodule Routes.Platforms.Simorgh do
   defp query_params_allowlist("live"), do: []
   defp query_params_allowlist(_production_env), do: ["component_env", "morph_env", "renderer_env"]
 
-  defp pipeline("live"), do: ["HTTPredirect", "WorldServiceRedirect", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["WorldServiceRedirect", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

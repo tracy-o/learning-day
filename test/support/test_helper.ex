@@ -125,6 +125,16 @@ defmodule Test.Support.Helper do
     end)
   end
 
+  def build_request_uri(opts \\ []) do
+    default = [scheme: "https", host: "www.example.com", path: "/", query: ""]
+
+    if String.contains?(opts[:path], "?") do
+      struct!(URI, Keyword.merge(default, opts)) |> URI.merge(URI.parse(opts[:path]))
+    else
+      struct!(URI, Keyword.merge(default, opts))
+    end
+  end
+
   def gtm_host("test"), do: "www.test.bbc.co.uk"
   def gtm_host("live"), do: "www.bbc.co.uk"
 

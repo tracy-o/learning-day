@@ -3,6 +3,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0, make_cached_response_stale: 1]
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -65,11 +66,11 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
     test "202's" do
       stub_http_response(202)
 
-      conn = make_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      conn = make_https_apps_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
       assert conn.status == 202
       assert cache_status_header(conn) == "MISS"
 
-      conn = make_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
+      conn = make_https_apps_request("https://news-app-classic.test.api.bbci.co.uk/202-ok-response")
       assert conn.status == 202
       assert cache_status_header(conn) == "MISS"
       assert String.contains?(cache_control_heaeder(conn), "public")
@@ -115,6 +116,10 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   end
 
   defp make_request(path \\ "/200-ok-response") do
+    conn(:get, build_request_uri(path: path)) |> Router.call([])
+  end
+
+  defp make_https_apps_request(path) do
     conn(:get, path) |> Router.call([])
   end
 

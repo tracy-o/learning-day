@@ -71,7 +71,7 @@ defmodule Benchmark.AccessLogs do
       |> put_req_header("x-request-id", "ae275035d2d01ccd424c865e6f8f3ed9")
       |> put_resp_header(
         "belfrage-request-pipeline-trail",
-        "DevelopmentRequests,CircuitBreaker,WorldServiceRedirect,HTTPredirect"
+        "DevelopmentRequests,CircuitBreaker,WorldServiceRedirect"
       )
       |> put_resp_header("routespec", "WorldServiceAfrique")
       |> put_resp_header("belfrage-cache-status", "MISS")

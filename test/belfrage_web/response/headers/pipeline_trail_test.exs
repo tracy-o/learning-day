@@ -11,12 +11,12 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
 
       struct = %Struct{
         private: %Struct.Private{production_environment: "test"},
-        debug: %Struct.Debug{request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"]}
+        debug: %Struct.Debug{request_pipeline_trail: ["CircuitBreaker"]}
       }
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
+      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker"]
     end
   end
 
@@ -26,7 +26,7 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
 
       struct = %Struct{
         private: %Struct.Private{production_environment: "live"},
-        debug: %Struct.Debug{request_pipeline_trail: ["HttpRedirector", "CircuitBreaker"]}
+        debug: %Struct.Debug{request_pipeline_trail: ["CircuitBreaker"]}
       }
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
@@ -42,14 +42,14 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
       struct = %Struct{
         private: %Struct.Private{production_environment: "test"},
         debug: %Struct.Debug{
-          request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
+          request_pipeline_trail: ["CircuitBreaker"],
           response_pipeline_trail: ["CacheDirective"]
         }
       }
 
       output_conn = PipelineTrail.add_header(input_conn, struct)
 
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
+      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker"]
       assert get_resp_header(output_conn, "belfrage-response-pipeline-trail") == ["CacheDirective"]
     end
   end
@@ -61,7 +61,7 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
       struct = %Struct{
         private: %Struct.Private{production_environment: "live"},
         debug: %Struct.Debug{
-          request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
+          request_pipeline_trail: ["CircuitBreaker"],
           response_pipeline_trail: ["CacheDirective"]
         }
       }

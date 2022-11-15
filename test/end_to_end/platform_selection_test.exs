@@ -2,6 +2,7 @@ defmodule EndToEnd.PlatformSelectionTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
@@ -31,7 +32,7 @@ defmodule EndToEnd.PlatformSelectionTest do
       )
 
       conn =
-        conn(:get, "/platform-selection-with-mozart-news-platform")
+        conn(:get, build_request_uri(path: "/platform-selection-with-mozart-news-platform"))
         |> Router.call([])
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
@@ -53,7 +54,7 @@ defmodule EndToEnd.PlatformSelectionTest do
       end)
 
       conn =
-        conn(:get, "/platform-selection-with-webcore-platform")
+        conn(:get, build_request_uri(path: "/platform-selection-with-webcore-platform"))
         |> Router.call([])
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
@@ -96,7 +97,7 @@ defmodule EndToEnd.PlatformSelectionTest do
         end)
 
         conn =
-          conn(:get, "/platform-selection-with-selector")
+          conn(:get, build_request_uri(path: "/platform-selection-with-selector"))
           |> Router.call([])
 
         assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
@@ -139,7 +140,7 @@ defmodule EndToEnd.PlatformSelectionTest do
       )
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, build_request_uri(path: "/platform-selection-with-selector"))
         |> Router.call([])
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
@@ -180,14 +181,14 @@ defmodule EndToEnd.PlatformSelectionTest do
       )
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, build_request_uri(path: "/platform-selection-with-selector"))
         |> Router.call([])
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
     test "When an asset type cannot be retrieved" do
-      conn = conn(:get, "/platform-selection-with-selector")
+      conn = conn(:get, build_request_uri(path: "/platform-selection-with-selector"))
       url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       HTTPMock

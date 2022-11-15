@@ -4,6 +4,7 @@ defmodule EndToEnd.AccessLogsTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
   import ExUnit.CaptureLog
+  import Test.Support.Helper, only: [build_request_uri: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
@@ -31,7 +32,7 @@ defmodule EndToEnd.AccessLogsTest do
 
     captured_log =
       capture_log(fn ->
-        conn(:get, "/200-ok-response?query=querystring")
+        conn(:get, build_request_uri(path: "/200-ok-response", query: "query=querystring"))
         |> put_req_header("authorization", "auth-heaader-value")
         |> put_req_header("access-log-req-header", "yes")
         |> Router.call([])

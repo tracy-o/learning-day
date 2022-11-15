@@ -5,7 +5,7 @@ defmodule EndToEnd.LambdaTest do
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
-  import Test.Support.Helper, only: [assert_valid_request_hash: 1]
+  import Test.Support.Helper, only: [assert_valid_request_hash: 1, build_request_uri: 1]
 
   @moduletag :end_to_end
 
@@ -48,7 +48,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, "/200-ok-response")
+    conn = conn(:get, build_request_uri(path: "/200-ok-response"))
     conn = Router.call(conn, [])
 
     assert {200,
@@ -64,7 +64,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
+               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)
@@ -84,7 +84,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, @lambda_response}
     end)
 
-    conn = conn(:get, "/200-ok-response?query[hi]=foo")
+    conn = conn(:get, build_request_uri(path: "/200-ok-response", query: "query[hi]=foo"))
     Router.call(conn, [])
   end
 
@@ -98,7 +98,7 @@ defmodule EndToEnd.LambdaTest do
       {:ok, response}
     end)
 
-    conn = conn(:get, "/downstream-broken")
+    conn = conn(:get, build_request_uri(path: "/downstream-broken"))
     conn = Router.call(conn, [])
 
     assert {500,
@@ -114,7 +114,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation,HTTPredirect"},
+               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)
