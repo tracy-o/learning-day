@@ -233,5 +233,20 @@
         "description": "The council story election banner will be disabled"
       }
     ]
+  },
+  {
+    "name": "football_scores_fixtures",
+    "description": "Football scores and fixtures pointer",
+    "default-value": "mozart",
+    "values": [
+      {
+        "value": "mozart",
+        "description": "Football scores and fixtures served by Mozart"
+      },
+      {
+        "value": "webcore",
+        "description": "Football scores and fixtures served by Webcore"
+      }
+    ]
   }
 ]

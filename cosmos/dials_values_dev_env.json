@@ -4,6 +4,7 @@
   "circuit_breaker": "false",
   "election_banner_council_story": "off",
   "election_banner_ni_story": "off",
+  "football_scores_fixtures": "mozart",
   "logging_level": "debug",
   "mvt_enabled": "true",
   "news_articles_personalisation": "on",
