@@ -8,17 +8,15 @@ defmodule Belfrage.Clients.Lambda do
 
   @callback call(any, any, any, any) :: any
 
-  def call(credentials, function, payload, opts \\ [])
-
-  def call(%AWS.Credentials{}, function, payload, opts) do
+  def call(credentials = %AWS.Credentials{}, function, payload, opts \\ []) do
     if invalid_query_string?(payload) do
       {:error, :invalid_query_string}
     else
-      make_request(%AWS.Credentials{}, function, payload, opts)
+      make_request(credentials, function, payload, opts)
     end
   end
 
-  def make_request(credentials = %AWS.Credentials{}, function, payload, opts) do
+  def make_request(credentials, function, payload, opts) do
     lambda_response =
       aws().request(
         AWS.Lambda.invoke(function, payload, %{}, opts),
