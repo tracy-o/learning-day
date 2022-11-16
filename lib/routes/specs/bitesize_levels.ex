@@ -9,9 +9,9 @@ defmodule Routes.Specs.BitesizeLevels do
   end
 
   def pipeline("live") do
-    ["HTTPredirect", "ComToUKRedirect", "BitesizeLevelsPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
+    ["ComToUKRedirect", "BitesizeLevelsPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
   end
   def pipeline(_production_environment) do
-   ["HTTPredirect", "ComToUKRedirect", "BitesizeLevelsPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
+   ["ComToUKRedirect", "BitesizeLevelsPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
   end
 end
