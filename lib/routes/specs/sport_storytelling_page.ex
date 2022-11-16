@@ -2,7 +2,7 @@ defmodule Routes.Specs.SportStorytellingPage do
   def specs do
     %{
       owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Web+Core+Storytelling+Experience+Run+Book",
+      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
       platform: Webcore,
       request_pipeline: ["ObitMode"]
     }
