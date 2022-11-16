@@ -17,12 +17,30 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
     "z82hsbk",
     "zwv39j6",
     "zhtcvk7",
-    "zgdmsbk"
+    "zgdmsbk",
+    "zv9qhyc",
+    "zxfrwmn",
+    "zgwxfg8",
+    "zcj6yrd",
+    "z4qtvcw",
+    "zk2pb9q",
+    "zjty4wx",
+    "ztv4q6f",
+    "z47h34j"
   ]
 
   @webcore_live_ids [
     "zhtcvk7",
-    "zgdmsbk"
+    "zgdmsbk",
+    "zv9qhyc",
+    "zxfrwmn",
+    "zgwxfg8",
+    "zcj6yrd",
+    "z4qtvcw",
+    "zk2pb9q",
+    "zjty4wx",
+    "ztv4q6f",
+    "z47h34j"
   ]
 
   def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
