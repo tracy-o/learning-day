@@ -2,11 +2,9 @@ defmodule NonUtf8QueryStringTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.{AWS, RouteState, Services.Webcore}
-  alias Belfrage.Clients.{HTTP, HTTPMock, Lambda, LambdaMock}
-
+  alias Belfrage.RouteState
+  alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [set_env: 2]
 
   @moduletag :end_to_end
 
@@ -186,50 +184,5 @@ defmodule NonUtf8QueryStringTest do
 
     {status, _headers, _body} = sent_resp(conn)
     assert status == 200
-  end
-
-  test "invalid string" do
-    start_supervised!({RouteState, "SomeRouteState"})
-    set_env(:lambda_client, Lambda)
-    set_env(:aws, AWS)
-
-    conn =
-      :get
-      |> conn("/200-ok-response?query=%ED%95%B4%EC")
-      |> Router.call([])
-
-    {status, _headers, _body} = sent_resp(conn)
-    assert status == 404
-  end
-
-  test "valid string" do
-    start_supervised!({RouteState, "SomeRouteState"})
-
-    set_mock_credentials()
-
-    expect(HTTPMock, :execute, fn %HTTP.Request{}, :Webcore ->
-      {:ok, %{body: "{\"statusCode\":200,\"headers\":{},\"body\":\"something\"}", headers: %{}, status_code: 200}}
-    end)
-
-    set_env(:lambda_client, Lambda)
-    set_env(:aws, AWS)
-
-    conn =
-      :get
-      |> conn("/200-ok-response?query=abc")
-      |> Router.call([])
-
-    {status, _headers, _body} = sent_resp(conn)
-    assert status == 200
-  end
-
-  defp set_mock_credentials() do
-    Webcore.Credentials.update(Webcore.Credentials, %AWS.Credentials{
-      access_key_id: "some_access_key_id",
-      secret_access_key: "some_secret_access_key",
-      session_token: "some_session_token"
-    })
-
-    on_exit(fn -> Webcore.Credentials.update(Webcore.Credentials, %AWS.Credentials{}) end)
   end
 end
