@@ -4,21 +4,14 @@ defmodule Belfrage.Clients.Lambda do
 
   alias Belfrage.{AWS}
 
+  @aws Application.get_env(:belfrage, :aws)
   @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
 
   @callback call(any, any, any, any) :: any
 
   def call(credentials = %AWS.Credentials{}, function, payload, opts \\ []) do
-    if invalid_query_string?(payload) do
-      {:error, :invalid_query_string}
-    else
-      make_request(credentials, function, payload, opts)
-    end
-  end
-
-  def make_request(credentials, function, payload, opts) do
     lambda_response =
-      aws().request(
+      @aws.request(
         AWS.Lambda.invoke(function, payload, %{}, opts),
         security_token: credentials.session_token,
         access_key_id: credentials.access_key_id,
@@ -65,16 +58,4 @@ defmodule Belfrage.Clients.Lambda do
 
     {:error, :invoke_failure}
   end
-
-  defp aws(), do: Application.get_env(:belfrage, :aws)
-
-  # Takes a map - if the map contains a :queryStringParameters
-  # key, the value of which contains a key value pair where
-  # the value is an invalid string, this function returns true.
-  # Otherwise returns false.
-  defp invalid_query_string?(%{queryStringParameters: query_string_params}) do
-    Enum.any?(query_string_params, fn {_k, v} -> not String.valid?(v) end)
-  end
-
-  defp invalid_query_string?(_payload), do: false
 end
