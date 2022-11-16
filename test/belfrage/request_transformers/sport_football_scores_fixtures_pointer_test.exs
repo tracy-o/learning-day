@@ -25,7 +25,8 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
     test "platform will point to Webcore" do
       stub_dials(football_scores_fixtures: "webcore")
 
-      assert {:ok, %Struct{private: %{platform: Webcore}}} = SportFootballScoresFixturesPointer.call([], struct())
+      assert {:ok, %Struct{private: %{platform: Webcore, origin: "pwa-lambda-function"}}} =
+               SportFootballScoresFixturesPointer.call([], struct())
     end
   end
 end

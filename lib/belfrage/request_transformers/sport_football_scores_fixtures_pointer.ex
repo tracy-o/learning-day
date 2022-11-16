@@ -5,12 +5,12 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
 
   @impl true
   def call(rest, struct) do
-    if point_to_webcore?() do
+    if points_to_webcore?() do
       struct =
         struct
         |> Struct.add(:private, %{
           platform: Webcore,
-          origin: Application.get_env(:belfrage, :webcore_endpoint)
+          origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
 
       then_do(rest, struct)
@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
     end
   end
 
-  defp point_to_webcore? do
+  defp points_to_webcore? do
     @dial.state(:football_scores_fixtures) == "webcore"
   end
 end
