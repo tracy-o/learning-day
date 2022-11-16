@@ -236,7 +236,7 @@
   },
   {
     "name": "football_scores_fixtures",
-    "description": "Football scores and fixtures pointer",
+    "description": "Football scores and fixtures platform",
     "default-value": "mozart",
     "values": [
       {

@@ -24,6 +24,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
   describe "when the Dial is pointing to Webcore" do
     test "platform will point to Webcore" do
       stub_dials(football_scores_fixtures: "webcore")
+
       assert {:ok, %Struct{private: %{platform: Webcore}}} = SportFootballScoresFixturesPointer.call([], struct())
     end
   end
