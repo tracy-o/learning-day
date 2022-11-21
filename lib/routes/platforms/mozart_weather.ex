@@ -5,7 +5,7 @@ defmodule Routes.Platforms.MozartWeather do
       owner: "DEWeather@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
       request_pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
+      response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       headers_allowlist: ["cookie-ckps_language"],
       circuit_breaker_error_threshold: 200
