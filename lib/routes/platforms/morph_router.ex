@@ -13,7 +13,7 @@ defmodule Routes.Platforms.MorphRouter do
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/morph/Morph+Router+Run+Book",
       request_pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
+      response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
     }
   end
