@@ -114,16 +114,16 @@ defmodule EndToEnd.App.PersonalisationTest do
       assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
     end
 
-    test "personalisation off and news_articles_personalisation is on" do
-      stub_dials(personalisation: "off", news_articles_personalisation: "on")
+    # test "personalisation off and news_articles_personalisation is on" do
+    #   stub_dials(personalisation: "off", news_articles_personalisation: "on")
 
-      conn =
-        build_request()
-        |> personalise_app_request(@token)
-        |> make_request()
+    #   conn =
+    #     build_request()
+    #     |> personalise_app_request(@token)
+    #     |> make_request()
 
-      assert conn.status == 503
-    end
+    #   assert conn.status == 503
+    # end
   end
 
   describe "personalised route and expired auth. token" do
@@ -156,30 +156,30 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
   end
 
-  describe "personalisation is disabled" do
-    setup do
-      stub_dial(:personalisation, "off")
-      start_supervised!({RouteState, "PersonalisedFablData"})
-      :ok
-    end
+  # describe "personalisation is disabled" do
+  #   setup do
+  #     stub_dial(:personalisation, "off")
+  #     start_supervised!({RouteState, "PersonalisedFablData"})
+  #     :ok
+  #   end
 
-    test "authenticated request" do
-      conn =
-        build_request()
-        |> personalise_app_request(@token)
-        |> make_request()
+  #   test "authenticated request" do
+  #     conn =
+  #       build_request()
+  #       |> personalise_app_request(@token)
+  #       |> make_request()
 
-      assert conn.status == 503
-    end
+  #     assert conn.status == 503
+  #   end
 
-    test "non-authenticated request" do
-      conn =
-        build_request()
-        |> make_request()
+  #   test "non-authenticated request" do
+  #     conn =
+  #       build_request()
+  #       |> make_request()
 
-      assert conn.status == 503
-    end
-  end
+  #     assert conn.status == 503
+  #   end
+  # end
 
   describe "non-personalised route" do
     setup do
