@@ -29,7 +29,7 @@ defmodule EndToEnd.HttpRedirectTest do
               {"server", "Belfrage"},
               {"x-bbc-no-scheme-rewrite", "1"},
               {"req-svc-chain", "BELFRAGE"},
-              {"vary", "accept-encoding,x-id-oidc-signedin,x-bbc-edge-scheme"}
+              {"vary", "x-bbc-edge-scheme"}
             ], ""} = sent_resp(response_conn)
   end
 

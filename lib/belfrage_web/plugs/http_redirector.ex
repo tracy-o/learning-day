@@ -24,7 +24,7 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
     |> put_resp_header("x-bbc-no-scheme-rewrite", "1")
     |> put_resp_header("req-svc-chain", conn.private.bbc_headers.req_svc_chain)
     |> put_resp_header("cache-control", "public, stale-while-revalidate=10, max-age=60")
-    |> put_resp_header("vary", "accept-encoding,x-id-oidc-signedin,x-bbc-edge-scheme")
+    |> put_resp_header("vary", "x-bbc-edge-scheme")
     |> send_resp(302, "")
     |> halt()
   end
