@@ -4,6 +4,7 @@ defmodule EndToEnd.HttpRedirectTest do
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
   alias Belfrage.RouteState
+  import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
 
   @moduletag :end_to_end
 
@@ -35,7 +36,22 @@ defmodule EndToEnd.HttpRedirectTest do
 
   setup do
     start_supervised!({RouteState, "SomeRouteState"})
+    clear_cache()
     :ok
+  end
+
+  test "no redirect when http in uri but https in edge-scheme" do
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn _credentials, _lambda_arn, _request, _opts ->
+      {:ok, @lambda_response}
+    end)
+
+    response_conn =
+      conn(:get, "http://www.example.com/")
+      |> put_req_header("x-bbc-edge-scheme", "https")
+      |> Router.call([])
+
+    assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
   end
 
   test "no redirect when scheme is https" do
