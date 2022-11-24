@@ -2589,7 +2589,7 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/weather/av/:asset_id", using: "WeatherVideos", only_on: "test", examples: ["/weather/av/62556161"]
+  handle "/weather/av/:asset_id", using: "WeatherVideos", only_on: "test", examples: []
 
   handle "/weather/*any", using: "WeatherCatchAll", examples: []
 
