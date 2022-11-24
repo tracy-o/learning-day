@@ -2589,6 +2589,8 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/weather/av/:asset_id", using: "Weather", only_on: "test", examples: ["/weather/av/62556161"]
+
   handle "/weather/*any", using: "WeatherCatchAll", examples: []
 
   # WebCore Hub
