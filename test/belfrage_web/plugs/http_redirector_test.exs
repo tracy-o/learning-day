@@ -33,4 +33,17 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
     conn = incoming_request("https")
     assert conn === HttpRedirector.call(conn, [])
   end
+
+  test "redirect when https in uri but http in edge-scheme" do
+    conn =
+      conn(:get, "/")
+      |> put_http_protocol("https")
+      |> put_req_header("x-bbc-edge-scheme", "http")
+      |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
+      |> HttpRedirector.call([])
+
+    assert conn.status == 302
+    assert conn.resp_body == ""
+    assert get_resp_header(conn, "location") == ["https://" <> conn.host <> "/"]
+  end
 end

@@ -67,4 +67,22 @@ defmodule EndToEnd.HttpRedirectTest do
 
     assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
   end
+
+  test "redirect when uri scheme is https and edge scheme is http" do
+    response_conn =
+      conn(:get, "https://www.example.com/foo-bar?query=query_string")
+      |> put_req_header("x-bbc-edge-scheme", "http")
+      |> Router.call([])
+
+    assert {302,
+            [
+              {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
+              {"location", "https://www.example.com/foo-bar?query=query_string"},
+              {"via", "1.1 Belfrage"},
+              {"server", "Belfrage"},
+              {"x-bbc-no-scheme-rewrite", "1"},
+              {"req-svc-chain", "BELFRAGE"},
+              {"vary", "x-bbc-edge-scheme"}
+            ], ""} = sent_resp(response_conn)
+  end
 end

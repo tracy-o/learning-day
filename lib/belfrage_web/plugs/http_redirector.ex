@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.Plugs.HttpRedirector do
   import Plug.Conn
+  alias Belfrage.Helpers.QueryParams
 
   @moduledoc """
   Redirects a request with a http scheme
@@ -18,7 +19,7 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
 
   defp redirect(conn) do
     conn
-    |> set_location()
+    |> put_resp_header("location", set_location(conn))
     |> put_resp_header("via", "1.1 Belfrage")
     |> put_resp_header("server", "Belfrage")
     |> put_resp_header("x-bbc-no-scheme-rewrite", "1")
@@ -29,9 +30,12 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
     |> halt()
   end
 
+  defp set_location(conn = %Plug.Conn{query_params: %Plug.Conn.Unfetched{aspect: :query_params}}) do
+    "https://" <> conn.host <> conn.request_path
+  end
+
   defp set_location(conn) do
-    redirect_url = String.replace(request_url(conn), "http", "https", global: false)
-    put_resp_header(conn, "location", redirect_url)
+    "https://" <> conn.host <> conn.request_path <> QueryParams.encode(conn.query_params)
   end
 
   defp is_insecure?(["http"]), do: true
