@@ -198,6 +198,7 @@ defroutefile "Main" do
   handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", examples: [] # flakey /homepage/preview/northernireland (returned 500)
   handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", examples: ["/homepage/preview/cymru"]
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba", examples: ["/homepage/preview/alba"]
+  handle "/homepage/newsround/preview", using: "NewsroundHomePagePreview", examples: ["/homepage/newsround/preview"]
 
   handle "/homepage/personalised", using: "HomePagePersonalised", examples: ["/homepage/personalised"]
   handle "/homepage/segmented", using: "HomePageSegmented", examples: ["/homepage/segmented"]
