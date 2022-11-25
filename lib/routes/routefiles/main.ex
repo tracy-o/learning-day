@@ -2744,6 +2744,12 @@ defroutefile "Main" do
   handle "/music", using: "Music", examples: []
 
   # Bitesize
+  redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
+  redirect "/bitesize/guides/:id/revision", to: "/bitesize/guides/:id/revision/1", status: 301
+
+  redirect "/bitesize/preview/guides/:id", to: "/bitesize/preview/guides/:id/revision/1", status: 301
+  redirect "/bitesize/preview/guides/:id/revision", to: "/bitesize/preview/guides/:id/revision/1", status: 301
+
   handle "/bitesize/preview/secondary", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/secondary"]
 
   handle "/bitesize/subjects", using: "Bitesize", examples: ["/bitesize/subjects"]
@@ -2770,18 +2776,14 @@ defroutefile "Main" do
   handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"]
 
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/guides/:id/revision", using: "BitesizeGuides", examples: []
   handle "/bitesize/guides/:id/test", using: "BitesizeGuides", examples: ["/bitesize/guides/zw7xfcw/test"]
   handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", examples: ["/bitesize/guides/zwsffg8/audio"]
   handle "/bitesize/guides/:id/video", using: "BitesizeGuides", examples: ["/bitesize/guides/zcvy6yc/video"]
 
   handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/preview/guides/:id/revision", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision"]
   handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
   handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
   handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
-
-  redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
 
   handle "/bitesize/topics/:id", using: "BitesizeTopics", examples: ["/bitesize/topics/z82hsbk"]
   handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
