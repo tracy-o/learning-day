@@ -1,5 +1,5 @@
 defmodule Belfrage.Services.Webcore.Supervisor do
-  use Supervisor
+  use Supervisor, restart: :temporary
 
   alias Belfrage.Services.Webcore.Credentials
 

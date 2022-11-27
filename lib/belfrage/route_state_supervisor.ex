@@ -10,7 +10,8 @@ defmodule Belfrage.RouteStateSupervisor do
     %{
       id: Keyword.get(opts, :id, __MODULE__),
       start: {__MODULE__, :start_link, [opts]},
-      type: :supervisor
+      type: :supervisor,
+      restart: :temporary
     }
   end
 

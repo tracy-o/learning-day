@@ -1,5 +1,5 @@
 defmodule Belfrage.Mvt.Supervisor do
-  use Supervisor
+  use Supervisor, restart: :temporary
 
   alias Belfrage.Mvt.{FilePoller, Slots}
 

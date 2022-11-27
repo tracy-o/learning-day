@@ -1,5 +1,5 @@
 defmodule Belfrage.Authentication.Supervisor do
-  use Supervisor
+  use Supervisor, restart: :temporary
 
   alias Belfrage.Authentication.{BBCID, JWK}
 
