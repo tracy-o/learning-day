@@ -9,9 +9,10 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
     |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
   end
 
-  test "redirect when protocol is insecure" do
+  test "redirect when x-bbc-edge-scheme is http" do
     conn =
-      incoming_request("http")
+      "http"
+      |> incoming_request()
       |> HttpRedirector.call([])
 
     assert conn.status == 302
@@ -19,27 +20,25 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
     assert get_resp_header(conn, "location") == ["https://" <> conn.host <> "/"]
   end
 
-  test "no redirect when http in uri but https in edge-scheme" do
-    conn =
-      conn(:get, "/")
-      |> put_http_protocol("http")
-      |> put_req_header("x-bbc-edge-scheme", "https")
-      |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
-
-    assert conn === HttpRedirector.call(conn, [])
-  end
-
-  test "no redirect when scheme is secure" do
+  test "no redirect when http in uri but https in x-bbc-edge-scheme" do
     conn = incoming_request("https")
     assert conn === HttpRedirector.call(conn, [])
   end
 
-  test "redirect when https in uri but http in edge-scheme" do
+  test "no redirect when uri scheme is https and https in x-bbc-edge-scheme" do
     conn =
-      conn(:get, "/")
+      "https"
+      |> incoming_request()
       |> put_http_protocol("https")
-      |> put_req_header("x-bbc-edge-scheme", "http")
-      |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
+
+    assert conn === HttpRedirector.call(conn, [])
+  end
+
+  test "will redirect when https in uri but http in x-bbc-edge-scheme" do
+    conn =
+      "http"
+      |> incoming_request()
+      |> put_http_protocol("https")
       |> HttpRedirector.call([])
 
     assert conn.status == 302
