@@ -7,11 +7,11 @@ defmodule Belfrage do
     struct
     |> Processor.pre_request_pipeline()
     |> Processor.fetch_early_response_from_cache()
-    |> result_or(&no_cached_response/1)
+    |> response_or(&no_cached_response/1)
     |> Processor.post_response_pipeline()
   end
 
-  defp result_or(struct, callback) do
+  defp response_or(struct, callback) do
     if struct.response.http_status do
       struct
     else
@@ -22,7 +22,7 @@ defmodule Belfrage do
   defp no_cached_response(struct) do
     struct
     |> Processor.request_pipeline()
-    |> result_or(&perform_call/1)
+    |> perform_call()
     |> Processor.response_pipeline()
   end
 
