@@ -21,6 +21,7 @@ defmodule BelfrageWeb.Router do
   plug(PreviewMode)
   plug(:log_invalid_utf8)
   plug(:fetch_query_params, validate_utf8: false)
+  plug(Plugs.HttpRedirector)
   plug(BelfrageWeb.Plugs.Overrides)
   plug(Plugs.PathLogger)
   plug(:match)
