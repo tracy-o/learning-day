@@ -251,7 +251,7 @@
   },
   {
     "name": "news_apps_hardcoded_response",
-    "description": "To return a hard-coded response, without forwarding the traffic upstream",
+    "description": "Used to return a hard-coded response, without forwarding the traffic upstream",
     "default-value": "disabled",
     "values": [
       {
@@ -260,7 +260,7 @@
       },
       {
         "value": "disabled",
-        "description": "Sroxies requests upstream"
+        "description": "Proxies requests upstream"
       }
     ]
   }
