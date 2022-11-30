@@ -212,13 +212,27 @@ defroutefile "Main" do
 
   handle "/fd/p/mytopics-page", using: "MyTopicsPage", examples: []
   handle "/fd/p/mytopics-follows", using: "MyTopicsFollows", examples: []
-  handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: []
+  handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test", examples: [] do
+    return_404 if: [
+      !is_valid_length?(name, 3..40),
+      !matches?(name, ~r/^[a-z0-9-]+$/)
+    ]
+  end
   handle "/fd/preview/abl", using: "AblData", examples: []
   handle "/fd/preview/spike-abl-core", using: "AblData", examples: []
-  handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"]
+  handle "/fd/preview/:name", using: "FablData", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"] do
+    return_404 if: [
+      !is_valid_length?(name, 3..40),
+      !matches?(name, ~r/^[a-z0-9-]+$/)
+    ]
+  end
   handle "/fd/abl", using: "AblData", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
-  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: []
-
+  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test", examples: [] do
+    return_404 if: [
+      !is_valid_length?(name, 3..40),
+      !matches?(name, ~r/^[a-z0-9-]+$/)
+    ]
+  end
   handle "/fd/sport-app-allsport", using: "SportData", examples: ["/fd/sport-app-allsport?env=live&edition=domestic"]
   handle "/fd/sport-app-followables", using: "SportData", examples: ["/fd/sport-app-followables?env=live&edition=domestic"]
   handle "/fd/sport-app-images", using: "SportData", examples: ["/fd/sport-app-images"]
@@ -227,7 +241,12 @@ defroutefile "Main" do
   handle "/fd/sport-app-page", using: "SportData", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios", "/fd/sport-app-page?page=https%3A%2F%2Fwww.bbc.co.uk%2Fsport&v=11&platform=ios&edition=domestic"]
   handle "/fd/topic-mapping", using: "SportData", examples: ["/fd/topic-mapping?product=sport&followable=true&alias=false", "/fd/topic-mapping?product=sport&route=/sport&edition=domestic"]
 
-  handle "/fd/:name", using: "FablData", examples: []
+  handle "/fd/:name", using: "FablData", examples: [] do
+    return_404 if: [
+      !is_valid_length?(name, 3..40),
+      !matches?(name, ~r/^[a-z0-9-]+$/)
+    ]
+  end
 
   handle "/wc-data/container/:name", using: "ContainerData", examples: ["/wc-data/container/consent-banner"]
   handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", examples: []
