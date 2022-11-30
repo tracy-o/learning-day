@@ -37,6 +37,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
 
   defp build_location(conn) do
     conn
+    |> remove_trailing()
     |> normalise_path()
     |> append_query_string()
   end
@@ -49,7 +50,14 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   end
 
   defp normalise_path(conn) do
-    Map.put(conn, :request_path, Path.absname(conn.request_path, ""))
+    Map.put(conn, :request_path, String.replace(conn.request_path, ~r/^\/\/+/, "/"))
+  end
+
+  defp remove_trailing(conn) do
+    case String.replace_trailing(conn.request_path, "/", "") do
+      "" -> Map.put(conn, :request_path, "/")
+      location -> Map.put(conn, :request_path, location)
+    end
   end
 
   defp trailing_slash?(%{request_path: path}) do
