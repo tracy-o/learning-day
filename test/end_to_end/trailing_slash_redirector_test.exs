@@ -12,7 +12,17 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     :ok
   end
 
-  test "a succesful redirect if there is multiple trailing slashes at the top level" do
+  test "redirect preserves multiple slashes if not at beginning or end of path" do
+    conn =
+      :get
+      |> conn("/some//path//with//multiple///forward////slashes///")
+      |> Router.call([])
+
+    assert {301, _headers, ""} = sent_resp(conn)
+    assert Plug.Conn.get_resp_header(conn, "location") == ["/some//path//with//multiple///forward////slashes"]
+  end
+
+  test "a succesful redirect if there  multiple trailing slashes at the top level" do
     conn =
       conn(:get, "///")
       |> Map.put(:request_path, "///")
@@ -51,5 +61,25 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"req-svc-chain", "GTM,BELFRAGE"} in headers
+  end
+
+  test "does not issue open redirects" do
+    conn =
+      :get
+      |> conn("https://example.com//foo.com/")
+      |> Router.call([])
+
+    assert {301, _headers, ""} = sent_resp(conn)
+    assert Plug.Conn.get_resp_header(conn, "location") == ["/foo.com"]
+  end
+
+  test "does not issue open redirects when querystring are present" do
+    conn =
+      :get
+      |> conn("https://example.com//foo.com/?foo=bar&a=b")
+      |> Router.call([])
+
+    assert {301, _headers, ""} = sent_resp(conn)
+    assert Plug.Conn.get_resp_header(conn, "location") == ["/foo.com?foo=bar&a=b"]
   end
 end
