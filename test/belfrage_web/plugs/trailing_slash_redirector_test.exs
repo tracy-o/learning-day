@@ -88,4 +88,34 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert conn.resp_body == ""
     assert get_resp_header(conn, "location") == ["/a-page?a-query/"]
   end
+
+  test "redirect preserves multiple slashes if not at beginning or end of path" do
+    conn =
+      incoming_request("/some//path//with//multiple///forward////slashes///")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+    assert get_resp_header(conn, "location") == ["/some//path//with//multiple///forward////slashes"]
+  end
+
+  test "does not issue open redirects" do
+    conn =
+      incoming_request("https://example.com//foo.com/")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+    assert get_resp_header(conn, "location") == ["/foo.com"]
+  end
+
+  test "does not issue open redirects when querystring are present" do
+    conn =
+      incoming_request("https://example.com//foo.com/?foo=bar&a=b")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+    assert get_resp_header(conn, "location") == ["/foo.com?foo=bar&a=b"]
+  end
 end
