@@ -6,13 +6,14 @@ defmodule Belfrage.Services.HTTP do
   alias Belfrage.Struct.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
+  alias Belfrage.Mvt
   alias Belfrage.Xray
 
   @behaviour Service
 
   @impl Service
-  def dispatch(struct = %Struct{request: request = %Request{}, private: private = %Private{}}) do
-    built_request = request |> build_request(private.origin)
+  def dispatch(struct = %Struct{private: private = %Private{}}) do
+    built_request = build_request(struct)
     struct = LatencyMonitor.checkpoint(struct, :origin_request_sent)
     result = built_request |> execute_request(private)
     struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
@@ -37,7 +38,7 @@ defmodule Belfrage.Services.HTTP do
     %Struct{struct | response: response}
   end
 
-  defp build_request(request = %Request{}, origin) do
+  defp build_request(struct = %Struct{request: request, private: private}) do
     attrs =
       case request.method do
         "GET" ->
@@ -50,18 +51,19 @@ defmodule Belfrage.Services.HTTP do
     struct!(
       Clients.HTTP.Request,
       Map.merge(attrs, %{
-        url: origin <> request.path <> QueryParams.encode(request.query_params),
-        headers: build_headers(request),
+        url: private.origin <> request.path <> QueryParams.encode(request.query_params),
+        headers: build_headers(struct),
         request_id: request.request_id
       })
     )
   end
 
-  defp build_headers(request) do
+  defp build_headers(%Struct{request: request, private: private}) do
     edge_headers(request)
     |> Map.merge(default_headers(request))
     |> Map.merge(request.raw_headers)
     |> Map.merge(xray_header(request))
+    |> Mvt.Headers.put_mvt_headers(private)
     |> Enum.reject(fn {_k, v} -> is_nil(v) end)
     |> Map.new()
   end

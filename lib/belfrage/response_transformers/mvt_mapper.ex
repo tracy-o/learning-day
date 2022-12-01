@@ -7,6 +7,7 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
         struct = %Struct{
           private: %Struct.Private{
             headers_allowlist: headers_allowlist,
+            mvt_project_id: mvt_project_id,
             mvt: mvt_headers
           },
           response: %Struct.Response{headers: headers}
@@ -14,8 +15,8 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
       ) do
     vary_header = Map.get(headers, "vary")
 
-    if vary_header && :binary.match(vary_header, "mvt") != :nomatch do
-      mapped_mvt_headers = map_mvt_headers(vary_header, mvt_headers)
+    if vary_header && mvt_project_id > 0 do
+      mapped_mvt_headers = ["bbc-mvt-complete" | map_mvt_headers(vary_header, mvt_headers)]
 
       Struct.add(struct, :private, %{
         headers_allowlist: filter_mvt_headers(headers_allowlist, mapped_mvt_headers),

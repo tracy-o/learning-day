@@ -195,32 +195,6 @@ defmodule Belfrage.Services.Webcore.RequestTest do
     %{headers: %{"ctx-features": "chameleon=off"}} = Request.build(struct_with_features)
   end
 
-  test "does not add mvt headers when none set" do
-    struct_with_environment = %Struct{}
-
-    refute Request.build(struct_with_environment)
-           |> Map.get(:headers)
-           |> Map.keys()
-           |> Enum.map(&to_string/1)
-           |> Enum.any?(fn header -> String.starts_with?(header, "mvt-") end)
-  end
-
-  test "adds mvt headers when set with \"type;value\"" do
-    struct_with_mvt = %Struct{
-      private: %Struct.Private{
-        mvt: %{
-          "mvt-button_colour" => {1, nil},
-          "mvt-sidebar" => {3, "feature;false"},
-          "mvt-banner_colour" => {4, nil},
-          "mvt-footer_colour" => {7, "experiment;red"}
-        }
-      }
-    }
-
-    assert %{headers: %{"mvt-sidebar" => "feature;false", "mvt-footer_colour" => "experiment;red"}} =
-             Request.build(struct_with_mvt)
-  end
-
   test "adds election dials when set" do
     struct_with_election_headers = %Struct{
       request: %Struct.Request{

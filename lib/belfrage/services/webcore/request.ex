@@ -1,6 +1,7 @@
 defmodule Belfrage.Services.Webcore.Request do
   alias Belfrage.Struct
   alias Belfrage.Struct.{Request, Private, UserSession}
+  alias Belfrage.Mvt
 
   def build(struct) do
     %{
@@ -20,7 +21,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> put_election_headers(struct.request)
     |> put_user_session_headers(struct.user_session)
     |> put_feature_header(struct.private)
-    |> put_mvt_headers(struct.private)
+    |> Mvt.Headers.put_mvt_headers(struct.private)
   end
 
   defp base_headers(%Struct{request: request = %Request{}, private: private = %Private{}}) do
@@ -91,20 +92,6 @@ defmodule Belfrage.Services.Webcore.Request do
     else
       value = private.features |> Enum.map(&Tuple.to_list/1) |> Enum.map_join(",", &Enum.join(&1, "="))
       Map.put(headers, :"ctx-features", value)
-    end
-  end
-
-  defp put_mvt_headers(headers, private = %Private{}) do
-    if private.mvt == %{} do
-      headers
-    else
-      Enum.reduce(private.mvt, headers, fn {k, {_, v}}, acc ->
-        if v do
-          Map.put(acc, k, v)
-        else
-          acc
-        end
-      end)
     end
   end
 end

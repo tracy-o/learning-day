@@ -123,6 +123,18 @@ defmodule Belfrage.Mvt.MapperTest do
     end
   end
 
+  describe "when 'bbc-mvt-complete' header is present" do
+    test "it should be put in private.mvt with a slot of nil and data of '1' or '0'" do
+      struct = build_struct(raw_headers: %{"bbc-mvt-complete" => "1"}) |> Mvt.Mapper.map()
+
+      assert %{"bbc-mvt-complete" => {nil, "1"}} == struct.private.mvt
+
+      struct = build_struct(raw_headers: %{"bbc-mvt-complete" => "0"}) |> Mvt.Mapper.map()
+
+      assert %{"bbc-mvt-complete" => {nil, "0"}} == struct.private.mvt
+    end
+  end
+
   defp build_struct(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
     platform = Keyword.get(opts, :platform, Webcore)

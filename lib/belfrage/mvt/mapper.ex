@@ -13,10 +13,10 @@ defmodule Belfrage.Mvt.Mapper do
         |> Map.get(@platform_mapping[struct.private.platform], %{})
 
       mvt_map =
-        Map.merge(
-          map_mvt_headers(raw_headers, project_slots),
-          map_override_headers(raw_headers)
-        )
+        %{}
+        |> Map.merge(map_mvt_headers(raw_headers, project_slots))
+        |> Map.merge(map_override_headers(raw_headers))
+        |> Map.merge(bbc_mvt_complete_header(raw_headers))
 
       Struct.add(struct, :private, %{mvt: mvt_map})
     else
@@ -85,5 +85,14 @@ defmodule Belfrage.Mvt.Mapper do
     headers
     |> Enum.filter(fn {name, _v} -> match?(<<"mvt-", _rest::binary>>, name) end)
     |> Enum.into(%{}, fn {name, value} -> {name, {:override, value}} end)
+  end
+
+  defp bbc_mvt_complete_header(headers) do
+    if headers["bbc-mvt-complete"] in ["0", "1"] do
+      v = headers["bbc-mvt-complete"]
+      %{"bbc-mvt-complete" => {nil, v}}
+    else
+      %{}
+    end
   end
 end

@@ -78,6 +78,8 @@ defroutefile "Mock", "test" do
 
   handle("/mvt", using: "SomeMvtRouteState", examples: ["/mvt"])
 
+  handle("/ws-mvt", using: "SomeSimorghRouteSpec", examples: ["/ws-mvt"])
+
   handle("/proxy-on-joan/:id", using: "NewsArticlePage", examples: ["/proxy-on-joan/49336140"])
 
   handle("/app-request/p/:name", using: "PersonalisedFablData", examples: [])

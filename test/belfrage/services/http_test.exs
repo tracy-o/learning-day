@@ -440,6 +440,47 @@ defmodule Belfrage.Services.HTTPTest do
              } = HTTP.dispatch(struct)
     end
 
+    test "when mvt headers are present, they are put in the request headers" do
+      expected_mvt_headers = %{
+        "mvt-button_colour" => {1, "experiment;red"},
+        "mvt-sidebar" => {3, "feature;false"}
+      }
+
+      struct = %Struct{
+        private: %Struct.Private{
+          origin: "https://www.bbc.co.uk",
+          platform: SomePlatform,
+          mvt: expected_mvt_headers
+        },
+        request: %Struct.Request{
+          method: "GET",
+          path: "/_some_path",
+          country: "gb",
+          host: "www.bbc.co.uk",
+          edge_cache?: true,
+          scheme: :https,
+          is_uk: true
+        }
+      }
+
+      Clients.HTTPMock
+      |> expect(:execute, fn %Clients.HTTP.Request{headers: actual_headers}, _pool ->
+        for {key, _value} <- expected_mvt_headers do
+          assert Map.get(actual_headers, key)
+        end
+
+        @ok_response
+      end)
+
+      assert %Struct{
+               response: %Struct.Response{
+                 http_status: 200,
+                 body: "{\"some\": \"body\"}",
+                 headers: %{"content-type" => "application/json"}
+               }
+             } = HTTP.dispatch(struct)
+    end
+
     test "tracks latency checkpoints" do
       request_id = UUID.uuid4(:hex)
       struct = Struct.add(@get_struct, :request, %{request_id: request_id})

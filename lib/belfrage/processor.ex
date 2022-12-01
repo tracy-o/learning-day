@@ -28,6 +28,7 @@ defmodule Belfrage.Processor do
       &Personalisation.maybe_put_personalised_request/1,
       &Language.add_signature/1,
       &Mvt.Mapper.map/1,
+      &Mvt.Headers.remove_original_headers/1,
       &generate_request_hash/1
     ]
 
