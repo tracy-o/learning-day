@@ -78,7 +78,7 @@ config :logger, :file,
   metadata: :all
 
 config :logger, :weather_routes,
-  path: "weather_routes.log",
+  path: "local.log",
   format: {Belfrage.Logger.Formatter, :weather},
   level: :debug,
   metadata: :all,
