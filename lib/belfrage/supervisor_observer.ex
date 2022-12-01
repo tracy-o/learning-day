@@ -40,16 +40,21 @@ defmodule Belfrage.SupervisorObserver do
           !Keyword.has_key?(monitors, id),
           do: {id, Process.monitor(id)}
 
+    upd_monitors = monitors ++ new_monitors
+    send_total_observed_metric(upd_monitors)
     start_timer()
-    {:noreply, %{state | monitor_map: monitors ++ new_monitors}}
+    {:noreply, %{state | monitor_map: upd_monitors}}
   end
 
   def handle_info(
         {:DOWN, _, :process, {id, _}, reason},
         state = %{monitor_map: monitors}
       ) do
+    upd_monitors = Keyword.delete(monitors, id)
+    :telemetry.execute([:belfrage, :child, :supervisor, :is, :down], %{}, %{supervisor_id: id})
+    send_total_observed_metric(upd_monitors)
     Logger.log(:error, "", %{msg: "Observed process #{id} is down", reason: reason})
-    {:noreply, %{state | monitor_map: Keyword.delete(monitors, id)}}
+    {:noreply, %{state | monitor_map: upd_monitors}}
   end
 
   defp start_timer() do
@@ -61,6 +66,10 @@ defmodule Belfrage.SupervisorObserver do
       )
 
     Process.send_after(self(), :timer, sup_observer_timer_ms)
+  end
+
+  defp send_total_observed_metric(monitors) do
+    :telemetry.execute([:belfrage, :observed, :supervisors, :total], %{number: length(monitors)})
   end
 
   defp process_alive?(id) do

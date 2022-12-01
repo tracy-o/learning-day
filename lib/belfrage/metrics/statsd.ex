@@ -19,7 +19,8 @@ defmodule Belfrage.Metrics.Statsd do
       :plug_metrics,
       :plug_legacy_metrics,
       :service_error_metrics,
-      :misc_metrics
+      :misc_metrics,
+      :supervisor_observer_metrics
     ]
 
   def last_value(metric_name, opts \\ []) do
