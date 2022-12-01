@@ -69,13 +69,20 @@ config :cachex, :limit,
   options: []
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, {LoggerFileBackend, :weather_routes}]
 
 config :logger, :file,
   path: "local.log",
   format: {Belfrage.Logger.Formatter, :app},
   level: :debug,
   metadata: :all
+
+config :logger, :weather_routes,
+  path: "weather_routes.log",
+  format: {Belfrage.Logger.Formatter, :weather},
+  level: :debug,
+  metadata: :all,
+  metadata_filter: [status: 404]
 
 config :logger, :cloudwatch,
   path: "cloudwatch.log",

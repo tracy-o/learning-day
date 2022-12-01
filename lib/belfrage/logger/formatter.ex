@@ -9,6 +9,16 @@ defmodule Belfrage.Logger.Formatter do
     end
   end
 
+  def weather(level, message, timestamp, metadata) do
+    case Keyword.get(metadata, :cloudwatch) do
+      true ->
+        ""
+
+      _ ->
+        format(level, message, timestamp, metadata)
+    end
+  end
+
   def cloudwatch(level, message, timestamp, metadata) do
     case Keyword.get(metadata, :cloudwatch) do
       true ->
