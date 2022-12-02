@@ -60,7 +60,7 @@ config :belfrage,
     bbc_id_availability: 10_000,
     mvt_file: 60_000
   ],
-  delegate: Belfrage.Utils.Current.Real
+  date_time: Belfrage.Utils.Current.Real
 
 config :cachex, :limit,
   size: 36_000,

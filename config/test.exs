@@ -43,7 +43,7 @@ config :belfrage,
     bbc_id_availability: 50,
     mvt_file: 50
   ],
-  delegate: Belfrage.Utils.Current.Mock
+  date_time: Belfrage.Utils.Current.Mock
 
 config :cachex, :limit,
   size: 6,

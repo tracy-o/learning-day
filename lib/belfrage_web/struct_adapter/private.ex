@@ -6,7 +6,8 @@ defmodule BelfrageWeb.StructAdapter.Private do
       route_state_id: route_state_id,
       overrides: private.overrides,
       production_environment: private.production_environment,
-      preview_mode: private.preview_mode
+      preview_mode: private.preview_mode,
+      now: Belfrage.Utils.Current.date_time()
     })
   end
 end

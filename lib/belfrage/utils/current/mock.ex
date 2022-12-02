@@ -25,7 +25,9 @@ defmodule Belfrage.Utils.Current.Mock do
     Real.date_time()
   end
 
-  def freeze(dt) do
+  def freeze(day, time) do
+    {:ok, dt} = DateTime.new(day, time, "Etc/UTC")
+
     Agent.update(__MODULE__, fn _state ->
       %{is_frozen: true, frozen_value: dt}
     end)
