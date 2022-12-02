@@ -29,7 +29,7 @@ defmodule Belfrage.RequestTransformers.Echo do
 
     if input == 0 do
       """
-      Hey, ho!
+      Echo Response
       PATH:           #{struct.request.path}
       PIPELINE:       #{struct.private.request_pipeline}
       ROUTE_RELEASE:  #{Application.get_env(:belfrage, :route_rel)}

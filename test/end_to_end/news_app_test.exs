@@ -1,0 +1,52 @@
+defmodule EndToEnd.NewsAppsTest do
+  use ExUnit.Case, async: false
+  use Plug.Test
+  alias BelfrageWeb.Router
+  use Test.Support.Helper, :mox
+
+  alias Belfrage.Utils.Current
+
+  describe "when the NewsAppsHardcodedResponse dial is enabled" do
+    test "returns a hardcoded payload" do
+      stub_dials(news_apps_hardcoded_response: "enabled")
+
+      response_conn = conn(:get, "/fd/abl") |> Router.call([])
+
+      {200, _resp_headers, body} = sent_resp(response_conn)
+      assert body =~ "CallToActionBanner"
+    end
+
+    test "returns the same etag when requests are within the same hour" do
+      DateTime.new(~D[2022-12-02], ~T[11:14:52.368815Z], "Etc/UTC")
+      |> Current.Mock.freeze()
+
+      stub_dials(news_apps_hardcoded_response: "enabled")
+
+      response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
+      {200, resp_headers1, _body} = sent_resp(response_conn1)
+      {"etag", etag1} = List.keyfind(resp_headers1, "etag", 0)
+
+      # 10 mins later...
+      DateTime.new(~D[2022-12-02], ~T[11:24:56.368815Z], "Etc/UTC")
+      |> Current.Mock.freeze()
+
+      response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
+      {200, resp_headers2, _body} = sent_resp(response_conn2)
+      {"etag", etag2} = List.keyfind(resp_headers2, "etag", 0)
+
+      assert etag1 == etag2
+      on_exit(&Current.Mock.unfreeze/0)
+    end
+  end
+
+  describe "when the NewsAppsHardcodedResponse dial is disabled" do
+    test "does not return an hardcoded payload" do
+      stub_dials(news_apps_hardcoded_response: "disabled")
+
+      response_conn = conn(:get, "/fd/abl") |> Router.call([])
+
+      {200, _resp_headers, body} = sent_resp(response_conn)
+      assert body =~ "Echo Response"
+    end
+  end
+end
