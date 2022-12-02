@@ -5,10 +5,16 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
   alias Belfrage.RequestTransformers.NewsAppsHardcodedResponse
   alias Belfrage.Struct
 
+  defp date_time do
+    {:ok, dt} = DateTime.new(~D[2022-12-02], ~T[11:14:52.368815Z], "Etc/UTC")
+    dt
+  end
+
   defp struct do
     %Struct{
       private: %Struct.Private{
-        platform: Fabl
+        platform: Fabl,
+        now: date_time()
       }
     }
   end
@@ -50,6 +56,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
       parsed_body = Json.decode!(body)
 
       assert parsed_body["data"]["metadata"]["name"] == "Home"
+      assert parsed_body["data"]["metadata"]["lastUpdated"] == 1_669_978_800_000
     end
   end
 end
