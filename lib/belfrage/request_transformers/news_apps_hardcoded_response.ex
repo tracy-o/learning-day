@@ -40,17 +40,18 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
            "items": [
              {
                "type": "CallToActionBanner",
-               "title": "We're currently experiencing technical issues with our beta experience. You can continue to get news via our website.",
+               "title": "The BBC News app is unavailable at the moment.",
+               "subtitle": "Please visit our website for the latest updates.",
                "buttons": [
                  {
-                   "title": "Go to website",
+                   "title": "bbc.co.uk/news",
                    "link": {
                      "trackers": [],
                      "destinations": [
                        {
                          "sourceFormat": "HTML",
-                         "url": "https://www.bbc.co.uk/news/",
-                         "id": "https://www.bbc.co.uk/news/",
+                         "url": "https://www.bbc.co.uk/news",
+                         "id": "https://www.bbc.co.uk/news",
                          "presentation": {
                            "type": "WEB",
                            "contentSource": "EXTERNAL"

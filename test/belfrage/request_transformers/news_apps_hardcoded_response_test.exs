@@ -46,6 +46,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
         }
       } = NewsAppsHardcodedResponse.call([], struct())
 
+      # cheks that JSON is parseable
       parsed_body = Json.decode!(body)
 
       assert parsed_body["data"]["metadata"]["name"] == "Home"
