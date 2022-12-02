@@ -1,5 +1,6 @@
 defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   use Belfrage.Transformer
+  alias Belfrage.Utils
 
   @dial Application.get_env(:belfrage, :dial)
 
@@ -24,7 +25,10 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   end
 
   defp hardcoded_body do
-    epoch = :os.system_time(:millisecond)
+    epoch =
+      DateTime.utc_now()
+      |> Utils.DateTime.beginning_of_the_hour()
+      |> DateTime.to_unix(:millisecond)
 
     ~s({"data": {
            "metadata": {
