@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
     end
   end
 
-  describe "when the Dial is anabled" do
+  describe "when the Dial is enabled" do
     test "an early response is returned" do
       stub_dials(news_apps_hardcoded_response: "enabled")
 
