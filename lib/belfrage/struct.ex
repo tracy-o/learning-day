@@ -94,6 +94,7 @@ defmodule Belfrage.Struct.Private do
             throughput: 100,
             fallback_write_sample: 1,
             etag: false,
+            now: Belfrage.Utils.Current.date_time(),
             metadata: %{}
 
   @type t :: %__MODULE__{}
