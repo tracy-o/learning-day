@@ -32,7 +32,6 @@ config :belfrage,
   trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
   walter_endpoint: "https://walter-producer.test.api.bbci.co.uk",
   sup_observer_timer_ms: 10,
-
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests
   short_counter_reset_interval: 3_600_000,
@@ -43,7 +42,8 @@ config :belfrage,
     credentials: 50,
     bbc_id_availability: 50,
     mvt_file: 50
-  ]
+  ],
+  delegate: Belfrage.Utils.Current.Mock
 
 config :cachex, :limit,
   size: 6,
