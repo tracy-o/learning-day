@@ -49,7 +49,6 @@ defmodule EndToEnd.NewsAppsTest do
 
       assert etag1 == "\"38015b62b58778895ea93d64e45576f315a5d009\""
 
-      # 20 mins later...
       Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
