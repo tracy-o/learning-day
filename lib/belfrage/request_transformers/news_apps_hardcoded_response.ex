@@ -5,14 +5,14 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   @dial Application.get_env(:belfrage, :dial)
 
   @impl true
-  def call(rest, struct = %Struct{private: %Struct.Private{now: current_date_time}}) do
+  def call(rest, struct) do
     if dial_active?() do
       {
         :stop_pipeline,
         Struct.add(struct, :response, %{
           http_status: 200,
           headers: %{"content-type" => "application/json", "cache-control" => "public, max-age=5"},
-          body: hardcoded_body(current_date_time)
+          body: hardcoded_body()
         })
       }
     else
@@ -24,9 +24,9 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
     @dial.state(:news_apps_hardcoded_response) == "enabled"
   end
 
-  defp hardcoded_body(current_date_time) do
+  defp hardcoded_body do
     epoch =
-      current_date_time
+      Belfrage.Utils.Current.date_time()
       |> Utils.DateTime.beginning_of_the_hour()
       |> DateTime.to_unix(:millisecond)
 

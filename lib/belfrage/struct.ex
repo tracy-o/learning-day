@@ -94,7 +94,6 @@ defmodule Belfrage.Struct.Private do
             throughput: 100,
             fallback_write_sample: 1,
             etag: false,
-            now: nil,
             metadata: %{}
 
   @type t :: %__MODULE__{}

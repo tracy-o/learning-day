@@ -4,17 +4,12 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
 
   alias Belfrage.RequestTransformers.NewsAppsHardcodedResponse
   alias Belfrage.Struct
-
-  defp date_time do
-    {:ok, dt} = DateTime.new(~D[2022-12-02], ~T[11:14:52.368815Z], "Etc/UTC")
-    dt
-  end
+  alias Belfrage.Utils.Current
 
   defp struct do
     %Struct{
       private: %Struct.Private{
-        platform: Fabl,
-        now: date_time()
+        platform: Fabl
       }
     }
   end
@@ -44,6 +39,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
 
     test "the response body is hardocded" do
       stub_dials(news_apps_hardcoded_response: "enabled")
+      Current.Mock.freeze(~D[2022-12-02], ~T[11:14:52.368815Z])
 
       {
         :stop_pipeline,
@@ -57,6 +53,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
 
       assert parsed_body["data"]["metadata"]["name"] == "Home"
       assert parsed_body["data"]["metadata"]["lastUpdated"] == 1_669_978_800_000
+      on_exit(&Current.Mock.unfreeze/0)
     end
   end
 end
