@@ -22,17 +22,41 @@ defmodule EndToEnd.NewsAppsTest do
       stub_dials(news_apps_hardcoded_response: "enabled")
 
       response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, resp_headers1, _body} = sent_resp(response_conn1)
-      {"etag", etag1} = List.keyfind(resp_headers1, "etag", 0)
+      {200, _resp_headers, _body} = sent_resp(response_conn1)
+      [etag1] = get_resp_header(response_conn1, "etag")
+
+      assert etag1 == "\"38015b62b58778895ea93d64e45576f315a5d009\""
 
       # 20 mins later...
       Current.Mock.freeze(~D[2022-12-02], ~T[11:34:56.368815Z])
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, resp_headers2, _body} = sent_resp(response_conn2)
-      {"etag", etag2} = List.keyfind(resp_headers2, "etag", 0)
+      {200, _resp_headers, _body} = sent_resp(response_conn2)
+      [etag2] = get_resp_header(response_conn2, "etag")
 
       assert etag1 == etag2
+      on_exit(&Current.Mock.unfreeze/0)
+    end
+
+    test "returns a different etag when requests are over two different hours" do
+      Current.Mock.freeze(~D[2022-12-02], ~T[11:58:52.368815Z])
+
+      stub_dials(news_apps_hardcoded_response: "enabled")
+
+      response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
+      {200, _resp_headers, _body} = sent_resp(response_conn1)
+      [etag1] = get_resp_header(response_conn1, "etag")
+
+      assert etag1 == "\"38015b62b58778895ea93d64e45576f315a5d009\""
+
+      # 20 mins later...
+      Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
+
+      response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
+      {200, _resp_headers, _body} = sent_resp(response_conn2)
+      [etag2] = get_resp_header(response_conn2, "etag")
+
+      assert etag1 != etag2
       on_exit(&Current.Mock.unfreeze/0)
     end
   end
