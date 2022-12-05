@@ -3,6 +3,7 @@ defmodule Belfrage.SupervisorTest do
 
   import Cachex.Spec, only: [{:limit, 1}]
   import Fixtures.Struct
+  alias Belfrage.SupervisorObserver
 
   @belfrage_local_cache :cache
   @test_cache :test_cache
@@ -60,6 +61,16 @@ defmodule Belfrage.SupervisorTest do
         assert {:ok, true} = Cachex.exists?(@test_cache, remaining_cache_key)
       end
     end
+  end
+
+  test "ensure children supervisors are monitored by SupervisorObserver" do
+    expected_observed_ids = Enum.sort(Belfrage.Supervisor.get_observed_ids())
+
+    %{monitor_map: m_map, observed_ids: observed_ids} = SupervisorObserver.get_state(SupervisorObserver)
+    monitor_ids = for {id, _ref} <- m_map, do: id
+
+    assert expected_observed_ids == Enum.sort(observed_ids)
+    assert expected_observed_ids == Enum.sort(monitor_ids)
   end
 
   # This helper starts a new local cache and links it to

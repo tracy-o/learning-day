@@ -19,8 +19,20 @@ defmodule Belfrage.Supervisor do
       {Belfrage.Metrics.Supervisor, [env: env]},
       {Belfrage.Mvt.Supervisor, [env: env]},
       {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-      {Belfrage.Services.Webcore.Supervisor, [env: env]}
+      {Belfrage.Services.Webcore.Supervisor, [env: env]},
+      {Belfrage.SupervisorObserver, get_observed_ids()}
     ] ++ http_router(env)
+  end
+
+  def get_observed_ids() do
+    [
+      Belfrage.RouteStateSupervisor,
+      Belfrage.Authentication.Supervisor,
+      Belfrage.Dials.Supervisor,
+      Belfrage.Metrics.Supervisor,
+      Belfrage.Mvt.Supervisor,
+      Belfrage.Services.Webcore.Supervisor
+    ]
   end
 
   defp finch_opts() do

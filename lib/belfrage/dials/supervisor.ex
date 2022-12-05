@@ -1,5 +1,5 @@
 defmodule Belfrage.Dials.Supervisor do
-  use Supervisor
+  use Supervisor, restart: :temporary
   use Belfrage.DialConfig
   @type dials_event :: :dials_changed
 

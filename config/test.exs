@@ -31,6 +31,7 @@ config :belfrage,
   philippa_endpoint: "https://philippa-producer.test.api.bbci.co.uk",
   trevor_endpoint: "https://trevor-producer.test.api.bbci.co.uk",
   walter_endpoint: "https://walter-producer.test.api.bbci.co.uk",
+  sup_observer_timer_ms: 10,
 
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

@@ -461,6 +461,22 @@ defmodule Belfrage.MetricsMigration do
         end
       end
 
+      def supervisor_observer_metrics() do
+        [
+          counter(
+            "child.supervisor.is.down",
+            event_name: [:belfrage, :child, :supervisor, :is, :down],
+            measurement: :count,
+            tags: [:supervisor_id]
+          ),
+          last_value(
+            "observed.supervisors.total",
+            event_name: [:belfrage, :observed, :supervisors, :total],
+            measurement: :number
+          )
+        ]
+      end
+
       def private_response?(conn = %Plug.Conn{}) do
         match?(["private" <> _], Plug.Conn.get_resp_header(conn, "cache-control"))
       end
