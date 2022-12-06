@@ -25,7 +25,7 @@ defmodule EndToEnd.NewsAppsTest do
       {200, _resp_headers, _body} = sent_resp(response_conn1)
       [etag1] = get_resp_header(response_conn1, "etag")
 
-      assert etag1 == "\"38015b62b58778895ea93d64e45576f315a5d009\""
+      assert etag1 == "\"6c65c87901c36aa9afc266d70bf6539d2a283198\""
 
       # 20 mins later...
       Current.Mock.freeze(~D[2022-12-02], ~T[11:34:56.368815Z])
@@ -47,7 +47,7 @@ defmodule EndToEnd.NewsAppsTest do
       {200, _resp_headers, _body} = sent_resp(response_conn1)
       [etag1] = get_resp_header(response_conn1, "etag")
 
-      assert etag1 == "\"38015b62b58778895ea93d64e45576f315a5d009\""
+      assert etag1 == "\"6c65c87901c36aa9afc266d70bf6539d2a283198\""
 
       Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
 
