@@ -31,7 +31,11 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
                :stop_pipeline,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
-                   http_status: 200
+                   http_status: 200,
+                   headers: %{
+                     "content-type" => "application/json; charset=utf-8",
+                     "cache-control" => "public, max-age=5"
+                   }
                  }
                }
              } = NewsAppsHardcodedResponse.call([], struct())

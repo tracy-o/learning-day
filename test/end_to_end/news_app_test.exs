@@ -13,7 +13,14 @@ defmodule EndToEnd.NewsAppsTest do
       response_conn = conn(:get, "/fd/abl") |> Router.call([])
 
       {200, _resp_headers, body} = sent_resp(response_conn)
+
       assert body =~ "CallToActionBanner"
+
+      assert ["application/json; charset=utf-8"] ==
+               get_resp_header(response_conn, "content-type")
+
+      assert ["public, stale-if-error=90, stale-while-revalidate=30, max-age=5"] ==
+               get_resp_header(response_conn, "cache-control")
     end
 
     test "returns the same etag when requests are within the same hour" do
