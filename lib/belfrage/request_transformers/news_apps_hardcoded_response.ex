@@ -41,7 +41,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
              {
                "type": "CallToActionBanner",
                "title": "The BBC News app is unavailable at the moment.",
-               "subtitle": "Please visit our website for the latest updates.",
+               "subtitle": "Please visit our website for the latest news.",
                "buttons": [
                  {
                    "title": "bbc.co.uk/news",
