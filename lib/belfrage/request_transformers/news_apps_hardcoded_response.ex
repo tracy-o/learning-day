@@ -11,7 +11,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
         :stop_pipeline,
         Struct.add(struct, :response, %{
           http_status: 200,
-          headers: %{"content-type" => "application/json", "cache-control" => "public, max-age=5"},
+          headers: %{"content-type" => "application/json; charset=utf-8", "cache-control" => "public, max-age=5"},
           body: hardcoded_body()
         })
       }
