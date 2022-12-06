@@ -2700,7 +2700,12 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/weather/*any", using: "Weather", examples: []
+  handle "/weather/*any", using: "Weather", examples: [] do
+    require Logger
+    Logger.metadata([request_id: nil])
+    Logger.error("weather catch all")
+    false
+  end
 
   # WebCore Hub
   redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302

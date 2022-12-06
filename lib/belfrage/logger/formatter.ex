@@ -9,17 +9,6 @@ defmodule Belfrage.Logger.Formatter do
     end
   end
 
-  def weather(_level, _message, timestamp, metadata) do
-    if String.starts_with?(Keyword.get(metadata, :path), "/weather") do
-      data = [:status, :route_state_id, :path, :time]
-      {_, rsc} = metadata[:resp_headers] |> List.keyfind("req-svc-chain", 0)
-      metadata = Keyword.filter(metadata, fn {k, _} -> k in data end) |> Keyword.put(:req_svc_chain, rsc)
-      format("error", "ANY weather route", timestamp, metadata)
-    else
-      ""
-    end
-  end
-
   def cloudwatch(level, message, timestamp, metadata) do
     case Keyword.get(metadata, :cloudwatch) do
       true ->
