@@ -7,6 +7,7 @@
   "football_scores_fixtures": "mozart",
   "logging_level": "debug",
   "mvt_enabled": "true",
+  "news_apps_hardcoded_response": "disabled",
   "news_articles_personalisation": "on",
   "non_webcore_ttl_multiplier": "default",
   "obit_mode": "off",

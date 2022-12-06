@@ -97,6 +97,8 @@ defroutefile "Mock", "test" do
 
   handle("/etag-support", using: "EtagSupport", examples: [])
 
+  handle "/fd/abl", using: "AblDataWithNoCache", examples: []
+
   handle("/no-etag-support", using: "NoEtagSupport", examples: [])
 
   handle("/platform-selection-with-selector", using: "SomeRouteStateWithoutPlatformAttribute", platform: "AssetTypePlatformSelector", examples: [])

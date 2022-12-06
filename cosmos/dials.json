@@ -248,5 +248,20 @@
         "description": "Football scores and fixtures served by Webcore"
       }
     ]
+  },
+  {
+    "name": "news_apps_hardcoded_response",
+    "description": "Used to return a hard-coded response, without forwarding the traffic upstream",
+    "default-value": "disabled",
+    "values": [
+      {
+        "value": "enabled",
+        "description": "Serves hardcoded response"
+      },
+      {
+        "value": "disabled",
+        "description": "Proxies requests upstream"
+      }
+    ]
   }
 ]

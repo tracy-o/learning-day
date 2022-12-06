@@ -59,7 +59,8 @@ config :belfrage,
     credentials: 600_000,
     bbc_id_availability: 10_000,
     mvt_file: 60_000
-  ]
+  ],
+  date_time: Belfrage.Utils.Current.Real
 
 config :cachex, :limit,
   size: 36_000,
