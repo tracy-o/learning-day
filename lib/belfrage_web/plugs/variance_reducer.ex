@@ -30,8 +30,12 @@ defmodule BelfrageWeb.Plugs.VarianceReducer do
             )
         })
 
-      # This does not guarantee that the order of the original query string would be mantained
-      conn |> Map.merge(%{query_string: conn.query_params |> URI.encode_query()})
+      conn
+      |> Map.merge(%{
+        query_string:
+          conn.query_params
+          |> URI.encode_query()
+      })
     else
       conn
     end

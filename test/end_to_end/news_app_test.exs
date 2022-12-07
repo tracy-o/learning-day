@@ -4,9 +4,12 @@ defmodule EndToEnd.NewsAppsTest do
   alias BelfrageWeb.Router
   use Test.Support.Helper, :mox
 
+  alias Belfrage.Clients.{HTTP, HTTPMock}
   alias Belfrage.Utils.Current
 
   @moduletag :end_to_end
+
+  @fabl_endpoint Application.get_env(:belfrage, :fabl_endpoint)
 
   describe "when the NewsAppsHardcodedResponse dial is enabled" do
     test "returns a hardcoded payload" do
@@ -73,12 +76,18 @@ defmodule EndToEnd.NewsAppsTest do
     test "does not return an hardcoded payload" do
       stub_dials(news_apps_hardcoded_response: "disabled")
 
-      response_conn = conn(:get, "/fd/abl") |> Router.call([])
+      url = "#{@fabl_endpoint}/module/abl"
 
-      {200, _resp_headers, body} = sent_resp(response_conn)
+      expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: ^url}, _pool ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{},
+           status_code: 200,
+           body: "OK"
+         }}
+      end)
 
-      parsed_body = Json.decode!(body)
-      assert parsed_body["path"] == "/fd/abl"
+      conn(:get, "/fd/abl") |> Router.call([])
     end
   end
 
@@ -86,28 +95,26 @@ defmodule EndToEnd.NewsAppsTest do
     test "removes the 'clientLoc' query string param" do
       stub_dials(news_apps_variance_reducer: "enabled")
 
-      response_conn =
-        conn(
-          :get,
-          "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
-        )
-        |> Router.call([])
+      # to keep requests deterministic, query string get sorted
+      sorted_qs =
+        "clientName=Chrysalis&clientNeedsUpdate=true&clientVersion=pre-4&page=chrysalis_discovery&release=team&segmentId=70022f59ab_10&service=news&type=index"
 
-      {200, _resp_headers, body} = sent_resp(response_conn)
-      parsed_body = Json.decode!(body)
+      url = "#{@fabl_endpoint}/module/abl?#{sorted_qs}"
 
-      assert parsed_body["path"] == "/fd/abl"
+      expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: ^url}, _pool ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{},
+           status_code: 200,
+           body: "OK"
+         }}
+      end)
 
-      assert Map.keys(parsed_body["query_params"]) == [
-               "clientName",
-               "clientNeedsUpdate",
-               "clientVersion",
-               "page",
-               "release",
-               "segmentId",
-               "service",
-               "type"
-             ]
+      conn(
+        :get,
+        "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
+      )
+      |> Router.call([])
     end
   end
 
@@ -115,19 +122,26 @@ defmodule EndToEnd.NewsAppsTest do
     test "does not remove the 'clientLoc' query string param" do
       stub_dials(news_apps_variance_reducer: "disabled")
 
-      response_conn =
-        conn(
-          :get,
-          "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
-        )
-        |> Router.call([])
+      # to keep requests deterministic, query string get sorted
+      sorted_qs =
+        "clientLoc=E7&clientName=Chrysalis&clientNeedsUpdate=true&clientVersion=pre-4&page=chrysalis_discovery&release=team&segmentId=70022f59ab_10&service=news&type=index"
 
-      {200, _resp_headers, body} = sent_resp(response_conn)
-      parsed_body = Json.decode!(body)
+      url = "#{@fabl_endpoint}/module/abl?#{sorted_qs}"
 
-      assert parsed_body["path"] == "/fd/abl"
+      expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: ^url}, _pool ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{},
+           status_code: 200,
+           body: "OK"
+         }}
+      end)
 
-      assert "clientLoc" in Map.keys(parsed_body["query_params"])
+      conn(
+        :get,
+        "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
+      )
+      |> Router.call([])
     end
   end
 end
