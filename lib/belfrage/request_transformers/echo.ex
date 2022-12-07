@@ -28,7 +28,12 @@ defmodule Belfrage.RequestTransformers.Echo do
       |> String.to_integer()
 
     if input == 0 do
-      struct.request |> Json.encode!()
+      """
+      Echo Response
+      PATH:           #{struct.request.path}
+      PIPELINE:       #{struct.private.request_pipeline}
+      ROUTE_RELEASE:  #{Application.get_env(:belfrage, :route_rel)}
+      """
     else
       :crypto.strong_rand_bytes(input * 1024)
       |> Base.encode64()
