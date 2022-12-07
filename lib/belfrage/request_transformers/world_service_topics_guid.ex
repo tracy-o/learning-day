@@ -1,17 +1,18 @@
 defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuid do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if topics_guid?(struct) do
-      then_do(
-        rest,
+      {
+        :ok,
         Struct.add(struct, :private, %{
           platform: MozartNews,
           origin: Application.get_env(:belfrage, :mozart_news_endpoint)
         })
-      )
+      }
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 

@@ -1,12 +1,12 @@
 defmodule Belfrage.RequestTransformers.Echo do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(_rest, struct) do
+  @impl Transformer
+  def call(struct) do
     Process.sleep(struct |> sleep_duration())
 
     {
-      :stop_pipeline,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 200,
         headers: %{},

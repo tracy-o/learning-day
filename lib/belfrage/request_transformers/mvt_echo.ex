@@ -1,12 +1,12 @@
 defmodule Belfrage.RequestTransformers.MvtEcho do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @json_codec Application.get_env(:belfrage, :json_codec)
 
-  @impl true
-  def call(_rest, struct) do
+  @impl Transformer
+  def call(struct) do
     {
-      :stop_pipeline,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 200,
         headers: %{"content-type" => "application/json", "cache-control" => "public, max-age=5"},

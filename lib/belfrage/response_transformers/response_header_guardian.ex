@@ -3,18 +3,17 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   Remove response headers that could result in
   clearly bad behaviour for Belfrage.
   """
-  alias Belfrage.Struct
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
+  @impl Transformer
+  def call(struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
     struct =
       Map.put(struct, :response, %Struct.Response{
         response
         | headers: clean_headers(response_headers)
       })
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 
   @doc ~S"""

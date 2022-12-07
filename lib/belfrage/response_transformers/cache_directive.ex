@@ -6,13 +6,12 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   require Logger
 
   alias Belfrage.{CacheControl, Struct, Struct.Private}
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @dial Application.get_env(:belfrage, :dial)
 
-  @impl true
+  @impl Transformer
   def call(
-        rest,
         struct = %Struct{
           response: %Struct.Response{headers: %{"cache-control" => cache_control}},
           private: %Private{personalised_request: personalised_request}
@@ -20,8 +19,8 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
       ) do
     response_headers = Map.delete(struct.response.headers, "cache-control")
 
-    then_do(
-      rest,
+    {
+      :ok,
       struct
       |> Struct.add(:response, %{
         cache_directive:
@@ -32,11 +31,10 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
           ),
         headers: response_headers
       })
-    )
+    }
   end
 
-  @impl true
-  def call(rest, struct), do: then_do(rest, struct)
+  def call(struct), do: {:ok, struct}
 
   defp ttl_multiplier(%Private{platform: platform}) do
     if platform == Webcore do

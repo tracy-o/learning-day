@@ -1,7 +1,5 @@
 defmodule Belfrage.RequestTransformers.AppSubdomainMapper do
-  use Belfrage.Transformer
-
-  alias Belfrage.Struct
+  use Belfrage.Behaviours.Transformer
 
   # This transformer uses the request subdomain to decide which apps endpoint to
   # send a request to.
@@ -17,19 +15,20 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapper do
   # - news-app-global-classic.test.api.bbci.co.uk
   # - news-app-ws-classic.test.api.bbci.co.uk
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     case struct.request.subdomain do
       "news-app-classic" ->
-        then_do(rest, change_endpoint(struct, AppsTrevor, :trevor_endpoint, 15_000))
+        {:ok, change_endpoint(struct, AppsTrevor, :trevor_endpoint, 15_000)}
 
       "news-app-global-classic" ->
-        then_do(rest, change_endpoint(struct, AppsWalter, :walter_endpoint, 8_000))
+        {:ok, change_endpoint(struct, AppsWalter, :walter_endpoint, 8_000)}
 
       "news-app-ws-classic" ->
-        then_do(rest, change_endpoint(struct, AppsPhilippa, :philippa_endpoint, 1_500))
+        {:ok, change_endpoint(struct, AppsPhilippa, :philippa_endpoint, 1_500)}
 
       _ ->
-        {:stop_pipeline, Struct.put_status(struct, 400)}
+        {:stop, Struct.put_status(struct, 400)}
     end
   end
 

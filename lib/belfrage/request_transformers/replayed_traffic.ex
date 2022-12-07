@@ -1,17 +1,16 @@
 defmodule Belfrage.RequestTransformers.ReplayedTraffic do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct = %Struct{request: %Struct.Request{has_been_replayed?: true}}) do
+  @impl Transformer
+  def call(struct = %Struct{request: %Struct.Request{has_been_replayed?: true}}) do
     struct =
       Struct.add(struct, :private, %{
         origin: Application.get_env(:belfrage, :origin_simulator),
         platform: OriginSimulator
       })
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 
-  @impl true
-  def call(rest, struct), do: then_do(rest, struct)
+  def call(struct), do: {:ok, struct}
 end

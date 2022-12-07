@@ -1,16 +1,16 @@
 defmodule Belfrage.RequestTransformers.WorldServiceRedirect do
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.Helpers.QueryParams
-  use Belfrage.Transformer
 
-  @impl true
-  def call(_rest, struct = %Struct{request: %Struct.Request{scheme: :http}}) do
+  @impl Transformer
+  def call(struct = %Struct{request: %Struct.Request{scheme: :http}}) do
     redirect(redirect_url(struct.request), struct)
   end
 
-  def call(rest, struct) do
+  def call(struct) do
     case should_redirect?(struct.request.host) do
       true -> redirect(redirect_url(struct.request), struct)
-      _ -> then_do(rest, struct)
+      false -> {:ok, struct}
     end
   end
 
@@ -21,7 +21,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirect do
 
   def redirect(redirect_url, struct) do
     {
-      :redirect,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{

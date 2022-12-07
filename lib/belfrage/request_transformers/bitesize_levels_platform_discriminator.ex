@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform and Origin for a subset of Bitesize level IDs that need to be served by Webcore.
   """
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @valid_year_ids [
     "zjpqqp3",
@@ -20,20 +20,20 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
 
   @webcore_live_ids []
 
-  def call(rest, struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    then_do(rest, maybe_update_origin(id, struct))
+  @impl Transformer
+  def call(struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
+    {:ok, maybe_update_origin(id, struct)}
   end
 
-  def call(
-        rest,
-        struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "year_id" => year_id}}}
-      ) do
+  def call(struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "year_id" => year_id}}}) do
     if year_id in @valid_year_ids do
-      then_do(rest, maybe_update_origin(id, struct))
+      {:ok, maybe_update_origin(id, struct)}
+    else
+      {:ok, struct}
     end
   end
 
-  def call(_rest, struct), do: then_do([], struct)
+  def call(struct), do: {:ok, struct}
 
   defp is_webcore_id(id) do
     application_env = Application.get_env(:belfrage, :production_environment)

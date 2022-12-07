@@ -1,28 +1,20 @@
 defmodule Belfrage.RequestTransformers.Personalisation do
-  use Belfrage.Transformer
-
-  alias Belfrage.Struct
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.Authentication.SessionState
 
-  @impl true
-  def call(rest, struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
-    then_do(rest, struct)
+  @impl Transformer
+  def call(struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
+    {:ok, struct}
   end
 
-  @impl true
-  def call(rest, struct = %Struct{}) do
+  def call(struct = %Struct{}) do
     session_state = SessionState.build(struct.request)
     struct = Struct.add(struct, :user_session, session_state)
 
     cond do
-      return_401?(struct) ->
-        {:stop_pipeline, Struct.put_status(struct, 401)}
-
-      redirect?(struct) ->
-        redirect(struct)
-
-      true ->
-        then_do(rest, struct)
+      return_401?(struct) -> {:stop, Struct.put_status(struct, 401)}
+      redirect?(struct) -> redirect(struct)
+      true -> {:ok, struct}
     end
   end
 
@@ -40,7 +32,7 @@ defmodule Belfrage.RequestTransformers.Personalisation do
 
   defp redirect(struct = %Struct{}) do
     {
-      :redirect,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{

@@ -1,26 +1,25 @@
 defmodule Belfrage.RequestTransformers.ClassicAppFablLdp do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     case struct.request.path_params["guid"] do
       nil ->
-        then_do(rest, struct)
+        {:ok, struct}
 
       guid ->
-        then_do(
-          rest,
-          struct
-          |> Struct.add(:request, %{
-            path: "/fd/abl-classic",
-            path_params: %{
-              "name" => "abl-classic"
-            },
-            query_params: Map.put(struct.request.query_params, "subjectId", guid),
-            raw_headers: %{
-              "ctx-unwrapped" => "1"
-            }
-          })
-        )
+        {:ok,
+         struct
+         |> Struct.add(:request, %{
+           path: "/fd/abl-classic",
+           path_params: %{
+             "name" => "abl-classic"
+           },
+           query_params: Map.put(struct.request.query_params, "subjectId", guid),
+           raw_headers: %{
+             "ctx-unwrapped" => "1"
+           }
+         })}
     end
   end
 end

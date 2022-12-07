@@ -1,20 +1,20 @@
 defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(rest, struct) do
+  def call(struct) do
     application_env = Application.get_env(:belfrage, :production_environment)
 
     # currently we don't want to show webcore pages in live environment
     if tipo_id?(struct) && application_env != "live" do
-      then_do(
-        rest,
+      {
+        :ok,
         Struct.add(struct, :private, %{
           platform: Webcore,
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
-      )
+      }
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 

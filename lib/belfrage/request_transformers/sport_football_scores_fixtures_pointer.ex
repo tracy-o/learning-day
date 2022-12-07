@@ -1,10 +1,10 @@
 defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @dial Application.get_env(:belfrage, :dial)
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if points_to_webcore?() do
       struct =
         struct
@@ -13,9 +13,9 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
 
-      then_do(rest, struct)
+      {:ok, struct}
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 

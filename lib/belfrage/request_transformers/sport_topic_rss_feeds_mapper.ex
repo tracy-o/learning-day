@@ -3,13 +3,14 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
   Does the mapping between path and topicId.
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
   """
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @sport_feed_mapping %{
     "/sport/rss.xml" => "c22ymglr3x3t"
   }
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     struct =
       Struct.add(struct, :request, %{
         path: "/fd/rss",
@@ -25,6 +26,6 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
         }
       })
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 end
