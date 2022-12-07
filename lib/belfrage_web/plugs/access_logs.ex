@@ -10,6 +10,11 @@ defmodule BelfrageWeb.Plugs.AccessLogs do
   end
 
   defp write_access_log(conn) do
+    if {"routespec", "WeatherCatchAll"} in conn.resp_headers do
+      Logger.metadata(request_id: nil, route_state_id: nil)
+      Logger.log(:error, "WEATHERALL", %{path: conn.request_path, status: conn.status})
+    end
+
     Logger.log(:info, "", %{
       path: conn.request_path,
       status: conn.status,
