@@ -6,6 +6,8 @@ defmodule EndToEnd.NewsAppsTest do
 
   alias Belfrage.Utils.Current
 
+  @moduletag :end_to_end
+
   describe "when the NewsAppsHardcodedResponse dial is enabled" do
     test "returns a hardcoded payload" do
       stub_dials(news_apps_hardcoded_response: "enabled")
@@ -74,7 +76,43 @@ defmodule EndToEnd.NewsAppsTest do
       response_conn = conn(:get, "/fd/abl") |> Router.call([])
 
       {200, _resp_headers, body} = sent_resp(response_conn)
-      assert body =~ "Echo Response"
+
+      parsed_body = Json.decode!(body)
+      assert parsed_body["path"] == "/fd/abl"
+    end
+  end
+
+  describe "when the NewsAppsVarianceReducer dial is disabled" do
+    test "does not amend teh query strings" do
+      stub_dials(news_apps_variance_reducer: "disabled")
+
+      response_conn = conn(
+        :get,
+        "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true")
+      |> Router.call([])
+
+      {200, _resp_headers, body} = sent_resp(response_conn)
+      parsed_body = Json.decode!(body)
+
+      assert parsed_body["path"] == "/fd/abl"
+      assert Map.keys(parsed_body["query_params"]) == ["clientLoc", "clientName", "clientNeedsUpdate", "clientVersion", "page", "release", "segmentId", "service", "type"]
+    end
+  end
+
+  describe "when the NewsAppsVarianceReducer dial is enabled" do
+    test "removes the 'clientLoc' query string param" do
+      stub_dials(news_apps_variance_reducer: "enabled")
+
+      response_conn = conn(
+        :get,
+        "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true")
+      |> Router.call([])
+
+      {200, _resp_headers, body} = sent_resp(response_conn)
+      parsed_body = Json.decode!(body)
+
+      assert parsed_body["path"] == "/fd/abl"
+      assert Map.keys(parsed_body["query_params"]) == ["clientName", "clientNeedsUpdate", "clientVersion", "page", "release", "segmentId", "service", "type"]
     end
   end
 end

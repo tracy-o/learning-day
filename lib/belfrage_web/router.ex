@@ -23,6 +23,7 @@ defmodule BelfrageWeb.Router do
   plug(:fetch_query_params, validate_utf8: false)
   plug(Plugs.HttpRedirector)
   plug(BelfrageWeb.Plugs.Overrides)
+  plug(BelfrageWeb.Plugs.VarianceReducer)
   plug(Plugs.PathLogger)
   plug(:match)
   plug(:dispatch)
