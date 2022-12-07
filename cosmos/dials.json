@@ -274,8 +274,8 @@
         "description": "Remove query strings"
       },
       {
-        "value": "off",
-        "description": "keeps all allowed query strings"
+        "value": "disabled",
+        "description": "Keeps all allowed query strings"
       }
     ]
   }
