@@ -113,7 +113,7 @@ defmodule Belfrage.Processor do
       # need to call the former before the latter, as we would
       # like to get the state of :mvt_seen before it is
       # updated.
-      &ResponseTransformers.CachingEnabled.call/1,
+      unwrap_ok_response(&ResponseTransformers.CachingEnabled.call/1),
       &update_route_state/1,
       &maybe_log_response_status/1,
       &process_response_pipeline/1,
@@ -176,8 +176,8 @@ defmodule Belfrage.Processor do
 
   def post_response_pipeline(struct = %Struct{}) do
     pipeline = [
-      &ResponseTransformers.MvtMapper.call/1,
-      &ResponseTransformers.CompressionAsRequested.call/1
+      unwrap_ok_response(&ResponseTransformers.MvtMapper.call/1),
+      unwrap_ok_response(&ResponseTransformers.CompressionAsRequested.call/1)
     ]
 
     WrapperError.wrap(pipeline, struct)
@@ -198,4 +198,11 @@ defmodule Belfrage.Processor do
   end
 
   defp maybe_log_response_status(struct), do: struct
+
+  defp unwrap_ok_response(func) do
+    fn struct ->
+      {:ok, resp} = func.(struct)
+      resp
+    end
+  end
 end
