@@ -1,11 +1,11 @@
-defmodule Belfrage.TransformerTest do
+defmodule Belfrage.Behaviours.TransformerTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
   alias Belfrage.Behaviours.Transformer, as: Subject
   alias Belfrage.Struct
 
-  test "when there are transformers in the list it will call the next one, seen via the reverse ordering in the debug pipeline trail" do
+  test "call request transformer behaviour" do
     stub_dial(:circuit_breaker, "false")
 
     struct = %Struct{private: %Struct.Private{request_pipeline: ["CircuitBreaker"]}}
@@ -14,8 +14,15 @@ defmodule Belfrage.TransformerTest do
              Subject.call(struct, :request, "CircuitBreaker")
   end
 
-#  test "when there are no more transformers in the list it returns {:ok, struct}" do
-#    struct = %Struct{private: %Struct.Private{request_pipeline: []}}
-#    assert {:ok, _struct} = Subject.call(struct, :request, [])
-#  end
+  test "call response transformer behaviour" do
+    stub_dial(:etag, "false")
+
+    struct = %Struct{
+      private: %Struct.Private{response_pipeline: ["Etag", "MvtMapper"]},
+      debug: %Belfrage.Struct.Debug{response_pipeline_trail: ["Etag"]}
+    }
+
+    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{response_pipeline_trail: ["MvtMapper", "Etag"]}}} =
+             Subject.call(struct, :response, "MvtMapper")
+  end
 end

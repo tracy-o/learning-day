@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
       stub_dials(news_apps_hardcoded_response: "disabled")
       original_struct = struct()
 
-      assert {:ok, ^original_struct} = NewsAppsHardcodedResponse.call([], original_struct)
+      assert {:ok, ^original_struct} = NewsAppsHardcodedResponse.call(original_struct)
     end
   end
 
@@ -28,7 +28,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
       stub_dials(news_apps_hardcoded_response: "enabled")
 
       assert {
-               :stop_pipeline,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 200,
@@ -39,7 +39,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
                    }
                  }
                }
-             } = NewsAppsHardcodedResponse.call([], struct())
+             } = NewsAppsHardcodedResponse.call(struct())
     end
 
     test "the response body is hardocded" do
@@ -48,11 +48,11 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
       Belfrage.NewsApps.Failover.update()
 
       {
-        :stop_pipeline,
+        :stop,
         %Belfrage.Struct{
           response: %Belfrage.Struct.Response{body: body}
         }
-      } = NewsAppsHardcodedResponse.call([], struct())
+      } = NewsAppsHardcodedResponse.call(struct())
 
       # checks that JSON is parseable
       parsed_body = body |> :zlib.gunzip() |> Json.decode!()

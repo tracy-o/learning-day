@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
       stub_dial(:obit_mode, "on")
 
       assert {
-               :redirect,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 302,
@@ -31,7 +31,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
                    }
                  }
                }
-             } = NaidheachdanObitRedirect.call([], @naidheachdan_request_struct)
+             } = NaidheachdanObitRedirect.call(@naidheachdan_request_struct)
     end
   end
 
@@ -42,7 +42,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
       assert {
                :ok,
                @naidheachdan_request_struct
-             } = NaidheachdanObitRedirect.call([], @naidheachdan_request_struct)
+             } = NaidheachdanObitRedirect.call(@naidheachdan_request_struct)
     end
   end
 end

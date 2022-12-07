@@ -70,7 +70,7 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminatorTest
                  path_params: %{"id" => "zm8fhbk"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeArticlesPlatformDiscriminator.call(@webcore_test_data)
   end
 
   test "if the Article ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
@@ -90,7 +90,7 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminatorTest
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @morph_test_data)
+           } = BitesizeArticlesPlatformDiscriminator.call(@morph_test_data)
   end
 
   test "if the Article ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
@@ -113,6 +113,6 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminatorTest
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeArticlesPlatformDiscriminator.call([], @morph_live_data)
+           } = BitesizeArticlesPlatformDiscriminator.call(@morph_live_data)
   end
 end

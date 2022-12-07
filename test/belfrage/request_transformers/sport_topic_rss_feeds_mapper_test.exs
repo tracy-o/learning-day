@@ -24,7 +24,7 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapperTest do
                }
              }
            } =
-             SportTopicRssFeedsMapper.call([], %Struct{
+             SportTopicRssFeedsMapper.call(%Struct{
                request: %Struct.Request{path: "/sport/rss.xml"}
              })
   end

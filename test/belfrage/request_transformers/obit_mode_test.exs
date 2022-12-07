@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.ObitModeTest do
     test "obit-mode: 'on' will be set in the raw headers" do
       stub_dial(:obit_mode, "on")
 
-      {:ok, struct} = ObitMode.call([], @struct)
+      {:ok, struct} = ObitMode.call(@struct)
       assert struct.request.raw_headers == %{"header1" => "header1value", "obit-mode" => "on"}
     end
   end
@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.ObitModeTest do
     test "obit-mode: 'off' will be set in the raw headers" do
       stub_dial(:obit_mode, "off")
 
-      {:ok, struct} = ObitMode.call([], @struct)
+      {:ok, struct} = ObitMode.call(@struct)
       assert struct.request.raw_headers == %{"header1" => "header1value", "obit-mode" => "off"}
     end
   end

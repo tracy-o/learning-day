@@ -11,18 +11,16 @@ defmodule Belfrage.RequestTransformers.MyTransformer1Test do
   }
 
   test 'call with no remaining transformers' do
-    pipeline = ["MyTransformer1"]
-    {:ok, next_struct} = Subject.call(pipeline, @original_struct)
+    {:ok, next_struct} = Subject.call(@original_struct)
 
     assert next_struct.sample_change == "foo"
-    assert next_struct.debug.request_pipeline_trail == pipeline
+    assert next_struct.debug.request_pipeline_trail == []
   end
 
   test 'call with remaining transformers' do
-    pipeline = ["MyTransformer1", "MockTransformer"]
-    {:ok, next_struct} = Subject.call(pipeline, @original_struct)
+    {:ok, next_struct} = Subject.call(@original_struct)
 
     assert next_struct.sample_change == "foo"
-    assert next_struct.debug.request_pipeline_trail == Enum.reverse(pipeline)
+    assert next_struct.debug.request_pipeline_trail == []
   end
 end

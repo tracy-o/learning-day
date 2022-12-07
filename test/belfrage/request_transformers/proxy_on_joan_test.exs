@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoanTest do
     end
 
     test "the origin is not overwritten" do
-      assert {:ok, @webcore_struct} == ProxyOnJoan.call([], @webcore_struct)
+      assert {:ok, @webcore_struct} == ProxyOnJoan.call(@webcore_struct)
     end
   end
 
@@ -30,7 +30,7 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoanTest do
     end
 
     test "the origin is overritten to be the Mozart News endpoint" do
-      {:ok, struct} = ProxyOnJoan.call([], @webcore_struct)
+      {:ok, struct} = ProxyOnJoan.call(@webcore_struct)
       assert struct.private.origin == Application.get_env(:belfrage, :mozart_news_endpoint)
     end
   end

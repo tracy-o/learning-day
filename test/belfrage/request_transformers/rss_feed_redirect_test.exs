@@ -15,7 +15,7 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
     }
 
     assert {
-             :redirect,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 302,
@@ -27,7 +27,7 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
                  }
                }
              }
-           } = RssFeedRedirect.call([], struct)
+           } = RssFeedRedirect.call(struct)
   end
 
   test "redirects strip any query parameters" do
@@ -44,7 +44,7 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
     }
 
     assert {
-             :redirect,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 302,
@@ -56,7 +56,7 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
                  }
                }
              }
-           } = RssFeedRedirect.call([], struct)
+           } = RssFeedRedirect.call(struct)
   end
 
   test "requests to the feeds subdomain are left unchanged" do
@@ -69,6 +69,6 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
       }
     }
 
-    assert {:ok, ^struct} = RssFeedRedirect.call([], struct)
+    assert {:ok, ^struct} = RssFeedRedirect.call(struct)
   end
 end

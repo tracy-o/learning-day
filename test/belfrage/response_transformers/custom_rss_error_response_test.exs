@@ -6,7 +6,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
 
   test "Amend FABL response on error" do
     {:ok, struct} =
-      CustomRssErrorResponse.call([], %Struct{
+      CustomRssErrorResponse.call(%Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 500,
@@ -23,7 +23,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
 
   test "Do not amend FABL response on success" do
     {:ok, struct} =
-      CustomRssErrorResponse.call([], %Struct{
+      CustomRssErrorResponse.call(%Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 200,
@@ -40,7 +40,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
 
   test "Do not amend Karanga responses on failure" do
     {:ok, struct} =
-      CustomRssErrorResponse.call([], %Struct{
+      CustomRssErrorResponse.call(%Struct{
         request: %Struct.Request{path: "/fd/rss"},
         response: %Struct.Response{
           http_status: 500,

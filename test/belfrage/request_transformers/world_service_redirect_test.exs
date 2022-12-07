@@ -16,7 +16,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
 
     test ".co.uk will be uplifted to https and redirected to .com" do
       assert {
-               :redirect,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 302,
@@ -28,7 +28,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call([], @http_uk_request_struct)
+             } = WorldServiceRedirect.call(@http_uk_request_struct)
     end
 
     @http_uk_with_qs_request_struct %Struct{
@@ -45,7 +45,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
 
     test ".co.uk with a query string will be uplifted to https and redirected to .com with the query string remains" do
       assert {
-               :redirect,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 302,
@@ -57,7 +57,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call([], @http_uk_with_qs_request_struct)
+             } = WorldServiceRedirect.call(@http_uk_with_qs_request_struct)
     end
 
     @http_com_request_struct %Struct{
@@ -71,7 +71,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
 
     test ".com will be uplifted to https" do
       assert {
-               :redirect,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 302,
@@ -83,7 +83,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call([], @http_com_request_struct)
+             } = WorldServiceRedirect.call(@http_com_request_struct)
     end
 
     @http_com_with_qs_request_struct %Struct{
@@ -100,7 +100,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
 
     test ".com request with qs will be uplifted to https and redirected to .com and the query string remain" do
       assert {
-               :redirect,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 302,
@@ -112,7 +112,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call([], @http_com_with_qs_request_struct)
+             } = WorldServiceRedirect.call(@http_com_with_qs_request_struct)
     end
   end
 
@@ -127,7 +127,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     }
 
     test ".com request will not redirect" do
-      assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call([], @https_com_request_struct)
+      assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call(@https_com_request_struct)
     end
 
     @https_com_with_qs_request_struct %Struct{
@@ -143,7 +143,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     }
 
     test ".com request with a query string will not redirect" do
-      assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call([], @https_com_with_qs_request_struct)
+      assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call(@https_com_with_qs_request_struct)
     end
   end
 
@@ -160,6 +160,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
   }
 
   test ".api hosts will not be redirected" do
-    assert {:ok, @https_api_request_struct} = WorldServiceRedirect.call([], @https_api_request_struct)
+    assert {:ok, @https_api_request_struct} = WorldServiceRedirect.call(@https_api_request_struct)
   end
 end

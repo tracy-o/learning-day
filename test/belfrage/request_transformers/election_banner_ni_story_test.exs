@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.ElectionBannerNiStoryTest do
     test "election-banner-ni-story: 'on' exists in headers" do
       stub_dial(:election_banner_ni_story, "on")
 
-      {:ok, struct} = ElectionBannerNiStory.call([], @struct)
+      {:ok, struct} = ElectionBannerNiStory.call(@struct)
       assert struct.request.raw_headers == %{"header1" => "header1value", "election-banner-ni-story" => "on"}
     end
   end
@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.ElectionBannerNiStoryTest do
     test "election-banner-ni-story: 'off' exists in headers" do
       stub_dial(:election_banner_ni_story, "off")
 
-      {:ok, struct} = ElectionBannerNiStory.call([], @struct)
+      {:ok, struct} = ElectionBannerNiStory.call(@struct)
       assert struct.request.raw_headers == %{"header1" => "header1value", "election-banner-ni-story" => "off"}
     end
   end

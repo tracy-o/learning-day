@@ -15,4 +15,10 @@ defmodule Belfrage.RequestTransformers.DevelopmentRequestsTest do
 
     assert [] == DevelopmentRequests.development_transformers(struct)
   end
+
+  test "return add: ReplayedTraffic updated transformer" do
+    struct = %Struct{request: %Struct.Request{has_been_replayed?: true}}
+
+    assert {:ok, struct, {:add, ["ReplayedTraffic"]}} == DevelopmentRequests.call(struct)
+  end
 end

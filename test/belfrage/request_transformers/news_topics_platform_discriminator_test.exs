@@ -24,9 +24,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    personalised_route: false,
                    personalised_request: false
                  }
-               }
+               },
+               {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call([], %Struct{
+               NewsTopicsPlatformDiscriminator.call(%Struct{
                  request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
                  private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
@@ -38,30 +39,20 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                %Struct{
                  private: %Struct.Private{
                    platform: SomePlatform,
-                   origin: "https://some.example.origin:test"
+                   origin: "https://some.example.origin"
                  }
                }
              } =
-               NewsTopicsPlatformDiscriminator.call(
-                 [
-                   "Personalisation",
-                   "LambdaOriginAlias",
-                   "Language",
-                   "PlatformKillSwitch",
-                   "CircuitBreaker",
-                   "DevelopmentRequests"
-                 ],
-                 %Struct{
-                   private: %Struct.Private{
-                     origin: "https://some.example.origin",
-                     platform: SomePlatform,
-                     production_environment: "test"
-                   },
-                   request: %Struct.Request{
-                     path_params: %{"id" => "some-id"}
-                   }
+               NewsTopicsPlatformDiscriminator.call(%Struct{
+                 private: %Struct.Private{
+                   origin: "https://some.example.origin",
+                   platform: SomePlatform,
+                   production_environment: "test"
+                 },
+                 request: %Struct.Request{
+                   path_params: %{"id" => "some-id"}
                  }
-               )
+               })
     end
 
     test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
@@ -77,9 +68,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    personalised_route: false,
                    personalised_request: false
                  }
-               }
+               },
+               {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call([], %Struct{
+               NewsTopicsPlatformDiscriminator.call(%Struct{
                  request: %Struct.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
                  private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
@@ -100,16 +92,17 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    personalised_route: false,
                    personalised_request: false
                  }
-               }
+               },
+               {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call([], %Struct{
+               NewsTopicsPlatformDiscriminator.call(%Struct{
                  request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
                  private: %Struct.Private{personalised_route: true, personalised_request: true}
                })
     end
 
     test "if the id is a Topic ID and is not in the Mozart allowlist, a redirect will be issued without the slug" do
-      assert {:redirect,
+      assert {:stop,
               %Struct{
                 response: %Struct.Response{
                   http_status: 302,
@@ -121,7 +114,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                   body: "Redirecting"
                 }
               }} =
-               NewsTopicsPlatformDiscriminator.call([], %Struct{
+               NewsTopicsPlatformDiscriminator.call(%Struct{
                  request: %Struct.Request{
                    path: "/_some_path",
                    path_params: %{"id" => "cl16knzkz9yt", "slug" => "some-slug"}
@@ -143,9 +136,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                  personalised_route: false,
                  personalised_request: false
                }
-             }
+             },
+             {:replace, ["CircuitBreaker"]}
            } =
-             NewsTopicsPlatformDiscriminator.call([], %Struct{
+             NewsTopicsPlatformDiscriminator.call(%Struct{
                request: %Struct.Request{
                  path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
                },

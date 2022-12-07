@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     end
 
     test "origin and platform gets changed to webcore", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: Webcore,
@@ -55,7 +55,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     end
 
     test "origin and platform remains as MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: MozartNews,
@@ -84,7 +84,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     end
 
     test "origin and platform is MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: MozartNews,
@@ -113,7 +113,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     end
 
     test "origin and platform is MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call([], struct) ==
+      assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
                   platform: MozartNews,

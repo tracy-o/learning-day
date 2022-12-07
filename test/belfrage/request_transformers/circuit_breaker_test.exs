@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
                  http_status: nil
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "a nil throughput will not add circuit breaker response" do
@@ -42,7 +42,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
                  http_status: nil
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "throughput of 100 will not add circuit breaker response" do
@@ -62,7 +62,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
                  http_status: nil
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "thoughput of 0 will return struct with response section with 500 status" do
@@ -78,13 +78,13 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
     }
 
     assert {
-             :stop_pipeline,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 500
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "when circuit breaker is active, the origin represents this" do
@@ -101,13 +101,13 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
     }
 
     assert {
-             :stop_pipeline,
+             :stop,
              %Belfrage.Struct{
                private: %Belfrage.Struct.Private{
                  origin: :belfrage_circuit_breaker
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "when circuit breaker is active, the response body is returned as an empty string" do
@@ -123,13 +123,13 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
     }
 
     assert {
-             :stop_pipeline,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  body: ""
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   test "multiple origins will not add circuit breaker response when no errors for current origin" do
@@ -156,7 +156,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
                  http_status: nil
                }
              }
-           } = CircuitBreaker.call([], struct)
+           } = CircuitBreaker.call(struct)
   end
 
   describe "when circuit breaker is active but disabled in dial" do
@@ -180,9 +180,9 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
             origin: origin
           }
         }
-      } = CircuitBreaker.call([], struct)
+      } = CircuitBreaker.call(struct)
 
-      refute status == :stop_pipline
+      refute status == :stop
       refute origin == :belfrage_circuit_breaker
     end
 
@@ -210,7 +210,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
                    http_status: nil
                  }
                }
-             } = CircuitBreaker.call([], struct)
+             } = CircuitBreaker.call(struct)
     end
   end
 end

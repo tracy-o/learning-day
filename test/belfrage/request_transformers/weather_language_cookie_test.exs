@@ -10,7 +10,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
     struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/en", %{}, %{"language" => "en"})
 
     assert {
-             :redirect,
+             :stop,
              %{
                response: %{
                  http_status: 301,
@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  }
                }
              }
-           } = WeatherLanguageCookie.call([], struct)
+           } = WeatherLanguageCookie.call(struct)
 
     on_exit(&Current.Mock.unfreeze/0)
   end
@@ -36,7 +36,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
       })
 
     assert {
-             :redirect,
+             :stop,
              %{
                response: %{
                  http_status: 301,
@@ -48,7 +48,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  }
                }
              }
-           } = WeatherLanguageCookie.call([], struct)
+           } = WeatherLanguageCookie.call(struct)
 
     on_exit(&Current.Mock.unfreeze/0)
   end
@@ -57,7 +57,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
     struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/ab", %{}, %{"language" => "ab"})
 
     assert {
-             :stop_pipeline,
+             :stop,
              %{
                response: %{
                  http_status: 404,
@@ -65,7 +65,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  headers: %{}
                }
              }
-           } = WeatherLanguageCookie.call([], struct)
+           } = WeatherLanguageCookie.call(struct)
   end
 
   test "returns a 404 when redirect_location is not valid" do
@@ -75,7 +75,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
       })
 
     assert {
-             :stop_pipeline,
+             :stop,
              %{
                response: %{
                  http_status: 404,
@@ -83,6 +83,6 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  headers: %{}
                }
              }
-           } = WeatherLanguageCookie.call([], struct)
+           } = WeatherLanguageCookie.call(struct)
   end
 end

@@ -13,8 +13,8 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
     end
 
     test "404 is returned if article id does not match" do
-      assert {:stop_pipeline, %Struct{response: %Struct.Response{http_status: 404}}} =
-               NewsArticleValidator.call([], %Struct{
+      assert {:stop, %Struct{response: %Struct.Response{http_status: 404}}} =
+               NewsArticleValidator.call(%Struct{
                  request: %Struct.Request{path_params: %{"id" => "123456789123456789"}}
                })
     end
@@ -24,7 +24,7 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
         request: %Struct.Request{path_params: %{"id" => "49336144"}}
       }
 
-      assert {:ok, ^struct} = NewsArticleValidator.call([], struct)
+      assert {:ok, ^struct} = NewsArticleValidator.call(struct)
     end
   end
 
@@ -39,7 +39,7 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
         request: %Struct.Request{path_params: %{"id" => "123456789123456789"}}
       }
 
-      assert {:ok, ^struct} = NewsArticleValidator.call([], struct)
+      assert {:ok, ^struct} = NewsArticleValidator.call(struct)
     end
   end
 end

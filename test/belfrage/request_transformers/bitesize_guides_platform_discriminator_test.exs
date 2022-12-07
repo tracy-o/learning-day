@@ -64,7 +64,7 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
                  platform: Webcore
                }
              }
-           } = BitesizeGuidesPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeGuidesPlatformDiscriminator.call(@webcore_test_data)
   end
 
   test "if on Test environment and the Guide ID is not in the whitelist, the origin and platform will remain the same" do
@@ -78,7 +78,7 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
                  platform: MorphRouter
                }
              }
-           } = BitesizeGuidesPlatformDiscriminator.call([], @morph_test_data)
+           } = BitesizeGuidesPlatformDiscriminator.call(@morph_test_data)
   end
 
   test "if on Live environment and the Guide ID is not in the whitelist, the origin and platform will remain the same" do
@@ -95,6 +95,6 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
                  platform: MorphRouter
                }
              }
-           } = BitesizeGuidesPlatformDiscriminator.call([], @morph_live_data)
+           } = BitesizeGuidesPlatformDiscriminator.call(@morph_live_data)
   end
 end

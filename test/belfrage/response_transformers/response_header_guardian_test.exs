@@ -8,7 +8,7 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "removes connection response header" do
     {:ok, result} =
-      ResponseHeaderGuardian.call([], %Struct{
+      ResponseHeaderGuardian.call(%Struct{
         response: %Struct.Response{
           headers: %{
             "content-type" => "application/json",
@@ -23,7 +23,7 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "removes transfer-encoding header" do
     {:ok, result} =
-      ResponseHeaderGuardian.call([], %Struct{
+      ResponseHeaderGuardian.call(%Struct{
         response: %Struct.Response{
           headers: %{
             "content-type" => "application/json",
@@ -38,7 +38,7 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "does not affect any other response headers" do
     result =
-      ResponseHeaderGuardian.call([], %Struct{
+      ResponseHeaderGuardian.call(%Struct{
         response: %Struct.Response{
           body: "<p>some content</p>",
           http_status: 200,
