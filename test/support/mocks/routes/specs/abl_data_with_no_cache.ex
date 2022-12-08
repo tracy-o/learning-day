@@ -2,7 +2,7 @@ defmodule Routes.Specs.AblDataWithNoCache do
   def specs do
     %{
       platform: Fabl,
-      request_pipeline: ["NewsAppsHardcodedResponse", "Echo"],
+      request_pipeline: ["NewsAppsHardcodedResponse"],
       response_pipeline: [
         "CacheDirective",
         "ClassicAppCacheControl",

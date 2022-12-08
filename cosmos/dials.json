@@ -263,5 +263,20 @@
         "description": "Proxies requests upstream"
       }
     ]
+  },
+  {
+    "name": "news_apps_variance_reducer",
+    "description": "reduce pressure on ABL by removing a number of query strings",
+    "default-value": "disabled",
+    "values": [
+      {
+        "value": "enabled",
+        "description": "Remove query strings"
+      },
+      {
+        "value": "disabled",
+        "description": "Keeps all allowed query strings"
+      }
+    ]
   }
 ]
