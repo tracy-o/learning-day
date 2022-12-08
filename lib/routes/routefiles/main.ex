@@ -191,6 +191,7 @@ defroutefile "Main" do
 
   handle "/homepage/news/preview", using: "NewsHomePagePreview", only_on: "test", examples: ["/homepage/news/preview"]
   handle "/homepage/news/test", using: "TestNewsHomePage", only_on: "test", examples: ["/homepage/news/test"]
+  handle "/homepage/index-examples", using: "IndexExamplesHomePage", only_on: "test", examples: ["/homepage/index-examples"]
 
   handle "/homepage/preview", using: "HomePagePreview", examples: ["/homepage/preview"]
   handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", examples: ["/homepage/preview/scotland"]
