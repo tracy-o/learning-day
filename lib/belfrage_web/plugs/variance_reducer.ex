@@ -12,30 +12,16 @@ defmodule BelfrageWeb.Plugs.VarianceReducer do
   def init(opts), do: opts
 
   def call(conn = %{request_path: "/fd/abl"}, _opts) do
-    if reducible_query_string?(conn) and news_apps_variance_reducer_dial_enabled?() do
-      conn =
-        conn
-        |> Map.merge(%{
-          query_params:
-            Map.reject(
-              conn.query_params,
-              fn {key, _val} -> key == "clientLoc" end
-            )
-        })
-        |> Map.merge(%{
-          params:
-            Map.reject(
-              conn.params,
-              fn {key, _val} -> key == "clientLoc" end
-            )
-        })
+    if news_apps_variance_reducer_dial_enabled?() do
+      upd_query_params = remove_query_param("clientLoc", conn.query_params)
+      upd_params = remove_query_param("clientLoc", conn.params)
 
-      conn
-      |> Map.merge(%{
-        query_string:
-          conn.query_params
-          |> URI.encode_query()
-      })
+      %{
+        conn
+        | query_params: upd_query_params,
+          params: upd_params,
+          query_string: URI.encode_query(upd_query_params)
+      }
     else
       conn
     end
@@ -45,11 +31,11 @@ defmodule BelfrageWeb.Plugs.VarianceReducer do
     conn
   end
 
-  defp news_apps_variance_reducer_dial_enabled? do
-    @dial.state(:news_apps_variance_reducer) == "enabled"
+  defp remove_query_param(param, map) do
+    Map.reject(map, fn {key, _} -> key == param end)
   end
 
-  defp reducible_query_string?(conn) do
-    conn.query_string |> String.contains?("clientLoc")
+  defp news_apps_variance_reducer_dial_enabled? do
+    @dial.state(:news_apps_variance_reducer) == "enabled"
   end
 end
