@@ -29,10 +29,10 @@ defmodule Belfrage.RequestTransformers.AppPersonalisationTest do
       assert AppPersonalisation.call(envelope) == {:ok, envelope}
     end
 
-    test "returns envelope with 503 response when envelope.request.app? is true and personalisation disabled" do
+    test "returns envelope with 204 response when envelope.request.app? is true and personalisation disabled" do
       disable_personalisation()
 
-      assert {:stop, %Envelope{request: %Request{app?: true}, response: %Response{http_status: 503}}} =
+      assert {:stop, %Envelope{request: %Request{app?: true}, response: %Response{http_status: 204}}} =
                AppPersonalisation.call(%Envelope{request: %Request{app?: true}})
     end
   end

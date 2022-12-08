@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.AppPersonalisation do
     if Personalisation.enabled?() do
       {:ok, envelope}
     else
-      {:stop, Envelope.put_status(envelope, 503)}
+      {:stop, Envelope.put_status(envelope, 204)}
     end
   end
 end
