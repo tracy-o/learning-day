@@ -53,7 +53,7 @@ defmodule Belfrage.NewsApps.Failover do
 
   defp uncompressed_body do
     epoch =
-      Belfrage.Utils.Current.date_time()
+      Utils.Current.date_time()
       |> Utils.DateTime.beginning_of_the_hour()
       |> DateTime.to_unix(:millisecond)
 

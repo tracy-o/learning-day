@@ -17,6 +17,8 @@ defmodule Belfrage.NewsApps.FailoverTest do
 
   describe "update/0" do
     test "refresh the hardcoded epoch times" do
+      NewsApps.Failover.update()
+
       body_t1 =
         NewsApps.Failover.body()
         |> :zlib.gunzip()
