@@ -30,6 +30,7 @@ defmodule EndToEnd.NewsAppsTest do
 
     test "returns the same etag when requests are within the same hour" do
       Current.Mock.freeze(~D[2022-12-02], ~T[11:14:52.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
@@ -41,6 +42,7 @@ defmodule EndToEnd.NewsAppsTest do
 
       # 20 mins later...
       Current.Mock.freeze(~D[2022-12-02], ~T[11:34:56.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
       {200, _resp_headers, _body} = sent_resp(response_conn2)
@@ -52,6 +54,7 @@ defmodule EndToEnd.NewsAppsTest do
 
     test "returns a different etag when requests are over two different hours" do
       Current.Mock.freeze(~D[2022-12-02], ~T[11:58:52.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
@@ -62,6 +65,7 @@ defmodule EndToEnd.NewsAppsTest do
       assert etag1 == "\"6c65c87901c36aa9afc266d70bf6539d2a283198\""
 
       Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
       {200, _resp_headers, _body} = sent_resp(response_conn2)
