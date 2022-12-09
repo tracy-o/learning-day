@@ -36,7 +36,8 @@ defmodule Belfrage.NewsApps.Failover do
   end
 
   @impl true
-  def handle_info(:scheduled_update, state) do
+  def handle_info(:scheduled_update, _state) do
+    state = generate_hardcoded_response()
     schedule_work()
 
     {:noreply, state}
