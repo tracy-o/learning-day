@@ -2638,12 +2638,10 @@ defroutefile "Main" do
   handle "/weather", using: "WeatherHomePage", examples: ["/weather"]
 
   handle "/weather/search", using: "WeatherSearch", examples: ["/weather/search?s=london"] do
-    return_404(
-      if: [
+    return_404 if: [
         !is_valid_length?(conn.query_params["s"] || "", 0..100),
         !integer_in_range?(conn.query_params["page"] || "1", 1..999)
       ]
-    )
   end
 
   handle "/weather/outlook", using: "Weather", examples: ["/weather/outlook"]
@@ -2661,12 +2659,10 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(region_id, 1..12)
   end
   handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
-    return_404(
-      if: [
+    return_404 if: [
         !matches?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
         !integer_in_range?(region_id, 1..12)
       ]
-    )
   end
   handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea", examples: []
   handle "/weather/coast-and-sea/*any", using: "WeatherCoastAndSea", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
@@ -2676,12 +2672,10 @@ defroutefile "Main" do
   end
 
   handle "/weather/language/:language", using: "Weather", examples: [{"/weather/language/en", 301}] do
-    return_404(
-      if: [
+    return_404 if: [
         !starts_with?(conn.query_params["redirect_location"] || "/weather", "/"),
         !is_language?(language)
       ]
-    )
   end
 
   handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
@@ -2701,10 +2695,13 @@ defroutefile "Main" do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
   handle "/weather/:location_id/:day", using: "WeatherLocation", examples: ["/weather/2650225/today"] do
-    return_404 if: !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
+    return_404 if: [
+      !matches?(location_id, ~r/^([a-z0-9]{1,50})$/),
+      !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
+    ]
   end
 
-  handle "/weather/*any", using: "Weather", examples: []
+  handle "/weather/*any", using: "WeatherCatchAll", examples: []
 
   # WebCore Hub
   redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302

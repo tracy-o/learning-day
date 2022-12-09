@@ -39,13 +39,13 @@ defmodule BelfrageWeb.Validators do
 
   @doc """
   ## Examples
-    iex> matches?("123a", ~r/^\\d{1,4}[a-f]?$/)
+    iex> matches?("123a", ~r/^[0-9]{1,4}[a-f]?$/)
     true
 
-    iex> matches?("a123a", ~r/^\d{1,4}[a-f]?$/)
+    iex> matches?("a123a", ~r/^[0-9]{1,4}[a-f]?$/)
     false
 
-    iex> matches?("123z", ~r/^\d{1,4}[a-f]?$/)
+    iex> matches?("123z", ~r/^[0-9]{1,4}[a-f]?$/)
     false
   """
   def matches?(param, regex) do
