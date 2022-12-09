@@ -33,7 +33,8 @@ defmodule Belfrage.Supervisor do
       Belfrage.Dials.Supervisor,
       Belfrage.Metrics.Supervisor,
       Belfrage.Mvt.Supervisor,
-      Belfrage.Services.Webcore.Supervisor
+      Belfrage.Services.Webcore.Supervisor,
+      Belfrage.NewsApps.Supervisor
     ]
   end
 
