@@ -9,19 +9,21 @@ defmodule Belfrage.Supervisor do
   # documentation it should be defined as:
   # {Cachex, [name: :cache, limit: cachex_limit()]}
   def children(env: env) do
-    [
-      {Finch, finch_opts()},
-      {BelfrageWeb.Router, router_options(env)},
-      Belfrage.RouteStateRegistry,
-      Belfrage.RouteStateSupervisor,
-      {Belfrage.Authentication.Supervisor, [env: env]},
-      {Belfrage.Dials.Supervisor, [env: env]},
-      {Belfrage.Metrics.Supervisor, [env: env]},
-      {Belfrage.Mvt.Supervisor, [env: env]},
-      {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-      {Belfrage.Services.Webcore.Supervisor, [env: env]},
-      {Belfrage.SupervisorObserver, get_observed_ids()}
-    ] ++ http_router(env)
+    conditional_servers(env) ++
+      [
+        {Finch, finch_opts()},
+        {BelfrageWeb.Router, router_options(env)},
+        Belfrage.RouteStateRegistry,
+        Belfrage.RouteStateSupervisor,
+        {Belfrage.Authentication.Supervisor, [env: env]},
+        {Belfrage.Dials.Supervisor, [env: env]},
+        {Belfrage.Metrics.Supervisor, [env: env]},
+        {Belfrage.Mvt.Supervisor, [env: env]},
+        {Cachex, name: :cache, limit: cachex_limit(), stats: true},
+        {Belfrage.Services.Webcore.Supervisor, [env: env]},
+        {Belfrage.NewsApps.Supervisor, [env: env]},
+        {Belfrage.SupervisorObserver, get_observed_ids()}
+      ]
   end
 
   def get_observed_ids() do
@@ -31,7 +33,8 @@ defmodule Belfrage.Supervisor do
       Belfrage.Dials.Supervisor,
       Belfrage.Metrics.Supervisor,
       Belfrage.Mvt.Supervisor,
-      Belfrage.Services.Webcore.Supervisor
+      Belfrage.Services.Webcore.Supervisor,
+      Belfrage.NewsApps.Supervisor
     ]
   end
 
@@ -173,10 +176,15 @@ defmodule Belfrage.Supervisor do
     {:limit, size, policy, reclaim, options}
   end
 
-  # this is due to the www stack still handling the TLS termination,
-  # it should go soon.
-  defp http_router(:prod), do: [BelfrageWeb.Router.child_spec(scheme: :https, port: 7443)]
-  defp http_router(_env), do: []
+  defp conditional_servers(:prod) do
+    # this is due to the www stack still handling the TLS termination,
+    # it should go soonish.
+    [BelfrageWeb.Router.child_spec(scheme: :https, port: 7443)]
+  end
+
+  defp conditional_servers(_) do
+    [Belfrage.Utils.Current.Mock]
+  end
 
   defp router_options(env) do
     case env do

@@ -28,46 +28,53 @@ defmodule EndToEnd.NewsAppsTest do
                get_resp_header(response_conn, "cache-control")
     end
 
-    test "returns the same etag when requests are within the same hour" do
+    test "returns the same epoch when requests are within the same hour" do
       Current.Mock.freeze(~D[2022-12-02], ~T[11:14:52.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
       response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, _resp_headers, _body} = sent_resp(response_conn1)
-      [etag1] = get_resp_header(response_conn1, "etag")
+      {200, _resp_headers, body} = sent_resp(response_conn1)
 
-      assert etag1 == "\"6c65c87901c36aa9afc266d70bf6539d2a283198\""
+      body_t1 = body |> Json.decode!()
+
+      assert body_t1["data"]["metadata"]["lastUpdated"] == 1_669_978_800_000
 
       # 20 mins later...
       Current.Mock.freeze(~D[2022-12-02], ~T[11:34:56.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, _resp_headers, _body} = sent_resp(response_conn2)
-      [etag2] = get_resp_header(response_conn2, "etag")
+      {200, _resp_headers, body} = sent_resp(response_conn2)
 
-      assert etag1 == etag2
+      body_t2 = body |> Json.decode!()
+      assert body_t1 == body_t2
       on_exit(&Current.Mock.unfreeze/0)
     end
 
-    test "returns a different etag when requests are over two different hours" do
+    test "returns a different epoch when requests are over two different hours" do
       Current.Mock.freeze(~D[2022-12-02], ~T[11:58:52.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
       response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, _resp_headers, _body} = sent_resp(response_conn1)
-      [etag1] = get_resp_header(response_conn1, "etag")
+      {200, _resp_headers, body} = sent_resp(response_conn1)
 
-      assert etag1 == "\"6c65c87901c36aa9afc266d70bf6539d2a283198\""
+      body_t1 = body |> Json.decode!()
+
+      assert body_t1["data"]["metadata"]["lastUpdated"] == 1_669_978_800_000
 
       Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
-      {200, _resp_headers, _body} = sent_resp(response_conn2)
-      [etag2] = get_resp_header(response_conn2, "etag")
+      {200, _resp_headers, body} = sent_resp(response_conn2)
 
-      assert etag1 != etag2
+      body_t2 = body |> Json.decode!()
+
+      assert body_t1 != body_t2
       on_exit(&Current.Mock.unfreeze/0)
     end
   end

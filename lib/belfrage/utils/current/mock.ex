@@ -2,7 +2,7 @@ defmodule Belfrage.Utils.Current.Mock do
   use Agent
   alias Belfrage.Utils.Current.Real
 
-  def start_link do
+  def start_link(_opts) do
     Agent.start_link(
       fn ->
         %{is_frozen: false, frozen_value: nil}

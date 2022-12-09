@@ -34,7 +34,8 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
                    http_status: 200,
                    headers: %{
                      "content-type" => "application/json; charset=utf-8",
-                     "cache-control" => "public, max-age=5"
+                     "cache-control" => "public, max-age=5",
+                     "content-encoding" => "gzip"
                    }
                  }
                }
@@ -44,6 +45,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
     test "the response body is hardocded" do
       stub_dials(news_apps_hardcoded_response: "enabled")
       Current.Mock.freeze(~D[2022-12-02], ~T[11:14:52.368815Z])
+      Belfrage.NewsApps.Failover.update()
 
       {
         :stop_pipeline,
@@ -52,8 +54,8 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
         }
       } = NewsAppsHardcodedResponse.call([], struct())
 
-      # cheks that JSON is parseable
-      parsed_body = Json.decode!(body)
+      # checks that JSON is parseable
+      parsed_body = body |> :zlib.gunzip() |> Json.decode!()
 
       assert parsed_body["data"]["metadata"]["name"] == "Home"
       assert parsed_body["data"]["metadata"]["lastUpdated"] == 1_669_978_800_000
