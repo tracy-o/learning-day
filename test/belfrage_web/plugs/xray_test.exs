@@ -11,6 +11,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
     setup do
       conn =
         conn(:get, "/some/route")
+        |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
 
@@ -39,7 +40,8 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert request == %HTTPRequest{
                segment_type: :segment,
                method: "GET",
-               url: "/some/route"
+               url: "/some/route",
+               user_agent: "Mozilla/5.0"
              }
     end
 

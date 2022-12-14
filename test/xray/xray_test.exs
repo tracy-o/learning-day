@@ -82,12 +82,13 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can set http request information", %{segment: segment} do
-      segment = Xray.set_http_request(segment, %{method: "GET", path: "/some/path"})
+      segment = Xray.set_http_request(segment, %{method: "GET", path: "/some/path", user_agent: "Mozilla/5.0"})
 
       assert segment.http.request == %HTTPRequest{
                segment_type: :segment,
                method: "GET",
-               url: "/some/path"
+               url: "/some/path",
+               user_agent: "Mozilla/5.0"
              }
     end
 
@@ -157,7 +158,7 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can't set http request information", %{segment: segment} do
-      assert segment == Xray.set_http_request(segment, %{method: "GET", path: "/some/path"})
+      assert segment == Xray.set_http_request(segment, %{method: "GET", path: "/some/path", user_agent: "Mozilla/5.0"})
     end
 
     test "can't set http response information", %{segment: segment} do
@@ -205,12 +206,13 @@ defmodule Belfrage.XrayTest do
     end
 
     test "can set http request information", %{subsegment: subsegment} do
-      subsegment = Xray.set_http_request(subsegment, %{method: "GET", path: "/some/path"})
+      subsegment = Xray.set_http_request(subsegment, %{method: "GET", path: "/some/path", user_agent: "Mozilla/5.0"})
 
       assert subsegment.segment.http.request == %HTTPRequest{
                segment_type: :subsegment,
                method: "GET",
-               url: "/some/path"
+               url: "/some/path",
+               user_agent: "Mozilla/5.0"
              }
     end
 

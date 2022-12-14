@@ -81,23 +81,25 @@ defmodule Belfrage.Xray do
   end
 
   @spec set_http_request(Segment.t(), request_info) :: Segment.t()
-  def set_http_request(segment = %Segment{}, %{method: method, path: url}) do
+  def set_http_request(segment = %Segment{}, %{method: method, path: url, user_agent: user_agent}) do
     if_sampled(segment, fn ->
       Segment.set_http_request(segment, %HTTPRequest{
         segment_type: :segment,
         method: method,
-        url: url
+        url: url,
+        user_agent: user_agent
       })
     end)
   end
 
   @spec set_http_request(Subsegment.t(), request_info) :: Subsegment.t()
-  def set_http_request(subsegment = %Subsegment{}, %{method: method, path: url}) do
+  def set_http_request(subsegment = %Subsegment{}, %{method: method, path: url, user_agent: user_agent}) do
     if_sampled(subsegment, fn ->
       Subsegment.set_http_request(subsegment, %HTTPRequest{
         segment_type: :subsegment,
         method: method,
-        url: url
+        url: url,
+        user_agent: user_agent
       })
     end)
   end
