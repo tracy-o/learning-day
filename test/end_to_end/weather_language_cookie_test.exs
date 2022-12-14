@@ -1,21 +1,12 @@
 defmodule EndToEnd.WeatherLanguageCookieTest do
   use ExUnit.Case
   use Plug.Test
-  alias Belfrage.RequestTransformers.WeatherLanguageCookie
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
+  alias Belfrage.{RouteState, Clients.HTTP, Clients.HTTPMock}
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
 
-  @moduletag :end_to_end
-
-  @lambda_response %{
-    "headers" => %{
-      "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
-    },
-    "statusCode" => 301,
-    "body" => "<h1>Hello from the Lambda!</h1>"
-  }
+  @redirect_languages ["en", "cy", "ga", "gd"]
 
   setup do
     start_supervised!({RouteState, "SomeRouteState"})
@@ -23,16 +14,32 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
     :ok
   end
 
-  test "weather/language/:language redirects" do
-    Belfrage.Clients.LambdaMock
-    |> expect(:call, fn _credentials, _lambda_arn, _request, _opts ->
-      {:ok, @lambda_response}
+  test "weather/language/:language redirects when language segment is in redirect_languages" do
+    for lang <- @redirect_languages do
+      response_conn =
+        conn(:get, "/weather/language/#{lang}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Test)
+
+      assert {301, _headers, "Redirecting"} = sent_resp(response_conn)
+    end
+  end
+
+  test "weather/language/:language does not redirect when language is not in redirect_langugages" do
+    expect(HTTPMock, :execute, fn _request, _pool ->
+      {:ok,
+       %HTTP.Response{
+         headers: %{
+           "cache-control" => "public, max-age=30"
+         },
+         status_code: 200,
+         body: "Hello from MozartWeather"
+       }}
     end)
 
     response_conn =
-      conn(:get, "/weather/language/en")
-      |> Router.call([])
+      conn(:get, "/weather/language/ab")
+      |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
-    assert {301, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
+    assert {200, _headers, "Hello from MozartWeather"} = sent_resp(response_conn)
   end
 end
