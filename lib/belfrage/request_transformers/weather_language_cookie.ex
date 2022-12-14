@@ -1,10 +1,12 @@
 defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
   use Belfrage.Transformer
 
-  def call(rest, struct) do
-    if language_path?(struct.request.path) do
-      "/weather/language/" <> lang = struct.request.path
+  @redirect_languages ["en", "cy", "ga", "gd"]
 
+  def call(rest, struct) do
+    language = struct.request.path_params["language"]
+
+    if language in @redirect_languages do
       {
         :redirect,
         Struct.add(struct, :response, %{
@@ -12,7 +14,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
           headers: %{
             "location" => redirect_url(struct.request),
             "set-cookie" =>
-              "ckps_language=#{lang}; expires=#{next_year_http_date()}; path=/; domain=#{struct.request.subdomain}",
+              "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{struct.request.subdomain}",
             "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
           },
           body: "Redirecting"
@@ -21,14 +23,6 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
     else
       then_do(rest, struct)
     end
-  end
-
-  defp language_path?(path), do: path =~ ~r/^\/weather\/language\/(en|cy|ga|gd)$/
-
-  @spec valid_domain?(binary) :: boolean
-  def valid_domain?(host) do
-    [_subdomain, top_level_domain] = String.split(host, ".bbc")
-    ("bbc" <> top_level_domain) in ["bbc.co.uk", "bbc.com"]
   end
 
   def next_year_http_date(date \\ DateTime.now("Etc/UTC")) do
