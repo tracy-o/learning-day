@@ -26,7 +26,7 @@ defmodule BelfrageWeb.Plugs.Xray do
 
     segment
     |> xray.add_annotations(%{request_id: conn.private.request_id})
-    |> xray.add_metadata(%{xray: xray})
+    |> xray.add_metadata(%{xray: xray, referer: req_header(conn, "referer")})
     |> xray.set_http_request(%{method: conn.method, path: conn.request_path, user_agent: user_agent(conn)})
   end
 

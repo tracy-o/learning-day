@@ -79,6 +79,7 @@ defmodule EndToEnd.XrayTest do
       conn =
         conn(:get, "/fabl/xray")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
+        |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
         |> Router.call([])
 
       {200, _, _} = sent_resp(conn)

@@ -12,6 +12,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       conn =
         conn(:get, "/some/route")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
+        |> Plug.Conn.put_req_header("referer", "http://bbc.co.uk/")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
 
@@ -28,6 +29,10 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
     test "puts the segment into the conn", %{conn: conn} do
       assert conn.assigns[:xray_segment]
+    end
+
+    test "referer is added to the metadata section of the segment", %{conn: conn} do
+      assert %{referer: _} = conn.assigns[:xray_segment].metadata
     end
 
     test "segment has annotations", %{conn: conn} do
