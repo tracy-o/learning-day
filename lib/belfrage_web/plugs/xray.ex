@@ -2,7 +2,7 @@ defmodule BelfrageWeb.Plugs.Xray do
   @behaviour Plug
   require Logger
   import Plug.Conn, only: [register_before_send: 2, assign: 3, get_req_header: 2]
-  alias Belfrage.Xray
+  alias Belfrage.{Metrics, Xray}
 
   @skip_paths ["/status"]
 
@@ -65,18 +65,20 @@ defmodule BelfrageWeb.Plugs.Xray do
   end
 
   defp on_request_completed(conn, segment, xray) do
-    segment =
-      segment
-      |> xray.finish()
-      |> xray.set_http_response(%{
-        status: conn.status,
-        content_length: content_length(conn)
-      })
+    Metrics.latency_span(:register_before_send_xray, fn ->
+      segment =
+        segment
+        |> xray.finish()
+        |> xray.set_http_response(%{
+          status: conn.status,
+          content_length: content_length(conn)
+        })
 
-    xray.send(segment)
+      xray.send(segment)
 
-    conn
-    |> assign(:xray_segment, segment)
+      conn
+      |> assign(:xray_segment, segment)
+    end)
   end
 
   defp partial_trace_header?(trace_header) do

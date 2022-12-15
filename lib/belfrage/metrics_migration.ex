@@ -231,6 +231,9 @@ defmodule Belfrage.MetricsMigration do
       set_response_headers
       return_json_response
       return_binary_response
+      register_before_send_access_logs
+      register_before_send_latency_monitor
+      register_before_send_xray
     ),
           fn name ->
             summary("belfrage.latency.#{name}",
