@@ -15,5 +15,5 @@ defmodule Routes.Specs.MyTopicsFollows do
 
   defp request_pipeline("live"), do: []
 
-  defp request_pipeline(_env), do: ["AppPersonalisation"]
+  defp request_pipeline(_env), do: ["AppPersonalisationHalter"]
 end
