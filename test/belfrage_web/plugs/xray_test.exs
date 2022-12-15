@@ -12,7 +12,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       conn =
         conn(:get, "/some/route")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
-        |> Plug.Conn.put_req_header("referer", "http://bbc.co.uk/")
+        |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
 
