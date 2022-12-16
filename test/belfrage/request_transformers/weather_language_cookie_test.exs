@@ -8,7 +8,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
   test "301 redirect when language in redirect_languages" do
     for lang <- @redirect_languages do
       struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/#{lang}", %{}, %{"language" => lang})
-      cookie = "ckps_language=#{lang}; expires=#{next_year_http_date()}; path=/; domain=www"
+      cookie = "ckps_language=#{lang}; expires=#{next_year_http_date()}; path=/; domain=.bbc.co.uk"
 
       assert {
                :redirect,

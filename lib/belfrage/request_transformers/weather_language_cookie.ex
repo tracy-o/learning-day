@@ -14,7 +14,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
           headers: %{
             "location" => redirect_url(struct.request),
             "set-cookie" =>
-              "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{struct.request.subdomain}",
+              "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(struct.request.host)}",
             "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
           },
           body: ""
@@ -23,6 +23,10 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
     else
       then_do(rest, struct)
     end
+  end
+
+  defp request_domain(host) do
+    String.replace(host, ~r/.+?(?=\.bbc)/, "", global: false)
   end
 
   defp next_year_http_date(date \\ DateTime.now("Etc/UTC")) do
