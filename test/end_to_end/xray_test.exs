@@ -76,8 +76,63 @@ defmodule EndToEnd.XrayTest do
          }}
       end)
 
-      conn = conn(:get, "/fabl/xray") |> Router.call([])
-      {200, _, _} = sent_resp(conn)
+      conn =
+        conn(:get, "/fabl/xray")
+        |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
+        |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
+        |> Router.call([])
+
+      assert {200, _, _} = sent_resp(conn)
+    end
+
+    test "invalid UTF8 path for the referer still allows outgoing request to work" do
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->
+        assert Map.has_key?(headers, "x-amzn-trace-id")
+        assert String.contains?(headers["x-amzn-trace-id"], "Sampled=")
+        assert String.contains?(headers["x-amzn-trace-id"], "Root=")
+        assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
+
+        {:ok,
+         %HTTP.Response{
+           headers: %{"cache-control" => "public, max-age=60"},
+           status_code: 200,
+           body: ""
+         }}
+      end)
+
+      conn =
+        conn(:get, "/fabl/xray")
+        |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
+        |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
+        |> Router.call([])
+
+      assert {200, _, _} = sent_resp(conn)
+    end
+
+    test "User Agent containing invlid UTF8 characters still allows outgoing request to work" do
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->
+        assert Map.has_key?(headers, "x-amzn-trace-id")
+        assert String.contains?(headers["x-amzn-trace-id"], "Sampled=")
+        assert String.contains?(headers["x-amzn-trace-id"], "Root=")
+        assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
+
+        {:ok,
+         %HTTP.Response{
+           headers: %{"cache-control" => "public, max-age=60"},
+           status_code: 200,
+           body: ""
+         }}
+      end)
+
+      conn =
+        conn(:get, "/fabl/xray")
+        |> Plug.Conn.put_req_header("user-agent", "Mozilla/fo%a0%B4%E")
+        |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
+        |> Router.call([])
+
+      assert {200, _, _} = sent_resp(conn)
     end
   end
 end
