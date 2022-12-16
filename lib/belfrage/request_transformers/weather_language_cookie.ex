@@ -6,7 +6,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
   @redirect_languages ["en", "cy", "ga", "gd"]
   @one_year_in_seconds 365 * 24 * 3600
 
-  def call(rest, struct) do
+  def call(_rest, struct) do
     language = struct.request.path_params["language"]
     redirect_location = struct.request.query_params["redirect_location"] || "/weather"
 
@@ -35,7 +35,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
           Struct.add(struct, :response, %{
             http_status: 301,
             headers: %{
-              "location" => redirect_url(struct.request),
+              "location" => redirect_url(struct.request.host, redirect_location),
               "set-cookie" =>
                 "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(struct.request.host)}",
               "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
@@ -56,10 +56,9 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
     |> Calendar.strftime("%a, %d %b %Y %H:%M:%S GMT")
   end
 
-  defp redirect_url(request) do
+  defp redirect_url(host, redirect_location) do
     "https://" <>
-      request.host <>
-      "/weather" <>
-      Belfrage.Helpers.QueryParams.encode(request.query_params)
+      host <>
+      redirect_location
   end
 end

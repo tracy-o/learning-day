@@ -42,7 +42,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  http_status: 301,
                  body: "",
                  headers: %{
-                   "location" => "https://www.bbc.co.uk/weather?redirect_location=%2Fweather%2Fw1a",
+                   "location" => "https://www.bbc.co.uk/weather/w1a",
                    "set-cookie" => "ckps_language=en; expires=Sat, 16 Dec 2023 10:30:45 GMT; path=/; domain=.bbc.co.uk",
                    "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
                  }
