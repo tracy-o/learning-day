@@ -53,14 +53,14 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
     on_exit(&Current.Mock.unfreeze/0)
   end
 
-  test "returns a 400 when language is not in redirect_languages" do
+  test "returns a 404 when language is not in redirect_languages" do
     struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/ab", %{}, %{"language" => "ab"})
 
     assert {
              :stop_pipeline,
              %{
                response: %{
-                 http_status: 400,
+                 http_status: 404,
                  body: "",
                  headers: %{}
                }

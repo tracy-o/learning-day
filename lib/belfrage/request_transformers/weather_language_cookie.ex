@@ -24,7 +24,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
         {
           :stop_pipeline,
           Struct.add(struct, :response, %{
-            http_status: 400,
+            http_status: 404,
             body: ""
           })
         }
