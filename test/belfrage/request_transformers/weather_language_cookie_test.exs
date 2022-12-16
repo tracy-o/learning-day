@@ -2,41 +2,34 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
   use ExUnit.Case, async: true
   import Fixtures.Struct
   alias Belfrage.RequestTransformers.WeatherLanguageCookie
+  alias Belfrage.Utils.Current
 
-  @redirect_languages ["en", "cy", "ga", "gd"]
+  test "301 redirect when language one of the redirect_languages" do
+    Current.Mock.freeze(~D[2022-12-16], ~T[08:15:45.368815Z])
 
-  test "301 redirect when language in redirect_languages" do
-    for lang <- @redirect_languages do
-      struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/#{lang}", %{}, %{"language" => lang})
-      cookie = "ckps_language=#{lang}; expires=#{next_year_http_date()}; path=/; domain=.bbc.co.uk"
+    struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/en", %{}, %{"language" => "en"})
 
-      assert {
-               :redirect,
-               %{
-                 response: %{
-                   http_status: 301,
-                   body: "",
-                   headers: %{
-                     "location" => "https://www.bbc.co.uk/weather",
-                     "set-cookie" => ^cookie,
-                     "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
-                   }
+    assert {
+             :redirect,
+             %{
+               response: %{
+                 http_status: 301,
+                 body: "",
+                 headers: %{
+                   "location" => "https://www.bbc.co.uk/weather",
+                   "set-cookie" => "ckps_language=en; expires=Sat, 16 Dec 2023 08:15:45 GMT; path=/; domain=.bbc.co.uk",
+                   "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
                  }
                }
-             } = WeatherLanguageCookie.call([], struct)
-    end
+             }
+           } = WeatherLanguageCookie.call([], struct)
+
+    on_exit(&Current.Mock.unfreeze/0)
   end
 
   test "does not 301 redirect when language is not in redirect_languages" do
     struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/ab", %{}, %{"language" => "ab"})
 
     assert {:ok, struct} == WeatherLanguageCookie.call([], struct)
-  end
-
-  defp next_year_http_date() do
-    {:ok, current} = DateTime.now("Etc/UTC")
-
-    %{current | year: current.year + 1}
-    |> Calendar.strftime("%a, %d %b %Y %H:%M:%S GMT")
   end
 end

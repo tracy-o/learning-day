@@ -1,7 +1,10 @@
 defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
   use Belfrage.Transformer
 
+  alias Belfrage.Utils
+
   @redirect_languages ["en", "cy", "ga", "gd"]
+  @one_year_in_seconds 365 * 24 * 3600
 
   def call(rest, struct) do
     language = struct.request.path_params["language"]
@@ -29,10 +32,9 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
     String.replace(host, ~r/.+?(?=\.bbc)/, "", global: false)
   end
 
-  defp next_year_http_date(date \\ DateTime.now("Etc/UTC")) do
-    {:ok, current} = date
-
-    %{current | year: current.year + 1}
+  defp next_year_http_date() do
+    Utils.Current.date_time()
+    |> DateTime.add(@one_year_in_seconds, :second)
     |> Calendar.strftime("%a, %d %b %Y %H:%M:%S GMT")
   end
 
