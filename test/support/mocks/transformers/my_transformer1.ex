@@ -1,10 +1,10 @@
 defmodule Belfrage.RequestTransformers.MyTransformer1 do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct = %Struct{}) do
+  @impl Transformer
+  def call(struct = %Struct{}) do
     struct = Map.merge(struct, %{sample_change: "foo"})
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 end

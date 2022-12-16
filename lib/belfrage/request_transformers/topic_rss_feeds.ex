@@ -1,7 +1,8 @@
 defmodule Belfrage.RequestTransformers.TopicRssFeeds do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     struct =
       Struct.add(struct, :request, %{
         path: "/fd/rss",
@@ -17,6 +18,6 @@ defmodule Belfrage.RequestTransformers.TopicRssFeeds do
         }
       })
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 end

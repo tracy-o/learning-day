@@ -1,14 +1,14 @@
 defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirect do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(_rest, struct = %Struct{}) do
+  @impl Transformer
+  def call(struct = %Struct{}) do
     redirect(struct)
   end
 
   def redirect(struct) do
     {
-      :redirect,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{

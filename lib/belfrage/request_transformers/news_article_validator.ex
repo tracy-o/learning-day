@@ -1,12 +1,12 @@
 defmodule Belfrage.RequestTransformers.NewsArticleValidator do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if joan_belfrage_stack?() or valid_article_id?(struct) do
-      then_do(rest, struct)
+      {:ok, struct}
     else
-      {:stop_pipeline, Struct.put_status(struct, 404)}
+      {:stop, Struct.put_status(struct, 404)}
     end
   end
 

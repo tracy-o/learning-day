@@ -1,14 +1,14 @@
 defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.NewsApps
 
   @dial Application.get_env(:belfrage, :dial)
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if dial_active?() do
       {
-        :stop_pipeline,
+        :stop,
         Struct.add(struct, :response, %{
           http_status: 200,
           headers: %{
@@ -20,7 +20,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
         })
       }
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 

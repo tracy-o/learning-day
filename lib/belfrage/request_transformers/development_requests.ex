@@ -3,15 +3,15 @@ defmodule Belfrage.RequestTransformers.DevelopmentRequests do
   Prepends transformers that are needed to satisfy the
   request a developer has made.
   """
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @request_type_to_transformer_mapping [
     replayed: ["ReplayedTraffic"]
   ]
 
-  @impl true
-  def call(rest, struct) do
-    then_do(development_transformers(struct) ++ rest, struct)
+  @impl Transformer
+  def call(struct) do
+    {:ok, struct, {:add, development_transformers(struct)}}
   end
 
   def development_transformers(struct) do

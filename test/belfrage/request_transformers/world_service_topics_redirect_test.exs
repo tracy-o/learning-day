@@ -6,7 +6,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
 
   test "redirects old to base of new ws topics page - w/o variant" do
     assert {
-             :redirect,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 302,
@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
                }
              }
            } =
-             WorldServiceTopicsRedirect.call([], %Struct{
+             WorldServiceTopicsRedirect.call(%Struct{
                request: %Struct.Request{
                  path: "/pidgin/topics/cqywjyzk2vyt/page/5",
                  path_params: %{"page" => "5", "id" => "cqywjyzk2vyt"}
@@ -29,7 +29,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
 
   test "redirects old to base of new ws topics page - w/ variant" do
     assert {
-             :redirect,
+             :stop,
              %Belfrage.Struct{
                response: %Belfrage.Struct.Response{
                  http_status: 302,
@@ -42,7 +42,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
                }
              }
            } =
-             WorldServiceTopicsRedirect.call([], %Struct{
+             WorldServiceTopicsRedirect.call(%Struct{
                request: %Struct.Request{
                  path: "/serbian/cyr/topics/cqwvxvvw9qrt/page/5",
                  path_params: %{"page" => "5", "id" => "cqwvxvvw9qrt"}

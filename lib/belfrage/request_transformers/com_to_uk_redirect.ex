@@ -1,26 +1,24 @@
 defmodule Belfrage.RequestTransformers.ComToUKRedirect do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     case String.ends_with?(struct.request.host, "bbc.com") do
-      true ->
-        {
-          :redirect,
-          Struct.add(struct, :response, %{
-            http_status: 302,
-            headers: %{
-              "location" => redirect_url(struct.request),
-              "x-bbc-no-scheme-rewrite" => "1",
-              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-            },
-            body: "Redirecting"
-          })
-        }
-
-      false ->
-        then_do(rest, struct)
+      true -> {:stop, Struct.add(struct, :response, make_redirect_resp(struct))}
+      false -> {:ok, struct}
     end
+  end
+
+  defp make_redirect_resp(struct) do
+    %{
+      http_status: 302,
+      headers: %{
+        "location" => redirect_url(struct.request),
+        "x-bbc-no-scheme-rewrite" => "1",
+        "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+      },
+      body: "Redirecting"
+    }
   end
 
   defp redirect_url(request) do

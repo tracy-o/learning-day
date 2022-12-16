@@ -27,9 +27,10 @@ defmodule Belfrage.RequestTransformers.SportRssFeedsPlatformDiscriminatorTest do
                    "ctx-unwrapped" => "1"
                  }
                }
-             }
+             },
+             {:replace, ["CircuitBreaker"]}
            } =
-             SportRssFeedsPlatformDiscriminator.call([], %Struct{
+             SportRssFeedsPlatformDiscriminator.call(%Struct{
                request: %Struct.Request{path_params: %{"discipline" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"}}
              })
   end
@@ -46,7 +47,7 @@ defmodule Belfrage.RequestTransformers.SportRssFeedsPlatformDiscriminatorTest do
                }
              }
            } =
-             SportRssFeedsPlatformDiscriminator.call([], %Struct{
+             SportRssFeedsPlatformDiscriminator.call(%Struct{
                private: %Struct.Private{
                  platform: Karanga,
                  origin: karanga_endpoint

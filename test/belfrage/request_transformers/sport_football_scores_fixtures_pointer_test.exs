@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
     test "platform will stay as Mozart" do
       stub_dials(football_scores_fixtures: "mozart")
 
-      assert {:ok, %Struct{private: %{platform: MozartSport}}} = SportFootballScoresFixturesPointer.call([], struct())
+      assert {:ok, %Struct{private: %{platform: MozartSport}}} = SportFootballScoresFixturesPointer.call(struct())
     end
   end
 
@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
       stub_dials(football_scores_fixtures: "webcore")
 
       assert {:ok, %Struct{private: %{platform: Webcore, origin: "pwa-lambda-function"}}} =
-               SportFootballScoresFixturesPointer.call([], struct())
+               SportFootballScoresFixturesPointer.call(struct())
     end
   end
 end

@@ -14,7 +14,7 @@ defmodule Belfrage.RequestTransformers.RssFeedDomainValidatorTest do
       }
     }
 
-    assert {:ok, ^struct} = RssFeedDomainValidator.call([], struct)
+    assert {:ok, ^struct} = RssFeedDomainValidator.call(struct)
   end
 
   test "requests to the www subdomain are stopped" do
@@ -28,10 +28,10 @@ defmodule Belfrage.RequestTransformers.RssFeedDomainValidatorTest do
     }
 
     assert {
-             :stop_pipeline,
+             :stop,
              %Struct{
                response: %Struct.Response{http_status: 404}
              }
-           } = RssFeedDomainValidator.call([], struct)
+           } = RssFeedDomainValidator.call(struct)
   end
 end

@@ -25,7 +25,7 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapperTest do
                   circuit_breaker_error_threshold: 15_000,
                   platform: AppsTrevor
                 }
-              }} = AppSubdomainMapper.call([], struct)
+              }} = AppSubdomainMapper.call(struct)
     end
   end
 
@@ -49,7 +49,7 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapperTest do
                   circuit_breaker_error_threshold: 8_000,
                   platform: AppsWalter
                 }
-              }} = AppSubdomainMapper.call([], struct)
+              }} = AppSubdomainMapper.call(struct)
     end
   end
 
@@ -73,7 +73,7 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapperTest do
                   circuit_breaker_error_threshold: 1_500,
                   platform: AppsPhilippa
                 }
-              }} = AppSubdomainMapper.call([], struct)
+              }} = AppSubdomainMapper.call(struct)
     end
   end
 
@@ -85,12 +85,12 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapperTest do
         }
       }
 
-      assert {:stop_pipeline,
+      assert {:stop,
               %Struct{
                 response: %Response{
                   http_status: 400
                 }
-              }} = AppSubdomainMapper.call([], struct)
+              }} = AppSubdomainMapper.call(struct)
     end
   end
 end

@@ -1,6 +1,6 @@
 defmodule Belfrage.ResponseTransformers.CachingEnabled do
   alias Belfrage.{Struct, Mvt}
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Behaviours.Transformer
 
   @doc """
   Sets struct.private.caching_enabled depending on
@@ -9,12 +9,12 @@ defmodule Belfrage.ResponseTransformers.CachingEnabled do
   the response are in :mvt_seen - if not then we
   set struct.private.caching_enabled to false.
   """
-  @impl true
+  @impl Transformer
   def call(struct = %Struct{}) do
     if Mvt.State.all_vary_headers_seen?(struct) do
-      struct
+      {:ok, struct}
     else
-      Struct.add(struct, :private, %{caching_enabled: false})
+      {:ok, Struct.add(struct, :private, %{caching_enabled: false})}
     end
   end
 end

@@ -1,29 +1,49 @@
 defmodule Belfrage.RequestTransformers.MockTransformer do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     send(self(), :mock_transformer_called)
-    then_do(rest, struct)
+    {:ok, struct}
+  end
+end
+
+defmodule Belfrage.RequestTransformers.MockTransformerAdd do
+  use Belfrage.Behaviours.Transformer
+
+  @impl Transformer
+  def call(struct) do
+    send(self(), :mock_transformer_add_called)
+    {:ok, struct, {:add, [MockTransformer]}}
+  end
+end
+
+defmodule Belfrage.RequestTransformers.MockTransformerReplace do
+  use Belfrage.Behaviours.Transformer
+
+  @impl Transformer
+  def call(struct) do
+    send(self(), :mock_transformer_replace_called)
+    {:ok, struct, {:replace, [MockTransformer]}}
   end
 end
 
 defmodule Belfrage.RequestTransformers.MockTransformerStop do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(_rest, struct) do
+  @impl Transformer
+  def call(struct) do
     send(self(), :mock_transformer_stop_called)
-    {:stop_pipeline, struct}
+    {:stop, struct}
   end
 end
 
 defmodule Belfrage.RequestTransformers.MockTransformerRedirect do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
-  def call(_rest, struct) do
+  @impl Transformer
+  def call(struct) do
     send(self(), :mock_transformer_redirect_called)
-    {:redirect, struct}
+    {:stop, struct}
   end
 end

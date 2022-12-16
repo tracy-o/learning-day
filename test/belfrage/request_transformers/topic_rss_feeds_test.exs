@@ -23,7 +23,7 @@ defmodule Belfrage.RequestTransformers.TopicRssFeedsTest do
                }
              }
            } =
-             TopicRssFeeds.call([], %Struct{
+             TopicRssFeeds.call(%Struct{
                request: %Struct.Request{
                  path: "/topics/testId/rss.xml",
                  path_params: %{"id" => "testId"}

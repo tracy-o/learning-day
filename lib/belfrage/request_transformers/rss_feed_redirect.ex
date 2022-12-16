@@ -1,9 +1,10 @@
 defmodule Belfrage.RequestTransformers.RssFeedRedirect do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if struct.request.subdomain == "feeds" do
-      then_do(rest, struct)
+      {:ok, struct}
     else
       redirect(struct)
     end
@@ -11,7 +12,7 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirect do
 
   defp redirect(struct) do
     {
-      :redirect,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{

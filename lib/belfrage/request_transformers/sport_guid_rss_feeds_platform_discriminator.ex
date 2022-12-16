@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform for a subset of Sport RSS feeds that need to be served by FABL.
   """
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @fabl_feeds [
     # /sport/alpine-skiing
@@ -1517,7 +1517,8 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
     "f9bcd500-e383-408f-9177-6d8468d6ae35"
   ]
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if struct.request.path_params["discipline"] in @fabl_feeds do
       struct =
         struct
@@ -1538,9 +1539,9 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
           }
         })
 
-      then_do(["CircuitBreaker"], struct)
+      {:ok, struct, {:replace, ["CircuitBreaker"]}}
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 end

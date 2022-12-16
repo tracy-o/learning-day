@@ -2,10 +2,11 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform for a subset of News Topics IDs that need to be served by Mozart.
   """
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
 
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     cond do
       is_mozart_topic?(struct) or is_id_guid?(struct) ->
         struct =
@@ -16,11 +17,11 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
             personalised_request: false
           })
 
-        then_do(["CircuitBreaker"], struct)
+        {:ok, struct, {:replace, ["CircuitBreaker"]}}
 
       not is_mozart_topic?(struct) and has_slug?(struct) ->
         {
-          :redirect,
+          :stop,
           Struct.add(struct, :response, %{
             http_status: 302,
             headers: %{
@@ -33,7 +34,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
         }
 
       true ->
-        then_do(rest, struct)
+        {:ok, struct}
     end
   end
 

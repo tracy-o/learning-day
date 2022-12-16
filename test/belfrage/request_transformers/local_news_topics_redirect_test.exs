@@ -13,7 +13,7 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
         "location_id_and_name" => "6296650-somelocation"
       })
 
-    assert {:redirect,
+    assert {:stop,
             %Struct{
               response: %Struct.Response{
                 http_status: 302,
@@ -24,7 +24,7 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
                 },
                 body: "Redirecting"
               }
-            }} = LocalNewsTopicsRedirect.call([], struct)
+            }} = LocalNewsTopicsRedirect.call(struct)
   end
 
   test "If the location ID is not in the mapping, then a redirect will be issued to the local news search page" do
@@ -33,7 +33,7 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
         "location_id_and_name" => "12345-somelocation"
       })
 
-    assert {:redirect,
+    assert {:stop,
             %Struct{
               response: %Struct.Response{
                 http_status: 302,
@@ -44,7 +44,7 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
                 },
                 body: "Redirecting"
               }
-            }} = LocalNewsTopicsRedirect.call([], struct)
+            }} = LocalNewsTopicsRedirect.call(struct)
   end
 
   test "If the path does not start with /news/localnews/, continue to origin" do
@@ -53,6 +53,6 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
         "location_id_and_name" => "6296650-somelocation"
       })
 
-    assert {:ok, ^struct} = LocalNewsTopicsRedirect.call([], struct)
+    assert {:ok, ^struct} = LocalNewsTopicsRedirect.call(struct)
   end
 end

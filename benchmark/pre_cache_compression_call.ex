@@ -54,8 +54,8 @@ defmodule Benchmark.PreCacheCompressionCall do
     setup(iteration, step_size_kb)
     |> Enum.map(fn {size_kb, {a, b}} ->
       [
-        {"pre cache compression: #{size_kb}kb lambda resp", fn -> PreCacheCompression.call([], a) end},
-        {"pre cache compression: #{size_kb}kb lambda gzip resp", fn -> PreCacheCompression.call([], b) end}
+        {"pre cache compression: #{size_kb}kb lambda resp", fn -> PreCacheCompression.call(a) end},
+        {"pre cache compression: #{size_kb}kb lambda gzip resp", fn -> PreCacheCompression.call(b) end}
       ]
     end)
     |> List.flatten()

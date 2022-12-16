@@ -84,7 +84,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
                  path_params: %{"id" => "zr48q6f"}
                }
              }
-           } = BitesizeLevelsPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeLevelsPlatformDiscriminator.call(@webcore_test_data)
   end
 
   test "if the Level ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
@@ -104,7 +104,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeLevelsPlatformDiscriminator.call([], @morph_test_data)
+           } = BitesizeLevelsPlatformDiscriminator.call(@morph_test_data)
   end
 
   test "if the Level ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
@@ -127,7 +127,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeLevelsPlatformDiscriminator.call([], @morph_live_data)
+           } = BitesizeLevelsPlatformDiscriminator.call(@morph_live_data)
   end
 
   test "if the Level ID and year Id is in the Test Webcore allow list, the origin and platform will be altered" do
@@ -147,6 +147,6 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
                  path_params: %{"id" => "zr48q6f", "year_id" => "zmyxxyc"}
                }
              }
-           } = BitesizeLevelsPlatformDiscriminator.call([], @webcore_test_data_with_year)
+           } = BitesizeLevelsPlatformDiscriminator.call(@webcore_test_data_with_year)
   end
 end

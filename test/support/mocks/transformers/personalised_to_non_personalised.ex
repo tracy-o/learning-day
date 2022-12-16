@@ -1,15 +1,16 @@
 defmodule Belfrage.RequestTransformers.PersonalisedToNonPersonalised do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
-  def call(_rest, struct) do
-    then_do(
-      [],
+  @impl Transformer
+  def call(struct) do
+    {
+      :ok,
       Struct.add(struct, :private, %{
         platform: MozartNews,
         origin: Application.get_env(:belfrage, :mozart_news_endpoint),
         personalised_route: false,
         personalised_request: false
       })
-    )
+    }
   end
 end

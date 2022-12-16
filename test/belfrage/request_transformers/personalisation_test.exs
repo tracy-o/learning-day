@@ -29,17 +29,17 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
   describe "call/2" do
     test "request is not personalised", %{struct: struct} do
       struct = Struct.add(struct, :private, %{personalised_request: false})
-      assert Personalisation.call([], struct) == {:ok, struct}
+      assert Personalisation.call(struct) == {:ok, struct}
     end
 
     test "user is not authenticated", %{struct: struct} do
       struct = deauthenticate_request(struct)
-      assert {:ok, struct} = Personalisation.call([], struct)
+      assert {:ok, struct} = Personalisation.call(struct)
       refute struct.user_session.authenticated
     end
 
     test "user is authenticated, web session is invalid", %{struct: struct} do
-      assert {:redirect, struct} = Personalisation.call([], struct)
+      assert {:stop, struct} = Personalisation.call(struct)
       assert struct.user_session.authenticated
       refute struct.user_session.valid_session
 
@@ -59,7 +59,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
       token = Fixtures.AuthToken.valid_access_token()
       struct = personalise_request(struct, token)
 
-      assert {:ok, struct} = Personalisation.call([], struct)
+      assert {:ok, struct} = Personalisation.call(struct)
       assert struct.user_session.authenticated
       assert struct.user_session.valid_session
       assert struct.user_session.session_token == token
@@ -79,7 +79,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, struct} = Personalisation.call([], struct)
+      assert {:ok, struct} = Personalisation.call(struct)
 
       refute struct.user_session.authenticated
       refute struct.user_session.valid_session
@@ -101,13 +101,13 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
       }
 
       assert {
-               :stop_pipeline,
+               :stop,
                struct = %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 401
                  }
                }
-             } = Personalisation.call([], struct)
+             } = Personalisation.call(struct)
 
       assert struct.user_session.authenticated
       refute struct.user_session.valid_session
@@ -130,7 +130,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, struct} = Personalisation.call([], struct)
+      assert {:ok, struct} = Personalisation.call(struct)
 
       assert struct.user_session.authenticated
       assert struct.user_session.valid_session

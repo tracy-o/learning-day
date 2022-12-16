@@ -12,7 +12,7 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         private: %Struct.Private{origin: "lambda-function", production_environment: "test"}
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], struct)
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
 
       assert origin == "lambda-function:#{production_env}"
     end
@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         private: %Struct.Private{origin: "lambda-function", production_environment: "test", preview_mode: "off"}
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], struct)
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
 
       assert origin == "lambda-function:#{production_env}"
     end
@@ -44,7 +44,7 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         }
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], struct)
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
 
       assert origin == "lambda-function:example-branch"
     end
@@ -60,7 +60,7 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         }
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call([], struct)
+      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
 
       assert origin == "lambda-function:example-branch_2"
     end
@@ -77,14 +77,14 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
       }
 
       assert {
-               :stop_pipeline,
+               :stop,
                %Belfrage.Struct{
                  response: %Belfrage.Struct.Response{
                    http_status: 400,
                    body: "Invalid Alias"
                  }
                }
-             } = LambdaOriginAlias.call([], struct)
+             } = LambdaOriginAlias.call(struct)
     end
   end
 

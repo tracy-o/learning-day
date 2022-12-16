@@ -1,10 +1,10 @@
 defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStory do
-  use Belfrage.Transformer
-  alias Belfrage.Struct
+  use Belfrage.Behaviours.Transformer
 
   @dial Application.get_env(:belfrage, :dial)
 
-  def call(rest, struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
+  @impl Transformer
+  def call(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
     struct =
       Struct.add(struct, :request, %{
         raw_headers:
@@ -13,6 +13,6 @@ defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStory do
           })
       })
 
-    then_do(rest, struct)
+    {:ok, struct}
   end
 end

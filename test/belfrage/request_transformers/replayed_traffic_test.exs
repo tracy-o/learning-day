@@ -26,7 +26,7 @@ defmodule Belfrage.RequestTransformers.ReplayedTrafficTest do
                  platform: SomePlatform
                }
              }
-           } = ReplayedTraffic.call([], @non_replayed_request_struct)
+           } = ReplayedTraffic.call(@non_replayed_request_struct)
   end
 
   test "replayed traffic will be sent to a different origin" do
@@ -38,6 +38,6 @@ defmodule Belfrage.RequestTransformers.ReplayedTrafficTest do
                  platform: OriginSimulator
                }
              }
-           } = ReplayedTraffic.call([], @replayed_request_struct)
+           } = ReplayedTraffic.call(@replayed_request_struct)
   end
 end

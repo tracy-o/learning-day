@@ -83,7 +83,7 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminatorTest d
                  path_params: %{"id" => "z82hsbk"}
                }
              }
-           } = BitesizeTopicsPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeTopicsPlatformDiscriminator.call(@webcore_test_data)
   end
 
   test "if the topic ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
@@ -103,7 +103,7 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminatorTest d
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeTopicsPlatformDiscriminator.call([], @morph_test_data)
+           } = BitesizeTopicsPlatformDiscriminator.call(@morph_test_data)
   end
 
   test "if the topic ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
@@ -126,7 +126,7 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminatorTest d
                  path_params: %{"id" => "abc123xyz789"}
                }
              }
-           } = BitesizeTopicsPlatformDiscriminator.call([], @morph_live_data)
+           } = BitesizeTopicsPlatformDiscriminator.call(@morph_live_data)
   end
 
   test "if the topic ID and year Id is in the Test Webcore allow list, the origin and platform will be altered" do
@@ -146,6 +146,6 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminatorTest d
                  path_params: %{"id" => "z82hsbk", "year_id" => "zmyxxyc"}
                }
              }
-           } = BitesizeTopicsPlatformDiscriminator.call([], @webcore_test_data_with_year)
+           } = BitesizeTopicsPlatformDiscriminator.call(@webcore_test_data_with_year)
   end
 end

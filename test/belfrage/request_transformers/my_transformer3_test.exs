@@ -15,6 +15,6 @@ defmodule Belfrage.RequestTransformers.MyTransformer3Test do
              :error,
              _original_struct,
              "error processing pipeline, I'm doing something specific with this"
-           } = Subject.call([], @original_struct)
+           } = Subject.call(@original_struct)
   end
 end

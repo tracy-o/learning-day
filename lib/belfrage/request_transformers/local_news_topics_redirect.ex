@@ -1,9 +1,9 @@
 defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirect do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.RequestTransformers.LocalNewsTopicsRedirect.LocationTopicMappings
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     cond do
       is_local_news?(struct) and topic_id(struct.request.path_params) ->
         location = topic_id_location(struct.request)
@@ -13,13 +13,13 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirect do
         redirect(struct, "/news/localnews")
 
       true ->
-        then_do(rest, struct)
+        {:ok, struct}
     end
   end
 
   defp redirect(struct, location) do
     {
-      :redirect,
+      :stop,
       Struct.add(struct, :response, %{
         http_status: 302,
         headers: %{

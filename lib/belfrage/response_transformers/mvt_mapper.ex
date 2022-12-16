@@ -1,8 +1,7 @@
 defmodule Belfrage.ResponseTransformers.MvtMapper do
-  alias Belfrage.Struct
-  @behaviour Belfrage.Behaviours.ResponseTransformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
+  @impl Transformer
   def call(
         struct = %Struct{
           private: %Struct.Private{
@@ -18,19 +17,24 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
     if vary_header && mvt_project_id > 0 do
       mapped_mvt_headers = ["bbc-mvt-complete" | map_mvt_headers(vary_header, mvt_headers)]
 
-      Struct.add(struct, :private, %{
-        headers_allowlist: filter_mvt_headers(headers_allowlist, mapped_mvt_headers),
-        mvt_vary: mapped_mvt_headers
-      })
+      struct =
+        Struct.add(struct, :private, %{
+          headers_allowlist: filter_mvt_headers(headers_allowlist, mapped_mvt_headers),
+          mvt_vary: mapped_mvt_headers
+        })
+
+      {:ok, struct}
     else
-      Struct.add(struct, :private, %{
-        headers_allowlist: filter_mvt_headers(headers_allowlist, [])
-      })
+      struct =
+        Struct.add(struct, :private, %{
+          headers_allowlist: filter_mvt_headers(headers_allowlist, [])
+        })
+
+      {:ok, struct}
     end
   end
 
-  @impl true
-  def call(struct), do: struct
+  def call(struct), do: {:ok, struct}
 
   defp filter_mvt_headers(headers_allowlist, mapped_mvt_headers) do
     headers_allowlist

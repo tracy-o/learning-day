@@ -23,7 +23,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
         set_webcore_ttl_multiplier(@webcore_value)
 
         {:ok, %{response: response}} =
-          CacheDirective.call([], %Struct{
+          CacheDirective.call(%Struct{
             response: %Struct.Response{
               headers: %{
                 "cache-control" => "private, max-age=5"
@@ -49,7 +49,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
         set_non_webcore_ttl_multiplier(@non_webcore_value)
 
         {:ok, %{response: response}} =
-          CacheDirective.call([], %Struct{
+          CacheDirective.call(%Struct{
             response: %Struct.Response{
               headers: %{
                 "cache-control" => "public, max-age=30"
@@ -68,12 +68,12 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   describe "call/2 with edge cases" do
     test "Given no cache_control response header, nothing is changed" do
-      assert CacheDirective.call([], %Struct{}) == {:ok, %Struct{}}
+      assert CacheDirective.call(%Struct{}) == {:ok, %Struct{}}
     end
 
     test "Given a cache control with no max-age, the max-age remains unprovided" do
       {:ok, %{response: response}} =
-        CacheDirective.call([], %Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "private"
@@ -94,7 +94,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
     test "Given a cache-control set to public, the cacheabilty is set to 'private' and the max_age is set to 0" do
       {:ok, %{response: response}} =
-        CacheDirective.call([], %Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "public, max-age=30"
@@ -111,7 +111,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
     test "Given a cache-control set to private, the cacheabilty remains as 'private' the and max_age is unchanged" do
       {:ok, %{response: response}} =
-        CacheDirective.call([], %Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "private, max-age=30"
@@ -128,7 +128,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
     test "Given a cache-control set to public and a Webcore platform, the cacheabilty is set to 'private' and the max_age is set to 0" do
       {:ok, %{response: response}} =
-        CacheDirective.call([], %Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "public, max-age=30"
@@ -146,7 +146,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
     test "Given a cache-control set to private and a Webcore platform, the cacheabilty remains as 'private' the and max_age is unchanged" do
       {:ok, %{response: response}} =
-        CacheDirective.call([], %Struct{
+        CacheDirective.call(%Struct{
           response: %Struct.Response{
             headers: %{
               "cache-control" => "private, max-age=30"

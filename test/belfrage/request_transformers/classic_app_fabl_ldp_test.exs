@@ -16,7 +16,7 @@ defmodule Belfrage.RequestTransformers.ClassicAppFablLdpTest do
                }
              }
            } =
-             ClassicAppFablLdp.call([], %Struct{
+             ClassicAppFablLdp.call(%Struct{
                request: %Struct.Request{path_params: %{}, query_params: %{"foo" => "bar"}}
              })
   end
@@ -42,7 +42,7 @@ defmodule Belfrage.RequestTransformers.ClassicAppFablLdpTest do
                }
              }
            } =
-             ClassicAppFablLdp.call([], %Struct{
+             ClassicAppFablLdp.call(%Struct{
                request: %Struct.Request{path_params: %{"guid" => guid}, query_params: %{"foo" => "bar"}}
              })
   end

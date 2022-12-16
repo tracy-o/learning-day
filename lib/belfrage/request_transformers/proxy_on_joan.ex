@@ -1,5 +1,5 @@
 defmodule Belfrage.RequestTransformers.ProxyOnJoan do
-  use Belfrage.Transformer
+  use Belfrage.Behaviours.Transformer
 
   @moduledoc """
     Previously all `/news/*` traffic articles that weren't specifically sent to
@@ -17,18 +17,18 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoan do
     Pres rather than giving to Mozart.
   """
 
-  @impl true
-  def call(rest, struct) do
+  @impl Transformer
+  def call(struct) do
     if stack_id() == "joan" do
-      then_do(
-        rest,
+      {
+        :ok,
         Struct.add(struct, :private, %{
           platform: MozartNews,
           origin: Application.get_env(:belfrage, :mozart_news_endpoint)
         })
-      )
+      }
     else
-      then_do(rest, struct)
+      {:ok, struct}
     end
   end
 

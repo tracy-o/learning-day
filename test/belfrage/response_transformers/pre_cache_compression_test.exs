@@ -27,7 +27,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                     "content-encoding" => "gzip"
                   }
                 }
-              }} = PreCacheCompression.call([], struct)
+              }} = PreCacheCompression.call(struct)
     end
 
     test "when encoding is not supported it should return a 415" do
@@ -46,7 +46,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                   body: "",
                   http_status: 415
                 }
-              }} = PreCacheCompression.call([], struct)
+              }} = PreCacheCompression.call(struct)
     end
   end
 
@@ -76,7 +76,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
                         "content-encoding" => "gzip"
                       }
                     }
-                  }} = PreCacheCompression.call([], struct)
+                  }} = PreCacheCompression.call(struct)
 
           assert_gzipped(compressed_body, "I am some plain text")
         end)
@@ -98,7 +98,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
         }
       }
 
-      assert {:ok, struct} == PreCacheCompression.call([], struct)
+      assert {:ok, struct} == PreCacheCompression.call(struct)
     end
   end
 end

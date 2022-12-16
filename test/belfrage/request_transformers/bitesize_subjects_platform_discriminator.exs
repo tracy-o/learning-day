@@ -64,7 +64,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
                  platform: Webcore
                }
              }
-           } = BitesizeSubjectsPlatformDiscriminator.call([], @webcore_test_data)
+           } = BitesizeSubjectsPlatformDiscriminator.call(@webcore_test_data)
   end
 
   test "if the Subject ID is not in the Test Webcore allow list, the origin and platform will remain the same" do
@@ -78,7 +78,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
                  platform: MorphRouter
                }
              }
-           } = BitesizeSubjectsPlatformDiscriminator.call([], @morph_test_data)
+           } = BitesizeSubjectsPlatformDiscriminator.call(@morph_test_data)
   end
 
   test "if the Subject ID is not in the Live Webcore allow list, the origin and platform will remain the same" do
@@ -95,6 +95,6 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
                  platform: MorphRouter
                }
              }
-           } = BitesizeSubjectsPlatformDiscriminator.call([], @morph_live_data)
+           } = BitesizeSubjectsPlatformDiscriminator.call(@morph_live_data)
   end
 end

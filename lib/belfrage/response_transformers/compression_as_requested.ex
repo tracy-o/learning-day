@@ -1,9 +1,8 @@
 defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
   alias Belfrage.{Struct, Metrics}
-  alias Belfrage.Behaviours.ResponseTransformer
-  @behaviour ResponseTransformer
+  use Belfrage.Behaviours.Transformer
 
-  @impl true
+  @impl Transformer
   def call(
         struct = %Struct{
           request: %Struct.Request{accept_encoding: accept_encoding},
@@ -11,9 +10,9 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
         }
       ) do
     if contains_gzip?(headers["content-encoding"]) && !contains_gzip?(accept_encoding) do
-      decompress_body(struct)
+      {:ok, decompress_body(struct)}
     else
-      struct
+      {:ok, struct}
     end
   end
 
