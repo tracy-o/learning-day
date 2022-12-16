@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
               "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{struct.request.subdomain}",
             "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
           },
-          body: "Redirecting"
+          body: ""
         })
       }
     else
@@ -25,7 +25,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
     end
   end
 
-  def next_year_http_date(date \\ DateTime.now("Etc/UTC")) do
+  defp next_year_http_date(date \\ DateTime.now("Etc/UTC")) do
     {:ok, current} = date
 
     %{current | year: current.year + 1}
@@ -33,8 +33,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
   end
 
   defp redirect_url(request) do
-    to_string(request.scheme) <>
-      "://" <>
+    "https://" <>
       request.host <>
       "/weather" <>
       Belfrage.Helpers.QueryParams.encode(request.query_params)

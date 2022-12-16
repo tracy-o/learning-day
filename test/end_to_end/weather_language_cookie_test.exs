@@ -20,7 +20,7 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
         conn(:get, "/weather/language/#{lang}")
         |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
-      assert {301, _headers, "Redirecting"} = sent_resp(response_conn)
+      assert {301, _headers, ""} = sent_resp(response_conn)
     end
   end
 

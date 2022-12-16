@@ -15,7 +15,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                %{
                  response: %{
                    http_status: 301,
-                   body: "Redirecting",
+                   body: "",
                    headers: %{
                      "location" => "https://www.bbc.co.uk/weather",
                      "set-cookie" => ^cookie,
