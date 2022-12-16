@@ -3,7 +3,7 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, Clients.HTTP, Clients.HTTPMock}
+  alias Belfrage.RouteState
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
 
   @redirect_languages ["en", "cy", "ga", "gd"]
@@ -24,22 +24,19 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
     end
   end
 
-  test "weather/language/:language does not redirect when language is not in redirect_langugages" do
-    expect(HTTPMock, :execute, fn _request, _pool ->
-      {:ok,
-       %HTTP.Response{
-         headers: %{
-           "cache-control" => "public, max-age=30"
-         },
-         status_code: 200,
-         body: "Hello from MozartWeather"
-       }}
-    end)
-
+  test "weather/language/:language returns a 400 when language is not in redirect_langugages" do
     response_conn =
       conn(:get, "/weather/language/ab")
       |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
-    assert {200, _headers, "Hello from MozartWeather"} = sent_resp(response_conn)
+    assert {400, _headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+  end
+
+  test "weather/language/:language returns a 404 when redirect_location is not valid" do
+    response_conn =
+      conn(:get, "/weather/language/ab?redirect_location=not_valid")
+      |> Router.call(routefile: Routes.Routefiles.Main.Test)
+
+    assert {404, _headers, "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
   end
 end

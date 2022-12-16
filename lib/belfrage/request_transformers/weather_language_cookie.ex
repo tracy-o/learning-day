@@ -8,23 +8,41 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
 
   def call(rest, struct) do
     language = struct.request.path_params["language"]
+    redirect_location = struct.request.query_params["redirect_location"] || "/weather"
 
-    if language in @redirect_languages do
-      {
-        :redirect,
-        Struct.add(struct, :response, %{
-          http_status: 301,
-          headers: %{
-            "location" => redirect_url(struct.request),
-            "set-cookie" =>
-              "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(struct.request.host)}",
-            "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
-          },
-          body: ""
-        })
-      }
-    else
-      then_do(rest, struct)
+    cond do
+      not BelfrageWeb.Validators.matches?(redirect_location, ~r/^[\/]/) ->
+        {
+          :stop_pipeline,
+          Struct.add(struct, :response, %{
+            http_status: 404,
+            body: ""
+          })
+        }
+
+      language not in @redirect_languages ->
+        {
+          :stop_pipeline,
+          Struct.add(struct, :response, %{
+            http_status: 400,
+            body: ""
+          })
+        }
+
+      true ->
+        {
+          :redirect,
+          Struct.add(struct, :response, %{
+            http_status: 301,
+            headers: %{
+              "location" => redirect_url(struct.request),
+              "set-cookie" =>
+                "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(struct.request.host)}",
+              "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
+            },
+            body: ""
+          })
+        }
     end
   end
 
