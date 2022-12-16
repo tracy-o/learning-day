@@ -2671,11 +2671,13 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(status, [404, 500])
   end
 
-  handle "/weather/language/:language", using: "Weather", examples: [{"/weather/language/en", 301}] do
-    return_404 if: [
+  handle "/weather/language/:language", using: "WeatherLanguage", examples: [{"/weather/language/en", 301}] do
+    return_404(
+      if: [
         !starts_with?(conn.query_params["redirect_location"] || "/weather", "/"),
         !is_language?(language)
       ]
+    )
   end
 
   handle "/weather/about/:cps_id", using: "WeatherCps", examples: [] do
