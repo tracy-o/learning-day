@@ -24,12 +24,12 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
     end
   end
 
-  test "weather/language/:language returns a 400 when language is not in redirect_langugages" do
+  test "weather/language/:language returns a 404 when language is not in redirect_langugages" do
     response_conn =
       conn(:get, "/weather/language/ab")
       |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
-    assert {400, _headers, "<h1>400</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
+    assert {404, _headers, "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"} = sent_resp(response_conn)
   end
 
   test "weather/language/:language returns a 404 when redirect_location is not valid" do
