@@ -1,5 +1,6 @@
 defmodule BelfrageWeb.Plugs.LatencyMonitor do
   alias Belfrage.Metrics.LatencyMonitor
+  alias Belfrage.Metrics
 
   @behaviour Plug
   import Plug.Conn, only: [register_before_send: 2]
@@ -11,23 +12,25 @@ defmodule BelfrageWeb.Plugs.LatencyMonitor do
       conn
       |> Plug.Conn.assign(:request_received, get_time())
 
-    register_before_send(conn, fn
-      conn = %Plug.Conn{status: status} when status in [200, :ok] ->
-        conn.assigns[:struct]
-        |> case do
-          nil ->
-            nil
+    register_before_send(conn, &on_request_completed/1)
+  end
 
-          struct ->
-            LatencyMonitor.checkpoint(struct, :response_sent)
-        end
+  defp on_request_completed(conn = %Plug.Conn{status: status}) when status in [200, :ok] do
+    Metrics.latency_span(:register_before_send_latency_monitor, fn ->
+      conn.assigns[:struct]
+      |> case do
+        nil ->
+          nil
 
-        conn
+        struct ->
+          LatencyMonitor.checkpoint(struct, :response_sent)
+      end
 
-      conn ->
-        conn
+      conn
     end)
   end
+
+  defp on_request_completed(conn), do: conn
 
   defp get_time(), do: System.monotonic_time(:nanosecond) / 1_000_000
 end
