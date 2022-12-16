@@ -82,7 +82,7 @@ defmodule EndToEnd.XrayTest do
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
         |> Router.call([])
 
-      {200, _, _} = sent_resp(conn)
+      assert {200, _, _} = sent_resp(conn)
     end
 
     test "invalid UTF8 path for the referer still allows outgoing request to work" do
@@ -107,7 +107,7 @@ defmodule EndToEnd.XrayTest do
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
         |> Router.call([])
 
-      {200, _, _} = sent_resp(conn)
+      assert {200, _, _} = sent_resp(conn)
     end
 
     test "User Agent containing invlid UTF8 characters still allows outgoing request to work" do
@@ -132,7 +132,7 @@ defmodule EndToEnd.XrayTest do
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
         |> Router.call([])
 
-      {200, _, _} = sent_resp(conn)
+      assert {200, _, _} = sent_resp(conn)
     end
   end
 end
