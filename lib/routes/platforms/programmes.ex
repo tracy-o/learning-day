@@ -5,16 +5,13 @@ defmodule Routes.Platforms.Programmes do
       owner: "homedatacap@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=152098352",
       request_pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
+      response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 800
     }
   end
 
-  defp pipeline("live") do
-    ["CircuitBreaker"]
-  end
-
+  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 
   defp query_params_allowlist(_production_env) do
