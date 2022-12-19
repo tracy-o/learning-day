@@ -9,10 +9,6 @@ defmodule Routes.Specs.BitesizeTopics do
     }
   end
 
-  def pipeline("live") do
-    ["ComToUKRedirect", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"]
-  end
-  def pipeline(_production_environment) do
-   ["ComToUKRedirect", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"]
-  end
+  def pipeline("live"), do: ["ComToUKRedirect", "BitesizeTopicsPlatformDiscriminator", "LambdaOriginAlias", "Language"]
+  def pipeline(_production_env), do: pipeline("live")
 end
