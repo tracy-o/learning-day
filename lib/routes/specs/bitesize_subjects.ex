@@ -1,13 +1,10 @@
 defmodule Routes.Specs.BitesizeSubjects do
-  def specs(production_env) do
+  def specs do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      request_pipeline: pipeline(production_env)
+      request_pipeline: ["ComToUKRedirect", "BitesizeSubjectsPlatformDiscriminator", "LambdaOriginAlias", "Language"]
     }
   end
-
-  def pipeline("live"), do: ["ComToUKRedirect", "BitesizeSubjectsPlatformDiscriminator", "LambdaOriginAlias", "Language"]
-  def pipeline(_production_env), do: pipeline("live")
 end
