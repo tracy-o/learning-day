@@ -1378,8 +1378,8 @@ defroutefile "Main" do
 
   handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test", examples: [] do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
     ]
   end
 
