@@ -15,20 +15,17 @@ defmodule Belfrage.Services.Fabl do
       {
         struct
         |> execute_request()
-        |> handle_response(),
+        |> handle_response(struct),
         %{}
       }
     end)
   end
 
   defp execute_request(struct) do
-    {@http_client.execute(
-       Request.build(struct),
-       :Fabl
-     ), struct}
+    @http_client.execute(Request.build(struct), :Fabl)
   end
 
-  defp handle_response({{:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct}) do
+  defp handle_response({:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, struct) do
     Belfrage.Metrics.multi_execute(
       [[:belfrage, :service, :Fabl, :response, String.to_atom(to_string(status))], [:belfrage, :platform, :response]],
       %{count: 1},
@@ -41,17 +38,18 @@ defmodule Belfrage.Services.Fabl do
     Map.put(struct, :response, %Struct.Response{http_status: status, body: body, headers: headers})
   end
 
-  defp handle_response({{:error, %Clients.HTTP.Error{reason: :timeout}}, struct}) do
-    :telemetry.execute([:belfrage, :error, :service, :Fabl, :timeout], %{})
-    log(:timeout, struct)
-    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
-    Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
+  defp handle_response({:error, %Clients.HTTP.Error{reason: reason = :timeout}}, struct) do
+    handle_error_resp(reason, reason, struct)
   end
 
-  defp handle_response({{:error, error}, struct}) do
-    :telemetry.execute([:belfrage, :error, :service, :Fabl, :request], %{})
-    log(error, struct)
+  defp handle_response({:error, reason}, struct) do
+    handle_error_resp(reason, :request, struct)
+  end
+
+  defp handle_error_resp(reason, metric, struct) do
+    :telemetry.execute([:belfrage, :error, :service, :Fabl, metric], %{})
     :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
+    log(reason, struct)
     Struct.add(struct, :response, %Struct.Response{http_status: 500, body: ""})
   end
 

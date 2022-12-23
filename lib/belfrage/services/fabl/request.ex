@@ -5,36 +5,40 @@ defmodule Belfrage.Services.Fabl.Request do
   alias Belfrage.Helpers.QueryParams
 
   def build(%Struct{
-        request: request = %Struct.Request{method: "GET", path: path, path_params: params, request_id: request_id},
-        private: private,
+        request:
+          request = %Struct.Request{
+            method: "GET",
+            path: path,
+            path_params: params,
+            request_id: request_id,
+            query_params: query_params
+          },
+        private: %Struct.Private{
+          origin: origin,
+          personalised_route: is_personalised
+        },
         user_session: user_session
       }) do
+    name = maybe_get_name_from_path(params["name"], path)
+
     %Clients.HTTP.Request{
       method: :get,
-      url:
-        private.origin <>
-          build_path(path, private.personalised_route, params["name"]) <> QueryParams.encode(request.query_params),
+      url: build_url(origin, path, is_personalised, name, query_params),
       headers: build_headers(request, user_session),
       request_id: request_id
     }
   end
 
-  defp build_path("/fd/sport-app-allsport", _personalised, _name), do: "/module/sport-app-allsport"
-  defp build_path("/fd/sport-app-followables", _personalised, _name), do: "/module/sport-app-followables"
-  defp build_path("/fd/sport-app-images", _personalised, _name), do: "/module/sport-app-images"
-  defp build_path("/fd/sport-app-menu", _personalised, _name), do: "/module/sport-app-menu"
-  defp build_path("/fd/sport-app-notification-data", _personalised, _name), do: "/module/sport-app-notification-data"
-  defp build_path("/fd/sport-app-page", _personalised, _name), do: "/module/sport-app-page"
-  defp build_path("/fd/topic-mapping", _personalised, _name), do: "/module/topic-mapping"
-  defp build_path("/fd/preview/abl", _personalised, _name), do: "/preview/module/abl"
-  defp build_path("/fd/preview/spike-abl-core", _personalised, _name), do: "/preview/module/spike-abl-core"
-  defp build_path("/fd/abl", _personalised, _name), do: "/module/abl"
+  defp maybe_get_name_from_path(nil, path), do: Path.basename(path)
+  defp maybe_get_name_from_path(name, _path), do: name
 
-  defp build_path("/fd/p/mytopics-page", _personalised, _name), do: "/personalised-module/mytopics-page"
-  defp build_path("/fd/p/mytopics-follows", _personalised, _name), do: "/personalised-module/mytopics-follows"
-  defp build_path("/fd/preview/" <> _rest_of_path, true, name), do: "/preview/personalised-module/#{name}"
+  defp build_url(origin, path, is_personalised, name, query_params) do
+    origin <> build_path(path, is_personalised, name) <> QueryParams.encode(query_params)
+  end
+
+  defp build_path("/fd/preview/" <> _, true, name), do: "/preview/personalised-module/#{name}"
+  defp build_path("/fd/preview/" <> _, false, name), do: "/preview/module/#{name}"
   defp build_path(_path, true, name), do: "/personalised-module/#{name}"
-  defp build_path("/fd/preview/" <> _rest_of_path, false, name), do: "/preview/module/#{name}"
   defp build_path(_path, false, name), do: "/module/#{name}"
 
   defp build_headers(request, user_session) do

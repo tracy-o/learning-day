@@ -252,26 +252,9 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                })
     end
 
-    test ~s(mytopics pages are prefixed with "/personalised-module/") do
+    test ~s(mytopics pages are prefixed with "/personalised-module/" when route is personalised) do
       Enum.each(~w(mytopics-page mytopics-follows), fn module ->
         url = "https://fabl.test.api.bbci.co.uk/personalised-module/#{module}?q=something"
-
-        assert %Clients.HTTP.Request{url: ^url} =
-                 Request.build(%Struct{
-                   request: %Struct.Request{
-                     method: "GET",
-                     path: "/fd/p/#{module}",
-                     request_id: "arequestid",
-                     path_params: %{},
-                     query_params: %{
-                       "q" => "something"
-                     }
-                   },
-                   private: %Struct.Private{
-                     origin: "https://fabl.test.api.bbci.co.uk",
-                     personalised_route: false
-                   }
-                 })
 
         assert %Clients.HTTP.Request{url: ^url} =
                  Request.build(%Struct{
@@ -292,7 +275,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       end)
     end
 
-    test ~s(sport pages are prefixed with "/module/") do
+    test ~s(sport pages are prefixed with "/module/" when route is not personalised) do
       Enum.each(
         ~w(sport-app-allsport sport-app-followables sport-app-images sport-app-menu sport-app-notification-data sport-app-page topic-mapping),
         fn module ->
@@ -312,23 +295,6 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                      private: %Struct.Private{
                        origin: "https://fabl.test.api.bbci.co.uk",
                        personalised_route: false
-                     }
-                   })
-
-          assert %Clients.HTTP.Request{url: ^url} =
-                   Request.build(%Struct{
-                     request: %Struct.Request{
-                       method: "GET",
-                       path: "/fd/#{module}",
-                       request_id: "arequestid",
-                       path_params: %{},
-                       query_params: %{
-                         "q" => "something"
-                       }
-                     },
-                     private: %Struct.Private{
-                       origin: "https://fabl.test.api.bbci.co.uk",
-                       personalised_route: true
                      }
                    })
         end
