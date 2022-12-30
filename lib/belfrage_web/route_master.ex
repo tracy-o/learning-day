@@ -61,7 +61,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, [using: id, only_on: env, platform: platform, examples: _examples] = args, do: block) do
+  defmacro handle(matcher, [using: id, platform: platform, only_on: env, examples: _examples] = args, do: block) do
     quote bind_quoted: [
             id: id,
             platform: platform,
