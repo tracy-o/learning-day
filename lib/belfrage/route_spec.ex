@@ -1,7 +1,6 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
 
-  @platforms Routes.Platforms.list()
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
@@ -41,57 +40,83 @@ defmodule Belfrage.RouteSpec do
             etag: false,
             xray_enabled: false
 
-  def specs_for(name, env \\ Application.get_env(:belfrage, :production_environment)) do
-    route_attrs =
-      name
-      |> get_route_spec_attrs(env)
-      |> maybe_put_platform()
+  @type route_state_id :: String.t()
 
-    route_attrs.platform
-    |> get_platform_spec(env)
-    |> update_with_route_attrs(route_attrs)
-    |> Personalisation.maybe_put_personalised_route()
+  @spec make_route_state_id(String.t(), String.t()) :: route_state_id()
+  def make_route_state_id(spec_name, platform) do
+    "#{spec_name}.#{platform}"
   end
 
-  def get_route_spec_attrs(name, env) do
-    [Routes, Specs, name]
-    |> call_specs_func(env)
-    |> Map.put(:route_state_id, name)
+  @spec list_route_specs(String.t()) :: [RouteSpec.t()]
+  def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
+    list_spec_names()
+    |> Enum.map(&get_specs(&1, env))
+    |> :lists.append()
+    |> Enum.map(&update_spec_with_platform(&1, env))
   end
 
-  # maybe_put_platform/1 Takes a "spec" map and checks the :route_spec_id value.
-  # If the :route_spec_id value has a Platform suffix
-  # then the spec map is updated with the corresponding
-  # platform atom.
-  # Otherwise the original spec is returned.
-  defp maybe_put_platform(spec) do
-    maybe_put_platform(@platforms, spec)
+  # get_route_spec/2 interface should be removed as it is used for tests only
+  #
+  @spec get_route_spec(route_state_id() | {String.t(), String.t()}, String.t()) :: RouteSpec.t() | nil
+  def get_route_spec(_route_state_id, env \\ Application.get_env(:belfrage, :production_environment))
+
+  def get_route_spec(route_state_id, env) when is_binary(route_state_id) do
+    [spec_name, platform] = String.split(route_state_id, ".")
+    get_route_spec({spec_name, platform}, env)
   end
 
-  defp maybe_put_platform([platform | rest], spec) do
-    if String.ends_with?(spec.route_state_id, ".#{platform}") do
-      Map.put(spec, :platform, String.to_atom("Elixir.#{platform}"))
-    else
-      maybe_put_platform(rest, spec)
+  def get_route_spec({spec_name, platform}, env) do
+    found_specs =
+      for spec <- get_specs(spec_name, env),
+          spec.platform == platform,
+          do: update_spec_with_platform(spec, env)
+
+    case found_specs do
+      [spec] -> spec
+      [] -> nil
     end
   end
 
-  defp maybe_put_platform([], spec), do: spec
+  defp get_specs(spec_name, env) do
+    module = Module.concat([Routes, Specs, spec_name])
 
-  defp call_specs_func(module_name, env) do
-    module = Module.concat(module_name)
+    case call_specs_func(module, env) do
+      spec when is_map(spec) -> [put_route_state_id(spec, spec_name)]
+      specs when is_list(specs) -> Enum.map(specs, &put_route_state_id(&1, spec_name))
+    end
+  end
 
+  defp update_spec_with_platform(spec, env) do
+    platform = get_platform(spec.platform, env)
+
+    spec
+    |> Map.merge(merge_allowlists(platform, spec))
+    |> Map.put(:request_pipeline, merge_pipelines(:request_pipeline, platform, spec))
+    |> Map.put(:response_pipeline, merge_pipelines(:response_pipeline, platform, spec))
+    |> to_struct(platform)
+    |> Personalisation.maybe_put_personalised_route()
+  end
+
+  defp get_platform(platform_name, env) do
+    module = Module.concat([Routes, Platforms, platform_name])
+    call_specs_func(module, env)
+  end
+
+  defp to_struct(route_spec_map, platform) do
+    struct!(__MODULE__, Map.merge(platform, route_spec_map))
+  end
+
+  defp put_route_state_id(spec = %{platform: platform}, spec_name) do
+    Map.put(spec, :route_state_id, make_route_state_id(spec_name, platform))
+  end
+
+  defp call_specs_func(module, env) do
     case Code.ensure_loaded(module) do
       {:module, module} ->
         cond do
-          function_exported?(module, :specs, 1) ->
-            module.specs(env)
-
-          function_exported?(module, :specs, 0) ->
-            module.specs()
-
-          true ->
-            raise "Module #{module} must define a specs/0 or specs/1 function"
+          function_exported?(module, :specs, 1) -> module.specs(env)
+          function_exported?(module, :specs, 0) -> module.specs()
+          true -> raise "Module #{module} must define a specs/0 or specs/1 function"
         end
 
       _ ->
@@ -99,47 +124,45 @@ defmodule Belfrage.RouteSpec do
     end
   end
 
-  defp get_platform_spec(name, env) do
-    struct!(__MODULE__, call_specs_func([Routes, Platforms, name], env))
-  end
+  defp merge_pipelines(type, platform, spec) do
+    platform_pipeline = Map.get(platform, type, [])
+    spec_pipeline = spec[type]
 
-  defp update_with_route_attrs(spec = %__MODULE__{}, route_attrs) do
-    route_overrides =
-      route_attrs
-      |> Map.merge(merge_allowlists(spec, route_attrs))
-      |> Map.put(:request_pipeline, merge_pipelines(spec.request_pipeline, route_attrs[:request_pipeline]))
-      |> Map.put(:response_pipeline, merge_pipelines(spec.response_pipeline, route_attrs[:response_pipeline]))
-
-    struct!(spec, route_overrides)
-  end
-
-  defp merge_pipelines(platform_pipeline, route_pipeline) do
     if @pipeline_placeholder in platform_pipeline do
       Enum.flat_map(platform_pipeline, fn transformer ->
         if transformer == @pipeline_placeholder do
-          route_pipeline || []
+          spec_pipeline || []
         else
           [transformer]
         end
       end)
     else
-      route_pipeline || platform_pipeline
+      spec_pipeline || platform_pipeline
     end
   end
 
-  defp merge_allowlists(spec, route_attrs) do
+  defp merge_allowlists(platform, spec) do
     Enum.reduce(@allowlists, %{}, fn attr, result ->
-      spec_value = Map.fetch!(spec, attr)
-      route_value = route_attrs[attr] || []
+      platform_value = Map.get(platform, attr, [])
+      spec_value = Map.get(spec, attr, [])
 
       value =
-        if spec_value == "*" || route_value == "*" do
+        if platform_value == "*" || spec_value == "*" do
           "*"
         else
-          spec_value ++ route_value
+          platform_value ++ spec_value
         end
 
       Map.put(result, attr, value)
     end)
+  end
+
+  defp list_spec_names() do
+    {:ok, modules} = :application.get_key(:belfrage, :modules)
+    module_path = "Routes.Specs."
+
+    for module <- modules,
+        String.starts_with?(Macro.to_string(module), module_path),
+        do: String.trim_leading(Macro.to_string(module), module_path)
   end
 end

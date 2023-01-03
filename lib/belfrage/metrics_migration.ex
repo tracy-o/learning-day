@@ -480,6 +480,17 @@ defmodule Belfrage.MetricsMigration do
         ]
       end
 
+      def route_spec_metrics() do
+        [
+          counter(
+            "route_spec.not_found",
+            event_name: [:belfrage, :route_spec, :not_found],
+            measurement: :count,
+            tags: [:route_spec]
+          )
+        ]
+      end
+
       def private_response?(conn = %Plug.Conn{}) do
         match?(["private" <> _], Plug.Conn.get_resp_header(conn, "cache-control"))
       end

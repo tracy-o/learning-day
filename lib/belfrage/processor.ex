@@ -43,7 +43,7 @@ defmodule Belfrage.Processor do
 
       case RouteState.state(struct) do
         {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
-        _ -> route_state_state_failure()
+        {:error, reason} -> route_state_state_failure(reason)
       end
     end)
   end
@@ -193,10 +193,10 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, struct)
   end
 
-  defp route_state_state_failure do
+  defp route_state_state_failure(reason) do
     :telemetry.execute([:belfrage, :error, :route_state, :state], %{})
 
-    Logger.log(:error, "Error retrieving route_state state")
+    Logger.log(:error, "Error retrieving route_state state with reason: #{inspect(reason)}}")
 
     raise "Failed to load route_state state."
   end
