@@ -21,6 +21,6 @@ defmodule Routes.Platforms.Fabl do
     pipeline("live") ++ ["DevelopmentRequests"]
   end
 
-  defp headers_allowlist("live"), do: []
   defp headers_allowlist("test"), do: ["ctx-service-env"]
+  defp headers_allowlist(_), do: []
 end
