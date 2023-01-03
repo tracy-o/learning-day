@@ -37,11 +37,11 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, struct)
   end
 
-  def get_route_state(struct = %Struct{}) do
+  def get_route_state(struct = %Struct{private: %Struct.Private{route_state_id: route_state_id}}) do
     Metrics.latency_span(:set_request_route_state_data, fn ->
-      RouteStateRegistry.find_or_start(struct)
+      RouteStateRegistry.find_or_start(route_state_id)
 
-      case RouteState.state(struct) do
+      case RouteState.state(route_state_id) do
         {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
         {:error, reason} -> route_state_state_failure(reason)
       end

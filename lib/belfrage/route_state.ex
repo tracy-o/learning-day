@@ -12,7 +12,7 @@ defmodule Belfrage.RouteState do
     end
   end
 
-  def state(%Struct{private: %Struct.Private{route_state_id: name}}, timeout \\ @fetch_route_state_timeout) do
+  def state(name, timeout \\ @fetch_route_state_timeout) do
     try do
       GenServer.call(via_tuple(name), :state, timeout)
     catch

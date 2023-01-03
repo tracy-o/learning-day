@@ -1,11 +1,11 @@
 defmodule Belfrage.RouteStateRegistry do
-  alias Belfrage.{Struct, RouteStateSupervisor}
+  alias Belfrage.RouteStateSupervisor
 
   def start_link do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
-  def find_or_start(%Struct{private: %Struct.Private{route_state_id: route_state_id}}) do
+  def find_or_start(route_state_id) do
     case Registry.lookup(__MODULE__, {Belfrage.RouteState, route_state_id}) do
       [{pid, _}] -> pid
       [] -> RouteStateSupervisor.start_route_state(route_state_id)
