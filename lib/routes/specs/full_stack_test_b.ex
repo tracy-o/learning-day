@@ -2,7 +2,7 @@ defmodule Routes.Specs.FullStackTestB do
   def specs do
     %{
       owner: "fabl@onebbc.onmicrosoft.com",
-      platform: Webcore,
+      platform: "Webcore",
       personalisation: "test_only"
     }
   end

@@ -3,7 +3,7 @@ defmodule Routes.Specs.SportAlpha do
     %{
       owner: "#help-sport",
       runbook: "https://confluence.dev.bbc.co.uk/display/sport/BBC+Sport+Technical+Design",
-      platform: Webcore
+      platform: "Webcore"
     }
   end
 end

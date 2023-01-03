@@ -3,7 +3,7 @@ defmodule Routes.Specs.SportLiveGuide do
     %{
       owner: "#help-sport",
       runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Live+Guide+Run+Book",
-      platform: MozartSport
+      platform: "MozartSport"
     }
   end
 end

@@ -3,7 +3,7 @@ defmodule Routes.Specs.Games do
     %{
       owner: "#games-team",
       runbook: "https://confluence.dev.bbc.co.uk/display/CE/CAGE+Games+Runbook",
-      platform: Webcore,
+      platform: "Webcore",
       query_params_allowlist: ["exitGameUrl", "v", "token"]
     }
   end
