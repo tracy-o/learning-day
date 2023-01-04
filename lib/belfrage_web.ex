@@ -9,15 +9,10 @@ defmodule BelfrageWeb do
     * Processes the Struct
     * puts a response.
 
-  yield/3 also takes a platform_selector which
+  yield/3 takes a platform_selector which
   is used to select a platform and complete the route spec ID.
 
-  For example, yield/3 may take the args:
-
-    yield("SomeRouteState", conn)
-
-  which will not need the route spec ID to be completed.
-  However the following call:
+  The following call:
 
     yield("SomeRouteState", "SomePlatformSelector", conn)
 
@@ -45,28 +40,6 @@ defmodule BelfrageWeb do
 
   respectively.
   """
-  def yield(id, conn) do
-    conn = Conn.assign(conn, :route_spec, id)
-
-    try do
-      struct =
-        StructAdapter.adapt(conn, id)
-        |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
-
-      conn
-      |> Conn.assign(:struct, Belfrage.handle(struct))
-      |> Response.put()
-    catch
-    # Unwrap an internal Belfrage error to extract %Struct{} from it
-    _, error = %Belfrage.WrapperError{} ->
-        conn = Conn.assign(conn, :struct, error.struct)
-      reraise(conn, error.kind, error.reason, error.stack)
-
-      kind, reason ->
-        reraise(conn, kind, reason, __STACKTRACE__)
-    end
-  end
-
   def yield(id, platform_selector, conn) do
     try do
       struct =
