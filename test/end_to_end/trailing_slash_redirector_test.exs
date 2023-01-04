@@ -8,7 +8,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   @moduletag :end_to_end
 
   setup do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     :ok
   end
 

@@ -16,7 +16,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-          platform: MozartNews
+          platform: "MozartNews"
         }
       }
 
@@ -29,7 +29,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
-                  platform: Webcore,
+                  platform: "Webcore",
                   origin: Application.get_env(:belfrage, :pwa_lambda_function)
                 })}
     end
@@ -45,7 +45,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-          platform: MozartNews
+          platform: "MozartNews"
         }
       }
 
@@ -58,7 +58,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
-                  platform: MozartNews,
+                  platform: "MozartNews",
                   production_environment: "live"
                 })}
     end
@@ -74,7 +74,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-          platform: MozartNews
+          platform: "MozartNews"
         }
       }
 
@@ -87,7 +87,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
-                  platform: MozartNews,
+                  platform: "MozartNews",
                   production_environment: "live"
                 })}
     end
@@ -103,7 +103,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-          platform: MozartNews
+          platform: "MozartNews"
         }
       }
 
@@ -116,7 +116,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       assert NewsLivePlatformDiscriminator.call(struct) ==
                {:ok,
                 Struct.add(struct, :private, %{
-                  platform: MozartNews,
+                  platform: "MozartNews",
                   production_environment: "live"
                 })}
     end

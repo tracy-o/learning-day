@@ -182,7 +182,6 @@ defmodule BelfrageWeb.RouteMaster do
           end
       end
 
-
       var!(add_route_for_env, BelfrageWeb.RouteMaster) = fn
         matcher, {id, platform}, args, env ->
           if env == @production_environment do

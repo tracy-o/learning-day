@@ -99,11 +99,11 @@ defroutefile "Mock", "test" do
 
   handle "/no-etag-support", using: "NoEtagSupport", platform: "MozartNews", examples: []
 
-  handle("/platform-selection-with-selector", using: "SomeRouteStateWithoutPlatformAttribute", platform: "AssetTypePlatformSelector", examples: [])
+  handle("/platform-selection-with-selector", using: "SomeRouteStateWithMultipleSpecs", platform: "AssetTypePlatformSelector", examples: [])
 
-  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "Webcore", examples: [])
+  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs", platform: "Webcore", examples: [])
 
-  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithoutPlatformAttribute", platform: "MozartNews", examples: [])
+  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs", platform: "MozartNews", examples: [])
 
   handle_proxy_pass "/*any", using: "ProxyPass", platform: "OriginSimulator", only_on: "test", examples: ["/foo/bar"]
 

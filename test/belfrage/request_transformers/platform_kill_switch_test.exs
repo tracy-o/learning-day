@@ -34,12 +34,12 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitchTest do
                    http_status: 500
                  }
                }
-             } = PlatformKillSwitch.call(struct_with_platform(Webcore))
+             } = PlatformKillSwitch.call(struct_with_platform("Webcore"))
     end
 
     test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
       activate_webcore_kill_switch()
-      original_struct = struct_with_platform(Fabl)
+      original_struct = struct_with_platform("Fabl")
       assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
     end
 
@@ -53,13 +53,13 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitchTest do
   describe "when the Webcore kill switch is inactive" do
     test "and the platform is Webcore, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform(Webcore)
+      original_struct = struct_with_platform("Webcore")
       assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
     end
 
     test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform(Fabl)
+      original_struct = struct_with_platform("Fabl")
       assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
     end
 

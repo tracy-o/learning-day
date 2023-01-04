@@ -16,7 +16,7 @@ defmodule EndToEnd.RequestIdTest do
   }
 
   test "returns the request id header" do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
 
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _payload, _opts ->

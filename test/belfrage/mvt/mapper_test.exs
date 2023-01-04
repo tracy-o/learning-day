@@ -137,7 +137,7 @@ defmodule Belfrage.Mvt.MapperTest do
 
   defp build_struct(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
-    platform = Keyword.get(opts, :platform, Webcore)
+    platform = Keyword.get(opts, :platform, "Webcore")
 
     %Struct{
       request: %Belfrage.Struct.Request{

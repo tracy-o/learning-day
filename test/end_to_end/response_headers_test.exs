@@ -11,7 +11,7 @@ defmodule EndToEnd.ResponseHeadersTest do
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     :ok
   end
 
@@ -34,7 +34,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"req-svc-chain", "BELFRAGE"},
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
-               {"routespec", "SomeRouteState"},
+               {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
                 "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
                {"belfrage-response-pipeline-trail",
@@ -78,7 +78,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"req-svc-chain", "BELFRAGE"},
                {"brequestid", _},
                {"belfrage-cache-status", "MISS"},
-               {"routespec", "SomeRouteState"},
+               {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
                 "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
                {"belfrage-response-pipeline-trail",

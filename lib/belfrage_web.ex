@@ -52,7 +52,7 @@ defmodule BelfrageWeb do
           struct = StructAdapter.Private.adapt(struct, conn.private, route_state_id)
 
           conn
-          |> Conn.assign(:route_spec, id)
+          |> Conn.assign(:route_spec, route_state_id)
           |> Conn.assign(:struct, Belfrage.handle(struct))
           |> Response.put()
 

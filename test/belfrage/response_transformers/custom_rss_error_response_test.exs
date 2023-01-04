@@ -13,7 +13,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
           body: "Error body from FABL"
         },
         private: %Struct.Private{
-          platform: Fabl
+          platform: "Fabl"
         }
       })
 
@@ -30,7 +30,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
           body: "Some data from FABL"
         },
         private: %Struct.Private{
-          platform: Fabl
+          platform: "Fabl"
         }
       })
 
@@ -47,7 +47,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponseTest do
           body: "Some error data from Karanga"
         },
         private: %Struct.Private{
-          platform: Karanga
+          platform: "Karanga"
         }
       })
 

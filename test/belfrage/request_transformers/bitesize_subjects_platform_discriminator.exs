@@ -7,7 +7,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
   @webcore_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -21,7 +21,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
   @morph_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -35,7 +35,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
   @morph_live_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.api.bbci.co.uk",
-      platform: MorphRouter
+      platform: "MorphRouter"
     },
     request: %Struct.Request{
       scheme: :http,
@@ -61,7 +61,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
              %Struct{
                private: %Struct.Private{
                  origin: ^lambda_function,
-                 platform: Webcore
+                 platform: "Webcore"
                }
              }
            } = BitesizeSubjectsPlatformDiscriminator.call(@webcore_test_data)
@@ -75,7 +75,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
              %Struct{
                private: %Struct.Private{
                  origin: ^morph_endpoint,
-                 platform: MorphRouter
+                 platform: "MorphRouter"
                }
              }
            } = BitesizeSubjectsPlatformDiscriminator.call(@morph_test_data)
@@ -92,7 +92,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminatorTest
              %Struct{
                private: %Struct.Private{
                  origin: ^morph_endpoint,
-                 platform: MorphRouter
+                 platform: "MorphRouter"
                }
              }
            } = BitesizeSubjectsPlatformDiscriminator.call(@morph_live_data)
