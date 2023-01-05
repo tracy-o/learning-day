@@ -6,7 +6,7 @@ defmodule Belfrage.RequestTransformers.ReplayedTraffic do
     struct =
       Struct.add(struct, :private, %{
         origin: Application.get_env(:belfrage, :origin_simulator),
-        platform: OriginSimulator
+        platform: "OriginSimulator"
       })
 
     {:ok, struct}

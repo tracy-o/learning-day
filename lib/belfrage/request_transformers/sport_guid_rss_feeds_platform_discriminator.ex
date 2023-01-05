@@ -1523,7 +1523,7 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
       struct =
         struct
         |> Struct.add(:private, %{
-          platform: Fabl,
+          platform: "Fabl",
           origin: Application.get_env(:belfrage, :fabl_endpoint)
         })
         |> Struct.add(:request, %{
