@@ -140,6 +140,12 @@ defmodule Belfrage.MetricsMigration do
             event_name: "belfrage.platform.pre_cache_compression.response",
             measurement: :count,
             tags: [:platform]
+          ),
+          counter(
+            "platform_selector.not_found",
+            event_name: [:belfrage, :platform_selector, :not_found],
+            measurement: :count,
+            tags: [:selector]
           )
         ]
       end

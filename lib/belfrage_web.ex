@@ -1,7 +1,9 @@
 defmodule BelfrageWeb do
   alias BelfrageWeb.{StructAdapter, Response}
   alias Plug.Conn
-  alias Belfrage.{Metrics.LatencyMonitor, Struct}
+  alias Belfrage.{Metrics.LatencyMonitor, Struct, RouteSpec, RouteSpecManager}
+
+  require Logger
 
   @doc """
   Given an id corresponding to a route spec ID and a Conn:
@@ -9,7 +11,7 @@ defmodule BelfrageWeb do
     * Processes the Struct
     * puts a response.
 
-  yield/3 takes a platform_selector which
+  yield/3 takes a platform_or_selector which
   is used to select a platform and complete the route spec ID.
 
   The following call:
@@ -40,14 +42,14 @@ defmodule BelfrageWeb do
 
   respectively.
   """
-  def yield(id, platform_selector, conn) do
+  def yield(id, platform_or_selector, conn) do
     try do
       struct =
         conn
         |> StructAdapter.Request.adapt()
         |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
-      case build_route_state_id(id, platform_selector, struct.request) do
+      case build_route_state_id(id, platform_or_selector, struct.request) do
         {:ok, route_state_id} ->
           struct = StructAdapter.Private.adapt(struct, conn.private, route_state_id)
 
@@ -57,6 +59,9 @@ defmodule BelfrageWeb do
           |> Response.put()
 
         {:error, status_code} ->
+          :telemetry.execute([:belfrage, :platform_selector, :not_found], %{}, %{selector: platform_or_selector})
+          Logger.log(:error, "", %{msg: "Selector '#{platform_or_selector}' not found", reason: status_code})
+
           conn
           |> Conn.assign(:struct, Struct.put_status(%Struct{}, status_code))
           |> Response.put()
@@ -81,26 +86,18 @@ defmodule BelfrageWeb do
     :erlang.raise(kind, wrapper, stack)
   end
 
-  # Uses the platform_selector and the request to
-  # determine what platform suffix to add the route state id.
-  # When the platform_selector is a Platform, the said
-  # Platform is used as a suffix.
-  #
-  # Otherwise, the platform_selector is used to call
-  # the corresponding Selector module, which
-  # selects the correct Platform suffix.
-  #
-  # build_route_state_id/3 can take a list of incomplete route
-  # state ids or a single incomplete route state id.
-  # A route state id is "incomplete" if it does
-  # not have a Platform suffix.
-  defp build_route_state_id(ids, platform_selector, request) when is_list(ids) do
-    {:ok, Enum.map(ids, &build_route_state_id(&1, platform_selector, request))}
+  defp build_route_state_id(spec_name, platform_or_selector, request) do
+    route_state_id = RouteSpec.make_route_state_id(spec_name, platform_or_selector)
+
+    case RouteSpecManager.get_spec(route_state_id) do
+      nil -> call_platform_selector(spec_name, platform_or_selector, request)
+      %RouteSpec{} -> {:ok, route_state_id}
+    end
   end
 
-  defp build_route_state_id(route_state_id, platform_selector, request) do
-    with {:ok, platform} <- Routes.Platforms.Selector.call(platform_selector, request) do
-      {:ok, "#{route_state_id}.#{platform}"}
+  defp call_platform_selector(spec_name, selector, request) do
+    with {:ok, platform} <- Routes.Platforms.Selector.call(selector, request) do
+      {:ok, RouteSpec.make_route_state_id(spec_name, platform)}
     end
   end
 end
