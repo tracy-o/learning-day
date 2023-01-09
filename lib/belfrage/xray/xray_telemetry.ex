@@ -7,7 +7,7 @@ defmodule Belfrage.Xray.Telemetry do
       ~w(belfrage webcore request stop)a
     ]
 
-    :telemetry.attach_many("belfrage-xray", events, &handle_event/4, nil)
+    :telemetry.attach_many("belfrage-xray", events, &__MODULE__.handle_event/4, nil)
   end
 
   def handle_event(_event, measurements, metadata, _config) do
