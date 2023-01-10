@@ -68,7 +68,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert_received {:mock_xray_client_data, data}
       json = Jason.decode!(data)
       assert json["trace_id"]
-      assert json["name"] == "Belfrage-local"
+      assert json["name"] == "local-belfrage"
     end
   end
 
@@ -91,11 +91,11 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
       assert_received {:mock_xray_client_data, data}
       json = Jason.decode!(data)
-      assert json["name"] == "Belfrage-joan"
+      assert json["name"] == "joan-belfrage"
     end
 
     test "X-Ray segment name in conn matches env stack id", %{conn: conn} do
-      assert conn.assigns[:xray_segment].name == "Belfrage-joan"
+      assert conn.assigns[:xray_segment].name == "joan-belfrage"
     end
   end
 

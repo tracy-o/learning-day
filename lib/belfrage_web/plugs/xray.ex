@@ -13,7 +13,7 @@ defmodule BelfrageWeb.Plugs.Xray do
   def call(conn = %Plug.Conn{request_path: request_path}, opts) when request_path not in @skip_paths do
     xray = Keyword.get(opts, :xray, Xray)
     stack_id = Application.get_env(:belfrage, :stack_id)
-    segment = build_segment(conn, "Belfrage-#{stack_id}", xray)
+    segment = build_segment(conn, "#{stack_id}-belfrage", xray)
 
     conn
     |> assign(:xray_segment, segment)
