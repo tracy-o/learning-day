@@ -6,7 +6,8 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
 
   @webcore_test_ids [
     "zbhy4wx",
-    "zjxhfg8"
+    "zjxhfg8",
+    "zdmtsbk"
   ]
 
   @webcore_live_ids []
