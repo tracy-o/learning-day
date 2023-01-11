@@ -1,20 +1,10 @@
 defmodule Routes.Specs.BitesizeArticles do
-  def specs("live") do
+  def specs do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language", "CircuitBreaker"],
-      query_params_allowlist: ["course", "topicJourney"]
-    }
-  end
-
-  def specs(_production_env) do
-    %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: MorphRouter,
-      language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "DevelopmentRequests", "Language", "CircuitBreaker"],
+      request_pipeline: ["ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language"],
       query_params_allowlist: ["course", "topicJourney"]
     }
   end
