@@ -10,7 +10,8 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if is_insecure?(get_req_header(conn, "x-bbc-edge-scheme")) and is_bbc_domain?(get_req_header(conn, "x-bbc-edge-host")) do
+    if is_insecure?(get_req_header(conn, "x-bbc-edge-scheme")) and
+         is_bbc_domain?(get_req_header(conn, "x-bbc-edge-host")) do
       redirect(conn)
     else
       conn
