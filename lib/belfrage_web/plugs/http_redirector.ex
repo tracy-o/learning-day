@@ -10,7 +10,7 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if is_insecure?(get_req_header(conn, "x-bbc-edge-scheme")) do
+    if is_insecure?(get_req_header(conn, "x-bbc-edge-scheme")) and is_bbc_host?(get_req_header(conn, "x-bbc-edge-host")) do
       redirect(conn)
     else
       conn
@@ -40,4 +40,9 @@ defmodule BelfrageWeb.Plugs.HttpRedirector do
 
   defp is_insecure?(["http"]), do: true
   defp is_insecure?(_), do: false
+
+  # This is to allow vanity url redirects in the routefiles
+  defp is_bbc_host?([host]) do
+    String.ends_with?(host, "bbc.com") or String.ends_with?(host, "bbc.co.uk")
+  end
 end

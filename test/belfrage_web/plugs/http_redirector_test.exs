@@ -6,6 +6,7 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
   defp incoming_request(scheme) do
     conn(:get, "/")
     |> put_req_header("x-bbc-edge-scheme", scheme)
+    |> put_req_header("x-bbc-edge-host", "bbc.com")
     |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
   end
 
