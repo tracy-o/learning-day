@@ -20,7 +20,7 @@ defmodule EndToEnd.HttpRedirectTest do
     response_conn =
       conn(:get, "http://www.bbc.com/foo-bar?foo=bar&query=query_string&zoo=far")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> put_req_header("x-bbc-edge-host", "bbc.com")
+      |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
       |> Router.call([])
 
     assert {302,
@@ -64,7 +64,7 @@ defmodule EndToEnd.HttpRedirectTest do
     response_conn =
       conn(:get, "https://www.bbc.com/")
       |> put_req_header("x-bbc-edge-scheme", "https")
-      |> put_req_header("x-bbc-edge-host", "bbc.com")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
@@ -74,7 +74,7 @@ defmodule EndToEnd.HttpRedirectTest do
     response_conn =
       conn(:get, "https://www.bbc.com/foo-bar?query=query_string")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> put_req_header("x-bbc-edge-host", "bbc.com")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {302,
@@ -93,7 +93,7 @@ defmodule EndToEnd.HttpRedirectTest do
     response_conn =
       conn(:get, "http://bbcarabic.com/foo")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> put_req_header("x-bbc-edge-host", "bbcarabic.com")
+      |> put_req_header("x-bbc-edge-host", "www.bbcarabic.com")
       |> Router.call([])
 
     assert {302,
