@@ -2715,8 +2715,8 @@ defroutefile "Main" do
   handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
   handle "/bitesize/preview/guides/:id/video", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
 
-  handle "/bitesize/topics/:id", using: "BitesizeTopics", platform: "MorphRouter", examples: ["/bitesize/topics/z82hsbk"]
-  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics", platform: "MorphRouter", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
+  handle "/bitesize/topics/:id", using: "BitesizeTopics", platform: "BitesizeTopicsPlatformSelector", examples: ["/bitesize/topics/z82hsbk"]
+  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics", platform: "BitesizeTopicsPlatformSelector", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
 
   handle "/bitesize/preview/topics/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
