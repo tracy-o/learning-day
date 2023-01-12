@@ -20,7 +20,7 @@ defmodule EndToEnd.HttpRedirectTest do
     response_conn =
       conn(:get, "http://www.bbc.com/foo-bar?foo=bar&query=query_string&zoo=far")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {302,
