@@ -61,7 +61,7 @@ defmodule Belfrage.MixProject do
       {:logger_file_backend, "~> 0.0.10"},
       {:finch, "~> 0.13.0"},
       {:mox, "~> 1.0.2", only: @test_envs},
-      {:plug_cowboy, "~> 2.5"},
+      {:plug_cowboy, "~> 2.6"},
       {:sweet_xml, "~> 0.7"},
       {:cachex, "~> 3.4"},
       {:poison, "~> 5.0", override: true},
