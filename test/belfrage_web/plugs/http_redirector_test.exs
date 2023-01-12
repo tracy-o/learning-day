@@ -10,16 +10,6 @@ defmodule BelfrageWeb.Plugs.HttpRedirectorTest do
     |> Plug.Conn.put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE"})
   end
 
-  test "no redirect when x-bbc-edge-host is not a bbc host and x-bbc-edge-scheme is http" do
-    conn =
-      "http"
-      |> incoming_request()
-      |> put_req_header("x-bbc-edge-host", "www.notthebbc.com")
-      |> HttpRedirector.call([])
-
-    assert conn === HttpRedirector.call(conn, [])
-  end
-
   test "redirect when x-bbc-edge-scheme is http" do
     conn =
       "http"

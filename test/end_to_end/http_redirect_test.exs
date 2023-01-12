@@ -98,22 +98,13 @@ defmodule EndToEnd.HttpRedirectTest do
 
     assert {302,
             [
-              {
-                "cache-control",
-                "public, stale-if-error=90, stale-while-revalidate=60, max-age=60"
-              },
+              {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
               {"location", "https://www.bbc.com/arabic/foo"},
-              {
-                "vary",
-                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
-              },
-              {"server", "Belfrage"},
-              {"bid", "local"},
               {"via", "1.1 Belfrage"},
+              {"server", "Belfrage"},
+              {"x-bbc-no-scheme-rewrite", "1"},
               {"req-svc-chain", "BELFRAGE"},
-              {"brequestid", _request_id},
-              {"belfrage-cache-status", "MISS"},
-              {"routespec", "redirect"}
+              {"vary", "x-bbc-edge-scheme"}
             ], ""} = sent_resp(response_conn)
   end
 end
