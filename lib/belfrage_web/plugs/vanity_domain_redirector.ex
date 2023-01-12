@@ -4,10 +4,13 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
   # Vanity urls
   @redirects %{
     "www.bbcafaanoromoo.com" => "https://www.bbc.com/afaanoromoo",
+    "m.bbcafaanoromoo.com" => "https://www.bbc.com/afaanoromoo",
+    "bbcafaanoromoo.com" => "https://www.bbc.com/afaanoromoo",
     "www.bbcafrique.com" => "https://www.bbc.com/afrique",
     "m.bbcafrique.com" => "https://www.bbc.com/afrique",
     "bbcafrique.com" => "https://www.bbc.com/afrique",
     "www.bbcamharic.com" => "https://www.bbc.com/amharic",
+    "m.bbcamharic.com" => "https://www.bbc.com/amharic",
     "bbcamharic.com" => "https://www.bbc.com/amharic",
     "www.bbcarabic.com" => "https://www.bbc.com/arabic",
     "m.bbcarabic.com" => "https://www.bbc.com/arabic",
@@ -34,15 +37,19 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbchindi.com" => "https://www.bbc.com/hindi",
     "bbchindi.com" => "https://www.bbc.com/hindi",
     "www.bbcigbo.com" => "https://www.bbc.com/igbo",
+    "m.bbcigbo.com" => "https://www.bbc.com/igbo",
     "bbcigbo.com" => "https://www.bbc.com/igbo",
     "www.bbcindonesia.com" => "https://www.bbc.com/indonesia",
+    "m.bbcindonesia.com" => "https://www.bbc.com/indonesia",
     "bbcindonesia.com" => "https://www.bbc.com/indonesia",
     "www.bbckorean.com" => "https://www.bbc.com/korean",
+    "m.bbckorean.com" => "https://www.bbc.com/korean",
     "bbckorean.com" => "https://www.bbc.com/korean",
     "www.bbckyrgyz.com" => "https://www.bbc.com/kyrgyz",
     "m.bbckyrgyz.com" => "https://www.bbc.com/kyrgyz",
     "bbckyrgyz.com" => "https://www.bbc.com/kyrgyz",
     "www.bbcmarathi.com" => "https://www.bbc.com/marathi",
+    "m.bbcmarathi.com" => "https://www.bbc.com/marathi",
     "bbcmarathi.com" => "https://www.bbc.com/marathi",
     "www.bbcmundo.com" => "https://www.bbc.com/mundo",
     "m.bbcmundo.com" => "https://www.bbc.com/mundo",
@@ -57,6 +64,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbcpersian.com" => "https://www.bbc.com/persian",
     "bbcpersian.com" => "https://www.bbc.com/persian",
     "www.bbcpidgin.com" => "https://www.bbc.com/pidgin",
+    "m.bbcpidgin.com" => "https://www.bbc.com/pidgin",
     "bbcpidgin.com" => "https://www.bbc.com/pidgin",
     "www.bbcportuguese.com" => "https://www.bbc.com/portuguese",
     "m.bbcportuguese.com" => "https://www.bbc.com/portuguese",
@@ -65,6 +73,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbcbrasil.com" => "https://www.bbc.com/portuguese",
     "bbcbrasil.com" => "https://www.bbc.com/portuguese",
     "www.bbcpunjabi.com" => "https://www.bbc.com/punjabi",
+    "m.bbcpunjabi.com" => "https://www.bbc.com/punjabi",
     "bbcpunjabi.com" => "https://www.bbc.com/punjabi",
     "www.bbcrussian.com" => "https://www.bbc.com/russian",
     "m.bbcrussian.com" => "https://www.bbc.com/russian",
@@ -73,6 +82,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbcsinhala.com" => "https://www.bbc.com/sinhala",
     "bbcsinhala.com" => "https://www.bbc.com/sinhala",
     "www.bbcserbian.com" => "https://www.bbc.com/serbian",
+    "m.bbcserbian.com" => "https://www.bbc.com/serbian",
     "bbcserbian.com" => "https://www.bbc.com/serbian",
     "www.bbcsomali.com" => "https://www.bbc.com/somali",
     "m.bbcsomali.com" => "https://www.bbc.com/somali",
@@ -81,16 +91,19 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbcswahili.com" => "https://www.bbc.com/swahili",
     "bbcswahili.com" => "https://www.bbc.com/swahili",
     "www.bbctajik.com" => "https://www.bbc.com/tajik",
+    "m.bbctajik.com" => "https://www.bbc.com/tajik",
     "bbctajik.com" => "https://www.bbc.com/tajik",
     "www.bbctamil.com" => "https://www.bbc.com/tamil",
     "m.bbctamil.com" => "https://www.bbc.com/tamil",
     "bbctamil.com" => "https://www.bbc.com/tamil",
     "www.bbctelugu.com" => "https://www.bbc.com/telugu",
+    "m.bbctelugu.com" => "https://www.bbc.com/telugu",
     "bbctelugu.com" => "https://www.bbc.com/telugu",
     "www.bbcthai.com" => "https://www.bbc.com/thai",
     "m.bbcthai.com" => "https://www.bbc.com/thai",
     "bbcthai.com" => "https://www.bbc.com/thai",
     "www.bbctigrinya.com" => "https://www.bbc.com/tigrinya",
+    "m.bbctigrinya.com" => "https://www.bbc.com/tigrinya",
     "bbctigrinya.com" => "https://www.bbc.com/tigrinya",
     "www.bbcturkce.com" => "https://www.bbc.com/turkce",
     "m.bbcturkce.com" => "https://www.bbc.com/turkce",
@@ -111,6 +124,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     "m.bbcvietnamese.com" => "https://www.bbc.com/vietnamese",
     "bbcvietnamese.com" => "https://www.bbc.com/vietnamese",
     "www.bbcyoruba.com" => "https://www.bbc.com/yoruba",
+    "m.bbcyoruba.com" => "https://www.bbc.com/yoruba",
     "bbcyoruba.com" => "https://www.bbc.com/yoruba",
     "www.bbczhongwen.com" => "https://www.bbc.com/zhongwen",
     "m.bbczhongwen.com" => "https://www.bbc.com/zhongwen",
@@ -129,9 +143,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     redirect(conn)
   end
 
-  def call(conn, _opts) do
-    conn
-  end
+  def call(conn, _opts), do: conn
 
   defp redirect(conn) do
     conn
