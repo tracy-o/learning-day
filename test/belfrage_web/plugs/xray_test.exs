@@ -1,8 +1,9 @@
 defmodule BelfrageWeb.Plugs.XrayTest do
   use ExUnit.Case, async: true
   use Plug.Test
-  use Test.Support.Helper, :mox
   use Belfrage.Test.XrayHelper
+
+  import Test.Support.Helper
 
   alias BelfrageWeb.Plugs
   alias AwsExRay.Record.HTTPRequest
@@ -67,7 +68,34 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert_received {:mock_xray_client_data, data}
       json = Jason.decode!(data)
       assert json["trace_id"]
-      assert json["name"] == "Belfrage"
+      assert json["name"] == "local-belfrage"
+    end
+  end
+
+  describe "env stack id in X-Ray segment name" do
+    setup do
+      set_stack_id("joan")
+
+      conn =
+        conn(:get, "/some/route")
+        |> Plugs.RequestId.call([])
+        |> Plugs.Xray.call(xray: MockXray)
+
+      %{conn: conn}
+    end
+
+    test "when response had been sent, X-Ray segment name maintained in client data", %{conn: conn} do
+      conn
+      |> resp(200, "OK")
+      |> send_resp()
+
+      assert_received {:mock_xray_client_data, data}
+      json = Jason.decode!(data)
+      assert json["name"] == "joan-belfrage"
+    end
+
+    test "X-Ray segment name in conn matches env stack id", %{conn: conn} do
+      assert conn.assigns[:xray_segment].name == "joan-belfrage"
     end
   end
 
