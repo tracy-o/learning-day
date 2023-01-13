@@ -158,7 +158,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirector do
     |> halt()
   end
 
-  def set_location(_conn = %{request_path: nil}), do: ""
-  def set_location(_conn = %{request_path: "/"}), do: ""
-  def set_location(_conn = %{request_path: request_path}), do: request_path
+  defp set_location(%{request_path: nil}), do: ""
+  defp set_location(%{request_path: "/"}), do: ""
+  defp set_location(%{request_path: request_path}), do: request_path
 end
