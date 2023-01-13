@@ -29,7 +29,7 @@ defmodule BelfrageWeb.Plugs.VanityDomainRedirectTest do
     assert get_resp_header(conn, "location") == ["https://www.bbc.com/afaanoromoo"]
   end
 
-  test "redirect when not vanity url" do
+  test "no redirect when not vanity url" do
     conn = incoming_request("http://www.afaanoromoobbc.com")
 
     assert conn.status == 200

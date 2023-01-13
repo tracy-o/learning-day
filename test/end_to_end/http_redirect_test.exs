@@ -89,7 +89,7 @@ defmodule EndToEnd.HttpRedirectTest do
             ], ""} = sent_resp(response_conn)
   end
 
-  test "vanity urls" do
+  test "redirect vanity urls to a bbc.com domain" do
     response_conn =
       conn(:get, "http://bbcarabic.com/foo")
       |> put_req_header("x-bbc-edge-scheme", "http")
