@@ -18,14 +18,15 @@ defmodule EndToEnd.HttpRedirectTest do
 
   test "http redirects" do
     response_conn =
-      conn(:get, "http://www.example.com/foo-bar?foo=bar&query=query_string&zoo=far")
+      conn(:get, "http://www.bbc.com/foo-bar?foo=bar&query=query_string&zoo=far")
       |> put_req_header("x-bbc-edge-scheme", "http")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {302,
             [
               {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
-              {"location", "https://www.example.com/foo-bar?foo=bar&query=query_string&zoo=far"},
+              {"location", "https://www.bbc.com/foo-bar?foo=bar&query=query_string&zoo=far"},
               {"via", "1.1 Belfrage"},
               {"server", "Belfrage"},
               {"x-bbc-no-scheme-rewrite", "1"},
@@ -61,8 +62,9 @@ defmodule EndToEnd.HttpRedirectTest do
     end)
 
     response_conn =
-      conn(:get, "https://www.example.com/")
+      conn(:get, "https://www.bbc.com/")
       |> put_req_header("x-bbc-edge-scheme", "https")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
@@ -70,14 +72,34 @@ defmodule EndToEnd.HttpRedirectTest do
 
   test "redirect when uri scheme is https and edge scheme is http" do
     response_conn =
-      conn(:get, "https://www.example.com/foo-bar?query=query_string")
+      conn(:get, "https://www.bbc.com/foo-bar?query=query_string")
       |> put_req_header("x-bbc-edge-scheme", "http")
+      |> put_req_header("x-bbc-edge-host", "www.bbc.com")
       |> Router.call([])
 
     assert {302,
             [
               {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
-              {"location", "https://www.example.com/foo-bar?query=query_string"},
+              {"location", "https://www.bbc.com/foo-bar?query=query_string"},
+              {"via", "1.1 Belfrage"},
+              {"server", "Belfrage"},
+              {"x-bbc-no-scheme-rewrite", "1"},
+              {"req-svc-chain", "BELFRAGE"},
+              {"vary", "x-bbc-edge-scheme"}
+            ], ""} = sent_resp(response_conn)
+  end
+
+  test "redirect vanity urls to a bbc.com domain regardless of scheme" do
+    response_conn =
+      conn(:get, "https://bbcarabic.com/foo")
+      |> put_req_header("x-bbc-edge-scheme", "https")
+      |> put_req_header("x-bbc-edge-host", "www.bbcarabic.com")
+      |> Router.call([])
+
+    assert {302,
+            [
+              {"cache-control", "public, stale-while-revalidate=10, max-age=60"},
+              {"location", "https://www.bbc.com/arabic/foo"},
               {"via", "1.1 Belfrage"},
               {"server", "Belfrage"},
               {"x-bbc-no-scheme-rewrite", "1"},
