@@ -160,7 +160,7 @@ defmodule EndToEnd.XrayTest do
     assert invoke_lambda_service_subsegment =~ ~s("type":"subsegment")
     assert invoke_lambda_service_subsegment =~ ~s("name":"invoke-lambda-call")
 
-    assert segment =~ ~s("name":"Belfrage")
+    assert segment =~ ~s("name":"local-belfrage")
   end
 
   defp aws_ex_ray_udp_client_pid() do
