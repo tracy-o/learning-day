@@ -55,3 +55,7 @@ config :logger, :console,
   format: {Belfrage.Logger.Formatter, :format},
   colors: [enabled: false],
   metadata: :all
+
+config :aws_ex_ray,
+  store_monitor_pool_size: 1,
+  client_pool_size: 1

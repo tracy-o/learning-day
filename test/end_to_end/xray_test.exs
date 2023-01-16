@@ -4,6 +4,7 @@ defmodule EndToEnd.XrayTest do
   use Test.Support.Helper, :mox
 
   import Belfrage.Test.MetricsHelper
+  import Test.Support.Helper, only: [set_env: 3]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTP, RouteState}
@@ -133,6 +134,40 @@ defmodule EndToEnd.XrayTest do
         |> Router.call([])
 
       assert {200, _, _} = sent_resp(conn)
+    end
+  end
+
+  test "expected messages are sent to AWS X-Ray client" do
+    start_supervised!({RouteState, "SomeRouteState"})
+    set_env(:aws_ex_ray, :sampling_rate, 1.0)
+    :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
+
+    Belfrage.Clients.LambdaMock
+    |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
+      {:ok, @lambda_response}
+    end)
+
+    conn(:get, "/200-ok-response")
+    |> Router.call([])
+
+    assert_receive {:trace, _, :receive, {_, _, {:send, webcore_service_subsegment}}}
+    assert_receive {:trace, _, :receive, {_, _, {:send, invoke_lambda_service_subsegment}}}
+    assert_receive {:trace, _, :receive, {_, _, {:send, segment}}}
+
+    assert webcore_service_subsegment =~ ~s("type":"subsegment")
+    assert webcore_service_subsegment =~ ~s("name":"webcore-service")
+
+    assert invoke_lambda_service_subsegment =~ ~s("type":"subsegment")
+    assert invoke_lambda_service_subsegment =~ ~s("name":"invoke-lambda-call")
+
+    assert segment =~ ~s("name":"Belfrage")
+  end
+
+  defp aws_ex_ray_udp_client_pid() do
+    with [{:aws_ex_ray_client_pool, poolboy_pid, :worker, [:poolboy]}] <-
+           Supervisor.which_children(AwsExRay.Client.UDPClientSupervisor),
+         {:state, _pid, [udp_client_pid], _, _, _, _, _, :lifo} <- :sys.get_state(poolboy_pid) do
+      udp_client_pid
     end
   end
 end
