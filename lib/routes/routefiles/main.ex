@@ -2698,6 +2698,8 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
 
   handle "/bitesize/*any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
+  handle "/bitesize/guides/:id/test.hybrid ", using: "BitesizeLegacy", examples: ["/bitesize/guides/zcvy6yc/test.hybrid"]
+
 
   # Games
   handle "/games/*any", using: "Games", examples: ["/games/embed/genie-starter-pack"]
