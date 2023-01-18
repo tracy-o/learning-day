@@ -2630,12 +2630,12 @@ defroutefile "Main" do
   handle "/newsround/:id.amp", using: "NewsroundAmp", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:id.json", using: "NewsroundAmp", examples: ["/newsround/61545299.json"]
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp", examples: ["/newsround/articles/manifest.json"]
-  handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/watch_newsround"]
-  handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/news/newsroundbsl"]
+  handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", examples: ["/newsround/news/watch_newsround"]
+  handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", examples: ["/newsround/news/newsroundbsl"]
   handle "/newsround/av/:id", using: "NewsroundVideoPage", only_on: "test", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", only_on: "test", examples: ["/newsround/61545299"]
   handle "/newsround", using: "NewsroundHomePage", examples: ["/newsround"]
-  handle "/newsround/*any", using: "NewsroundLegacy", only_on: "live", examples: ["/newsround/news/watch_newsround", "/newsround/news/newsroundbsl", "/newsround/61545299", "/newsround/av/43245617"]  # Use Morph as a catch-all
+  handle "/newsround/*any", using: "NewsroundLegacy", only_on: "live", examples: ["/newsround/61545299", "/newsround/av/43245617"]  # Use Morph as a catch-all
 
   handle "/schoolreport/*any", using: "Schoolreport", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
 
