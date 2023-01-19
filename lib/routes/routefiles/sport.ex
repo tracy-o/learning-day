@@ -1186,8 +1186,8 @@ defroutefile "Sport" do
 
   handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", examples: [] # flakey /sport/athletics/british-championship/results.app
   handle "/sport/:discipline/:tournament/results", using: "SportDataPage", examples: ["/sport/athletics/british-championship/results"]
-  handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app"]
-  handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results"]
+  handle "/sport/:discipline/results.app", using: "SportDataPage", examples: ["/sport/snooker/results.app", "/sport/tennis/results.app"]
+  handle "/sport/:discipline/results", using: "SportDataPage", examples: ["/sport/snooker/results", "/sport/tennis/results"]
 
   ## Sport Football Scores-Fixtures pages
   handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPageInApps", examples: ["/sport/football/scores-fixtures.app"]
@@ -1272,8 +1272,6 @@ defroutefile "Sport" do
   handle "/sport/tennis/order-of-play.app", using: "SportDataPage", examples: ["/sport/tennis/order-of-play.app"]
   handle "/sport/tennis/order-of-play", using: "SportDataPage", examples: ["/sport/tennis/order-of-play"]
   handle "/sport/tennis/order-of-play/*any", using: "SportDataPage", examples: []
-  handle "/sport/tennis/results.app", using: "SportDataPage", examples: ["/sport/tennis/results.app"]
-  handle "/sport/tennis/results", using: "SportDataPage", examples: ["/sport/tennis/results"]
   handle "/sport/tennis/results/*any", using: "SportDataPage", examples: []
 
   ## Sport Event Data Pages
