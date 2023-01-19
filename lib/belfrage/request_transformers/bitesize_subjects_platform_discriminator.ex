@@ -5,12 +5,14 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
   use Belfrage.Behaviours.Transformer
 
   @webcore_test_ids [
-    "zbhy4wx",
-    "zjxhfg8",
-    "zdmtsbk"
+    "zxtnvcw",
+    "zmpfb9q"
   ]
 
-  @webcore_live_ids []
+  @webcore_live_ids [
+    "zxtnvcw",
+    "zmpfb9q"
+  ]
 
   @impl Transformer
   def call(struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
