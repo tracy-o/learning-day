@@ -5,7 +5,7 @@ defmodule Routes.Platforms.MozartWeather do
       owner: "DEWeather@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
       request_pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
+      response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       headers_allowlist: ["cookie-ckps_language"],
       circuit_breaker_error_threshold: 200
@@ -15,6 +15,6 @@ defmodule Routes.Platforms.MozartWeather do
   defp query_params_allowlist("live"), do: ["alternativeJsLoading", "amp", "batch", "before", "category_site", "component_id", "components", "config_path", "embeddingPageTitle", "embeddingPageUri", "lang", "options", "page", "presenter", "ptrt", "q", "redirect_location", "s", "search", "show-service-calls", "start", "ticker", "anchor"]
   defp query_params_allowlist(_production_env), do: "*"
 
-  defp pipeline("live"), do: ["CircuitBreaker"]
+  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
