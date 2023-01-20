@@ -5,7 +5,7 @@ defmodule Routes.Specs.BitesizeGuides do
       platform: MorphRouter,
       language_from_cookie: true,
       personalisation: "on",
-      request_pipeline: ["ComToUKRedirect", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language"]
+      request_pipeline: ["ComToUKRedirect", Personalisation, "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language"]
     }
   end
 end
