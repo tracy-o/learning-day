@@ -6,7 +6,7 @@ defmodule Routes.Specs.BitesizeArticles do
       language_from_cookie: true,
       personalisation: "on"
       request_pipeline: ["ComToUKRedirect", "Personalisation", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language"],
-      query_params_allowlist: ["course", "topicJourney"],
+      query_params_allowlist: ["course", "topicJourney"]
     }
   end
 end
