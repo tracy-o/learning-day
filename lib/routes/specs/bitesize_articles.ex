@@ -5,7 +5,8 @@ defmodule Routes.Specs.BitesizeArticles do
       platform: MorphRouter,
       language_from_cookie: true,
       request_pipeline: ["ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language"],
-      query_params_allowlist: ["course", "topicJourney"]
+      query_params_allowlist: ["course", "topicJourney"],
+      personalisation: "on"
     }
   end
 end
