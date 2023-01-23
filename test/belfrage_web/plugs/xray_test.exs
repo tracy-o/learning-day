@@ -51,7 +51,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
       assert request == %HTTPRequest{
                segment_type: :segment,
                method: "GET",
-               url: "/fabl/xray"
+               url: "/fabl/xray",
                user_agent: "Mozilla/5.0"
              }
     end
@@ -88,12 +88,15 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
   describe "env stack id in X-Ray segment name" do
     setup do
+      struct = Struct.add(%Struct{}, :request, %{xray_segment: :exists})
+
       set_stack_id("joan")
 
       conn =
-        conn(:get, "/some/route")
+        conn(:get, "/fabl/xray")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
+        |> Plug.Conn.assign(:struct, struct)
 
       %{conn: conn}
     end

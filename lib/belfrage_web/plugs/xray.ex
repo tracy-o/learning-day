@@ -72,14 +72,14 @@ defmodule BelfrageWeb.Plugs.Xray do
           segment
           |> xray.finish()
           |> xray.set_http_response(%{
-              status: conn.status,
-              content_length: content_length(conn)
-                                    })
+            status: conn.status,
+            content_length: content_length(conn)
+          })
 
-          xray.send(segment)
+        xray.send(segment)
 
-          conn
-          |> assign(:xray_segment, segment)
+        conn
+        |> assign(:xray_segment, segment)
       end)
     else
       conn
