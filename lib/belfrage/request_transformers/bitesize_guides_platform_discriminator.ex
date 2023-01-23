@@ -34,8 +34,7 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminator do
     if is_webcore_id(id) do
       Struct.add(struct, :private, %{
         platform: Webcore,
-        origin: Application.get_env(:belfrage, :pwa_lambda_function),
-        personalisation: "on"
+        origin: Application.get_env(:belfrage, :pwa_lambda_function)
       })
     else
       struct
