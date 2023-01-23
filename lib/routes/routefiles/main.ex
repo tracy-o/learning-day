@@ -2750,8 +2750,6 @@ defroutefile "Main" do
   handle "/_health/public_content", using: "PhoPublicContent", examples: ["/_health/public_content"]
   handle "/_health/private_content", using: "PhoPrivateContent", examples: ["/_health/private_content"]
 
-  handle "/_private/belfrage-cascade-test", using: ["WorldServiceTajik", "WorldServiceKorean", "ProxyPass"], only_on: "test", examples: []
-  handle "/_private/lambda-cascade-test", using: ["HomePage", "ProxyPass"], only_on: "test", examples: []
   # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
   # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
 
