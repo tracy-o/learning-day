@@ -922,6 +922,9 @@ defroutefile "Sport" do
   handle "/sport/winter-olympics/results/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
   handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
   handle "/sport/winter-olympics/sports/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
+  
+  ## Discipline Competition
+  redirect "/sport/football/fifa-womens-world-cup", to: "/sport/football/womens-world-cup", status: 302
 
   ## Sport Visual Journalism
   handle "/sport/extra/*any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
@@ -1561,6 +1564,9 @@ defroutefile "Sport" do
     return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
   end
   handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/womens-european-championship"] do
+    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+  end
+   handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/womens-world-cup"] do
     return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
   end
 
