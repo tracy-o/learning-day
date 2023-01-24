@@ -923,7 +923,7 @@ defroutefile "Sport" do
   handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
   handle "/sport/winter-olympics/sports/*any", using: "SportRedirects", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
   
-  ## Discipline Competition
+  ## Sport topic redirects
   redirect "/sport/football/fifa-womens-world-cup", to: "/sport/football/womens-world-cup", status: 302
 
   ## Sport Visual Journalism
