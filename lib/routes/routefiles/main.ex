@@ -2579,7 +2579,7 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
 
-  redirect "/weather/about", to: "/weather, status: 302
+  redirect "/weather/about", to: "/weather", status: 302
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
