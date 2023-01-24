@@ -167,7 +167,7 @@ defroutefile "Main" do
 
   handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
-  handle "/news/election/2021/:polity/results", using: "NewsElectionResults", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
+  handle "/news/election/2021/:polity/results", using: "NewsElection2021", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
     return_404 if: [
                  !String.match?(polity, ~r/^(england|scotland|wales)$/)
                ]
