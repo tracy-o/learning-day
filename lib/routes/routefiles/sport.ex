@@ -1506,9 +1506,6 @@ defroutefile "Sport" do
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/europa-league"] do
     return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
   end
-  handle "/sport/football/fifa-womens-world-cup", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/fifa-womens-world-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
-  end
   handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", examples: ["/sport/football/french-ligue-one"] do
     return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
   end
