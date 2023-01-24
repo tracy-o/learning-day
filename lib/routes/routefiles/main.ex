@@ -178,7 +178,6 @@ defroutefile "Main" do
     return_404 if: [
       !String.match?(division_name, ~r/^(councils|mayors)$/),
       !String.match?(division_id, ~r/^[E][0-9]{8}$/),
-      String.match?(division_id, ~r/E12000007/)
     ]
   end
 
