@@ -167,6 +167,12 @@ defroutefile "Main" do
 
   handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
+  handle "/news/election/2021/:polity/results", using: "NewsElectionResults", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
+    return_404 if: [
+                 !String.match?(polity, ~r/^(england|scotland|wales)$/)
+               ]
+  end
+
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
@@ -179,12 +185,6 @@ defroutefile "Main" do
       !String.match?(division_name, ~r/^(councils|mayors)$/),
       !String.match?(division_id, ~r/^[E][0-9]{8}$/),
     ]
-  end
-
-  handle "/news/election/2021/:polity/results", using: "NewsElectionResults", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
-    return_404 if: [
-                 !String.match?(polity, ~r/^(england|scotland|wales)$/)
-               ]
   end
 
   handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021", examples: ["/news/election/2021/scotland/constituencies/S16000084", "/news/election/2021/scotland/regions/S17000014", "/news/election/2021/wales/constituencies/W09000001", "/news/election/2021/wales/regions/W10000006"] do
