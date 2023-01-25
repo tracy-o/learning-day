@@ -1,5 +1,6 @@
 defmodule Belfrage.Supervisor do
   use Supervisor
+  require Cachex.Spec
 
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
@@ -21,6 +22,7 @@ defmodule Belfrage.Supervisor do
         {Belfrage.Metrics.Supervisor, [env: env]},
         {Belfrage.Mvt.Supervisor, [env: env]},
         {Cachex, name: :cache, limit: cachex_limit(), stats: true},
+        {Belfrage.MetadataCache, Belfrage.MetadataCache.options()},
         {Belfrage.Services.Webcore.Supervisor, [env: env]},
         {Belfrage.NewsApps.Supervisor, [env: env]},
         {Belfrage.SupervisorObserver, get_observed_ids()}

@@ -43,7 +43,18 @@ config :belfrage,
     bbc_id_availability: 50,
     mvt_file: 50
   ],
-  date_time: Belfrage.Utils.Current.Mock
+  date_time: Belfrage.Utils.Current.Mock,
+  metadata_cache: [
+    default_ttl_ms: 100,
+    expiration_interval_ms: 60_000,
+    limit: [
+      size: 6,
+      # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
+      policy: Cachex.Policy.LRW,
+      reclaim: 0.5,
+      options: []
+    ]
+  ]
 
 config :cachex, :limit,
   size: 6,

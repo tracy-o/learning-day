@@ -35,6 +35,21 @@ defmodule Belfrage.Test.CachingHelper do
   end
 
   @doc """
+  This clears the entire metadata cache, so can affect other tests if called from an
+  async test. Can be called from setup/1 like:
+
+      setup :clear_metadata_cache
+  """
+  def clear_metadata_cache(_context) do
+    clear_metadata_cache()
+    :ok
+  end
+
+  def clear_metadata_cache() do
+    :ets.delete_all_objects(:metadata_cache)
+  end
+
+  @doc """
   Puts the envelope's response into the cache under the `request_hash` of the envelope's request.
   """
   def put_into_cache(envelope = %Envelope{}) do
