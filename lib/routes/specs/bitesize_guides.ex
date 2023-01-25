@@ -4,7 +4,8 @@ defmodule Routes.Specs.BitesizeGuides do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: MorphRouter,
       language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language"]
+      personalisation: "test_only",
+      request_pipeline: ["ComToUKRedirect", "Personalisation", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language"]
     }
   end
 end
