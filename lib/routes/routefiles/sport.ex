@@ -977,7 +977,7 @@ defroutefile "Sport" do
   handle "/sport/live/*any", using: "SportLivePage", examples: [] # flakey /sport/live/rugby-union/56269849.app?morph_env=live&renderer_env=live, "/sport/live/rugby-union/56269849?morph_env=live&renderer_env=live", "/sport/live/rugby-union/56269849/page/2?morph_env=live&renderer_env=live"
 
   ## Sport BBC Live - Webcore Football Live - TIPO IDs
-  handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
+  handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: ["/sport/football/live/cvpx5wr4nv8t"] do
     return_404 if: [
       !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
@@ -985,10 +985,8 @@ defroutefile "Sport" do
     ]
   end
 
-  ## Sport BBC Live - Webcore Football Live (App Route) - TIPO IDs
-  redirect "/sport/football/live/:tipo_id.app", to: "/sport/app-webview/football/live/:tipo_id", status: 302
-
-  handle "/sport/app-webview/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", examples: [] do
+  # Sport BBC Live - Webcore .app route
+  handle "/sport/football/live/:tipo_id.app", using: "SportWebcoreFootballLivePage", examples: ["/sport/football/live/cvpx5wr4nv8t.app"] do
     return_404 if: [
       !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
