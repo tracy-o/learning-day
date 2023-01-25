@@ -138,7 +138,7 @@ defmodule EndToEnd.XrayTest do
     end
   end
 
-  test "expected messages are sent to AWS X-Ray client" do
+  test "expected messages are sent to AWS X-Ray client when platform is Webcore" do
     start_supervised!({RouteState, "SomeRouteState"})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
@@ -162,6 +162,41 @@ defmodule EndToEnd.XrayTest do
     assert invoke_lambda_service_subsegment =~ ~s("name":"invoke-lambda-call")
 
     assert segment =~ ~s("name":"local-belfrage")
+  end
+
+  test "expected messages are sent to AWS X-Ray client when platform is Fabl" do
+    start_supervised!({RouteState, "SomeFablRouteState"})
+    set_env(:aws_ex_ray, :sampling_rate, 1.0)
+    :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
+
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :Fabl ->
+      {:ok, @http_response}
+    end)
+
+    conn(:get, "/fabl/xray")
+    |> Router.call([])
+
+    assert_receive {:trace, _, :receive, {_, _, {:send, segment}}}
+    refute_receive {:trace, _, :receive, {_, _, {:send, _subsegment}}}
+
+    assert segment =~ ~s("name":"local-belfrage")
+  end
+
+  test "no messages are sent to AWS X-Ray client when platform is not Fabl or Webcore" do
+    start_supervised!({RouteState, "SomeSimorghRouteSpec"})
+    set_env(:aws_ex_ray, :sampling_rate, 1.0)
+    :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
+
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :Simorgh ->
+      {:ok, @http_response}
+    end)
+
+    conn(:get, "/ws-mvt")
+    |> Router.call([])
+
+    refute_receive {:trace, _, :receive, {_, _, {:send, _segment}}}
   end
 
   defp aws_ex_ray_udp_client_pid() do
