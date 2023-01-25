@@ -40,13 +40,6 @@ defroutefile "Main" do
   redirect "/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
   redirect "/news/election", to: "/news/politics", status: 302
   redirect "/news/election/2021", to: "/news/politics", status: 302
-  redirect "/news/election/2021/scotland", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
-  redirect "/news/election/2021/wales", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
-  redirect "/news/election/2021/england", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
-  redirect "/news/election/2021/scotland/results", to: "/news/topics/c37d28xdn99t/scottish-parliament-election-2021", status: 302
-  redirect "/news/election/2021/wales/results", to: "/news/topics/cqwn14k92zwt/welsh-parliament-election-2021", status: 302
-  redirect "/news/election/2021/england/results", to: "/news/topics/c481drqqzv7t/england-local-elections-2021", status: 302
-  redirect "/news/election/2021/london", to: "/news/topics/c27kz1m3j9mt/london-elections-2021", status: 302
 
   redirect "https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302
   redirect "https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
@@ -174,6 +167,12 @@ defroutefile "Main" do
 
   handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
 
+  handle "/news/election/2021/:polity/results", using: "NewsElection2021", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
+    return_404 if: [
+                 !String.match?(polity, ~r/^(england|scotland|wales)$/)
+               ]
+  end
+
   handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
@@ -185,7 +184,6 @@ defroutefile "Main" do
     return_404 if: [
       !String.match?(division_name, ~r/^(councils|mayors)$/),
       !String.match?(division_id, ~r/^[E][0-9]{8}$/),
-      String.match?(division_id, ~r/E12000007/)
     ]
   end
 
