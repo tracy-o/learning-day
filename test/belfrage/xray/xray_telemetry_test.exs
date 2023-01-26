@@ -64,4 +64,31 @@ defmodule Belfrage.Xray.TelemetryTest do
       assert subsegment["annotations"]["route_state_id"] == "some_id"
     end
   end
+
+  describe "handle_events/4 when xray segment is nil" do
+    test "it should return nil" do
+      struct = put_in(@test_struct.request.xray_segment, nil)
+
+      assert nil ==
+               Xray.Telemetry.handle_event(
+                 :event,
+                 %{start_time: 123_000, duration: 1000},
+                 %{struct: struct},
+                 :config
+               )
+    end
+
+    test "no data is sent to the xray client" do
+      struct = put_in(@test_struct.request.xray_segment, nil)
+
+      Xray.Telemetry.setup()
+
+      Belfrage.Metrics.duration(~w(webcore request)a, %{struct: struct, client: MockXrayClient}, fn ->
+        Process.sleep(1)
+      end)
+
+      refute_received {:mock_xray_client_data, _webcore_subsegment}
+      refute_received {:mock_xray_client_data, _lambda_subsegment}
+    end
+  end
 end

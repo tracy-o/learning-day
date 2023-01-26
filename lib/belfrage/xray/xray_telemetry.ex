@@ -11,16 +11,13 @@ defmodule Belfrage.Xray.Telemetry do
   end
 
   def handle_event(_event, measurements, metadata, _config) do
-    case metadata.struct.request do
-      %Request{xray_segment: segment = %AwsExRay.Segment{}} ->
-        start_time = format_time(Map.get(measurements, :start_time))
-        duration = format_time(Map.get(measurements, :duration))
+    if segment_in(metadata) do
+      segment = metadata.struct.request.xray_segment
+      start_time = format_time(Map.get(measurements, :start_time))
+      duration = format_time(Map.get(measurements, :duration))
 
-        subsegment(segment, "webcore-service", start_time, duration, metadata)
-        subsegment(segment, "invoke-lambda-call", start_time, duration, metadata)
-
-      _request ->
-        :ok
+      subsegment(segment, "webcore-service", start_time, duration, metadata)
+      subsegment(segment, "invoke-lambda-call", start_time, duration, metadata)
     end
   end
 
@@ -46,6 +43,12 @@ defmodule Belfrage.Xray.Telemetry do
       Xray.add_struct_annotations(subsegment, struct)
     else
       subsegment
+    end
+  end
+
+  defp segment_in(metadata) do
+    if Map.get(metadata, :struct) do
+      metadata.struct.request.xray_segment
     end
   end
 end
