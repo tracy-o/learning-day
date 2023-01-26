@@ -50,7 +50,19 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
     "zhkk7ty",
     "z644jxs",
     "z8ffr82",
-    "zwvv4wx"
+    "zwvv4wx",
+    "zq6g4xs",
+    "zpvw7yc",
+    "z2hckty",
+    "zn3j2v4",
+    "zjxbcmn",
+    "z7tr96f",
+    "ztf8jsg",
+    "zxn9dp3",
+    "zhydqfr",
+    "zmp48hv",
+    "z6skwnb",
+    "zsbqm39"
   ]
 
   @webcore_live_ids [
@@ -88,7 +100,19 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
     "zhkk7ty",
     "z644jxs",
     "z8ffr82",
-    "zwvv4wx"
+    "zwvv4wx",
+    "zq6g4xs",
+    "zpvw7yc",
+    "z2hckty",
+    "zn3j2v4",
+    "zjxbcmn",
+    "z7tr96f",
+    "ztf8jsg",
+    "zxn9dp3",
+    "zhydqfr",
+    "zmp48hv",
+    "z6skwnb",
+    "zsbqm39"
   ]
 
   @impl Transformer
