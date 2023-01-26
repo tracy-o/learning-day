@@ -265,7 +265,7 @@ defroutefile "Main" do
   # News Live - .app route webcore traffic to platform discriminator
   handle "/news/live/:asset_id.app", using: "NewsLive", only_on: "test", examples: ["/news/live/c1v596ken6vt.app", "/news/live/c1v596ken6vt.app?page=1"] do
     return_404 if: [
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
+      !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
     ]
   end
