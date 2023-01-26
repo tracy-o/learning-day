@@ -50,7 +50,6 @@ defroutefile "Main" do
   redirect "/news/iswoty", to: "/news/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
 
   # Home Page
-
   redirect "/ni", to: "/northernireland", status: 302
 
   handle "/", using: "HomePage", examples: ["/"]
@@ -2592,7 +2591,6 @@ defroutefile "Main" do
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
-
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
