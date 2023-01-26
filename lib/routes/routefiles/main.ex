@@ -46,6 +46,9 @@ defroutefile "Main" do
   redirect "https://www.test.bbc.com/ukraine", to: "https://www.test.bbc.com/ukrainian", status: 302
   redirect "https://www.test.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
 
+  # News - Indian Sports Woman of The Year
+  redirect "/news/iswoty", to: "/news/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+
   # Home Page
 
   redirect "/ni", to: "/northernireland", status: 302
@@ -685,6 +688,14 @@ defroutefile "Main" do
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+
+  # World Service - Indian Sports Woman of The Year
+  redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+  redirect "/hindi/iswoty", to: "/hindi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+  redirect "/marathi/iswoty", to: "/marathi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+  redirect "/punjabi/iswoty", to: "/punjabi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+  redirect "/tamil/iswoty", to: "/tamil/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
+  redirect "/telugu/iswoty", to: "/telugu/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
 
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
@@ -2581,7 +2592,7 @@ defroutefile "Main" do
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
-  
+
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
