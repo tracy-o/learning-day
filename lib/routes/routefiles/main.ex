@@ -2581,7 +2581,9 @@ defroutefile "Main" do
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
-  
+
+  handle "/weather/av/:asset_id", using: "WeatherVideos", only_on: "test", examples: []
+
   handle "/weather/:location_id", using: "WeatherLocation", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
@@ -2592,7 +2594,6 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/weather/av/:asset_id", using: "WeatherVideos", only_on: "test", examples: []
 
   handle "/weather/*any", using: "WeatherCatchAll", examples: []
 
