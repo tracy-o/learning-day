@@ -488,7 +488,9 @@ defroutefile "Main" do
   handle "/news/world-us-canada-15949569", using: "NewsWorld", examples: ["/news/world-us-canada-15949569"]
 
   redirect "https://www.test.bbc.co.uk/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
+  redirect "https://www.test.bbc.com/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
   redirect "https://www.test.bbc.co.uk/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
+  redirect "https://www.test.bbc.com/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
 
   # News archive assets
   handle "/news/10284448/ticker.sjson", using: "NewsArchive", examples: ["/news/10284448/ticker.sjson"]
