@@ -119,12 +119,24 @@ defmodule Routes.RoutefileTest do
 
         {matcher, %{using: route_state_id}, example} ->
           conn = make_call(:get, example)
+          plug_route = plug_route(conn)
 
           if conn.assigns.route_spec == route_state_id do
             :ok
           else
             {:error,
              "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
+          end
+
+          # An example may be routed to an incorrect route with the same route spec
+          # as the expected route.
+          #
+          # Given this, below we check that the matched route stored in conn.private.plug_route
+          # is the expected route.
+          if plug_route == matcher do
+            :ok
+          else
+            {:error, "Example #{example} for route #{matcher} has been routed to #{plug_route}"}
           end
       end)
     end
@@ -387,5 +399,16 @@ defmodule Routes.RoutefileTest do
       _route ->
         route
     end
+  end
+
+  defp plug_route(conn) do
+    conn.private.plug_route
+    |> elem(0)
+    |> String.replace("/*_path", "")
+    # conn.private.plug_route seems to not show as expected for paths with file extensions,
+    # for example:
+    #
+    #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
+    |> String.replace("/.", ".")
   end
 end
