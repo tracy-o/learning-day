@@ -36,8 +36,6 @@ defroutefile "Main" do
 
   redirect "/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302
   redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
-  redirect "/cymrufyw/etholiad/2021/cymru", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
-  redirect "/cymrufyw/etholiad/2021/cymru/canlyniadau", to: "/cymrufyw/pynciau/cvd627zw9rjt/etholiad-senedd-cymru-2021", status: 302
   redirect "/news/election", to: "/news/politics", status: 302
   redirect "/news/election/2021", to: "/news/politics", status: 302
 
@@ -560,6 +558,12 @@ defroutefile "Main" do
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", examples: ["/cymrufyw/cylchgrawn"]
 
+  handle "/cymrufyw/etholiad/:year/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau", "/cymrufyw/etholiad/2021/cymru/canlyniadau"] do
+    return_404 if: [
+      !String.match?(year, ~r/^(2021|2022)$/)
+    ]
+  end
+
   handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
 
   handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau/W09000001", "/cymrufyw/etholiad/2021/cymru/rhanbarthau/W10000006"] do
@@ -568,8 +572,6 @@ defroutefile "Main" do
       !String.match?(division_id, ~r/^W[0-9]{8}$/)
     ]
   end
-
-  handle "/cymrufyw/etholiad/2022/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau"]
 
   handle "/cymrufyw/etholiad/2022/cymru/cynghorau", using: "CymrufywEtholiadCanlyniadau", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau"]
 
