@@ -26,8 +26,7 @@ defmodule Belfrage.MixProject do
       "lib",
       "benchmark",
       "test/support/fixtures",
-      "test/support/transformer_examples",
-      "test/support/mocks/routes/specs"
+      "test/support/mocks"
     ]
 
   defp elixirc_paths(_), do: ["lib"]

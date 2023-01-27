@@ -18,16 +18,16 @@ defmodule Routes.SportRoutefileTest do
   @routes Routefile.routes()
 
   @examples Enum.flat_map(@routes, fn {matcher, %{examples: examples} = spec} ->
-    Enum.map(examples, fn example ->
-      example_path =
-        case example do
-          {path, _status_code} -> path
-          path -> path
-        end
+              Enum.map(examples, fn example ->
+                example_path =
+                  case example do
+                    {path, _status_code} -> path
+                    path -> path
+                  end
 
-      {matcher, spec, example_path}
-    end)
-  end)
+                {matcher, spec, example_path}
+              end)
+            end)
 
   describe "routes" do
     test "matcher is prefixed with a '/'" do
@@ -103,7 +103,7 @@ defmodule Routes.SportRoutefileTest do
                 :ok
               else
                 {:error,
-                  "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
+                 "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
               end
 
               # An example may be routed to an incorrect route with the same route spec
@@ -132,7 +132,7 @@ defmodule Routes.SportRoutefileTest do
           :ok
         else
           {:error,
-            "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{conn.resp_body}"}
+           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{conn.resp_body}"}
         end
       end)
     end
@@ -155,7 +155,7 @@ defmodule Routes.SportRoutefileTest do
           :ok
         else
           {:error,
-            "Redirect from #{from} to #{to} has invalid status #{status} (must have one of #{@redirect_statuses})"}
+           "Redirect from #{from} to #{to} has invalid status #{status} (must have one of #{@redirect_statuses})"}
         end
       end)
     end
@@ -251,11 +251,11 @@ defmodule Routes.SportRoutefileTest do
     cond do
       invalid_transformers != [] ->
         {:error,
-          "Route #{matcher} contains invalid transformers in the request_pipeline on #{env}: #{inspect(invalid_transformers)}"}
+         "Route #{matcher} contains invalid transformers in the request_pipeline on #{env}: #{inspect(invalid_transformers)}"}
 
       duplicate_transformers != [] ->
         {:error,
-          "Route #{matcher} contains duplicate transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
       env == "live" && "DevelopmentRequests" in spec.request_pipeline ->
         {:error, "Route #{matcher} contains DevelopmentRequests transformer in the request_pipeline on live"}
@@ -273,11 +273,11 @@ defmodule Routes.SportRoutefileTest do
     cond do
       duplicate_transformers != [] ->
         {:error,
-          "Route #{matcher} contains duplicate platform transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+         "Route #{matcher} contains duplicate platform transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
 
       missing_transformers != [] ->
         {:error,
-          "Route #{matcher} doesn't have platform transformers #{inspect(missing_transformers)} in the request_pipeline on #{env}"}
+         "Route #{matcher} doesn't have platform transformers #{inspect(missing_transformers)} in the request_pipeline on #{env}"}
 
       true ->
         :ok
@@ -316,10 +316,10 @@ defmodule Routes.SportRoutefileTest do
     conn.private.plug_route
     |> elem(0)
     |> String.replace("/*_path", "")
-      # conn.private.plug_route seems to not show as expected for paths with file extensions,
-      # for example:
-      #
-      #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
+    # conn.private.plug_route seems to not show as expected for paths with file extensions,
+    # for example:
+    #
+    #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
     |> String.replace("/.", ".")
   end
 end

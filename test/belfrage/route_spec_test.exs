@@ -2,9 +2,15 @@ defmodule Belfrage.RouteSpecTest do
   use ExUnit.Case, async: true
   import Belfrage.Test.RoutingHelper
 
-  alias Belfrage.RouteSpec
+  alias Belfrage.{RouteSpec, Struct}
 
   describe "get_spec/1" do
+    for transformer <- ["Foo", "Bar", "Baz1", "Baz2"],
+        do: define_request_transformer(transformer, %Struct{})
+
+    for transformer <- ["Foo", "Bar", "Baz"],
+        do: define_response_transformer(transformer, %Struct{})
+
     test "merges route attributes into platform attributes" do
       define_platform("MergePlatform", %{caching_enabled: false, default_language: "foo"})
       define_route("MergeRoute", %{platform: "MergePlatform", default_language: "bar", owner: "baz"})
@@ -129,6 +135,69 @@ defmodule Belfrage.RouteSpecTest do
       spec = RouteSpec.get_route_spec({"NonPersonalisedRoute", "PersonalisedPlatform"})
       assert spec.personalisation == "off"
       assert spec.personalised_route == false
+    end
+
+    test "invalidates non-existing platform pipeline" do
+      define_platform("ResponsePipelinePlatform", %{
+        response_pipeline: ["NonExistingTransformer", :_routespec_pipeline_placeholder]
+      })
+
+      define_route("ResponsePipelineRoute", %{
+        platform: "ResponsePipelinePlatform",
+        response_pipeline: ["Bar"]
+      })
+
+      err_msg = "Module 'Elixir.Belfrage.ResponseTransformers.NonExistingTransformer' doesn't exist"
+
+      assert_raise RuntimeError, err_msg, fn ->
+        RouteSpec.get_route_spec({"ResponsePipelineRoute", "ResponsePipelinePlatform"})
+      end
+    end
+
+    test "invalidates non-existing route spec pipeline" do
+      define_platform("RequestPipelinePlatform", %{})
+
+      define_route("RequestPipelineRoute", %{
+        platform: "RequestPipelinePlatform",
+        request_pipeline: ["NonExistingTransformer"]
+      })
+
+      err_msg = "Module 'Elixir.Belfrage.RequestTransformers.NonExistingTransformer' doesn't exist"
+
+      assert_raise RuntimeError, err_msg, fn ->
+        RouteSpec.get_route_spec({"RequestPipelineRoute", "RequestPipelinePlatform"})
+      end
+    end
+
+    test "invalidates non-existing spec" do
+      assert_raise RuntimeError, "Module 'Elixir.Routes.Specs.NonExistingRoute' doesn't exist", fn ->
+        RouteSpec.get_route_spec({"NonExistingRoute", "NonExistingPlatform"})
+      end
+    end
+
+    test "invalidates non-existing platform" do
+      define_route("Route", %{platform: "NonExistingPlatform"})
+
+      assert_raise RuntimeError, "Module 'Elixir.Routes.Platforms.NonExistingPlatform' doesn't exist", fn ->
+        RouteSpec.get_route_spec({"Route", "NonExistingPlatform"})
+      end
+    end
+
+    test "invalidates not allowed RouteSpec struct attributes" do
+      define_platform("NotAllowedAttrPlatform", %{
+        query_params_allowlist: ["param2"],
+        headers_allowlist: ["header2"],
+        cookie_allowlist: ["cookie2"],
+        not_allowed_attr: :blah
+      })
+
+      define_route("AllowedAttrRoute", %{platform: "NotAllowedAttrPlatform"})
+
+      err_msg = "Invalid 'AllowedAttrRoute.NotAllowedAttrPlatform' spec, error: {:badkey, :not_allowed_attr}"
+
+      assert_raise RuntimeError, err_msg, fn ->
+        RouteSpec.get_route_spec({"AllowedAttrRoute", "NotAllowedAttrPlatform"})
+      end
     end
   end
 end

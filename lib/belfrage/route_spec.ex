@@ -1,5 +1,6 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
+  alias Belfrage.Behaviours.Transformer
 
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
@@ -53,6 +54,7 @@ defmodule Belfrage.RouteSpec do
     |> Enum.map(&get_specs(&1, env))
     |> :lists.append()
     |> Enum.map(&update_spec_with_platform(&1, env))
+    |> validate_unique_specs()
   end
 
   # get_route_spec/2 interface should be removed as it is used for tests only
@@ -91,8 +93,8 @@ defmodule Belfrage.RouteSpec do
 
     spec
     |> Map.merge(merge_allowlists(platform, spec))
-    |> Map.put(:request_pipeline, merge_pipelines(:request_pipeline, platform, spec))
-    |> Map.put(:response_pipeline, merge_pipelines(:response_pipeline, platform, spec))
+    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
+    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
     |> to_struct(platform)
     |> Personalisation.maybe_put_personalised_route()
   end
@@ -103,7 +105,11 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp to_struct(route_spec_map, platform) do
-    struct!(__MODULE__, Map.merge(platform, route_spec_map))
+    try do
+      struct!(__MODULE__, Map.merge(platform, route_spec_map))
+    catch
+      _kind, reason -> raise "Invalid '#{route_spec_map.route_state_id}' spec, error: #{inspect(reason)}"
+    end
   end
 
   defp put_route_state_id(spec = %{platform: platform}, spec_name) do
@@ -111,34 +117,34 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp call_specs_func(module, env) do
-    case Code.ensure_loaded(module) do
-      {:module, module} ->
-        cond do
-          function_exported?(module, :specs, 1) -> module.specs(env)
-          function_exported?(module, :specs, 0) -> module.specs()
-          true -> raise "Module #{module} must define a specs/0 or specs/1 function"
-        end
+    ensure_module_loaded(module)
 
-      _ ->
-        raise "Module #{module} doesn't exist"
+    cond do
+      function_exported?(module, :specs, 1) -> module.specs(env)
+      function_exported?(module, :specs, 0) -> module.specs()
+      true -> raise "Module '#{module}' must define a specs/0 or specs/1 function"
     end
   end
 
-  defp merge_pipelines(type, platform, spec) do
+  defp merge_validate_pipelines(type, platform, spec) do
     platform_pipeline = Map.get(platform, type, [])
     spec_pipeline = spec[type]
 
-    if @pipeline_placeholder in platform_pipeline do
-      Enum.flat_map(platform_pipeline, fn transformer ->
-        if transformer == @pipeline_placeholder do
-          spec_pipeline || []
-        else
-          [transformer]
-        end
-      end)
-    else
-      spec_pipeline || platform_pipeline
-    end
+    pipeline =
+      if @pipeline_placeholder in platform_pipeline do
+        Enum.flat_map(platform_pipeline, fn transformer ->
+          if transformer == @pipeline_placeholder do
+            spec_pipeline || []
+          else
+            [transformer]
+          end
+        end)
+      else
+        spec_pipeline || platform_pipeline
+      end
+
+    validate_pipeline(pipeline_to_transformer_type(type), pipeline)
+    pipeline
   end
 
   defp merge_allowlists(platform, spec) do
@@ -156,6 +162,30 @@ defmodule Belfrage.RouteSpec do
       Map.put(result, attr, value)
     end)
   end
+
+  defp validate_unique_specs(specs) do
+    route_state_ids = for spec <- specs, do: spec.route_state_id
+
+    case route_state_ids -- Enum.uniq(route_state_ids) do
+      [] -> specs
+      non_unique_ids -> raise "Specs are not unique: #{inspect(non_unique_ids)}}"
+    end
+  end
+
+  defp validate_pipeline(type, transformers) do
+    for name <- transformers,
+        do: ensure_module_loaded(Transformer.get_transformer_callback(type, name))
+  end
+
+  defp ensure_module_loaded(module) do
+    case Code.ensure_loaded(module) do
+      {:module, _} -> :ok
+      {:error, _} -> raise "Module '#{module}' doesn't exist"
+    end
+  end
+
+  defp pipeline_to_transformer_type(:request_pipeline), do: :request
+  defp pipeline_to_transformer_type(:response_pipeline), do: :response
 
   defp list_spec_names() do
     {:ok, modules} = :application.get_key(:belfrage, :modules)
