@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 [
   {"WEBCORE_LAMBDA_ROLE_ARN", :default},
@@ -46,3 +46,17 @@ config :belfrage,
   mvt: %{
     slots_file_location: System.get_env("MVT_SLOTS_URI")
   }
+
+if config_env() == :prod do
+  config :libcluster,
+    topologies: [
+      cluster: [
+        # The selected clustering strategy. Required.
+        strategy: ClusterEC2.Strategy.Tags,
+        config: [
+          ec2_tagname: "LIBCLUSTER_TAGNAME",
+          show_debug: false
+        ]
+      ]
+    ]
+end

@@ -59,3 +59,13 @@ config :logger, :console,
 config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 1
+
+config :libcluster,
+  topologies: [
+    cluster: [
+      # The selected clustering strategy. Required.
+      strategy: Cluster.Strategy.Epmd,
+      # This is based on how many nodes we'll be starting locally
+      config: [hosts: [:"a@127.0.0.1", :"b@127.0.0.1"]]
+    ]
+  ]

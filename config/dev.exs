@@ -30,3 +30,13 @@ config :belfrage, :benchmark,
   namespace: Benchmark
 
 config :logger, truncate: :infinity
+
+config :libcluster,
+  topologies: [
+    cluster: [
+      # The selected clustering strategy. Required.
+      strategy: Cluster.Strategy.Epmd,
+      # This is based on how many nodes we'll be starting locally
+      config: [hosts: [:"a@127.0.0.1", :"b@127.0.0.1"]]
+    ]
+  ]
