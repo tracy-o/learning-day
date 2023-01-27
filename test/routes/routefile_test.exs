@@ -13,6 +13,7 @@ defmodule Routes.RoutefileTest do
   @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
 
   @routes Routefile.routes()
+  @redirects Routefile.redirects()
 
   @examples Enum.flat_map(@routes, fn {matcher, %{examples: examples} = spec} ->
               Enum.map(examples, fn example ->
@@ -154,6 +155,37 @@ defmodule Routes.RoutefileTest do
           {:error,
            "Redirect from #{from} to #{to} has invalid status #{status} (must have one of #{@redirect_statuses})"}
         end
+      end)
+    end
+
+    test "redirect target is not also a redirect" do
+      validate(@redirects, fn {from, to, _status} ->
+        case Enum.find(@redirects, fn {from, _to, _status} -> from == to end) do
+          {matched_from, matched_to, _status} ->
+            {:error,
+             "Redirect from #{from} to #{to} will be sent to another redirect: from #{matched_from} to #{matched_to}"}
+
+          _ ->
+            :ok
+        end
+      end)
+    end
+
+    test "redirect is routed correctly" do
+      stub_origins()
+      start_route_states()
+
+      @redirects
+      |> validate(fn
+        {from, to, status} ->
+          conn = make_call(:get, from)
+
+          if conn.status == status do
+            :ok
+          else
+            {:error,
+             "#{from} in redirect from #{from} to #{to} is not routed correctly - expected status code #{status} but got #{conn.status}"}
+          end
       end)
     end
   end
