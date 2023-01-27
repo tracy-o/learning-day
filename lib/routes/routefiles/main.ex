@@ -463,6 +463,12 @@ defroutefile "Main" do
   handle "/news/world_radio_and_tv", using: "NewsIndex", examples: ["/news/world_radio_and_tv"]
 
   # News feature indexes (FIX assets)
+
+  redirect "https://www.test.bbc.co.uk/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
+  redirect "https://www.test.bbc.com/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
+  redirect "https://www.test.bbc.co.uk/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
+  redirect "https://www.test.bbc.com/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
+
   handle "/news/business-11428889", using: "NewsBusiness", examples: ["/news/business-11428889"]
   handle "/news/business-12686570", using: "NewsBusiness", examples: ["/news/business-12686570"]
   handle "/news/business-15521824", using: "NewsBusiness", examples: ["/news/business-15521824"]
@@ -486,11 +492,6 @@ defroutefile "Main" do
   handle "/news/world-48623037", using: "NewsWorld", examples: ["/news/world-48623037"]
   handle "/news/world-middle-east-48433977", using: "NewsWorld", examples: ["/news/world-middle-east-48433977"]
   handle "/news/world-us-canada-15949569", using: "NewsWorld", examples: ["/news/world-us-canada-15949569"]
-
-  redirect "https://www.test.bbc.co.uk/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
-  redirect "https://www.test.bbc.com/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
-  redirect "https://www.test.bbc.co.uk/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
-  redirect "https://www.test.bbc.com/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
 
   # News archive assets
   handle "/news/10284448/ticker.sjson", using: "NewsArchive", examples: ["/news/10284448/ticker.sjson"]
