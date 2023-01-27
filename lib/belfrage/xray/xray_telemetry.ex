@@ -1,6 +1,5 @@
 defmodule Belfrage.Xray.Telemetry do
   alias Belfrage.Xray
-  alias Belfrage.Struct.Request
 
   def setup() do
     events = [
