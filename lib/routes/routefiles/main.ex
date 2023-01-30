@@ -2536,7 +2536,7 @@ defroutefile "Main" do
   end
 
   ## Live WebCore
-  handle "/live/:asset_id", using: "Live", platform: "Webcore", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt&page=6"] do
+  handle "/live/:asset_id", using: "Live", platform: "Webcore", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt?page=6"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
@@ -2544,7 +2544,7 @@ defroutefile "Main" do
   end
 
   ## Live WebCore - .app route
-  handle "/live/:asset_id", using: "Live",  platform: "Webcore", only_on: "test", examples: ["/live/cvpx5wr4nv8t.app", "/live/cvpx5wr4nv8t.app&page=6"] do
+  handle "/live/:asset_id.app", using: "Live",  platform: "Webcore", only_on: "test", examples: ["/live/cvpx5wr4nv8t.app", "/live/cvpx5wr4nv8t.app?page=6"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
