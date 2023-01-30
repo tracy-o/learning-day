@@ -13,7 +13,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       struct = %Struct{
         request: %Request{
           path: "/news/live/c1v596ken6vt",
-          path_params: %{"asset_id" => "c1v596ken6vt"},
+          path_params: %{"asset_id" => "c1v596ken6vt"}
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
@@ -43,7 +43,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       struct = %Struct{
         request: %Request{
           path: "/news/live/c1v596ken6vt",
-          path_params: %{"asset_id" => "c1v596ken6vt"},
+          path_params: %{"asset_id" => "c1v596ken6vt"}
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
@@ -73,7 +73,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       struct = %Struct{
         request: %Request{
           path: "/news/live/uk-55930940",
-          path_params: %{"asset_id" => "uk-55930940"},
+          path_params: %{"asset_id" => "uk-55930940"}
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
@@ -103,7 +103,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       struct = %Struct{
         request: %Request{
           path: "/news/live/uk-55930940",
-          path_params: %{"asset_id" => "uk-55930940"},
+          path_params: %{"asset_id" => "uk-55930940"}
         },
         private: %Private{
           origin: Application.get_env(:belfrage, :mozart_news_endpoint),
@@ -185,6 +185,4 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
                 })}
     end
   end
-
-
 end
