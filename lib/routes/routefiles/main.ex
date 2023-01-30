@@ -263,7 +263,7 @@ defroutefile "Main" do
   end
 
   # News Live - .app route webcore traffic to platform discriminator
-  handle "/news/live/:asset_id.app", using: "NewsLive", only_on: "test", examples: ["/news/live/c1v596ken6vt.app", "/news/live/c1v596ken6vt.app?page=1"] do
+  handle "/news/live/:asset_id.app", using: "NewsLive", platform: "MozartNews", only_on: "test", examples: ["/news/live/c1v596ken6vt.app", "/news/live/c1v596ken6vt.app?page=1"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
@@ -2544,7 +2544,7 @@ defroutefile "Main" do
   end
 
   ## Live WebCore - .app route
-  handle "/live/:asset_id", using: "Live", only_on: "test", examples: ["/live/cvpx5wr4nv8t.app", "/live/cvpx5wr4nv8t.app&page=6"] do
+  handle "/live/:asset_id", using: "Live",  platform: "Webcore", only_on: "test", examples: ["/live/cvpx5wr4nv8t.app", "/live/cvpx5wr4nv8t.app&page=6"] do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
