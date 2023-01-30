@@ -28,7 +28,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     assert capture_log(fn ->
              assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:error, 500}
            end) =~
-             "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}"
+             "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{body: nil, headers: %{}, status_code: 500}}"
   end
 
   test "returns error tuple if origin response body does not contain assetType" do
