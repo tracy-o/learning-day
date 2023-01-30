@@ -215,4 +215,18 @@ defmodule Test.Support.Helper do
       on_exit(fn -> Supervisor.start_child(supervisor, spec) end)
     end
   end
+
+  def stop_supervised_process_with_env(supervisor, id, env) do
+    original_env = Application.get_env(:belfrage, :production_environment)
+    Application.put_env(:belfrage, :production_environment, env)
+
+    with {:ok, spec} <- :supervisor.get_childspec(supervisor, id) do
+      Supervisor.terminate_child(supervisor, id)
+
+      on_exit(fn ->
+        Application.put_env(:belfrage, :production_environment, original_env)
+        Supervisor.start_child(supervisor, spec)
+      end)
+    end
+  end
 end

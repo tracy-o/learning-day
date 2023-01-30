@@ -30,10 +30,11 @@ defmodule Belfrage.RouteSpecManager do
 
   # callbacks
   @impl GenServer
-  def init(env: env) do
+  def init(_) do
+    prod_env = Application.get_env(:belfrage, :production_environment)
     table_id = bootstrap_route_spec_table()
-    do_update_specs(env, table_id)
-    {:ok, %{env: env, route_spec_table_id: table_id}}
+    do_update_specs(prod_env, table_id)
+    {:ok, %{env: prod_env, route_spec_table_id: table_id}}
   end
 
   @impl GenServer
