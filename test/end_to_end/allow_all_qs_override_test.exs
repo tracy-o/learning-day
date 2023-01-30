@@ -5,7 +5,7 @@ defmodule AllowAllQsOverrideTest do
   alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
-  import Test.Support.Helper, only: [stop_supervised_process: 2]
+  import Test.Support.Helper
 
   @moduletag :end_to_end
 
@@ -42,8 +42,8 @@ defmodule AllowAllQsOverrideTest do
   end
 
   test "Don't allow all query string for the Mozart platform routes on Live" do
-    stop_supervised_process(Belfrage.Supervisor, Belfrage.RouteSpecSupervisor)
-    start_supervised!({Belfrage.RouteSpecSupervisor, env: "live"})
+    stop_supervised_process_with_env(Belfrage.Supervisor, Belfrage.RouteSpecSupervisor, "live")
+    start_supervised!({Belfrage.RouteSpecSupervisor, []})
     start_supervised!({RouteState, "Moz.MozartNews"})
 
     url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?only_allow_this_on_live=123"
