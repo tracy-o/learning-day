@@ -1,7 +1,7 @@
 defmodule Belfrage.SmokeTestCase.Expectations do
-  @stack_ids Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
+  @stack_ids Application.compile_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
   @expected_minimum_content_length 30
-  @redirects_statuses Application.get_env(:belfrage, :redirect_statuses)
+  @redirects_statuses Application.compile_env(:belfrage, :redirect_statuses)
 
   alias Test.Support.Helper
 

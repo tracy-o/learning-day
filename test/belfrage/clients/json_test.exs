@@ -7,7 +7,7 @@ defmodule Belfrage.Client.JsonTest do
 
   alias Belfrage.Clients.{HTTP, HTTPMock, Json}
 
-  @authentication Application.get_env(:belfrage, :authentication)
+  @authentication Application.compile_env(:belfrage, :authentication)
 
   @error_response {:error, %HTTP.Error{reason: :timeout}}
   @error_unknown_response {:error, :einval}

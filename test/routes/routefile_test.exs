@@ -12,7 +12,7 @@ defmodule Routes.RoutefileTest do
 
   @moduletag :routes_test
 
-  @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
+  @redirect_statuses Application.compile_env(:belfrage, :redirect_statuses)
 
   @routes Routefile.routes()
 

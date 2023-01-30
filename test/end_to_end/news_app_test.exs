@@ -9,7 +9,7 @@ defmodule EndToEnd.NewsAppsTest do
 
   @moduletag :end_to_end
 
-  @fabl_endpoint Application.get_env(:belfrage, :fabl_endpoint)
+  @fabl_endpoint Application.compile_env(:belfrage, :fabl_endpoint)
 
   describe "when the NewsAppsHardcodedResponse dial is enabled" do
     test "returns a hardcoded payload" do
