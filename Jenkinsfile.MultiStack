@@ -3,7 +3,7 @@
 library 'devops-tools-jenkins'
 
 def dockerRegistry = libraryResource('dockerregistry').trim()
-def dockerImage = "${dockerRegistry}/bbc-news/elixir-centos7:1.14.0-erlang-24.3.4.8"
+def dockerImage = "${dockerRegistry}/bbc-news/elixir-centos7:1.14.3-erlang-24.3.4.8"
 
 library 'BBCNews'
 
