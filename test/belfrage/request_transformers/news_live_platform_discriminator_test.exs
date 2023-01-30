@@ -121,4 +121,64 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
                 })}
     end
   end
+
+  describe "NEWS - when with TIPO .app URL on TEST, show WebCore" do
+    setup do
+      set_environment("test")
+
+      struct = %Struct{
+        request: %Request{
+          path: "/news/live/c1v596ken6vt.app"
+        },
+        private: %Private{
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+          platform: MozartNews
+        }
+      }
+
+      %{
+        struct: struct
+      }
+    end
+
+    test "origin and platform gets changed to webcore", %{struct: struct} do
+      assert NewsLivePlatformDiscriminator.call(struct) ==
+               {:ok,
+                Struct.add(struct, :private, %{
+                  platform: Webcore,
+                  origin: Application.get_env(:belfrage, :pwa_lambda_function)
+                })}
+    end
+  end
+
+  describe "NEWS - when TIPO .app URL on LIVE, show MozartNews" do
+    setup do
+      set_environment("live")
+
+      struct = %Struct{
+        request: %Request{
+          path: "/news/live/c1v596ken6vt.app"
+        },
+        private: %Private{
+          origin: Application.get_env(:belfrage, :mozart_news_endpoint),
+          platform: MozartNews
+        }
+      }
+
+      %{
+        struct: struct
+      }
+    end
+
+    test "origin and platform remains as MozartNews", %{struct: struct} do
+      assert NewsLivePlatformDiscriminator.call(struct) ==
+               {:ok,
+                Struct.add(struct, :private, %{
+                  platform: MozartNews,
+                  production_environment: "live"
+                })}
+    end
+  end
+
+
 end
