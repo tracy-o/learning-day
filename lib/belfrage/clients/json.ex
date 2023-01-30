@@ -2,8 +2,8 @@ defmodule Belfrage.Clients.Json do
   require Logger
   alias Belfrage.{Clients, Metrics}
 
-  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
-  @json_codec Application.get_env(:belfrage, :json_codec)
+  @http_client Application.compile_env(:belfrage, :http_client, Clients.HTTP)
+  @json_codec Application.compile_env(:belfrage, :json_codec)
 
   @callback get(url :: String.t(), pool_name :: Atom.t(), opts :: List.t()) :: {:ok, map()} | {:error, term()}
 

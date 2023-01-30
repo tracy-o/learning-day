@@ -1,7 +1,7 @@
 defmodule Belfrage.Cache.Local do
   require Logger
   @behaviour Belfrage.Behaviours.CacheStrategy
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   alias Belfrage.Behaviours.CacheStrategy
   alias Belfrage.Struct

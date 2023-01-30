@@ -1,8 +1,8 @@
 defmodule Belfrage.AWS.HttpClient do
   alias Belfrage.Clients.HTTP
 
-  @http_client Application.get_env(:belfrage, :http_client, HTTP)
-  @default_timeout Application.get_env(:belfrage, :default_timeout)
+  @http_client Application.compile_env(:belfrage, :http_client, HTTP)
+  @default_timeout Application.compile_env(:belfrage, :default_timeout)
 
   @behaviour ExAws.Request.HttpClient
 

@@ -4,7 +4,7 @@ defmodule Belfrage.Cache.Distributed do
   import Enum, only: [random: 1]
   @behaviour CacheStrategy
 
-  @ccp_client Application.get_env(:belfrage, :ccp_client)
+  @ccp_client Application.compile_env(:belfrage, :ccp_client)
 
   @impl CacheStrategy
   def fetch(%Struct{request: %Request{request_hash: request_hash}}) do

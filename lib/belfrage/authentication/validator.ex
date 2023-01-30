@@ -3,7 +3,7 @@ defmodule Belfrage.Authentication.Validator do
 
   add_hook(Belfrage.Authentication.VerifyHook)
 
-  @expiry_validator Application.get_env(:belfrage, :expiry_validator)
+  @expiry_validator Application.compile_env(:belfrage, :expiry_validator)
 
   @impl Joken.Config
   def token_config do
