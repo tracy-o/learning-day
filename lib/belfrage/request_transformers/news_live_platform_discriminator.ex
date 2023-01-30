@@ -4,6 +4,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
   def call(struct) do
     application_env = Application.get_env(:belfrage, :production_environment)
 
+    IO.inspect(struct)
     # currently we don't want to show webcore pages in live environment
     if tipo_id?(struct) && application_env != "live" do
       {
@@ -19,6 +20,6 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
   end
 
   defp tipo_id?(struct) do
-    String.match?(struct.request.path, ~r/\/(c[a-z0-9]{10,}t)$/)
+    String.match?(struct.request.path_params["asset_id"], ~r/\/(c[a-z0-9]{10,}t)$/)
   end
 end
