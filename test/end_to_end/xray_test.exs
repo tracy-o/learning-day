@@ -32,7 +32,7 @@ defmodule EndToEnd.XrayTest do
 
   describe "request goes through webcore service" do
     setup do
-      start_supervised!({RouteState, "SomeRouteState"})
+      start_supervised!({RouteState, "SomeRouteState.Webcore"})
       :ok
     end
 
@@ -63,7 +63,7 @@ defmodule EndToEnd.XrayTest do
 
   describe "hitting the fabl endpoint" do
     setup do
-      start_supervised!({RouteState, "SomeFablRouteState"})
+      start_supervised!({RouteState, "SomeFablRouteState.Fabl"})
       :ok
     end
 
@@ -139,7 +139,7 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "expected messages are sent to AWS X-Ray client when platform is Webcore" do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -165,7 +165,7 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "expected messages are sent to AWS X-Ray client when platform is Fabl" do
-    start_supervised!({RouteState, "SomeFablRouteState"})
+    start_supervised!({RouteState, "SomeFablRouteState.Fabl"})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -184,7 +184,7 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "no messages are sent to AWS X-Ray client when platform is not Fabl or Webcore" do
-    start_supervised!({RouteState, "SomeSimorghRouteSpec"})
+    start_supervised!({RouteState, "SomeSimorghRouteSpec.Simorgh"})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -209,7 +209,7 @@ defmodule EndToEnd.XrayTest do
 
   describe "hitting route which is not have fabl or webcore as platform" do
     setup do
-      start_supervised!({RouteState, "ProxyPass"})
+      start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
       :ok
     end
 

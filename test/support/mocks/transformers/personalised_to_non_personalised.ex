@@ -6,7 +6,7 @@ defmodule Belfrage.RequestTransformers.PersonalisedToNonPersonalised do
     {
       :ok,
       Struct.add(struct, :private, %{
-        platform: MozartNews,
+        platform: "MozartNews",
         origin: Application.get_env(:belfrage, :mozart_news_endpoint),
         personalised_route: false,
         personalised_request: false

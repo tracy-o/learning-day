@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceSwahiliArticlePage do
   def specs do
     %{
-      platform: Simorgh
+      platform: "Simorgh"
     }
   end
 end

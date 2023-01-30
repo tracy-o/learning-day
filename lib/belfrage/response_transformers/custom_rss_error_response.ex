@@ -4,7 +4,7 @@ defmodule Belfrage.ResponseTransformers.CustomRssErrorResponse do
   @impl Transformer
   def call(
         struct = %Struct{
-          private: %Struct.Private{platform: Fabl},
+          private: %Struct.Private{platform: "Fabl"},
           request: %Struct.Request{path: "/fd/rss"},
           response: %Struct.Response{http_status: http_status}
         }

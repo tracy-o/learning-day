@@ -3,7 +3,7 @@ defmodule Routes.Specs.SportFootballStandingsTablePage do
     %{
       owner: "#help-sport",
       runbook: "https://confluence.dev.bbc.co.uk/display/SLS/Sport+Football+Standings+Webcore+Container+Run+Book",
-      platform: Webcore
+      platform: "Webcore"
     }
   end
 end

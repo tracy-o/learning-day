@@ -12,7 +12,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
           path: "/portuguese/topics/15f1bcf6-b6ab-48e8-b708-efed41e43d31",
           path_params: %{"id" => "15f1bcf6-b6ab-48e8-b708-efed41e43d31"}
         },
-        private: %Private{origin: "https://simorgh.example.com", platform: Simorgh}
+        private: %Private{origin: "https://simorgh.example.com", platform: "Simorgh"}
       }
 
       %{
@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
 
     test "origin and platform gets changed to mozart", %{struct: struct} do
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: "MozartNews"})}
     end
 
     test "When the route has query params, origin and platform gets changed to mozart", %{struct: struct} do
@@ -33,7 +33,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
         })
 
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: "MozartNews"})}
     end
 
     test "When the route has trailing slashes, origin and platform gets changed to mozart", %{struct: struct} do
@@ -41,7 +41,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
         Struct.add(struct, :request, %{path: "/portuguese/topics/15f1bcf6-b6ab-48e8-b708-efed41e43d31/////////////"})
 
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: MozartNews})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://mozart-news.example.com", platform: "MozartNews"})}
     end
   end
 
@@ -52,7 +52,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
           path: "/pidgin/topics/c0823e52dd0t",
           path_params: %{"id" => "c0823e52dd0t"}
         },
-        private: %Private{origin: "https://simorgh.example.com", platform: Simorgh}
+        private: %Private{origin: "https://simorgh.example.com", platform: "Simorgh"}
       }
 
       %{
@@ -62,7 +62,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
 
     test "origin and platform should be left unaltered", %{struct: struct} do
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: Simorgh})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: "Simorgh"})}
     end
 
     test "when the route has query params, origin and platform should be left unaltered", %{struct: struct} do
@@ -73,14 +73,14 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
         })
 
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: Simorgh})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: "Simorgh"})}
     end
 
     test "when the route has trailing slashes, origin and platform should be left unaltered", %{struct: struct} do
       struct = Struct.add(struct, :request, %{path: "/pidgin/topics/c0823e52dd0t///////////////////"})
 
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: Simorgh})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: "Simorgh"})}
     end
   end
 
@@ -90,7 +90,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
         request: %Request{
           path: "/pidgin/topics/c0823e52dd0t"
         },
-        private: %Private{origin: "https://simorgh.example.com", platform: Simorgh}
+        private: %Private{origin: "https://simorgh.example.com", platform: "Simorgh"}
       }
 
       %{
@@ -100,7 +100,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
 
     test "origin and platform should be left unaltered", %{struct: struct} do
       assert WorldServiceTopicsGuid.call(struct) ==
-               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: Simorgh})}
+               {:ok, Struct.add(struct, :private, %{origin: "https://simorgh.example.com", platform: "Simorgh"})}
     end
   end
 end

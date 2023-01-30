@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeMvtRouteState do
     %{
       owner: "Some person",
       runbook: "Some runbook",
-      platform: Webcore,
+      platform: "Webcore",
       caching_enabled: true,
       mvt_project_id: 1
     }

@@ -14,7 +14,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "cache scenarios" do
     setup do
       clear_cache()
-      start_supervised!({RouteState, "SomeRouteState"})
+      start_supervised!({RouteState, "SomeRouteState.Webcore"})
       :ok
     end
 
@@ -58,7 +58,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "ensure certain status codes don't cache and headers are respected from origin" do
     setup do
       clear_cache()
-      start_supervised!({RouteState, "SomeClassicAppsRouteSpec"})
+      start_supervised!({RouteState, "SomeClassicAppsRouteSpec.ClassicApps"})
       :ok
     end
 

@@ -22,7 +22,12 @@ defmodule Belfrage.MixProject do
     do: ["lib", "test/support"]
 
   defp elixirc_paths(mix_env) when mix_env == :dev,
-    do: ["lib", "benchmark", "test/support/fixtures", "test/support/transformer_examples"]
+    do: [
+      "lib",
+      "benchmark",
+      "test/support/fixtures",
+      "test/support/mocks"
+    ]
 
   defp elixirc_paths(_), do: ["lib"]
 

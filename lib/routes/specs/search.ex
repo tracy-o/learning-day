@@ -4,7 +4,7 @@ defmodule Routes.Specs.Search do
       owner: "D+ESearchAndNavigationDev@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
       request_pipeline: ["ComToUKRedirect"],
-      platform: Webcore,
+      platform: "Webcore",
       query_params_allowlist: query_params_allowlist(production_env),
       caching_enabled: false
     }

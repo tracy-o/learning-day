@@ -1,7 +1,7 @@
 defmodule Routes.Specs.PersonalisedContainerData do
   def specs do
     %{
-      platform: Webcore,
+      platform: "Webcore",
       query_params_allowlist: "*",
       personalisation: "on"
     }

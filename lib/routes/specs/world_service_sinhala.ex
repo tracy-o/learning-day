@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceSinhala do
   def specs(production_env) do
     %{
-      platform: MozartSimorgh,
+      platform: "MozartSimorgh",
       request_pipeline: pipeline(production_env)
     }
   end

@@ -1,7 +1,7 @@
 defmodule Routes.Specs.NewsElection do
     def specs do
       %{
-        platform: MozartNews
+        platform: "MozartNews"
        }
     end
   end

@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WeatherLanguage do
   def specs do
     %{
-      platform: MozartWeather,
+      platform: "MozartWeather",
       request_pipeline: ["WeatherLanguageCookie"]
     }
   end

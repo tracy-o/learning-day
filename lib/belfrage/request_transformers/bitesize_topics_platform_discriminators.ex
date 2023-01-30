@@ -119,7 +119,7 @@ defmodule Belfrage.RequestTransformers.BitesizeTopicsPlatformDiscriminator do
   defp maybe_update_origin(id, struct) do
     if is_webcore_id(id) do
       Struct.add(struct, :private, %{
-        platform: Webcore,
+        platform: "Webcore",
         origin: Application.get_env(:belfrage, :pwa_lambda_function)
       })
     else

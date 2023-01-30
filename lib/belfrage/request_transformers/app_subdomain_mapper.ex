@@ -19,13 +19,13 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapper do
   def call(struct) do
     case struct.request.subdomain do
       "news-app-classic" ->
-        {:ok, change_endpoint(struct, AppsTrevor, :trevor_endpoint, 15_000)}
+        {:ok, change_endpoint(struct, "AppsTrevor", :trevor_endpoint, 15_000)}
 
       "news-app-global-classic" ->
-        {:ok, change_endpoint(struct, AppsWalter, :walter_endpoint, 8_000)}
+        {:ok, change_endpoint(struct, "AppsWalter", :walter_endpoint, 8_000)}
 
       "news-app-ws-classic" ->
-        {:ok, change_endpoint(struct, AppsPhilippa, :philippa_endpoint, 1_500)}
+        {:ok, change_endpoint(struct, "AppsPhilippa", :philippa_endpoint, 1_500)}
 
       _ ->
         {:stop, Struct.put_status(struct, 400)}

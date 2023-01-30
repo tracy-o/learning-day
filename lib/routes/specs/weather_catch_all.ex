@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WeatherCatchAll do
   def specs do
     %{
-      platform: MozartWeather
+      platform: "MozartWeather"
     }
   end
 end

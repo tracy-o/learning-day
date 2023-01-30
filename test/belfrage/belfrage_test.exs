@@ -11,7 +11,9 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @route_state_id "SportArticlePage"
+  @spec_name "SportArticlePage"
+  @platform "Webcore"
+  @route_state_id "#{@spec_name}.#{@platform}"
 
   @get_request_struct %Struct{
     private: %Private{
@@ -91,7 +93,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
     assert state.counter == %{
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
@@ -116,7 +118,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
     assert state.counter == %{
              "pwa-lambda-function:test" => %{200 => 1, :errors => 0}
@@ -138,7 +140,7 @@ defmodule BelfrageTest do
 
     Belfrage.handle(@get_request_struct)
 
-    {:ok, state} = Belfrage.RouteState.state(@get_request_struct)
+    {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
     assert state.counter == %{
              :errors => 1,
@@ -209,7 +211,8 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.RouteState.state(struct)
+      %Private{route_state_id: route_state_id} = struct.private
+      {:ok, state} = Belfrage.RouteState.state(route_state_id)
 
       assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
     end
@@ -245,7 +248,8 @@ defmodule BelfrageTest do
 
       Belfrage.handle(struct)
 
-      {:ok, state} = Belfrage.RouteState.state(struct)
+      %Private{route_state_id: route_state_id} = struct.private
+      {:ok, state} = Belfrage.RouteState.state(route_state_id)
 
       assert state.counter == %{
                :errors => 1,
