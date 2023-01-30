@@ -19,6 +19,12 @@ defmodule EndToEnd.XrayTest do
     "body" => "<h1>Hello from the Lambda!</h1>"
   }
 
+  @http_response %HTTP.Response{
+    headers: %{"cache-control" => "public, max-age=60"},
+    status_code: 200,
+    body: ""
+  }
+
   setup do
     :ets.delete_all_objects(:cache)
     :ok
@@ -26,11 +32,11 @@ defmodule EndToEnd.XrayTest do
 
   describe "request goes through webcore service" do
     setup do
-      start_supervised!({RouteState, "SomeRouteState"})
+      start_supervised!({RouteState, "SomeRouteState.Webcore"})
       :ok
     end
 
-    test "a webcore.request.stop event is emmited (triggers subsegment creation)" do
+    test "a webcore.request.stop event is emitted (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
         {:ok, @lambda_response}
@@ -57,7 +63,7 @@ defmodule EndToEnd.XrayTest do
 
   describe "hitting the fabl endpoint" do
     setup do
-      start_supervised!({RouteState, "SomeFablRouteState"})
+      start_supervised!({RouteState, "SomeFablRouteState.Fabl"})
       :ok
     end
 
@@ -69,12 +75,7 @@ defmodule EndToEnd.XrayTest do
         assert String.contains?(headers["x-amzn-trace-id"], "Root=")
         assert String.contains?(headers["x-amzn-trace-id"], "Parent=")
 
-        {:ok,
-         %HTTP.Response{
-           headers: %{"cache-control" => "public, max-age=60"},
-           status_code: 200,
-           body: ""
-         }}
+        {:ok, @http_response}
       end)
 
       conn =
@@ -137,8 +138,8 @@ defmodule EndToEnd.XrayTest do
     end
   end
 
-  test "expected messages are sent to AWS X-Ray client" do
-    start_supervised!({RouteState, "SomeRouteState"})
+  test "expected messages are sent to AWS X-Ray client when platform is Webcore" do
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -163,11 +164,65 @@ defmodule EndToEnd.XrayTest do
     assert segment =~ ~s("name":"local-belfrage")
   end
 
+  test "expected messages are sent to AWS X-Ray client when platform is Fabl" do
+    start_supervised!({RouteState, "SomeFablRouteState.Fabl"})
+    set_env(:aws_ex_ray, :sampling_rate, 1.0)
+    :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
+
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :Fabl ->
+      {:ok, @http_response}
+    end)
+
+    conn(:get, "/fabl/xray")
+    |> Router.call([])
+
+    assert_receive {:trace, _, :receive, {_, _, {:send, segment}}}
+    refute_receive {:trace, _, :receive, {_, _, {:send, _subsegment}}}
+
+    assert segment =~ ~s("name":"local-belfrage")
+  end
+
+  test "no messages are sent to AWS X-Ray client when platform is not Fabl or Webcore" do
+    start_supervised!({RouteState, "SomeSimorghRouteSpec.Simorgh"})
+    set_env(:aws_ex_ray, :sampling_rate, 1.0)
+    :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
+
+    Belfrage.Clients.HTTPMock
+    |> expect(:execute, fn _request, :Simorgh ->
+      {:ok, @http_response}
+    end)
+
+    conn(:get, "/ws-mvt")
+    |> Router.call([])
+
+    refute_receive {:trace, _, :receive, {_, _, {:send, _segment}}}
+  end
+
   defp aws_ex_ray_udp_client_pid() do
     with [{:aws_ex_ray_client_pool, poolboy_pid, :worker, [:poolboy]}] <-
            Supervisor.which_children(AwsExRay.Client.UDPClientSupervisor),
          {:state, _pid, [udp_client_pid], _, _, _, _, _, :lifo} <- :sys.get_state(poolboy_pid) do
       udp_client_pid
+    end
+  end
+
+  describe "hitting route which is not have fabl or webcore as platform" do
+    setup do
+      start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
+      :ok
+    end
+
+    test "no `x-amzn-trace-id` header is sent downstream" do
+      Belfrage.Clients.HTTPMock
+      |> expect(:execute, fn %HTTP.Request{headers: headers}, :OriginSimulator ->
+        refute Map.has_key?(headers, "x-amzn-trace-id")
+
+        {:ok, @http_response}
+      end)
+
+      conn = conn(:get, "/proxy-pass") |> Router.call([])
+      {200, _, _} = sent_resp(conn)
     end
   end
 end

@@ -3,7 +3,7 @@ defmodule Routes.Specs.NewsStorytellingPage do
     %{
       owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
-      platform: Webcore,
+      platform: "Webcore",
       request_pipeline: ["ObitMode"]
     }
   end

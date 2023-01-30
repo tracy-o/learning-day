@@ -19,6 +19,7 @@ defmodule Belfrage.RouteStateSupervisor do
     case start_child(supervisor, name) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
+      {:error, _} = error -> error
     end
   end
 

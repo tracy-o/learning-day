@@ -140,6 +140,12 @@ defmodule Belfrage.MetricsMigration do
             event_name: "belfrage.platform.pre_cache_compression.response",
             measurement: :count,
             tags: [:platform]
+          ),
+          counter(
+            "platform_selector.not_found",
+            event_name: [:belfrage, :platform_selector, :not_found],
+            measurement: :count,
+            tags: [:selector]
           )
         ]
       end
@@ -476,6 +482,17 @@ defmodule Belfrage.MetricsMigration do
             "observed.supervisors.total",
             event_name: [:belfrage, :observed, :supervisors, :total],
             measurement: :number
+          )
+        ]
+      end
+
+      def route_spec_metrics() do
+        [
+          counter(
+            "route_spec.not_found",
+            event_name: [:belfrage, :route_spec, :not_found],
+            measurement: :count,
+            tags: [:route_spec]
           )
         ]
       end

@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: MozartNews,
+                   platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
                    personalised_request: false
@@ -38,7 +38,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: SomePlatform,
+                   platform: "SomePlatform",
                    origin: "https://some.example.origin"
                  }
                }
@@ -46,7 +46,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                NewsTopicsPlatformDiscriminator.call(%Struct{
                  private: %Struct.Private{
                    origin: "https://some.example.origin",
-                   platform: SomePlatform,
+                   platform: "SomePlatform",
                    production_environment: "test"
                  },
                  request: %Struct.Request{
@@ -63,7 +63,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: MozartNews,
+                   platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
                    personalised_request: false
@@ -87,7 +87,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Struct{
                  private: %Struct.Private{
-                   platform: MozartNews,
+                   platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
                    personalised_request: false
@@ -131,7 +131,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
              :ok,
              %Struct{
                private: %Struct.Private{
-                 platform: MozartNews,
+                 platform: "MozartNews",
                  origin: ^mozart_news_endpoint,
                  personalised_route: false,
                  personalised_request: false

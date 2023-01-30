@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceUkChina do
   def specs(production_env) do
     %{
-      platform: MozartSimorgh,
+      platform: "MozartSimorgh",
       request_pipeline: pipeline(production_env),
       headers_allowlist: ["cookie-ckps_chinese"]
     }

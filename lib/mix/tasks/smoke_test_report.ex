@@ -2,6 +2,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   use Mix.Task
 
   alias Mix.Tasks.ReportSmokeTestResults.Message
+  alias Belfrage.RouteSpec
 
   @shortdoc "Reports smoke test failures to route owner teams."
 
@@ -52,8 +53,9 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   def failures_per_routespec(_test_results = %{failed_tests: failed_tests}) do
     Enum.reduce(failed_tests, %{}, fn failure, acc ->
       route_spec = get_in(failure, [Access.key(:tags), Access.key(:spec)])
+      platform = get_in(failure, [Access.key(:tags), Access.key(:platform)])
 
-      update_in(acc, [route_spec], fn
+      update_in(acc, [RouteSpec.make_route_state_id(route_spec, platform)], fn
         nil -> [failure]
         current_failures when is_list(current_failures) -> [failure | current_failures]
       end)
@@ -64,8 +66,8 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     Map.new(failures_per_routespec, &format_routespec_failures/1)
   end
 
-  defp format_routespec_failures({route_spec, failures}) do
-    {route_spec, Enum.flat_map(failures, &format_test_failure/1)}
+  defp format_routespec_failures({route_state_id, failures}) do
+    {route_state_id, Enum.flat_map(failures, &format_test_failure/1)}
   end
 
   defp format_test_failure(failure = %ExUnit.Test{state: {:failed, errors}}) do
@@ -90,8 +92,8 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
     Enum.map(formatted_routespec_failures, &build_result_message(&1, slack_auth_token))
   end
 
-  defp build_result_message({routespec, failure_messages}, slack_auth_token) do
-    slack_channel = Belfrage.RouteSpec.specs_for(routespec).slack_channel || @results_slack_channel
+  defp build_result_message({route_state_id, failure_messages}, slack_auth_token) do
+    slack_channel = RouteSpec.get_route_spec(route_state_id).slack_channel || @results_slack_channel
 
     msg = Enum.join(failure_messages, "\n\n")
 
@@ -104,7 +106,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
       },
       payload:
         Jason.encode!(%{
-          text: "*#{routespec} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
+          text: "*#{route_state_id} - Belfrage Smoke Test Failures (#{Enum.count(failure_messages)} total)*",
           channel: slack_channel,
           attachments:
             [

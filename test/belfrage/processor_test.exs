@@ -9,10 +9,12 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.Struct.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
+  @route_state_id "SportVideos.Webcore"
+
   defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
     def specs do
       %{
-        platform: Webcore,
+        platform: "Webcore",
         personalisation: "test_only",
         response_pipeline: ["CacheDirective"]
       }
@@ -20,13 +22,13 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.get_route_state/1" do
-    @struct %Struct{private: %Private{route_state_id: "SportVideos"}}
+    @struct %Struct{private: %Private{route_state_id: @route_state_id}}
 
     test "adds route_state information to Struct.private" do
       assert %Struct{
                request: _request,
                private: %Private{
-                 route_state_id: "SportVideos",
+                 route_state_id: @route_state_id,
                  origin: origin,
                  counter: counter,
                  request_pipeline: pipeline

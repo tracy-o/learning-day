@@ -11,7 +11,7 @@ defmodule Belfrage.Services.HTTPTest do
   @get_struct %Struct{
     private: %Struct.Private{
       origin: "https://www.bbc.co.uk",
-      platform: SomePlatform
+      platform: "SomePlatform"
     },
     request: %Struct.Request{
       method: "GET",
@@ -141,7 +141,7 @@ defmodule Belfrage.Services.HTTPTest do
                HTTP.dispatch(%Struct{
                  private: %Struct.Private{
                    origin: "https://www.bbc.co.uk",
-                   platform: SomePlatform
+                   platform: "SomePlatform"
                  },
                  request: %Struct.Request{
                    method: "GET",
@@ -204,7 +204,7 @@ defmodule Belfrage.Services.HTTPTest do
                HTTP.dispatch(%Struct{
                  private: %Struct.Private{
                    origin: "http://localhost:#{port}",
-                   platform: SomePlatform
+                   platform: "SomePlatform"
                  },
                  request: %Struct.Request{
                    method: "GET",
@@ -242,7 +242,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk",
-          platform: SomePlatform
+          platform: "SomePlatform"
         },
         request: %Struct.Request{
           method: "GET",
@@ -280,7 +280,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk",
-          platform: SomePlatform
+          platform: "SomePlatform"
         },
         request: %Struct.Request{
           method: "GET",
@@ -322,7 +322,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk",
-          platform: SomePlatform
+          platform: "SomePlatform"
         },
         request: %Struct.Request{
           method: "GET",
@@ -366,7 +366,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.com",
-          platform: SomePlatform
+          platform: "SomePlatform"
         },
         request: %Struct.Request{
           method: "GET",
@@ -411,7 +411,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk",
-          platform: SomePlatform
+          platform: "SomePlatform"
         },
         request: %Struct.Request{
           method: "GET",
@@ -449,7 +449,7 @@ defmodule Belfrage.Services.HTTPTest do
       struct = %Struct{
         private: %Struct.Private{
           origin: "https://www.bbc.co.uk",
-          platform: SomePlatform,
+          platform: "SomePlatform",
           mvt: expected_mvt_headers
         },
         request: %Struct.Request{

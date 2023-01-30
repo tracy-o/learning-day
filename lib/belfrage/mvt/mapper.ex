@@ -3,7 +3,7 @@ defmodule Belfrage.Mvt.Mapper do
   alias Belfrage.Struct
 
   @dial Application.get_env(:belfrage, :dial)
-  @platform_mapping %{Webcore => "1", Simorgh => "2"}
+  @platform_mapping %{"Webcore" => "1", "Simorgh" => "2"}
   @max_slots 20
 
   def map(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do

@@ -66,20 +66,24 @@ defmodule BelfrageWeb.Plugs.Xray do
   end
 
   defp on_request_completed(conn, segment, xray) do
-    Metrics.latency_span(:register_before_send_xray, fn ->
-      segment =
-        segment
-        |> xray.finish()
-        |> xray.set_http_response(%{
-          status: conn.status,
-          content_length: content_length(conn)
-        })
+    if xray_segment_in(conn) do
+      Metrics.latency_span(:register_before_send_xray, fn ->
+        segment =
+          segment
+          |> xray.finish()
+          |> xray.set_http_response(%{
+            status: conn.status,
+            content_length: content_length(conn)
+          })
 
-      xray.send(segment)
+        xray.send(segment)
 
+        conn
+        |> assign(:xray_segment, segment)
+      end)
+    else
       conn
-      |> assign(:xray_segment, segment)
-    end)
+    end
   end
 
   defp partial_trace_header?(trace_header) do
@@ -127,5 +131,11 @@ defmodule BelfrageWeb.Plugs.Xray do
     pairs
     |> Enum.filter(&match?([_, _], &1))
     |> Map.new(fn [k, v] -> {k, v} end)
+  end
+
+  defp xray_segment_in(conn) do
+    if Map.get(conn.assigns, :struct) do
+      conn.assigns.struct.request.xray_segment
+    end
   end
 end

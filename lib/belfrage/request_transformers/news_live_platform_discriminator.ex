@@ -9,7 +9,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
       {
         :ok,
         Struct.add(struct, :private, %{
-          platform: Webcore,
+          platform: "Webcore",
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
       }

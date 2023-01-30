@@ -16,7 +16,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
   }
 
   test "returns the routespec header" do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
 
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _payload, _opts ->
@@ -27,6 +27,6 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
 
     assert {200, _resp_headers, _body} = sent_resp(response_conn)
 
-    assert ["SomeRouteState"] = get_resp_header(response_conn, "routespec")
+    assert ["SomeRouteState.Webcore"] = get_resp_header(response_conn, "routespec")
   end
 end

@@ -10,11 +10,12 @@ defmodule EndToEnd.AccessLogsTest do
   alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
+  @route_state_id "SomeRouteState.Webcore"
 
   setup :clear_cache
 
   test "requests are logged" do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, @route_state_id})
 
     stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
       {:ok,
