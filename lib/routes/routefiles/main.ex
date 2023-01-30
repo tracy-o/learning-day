@@ -157,6 +157,8 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2023/england/results", using: "NewsElectionResults", only_on: "test", platform: "Webcore", examples: ["/news/election/2023/england/results"]
+
   handle "/news/election/2022/us/results", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/results"]
 
   handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/states/al"] do
