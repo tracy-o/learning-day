@@ -472,19 +472,15 @@ defroutefile "Main" do
 
   # News feature indexes (FIX assets)
 
-  redirect "https://www.test.bbc.co.uk/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
-  redirect "https://www.test.bbc.com/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 302
-  redirect "https://www.test.bbc.co.uk/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
-  redirect "https://www.test.bbc.com/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 302
+  redirect "/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 301
+  redirect "/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 301
 
   handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
   handle "/news/business-12686570", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-12686570"]
   handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
   handle "/news/business-22434141", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-22434141"]
-  handle "/news/business-22449886", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-22449886"]
   handle "/news/business-33712313", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-33712313"]
   handle "/news/business-38507481", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-38507481"]
-  handle "/news/business-41188875", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-41188875"]
   handle "/news/business-45489065", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-45489065"]
   handle "/news/business-46985441", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-46985441"]
   handle "/news/business-46985442", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-46985442"]
