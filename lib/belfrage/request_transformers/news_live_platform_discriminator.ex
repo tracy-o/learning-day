@@ -19,6 +19,6 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
   end
 
   defp tipo_id?(struct) do
-    String.match?(struct.request.path, ~r/\/(c[a-z0-9]{10,}t)$/)
+    String.match?(struct.request.path_params["asset_id"], ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
   end
 end
