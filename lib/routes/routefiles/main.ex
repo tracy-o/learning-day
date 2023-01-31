@@ -157,6 +157,12 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2023/:polity/results", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/results"]  do
+    return_404 if: [
+                 !String.match?(polity, ~r/^(england|northern-ireland)$/)
+               ]
+  end
+
   handle "/news/election/2022/us/results", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/results"]
 
   handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/states/al"] do
