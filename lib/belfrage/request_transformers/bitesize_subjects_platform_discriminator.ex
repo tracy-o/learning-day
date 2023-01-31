@@ -6,12 +6,29 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
 
   @webcore_test_ids [
     "zxtnvcw",
-    "zmpfb9q"
+    "zmpfb9q",
+    "zphybqt",
+    "zhtf3j6",
+    "z7mtsbk",
+    "zvsc96f",
+    "z8yrwmn",
+    "zjcdxnb",
+    "znwqtfr",
+    "zmj2n39",
+    "zdmtsbk"
   ]
 
   @webcore_live_ids [
     "zxtnvcw",
-    "zmpfb9q"
+    "zmpfb9q",
+    "zphybqt",
+    "zhtf3j6",
+    "z7mtsbk",
+    "zvsc96f",
+    "z8yrwmn",
+    "zjcdxnb",
+    "znwqtfr",
+    "zmj2n39"
   ]
 
   @impl Transformer
