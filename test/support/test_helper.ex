@@ -177,6 +177,16 @@ defmodule Test.Support.Helper do
     on_exit(fn -> Application.put_env(app, name, original_value) end)
   end
 
+  def set_env(app, name, value, on_exit_fun) do
+    original_value = Application.get_env(app, name)
+    Application.put_env(app, name, value)
+
+    on_exit(fn ->
+      Application.put_env(app, name, original_value)
+      on_exit_fun
+    end)
+  end
+
   def set_slots(project) do
     Belfrage.Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Belfrage.Mvt.Slots.set(%{}) end)
