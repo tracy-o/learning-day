@@ -2,13 +2,20 @@ defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
   alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Struct, CircuitBreaker, Mvt}
+  require Logger
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
   def start_link(name) do
     case RouteSpecManager.get_spec(name) do
-      nil -> {:error, "Route spec '#{name}' doesn't exist"}
-      spec -> GenServer.start_link(__MODULE__, spec, name: via_tuple(name))
+      nil ->
+        :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: name})
+        reason = "Route spec '#{name}' not found"
+        Logger.log(:error, "", %{msg: reason})
+        {:error, reason}
+
+      spec ->
+        GenServer.start_link(__MODULE__, spec, name: via_tuple(name))
     end
   end
 
