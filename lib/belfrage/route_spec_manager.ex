@@ -2,48 +2,37 @@ defmodule Belfrage.RouteSpecManager do
   use GenServer
 
   alias Belfrage.RouteSpec
-  require Logger
 
   @route_spec_table :route_spec_table
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
-  end
+  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
 
   @spec get_spec(RouteSpec.route_state_id()) :: RouteSpec.t() | nil
   def get_spec(route_state_id) do
-    case GenServer.call(__MODULE__, {:get_spec, route_state_id}) do
-      nil -> report_spec_not_found(route_state_id)
-      spec -> spec
-    end
+    GenServer.call(__MODULE__, {:get_spec, route_state_id})
   end
 
   @spec list_specs() :: [RouteSpec.t()]
-  def list_specs() do
-    GenServer.call(__MODULE__, :list_specs)
-  end
+  def list_specs(), do: GenServer.call(__MODULE__, :list_specs)
 
   @spec update_specs() :: :ok
-  def update_specs() do
-    GenServer.cast(__MODULE__, :update)
-  end
+  def update_specs(), do: GenServer.call(__MODULE__, :update)
 
   # callbacks
   @impl GenServer
   def init(_) do
-    prod_env = Application.get_env(:belfrage, :production_environment)
     table_id = bootstrap_route_spec_table()
-    do_update_specs(prod_env, table_id)
-    {:ok, %{env: prod_env, route_spec_table_id: table_id}}
+    do_update_specs(table_id)
+    {:ok, %{route_spec_table_id: table_id}}
   end
 
   @impl GenServer
-  def handle_call(:list_specs, _, state = %{route_spec_table_id: table_id}) do
+  def handle_call(:list_specs, _from, state = %{route_spec_table_id: table_id}) do
     specs = for {_id, spec} <- :ets.tab2list(table_id), do: spec
     {:reply, specs, state}
   end
 
-  def handle_call({:get_spec, route_state_id}, _, state = %{route_spec_table_id: table_id}) do
+  def handle_call({:get_spec, route_state_id}, _from, state = %{route_spec_table_id: table_id}) do
     result =
       case :ets.lookup(table_id, route_state_id) do
         [{_id, spec}] -> spec
@@ -53,29 +42,18 @@ defmodule Belfrage.RouteSpecManager do
     {:reply, result, state}
   end
 
-  @impl GenServer
-  def handle_cast(:update, state = %{env: env, route_spec_table_id: table_id}) do
-    do_update_specs(env, table_id)
-    {:no_reply, state}
+  def handle_call(:update, _from, state = %{route_spec_table_id: table_id}) do
+    {:reply, do_update_specs(table_id), state}
   end
 
-  defp do_update_specs(env, table_id) do
-    RouteSpec.list_route_specs(env)
-    |> write_specs(table_id)
-  end
+  defp do_update_specs(table_id), do: RouteSpec.list_route_specs() |> write_specs(table_id)
 
   defp write_specs(specs, table_id) do
     objects = for spec <- specs, do: {spec.route_state_id, spec}
+    true = :ets.delete_all_objects(table_id)
     true = :ets.insert(table_id, objects)
+    :ok
   end
 
-  defp bootstrap_route_spec_table() do
-    :ets.new(@route_spec_table, [:set])
-  end
-
-  defp report_spec_not_found(route_state_id) do
-    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: route_state_id})
-    Logger.log(:error, "", %{msg: "Route spec '#{route_state_id}' not found"})
-    nil
-  end
+  defp bootstrap_route_spec_table(), do: :ets.new(@route_spec_table, [:set])
 end

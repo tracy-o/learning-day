@@ -177,6 +177,16 @@ defmodule Test.Support.Helper do
     on_exit(fn -> Application.put_env(app, name, original_value) end)
   end
 
+  def set_env(app, name, value, on_exit_fun) do
+    original_value = Application.get_env(app, name)
+    Application.put_env(app, name, value)
+
+    on_exit(fn ->
+      Application.put_env(app, name, original_value)
+      on_exit_fun
+    end)
+  end
+
   def set_slots(project) do
     Belfrage.Mvt.Slots.set(%{"1" => project})
     on_exit(fn -> Belfrage.Mvt.Slots.set(%{}) end)
@@ -192,41 +202,5 @@ defmodule Test.Support.Helper do
   def alive_after?(pid, interval_ms \\ 100) do
     Process.sleep(interval_ms)
     Process.alive?(pid)
-  end
-
-  @doc """
-  Takes a supervisor and ID, both of which can be atoms,
-  and terminates the supervised process corresponding to that ID. For example:
-
-  > stop_supervised_process(SomeSupervisor, SomeWorker)
-
-  The spec for the ID is retrieved from the supervisor state before termination, and
-  is used to start the process under the supervision tree as it was before,
-  after the test is finished.
-
-  Also note that this function should be used for supervised processes with
-  a :restart strategy of :temporary.
-
-  If the spec cannot be retrieved then the process is not stopped.
-  """
-  def stop_supervised_process(supervisor, id) do
-    with {:ok, spec} <- :supervisor.get_childspec(supervisor, id) do
-      Supervisor.terminate_child(supervisor, id)
-      on_exit(fn -> Supervisor.start_child(supervisor, spec) end)
-    end
-  end
-
-  def stop_supervised_process_with_env(supervisor, id, env) do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, env)
-
-    with {:ok, spec} <- :supervisor.get_childspec(supervisor, id) do
-      Supervisor.terminate_child(supervisor, id)
-
-      on_exit(fn ->
-        Application.put_env(:belfrage, :production_environment, original_env)
-        Supervisor.start_child(supervisor, spec)
-      end)
-    end
   end
 end
