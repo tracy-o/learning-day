@@ -37,10 +37,6 @@ defmodule Mix.Tasks.SmokeTest do
 
   ## Test route subsets with `--only`
 
-  Platform:
-
-      mix smoke_test --only platform:Webcore
-
   Spec:
 
       mix smoke_test --only spec:Search

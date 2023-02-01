@@ -73,8 +73,6 @@ defmodule Belfrage.SmokeTestCase do
 
         describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{@target}" do
           @describetag spec: @matcher_spec.using
-          @describetag platform:
-                         Belfrage.RouteSpec.get_route_spec({@matcher_spec.using, @matcher_spec.platform}, smoke_env).platform
 
           for example <- @matcher_spec.examples do
             {path, expected_status_code} = normalise_example(example)
