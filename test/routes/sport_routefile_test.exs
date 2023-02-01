@@ -77,9 +77,9 @@ defmodule Routes.SportRoutefileTest do
 
     test "example is routed correctly" do
       stub_origins()
+      start_route_states()
 
       @examples
-      |> start_route_states()
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn
         {matcher, %{platform: platform, using: spec_name}, example} ->
@@ -284,21 +284,10 @@ defmodule Routes.SportRoutefileTest do
     end
   end
 
-  defp start_route_states(examples) do
-    examples
-    |> Enum.map(&route_state_id/1)
-    |> Enum.uniq()
-    |> Enum.filter(&(!is_nil(&1)))
+  defp start_route_states() do
+    Belfrage.RouteSpecManager.list_specs()
+    |> Enum.map(&Map.get(&1, :route_state_id))
     |> Enum.each(&start_route_state/1)
-
-    examples
-  end
-
-  defp route_state_id({_matcher, %{using: spec_name, platform: platform}, _example}) do
-    case RouteSpec.get_route_spec({spec_name, platform}) do
-      nil -> nil
-      %RouteSpec{route_state_id: route_state_id} -> route_state_id
-    end
   end
 
   defp start_route_state(route_state_id) do
