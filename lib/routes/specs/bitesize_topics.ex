@@ -6,7 +6,7 @@ defmodule Routes.Specs.BitesizeTopics do
       owner: "bitesize-production@lists.forge.bbc.co.uk",
       platform: "MorphRouter",
       language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "LambdaOriginAlias", "Language"]
+      request_pipeline: ["ComToUKRedirect", "Language"]
       },
       %{
         owner: "bitesize-production@lists.forge.bbc.co.uk",
