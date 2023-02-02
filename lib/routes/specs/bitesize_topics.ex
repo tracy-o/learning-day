@@ -12,7 +12,7 @@ defmodule Routes.Specs.BitesizeTopics do
         owner: "bitesize-production@lists.forge.bbc.co.uk",
         platform: "Webcore",
         language_from_cookie: true,
-        request_pipeline: ["ComToUKRedirect", "LambdaOriginAlias", "Language"]
+        request_pipeline: ["ComToUKRedirect"]
       }
     ]
   end
