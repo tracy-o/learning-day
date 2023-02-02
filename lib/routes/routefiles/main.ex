@@ -163,6 +163,19 @@ defroutefile "Main" do
                ]
   end
 
+  handle "/news/election/2023/:polity/councils", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/councils", "/news/election/2023/northern-ireland/councils"] do
+    return_404 if: [
+      !String.match?(polity, ~r/^(england|northern-ireland)$/)
+    ]
+  end
+
+  handle "/news/election/2023/:polity/councils/:gss_id", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/councils/E09000016"] do
+    return_404 if: [
+      !String.match?(polity, ~r/^(england|northern-ireland)$/),
+      !String.match?(gss_id, ~r/^[A-Z][0-9]{8}$/)
+    ]
+  end
+
   handle "/news/election/2022/us/results", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/results"]
 
   handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/states/al"] do
