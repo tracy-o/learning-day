@@ -199,5 +199,23 @@ defmodule Belfrage.RouteSpecTest do
         RouteSpec.get_route_spec({"AllowedAttrRoute", "NotAllowedAttrPlatform"})
       end
     end
+
+    test "invalidates duplicate transformers in pipeline" do
+      define_platform("DuplicateTransformersPlatform", %{
+        request_pipeline: [:_routespec_pipeline_placeholder, "LambdaOriginAlias", "CircuitBreaker"]
+      })
+
+      define_route("DuplicateTransformersRoute", %{
+        platform: "DuplicateTransformersPlatform",
+        request_pipeline: ["LambdaOriginAlias"]
+      })
+
+      err_msg =
+        ~s(DuplicateTransformersRoute.DuplicateTransformersPlatform contains the following duplicated transformers in the request_pipeline : ["LambdaOriginAlias"])
+
+      assert_raise RuntimeError, err_msg, fn ->
+        RouteSpec.get_route_spec({"DuplicateTransformersRoute", "DuplicateTransformersPlatform"})
+      end
+    end
   end
 end
