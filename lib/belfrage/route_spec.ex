@@ -143,7 +143,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline(pipeline_to_transformer_type(type), pipeline)
+    validate_pipeline(spec.route_state_id, pipeline_to_transformer_type(type), pipeline)
     pipeline
   end
 
@@ -172,9 +172,23 @@ defmodule Belfrage.RouteSpec do
     end
   end
 
-  defp validate_pipeline(type, transformers) do
+  defp validate_pipeline(route_state_id, type, transformers) do
     for name <- transformers,
         do: ensure_module_loaded(Transformer.get_transformer_callback(type, name))
+
+    ensure_unique_transformers(route_state_id, type, transformers)
+  end
+
+  defp ensure_unique_transformers(route_state_id, type, transformers) do
+    case Enum.uniq(transformers -- Enum.uniq(transformers)) do
+      [] ->
+        :ok
+
+      duplicates ->
+        type = Atom.to_string(type)
+
+        raise "#{route_state_id} contains the following duplicated transformers in the #{type}_pipeline : #{inspect(duplicates)}"
+    end
   end
 
   defp ensure_module_loaded(module) do
