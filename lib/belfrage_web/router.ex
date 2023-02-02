@@ -42,7 +42,18 @@ defmodule BelfrageWeb.Router do
   end
 
   get "/status" do
-    send_resp(conn, 200, "I'm ok thanks")
+    case get_service_status() do
+      :ok ->
+        send_resp(conn, 200, "I'm ok thanks")
+
+      {:error, reason} ->
+        Logger.log(:error, "", %{
+          msg: "Service status is not ok",
+          reason: reason
+        })
+
+        send_resp(conn, 500, "")
+    end
   end
 
   get "/robots.txt" do
@@ -119,6 +130,13 @@ defmodule BelfrageWeb.Router do
       BelfrageWeb.Response.not_found(conn)
     else
       BelfrageWeb.Response.internal_server_error(conn)
+    end
+  end
+
+  defp get_service_status() do
+    case Belfrage.RouteSpecManager.list_specs() do
+      [_ | _] -> :ok
+      other -> {:error, "Route Spec table isn't ready: #{inspect(other)}"}
     end
   end
 
