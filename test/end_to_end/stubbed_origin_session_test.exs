@@ -10,7 +10,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   @moduletag :end_to_end
 
   setup do
-    start_supervised!({RouteState, "MySession"})
+    start_supervised!({RouteState, "MySession.OriginSimulator"})
     :ok
   end
 

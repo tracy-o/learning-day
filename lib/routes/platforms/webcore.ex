@@ -8,7 +8,8 @@ defmodule Routes.Platforms.Webcore do
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
       query_params_allowlist: query_params_allowlist(production_env),
-      mvt_project_id: 1
+      mvt_project_id: 1,
+      xray_enabled: true
     }
   end
 

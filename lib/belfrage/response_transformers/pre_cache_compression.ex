@@ -57,6 +57,6 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   end
 
   defp platform_name(%Struct.Private{platform: platform}) do
-    Module.split(platform) |> hd() |> String.to_atom()
+    platform |> String.to_atom()
   end
 end

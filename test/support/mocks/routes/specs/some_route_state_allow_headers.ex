@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeRouteStateAllowHeaders do
     %{
       owner: "Some person",
       runbook: "Some runbook",
-      platform: Webcore,
+      platform: "Webcore",
       headers_allowlist: ["one_header", "cookie", "another_header"]
     }
   end

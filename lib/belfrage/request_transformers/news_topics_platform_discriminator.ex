@@ -11,7 +11,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
       is_mozart_topic?(struct) or is_id_guid?(struct) ->
         struct =
           Struct.add(struct, :private, %{
-            platform: MozartNews,
+            platform: "MozartNews",
             origin: Application.get_env(:belfrage, :mozart_news_endpoint),
             personalised_route: false,
             personalised_request: false

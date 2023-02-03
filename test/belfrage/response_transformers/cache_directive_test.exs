@@ -30,7 +30,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
               }
             },
             private: %Struct.Private{
-              platform: Webcore
+              platform: "Webcore"
             }
           })
 
@@ -56,7 +56,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
               }
             },
             private: %Struct.Private{
-              platform: NonWebcore
+              platform: "NonWebcore"
             }
           })
 
@@ -136,7 +136,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
           },
           private: %Struct.Private{
             personalised_request: true,
-            platform: Webcore
+            platform: "Webcore"
           }
         })
 
@@ -154,7 +154,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
           },
           private: %Struct.Private{
             personalised_request: true,
-            platform: Webcore
+            platform: "Webcore"
           }
         })
 

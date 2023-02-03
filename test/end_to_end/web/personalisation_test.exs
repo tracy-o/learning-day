@@ -13,7 +13,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     :ok
   end
 

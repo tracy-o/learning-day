@@ -19,7 +19,7 @@ defmodule EndToEnd.LambdaTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     :ok
   end
 
@@ -62,7 +62,7 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeRouteState"},
+              {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
               {"belfrage-response-pipeline-trail",
@@ -112,7 +112,7 @@ defmodule EndToEnd.LambdaTest do
               {"req-svc-chain", "BELFRAGE"},
               {"brequestid", _request_id},
               {"belfrage-cache-status", "MISS"},
-              {"routespec", "SomeRouteState"},
+              {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
               {"belfrage-response-pipeline-trail",

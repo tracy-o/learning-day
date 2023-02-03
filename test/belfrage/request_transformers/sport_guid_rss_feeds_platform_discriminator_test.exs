@@ -12,7 +12,7 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTes
              :ok,
              %Struct{
                private: %Struct.Private{
-                 platform: Fabl,
+                 platform: "Fabl",
                  origin: ^fabl_endpoint
                },
                request: %Struct.Request{
@@ -42,14 +42,14 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTes
              :ok,
              %Struct{
                private: %Struct.Private{
-                 platform: Karanga,
+                 platform: "Karanga",
                  origin: ^karanga_endpoint
                }
              }
            } =
              SportGuidRssFeedsPlatformDiscriminator.call(%Struct{
                private: %Struct.Private{
-                 platform: Karanga,
+                 platform: "Karanga",
                  origin: karanga_endpoint
                },
                request: %Struct.Request{path_params: %{"discipline" => "football"}}

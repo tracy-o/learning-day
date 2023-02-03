@@ -182,7 +182,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp platform_name(%Private{platform: platform}) do
-    Module.split(platform) |> hd() |> String.to_atom()
+    platform |> String.to_atom()
   end
 
   defp log_error(reason, struct = %Struct{}) do

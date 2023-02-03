@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceTajik do
   def specs do
     %{
-      platform: MozartNews,
+      platform: "MozartNews",
       request_pipeline: ["WorldServiceRedirect"]
     }
   end

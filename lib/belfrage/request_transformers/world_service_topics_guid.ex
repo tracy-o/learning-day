@@ -7,7 +7,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuid do
       {
         :ok,
         Struct.add(struct, :private, %{
-          platform: MozartNews,
+          platform: "MozartNews",
           origin: Application.get_env(:belfrage, :mozart_news_endpoint)
         })
       }

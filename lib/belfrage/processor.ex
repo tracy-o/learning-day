@@ -15,7 +15,8 @@ defmodule Belfrage.Processor do
     Metrics,
     Mvt,
     Language,
-    WrapperError
+    WrapperError,
+    ServiceProvider
   }
 
   alias Struct.{Response, Private}
@@ -29,19 +30,20 @@ defmodule Belfrage.Processor do
       &Language.add_signature/1,
       &Mvt.Mapper.map/1,
       &Mvt.Headers.remove_original_headers/1,
+      &Belfrage.Xray.Enable.call/1,
       &generate_request_hash/1
     ]
 
     WrapperError.wrap(pipeline, struct)
   end
 
-  def get_route_state(struct = %Struct{}) do
+  def get_route_state(struct = %Struct{private: %Struct.Private{route_state_id: route_state_id}}) do
     Metrics.latency_span(:set_request_route_state_data, fn ->
-      RouteStateRegistry.find_or_start(struct)
+      RouteStateRegistry.find_or_start(route_state_id)
 
-      case RouteState.state(struct) do
+      case RouteState.state(route_state_id) do
         {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
-        _ -> route_state_state_failure()
+        {:error, reason} -> route_state_state_failure(reason)
       end
     end)
   end
@@ -97,6 +99,14 @@ defmodule Belfrage.Processor do
       {:ok, struct} -> struct
       {:error, _struct, msg} -> raise "Request pipeline failure: #{msg}"
     end
+  end
+
+  def perform_call(struct = %Struct{response: %Struct.Response{http_status: code}}) when is_number(code) do
+    struct
+  end
+
+  def perform_call(struct = %Struct{private: %Struct.Private{origin: origin}}) do
+    ServiceProvider.service_for(origin).dispatch(struct)
   end
 
   def process_response_pipeline(struct = %Struct{}) do
@@ -183,10 +193,10 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, struct)
   end
 
-  defp route_state_state_failure do
+  defp route_state_state_failure(reason) do
     :telemetry.execute([:belfrage, :error, :route_state, :state], %{})
 
-    Logger.log(:error, "Error retrieving route_state state")
+    Logger.log(:error, "Error retrieving route_state state with reason: #{inspect(reason)}}")
 
     raise "Failed to load route_state state."
   end

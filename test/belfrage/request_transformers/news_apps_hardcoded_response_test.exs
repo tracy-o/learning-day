@@ -9,7 +9,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
   defp struct do
     %Struct{
       private: %Struct.Private{
-        platform: Fabl
+        platform: "Fabl"
       }
     }
   end

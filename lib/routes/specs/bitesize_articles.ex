@@ -2,9 +2,10 @@ defmodule Routes.Specs.BitesizeArticles do
   def specs do
     %{
       owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language"],
+      personalisation: "test_only",
+      request_pipeline: ["ComToUKRedirect", "Personalisation", "BitesizeArticlesPlatformDiscriminator", "LambdaOriginAlias", "Language"],
       query_params_allowlist: ["course", "topicJourney"]
     }
   end

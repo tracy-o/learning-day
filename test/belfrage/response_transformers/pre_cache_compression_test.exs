@@ -61,7 +61,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
           http_status: 200
         },
         private: %Struct.Private{
-          platform: SomePlatform
+          platform: "SomePlatform"
         }
       }
 
@@ -85,7 +85,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompressionTest do
       assert log =~ ~r/\"metadata\":{}/
       assert log =~ ~r/\"msg\":\"Content was pre-cache compressed\"/
       assert log =~ ~r/\"path\":\"\/non-compressed\/path\"/
-      assert log =~ ~r/\"platform\":\"Elixir.SomePlatform\"/
+      assert log =~ ~r/\"platform\":\"SomePlatform\"/
     end
   end
 

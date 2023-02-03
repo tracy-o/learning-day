@@ -12,7 +12,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
 
   test "failures_per_routespec/1", %{output_with_failures: output} do
     expected = %{
-      "ScotlandHomePage" => [
+      "ScotlandHomePage.Webcore" => [
         Enum.at(output.failed_tests, 2),
         Enum.at(output.failed_tests, 1),
         Enum.at(output.failed_tests, 0)
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
     failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
 
     expected = %{
-      "ScotlandHomePage" => [
+      "ScotlandHomePage.Webcore" => [
         "test ScotlandHomePage /scotland against test belfrage /scotland\n\n```Assertion with == failed\ncode:  assert response.status_code() == expected_status_code\nleft:  404\nright: 200\n```",
         "test ScotlandHomePage /scotland against test cedric-belfrage /scotland\n\n```Assertion with == failed\ncode:  assert response.status_code() == expected_status_code\nleft:  404\nright: 200\n```",
         "test ScotlandHomePage /scotland against test bruce-belfrage /scotland\n\n```Assertion with == failed\ncode:  assert response.status_code() == expected_status_code\nleft:  404\nright: 200\n```"
@@ -42,7 +42,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
     failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
 
     expected = %{
-      "WorldServiceTajik" => [
+      "WorldServiceTajik.MozartNews" => [
         "test WorldServiceTajik /tajik.amp against test bruce-belfrage /tajik.amp\n\n```Expected `location` response header to be set for world service redirect.\n```",
         "test WorldServiceTajik /tajik.json against test bruce-belfrage /tajik.json\n\n```Expected `location` response header to be set for world service redirect.\n```",
         "test WorldServiceTajik /tajik/*any against test bruce-belfrage /tajik\n\n```Expected `location` response header to be set for world service redirect.\n```"
@@ -58,8 +58,8 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
     failures_per_routespec = ReportSmokeTestResults.failures_per_routespec(output)
 
     expected = %{
-      "Schoolreport" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."],
-      "Weather" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."]
+      "Schoolreport.MozartNews" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."],
+      "Weather.MozartWeather" => ["Unexpected error occured. Contact us in #help-belfrage slack channel."]
     }
 
     assert expected == ReportSmokeTestResults.format_failure_messages(failures_per_routespec)
@@ -80,7 +80,7 @@ defmodule Mix.Tasks.ReportSmokeTestResultsTest do
                timeout: 6000,
                url: "https://slack.com/api/chat.postMessage",
                payload:
-                 "{\"attachments\":[{\"blocks\":[{\"block_id\":\"smoke_test_failure_output\",\"text\":{\"text\":\"test ScotlandHomePage /scotland against test belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test cedric-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test bruce-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\",\"type\":\"mrkdwn\"},\"type\":\"section\"},{\"elements\":[{\"style\":\"primary\",\"text\":{\"emoji\":true,\"text\":\"Customise slack channel\",\"type\":\"plain_text\"},\"type\":\"button\",\"url\":\"https://github.com/bbc/belfrage/wiki/Direct-smoke-test-failures-to-your-own-slack-channels\"}],\"type\":\"actions\"}]}],\"channel\":\"belfrage-smoke-tests\",\"text\":\"*ScotlandHomePage - Belfrage Smoke Test Failures (3 total)*\"}"
+                 "{\"attachments\":[{\"blocks\":[{\"block_id\":\"smoke_test_failure_output\",\"text\":{\"text\":\"test ScotlandHomePage /scotland against test belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test cedric-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\\n\\ntest ScotlandHomePage /scotland against test bruce-belfrage /scotland\\n\\n```Assertion with == failed\\ncode:  assert response.status_code() == expected_status_code\\nleft:  404\\nright: 200\\n```\",\"type\":\"mrkdwn\"},\"type\":\"section\"},{\"elements\":[{\"style\":\"primary\",\"text\":{\"emoji\":true,\"text\":\"Customise slack channel\",\"type\":\"plain_text\"},\"type\":\"button\",\"url\":\"https://github.com/bbc/belfrage/wiki/Direct-smoke-test-failures-to-your-own-slack-channels\"}],\"type\":\"actions\"}]}],\"channel\":\"belfrage-smoke-tests\",\"text\":\"*ScotlandHomePage.Webcore - Belfrage Smoke Test Failures (3 total)*\"}"
              }
            ] == ReportSmokeTestResults.broadcast_results_to_teams(formatted_messages, slack_auth_token)
   end

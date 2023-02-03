@@ -9,7 +9,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "CacheDisabled"})
+    start_supervised!({RouteState, "CacheDisabled.Webcore"})
     :ok
   end
 
@@ -56,7 +56,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
       assert {200, _resp_headers, _body} = sent_resp(response_conn)
       assert ["MISS"] = get_resp_header(response_conn, "belfrage-cache-status")
-      assert ["CacheDisabled"] == get_resp_header(response_conn, "routespec")
+      assert ["CacheDisabled.Webcore"] == get_resp_header(response_conn, "routespec")
 
       assert ["public, stale-if-error=90, stale-while-revalidate=30, max-age=30"] ==
                get_resp_header(response_conn, "cache-control")

@@ -9,7 +9,7 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
   @redirect_languages ["en", "cy", "ga", "gd"]
 
   setup do
-    start_supervised!({RouteState, "SomeRouteState"})
+    start_supervised!({RouteState, "SomeRouteState.Webcore"})
     clear_cache()
     :ok
   end

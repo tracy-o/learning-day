@@ -5,7 +5,7 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitch do
   @dial Application.get_env(:belfrage, :dial)
 
   @platform_map %{
-    Webcore => :webcore_kill_switch
+    "Webcore" => :webcore_kill_switch
   }
 
   @impl Transformer

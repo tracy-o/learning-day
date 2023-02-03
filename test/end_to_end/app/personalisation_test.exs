@@ -25,7 +25,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "personalised route " do
     setup do
-      start_supervised!({RouteState, "PersonalisedFablData"})
+      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
       :ok
     end
 
@@ -129,7 +129,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   describe "personalised route and expired auth. token" do
     test "invalid auth token on test prod. env." do
       set_environment("test")
-      start_supervised!({RouteState, "PersonalisedFablData"})
+      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
 
       expect_no_origin_request()
 
@@ -143,7 +143,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
     test "expired auth token on live prod. env." do
       set_environment("live")
-      start_supervised!({RouteState, "PersonalisedFablData"})
+      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
 
       expect_no_origin_request()
 
@@ -159,7 +159,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   # describe "personalisation is disabled" do
   #   setup do
   #     stub_dial(:personalisation, "off")
-  #     start_supervised!({RouteState, "PersonalisedFablData"})
+  #     start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
   #     :ok
   #   end
 
@@ -183,7 +183,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "non-personalised route" do
     setup do
-      start_supervised!({RouteState, "FablData"})
+      start_supervised!({RouteState, "FablData.Fabl"})
       :ok
     end
 

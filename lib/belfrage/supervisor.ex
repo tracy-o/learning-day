@@ -11,6 +11,7 @@ defmodule Belfrage.Supervisor do
   def children(env: env) do
     conditional_servers(env) ++
       [
+        Belfrage.RouteSpecSupervisor,
         {Finch, finch_opts()},
         {BelfrageWeb.Router, router_options(env)},
         Belfrage.RouteStateRegistry,
@@ -28,6 +29,7 @@ defmodule Belfrage.Supervisor do
 
   def get_observed_ids() do
     [
+      Belfrage.RouteSpecSupervisor,
       Belfrage.RouteStateSupervisor,
       Belfrage.Authentication.Supervisor,
       Belfrage.Dials.Supervisor,

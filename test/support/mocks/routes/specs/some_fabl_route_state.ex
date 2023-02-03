@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeFablRouteState do
     %{
       owner: "Some chap/chapette",
       runbook: "Some runbook",
-      platform: Fabl
+      platform: "Fabl"
     }
   end
 end

@@ -2,8 +2,10 @@ defmodule AllowAllQsOverrideTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
+  alias Belfrage.{RouteState, RouteSpecManager}
   use Test.Support.Helper, :mox
+
+  import Test.Support.Helper, only: [set_environment: 1]
 
   @moduletag :end_to_end
 
@@ -20,7 +22,8 @@ defmodule AllowAllQsOverrideTest do
 
   # The Moz.ex route spec only allows one query string, but on test the mozart platform allows all query strings
   test "Allow all query strings for Mozart platform routes on test" do
-    start_supervised!({RouteState, "Moz"})
+    RouteSpecManager.update_specs()
+    start_supervised!({RouteState, "Moz.MozartNews"})
 
     url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?a=bar&b=foo"
 
@@ -40,14 +43,9 @@ defmodule AllowAllQsOverrideTest do
   end
 
   test "Don't allow all query string for the Mozart platform routes on Live" do
-    original_env = Application.get_env(:belfrage, :production_environment)
-    Application.put_env(:belfrage, :production_environment, "live")
-
-    start_supervised!({RouteState, "Moz"})
-
-    on_exit(fn ->
-      Application.put_env(:belfrage, :production_environment, original_env)
-    end)
+    set_environment("live")
+    RouteSpecManager.update_specs()
+    start_supervised!({RouteState, "Moz.MozartNews"})
 
     url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?only_allow_this_on_live=123"
 
