@@ -26,9 +26,10 @@ defmodule Belfrage.RouteSpecManagerTest do
     end
 
     test "retrieves different specs per production environment" do
+      Belfrage.RouteSpecManager.update_specs()
       test_specs = Belfrage.RouteSpecManager.list_specs()
 
-      set_environment("live")
+      set_env(:belfrage, :production_environment, "live", &RouteSpecManager.update_specs/0)
 
       Belfrage.RouteSpecManager.update_specs()
 
