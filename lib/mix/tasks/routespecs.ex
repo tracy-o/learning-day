@@ -14,19 +14,23 @@ defmodule Mix.Tasks.Routespecs do
 
     routefile.routes()
     |> Enum.uniq_by(fn {_matcher, attrs} -> attrs.using end)
-    |> Enum.map(fn {_matcher, %{using: spec_name, platform: platform}} ->
-      spec = Belfrage.RouteSpec.get_route_spec({spec_name, platform}, env)
-
-      %{
-        "RouteSpec" => spec_name,
-        "Platform" => spec.platform,
-        "Request Pipeline" => Enum.join(spec.pipeline, ",")
-      }
-    end)
-    |> Enum.reverse()
+    |> Enum.reduce([], fn route, acc -> reduce_route_maps(route, env, acc) end)
     |> Tabula.print_table(
       only: ["#", "RouteSpec", "Platform", "Request Pipeline", "Response Pipeline"],
       style: :github_md
     )
+  end
+
+  defp reduce_route_maps({_matcher, %{using: spec_name, platform: platform}}, env, acc) do
+    if String.ends_with?(platform, "PlatformSelector") do
+      acc
+    else
+      spec = Belfrage.RouteSpec.get_route_spec({spec_name, platform}, env)
+      [%{
+         "RouteSpec" => spec_name,
+         "Platform" => platform,
+         "Request Pipeline" => Enum.join(spec.pipeline, ",")
+       } | acc]
+    end
   end
 end
