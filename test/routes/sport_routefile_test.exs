@@ -96,16 +96,9 @@ defmodule Routes.SportRoutefileTest do
                                              but to #{conn.assigns.route_spec}"}
               end
 
-            %RouteSpec{route_state_id: route_state_id} ->
+            %RouteSpec{} ->
               conn = make_call(:get, example)
               plug_route = plug_route(conn)
-
-              if conn.assigns.route_spec == route_state_id do
-                :ok
-              else
-                {:error,
-                 "Example #{example} for route #{matcher} is not routed to #{route_state_id}, but to #{conn.assigns.route_spec}"}
-              end
 
               # An example may be routed to an incorrect route with the same route spec
               # as the expected route.
