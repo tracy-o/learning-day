@@ -402,17 +402,17 @@ defroutefile "Main" do
   redirect "/news/blogs/trending", to: "/news/topics/cme72mv58q4t", status: 301, ttl: 3600
   redirect "/news/blogs/the_papers", to: "/news/topics/cpml2v678pxt", status: 301, ttl: 3600
 
-  handle "/news/topics/:id/:slug", using: "NewsTopics", platform: "Webcore", examples: [] do
+  handle "/news/topics/:id/:slug", using: "NewsTopics", platform: "Webcore", examples: ["/news/topics/cwjzj55q2p3t/gold", {"/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e/gold", 301}] do
     return_404 if: [
-      !is_tipo_id?(id) or !is_guid?(id),
+      !(is_tipo_id?(id) or is_guid?(id)),
       !String.match?(slug, ~r/^([a-z0-9-]+)$/),
       !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
 
-  handle "/news/topics/:id", using: "NewsTopics", platform: "Webcore", examples: [] do
+  handle "/news/topics/:id", using: "NewsTopics", platform: "Webcore", examples: ["/news/topics/cljev4jz3pjt", {"/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e", 301}] do
     return_404 if: [
-      !is_tipo_id?(id) or !is_guid?(id),
+      !(is_tipo_id?(id) or is_guid?(id)),
       !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
