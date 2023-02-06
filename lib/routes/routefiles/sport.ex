@@ -922,7 +922,7 @@ defroutefile "Sport" do
   handle "/sport/winter-olympics/results/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
   handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
   handle "/sport/winter-olympics/sports/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
-  
+
   ## Sport topic redirects
   redirect "/sport/football/fifa-womens-world-cup", to: "/sport/football/womens-world-cup", status: 302
 
@@ -1292,275 +1292,275 @@ defroutefile "Sport" do
   ## Sport Topics
   handle "/sport/topics/:id", using: "SportTopicPage", platform: "Webcore", examples: ["/sport/topics/cd61kendv7et"] do
     return_404 if: [
-      !String.match?(id, ~r/^c[\w]{10}t$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+      !is_tipo_id?(id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..42)
     ]
   end
 
   handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", platform: "Webcore", only_on: "test", examples: ["/sport/topics-test-blitzball"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/alpine-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/alpine-skiing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/archery", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/archery"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/badminton", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/badminton"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/baseball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/baseball"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/biathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/biathlon"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/bobsleigh", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/bobsleigh"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/bowls", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/bowls"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/canoeing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/canoeing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/cross-country-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/cross-country-skiing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/curling", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/curling"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/darts", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/darts"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/diving", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/diving"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/equestrian", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/equestrian"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/fencing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/fencing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/figure-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/figure-skating"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/freestyle-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/freestyle-skiing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/gymnastics", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/gymnastics"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/handball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/handball"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/hockey", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/hockey"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/ice-hockey", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/ice-hockey"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/judo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/judo"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/karate", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/karate"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/luge", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/luge"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/modern-pentathlon"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/nordic-combined", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/nordic-combined"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/rowing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/rowing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/rugby-sevens", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/rugby-sevens"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/sailing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sailing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/shooting", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/shooting"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/short-track-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/short-track-skating"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/skateboarding", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/skateboarding"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/skeleton", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/skeleton"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/ski-jumping", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/ski-jumping"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/snowboarding", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/snowboarding"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/speed-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/speed-skating"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/sport-climbing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sport-climbing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/squash", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/squash"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/surfing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/surfing"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/synchronised-swimming"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/table-tennis", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/table-tennis"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/taekwondo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/taekwondo"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/triathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/triathlon"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/volleyball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/volleyball"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/water-polo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/water-polo"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/weightlifting", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/weightlifting"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/wrestling", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/wrestling"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   # Sports Team Pages
   handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", platform: "Webcore", examples: ["/sport/football/teams/liverpool"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/cricket/the-hundred"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/champions-league"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/dutch-eredivisie"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/europa-league"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/french-ligue-one"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/german-bundesliga"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/italian-serie-a"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-one"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-two"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/national-league"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/portuguese-primeira-liga"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-challenge-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-championship"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-one"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-two"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-premiership"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/spanish-la-liga"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/us-major-league"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/welsh-premier-league"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
   handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/womens-european-championship"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
    handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/womens-world-cup"] do
-    return_404 if: !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   ## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart

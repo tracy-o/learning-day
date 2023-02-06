@@ -96,4 +96,29 @@ defmodule BelfrageWeb.Validators do
   def starts_with?(param, start_string) do
     String.starts_with?(param, start_string)
   end
+
+  @doc """
+  Documentation on short ID generation: https://confluence.dev.bbc.co.uk/display/cps/Generating+Short+IDs
+  ## Examples
+    iex> is_tipo_id?("cx6pk6ve3kkt")
+    true
+
+    iex> is_tipo_id?("zx11pk6ve3kkb")
+    false
+  """
+  def is_tipo_id?(param) do
+    String.match?(param, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,11}t$/)
+  end
+
+  @doc """
+  ## Examples
+    iex> is_guid?("ea49bb5e-9a7d-4456-98df-b7087ecc0788")
+    true
+
+    iex> is_guid?("ea49bb5e-9a7d-4456-98df")
+    false
+  """
+  def is_guid?(param) do
+    String.match?(param, ~r/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/)
+  end
 end

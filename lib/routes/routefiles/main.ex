@@ -404,16 +404,16 @@ defroutefile "Main" do
 
   handle "/news/topics/:id/:slug", using: "NewsTopics", platform: "Webcore", examples: [] do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !is_tipo_id?(id) or !is_guid?(id),
       !String.match?(slug, ~r/^([a-z0-9-]+)$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-4][0-9]|50)$/)
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
 
   handle "/news/topics/:id", using: "NewsTopics", platform: "Webcore", examples: [] do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-4][0-9]|50)$/)
+      !is_tipo_id?(id) or !is_guid?(id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
 
@@ -528,7 +528,7 @@ defroutefile "Main" do
   handle "/news/:id/rss.xml", using: "NewsRss", platform: "Karanga", examples: ["/news/uk/rss.xml"]
 
   handle "/news/topics/:id/rss.xml", using: "NewsTopicRss", platform: "Fabl", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+    return_404 if: !is_tipo_id?(id)
   end
 
   # News section matchers
@@ -2540,14 +2540,14 @@ defroutefile "Main" do
 
   handle "/topics/:id", using: "TopicPage", platform: "Webcore", examples: ["/topics/c583y7zk042t"] do
     return_404 if: [
-      !String.match?(id, ~r/^c[\w]{10}t$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/^([1-9]|[1-3][0-9]|4[0-2])$/)
+      !is_tipo_id?(id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..42)
     ]
   end
 
   handle "/topics/:id/rss.xml", using: "TopicRss", platform: "Fabl", examples: [] do
     # example "/topics/c57jjx4233xt/rss.xml" need "feeds.api.bbci.co.uk" as host
-    return_404 if: !String.match?(id, ~r/^c[\w]{10}t$/)
+    return_404 if: !is_tipo_id?(id)
   end
 
   ## Live WebCore
