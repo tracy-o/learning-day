@@ -2632,7 +2632,7 @@ defroutefile "Main" do
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
 
-  handle "/weather/av/:asset_id", using: "WeatherVideos", platform: "Webcore", only_on: "test", examples: []
+  handle "/weather/av/:asset_id", using: "WeatherVideos", platform: "Webcore", examples: ["/weather/av/64475513"]
 
   handle "/weather/:location_id", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
