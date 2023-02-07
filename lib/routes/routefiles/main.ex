@@ -301,14 +301,12 @@ defroutefile "Main" do
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
-  redirect "/news/topics/cxlvkzzjq1wt/*any", to: "/news/uk-northern-ireland-55401938", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
   redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/uk-politics-48448557", status: 302
   redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
   redirect "/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302
-  redirect "/news/topics/c77jz3mdmgzt/*any", to: "/news/uk-northern-ireland-38323577", status: 302
   redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
-  redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/business-22434141", status: 302
+  redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/topics/czpqp1pq5q5t", status: 301
   redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
   redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
   redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
@@ -493,23 +491,23 @@ defroutefile "Main" do
 
   redirect "/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 301
   redirect "/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 301
+  redirect "/news/business-46985441", to: "/news/topics/cyq54q01grmt", status: 301
+  redirect "/news/business-22434141", to: "/news/topics/czpqp1pq5q5t", status: 301 
+  redirect "/news/business-46985442", to: "/news/topics/cgdwpywgeegt", status: 301
+  redirect "/news/uk-northern-ireland-55401938", to: "/news/topics/cxlvkzzjq1wt", status: 301
+  redirect "/news/business-12686570", to: "/news/topics/c89l21e4068t", status: 301
+  redirect "/news/uk-northern-ireland-38323577", to: "/news/topics/c77jz3mdmgzt", status: 301
 
   handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
-  handle "/news/business-12686570", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-12686570"]
   handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
-  handle "/news/business-22434141", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-22434141"]
   handle "/news/business-33712313", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-33712313"]
   handle "/news/business-38507481", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-38507481"]
   handle "/news/business-45489065", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-45489065"]
-  handle "/news/business-46985441", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-46985441"]
-  handle "/news/business-46985442", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-46985442"]
   handle "/news/education-46131593", using: "NewsEducation", platform: "MozartNews", examples: ["/news/education-46131593"]
   handle "/news/uk-england-47486169", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-england-47486169"]
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment-56837908"]
   handle "/news/technology-22774341", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/technology-22774341"]
   handle "/news/uk-55220521", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-55220521"]
-  handle "/news/uk-northern-ireland-38323577", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-northern-ireland-38323577"]
-  handle "/news/uk-northern-ireland-55401938", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-northern-ireland-55401938"]
   handle "/news/uk-politics-48448557", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-politics-48448557"]
   handle "/news/world-43160365", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-43160365"]
   handle "/news/world-48623037", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-48623037"]
