@@ -22,7 +22,7 @@ defmodule BelfrageWeb.Response do
     Headers.RouteSpec,
     Headers.PipelineTrail
   ]
-  @json_codec Application.get_env(:belfrage, :json_codec)
+  @json_codec Application.compile_env(:belfrage, :json_codec)
 
   def put(conn = %Conn{assigns: %{struct: struct = %Struct{response: response = %Response{}}}}) do
     response =

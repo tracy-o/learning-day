@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.NewsApps
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
   def call(struct) do

@@ -4,7 +4,7 @@ defmodule Belfrage.RouteState do
   alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Struct, CircuitBreaker, Mvt}
   require Logger
 
-  @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
+  @fetch_route_state_timeout Application.compile_env(:belfrage, :fetch_route_state_timeout)
 
   def start_link(name) do
     case RouteSpecManager.get_spec(name) do

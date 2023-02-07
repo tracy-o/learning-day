@@ -2,7 +2,7 @@ defmodule Belfrage.Mvt.Mapper do
   alias Belfrage.Mvt
   alias Belfrage.Struct
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
   @platform_mapping %{"Webcore" => "1", "Simorgh" => "2"}
   @max_slots 20
 

@@ -5,7 +5,7 @@ defmodule Belfrage.Services.Fabl do
   alias Belfrage.{Clients, Struct}
   alias Belfrage.Services.Fabl.Request
 
-  @http_client Application.get_env(:belfrage, :http_client, Clients.HTTP)
+  @http_client Application.compile_env(:belfrage, :http_client, Clients.HTTP)
 
   @behaviour Service
 

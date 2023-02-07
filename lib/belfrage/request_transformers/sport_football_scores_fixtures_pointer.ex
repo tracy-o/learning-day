@@ -1,7 +1,7 @@
 defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
   use Belfrage.Behaviours.Transformer
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
   def call(struct) do
