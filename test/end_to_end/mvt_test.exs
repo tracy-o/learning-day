@@ -135,6 +135,26 @@ defmodule EndToEnd.MvtTest do
       assert String.contains?(vary_header, "bbc-mvt-complete")
       refute String.contains?(vary_header, "mvt-some_experiment")
     end
+
+    test "the response will not differ on override header values" do
+      expect_lambda_call(times_called: 2, vary_response: "mvt-some_experiment")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("mvt-some_experiment", "experiment;some_value_a")
+        |> Router.call([])
+
+      [request_id_one] = get_resp_header(response, "bsig")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("mvt-some_experiment", "experiment;some_value_b")
+        |> Router.call([])
+
+      [request_id_two] = get_resp_header(response, "bsig")
+
+      assert request_id_one == request_id_two
+    end
   end
 
   describe "when on live environment and lambda returns vary header which doesn't match any mvt header" do
@@ -197,6 +217,26 @@ defmodule EndToEnd.MvtTest do
       assert String.contains?(vary_header, "bbc-mvt-complete")
     end
 
+    test "the response will differ on mapped mvt header values" do
+      expect_lambda_call(times_called: 2, vary_response: "mvt-button_colour")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("bbc-mvt-1", "experiment;button_colour;green")
+        |> Router.call([])
+
+      [request_id_one] = get_resp_header(response, "bsig")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("bbc-mvt-1", "experiment;button_colour;blue")
+        |> Router.call([])
+
+      [request_id_two] = get_resp_header(response, "bsig")
+
+      refute request_id_one == request_id_two
+    end
+
     test "the response will vary on override headers" do
       expect_lambda_call(times_called: 1, vary_response: "mvt-some_experiment")
 
@@ -209,6 +249,26 @@ defmodule EndToEnd.MvtTest do
 
       assert String.contains?(vary_header, "mvt-some_experiment")
       assert String.contains?(vary_header, "bbc-mvt-complete")
+    end
+
+    test "the response will differ on override header values" do
+      expect_lambda_call(times_called: 2, vary_response: "mvt-some_experiment")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("mvt-some_experiment", "experiment;some_value_a")
+        |> Router.call([])
+
+      [request_id_one] = get_resp_header(response, "bsig")
+
+      response =
+        conn(:get, "/mvt")
+        |> put_req_header("mvt-some_experiment", "experiment;some_value_b")
+        |> Router.call([])
+
+      [request_id_two] = get_resp_header(response, "bsig")
+
+      refute request_id_one == request_id_two
     end
   end
 
@@ -327,6 +387,26 @@ defmodule EndToEnd.MvtTest do
     [vary_header] = get_resp_header(response, "vary")
     refute String.contains?(vary_header, "bbc-mvt-2")
     assert 200 == response.status
+  end
+
+  test "the response will differ on mapped mvt header values" do
+    expect_lambda_call(times_called: 2, vary_response: "mvt-button_colour")
+
+    response =
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-1", "experiment;button_colour;green")
+      |> Router.call([])
+
+    [request_id_one] = get_resp_header(response, "bsig")
+
+    response =
+      conn(:get, "/mvt")
+      |> put_req_header("bbc-mvt-1", "experiment;button_colour;blue")
+      |> Router.call([])
+
+    [request_id_two] = get_resp_header(response, "bsig")
+
+    refute request_id_one == request_id_two
   end
 
   test "Response is not cached if all MVT headers in response vary are not in :mvt_seen", %{
