@@ -3,7 +3,7 @@ defmodule Routes.Specs.UploaderWorldService do
     %{
       owner: "D&EHomeParticipationTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=183485635",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       request_pipeline: ["WorldServiceRedirect"]
     }
   end

@@ -1,7 +1,7 @@
 defmodule Routes.Specs.WorldServiceKyrgyzLivePage do
   def specs(production_env) do
     %{
-      platform: Simorgh,
+      platform: "Simorgh",
       query_params_allowlist: query_params_allowlist(production_env)
     }
   end

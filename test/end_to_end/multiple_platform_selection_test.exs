@@ -1,4 +1,4 @@
-defmodule EndToEnd.PlatformSelectionTest do
+defmodule EndToEnd.MultiplePlatformSelectionTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
@@ -40,7 +40,7 @@ defmodule EndToEnd.PlatformSelectionTest do
     test ~s(Webcore platform is used when platform is "Webcore") do
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
-                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithoutPlatformAttribute.Webcore"}},
+                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
                                    _opts ->
         {:ok,
          %{
@@ -83,7 +83,7 @@ defmodule EndToEnd.PlatformSelectionTest do
 
         expect(LambdaMock, :call, fn _credentials,
                                      _function_arn,
-                                     %{headers: %{"ctx-route-spec": "SomeRouteStateWithoutPlatformAttribute.Webcore"}},
+                                     %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
                                      _opts ->
           {:ok,
            %{

@@ -11,7 +11,7 @@ defmodule Belfrage.PersonalisationTest do
     @route_spec %RouteSpec{
       owner: "An owner",
       runbook: "A run book",
-      platform: Webcore,
+      platform: "Webcore",
       request_pipeline: ["a", "really", "long", "pipeline"]
     }
 
@@ -113,7 +113,7 @@ defmodule Belfrage.PersonalisationTest do
 
     test "returns false when the news article personalisation is off and personalisation dial is on for PersonalisedContainerData routes" do
       stub_dials(news_articles_personalisation: "off", personalisation: "on")
-      refute(Personalisation.enabled?(route_state_id: "PersonalisedContainerData"))
+      refute(Personalisation.enabled?(route_state_id: "PersonalisedContainerData.Webcore"))
       assert(Personalisation.enabled?(route_state_id: "HomePagePersonalised"))
     end
 

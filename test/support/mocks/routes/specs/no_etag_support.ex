@@ -3,7 +3,7 @@ defmodule Routes.Specs.NoEtagSupport do
     %{
       owner: "Some owner",
       runbook: "Some runbook",
-      platform: MozartNews,
+      platform: "MozartNews",
       etag: false
     }
   end

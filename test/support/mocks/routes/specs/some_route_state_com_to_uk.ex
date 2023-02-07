@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeRouteStateComToUK do
     %{
       owner: "Some person",
       runbook: "Some runbook",
-      platform: Webcore,
+      platform: "Webcore",
       request_pipeline: ["ComToUKRedirect"],
       query_params_allowlist: ["q", "page", "scope", "filter"]
     }

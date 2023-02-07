@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeMozartRouteState do
     %{
       owner: "An owner",
       runbook: "Some runbook",
-      platform: MozartNews,
+      platform: "MozartNews",
       query_params_allowlist: ["page"]
     }
   end

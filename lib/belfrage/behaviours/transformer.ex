@@ -18,7 +18,7 @@ defmodule Belfrage.Behaviours.Transformer do
     end
   end
 
-  @spec call(Struct.t(), transformer_type(), [String.t()]) ::
+  @spec call(Struct.t(), transformer_type(), String.t()) ::
           {:ok, Struct.t()}
           | {:ok, Struct.t(), updated_transformers()}
           | {:stop, Struct.t()}
@@ -29,8 +29,9 @@ defmodule Belfrage.Behaviours.Transformer do
     apply(callback, :call, [struct])
   end
 
-  defp get_transformer_callback(type, name) do
-    Module.concat([Elixir.Belfrage, get_transformer_path(type), name])
+  @spec get_transformer_callback(transformer_type(), String.t()) :: atom()
+  def get_transformer_callback(type, name) do
+    Module.concat([Belfrage, get_transformer_path(type), name])
   end
 
   defp get_transformer_path(:request), do: RequestTransformers

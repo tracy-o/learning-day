@@ -9,7 +9,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
   @moduletag :end_to_end
 
   setup do
-    start_supervised!({RouteState, "SomeRouteStateComToUK"})
+    start_supervised!({RouteState, "SomeRouteStateComToUK.Webcore"})
     :ok
   end
 

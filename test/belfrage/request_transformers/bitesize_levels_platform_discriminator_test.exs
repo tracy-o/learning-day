@@ -7,7 +7,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
   @webcore_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -21,7 +21,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
   @webcore_test_data_with_year %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -35,7 +35,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
   @morph_test_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
-      platform: MorphRouter,
+      platform: "MorphRouter",
       production_environment: "test"
     },
     request: %Struct.Request{
@@ -49,7 +49,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
   @morph_live_data %Struct{
     private: %Struct.Private{
       origin: "https://morph-router.api.bbci.co.uk",
-      platform: MorphRouter
+      platform: "MorphRouter"
     },
     request: %Struct.Request{
       scheme: :http,
@@ -75,7 +75,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
              %Struct{
                private: %Struct.Private{
                  origin: ^lambda_function,
-                 platform: Webcore
+                 platform: "Webcore"
                },
                request: %Struct.Request{
                  scheme: :http,
@@ -95,7 +95,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
              %Struct{
                private: %Struct.Private{
                  origin: ^morph_endpoint,
-                 platform: MorphRouter
+                 platform: "MorphRouter"
                },
                request: %Struct.Request{
                  scheme: :http,
@@ -118,7 +118,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
              %Struct{
                private: %Struct.Private{
                  origin: ^morph_endpoint,
-                 platform: MorphRouter
+                 platform: "MorphRouter"
                },
                request: %Struct.Request{
                  scheme: :http,
@@ -138,7 +138,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
              %Struct{
                private: %Struct.Private{
                  origin: ^lambda_function,
-                 platform: Webcore
+                 platform: "Webcore"
                },
                request: %Struct.Request{
                  scheme: :http,

@@ -22,14 +22,20 @@ defmodule Belfrage.MixProject do
     do: ["lib", "test/support"]
 
   defp elixirc_paths(mix_env) when mix_env == :dev,
-    do: ["lib", "benchmark", "test/support/fixtures", "test/support/transformer_examples"]
+    do: [
+      "lib",
+      "benchmark",
+      "test/support/fixtures",
+      "test/support/mocks"
+    ]
 
   defp elixirc_paths(_), do: ["lib"]
 
   defp aliases do
     [
       # for smoke_test, see lib/mix/tasks/smoke_test.ex
-      t: ["format", "cmd mix test --force --color"]
+      t: ["format", "cmd mix test --force --color"],
+      test: ["test --color --trace"]
     ]
   end
 
@@ -74,7 +80,11 @@ defmodule Belfrage.MixProject do
       {:telemetry_metrics_statsd, "~> 0.6"},
       {:observer_cli, "~> 1.7", only: :dev},
       {:joken, "~> 2.5"},
-      {:b64fast, "~> 0.2.3"}
+      {:b64fast, "~> 0.2.3"},
+
+      # Clustering
+      {:libcluster, "~> 3.3"},
+      {:libcluster_ec2, "~> 0.7"}
     ]
   end
 end

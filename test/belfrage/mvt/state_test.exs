@@ -7,6 +7,8 @@ defmodule Belfrage.Mvt.StateTest do
   alias Belfrage.{Mvt, RouteState, Struct}
   alias Belfrage.Struct.{Response, Private}
 
+  @route_state_id "SomeRouteState.Webcore"
+
   describe "put_vary_headers/2" do
     test "puts no header when none are supplied" do
       %{} = Mvt.State.put_vary_headers(%{}, [])
@@ -133,7 +135,7 @@ defmodule Belfrage.Mvt.StateTest do
 
     test "drops all bbc-mvt- headers that are not in :mvt_seen in RouteState state" do
       now = DateTime.utc_now()
-      pid = start_supervised!({RouteState, "SomeRouteState"})
+      pid = start_supervised!({RouteState, @route_state_id})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => now})
@@ -146,12 +148,12 @@ defmodule Belfrage.Mvt.StateTest do
                    "bbc-mvt-1" => "some;button_colour;value",
                    "bbc-mvt-2" => "some;sidebar_colour;value"
                  },
-                 "SomeRouteState"
+                 @route_state_id
                )
     end
 
     test "drops all bbc-mvt- headers that have values not in the correct format" do
-      pid = start_supervised!({RouteState, "SomeRouteState"})
+      pid = start_supervised!({RouteState, @route_state_id})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{
@@ -169,14 +171,14 @@ defmodule Belfrage.Mvt.StateTest do
                    "bbc-mvt-2" => "some;footer_colour;value;something_else",
                    "bbc-mvt-3" => "some;banner_colour"
                  },
-                 "SomeRouteState"
+                 @route_state_id
                )
     end
   end
 
   describe "all_vary_headers_seen?/2" do
     setup do
-      pid = start_supervised!({RouteState, "SomeRouteState"})
+      pid = start_supervised!({RouteState, @route_state_id})
       {:ok, route_state_pid: pid}
     end
 
@@ -196,7 +198,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
 
@@ -216,7 +218,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "something"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
 
@@ -236,7 +238,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "mvt-banner_colour,something"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
 
@@ -256,7 +258,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "mvt-banner_colour,something,mvt-button_colour"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
 
@@ -267,7 +269,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
 
@@ -278,7 +280,7 @@ defmodule Belfrage.Mvt.StateTest do
                    "vary" => "something"
                  }
                },
-               private: %Private{route_state_id: "SomeRouteState"}
+               private: %Private{route_state_id: @route_state_id}
              })
     end
   end

@@ -3,7 +3,7 @@ defmodule Routes.Specs.SportDisciplineTeamTopic do
     %{
       owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
-      platform: Webcore,
+      platform: "Webcore",
       query_params_allowlist: ["page"],
       personalisation: "on"
     }

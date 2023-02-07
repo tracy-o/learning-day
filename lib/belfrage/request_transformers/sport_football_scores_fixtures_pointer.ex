@@ -9,7 +9,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
       struct =
         struct
         |> Struct.add(:private, %{
-          platform: Webcore,
+          platform: "Webcore",
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
 

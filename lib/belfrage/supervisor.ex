@@ -11,6 +11,7 @@ defmodule Belfrage.Supervisor do
   def children(env: env) do
     conditional_servers(env) ++
       [
+        Belfrage.RouteSpecSupervisor,
         {Finch, finch_opts()},
         {BelfrageWeb.Router, router_options(env)},
         Belfrage.RouteStateRegistry,
@@ -22,12 +23,14 @@ defmodule Belfrage.Supervisor do
         {Cachex, name: :cache, limit: cachex_limit(), stats: true},
         {Belfrage.Services.Webcore.Supervisor, [env: env]},
         {Belfrage.NewsApps.Supervisor, [env: env]},
-        {Belfrage.SupervisorObserver, get_observed_ids()}
+        {Belfrage.SupervisorObserver, get_observed_ids()},
+        {Cluster.Supervisor, [Application.fetch_env!(:libcluster, :topologies), [name: BelfrageClusterSupervisor]]}
       ]
   end
 
   def get_observed_ids() do
     [
+      Belfrage.RouteSpecSupervisor,
       Belfrage.RouteStateSupervisor,
       Belfrage.Authentication.Supervisor,
       Belfrage.Dials.Supervisor,

@@ -37,7 +37,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
   def call(struct), do: {:ok, struct}
 
   defp ttl_multiplier(%Private{platform: platform}) do
-    if platform == Webcore do
+    if platform == "Webcore" do
       @dial.state(:webcore_ttl_multiplier)
     else
       @dial.state(:non_webcore_ttl_multiplier)

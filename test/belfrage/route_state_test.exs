@@ -1,19 +1,14 @@
 defmodule Belfrage.RouteStateTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-  import Belfrage.Test.RoutingHelper
   import Process, only: [send: 3]
   import Test.Support.Helper, only: [set_env: 2]
 
-  alias Belfrage.{Struct, RouteState, RouteSpec}
+  alias Belfrage.{Struct, RouteState, RouteSpecManager}
 
   @failure_status_code Enum.random(500..504)
 
-  @route_state_id "RouteStateTestRouteSpec"
-
-  define_route(@route_state_id, %{platform: Webcore})
-
-  @legacy_request_struct %Struct{private: %Struct.Private{route_state_id: @route_state_id}}
+  @route_state_id "SomeRouteState.Webcore"
 
   @resp_struct %Struct{
     private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
@@ -40,13 +35,10 @@ defmodule Belfrage.RouteStateTest do
   test "returns a state pointer" do
     start_supervised!({RouteState, @route_state_id})
 
-    route_spec =
-      @route_state_id
-      |> RouteSpec.specs_for()
-      |> Map.from_struct()
+    route_spec = Map.from_struct(RouteSpecManager.get_spec(@route_state_id))
 
-    assert RouteState.state(@legacy_request_struct) ==
-             {:ok, Map.merge(route_spec, %{route_state_id: @route_state_id, counter: %{}})}
+    assert RouteState.state(@route_state_id) ==
+             {:ok, Map.merge(route_spec, %{counter: %{}})}
   end
 
   describe "returns a different count per origin" do
@@ -73,7 +65,7 @@ defmodule Belfrage.RouteStateTest do
                     :errors => 9
                   }
                 }
-              }} = RouteState.state(@resp_struct)
+              }} = RouteState.state(@route_state_id)
     end
 
     test "when there are no errors" do
@@ -92,7 +84,7 @@ defmodule Belfrage.RouteStateTest do
                     200 => 15
                   }
                 }
-              }} = RouteState.state(@resp_struct)
+              }} = RouteState.state(@route_state_id)
     end
 
     test "when there are a mix of errors and success responses" do
@@ -110,7 +102,7 @@ defmodule Belfrage.RouteStateTest do
                     :errors => 15
                   }
                 }
-              }} = RouteState.state(@resp_struct)
+              }} = RouteState.state(@route_state_id)
     end
   end
 
@@ -122,12 +114,12 @@ defmodule Belfrage.RouteStateTest do
     set_env(:short_counter_reset_interval, interval)
 
     for _ <- 1..30, do: RouteState.inc(@resp_struct)
-    {:ok, state} = RouteState.state(@legacy_request_struct)
+    {:ok, state} = RouteState.state(@route_state_id)
     assert state.counter.errors == 30
 
     Process.sleep(interval + 1)
 
-    {:ok, state} = RouteState.state(@legacy_request_struct)
+    {:ok, state} = RouteState.state(@route_state_id)
     assert false == Map.has_key?(state.counter, :error), "RouteState should have reset"
   end
 
@@ -136,7 +128,7 @@ defmodule Belfrage.RouteStateTest do
 
     test "it only increments the fallback counter" do
       for _ <- 1..30, do: RouteState.inc(@fallback_resp_struct)
-      {:ok, state} = RouteState.state(@legacy_request_struct)
+      {:ok, state} = RouteState.state(@route_state_id)
 
       assert %{
                counter: %{
@@ -153,7 +145,7 @@ defmodule Belfrage.RouteStateTest do
         RouteState.inc(@resp_struct)
       end
 
-      assert {:ok, %{counter: counter}} = RouteState.state(@resp_struct)
+      assert {:ok, %{counter: counter}} = RouteState.state(@route_state_id)
 
       assert not Map.has_key?(counter, :fallback)
     end
@@ -162,7 +154,7 @@ defmodule Belfrage.RouteStateTest do
   test "exits when fetch_route_state_timeout reached" do
     start_supervised!({RouteState, @route_state_id})
 
-    assert catch_exit(RouteState.state(@resp_struct, 0)) ==
+    assert catch_exit(RouteState.state(@route_state_id, 0)) ==
              {:timeout,
               {GenServer, :call,
                [{:via, Registry, {Belfrage.RouteStateRegistry, {Belfrage.RouteState, @route_state_id}}}, :state, 0]}}
@@ -229,7 +221,7 @@ defmodule Belfrage.RouteStateTest do
       :erlang.trace(pid, true, [:receive])
 
       struct = %Struct{
-        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
         response: %Struct.Response{
           http_status: 200,
           fallback: false,
@@ -251,7 +243,7 @@ defmodule Belfrage.RouteStateTest do
       :erlang.trace(pid, true, [:receive])
 
       struct = %Struct{
-        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
         response: %Struct.Response{
           http_status: 200,
           fallback: false,
@@ -273,7 +265,7 @@ defmodule Belfrage.RouteStateTest do
       :erlang.trace(pid, true, [:receive])
 
       struct = %Struct{
-        private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
         response: %Struct.Response{
           http_status: 200,
           fallback: true,
@@ -421,7 +413,7 @@ defmodule Belfrage.RouteStateTest do
     :erlang.trace(pid, true, [:receive])
 
     struct = %Struct{
-      private: %Struct.Private{route_state_id: "RouteStateTestRouteSpec", origin: "https://some.origin"},
+      private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
       response: %Struct.Response{
         http_status: 200,
         fallback: false,

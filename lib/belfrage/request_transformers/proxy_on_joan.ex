@@ -23,7 +23,7 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoan do
       {
         :ok,
         Struct.add(struct, :private, %{
-          platform: MozartNews,
+          platform: "MozartNews",
           origin: Application.get_env(:belfrage, :mozart_news_endpoint)
         })
       }

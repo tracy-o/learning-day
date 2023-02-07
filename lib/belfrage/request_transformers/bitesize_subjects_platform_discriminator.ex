@@ -6,12 +6,29 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
 
   @webcore_test_ids [
     "zxtnvcw",
-    "zmpfb9q"
+    "zmpfb9q",
+    "zphybqt",
+    "zhtf3j6",
+    "z7mtsbk",
+    "zvsc96f",
+    "z8yrwmn",
+    "zjcdxnb",
+    "znwqtfr",
+    "zmj2n39",
+    "zdmtsbk"
   ]
 
   @webcore_live_ids [
     "zxtnvcw",
-    "zmpfb9q"
+    "zmpfb9q",
+    "zphybqt",
+    "zhtf3j6",
+    "z7mtsbk",
+    "zvsc96f",
+    "z8yrwmn",
+    "zjcdxnb",
+    "znwqtfr",
+    "zmj2n39"
   ]
 
   @impl Transformer
@@ -34,7 +51,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
   defp maybe_update_origin(id, struct) do
     if is_webcore_id(id) do
       Struct.add(struct, :private, %{
-        platform: Webcore,
+        platform: "Webcore",
         origin: Application.get_env(:belfrage, :pwa_lambda_function)
       })
     else

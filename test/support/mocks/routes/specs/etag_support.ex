@@ -3,7 +3,7 @@ defmodule Routes.Specs.EtagSupport do
     %{
       owner: "Some owner",
       runbook: "Some runbook",
-      platform: MozartNews,
+      platform: "MozartNews",
       headers_allowlist: ["if-none-match"],
       response_pipeline: ["Etag"],
       etag: true

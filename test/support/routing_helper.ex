@@ -24,4 +24,24 @@ defmodule Belfrage.Test.RoutingHelper do
       end
     end
   end
+
+  defmacro define_request_transformer(name, struct) do
+    quote do
+      defmodule Module.concat([Belfrage, RequestTransformers, unquote(name)]) do
+        def call(_) do
+          unquote(struct)
+        end
+      end
+    end
+  end
+
+  defmacro define_response_transformer(name, struct) do
+    quote do
+      defmodule Module.concat([Belfrage, ResponseTransformers, unquote(name)]) do
+        def call(_) do
+          unquote(struct)
+        end
+      end
+    end
+  end
 end

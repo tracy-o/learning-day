@@ -1,7 +1,7 @@
 defmodule Routes.Specs.PersonalisedFablData do
   def specs() do
     %{
-      platform: Fabl,
+      platform: "Fabl",
       personalisation: "on"
     }
   end

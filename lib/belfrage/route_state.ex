@@ -1,15 +1,25 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, Struct, RouteSpec, CircuitBreaker, Mvt}
+  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Struct, CircuitBreaker, Mvt}
+  require Logger
 
   @fetch_route_state_timeout Application.get_env(:belfrage, :fetch_route_state_timeout)
 
   def start_link(name) do
-    GenServer.start_link(__MODULE__, RouteSpec.specs_for(name), name: via_tuple(name))
+    case RouteSpecManager.get_spec(name) do
+      nil ->
+        :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: name})
+        reason = "Route spec '#{name}' not found"
+        Logger.log(:error, "", %{msg: reason})
+        {:error, reason}
+
+      spec ->
+        GenServer.start_link(__MODULE__, spec, name: via_tuple(name))
+    end
   end
 
-  def state(%Struct{private: %Struct.Private{route_state_id: name}}, timeout \\ @fetch_route_state_timeout) do
+  def state(name, timeout \\ @fetch_route_state_timeout) do
     try do
       GenServer.call(via_tuple(name), :state, timeout)
     catch
@@ -53,13 +63,13 @@ defmodule Belfrage.RouteState do
   # callbacks
 
   @impl GenServer
-  def init(specs) do
+  def init(spec) do
     Process.send_after(self(), :reset, route_state_reset_interval())
 
-    specs = Map.from_struct(specs)
+    spec = Map.from_struct(spec)
 
     {:ok,
-     Map.merge(specs, %{
+     Map.merge(spec, %{
        counter: Counter.init(),
        mvt_seen: %{},
        throughput: 100

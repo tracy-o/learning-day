@@ -3,7 +3,7 @@ defmodule Routes.Specs.SomeRouteState do
     %{
       owner: "Some guy",
       runbook: "Some runbook",
-      platform: Webcore,
+      platform: "Webcore",
       query_params_allowlist: ["query"]
     }
   end
