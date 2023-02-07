@@ -23,8 +23,7 @@ defmodule Belfrage.Supervisor do
         {Cachex, name: :cache, limit: cachex_limit(), stats: true},
         {Belfrage.Services.Webcore.Supervisor, [env: env]},
         {Belfrage.NewsApps.Supervisor, [env: env]},
-        {Belfrage.SupervisorObserver, get_observed_ids()},
-        {Cluster.Supervisor, [Application.fetch_env!(:libcluster, :topologies), [name: BelfrageClusterSupervisor]]}
+        {Belfrage.SupervisorObserver, get_observed_ids()}
       ]
   end
 
