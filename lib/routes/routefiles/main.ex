@@ -2642,9 +2642,6 @@ defroutefile "Main" do
     ]
   end
 
-
-  handle "/weather/*any", using: "Weather", platform: "MozartWeather", examples: []
-
   # WebCore Hub
   redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302
 
