@@ -1,8 +1,8 @@
 defmodule Mix.Tasks.Benchmark do
   use Mix.Task
 
-  @dir Application.get_env(:belfrage, :benchmark)[:dir]
-  @namespace Application.get_env(:belfrage, :benchmark)[:namespace]
+  @dir Application.compile_env(:belfrage, :benchmark)[:dir]
+  @namespace Application.compile_env(:belfrage, :benchmark)[:namespace]
 
   def run([suite | args]) do
     test_module = Module.concat(@namespace, Macro.camelize(suite))

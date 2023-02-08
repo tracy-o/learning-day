@@ -3,7 +3,7 @@ defmodule Belfrage.Personalisation do
   alias Belfrage.Struct.{Request, Private}
   alias Belfrage.Authentication.{BBCID, SessionState}
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   def maybe_put_personalised_route(spec = %RouteSpec{}) do
     if personalised_route_spec?(spec) do

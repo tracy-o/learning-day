@@ -7,7 +7,7 @@ defmodule Belfrage.Clients.HTTP.Request do
     :request_id,
     payload: "",
     headers: %{},
-    timeout: Application.get_env(:belfrage, :default_timeout)
+    timeout: Application.compile_env(:belfrage, :default_timeout)
   ]
 
   @type t :: %__MODULE__{

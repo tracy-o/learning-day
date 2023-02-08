@@ -15,7 +15,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   alias Belfrage.{Cache.Local, Cache.Distributed}
 
   @default_result {:ok, :content_not_found}
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @doc """
   Tries the Local and Distributed caches

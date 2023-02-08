@@ -7,7 +7,7 @@ defmodule BelfrageWeb.Plugs.VarianceReducer do
   This feature is currently used exclusively by News Apps but could be extended to other products.
   """
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   def init(opts), do: opts
 

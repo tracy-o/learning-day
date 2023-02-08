@@ -6,7 +6,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   @shortdoc "Reports smoke test failures to route owner teams."
 
-  @http_client Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
+  @http_client Application.compile_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
 
 
   # Result of smoke tests are only send if at least one test fails.

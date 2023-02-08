@@ -4,7 +4,7 @@ defmodule Belfrage.Clients.Lambda do
 
   alias Belfrage.{AWS}
 
-  @lambda_timeout Application.get_env(:belfrage, :lambda_timeout)
+  @lambda_timeout Application.compile_env(:belfrage, :lambda_timeout)
 
   @callback call(any, any, any, any) :: any
 

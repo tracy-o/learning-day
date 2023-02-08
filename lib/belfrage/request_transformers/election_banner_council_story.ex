@@ -1,7 +1,7 @@
 defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStory do
   use Belfrage.Behaviours.Transformer
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
   def call(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do

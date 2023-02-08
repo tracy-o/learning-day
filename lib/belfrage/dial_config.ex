@@ -1,5 +1,5 @@
 defmodule Belfrage.DialConfig do
-  @dial_name_handler_mapping Application.get_env(:belfrage, :dial_handlers)
+  @dial_name_handler_mapping Application.compile_env(:belfrage, :dial_handlers)
 
   defmacro __before_compile__(env) do
     Module.register_attribute(env.module, :dial_defaults, accumulate: true)

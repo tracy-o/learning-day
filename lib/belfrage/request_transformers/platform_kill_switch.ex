@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitch do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Struct.Private
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @platform_map %{
     "Webcore" => :webcore_kill_switch

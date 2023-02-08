@@ -150,7 +150,7 @@ defmodule BelfrageWeb.RouteMaster do
       var!(add_redirect, BelfrageWeb.RouteMaster) = fn from, location, status, ttl ->
         matcher = BelfrageWeb.ReWrite.prepare(location) |> Macro.escape()
 
-        redirect_statuses = Application.get_env(:belfrage, :redirect_statuses)
+        redirect_statuses = Application.compile_env(:belfrage, :redirect_statuses)
 
         if status not in redirect_statuses do
           raise ArgumentError, message: "only #{Enum.join(redirect_statuses, ", ")} are accepted for redirects"

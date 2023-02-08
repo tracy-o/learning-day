@@ -12,7 +12,7 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPoller do
   alias Belfrage.Authentication.BBCID
 
   @availability_states %{"GREEN" => true, "RED" => false}
-  @client Application.get_env(:belfrage, :json_client)
+  @client Application.compile_env(:belfrage, :json_client)
   @http_pool :AccountAuthentication
 
   @impl true

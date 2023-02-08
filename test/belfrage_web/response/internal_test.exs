@@ -50,7 +50,7 @@ defmodule BelfrageWeb.Response.InternalTest do
     assert response.body == "<h1>400</h1>\n<!-- Belfrage -->"
   end
 
-  for status <- Application.get_env(:belfrage, :redirect_statuses) do
+  for status <- Application.compile_env(:belfrage, :redirect_statuses) do
     test "#{status} redirect" do
       response = build_response(unquote(status))
       assert response.body == ""

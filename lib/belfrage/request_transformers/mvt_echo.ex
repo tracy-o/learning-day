@@ -1,7 +1,7 @@
 defmodule Belfrage.RequestTransformers.MvtEcho do
   use Belfrage.Behaviours.Transformer
 
-  @json_codec Application.get_env(:belfrage, :json_codec)
+  @json_codec Application.compile_env(:belfrage, :json_codec)
 
   @impl Transformer
   def call(struct) do

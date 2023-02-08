@@ -4,16 +4,16 @@ defmodule BelfrageWeb.Response.Internal do
   alias Belfrage.{Metrics, CacheControl}
   alias Plug.Conn
 
-  @redirect_statuses Application.get_env(:belfrage, :redirect_statuses)
+  @redirect_statuses Application.compile_env(:belfrage, :redirect_statuses)
 
   @html_body Map.new(
                Enum.map(@redirect_statuses, fn status -> {status, ""} end) ++
                  [
                    # These files are read from disk at compilation time. If you change them be
                    # sure to recompile this module.
-                   {404, File.read!(Application.get_env(:belfrage, :not_found_page)) <> "<!-- Belfrage -->"},
-                   {405, File.read!(Application.get_env(:belfrage, :not_supported_page)) <> "<!-- Belfrage -->"},
-                   {500, File.read!(Application.get_env(:belfrage, :internal_error_page)) <> "<!-- Belfrage -->"}
+                   {404, File.read!(Application.compile_env(:belfrage, :not_found_page)) <> "<!-- Belfrage -->"},
+                   {405, File.read!(Application.compile_env(:belfrage, :not_supported_page)) <> "<!-- Belfrage -->"},
+                   {500, File.read!(Application.compile_env(:belfrage, :internal_error_page)) <> "<!-- Belfrage -->"}
                  ]
              )
 

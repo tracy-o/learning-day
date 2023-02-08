@@ -6,7 +6,7 @@ defmodule Belfrage.Services.Webcore.Credentials.STS do
   require Logger
 
   alias Belfrage.{AWS, Metrics}
-  @aws Application.get_env(:belfrage, :aws)
+  @aws Application.compile_env(:belfrage, :aws)
 
   def get() do
     request = AWS.STS.assume_role(Application.get_env(:belfrage, :webcore_lambda_role_arn), "webcore_session")

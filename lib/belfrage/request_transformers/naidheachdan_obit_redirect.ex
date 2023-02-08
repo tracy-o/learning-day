@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirect do
   alias Belfrage.Helpers.QueryParams
   use Belfrage.Behaviours.Transformer
 
-  @dial Application.get_env(:belfrage, :dial)
+  @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
   def call(struct) do

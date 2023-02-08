@@ -6,7 +6,7 @@ defmodule Belfrage.AWS.HttpClientTest do
   alias Belfrage.Clients.HTTP.Request
   alias Belfrage.Clients.HTTPMock
 
-  @default_timeout Application.get_env(:belfrage, :default_timeout)
+  @default_timeout Application.compile_env(:belfrage, :default_timeout)
 
   describe "request/5" do
     test "GET request" do
