@@ -634,6 +634,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/cymrufyw/*any", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw"]
 
   # Naidheachdan
@@ -648,6 +652,10 @@ defroutefile "Main" do
 
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", platform: "Webcore", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
+  end
+
+  handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", platform: "Webcore", examples: ["/naidheachdan/fbh/53159144"] do
