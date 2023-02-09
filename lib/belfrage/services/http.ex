@@ -2,8 +2,8 @@ defmodule Belfrage.Services.HTTP do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Struct}
-  alias Belfrage.Struct.{Request, Private, Response}
+  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.Envelope.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
   alias Belfrage.Mvt
@@ -12,11 +12,11 @@ defmodule Belfrage.Services.HTTP do
   @behaviour Service
 
   @impl Service
-  def dispatch(struct = %Struct{private: private = %Private{}}) do
-    built_request = build_request(struct)
-    struct = LatencyMonitor.checkpoint(struct, :origin_request_sent)
+  def dispatch(envelope = %Envelope{private: private = %Private{}}) do
+    built_request = build_request(envelope)
+    envelope = LatencyMonitor.checkpoint(envelope, :origin_request_sent)
     result = built_request |> execute_request(private)
-    struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
+    envelope = LatencyMonitor.checkpoint(envelope, :origin_response_received)
 
     response =
       case result do
@@ -31,14 +31,14 @@ defmodule Belfrage.Services.HTTP do
           %Response{http_status: 400, body: ""}
 
         {:error, error} ->
-          track_error(struct, error)
+          track_error(envelope, error)
           %Response{http_status: 500, body: ""}
       end
 
-    %Struct{struct | response: response}
+    %Envelope{envelope | response: response}
   end
 
-  defp build_request(struct = %Struct{request: request, private: private}) do
+  defp build_request(envelope = %Envelope{request: request, private: private}) do
     attrs =
       case request.method do
         "GET" ->
@@ -52,13 +52,13 @@ defmodule Belfrage.Services.HTTP do
       Clients.HTTP.Request,
       Map.merge(attrs, %{
         url: private.origin <> request.path <> QueryParams.encode(request.query_params),
-        headers: build_headers(struct),
+        headers: build_headers(envelope),
         request_id: request.request_id
       })
     )
   end
 
-  defp build_headers(%Struct{request: request, private: private}) do
+  defp build_headers(%Envelope{request: request, private: private}) do
     edge_headers(request)
     |> Map.merge(default_headers(request))
     |> Map.merge(request.raw_headers)
@@ -68,7 +68,7 @@ defmodule Belfrage.Services.HTTP do
     |> Map.new()
   end
 
-  defp edge_headers(request = %Struct.Request{edge_cache?: true}) do
+  defp edge_headers(request = %Envelope.Request{edge_cache?: true}) do
     %{
       "x-bbc-edge-cache" => "1",
       "x-bbc-edge-country" => request.country,
@@ -155,7 +155,7 @@ defmodule Belfrage.Services.HTTP do
     )
   end
 
-  defp track_error(struct = %Struct{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
+  defp track_error(envelope = %Envelope{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :timeout],
@@ -165,10 +165,10 @@ defmodule Belfrage.Services.HTTP do
       %{platform: platform_name(private), status_code: "408"}
     )
 
-    log_error(:timeout, struct)
+    log_error(:timeout, envelope)
   end
 
-  defp track_error(struct = %Struct{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
+  defp track_error(envelope = %Envelope{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :request],
@@ -178,18 +178,18 @@ defmodule Belfrage.Services.HTTP do
       %{platform: platform_name(private)}
     )
 
-    log_error(error, struct)
+    log_error(error, envelope)
   end
 
   defp platform_name(%Private{platform: platform}) do
     platform |> String.to_atom()
   end
 
-  defp log_error(reason, struct = %Struct{}) do
+  defp log_error(reason, envelope = %Envelope{}) do
     Logger.log(:error, "", %{
       msg: "HTTP Service request error",
       reason: reason,
-      struct: Struct.loggable(struct)
+      envelope: Envelope.loggable(envelope)
     })
   end
 end

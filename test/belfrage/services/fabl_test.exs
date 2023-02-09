@@ -1,13 +1,13 @@
 defmodule Belfrage.Services.FablTest do
   alias Belfrage.Clients
   alias Belfrage.Services.Fabl
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
   use Belfrage.Test.XrayHelper
 
-  @valid_session %Struct.UserSession{
+  @valid_session %Envelope.UserSession{
     authentication_env: "int",
     session_token: "a-valid-session-token",
     authenticated: true,
@@ -15,7 +15,7 @@ defmodule Belfrage.Services.FablTest do
     user_attributes: %{age_bracket: "o18", allow_personalisation: true}
   }
 
-  @unauthenticated_session %Struct.UserSession{
+  @unauthenticated_session %Envelope.UserSession{
     authentication_env: "int",
     session_token: nil,
     authenticated: false,
@@ -23,11 +23,11 @@ defmodule Belfrage.Services.FablTest do
     user_attributes: %{}
   }
 
-  @get_struct %Struct{
-    private: %Struct.Private{
+  @get_envelope %Envelope{
+    private: %Envelope.Private{
       origin: "https://fabl.test.api.bbci.co.uk"
     },
-    request: %Struct.Request{
+    request: %Envelope.Request{
       method: "GET",
       path: "/fd/example-module",
       path_params: %{
@@ -65,15 +65,15 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      struct = Struct.add(@get_struct, :user_session, @unauthenticated_session)
+      envelope = Envelope.add(@get_envelope, :user_session, @unauthenticated_session)
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = Fabl.dispatch(struct)
+             } = Fabl.dispatch(envelope)
     end
 
     test "get handles a valid personalised request and returns a successful response" do
@@ -100,15 +100,15 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      struct = Struct.add(@get_struct, :user_session, @valid_session)
+      envelope = Envelope.add(@get_envelope, :user_session, @valid_session)
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = Fabl.dispatch(struct)
+             } = Fabl.dispatch(envelope)
     end
 
     test "origin returns a 500 response" do
@@ -131,12 +131,12 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: "500 - Internal Server Error"
                }
-             } = Fabl.dispatch(@get_struct)
+             } = Fabl.dispatch(@get_envelope)
     end
 
     test "Cannot connect to origin" do
@@ -159,13 +159,13 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: "",
                  headers: %{}
                }
-             } = Fabl.dispatch(@get_struct)
+             } = Fabl.dispatch(@get_envelope)
     end
 
     test "origin times out" do
@@ -186,19 +186,19 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: ""
                }
-             } = Fabl.dispatch(@get_struct)
+             } = Fabl.dispatch(@get_envelope)
     end
 
-    @get_preview_struct %Struct{
-      private: %Struct.Private{
+    @get_preview_envelope %Envelope{
+      private: %Envelope.Private{
         origin: "https://fabl.test.api.bbci.co.uk"
       },
-      request: %Struct.Request{
+      request: %Envelope.Request{
         method: "GET",
         path: "/fd/preview/example-preview-module",
         path_params: %{
@@ -223,20 +223,20 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = Fabl.dispatch(@get_preview_struct)
+             } = Fabl.dispatch(@get_preview_envelope)
     end
 
-    @get_preview_with_query_struct %Struct{
-      private: %Struct.Private{
+    @get_preview_with_query_envelope %Envelope{
+      private: %Envelope.Private{
         origin: "https://fabl.test.api.bbci.co.uk"
       },
-      request: %Struct.Request{
+      request: %Envelope.Request{
         method: "GET",
         path: "/fd/preview/example-preview-module?subText=readable",
         path_params: %{
@@ -264,13 +264,13 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = Fabl.dispatch(@get_preview_with_query_struct)
+             } = Fabl.dispatch(@get_preview_with_query_envelope)
     end
 
     test "sends raw_header values" do
@@ -293,7 +293,7 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      Fabl.dispatch(@get_struct)
+      Fabl.dispatch(@get_envelope)
     end
 
     test "passes non nil xray-trace-id" do
@@ -317,8 +317,8 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      struct = put_in(@get_struct.request.xray_segment, build_segment(sampled: true))
-      Fabl.dispatch(struct)
+      envelope = put_in(@get_envelope.request.xray_segment, build_segment(sampled: true))
+      Fabl.dispatch(envelope)
     end
 
     test "does not pass nil xray-trace-id " do
@@ -337,7 +337,7 @@ defmodule Belfrage.Services.FablTest do
         end
       )
 
-      Fabl.dispatch(@get_struct)
+      Fabl.dispatch(@get_envelope)
     end
   end
 end

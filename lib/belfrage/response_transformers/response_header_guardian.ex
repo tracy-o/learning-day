@@ -6,14 +6,14 @@ defmodule Belfrage.ResponseTransformers.ResponseHeaderGuardian do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct = %Struct{response: response = %Struct.Response{headers: response_headers}}) do
-    struct =
-      Map.put(struct, :response, %Struct.Response{
+  def call(envelope = %Envelope{response: response = %Envelope.Response{headers: response_headers}}) do
+    envelope =
+      Map.put(envelope, :response, %Envelope.Response{
         response
         | headers: clean_headers(response_headers)
       })
 
-    {:ok, struct}
+    {:ok, envelope}
   end
 
   @doc ~S"""

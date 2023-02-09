@@ -5,7 +5,7 @@ defmodule Belfrage.PersonalisationTest do
 
   alias Belfrage.Personalisation
   alias Belfrage.RouteSpec
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   describe "maybe_put_personalised_route/1" do
     @route_spec %RouteSpec{
@@ -30,47 +30,55 @@ defmodule Belfrage.PersonalisationTest do
     test "sets :personalised_request to true when request is personalised" do
       enable_personalisation()
 
-      struct =
-        %Struct{}
+      envelope =
+        %Envelope{}
         |> set_host("bbc.co.uk")
         |> set_personalised_route(true)
         |> authenticate_request()
 
-      assert Personalisation.maybe_put_personalised_request(struct) ==
-               Struct.add(struct, :private, %{personalised_request: true})
+      assert Personalisation.maybe_put_personalised_request(envelope) ==
+               Envelope.add(envelope, :private, %{personalised_request: true})
     end
 
     test "does not set :personalised_request to true when request is not personalised" do
       enable_personalisation()
-      struct = set_host(%Struct{}, "bbc.co.uk")
+      envelope = set_host(%Envelope{}, "bbc.co.uk")
 
-      assert Personalisation.maybe_put_personalised_request(struct) == struct
+      assert Personalisation.maybe_put_personalised_request(envelope) == envelope
     end
   end
 
   describe "append_allowlists/1" do
     test "does not append allowlists when personalisation is off and request is not from app" do
-      struct = %Struct{request: %Struct.Request{app?: false}, private: %Struct.Private{personalised_route: false}}
-      assert Personalisation.append_allowlists(struct) == struct
+      envelope = %Envelope{
+        request: %Envelope.Request{app?: false},
+        private: %Envelope.Private{personalised_route: false}
+      }
+
+      assert Personalisation.append_allowlists(envelope) == envelope
     end
 
     test "does not append allowlists when personalisation is off and request is from app" do
-      struct = %Struct{request: %Struct.Request{app?: true}, private: %Struct.Private{personalised_route: false}}
-      assert Personalisation.append_allowlists(struct) == struct
+      envelope = %Envelope{
+        request: %Envelope.Request{app?: true},
+        private: %Envelope.Private{personalised_route: false}
+      }
+
+      assert Personalisation.append_allowlists(envelope) == envelope
     end
 
     test "appends correct allowlists when personalisation is on and request is from app" do
-      struct = %Struct{request: %Struct.Request{app?: true}, private: %Struct.Private{personalised_route: true}}
+      envelope = %Envelope{request: %Envelope.Request{app?: true}, private: %Envelope.Private{personalised_route: true}}
 
-      assert Personalisation.append_allowlists(struct) ==
-               Struct.add(struct, :private, %{headers_allowlist: ["authorization", "x-authentication-provider"]})
+      assert Personalisation.append_allowlists(envelope) ==
+               Envelope.add(envelope, :private, %{headers_allowlist: ["authorization", "x-authentication-provider"]})
     end
 
     test "appends allowlists when personalisation is on and request is not from app" do
-      struct = %Struct{private: %Struct.Private{personalised_route: true}}
+      envelope = %Envelope{private: %Envelope.Private{personalised_route: true}}
 
-      assert Personalisation.append_allowlists(struct) ==
-               Struct.add(struct, :private, %{
+      assert Personalisation.append_allowlists(envelope) ==
+               Envelope.add(envelope, :private, %{
                  cookie_allowlist: ["ckns_atkn", "ckns_id"],
                  headers_allowlist: ["x-id-oidc-signedin"]
                })
@@ -128,48 +136,48 @@ defmodule Belfrage.PersonalisationTest do
     test "returns true if personalisation is enabled and request is made by authenticated user to personalised route on bbc.co.uk" do
       enable_personalisation()
 
-      struct =
-        %Struct{}
+      envelope =
+        %Envelope{}
         |> set_host("bbc.co.uk")
         |> set_personalised_route(true)
         |> authenticate_request()
 
-      assert Personalisation.personalised_request?(struct)
+      assert Personalisation.personalised_request?(envelope)
 
-      refute struct |> deauthenticate_request() |> Personalisation.personalised_request?()
-      refute struct |> set_personalised_route(false) |> Personalisation.personalised_request?()
-      refute struct |> set_host("bbc.com") |> Personalisation.personalised_request?()
+      refute envelope |> deauthenticate_request() |> Personalisation.personalised_request?()
+      refute envelope |> set_personalised_route(false) |> Personalisation.personalised_request?()
+      refute envelope |> set_host("bbc.com") |> Personalisation.personalised_request?()
 
       disable_personalisation()
-      refute Personalisation.personalised_request?(struct)
+      refute Personalisation.personalised_request?(envelope)
     end
 
     test "returns true if personalisation is enabled and request is made with auth header by app user to personalised route on bbc.co.uk" do
       enable_personalisation()
 
-      struct =
-        %Struct{}
-        |> Struct.add(:request, %{app?: true})
+      envelope =
+        %Envelope{}
+        |> Envelope.add(:request, %{app?: true})
         |> set_host("bbc.co.uk")
         |> set_personalised_route(true)
         |> personalise_app_request("some-value")
 
-      assert Personalisation.personalised_request?(struct)
+      assert Personalisation.personalised_request?(envelope)
 
-      refute struct |> unpersonalise_app_request() |> Personalisation.personalised_request?()
-      refute struct |> set_personalised_route(false) |> Personalisation.personalised_request?()
-      refute struct |> set_host("bbc.com") |> Personalisation.personalised_request?()
+      refute envelope |> unpersonalise_app_request() |> Personalisation.personalised_request?()
+      refute envelope |> set_personalised_route(false) |> Personalisation.personalised_request?()
+      refute envelope |> set_host("bbc.com") |> Personalisation.personalised_request?()
 
       disable_personalisation()
-      refute Personalisation.personalised_request?(struct)
+      refute Personalisation.personalised_request?(envelope)
     end
 
-    defp set_host(struct, host) do
-      Struct.add(struct, :request, %{host: host})
+    defp set_host(envelope, host) do
+      Envelope.add(envelope, :request, %{host: host})
     end
 
-    defp set_personalised_route(struct, value) do
-      Struct.add(struct, :private, %{personalised_route: value})
+    defp set_personalised_route(envelope, value) do
+      Envelope.add(envelope, :private, %{personalised_route: value})
     end
   end
 end

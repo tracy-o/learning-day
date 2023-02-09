@@ -1,10 +1,10 @@
 defmodule Belfrage.Overrides do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   @override_keys ["belfrage-cache-bust"]
 
   def keys, do: @override_keys
 
-  def should_cache_bust?(struct = %Struct{}) do
-    Map.has_key?(struct.private.overrides, "belfrage-cache-bust")
+  def should_cache_bust?(envelope = %Envelope{}) do
+    Map.has_key?(envelope.private.overrides, "belfrage-cache-bust")
   end
 end

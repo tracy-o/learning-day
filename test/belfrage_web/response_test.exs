@@ -2,8 +2,8 @@ defmodule BelfrageWeb.ResponseTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Request, Response, Private}
 
   describe "put/2" do
     test "returns a successful binary response" do
@@ -41,7 +41,7 @@ defmodule BelfrageWeb.ResponseTest do
 
     test "sets Belfrage headers" do
       conn =
-        put_response(%Struct{
+        put_response(%Envelope{
           request: %Request{request_id: "request-id"},
           response: %Response{http_status: 200, body: "OK"}
         })
@@ -60,7 +60,7 @@ defmodule BelfrageWeb.ResponseTest do
 
     test "returns default error page if response body is empty" do
       conn =
-        put_response(%Struct{
+        put_response(%Envelope{
           request: %Request{request_id: "request-id"},
           response: %Response{http_status: 500, body: nil}
         })
@@ -72,7 +72,7 @@ defmodule BelfrageWeb.ResponseTest do
 
     test "returns default error page as publicly cacheable if request is not personalised" do
       conn =
-        put_response(%Struct{
+        put_response(%Envelope{
           response: %Response{http_status: 500, body: nil},
           private: %Private{personalised_request: false}
         })
@@ -83,7 +83,7 @@ defmodule BelfrageWeb.ResponseTest do
 
     test "returns default error page as privately cacheable if request is personalised" do
       conn =
-        put_response(%Struct{
+        put_response(%Envelope{
           response: %Response{http_status: 500, body: nil},
           private: %Private{personalised_request: true}
         })
@@ -93,11 +93,11 @@ defmodule BelfrageWeb.ResponseTest do
     end
 
     defp put_response(response = %Response{}) do
-      put_response(%Struct{response: response})
+      put_response(%Envelope{response: response})
     end
 
-    defp put_response(struct = %Struct{}) do
-      BelfrageWeb.Response.put(build_conn(struct))
+    defp put_response(envelope = %Envelope{}) do
+      BelfrageWeb.Response.put(build_conn(envelope))
     end
   end
 
@@ -116,7 +116,7 @@ defmodule BelfrageWeb.ResponseTest do
     end
 
     defp redirect(status, location, ttl) do
-      BelfrageWeb.Response.redirect(build_conn(), %Struct{}, status, location, ttl)
+      BelfrageWeb.Response.redirect(build_conn(), %Envelope{}, status, location, ttl)
     end
   end
 
@@ -144,17 +144,17 @@ defmodule BelfrageWeb.ResponseTest do
     assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
   end
 
-  test "keep struct data on error" do
-    struct = %Struct{private: %Private{personalised_request: true}}
-    conn = build_conn(struct) |> BelfrageWeb.Response.internal_server_error()
+  test "keep envelope data on error" do
+    envelope = %Envelope{private: %Private{personalised_request: true}}
+    conn = build_conn(envelope) |> BelfrageWeb.Response.internal_server_error()
     assert conn.status == 500
     # Check that the response is private because the request is personalised,
-    # which verifies that the data in the `Struct` is kept and used
+    # which verifies that the data in the `Envelope` is kept and used
     assert get_resp_header(conn, "cache-control") == ["private, stale-while-revalidate=15, max-age=0"]
   end
 
-  defp build_conn(struct \\ nil) do
+  defp build_conn(envelope \\ nil) do
     conn = conn(:get, "/_web_core")
-    if struct, do: assign(conn, :struct, struct), else: conn
+    if envelope, do: assign(conn, :envelope, envelope), else: conn
   end
 end

@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Selectors.AssetTypePlatformSelector do
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope.Request
   alias Belfrage.Clients.HTTP
   alias Routes.Platforms.Selectors.Fetchers.AresData
 

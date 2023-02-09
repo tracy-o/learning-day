@@ -2,14 +2,14 @@ defmodule Belfrage.RouteSpecTest do
   use ExUnit.Case, async: true
   import Belfrage.Test.RoutingHelper
 
-  alias Belfrage.{RouteSpec, Struct}
+  alias Belfrage.{RouteSpec, Envelope}
 
   describe "get_spec/1" do
     for transformer <- ["Foo", "Bar", "Baz1", "Baz2"],
-        do: define_request_transformer(transformer, %Struct{})
+        do: define_request_transformer(transformer, %Envelope{})
 
     for transformer <- ["Foo", "Bar", "Baz"],
-        do: define_response_transformer(transformer, %Struct{})
+        do: define_response_transformer(transformer, %Envelope{})
 
     test "merges route attributes into platform attributes" do
       define_platform("MergePlatform", %{caching_enabled: false, default_language: "foo"})
@@ -183,7 +183,7 @@ defmodule Belfrage.RouteSpecTest do
       end
     end
 
-    test "invalidates not allowed RouteSpec struct attributes" do
+    test "invalidates not allowed RouteSpec envelope attributes" do
       define_platform("NotAllowedAttrPlatform", %{
         query_params_allowlist: ["param2"],
         headers_allowlist: ["header2"],

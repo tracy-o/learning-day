@@ -3,29 +3,29 @@ defmodule Belfrage.Cache.FetchTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Cache.Fetch
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Request
-  alias Belfrage.Struct.Response
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Request
+  alias Belfrage.Envelope.Response
 
   import Belfrage.Test.CachingHelper
 
   describe "fetch/2" do
     setup do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{request_hash: unique_cache_key()}
       }
 
       response = %Response{body: "Cached response", personalised_route: true}
-      response = put_into_cache(%Struct{struct | response: response})
-      %{struct: struct, cached_response: response}
+      response = put_into_cache(%Envelope{envelope | response: response})
+      %{envelope: envelope, cached_response: response}
     end
 
-    test "returns a struct with expected values when fetching a fresh response from the local cache", %{
-      struct: struct,
+    test "returns a envelope with expected values when fetching a fresh response from the local cache", %{
+      envelope: envelope,
       cached_response: cached_response
     } do
-      struct = Struct.add(struct, :private, %{personalised_route: true, personalised_request: false})
-      %Struct{response: response, private: private} = Fetch.fetch(struct, [:fresh])
+      envelope = Envelope.add(envelope, :private, %{personalised_route: true, personalised_request: false})
+      %Envelope{response: response, private: private} = Fetch.fetch(envelope, [:fresh])
 
       assert response.body == cached_response.body
       assert private.origin == :belfrage_cache
@@ -35,12 +35,12 @@ defmodule Belfrage.Cache.FetchTest do
       assert response.cache_type == nil
     end
 
-    test "returns a struct with expected values when fetching a fresh response from the local cache and fallback opt. is true",
+    test "returns a envelope with expected values when fetching a fresh response from the local cache and fallback opt. is true",
          %{
-           struct: struct,
+           envelope: envelope,
            cached_response: cached_response
          } do
-      %Struct{response: response, private: private} = Fetch.fetch(struct, [:fresh], fallback: true)
+      %Envelope{response: response, private: private} = Fetch.fetch(envelope, [:fresh], fallback: true)
 
       assert response.body == cached_response.body
       assert private.origin == :belfrage_cache
@@ -48,12 +48,12 @@ defmodule Belfrage.Cache.FetchTest do
       assert response.cache_type == nil
     end
 
-    test "returns a struct with expected values when fetching a stale response from the local cache", %{
-      struct: struct
+    test "returns a envelope with expected values when fetching a stale response from the local cache", %{
+      envelope: envelope
     } do
-      cached_response = make_cached_response_stale(struct.request.request_hash)
+      cached_response = make_cached_response_stale(envelope.request.request_hash)
 
-      %Struct{response: response, private: private} = Fetch.fetch(struct, [:stale])
+      %Envelope{response: response, private: private} = Fetch.fetch(envelope, [:stale])
 
       assert response.body == cached_response.body
       assert private.origin == nil
@@ -61,17 +61,17 @@ defmodule Belfrage.Cache.FetchTest do
       assert response.cache_type == :local
     end
 
-    test "returns a struct with expected values when fetching a stale response from the distributed cache", %{
-      struct: struct,
+    test "returns a envelope with expected values when fetching a stale response from the distributed cache", %{
+      envelope: envelope,
       cached_response: cached_response
     } do
       clear_cache()
 
-      expect(Belfrage.Clients.CCPMock, :fetch, fn _struct ->
+      expect(Belfrage.Clients.CCPMock, :fetch, fn _envelope ->
         {:ok, cached_response}
       end)
 
-      %Struct{response: response, private: private} = Fetch.fetch(struct, [:stale])
+      %Envelope{response: response, private: private} = Fetch.fetch(envelope, [:stale])
 
       assert response.body == cached_response.body
       assert private.origin == nil

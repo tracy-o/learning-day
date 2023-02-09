@@ -2,12 +2,12 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.WorldServiceRedirect
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   describe "http requests" do
-    @http_uk_request_struct %Struct{
-      private: %Struct.Private{origin: "http://www.bbc.co.uk"},
-      request: %Struct.Request{
+    @http_uk_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "http://www.bbc.co.uk"},
+      request: %Envelope.Request{
         scheme: :http,
         host: "www.bbc.co.uk",
         path: "/_web_core"
@@ -17,8 +17,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     test ".co.uk will be uplifted to https and redirected to .com" do
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 302,
                    body: "Redirecting",
                    headers: %{
@@ -28,12 +28,12 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call(@http_uk_request_struct)
+             } = WorldServiceRedirect.call(@http_uk_request_envelope)
     end
 
-    @http_uk_with_qs_request_struct %Struct{
-      private: %Struct.Private{origin: "https://www.bbc.co.uk"},
-      request: %Struct.Request{
+    @http_uk_with_qs_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "https://www.bbc.co.uk"},
+      request: %Envelope.Request{
         host: "www.bbc.co.uk",
         path: "/_web_core",
         query_params: %{
@@ -46,8 +46,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     test ".co.uk with a query string will be uplifted to https and redirected to .com with the query string remains" do
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 302,
                    body: "Redirecting",
                    headers: %{
@@ -57,12 +57,12 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call(@http_uk_with_qs_request_struct)
+             } = WorldServiceRedirect.call(@http_uk_with_qs_request_envelope)
     end
 
-    @http_com_request_struct %Struct{
-      private: %Struct.Private{origin: "http://www.bbc.com"},
-      request: %Struct.Request{
+    @http_com_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "http://www.bbc.com"},
+      request: %Envelope.Request{
         host: "www.bbc.com",
         path: "/_web_core",
         scheme: :http
@@ -72,8 +72,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     test ".com will be uplifted to https" do
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 302,
                    body: "Redirecting",
                    headers: %{
@@ -83,12 +83,12 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call(@http_com_request_struct)
+             } = WorldServiceRedirect.call(@http_com_request_envelope)
     end
 
-    @http_com_with_qs_request_struct %Struct{
-      private: %Struct.Private{origin: "https://www.bbc.com"},
-      request: %Struct.Request{
+    @http_com_with_qs_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "https://www.bbc.com"},
+      request: %Envelope.Request{
         host: "www.bbc.com",
         path: "/_web_core",
         query_params: %{
@@ -101,8 +101,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     test ".com request with qs will be uplifted to https and redirected to .com and the query string remain" do
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 302,
                    body: "Redirecting",
                    headers: %{
@@ -112,14 +112,14 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
                    }
                  }
                }
-             } = WorldServiceRedirect.call(@http_com_with_qs_request_struct)
+             } = WorldServiceRedirect.call(@http_com_with_qs_request_envelope)
     end
   end
 
   describe "https requests" do
-    @https_com_request_struct %Struct{
-      private: %Struct.Private{origin: "https://www.bbc.com"},
-      request: %Struct.Request{
+    @https_com_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "https://www.bbc.com"},
+      request: %Envelope.Request{
         host: "www.bbc.com",
         path: "/_web_core",
         scheme: :https
@@ -127,12 +127,12 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     }
 
     test ".com request will not redirect" do
-      assert {:ok, @https_com_request_struct} = WorldServiceRedirect.call(@https_com_request_struct)
+      assert {:ok, @https_com_request_envelope} = WorldServiceRedirect.call(@https_com_request_envelope)
     end
 
-    @https_com_with_qs_request_struct %Struct{
-      private: %Struct.Private{origin: "https://www.bbc.com"},
-      request: %Struct.Request{
+    @https_com_with_qs_request_envelope %Envelope{
+      private: %Envelope.Private{origin: "https://www.bbc.com"},
+      request: %Envelope.Request{
         host: "www.bbc.com",
         path: "/_web_core",
         query_params: %{
@@ -143,13 +143,13 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
     }
 
     test ".com request with a query string will not redirect" do
-      assert {:ok, @https_com_with_qs_request_struct} = WorldServiceRedirect.call(@https_com_with_qs_request_struct)
+      assert {:ok, @https_com_with_qs_request_envelope} = WorldServiceRedirect.call(@https_com_with_qs_request_envelope)
     end
   end
 
-  @https_api_request_struct %Struct{
-    private: %Struct.Private{origin: "https://bruce.belfrage.api.bbc.co.uk"},
-    request: %Struct.Request{
+  @https_api_request_envelope %Envelope{
+    private: %Envelope.Private{origin: "https://bruce.belfrage.api.bbc.co.uk"},
+    request: %Envelope.Request{
       host: "bruce.belfrage.api.bbc.co.uk",
       path: "/_web_core",
       query_params: %{
@@ -160,6 +160,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirectTest do
   }
 
   test ".api hosts will not be redirected" do
-    assert {:ok, @https_api_request_struct} = WorldServiceRedirect.call(@https_api_request_struct)
+    assert {:ok, @https_api_request_envelope} = WorldServiceRedirect.call(@https_api_request_envelope)
   end
 end

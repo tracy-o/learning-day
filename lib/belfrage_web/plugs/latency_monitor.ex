@@ -17,13 +17,13 @@ defmodule BelfrageWeb.Plugs.LatencyMonitor do
 
   defp on_request_completed(conn = %Plug.Conn{status: status}) when status in [200, :ok] do
     Metrics.latency_span(:register_before_send_latency_monitor, fn ->
-      conn.assigns[:struct]
+      conn.assigns[:envelope]
       |> case do
         nil ->
           nil
 
-        struct ->
-          LatencyMonitor.checkpoint(struct, :response_sent)
+        envelope ->
+          LatencyMonitor.checkpoint(envelope, :response_sent)
       end
 
       conn

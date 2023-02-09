@@ -1,19 +1,19 @@
 defmodule Belfrage.Services.Fabl.Request do
-  alias Belfrage.{Clients, Struct}
-  alias Belfrage.Struct.{Request, UserSession}
+  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.Envelope.{Request, UserSession}
   alias Belfrage.Xray
   alias Belfrage.Helpers.QueryParams
 
-  def build(%Struct{
+  def build(%Envelope{
         request:
-          request = %Struct.Request{
+          request = %Envelope.Request{
             method: "GET",
             path: path,
             path_params: params,
             request_id: request_id,
             query_params: query_params
           },
-        private: %Struct.Private{
+        private: %Envelope.Private{
           origin: origin,
           personalised_route: is_personalised
         },

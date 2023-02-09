@@ -1,7 +1,7 @@
 defmodule Belfrage.Services.Webcore do
   require Logger
-  alias Belfrage.{Struct, Metrics}
-  alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.{Envelope, Metrics}
+  alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
   alias Belfrage.Xray
@@ -10,11 +10,11 @@ defmodule Belfrage.Services.Webcore do
   @behaviour Service
 
   @impl Service
-  def dispatch(struct = %Struct{private: private = %Private{}}) do
-    struct = LatencyMonitor.checkpoint(struct, :origin_request_sent)
+  def dispatch(envelope = %Envelope{private: private = %Private{}}) do
+    envelope = LatencyMonitor.checkpoint(envelope, :origin_request_sent)
 
     response =
-      with {:ok, response} <- call_lambda(struct),
+      with {:ok, response} <- call_lambda(envelope),
            {:ok, response} <- build_response(response) do
         Metrics.multi_execute([[:belfage, :webcore, :response], [:belfrage, :platform, :response]], %{}, %{
           platform: "Webcore",
@@ -38,27 +38,27 @@ defmodule Belfrage.Services.Webcore do
           %Response{http_status: status_code, body: body}
       end
 
-    struct = LatencyMonitor.checkpoint(struct, :origin_response_received)
-    Struct.add(struct, :response, response)
+    envelope = LatencyMonitor.checkpoint(envelope, :origin_response_received)
+    Envelope.add(envelope, :response, response)
   end
 
-  defp call_lambda(struct = %Struct{request: %Request{}, private: private = %Private{}}) do
+  defp call_lambda(envelope = %Envelope{request: %Request{}, private: private = %Private{}}) do
     metadata = %{
       route_spec: private.route_state_id,
-      struct: struct
+      envelope: envelope
     }
 
     Metrics.duration(~w(webcore request)a, metadata, fn ->
       lambda_client().call(
         Webcore.Credentials.get(),
         private.origin,
-        Webcore.Request.build(struct),
-        lambda_options(struct.request)
+        Webcore.Request.build(envelope),
+        lambda_options(envelope.request)
       )
     end)
   end
 
-  defp lambda_options(request = %Struct.Request{}) do
+  defp lambda_options(request = %Envelope.Request{}) do
     if request.xray_segment do
       [xray_trace_id: Xray.build_trace_id_header(request.xray_segment)]
     else

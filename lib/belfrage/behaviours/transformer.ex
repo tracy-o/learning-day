@@ -1,32 +1,32 @@
 defmodule Belfrage.Behaviours.Transformer do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   @type updated_transformers :: {:add | :replace, list()}
   @type transformer_type :: :request | :response
 
-  @callback call(Struct.t()) ::
-              {:ok, Struct.t()}
-              | {:ok, Struct.t(), updated_transformers()}
-              | {:stop, Struct.t()}
-              | {:error, Struct.t(), String.t()}
+  @callback call(Envelope.t()) ::
+              {:ok, Envelope.t()}
+              | {:ok, Envelope.t(), updated_transformers()}
+              | {:stop, Envelope.t()}
+              | {:error, Envelope.t(), String.t()}
 
   defmacro __using__(_opts) do
     quote do
-      alias Belfrage.Struct
+      alias Belfrage.Envelope
       alias Belfrage.Behaviours.Transformer
       @behaviour Belfrage.Behaviours.Transformer
     end
   end
 
-  @spec call(Struct.t(), transformer_type(), String.t()) ::
-          {:ok, Struct.t()}
-          | {:ok, Struct.t(), updated_transformers()}
-          | {:stop, Struct.t()}
-          | {:error, Struct.t(), String.t()}
-  def call(struct, type, name) do
-    struct = update_pipeline_trail(struct, type, name)
+  @spec call(Envelope.t(), transformer_type(), String.t()) ::
+          {:ok, Envelope.t()}
+          | {:ok, Envelope.t(), updated_transformers()}
+          | {:stop, Envelope.t()}
+          | {:error, Envelope.t(), String.t()}
+  def call(envelope, type, name) do
+    envelope = update_pipeline_trail(envelope, type, name)
     callback = get_transformer_callback(type, name)
-    apply(callback, :call, [struct])
+    apply(callback, :call, [envelope])
   end
 
   @spec get_transformer_callback(transformer_type(), String.t()) :: atom()
@@ -37,11 +37,11 @@ defmodule Belfrage.Behaviours.Transformer do
   defp get_transformer_path(:request), do: RequestTransformers
   defp get_transformer_path(:response), do: ResponseTransformers
 
-  defp update_pipeline_trail(struct, :request, name) do
-    update_in(struct.debug.request_pipeline_trail, &[name | &1])
+  defp update_pipeline_trail(envelope, :request, name) do
+    update_in(envelope.debug.request_pipeline_trail, &[name | &1])
   end
 
-  defp update_pipeline_trail(struct, :response, name) do
-    update_in(struct.debug.response_pipeline_trail, &[name | &1])
+  defp update_pipeline_trail(envelope, :response, name) do
+    update_in(envelope.debug.response_pipeline_trail, &[name | &1])
   end
 end

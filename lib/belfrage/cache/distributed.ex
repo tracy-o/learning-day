@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache.Distributed do
-  alias Belfrage.{Struct, Struct.Request, Struct.Response}
+  alias Belfrage.{Envelope, Envelope.Request, Envelope.Response}
   alias Belfrage.Behaviours.CacheStrategy
   import Enum, only: [random: 1]
   @behaviour CacheStrategy
@@ -7,18 +7,18 @@ defmodule Belfrage.Cache.Distributed do
   @ccp_client Application.compile_env(:belfrage, :ccp_client)
 
   @impl CacheStrategy
-  def fetch(%Struct{request: %Request{request_hash: request_hash}}) do
+  def fetch(%Envelope{request: %Request{request_hash: request_hash}}) do
     with {:ok, response = %Response{}} <- @ccp_client.fetch(request_hash) do
       {:ok, {:distributed, :stale}, response}
     end
   end
 
   @impl CacheStrategy
-  def store(struct), do: store(struct, sampled?(struct.private.fallback_write_sample))
-  defp store(_struct, false), do: {:ok, false}
+  def store(envelope), do: store(envelope, sampled?(envelope.private.fallback_write_sample))
+  defp store(_envelope, false), do: {:ok, false}
 
-  defp store(struct, true) do
-    @ccp_client.put(struct)
+  defp store(envelope, true) do
+    @ccp_client.put(envelope)
 
     {:ok, true}
   end

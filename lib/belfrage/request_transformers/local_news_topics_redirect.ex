@@ -3,24 +3,24 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirect do
   alias Belfrage.RequestTransformers.LocalNewsTopicsRedirect.LocationTopicMappings
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     cond do
-      is_local_news?(struct) and topic_id(struct.request.path_params) ->
-        location = topic_id_location(struct.request)
-        redirect(struct, location)
+      is_local_news?(envelope) and topic_id(envelope.request.path_params) ->
+        location = topic_id_location(envelope.request)
+        redirect(envelope, location)
 
-      is_local_news?(struct) ->
-        redirect(struct, "/news/localnews")
+      is_local_news?(envelope) ->
+        redirect(envelope, "/news/localnews")
 
       true ->
-        {:ok, struct}
+        {:ok, envelope}
     end
   end
 
-  defp redirect(struct, location) do
+  defp redirect(envelope, location) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
           "location" => location,
@@ -32,8 +32,8 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirect do
     }
   end
 
-  defp is_local_news?(struct) do
-    String.starts_with?(struct.request.path, "/news/localnews/")
+  defp is_local_news?(envelope) do
+    String.starts_with?(envelope.request.path, "/news/localnews/")
   end
 
   defp topic_id(path_params = %{}) do
@@ -44,7 +44,7 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirect do
     |> LocationTopicMappings.get_topic_id()
   end
 
-  defp topic_id_location(request = %Struct.Request{}) do
+  defp topic_id_location(request = %Envelope.Request{}) do
     "/news/topics/#{topic_id(request.path_params)}"
   end
 end

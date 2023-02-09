@@ -2,18 +2,18 @@ defmodule Belfrage.Test.PersonalisationHelper do
   import Belfrage.Test.StubHelper
 
   alias Plug.Conn
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Request
   alias Fixtures.AuthToken
 
   @token AuthToken.valid_access_token()
 
   @doc """
-  Make the passed request authenticated. Accepts a %Struct{}, %Struct.Request{}
+  Make the passed request authenticated. Accepts a %Envelope{}, %Envelope.Request{}
   or %Plug.Conn{} so can be used in unit and end-to-end tests.
   """
-  def authenticate_request(struct = %Struct{}) do
-    Struct.add(struct, :request, authenticate_request(struct.request))
+  def authenticate_request(envelope = %Envelope{}) do
+    Envelope.add(envelope, :request, authenticate_request(envelope.request))
   end
 
   def authenticate_request(request = %Request{}) do
@@ -25,11 +25,11 @@ defmodule Belfrage.Test.PersonalisationHelper do
   end
 
   @doc """
-  Make the passed request unauthenticated. Accepts a %Struct{}, %Struct.Request{}
+  Make the passed request unauthenticated. Accepts a %Envelope{}, %Envelope.Request{}
   or %Plug.Conn{} so can be used in unit and end-to-end tests.
   """
-  def deauthenticate_request(struct = %Struct{}) do
-    Struct.add(struct, :request, deauthenticate_request(struct.request))
+  def deauthenticate_request(envelope = %Envelope{}) do
+    Envelope.add(envelope, :request, deauthenticate_request(envelope.request))
   end
 
   def deauthenticate_request(request = %Request{}) do
@@ -42,13 +42,13 @@ defmodule Belfrage.Test.PersonalisationHelper do
 
   @doc """
   Make the passed request authenticated and personalised by adding a token
-  cookie. Accepts a %Struct{}, %Struct.Request{} and %Plug.Conn so can be used
+  cookie. Accepts a %Envelope{}, %Envelope.Request{} and %Plug.Conn so can be used
   in unit and end-to-end tests.
   """
   def personalise_request(request, token \\ AuthToken.valid_access_token())
 
-  def personalise_request(struct = %Struct{}, token) do
-    Struct.add(struct, :request, personalise_request(struct.request, token))
+  def personalise_request(envelope = %Envelope{}, token) do
+    Envelope.add(envelope, :request, personalise_request(envelope.request, token))
   end
 
   def personalise_request(request = %Request{}, token) do
@@ -65,8 +65,8 @@ defmodule Belfrage.Test.PersonalisationHelper do
 
   def personalise_app_request(data, token \\ @token)
 
-  def personalise_app_request(struct = %Struct{}, token) do
-    Struct.add(struct, :request, personalise_app_request(struct.request, token))
+  def personalise_app_request(envelope = %Envelope{}, token) do
+    Envelope.add(envelope, :request, personalise_app_request(envelope.request, token))
   end
 
   def personalise_app_request(request = %Request{}, token) do
@@ -85,8 +85,8 @@ defmodule Belfrage.Test.PersonalisationHelper do
     |> Conn.put_req_header("x-authentication-provider", "idv5")
   end
 
-  def unpersonalise_app_request(struct = %Struct{}) do
-    Struct.add(struct, :request, unpersonalise_app_request(struct.request))
+  def unpersonalise_app_request(envelope = %Envelope{}) do
+    Envelope.add(envelope, :request, unpersonalise_app_request(envelope.request))
   end
 
   def unpersonalise_app_request(request = %Request{}) do

@@ -1,33 +1,33 @@
 defmodule BelfrageWeb.Response.Headers.Vary do
   import Plug.Conn
 
-  alias Belfrage.{Struct, Struct.Private, Struct.Request, Personalisation, Language}
+  alias Belfrage.{Envelope, Envelope.Private, Envelope.Request, Personalisation, Language}
 
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, struct = %Struct{request: %Request{host: host, cdn?: cdn?}}) do
+  def add_header(conn, envelope = %Envelope{request: %Request{host: host, cdn?: cdn?}}) do
     put_resp_header(
       conn,
       "vary",
-      vary_headers(struct, cdn_or_polling(host, cdn?))
+      vary_headers(envelope, cdn_or_polling(host, cdn?))
     )
   end
 
-  def vary_headers(struct, cdn?)
+  def vary_headers(envelope, cdn?)
 
-  def vary_headers(struct = %Struct{}, false) do
-    edge_cache? = struct.request.edge_cache?
-    platform = struct.private.platform
+  def vary_headers(envelope = %Envelope{}, false) do
+    edge_cache? = envelope.request.edge_cache?
+    platform = envelope.private.platform
 
-    struct.request
+    envelope.request
     |> base_headers()
-    |> Kernel.++(route_headers(struct))
+    |> Kernel.++(route_headers(envelope))
     |> Kernel.++(adverts_headers(edge_cache?, platform))
     |> Enum.join(",")
   end
 
-  def vary_headers(_struct, true), do: "Accept-Encoding"
+  def vary_headers(_envelope, true), do: "Accept-Encoding"
 
   defp base_headers(request) do
     [
@@ -40,18 +40,18 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   end
 
   # TODO: to be improved in RESFRAME-3924
-  defp route_headers(struct = %Struct{private: %Private{headers_allowlist: []}}) do
-    Language.vary([], struct)
+  defp route_headers(envelope = %Envelope{private: %Private{headers_allowlist: []}}) do
+    Language.vary([], envelope)
   end
 
-  defp route_headers(struct = %Struct{private: %Private{headers_allowlist: allowlist}}) do
+  defp route_headers(envelope = %Envelope{private: %Private{headers_allowlist: allowlist}}) do
     allowlist
     |> List.delete("cookie")
-    |> remove_signed_in_header(struct)
-    |> Language.vary(struct)
+    |> remove_signed_in_header(envelope)
+    |> Language.vary(envelope)
   end
 
-  defp remove_signed_in_header(headers, %Struct{request: request, private: private = %Private{}}) do
+  defp remove_signed_in_header(headers, %Envelope{request: request, private: private = %Private{}}) do
     if private.personalised_route and Personalisation.applicable_request?(request) and
          Personalisation.enabled?(route_state_id: private.route_state_id) do
       headers

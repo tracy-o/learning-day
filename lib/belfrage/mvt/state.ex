@@ -1,5 +1,5 @@
 defmodule Belfrage.Mvt.State do
-  alias Belfrage.{Struct, RouteState}
+  alias Belfrage.{Envelope, RouteState}
 
   @doc """
   Updates a Map of 'seen' headers with new headers.
@@ -18,12 +18,12 @@ defmodule Belfrage.Mvt.State do
   end
 
   @doc """
-  Gets the MVT vary headers from the vary header in the Struct Response.
+  Gets the MVT vary headers from the vary header in the Envelope Response.
   A list is returned.
   If there are no MVT vary headers, or there is no vary header,
   then an empty list is returned.
   """
-  def get_vary_headers(response = %Struct.Response{}) do
+  def get_vary_headers(response = %Envelope.Response{}) do
     response.headers
     |> Map.get("vary", "")
     |> String.split(",", trim: true)
@@ -66,9 +66,9 @@ defmodule Belfrage.Mvt.State do
   Returns true if all of the MVT vary headers in the response are in :mvt_seen in
   the state of the RouteState. Otherwise returns false.
   """
-  def all_vary_headers_seen?(struct) do
-    seen_headers = get_seen_headers(struct.private.route_state_id)
-    vary_headers = get_vary_headers(struct.response)
+  def all_vary_headers_seen?(envelope) do
+    seen_headers = get_seen_headers(envelope.private.route_state_id)
+    vary_headers = get_vary_headers(envelope.response)
 
     Enum.all?(vary_headers, fn vary_header ->
       Enum.member?(seen_headers, vary_header)

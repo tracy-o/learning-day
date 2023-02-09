@@ -3,7 +3,7 @@ defmodule BelfrageWeb.Response.Headers.CacheControlTest do
   use Plug.Test
 
   alias BelfrageWeb.Response.Headers.CacheControl
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   doctest CacheControl
 
@@ -11,8 +11,8 @@ defmodule BelfrageWeb.Response.Headers.CacheControlTest do
     input_conn = conn(:get, "/_web_core")
 
     output_conn =
-      CacheControl.add_header(input_conn, %Struct{
-        response: %Struct.Response{
+      CacheControl.add_header(input_conn, %Envelope{
+        response: %Envelope.Response{
           cache_directive: %Belfrage.CacheControl{cacheability: "private", max_age: 0, stale_while_revalidate: 0}
         }
       })
@@ -25,8 +25,8 @@ defmodule BelfrageWeb.Response.Headers.CacheControlTest do
     input_conn = conn(:get, "/_web_core")
 
     output_conn =
-      CacheControl.add_header(input_conn, %Struct{
-        response: %Struct.Response{
+      CacheControl.add_header(input_conn, %Envelope{
+        response: %Envelope.Response{
           cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30, stale_while_revalidate: 10}
         }
       })
@@ -39,8 +39,8 @@ defmodule BelfrageWeb.Response.Headers.CacheControlTest do
     input_conn = conn(:get, "/_web_core")
 
     output_conn =
-      CacheControl.add_header(input_conn, %Struct{
-        response: %Struct.Response{
+      CacheControl.add_header(input_conn, %Envelope{
+        response: %Envelope.Response{
           cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: nil, stale_while_revalidate: 10}
         }
       })

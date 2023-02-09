@@ -1,14 +1,14 @@
 defmodule BelfrageWeb do
-  alias BelfrageWeb.{StructAdapter, Response}
+  alias BelfrageWeb.{EnvelopeAdapter, Response}
   alias Plug.Conn
-  alias Belfrage.{Metrics.LatencyMonitor, Struct, RouteSpec, RouteSpecManager}
+  alias Belfrage.{Metrics.LatencyMonitor, Envelope, RouteSpec, RouteSpecManager}
 
   require Logger
 
   @doc """
   Given an id corresponding to a route spec ID and a Conn:
-    * Adapts the Conn to a Struct
-    * Processes the Struct
+    * Adapts the Conn to a Envelope
+    * Processes the Envelope
     * puts a response.
 
   yield/3 takes a platform_or_selector which
@@ -44,18 +44,18 @@ defmodule BelfrageWeb do
   """
   def yield(id, platform_or_selector, conn) do
     try do
-      struct =
+      envelope =
         conn
-        |> StructAdapter.Request.adapt()
+        |> EnvelopeAdapter.Request.adapt()
         |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
-      case build_route_state_id(id, platform_or_selector, struct.request) do
+      case build_route_state_id(id, platform_or_selector, envelope.request) do
         {:ok, route_state_id} ->
-          struct = StructAdapter.Private.adapt(struct, conn.private, route_state_id)
+          envelope = EnvelopeAdapter.Private.adapt(envelope, conn.private, route_state_id)
 
           conn
           |> Conn.assign(:route_spec, route_state_id)
-          |> Conn.assign(:struct, Belfrage.handle(struct))
+          |> Conn.assign(:envelope, Belfrage.handle(envelope))
           |> Response.put()
 
         {:error, status_code} ->
@@ -63,13 +63,13 @@ defmodule BelfrageWeb do
           Logger.log(:error, "", %{msg: "Selector '#{platform_or_selector}' not found", reason: status_code})
 
           conn
-          |> Conn.assign(:struct, Struct.put_status(%Struct{}, status_code))
+          |> Conn.assign(:envelope, Envelope.put_status(%Envelope{}, status_code))
           |> Response.put()
       end
     catch
-      # Unwrap an internal Belfrage error to extract %Struct{} from it
+      # Unwrap an internal Belfrage error to extract %Envelope{} from it
       _, error = %Belfrage.WrapperError{} ->
-        conn = Conn.assign(conn, :struct, error.struct)
+        conn = Conn.assign(conn, :envelope, error.envelope)
         reraise(conn, error.kind, error.reason, error.stack)
 
       kind, reason ->
@@ -79,7 +79,7 @@ defmodule BelfrageWeb do
 
   defp reraise(conn, kind, reason, stack) do
     # Wrap the error in `Plug.Conn.WrapperError` to preserve the `conn`
-    # which now contains the name of the route spec and the struct, so that
+    # which now contains the name of the route spec and the envelope, so that
     # we could use that data when generating an error response or tracking
     # metrics.
     wrapper = %Conn.WrapperError{conn: conn, kind: kind, reason: reason, stack: stack}

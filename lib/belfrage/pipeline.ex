@@ -1,53 +1,53 @@
 defmodule Belfrage.Pipeline do
   require Logger
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Behaviours.Transformer
 
-  @spec process(Struct.t(), Transformer.transformer_type(), [String.t()]) ::
-          {:ok, Struct.t()} | {:error, Struct.t(), String.t()}
-  def process(struct, type, [first | rest]) do
-    case Transformer.call(struct, type, first) do
-      {:ok, struct} ->
-        process(struct, type, rest)
+  @spec process(Envelope.t(), Transformer.transformer_type(), [String.t()]) ::
+          {:ok, Envelope.t()} | {:error, Envelope.t(), String.t()}
+  def process(envelope, type, [first | rest]) do
+    case Transformer.call(envelope, type, first) do
+      {:ok, envelope} ->
+        process(envelope, type, rest)
 
-      {:ok, struct, upd_transformers} ->
-        process(struct, type, update_pipeline(rest, upd_transformers))
+      {:ok, envelope, upd_transformers} ->
+        process(envelope, type, update_pipeline(rest, upd_transformers))
 
-      {:stop, struct} ->
-        {:ok, struct}
+      {:stop, envelope} ->
+        {:ok, envelope}
 
-      {:error, struct, msg} ->
-        handle_server_error(struct, msg)
+      {:error, envelope, msg} ->
+        handle_server_error(envelope, msg)
 
       _other ->
-        handle_error(struct)
+        handle_error(envelope)
     end
   end
 
-  def process(struct, _, []), do: {:ok, struct}
+  def process(envelope, _, []), do: {:ok, envelope}
 
   defp update_pipeline(_current, {:replace, transformers}), do: transformers
   defp update_pipeline(current, {:add, transformers}), do: transformers ++ current
 
-  defp handle_server_error(struct, msg) do
+  defp handle_server_error(envelope, msg) do
     :telemetry.execute([:belfrage, :error, :pipeline, :process], %{})
 
     Logger.log(:error, "", %{
       msg: "Transformer returned an early error",
-      struct: Struct.loggable(struct)
+      envelope: Envelope.loggable(envelope)
     })
 
-    {:error, struct, msg}
+    {:error, envelope, msg}
   end
 
-  defp handle_error(struct) do
+  defp handle_error(envelope) do
     :telemetry.execute([:belfrage, :error, :pipeline, :process, :unhandled], %{})
 
     Logger.log(:error, "", %{
       msg: "Transformer did not return a valid response tuple",
-      struct: Struct.loggable(struct)
+      envelope: Envelope.loggable(envelope)
     })
 
-    {:error, struct, "Transformer did not return a valid response tuple"}
+    {:error, envelope, "Transformer did not return a valid response tuple"}
   end
 end

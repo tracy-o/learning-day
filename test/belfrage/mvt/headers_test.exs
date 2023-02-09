@@ -2,7 +2,7 @@ defmodule Belfrage.Mvt.HeadersTest do
   use ExUnit.Case
 
   alias Belfrage.Mvt
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   describe "remove_original_headers" do
     test "if private.mvt_project_id not set no filtering is performed" do
@@ -15,11 +15,11 @@ defmodule Belfrage.Mvt.HeadersTest do
         "mvt-override" => "true"
       }
 
-      struct =
-        %Struct{}
-        |> Struct.add(:request, %{raw_headers: headers})
+      envelope =
+        %Envelope{}
+        |> Envelope.add(:request, %{raw_headers: headers})
 
-      assert headers == Mvt.Headers.remove_original_headers(struct).request.raw_headers
+      assert headers == Mvt.Headers.remove_original_headers(envelope).request.raw_headers
     end
 
     test "if project set then bbc-mvt-{i}, bbc-mvt-complete and mvt-* are removed from raw_headers" do
@@ -29,26 +29,26 @@ defmodule Belfrage.Mvt.HeadersTest do
         "mvt-override_experiment" => "an mvt override header"
       }
 
-      struct =
-        %Struct{}
-        |> Struct.add(:request, %{raw_headers: headers})
-        |> Struct.add(:private, %{mvt_project_id: 2})
+      envelope =
+        %Envelope{}
+        |> Envelope.add(:request, %{raw_headers: headers})
+        |> Envelope.add(:private, %{mvt_project_id: 2})
 
       assert %{} ==
-               Mvt.Headers.remove_original_headers(struct).request.raw_headers
+               Mvt.Headers.remove_original_headers(envelope).request.raw_headers
     end
   end
 
   describe "put_mvt_headers/2" do
     test "does not add mvt headers when none set" do
-      struct = %Struct{}
+      envelope = %Envelope{}
 
-      assert %{} == Mvt.Headers.put_mvt_headers(%{}, struct.private)
+      assert %{} == Mvt.Headers.put_mvt_headers(%{}, envelope.private)
     end
 
     test "adds mvt headers when set with \"type;value\"" do
-      struct_with_mvt = %Struct{
-        private: %Struct.Private{
+      envelope_with_mvt = %Envelope{
+        private: %Envelope.Private{
           mvt: %{
             "mvt-button_colour" => {1, nil},
             "mvt-sidebar" => {3, "feature;false"},
@@ -59,19 +59,19 @@ defmodule Belfrage.Mvt.HeadersTest do
       }
 
       assert %{"mvt-sidebar" => "feature;false", "mvt-footer_colour" => "experiment;red"} ==
-               Mvt.Headers.put_mvt_headers(%{}, struct_with_mvt.private)
+               Mvt.Headers.put_mvt_headers(%{}, envelope_with_mvt.private)
     end
 
     test "does not put 'bbc-mvt-complete' header even when in private.mvt" do
-      struct_with_mvt = %Struct{
-        private: %Struct.Private{
+      envelope_with_mvt = %Envelope{
+        private: %Envelope.Private{
           mvt: %{
             "bbc-mvt-complete" => {nil, "1"}
           }
         }
       }
 
-      assert %{} == Mvt.Headers.put_mvt_headers(%{}, struct_with_mvt.private)
+      assert %{} == Mvt.Headers.put_mvt_headers(%{}, envelope_with_mvt.private)
     end
   end
 end

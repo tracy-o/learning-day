@@ -2,40 +2,40 @@ defmodule Belfrage.Clients.CCPTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   alias Belfrage.Clients.CCP
-  alias Belfrage.{Struct, Struct.Request, Struct.Response}
+  alias Belfrage.{Envelope, Envelope.Request, Envelope.Response}
 
   describe "put/2" do
     test "sends request and request hash as cast" do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{request_hash: "a-request-hash"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
-      assert :ok == CCP.put(struct, self())
+      assert :ok == CCP.put(envelope, self())
 
       assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
     end
 
     test "sends request globally and request hash as cast" do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{request_hash: "a-request-hash"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
       :global.register_name(:belfrage_ccp_test, self())
 
-      assert :ok == CCP.put(struct, {:global, :belfrage_ccp_test})
+      assert :ok == CCP.put(envelope, {:global, :belfrage_ccp_test})
 
       assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
     end
 
     test "returns :error whith non existant target" do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{request_hash: "a-request-hash"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
-      assert :error == CCP.put(struct, {:global, :foo})
+      assert :error == CCP.put(envelope, {:global, :foo})
     end
   end
 
@@ -43,7 +43,7 @@ defmodule Belfrage.Clients.CCPTest do
     setup do
       %{
         s3_response_body:
-          %Belfrage.Struct.Response{
+          %Belfrage.Envelope.Response{
             body: :zlib.gzip(~s({"hi": "bonjour"})),
             headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
             http_status: 200,

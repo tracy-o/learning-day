@@ -46,9 +46,9 @@ defmodule Routes.RoutefileTest do
         # then we simply validate the route as we cannot validate the
         # route spec or transformers. This is because the :platform
         # attribute is then expected to be a platform selector, which
-        # requires a %Struct to select the platform. Given that we
+        # requires a %Envelope to select the platform. Given that we
         # are simply iterating through a list of routes, we do not
-        # have access to the %Struct and therefore cannot select the
+        # have access to the %Envelope and therefore cannot select the
         # platform and build the route state id.
         {matcher, route = %{using: _, platform: _}} -> validate_route(matcher, route, env)
       end)

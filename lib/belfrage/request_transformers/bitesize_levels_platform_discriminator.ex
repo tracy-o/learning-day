@@ -21,19 +21,19 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
   @webcore_live_ids []
 
   @impl Transformer
-  def call(struct = %Struct{request: %Struct.Request{path_params: %{"id" => id}}}) do
-    {:ok, maybe_update_origin(id, struct)}
+  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id}}}) do
+    {:ok, maybe_update_origin(id, envelope)}
   end
 
-  def call(struct = %Struct{request: %Struct.Request{path_params: %{"id" => id, "year_id" => year_id}}}) do
+  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id, "year_id" => year_id}}}) do
     if year_id in @valid_year_ids do
-      {:ok, maybe_update_origin(id, struct)}
+      {:ok, maybe_update_origin(id, envelope)}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 
-  def call(struct), do: {:ok, struct}
+  def call(envelope), do: {:ok, envelope}
 
   defp is_webcore_id(id) do
     application_env = Application.get_env(:belfrage, :production_environment)
@@ -45,14 +45,14 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
     end
   end
 
-  defp maybe_update_origin(id, struct) do
+  defp maybe_update_origin(id, envelope) do
     if is_webcore_id(id) do
-      Struct.add(struct, :private, %{
+      Envelope.add(envelope, :private, %{
         platform: "Webcore",
         origin: Application.get_env(:belfrage, :pwa_lambda_function)
       })
     else
-      struct
+      envelope
     end
   end
 end

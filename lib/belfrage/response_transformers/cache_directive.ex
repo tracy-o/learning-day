@@ -1,32 +1,32 @@
 defmodule Belfrage.ResponseTransformers.CacheDirective do
   @moduledoc """
-  - Parses the Cache-Control header, and saves result to `struct.response.cache_directive`
+  - Parses the Cache-Control header, and saves result to `envelope.response.cache_directive`
   - Removes the Cache-Control response header, so it is not stored in the cache
   """
   require Logger
 
-  alias Belfrage.{CacheControl, Struct, Struct.Private}
+  alias Belfrage.{CacheControl, Envelope, Envelope.Private}
   use Belfrage.Behaviours.Transformer
 
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
   def call(
-        struct = %Struct{
-          response: %Struct.Response{headers: %{"cache-control" => cache_control}},
+        envelope = %Envelope{
+          response: %Envelope.Response{headers: %{"cache-control" => cache_control}},
           private: %Private{personalised_request: personalised_request}
         }
       ) do
-    response_headers = Map.delete(struct.response.headers, "cache-control")
+    response_headers = Map.delete(envelope.response.headers, "cache-control")
 
     {
       :ok,
-      struct
-      |> Struct.add(:response, %{
+      envelope
+      |> Envelope.add(:response, %{
         cache_directive:
           cache_directive(
             CacheControl.Parser.parse(cache_control),
-            ttl_multiplier(struct.private),
+            ttl_multiplier(envelope.private),
             personalised_request
           ),
         headers: response_headers
@@ -34,7 +34,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirective do
     }
   end
 
-  def call(struct), do: {:ok, struct}
+  def call(envelope), do: {:ok, envelope}
 
   defp ttl_multiplier(%Private{platform: platform}) do
     if platform == "Webcore" do

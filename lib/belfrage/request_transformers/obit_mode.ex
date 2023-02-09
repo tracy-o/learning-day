@@ -4,15 +4,15 @@ defmodule Belfrage.RequestTransformers.ObitMode do
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
-  def call(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
-    struct =
-      Struct.add(struct, :request, %{
+  def call(envelope = %Envelope{request: %Envelope.Request{raw_headers: raw_headers}}) do
+    envelope =
+      Envelope.add(envelope, :request, %{
         raw_headers:
           Map.merge(raw_headers, %{
             "obit-mode" => @dial.state(:obit_mode)
           })
       })
 
-    {:ok, struct}
+    {:ok, envelope}
   end
 end

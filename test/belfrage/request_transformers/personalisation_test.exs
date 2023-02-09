@@ -4,13 +4,13 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
 
   import Belfrage.Test.PersonalisationHelper
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Private}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Request, Private}
   alias Belfrage.RequestTransformers.Personalisation
 
   setup do
-    struct =
-      %Struct{
+    envelope =
+      %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
@@ -23,27 +23,27 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
       }
       |> authenticate_request()
 
-    %{struct: struct}
+    %{envelope: envelope}
   end
 
   describe "call/2" do
-    test "request is not personalised", %{struct: struct} do
-      struct = Struct.add(struct, :private, %{personalised_request: false})
-      assert Personalisation.call(struct) == {:ok, struct}
+    test "request is not personalised", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :private, %{personalised_request: false})
+      assert Personalisation.call(envelope) == {:ok, envelope}
     end
 
-    test "user is not authenticated", %{struct: struct} do
-      struct = deauthenticate_request(struct)
-      assert {:ok, struct} = Personalisation.call(struct)
-      refute struct.user_session.authenticated
+    test "user is not authenticated", %{envelope: envelope} do
+      envelope = deauthenticate_request(envelope)
+      assert {:ok, envelope} = Personalisation.call(envelope)
+      refute envelope.user_session.authenticated
     end
 
-    test "user is authenticated, web session is invalid", %{struct: struct} do
-      assert {:stop, struct} = Personalisation.call(struct)
-      assert struct.user_session.authenticated
-      refute struct.user_session.valid_session
+    test "user is authenticated, web session is invalid", %{envelope: envelope} do
+      assert {:stop, envelope} = Personalisation.call(envelope)
+      assert envelope.user_session.authenticated
+      refute envelope.user_session.valid_session
 
-      assert struct.response == %Struct.Response{
+      assert envelope.response == %Envelope.Response{
                http_status: 302,
                headers: %{
                  "location" =>
@@ -55,18 +55,18 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
              }
     end
 
-    test "user is authenticated, session is valid", %{struct: struct} do
+    test "user is authenticated, session is valid", %{envelope: envelope} do
       token = Fixtures.AuthToken.valid_access_token()
-      struct = personalise_request(struct, token)
+      envelope = personalise_request(envelope, token)
 
-      assert {:ok, struct} = Personalisation.call(struct)
-      assert struct.user_session.authenticated
-      assert struct.user_session.valid_session
-      assert struct.user_session.session_token == token
+      assert {:ok, envelope} = Personalisation.call(envelope)
+      assert envelope.user_session.authenticated
+      assert envelope.user_session.valid_session
+      assert envelope.user_session.session_token == token
     end
 
     test "app session is not authenticated nor valid" do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
@@ -79,14 +79,14 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, struct} = Personalisation.call(struct)
+      assert {:ok, envelope} = Personalisation.call(envelope)
 
-      refute struct.user_session.authenticated
-      refute struct.user_session.valid_session
+      refute envelope.user_session.authenticated
+      refute envelope.user_session.valid_session
     end
 
     test "app session is authenticated but invalid" do
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
@@ -102,21 +102,21 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
 
       assert {
                :stop,
-               struct = %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               envelope = %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 401
                  }
                }
-             } = Personalisation.call(struct)
+             } = Personalisation.call(envelope)
 
-      assert struct.user_session.authenticated
-      refute struct.user_session.valid_session
+      assert envelope.user_session.authenticated
+      refute envelope.user_session.valid_session
     end
 
     test "app session is authenticated and valid" do
       token = Fixtures.AuthToken.valid_access_token()
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
@@ -130,11 +130,11 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, struct} = Personalisation.call(struct)
+      assert {:ok, envelope} = Personalisation.call(envelope)
 
-      assert struct.user_session.authenticated
-      assert struct.user_session.valid_session
-      assert struct.user_session.session_token == token
+      assert envelope.user_session.authenticated
+      assert envelope.user_session.valid_session
+      assert envelope.user_session.session_token == token
     end
   end
 end

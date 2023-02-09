@@ -1,6 +1,6 @@
 defmodule Belfrage.Clients.HTTP.Error do
   @moduledoc """
-  Defines the Error struct.
+  Defines the Error envelope.
 
   Converts error reasons from the 3rd party to a consistent
   set that Belfrage modules using the HTTP client can rely on.
@@ -13,7 +13,7 @@ defmodule Belfrage.Clients.HTTP.Error do
         }
 
   @doc ~S"""
-  Create Belfrage HTTP error struct with converted
+  Create Belfrage HTTP error envelope with converted
   3rd party error reason into a Belfrage error
   reason.
   """

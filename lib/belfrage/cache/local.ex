@@ -4,8 +4,8 @@ defmodule Belfrage.Cache.Local do
   @dial Application.compile_env(:belfrage, :dial)
 
   alias Belfrage.Behaviours.CacheStrategy
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Request
   alias Belfrage.Timer
   alias Belfrage.Metrics
 
@@ -23,7 +23,7 @@ defmodule Belfrage.Cache.Local do
   - [2] https://github.com/bbc/belfrage/pull/821/commits/761d3d68ca9a30b0b6a543ed4ff42b268ac14565
   """
   @impl CacheStrategy
-  def fetch(%Struct{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
+  def fetch(%Envelope{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
     if @dial.state(:cache_enabled) do
       try do
         caching_module.touch(:cache, request_hash)
@@ -44,9 +44,9 @@ defmodule Belfrage.Cache.Local do
 
   @impl CacheStrategy
   def store(
-        struct = %Belfrage.Struct{
-          private: %Belfrage.Struct.Private{personalised_route: personalised_route},
-          response: %Belfrage.Struct.Response{
+        envelope = %Belfrage.Envelope{
+          private: %Belfrage.Envelope.Private{personalised_route: personalised_route},
+          response: %Belfrage.Envelope.Response{
             cache_directive: %Belfrage.CacheControl{max_age: max_age},
             cache_last_updated: cache_last_updated
           }
@@ -61,13 +61,13 @@ defmodule Belfrage.Cache.Local do
 
       Cachex.put(
         cache,
-        struct.request.request_hash,
+        envelope.request.request_hash,
         %{
-          struct.response
+          envelope.response
           | personalised_route: personalised_route,
             cache_last_updated: maybe_make_stale(Timer.now_ms(), max_age, make_stale)
         },
-        ttl: struct.private.fallback_ttl
+        ttl: envelope.private.fallback_ttl
       )
     else
       {:ok, false}
@@ -80,7 +80,7 @@ defmodule Belfrage.Cache.Local do
   defp cacheable?(_max_age = nil), do: false
   defp cacheable?(_max_age), do: true
 
-  defp format_cache_result({:ok, response = %Belfrage.Struct.Response{cache_last_updated: last_updated}})
+  defp format_cache_result({:ok, response = %Belfrage.Envelope.Response{cache_last_updated: last_updated}})
        when not is_nil(last_updated) do
     %{max_age: max_age} = response.cache_directive
 

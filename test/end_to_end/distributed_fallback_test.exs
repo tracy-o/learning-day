@@ -46,8 +46,8 @@ defmodule EndToEnd.DistributedTest do
       end)
 
       Belfrage.Clients.CCPMock
-      |> expect(:put, fn %Belfrage.Struct{} = struct ->
-        send(test_pid, {:ccp_request_hash_stored, struct.request.request_hash})
+      |> expect(:put, fn %Belfrage.Envelope{} = envelope ->
+        send(test_pid, {:ccp_request_hash_stored, envelope.request.request_hash})
 
         :ok
       end)
@@ -67,7 +67,7 @@ defmodule EndToEnd.DistributedTest do
       end)
 
       Belfrage.Clients.CCPMock
-      |> expect(:put, 0, fn _struct ->
+      |> expect(:put, 0, fn _envelope ->
         flunk("Should not call the ccp.")
       end)
 
@@ -83,7 +83,7 @@ defmodule EndToEnd.DistributedTest do
       end)
 
       Belfrage.Clients.CCPMock
-      |> expect(:put, 0, fn _struct ->
+      |> expect(:put, 0, fn _envelope ->
         flunk("Should not call the ccp.")
       end)
 

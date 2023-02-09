@@ -1,13 +1,13 @@
 defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
   use ExUnit.Case, async: true
-  import Fixtures.Struct
+  import Fixtures.Envelope
   alias Belfrage.RequestTransformers.WeatherLanguageCookie
   alias Belfrage.Utils.Current
 
   test "returns 301 redirect when language one of the redirect_languages and redirect_location is not set" do
     Current.Mock.freeze(~D[2022-12-16], ~T[08:15:45.368815Z])
 
-    struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/en", %{}, %{"language" => "en"})
+    envelope = request_envelope(:https, "www.bbc.co.uk", "/weather/language/en", %{}, %{"language" => "en"})
 
     assert {
              :stop,
@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  }
                }
              }
-           } = WeatherLanguageCookie.call(struct)
+           } = WeatherLanguageCookie.call(envelope)
 
     on_exit(&Current.Mock.unfreeze/0)
   end
@@ -30,8 +30,8 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
   test "returns 301 redirect and encodes query string when language one of the redirect_languages and redirect_location is valid" do
     Current.Mock.freeze(~D[2022-12-16], ~T[10:30:45.368815Z])
 
-    struct =
-      request_struct(:https, "www.bbc.co.uk", "/weather/language/en", %{"redirect_location" => "/weather/w1a"}, %{
+    envelope =
+      request_envelope(:https, "www.bbc.co.uk", "/weather/language/en", %{"redirect_location" => "/weather/w1a"}, %{
         "language" => "en"
       })
 
@@ -48,13 +48,13 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  }
                }
              }
-           } = WeatherLanguageCookie.call(struct)
+           } = WeatherLanguageCookie.call(envelope)
 
     on_exit(&Current.Mock.unfreeze/0)
   end
 
   test "returns a 404 when language is not in redirect_languages" do
-    struct = request_struct(:https, "www.bbc.co.uk", "/weather/language/ab", %{}, %{"language" => "ab"})
+    envelope = request_envelope(:https, "www.bbc.co.uk", "/weather/language/ab", %{}, %{"language" => "ab"})
 
     assert {
              :stop,
@@ -65,12 +65,12 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  headers: %{}
                }
              }
-           } = WeatherLanguageCookie.call(struct)
+           } = WeatherLanguageCookie.call(envelope)
   end
 
   test "returns a 404 when redirect_location is not valid" do
-    struct =
-      request_struct(:https, "www.bbc.co.uk", "/weather/language/cy", %{"redirect_location" => "not_valid"}, %{
+    envelope =
+      request_envelope(:https, "www.bbc.co.uk", "/weather/language/cy", %{"redirect_location" => "not_valid"}, %{
         "language" => "cy"
       })
 
@@ -83,6 +83,6 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookieTest do
                  headers: %{}
                }
              }
-           } = WeatherLanguageCookie.call(struct)
+           } = WeatherLanguageCookie.call(envelope)
   end
 end

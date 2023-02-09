@@ -3,11 +3,11 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.NaidheachdanObitRedirect
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  @naidheachdan_request_struct %Struct{
-    private: %Struct.Private{origin: "https://www.bbc.com"},
-    request: %Struct.Request{
+  @naidheachdan_request_envelope %Envelope{
+    private: %Envelope.Private{origin: "https://www.bbc.com"},
+    request: %Envelope.Request{
       host: "www.bbc.com",
       path: "/naidheachdan",
       scheme: :https
@@ -20,8 +20,8 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
 
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 302,
                    body: "Redirecting",
                    headers: %{
@@ -31,7 +31,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
                    }
                  }
                }
-             } = NaidheachdanObitRedirect.call(@naidheachdan_request_struct)
+             } = NaidheachdanObitRedirect.call(@naidheachdan_request_envelope)
     end
   end
 
@@ -41,8 +41,8 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirectTest do
 
       assert {
                :ok,
-               @naidheachdan_request_struct
-             } = NaidheachdanObitRedirect.call(@naidheachdan_request_struct)
+               @naidheachdan_request_envelope
+             } = NaidheachdanObitRedirect.call(@naidheachdan_request_envelope)
     end
   end
 end

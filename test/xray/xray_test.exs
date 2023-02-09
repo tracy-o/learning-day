@@ -3,15 +3,15 @@ defmodule Belfrage.XrayTest do
   use Belfrage.Test.XrayHelper
 
   alias Belfrage.Xray
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Private
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Private
 
   alias AwsExRay.Segment
   alias AwsExRay.Trace
   alias AwsExRay.Subsegment
   alias AwsExRay.Record.{HTTPRequest, HTTPResponse, Error}
 
-  @test_struct %Struct{
+  @test_envelope %Envelope{
     private: %Private{
       owner: "me!",
       route_state_id: "some_id",
@@ -60,8 +60,8 @@ defmodule Belfrage.XrayTest do
       assert segment.annotation == %{hello: "there"}
     end
 
-    test "can be annotated with a struct", %{segment: segment} do
-      segment = Xray.add_struct_annotations(segment, @test_struct)
+    test "can be annotated with a envelope", %{segment: segment} do
+      segment = Xray.add_envelope_annotations(segment, @test_envelope)
 
       assert segment.annotation == %{
                "owner" => "me!",
@@ -153,8 +153,8 @@ defmodule Belfrage.XrayTest do
       assert segment == Xray.add_annotations(segment, %{hello: "there"})
     end
 
-    test "can't be a annotated with a struct", %{segment: segment} do
-      assert segment == Xray.add_struct_annotations(segment, @test_struct)
+    test "can't be a annotated with a envelope", %{segment: segment} do
+      assert segment == Xray.add_envelope_annotations(segment, @test_envelope)
     end
 
     test "can't set http request information", %{segment: segment} do
@@ -193,8 +193,8 @@ defmodule Belfrage.XrayTest do
       assert subsegment.segment.annotation == %{hello: "there"}
     end
 
-    test "can be annotated with a struct", %{subsegment: subsegment} do
-      subsegment = Xray.add_struct_annotations(subsegment, @test_struct)
+    test "can be annotated with a envelope", %{subsegment: subsegment} do
+      subsegment = Xray.add_envelope_annotations(subsegment, @test_envelope)
 
       assert subsegment.segment.annotation == %{
                "owner" => "me!",

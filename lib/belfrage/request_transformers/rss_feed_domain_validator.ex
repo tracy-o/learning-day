@@ -2,11 +2,11 @@ defmodule Belfrage.RequestTransformers.RssFeedDomainValidator do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct) do
-    if struct.request.subdomain == "feeds" do
-      {:ok, struct}
+  def call(envelope) do
+    if envelope.request.subdomain == "feeds" do
+      {:ok, envelope}
     else
-      {:stop, Struct.put_status(struct, 404)}
+      {:stop, Envelope.put_status(envelope, 404)}
     end
   end
 end

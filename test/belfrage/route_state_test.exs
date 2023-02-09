@@ -4,32 +4,32 @@ defmodule Belfrage.RouteStateTest do
   import Process, only: [send: 3]
   import Test.Support.Helper, only: [set_env: 2]
 
-  alias Belfrage.{Struct, RouteState, RouteSpecManager}
+  alias Belfrage.{Envelope, RouteState, RouteSpecManager}
 
   @failure_status_code Enum.random(500..504)
 
   @route_state_id "SomeRouteState.Webcore"
 
-  @resp_struct %Struct{
-    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
-    response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
+  @resp_envelope %Envelope{
+    private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
+    response: %Envelope.Response{http_status: @failure_status_code, fallback: nil}
   }
-  @resp_struct_2 %Struct{
-    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
-    response: %Struct.Response{http_status: @failure_status_code, fallback: nil}
+  @resp_envelope_2 %Envelope{
+    private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
+    response: %Envelope.Response{http_status: @failure_status_code, fallback: nil}
   }
-  @non_error_resp_struct %Struct{
-    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
-    response: %Struct.Response{http_status: 200, fallback: nil}
+  @non_error_resp_envelope %Envelope{
+    private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
+    response: %Envelope.Response{http_status: 200, fallback: nil}
   }
-  @non_error_resp_struct_2 %Struct{
-    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
-    response: %Struct.Response{http_status: 200, fallback: nil}
+  @non_error_resp_envelope_2 %Envelope{
+    private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://s3.aws.com/"},
+    response: %Envelope.Response{http_status: 200, fallback: nil}
   }
 
-  @fallback_resp_struct %Struct{
-    private: %Struct.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
-    response: %Struct.Response{http_status: 200, fallback: true}
+  @fallback_resp_envelope %Envelope{
+    private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
+    response: %Envelope.Response{http_status: 200, fallback: true}
   }
 
   test "returns a state pointer" do
@@ -46,11 +46,11 @@ defmodule Belfrage.RouteStateTest do
 
     test "when there are errors" do
       for _ <- 1..15 do
-        RouteState.inc(@resp_struct)
+        RouteState.inc(@resp_envelope)
       end
 
       for _ <- 1..9 do
-        RouteState.inc(@resp_struct_2)
+        RouteState.inc(@resp_envelope_2)
       end
 
       assert {:ok,
@@ -70,8 +70,8 @@ defmodule Belfrage.RouteStateTest do
 
     test "when there are no errors" do
       for _ <- 1..15 do
-        RouteState.inc(@non_error_resp_struct)
-        RouteState.inc(@non_error_resp_struct_2)
+        RouteState.inc(@non_error_resp_envelope)
+        RouteState.inc(@non_error_resp_envelope_2)
       end
 
       assert {:ok,
@@ -89,8 +89,8 @@ defmodule Belfrage.RouteStateTest do
 
     test "when there are a mix of errors and success responses" do
       for _ <- 1..15 do
-        RouteState.inc(@non_error_resp_struct)
-        RouteState.inc(@resp_struct)
+        RouteState.inc(@non_error_resp_envelope)
+        RouteState.inc(@resp_envelope)
       end
 
       assert {:ok,
@@ -113,7 +113,7 @@ defmodule Belfrage.RouteStateTest do
     interval = 100
     set_env(:short_counter_reset_interval, interval)
 
-    for _ <- 1..30, do: RouteState.inc(@resp_struct)
+    for _ <- 1..30, do: RouteState.inc(@resp_envelope)
     {:ok, state} = RouteState.state(@route_state_id)
     assert state.counter.errors == 30
 
@@ -127,7 +127,7 @@ defmodule Belfrage.RouteStateTest do
     setup :start_route_state
 
     test "it only increments the fallback counter" do
-      for _ <- 1..30, do: RouteState.inc(@fallback_resp_struct)
+      for _ <- 1..30, do: RouteState.inc(@fallback_resp_envelope)
       {:ok, state} = RouteState.state(@route_state_id)
 
       assert %{
@@ -141,8 +141,8 @@ defmodule Belfrage.RouteStateTest do
 
     test "it does not increment fallback for successful responses" do
       for _ <- 1..15 do
-        RouteState.inc(@non_error_resp_struct)
-        RouteState.inc(@resp_struct)
+        RouteState.inc(@non_error_resp_envelope)
+        RouteState.inc(@resp_envelope)
       end
 
       assert {:ok, %{counter: counter}} = RouteState.state(@route_state_id)
@@ -220,16 +220,16 @@ defmodule Belfrage.RouteStateTest do
     } do
       :erlang.trace(pid, true, [:receive])
 
-      struct = %Struct{
-        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
+        response: %Envelope.Response{
           http_status: 200,
           fallback: false,
           headers: %{}
         }
       }
 
-      RouteState.update(struct)
+      RouteState.update(envelope)
 
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
                      100
@@ -242,16 +242,16 @@ defmodule Belfrage.RouteStateTest do
     } do
       :erlang.trace(pid, true, [:receive])
 
-      struct = %Struct{
-        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
+        response: %Envelope.Response{
           http_status: 200,
           fallback: false,
           headers: %{"vary" => "something,something-else"}
         }
       }
 
-      RouteState.update(struct)
+      RouteState.update(envelope)
 
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", false}}},
                      100
@@ -264,16 +264,16 @@ defmodule Belfrage.RouteStateTest do
     } do
       :erlang.trace(pid, true, [:receive])
 
-      struct = %Struct{
-        private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
+        response: %Envelope.Response{
           http_status: 200,
           fallback: true,
           headers: %{"vary" => "something,mvt-button-colour,something-else"}
         }
       }
 
-      RouteState.update(struct)
+      RouteState.update(envelope)
 
       assert_receive {:trace, ^pid, :receive, {:"$gen_cast", {:inc, 200, "https://some.origin", true}}},
                      100
@@ -291,8 +291,8 @@ defmodule Belfrage.RouteStateTest do
     end
 
     test "with new datetime for existing header when the same MVT vary header is in response",
-         %{pid: pid, header_datetime: orig_button_colour_datetime, struct: struct} do
-      RouteState.update(struct)
+         %{pid: pid, header_datetime: orig_button_colour_datetime, envelope: envelope} do
+      RouteState.update(envelope)
 
       assert_receive {:trace, ^pid, :receive,
                       {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
@@ -307,9 +307,9 @@ defmodule Belfrage.RouteStateTest do
     end
 
     test "with new header-datetime key-value pair when different MVT vary header is in response",
-         %{pid: pid, header_datetime: button_colour_datetime, struct: struct} do
+         %{pid: pid, header_datetime: button_colour_datetime, envelope: envelope} do
       RouteState.update(
-        Struct.add(struct, :response, %{
+        Envelope.add(envelope, :response, %{
           headers: %{"vary" => "something,mvt-sidebar-colour,something-else"}
         })
       )
@@ -331,9 +331,9 @@ defmodule Belfrage.RouteStateTest do
     end
 
     test "overrides existing header with new datetime, and adds new header-datetime key-value pair",
-         %{pid: pid, header_datetime: orig_button_colour_datetime, struct: struct} do
+         %{pid: pid, header_datetime: orig_button_colour_datetime, envelope: envelope} do
       RouteState.update(
-        Struct.add(struct, :response, %{
+        Envelope.add(envelope, :response, %{
           headers: %{"vary" => "something,mvt-button-colour,something-else,mvt-footer-colour,"}
         })
       )
@@ -412,16 +412,16 @@ defmodule Belfrage.RouteStateTest do
   defp update_mvt_seen_with_button_colour_header(context = %{pid: pid}) do
     :erlang.trace(pid, true, [:receive])
 
-    struct = %Struct{
-      private: %Struct.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
-      response: %Struct.Response{
+    envelope = %Envelope{
+      private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://some.origin"},
+      response: %Envelope.Response{
         http_status: 200,
         fallback: false,
         headers: %{"vary" => "something,mvt-button-colour,something-else"}
       }
     }
 
-    RouteState.update(struct)
+    RouteState.update(envelope)
 
     assert_receive {:trace, ^pid, :receive,
                     {:"$gen_cast", {:update, 200, "https://some.origin", ["mvt-button-colour"]}}},
@@ -433,7 +433,7 @@ defmodule Belfrage.RouteStateTest do
     context =
       context
       |> Map.put(:header_datetime, mvt_seen["mvt-button-colour"])
-      |> Map.put(:struct, struct)
+      |> Map.put(:envelope, envelope)
 
     {:ok, context}
   end

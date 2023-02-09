@@ -4,12 +4,12 @@ defmodule Belfrage.RequestHashTest do
   import Test.Support.Helper, only: [set_env: 2]
 
   alias Belfrage.RequestHash
-  alias Belfrage.{Struct, RouteState}
+  alias Belfrage.{Envelope, RouteState}
 
   @route_state_id "SomeRouteState.Webcore"
 
-  @struct %Struct{
-    request: %Struct.Request{
+  @envelope %Envelope{
+    request: %Envelope.Request{
       scheme: :https,
       path: "/news/clips/abc123",
       country: "gb",
@@ -18,23 +18,23 @@ defmodule Belfrage.RequestHashTest do
     }
   }
 
-  @struct_with_different_country %Struct{
-    request: %Struct.Request{
+  @envelope_with_different_country %Envelope{
+    request: %Envelope.Request{
       path: "/news/clips/abc123",
       country: "usa",
       method: "GET"
     }
   }
-  @struct_with_different_path %Struct{
-    request: %Struct.Request{
+  @envelope_with_different_path %Envelope{
+    request: %Envelope.Request{
       path: "/sport/football/abc123",
       country: "gb",
       method: "GET"
     }
   }
 
-  @struct_for_cache_bust_request %Struct{
-    private: %Struct.Private{
+  @envelope_for_cache_bust_request %Envelope{
+    private: %Envelope.Private{
       overrides: %{
         "belfrage-cache-bust" => nil
       }
@@ -43,44 +43,44 @@ defmodule Belfrage.RequestHashTest do
 
   describe "Belfrage.RequestHash.generate/1" do
     test "when given a valid path and country" do
-      assert is_binary(RequestHash.generate(@struct))
+      assert is_binary(RequestHash.generate(@envelope))
     end
 
     test "varies on method" do
-      post_struct = Belfrage.Struct.add(@struct, :request, %{method: "POST"})
+      post_envelope = Belfrage.Envelope.add(@envelope, :request, %{method: "POST"})
 
-      refute RequestHash.generate(@struct) == RequestHash.generate(post_struct)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(post_envelope)
     end
 
     test "varies on query_params" do
-      query_string_struct = Belfrage.Struct.add(@struct, :request, %{query_params: %{"foo" => "bar"}})
+      query_string_envelope = Belfrage.Envelope.add(@envelope, :request, %{query_params: %{"foo" => "bar"}})
 
-      refute RequestHash.generate(@struct) == RequestHash.generate(query_string_struct)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(query_string_envelope)
     end
 
     test "varies for replayed traffic" do
-      replayed_struct = Belfrage.Struct.add(@struct, :request, %{has_been_replayed?: true})
+      replayed_envelope = Belfrage.Envelope.add(@envelope, :request, %{has_been_replayed?: true})
 
-      refute RequestHash.generate(@struct) == RequestHash.generate(replayed_struct)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(replayed_envelope)
     end
 
     test "varies for origin simulator traffic" do
-      replayed_struct = Belfrage.Struct.add(@struct, :request, %{origin_simulator?: true})
+      replayed_envelope = Belfrage.Envelope.add(@envelope, :request, %{origin_simulator?: true})
 
-      refute RequestHash.generate(@struct) == RequestHash.generate(replayed_struct)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(replayed_envelope)
     end
 
     test "given the path is the same, when the country is not the same assert the request_hashes are different" do
-      refute RequestHash.generate(@struct) == RequestHash.generate(@struct_with_different_country)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(@envelope_with_different_country)
     end
 
     test "given the country is the same, when the path is not the same assert the request_hashes are different" do
-      refute RequestHash.generate(@struct) == RequestHash.generate(@struct_with_different_path)
+      refute RequestHash.generate(@envelope) == RequestHash.generate(@envelope_with_different_path)
     end
 
     test "builds repeatable request hash" do
-      hash_one = RequestHash.generate(@struct)
-      hash_two = RequestHash.generate(@struct)
+      hash_one = RequestHash.generate(@envelope)
+      hash_two = RequestHash.generate(@envelope)
 
       refute String.starts_with?(hash_one, "cache-bust.")
       refute String.starts_with?(hash_two, "cache-bust.")
@@ -89,8 +89,8 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "when the request hash is used to cache bust requests should be unique" do
-      hash_one = RequestHash.generate(@struct_for_cache_bust_request)
-      hash_two = RequestHash.generate(@struct_for_cache_bust_request)
+      hash_one = RequestHash.generate(@envelope_for_cache_bust_request)
+      hash_two = RequestHash.generate(@envelope_for_cache_bust_request)
 
       assert String.starts_with?(hash_one, "cache-bust.")
       assert String.starts_with?(hash_two, "cache-bust.")
@@ -99,71 +99,71 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "varies on scheme" do
-      https_struct = @struct
-      http_struct = @struct |> Belfrage.Struct.add(:request, %{scheme: :http})
+      https_envelope = @envelope
+      http_envelope = @envelope |> Belfrage.Envelope.add(:request, %{scheme: :http})
 
-      refute RequestHash.generate(https_struct) == RequestHash.generate(http_struct)
+      refute RequestHash.generate(https_envelope) == RequestHash.generate(http_envelope)
     end
 
     test "varies on host" do
-      co_uk_host_struct = Belfrage.Struct.add(@struct, :request, %{host: "www.bbc.co.uk"})
-      com_host_struct = Belfrage.Struct.add(@struct, :request, %{host: "www.bbc.com"})
+      co_uk_host_envelope = Belfrage.Envelope.add(@envelope, :request, %{host: "www.bbc.co.uk"})
+      com_host_envelope = Belfrage.Envelope.add(@envelope, :request, %{host: "www.bbc.com"})
 
-      refute RequestHash.generate(co_uk_host_struct) == RequestHash.generate(com_host_struct)
+      refute RequestHash.generate(co_uk_host_envelope) == RequestHash.generate(com_host_envelope)
     end
 
     test "varies on is_uk" do
-      is_uk_struct = @struct |> Belfrage.Struct.add(:request, %{is_uk: true})
-      is_not_uk_struct = @struct |> Belfrage.Struct.add(:request, %{is_uk: false})
+      is_uk_envelope = @envelope |> Belfrage.Envelope.add(:request, %{is_uk: true})
+      is_not_uk_envelope = @envelope |> Belfrage.Envelope.add(:request, %{is_uk: false})
 
-      refute RequestHash.generate(is_uk_struct) == RequestHash.generate(is_not_uk_struct)
+      refute RequestHash.generate(is_uk_envelope) == RequestHash.generate(is_not_uk_envelope)
     end
 
     test "varies on cdn?" do
-      struct_with_cdn = @struct |> Belfrage.Struct.add(:request, %{cdn?: true})
-      struct_without_cdn = @struct |> Belfrage.Struct.add(:request, %{cdn?: false})
+      envelope_with_cdn = @envelope |> Belfrage.Envelope.add(:request, %{cdn?: true})
+      envelope_without_cdn = @envelope |> Belfrage.Envelope.add(:request, %{cdn?: false})
 
-      refute RequestHash.generate(struct_with_cdn) == RequestHash.generate(struct_without_cdn)
+      refute RequestHash.generate(envelope_with_cdn) == RequestHash.generate(envelope_without_cdn)
     end
 
     test "when a key is removed the request hash doesn't vary on it" do
-      uk_struct = @struct |> Belfrage.Struct.add(:private, %{signature_keys: %{add: [], skip: [:country]}})
+      uk_envelope = @envelope |> Belfrage.Envelope.add(:private, %{signature_keys: %{add: [], skip: [:country]}})
 
-      kr_struct =
-        @struct
-        |> Belfrage.Struct.add(:request, %{country: "kr"})
-        |> Belfrage.Struct.add(:private, %{signature_keys: %{add: [], skip: [:country]}})
+      kr_envelope =
+        @envelope
+        |> Belfrage.Envelope.add(:request, %{country: "kr"})
+        |> Belfrage.Envelope.add(:private, %{signature_keys: %{add: [], skip: [:country]}})
 
-      assert RequestHash.generate(uk_struct) == RequestHash.generate(kr_struct)
+      assert RequestHash.generate(uk_envelope) == RequestHash.generate(kr_envelope)
     end
 
     test "when a key is added the request hash does vary on it" do
-      struct_one =
-        @struct
-        |> Belfrage.Struct.add(:request, %{payload: "one"})
-        |> Belfrage.Struct.add(:private, %{signature_keys: %{add: [:payload], skip: []}})
+      envelope_one =
+        @envelope
+        |> Belfrage.Envelope.add(:request, %{payload: "one"})
+        |> Belfrage.Envelope.add(:private, %{signature_keys: %{add: [:payload], skip: []}})
 
-      struct_two =
-        @struct
-        |> Belfrage.Struct.add(:request, %{payload: "two"})
-        |> Belfrage.Struct.add(:private, %{signature_keys: %{add: [:payload], skip: []}})
+      envelope_two =
+        @envelope
+        |> Belfrage.Envelope.add(:request, %{payload: "two"})
+        |> Belfrage.Envelope.add(:private, %{signature_keys: %{add: [:payload], skip: []}})
 
-      refute RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
+      refute RequestHash.generate(envelope_one) == RequestHash.generate(envelope_two)
     end
 
     test "request hash does not vary when the request is the same" do
-      struct =
-        @struct
-        |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
+      envelope =
+        @envelope
+        |> Belfrage.Envelope.add(:request, %{raw_headers: %{"foo" => "boo"}})
 
-      assert RequestHash.generate(struct) == RequestHash.generate(struct)
+      assert RequestHash.generate(envelope) == RequestHash.generate(envelope)
     end
 
     test "varies on raw_headers, when differs" do
-      struct_one = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "boo"}})
-      struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
+      envelope_one = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: %{"foo" => "boo"}})
+      envelope_two = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: %{"foo" => "bar"}})
 
-      refute RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
+      refute RequestHash.generate(envelope_one) == RequestHash.generate(envelope_two)
     end
 
     test "does not vary on raw MVT header when it is not in :mvt_seen in RouteState state" do
@@ -173,19 +173,19 @@ defmodule Belfrage.RequestHashTest do
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
       end)
 
-      assert RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      assert RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;sidebar_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar"
                    }
@@ -204,19 +204,19 @@ defmodule Belfrage.RequestHashTest do
 
       send(pid, :reset)
 
-      assert RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      assert RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar"
                    }
@@ -225,16 +225,16 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "does not vary on raw MVT header when no RouteState can be found" do
-      assert RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      assert RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar"
                    }
@@ -249,19 +249,19 @@ defmodule Belfrage.RequestHashTest do
         Map.put(state, :mvt_seen, %{"mvt-sidebar_colour" => DateTime.utc_now()})
       end)
 
-      assert RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      assert RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar",
                      "bbc-mvt-1" => "experiment;button_colour;green"
@@ -277,19 +277,19 @@ defmodule Belfrage.RequestHashTest do
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
       end)
 
-      refute RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      refute RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar",
                      "bbc-mvt-1" => "experiment;button_colour;green"
@@ -305,19 +305,19 @@ defmodule Belfrage.RequestHashTest do
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
       end)
 
-      refute RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      refute RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar"
                    }
@@ -335,52 +335,53 @@ defmodule Belfrage.RequestHashTest do
         })
       end)
 
-      refute RequestHash.generate(%Struct{
-               request: %Struct.Request{
+      refute RequestHash.generate(%Envelope{
+               request: %Envelope.Request{
                  raw_headers: %{
                    "foo" => "bar",
                    "bbc-mvt-1" => "experiment;button_colour;red"
                  }
                },
-               private: %Struct.Private{
+               private: %Envelope.Private{
                  route_state_id: @route_state_id
                }
              }) ==
-               RequestHash.generate(%Struct{
-                 request: %Struct.Request{
+               RequestHash.generate(%Envelope{
+                 request: %Envelope.Request{
                    raw_headers: %{
                      "foo" => "bar",
                      "bbc-mvt-1" => "experiment;sidebar_colour;red"
                    }
                  },
-                 private: %Struct.Private{
+                 private: %Envelope.Private{
                    route_state_id: @route_state_id
                  }
                })
     end
 
     test "never vary on cookie header" do
-      struct_one =
-        @struct |> Belfrage.Struct.add(:request, %{raw_headers: Map.merge(%{"foo" => "bar"}, %{"cookie" => "yummy"})})
+      envelope_one =
+        @envelope
+        |> Belfrage.Envelope.add(:request, %{raw_headers: Map.merge(%{"foo" => "bar"}, %{"cookie" => "yummy"})})
 
-      struct_two = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{"foo" => "bar"}})
+      envelope_two = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: %{"foo" => "bar"}})
 
-      assert RequestHash.generate(struct_one) == RequestHash.generate(struct_two)
+      assert RequestHash.generate(envelope_one) == RequestHash.generate(envelope_two)
     end
 
     test "does not vary on personalisation headers" do
-      non_personalised = @struct
-      personalised = authenticate_request(@struct)
+      non_personalised = @envelope
+      personalised = authenticate_request(@envelope)
       assert RequestHash.generate(personalised) == RequestHash.generate(non_personalised)
     end
   end
 
   describe "put/1" do
     test "generates and sets request_hash" do
-      refute @struct.request.request_hash
-      struct = RequestHash.put(@struct)
-      assert struct.request.request_hash
-      assert struct.request.request_hash == RequestHash.generate(@struct)
+      refute @envelope.request.request_hash
+      envelope = RequestHash.put(@envelope)
+      assert envelope.request.request_hash
+      assert envelope.request.request_hash == RequestHash.generate(@envelope)
     end
   end
 end

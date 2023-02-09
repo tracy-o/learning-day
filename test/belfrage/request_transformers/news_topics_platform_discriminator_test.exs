@@ -3,7 +3,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
@@ -17,8 +17,8 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
          } do
       assert {
                :ok,
-               %Struct{
-                 private: %Struct.Private{
+               %Envelope{
+                 private: %Envelope.Private{
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
@@ -27,29 +27,29 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                },
                {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call(%Struct{
-                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
-                 private: %Struct.Private{personalised_route: true, personalised_request: true}
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
+                 private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
 
     test "if the id is a Topic ID and is not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
       assert {
                :ok,
-               %Struct{
-                 private: %Struct.Private{
+               %Envelope{
+                 private: %Envelope.Private{
                    platform: "SomePlatform",
                    origin: "https://some.example.origin"
                  }
                }
              } =
-               NewsTopicsPlatformDiscriminator.call(%Struct{
-                 private: %Struct.Private{
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 private: %Envelope.Private{
                    origin: "https://some.example.origin",
                    platform: "SomePlatform",
                    production_environment: "test"
                  },
-                 request: %Struct.Request{
+                 request: %Envelope.Request{
                    path_params: %{"id" => "some-id"}
                  }
                })
@@ -61,8 +61,8 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
          } do
       assert {
                :ok,
-               %Struct{
-                 private: %Struct.Private{
+               %Envelope{
+                 private: %Envelope.Private{
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
@@ -71,9 +71,9 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                },
                {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call(%Struct{
-                 request: %Struct.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
-                 private: %Struct.Private{personalised_route: true, personalised_request: true}
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
+                 private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
   end
@@ -85,8 +85,8 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
          } do
       assert {
                :ok,
-               %Struct{
-                 private: %Struct.Private{
+               %Envelope{
+                 private: %Envelope.Private{
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
@@ -95,16 +95,16 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                },
                {:replace, ["CircuitBreaker"]}
              } =
-               NewsTopicsPlatformDiscriminator.call(%Struct{
-                 request: %Struct.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
-                 private: %Struct.Private{personalised_route: true, personalised_request: true}
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
+                 private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
 
     test "if the id is a Topic ID and is not in the Mozart allowlist, a redirect will be issued without the slug" do
       assert {:stop,
-              %Struct{
-                response: %Struct.Response{
+              %Envelope{
+                response: %Envelope.Response{
                   http_status: 302,
                   headers: %{
                     "location" => "/news/topics/cl16knzkz9yt",
@@ -114,8 +114,8 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                   body: "Redirecting"
                 }
               }} =
-               NewsTopicsPlatformDiscriminator.call(%Struct{
-                 request: %Struct.Request{
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{
                    path: "/_some_path",
                    path_params: %{"id" => "cl16knzkz9yt", "slug" => "some-slug"}
                  }
@@ -129,8 +129,8 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
        } do
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  platform: "MozartNews",
                  origin: ^mozart_news_endpoint,
                  personalised_route: false,
@@ -139,11 +139,11 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
              },
              {:replace, ["CircuitBreaker"]}
            } =
-             NewsTopicsPlatformDiscriminator.call(%Struct{
-               request: %Struct.Request{
+             NewsTopicsPlatformDiscriminator.call(%Envelope{
+               request: %Envelope.Request{
                  path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
                },
-               private: %Struct.Private{personalised_route: true, personalised_request: true}
+               private: %Envelope.Private{personalised_route: true, personalised_request: true}
              })
   end
 end

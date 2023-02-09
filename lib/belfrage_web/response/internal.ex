@@ -1,6 +1,6 @@
 defmodule BelfrageWeb.Response.Internal do
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Response, Private}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Response, Private}
   alias Belfrage.{Metrics, CacheControl}
   alias Plug.Conn
 
@@ -17,15 +17,15 @@ defmodule BelfrageWeb.Response.Internal do
                  ]
              )
 
-  def new(struct = %Struct{}, conn = %Conn{}) do
+  def new(envelope = %Envelope{}, conn = %Conn{}) do
     Metrics.latency_span(:generate_internal_response, fn ->
-      {content_type, body} = body(struct.response, conn)
+      {content_type, body} = body(envelope.response, conn)
 
       %Response{
-        struct.response
+        envelope.response
         | headers: %{"content-type" => content_type},
           body: body,
-          cache_directive: cache_control(struct)
+          cache_directive: cache_control(envelope)
       }
     end)
   end
@@ -47,7 +47,7 @@ defmodule BelfrageWeb.Response.Internal do
     end
   end
 
-  defp cache_control(%Struct{response: response = %Response{}, private: private = %Private{}}) do
+  defp cache_control(%Envelope{response: response = %Response{}, private: private = %Private{}}) do
     cond do
       response.http_status == 404 ->
         %CacheControl{

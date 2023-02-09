@@ -134,8 +134,8 @@ defmodule BelfrageWeb.Plugs.Xray do
   end
 
   defp xray_segment_in(conn) do
-    if Map.get(conn.assigns, :struct) do
-      conn.assigns.struct.request.xray_segment
+    if Map.get(conn.assigns, :envelope) do
+      conn.assigns.envelope.request.xray_segment
     end
   end
 end

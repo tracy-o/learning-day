@@ -3,18 +3,18 @@ defmodule Belfrage.Clients.CCP do
   The interface to the Belfrage Central Cache Processor (CCP)
   """
   require Logger
-  alias Belfrage.{Struct, Struct.Request}
+  alias Belfrage.{Envelope, Envelope.Request}
 
   @s3_not_found_response_code 403
 
   @type target :: pid() | {:global, atom()}
   @callback fetch(String.t()) ::
-              {:ok, :content_not_found} | {:ok, Struct.Response.t()}
-  @callback put(Struct.t()) :: :ok
-  @callback put(Struct.t(), target) :: :ok
+              {:ok, :content_not_found} | {:ok, Envelope.Response.t()}
+  @callback put(Envelope.t()) :: :ok
+  @callback put(Envelope.t(), target) :: :ok
 
   @spec fetch(String.t()) ::
-          {:ok, :content_not_found} | {:ok, Struct.Response.t()}
+          {:ok, :content_not_found} | {:ok, Envelope.Response.t()}
   def fetch(request_hash) do
     # TODO Investigate using internal S3 endpoints for secure fetches
     # https://aws.amazon.com/premiumsupport/knowledge-center/s3-private-connection-no-authentication/
@@ -78,10 +78,10 @@ defmodule Belfrage.Clients.CCP do
     end
   end
 
-  @spec put(Struct.t()) :: :ok | :error
-  @spec put(Struct.t(), target) :: :ok | :error
+  @spec put(Envelope.t()) :: :ok | :error
+  @spec put(Envelope.t(), target) :: :ok | :error
   def put(
-        %Struct{
+        %Envelope{
           request: %Request{request_hash: request_hash},
           response: response
         },

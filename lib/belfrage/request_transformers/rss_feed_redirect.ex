@@ -2,21 +2,21 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirect do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct) do
-    if struct.request.subdomain == "feeds" do
-      {:ok, struct}
+  def call(envelope) do
+    if envelope.request.subdomain == "feeds" do
+      {:ok, envelope}
     else
-      redirect(struct)
+      redirect(envelope)
     end
   end
 
-  defp redirect(struct) do
+  defp redirect(envelope) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
-          "location" => "https://feeds.bbci.co.uk" <> struct.request.path,
+          "location" => "https://feeds.bbci.co.uk" <> envelope.request.path,
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, max-age=60"
         },

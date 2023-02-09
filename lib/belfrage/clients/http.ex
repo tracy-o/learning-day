@@ -3,7 +3,7 @@ defmodule Belfrage.Clients.HTTP do
   Calls 3rd party http clients to make requests.
 
   Makes requests and formats responses using Belfrage's
-  own HTTP Request, Response and Error structs.
+  own HTTP Request, Response and Error envelopes.
   """
   alias Belfrage.{Clients.HTTP}
 

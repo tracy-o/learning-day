@@ -9,8 +9,8 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     :response_sent
   ]
 
-  def checkpoint(struct, :response_sent) do
-    request_times = get_checkpoints(struct)
+  def checkpoint(envelope, :response_sent) do
+    request_times = get_checkpoints(envelope)
 
     if request_times do
       request_times
@@ -18,13 +18,13 @@ defmodule Belfrage.Metrics.LatencyMonitor do
       |> send_metrics()
     end
 
-    struct
+    envelope
   end
 
-  defdelegate get_checkpoints(struct), to: Belfrage.Struct
+  defdelegate get_checkpoints(envelope), to: Belfrage.Envelope
 
-  def checkpoint(struct, name, time \\ get_time()) when name in @valid_checkpoints do
-    Belfrage.Struct.put_checkpoint(struct, name, time)
+  def checkpoint(envelope, name, time \\ get_time()) when name in @valid_checkpoints do
+    Belfrage.Envelope.put_checkpoint(envelope, name, time)
   end
 
   defp send_metrics(checkpoints) do

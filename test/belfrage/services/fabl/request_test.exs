@@ -2,12 +2,12 @@ defmodule Belfrage.Services.Fabl.RequestTest do
   use ExUnit.Case
   alias Belfrage.Services.Fabl.Request
   alias Belfrage.Clients
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Xray
   use Belfrage.Test.XrayHelper
 
   setup do
-    valid_session = %Struct.UserSession{
+    valid_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -15,7 +15,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       user_attributes: %{age_bracket: "o18", allow_personalisation: true}
     }
 
-    valid_session_without_user_attributes = %Struct.UserSession{
+    valid_session_without_user_attributes = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -23,7 +23,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       user_attributes: %{}
     }
 
-    valid_session_with_partial_user_attributes = %Struct.UserSession{
+    valid_session_with_partial_user_attributes = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -31,7 +31,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       user_attributes: %{allow_personalisation: true}
     }
 
-    invalid_session = %Struct.UserSession{
+    invalid_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "an-invalid-session-token",
       authenticated: true,
@@ -39,7 +39,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       user_attributes: %{}
     }
 
-    unauthenticated_session = %Struct.UserSession{
+    unauthenticated_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: nil,
       authenticated: false,
@@ -47,8 +47,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       user_attributes: %{}
     }
 
-    struct = %Struct{
-      request: %Struct.Request{
+    envelope = %Envelope{
+      request: %Envelope.Request{
         method: "GET",
         path: "/fd/example-module",
         request_id: "arequestid",
@@ -60,14 +60,14 @@ defmodule Belfrage.Services.Fabl.RequestTest do
           "q" => "something"
         }
       },
-      private: %Struct.Private{
+      private: %Envelope.Private{
         origin: "https://fabl.test.api.bbci.co.uk",
         personalised_route: true
       }
     }
 
-    struct_without_name_path_param = %Struct{
-      request: %Struct.Request{
+    envelope_without_name_path_param = %Envelope{
+      request: %Envelope.Request{
         method: "GET",
         path: "/fd/p/mytopics-page",
         request_id: "arequestid",
@@ -76,25 +76,26 @@ defmodule Belfrage.Services.Fabl.RequestTest do
           "q" => "something"
         }
       },
-      private: %Struct.Private{
+      private: %Envelope.Private{
         origin: "https://fabl.test.api.bbci.co.uk",
         personalised_route: true
       }
     }
 
     %{
-      valid_session: Struct.add(struct, :user_session, valid_session),
-      valid_session_no_name_param: Struct.add(struct_without_name_path_param, :user_session, valid_session),
-      valid_session_without_user_attributes: Struct.add(struct, :user_session, valid_session_without_user_attributes),
+      valid_session: Envelope.add(envelope, :user_session, valid_session),
+      valid_session_no_name_param: Envelope.add(envelope_without_name_path_param, :user_session, valid_session),
+      valid_session_without_user_attributes:
+        Envelope.add(envelope, :user_session, valid_session_without_user_attributes),
       valid_session_with_partial_user_attributes:
-        Struct.add(struct, :user_session, valid_session_with_partial_user_attributes),
-      invalid_session: Struct.add(struct, :user_session, invalid_session),
-      unauthenticated_session: Struct.add(struct, :user_session, unauthenticated_session)
+        Envelope.add(envelope, :user_session, valid_session_with_partial_user_attributes),
+      invalid_session: Envelope.add(envelope, :user_session, invalid_session),
+      unauthenticated_session: Envelope.add(envelope, :user_session, unauthenticated_session)
     }
   end
 
   describe "personalised route requests" do
-    test "builds a non-personalised request", %{unauthenticated_session: struct} do
+    test "builds a non-personalised request", %{unauthenticated_session: envelope} do
       assert %Clients.HTTP.Request{
                headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
                method: :get,
@@ -102,10 +103,10 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
 
-    test "builds a personalised request with user attribute headers", %{valid_session: struct} do
+    test "builds a personalised request with user attribute headers", %{valid_session: envelope} do
       assert %Clients.HTTP.Request{
                headers: %{
                  "accept-encoding" => "gzip",
@@ -122,12 +123,12 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
 
     # Should this set allow personalisation and not set the age bracket?
     test "builds a personalised request with partial user attribute headers", %{
-      valid_session_with_partial_user_attributes: struct
+      valid_session_with_partial_user_attributes: envelope
     } do
       assert %Clients.HTTP.Request{
                headers: %{
@@ -143,11 +144,11 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
 
     test "builds a personalised request without user attribute headers", %{
-      valid_session_without_user_attributes: struct
+      valid_session_without_user_attributes: envelope
     } do
       assert %Clients.HTTP.Request{
                headers: %{
@@ -163,15 +164,15 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
 
     test ~s(path prefixed with "/fd/preview" is updated to "/preview/personalised-module/" when route is personalised) do
       assert %Clients.HTTP.Request{
                url: "https://fabl.test.api.bbci.co.uk/preview/personalised-module/foobar?q=something"
              } =
-               Request.build(%Struct{
-                 request: %Struct.Request{
+               Request.build(%Envelope{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/fd/preview/",
                    request_id: "arequestid",
@@ -182,7 +183,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                      "q" => "something"
                    }
                  },
-                 private: %Struct.Private{
+                 private: %Envelope.Private{
                    origin: "https://fabl.test.api.bbci.co.uk",
                    personalised_route: true
                  }
@@ -191,8 +192,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
 
     test ~s(path not prefixed with "/fd/preview/" is updated to "/personalised-module/" when route is personalised) do
       assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"} =
-               Request.build(%Struct{
-                 request: %Struct.Request{
+               Request.build(%Envelope{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/fd/example-module",
                    request_id: "arequestid",
@@ -203,7 +204,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                      "q" => "something"
                    }
                  },
-                 private: %Struct.Private{
+                 private: %Envelope.Private{
                    origin: "https://fabl.test.api.bbci.co.uk",
                    personalised_route: true
                  }
@@ -212,8 +213,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
 
     test ~s(path prefixed with "/fd/preview" is updated to "/preview/module/" when route is not personalised) do
       assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/preview/module/foobar?q=something"} =
-               Request.build(%Struct{
-                 request: %Struct.Request{
+               Request.build(%Envelope{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/fd/preview/",
                    request_id: "arequestid",
@@ -224,7 +225,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                      "q" => "something"
                    }
                  },
-                 private: %Struct.Private{
+                 private: %Envelope.Private{
                    origin: "https://fabl.test.api.bbci.co.uk",
                    personalised_route: false
                  }
@@ -233,8 +234,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
 
     test ~s(path not prefixed with "/fd/preview" is updated to "/module/" when route is not personalised) do
       assert %Clients.HTTP.Request{url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"} =
-               Request.build(%Struct{
-                 request: %Struct.Request{
+               Request.build(%Envelope{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/something",
                    request_id: "arequestid",
@@ -245,7 +246,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                      "q" => "something"
                    }
                  },
-                 private: %Struct.Private{
+                 private: %Envelope.Private{
                    origin: "https://fabl.test.api.bbci.co.uk",
                    personalised_route: false
                  }
@@ -257,8 +258,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
         url = "https://fabl.test.api.bbci.co.uk/personalised-module/#{module}?q=something"
 
         assert %Clients.HTTP.Request{url: ^url} =
-                 Request.build(%Struct{
-                   request: %Struct.Request{
+                 Request.build(%Envelope{
+                   request: %Envelope.Request{
                      method: "GET",
                      path: "/fd/p/#{module}",
                      request_id: "arequestid",
@@ -267,7 +268,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                        "q" => "something"
                      }
                    },
-                   private: %Struct.Private{
+                   private: %Envelope.Private{
                      origin: "https://fabl.test.api.bbci.co.uk",
                      personalised_route: true
                    }
@@ -282,8 +283,8 @@ defmodule Belfrage.Services.Fabl.RequestTest do
           url = "https://fabl.test.api.bbci.co.uk/module/#{module}?q=something"
 
           assert %Clients.HTTP.Request{url: ^url} =
-                   Request.build(%Struct{
-                     request: %Struct.Request{
+                   Request.build(%Envelope{
+                     request: %Envelope.Request{
                        method: "GET",
                        path: "/fd/#{module}",
                        request_id: "arequestid",
@@ -292,7 +293,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                          "q" => "something"
                        }
                      },
-                     private: %Struct.Private{
+                     private: %Envelope.Private{
                        origin: "https://fabl.test.api.bbci.co.uk",
                        personalised_route: false
                      }
@@ -301,7 +302,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
       )
     end
 
-    test "builds a non personalised request", %{invalid_session: struct} do
+    test "builds a non personalised request", %{invalid_session: envelope} do
       assert %Clients.HTTP.Request{
                headers: %{
                  "accept-encoding" => "gzip",
@@ -313,10 +314,10 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
 
-    test "builds a non personalised request from an invalid session", %{invalid_session: struct} do
+    test "builds a non personalised request from an invalid session", %{invalid_session: envelope} do
       assert %Clients.HTTP.Request{
                headers: %{
                  "accept-encoding" => "gzip",
@@ -328,13 +329,13 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
   end
 
   describe "non-personalised route requests" do
-    test "builds a non-personalised request", %{unauthenticated_session: struct} do
-      struct = Struct.add(struct, :private, %{personalised_route: false})
+    test "builds a non-personalised request", %{unauthenticated_session: envelope} do
+      envelope = Envelope.add(envelope, :private, %{personalised_route: false})
 
       assert %Clients.HTTP.Request{
                headers: %{"accept-encoding" => "gzip", "req-svc-chain" => "Belfrage", "user-agent" => "Belfrage"},
@@ -343,12 +344,12 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/module/foobar?q=something"
-             } == Request.build(struct)
+             } == Request.build(envelope)
     end
   end
 
   describe "requests without name param" do
-    test "personalised", %{valid_session_no_name_param: struct_without_name_path_param} do
+    test "personalised", %{valid_session_no_name_param: envelope_without_name_path_param} do
       assert %Clients.HTTP.Request{
                headers: %{
                  "accept-encoding" => "gzip",
@@ -365,14 +366,14 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/mytopics-page?q=something"
-             } == Request.build(struct_without_name_path_param)
+             } == Request.build(envelope_without_name_path_param)
     end
   end
 
   describe "X-Ray trace id" do
-    test "builds a request with a x-amzn-trace-id when segment present", %{invalid_session: struct} do
+    test "builds a request with a x-amzn-trace-id when segment present", %{invalid_session: envelope} do
       x_ray_segment = build_segment(sampled: true)
-      struct_with_segment = put_in(struct.request.xray_segment, x_ray_segment)
+      envelope_with_segment = put_in(envelope.request.xray_segment, x_ray_segment)
 
       assert %Clients.HTTP.Request{
                headers: %{
@@ -386,7 +387,7 @@ defmodule Belfrage.Services.Fabl.RequestTest do
                request_id: "arequestid",
                timeout: 6000,
                url: "https://fabl.test.api.bbci.co.uk/personalised-module/foobar?q=something"
-             } == Request.build(struct_with_segment)
+             } == Request.build(envelope_with_segment)
     end
   end
 end

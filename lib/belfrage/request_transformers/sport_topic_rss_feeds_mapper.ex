@@ -10,22 +10,22 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
   }
 
   @impl Transformer
-  def call(struct) do
-    struct =
-      Struct.add(struct, :request, %{
+  def call(envelope) do
+    envelope =
+      Envelope.add(envelope, :request, %{
         path: "/fd/rss",
         path_params: %{
           "name" => "rss"
         },
         query_params: %{
-          "topicId" => Map.get(@sport_feed_mapping, struct.request.path),
-          "uri" => String.replace(struct.request.path, "/rss.xml", "")
+          "topicId" => Map.get(@sport_feed_mapping, envelope.request.path),
+          "uri" => String.replace(envelope.request.path, "/rss.xml", "")
         },
         raw_headers: %{
           "ctx-unwrapped" => "1"
         }
       })
 
-    {:ok, struct}
+    {:ok, envelope}
   end
 end

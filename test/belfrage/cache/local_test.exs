@@ -6,7 +6,7 @@ defmodule Belfrage.Cache.LocalTest do
   import Belfrage.Test.CachingHelper
 
   alias Belfrage.Cache
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Timer
   import Belfrage.Test.MetricsHelper, only: [assert_metric: 2]
   require Cachex.Spec
@@ -17,17 +17,17 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     def fetch(_cache, _key) do
-      {:ok, %Struct{response: Fixtures.Struct.successful_response()}}
+      {:ok, %Envelope{response: Fixtures.Envelope.successful_response()}}
     end
   end
 
   setup do
     stub_dial(:cache_enabled, "true")
 
-    put_into_cache(cache_key("fresh"), Fixtures.Struct.successful_response())
+    put_into_cache(cache_key("fresh"), Fixtures.Envelope.successful_response())
 
     put_into_cache(cache_key("stale"), %{
-      Fixtures.Struct.successful_response()
+      Fixtures.Envelope.successful_response()
       | cache_last_updated: Belfrage.Timer.now_ms() - :timer.seconds(31)
     })
 
@@ -37,9 +37,9 @@ defmodule Belfrage.Cache.LocalTest do
   describe "storing responses" do
     setup do
       %{
-        struct: %Struct{
-          request: %Struct.Request{request_hash: cache_key("abc123")},
-          response: %Struct.Response{
+        envelope: %Envelope{
+          request: %Envelope.Request{request_hash: cache_key("abc123")},
+          response: %Envelope.Response{
             headers: %{"content-type" => "application/json"},
             body: "hello!",
             http_status: 200,
@@ -49,12 +49,12 @@ defmodule Belfrage.Cache.LocalTest do
       }
     end
 
-    test "a new response", %{struct: struct} do
-      assert {:ok, true} == Cache.Local.store(struct)
+    test "a new response", %{envelope: envelope} do
+      assert {:ok, true} == Cache.Local.store(envelope)
 
       assert [
                {:entry, _key, _cachex_determined_last_update, _cachex_expires_in,
-                %Belfrage.Struct.Response{
+                %Belfrage.Envelope.Response{
                   body: "hello!",
                   headers: %{"content-type" => "application/json"},
                   http_status: 200,
@@ -67,25 +67,25 @@ defmodule Belfrage.Cache.LocalTest do
       refute Timer.stale?(cache_last_updated, max_age)
     end
 
-    test "a new response for a personalised route", %{struct: struct} do
-      struct = Struct.add(struct, :private, %{personalised_route: true})
+    test "a new response for a personalised route", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :private, %{personalised_route: true})
 
-      assert {:ok, true} == Cache.Local.store(struct, make_stale: true)
+      assert {:ok, true} == Cache.Local.store(envelope, make_stale: true)
 
       assert [
                {:entry, _key, _cachex_determined_last_update, _cachex_expires_in,
-                %Belfrage.Struct.Response{
+                %Belfrage.Envelope.Response{
                   personalised_route: true
                 }}
              ] = :ets.lookup(:cache, cache_key("abc123"))
     end
 
-    test "a new response as stale", %{struct: struct} do
-      assert {:ok, true} == Cache.Local.store(struct, make_stale: true)
+    test "a new response as stale", %{envelope: envelope} do
+      assert {:ok, true} == Cache.Local.store(envelope, make_stale: true)
 
       assert [
                {:entry, _key, _cachex_determined_last_update, _cachex_expires_in,
-                %Belfrage.Struct.Response{
+                %Belfrage.Envelope.Response{
                   body: "hello!",
                   headers: %{"content-type" => "application/json"},
                   http_status: 200,
@@ -99,9 +99,9 @@ defmodule Belfrage.Cache.LocalTest do
     end
 
     test "does not overwrite an existing fresh cache version" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("fresh")},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("fresh")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -110,13 +110,13 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, false} == Cache.Local.store(struct)
+      assert {:ok, false} == Cache.Local.store(envelope)
     end
 
     test "updates a stale cached response" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("stale")},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("stale")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -124,13 +124,13 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct)
+      assert {:ok, true} == Cache.Local.store(envelope)
     end
 
     test "touches the cache on access" do
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("fresh")},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("fresh")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -138,11 +138,11 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(struct)
+      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(envelope)
 
       :timer.sleep(1000)
 
-      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(struct)
+      assert {:ok, {:local, :fresh}, _} = Cache.Local.fetch(envelope)
 
       [{:entry, _key, ets_updated, _expires, response}] = :ets.lookup(:cache, cache_key("fresh"))
 
@@ -152,57 +152,58 @@ defmodule Belfrage.Cache.LocalTest do
 
   describe "Fetches a cached response" do
     test "that is fresh" do
-      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+      envelope = %Envelope{request: %Envelope.Request{request_hash: cache_key("fresh")}}
 
       assert {:ok, {:local, :fresh},
-              %Belfrage.Struct.Response{
+              %Belfrage.Envelope.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct)
+              }} = Cache.Local.fetch(envelope)
     end
 
     test "that is stale" do
-      struct = %Struct{request: %Struct.Request{request_hash: cache_key("stale")}}
+      envelope = %Envelope{request: %Envelope.Request{request_hash: cache_key("stale")}}
 
       assert {:ok, {:local, :stale},
-              %Belfrage.Struct.Response{
+              %Belfrage.Envelope.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct)
+              }} = Cache.Local.fetch(envelope)
     end
   end
 
   describe "When an exit signal is sent during an attempt to fetch a cached response" do
     setup do
-      {:ok, caching_module: TestCache, struct: %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}}
+      {:ok,
+       caching_module: TestCache, envelope: %Envelope{request: %Envelope.Request{request_hash: cache_key("fresh")}}}
     end
 
-    test "the expected message is logged", %{struct: struct, caching_module: caching_module} do
-      captured_log = capture_log(fn -> Cache.Local.fetch(struct, caching_module) end)
+    test "the expected message is logged", %{envelope: envelope, caching_module: caching_module} do
+      captured_log = capture_log(fn -> Cache.Local.fetch(envelope, caching_module) end)
 
       assert captured_log =~ "level\":\"error\""
       assert captured_log =~ "\"metadata\":{}"
       assert captured_log =~ "\"msg\":\"Attempt to fetch from the local cache failed: :some_reason"
     end
 
-    test "the correct event is emitted", %{struct: struct, caching_module: caching_module} do
-      assert_metric(~w(cache local fetch_exit)a, fn -> Cache.Local.fetch(struct, caching_module) end)
+    test "the correct event is emitted", %{envelope: envelope, caching_module: caching_module} do
+      assert_metric(~w(cache local fetch_exit)a, fn -> Cache.Local.fetch(envelope, caching_module) end)
     end
 
-    test "the correct tuple is returned", %{struct: struct, caching_module: caching_module} do
-      assert {:ok, :content_not_found} == Cache.Local.fetch(struct, caching_module)
+    test "the correct tuple is returned", %{envelope: envelope, caching_module: caching_module} do
+      assert {:ok, :content_not_found} == Cache.Local.fetch(envelope, caching_module)
     end
   end
 
   describe "cachex integration test" do
     test "stores and retrieves a response" do
-      struct_without_response = %Struct{request: %Struct.Request{request_hash: cache_key("asdf567")}}
+      envelope_without_response = %Envelope{request: %Envelope.Request{request_hash: cache_key("asdf567")}}
 
-      struct_with_response = %Struct{
-        request: %Struct.Request{request_hash: cache_key("asdf567")},
-        response: %Struct.Response{
+      envelope_with_response = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("asdf567")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -210,14 +211,14 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct_with_response)
+      assert {:ok, true} == Cache.Local.store(envelope_with_response)
 
       assert {:ok, {:local, :fresh},
-              %Belfrage.Struct.Response{
+              %Belfrage.Envelope.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct_without_response)
+              }} = Cache.Local.fetch(envelope_without_response)
     end
   end
 
@@ -225,9 +226,9 @@ defmodule Belfrage.Cache.LocalTest do
     test "it successfully stores the response when dial is true" do
       stub_dial(:cache_enabled, "true")
 
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("abc123")},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("abc123")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -235,15 +236,15 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, true} == Cache.Local.store(struct)
+      assert {:ok, true} == Cache.Local.store(envelope)
     end
 
     test "it does not store the response when dial is false" do
       stub_dial(:cache_enabled, "false")
 
-      struct = %Struct{
-        request: %Struct.Request{request_hash: cache_key("abc123")},
-        response: %Struct.Response{
+      envelope = %Envelope{
+        request: %Envelope.Request{request_hash: cache_key("abc123")},
+        response: %Envelope.Response{
           headers: %{"content-type" => "application/json"},
           body: "hello!",
           http_status: 200,
@@ -251,28 +252,28 @@ defmodule Belfrage.Cache.LocalTest do
         }
       }
 
-      assert {:ok, false} == Cache.Local.store(struct)
+      assert {:ok, false} == Cache.Local.store(envelope)
     end
 
     test "it successfully fetches a response when dial is true" do
       stub_dial(:cache_enabled, "true")
 
-      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+      envelope = %Envelope{request: %Envelope.Request{request_hash: cache_key("fresh")}}
 
       assert {:ok, {:local, :fresh},
-              %Belfrage.Struct.Response{
+              %Belfrage.Envelope.Response{
                 body: "hello!",
                 headers: %{"content-type" => "application/json"},
                 http_status: 200
-              }} = Cache.Local.fetch(struct)
+              }} = Cache.Local.fetch(envelope)
     end
 
     test "it does not fetch a response when dial is false" do
       stub_dial(:cache_enabled, "false")
 
-      struct = %Struct{request: %Struct.Request{request_hash: cache_key("fresh")}}
+      envelope = %Envelope{request: %Envelope.Request{request_hash: cache_key("fresh")}}
 
-      assert {:ok, :content_not_found} == Cache.Local.fetch(struct)
+      assert {:ok, :content_not_found} == Cache.Local.fetch(envelope)
     end
   end
 end

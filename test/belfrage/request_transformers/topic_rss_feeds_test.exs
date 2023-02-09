@@ -2,13 +2,13 @@ defmodule Belfrage.RequestTransformers.TopicRssFeedsTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.TopicRssFeeds
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "point to rss FABL module and adds topicId and uri query params to request" do
     assert {
              :ok,
-             %Struct{
-               request: %Struct.Request{
+             %Envelope{
+               request: %Envelope.Request{
                  path: "/fd/rss",
                  path_params: %{
                    "name" => "rss"
@@ -23,8 +23,8 @@ defmodule Belfrage.RequestTransformers.TopicRssFeedsTest do
                }
              }
            } =
-             TopicRssFeeds.call(%Struct{
-               request: %Struct.Request{
+             TopicRssFeeds.call(%Envelope{
+               request: %Envelope.Request{
                  path: "/topics/testId/rss.xml",
                  path_params: %{"id" => "testId"}
                }

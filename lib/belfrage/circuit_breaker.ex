@@ -1,24 +1,24 @@
 defmodule Belfrage.CircuitBreaker do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   import Enum, only: [random: 1]
 
-  def maybe_apply(struct, dial_enabled? \\ true) do
-    if apply?(struct, dial_enabled?) do
-      {:applied, apply(struct)}
+  def maybe_apply(envelope, dial_enabled? \\ true) do
+    if apply?(envelope, dial_enabled?) do
+      {:applied, apply(envelope)}
     else
-      {:not_applied, struct}
+      {:not_applied, envelope}
     end
   end
 
-  defp apply(struct = %Belfrage.Struct{}) do
-    Belfrage.Metrics.event(~w(circuit_breaker applied)a, %{route_spec: struct.private.route_state_id})
+  defp apply(envelope = %Belfrage.Envelope{}) do
+    Belfrage.Metrics.event(~w(circuit_breaker applied)a, %{route_spec: envelope.private.route_state_id})
 
-    struct
-    |> Struct.add(:response, %{http_status: 500})
-    |> Struct.add(:private, %{origin: :belfrage_circuit_breaker})
+    envelope
+    |> Envelope.add(:response, %{http_status: 500})
+    |> Envelope.add(:private, %{origin: :belfrage_circuit_breaker})
   end
 
-  def threshold_exceeded?(%Struct{
+  def threshold_exceeded?(%Envelope{
         private: %{origin: origin, counter: counts, circuit_breaker_error_threshold: threshold}
       }) do
     error_count(origin, counts) > threshold
@@ -54,8 +54,8 @@ defmodule Belfrage.CircuitBreaker do
     throughput == 100
   end
 
-  defp apply?(struct, dial_enabled?) do
-    dial_enabled? and random(1..100) > struct.private.throughput
+  defp apply?(envelope, dial_enabled?) do
+    dial_enabled? and random(1..100) > envelope.private.throughput
   end
 
   def applied?({applied_or_not_applied, _}) do

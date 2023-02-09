@@ -1,11 +1,11 @@
 defmodule Belfrage.RequestTransformers.ComToUKRedirectTest do
   use ExUnit.Case, async: true
-  import Fixtures.Struct
+  import Fixtures.Envelope
 
   alias Belfrage.RequestTransformers.ComToUKRedirect
 
   test "redirect to co.uk when host is .com" do
-    struct = request_struct(:https, "www.bbc.com", "/search")
+    envelope = request_envelope(:https, "www.bbc.com", "/search")
 
     assert {
              :stop,
@@ -20,42 +20,42 @@ defmodule Belfrage.RequestTransformers.ComToUKRedirectTest do
                  }
                }
              }
-           } = ComToUKRedirect.call(struct)
+           } = ComToUKRedirect.call(envelope)
   end
 
   test "redirect to co.uk with the correct subdomain" do
-    struct = request_struct(:https, "sub.domain.bbc.com", "/search")
+    envelope = request_envelope(:https, "sub.domain.bbc.com", "/search")
 
     assert {
              :stop,
              %{response: %{http_status: 302, headers: %{"location" => "https://sub.domain.bbc.co.uk/search"}}}
-           } = ComToUKRedirect.call(struct)
+           } = ComToUKRedirect.call(envelope)
   end
 
   test "redirect to co.uk including query params" do
-    struct = request_struct(:https, "www.bbc.com", "/search", %{"q" => "ruby", "page" => "3"})
+    envelope = request_envelope(:https, "www.bbc.com", "/search", %{"q" => "ruby", "page" => "3"})
 
     assert {
              :stop,
              %{response: %{http_status: 302, headers: %{"location" => "https://www.bbc.co.uk/search?page=3&q=ruby"}}}
-           } = ComToUKRedirect.call(struct)
+           } = ComToUKRedirect.call(envelope)
   end
 
   test "redirect to co.uk without changing scheme" do
-    struct = request_struct(:http, "www.bbc.com", "/search")
+    envelope = request_envelope(:http, "www.bbc.com", "/search")
 
     assert {
              :stop,
              %{response: %{http_status: 302, headers: %{"location" => "http://www.bbc.co.uk/search"}}}
-           } = ComToUKRedirect.call(struct)
+           } = ComToUKRedirect.call(envelope)
   end
 
   test "redirect only when host is bbc.com" do
-    struct = request_struct(:https, "www.bbc.co.uk", "/search")
+    envelope = request_envelope(:https, "www.bbc.co.uk", "/search")
 
     assert {
              :ok,
              %{response: %{http_status: nil, body: "", headers: %{}}}
-           } = ComToUKRedirect.call(struct)
+           } = ComToUKRedirect.call(envelope)
   end
 end

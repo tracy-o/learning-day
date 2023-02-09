@@ -4,21 +4,21 @@ defmodule Belfrage.RequestTransformers.MvtEcho do
   @json_codec Application.compile_env(:belfrage, :json_codec)
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 200,
         headers: %{"content-type" => "application/json", "cache-control" => "public, max-age=5"},
-        body: body(struct)
+        body: body(envelope)
       })
     }
   end
 
-  defp body(struct) do
+  defp body(envelope) do
     keys = [:raw_headers, :country, :host, :path]
 
-    Map.take(struct.request, keys)
+    Map.take(envelope.request, keys)
     |> Map.put(:datetime, current_datetime())
     |> @json_codec.encode!
   end

@@ -3,14 +3,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.NewsLivePlatformDiscriminator
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Private}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Request, Private}
 
   describe "NEWS - when with TIPO URL on TEST, show WebCore" do
     setup do
       set_environment("test")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/c1v596ken6vt",
           path_params: %{"asset_id" => "c1v596ken6vt"}
@@ -22,14 +22,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform gets changed to webcore", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform gets changed to webcore", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: "Webcore",
                   origin: Application.get_env(:belfrage, :pwa_lambda_function),
                   request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
@@ -41,7 +41,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     setup do
       set_environment("live")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/c1v596ken6vt",
           path_params: %{"asset_id" => "c1v596ken6vt"}
@@ -53,14 +53,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform remains as MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform remains as MozartNews", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: MozartNews,
                   production_environment: "live"
                 })}
@@ -71,7 +71,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     setup do
       set_environment("test")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/uk-55930940",
           path_params: %{"asset_id" => "uk-55930940"}
@@ -83,14 +83,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform is MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform is MozartNews", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: MozartNews,
                   production_environment: "live"
                 })}
@@ -101,7 +101,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     setup do
       set_environment("live")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/uk-55930940",
           path_params: %{"asset_id" => "uk-55930940"}
@@ -113,14 +113,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform is MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform is MozartNews", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: MozartNews,
                   production_environment: "live"
                 })}
@@ -131,7 +131,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     setup do
       set_environment("test")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/c1v596ken6vt.app",
           path_params: %{"asset_id" => "c1v596ken6vt", "format" => "app"}
@@ -143,14 +143,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform gets changed to webcore", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform gets changed to webcore", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: "Webcore",
                   origin: Application.get_env(:belfrage, :pwa_lambda_function),
                   request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
@@ -162,7 +162,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
     setup do
       set_environment("live")
 
-      struct = %Struct{
+      envelope = %Envelope{
         request: %Request{
           path: "/news/live/c1v596ken6vt.app",
           path_params: %{"asset_id" => "cvpx5wr4nv8t", "format" => "app"}
@@ -174,14 +174,14 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
       }
 
       %{
-        struct: struct
+        envelope: envelope
       }
     end
 
-    test "origin and platform remains as MozartNews", %{struct: struct} do
-      assert NewsLivePlatformDiscriminator.call(struct) ==
+    test "origin and platform remains as MozartNews", %{envelope: envelope} do
+      assert NewsLivePlatformDiscriminator.call(envelope) ==
                {:ok,
-                Struct.add(struct, :private, %{
+                Envelope.add(envelope, :private, %{
                   platform: MozartNews,
                   production_environment: "live"
                 })}

@@ -3,24 +3,24 @@ defmodule Belfrage.ResponseTransformers.Etag do
 
   @doc """
   Etag support is specified per route spec by the "etag" field.
-  This field is then merged into the Struct, and found at struct.private.etag.
+  This field is then merged into the Envelope, and found at envelope.private.etag.
 
-  If struct.private.etag is not true then we simply return the original struct.
+  If envelope.private.etag is not true then we simply return the original envelope.
 
-  If struct.private.etag is true then we generate an etag from the response body, and
+  If envelope.private.etag is true then we generate an etag from the response body, and
   add an "etag" response header with a value equal to the generated etag.
   """
   @impl Transformer
-  def call(struct = %Struct{private: %Struct.Private{etag: true}}) do
-    struct =
-      struct.response.body
+  def call(envelope = %Envelope{private: %Envelope.Private{etag: true}}) do
+    envelope =
+      envelope.response.body
       |> generate_etag()
-      |> add_etag_header(struct)
+      |> add_etag_header(envelope)
 
-    {:ok, struct}
+    {:ok, envelope}
   end
 
-  def call(struct = %Struct{}), do: {:ok, struct}
+  def call(envelope = %Envelope{}), do: {:ok, envelope}
 
   defp generate_etag(binary) do
     etag =
@@ -31,8 +31,8 @@ defmodule Belfrage.ResponseTransformers.Etag do
     ~s("#{etag}")
   end
 
-  defp add_etag_header(etag, struct) do
-    headers = Map.put(struct.response.headers, "etag", etag)
-    Struct.add(struct, :response, %{headers: headers})
+  defp add_etag_header(etag, envelope) do
+    headers = Map.put(envelope.response.headers, "etag", etag)
+    Envelope.add(envelope, :response, %{headers: headers})
   end
 end

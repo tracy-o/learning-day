@@ -3,14 +3,14 @@ defmodule BelfrageWeb.Response.Headers.AccessControlAllowOriginTest do
   use Plug.Test
 
   alias BelfrageWeb.Response.Headers.AccessControlAllowOrigin
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "when in cdn mode, allow-control-allow-origin is set" do
     input_conn = conn(:get, "/")
 
     output_conn =
-      AccessControlAllowOrigin.add_header(input_conn, %Struct{
-        request: %Struct.Request{
+      AccessControlAllowOrigin.add_header(input_conn, %Envelope{
+        request: %Envelope.Request{
           cdn?: true
         }
       })
@@ -22,8 +22,8 @@ defmodule BelfrageWeb.Response.Headers.AccessControlAllowOriginTest do
     input_conn = conn(:get, "/")
 
     output_conn =
-      AccessControlAllowOrigin.add_header(input_conn, %Struct{
-        request: %Struct.Request{
+      AccessControlAllowOrigin.add_header(input_conn, %Envelope{
+        request: %Envelope.Request{
           cdn?: false
         }
       })

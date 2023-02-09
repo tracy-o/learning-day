@@ -4,10 +4,10 @@ defmodule Belfrage.RequestTransformers.CircuitBreaker do
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
-  def call(struct) do
-    case Belfrage.CircuitBreaker.maybe_apply(struct, @dial.state(:circuit_breaker)) do
-      {:applied, applied_struct} -> {:stop, applied_struct}
-      {:not_applied, not_applied_struct} -> {:ok, not_applied_struct}
+  def call(envelope) do
+    case Belfrage.CircuitBreaker.maybe_apply(envelope, @dial.state(:circuit_breaker)) do
+      {:applied, applied_envelope} -> {:stop, applied_envelope}
+      {:not_applied, not_applied_envelope} -> {:ok, not_applied_envelope}
     end
   end
 end

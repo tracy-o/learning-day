@@ -1,11 +1,11 @@
-defmodule Fixtures.Struct do
-  alias Belfrage.Struct
+defmodule Fixtures.Envelope do
+  alias Belfrage.Envelope
 
-  def struct_with_gzip_resp(), do: struct_with_gzip_resp(%Struct{})
+  def envelope_with_gzip_resp(), do: envelope_with_gzip_resp(%Envelope{})
 
-  def struct_with_gzip_resp(struct, body \\ "{\"hello\":\"world\"}") when is_binary(body) do
-    Struct.add(
-      struct,
+  def envelope_with_gzip_resp(envelope, body \\ "{\"hello\":\"world\"}") when is_binary(body) do
+    Envelope.add(
+      envelope,
       :response,
       %{
         body: :zlib.zip(body),
@@ -16,11 +16,11 @@ defmodule Fixtures.Struct do
     )
   end
 
-  def struct_with_resp(struct, lambda) when is_map(lambda), do: Struct.add(struct, :response, lambda)
+  def envelope_with_resp(envelope, lambda) when is_map(lambda), do: Envelope.add(envelope, :response, lambda)
 
-  def request_struct(scheme, host, path, query \\ %{}, path_params \\ %{}) do
-    %Struct{
-      request: %Struct.Request{
+  def request_envelope(scheme, host, path, query \\ %{}, path_params \\ %{}) do
+    %Envelope{
+      request: %Envelope.Request{
         scheme: scheme,
         host: host,
         path: path,
@@ -31,7 +31,7 @@ defmodule Fixtures.Struct do
   end
 
   def successful_response() do
-    %Belfrage.Struct.Response{
+    %Belfrage.Envelope.Response{
       body: "hello!",
       headers: %{"content-type" => "application/json"},
       http_status: 200,

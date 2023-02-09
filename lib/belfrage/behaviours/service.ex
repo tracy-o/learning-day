@@ -1,4 +1,4 @@
 defmodule Belfrage.Behaviours.Service do
-  alias Belfrage.Struct
-  @callback dispatch(Struct.t()) :: Struct.t()
+  alias Belfrage.Envelope
+  @callback dispatch(Envelope.t()) :: Envelope.t()
 end

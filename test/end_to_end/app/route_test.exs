@@ -30,7 +30,7 @@ defmodule EndToEnd.App.RouteTest do
         conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
         |> Router.call([])
 
-      assert conn.assigns.struct.private.origin == Application.get_env(:belfrage, :trevor_endpoint)
+      assert conn.assigns.envelope.private.origin == Application.get_env(:belfrage, :trevor_endpoint)
     end
   end
 

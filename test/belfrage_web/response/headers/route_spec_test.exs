@@ -3,23 +3,23 @@ defmodule BelfrageWeb.Response.Headers.RouteSpecTest do
   use Plug.Test
 
   alias BelfrageWeb.Response.Headers.RouteSpec
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  describe "when route spec (route_state_id) exists in struct and production_environment is not live" do
+  describe "when route spec (route_state_id) exists in envelope and production_environment is not live" do
     test "the routespec header is set" do
       input_conn = conn(:get, "/")
-      struct = %Struct{private: %Struct.Private{route_state_id: "NewsHomePage", production_environment: "test"}}
-      output_conn = RouteSpec.add_header(input_conn, struct)
+      envelope = %Envelope{private: %Envelope.Private{route_state_id: "NewsHomePage", production_environment: "test"}}
+      output_conn = RouteSpec.add_header(input_conn, envelope)
 
       assert ["NewsHomePage"] == get_resp_header(output_conn, "routespec")
     end
   end
 
-  describe "when route spec (route_state_id) exists in struct and production_environment is live" do
+  describe "when route spec (route_state_id) exists in envelope and production_environment is live" do
     test "the routespec header is not set" do
       input_conn = conn(:get, "/")
-      struct = %Struct{private: %Struct.Private{route_state_id: "NewsHomePage", production_environment: "live"}}
-      output_conn = RouteSpec.add_header(input_conn, struct)
+      envelope = %Envelope{private: %Envelope.Private{route_state_id: "NewsHomePage", production_environment: "live"}}
+      output_conn = RouteSpec.add_header(input_conn, envelope)
 
       assert [] == get_resp_header(output_conn, "routespec")
     end
@@ -28,8 +28,8 @@ defmodule BelfrageWeb.Response.Headers.RouteSpecTest do
   describe "when route spec (route_state_id) is nil" do
     test "the routespec header is not set" do
       input_conn = conn(:get, "/")
-      struct = %Struct{private: %Struct.Private{route_state_id: nil}}
-      output_conn = RouteSpec.add_header(input_conn, struct)
+      envelope = %Envelope{private: %Envelope.Private{route_state_id: nil}}
+      output_conn = RouteSpec.add_header(input_conn, envelope)
 
       assert [] == get_resp_header(output_conn, "routespec")
     end

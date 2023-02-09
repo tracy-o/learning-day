@@ -1,19 +1,19 @@
 defmodule Belfrage.Services.HTTPTest do
   alias Belfrage.Clients
   alias Belfrage.Services.HTTP
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Metrics.LatencyMonitor
   alias Belfrage.Test.XrayHelper
 
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  @get_struct %Struct{
-    private: %Struct.Private{
+  @get_envelope %Envelope{
+    private: %Envelope.Private{
       origin: "https://www.bbc.co.uk",
       platform: "SomePlatform"
     },
-    request: %Struct.Request{
+    request: %Envelope.Request{
       method: "GET",
       path: "/_some_path",
       country: "gb",
@@ -59,13 +59,13 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(@get_struct)
+             } = HTTP.dispatch(@get_envelope)
     end
 
     test "origin returns a 500 response" do
@@ -91,12 +91,12 @@ defmodule Belfrage.Services.HTTPTest do
         response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: "500 - Internal Server Error"
                }
-             } = HTTP.dispatch(@get_struct)
+             } = HTTP.dispatch(@get_envelope)
     end
 
     test "Cannot connect to origin" do
@@ -112,13 +112,13 @@ defmodule Belfrage.Services.HTTPTest do
         response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: "",
                  headers: %{}
                }
-             } = HTTP.dispatch(@get_struct)
+             } = HTTP.dispatch(@get_envelope)
     end
 
     test "invalid path" do
@@ -132,18 +132,18 @@ defmodule Belfrage.Services.HTTPTest do
         {:error, %Clients.HTTP.Error{reason: :invalid_request_target}}
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 404,
                  body: ""
                }
              } =
-               HTTP.dispatch(%Struct{
-                 private: %Struct.Private{
+               HTTP.dispatch(%Envelope{
+                 private: %Envelope.Private{
                    origin: "https://www.bbc.co.uk",
                    platform: "SomePlatform"
                  },
-                 request: %Struct.Request{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/invalid\\path",
                    query_params: %{},
@@ -200,13 +200,13 @@ defmodule Belfrage.Services.HTTPTest do
       referer = "https://fa.wikipedia.org/wiki/۲۰۰۸"
       urlencoded_referer = URI.encode(referer)
 
-      assert %Struct{response: %Struct.Response{http_status: 200, body: ^urlencoded_referer}} =
-               HTTP.dispatch(%Struct{
-                 private: %Struct.Private{
+      assert %Envelope{response: %Envelope.Response{http_status: 200, body: ^urlencoded_referer}} =
+               HTTP.dispatch(%Envelope{
+                 private: %Envelope.Private{
                    origin: "http://localhost:#{port}",
                    platform: "SomePlatform"
                  },
-                 request: %Struct.Request{
+                 request: %Envelope.Request{
                    method: "GET",
                    path: "/some-path",
                    query_params: %{},
@@ -230,21 +230,21 @@ defmodule Belfrage.Services.HTTPTest do
         response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 500,
                  body: ""
                }
-             } = HTTP.dispatch(@get_struct)
+             } = HTTP.dispatch(@get_envelope)
     end
 
     test "when varnish is set, the varnish header is used" do
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.co.uk",
           platform: "SomePlatform"
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "gb",
@@ -267,22 +267,22 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "when the raw headers are set, the raw headers are used" do
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.co.uk",
           platform: "SomePlatform"
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "gb",
@@ -309,22 +309,22 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "when edge cache is set, the edge cache request headers are used" do
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.co.uk",
           platform: "SomePlatform"
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "gb",
@@ -353,22 +353,22 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "when advertise is set, the bbc adverts header is used" do
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.com",
           platform: "SomePlatform"
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "kg",
@@ -398,22 +398,22 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       )
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "when xray_segment present, 'x-amzn-trace-id' us used" do
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.co.uk",
           platform: "SomePlatform"
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "gb",
@@ -431,13 +431,13 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       end)
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "when mvt headers are present, they are put in the request headers" do
@@ -446,13 +446,13 @@ defmodule Belfrage.Services.HTTPTest do
         "mvt-sidebar" => {3, "feature;false"}
       }
 
-      struct = %Struct{
-        private: %Struct.Private{
+      envelope = %Envelope{
+        private: %Envelope.Private{
           origin: "https://www.bbc.co.uk",
           platform: "SomePlatform",
           mvt: expected_mvt_headers
         },
-        request: %Struct.Request{
+        request: %Envelope.Request{
           method: "GET",
           path: "/_some_path",
           country: "gb",
@@ -472,24 +472,24 @@ defmodule Belfrage.Services.HTTPTest do
         @ok_response
       end)
 
-      assert %Struct{
-               response: %Struct.Response{
+      assert %Envelope{
+               response: %Envelope.Response{
                  http_status: 200,
                  body: "{\"some\": \"body\"}",
                  headers: %{"content-type" => "application/json"}
                }
-             } = HTTP.dispatch(struct)
+             } = HTTP.dispatch(envelope)
     end
 
     test "tracks latency checkpoints" do
       request_id = UUID.uuid4(:hex)
-      struct = Struct.add(@get_struct, :request, %{request_id: request_id})
+      envelope = Envelope.add(@get_envelope, :request, %{request_id: request_id})
 
       stub_request()
-      struct = HTTP.dispatch(struct)
-      assert_successful_response(struct)
+      envelope = HTTP.dispatch(envelope)
+      assert_successful_response(envelope)
 
-      checkpoints = LatencyMonitor.get_checkpoints(struct)
+      checkpoints = LatencyMonitor.get_checkpoints(envelope)
       assert checkpoints[:origin_request_sent]
       assert checkpoints[:origin_response_received]
       assert checkpoints[:origin_response_received] > checkpoints[:origin_request_sent]
@@ -509,7 +509,7 @@ defmodule Belfrage.Services.HTTPTest do
     end
 
     defp assert_successful_response(response) do
-      assert %Struct{response: %{http_status: 200}} = response
+      assert %Envelope{response: %{http_status: 200}} = response
     end
   end
 end

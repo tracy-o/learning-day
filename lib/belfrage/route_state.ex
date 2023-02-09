@@ -1,7 +1,7 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Struct, CircuitBreaker, Mvt}
+  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Envelope, CircuitBreaker, Mvt}
   require Logger
 
   @fetch_route_state_timeout Application.compile_env(:belfrage, :fetch_route_state_timeout)
@@ -29,9 +29,9 @@ defmodule Belfrage.RouteState do
     end
   end
 
-  def inc(%Struct{
-        private: %Struct.Private{route_state_id: name, origin: origin},
-        response: %Struct.Response{http_status: http_status, fallback: fallback}
+  def inc(%Envelope{
+        private: %Envelope.Private{route_state_id: name, origin: origin},
+        response: %Envelope.Response{http_status: http_status, fallback: fallback}
       }) do
     GenServer.cast(via_tuple(name), {:inc, http_status, origin, fallback})
   end
@@ -42,17 +42,17 @@ defmodule Belfrage.RouteState do
   message is sent. Otherwise inc/1 is called.
   """
   def update(
-        struct = %Struct{
-          private: %Struct.Private{route_state_id: name, origin: origin},
-          response: %Struct.Response{http_status: http_status, fallback: fallback}
+        envelope = %Envelope{
+          private: %Envelope.Private{route_state_id: name, origin: origin},
+          response: %Envelope.Response{http_status: http_status, fallback: fallback}
         }
       ) do
-    case {fallback, Mvt.State.get_vary_headers(struct.response)} do
+    case {fallback, Mvt.State.get_vary_headers(envelope.response)} do
       {false, vary_headers = [_ | _]} ->
         GenServer.cast(via_tuple(name), {:update, http_status, origin, vary_headers})
 
       _ ->
-        inc(struct)
+        inc(envelope)
     end
   end
 

@@ -3,7 +3,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Authentication.SessionState
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope.Request
 
   @token Fixtures.AuthToken.valid_access_token()
 

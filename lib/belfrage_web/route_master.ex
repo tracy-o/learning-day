@@ -1,5 +1,5 @@
 defmodule BelfrageWeb.RouteMaster do
-  alias BelfrageWeb.{Response, StructAdapter}
+  alias BelfrageWeb.{Response, EnvelopeAdapter}
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
   defmacro __using__(_opts) do
@@ -165,7 +165,7 @@ defmodule BelfrageWeb.RouteMaster do
 
           Response.redirect(
             var!(conn),
-            StructAdapter.adapt(var!(conn), "redirect"),
+            EnvelopeAdapter.adapt(var!(conn), "redirect"),
             unquote(status),
             new_location,
             unquote(ttl)

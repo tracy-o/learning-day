@@ -1,30 +1,30 @@
 defmodule Belfrage.Services.Webcore.Request do
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Private, UserSession}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Request, Private, UserSession}
   alias Belfrage.Mvt
 
-  def build(struct) do
+  def build(envelope) do
     %{
-      headers: headers(struct),
+      headers: headers(envelope),
       body: nil,
-      httpMethod: struct.request.method,
-      path: struct.request.path,
-      queryStringParameters: struct.request.query_params,
-      pathParameters: struct.request.path_params
+      httpMethod: envelope.request.method,
+      path: envelope.request.path,
+      queryStringParameters: envelope.request.query_params,
+      pathParameters: envelope.request.path_params
     }
   end
 
-  defp headers(struct = %Struct{}) do
-    struct
+  defp headers(envelope = %Envelope{}) do
+    envelope
     |> base_headers()
-    |> put_obit_mode_headers(struct.request)
-    |> put_election_headers(struct.request)
-    |> put_user_session_headers(struct.user_session)
-    |> put_feature_header(struct.private)
-    |> Mvt.Headers.put_mvt_headers(struct.private)
+    |> put_obit_mode_headers(envelope.request)
+    |> put_election_headers(envelope.request)
+    |> put_user_session_headers(envelope.user_session)
+    |> put_feature_header(envelope.private)
+    |> Mvt.Headers.put_mvt_headers(envelope.private)
   end
 
-  defp base_headers(%Struct{request: request = %Request{}, private: private = %Private{}}) do
+  defp base_headers(%Envelope{request: request = %Request{}, private: private = %Private{}}) do
     %{
       country: request.country,
       language: request.language,

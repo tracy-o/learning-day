@@ -1,17 +1,17 @@
 defmodule Belfrage.RequestTransformers.UserAgentValidator do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope.Request
 
   @valid_user_agents ~w(MozartFetcher MozartCli fabl)
 
   @impl Transformer
-  def call(struct = %Struct{request: request = %Request{}}) do
+  def call(envelope = %Envelope{request: request = %Request{}}) do
     if request.user_agent in @valid_user_agents do
-      {:ok, struct}
+      {:ok, envelope}
     else
       {
         :stop,
-        Struct.add(struct, :response, %{
+        Envelope.add(envelope, :response, %{
           http_status: 400,
           headers: %{
             "req-svc-chain" => request.req_svc_chain,

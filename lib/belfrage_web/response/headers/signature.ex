@@ -1,17 +1,17 @@
 defmodule BelfrageWeb.Response.Headers.Signature do
   import Plug.Conn
 
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, %Struct{request: %Struct.Request{request_hash: request_hash}})
+  def add_header(conn, %Envelope{request: %Envelope.Request{request_hash: request_hash}})
       when byte_size(request_hash) > 0 do
     put_resp_header(conn, "bsig", request_hash)
   end
 
-  def add_header(conn, _struct) do
+  def add_header(conn, _envelope) do
     conn
   end
 end

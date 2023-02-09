@@ -2,17 +2,17 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.LambdaOriginAlias
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   describe "when preview mode boolean is non existant" do
     test "the production_environment is used as the alias" do
       production_env = Application.get_env(:belfrage, :production_environment)
 
-      struct = %Struct{
-        private: %Struct.Private{origin: "lambda-function", production_environment: "test"}
+      envelope = %Envelope{
+        private: %Envelope.Private{origin: "lambda-function", production_environment: "test"}
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
+      {:ok, %Envelope{private: %Envelope.Private{origin: origin}}} = LambdaOriginAlias.call(envelope)
 
       assert origin == "lambda-function:#{production_env}"
     end
@@ -22,11 +22,11 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
     test "the production_environment is used as the alias" do
       production_env = Application.get_env(:belfrage, :production_environment)
 
-      struct = %Struct{
-        private: %Struct.Private{origin: "lambda-function", production_environment: "test", preview_mode: "off"}
+      envelope = %Envelope{
+        private: %Envelope.Private{origin: "lambda-function", production_environment: "test", preview_mode: "off"}
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
+      {:ok, %Envelope{private: %Envelope.Private{origin: origin}}} = LambdaOriginAlias.call(envelope)
 
       assert origin == "lambda-function:#{production_env}"
     end
@@ -34,9 +34,9 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
 
   describe "when preview mode is on" do
     test "if valid the subdomain will be used as the alias" do
-      struct = %Struct{
-        request: %Struct.Request{subdomain: "example-branch"},
-        private: %Struct.Private{
+      envelope = %Envelope{
+        request: %Envelope.Request{subdomain: "example-branch"},
+        private: %Envelope.Private{
           route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
@@ -44,15 +44,15 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         }
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
+      {:ok, %Envelope{private: %Envelope.Private{origin: origin}}} = LambdaOriginAlias.call(envelope)
 
       assert origin == "lambda-function:example-branch"
     end
 
     test "a valid subdomain containing -'s and _'s will be used as the alias" do
-      struct = %Struct{
-        request: %Struct.Request{subdomain: "example-branch_2"},
-        private: %Struct.Private{
+      envelope = %Envelope{
+        request: %Envelope.Request{subdomain: "example-branch_2"},
+        private: %Envelope.Private{
           route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
@@ -60,15 +60,15 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
         }
       }
 
-      {:ok, %Struct{private: %Struct.Private{origin: origin}}} = LambdaOriginAlias.call(struct)
+      {:ok, %Envelope{private: %Envelope.Private{origin: origin}}} = LambdaOriginAlias.call(envelope)
 
       assert origin == "lambda-function:example-branch_2"
     end
 
     test "if the subdomain contains invalid characters a 400 will be returned" do
-      struct = %Struct{
-        request: %Struct.Request{subdomain: "*"},
-        private: %Struct.Private{
+      envelope = %Envelope{
+        request: %Envelope.Request{subdomain: "*"},
+        private: %Envelope.Private{
           route_state_id: "SportVideos",
           origin: "lambda-function",
           production_environment: "test",
@@ -78,13 +78,13 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAliasTest do
 
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 400,
                    body: "Invalid Alias"
                  }
                }
-             } = LambdaOriginAlias.call(struct)
+             } = LambdaOriginAlias.call(envelope)
     end
   end
 

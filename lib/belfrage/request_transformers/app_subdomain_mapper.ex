@@ -16,24 +16,24 @@ defmodule Belfrage.RequestTransformers.AppSubdomainMapper do
   # - news-app-ws-classic.test.api.bbci.co.uk
 
   @impl Transformer
-  def call(struct) do
-    case struct.request.subdomain do
+  def call(envelope) do
+    case envelope.request.subdomain do
       "news-app-classic" ->
-        {:ok, change_endpoint(struct, "AppsTrevor", :trevor_endpoint, 15_000)}
+        {:ok, change_endpoint(envelope, "AppsTrevor", :trevor_endpoint, 15_000)}
 
       "news-app-global-classic" ->
-        {:ok, change_endpoint(struct, "AppsWalter", :walter_endpoint, 8_000)}
+        {:ok, change_endpoint(envelope, "AppsWalter", :walter_endpoint, 8_000)}
 
       "news-app-ws-classic" ->
-        {:ok, change_endpoint(struct, "AppsPhilippa", :philippa_endpoint, 1_500)}
+        {:ok, change_endpoint(envelope, "AppsPhilippa", :philippa_endpoint, 1_500)}
 
       _ ->
-        {:stop, Struct.put_status(struct, 400)}
+        {:stop, Envelope.put_status(envelope, 400)}
     end
   end
 
-  defp change_endpoint(struct, platform, endpoint, threshold) do
-    Struct.add(struct, :private, %{
+  defp change_endpoint(envelope, platform, endpoint, threshold) do
+    Envelope.add(envelope, :private, %{
       circuit_breaker_error_threshold: threshold,
       origin: Application.get_env(:belfrage, endpoint),
       platform: platform

@@ -2,17 +2,17 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirect do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct = %Struct{}) do
-    redirect(struct)
+  def call(envelope = %Envelope{}) do
+    redirect(envelope)
   end
 
-  def redirect(struct) do
+  def redirect(envelope) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
-          "location" => location(struct.request),
+          "location" => location(envelope.request),
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "public, max-age=60"
         },
@@ -21,7 +21,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirect do
     }
   end
 
-  defp location(%Struct.Request{path: path, path_params: %{"id" => id}}) do
+  defp location(%Envelope.Request{path: path, path_params: %{"id" => id}}) do
     base_path(path) <> "/topics/#{id}"
   end
 

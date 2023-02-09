@@ -4,7 +4,7 @@ defmodule BelfrageWeb.Response.Headers.BID do
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, _struct) do
+  def add_header(conn, _envelope) do
     put_resp_header(conn, "bid", bid_value())
   end
 

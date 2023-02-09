@@ -3,12 +3,12 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.NewsAppsHardcodedResponse
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Utils.Current
 
-  defp struct do
-    %Struct{
-      private: %Struct.Private{
+  defp envelope do
+    %Envelope{
+      private: %Envelope.Private{
         platform: "Fabl"
       }
     }
@@ -17,9 +17,9 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
   describe "when the Dial is disabled (default)" do
     test "traffic is proxied to origin" do
       stub_dials(news_apps_hardcoded_response: "disabled")
-      original_struct = struct()
+      original_envelope = envelope()
 
-      assert {:ok, ^original_struct} = NewsAppsHardcodedResponse.call(original_struct)
+      assert {:ok, ^original_envelope} = NewsAppsHardcodedResponse.call(original_envelope)
     end
   end
 
@@ -29,8 +29,8 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
 
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 200,
                    headers: %{
                      "content-type" => "application/json; charset=utf-8",
@@ -39,7 +39,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
                    }
                  }
                }
-             } = NewsAppsHardcodedResponse.call(struct())
+             } = NewsAppsHardcodedResponse.call(envelope())
     end
 
     test "the response body is hardocded" do
@@ -49,10 +49,10 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponseTest do
 
       {
         :stop,
-        %Belfrage.Struct{
-          response: %Belfrage.Struct.Response{body: body}
+        %Belfrage.Envelope{
+          response: %Belfrage.Envelope.Response{body: body}
         }
-      } = NewsAppsHardcodedResponse.call(struct())
+      } = NewsAppsHardcodedResponse.call(envelope())
 
       # checks that JSON is parseable
       parsed_body = body |> :zlib.gunzip() |> Json.decode!()

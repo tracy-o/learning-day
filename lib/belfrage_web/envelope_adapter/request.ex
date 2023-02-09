@@ -1,10 +1,10 @@
-defmodule BelfrageWeb.StructAdapter.Request do
-  alias Belfrage.Struct
+defmodule BelfrageWeb.EnvelopeAdapter.Request do
+  alias Belfrage.Envelope
   alias Plug.Conn
 
   def adapt(conn = %Conn{private: %{bbc_headers: bbc_headers}}) do
-    %Struct{
-      request: %Struct.Request{
+    %Envelope{
+      request: %Envelope.Request{
         path: conn.request_path,
         raw_headers: raw_headers(conn),
         method: conn.method,

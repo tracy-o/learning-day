@@ -4,18 +4,18 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointer do
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     if points_to_webcore?() do
-      struct =
-        struct
-        |> Struct.add(:private, %{
+      envelope =
+        envelope
+        |> Envelope.add(:private, %{
           platform: "Webcore",
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         })
 
-      {:ok, struct}
+      {:ok, envelope}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 

@@ -2,7 +2,7 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.NewsArticleValidator
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   import Test.Support.Helper, only: [set_stack_id: 1]
 
@@ -13,18 +13,18 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
     end
 
     test "404 is returned if article id does not match" do
-      assert {:stop, %Struct{response: %Struct.Response{http_status: 404}}} =
-               NewsArticleValidator.call(%Struct{
-                 request: %Struct.Request{path_params: %{"id" => "123456789123456789"}}
+      assert {:stop, %Envelope{response: %Envelope.Response{http_status: 404}}} =
+               NewsArticleValidator.call(%Envelope{
+                 request: %Envelope.Request{path_params: %{"id" => "123456789123456789"}}
                })
     end
 
     test "404 is not returned if article id matches" do
-      struct = %Struct{
-        request: %Struct.Request{path_params: %{"id" => "49336144"}}
+      envelope = %Envelope{
+        request: %Envelope.Request{path_params: %{"id" => "49336144"}}
       }
 
-      assert {:ok, ^struct} = NewsArticleValidator.call(struct)
+      assert {:ok, ^envelope} = NewsArticleValidator.call(envelope)
     end
   end
 
@@ -35,11 +35,11 @@ defmodule Belfrage.RequestTransformers.NewsArticleValidatorTest do
     end
 
     test "404 is not returned" do
-      struct = %Struct{
-        request: %Struct.Request{path_params: %{"id" => "123456789123456789"}}
+      envelope = %Envelope{
+        request: %Envelope.Request{path_params: %{"id" => "123456789123456789"}}
       }
 
-      assert {:ok, ^struct} = NewsArticleValidator.call(struct)
+      assert {:ok, ^envelope} = NewsArticleValidator.call(envelope)
     end
   end
 end

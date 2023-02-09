@@ -3,61 +3,61 @@ defmodule Belfrage.Cache.Store do
   alias Belfrage.Cache.Local
   alias Belfrage.Metrics
 
-  def store(struct) do
+  def store(envelope) do
     cond do
-      store_in_local_and_distributed_cache?(struct) ->
+      store_in_local_and_distributed_cache?(envelope) ->
         Metrics.latency_span(:cache_response, fn ->
-          MultiStrategy.store(struct)
+          MultiStrategy.store(envelope)
         end)
 
-        struct
+        envelope
 
-      store_in_local_cache?(struct) ->
+      store_in_local_cache?(envelope) ->
         Metrics.latency_span(:cache_response, fn ->
-          Local.store(struct, make_stale: true)
+          Local.store(envelope, make_stale: true)
         end)
 
-        struct
+        envelope
 
       true ->
-        struct
+        envelope
     end
   end
 
-  defp store_in_local_and_distributed_cache?(struct) do
-    is_cacheable?(struct) and not is_response_fallback?(struct)
+  defp store_in_local_and_distributed_cache?(envelope) do
+    is_cacheable?(envelope) and not is_response_fallback?(envelope)
   end
 
-  defp store_in_local_cache?(struct) do
-    is_cacheable?(struct) and is_response_fallback?(struct) and
-      struct.response.cache_type == :distributed
+  defp store_in_local_cache?(envelope) do
+    is_cacheable?(envelope) and is_response_fallback?(envelope) and
+      envelope.response.cache_type == :distributed
   end
 
-  defp is_cacheable?(struct) do
-    is_caching_enabled?(struct) and is_successful_response?(struct) and is_get_request?(struct) and
-      is_public_cacheable_response?(struct)
+  defp is_cacheable?(envelope) do
+    is_caching_enabled?(envelope) and is_successful_response?(envelope) and is_get_request?(envelope) and
+      is_public_cacheable_response?(envelope)
   end
 
-  defp is_public_cacheable_response?(struct) do
-    case struct.response.cache_directive do
+  defp is_public_cacheable_response?(envelope) do
+    case envelope.response.cache_directive do
       %Belfrage.CacheControl{cacheability: "public", max_age: max_age} when is_integer(max_age) -> true
       _ -> false
     end
   end
 
-  defp is_successful_response?(struct) do
-    struct.response.http_status == 200
+  defp is_successful_response?(envelope) do
+    envelope.response.http_status == 200
   end
 
-  defp is_get_request?(struct) do
-    struct.request.method == "GET"
+  defp is_get_request?(envelope) do
+    envelope.request.method == "GET"
   end
 
-  defp is_caching_enabled?(struct) do
-    struct.private.caching_enabled
+  defp is_caching_enabled?(envelope) do
+    envelope.private.caching_enabled
   end
 
-  defp is_response_fallback?(struct) do
-    struct.response.fallback
+  defp is_response_fallback?(envelope) do
+    envelope.response.fallback
   end
 end

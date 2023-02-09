@@ -22,7 +22,7 @@ defmodule BelfrageWeb.Plugs.FormatRewriter do
   The DSL will take care of rewriting the matcher to: `"/sport/cricket/teams/:team/.app"`
   See also `BelfrageWeb.Rewriter`
 
-  This hijack of the request_info solves the matching and remain invisible in the Belfrage Struct where only the unmodified request_path is passed.
+  This hijack of the request_info solves the matching and remain invisible in the Belfrage Envelope where only the unmodified request_path is passed.
 
   """
 

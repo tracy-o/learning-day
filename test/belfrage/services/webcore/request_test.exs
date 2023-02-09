@@ -1,10 +1,10 @@
 defmodule Belfrage.Services.Webcore.RequestTest do
   use ExUnit.Case
   alias Belfrage.Services.Webcore.Request
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   setup do
-    private_valid_session = %Struct.UserSession{
+    private_valid_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -12,7 +12,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       user_attributes: %{age_bracket: "o18", allow_personalisation: true}
     }
 
-    private_valid_session_without_user_attributes = %Struct.UserSession{
+    private_valid_session_without_user_attributes = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -20,7 +20,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       user_attributes: %{}
     }
 
-    private_valid_session_with_partial_user_attributes = %Struct.UserSession{
+    private_valid_session_with_partial_user_attributes = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "a-valid-session-token",
       authenticated: true,
@@ -28,7 +28,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       user_attributes: %{allow_personalisation: true}
     }
 
-    private_invalid_session = %Struct.UserSession{
+    private_invalid_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: "an-invalid-session-token",
       authenticated: true,
@@ -36,7 +36,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       user_attributes: %{}
     }
 
-    private_unauthenticated_session = %Struct.UserSession{
+    private_unauthenticated_session = %Envelope.UserSession{
       authentication_env: "int",
       session_token: nil,
       authenticated: false,
@@ -44,8 +44,8 @@ defmodule Belfrage.Services.Webcore.RequestTest do
       user_attributes: %{}
     }
 
-    request_struct = %Struct{
-      request: %Struct.Request{
+    request_envelope = %Envelope{
+      request: %Envelope.Request{
         scheme: :https,
         host: "bbc.co.uk",
         path: "/_web_core/12345",
@@ -56,23 +56,23 @@ defmodule Belfrage.Services.Webcore.RequestTest do
           "q" => "something"
         }
       },
-      private: %Struct.Private{
+      private: %Envelope.Private{
         route_state_id: "HomePage"
       }
     }
 
     %{
-      valid_session: Struct.add(request_struct, :user_session, private_valid_session),
+      valid_session: Envelope.add(request_envelope, :user_session, private_valid_session),
       valid_session_without_user_attributes:
-        Struct.add(request_struct, :user_session, private_valid_session_without_user_attributes),
+        Envelope.add(request_envelope, :user_session, private_valid_session_without_user_attributes),
       valid_session_with_partial_user_attributes:
-        Struct.add(request_struct, :user_session, private_valid_session_with_partial_user_attributes),
-      invalid_session: Struct.add(request_struct, :user_session, private_invalid_session),
-      unauthenticated_session: Struct.add(request_struct, :user_session, private_unauthenticated_session)
+        Envelope.add(request_envelope, :user_session, private_valid_session_with_partial_user_attributes),
+      invalid_session: Envelope.add(request_envelope, :user_session, private_invalid_session),
+      unauthenticated_session: Envelope.add(request_envelope, :user_session, private_unauthenticated_session)
     }
   end
 
-  test "builds a non-personalised request", %{unauthenticated_session: struct} do
+  test "builds a non-personalised request", %{unauthenticated_session: envelope} do
     assert %{
              body: nil,
              headers: %{
@@ -89,10 +89,10 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "id" => "12345"
              },
              queryStringParameters: %{"q" => "something"}
-           } == Request.build(struct)
+           } == Request.build(envelope)
   end
 
-  test "when session is invalid", %{invalid_session: struct} do
+  test "when session is invalid", %{invalid_session: envelope} do
     assert %{
              body: nil,
              headers: %{
@@ -109,10 +109,10 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "id" => "12345"
              },
              queryStringParameters: %{"q" => "something"}
-           } == Request.build(struct)
+           } == Request.build(envelope)
   end
 
-  test "when session is valid", %{valid_session: struct} do
+  test "when session is valid", %{valid_session: envelope} do
     assert %{
              body: nil,
              headers: %{
@@ -134,10 +134,10 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "id" => "12345"
              },
              queryStringParameters: %{"q" => "something"}
-           } == Request.build(struct)
+           } == Request.build(envelope)
   end
 
-  test "when session is valid but user attributes are missing", %{valid_session_without_user_attributes: struct} do
+  test "when session is valid but user attributes are missing", %{valid_session_without_user_attributes: envelope} do
     assert %{
              body: nil,
              headers: %{
@@ -157,11 +157,11 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "id" => "12345"
              },
              queryStringParameters: %{"q" => "something"}
-           } == Request.build(struct)
+           } == Request.build(envelope)
   end
 
   test "when session is valid but user attributes are partially missing", %{
-    valid_session_with_partial_user_attributes: struct
+    valid_session_with_partial_user_attributes: envelope
   } do
     assert %{
              body: nil,
@@ -182,37 +182,37 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "id" => "12345"
              },
              queryStringParameters: %{"q" => "something"}
-           } == Request.build(struct)
+           } == Request.build(envelope)
   end
 
   test "concatenates private.features into the feature header" do
-    struct_with_features = %Struct{
-      private: %Struct.Private{
+    envelope_with_features = %Envelope{
+      private: %Envelope.Private{
         features: %{chameleon: "off"}
       }
     }
 
-    %{headers: %{"ctx-features": "chameleon=off"}} = Request.build(struct_with_features)
+    %{headers: %{"ctx-features": "chameleon=off"}} = Request.build(envelope_with_features)
   end
 
   test "adds election dials when set" do
-    struct_with_election_headers = %Struct{
-      request: %Struct.Request{
+    envelope_with_election_headers = %Envelope{
+      request: %Envelope.Request{
         raw_headers: %{"election-banner-council-story" => "on", "election-banner-ni-story" => "off"}
       }
     }
 
     assert %{headers: %{"election-banner-council-story" => "on", "election-banner-ni-story" => "off"}} =
-             Request.build(struct_with_election_headers)
+             Request.build(envelope_with_election_headers)
   end
 
   test "adds the Obit Mode header when set" do
-    struct_with_obit_mode_header = %Struct{
-      request: %Struct.Request{
+    envelope_with_obit_mode_header = %Envelope{
+      request: %Envelope.Request{
         raw_headers: %{"obit-mode" => "on"}
       }
     }
 
-    assert %{headers: %{"obm" => "on"}} = Request.build(struct_with_obit_mode_header)
+    assert %{headers: %{"obm" => "on"}} = Request.build(envelope_with_obit_mode_header)
   end
 end

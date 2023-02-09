@@ -5,10 +5,10 @@ defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStoryTest do
   import Belfrage.Test.StubHelper
 
   alias Belfrage.RequestTransformers.ElectionBannerCouncilStory
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  @struct %Struct{
-    request: %Struct.Request{
+  @envelope %Envelope{
+    request: %Envelope.Request{
       raw_headers: %{"header1" => "header1value"}
     }
   }
@@ -17,8 +17,8 @@ defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStoryTest do
     test "election-banner-council-story: 'on' exists in headers" do
       stub_dial(:election_banner_council_story, "on")
 
-      {:ok, struct} = ElectionBannerCouncilStory.call(@struct)
-      assert struct.request.raw_headers == %{"header1" => "header1value", "election-banner-council-story" => "on"}
+      {:ok, envelope} = ElectionBannerCouncilStory.call(@envelope)
+      assert envelope.request.raw_headers == %{"header1" => "header1value", "election-banner-council-story" => "on"}
     end
   end
 
@@ -26,8 +26,8 @@ defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStoryTest do
     test "election-banner-council-story: 'off' exists in headers" do
       stub_dial(:election_banner_council_story, "off")
 
-      {:ok, struct} = ElectionBannerCouncilStory.call(@struct)
-      assert struct.request.raw_headers == %{"header1" => "header1value", "election-banner-council-story" => "off"}
+      {:ok, envelope} = ElectionBannerCouncilStory.call(@envelope)
+      assert envelope.request.raw_headers == %{"header1" => "header1value", "election-banner-council-story" => "off"}
     end
   end
 end

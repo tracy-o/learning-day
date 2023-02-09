@@ -2,7 +2,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Struct, Clients}
+  alias Belfrage.{Envelope, Clients}
   alias Routes.Platforms.Selectors.AssetTypePlatformSelector
 
   import ExUnit.CaptureLog
@@ -26,7 +26,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:error, 500}
+             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
   end
@@ -51,7 +51,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:error, 500}
+             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
   end
@@ -76,7 +76,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
         end
       )
 
-      assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:ok, "Webcore"}
+      assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "Webcore"}
     end)
   end
 
@@ -99,7 +99,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 
   test "returns MozartNews platform if origin response contains a 404 status code" do
@@ -120,6 +120,6 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Struct.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 end

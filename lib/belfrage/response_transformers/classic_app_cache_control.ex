@@ -6,22 +6,22 @@ defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
   """
   @impl Transformer
   def call(
-        struct = %Struct{
-          request: %Struct.Request{subdomain: subdomain},
-          response: %Struct.Response{
+        envelope = %Envelope{
+          request: %Envelope.Request{subdomain: subdomain},
+          response: %Envelope.Response{
             cache_directive: %Belfrage.CacheControl{cacheability: cacheability, max_age: max_age}
           },
-          private: %Struct.Private{personalised_request: personalised_request}
+          private: %Envelope.Private{personalised_request: personalised_request}
         }
       )
       when subdomain in ["news-app-classic", "news-app-global-classic", "news-app-ws-classic"] do
     cond do
       cacheability == "public" && max_age < 60 ->
-        cache_directive = Map.put(struct.response.cache_directive, :max_age, 60)
+        cache_directive = Map.put(envelope.response.cache_directive, :max_age, 60)
 
         {
           :ok,
-          Struct.add(struct, :response, %{
+          Envelope.add(envelope, :response, %{
             cache_directive: cache_directive
           })
         }
@@ -36,15 +36,15 @@ defmodule Belfrage.ResponseTransformers.ClassicAppCacheControl do
 
         {
           :ok,
-          Struct.add(struct, :response, %{
+          Envelope.add(envelope, :response, %{
             cache_directive: cache_directive
           })
         }
 
       true ->
-        {:ok, struct}
+        {:ok, envelope}
     end
   end
 
-  def call(struct = %Struct{}), do: {:ok, struct}
+  def call(envelope = %Envelope{}), do: {:ok, envelope}
 end

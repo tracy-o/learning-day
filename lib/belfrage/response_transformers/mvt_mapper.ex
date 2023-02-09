@@ -3,13 +3,13 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
 
   @impl Transformer
   def call(
-        struct = %Struct{
-          private: %Struct.Private{
+        envelope = %Envelope{
+          private: %Envelope.Private{
             headers_allowlist: headers_allowlist,
             mvt_project_id: mvt_project_id,
             mvt: mvt_headers
           },
-          response: %Struct.Response{headers: headers}
+          response: %Envelope.Response{headers: headers}
         }
       ) do
     vary_header = Map.get(headers, "vary")
@@ -17,24 +17,24 @@ defmodule Belfrage.ResponseTransformers.MvtMapper do
     if vary_header && mvt_project_id > 0 do
       mapped_mvt_headers = ["bbc-mvt-complete" | map_mvt_headers(vary_header, mvt_headers)]
 
-      struct =
-        Struct.add(struct, :private, %{
+      envelope =
+        Envelope.add(envelope, :private, %{
           headers_allowlist: filter_mvt_headers(headers_allowlist, mapped_mvt_headers),
           mvt_vary: mapped_mvt_headers
         })
 
-      {:ok, struct}
+      {:ok, envelope}
     else
-      struct =
-        Struct.add(struct, :private, %{
+      envelope =
+        Envelope.add(envelope, :private, %{
           headers_allowlist: filter_mvt_headers(headers_allowlist, [])
         })
 
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 
-  def call(struct), do: {:ok, struct}
+  def call(envelope), do: {:ok, envelope}
 
   defp filter_mvt_headers(headers_allowlist, mapped_mvt_headers) do
     headers_allowlist

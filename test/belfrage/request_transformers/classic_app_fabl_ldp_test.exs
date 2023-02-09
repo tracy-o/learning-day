@@ -3,21 +3,21 @@ defmodule Belfrage.RequestTransformers.ClassicAppFablLdpTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.ClassicAppFablLdp
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  test "when a guid is not present, struct is unmodified" do
+  test "when a guid is not present, envelope is unmodified" do
     assert {
              :ok,
-             %Struct{
-               request: %Struct.Request{
+             %Envelope{
+               request: %Envelope.Request{
                  query_params: %{
                    "foo" => "bar"
                  }
                }
              }
            } =
-             ClassicAppFablLdp.call(%Struct{
-               request: %Struct.Request{path_params: %{}, query_params: %{"foo" => "bar"}}
+             ClassicAppFablLdp.call(%Envelope{
+               request: %Envelope.Request{path_params: %{}, query_params: %{"foo" => "bar"}}
              })
   end
 
@@ -26,8 +26,8 @@ defmodule Belfrage.RequestTransformers.ClassicAppFablLdpTest do
 
     assert {
              :ok,
-             %Struct{
-               request: %Struct.Request{
+             %Envelope{
+               request: %Envelope.Request{
                  query_params: %{
                    "subjectId" => ^guid,
                    "foo" => "bar"
@@ -42,8 +42,8 @@ defmodule Belfrage.RequestTransformers.ClassicAppFablLdpTest do
                }
              }
            } =
-             ClassicAppFablLdp.call(%Struct{
-               request: %Struct.Request{path_params: %{"guid" => guid}, query_params: %{"foo" => "bar"}}
+             ClassicAppFablLdp.call(%Envelope{
+               request: %Envelope.Request{path_params: %{"guid" => guid}, query_params: %{"foo" => "bar"}}
              })
   end
 end

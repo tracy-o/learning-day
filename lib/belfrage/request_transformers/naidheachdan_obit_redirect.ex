@@ -5,19 +5,19 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirect do
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     case @dial.state(:obit_mode) do
-      "on" -> redirect(struct)
-      "off" -> {:ok, struct}
+      "on" -> redirect(envelope)
+      "off" -> {:ok, envelope}
     end
   end
 
-  defp redirect(struct) do
-    redirect_url = "https://" <> struct.request.host <> "/news" <> QueryParams.encode(struct.request.query_params)
+  defp redirect(envelope) do
+    redirect_url = "https://" <> envelope.request.host <> "/news" <> QueryParams.encode(envelope.request.query_params)
 
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
           "location" => redirect_url,

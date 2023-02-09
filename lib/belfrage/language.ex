@@ -1,18 +1,18 @@
 defmodule Belfrage.Language do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  def add_signature(struct) do
-    if struct.private.language_from_cookie do
-      add_cookie_to_signature(struct)
+  def add_signature(envelope) do
+    if envelope.private.language_from_cookie do
+      add_cookie_to_signature(envelope)
     else
-      struct
+      envelope
     end
   end
 
-  def set(struct) do
-    language_from_cookie = struct.private.language_from_cookie
-    cookie_ckps_language = struct.request.cookie_ckps_language
-    default_language = struct.private.default_language
+  def set(envelope) do
+    language_from_cookie = envelope.private.language_from_cookie
+    cookie_ckps_language = envelope.request.cookie_ckps_language
+    default_language = envelope.private.default_language
 
     case {language_from_cookie, cookie_ckps_language} do
       {true, "cy"} -> "cy"
@@ -23,19 +23,19 @@ defmodule Belfrage.Language do
     end
   end
 
-  def vary(headers, struct) do
-    if struct.private.language_from_cookie do
+  def vary(headers, envelope) do
+    if envelope.private.language_from_cookie do
       ["cookie-ckps_language" | headers]
     else
       headers
     end
   end
 
-  defp add_cookie_to_signature(struct = %Struct{}) do
-    signature = struct.private.signature_keys
+  defp add_cookie_to_signature(envelope = %Envelope{}) do
+    signature = envelope.private.signature_keys
     add_keys = signature[:add] ++ [:cookie_ckps_language]
 
-    struct
-    |> Struct.add(:private, %{signature_keys: %{signature | add: add_keys}})
+    envelope
+    |> Envelope.add(:private, %{signature_keys: %{signature | add: add_keys}})
   end
 end

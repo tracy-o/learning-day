@@ -1,9 +1,9 @@
-defmodule Belfrage.Struct.Debug do
+defmodule Belfrage.Envelope.Debug do
   defstruct request_pipeline_trail: [],
             response_pipeline_trail: []
 end
 
-defmodule Belfrage.Struct.Request do
+defmodule Belfrage.Envelope.Request do
   @derive {Inspect, except: [:raw_headers, :cookies]}
   defstruct [
     :path,
@@ -45,7 +45,7 @@ defmodule Belfrage.Struct.Request do
   @type t :: %__MODULE__{}
 end
 
-defmodule Belfrage.Struct.Response do
+defmodule Belfrage.Envelope.Response do
   defstruct fallback: false,
             http_status: nil,
             headers: %{},
@@ -62,7 +62,7 @@ defmodule Belfrage.Struct.Response do
   end
 end
 
-defmodule Belfrage.Struct.Private do
+defmodule Belfrage.Envelope.Private do
   defstruct fallback_ttl: :timer.hours(6),
             route_state_id: nil,
             candidate_route_state_ids: [],
@@ -100,7 +100,7 @@ defmodule Belfrage.Struct.Private do
   @type t :: %__MODULE__{}
 end
 
-defmodule Belfrage.Struct.UserSession do
+defmodule Belfrage.Envelope.UserSession do
   @derive {Inspect, except: [:session_token, :user_attributes]}
 
   defstruct authentication_env: nil,
@@ -110,23 +110,23 @@ defmodule Belfrage.Struct.UserSession do
             user_attributes: %{}
 end
 
-defmodule Belfrage.Struct do
+defmodule Belfrage.Envelope do
   alias Belfrage.Logger.HeaderRedactor
 
-  defstruct request: %Belfrage.Struct.Request{},
-            private: %Belfrage.Struct.Private{},
-            user_session: %Belfrage.Struct.UserSession{},
-            response: %Belfrage.Struct.Response{},
-            debug: %Belfrage.Struct.Debug{}
+  defstruct request: %Belfrage.Envelope.Request{},
+            private: %Belfrage.Envelope.Private{},
+            user_session: %Belfrage.Envelope.UserSession{},
+            response: %Belfrage.Envelope.Response{},
+            debug: %Belfrage.Envelope.Debug{}
 
   @type t :: %__MODULE__{}
 
-  def add(struct, key, values) do
-    Map.put(struct, key, Map.merge(Map.get(struct, key), values))
+  def add(envelope, key, values) do
+    Map.put(envelope, key, Map.merge(Map.get(envelope, key), values))
   end
 
-  def loggable(struct) do
-    struct
+  def loggable(envelope) do
+    envelope
     |> update_in([Access.key(:response), Access.key(:body)], fn _value -> "REMOVED" end)
     |> update_in([Access.key(:request), Access.key(:raw_headers)], &HeaderRedactor.redact/1)
     |> update_in([Access.key(:request), Access.key(:cookies)], fn _value -> "REMOVED" end)
@@ -137,15 +137,15 @@ defmodule Belfrage.Struct do
     end)
   end
 
-  def put_status(struct, code) when is_number(code) do
-    add(struct, :response, %{http_status: code})
+  def put_status(envelope, code) when is_number(code) do
+    add(envelope, :response, %{http_status: code})
   end
 
-  def put_checkpoint(struct, name, value) do
-    update_in(struct.private.checkpoints, &Map.put(&1, name, value))
+  def put_checkpoint(envelope, name, value) do
+    update_in(envelope.private.checkpoints, &Map.put(&1, name, value))
   end
 
-  def get_checkpoints(struct) do
-    struct.private.checkpoints
+  def get_checkpoints(envelope) do
+    envelope.private.checkpoints
   end
 end

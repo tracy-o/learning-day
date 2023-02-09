@@ -1,29 +1,29 @@
 defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
-  alias Belfrage.{Struct, Metrics}
+  alias Belfrage.{Envelope, Metrics}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
   def call(
-        struct = %Struct{
-          request: %Struct.Request{accept_encoding: accept_encoding},
-          response: %Struct.Response{headers: headers}
+        envelope = %Envelope{
+          request: %Envelope.Request{accept_encoding: accept_encoding},
+          response: %Envelope.Response{headers: headers}
         }
       ) do
     if contains_gzip?(headers["content-encoding"]) && !contains_gzip?(accept_encoding) do
-      {:ok, decompress_body(struct)}
+      {:ok, decompress_body(envelope)}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 
   defp contains_gzip?(nil), do: false
   defp contains_gzip?(string), do: String.contains?(string, "gzip")
 
-  defp decompress_body(struct) do
+  defp decompress_body(envelope) do
     Metrics.latency_span(:decompress_response, fn ->
-      response_headers = Map.delete(struct.response.headers, "content-encoding")
+      response_headers = Map.delete(envelope.response.headers, "content-encoding")
       :telemetry.execute([:belfrage, :web, :response, :uncompressed], %{})
-      Struct.add(struct, :response, %{body: :zlib.gunzip(struct.response.body), headers: response_headers})
+      Envelope.add(envelope, :response, %{body: :zlib.gunzip(envelope.response.body), headers: response_headers})
     end)
   end
 end

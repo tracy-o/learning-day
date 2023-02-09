@@ -3,8 +3,8 @@ defmodule BelfrageWeb.Response do
   import Plug.Conn
 
   alias Plug.Conn
-  alias Belfrage.{CacheControl, Struct, Metrics}
-  alias Belfrage.Struct.Response
+  alias Belfrage.{CacheControl, Envelope, Metrics}
+  alias Belfrage.Envelope.Response
   alias BelfrageWeb.Response.Headers
   alias BelfrageWeb.Response.Internal
 
@@ -24,40 +24,40 @@ defmodule BelfrageWeb.Response do
   ]
   @json_codec Application.compile_env(:belfrage, :json_codec)
 
-  def put(conn = %Conn{assigns: %{struct: struct = %Struct{response: response = %Response{}}}}) do
+  def put(conn = %Conn{assigns: %{envelope: envelope = %Envelope{response: response = %Response{}}}}) do
     response =
       if response.http_status > 399 && response.body in ["", nil] do
-        Internal.new(struct, conn)
+        Internal.new(envelope, conn)
       else
         response
       end
 
-    struct = %Struct{struct | response: response}
+    envelope = %Envelope{envelope | response: response}
 
     conn
-    |> add_response_headers(struct)
+    |> add_response_headers(envelope)
     |> put_response(response.http_status, response.body)
   end
 
   def error(conn = %Conn{private: %{bbc_headers: %{cdn: true}}}, status) do
-    struct =
+    envelope =
       conn.assigns
-      |> Map.get(:struct, %Struct{request: %Struct.Request{cdn?: true}})
-      |> Struct.add(:response, %{http_status: status, body: ""})
+      |> Map.get(:envelope, %Envelope{request: %Envelope.Request{cdn?: true}})
+      |> Envelope.add(:response, %{http_status: status, body: ""})
 
     conn
-    |> assign(:struct, struct)
+    |> assign(:envelope, envelope)
     |> put()
   end
 
   def error(conn = %Conn{}, status) do
-    struct =
+    envelope =
       conn.assigns
-      |> Map.get(:struct, %Struct{})
-      |> Struct.add(:response, %{http_status: status, body: ""})
+      |> Map.get(:envelope, %Envelope{})
+      |> Envelope.add(:response, %{http_status: status, body: ""})
 
     conn
-    |> assign(:struct, struct)
+    |> assign(:envelope, envelope)
     |> put()
   end
 
@@ -73,7 +73,7 @@ defmodule BelfrageWeb.Response do
     error(conn, 405)
   end
 
-  def redirect(conn = %Conn{}, struct = %Struct{}, status, new_location, ttl) do
+  def redirect(conn = %Conn{}, envelope = %Envelope{}, status, new_location, ttl) do
     case :binary.match(new_location, ["\n", "\r"]) do
       {_, _} ->
         error(conn, 400)
@@ -81,8 +81,8 @@ defmodule BelfrageWeb.Response do
       :nomatch ->
         conn = put_resp_header(conn, "location", new_location)
 
-        struct = %Struct{
-          struct
+        envelope = %Envelope{
+          envelope
           | response: %Response{
               http_status: status,
               cache_directive: %CacheControl{
@@ -95,7 +95,7 @@ defmodule BelfrageWeb.Response do
         }
 
         conn
-        |> assign(:struct, struct)
+        |> assign(:envelope, envelope)
         |> put()
     end
   end
@@ -125,9 +125,9 @@ defmodule BelfrageWeb.Response do
     internal_server_error(conn)
   end
 
-  defp add_response_headers(conn, struct) do
+  defp add_response_headers(conn, envelope) do
     Metrics.latency_span(:set_response_headers, fn ->
-      struct.response.headers
+      envelope.response.headers
       |> Enum.reduce(conn, fn
         {header_key, header_value}, conn when is_binary(header_value) ->
           put_resp_header(conn, header_key, header_value)
@@ -141,13 +141,13 @@ defmodule BelfrageWeb.Response do
 
           conn
       end)
-      |> add_default_headers(struct)
+      |> add_default_headers(envelope)
     end)
   end
 
-  defp add_default_headers(conn, struct) do
+  defp add_default_headers(conn, envelope) do
     Enum.reduce(@default_headers, conn, fn headers_module, output_conn ->
-      apply(headers_module, :add_header, [output_conn, struct])
+      apply(headers_module, :add_header, [output_conn, envelope])
     end)
   end
 end

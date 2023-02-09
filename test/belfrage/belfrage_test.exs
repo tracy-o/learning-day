@@ -4,8 +4,8 @@ defmodule BelfrageTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Request, Response, Private}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Metrics.LatencyMonitor
 
@@ -15,7 +15,7 @@ defmodule BelfrageTest do
   @platform "Webcore"
   @route_state_id "#{@spec_name}.#{@platform}"
 
-  @get_request_struct %Struct{
+  @get_request_envelope %Envelope{
     private: %Private{
       route_state_id: @route_state_id,
       production_environment: "test"
@@ -46,12 +46,12 @@ defmodule BelfrageTest do
       @web_core_lambda_response
     end)
 
-    Belfrage.handle(@get_request_struct)
+    Belfrage.handle(@get_request_envelope)
   end
 
   test "GET request on a subdomain and preview_mode, invokes lambda with the lambda alias" do
-    struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
-    struct = Struct.add(struct, :private, %{preview_mode: "on"})
+    envelope = Envelope.add(@get_request_envelope, :request, %{subdomain: "example-branch"})
+    envelope = Envelope.add(envelope, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _credentials,
@@ -61,12 +61,12 @@ defmodule BelfrageTest do
       @web_core_lambda_response
     end)
 
-    Belfrage.handle(struct)
+    Belfrage.handle(envelope)
   end
 
   test "GET request on a subdomain and preview_mode with no matching alias, invokes lambda with the lambda alias and returns the 404 response" do
-    struct = Struct.add(@get_request_struct, :request, %{subdomain: "example-branch"})
-    struct = Struct.add(struct, :private, %{preview_mode: "on"})
+    envelope = Envelope.add(@get_request_envelope, :request, %{subdomain: "example-branch"})
+    envelope = Envelope.add(envelope, :private, %{preview_mode: "on"})
 
     LambdaMock
     |> expect(:call, fn _credentials,
@@ -76,7 +76,7 @@ defmodule BelfrageTest do
       @web_core_404_lambda_response
     end)
 
-    thing = Belfrage.handle(struct)
+    thing = Belfrage.handle(envelope)
 
     assert thing.response.http_status == 404
     assert thing.response.body == "404 - not found"
@@ -91,7 +91,7 @@ defmodule BelfrageTest do
       @web_core_lambda_response
     end)
 
-    Belfrage.handle(@get_request_struct)
+    Belfrage.handle(@get_request_envelope)
 
     {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
@@ -116,7 +116,7 @@ defmodule BelfrageTest do
        }}
     end)
 
-    Belfrage.handle(@get_request_struct)
+    Belfrage.handle(@get_request_envelope)
 
     {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
@@ -138,7 +138,7 @@ defmodule BelfrageTest do
       @web_core_500_lambda_response
     end)
 
-    Belfrage.handle(@get_request_struct)
+    Belfrage.handle(@get_request_envelope)
 
     {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
@@ -150,12 +150,12 @@ defmodule BelfrageTest do
 
   describe "with seeded cache" do
     setup do
-      struct =
-        @get_request_struct
-        |> Struct.add(:request, %{path: "/_seeded_cache"})
+      envelope =
+        @get_request_envelope
+        |> Envelope.add(:request, %{path: "/_seeded_cache"})
 
-      put_into_cache(%Struct{
-        struct
+      put_into_cache(%Envelope{
+        envelope
         | response: %Response{
             body: :zlib.gzip(~s({"hi": "bonjour"})),
             headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
@@ -164,43 +164,43 @@ defmodule BelfrageTest do
           }
       })
 
-      %{struct: struct}
+      %{envelope: envelope}
     end
 
-    test "returns cached response", %{struct: struct} do
-      struct = Struct.add(struct, :request, %{accept_encoding: "gzip, br, deflate"})
+    test "returns cached response", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :request, %{accept_encoding: "gzip, br, deflate"})
 
-      assert %Struct{
+      assert %Envelope{
                response: %Response{
                  body: compressed_body,
                  headers: %{
                    "content-encoding" => "gzip"
                  }
                }
-             } = Belfrage.handle(struct)
+             } = Belfrage.handle(envelope)
 
       assert_gzipped(compressed_body, ~s({"hi": "bonjour"}))
     end
 
-    test "decompresses cached response if client doesn't accept compression", %{struct: struct} do
-      assert %Struct{
+    test "decompresses cached response if client doesn't accept compression", %{envelope: envelope} do
+      assert %Envelope{
                response: %Response{
                  body: ~s({"hi": "bonjour"}),
                  headers: headers
                }
-             } = Belfrage.handle(struct)
+             } = Belfrage.handle(envelope)
 
       refute Map.has_key?(headers, "content-encoding")
     end
 
-    test "records latency checkpoint", %{struct: struct} do
-      struct = Belfrage.handle(struct)
+    test "records latency checkpoint", %{envelope: envelope} do
+      envelope = Belfrage.handle(envelope)
 
-      checkpoints = LatencyMonitor.get_checkpoints(struct)
+      checkpoints = LatencyMonitor.get_checkpoints(envelope)
       assert checkpoints[:early_response_received]
     end
 
-    test "increments the route_state, when fetching from cache", %{struct: struct} do
+    test "increments the route_state, when fetching from cache", %{envelope: envelope} do
       LambdaMock
       |> expect(:call, 0, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
@@ -209,9 +209,9 @@ defmodule BelfrageTest do
         flunk("This should never be called")
       end)
 
-      Belfrage.handle(struct)
+      Belfrage.handle(envelope)
 
-      %Private{route_state_id: route_state_id} = struct.private
+      %Private{route_state_id: route_state_id} = envelope.private
       {:ok, state} = Belfrage.RouteState.state(route_state_id)
 
       assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
@@ -220,12 +220,12 @@ defmodule BelfrageTest do
 
   describe "seeded with stale cache" do
     setup do
-      struct =
-        @get_request_struct
-        |> Struct.add(:request, %{path: "/_stale_seeded_cache"})
+      envelope =
+        @get_request_envelope
+        |> Envelope.add(:request, %{path: "/_stale_seeded_cache"})
 
-      put_into_cache_as_stale(%Struct{
-        struct
+      put_into_cache_as_stale(%Envelope{
+        envelope
         | response: %Response{
             body: :zlib.gzip(~s({"hi": "bonjour"})),
             headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
@@ -234,10 +234,10 @@ defmodule BelfrageTest do
           }
       })
 
-      %{struct: struct}
+      %{envelope: envelope}
     end
 
-    test "increments the route_state, when fetching from fallback", %{struct: struct} do
+    test "increments the route_state, when fetching from fallback", %{envelope: envelope} do
       LambdaMock
       |> expect(:call, 1, fn _credentials,
                              _lambda_func = "pwa-lambda-function:test",
@@ -246,9 +246,9 @@ defmodule BelfrageTest do
         @web_core_500_lambda_response
       end)
 
-      Belfrage.handle(struct)
+      Belfrage.handle(envelope)
 
-      %Private{route_state_id: route_state_id} = struct.private
+      %Private{route_state_id: route_state_id} = envelope.private
       {:ok, state} = Belfrage.RouteState.state(route_state_id)
 
       assert state.counter == %{

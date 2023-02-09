@@ -5,15 +5,15 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   """
   require Logger
 
-  alias Belfrage.{Struct, Metrics}
+  alias Belfrage.{Envelope, Metrics}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => "gzip"}}}) do
-    {:ok, struct}
+  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => "gzip"}}}) do
+    {:ok, envelope}
   end
 
-  def call(struct = %Struct{response: %Struct.Response{headers: %{"content-encoding" => content_encoding}}}) do
+  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => content_encoding}}}) do
     Logger.log(:error, "", %{
       msg: "Cannot handle compression type",
       content_encoding: content_encoding
@@ -21,19 +21,22 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
 
     :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{})
 
-    {:ok, Struct.add(struct, :response, %{body: "", http_status: 415})}
+    {:ok, Envelope.add(envelope, :response, %{body: "", http_status: 415})}
   end
 
-  def call(struct = %Struct{response: response = %Struct.Response{}}) do
-    if response.http_status == 200 and struct.response.body != "" do
-      {:ok, gzip_response_body(struct)}
+  def call(envelope = %Envelope{response: response = %Envelope.Response{}}) do
+    if response.http_status == 200 and envelope.response.body != "" do
+      {:ok, gzip_response_body(envelope)}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 
   defp gzip_response_body(
-         struct = %Struct{request: %Struct.Request{path: path}, private: private = %Struct.Private{platform: platform}}
+         envelope = %Envelope{
+           request: %Envelope.Request{path: path},
+           private: private = %Envelope.Private{platform: platform}
+         }
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
       Belfrage.Metrics.multi_execute(
@@ -51,12 +54,12 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
         platform: platform
       })
 
-      response_headers = Map.put(struct.response.headers, "content-encoding", "gzip")
-      Struct.add(struct, :response, %{body: :zlib.gzip(struct.response.body), headers: response_headers})
+      response_headers = Map.put(envelope.response.headers, "content-encoding", "gzip")
+      Envelope.add(envelope, :response, %{body: :zlib.gzip(envelope.response.body), headers: response_headers})
     end)
   end
 
-  defp platform_name(%Struct.Private{platform: platform}) do
+  defp platform_name(%Envelope.Private{platform: platform}) do
     platform |> String.to_atom()
   end
 end

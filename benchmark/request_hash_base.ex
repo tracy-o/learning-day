@@ -14,10 +14,10 @@ defmodule Benchmark.RequestHashBase do
   """
 
   alias Belfrage.RequestHash
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  @struct %Struct{
-    request: %Struct.Request{
+  @envelope %Envelope{
+    request: %Envelope.Request{
       scheme: :https,
       path: "/news/clips/abc123",
       country: "gb",
@@ -30,12 +30,12 @@ defmodule Benchmark.RequestHashBase do
 
   def experiment() do
     {:ok, _started} = Application.ensure_all_started(:belfrage)
-    struct = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{}})
+    envelope = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: %{}})
 
     Benchee.run(
       %{
-        "prev: hash with empty raw headers" => fn -> generate(struct) end,
-        "new: hash with empty raw headers" => fn -> RequestHash.generate(struct) end
+        "prev: hash with empty raw headers" => fn -> generate(envelope) end,
+        "new: hash with empty raw headers" => fn -> RequestHash.generate(envelope) end
       },
       time: 10,
       memory_time: 5
@@ -43,20 +43,20 @@ defmodule Benchmark.RequestHashBase do
   end
 
   ## previous implementation
-  def generate(struct) do
-    case Belfrage.Overrides.should_cache_bust?(struct) do
+  def generate(envelope) do
+    case Belfrage.Overrides.should_cache_bust?(envelope) do
       true ->
         cache_bust_request_hash()
 
       false ->
-        extract_keys(struct)
+        extract_keys(envelope)
         |> Crimpex.signature()
     end
-    |> update_struct(struct)
+    |> update_envelope(envelope)
   end
 
-  defp extract_keys(struct) do
-    Map.take(struct.request, build_signature_keys(struct))
+  defp extract_keys(envelope) do
+    Map.take(envelope.request, build_signature_keys(envelope))
   end
 
   @default_signature_keys [
@@ -73,14 +73,14 @@ defmodule Benchmark.RequestHashBase do
     :cdn?
   ]
 
-  defp build_signature_keys(%Struct{
-         private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
+  defp build_signature_keys(%Envelope{
+         private: %Envelope.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
        }) do
     (@default_signature_keys ++ add_keys) -- skip_keys
   end
 
-  defp update_struct(request_hash, struct) do
-    Struct.add(struct, :request, %{request_hash: request_hash})
+  defp update_envelope(request_hash, envelope) do
+    Envelope.add(envelope, :request, %{request_hash: request_hash})
   end
 
   defp cache_bust_request_hash do

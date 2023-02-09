@@ -58,14 +58,14 @@ defmodule Belfrage.Xray do
     if_sampled(subsegment, fn -> Subsegment.add_annotations(subsegment, annotations) end)
   end
 
-  @spec add_struct_annotations(Segment.t(), struct) :: Segment.t()
-  def add_struct_annotations(segment = %Segment{}, struct) do
-    add_annotations(segment, struct_annotations(struct))
+  @spec add_envelope_annotations(Segment.t(), struct) :: Segment.t()
+  def add_envelope_annotations(segment = %Segment{}, envelope) do
+    add_annotations(segment, envelope_annotations(envelope))
   end
 
-  @spec add_struct_annotations(Subsegment.t(), struct) :: Subsegment.t()
-  def add_struct_annotations(subsegment = %Subsegment{}, struct) do
-    add_annotations(subsegment, struct_annotations(struct))
+  @spec add_envelope_annotations(Subsegment.t(), struct) :: Subsegment.t()
+  def add_envelope_annotations(subsegment = %Subsegment{}, envelope) do
+    add_annotations(subsegment, envelope_annotations(envelope))
   end
 
   @spec add_metadata(Segment.t(), metadata) :: Segment.t()
@@ -207,13 +207,13 @@ defmodule Belfrage.Xray do
     end
   end
 
-  defp struct_annotations(struct) do
+  defp envelope_annotations(envelope) do
     %{
-      "owner" => struct.private.owner,
-      "route_state_id" => struct.private.route_state_id,
-      "preview_mode" => struct.private.preview_mode,
-      "production_environment" => struct.private.production_environment,
-      "runbook" => struct.private.runbook
+      "owner" => envelope.private.owner,
+      "route_state_id" => envelope.private.route_state_id,
+      "preview_mode" => envelope.private.preview_mode,
+      "production_environment" => envelope.private.production_environment,
+      "runbook" => envelope.private.runbook
     }
   end
 

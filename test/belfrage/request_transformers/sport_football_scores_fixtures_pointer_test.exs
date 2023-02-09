@@ -3,11 +3,11 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.SportFootballScoresFixturesPointer
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  defp struct do
-    %Struct{
-      private: %Struct.Private{
+  defp envelope do
+    %Envelope{
+      private: %Envelope.Private{
         platform: "MozartSport"
       }
     }
@@ -17,7 +17,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
     test "platform will stay as Mozart" do
       stub_dials(football_scores_fixtures: "mozart")
 
-      assert {:ok, %Struct{private: %{platform: "MozartSport"}}} = SportFootballScoresFixturesPointer.call(struct())
+      assert {:ok, %Envelope{private: %{platform: "MozartSport"}}} = SportFootballScoresFixturesPointer.call(envelope())
     end
   end
 
@@ -25,8 +25,8 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
     test "platform will point to Webcore" do
       stub_dials(football_scores_fixtures: "webcore")
 
-      assert {:ok, %Struct{private: %{platform: "Webcore", origin: "pwa-lambda-function"}}} =
-               SportFootballScoresFixturesPointer.call(struct())
+      assert {:ok, %Envelope{private: %{platform: "Webcore", origin: "pwa-lambda-function"}}} =
+               SportFootballScoresFixturesPointer.call(envelope())
     end
   end
 end

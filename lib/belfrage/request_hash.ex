@@ -1,6 +1,6 @@
 defmodule Belfrage.RequestHash do
-  alias Belfrage.{Struct, Mvt}
-  alias Belfrage.Struct.Private
+  alias Belfrage.{Envelope, Mvt}
+  alias Belfrage.Envelope.Private
 
   @signature_keys [
     :raw_headers,
@@ -18,15 +18,15 @@ defmodule Belfrage.RequestHash do
 
   @ignore_headers ~w(cookie x-id-oidc-signedin)
 
-  def put(struct = %Struct{}) do
-    Struct.add(struct, :request, %{request_hash: generate(struct)})
+  def put(envelope = %Envelope{}) do
+    Envelope.add(envelope, :request, %{request_hash: generate(envelope)})
   end
 
-  def generate(struct = %Struct{}) do
-    if Belfrage.Overrides.should_cache_bust?(struct) do
+  def generate(envelope = %Envelope{}) do
+    if Belfrage.Overrides.should_cache_bust?(envelope) do
       cache_bust_hash()
     else
-      struct
+      envelope
       |> take_signature_keys()
       |> Crimpex.signature()
     end
@@ -36,10 +36,10 @@ defmodule Belfrage.RequestHash do
     "cache-bust." <> UUID.uuid4()
   end
 
-  defp take_signature_keys(struct = %Struct{}) do
-    struct.request
-    |> Map.take(signature_keys(struct.private))
-    |> filter_headers(struct.private.route_state_id)
+  defp take_signature_keys(envelope = %Envelope{}) do
+    envelope.request
+    |> Map.take(signature_keys(envelope.private))
+    |> filter_headers(envelope.private.route_state_id)
   end
 
   defp signature_keys(%Private{signature_keys: %{add: add, skip: skip}}) do

@@ -5,31 +5,31 @@ defmodule Belfrage.RequestTransformers.WeatherLanguageCookie do
   @redirect_languages ["en", "cy", "ga", "gd"]
   @one_year_in_seconds 365 * 24 * 3600
 
-  def call(struct) do
-    language = struct.request.path_params["language"]
-    redirect_location = struct.request.query_params["redirect_location"] || "/weather"
+  def call(envelope) do
+    language = envelope.request.path_params["language"]
+    redirect_location = envelope.request.query_params["redirect_location"] || "/weather"
 
     cond do
       not BelfrageWeb.Validators.matches?(redirect_location, ~r/^[\/]/) ->
-        {:stop, update_resp_struct(struct, 404, %{})}
+        {:stop, update_resp_envelope(envelope, 404, %{})}
 
       language not in @redirect_languages ->
-        {:stop, update_resp_struct(struct, 404, %{})}
+        {:stop, update_resp_envelope(envelope, 404, %{})}
 
       true ->
         headers = %{
-          "location" => redirect_url(struct.request.host, redirect_location),
+          "location" => redirect_url(envelope.request.host, redirect_location),
           "set-cookie" =>
-            "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(struct.request.host)}",
+            "ckps_language=#{language}; expires=#{next_year_http_date()}; path=/; domain=#{request_domain(envelope.request.host)}",
           "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
         }
 
-        {:stop, update_resp_struct(struct, 301, headers)}
+        {:stop, update_resp_envelope(envelope, 301, headers)}
     end
   end
 
-  defp update_resp_struct(struct, status_code, headers) do
-    Struct.add(struct, :response, %{
+  defp update_resp_envelope(envelope, status_code, headers) do
+    Envelope.add(envelope, :response, %{
       http_status: status_code,
       headers: headers,
       body: ""

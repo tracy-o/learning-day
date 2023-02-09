@@ -18,17 +18,17 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoan do
   """
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     if stack_id() == "joan" do
       {
         :ok,
-        Struct.add(struct, :private, %{
+        Envelope.add(envelope, :private, %{
           platform: "MozartNews",
           origin: Application.get_env(:belfrage, :mozart_news_endpoint)
         })
       }
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 

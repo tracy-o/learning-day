@@ -95,7 +95,7 @@ defmodule Belfrage.RouteSpec do
     |> Map.merge(merge_allowlists(platform, spec))
     |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
     |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
-    |> to_struct(platform)
+    |> to_envelope(platform)
     |> Personalisation.maybe_put_personalised_route()
   end
 
@@ -104,7 +104,7 @@ defmodule Belfrage.RouteSpec do
     call_specs_func(module, env)
   end
 
-  defp to_struct(route_spec_map, platform) do
+  defp to_envelope(route_spec_map, platform) do
     try do
       struct!(__MODULE__, Map.merge(platform, route_spec_map))
     catch

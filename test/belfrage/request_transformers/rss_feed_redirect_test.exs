@@ -2,11 +2,11 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.RssFeedRedirect
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "requests to the www subdomain are redirected to the feeds subdomain" do
-    struct = %Struct{
-      request: %Struct.Request{
+    envelope = %Envelope{
+      request: %Envelope.Request{
         scheme: :https,
         host: "www.bbc.co.uk",
         path: "/sport/rss.xml",
@@ -16,8 +16,8 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
 
     assert {
              :stop,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
+             %Belfrage.Envelope{
+               response: %Belfrage.Envelope.Response{
                  http_status: 302,
                  body: "Redirecting",
                  headers: %{
@@ -27,12 +27,12 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
                  }
                }
              }
-           } = RssFeedRedirect.call(struct)
+           } = RssFeedRedirect.call(envelope)
   end
 
   test "redirects strip any query parameters" do
-    struct = %Struct{
-      request: %Struct.Request{
+    envelope = %Envelope{
+      request: %Envelope.Request{
         scheme: :https,
         host: "www.bbc.co.uk",
         path: "/sport/rss.xml",
@@ -45,8 +45,8 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
 
     assert {
              :stop,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
+             %Belfrage.Envelope{
+               response: %Belfrage.Envelope.Response{
                  http_status: 302,
                  body: "Redirecting",
                  headers: %{
@@ -56,12 +56,12 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
                  }
                }
              }
-           } = RssFeedRedirect.call(struct)
+           } = RssFeedRedirect.call(envelope)
   end
 
   test "requests to the feeds subdomain are left unchanged" do
-    struct = %Struct{
-      request: %Struct.Request{
+    envelope = %Envelope{
+      request: %Envelope.Request{
         scheme: :https,
         host: "feeds.bbci.co.uk",
         path: "/sport/rss.xml",
@@ -69,6 +69,6 @@ defmodule Belfrage.RequestTransformers.RssFeedRedirectTest do
       }
     }
 
-    assert {:ok, ^struct} = RssFeedRedirect.call(struct)
+    assert {:ok, ^envelope} = RssFeedRedirect.call(envelope)
   end
 end

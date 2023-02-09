@@ -3,26 +3,26 @@ defmodule Belfrage.Behaviours.TransformerTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.Behaviours.Transformer, as: Subject
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "call request transformer behaviour" do
     stub_dial(:circuit_breaker, "false")
 
-    struct = %Struct{private: %Struct.Private{request_pipeline: ["CircuitBreaker"]}}
+    envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["CircuitBreaker"]}}
 
-    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{request_pipeline_trail: ["CircuitBreaker"]}}} =
-             Subject.call(struct, :request, "CircuitBreaker")
+    assert {:ok, %Envelope{debug: %Belfrage.Envelope.Debug{request_pipeline_trail: ["CircuitBreaker"]}}} =
+             Subject.call(envelope, :request, "CircuitBreaker")
   end
 
   test "call response transformer behaviour" do
     stub_dial(:etag, "false")
 
-    struct = %Struct{
-      private: %Struct.Private{response_pipeline: ["Etag", "MvtMapper"]},
-      debug: %Belfrage.Struct.Debug{response_pipeline_trail: ["Etag"]}
+    envelope = %Envelope{
+      private: %Envelope.Private{response_pipeline: ["Etag", "MvtMapper"]},
+      debug: %Belfrage.Envelope.Debug{response_pipeline_trail: ["Etag"]}
     }
 
-    assert {:ok, %Struct{debug: %Belfrage.Struct.Debug{response_pipeline_trail: ["MvtMapper", "Etag"]}}} =
-             Subject.call(struct, :response, "MvtMapper")
+    assert {:ok, %Envelope{debug: %Belfrage.Envelope.Debug{response_pipeline_trail: ["MvtMapper", "Etag"]}}} =
+             Subject.call(envelope, :response, "MvtMapper")
   end
 end

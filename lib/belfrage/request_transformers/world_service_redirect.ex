@@ -3,14 +3,14 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirect do
   alias Belfrage.Helpers.QueryParams
 
   @impl Transformer
-  def call(struct = %Struct{request: %Struct.Request{scheme: :http}}) do
-    redirect(redirect_url(struct.request), struct)
+  def call(envelope = %Envelope{request: %Envelope.Request{scheme: :http}}) do
+    redirect(redirect_url(envelope.request), envelope)
   end
 
-  def call(struct) do
-    case should_redirect?(struct.request.host) do
-      true -> redirect(redirect_url(struct.request), struct)
-      false -> {:ok, struct}
+  def call(envelope) do
+    case should_redirect?(envelope.request.host) do
+      true -> redirect(redirect_url(envelope.request), envelope)
+      false -> {:ok, envelope}
     end
   end
 
@@ -19,10 +19,10 @@ defmodule Belfrage.RequestTransformers.WorldServiceRedirect do
       String.replace(request.host, ".co.uk", ".com") <> request.path <> QueryParams.encode(request.query_params)
   end
 
-  def redirect(redirect_url, struct) do
+  def redirect(redirect_url, envelope) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
           "location" => redirect_url,

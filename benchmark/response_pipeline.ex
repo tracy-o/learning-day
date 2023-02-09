@@ -22,9 +22,9 @@ defmodule Benchmark.ResponsePipeline do
   	- gzip base64 lambda response: + base64 decoding, - pre-cache gzipping
   """
 
-  import Fixtures.{Struct, Lambda}
+  import Fixtures.{Envelope, Lambda}
 
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Processor
   alias Belfrage.Services.Webcore
 
@@ -39,8 +39,8 @@ defmodule Benchmark.ResponsePipeline do
   end
 
   def setup(iteration \\ 1, step_size_kb \\ 1) do
-    struct = %Struct{
-      private: %Struct.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
+    envelope = %Envelope{
+      private: %Envelope.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
     }
 
     for i <- 1..iteration, into: %{} do
@@ -49,8 +49,8 @@ defmodule Benchmark.ResponsePipeline do
       {
         size_kb,
         {
-          struct_with_resp(struct, Webcore.build_response({:ok, lambda_resp(size_kb)})),
-          struct_with_resp(struct, Webcore.build_response({:ok, gzip_base64_lambda_resp(size_kb)}))
+          envelope_with_resp(envelope, Webcore.build_response({:ok, lambda_resp(size_kb)})),
+          envelope_with_resp(envelope, Webcore.build_response({:ok, gzip_base64_lambda_resp(size_kb)}))
         }
       }
     end

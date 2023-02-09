@@ -1,6 +1,6 @@
 defmodule Belfrage.RequestTransformers.PlatformKillSwitch do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.Struct.Private
+  alias Belfrage.Envelope.Private
 
   @dial Application.compile_env(:belfrage, :dial)
 
@@ -9,11 +9,11 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitch do
   }
 
   @impl Transformer
-  def call(struct = %Struct{private: %Private{platform: platform}}) do
+  def call(envelope = %Envelope{private: %Private{platform: platform}}) do
     if killswitch_active?(platform) do
-      {:stop, Struct.add(struct, :response, %{http_status: 500})}
+      {:stop, Envelope.add(envelope, :response, %{http_status: 500})}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 

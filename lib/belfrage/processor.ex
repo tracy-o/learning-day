@@ -3,7 +3,7 @@ defmodule Belfrage.Processor do
 
   alias Belfrage.{
     RouteStateRegistry,
-    Struct,
+    Envelope,
     RouteState,
     Pipeline,
     RequestHash,
@@ -19,10 +19,10 @@ defmodule Belfrage.Processor do
     ServiceProvider
   }
 
-  alias Struct.{Response, Private}
+  alias Envelope.{Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
-  def pre_request_pipeline(struct = %Struct{}) do
+  def pre_request_pipeline(envelope = %Envelope{}) do
     pipeline = [
       &get_route_state/1,
       &allowlists/1,
@@ -34,23 +34,23 @@ defmodule Belfrage.Processor do
       &Mvt.Headers.remove_original_headers/1
     ]
 
-    WrapperError.wrap(pipeline, struct)
+    WrapperError.wrap(pipeline, envelope)
   end
 
-  def get_route_state(struct = %Struct{private: %Struct.Private{route_state_id: route_state_id}}) do
+  def get_route_state(envelope = %Envelope{private: %Envelope.Private{route_state_id: route_state_id}}) do
     Metrics.latency_span(:set_request_route_state_data, fn ->
       RouteStateRegistry.find_or_start(route_state_id)
 
       case RouteState.state(route_state_id) do
-        {:ok, route_state} -> Map.put(struct, :private, Map.merge(struct.private, route_state))
+        {:ok, route_state} -> Map.put(envelope, :private, Map.merge(envelope.private, route_state))
         {:error, reason} -> route_state_state_failure(reason)
       end
     end)
   end
 
-  def allowlists(struct) do
+  def allowlists(envelope) do
     Metrics.latency_span(:filter_request_data, fn ->
-      struct
+      envelope
       |> Personalisation.append_allowlists()
       |> Mvt.Allowlist.add()
       |> Allowlist.QueryParams.filter()
@@ -59,64 +59,64 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  def generate_request_hash(struct = %Struct{}) do
+  def generate_request_hash(envelope = %Envelope{}) do
     Metrics.latency_span(:generate_request_hash, fn ->
-      RequestHash.put(struct)
+      RequestHash.put(envelope)
     end)
   end
 
-  def fetch_early_response_from_cache(struct = %Struct{private: private = %Private{}}) do
+  def fetch_early_response_from_cache(envelope = %Envelope{private: private = %Private{}}) do
     if private.caching_enabled && !private.personalised_request do
-      WrapperError.wrap(&do_fetch_early_response_from_cache/1, struct)
+      WrapperError.wrap(&do_fetch_early_response_from_cache/1, envelope)
     else
-      struct
+      envelope
     end
   end
 
-  defp do_fetch_early_response_from_cache(struct = %Struct{}) do
-    struct =
+  defp do_fetch_early_response_from_cache(envelope = %Envelope{}) do
+    envelope =
       Metrics.latency_span(:fetch_early_response_from_cache, fn ->
-        Cache.fetch(struct, [:fresh])
+        Cache.fetch(envelope, [:fresh])
       end)
 
-    if struct.response.http_status do
-      struct = LatencyMonitor.checkpoint(struct, :early_response_received)
-      RouteState.inc(struct)
-      struct
+    if envelope.response.http_status do
+      envelope = LatencyMonitor.checkpoint(envelope, :early_response_received)
+      RouteState.inc(envelope)
+      envelope
     else
-      struct
+      envelope
     end
   end
 
-  def request_pipeline(struct = %Struct{}) do
+  def request_pipeline(envelope = %Envelope{}) do
     Metrics.latency_span(:request_pipeline, fn ->
-      WrapperError.wrap(&process_request_pipeline/1, struct)
+      WrapperError.wrap(&process_request_pipeline/1, envelope)
     end)
   end
 
-  defp process_request_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct, :request, struct.private.request_pipeline) do
-      {:ok, struct} -> struct
-      {:error, _struct, msg} -> raise "Request pipeline failure: #{msg}"
+  defp process_request_pipeline(envelope = %Envelope{}) do
+    case Pipeline.process(envelope, :request, envelope.private.request_pipeline) do
+      {:ok, envelope} -> envelope
+      {:error, _envelope, msg} -> raise "Request pipeline failure: #{msg}"
     end
   end
 
-  def perform_call(struct = %Struct{response: %Struct.Response{http_status: code}}) when is_number(code) do
-    struct
+  def perform_call(envelope = %Envelope{response: %Envelope.Response{http_status: code}}) when is_number(code) do
+    envelope
   end
 
-  def perform_call(struct = %Struct{private: %Struct.Private{origin: origin}}) do
-    ServiceProvider.service_for(origin).dispatch(struct)
+  def perform_call(envelope = %Envelope{private: %Envelope.Private{origin: origin}}) do
+    ServiceProvider.service_for(origin).dispatch(envelope)
   end
 
-  def process_response_pipeline(struct = %Struct{}) do
-    case Pipeline.process(struct, :response, struct.private.response_pipeline) do
-      {:ok, struct} -> struct
-      {:error, _struct, msg} -> raise "Response pipeline failure: #{msg}"
+  def process_response_pipeline(envelope = %Envelope{}) do
+    case Pipeline.process(envelope, :response, envelope.private.response_pipeline) do
+      {:ok, envelope} -> envelope
+      {:error, _envelope, msg} -> raise "Response pipeline failure: #{msg}"
     end
   end
 
-  def response_pipeline(struct = %Struct{}) do
+  def response_pipeline(envelope = %Envelope{}) do
     pipeline = [
       # ResponseTransformers.CachingEnabled.call/1 will inspect :mvt_seen,
       # which is updated by &update_route_state/1. Therefore we
@@ -131,41 +131,41 @@ defmodule Belfrage.Processor do
       &fetch_fallback_from_cache/1
     ]
 
-    WrapperError.wrap(pipeline, struct)
+    WrapperError.wrap(pipeline, envelope)
   end
 
-  defp inc_route_state(struct = %Struct{}) do
-    RouteState.inc(struct)
-    struct
+  defp inc_route_state(envelope = %Envelope{}) do
+    RouteState.inc(envelope)
+    envelope
   end
 
-  defp update_route_state(struct = %Struct{}) do
-    RouteState.update(struct)
-    struct
+  defp update_route_state(envelope = %Envelope{}) do
+    RouteState.update(envelope)
+    envelope
   end
 
-  def fetch_fallback_from_cache(struct = %Struct{}) do
-    if use_fallback?(struct) do
-      struct =
-        struct
+  def fetch_fallback_from_cache(envelope = %Envelope{}) do
+    if use_fallback?(envelope) do
+      envelope =
+        envelope
         |> LatencyMonitor.checkpoint(:fallback_request_sent)
         |> Cache.fetch([:fresh, :stale], fallback: true)
         |> LatencyMonitor.checkpoint(:fallback_response_received)
 
-      if struct.response.http_status == 200 do
-        struct
+      if envelope.response.http_status == 200 do
+        envelope
         |> inc_route_state()
         |> Cache.store()
         |> make_fallback_private_if_personalised_request()
       else
-        struct
+        envelope
       end
     else
-      struct
+      envelope
     end
   end
 
-  def use_fallback?(%Struct{
+  def use_fallback?(%Envelope{
         response: %Response{http_status: status},
         private: %Private{caching_enabled: caching_enabled}
       }) do
@@ -173,24 +173,24 @@ defmodule Belfrage.Processor do
   end
 
   defp make_fallback_private_if_personalised_request(
-         struct = %Struct{
+         envelope = %Envelope{
            private: private = %Private{}
          }
        ) do
     if private.personalised_request do
-      Struct.add(struct, :response, %{cache_directive: CacheControl.private()})
+      Envelope.add(envelope, :response, %{cache_directive: CacheControl.private()})
     else
-      struct
+      envelope
     end
   end
 
-  def post_response_pipeline(struct = %Struct{}) do
+  def post_response_pipeline(envelope = %Envelope{}) do
     pipeline = [
       unwrap_ok_response(&ResponseTransformers.MvtMapper.call/1),
       unwrap_ok_response(&ResponseTransformers.CompressionAsRequested.call/1)
     ]
 
-    WrapperError.wrap(pipeline, struct)
+    WrapperError.wrap(pipeline, envelope)
   end
 
   defp route_state_state_failure(reason) do
@@ -201,17 +201,17 @@ defmodule Belfrage.Processor do
     raise "Failed to load route_state state."
   end
 
-  defp maybe_log_response_status(struct = %Struct{response: %Response{http_status: http_status}})
+  defp maybe_log_response_status(envelope = %Envelope{response: %Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
     Logger.log(:warn, "#{http_status} error from origin", cloudwatch: true)
-    struct
+    envelope
   end
 
-  defp maybe_log_response_status(struct), do: struct
+  defp maybe_log_response_status(envelope), do: envelope
 
   defp unwrap_ok_response(func) do
-    fn struct ->
-      {:ok, resp} = func.(struct)
+    fn envelope ->
+      {:ok, resp} = func.(envelope)
       resp
     end
   end

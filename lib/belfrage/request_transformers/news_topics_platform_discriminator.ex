@@ -6,26 +6,26 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
   alias Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     cond do
-      is_mozart_topic?(struct) or is_id_guid?(struct) ->
-        struct =
-          Struct.add(struct, :private, %{
+      is_mozart_topic?(envelope) or is_id_guid?(envelope) ->
+        envelope =
+          Envelope.add(envelope, :private, %{
             platform: "MozartNews",
             origin: Application.get_env(:belfrage, :mozart_news_endpoint),
             personalised_route: false,
             personalised_request: false
           })
 
-        {:ok, struct, {:replace, ["CircuitBreaker"]}}
+        {:ok, envelope, {:replace, ["CircuitBreaker"]}}
 
-      not is_mozart_topic?(struct) and has_slug?(struct) ->
+      not is_mozart_topic?(envelope) and has_slug?(envelope) ->
         {
           :stop,
-          Struct.add(struct, :response, %{
+          Envelope.add(envelope, :response, %{
             http_status: 302,
             headers: %{
-              "location" => "/news/topics/#{struct.request.path_params["id"]}",
+              "location" => "/news/topics/#{envelope.request.path_params["id"]}",
               "x-bbc-no-scheme-rewrite" => "1",
               "cache-control" => "public, stale-while-revalidate=10, max-age=60"
             },
@@ -34,19 +34,22 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
         }
 
       true ->
-        {:ok, struct}
+        {:ok, envelope}
     end
   end
 
-  defp is_mozart_topic?(struct) do
-    struct.request.path_params["id"] in NewsTopicIds.get()
+  defp is_mozart_topic?(envelope) do
+    envelope.request.path_params["id"] in NewsTopicIds.get()
   end
 
-  defp is_id_guid?(struct) do
-    String.match?(struct.request.path_params["id"], ~r/^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/)
+  defp is_id_guid?(envelope) do
+    String.match?(
+      envelope.request.path_params["id"],
+      ~r/^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/
+    )
   end
 
-  defp has_slug?(struct) do
-    Map.has_key?(struct.request.path_params, "slug")
+  defp has_slug?(envelope) do
+    Map.has_key?(envelope.request.path_params, "slug")
   end
 end

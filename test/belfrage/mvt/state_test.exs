@@ -4,8 +4,8 @@ defmodule Belfrage.Mvt.StateTest do
 
   import Test.Support.Helper, only: [set_env: 2]
 
-  alias Belfrage.{Mvt, RouteState, Struct}
-  alias Belfrage.Struct.{Response, Private}
+  alias Belfrage.{Mvt, RouteState, Envelope}
+  alias Belfrage.Envelope.{Response, Private}
 
   @route_state_id "SomeRouteState.Webcore"
 
@@ -192,7 +192,7 @@ defmodule Belfrage.Mvt.StateTest do
         })
       end)
 
-      assert Mvt.State.all_vary_headers_seen?(%Struct{
+      assert Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
@@ -212,7 +212,7 @@ defmodule Belfrage.Mvt.StateTest do
         })
       end)
 
-      assert Mvt.State.all_vary_headers_seen?(%Struct{
+      assert Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "something"
@@ -232,7 +232,7 @@ defmodule Belfrage.Mvt.StateTest do
         })
       end)
 
-      refute Mvt.State.all_vary_headers_seen?(%Struct{
+      refute Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "mvt-banner_colour,something"
@@ -252,7 +252,7 @@ defmodule Belfrage.Mvt.StateTest do
         })
       end)
 
-      refute Mvt.State.all_vary_headers_seen?(%Struct{
+      refute Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "mvt-banner_colour,something,mvt-button_colour"
@@ -263,7 +263,7 @@ defmodule Belfrage.Mvt.StateTest do
     end
 
     test "returns false if there are no MVT headers in :mvt_seen" do
-      refute Mvt.State.all_vary_headers_seen?(%Struct{
+      refute Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "mvt-button_colour,something,mvt-box_colour_enabled"
@@ -274,7 +274,7 @@ defmodule Belfrage.Mvt.StateTest do
     end
 
     test "returns true if no MVT vary headers are in the response or in :mvt_seen" do
-      assert Mvt.State.all_vary_headers_seen?(%Struct{
+      assert Mvt.State.all_vary_headers_seen?(%Envelope{
                response: %Response{
                  headers: %{
                    "vary" => "something"

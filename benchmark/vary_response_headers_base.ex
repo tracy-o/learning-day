@@ -17,8 +17,8 @@ defmodule Benchmark.VaryResponseHeadersBase do
   import Plug.Test, only: [conn: 2]
 
   alias BelfrageWeb.Response.Headers.Vary
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Private
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Private
 
   def run(_), do: experiment()
 
@@ -28,8 +28,8 @@ defmodule Benchmark.VaryResponseHeadersBase do
 
     Benchee.run(
       %{
-        "prev: add base header" => fn -> add_header(conn, %Struct{private: %Private{headers_allowlist: []}}) end,
-        "new: add base header" => fn -> Vary.add_header(conn, %Struct{private: %Private{headers_allowlist: []}}) end
+        "prev: add base header" => fn -> add_header(conn, %Envelope{private: %Private{headers_allowlist: []}}) end,
+        "new: add base header" => fn -> Vary.add_header(conn, %Envelope{private: %Private{headers_allowlist: []}}) end
       },
       time: 10,
       memory_time: 5
@@ -37,7 +37,7 @@ defmodule Benchmark.VaryResponseHeadersBase do
   end
 
   ## previous implementation
-  def add_header(conn, %Struct{request: request, private: private}) do
+  def add_header(conn, %Envelope{request: request, private: private}) do
     put_resp_header(
       conn,
       "vary",

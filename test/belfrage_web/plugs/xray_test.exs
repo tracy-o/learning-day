@@ -8,11 +8,11 @@ defmodule BelfrageWeb.Plugs.XrayTest do
   alias BelfrageWeb.Plugs
   alias AwsExRay.Record.{HTTPRequest, HTTPResponse}
 
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   describe "call/2 when tracing and no existing 'x-amzn-trace-id' header" do
     setup do
-      struct = Struct.add(%Struct{}, :request, %{xray_segment: :exists})
+      envelope = Envelope.add(%Envelope{}, :request, %{xray_segment: :exists})
 
       conn =
         conn(:get, "/fabl/xray")
@@ -20,7 +20,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
-        |> Plug.Conn.assign(:struct, struct)
+        |> Plug.Conn.assign(:envelope, envelope)
 
       %{conn: conn}
     end
@@ -88,7 +88,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
   describe "env stack id in X-Ray segment name" do
     setup do
-      struct = Struct.add(%Struct{}, :request, %{xray_segment: :exists})
+      envelope = Envelope.add(%Envelope{}, :request, %{xray_segment: :exists})
 
       set_stack_id("joan")
 
@@ -96,7 +96,7 @@ defmodule BelfrageWeb.Plugs.XrayTest do
         conn(:get, "/fabl/xray")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
-        |> Plug.Conn.assign(:struct, struct)
+        |> Plug.Conn.assign(:envelope, envelope)
 
       %{conn: conn}
     end
@@ -118,13 +118,13 @@ defmodule BelfrageWeb.Plugs.XrayTest do
 
   describe "call/2 when `xray_enabled: false`, when response sent" do
     setup do
-      struct = Struct.add(%Struct{}, :request, %{xray_segment: nil})
+      envelope = Envelope.add(%Envelope{}, :request, %{xray_segment: nil})
 
       conn =
         conn(:get, "/fabl/xray")
         |> Plugs.RequestId.call([])
         |> Plugs.Xray.call(xray: MockXray)
-        |> Plug.Conn.assign(:struct, struct)
+        |> Plug.Conn.assign(:envelope, envelope)
 
       %{conn: conn}
     end

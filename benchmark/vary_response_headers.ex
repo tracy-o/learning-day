@@ -22,8 +22,8 @@ defmodule Benchmark.VaryResponseHeaders do
   import Plug.Test, only: [conn: 2]
 
   alias BelfrageWeb.Response.Headers.Vary
-  alias Belfrage.Struct
-  alias Belfrage.Struct.Private
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.Private
 
   def run([header_size]), do: experiment(header_size |> String.to_integer())
   def run(_), do: experiment()
@@ -42,22 +42,22 @@ defmodule Benchmark.VaryResponseHeaders do
     Benchee.run(
       %{
         "prev: no headers" => fn ->
-          add_header(conn, %Struct{private: %Private{headers_allowlist: []}})
+          add_header(conn, %Envelope{private: %Private{headers_allowlist: []}})
         end,
         "prev: #{header_size} headers" => fn ->
-          add_header(conn, %Struct{private: %Private{headers_allowlist: base_headers}})
+          add_header(conn, %Envelope{private: %Private{headers_allowlist: base_headers}})
         end,
         "prev: #{header_size + 1} headers with cookie" => fn ->
-          add_header(conn, %Struct{private: %Private{headers_allowlist: headers_with_cookie}})
+          add_header(conn, %Envelope{private: %Private{headers_allowlist: headers_with_cookie}})
         end,
         "new: no headers" => fn ->
-          Vary.add_header(conn, %Struct{private: %Private{headers_allowlist: []}})
+          Vary.add_header(conn, %Envelope{private: %Private{headers_allowlist: []}})
         end,
         "new: #{header_size} headers" => fn ->
-          Vary.add_header(conn, %Struct{private: %Private{headers_allowlist: base_headers}})
+          Vary.add_header(conn, %Envelope{private: %Private{headers_allowlist: base_headers}})
         end,
         "new: #{header_size + 1} headers with cookie" => fn ->
-          Vary.add_header(conn, %Struct{private: %Private{headers_allowlist: headers_with_cookie}})
+          Vary.add_header(conn, %Envelope{private: %Private{headers_allowlist: headers_with_cookie}})
         end
       },
       time: 10,
@@ -72,7 +72,7 @@ defmodule Benchmark.VaryResponseHeaders do
   end
 
   ## previous implementation
-  def add_header(conn, %Struct{request: request, private: private}) do
+  def add_header(conn, %Envelope{request: request, private: private}) do
     put_resp_header(
       conn,
       "vary",

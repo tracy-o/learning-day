@@ -19,7 +19,7 @@ defmodule Belfrage.Test.XrayHelper do
         defdelegate start_subsegment(segment, name), to: Belfrage.Xray
         defdelegate set_start_time(subsegment, start_time), to: Belfrage.Xray
         defdelegate add_annotations(segment, annotations), to: Belfrage.Xray
-        defdelegate add_struct_annotations(segment, struct), to: Belfrage.Xray
+        defdelegate add_envelope_annotations(segment, envelope), to: Belfrage.Xray
         defdelegate add_metadata(segment, metadata), to: Belfrage.Xray
         defdelegate set_http_request(segment, request_info), to: Belfrage.Xray
         defdelegate set_http_response(segment, response_info), to: Belfrage.Xray

@@ -1,10 +1,10 @@
 defmodule Belfrage.ServiceProvider do
-  alias Belfrage.{Struct, Services}
-  alias Belfrage.Struct.Private
+  alias Belfrage.{Envelope, Services}
+  alias Belfrage.Envelope.Private
 
-  def dispatch(struct = %Struct{private: private = %Private{}}) do
+  def dispatch(envelope = %Envelope{private: private = %Private{}}) do
     service = service_for(private.origin)
-    service.dispatch(struct)
+    service.dispatch(envelope)
   end
 
   def service_for(origin) do

@@ -1,10 +1,10 @@
 defmodule Belfrage.Allowlist.Headers do
-  alias Belfrage.Struct
-  alias Struct.Private
+  alias Belfrage.Envelope
+  alias Envelope.Private
 
-  def filter(struct = %Struct{private: %Private{headers_allowlist: "*"}}), do: struct
+  def filter(envelope = %Envelope{private: %Private{headers_allowlist: "*"}}), do: envelope
 
-  def filter(struct = %Struct{request: request, private: %Private{headers_allowlist: allowlist}}) do
-    Struct.add(struct, :request, %{raw_headers: request.raw_headers |> Map.take(allowlist)})
+  def filter(envelope = %Envelope{request: request, private: %Private{headers_allowlist: allowlist}}) do
+    Envelope.add(envelope, :request, %{raw_headers: request.raw_headers |> Map.take(allowlist)})
   end
 end

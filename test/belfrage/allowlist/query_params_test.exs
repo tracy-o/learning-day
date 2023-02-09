@@ -1,62 +1,62 @@
 defmodule Belfrage.Allowlist.QueryParamsTest do
   use ExUnit.Case, async: true
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Allowlist.QueryParams
 
   test "allows all query strings when allowlist is *" do
-    struct =
-      %Struct{}
-      |> Struct.add(:request, %{
+    envelope =
+      %Envelope{}
+      |> Envelope.add(:request, %{
         query_params: %{
           "a" => "b",
           "c" => "d"
         }
       })
-      |> Struct.add(:private, %{
+      |> Envelope.add(:private, %{
         query_params_allowlist: "*"
       })
 
     assert %{
              "a" => "b",
              "c" => "d"
-           } == QueryParams.filter(struct).request.query_params
+           } == QueryParams.filter(envelope).request.query_params
   end
 
   test "rejects all query strings when allowlist is empty" do
-    struct =
-      %Struct{}
-      |> Struct.add(:request, %{
+    envelope =
+      %Envelope{}
+      |> Envelope.add(:request, %{
         query_params: %{
           "a" => "b",
           "c" => "d"
         }
       })
-      |> Struct.add(:private, %{
+      |> Envelope.add(:private, %{
         query_params_allowlist: []
       })
 
-    assert %{} == QueryParams.filter(struct).request.query_params
+    assert %{} == QueryParams.filter(envelope).request.query_params
   end
 
   test "filters query strings when allowlist is not empty" do
-    struct =
-      %Struct{}
-      |> Struct.add(:request, %{
+    envelope =
+      %Envelope{}
+      |> Envelope.add(:request, %{
         query_params: %{
           "a" => "b",
           "c" => "d"
         }
       })
-      |> Struct.add(:private, %{
+      |> Envelope.add(:private, %{
         query_params_allowlist: ["a"]
       })
 
     assert %{
              "a" => "b"
-           } == QueryParams.filter(struct).request.query_params
+           } == QueryParams.filter(envelope).request.query_params
   end
 
-  test "allowlist in struct defaults to empty" do
-    assert %Struct{private: %Struct.Private{query_params_allowlist: []}} = %Struct{}
+  test "allowlist in envelope defaults to empty" do
+    assert %Envelope{private: %Envelope.Private{query_params_allowlist: []}} = %Envelope{}
   end
 end

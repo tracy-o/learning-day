@@ -2,7 +2,7 @@ defmodule Belfrage.Mvt.MapperTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [set_slots: 1]
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.Mvt
 
   setup :clear_slots_agent_state
@@ -14,13 +14,13 @@ defmodule Belfrage.Mvt.MapperTest do
     end
 
     test "no mvt headers will ever be mapped" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-3" => "feature;sidebar;false"}
         )
         |> Mvt.Mapper.map()
 
-      assert %{} == struct.private.mvt
+      assert %{} == envelope.private.mvt
     end
   end
 
@@ -31,14 +31,14 @@ defmodule Belfrage.Mvt.MapperTest do
       :ok
     end
 
-    test "the header is mapped and added to the struct" do
-      struct =
-        build_struct(
+    test "the header is mapped and added to the envelope" do
+      envelope =
+        build_envelope(
           raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red", "bbc-mvt-3" => "feature;sidebar;false"}
         )
         |> Mvt.Mapper.map()
 
-      assert struct.private.mvt == %{
+      assert envelope.private.mvt == %{
                "mvt-button_colour" => {1, "experiment;red"},
                "mvt-sidebar" => {3, "feature;false"}
              }
@@ -52,10 +52,10 @@ defmodule Belfrage.Mvt.MapperTest do
       :ok
     end
 
-    test "the slot key is added to the struct with a nil \"type;value\"" do
-      struct = build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}) |> Mvt.Mapper.map()
+    test "the slot key is added to the envelope with a nil \"type;value\"" do
+      envelope = build_envelope(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}) |> Mvt.Mapper.map()
 
-      assert struct.private.mvt == %{"mvt-box_colour_change" => {1, nil}}
+      assert envelope.private.mvt == %{"mvt-box_colour_change" => {1, nil}}
     end
   end
 
@@ -65,12 +65,12 @@ defmodule Belfrage.Mvt.MapperTest do
       :ok
     end
 
-    test "the header isn't added to the struct" do
-      struct =
-        build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"})
+    test "the header isn't added to the envelope" do
+      envelope =
+        build_envelope(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"})
         |> Mvt.Mapper.map()
 
-      assert struct.private.mvt == %{}
+      assert envelope.private.mvt == %{}
     end
   end
 
@@ -81,9 +81,9 @@ defmodule Belfrage.Mvt.MapperTest do
       :ok
     end
 
-    test "the header is added to the struct with a nil \"type;value\"" do
-      struct = build_struct([]) |> Mvt.Mapper.map()
-      assert struct.private.mvt == %{"mvt-button_colour" => {1, nil}}
+    test "the header is added to the envelope with a nil \"type;value\"" do
+      envelope = build_envelope([]) |> Mvt.Mapper.map()
+      assert envelope.private.mvt == %{"mvt-button_colour" => {1, nil}}
     end
   end
 
@@ -93,9 +93,9 @@ defmodule Belfrage.Mvt.MapperTest do
       :ok
     end
 
-    test "the header isn't added to the struct" do
-      struct = build_struct(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}) |> Mvt.Mapper.map()
-      assert struct.private.mvt == %{}
+    test "the header isn't added to the envelope" do
+      envelope = build_envelope(raw_headers: %{"bbc-mvt-1" => "experiment;button_colour;red"}) |> Mvt.Mapper.map()
+      assert envelope.private.mvt == %{}
     end
   end
 
@@ -106,9 +106,9 @@ defmodule Belfrage.Mvt.MapperTest do
     end
 
     test "the mvt map is empty" do
-      struct = build_struct(raw_headers: %{"a" => "header"}) |> Mvt.Mapper.map()
+      envelope = build_envelope(raw_headers: %{"a" => "header"}) |> Mvt.Mapper.map()
 
-      assert %{} == struct.private.mvt
+      assert %{} == envelope.private.mvt
     end
   end
 
@@ -117,33 +117,33 @@ defmodule Belfrage.Mvt.MapperTest do
     # should filter out override headers when not on test.
 
     test "apply override header mapping" do
-      struct = build_struct(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
+      envelope = build_envelope(raw_headers: %{"mvt-some_experiment" => "experiment;some_value"}) |> Mvt.Mapper.map()
 
-      assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == struct.private.mvt
+      assert %{"mvt-some_experiment" => {:override, "experiment;some_value"}} == envelope.private.mvt
     end
   end
 
   describe "when 'bbc-mvt-complete' header is present" do
     test "it should be put in private.mvt with a slot of nil and data of '1' or '0'" do
-      struct = build_struct(raw_headers: %{"bbc-mvt-complete" => "1"}) |> Mvt.Mapper.map()
+      envelope = build_envelope(raw_headers: %{"bbc-mvt-complete" => "1"}) |> Mvt.Mapper.map()
 
-      assert %{"bbc-mvt-complete" => {nil, "1"}} == struct.private.mvt
+      assert %{"bbc-mvt-complete" => {nil, "1"}} == envelope.private.mvt
 
-      struct = build_struct(raw_headers: %{"bbc-mvt-complete" => "0"}) |> Mvt.Mapper.map()
+      envelope = build_envelope(raw_headers: %{"bbc-mvt-complete" => "0"}) |> Mvt.Mapper.map()
 
-      assert %{"bbc-mvt-complete" => {nil, "0"}} == struct.private.mvt
+      assert %{"bbc-mvt-complete" => {nil, "0"}} == envelope.private.mvt
     end
   end
 
-  defp build_struct(opts) do
+  defp build_envelope(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
     platform = Keyword.get(opts, :platform, "Webcore")
 
-    %Struct{
-      request: %Belfrage.Struct.Request{
+    %Envelope{
+      request: %Belfrage.Envelope.Request{
         raw_headers: raw_headers
       },
-      private: %Belfrage.Struct.Private{
+      private: %Belfrage.Envelope.Private{
         platform: platform
       }
     }

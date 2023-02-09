@@ -4,21 +4,21 @@ defmodule BelfrageWeb.Response.Headers.CacheControl do
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, struct) do
+  def add_header(conn, envelope) do
     put_resp_header(
       conn,
       "cache-control",
-      cache_directive(struct)
+      cache_directive(envelope)
     )
   end
 
-  defp cache_directive(struct) do
+  defp cache_directive(envelope) do
     %Belfrage.CacheControl{
       cacheability: cacheability,
       max_age: max_age,
       stale_while_revalidate: stale_while_revalidate,
       stale_if_error: stale_if_error
-    } = struct.response.cache_directive
+    } = envelope.response.cache_directive
 
     cacheability <>
       key("stale-if-error", stale_if_error) <>

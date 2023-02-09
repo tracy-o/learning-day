@@ -4,11 +4,11 @@ defmodule BelfrageWeb.Response.Headers.ReqSvcChain do
   @behaviour BelfrageWeb.Response.Headers.Behaviour
 
   @impl true
-  def add_header(conn, struct) do
+  def add_header(conn, envelope) do
     put_resp_header(
       conn,
       "req-svc-chain",
-      header(Map.get(struct.response.headers, "req-svc-chain"), struct.request.req_svc_chain)
+      header(Map.get(envelope.response.headers, "req-svc-chain"), envelope.request.req_svc_chain)
     )
   end
 

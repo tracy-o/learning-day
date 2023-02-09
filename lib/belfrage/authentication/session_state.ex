@@ -1,5 +1,5 @@
 defmodule Belfrage.Authentication.SessionState do
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope.Request
   alias Belfrage.Authentication.Token
 
   def authenticated?(request = %Request{}) do

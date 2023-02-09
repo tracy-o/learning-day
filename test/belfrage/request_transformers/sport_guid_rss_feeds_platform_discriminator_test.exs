@@ -3,19 +3,19 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTes
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "when the guid matches the allowlist the request is pointed to the rss FABL module" do
     fabl_endpoint = Application.get_env(:belfrage, :fabl_endpoint)
 
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  platform: "Fabl",
                  origin: ^fabl_endpoint
                },
-               request: %Struct.Request{
+               request: %Envelope.Request{
                  path: "/fd/rss",
                  path_params: %{
                    "name" => "rss"
@@ -30,8 +30,8 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTes
              },
              {:replace, ["CircuitBreaker"]}
            } =
-             SportGuidRssFeedsPlatformDiscriminator.call(%Struct{
-               request: %Struct.Request{path_params: %{"discipline" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"}}
+             SportGuidRssFeedsPlatformDiscriminator.call(%Envelope{
+               request: %Envelope.Request{path_params: %{"discipline" => "cd988a73-6c41-4690-b785-c8d3abc2d13c"}}
              })
   end
 
@@ -40,19 +40,19 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminatorTes
 
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  platform: "Karanga",
                  origin: ^karanga_endpoint
                }
              }
            } =
-             SportGuidRssFeedsPlatformDiscriminator.call(%Struct{
-               private: %Struct.Private{
+             SportGuidRssFeedsPlatformDiscriminator.call(%Envelope{
+               private: %Envelope.Private{
                  platform: "Karanga",
                  origin: karanga_endpoint
                },
-               request: %Struct.Request{path_params: %{"discipline" => "football"}}
+               request: %Envelope.Request{path_params: %{"discipline" => "football"}}
              })
   end
 end

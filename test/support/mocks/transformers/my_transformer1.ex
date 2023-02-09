@@ -2,9 +2,9 @@ defmodule Belfrage.RequestTransformers.MyTransformer1 do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct = %Struct{}) do
-    struct = Map.merge(struct, %{sample_change: "foo"})
+  def call(envelope = %Envelope{}) do
+    envelope = Map.merge(envelope, %{sample_change: "foo"})
 
-    {:ok, struct}
+    {:ok, envelope}
   end
 end

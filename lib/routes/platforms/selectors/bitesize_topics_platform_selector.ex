@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
-  alias Belfrage.Struct.Request
+  alias Belfrage.Envelope.Request
 
   @behaviour Routes.Platforms.Selector
 

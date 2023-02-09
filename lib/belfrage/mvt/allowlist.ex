@@ -1,16 +1,16 @@
 defmodule Belfrage.Mvt.Allowlist do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  def add(struct) do
-    raw_headers = struct.request.raw_headers
-    project_id = struct.private.mvt_project_id
+  def add(envelope) do
+    raw_headers = envelope.request.raw_headers
+    project_id = envelope.private.mvt_project_id
 
     allowlist =
-      struct.private.headers_allowlist
+      envelope.private.headers_allowlist
       |> Enum.concat(mvt_headers(project_id))
       |> Enum.concat(mvt_override_headers(raw_headers))
 
-    Struct.add(struct, :private, %{headers_allowlist: allowlist})
+    Envelope.add(envelope, :private, %{headers_allowlist: allowlist})
   end
 
   defp mvt_headers(project_id) do

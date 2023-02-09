@@ -11,7 +11,7 @@ defmodule Belfrage.Xray.Telemetry do
 
   def handle_event(_event, measurements, metadata, _config) do
     if segment_in(metadata) do
-      segment = metadata.struct.request.xray_segment
+      segment = metadata.envelope.request.xray_segment
       start_time = format_time(Map.get(measurements, :start_time))
       duration = format_time(Map.get(measurements, :duration))
 
@@ -21,12 +21,12 @@ defmodule Belfrage.Xray.Telemetry do
   end
 
   defp subsegment(segment, name, start_time, duration, metadata) do
-    struct = Map.get(metadata, :struct)
+    envelope = Map.get(metadata, :envelope)
     client = Map.get(metadata, :client, AwsExRay.Client)
 
     if segment.trace.sampled do
       Xray.start_subsegment(segment, name)
-      |> maybe_add_struct_annotations(struct)
+      |> maybe_add_envelope_annotations(envelope)
       |> Xray.set_start_time(start_time)
       |> Xray.finish(start_time + duration)
       |> Xray.send(client)
@@ -37,17 +37,17 @@ defmodule Belfrage.Xray.Telemetry do
     timing / 1_000_000_000
   end
 
-  defp maybe_add_struct_annotations(subsegment, struct) do
-    if struct do
-      Xray.add_struct_annotations(subsegment, struct)
+  defp maybe_add_envelope_annotations(subsegment, envelope) do
+    if envelope do
+      Xray.add_envelope_annotations(subsegment, envelope)
     else
       subsegment
     end
   end
 
   defp segment_in(metadata) do
-    if Map.get(metadata, :struct) do
-      metadata.struct.request.xray_segment
+    if Map.get(metadata, :envelope) do
+      metadata.envelope.request.xray_segment
     end
   end
 end

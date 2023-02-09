@@ -10,12 +10,12 @@ defmodule Belfrage.RequestTransformers.DevelopmentRequests do
   ]
 
   @impl Transformer
-  def call(struct) do
-    {:ok, struct, {:add, development_transformers(struct)}}
+  def call(envelope) do
+    {:ok, envelope, {:add, development_transformers(envelope)}}
   end
 
-  def development_transformers(struct) do
-    Keyword.get(@request_type_to_transformer_mapping, development_request_type(struct.request), [])
+  def development_transformers(envelope) do
+    Keyword.get(@request_type_to_transformer_mapping, development_request_type(envelope.request), [])
   end
 
   defp development_request_type(%{has_been_replayed?: true}), do: :replayed

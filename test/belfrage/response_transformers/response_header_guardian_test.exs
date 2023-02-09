@@ -1,5 +1,5 @@
 defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   use ExUnit.Case
 
   alias Belfrage.ResponseTransformers.ResponseHeaderGuardian
@@ -8,8 +8,8 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "removes connection response header" do
     {:ok, result} =
-      ResponseHeaderGuardian.call(%Struct{
-        response: %Struct.Response{
+      ResponseHeaderGuardian.call(%Envelope{
+        response: %Envelope.Response{
           headers: %{
             "content-type" => "application/json",
             "connection" => "close"
@@ -23,8 +23,8 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "removes transfer-encoding header" do
     {:ok, result} =
-      ResponseHeaderGuardian.call(%Struct{
-        response: %Struct.Response{
+      ResponseHeaderGuardian.call(%Envelope{
+        response: %Envelope.Response{
           headers: %{
             "content-type" => "application/json",
             "transfer-encoding" => "chunked"
@@ -38,8 +38,8 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
 
   test "does not affect any other response headers" do
     result =
-      ResponseHeaderGuardian.call(%Struct{
-        response: %Struct.Response{
+      ResponseHeaderGuardian.call(%Envelope{
+        response: %Envelope.Response{
           body: "<p>some content</p>",
           http_status: 200,
           headers: %{
@@ -49,8 +49,8 @@ defmodule Belfrage.RequestTransformers.ResponseHeaderGuardianTest do
       })
 
     assert {:ok,
-            %Struct{
-              response: %Struct.Response{
+            %Envelope{
+              response: %Envelope.Response{
                 body: "<p>some content</p>",
                 http_status: 200,
                 headers: %{

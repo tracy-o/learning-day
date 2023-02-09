@@ -3,7 +3,7 @@ defmodule Belfrage.RequestTransformers.Language do
   alias Belfrage.Language
 
   @impl Transformer
-  def call(struct) do
-    {:ok, Belfrage.Struct.add(struct, :request, %{language: Language.set(struct)})}
+  def call(envelope) do
+    {:ok, Belfrage.Envelope.add(envelope, :request, %{language: Language.set(envelope)})}
   end
 end

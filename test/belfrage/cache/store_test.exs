@@ -4,16 +4,16 @@ defmodule Belfrage.Cache.StoreTest do
 
   import Belfrage.Test.CachingHelper
 
-  alias Belfrage.{Struct, CacheControl}
+  alias Belfrage.{Envelope, CacheControl}
 
   setup do
     %{
-      struct: %Struct{
-        request: %Struct.Request{
+      envelope: %Envelope{
+        request: %Envelope.Request{
           method: "GET",
           request_hash: unique_cache_key()
         },
-        response: %Struct.Response{
+        response: %Envelope.Response{
           http_status: 200,
           body: "<p>Hi there.</p>"
         }
@@ -22,81 +22,81 @@ defmodule Belfrage.Cache.StoreTest do
   end
 
   describe "non-cacheable responses are not written to multi-strategy cache" do
-    setup %{struct: struct} do
-      expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
+    setup %{envelope: envelope} do
+      expect(Belfrage.Clients.CCPMock, :put, 0, fn _envelope -> flunk("Should never be called.") end)
 
       on_exit(fn ->
         stub_dial(:cache_enabled, "true")
-        assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(struct)
+        assert {:ok, :content_not_found} == Belfrage.Cache.Local.fetch(envelope)
       end)
 
       :ok
     end
 
-    test "private response is not written to the cache", %{struct: struct} do
-      struct = Struct.add(struct, :response, %{cache_directive: CacheControl.Parser.parse("private, max-age=30")})
+    test "private response is not written to the cache", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :response, %{cache_directive: CacheControl.Parser.parse("private, max-age=30")})
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "non-200 responses are not written to the cache", %{struct: struct} do
-      struct =
-        Struct.add(struct, :response, %{
+    test "non-200 responses are not written to the cache", %{envelope: envelope} do
+      envelope =
+        Envelope.add(envelope, :response, %{
           http_status: 500,
           cache_directive: CacheControl.Parser.parse("public, max-age=30")
         })
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "POST requests are not written to the cache", %{struct: struct} do
-      struct =
-        struct
-        |> Struct.add(:response, %{
+    test "POST requests are not written to the cache", %{envelope: envelope} do
+      envelope =
+        envelope
+        |> Envelope.add(:response, %{
           cache_directive: CacheControl.Parser.parse("public, max-age=30")
         })
-        |> Struct.add(:request, %{method: "POST"})
+        |> Envelope.add(:request, %{method: "POST"})
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "public without a max age", %{struct: struct} do
-      struct = Struct.add(struct, :response, %{cache_directive: CacheControl.Parser.parse("public")})
+    test "public without a max age", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :response, %{cache_directive: CacheControl.Parser.parse("public")})
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "struct with caching disabled is not written to the cache", %{struct: struct} do
-      struct =
-        struct
-        |> Struct.add(:response, %{
+    test "envelope with caching disabled is not written to the cache", %{envelope: envelope} do
+      envelope =
+        envelope
+        |> Envelope.add(:response, %{
           cache_directive: CacheControl.Parser.parse("public, max-age=30")
         })
-        |> Struct.add(:private, %{caching_enabled: false})
+        |> Envelope.add(:private, %{caching_enabled: false})
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "struct with fallback response from the local cache is not written to the cache", %{struct: struct} do
-      struct =
-        struct
-        |> Struct.add(:response, %{
+    test "envelope with fallback response from the local cache is not written to the cache", %{envelope: envelope} do
+      envelope =
+        envelope
+        |> Envelope.add(:response, %{
           cache_directive: CacheControl.Parser.parse("public, max-age=30"),
           fallback: true,
           cache_type: :local
         })
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
   end
 
   describe "cacheable content is written to multi-strategy cache" do
-    setup %{struct: struct} do
-      expect(Belfrage.Clients.CCPMock, :put, fn _struct -> :ok end)
+    setup %{envelope: envelope} do
+      expect(Belfrage.Clients.CCPMock, :put, fn _envelope -> :ok end)
 
       on_exit(fn ->
         stub_dial(:cache_enabled, "true")
-        assert {:ok, {:local, :fresh}, %Struct.Response{}} = Belfrage.Cache.Local.fetch(struct)
+        assert {:ok, {:local, :fresh}, %Envelope.Response{}} = Belfrage.Cache.Local.fetch(envelope)
 
         :ok
       end)
@@ -104,61 +104,61 @@ defmodule Belfrage.Cache.StoreTest do
       :ok
     end
 
-    test "public with a max age", %{struct: struct} do
-      struct = Struct.add(struct, :response, %{cache_directive: CacheControl.Parser.parse("public, max-age=30")})
-      # Also, note that %{fallback: false, cache_type: nil} are default values in struct.response
+    test "public with a max age", %{envelope: envelope} do
+      envelope = Envelope.add(envelope, :response, %{cache_directive: CacheControl.Parser.parse("public, max-age=30")})
+      # Also, note that %{fallback: false, cache_type: nil} are default values in envelope.response
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "struct with local cache type and no fallback response", %{struct: struct} do
-      struct =
-        struct
-        |> Struct.add(:response, %{
+    test "envelope with local cache type and no fallback response", %{envelope: envelope} do
+      envelope =
+        envelope
+        |> Envelope.add(:response, %{
           cache_directive: CacheControl.Parser.parse("public, max-age=30"),
           fallback: false,
           cache_type: :local
         })
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
 
-    test "struct with distributed cache type and no fallback response", %{struct: struct} do
-      struct =
-        struct
-        |> Struct.add(:response, %{
+    test "envelope with distributed cache type and no fallback response", %{envelope: envelope} do
+      envelope =
+        envelope
+        |> Envelope.add(:response, %{
           cache_directive: CacheControl.Parser.parse("public, max-age=30"),
           fallback: false,
           cache_type: :distributed
         })
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
   end
 
   describe "cacheable content is written to local cache only, as stale" do
-    setup %{struct: struct} do
-      expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
+    setup %{envelope: envelope} do
+      expect(Belfrage.Clients.CCPMock, :put, 0, fn _envelope -> flunk("Should never be called.") end)
 
       on_exit(fn ->
         stub_dial(:cache_enabled, "true")
-        assert {:ok, {:local, :stale}, %Struct.Response{}} = Belfrage.Cache.Local.fetch(struct)
+        assert {:ok, {:local, :stale}, %Envelope.Response{}} = Belfrage.Cache.Local.fetch(envelope)
 
         :ok
       end)
 
-      struct = Struct.add(struct, :response, %{cache_directive: CacheControl.Parser.parse("public, max-age=30")})
-      %{struct: struct}
+      envelope = Envelope.add(envelope, :response, %{cache_directive: CacheControl.Parser.parse("public, max-age=30")})
+      %{envelope: envelope}
     end
 
-    test "fallback from the distributed cache", %{struct: struct} do
-      struct =
-        Struct.add(struct, :response, %{
+    test "fallback from the distributed cache", %{envelope: envelope} do
+      envelope =
+        Envelope.add(envelope, :response, %{
           fallback: true,
           cache_type: :distributed
         })
 
-      Belfrage.Cache.Store.store(struct)
+      Belfrage.Cache.Store.store(envelope)
     end
   end
 end

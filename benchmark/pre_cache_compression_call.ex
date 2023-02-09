@@ -16,9 +16,9 @@ defmodule Benchmark.PreCacheCompressionCall do
   - performance implication of handling non-gzip response
   """
 
-  import Fixtures.{Struct, Lambda}
+  import Fixtures.{Envelope, Lambda}
 
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
   alias Belfrage.ResponseTransformers.PreCacheCompression
   alias Belfrage.Services.Webcore
 
@@ -33,8 +33,8 @@ defmodule Benchmark.PreCacheCompressionCall do
   end
 
   def setup(iteration \\ 1, step_size_kb \\ 1) do
-    struct = %Struct{
-      private: %Struct.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
+    envelope = %Envelope{
+      private: %Envelope.Private{request_pipeline: ["MyTransformer1"], route_state_id: "ProxyPass"}
     }
 
     for i <- 1..iteration, into: %{} do
@@ -43,8 +43,8 @@ defmodule Benchmark.PreCacheCompressionCall do
       {
         size_kb,
         {
-          struct_with_resp(struct, Webcore.build_response({:ok, lambda_resp(size_kb)})),
-          struct_with_resp(struct, Webcore.build_response({:ok, gzip_lambda_resp(size_kb)}))
+          envelope_with_resp(envelope, Webcore.build_response({:ok, lambda_resp(size_kb)})),
+          envelope_with_resp(envelope, Webcore.build_response({:ok, gzip_lambda_resp(size_kb)}))
         }
       }
     end

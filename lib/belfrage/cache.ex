@@ -1,5 +1,5 @@
 defmodule Belfrage.Cache do
-  defdelegate store(struct), to: Belfrage.Cache.Store
+  defdelegate store(envelope), to: Belfrage.Cache.Store
 
-  defdelegate fetch(struct, accepted_freshness, opts \\ []), to: Belfrage.Cache.Fetch
+  defdelegate fetch(envelope, accepted_freshness, opts \\ []), to: Belfrage.Cache.Fetch
 end

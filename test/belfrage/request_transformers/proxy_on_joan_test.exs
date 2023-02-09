@@ -2,12 +2,12 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoanTest do
   use ExUnit.Case, async: true
 
   alias Belfrage.RequestTransformers.ProxyOnJoan
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   import Test.Support.Helper, only: [set_stack_id: 1]
 
-  @webcore_struct %Struct{
-    private: %Struct.Private{
+  @webcore_envelope %Envelope{
+    private: %Envelope.Private{
       origin: "webcore-lambda-origin"
     }
   }
@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoanTest do
     end
 
     test "the origin is not overwritten" do
-      assert {:ok, @webcore_struct} == ProxyOnJoan.call(@webcore_struct)
+      assert {:ok, @webcore_envelope} == ProxyOnJoan.call(@webcore_envelope)
     end
   end
 
@@ -30,8 +30,8 @@ defmodule Belfrage.RequestTransformers.ProxyOnJoanTest do
     end
 
     test "the origin is overritten to be the Mozart News endpoint" do
-      {:ok, struct} = ProxyOnJoan.call(@webcore_struct)
-      assert struct.private.origin == Application.get_env(:belfrage, :mozart_news_endpoint)
+      {:ok, envelope} = ProxyOnJoan.call(@webcore_envelope)
+      assert envelope.private.origin == Application.get_env(:belfrage, :mozart_news_endpoint)
     end
   end
 end

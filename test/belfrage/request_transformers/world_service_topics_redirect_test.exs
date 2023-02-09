@@ -2,13 +2,13 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
   use ExUnit.Case
 
   alias Belfrage.RequestTransformers.WorldServiceTopicsRedirect
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "redirects old to base of new ws topics page - w/o variant" do
     assert {
              :stop,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
+             %Belfrage.Envelope{
+               response: %Belfrage.Envelope.Response{
                  http_status: 302,
                  body: "Redirecting",
                  headers: %{
@@ -19,8 +19,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
                }
              }
            } =
-             WorldServiceTopicsRedirect.call(%Struct{
-               request: %Struct.Request{
+             WorldServiceTopicsRedirect.call(%Envelope{
+               request: %Envelope.Request{
                  path: "/pidgin/topics/cqywjyzk2vyt/page/5",
                  path_params: %{"page" => "5", "id" => "cqywjyzk2vyt"}
                }
@@ -30,8 +30,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
   test "redirects old to base of new ws topics page - w/ variant" do
     assert {
              :stop,
-             %Belfrage.Struct{
-               response: %Belfrage.Struct.Response{
+             %Belfrage.Envelope{
+               response: %Belfrage.Envelope.Response{
                  http_status: 302,
                  body: "Redirecting",
                  headers: %{
@@ -42,8 +42,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicsRedirectTest do
                }
              }
            } =
-             WorldServiceTopicsRedirect.call(%Struct{
-               request: %Struct.Request{
+             WorldServiceTopicsRedirect.call(%Envelope{
+               request: %Envelope.Request{
                  path: "/serbian/cyr/topics/cqwvxvvw9qrt/page/5",
                  path_params: %{"page" => "5", "id" => "cqwvxvvw9qrt"}
                }

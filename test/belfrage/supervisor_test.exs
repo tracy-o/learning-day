@@ -2,7 +2,7 @@ defmodule Belfrage.SupervisorTest do
   use ExUnit.Case, async: true
 
   import Cachex.Spec, only: [{:limit, 1}]
-  import Fixtures.Struct
+  import Fixtures.Envelope
   alias Belfrage.SupervisorObserver
 
   @belfrage_local_cache :cache
@@ -86,13 +86,13 @@ defmodule Belfrage.SupervisorTest do
   end
 
   defp seed_test_cache(test_key_range, cache) do
-    struct = struct_with_gzip_resp()
+    envelope = envelope_with_gzip_resp()
 
     Enum.each(test_key_range, fn key ->
       Cachex.put(
         cache,
         key,
-        {struct.response, Belfrage.Timer.now_ms()},
+        {envelope.response, Belfrage.Timer.now_ms()},
         ttl: 15_000
       )
 

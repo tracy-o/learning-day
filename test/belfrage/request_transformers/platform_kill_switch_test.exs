@@ -3,11 +3,11 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitchTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.PlatformKillSwitch
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  defp struct_with_platform(platform_name) do
-    %Struct{
-      private: %Struct.Private{platform: platform_name}
+  defp envelope_with_platform(platform_name) do
+    %Envelope{
+      private: %Envelope.Private{platform: platform_name}
     }
   end
 
@@ -24,49 +24,49 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitchTest do
   end
 
   describe "when the Webcore kill switch is active" do
-    test "and the platform is Webcore, the pipeline is stopped and a 500 response is added to the Struct" do
+    test "and the platform is Webcore, the pipeline is stopped and a 500 response is added to the Envelope" do
       activate_webcore_kill_switch()
 
       assert {
                :stop,
-               %Belfrage.Struct{
-                 response: %Belfrage.Struct.Response{
+               %Belfrage.Envelope{
+                 response: %Belfrage.Envelope.Response{
                    http_status: 500
                  }
                }
-             } = PlatformKillSwitch.call(struct_with_platform("Webcore"))
+             } = PlatformKillSwitch.call(envelope_with_platform("Webcore"))
     end
 
-    test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
+    test "and the platform is Fabl, the pipeline continues and the envelope is unchanged" do
       activate_webcore_kill_switch()
-      original_struct = struct_with_platform("Fabl")
-      assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
+      original_envelope = envelope_with_platform("Fabl")
+      assert {:ok, ^original_envelope} = PlatformKillSwitch.call(original_envelope)
     end
 
-    test "and the platform is nil, the pipeline continues and the struct is unchanged" do
+    test "and the platform is nil, the pipeline continues and the envelope is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform(nil)
-      assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
+      original_envelope = envelope_with_platform(nil)
+      assert {:ok, ^original_envelope} = PlatformKillSwitch.call(original_envelope)
     end
   end
 
   describe "when the Webcore kill switch is inactive" do
-    test "and the platform is Webcore, the pipeline continues and the struct is unchanged" do
+    test "and the platform is Webcore, the pipeline continues and the envelope is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform("Webcore")
-      assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
+      original_envelope = envelope_with_platform("Webcore")
+      assert {:ok, ^original_envelope} = PlatformKillSwitch.call(original_envelope)
     end
 
-    test "and the platform is Fabl, the pipeline continues and the struct is unchanged" do
+    test "and the platform is Fabl, the pipeline continues and the envelope is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform("Fabl")
-      assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
+      original_envelope = envelope_with_platform("Fabl")
+      assert {:ok, ^original_envelope} = PlatformKillSwitch.call(original_envelope)
     end
 
-    test "and the platform is nil, the pipeline continues and the struct is unchanged" do
+    test "and the platform is nil, the pipeline continues and the envelope is unchanged" do
       disable_webcore_kill_switch()
-      original_struct = struct_with_platform(nil)
-      assert {:ok, ^original_struct} = PlatformKillSwitch.call(original_struct)
+      original_envelope = envelope_with_platform(nil)
+      assert {:ok, ^original_envelope} = PlatformKillSwitch.call(original_envelope)
     end
   end
 end

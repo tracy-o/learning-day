@@ -1,16 +1,16 @@
 defmodule Belfrage.Mvt.Mapper do
   alias Belfrage.Mvt
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   @dial Application.compile_env(:belfrage, :dial)
   @platform_mapping %{"Webcore" => "1", "Simorgh" => "2"}
   @max_slots 20
 
-  def map(struct = %Struct{request: %Struct.Request{raw_headers: raw_headers}}) do
+  def map(envelope = %Envelope{request: %Envelope.Request{raw_headers: raw_headers}}) do
     if @dial.state(:mvt_enabled) do
       project_slots =
         Mvt.Slots.available()
-        |> Map.get(@platform_mapping[struct.private.platform], %{})
+        |> Map.get(@platform_mapping[envelope.private.platform], %{})
 
       mvt_map =
         %{}
@@ -18,9 +18,9 @@ defmodule Belfrage.Mvt.Mapper do
         |> Map.merge(map_override_headers(raw_headers))
         |> Map.merge(bbc_mvt_complete_header(raw_headers))
 
-      Struct.add(struct, :private, %{mvt: mvt_map})
+      Envelope.add(envelope, :private, %{mvt: mvt_map})
     else
-      struct
+      envelope
     end
   end
 

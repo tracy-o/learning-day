@@ -1518,30 +1518,30 @@ defmodule Belfrage.RequestTransformers.SportGuidRssFeedsPlatformDiscriminator do
   ]
 
   @impl Transformer
-  def call(struct) do
-    if struct.request.path_params["discipline"] in @fabl_feeds do
-      struct =
-        struct
-        |> Struct.add(:private, %{
+  def call(envelope) do
+    if envelope.request.path_params["discipline"] in @fabl_feeds do
+      envelope =
+        envelope
+        |> Envelope.add(:private, %{
           platform: "Fabl",
           origin: Application.get_env(:belfrage, :fabl_endpoint)
         })
-        |> Struct.add(:request, %{
+        |> Envelope.add(:request, %{
           path: "/fd/rss",
           path_params: %{
             "name" => "rss"
           },
           query_params: %{
-            "guid" => struct.request.path_params["discipline"]
+            "guid" => envelope.request.path_params["discipline"]
           },
           raw_headers: %{
             "ctx-unwrapped" => "1"
           }
         })
 
-      {:ok, struct, {:replace, ["CircuitBreaker"]}}
+      {:ok, envelope, {:replace, ["CircuitBreaker"]}}
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 end

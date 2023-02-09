@@ -19,10 +19,10 @@ defmodule Benchmark.RequestHash do
   """
 
   alias Belfrage.RequestHash
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  @struct %Struct{
-    request: %Struct.Request{
+  @envelope %Envelope{
+    request: %Envelope.Request{
       scheme: :https,
       path: "/news/clips/abc123",
       country: "gb",
@@ -44,19 +44,19 @@ defmodule Benchmark.RequestHash do
 
     headers_with_cookie = Map.merge(base_headers, %{"cookie" => string(30)})
 
-    struct = @struct |> Belfrage.Struct.add(:request, %{raw_headers: %{}})
-    struct_headers = @struct |> Belfrage.Struct.add(:request, %{raw_headers: base_headers})
-    struct_headers_cookie = @struct |> Belfrage.Struct.add(:request, %{raw_headers: headers_with_cookie})
+    envelope = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: %{}})
+    envelope_headers = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: base_headers})
+    envelope_headers_cookie = @envelope |> Belfrage.Envelope.add(:request, %{raw_headers: headers_with_cookie})
 
     Benchee.run(
       %{
-        "prev: empty raw headers" => fn -> generate(struct) end,
-        "prev: #{map_size(base_headers)} raw headers" => fn -> generate(struct_headers) end,
-        "prev: #{map_size(headers_with_cookie)} raw headers and cookie" => fn -> generate(struct_headers_cookie) end,
-        "new: empty raw headers" => fn -> RequestHash.generate(struct) end,
-        "new: #{map_size(base_headers)} raw headers" => fn -> RequestHash.generate(struct_headers) end,
+        "prev: empty raw headers" => fn -> generate(envelope) end,
+        "prev: #{map_size(base_headers)} raw headers" => fn -> generate(envelope_headers) end,
+        "prev: #{map_size(headers_with_cookie)} raw headers and cookie" => fn -> generate(envelope_headers_cookie) end,
+        "new: empty raw headers" => fn -> RequestHash.generate(envelope) end,
+        "new: #{map_size(base_headers)} raw headers" => fn -> RequestHash.generate(envelope_headers) end,
         "new: #{map_size(headers_with_cookie)} raw headers and cookie" => fn ->
-          RequestHash.generate(struct_headers_cookie)
+          RequestHash.generate(envelope_headers_cookie)
         end
       },
       time: 10,
@@ -71,20 +71,20 @@ defmodule Benchmark.RequestHash do
   end
 
   ## previous implementation
-  def generate(struct) do
-    case Belfrage.Overrides.should_cache_bust?(struct) do
+  def generate(envelope) do
+    case Belfrage.Overrides.should_cache_bust?(envelope) do
       true ->
         cache_bust_request_hash()
 
       false ->
-        extract_keys(struct)
+        extract_keys(envelope)
         |> Crimpex.signature()
     end
-    |> update_struct(struct)
+    |> update_envelope(envelope)
   end
 
-  defp extract_keys(struct) do
-    Map.take(struct.request, build_signature_keys(struct))
+  defp extract_keys(envelope) do
+    Map.take(envelope.request, build_signature_keys(envelope))
   end
 
   @default_signature_keys [
@@ -101,14 +101,14 @@ defmodule Benchmark.RequestHash do
     :cdn?
   ]
 
-  defp build_signature_keys(%Struct{
-         private: %Struct.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
+  defp build_signature_keys(%Envelope{
+         private: %Envelope.Private{signature_keys: %{skip: skip_keys, add: add_keys}}
        }) do
     (@default_signature_keys ++ add_keys) -- skip_keys
   end
 
-  defp update_struct(request_hash, struct) do
-    Struct.add(struct, :request, %{request_hash: request_hash})
+  defp update_envelope(request_hash, envelope) do
+    Envelope.add(envelope, :request, %{request_hash: request_hash})
   end
 
   defp cache_bust_request_hash do

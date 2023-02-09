@@ -28,7 +28,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
         {:ok, @cacheable_lambda_response}
       end)
 
-      expect(Belfrage.Clients.CCPMock, :put, 0, fn _struct -> flunk("Should never be called.") end)
+      expect(Belfrage.Clients.CCPMock, :put, 0, fn _envelope -> flunk("Should never be called.") end)
 
       conn(:get, "/caching-disabled") |> Router.call([])
     end
@@ -39,7 +39,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
         {:ok, @cacheable_lambda_response}
       end)
 
-      expect(Belfrage.Clients.CCPMock, :fetch, 0, fn _struct -> flunk("Should never be called.") end)
+      expect(Belfrage.Clients.CCPMock, :fetch, 0, fn _envelope -> flunk("Should never be called.") end)
 
       conn(:get, "/caching-disabled") |> Router.call([])
     end

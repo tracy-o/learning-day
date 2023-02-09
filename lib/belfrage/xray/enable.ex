@@ -1,17 +1,17 @@
 defmodule Belfrage.Xray.Enable do
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   # If in a routespec or platform we set:
   #   xray_enabled: true
   #
   # It will trigger this piece of code which removes the `xray_segment` from the
-  # struct. All code that touches `xray_segment` is also prepared to handle a
+  # envelope. All code that touches `xray_segment` is also prepared to handle a
   # `nil` value.
-  def call(struct = %Struct{}) do
-    if struct.private.xray_enabled do
-      struct
+  def call(envelope = %Envelope{}) do
+    if envelope.private.xray_enabled do
+      envelope
     else
-      Struct.add(struct, :request, %{xray_segment: nil})
+      Envelope.add(envelope, :request, %{xray_segment: nil})
     end
   end
 end

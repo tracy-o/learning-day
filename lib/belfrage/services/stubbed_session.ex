@@ -3,15 +3,15 @@ defmodule Belfrage.Services.StubbedSession do
   alias Belfrage.Behaviours.Service
   @behaviour Service
 
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   @impl Service
-  def dispatch(struct = %Struct{}) do
-    Logger.log(:debug, "", Map.from_struct(Struct.loggable(struct)))
+  def dispatch(envelope = %Envelope{}) do
+    Logger.log(:debug, "", Map.from_struct(Envelope.loggable(envelope)))
 
-    Struct.add(struct, :response, %Struct.Response{
+    Envelope.add(envelope, :response, %Envelope.Response{
       http_status: 200,
-      body: :zlib.gzip(response_body(struct.user_session)),
+      body: :zlib.gzip(response_body(envelope.user_session)),
       headers: %{
         "cache-control" => "private",
         "content-encoding" => "gzip",
@@ -20,7 +20,7 @@ defmodule Belfrage.Services.StubbedSession do
     })
   end
 
-  defp response_body(user_session = %Struct.UserSession{}) do
+  defp response_body(user_session = %Envelope.UserSession{}) do
     Jason.encode!(%{
       valid_session: user_session.valid_session,
       authenticated: user_session.authenticated,

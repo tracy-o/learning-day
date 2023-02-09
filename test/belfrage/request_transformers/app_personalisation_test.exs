@@ -4,36 +4,36 @@ defmodule Belfrage.RequestTransformers.AppPersonalisationTest do
 
   import Belfrage.Test.PersonalisationHelper
 
-  alias Belfrage.{Struct, Struct.Request, Struct.Response}
+  alias Belfrage.{Envelope, Envelope.Request, Envelope.Response}
   alias Belfrage.RequestTransformers.AppPersonalisation
 
   describe "call/2" do
-    test "returns unmodified struct when struct.request.app? is false and personalisation enabled" do
+    test "returns unmodified envelope when envelope.request.app? is false and personalisation enabled" do
       enable_personalisation()
-      struct = %Struct{request: %Request{app?: false}}
+      envelope = %Envelope{request: %Request{app?: false}}
 
-      assert AppPersonalisation.call(struct) == {:ok, struct}
+      assert AppPersonalisation.call(envelope) == {:ok, envelope}
     end
 
-    test "returns unmodified struct when struct.request.app? is false and personalisation disabled" do
+    test "returns unmodified envelope when envelope.request.app? is false and personalisation disabled" do
       disable_personalisation()
-      struct = %Struct{request: %Request{app?: false}}
+      envelope = %Envelope{request: %Request{app?: false}}
 
-      assert AppPersonalisation.call(struct) == {:ok, struct}
+      assert AppPersonalisation.call(envelope) == {:ok, envelope}
     end
 
-    test "returns unmodified struct when struct.request.app? is true and personalisation enabled" do
+    test "returns unmodified envelope when envelope.request.app? is true and personalisation enabled" do
       enable_personalisation()
-      struct = %Struct{request: %Request{app?: true}}
+      envelope = %Envelope{request: %Request{app?: true}}
 
-      assert AppPersonalisation.call(struct) == {:ok, struct}
+      assert AppPersonalisation.call(envelope) == {:ok, envelope}
     end
 
-    test "returns struct with 503 response when struct.request.app? is true and personalisation disabled" do
+    test "returns envelope with 503 response when envelope.request.app? is true and personalisation disabled" do
       disable_personalisation()
 
-      assert {:stop, %Struct{request: %Request{app?: true}, response: %Response{http_status: 503}}} =
-               AppPersonalisation.call(%Struct{request: %Request{app?: true}})
+      assert {:stop, %Envelope{request: %Request{app?: true}, response: %Response{http_status: 503}}} =
+               AppPersonalisation.call(%Envelope{request: %Request{app?: true}})
     end
   end
 end

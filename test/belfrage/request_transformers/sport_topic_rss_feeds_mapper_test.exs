@@ -3,13 +3,13 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapperTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.SportTopicRssFeedsMapper
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
   test "point to rss FABL module and adds topicId and uri query params to request" do
     assert {
              :ok,
-             %Struct{
-               request: %Struct.Request{
+             %Envelope{
+               request: %Envelope.Request{
                  path: "/fd/rss",
                  path_params: %{
                    "name" => "rss"
@@ -24,8 +24,8 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapperTest do
                }
              }
            } =
-             SportTopicRssFeedsMapper.call(%Struct{
-               request: %Struct.Request{path: "/sport/rss.xml"}
+             SportTopicRssFeedsMapper.call(%Envelope{
+               request: %Envelope.Request{path: "/sport/rss.xml"}
              })
   end
 end

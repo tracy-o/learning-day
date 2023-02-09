@@ -1,6 +1,6 @@
 defmodule Belfrage.Personalisation do
-  alias Belfrage.{Struct, RouteSpec, Metrics}
-  alias Belfrage.Struct.{Request, Private}
+  alias Belfrage.{Envelope, RouteSpec, Metrics}
+  alias Belfrage.Envelope.{Request, Private}
   alias Belfrage.Authentication.{BBCID, SessionState}
 
   @dial Application.compile_env(:belfrage, :dial)
@@ -13,7 +13,7 @@ defmodule Belfrage.Personalisation do
     end
   end
 
-  def personalised_request?(%Struct{
+  def personalised_request?(%Envelope{
         request: request = %Request{},
         private: private = %Private{route_state_id: route_state_id}
       }) do
@@ -52,39 +52,39 @@ defmodule Belfrage.Personalisation do
     String.ends_with?(host, "bbc.co.uk")
   end
 
-  def maybe_put_personalised_request(struct = %Struct{}) do
+  def maybe_put_personalised_request(envelope = %Envelope{}) do
     Metrics.latency_span(:check_if_personalised_request, fn ->
-      if personalised_request?(struct) do
-        Struct.add(struct, :private, %{personalised_request: true})
+      if personalised_request?(envelope) do
+        Envelope.add(envelope, :private, %{personalised_request: true})
       else
-        struct
+        envelope
       end
     end)
   end
 
-  def append_allowlists(struct = %Struct{}) do
+  def append_allowlists(envelope = %Envelope{}) do
     cond do
-      append_allowlists_for_web_request?(struct) ->
-        Struct.add(struct, :private, %{
-          headers_allowlist: struct.private.headers_allowlist ++ ["x-id-oidc-signedin"],
-          cookie_allowlist: struct.private.cookie_allowlist ++ ["ckns_atkn", "ckns_id"]
+      append_allowlists_for_web_request?(envelope) ->
+        Envelope.add(envelope, :private, %{
+          headers_allowlist: envelope.private.headers_allowlist ++ ["x-id-oidc-signedin"],
+          cookie_allowlist: envelope.private.cookie_allowlist ++ ["ckns_atkn", "ckns_id"]
         })
 
-      append_allowlists_for_app_request?(struct) ->
-        Struct.add(struct, :private, %{
-          headers_allowlist: struct.private.headers_allowlist ++ ["authorization", "x-authentication-provider"]
+      append_allowlists_for_app_request?(envelope) ->
+        Envelope.add(envelope, :private, %{
+          headers_allowlist: envelope.private.headers_allowlist ++ ["authorization", "x-authentication-provider"]
         })
 
       true ->
-        struct
+        envelope
     end
   end
 
-  defp append_allowlists_for_app_request?(struct = %Struct{}) do
-    struct.private.personalised_route and struct.request.app?
+  defp append_allowlists_for_app_request?(envelope = %Envelope{}) do
+    envelope.private.personalised_route and envelope.request.app?
   end
 
-  defp append_allowlists_for_web_request?(struct = %Struct{}) do
-    struct.private.personalised_route and not struct.request.app?
+  defp append_allowlists_for_web_request?(envelope = %Envelope{}) do
+    envelope.private.personalised_route and not envelope.request.app?
   end
 end

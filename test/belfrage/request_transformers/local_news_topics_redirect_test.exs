@@ -3,19 +3,19 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.LocalNewsTopicsRedirect
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  import Fixtures.Struct
+  import Fixtures.Envelope
 
   test "If the location ID is in the mapping, then a redirect will be issued to the corresponding topic page" do
-    struct =
-      request_struct(:https, "www.bbc.com", "/news/localnews/6296650-somelocation/30", %{}, %{
+    envelope =
+      request_envelope(:https, "www.bbc.com", "/news/localnews/6296650-somelocation/30", %{}, %{
         "location_id_and_name" => "6296650-somelocation"
       })
 
     assert {:stop,
-            %Struct{
-              response: %Struct.Response{
+            %Envelope{
+              response: %Envelope.Response{
                 http_status: 302,
                 headers: %{
                   "location" => "/news/topics/cxrlk4ywplxt",
@@ -24,18 +24,18 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
                 },
                 body: "Redirecting"
               }
-            }} = LocalNewsTopicsRedirect.call(struct)
+            }} = LocalNewsTopicsRedirect.call(envelope)
   end
 
   test "If the location ID is not in the mapping, then a redirect will be issued to the local news search page" do
-    struct =
-      request_struct(:https, "www.bbc.com", "/news/localnews/12345-somelocation/30", %{}, %{
+    envelope =
+      request_envelope(:https, "www.bbc.com", "/news/localnews/12345-somelocation/30", %{}, %{
         "location_id_and_name" => "12345-somelocation"
       })
 
     assert {:stop,
-            %Struct{
-              response: %Struct.Response{
+            %Envelope{
+              response: %Envelope.Response{
                 http_status: 302,
                 headers: %{
                   "location" => "/news/localnews",
@@ -44,15 +44,15 @@ defmodule Belfrage.RequestTransformers.LocalNewsTopicsRedirectTest do
                 },
                 body: "Redirecting"
               }
-            }} = LocalNewsTopicsRedirect.call(struct)
+            }} = LocalNewsTopicsRedirect.call(envelope)
   end
 
   test "If the path does not start with /news/localnews/, continue to origin" do
-    struct =
-      request_struct(:https, "www.bbc.com", "/some/path/6296650-somelocation/30", %{}, %{
+    envelope =
+      request_envelope(:https, "www.bbc.com", "/some/path/6296650-somelocation/30", %{}, %{
         "location_id_and_name" => "6296650-somelocation"
       })
 
-    assert {:ok, ^struct} = LocalNewsTopicsRedirect.call(struct)
+    assert {:ok, ^envelope} = LocalNewsTopicsRedirect.call(envelope)
   end
 end

@@ -3,40 +3,40 @@ defmodule Belfrage.RequestTransformers.Personalisation do
   alias Belfrage.Authentication.SessionState
 
   @impl Transformer
-  def call(struct = %Struct{private: %Struct.Private{personalised_request: false}}) do
-    {:ok, struct}
+  def call(envelope = %Envelope{private: %Envelope.Private{personalised_request: false}}) do
+    {:ok, envelope}
   end
 
-  def call(struct = %Struct{}) do
-    session_state = SessionState.build(struct.request)
-    struct = Struct.add(struct, :user_session, session_state)
+  def call(envelope = %Envelope{}) do
+    session_state = SessionState.build(envelope.request)
+    envelope = Envelope.add(envelope, :user_session, session_state)
 
     cond do
-      return_401?(struct) -> {:stop, Struct.put_status(struct, 401)}
-      redirect?(struct) -> redirect(struct)
-      true -> {:ok, struct}
+      return_401?(envelope) -> {:stop, Envelope.put_status(envelope, 401)}
+      redirect?(envelope) -> redirect(envelope)
+      true -> {:ok, envelope}
     end
   end
 
-  defp return_401?(struct) do
-    reauthentication_required?(struct.user_session) and struct.request.app?
+  defp return_401?(envelope) do
+    reauthentication_required?(envelope.user_session) and envelope.request.app?
   end
 
-  defp redirect?(struct) do
-    reauthentication_required?(struct.user_session) and not struct.request.app?
+  defp redirect?(envelope) do
+    reauthentication_required?(envelope.user_session) and not envelope.request.app?
   end
 
   defp reauthentication_required?(session_state) do
     session_state.authenticated && !session_state.valid_session
   end
 
-  defp redirect(struct = %Struct{}) do
+  defp redirect(envelope = %Envelope{}) do
     {
       :stop,
-      Struct.add(struct, :response, %{
+      Envelope.add(envelope, :response, %{
         http_status: 302,
         headers: %{
-          "location" => redirect_url(struct.request),
+          "location" => redirect_url(envelope.request),
           "x-bbc-no-scheme-rewrite" => "1",
           "cache-control" => "private"
         },

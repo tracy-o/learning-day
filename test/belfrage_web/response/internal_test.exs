@@ -3,8 +3,8 @@ defmodule BelfrageWeb.Response.InternalTest do
   use Plug.Test
 
   alias BelfrageWeb.Response.Internal
-  alias Belfrage.{Struct, CacheControl}
-  alias Belfrage.Struct.{Response, Private}
+  alias Belfrage.{Envelope, CacheControl}
+  alias Belfrage.Envelope.{Response, Private}
 
   test "html requested" do
     response = build_response(404, request_headers: %{"accept" => "text/html"})
@@ -87,12 +87,12 @@ defmodule BelfrageWeb.Response.InternalTest do
   defp build_response(status, opts \\ []) do
     conn = Keyword.get(opts, :request_headers, %{}) |> build_conn()
 
-    struct = %Struct{
+    envelope = %Envelope{
       response: %Response{http_status: status},
       private: %Private{personalised_request: Keyword.get(opts, :personalised, false)}
     }
 
-    Internal.new(struct, conn)
+    Internal.new(envelope, conn)
   end
 
   defp build_conn(headers) do

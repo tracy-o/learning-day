@@ -4,7 +4,7 @@ defmodule BelfrageWeb.ProductionEnvironmentTest do
   alias BelfrageWeb.ProductionEnvironment
 
   describe "call" do
-    test "puts the production_environment in the private part of the struct" do
+    test "puts the production_environment in the private part of the envelope" do
       conn = conn("get", "/", "")
       assert ProductionEnvironment.call(conn, []).private[:production_environment] == "test"
     end

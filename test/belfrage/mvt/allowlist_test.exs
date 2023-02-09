@@ -2,15 +2,15 @@ defmodule Belfrage.Mvt.AllowlistTest do
   use ExUnit.Case
   import Test.Support.Helper, only: [set_environment: 1]
 
-  alias Belfrage.Struct
-  alias Belfrage.Struct.{Private, Request}
+  alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Private, Request}
   alias Belfrage.Processor
   alias Belfrage.Mvt.Allowlist
 
   describe "bbc-mvt-{i} (where 1 <= i <= 20) headers" do
     test "all bbc-mvt-{i} headers are added to allowlist" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_header: %{
             "bbc-mvt-0" => "experiment;name;some_value",
             "bbc-mvt-1" => "experiment;name;some_value",
@@ -21,20 +21,20 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      refute "bbc-mvt-0" in struct.private.headers_allowlist
-      assert "bbc-mvt-1" in struct.private.headers_allowlist
-      assert "bbc-mvt-20" in struct.private.headers_allowlist
-      refute "bbc-mvt-21" in struct.private.headers_allowlist
+      refute "bbc-mvt-0" in envelope.private.headers_allowlist
+      assert "bbc-mvt-1" in envelope.private.headers_allowlist
+      assert "bbc-mvt-20" in envelope.private.headers_allowlist
+      refute "bbc-mvt-21" in envelope.private.headers_allowlist
     end
 
-    test "are allowed into struct.request.raw_headers" do
-      struct =
-        build_struct(
+    test "are allowed into envelope.request.raw_headers" do
+      envelope =
+        build_envelope(
           raw_headers: %{"bbc-mvt-1" => "experiment;name;some_value"},
           mvt_project_id: 1
         )
 
-      raw_headers = Processor.allowlists(struct).request.raw_headers
+      raw_headers = Processor.allowlists(envelope).request.raw_headers
       assert Map.has_key?(raw_headers, "bbc-mvt-1")
     end
   end
@@ -50,8 +50,8 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
 
     test "all mvt-* headers are added to allowlist" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "mvt-some_override" => "experiment;name;some_value",
             "mvt-another_override" => "experiment;name;some_value",
@@ -61,20 +61,20 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      assert "mvt-some_override" in struct.private.headers_allowlist
-      assert "mvt-another_override" in struct.private.headers_allowlist
-      refute "invalid-override" in struct.private.headers_allowlist
+      assert "mvt-some_override" in envelope.private.headers_allowlist
+      assert "mvt-another_override" in envelope.private.headers_allowlist
+      refute "invalid-override" in envelope.private.headers_allowlist
     end
 
-    test "are allowed into struct.request.raw_headers" do
+    test "are allowed into envelope.request.raw_headers" do
       override_headers = %{
         "mvt-an_override" => "experiment;some_value",
         "mvt-another_override" => "experiment;another_value"
       }
 
-      struct = build_struct(raw_headers: override_headers, mvt_project_id: 1)
+      envelope = build_envelope(raw_headers: override_headers, mvt_project_id: 1)
 
-      raw_headers = Processor.allowlists(struct).request.raw_headers
+      raw_headers = Processor.allowlists(envelope).request.raw_headers
       assert raw_headers == override_headers
     end
   end
@@ -85,8 +85,8 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
 
     test "none of the headers are added to the allowlist" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "mvt-some_override" => "experiment;name;some_value",
             "mvt-another_override" => "experiment;name;some_value",
@@ -96,9 +96,9 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      refute "mvt-some_override" in struct.private.headers_allowlist
-      refute "mvt-another_override" in struct.private.headers_allowlist
-      refute "invalid-override" in struct.private.headers_allowlist
+      refute "mvt-some_override" in envelope.private.headers_allowlist
+      refute "mvt-another_override" in envelope.private.headers_allowlist
+      refute "invalid-override" in envelope.private.headers_allowlist
     end
   end
 
@@ -108,8 +108,8 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
 
     test "no bbc-mvt-{i} headers are added" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "bbc-mvt-1" => "experiment;name;some_value"
           },
@@ -117,12 +117,12 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      refute "bbc-mvt-1" in struct.private.headers_allowlist
+      refute "bbc-mvt-1" in envelope.private.headers_allowlist
     end
 
     test "override mvt headers are added" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "mvt-some_override" => "experiment;name;some_value"
           },
@@ -130,7 +130,7 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      assert "mvt-some_override" in struct.private.headers_allowlist
+      assert "mvt-some_override" in envelope.private.headers_allowlist
     end
   end
 
@@ -140,8 +140,8 @@ defmodule Belfrage.Mvt.AllowlistTest do
     end
 
     test "no bbc-mvt-{i} headers are added" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "bbc-mvt-1" => "experiment;name;some_value"
           },
@@ -149,12 +149,12 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      refute "bbc-mvt-1" in struct.private.headers_allowlist
+      refute "bbc-mvt-1" in envelope.private.headers_allowlist
     end
 
     test "no override mvt headers are added" do
-      struct =
-        build_struct(
+      envelope =
+        build_envelope(
           raw_headers: %{
             "mvt-some_override" => "experiment;name;some_value"
           },
@@ -162,15 +162,15 @@ defmodule Belfrage.Mvt.AllowlistTest do
         )
         |> Allowlist.add()
 
-      refute "mvt-some_override" in struct.private.headers_allowlist
+      refute "mvt-some_override" in envelope.private.headers_allowlist
     end
   end
 
-  defp build_struct(opts) do
+  defp build_envelope(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
     mvt_project_id = Keyword.get(opts, :mvt_project_id, 0)
 
-    %Struct{
+    %Envelope{
       private: %Private{
         mvt_project_id: mvt_project_id
       },

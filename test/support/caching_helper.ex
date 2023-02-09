@@ -1,6 +1,6 @@
 defmodule Belfrage.Test.CachingHelper do
-  alias Belfrage.{Struct, CacheControl, Timer}
-  alias Belfrage.Struct.Response
+  alias Belfrage.{Envelope, CacheControl, Timer}
+  alias Belfrage.Envelope.Response
   alias Plug.Conn
 
   @cache_name :cache
@@ -35,11 +35,11 @@ defmodule Belfrage.Test.CachingHelper do
   end
 
   @doc """
-  Puts the struct's response into the cache under the `request_hash` of the struct's request.
+  Puts the envelope's response into the cache under the `request_hash` of the envelope's request.
   """
-  def put_into_cache(struct = %Struct{}) do
-    request_hash = struct.request.request_hash || Belfrage.RequestHash.generate(struct)
-    put_into_cache(request_hash, struct.response)
+  def put_into_cache(envelope = %Envelope{}) do
+    request_hash = envelope.request.request_hash || Belfrage.RequestHash.generate(envelope)
+    put_into_cache(request_hash, envelope.response)
   end
 
   @doc """
@@ -57,11 +57,11 @@ defmodule Belfrage.Test.CachingHelper do
   end
 
   @doc """
-  Puts the struct's response into the cache and marks the cached response as stale.
+  Puts the envelope's response into the cache and marks the cached response as stale.
   """
-  def put_into_cache_as_stale(struct = %Struct{}) do
-    request_hash = struct.request.request_hash || Belfrage.RequestHash.generate(struct)
-    put_into_cache(request_hash, struct.response)
+  def put_into_cache_as_stale(envelope = %Envelope{}) do
+    request_hash = envelope.request.request_hash || Belfrage.RequestHash.generate(envelope)
+    put_into_cache(request_hash, envelope.response)
     make_cached_response_stale(request_hash)
   end
 
@@ -73,7 +73,7 @@ defmodule Belfrage.Test.CachingHelper do
   """
   def make_cached_response_stale(conn = %Conn{}) do
     conn
-    |> BelfrageWeb.StructAdapter.adapt(conn.assigns.route_spec)
+    |> BelfrageWeb.EnvelopeAdapter.adapt(conn.assigns.route_spec)
     |> Belfrage.RequestHash.generate()
     |> make_cached_response_stale()
   end

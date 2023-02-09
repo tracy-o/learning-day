@@ -5,11 +5,11 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   @dial Application.compile_env(:belfrage, :dial)
 
   @impl Transformer
-  def call(struct) do
+  def call(envelope) do
     if dial_active?() do
       {
         :stop,
-        Struct.add(struct, :response, %{
+        Envelope.add(envelope, :response, %{
           http_status: 200,
           headers: %{
             "content-type" => "application/json; charset=utf-8",
@@ -20,7 +20,7 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
         })
       }
     else
-      {:ok, struct}
+      {:ok, envelope}
     end
   end
 

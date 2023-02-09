@@ -5,18 +5,18 @@ defmodule Belfrage.RequestTransformers.LambdaOriginAlias do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(struct = %Struct{request: %Struct.Request{subdomain: subdomain}, private: private}) do
+  def call(envelope = %Envelope{request: %Envelope.Request{subdomain: subdomain}, private: private}) do
     if validate_alias(subdomain) do
       {
         :ok,
-        Struct.add(struct, :private, %{
+        Envelope.add(envelope, :private, %{
           origin: "#{private.origin}:#{lambda_alias(private.preview_mode, subdomain, private.production_environment)}"
         })
       }
     else
       {
         :stop,
-        Struct.add(struct, :response, %{
+        Envelope.add(envelope, :response, %{
           http_status: 400,
           body: "Invalid Alias"
         })

@@ -2,15 +2,15 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
   use ExUnit.Case
   use Test.Support.Helper, :mox
   alias Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminator
-  alias Belfrage.Struct
+  alias Belfrage.Envelope
 
-  @webcore_test_data %Struct{
-    private: %Struct.Private{
+  @webcore_test_data %Envelope{
+    private: %Envelope.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
       platform: "MorphRouter",
       production_environment: "test"
     },
-    request: %Struct.Request{
+    request: %Envelope.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
@@ -18,13 +18,13 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
     }
   }
 
-  @morph_test_data %Struct{
-    private: %Struct.Private{
+  @morph_test_data %Envelope{
+    private: %Envelope.Private{
       origin: "https://morph-router.test.api.bbci.co.uk",
       platform: "MorphRouter",
       production_environment: "test"
     },
-    request: %Struct.Request{
+    request: %Envelope.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
@@ -32,12 +32,12 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
     }
   }
 
-  @morph_live_data %Struct{
-    private: %Struct.Private{
+  @morph_live_data %Envelope{
+    private: %Envelope.Private{
       origin: "https://morph-router.api.bbci.co.uk",
       platform: "MorphRouter"
     },
-    request: %Struct.Request{
+    request: %Envelope.Request{
       scheme: :http,
       host: "www.bbc.co.uk",
       path: "/_web_core",
@@ -58,8 +58,8 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
 
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  origin: ^lambda_function,
                  platform: "Webcore"
                }
@@ -72,8 +72,8 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
 
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  origin: ^morph_endpoint,
                  platform: "MorphRouter"
                }
@@ -89,8 +89,8 @@ defmodule Belfrage.RequestTransformers.BitesizeGuidesPlatformDiscriminatorTest d
 
     assert {
              :ok,
-             %Struct{
-               private: %Struct.Private{
+             %Envelope{
+               private: %Envelope.Private{
                  origin: ^morph_endpoint,
                  platform: "MorphRouter"
                }
