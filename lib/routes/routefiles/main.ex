@@ -492,7 +492,7 @@ defroutefile "Main" do
   redirect "/news/business-22449886", to: "/news/topics/cem601g08pkt", status: 301
   redirect "/news/business-41188875", to: "/news/topics/cx6npx2zrk3t", status: 301
   redirect "/news/business-46985441", to: "/news/topics/cyq54q01grmt", status: 301
-  redirect "/news/business-22434141", to: "/news/topics/czpqp1pq5q5t", status: 301 
+  redirect "/news/business-22434141", to: "/news/topics/czpqp1pq5q5t", status: 301
   redirect "/news/business-46985442", to: "/news/topics/cgdwpywgeegt", status: 301
   redirect "/news/uk-northern-ireland-55401938", to: "/news/topics/cxlvkzzjq1wt", status: 301
   redirect "/news/business-12686570", to: "/news/topics/c89l21e4068t", status: 301
@@ -2641,9 +2641,6 @@ defroutefile "Main" do
       !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
     ]
   end
-
-
-  handle "/weather/*any", using: "WeatherCatchAll", platform: "MozartWeather", examples: []
 
   # WebCore Hub
   redirect "/webcore/*any", to: "https://hub.webcore.tools.bbc.co.uk/webcore/*any", status: 302
