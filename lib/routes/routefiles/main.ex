@@ -1523,9 +1523,6 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/pidgin/articles/cwl08rd38l6o", using: "WorldServicePidginArticleMvtPage", platform: "Simorgh", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o"]
-  handle "/pidgin/articles/cwl08rd38l6o.amp", using: "WorldServicePidginArticleMvtPage", platform: "Simorgh", only_on: "test", examples: ["/pidgin/articles/cwl08rd38l6o.amp"]
-
   handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss", platform: "Fabl", examples: ["/pidgin/topics/c95y35941vrt/rss.xml"] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
