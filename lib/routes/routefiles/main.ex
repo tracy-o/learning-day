@@ -34,6 +34,8 @@ defroutefile "Main" do
   redirect "/news/video_and_audio/features/:section_and_asset/:asset_id", to: "/news/av/:section_and_asset", status: 302
   redirect "/news/world-middle-east-27796850", to: "/programmes/w13xtvn3", status: 301
 
+  redirect "/news/world-radio-and-tv-12759931", to: "/aboutthebbc/whatwedo/worldservice", status: 301
+
   redirect "/cymrufyw/etholiad", to: "/cymrufyw/gwleidyddiaeth", status: 302
   redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
   redirect "/news/election", to: "/news/politics", status: 302
