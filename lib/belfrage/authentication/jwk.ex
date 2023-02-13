@@ -10,12 +10,7 @@ defmodule Belfrage.Authentication.JWK do
   }
 
   def start_link(opts \\ []) do
-    static_keys =
-      Application.get_env(:belfrage, :authentication)["account_jwk_uri"]
-      |> static_keys_file_name()
-      |> read_static_keys()
-
-    Agent.start_link(fn -> static_keys end, name: Keyword.get(opts, :name, __MODULE__))
+    Agent.start_link(fn -> read_static_keys() end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
   def get(agent \\ __MODULE__, alg, kid) do
@@ -40,7 +35,7 @@ defmodule Belfrage.Authentication.JWK do
     Agent.update(agent, fn _current_keys -> keys end)
   end
 
-  def read_static_keys(file_name) do
+  def read_static_keys(file_name \\ static_keys_file_name()) do
     :belfrage
     |> Application.app_dir("priv/static/#{file_name}")
     |> File.read!()
@@ -48,11 +43,11 @@ defmodule Belfrage.Authentication.JWK do
     |> Map.fetch!("keys")
   end
 
-  defp static_keys_file_name(uri) do
+  defp static_keys_file_name() do
     if Mix.env() == :test do
       "jwk_fixtures.json"
     else
-      Map.fetch!(@static_keys_filenames, uri)
+      Map.fetch!(@static_keys_filenames, Application.get_env(:belfrage, :authentication)["account_jwk_uri"])
     end
   end
 end
