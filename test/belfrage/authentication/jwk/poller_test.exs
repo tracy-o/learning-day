@@ -26,5 +26,8 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
     end)
 
     wait_for(fn -> JWK.get("foo", "bar") == {:error, :public_key_not_found} end)
+
+    # Set the JWK Agent state back to the original state it has on startup
+    JWK.update(JWK.read_static_keys())
   end
 end
