@@ -9,6 +9,13 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
   alias Belfrage.Authentication.JWK.Poller
   alias Belfrage.Clients.{HTTP, HTTPMock}
 
+  setup do
+    on_exit(fn ->
+      # Set the JWK Agent state back to the original state it has on startup
+      JWK.update(JWK.read_static_keys())
+    end)
+  end
+
   test "fetches and updates JWK keys from the API" do
     assert JWK.get("foo", "bar") == {:error, :public_key_not_found}
 
@@ -26,8 +33,5 @@ defmodule Belfrage.Authentication.JWK.PollerTest do
     end)
 
     wait_for(fn -> JWK.get("foo", "bar") == {:error, :public_key_not_found} end)
-
-    # Set the JWK Agent state back to the original state it has on startup
-    JWK.update(JWK.read_static_keys())
   end
 end
