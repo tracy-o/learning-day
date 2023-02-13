@@ -497,7 +497,6 @@ defroutefile "Main" do
   redirect "/news/uk-northern-ireland-55401938", to: "/news/topics/cxlvkzzjq1wt", status: 301
   redirect "/news/business-12686570", to: "/news/topics/c89l21e4068t", status: 301
   redirect "/news/uk-northern-ireland-38323577", to: "/news/topics/c77jz3mdmgzt", status: 301
-  redirect "/news/uk-20782891", to: "/news/topics/c8m8v3p0yygt", status: 301
   redirect "/news/world-43160365", to: "/news/topics/czpqp1q456vt", status: 301
   redirect "/news/world-us-canada-44928743", to: "/news/topics/c163jpkepkqt", status: 301
   redirect "/news/business-40863265", to: "/news/topics/cxn4z4nmzelt", status: 301
