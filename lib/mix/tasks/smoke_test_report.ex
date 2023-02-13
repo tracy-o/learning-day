@@ -93,7 +93,11 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   end
 
   defp build_result_message({route_state_id, failure_messages}, slack_auth_token) do
-    slack_channel = RouteSpec.get_route_spec(route_state_id).slack_channel || @results_slack_channel
+    slack_channel =
+      case RouteSpec.get_route_spec(route_state_id) do
+        nil -> @results_slack_channel
+        route_spec -> route_spec.slack_channel || @results_slack_channel
+      end
 
     msg = Enum.join(failure_messages, "\n\n")
 
