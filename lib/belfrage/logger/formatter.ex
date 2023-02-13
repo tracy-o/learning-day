@@ -60,7 +60,7 @@ defmodule Belfrage.Logger.Formatter do
     ])
   end
 
-  defp to_json(val = %{__envelope__: _}) do
+  defp to_json(val = %{__struct__: _}) do
     to_json(Map.from_struct(val))
   end
 
