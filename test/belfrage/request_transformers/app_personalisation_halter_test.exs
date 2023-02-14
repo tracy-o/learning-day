@@ -33,7 +33,7 @@ defmodule Belfrage.RequestTransformers.AppPersonalisationHalterTest do
       disable_personalisation()
 
       assert {:stop, %Envelope{request: %Request{app?: true}, response: %Response{http_status: 204}}} =
-        AppPersonalisationHalter.call(%Struct{request: %Request{app?: true}})
+               AppPersonalisationHalter.call(%Envelope{request: %Request{app?: true}})
     end
   end
 end

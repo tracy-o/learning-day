@@ -157,7 +157,6 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
   end
 
-
   describe "personalisation is disabled" do
     setup do
       stub_dial(:personalisation, "off")

@@ -1,7 +1,7 @@
-defmodule Routes.Specs.AppPersonalisationFabl do
+defmodule Routes.Specs.AppPersonalisation do
   def specs(env) do
     %{
-      platform: Fabl,
+      platform: "Fabl",
       personalisation: "on",
       request_pipeline: request_pipeline(env)
     }
