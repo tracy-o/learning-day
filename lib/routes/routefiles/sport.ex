@@ -1206,6 +1206,31 @@ defroutefile "Sport" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
 
+  ## Sport Netball Scores-Fixtures pages
+  handle "/sport/netball/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/scores-fixtures"]
+  handle "/sport/app-webview/netball/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/scores-fixtures"]
+  redirect "/sport/netball/scores-fixtures.app", to: "/sport/app-webview/netball/scores-fixtures", status: 302
+
+  handle "/sport/netball/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/scores-fixtures/2023-02-11"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
+  handle "/sport/app-webview/netball/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/scores-fixtures/2023-02-11"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
+  redirect "/sport/netball/scores-fixtures/:date.app", to: "/sport/app-webview/netball/scores-fixtures/:date", status: 302
+
+  handle "/sport/netball/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/world-cup/scores-fixtures"]
+  handle "/sport/app-webview/netball/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/world-cup/scores-fixtures"]
+  redirect "/sport/netball/:tournament/scores-fixtures.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures", status: 302
+
+  handle "/sport/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/world-cup/scores-fixtures/2023-02-11"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
+  handle "/sport/app-webview/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/world-cup/scores-fixtures/2023-02-11"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
+  redirect "/sport/netball/:tournament/scores-fixtures/:date.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures/:date", status: 302
+
   ## Sport Scores-Fixtures pages
   handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/scores-fixtures.app"]
   handle "/sport/:discipline/scores-fixtures/*any", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/scores-fixtures"]
