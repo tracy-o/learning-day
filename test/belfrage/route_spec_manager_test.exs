@@ -13,8 +13,13 @@ defmodule Belfrage.RouteSpecManagerTest do
       assert RouteSpecManager.get_spec(key) == route_spec
     end
 
+    test "retrieves expected spec with partition if key is in ets table" do
+      {key, route_spec} = Enum.random(ets_table_contents())
+      assert RouteSpecManager.get_spec("#{key}.SomePartition") == route_spec
+    end
+
     test "retrieves no spec if key is not in ets table" do
-      assert RouteSpecManager.get_spec("SomeRouteSpec") == nil
+      assert RouteSpecManager.get_spec("SomeRouteSpec.SomePlatform") == nil
     end
   end
 

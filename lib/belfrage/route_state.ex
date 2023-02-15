@@ -15,7 +15,7 @@ defmodule Belfrage.RouteState do
         {:error, reason}
 
       spec ->
-        GenServer.start_link(__MODULE__, spec, name: via_tuple(name))
+        GenServer.start_link(__MODULE__, {name, spec}, name: via_tuple(name))
     end
   end
 
@@ -63,13 +63,14 @@ defmodule Belfrage.RouteState do
   # callbacks
 
   @impl GenServer
-  def init(spec) do
+  def init({name, spec}) do
     Process.send_after(self(), :reset, route_state_reset_interval())
 
     spec = Map.from_struct(spec)
 
     {:ok,
      Map.merge(spec, %{
+       route_state_id: name,
        counter: Counter.init(),
        mvt_seen: %{},
        throughput: 100

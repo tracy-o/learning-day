@@ -9,7 +9,7 @@ defmodule Belfrage.RouteSpecManager do
 
   @spec get_spec(RouteSpec.route_state_id()) :: RouteSpec.t() | nil
   def get_spec(route_state_id) do
-    GenServer.call(__MODULE__, {:get_spec, route_state_id})
+    GenServer.call(__MODULE__, {:get_spec, maybe_remove_partition_part(route_state_id)})
   end
 
   @spec list_specs() :: [RouteSpec.t()]
@@ -56,4 +56,9 @@ defmodule Belfrage.RouteSpecManager do
   end
 
   defp bootstrap_route_spec_table(), do: :ets.new(@route_spec_table, [:set])
+
+  defp maybe_remove_partition_part(route_state_id) do
+    [spec, platform | _] = String.split(route_state_id, ".")
+    RouteSpec.make_route_state_id(spec, platform)
+  end
 end

@@ -49,6 +49,11 @@ defmodule Belfrage.RouteSpec do
     "#{spec_name}.#{platform}"
   end
 
+  @spec make_route_state_id(String.t(), String.t(), String.t()) :: route_state_id()
+  def make_route_state_id(spec_name, platform, partition) do
+    "#{spec_name}.#{platform}.#{partition}"
+  end
+
   @spec list_route_specs(String.t()) :: [RouteSpec.t()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
     list_spec_names()

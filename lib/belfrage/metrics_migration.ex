@@ -142,8 +142,8 @@ defmodule Belfrage.MetricsMigration do
             tags: [:platform]
           ),
           counter(
-            "platform_selector.not_found",
-            event_name: [:belfrage, :platform_selector, :not_found],
+            "selector.error",
+            event_name: [:belfrage, :selector, :error],
             measurement: :count,
             tags: [:selector]
           )
