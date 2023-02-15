@@ -34,25 +34,20 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelector do
   """
   @impl Routes.Platforms.Selector
   def call(request = %Request{}) do
-    with {:ok, %HTTP.Response{body: payload, status_code: 200}} <- AresData.fetch_metadata(request.path),
-         {:ok, asset_type} <- extract_asset_type(payload) do
-      select_platform(asset_type)
-    else
-      {:ok, %HTTP.Response{status_code: 404}} -> {:ok, "MozartNews"}
-    {_, reason} ->
+    case AresData.fetch_metadata(request.path) do
+      {:ok, asset_type} ->
+        select_platform(asset_type)
+
+      {:error, %HTTP.Response{status_code: 404}} ->
+        {:ok, "MozartNews"}
+
+      {_, reason} ->
         Logger.log(
           :error,
           "#{__MODULE__} could not select platform: %{path: #{request.path}, reason: #{inspect(reason)}}"
         )
 
-          {:error, 500}
-    end
-  end
-
-  defp extract_asset_type(payload) do
-    case Json.decode!(payload) do
-      %{"data" => %{"assetType" => asset_type}} -> {:ok, asset_type}
-      _ -> {:error, :no_asset_type}
+        {:error, 500}
     end
   end
 

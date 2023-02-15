@@ -7,6 +7,7 @@ defmodule Belfrage.SupervisorTest do
 
   @belfrage_local_cache :cache
   @test_cache :test_cache
+  @metadata_cache :metadata_cache
 
   setup_all do
     conf = Application.get_env(:cachex, :limit)
@@ -60,6 +61,28 @@ defmodule Belfrage.SupervisorTest do
       for remaining_cache_key <- Enum.take(1..overflow_size, -post_eviction_size) do
         assert {:ok, true} = Cachex.exists?(@test_cache, remaining_cache_key)
       end
+    end
+  end
+
+  describe "metadata cache" do
+    test "is alive" do
+      [{Belfrage.MetadataCache, pid, :worker, [Cachex]}] =
+        Supervisor.which_children(Belfrage.Supervisor)
+        |> Enum.filter(fn {cache, _, _, _} -> cache == Belfrage.MetadataCache end)
+
+      assert is_pid(pid)
+      assert Process.alive?(pid)
+    end
+
+    test "size limit and reclaim policy configured" do
+      conf = Application.get_env(:cachex, :limit)
+      limit = limit(size: conf[:size], policy: conf[:policy], reclaim: conf[:reclaim], options: conf[:options])
+
+      assert [limit] ==
+               Cachex.inspect(@metadata_cache, :cache)
+               |> elem(1)
+               |> Tuple.to_list()
+               |> Enum.filter(fn x -> is_tuple(x) and elem(x, 0) == :limit end)
     end
   end
 

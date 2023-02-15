@@ -6,9 +6,12 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
   alias Routes.Platforms.Selectors.AssetTypePlatformSelector
 
   import ExUnit.CaptureLog
+  import Belfrage.Test.CachingHelper, only: [clear_metadata_cache: 1]
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
+
+  setup :clear_metadata_cache
 
   test "returns error tuple if origin returns 500 http status" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -57,9 +60,10 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
   end
 
   test "returns Webcore platform if origin response contains a Webcore assetType" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-
     Enum.each(@webcore_asset_types, fn asset_type ->
+      path_segment = String.downcase(asset_type)
+      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2F#{path_segment}%2Fpath"
+
       Clients.HTTPMock
       |> expect(
         :execute,
@@ -76,7 +80,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
         end
       )
 
-      assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "Webcore"}
+      assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/#{path_segment}/path"}) == {:ok, "Webcore"}
     end)
   end
 
@@ -98,6 +102,71 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
          }}
       end
     )
+
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+  end
+
+  test "returns cached platform" do
+    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+
+    Clients.HTTPMock
+    |> expect(
+      :execute,
+      fn %Clients.HTTP.Request{
+           method: :get,
+           url: ^url
+         },
+         :Fabl ->
+        {:ok,
+         %Clients.HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+         }}
+      end
+    )
+
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+  end
+
+  test "does not return cached platform after TTL" do
+    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+
+    Clients.HTTPMock
+    |> expect(
+      :execute,
+      fn %Clients.HTTP.Request{
+           method: :get,
+           url: ^url
+         },
+         :Fabl ->
+        {:ok,
+         %Clients.HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+         }}
+      end
+    )
+
+    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+
+    Clients.HTTPMock
+    |> expect(
+      :execute,
+      fn %Clients.HTTP.Request{
+           method: :get,
+           url: ^url
+         },
+         :Fabl ->
+        {:ok,
+         %Clients.HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+         }}
+      end
+    )
+
+    Process.sleep(Application.get_env(:belfrage, :metadata_cache)[:default_ttl_ms] + 1)
 
     assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
