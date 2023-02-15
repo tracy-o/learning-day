@@ -5,7 +5,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelector do
 
   require Logger
 
-  @behaviour Routes.Platforms.Selector
+  @behaviour Belfrage.Behaviours.Selector
 
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
@@ -32,7 +32,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelector do
 
     {:error, status_code}
   """
-  @impl Routes.Platforms.Selector
+  @impl Belfrage.Behaviours.Selector
   def call(request = %Request{}) do
     case AresData.fetch_metadata(request.path) do
       {:ok, asset_type} ->

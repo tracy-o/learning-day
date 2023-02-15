@@ -2,6 +2,7 @@ defmodule BelfrageWeb do
   alias BelfrageWeb.{EnvelopeAdapter, Response}
   alias Plug.Conn
   alias Belfrage.{Metrics.LatencyMonitor, Envelope, RouteSpec, RouteSpecManager}
+  alias Belfrage.Behaviours.Selector
 
   require Logger
 
@@ -96,7 +97,7 @@ defmodule BelfrageWeb do
   end
 
   defp call_platform_selector(spec_name, selector, request) do
-    with {:ok, platform} <- Routes.Platforms.Selector.call(selector, request) do
+    with {:ok, platform} <- Selector.call(selector, :platform, request) do
       {:ok, RouteSpec.make_route_state_id(spec_name, platform)}
     end
   end
