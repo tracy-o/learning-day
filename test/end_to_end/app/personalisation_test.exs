@@ -122,7 +122,10 @@ defmodule EndToEnd.App.PersonalisationTest do
         |> personalise_app_request(@token)
         |> make_request()
 
-      assert conn.status == 204
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
     end
   end
 
@@ -170,7 +173,10 @@ defmodule EndToEnd.App.PersonalisationTest do
         |> personalise_app_request(@token)
         |> make_request()
 
-      assert conn.status == 204
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
     end
 
     test "non-authenticated request" do
@@ -178,7 +184,10 @@ defmodule EndToEnd.App.PersonalisationTest do
         build_request()
         |> make_request()
 
-      assert conn.status == 204
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
     end
   end
 
