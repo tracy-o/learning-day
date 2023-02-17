@@ -5,90 +5,43 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
   alias BelfrageWeb.Response.Headers.PipelineTrail
   alias Belfrage.Envelope
 
-  describe "when request pipeline trail exists in envelope and production_environment is not live" do
-    test "the request pipeline trail header is set" do
-      input_conn = conn(:get, "/")
-
-      envelope = %Envelope{
-        private: %Envelope.Private{production_environment: "test"},
-        debug: %Envelope.Debug{request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"]}
+  describe "when pipeline trails exist in envelope" do
+    @envelope %Envelope{
+      private: %Envelope.Private{production_environment: "test"},
+      debug: %Envelope.Debug{
+        pre_flight_pipeline_trail: ["SomePlatformSelector"],
+        request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
+        response_pipeline_trail: ["CacheDirective"]
       }
+    }
 
+    test "production_environment is not live" do
+      input_conn = conn(:get, "/")
+      output_conn = PipelineTrail.add_header(input_conn, @envelope)
+      assert_trail_headers(output_conn, ["SomePlatformSelector"], ["CircuitBreaker,HttpRedirector"], ["CacheDirective"])
+    end
+
+    test "production_environment is live" do
+      envelope = %Envelope{@envelope | private: %Envelope.Private{production_environment: "live"}}
+      input_conn = conn(:get, "/")
       output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
+      assert_trail_headers(output_conn, [], [], [])
     end
   end
 
-  describe "when request pipeline trail exists in envelope and production_environment is live" do
-    test "the request pipeline trail header is not set" do
+  describe "when pipeline trails are nil" do
+    @envelope %Envelope{private: %Envelope.Private{route_state_id: nil}}
+
+    test "pipeline trail headers are not set" do
       input_conn = conn(:get, "/")
-
-      envelope = %Envelope{
-        private: %Envelope.Private{production_environment: "live"},
-        debug: %Envelope.Debug{request_pipeline_trail: ["HttpRedirector", "CircuitBreaker"]}
-      }
-
-      output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == []
+      output_conn = PipelineTrail.add_header(input_conn, @envelope)
+      assert_trail_headers(output_conn, [], [], [])
     end
   end
 
-  describe "when response pipeline trail exists in envelope and production_environment is not live" do
-    test "the request and response pipeline trail header is set" do
-      input_conn = conn(:get, "/")
-
-      envelope = %Envelope{
-        private: %Envelope.Private{production_environment: "test"},
-        debug: %Envelope.Debug{
-          request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
-          response_pipeline_trail: ["CacheDirective"]
-        }
-      }
-
-      output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == ["CircuitBreaker,HttpRedirector"]
-      assert get_resp_header(output_conn, "belfrage-response-pipeline-trail") == ["CacheDirective"]
-    end
-  end
-
-  describe "when response pipeline trail exists in envelope and production_environment is live" do
-    test "the response pipeline trail header is not set" do
-      input_conn = conn(:get, "/")
-
-      envelope = %Envelope{
-        private: %Envelope.Private{production_environment: "live"},
-        debug: %Envelope.Debug{
-          request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
-          response_pipeline_trail: ["CacheDirective"]
-        }
-      }
-
-      output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-response-pipeline-trail") == []
-    end
-  end
-
-  describe "when request pipeline trail is nil" do
-    test "the request pipeline_trail header is not set" do
-      input_conn = conn(:get, "/")
-      envelope = %Envelope{private: %Envelope.Private{route_state_id: nil}}
-      output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == []
-    end
-  end
-
-  describe "when response pipeline trail is nil" do
-    test "the response pipeline_trail header is not set" do
-      input_conn = conn(:get, "/")
-      envelope = %Envelope{private: %Envelope.Private{route_state_id: nil}}
-      output_conn = PipelineTrail.add_header(input_conn, envelope)
-
-      assert get_resp_header(output_conn, "belfrage-request-pipeline-trail") == []
-    end
+  defp assert_trail_headers(conn, pre_flight_trail_res, req_trail_res, resp_trail_res) do
+    assert get_resp_header(conn, "belfrage-pre-flight-pipeline-trail") == pre_flight_trail_res
+    assert get_resp_header(conn, "belfrage-request-pipeline-trail") == req_trail_res
+    assert get_resp_header(conn, "belfrage-response-pipeline-trail") == resp_trail_res
   end
 end

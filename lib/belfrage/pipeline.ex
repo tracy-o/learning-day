@@ -5,6 +5,8 @@ defmodule Belfrage.Pipeline do
 
   @spec process(Envelope.t(), Transformer.transformer_type(), [String.t()]) ::
           {:ok, Envelope.t()} | {:error, Envelope.t(), String.t()}
+  def process(envelope, _, []), do: {:ok, envelope}
+
   def process(envelope, type, [first | rest]) do
     case Transformer.call(envelope, type, first) do
       {:ok, envelope} ->
@@ -17,37 +19,34 @@ defmodule Belfrage.Pipeline do
         {:ok, envelope}
 
       {:error, envelope, msg} ->
-        handle_server_error(envelope, msg)
+        handle_server_error(envelope, type, msg)
 
       _other ->
-        handle_error(envelope)
+        handle_error(envelope, type)
     end
   end
-
-  def process(envelope, _, []), do: {:ok, envelope}
 
   defp update_pipeline(_current, {:replace, transformers}), do: transformers
   defp update_pipeline(current, {:add, transformers}), do: transformers ++ current
 
-  defp handle_server_error(envelope, msg) do
+  defp handle_server_error(envelope, type, msg) do
     :telemetry.execute([:belfrage, :error, :pipeline, :process], %{})
-
-    Logger.log(:error, "", %{
-      msg: "Transformer returned an early error",
-      envelope: Envelope.loggable(envelope)
-    })
-
+    log_error(envelope, type, "Transformer returned an early error")
     {:error, envelope, msg}
   end
 
-  defp handle_error(envelope) do
+  defp handle_error(envelope, type) do
     :telemetry.execute([:belfrage, :error, :pipeline, :process, :unhandled], %{})
+    msg = "Transformer did not return a valid response tuple"
+    log_error(envelope, type, msg)
+    {:error, envelope, msg}
+  end
 
+  defp log_error(envelope, type, msg) do
     Logger.log(:error, "", %{
-      msg: "Transformer did not return a valid response tuple",
+      msg: msg,
+      type: type,
       envelope: Envelope.loggable(envelope)
     })
-
-    {:error, envelope, "Transformer did not return a valid response tuple"}
   end
 end

@@ -1,5 +1,6 @@
 defmodule Belfrage.Envelope.Debug do
-  defstruct request_pipeline_trail: [],
+  defstruct pre_flight_pipeline_trail: [],
+            request_pipeline_trail: [],
             response_pipeline_trail: []
 end
 
