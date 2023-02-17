@@ -80,8 +80,7 @@ defroutefile "Mock", "test" do
 
   handle "/proxy-on-joan/:id", using: "NewsArticlePage", platform: "Webcore", examples: ["/proxy-on-joan/49336140"]
 
-  handle "/app-request/p/:name", using: "PersonalisedFablData", platform: "Fabl", examples: []
-
+  handle "/app-request/p/:name", using: "AppPersonalisation", platform: "Fabl", examples: []
   handle "/app-request/:name", using: "FablData", platform: "Fabl", examples: []
 
   handle "/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", platform: "Webcore", examples: []

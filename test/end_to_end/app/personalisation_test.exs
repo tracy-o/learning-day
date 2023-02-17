@@ -23,9 +23,9 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   setup :clear_cache
 
-  describe "personalised route " do
+  describe "personalised route" do
     setup do
-      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
+      start_supervised!({RouteState, "AppPersonalisation.Fabl"})
       :ok
     end
 
@@ -114,22 +114,25 @@ defmodule EndToEnd.App.PersonalisationTest do
       assert vary_header_contains?(response, ["authorization", "x-authentication-provider"])
     end
 
-    # test "personalisation off and news_articles_personalisation is on" do
-    #   stub_dials(personalisation: "off", news_articles_personalisation: "on")
+    test "personalisation off and news_articles_personalisation is on" do
+      stub_dials(personalisation: "off", news_articles_personalisation: "on")
 
-    #   conn =
-    #     build_request()
-    #     |> personalise_app_request(@token)
-    #     |> make_request()
+      conn =
+        build_request()
+        |> personalise_app_request(@token)
+        |> make_request()
 
-    #   assert conn.status == 503
-    # end
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
+    end
   end
 
   describe "personalised route and expired auth. token" do
     test "invalid auth token on test prod. env." do
       set_environment("test")
-      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
+      start_supervised!({RouteState, "AppPersonalisation.Fabl"})
 
       expect_no_origin_request()
 
@@ -143,7 +146,8 @@ defmodule EndToEnd.App.PersonalisationTest do
 
     test "expired auth token on live prod. env." do
       set_environment("live")
-      start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
+
+      start_supervised!({RouteState, "AppPersonalisation.Fabl"})
 
       expect_no_origin_request()
 
@@ -156,30 +160,36 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
   end
 
-  # describe "personalisation is disabled" do
-  #   setup do
-  #     stub_dial(:personalisation, "off")
-  #     start_supervised!({RouteState, "PersonalisedFablData.Fabl"})
-  #     :ok
-  #   end
+  describe "personalisation is disabled" do
+    setup do
+      stub_dial(:personalisation, "off")
+      start_supervised!({RouteState, "AppPersonalisation.Fabl"})
+      :ok
+    end
 
-  #   test "authenticated request" do
-  #     conn =
-  #       build_request()
-  #       |> personalise_app_request(@token)
-  #       |> make_request()
+    test "authenticated request" do
+      conn =
+        build_request()
+        |> personalise_app_request(@token)
+        |> make_request()
 
-  #     assert conn.status == 503
-  #   end
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
+    end
 
-  #   test "non-authenticated request" do
-  #     conn =
-  #       build_request()
-  #       |> make_request()
+    test "non-authenticated request" do
+      conn =
+        build_request()
+        |> make_request()
 
-  #     assert conn.status == 503
-  #   end
-  # end
+      {status, headers, body} = sent_resp(conn)
+      assert status == 204
+      assert body == ""
+      assert {"cache-control", "private"} in headers
+    end
+  end
 
   describe "non-personalised route" do
     setup do
