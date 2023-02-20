@@ -26,6 +26,7 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.Overrides)
   plug(BelfrageWeb.Plugs.VarianceReducer)
   plug(Plugs.PathLogger)
+  plug(Belfrage.Plug.AccessLogger, level: :info)
   plug(:match)
   plug(:dispatch)
 

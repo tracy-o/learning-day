@@ -82,7 +82,7 @@ config :cachex, :limit,
   options: []
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, {LoggerFileBackend, :access}]
 
 config :logger, :file,
   path: "local.log",
@@ -96,6 +96,13 @@ config :logger, :cloudwatch,
   level: :warn,
   metadata: :all,
   metadata_filter: [cloudwatch: true]
+
+config :logger, :access,
+  path: "access.log",
+  format: {Belfrage.Logger.Formatter, :access},
+  level: :info,
+  metadata: :all,
+  metadata_filter: [access: true]
 
 config :aws_ex_ray,
   store_monitor_pool_size: 1,

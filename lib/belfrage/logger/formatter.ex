@@ -19,6 +19,16 @@ defmodule Belfrage.Logger.Formatter do
     end
   end
 
+  def access(level, message, timestamp, metadata) do
+    case Keyword.get(metadata, :access) do
+      true ->
+        gtm_format(level, message, timestamp, metadata)
+
+      _ ->
+        ""
+    end
+  end
+
   def format(level, message, timestamp, metadata) do
     [
       :jiffy.encode(
@@ -39,6 +49,36 @@ defmodule Belfrage.Logger.Formatter do
     ]
   rescue
     _ -> "could not format message: #{inspect({level, message, timestamp, metadata})}\n"
+  end
+
+  @spec gtm_format(any, any, {any, {any, any, any, any}}, any) :: <<_::64, _::_*8>> | [nonempty_binary, ...]
+  def gtm_format(level, _message, time_tuple = {date_erl, {h, m, s, ms}}, metadata) do
+    method = Keyword.get(metadata, :method)
+    request_path = Keyword.get(metadata, :request_path)
+    query_string = Keyword.get(metadata, :query_string)
+    status = Keyword.get(metadata, :status)
+
+    timestamp =
+      NaiveDateTime.from_erl!({date_erl, {h, m, s}}, ms)
+      |> DateTime.from_naive!("Etc/UTC")
+      |> DateTime.to_iso8601()
+
+    [
+      Enum.join(
+        [
+          with_quote(timestamp),
+          with_quote(method),
+          with_quote(request_path),
+          with_quote(query_string),
+          with_quote(status)
+        ],
+        " "
+      ) <>
+        "\n"
+    ]
+  rescue
+    e ->
+      "could not format message: #{inspect({level, "", time_tuple, metadata})}, error: #{inspect(e)}\n"
   end
 
   defp take_metadata(metadata) do
@@ -89,5 +129,9 @@ defmodule Belfrage.Logger.Formatter do
 
   defp to_json(val) do
     inspect(val)
+  end
+
+  defp with_quote(value) do
+    "\"#{value}\""
   end
 end

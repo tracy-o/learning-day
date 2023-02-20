@@ -31,6 +31,7 @@ priv/cert/*
 #log when running tests
 local.log
 cloudwatch.log
+access.log
 
 # Files generated when renewing globalsign certs
 *.csr

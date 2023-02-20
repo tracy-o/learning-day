@@ -46,4 +46,19 @@ defmodule Belfrage.Logger.FormatterTest do
       assert "" == Formatter.app(:error, @message, "", cloudwatch: true)
     end
   end
+
+  describe "GTM Formatter log" do
+    test "formatter returns properly formatted log when metadata has :access" do
+      metadata = [
+        access: true,
+        method: "GET",
+        request_path: "/",
+        query_string: "",
+        status: 200
+      ]
+
+      assert ["\"2022-01-01T00:00:00.001000Z\" \"GET\" \"/\" \"\" \"200\"\n"] =
+               Formatter.access(:access, "ignore me", {{2022, 1, 1}, {0, 0, 0, 1000}}, metadata)
+    end
+  end
 end

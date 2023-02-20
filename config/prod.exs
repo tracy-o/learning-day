@@ -13,7 +13,12 @@ config :statix,
   pool_size: 6
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, Belfrage.Metrics.CrashTracker]
+  backends: [
+    {LoggerFileBackend, :file},
+    {LoggerFileBackend, :cloudwatch},
+    Belfrage.Metrics.CrashTracker,
+    {LoggerFileBackend, :access}
+  ]
 
 config :logger, :file,
   path: System.get_env("LOG_PATH"),
@@ -27,3 +32,10 @@ config :logger, :cloudwatch,
   level: :warn,
   metadata: :all,
   metadata_filter: [cloudwatch: true]
+
+config :logger, :access,
+  path: System.get_env("LOG_PATH_ACCESS"),
+  format: {Belfrage.Logger.Formatter, :access},
+  level: :info,
+  metadata: :all,
+  metadata_filter: [access: true]
