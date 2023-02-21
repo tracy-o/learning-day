@@ -1,4 +1,6 @@
 defmodule Belfrage.Logger.Formatter do
+  alias Json
+
   def app(level, message, timestamp, metadata) do
     case Keyword.get(metadata, :cloudwatch) do
       true ->
@@ -31,7 +33,7 @@ defmodule Belfrage.Logger.Formatter do
 
   def format(level, message, timestamp, metadata) do
     [
-      :jiffy.encode(
+      Json.encode!(
         Map.merge(
           %{
             # This is what stump was doing
