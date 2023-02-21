@@ -972,7 +972,14 @@ defroutefile "Sport" do
   handle "/sport/top-4", using: "Sport", platform: "MozartSport", examples: ["/sport/top-4"]
 
   ## Sport Alpha Trials
-  handle "/sport/alpha/football/league-two/table", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/league-two/table"]
+  handle "/sport/alpha/football/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/scores-fixtures"]
+  handle "/sport/alpha/football/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/scores-fixtures/2023-02-21"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
+  handle "/sport/alpha/football/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/premier-league/scores-fixtures"]
+  handle "/sport/alpha/football/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/premier-league/scores-fixtures/2023-02-21"] do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  end
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
