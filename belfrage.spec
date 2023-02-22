@@ -15,6 +15,7 @@ Source4: cloudformation-signal.service
 Source5: cloudwatch
 Source6: component-cron
 Source7: access
+Source8: access-cron
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -57,6 +58,7 @@ cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
 cp -p %{SOURCE7} %{buildroot}/etc/logrotate.d/access
 mkdir -p %{buildroot}/etc/cron.d
 cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
+cp -p %{SOURCE8} %{buildroot}/etc/cron.d/access-cron
 
 %post
 systemctl enable belfrage
@@ -65,6 +67,7 @@ systemctl enable cloudformation-signal
 /bin/chown -R component:component /var/log/component
 cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
 touch /etc/cron.d/component-cron
+touch /etc/cron.d/access-cron
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
@@ -72,6 +75,7 @@ touch /etc/cron.d/component-cron
 %attr(0644, root, root) /etc/logrotate.d/cloudwatch
 %attr(0644, root, root) /etc/logrotate.d/access
 %attr(0644, root, root) /etc/cron.d/component-cron
+%attr(0644, root, root) /etc/cron.d/access-cron
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service
