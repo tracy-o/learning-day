@@ -32,6 +32,13 @@ defroutefile "Sport" do
     ]
   end
 
+  handle "/sport/:discipline/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage", platform: "Simorgh", examples: [] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
+  end
+
   redirect "/sport/amp/:id", to: "/sport/:id.amp", status: 301
   redirect "/sport/amp/:topic/:id", to: "/sport/:topic/:id.amp", status: 301
   redirect "/sport/uk.app", to: "/sport.app", status: 301
