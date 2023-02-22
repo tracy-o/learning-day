@@ -15,10 +15,14 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
 
   @webcore_test_ids [
     "zr48q6f",
-    "z3g4d2p"
+    "z3g4d2p",
+    "zt6svwx"
   ]
 
-  @webcore_live_ids []
+  @webcore_live_ids [
+    "zt6svwx",
+    "zr48q6f"
+  ]
 
   @impl Transformer
   def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id}}}) do
