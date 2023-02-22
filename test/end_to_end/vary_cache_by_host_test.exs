@@ -17,7 +17,7 @@ defmodule VaryCacheByHost do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeRouteState.Webcore"})
+    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
 
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _headers, _opts ->

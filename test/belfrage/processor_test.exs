@@ -9,7 +9,7 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
-  @route_state_id "SportVideos.Webcore"
+  @route_state_id {"SportVideos", "Webcore"}
 
   defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
     def specs do

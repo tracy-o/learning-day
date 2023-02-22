@@ -5,10 +5,12 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
   alias Belfrage.RequestTransformers.CircuitBreaker
   alias Belfrage.Envelope
 
+  @route_state_id {"SportVideos", "Webcore"}
+
   test "counter with no errors will not add circuit breaker response" do
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         counter: %{"https://origin.bbc.co.uk/" => %{}},
         request_pipeline: ["CircuitBreaker"]
@@ -28,7 +30,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
   test "a nil throughput will not add circuit breaker response" do
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         throughput: nil,
         request_pipeline: ["CircuitBreaker"]
@@ -48,7 +50,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
   test "throughput of 100 will not add circuit breaker response" do
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         throughput: 100,
         request_pipeline: ["CircuitBreaker"]
@@ -70,7 +72,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
         request_pipeline: ["CircuitBreaker"]
@@ -92,7 +94,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
         request_pipeline: ["CircuitBreaker"],
@@ -115,7 +117,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin.bbc.co.uk/",
         throughput: 0,
         request_pipeline: ["CircuitBreaker"]
@@ -137,7 +139,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
     envelope = %Envelope{
       private: %Envelope.Private{
-        route_state_id: "SportVideos",
+        route_state_id: @route_state_id,
         origin: "https://origin2.bbc.co.uk/",
         counter: %{
           "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},
@@ -165,7 +167,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "SportVideos",
+          route_state_id: @route_state_id,
           origin: "https://origin.bbc.co.uk/",
           counter: %{"https://origin.bbc.co.uk/" => %{501 => 4, 502 => 4, 408 => 4, :errors => 12}},
           request_pipeline: ["CircuitBreaker"],
@@ -191,7 +193,7 @@ defmodule Belfrage.RequestTransformers.CircuitBreakerTest do
 
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "SportVideos",
+          route_state_id: @route_state_id,
           origin: "https://origin2.bbc.co.uk/",
           counter: %{
             "https://origin.bbc.co.uk/" => %{501 => 6, :errors => 6},

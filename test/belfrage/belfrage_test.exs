@@ -11,9 +11,7 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @spec_name "SportArticlePage"
-  @platform "Webcore"
-  @route_state_id "#{@spec_name}.#{@platform}"
+  @route_state_id {"SportArticlePage", "Webcore"}
 
   @get_request_envelope %Envelope{
     private: %Private{

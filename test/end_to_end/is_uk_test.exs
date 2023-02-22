@@ -17,7 +17,7 @@ defmodule IsUKTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeRouteState.Webcore"})
+    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     :ok
   end
 

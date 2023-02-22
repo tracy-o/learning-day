@@ -10,7 +10,7 @@ defmodule ContentEncodingTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
+    start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
     :ok
   end
 

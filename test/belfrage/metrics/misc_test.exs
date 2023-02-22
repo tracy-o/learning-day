@@ -54,7 +54,7 @@ defmodule Belfrage.Metrics.MiscTest do
 
     envelope = %Belfrage.Envelope{
       private: %Belfrage.Envelope.Private{
-        route_state_id: "ARouteState"
+        route_state_id: {"ARouteState", "Webcore"}
       }
     }
 
@@ -63,16 +63,16 @@ defmodule Belfrage.Metrics.MiscTest do
     assert {:ok, {:fresh_strategy, :fresh}, _} =
              Belfrage.Cache.MultiStrategy.fetch([LocalStrategy, DistributedStrategy], envelope, accepted_freshness)
 
-    assert_reported(socket, "cache.local.fresh.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState")
+    assert_reported(socket, "cache.local.fresh.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
 
     assert {:ok, {:stale_strategy, :stale}, _} =
              Belfrage.Cache.MultiStrategy.fetch([DistributedStrategy], envelope, accepted_freshness)
 
-    assert_reported(socket, "cache.distributed.stale.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState")
+    assert_reported(socket, "cache.distributed.stale.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
 
     assert {:ok, :content_not_found} =
              Belfrage.Cache.MultiStrategy.fetch([LocalNotFoundStrategy], envelope, accepted_freshness)
 
-    assert_reported(socket, "cache.local.miss:1|c|#BBCEnvironment:live,route_spec:ARouteState")
+    assert_reported(socket, "cache.local.miss:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
   end
 end

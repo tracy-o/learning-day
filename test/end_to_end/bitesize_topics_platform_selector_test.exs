@@ -19,7 +19,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
 
   describe "requests with id and year_id path parameter keys" do
     test "if the id is a test webcore id, the year_id is valid and the production environment is test Webcore is returned" do
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response
@@ -33,7 +33,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a live webcore id, the year_id is valid and the production environment is live Webcore is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response
@@ -45,7 +45,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     end
 
     test "if the id is a not a test webcore id, the year_id is valid and the production environment is test MorphRouter is returned" do
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -57,7 +57,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     end
 
     test "if the id is a test webcore id, the year_id is not valid and the production environment is test MorphRouter is returned" do
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -71,7 +71,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a test webcore id, the year_id is valid and the production environment is live MorphRouter is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -85,7 +85,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is not a live webcore id, the year_id is valid and the production environment is live MorphRouter is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -99,7 +99,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a live webcore id, the year_id is invalid and the production environment is live MorphRouter is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -113,7 +113,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a live webcore id, the year_id is valid and the production environment is test Webcore is returned as all the live ids are a subset of the test ids" do
       set_environment("test")
 
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response
@@ -127,7 +127,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
 
   describe "requests with an id paramater key" do
     test "if the id is a test webcore id and the production environment is test Webcore is returned" do
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response
@@ -141,7 +141,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a live webcore id and the production environment is live Webcore is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response
@@ -153,7 +153,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     end
 
     test "if the id is a not a test webcore id and the production environment is test MorphRouter is returned" do
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -167,7 +167,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a test webcore id and the production environment is live MorphRouter is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -181,7 +181,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is not a live webcore id and the production environment is live MorphRouter is returned" do
       set_environment("live")
 
-      start_supervised!({RouteState, "BitesizeTopics.MorphRouter"})
+      start_supervised!({RouteState, {"BitesizeTopics", "MorphRouter"}})
 
       expect(HTTPMock, :execute, fn _request, :MorphRouter ->
         @successful_http_response
@@ -195,7 +195,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
     test "if the id is a live webcore id and the production environment is test Webcore is returned as all the live ids are a subset of the test ids" do
       set_environment("test")
 
-      start_supervised!({RouteState, "BitesizeTopics.Webcore"})
+      start_supervised!({RouteState, {"BitesizeTopics", "Webcore"}})
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         @successful_lambda_response

@@ -9,7 +9,7 @@ defmodule Belfrage.Xray.TelemetryTest do
   @test_envelope %Envelope{
     private: %Private{
       owner: "me!",
-      route_state_id: "some_id",
+      route_state_id: {"some_spec", "some_platform"},
       preview_mode: "off",
       production_environment: "test",
       runbook: "https://some.runbook/url"
@@ -61,7 +61,7 @@ defmodule Belfrage.Xray.TelemetryTest do
     end
 
     test "webcore subsegment had annotations", %{webcore_subsegment: subsegment} do
-      assert subsegment["annotations"]["route_state_id"] == "some_id"
+      assert subsegment["annotations"]["route_state_id"] == "some_spec.some_platform"
     end
   end
 

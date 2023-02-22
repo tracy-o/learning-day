@@ -11,7 +11,7 @@ defmodule EndToEnd.App.RouteTest do
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, "SomeClassicAppsRouteSpec.ClassicApps"})
+    start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
     :ok
   end
 

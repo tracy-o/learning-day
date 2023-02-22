@@ -36,7 +36,7 @@ defmodule EndToEnd.HttpRedirectTest do
   end
 
   setup do
-    start_supervised!({RouteState, "SomeRouteState.Webcore"})
+    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     clear_cache()
     :ok
   end

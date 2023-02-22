@@ -26,7 +26,7 @@ defmodule EndToEnd.AblSpecSelectorTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert ["AblData.Fabl.WSContentPartition"] = get_resp_header(response_conn, "routespec")
-      assert "AblData.Fabl.WSContentPartition" = response_conn.assigns.route_spec
+      assert {"AblData", "Fabl", "WSContentPartition"} = response_conn.assigns.route_spec
     end
 
     test "returns AblData with CPSNewsAssetPartition" do
@@ -43,7 +43,7 @@ defmodule EndToEnd.AblSpecSelectorTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert ["AblData.Fabl.CPSNewsAssetPartition"] = get_resp_header(response_conn, "routespec")
-      assert "AblData.Fabl.CPSNewsAssetPartition" = response_conn.assigns.route_spec
+      assert {"AblData", "Fabl", "CPSNewsAssetPartition"} = response_conn.assigns.route_spec
     end
 
     test "returns AblData with ChrysalisNewsHomePagePartition" do
@@ -60,7 +60,7 @@ defmodule EndToEnd.AblSpecSelectorTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert ["AblData.Fabl.ChrysalisNewsHomePagePartition"] = get_resp_header(response_conn, "routespec")
-      assert "AblData.Fabl.ChrysalisNewsHomePagePartition" = response_conn.assigns.route_spec
+      assert {"AblData", "Fabl", "ChrysalisNewsHomePagePartition"} = response_conn.assigns.route_spec
     end
 
     test "returns AblData with CatchAllPartition with invalid query params" do
@@ -77,7 +77,7 @@ defmodule EndToEnd.AblSpecSelectorTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert ["AblData.Fabl.CatchAllPartition"] = get_resp_header(response_conn, "routespec")
-      assert "AblData.Fabl.CatchAllPartition" = response_conn.assigns.route_spec
+      assert {"AblData", "Fabl", "CatchAllPartition"} = response_conn.assigns.route_spec
     end
   end
 end

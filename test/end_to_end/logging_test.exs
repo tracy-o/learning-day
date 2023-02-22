@@ -15,7 +15,7 @@ defmodule EndToEnd.LoggingTest do
   alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
-  @route_state_id "SomeRouteState.Webcore"
+  @route_state_id {"SomeRouteState", "Webcore"}
 
   setup :clear_cache
 

@@ -40,7 +40,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "handle/2" do
     setup do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
       :ok
     end
 
@@ -61,7 +61,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with do block" do
     setup do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
       :ok
     end
 
@@ -94,7 +94,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with only_on option" do
     test "when the environments match, will yield request" do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
       stub_origins()
 
       conn =
@@ -109,7 +109,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match and no other matching route will return a 404" do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
 
       conn =
         conn(:get, "/only-on")
@@ -124,7 +124,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match, will match similar route from other environment" do
-      start_supervised!({RouteState, "SomeMozartRouteState.MozartNews"})
+      start_supervised!({RouteState, {"SomeMozartRouteState", "MozartNews"}})
       stub_origins()
 
       conn =
@@ -142,7 +142,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "calling handle with only_on option with a block" do
     test "when the environments match, will yield request and execute block" do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
 
       conn =
         conn(:get, "/only-on-with-block")
@@ -157,7 +157,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match and no other matching route will return a 404" do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
 
       conn =
         conn(:get, "/only-on-with-block")
@@ -171,7 +171,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when the environments do not match, will match similar route from other environment ans execute block" do
-      start_supervised!({RouteState, "SomeMozartRouteState.MozartNews"})
+      start_supervised!({RouteState, {"SomeMozartRouteState", "MozartNews"}})
 
       conn =
         conn(:get, "/only-on-with-block-multi-env")
@@ -538,7 +538,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "matching proxy_pass routes" do
     setup do
-      start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
+      start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
       :ok
     end
 
@@ -557,7 +557,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == "ProxyPass.OriginSimulator"
+      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
     test "200 is returned when on the test env and replayed_header header is set" do
@@ -599,7 +599,7 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == "ProxyPass.OriginSimulator"
+      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
     test "404 is returned when on test and origin_simulator header is not set" do

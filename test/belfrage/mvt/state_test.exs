@@ -7,7 +7,7 @@ defmodule Belfrage.Mvt.StateTest do
   alias Belfrage.{Mvt, RouteState, Envelope}
   alias Belfrage.Envelope.{Response, Private}
 
-  @route_state_id "SomeRouteState.Webcore"
+  @route_state_id {"SomeRouteState", "Webcore"}
 
   describe "put_vary_headers/2" do
     test "puts no header when none are supplied" do
