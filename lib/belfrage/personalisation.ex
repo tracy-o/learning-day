@@ -28,12 +28,14 @@ defmodule Belfrage.Personalisation do
     bbc_id = Keyword.get(opts, :bbc_id, BBCID)
 
     case route_state_id do
-      "PersonalisedContainerData.Webcore" ->
-        @dial.state(:news_articles_personalisation) && @dial.state(:personalisation) && bbc_id.available?()
-
-      _ ->
-        @dial.state(:personalisation) && bbc_id.available?()
+      {"PersonalisedContainerData", "Webcore"} -> news_articles_personalised?(bbc_id)
+      {"PersonalisedContainerData", "Webcore", _} -> news_articles_personalised?(bbc_id)
+      _ -> @dial.state(:personalisation) && bbc_id.available?()
     end
+  end
+
+  defp news_articles_personalised?(bbc_id) do
+    @dial.state(:news_articles_personalisation) && @dial.state(:personalisation) && bbc_id.available?()
   end
 
   defp production_environment() do
