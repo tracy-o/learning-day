@@ -318,7 +318,7 @@ defroutefile "Main" do
   redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
-  redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/uk-politics-48448557", status: 302
+  redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/topics/cvp28kxz49xt", status: 301
   redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
   redirect "/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302
   redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
@@ -518,6 +518,8 @@ defroutefile "Main" do
   redirect "/news/technology-22774341", to: "/news/topics/c008ql15vdxt", status: 301
   redirect "/news/uk-55220521", to: "/news/topics/c8nq32jwn4rt", status: 301
   redirect "/news/uk-56837907", to: "/news/topics/cq23pdgvr7rt", status: 301
+  redirect "/news/uk-politics-48448557", to: "/news/topics/cvp28kxz49xt", status: 301
+  redirect "/news/uk-20782891", to: "/news/topics/c8m8v3p0yygt", status: 301
 
   handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
   handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
@@ -527,7 +529,6 @@ defroutefile "Main" do
   handle "/news/education-46131593", using: "NewsEducation", platform: "MozartNews", examples: ["/news/education-46131593"]
   handle "/news/uk-england-47486169", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-england-47486169"]
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment-56837908"]
-  handle "/news/uk-politics-48448557", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-politics-48448557"]
   handle "/news/world-48623037", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-48623037"]
   handle "/news/world-middle-east-48433977", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-middle-east-48433977"]
   handle "/news/world-us-canada-15949569", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-us-canada-15949569"]
