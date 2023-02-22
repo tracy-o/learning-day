@@ -1,7 +1,7 @@
 defmodule BelfrageWeb do
   alias BelfrageWeb.{EnvelopeAdapter, Response}
   alias Plug.Conn
-  alias Belfrage.{Metrics.LatencyMonitor, Envelope, RouteSpec}
+  alias Belfrage.{Metrics.LatencyMonitor, Envelope}
   alias Belfrage.Behaviours.Selector
 
   require Logger
@@ -111,11 +111,6 @@ defmodule BelfrageWeb do
     end
   end
 
-  defp make_route_state_id({spec_name, partition}, platform_name) do
-    RouteSpec.make_route_state_id(spec_name, platform_name, partition)
-  end
-
-  defp make_route_state_id(spec_name, platform_name) when is_binary(spec_name) do
-    RouteSpec.make_route_state_id(spec_name, platform_name)
-  end
+  defp make_route_state_id({spec, partition}, platform), do: {spec, platform, partition}
+  defp make_route_state_id(spec, platform), do: {spec, platform}
 end
