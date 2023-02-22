@@ -136,7 +136,7 @@ defmodule Belfrage.RouteState do
       |> Mvt.State.prune_vary_headers(mvt_vary_header_ttl())
 
     Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
-      route_spec: state.route_state_id
+      route_spec: format_id(state.route_state_id)
     })
 
     state = %{state | counter: Counter.init(), throughput: next_throughput, mvt_seen: mvt_seen}
@@ -152,7 +152,7 @@ defmodule Belfrage.RouteState do
   end
 
   defp circuit_breaker_open(0, route_state_id) do
-    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: route_state_id})
+    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: format_id(route_state_id)})
   end
 
   defp circuit_breaker_open(_throughput, _route_state_id), do: false

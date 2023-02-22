@@ -2,6 +2,7 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
   use Supervisor
 
   alias Belfrage.Metrics.ProcessMessageQueueLength
+  alias Belfrage.RouteState
 
   @processes [
     :ttl_multiplier,
@@ -17,11 +18,11 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
     Belfrage.Services.Webcore.Credentials.Poller
   ]
 
-  @route_states ~w(
-    NewsArticlePage
-    WorldServiceMundo
-    FablData
-  )
+  @route_states [
+    {"NewsArticlePage", "Webcore"},
+    {"WorldServiceMundo", "Simorgh"},
+    {"FablData", "Fabl"}
+  ]
 
   @interval :timer.seconds(5)
 
@@ -70,6 +71,8 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
     metrics =
       metrics ++
         Enum.map(@route_states, fn name ->
+          name = RouteState.format_id(name)
+
           Telemetry.Metrics.last_value("route_state.#{name}.mailbox_size",
             event_name: [:belfrage, :route_state_message_queue_length],
             measurement: :message_queue_len,
