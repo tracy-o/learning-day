@@ -264,6 +264,20 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2015", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015"]
+  handle "/news/election/2015/england", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/england"]
+  handle "/news/election/2015/northern_ireland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/northern_ireland"]
+  handle "/news/election/2015/wales", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/wales"]
+  handle "/news/election/2015/scotland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/scotland"]
+  handle "/news/election/2016", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016"]
+  handle "/news/election/2016/london", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/london"]
+  handle "/news/election/2016/northern_ireland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/northern_ireland"]
+  handle "/news/election/2016/scotland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/scotland"]
+  handle "/news/election/2016/wales", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/wales"]
+  handle "/news/election/2017", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2017"]
+  handle "/news/election/ni2017", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/ni2017"]
+  handle "/news/election/us2016", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/us2016"]
+
   handle "/news/election/*any", using: "NewsElection", platform: "MozartNews", examples: ["/news/election/2019"]
 
   # News Live - Both Morph and WebCore Traffic
