@@ -108,6 +108,22 @@ defmodule Routes.SportRoutefileTest do
       end)
     end
 
+    test "no routes with the same path exist" do
+      stub_origins()
+      start_route_states()
+
+      @routes
+      |> Enum.reject(fn {matcher, _} -> matcher == "/*any" end)
+      |> same_path_messages()
+      |> case do
+        "" ->
+          :ok
+
+        msg ->
+          flunk(msg)
+      end
+    end
+
     test "proxy-pass examples are routed correctly" do
       start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
 
@@ -365,5 +381,40 @@ defmodule Routes.SportRoutefileTest do
     path
     |> Path.basename(".ex")
     |> Macro.camelize()
+  end
+
+  # Takes a list of routes and returns a string
+  # detailing groups of routes that share the same path.
+  defp same_path_messages(routes) do
+    routes
+    |> Enum.group_by(fn {matcher, _attributes} -> matcher end)
+    |> Enum.reduce([], fn {_k, v}, acc ->
+      if Enum.count(v) > 1 do
+        [same_path_message(v) | acc]
+      else
+        acc
+      end
+    end)
+    |> Enum.join("\n")
+  end
+
+  defp serialize_routes(routes) do
+    Enum.map_join(routes, "\n", &serialize_route/1)
+  end
+
+  defp serialize_route(route, prefix \\ " * ")
+
+  defp serialize_route({matcher, %{using: id, platform: platform, only_on: env}}, prefix)
+       when env in ["live", "test"] do
+    prefix <> "handle #{matcher}, using: #{id}, platform: #{platform}, only_on: #{env}  ..."
+  end
+
+  defp serialize_route({matcher, %{using: id, platform: platform}}, prefix) do
+    prefix <> "handle #{matcher}, using: #{id}, platform: #{platform}  ..."
+  end
+
+  defp same_path_message(same_path_routes) do
+    "The following routes contain the same path - only one route should exist for a given path." <>
+      "\n" <> serialize_routes(same_path_routes) <> "\n"
   end
 end
