@@ -4,13 +4,14 @@ defmodule Belfrage.Behaviours.TransformerTest do
 
   alias Belfrage.Behaviours.Transformer, as: Subject
   alias Belfrage.Envelope
+  alias Belfrage.Envelope.{Private, Debug}
 
   test "call request transformer behaviour" do
     stub_dial(:circuit_breaker, "false")
 
-    envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["CircuitBreaker"]}}
+    envelope = %Envelope{private: %Private{request_pipeline: ["CircuitBreaker"]}}
 
-    assert {:ok, %Envelope{debug: %Belfrage.Envelope.Debug{request_pipeline_trail: ["CircuitBreaker"]}}} =
+    assert {:ok, %Envelope{debug: %Debug{request_pipeline_trail: ["CircuitBreaker"]}}} =
              Subject.call(envelope, :request, "CircuitBreaker")
   end
 
@@ -18,11 +19,23 @@ defmodule Belfrage.Behaviours.TransformerTest do
     stub_dial(:etag, "false")
 
     envelope = %Envelope{
-      private: %Envelope.Private{response_pipeline: ["Etag", "MvtMapper"]},
-      debug: %Belfrage.Envelope.Debug{response_pipeline_trail: ["Etag"]}
+      private: %Private{response_pipeline: ["Etag", "MvtMapper"]},
+      debug: %Debug{response_pipeline_trail: ["Etag"]}
     }
 
-    assert {:ok, %Envelope{debug: %Belfrage.Envelope.Debug{response_pipeline_trail: ["MvtMapper", "Etag"]}}} =
+    assert {:ok, %Envelope{debug: %Debug{response_pipeline_trail: ["MvtMapper", "Etag"]}}} =
              Subject.call(envelope, :response, "MvtMapper")
+  end
+
+  test "call pre-flight transformer behaviour" do
+    envelope = %Envelope{
+      debug: %Debug{response_pipeline_trail: ["TestPreFlightTransformer"]}
+    }
+
+    assert {:ok,
+            %Envelope{
+              private: %Private{platform: "Webcore"},
+              debug: %Debug{pre_flight_pipeline_trail: ["TestPreFlightTransformer"]}
+            }} = Subject.call(envelope, :pre_flight, "TestPreFlightTransformer")
   end
 end
