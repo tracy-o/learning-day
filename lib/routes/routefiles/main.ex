@@ -2708,8 +2708,30 @@ defroutefile "Main" do
   handle "/newsround/:id.amp", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:id.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.json"]
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/articles/manifest.json"]
+
   handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/watch_newsround"]
   handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/newsroundbsl"]
+
+  redirect "/newsround/news", to: "/newsround", status: 301
+  redirect "/newsround/news/*_any", to: "/newsround", status: 301
+
+  redirect "/newsround/rss.xml", to: "http://feeds.bbci.co.uk/newsround/rss.xml", status: 301
+  redirect "/newsround/rss.xml/*_any", to: "http://feeds.bbci.co.uk/newsround/rss.xml", status: 301
+  redirect "/newsround/home", to: "/newsround", status: 301
+  redirect "/newsround/animals", to: "/newsround", status: 301
+  redirect "/newsround/animals/*_any", to: "/newsround", status: 301
+  redirect "/newsround/entertainment", to: "/newsround", status: 301
+  redirect "/newsround/entertainment/*_any", to: "/newsround", status: 301
+  redirect "/newsround/front_page", to: "/newsround", status: 301
+  redirect "/newsround/front_page/*_any", to: "/newsround", status: 301
+  redirect "/newsround/sport", to: "/newsround", status: 301
+  redirect "/newsround/sport/*_any", to: "/newsround", status: 301
+  redirect "/newsround/video_and_audio", to: "/newsround", status: 301
+  redirect "/newsround/video_and_audio/*_any", to: "/newsround", status: 301
+  redirect "/newsround/mentalhealth", to: "/newsround/44074706", status: 301
+  redirect "/newsround/mentalhealth/*_any", to: "/newsround/44074706", status: 301
+  redirect "/newsround/beta/*_any", to: "/newsround", status: 301
+
   handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", only_on: "test", examples: ["/newsround/61545299"]
   handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
