@@ -2776,18 +2776,18 @@ defroutefile "Main" do
 
   handle "/bitesize/levels/:id", using: "BitesizeLevels", platform: "MorphRouter", examples: ["/bitesize/levels/zr48q6f"]
   handle "/bitesize/levels/:id/year/:year_id", using: "BitesizeLevels", platform: "MorphRouter", examples: ["/bitesize/levels/z3g4d2p/year/zjpqqp3"] do
-    return_404 if: [
-      !(String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)),
-      !(String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/))
-    ]
+    return_404 if: !(
+      String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)
+      or String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/)
+    )
   end
 
   handle "/bitesize/preview/levels/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/levels/zgckjxs"]
-  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"] do
-    return_404 if: [
-      !(String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)),
-      !(String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/))
-    ]
+  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"]  do
+    return_404 if: !(
+      String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)
+      or String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/)
+    )
   end
 
   handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", platform: "MorphRouter", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
