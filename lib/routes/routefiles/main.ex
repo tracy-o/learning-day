@@ -1297,6 +1297,12 @@ defroutefile "Main" do
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", examples: ["/kyrgyz/sw.js"]
   handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", examples: ["/kyrgyz/rss.xml"]
 
+  handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome.amp"]
+  handle "/kyrgyz/tipohome/manifest.json", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/manifest.json"]
+  handle "/kyrgyz/tipohome/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/sw.js"]
+  handle "/kyrgyz/tipohome/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", only_on: "test", examples: ["/kyrgyz/tipohome/rss.xml"]
+  handle "/kyrgyz/tipohome", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome"]
+
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
