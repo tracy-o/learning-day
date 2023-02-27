@@ -59,7 +59,7 @@ defmodule Belfrage.MixProject do
       {:distillery, "~> 2.0"},
       {:jason, "~> 1.0"},
       {:jiffy, "~> 1.1"},
-      {:ex_aws, "~> 2.0", [env: :prod, repo: "hexpm", hex: "ex_aws"]},
+      {:ex_aws, "~> 2.4.1", [env: :prod, repo: "hexpm", hex: "ex_aws"]},
       {:ex_aws_lambda, "~> 2.1"},
       {:ex_aws_sts, git: "https://github.com/ex-aws/ex_aws_sts.git"},
       {:aws_ex_ray, "~> 0.1.15"},
