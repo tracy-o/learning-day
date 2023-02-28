@@ -2645,16 +2645,25 @@ defroutefile "Main" do
     )
   end
 
-  handle "/weather/about/:cps_id", using: "WeatherCps", platform: "MozartWeather", examples: [] do
+  redirect "/weather/forecast-video/:asset_id", to: "/weather/av/:asset_id", status: 302
+
+  handle "/weather/about/:cps_id", using: "WeatherArticlePage", platform: "Webcore", only_on: "test", examples: [] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/features/:cps_id", using: "WeatherCps", platform: "MozartWeather", examples: [] do
+  handle "/weather/features/:cps_id", using: "WeatherArticlePage", platform: "Webcore", only_on: "test", examples: [] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/feeds/:cps_id", using: "WeatherCps", platform: "MozartWeather", examples: [] do
+  handle "/weather/feeds/:cps_id", using: "WeatherArticlePage", platform: "Webcore", only_on: "test", examples: [] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/forecast-video/:cps_id", using: "WeatherCps", platform: "MozartWeather", examples: [] do
+
+  handle "/weather/about/:cps_id", using: "WeatherCps", platform: "MozartWeather", only_on: "live", examples: ["/weather/about/17185651", "/weather/about/17543675"] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/features/:cps_id", using: "WeatherCps", platform: "MozartWeather", only_on: "live", examples: ["/weather/features/63962965", "/weather/features/60850659"] do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/feeds/:cps_id", using: "WeatherCps", platform: "MozartWeather", only_on: "live", examples: ["/weather/feeds/23602910", "/weather/feeds/23081292"] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
 
@@ -2663,7 +2672,9 @@ defroutefile "Main" do
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
 
-  handle "/weather/av/:asset_id", using: "WeatherVideos", platform: "Webcore", examples: ["/weather/av/64475513"]
+  handle "/weather/av/:asset_id", using: "WeatherVideos", platform: "Webcore", examples: ["/weather/av/64475513"] do
+    return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
+  end
 
   handle "/weather/:location_id", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
