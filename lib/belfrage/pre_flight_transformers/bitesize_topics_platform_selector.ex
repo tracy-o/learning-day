@@ -1,4 +1,4 @@
-defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
+defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
   alias Belfrage.Envelope
 
   @behaviour Routes.Platforms.Selector
