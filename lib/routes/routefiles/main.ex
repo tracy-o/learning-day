@@ -2738,7 +2738,7 @@ defroutefile "Main" do
   redirect "/newsround/mentalhealth", to: "/newsround/44074706", status: 301
   redirect "/newsround/mentalhealth/*_any", to: "/newsround/44074706", status: 301
   redirect "/newsround/beta/*_any", to: "/newsround", status: 301
-  redirect "/schoolreport", to: "news/topics/cg41ylwv43pt", status: 301
+  redirect "/schoolreport", to: "/news/topics/cg41ylwv43pt", status: 301
 
   handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", only_on: "test", examples: ["/newsround/61545299"]
