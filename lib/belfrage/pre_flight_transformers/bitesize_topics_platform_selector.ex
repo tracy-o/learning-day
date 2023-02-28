@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
-  alias Belfrage.Envelope.Request
+  alias Belfrage.Envelope
 
   @behaviour Routes.Platforms.Selector
 
@@ -357,34 +357,34 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
   ]
 
   @impl Routes.Platforms.Selector
-  def call(%Request{path_params: %{"year_id" => year_id, "id" => id}}) do
+  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"year_id" => year_id, "id" => id}}}) do
     cond do
       valid_year?(year_id) and production_environment() == "live" and webcore_live_id?(id) ->
-        {:ok, "Webcore"}
+        {:ok, set_platform(envelope, "Webcore")}
 
       valid_year?(year_id) and production_environment() == "test" and webcore_test_id?(id) ->
-        {:ok, "Webcore"}
+        {:ok, set_platform(envelope, "Webcore")}
 
       true ->
-        {:ok, "MorphRouter"}
+        {:ok, set_platform(envelope, "MorphRouter")}
     end
   end
 
-  def call(%Request{path_params: %{"id" => id}}) do
+  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id}}}) do
     cond do
       production_environment() == "live" and webcore_live_id?(id) ->
-        {:ok, "Webcore"}
+        {:ok, set_platform(envelope, "Webcore")}
 
       production_environment() == "test" and webcore_test_id?(id) ->
-        {:ok, "Webcore"}
+        {:ok, set_platform(envelope, "Webcore")}
 
       true ->
-        {:ok, "MorphRouter"}
+        {:ok, set_platform(envelope, "MorphRouter")}
     end
   end
 
-  def call(_request) do
-    {:ok, "MorphRouter"}
+  def call(envelope = %Envelope{}) do
+    {:ok, set_platform(envelope, "MorphRouter")}
   end
 
   defp webcore_live_id?(id) do
@@ -401,5 +401,9 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
 
   defp production_environment() do
     Application.get_env(:belfrage, :production_environment)
+  end
+
+  defp set_platform(envelope, platform) do
+    Envelope.add(envelope, :private, %{platform: platform})
   end
 end
