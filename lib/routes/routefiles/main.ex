@@ -326,7 +326,6 @@ defroutefile "Main" do
   redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
   redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
   redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
-  redirect "/news/topics/cp7r8vgl24lt/*any", to: "/news/world-middle-east-48433977", status: 302
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
   redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
 
@@ -520,13 +519,16 @@ defroutefile "Main" do
   redirect "/news/uk-56837907", to: "/news/topics/cq23pdgvr7rt", status: 301
   redirect "/news/uk-politics-48448557", to: "/news/topics/cvp28kxz49xt", status: 301
   redirect "/news/uk-20782891", to: "/news/topics/c8m8v3p0yygt", status: 301
+  redirect "/news/world-us-canada-44928743", to: "/news/topics/c163jpkepkqt", status: 301
+  redirect "/news/uk-england-tees-48281832", to: "/news/topics/c2ymky7eq13t", status: 301
+  redirect "/news/education-46131593", to: "/news/topics/cg41ylwv43pt", status: 301
+  redirect "/news/world-middle-east-48433977", to: "/news/topics/cp7r8vgl24lt", status: 301
 
   handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
   handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
   handle "/news/business-33712313", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-33712313"]
   handle "/news/business-38507481", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-38507481"]
   handle "/news/business-45489065", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-45489065"]
-  handle "/news/education-46131593", using: "NewsEducation", platform: "MozartNews", examples: ["/news/education-46131593"]
   handle "/news/uk-england-47486169", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-england-47486169"]
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment-56837908"]
   handle "/news/world-48623037", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-48623037"]
@@ -2737,6 +2739,7 @@ defroutefile "Main" do
   redirect "/newsround/mentalhealth", to: "/newsround/44074706", status: 301
   redirect "/newsround/mentalhealth/*_any", to: "/newsround/44074706", status: 301
   redirect "/newsround/beta/*_any", to: "/newsround", status: 301
+  redirect "/schoolreport", to: "news/topics/cg41ylwv43pt", status: 301
 
   handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"]
   handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", only_on: "test", examples: ["/newsround/61545299"]
