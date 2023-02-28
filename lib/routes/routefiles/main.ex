@@ -532,7 +532,6 @@ defroutefile "Main" do
   handle "/news/uk-england-47486169", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-england-47486169"]
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment-56837908"]
   handle "/news/world-48623037", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-48623037"]
-  handle "/news/world-middle-east-48433977", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-middle-east-48433977"]
   handle "/news/world-us-canada-15949569", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-us-canada-15949569"]
 
   # News archive assets
