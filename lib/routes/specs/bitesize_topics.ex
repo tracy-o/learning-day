@@ -1,4 +1,3 @@
-
 defmodule Routes.Specs.BitesizeTopics do
   def specs do
     [
@@ -15,5 +14,8 @@ defmodule Routes.Specs.BitesizeTopics do
         request_pipeline: ["ComToUKRedirect"]
       }
     ]
+  end
+  def pre_flight_pipeline do
+    ["BiteSizeTopicsPlatformSelector"]
   end
 end
