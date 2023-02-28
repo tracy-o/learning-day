@@ -29,7 +29,8 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
+             assert AssetTypePlatformSelector.call(%Envelope{request: %Envelope.Request{path: "/some/path"}}) ==
+                      {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
   end
@@ -54,7 +55,8 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
+             assert AssetTypePlatformSelector.call(%Envelope{request: %Envelope.Request{path: "/some/path"}}) ==
+                      {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
   end
@@ -63,6 +65,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     Enum.each(@webcore_asset_types, fn asset_type ->
       path_segment = String.downcase(asset_type)
       url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2F#{path_segment}%2Fpath"
+      request = %Envelope.Request{path: "/some/#{path_segment}/path"}
 
       Clients.HTTPMock
       |> expect(
@@ -80,12 +83,14 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
         end
       )
 
-      assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/#{path_segment}/path"}) == {:ok, "Webcore"}
+      assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+               {:ok, %Envelope{private: %Envelope.Private{platform: "Webcore"}, request: request}}
     end)
   end
 
   test "returns MozartNews platform if origin response does not contain a Webcore assetType" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    request = %Envelope.Request{path: "/some/path"}
 
     Clients.HTTPMock
     |> expect(
@@ -103,11 +108,13 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
   end
 
   test "returns cached platform" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    request = %Envelope.Request{path: "/some/path"}
 
     Clients.HTTPMock
     |> expect(
@@ -125,12 +132,16 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
+
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
   end
 
   test "does not return cached platform after TTL" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    request = %Envelope.Request{path: "/some/path"}
 
     Clients.HTTPMock
     |> expect(
@@ -148,7 +159,8 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
 
     Clients.HTTPMock
     |> expect(
@@ -168,11 +180,13 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
 
     Process.sleep(Application.get_env(:belfrage, :metadata_cache)[:default_ttl_ms] + 1)
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
   end
 
   test "returns MozartNews platform if origin response contains a 404 status code" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    request = %Envelope.Request{path: "/some/path"}
 
     Clients.HTTPMock
     |> expect(
@@ -189,6 +203,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
+             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
   end
 end
