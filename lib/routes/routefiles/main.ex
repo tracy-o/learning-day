@@ -2745,7 +2745,7 @@ defroutefile "Main" do
   handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
   handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: ["/newsround/61545299"]
 
-  handle "/schoolreport/*any", using: "Schoolreport", platform: "MozartNews", examples: [{"/schoolreport", 301}, {"/schoolreport/home", 301}]
+  handle "/schoolreport/*any", using: "Schoolreport", platform: "MozartNews", examples: [{"/schoolreport/home", 301}]
 
   handle "/wide/*any", using: "Wide", platform: "MozartNews", examples: []
 
