@@ -6,7 +6,7 @@ defmodule Routes.Platforms.Selector do
   # Finds the provided Selector module and calls
   # it with the provided Request as an argument.
   def call(selector, envelope = %Envelope{}) do
-    ["Belfrage", "PreFlightTransformers", selector]
+    ["Routes", "Platforms", "Selectors", selector]
     |> Module.concat()
     |> apply(:call, [envelope])
   end

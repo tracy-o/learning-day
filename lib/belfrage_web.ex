@@ -96,7 +96,7 @@ defmodule BelfrageWeb do
   end
 
   defp call_platform_selector(spec_name, selector, envelope) do
-    with {:ok, envelope} <- Routes.Platforms.Selector.call(selector, envelope) do
+    with {:ok, envelope} <- Belfrage.Behaviours.Transformer.call(envelope, :pre_flight, selector) do
       {:ok, RouteSpec.make_route_state_id(spec_name, envelope.private.platform)}
     end
   end

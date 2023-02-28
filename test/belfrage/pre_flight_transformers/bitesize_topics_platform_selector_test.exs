@@ -1,4 +1,4 @@
-defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelectorTest do
+defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelectorTest do
   use ExUnit.Case
   alias Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request, Envelope.Private}

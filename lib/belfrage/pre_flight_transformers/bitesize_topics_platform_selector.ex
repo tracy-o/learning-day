@@ -1,7 +1,5 @@
 defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
-  alias Belfrage.Envelope
-
-  @behaviour Routes.Platforms.Selector
+  use Belfrage.Behaviours.Transformer
 
   @valid_year_ids [
     "zjpqqp3",
@@ -356,7 +354,7 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
     "zc4ccmn"
   ]
 
-  @impl Routes.Platforms.Selector
+  @impl Transformer
   def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"year_id" => year_id, "id" => id}}}) do
     cond do
       valid_year?(year_id) and production_environment() == "live" and webcore_live_id?(id) ->

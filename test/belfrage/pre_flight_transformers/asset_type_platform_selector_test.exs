@@ -1,4 +1,4 @@
-defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
+defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 

@@ -1,11 +1,9 @@
 defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelector do
-  alias Belfrage.Envelope
+  use Belfrage.Behaviours.Transformer
   alias Belfrage.Clients.HTTP
   alias Routes.Platforms.Selectors.Fetchers.AresData
 
   require Logger
-
-  @behaviour Routes.Platforms.Selector
 
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
@@ -32,7 +30,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelector do
 
     {:error, status_code}
   """
-  @impl Routes.Platforms.Selector
+  @impl Transformer
   def call(envelope = %Envelope{}) do
     case AresData.fetch_metadata(envelope.request.path) do
       {:ok, asset_type} ->
