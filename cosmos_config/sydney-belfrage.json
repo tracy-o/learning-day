@@ -113,6 +113,41 @@
     },
     {
         "values": {
+          "test": "https://culture-features.gnl-test.bbcverticals.com",
+          "live": "https://culture-features.gnl-live.bbcverticals.com"
+        },
+        "name": "DOTCOM_CULTURE_ENDPOINT"
+      },
+      {
+        "values": {
+          "test": "https://future-features.gnl-test.bbcverticals.com",
+          "live": "https://future-features.gnl-live.bbcverticals.com"
+        },
+        "name": "DOTCOM_FUTURE_ENDPOINT"
+      },
+      {
+        "values": {
+          "test": "https://reel.gnl-test.bbcverticals.com",
+          "live": "https://reel.gnl-live.bbcverticals.com"
+        },
+        "name": "DOTCOM_REEL_ENDPOINT"
+      },
+      {
+        "values": {
+          "test": "https://travel-features.gnl-test.bbcverticals.com",
+          "live": "https://travel-features.gnl-live.bbcverticals.com"
+        },
+        "name": "DOTCOM_TRAVEL_ENDPOINT"
+      },
+      {
+        "values": {
+          "test": "https://worklife-features.gnl-test.bbcverticals.com",
+          "live": "https://worklife-features.gnl-live.bbcverticals.com"
+        },
+        "name": "DOTCOM_WORKLIFE_ENDPOINT"
+      },
+    {
+        "values": {
             "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
             "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
         },

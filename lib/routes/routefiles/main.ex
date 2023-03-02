@@ -2874,6 +2874,12 @@ defroutefile "Main" do
   handle "/static/*any", using: "ClassicAppStaticContent", platform: "ClassicApps", examples: ["/static/LE/android/1.5.0/config.json", "/static/MUNDO/ios/5.19.0/layouts.zip"]
   handle "/flagpoles/*any", using: "ClassicAppFlagpole", platform: "ClassicApps", examples: ["/flagpoles/ads"]
 
+  # DotCom routes
+  handle "/future/*any", using: "DotComFuture", platform: "DotComFuture", examples: ["/future"]
+  handle "/culture/*any", using: "DotComCulture", platform: "DotComCulture", examples: ["/culture"]
+  handle "/reel/*any", using: "DotComReel", platform: "DotComReel", examples: ["/reel"]
+  handle "/travel/*any", using: "DotComTravel", platform: "DotComTravel", examples: ["/travel"]
+  handle "/worklife/*any", using: "DotComWorklife", platform: "DotComWorklife", examples: ["/worklife"]
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
   handle "/_health/public_content", using: "PhoPublicContent", platform: "Webcore", examples: ["/_health/public_content"]
