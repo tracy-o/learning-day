@@ -15,6 +15,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
 
   test "returns error tuple if origin returns 500 http status" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    envelope = %Envelope{request: %Envelope.Request{path: "/some/path"}}
 
     Clients.HTTPMock
     |> expect(
@@ -29,14 +30,15 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope{request: %Envelope.Request{path: "/some/path"}}) ==
-                      {:error, 500}
+             assert AssetTypePlatformSelector.call(envelope) ==
+                      {:error, envelope, 500}
            end) =~
              "\"message\":\"Elixir.Belfrage.PreFlightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
   end
 
   test "returns error tuple if origin response body does not contain assetType" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
+    envelope = %Envelope{request: %Envelope.Request{path: "/some/path"}}
 
     Clients.HTTPMock
     |> expect(
@@ -55,8 +57,8 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope{request: %Envelope.Request{path: "/some/path"}}) ==
-                      {:error, 500}
+             assert AssetTypePlatformSelector.call(envelope) ==
+                      {:error, envelope, 500}
            end) =~
              "\"message\":\"Elixir.Belfrage.PreFlightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
   end

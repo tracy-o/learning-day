@@ -355,34 +355,8 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
   ]
 
   @impl Transformer
-  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"year_id" => year_id, "id" => id}}}) do
-    cond do
-      valid_year?(year_id) and production_environment() == "live" and webcore_live_id?(id) ->
-        {:ok, set_platform(envelope, "Webcore")}
-
-      valid_year?(year_id) and production_environment() == "test" and webcore_test_id?(id) ->
-        {:ok, set_platform(envelope, "Webcore")}
-
-      true ->
-        {:ok, set_platform(envelope, "MorphRouter")}
-    end
-  end
-
-  def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id}}}) do
-    cond do
-      production_environment() == "live" and webcore_live_id?(id) ->
-        {:ok, set_platform(envelope, "Webcore")}
-
-      production_environment() == "test" and webcore_test_id?(id) ->
-        {:ok, set_platform(envelope, "Webcore")}
-
-      true ->
-        {:ok, set_platform(envelope, "MorphRouter")}
-    end
-  end
-
-  def call(envelope = %Envelope{}) do
-    {:ok, set_platform(envelope, "MorphRouter")}
+  def call(envelope = %Envelope{request: request}) do
+    {:ok, Envelope.add(envelope, :private, %{platform: get_platform(request)})}
   end
 
   defp webcore_live_id?(id) do
@@ -401,7 +375,33 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
     Application.get_env(:belfrage, :production_environment)
   end
 
-  defp set_platform(envelope, platform) do
-    Envelope.add(envelope, :private, %{platform: platform})
+  defp get_platform(%Envelope.Request{path_params: %{"year_id" => year_id, "id" => id}}) do
+    cond do
+      valid_year?(year_id) and production_environment() == "live" and webcore_live_id?(id) ->
+        "Webcore"
+
+      valid_year?(year_id) and production_environment() == "test" and webcore_test_id?(id) ->
+        "Webcore"
+
+      true ->
+        "MorphRouter"
+    end
+  end
+
+  defp get_platform(%Envelope.Request{path_params: %{"id" => id}}) do
+    cond do
+      production_environment() == "live" and webcore_live_id?(id) ->
+        "Webcore"
+
+      production_environment() == "test" and webcore_test_id?(id) ->
+        "Webcore"
+
+      true ->
+        "MorphRouter"
+    end
+  end
+
+  defp get_platform(_request) do
+    "MorphRouter"
   end
 end

@@ -45,7 +45,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelector do
           "#{__MODULE__} could not select platform: %{path: #{envelope.request.path}, reason: #{inspect(reason)}}"
         )
 
-        {:error, 500}
+        {:error, envelope, 500}
     end
   end
 
