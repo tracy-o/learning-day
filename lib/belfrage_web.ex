@@ -49,7 +49,7 @@ defmodule BelfrageWeb do
         |> EnvelopeAdapter.Request.adapt()
         |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
-      case build_route_state_id(id, platform_or_selector, envelope) do
+      case build_route_state_id(id, platform_or_selector, envelope.request) do
         {:ok, route_state_id} ->
           envelope = EnvelopeAdapter.Private.adapt(envelope, conn.private, route_state_id)
 
@@ -86,18 +86,18 @@ defmodule BelfrageWeb do
     :erlang.raise(kind, wrapper, stack)
   end
 
-  defp build_route_state_id(spec_name, platform_or_selector, envelope) do
+  defp build_route_state_id(spec_name, platform_or_selector, request) do
     route_state_id = RouteSpec.make_route_state_id(spec_name, platform_or_selector)
 
     case RouteSpecManager.get_spec(route_state_id) do
-      nil -> call_platform_selector(spec_name, platform_or_selector, envelope)
+      nil -> call_platform_selector(spec_name, platform_or_selector, request)
       %RouteSpec{} -> {:ok, route_state_id}
     end
   end
 
-  defp call_platform_selector(spec_name, selector, envelope) do
-    with {:ok, envelope} <- Belfrage.Behaviours.Transformer.call(envelope, :pre_flight, selector) do
-      {:ok, RouteSpec.make_route_state_id(spec_name, envelope.private.platform)}
+  defp call_platform_selector(spec_name, selector, request) do
+    with {:ok, platform} <- Routes.Platforms.Selector.call(selector, request) do
+      {:ok, RouteSpec.make_route_state_id(spec_name, platform)}
     end
   end
 end
