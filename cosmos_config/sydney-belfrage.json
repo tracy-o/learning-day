@@ -123,6 +123,10 @@
         "name": "ERLANG_COOKIE"
     },
     {
+        "noecho": true,
+        "name": "GCP_AUTH"
+      },
+    {
         "values": {
             "test": "eu-west-1",
             "live": "eu-west-1"
