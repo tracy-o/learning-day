@@ -1,9 +1,9 @@
-defmodule Routes.Platforms.DotCom do
+defmodule Routes.Platforms.DotComFuture do
   def specs(production_env) do
     %{
       origin: Application.get_env(:belfrage, :dotcom_future_endpoint),
-      owner: "",
-      runbook: "",
+      owner: "GnlDevOps@bbc.com",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=276265727",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
