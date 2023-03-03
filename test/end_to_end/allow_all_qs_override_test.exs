@@ -20,12 +20,12 @@ defmodule AllowAllQsOverrideTest do
     :ok
   end
 
-  # The Moz.ex route spec only allows one query string, but on test the mozart platform allows all query strings
+  # The Moz route spec only allows one query string, but on test the Mozart platform allows a number of query strings
   test "Allow all query strings for Mozart platform routes on test" do
     RouteSpecManager.update_specs()
     start_supervised!({RouteState, "Moz.MozartNews"})
 
-    url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?a=bar&b=foo"
+    url = Application.get_env(:belfrage, :mozart_news_endpoint) <> "/moz?country=gb&only_allow_this_on_live=123"
 
     Belfrage.Clients.HTTPMock
     |> expect(:execute, fn %Belfrage.Clients.HTTP.Request{
@@ -36,7 +36,7 @@ defmodule AllowAllQsOverrideTest do
       {:ok, @http_response}
     end)
 
-    conn = conn(:get, "/moz?a=bar&b=foo")
+    conn = conn(:get, "/moz?country=gb&b=foo&only_allow_this_on_live=123")
     conn = Router.call(conn, [])
 
     assert {200, _headers, _body} = sent_resp(conn)
