@@ -2752,9 +2752,9 @@ defroutefile "Main" do
   redirect "/schoolreport", to: "/news/topics/cg41ylwv43pt", status: 301
 
   handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"]
-  handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", only_on: "test", examples: ["/newsround/61545299"]
+  handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", examples: ["/newsround/61545299"]
   handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
-  handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: ["/newsround/61545299"]
+  handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: []
 
   handle "/schoolreport/*any", using: "Schoolreport", platform: "MozartNews", examples: [{"/schoolreport/home", 301}]
 
