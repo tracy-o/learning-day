@@ -1,4 +1,4 @@
-defmodule Benchmark.AccessLogs do
+defmodule Benchmark.AppLogger do
   @moduledoc """
   Comparing parts of the Access Logs Plug
 

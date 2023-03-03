@@ -52,13 +52,42 @@ defmodule Belfrage.Logger.FormatterTest do
       metadata = [
         access: true,
         method: "GET",
-        request_path: "/",
-        query_string: "",
-        status: 200
+        request_path: "/status",
+        query_string: "foo=bar",
+        status: 200,
+        host: "www.test.bbc.co.uk",
+        scheme: "https",
+        bsig: "bsig-1234",
+        bbc_request_id: "bbc_r_id_1234",
+        belfrage_cache_status: "MISS",
+        cache_control: "max-age=0, private, must-revalidate",
+        content_length: 1234,
+        bid: "bid-1234",
+        location: "https://www.test.bbc.co.uk",
+        req_svc_chain: "GTM,BELFRAGE",
+        vary: "Accept-Encoding,Accept-Language,Accept,User-Agent"
       ]
 
-      assert ["\"2022-01-01T00:00:00.001000Z\" \"GET\" \"/\" \"\" \"200\"\n"] =
-               Formatter.access(:access, "ignore me", {{2022, 1, 1}, {0, 0, 0, 1000}}, metadata)
+      [response] = Formatter.access(:access, "", {{2022, 1, 1}, {0, 0, 0, 1000}}, metadata)
+
+      assert [
+               "\"2022-01-01T00:00:00.001000Z",
+               "bbc_r_id_1234",
+               "https",
+               "www.test.bbc.co.uk",
+               "GET",
+               "/status",
+               "foo=bar",
+               "200",
+               "bsig-1234",
+               "MISS",
+               "max-age=0, private, must-revalidate",
+               "1234",
+               "bid-1234",
+               "https://www.test.bbc.co.uk",
+               "GTM,BELFRAGE",
+               "Accept-Encoding,Accept-Language,Accept,User-Agent\"\n"
+             ] = String.split(response, "\" \"")
     end
   end
 end

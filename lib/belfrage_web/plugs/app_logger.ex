@@ -1,4 +1,4 @@
-defmodule BelfrageWeb.Plugs.AccessLogs do
+defmodule BelfrageWeb.Plugs.AppLogger do
   require Logger
   import Plug.Conn, only: [register_before_send: 2]
   alias Belfrage.Logger.HeaderRedactor

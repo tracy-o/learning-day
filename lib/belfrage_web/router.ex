@@ -14,7 +14,7 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.LatencyMonitor)
   plug(BelfrageWeb.Plugs.Xray, builder_opts())
   plug(Plug.Head)
-  plug(BelfrageWeb.Plugs.AccessLogs)
+  plug(BelfrageWeb.Plugs.AppLogger)
   plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
   plug(Plugs.VanityDomainRedirector)
@@ -26,7 +26,7 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.Overrides)
   plug(BelfrageWeb.Plugs.VarianceReducer)
   plug(Plugs.PathLogger)
-  plug(Belfrage.Plug.AccessLogger, level: :info)
+  plug(Plugs.AccessLogger, level: :info)
   plug(:match)
   plug(:dispatch)
 

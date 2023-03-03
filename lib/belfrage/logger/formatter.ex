@@ -1,5 +1,5 @@
 defmodule Belfrage.Logger.Formatter do
-  alias Json
+  require Logger
 
   def app(level, message, timestamp, metadata) do
     case Keyword.get(metadata, :cloudwatch) do
@@ -55,24 +55,47 @@ defmodule Belfrage.Logger.Formatter do
 
   @spec gtm_format(any, any, {any, {any, any, any, any}}, any) :: <<_::64, _::_*8>> | [nonempty_binary, ...]
   def gtm_format(level, _message, time_tuple = {date_erl, {h, m, s, ms}}, metadata) do
-    method = Keyword.get(metadata, :method)
-    request_path = Keyword.get(metadata, :request_path)
-    query_string = Keyword.get(metadata, :query_string)
-    status = Keyword.get(metadata, :status)
-
     timestamp =
       NaiveDateTime.from_erl!({date_erl, {h, m, s}}, ms)
       |> DateTime.from_naive!("Etc/UTC")
       |> DateTime.to_iso8601()
+      |> with_quote()
+
+    method = Keyword.get(metadata, :method) |> with_quote()
+    request_path = Keyword.get(metadata, :request_path) |> with_quote()
+    query_string = Keyword.get(metadata, :query_string) |> with_quote()
+    status = Keyword.get(metadata, :status) |> with_quote()
+    bbc_request_id = Keyword.get(metadata, :bbc_request_id) |> with_quote()
+    req_svc_chain = Keyword.get(metadata, :req_svc_chain) |> with_quote()
+    scheme = Keyword.get(metadata, :scheme) |> with_quote()
+    host = Keyword.get(metadata, :host) |> with_quote()
+    bsig = Keyword.get(metadata, :bsig) |> with_quote()
+    belfrage_cache_status = Keyword.get(metadata, :belfrage_cache_status) |> with_quote()
+    cache_control = Keyword.get(metadata, :cache_control) |> with_quote()
+    content_length = Keyword.get(metadata, :content_length) |> with_quote()
+    bid = Keyword.get(metadata, :bid) |> with_quote()
+    location = Keyword.get(metadata, :location) |> with_quote()
+    vary = Keyword.get(metadata, :vary) |> with_quote()
 
     [
       Enum.join(
         [
-          with_quote(timestamp),
-          with_quote(method),
-          with_quote(request_path),
-          with_quote(query_string),
-          with_quote(status)
+          timestamp,
+          bbc_request_id,
+          scheme,
+          host,
+          method,
+          request_path,
+          query_string,
+          status,
+          bsig,
+          belfrage_cache_status,
+          cache_control,
+          content_length,
+          bid,
+          location,
+          req_svc_chain,
+          vary
         ],
         " "
       ) <>
