@@ -38,9 +38,7 @@ defmodule Belfrage.RouteSpec do
             default_language: "en-GB",
             language_from_cookie: false,
             circuit_breaker_error_threshold: nil,
-            throughput: 100,
             mvt_project_id: 0,
-            mvt_seen: %{},
             fallback_write_sample: 1,
             etag: false,
             xray_enabled: false
