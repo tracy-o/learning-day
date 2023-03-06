@@ -83,18 +83,12 @@ defmodule Routes.SportRoutefileTest do
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn
-        {matcher, %{platform: platform, using: spec_name}, example} ->
+        {matcher, %{platform: platform, using: spec_name} = route, example} ->
           case RouteSpec.get_route_spec({spec_name, platform}) do
             nil ->
-              conn = make_call(:get, example)
-
-              if String.starts_with?(conn.assigns.route_spec, spec_name) do
-                :ok
-              else
-                {:error, "Example #{example} for route #{matcher} that uses a platform selector \
-                                             is not routed to a route spec that starts with #{spec_name}, \
-                                             but to #{conn.assigns.route_spec}"}
-              end
+              # All we can do is validate here as we do not
+              # mock PlatformSelector calls
+              validate_required_attrs_in_route(matcher, route)
 
             %RouteSpec{} ->
               conn = make_call(:get, example)
@@ -245,12 +239,32 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp validate_required_attrs_in_route(matcher, route, env) do
-    if selector?(route.platform) do
-      :ok
-    else
-      {:error, "Route #{matcher} has a :platform attribute that is not a Platform Selector or Platform \
-                         for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform \
-                         Selector that ends with 'PlatformSelector'."}
+    cond do
+      route.platform in platforms() ->
+        {:error,
+         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that does not exist in the RouteSpec: #{route.using} for #{env}."}
+
+      route.platform in platform_selectors() ->
+        :ok
+
+      true ->
+        {:error,
+         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that is neither a Platform Selector nor a Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with 'PlatformSelector'."}
+    end
+  end
+
+  defp validate_required_attrs_in_route(matcher, route) do
+    cond do
+      route.platform in platforms() ->
+        {:error,
+         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that does not exist in the RouteSpec: #{route.using}"}
+
+      route.platform in platform_selectors() ->
+        :ok
+
+      true ->
+        {:error,
+         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that is neither a Platform Selector nor a Platform.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with 'PlatformSelector'."}
     end
   end
 
@@ -322,10 +336,6 @@ defmodule Routes.SportRoutefileTest do
     })
   end
 
-  defp selector?(selector_or_platform) do
-    String.ends_with?(selector_or_platform, "PlatformSelector")
-  end
-
   defp plug_route(conn) do
     conn.private.plug_route
     |> elem(0)
@@ -335,5 +345,25 @@ defmodule Routes.SportRoutefileTest do
     #
     #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
     |> String.replace("/.", ".")
+  end
+
+  defp platforms() do
+    Path.expand("../../lib/routes/platforms", __DIR__)
+    |> File.ls!()
+    |> Enum.filter(&String.ends_with?(&1, ".ex"))
+    |> Enum.map(&to_module/1)
+  end
+
+  defp platform_selectors() do
+    Path.expand("../../lib/routes/platforms/selectors/", __DIR__)
+    |> File.ls!()
+    |> Enum.filter(&String.ends_with?(&1, ".ex"))
+    |> Enum.map(&to_module/1)
+  end
+
+  defp to_module(path) do
+    path
+    |> Path.basename(".ex")
+    |> Macro.camelize()
   end
 end
