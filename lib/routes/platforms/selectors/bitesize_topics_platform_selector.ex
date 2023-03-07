@@ -13,7 +13,7 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
   ]
 
   @webcore_test_ids [
-   "z82hsbk",
+    "z82hsbk",
     "zwv39j6",
     "zhtcvk7",
     "zgdmsbk",
