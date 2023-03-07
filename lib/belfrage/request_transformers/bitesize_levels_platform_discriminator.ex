@@ -16,12 +16,34 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
   @webcore_test_ids [
     "zr48q6f",
     "z3g4d2p",
-    "zt6svwx"
+    "zt6svwx",
+    "zgckjxs",
+    "z4y2scw",
+    "zk3xy9q",
+    "z4js6v4",
+    "zggh6g8",
+    "zbpwt39",
+    "zjmj92p",
+    "zcwyp4j",
+    "znyh7nb",
+    "zxybmsg",
+    "zf7hgwx"
   ]
 
   @webcore_live_ids [
     "zt6svwx",
-    "zr48q6f"
+    "zr48q6f",
+    "zgckjxs",
+    "z4y2scw",
+    "zk3xy9q",
+    "z4js6v4",
+    "zggh6g8",
+    "zbpwt39",
+    "zjmj92p",
+    "zcwyp4j",
+    "znyh7nb",
+    "zxybmsg",
+    "zf7hgwx"
   ]
 
   @impl Transformer
