@@ -22,7 +22,6 @@ BuildArch: x86_64
 
 Requires: cosmos-ca-chains cosmos-ca-tools
 Requires: amazon-cloudwatch-agent
-Requires: cfn-signal
 Requires: component-logger
 Requires: belfrage-performance-tuning
 Requires: dial-agent
