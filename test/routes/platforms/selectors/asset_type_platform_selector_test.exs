@@ -2,14 +2,16 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.{Envelope, Clients}
-  alias Routes.Platforms.Selectors.AssetTypePlatformSelector
+  alias Belfrage.Clients
+  alias Belfrage.Envelope.Request
+  alias Belfrage.Behaviours.Selector
 
   import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper, only: [clear_metadata_cache: 1]
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
+  @selector "AssetTypePlatformSelector"
 
   setup :clear_metadata_cache
 
@@ -29,7 +31,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
+             assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
   end
@@ -54,7 +56,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
     )
 
     assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:error, 500}
+             assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:error, 500}
            end) =~
              "\"message\":\"Elixir.Routes.Platforms.Selectors.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
   end
@@ -80,7 +82,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
         end
       )
 
-      assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/#{path_segment}/path"}) == {:ok, "Webcore"}
+      assert Selector.call(@selector, :platform, %Request{path: "/some/#{path_segment}/path"}) == {:ok, "Webcore"}
     end)
   end
 
@@ -103,7 +105,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 
   test "returns cached platform" do
@@ -125,8 +127,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 
   test "does not return cached platform after TTL" do
@@ -148,7 +149,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:ok, "MozartNews"}
 
     Clients.HTTPMock
     |> expect(
@@ -168,7 +169,7 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
 
     Process.sleep(Application.get_env(:belfrage, :metadata_cache)[:default_ttl_ms] + 1)
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 
   test "returns MozartNews platform if origin response contains a 404 status code" do
@@ -189,6 +190,6 @@ defmodule Routes.Platforms.Selectors.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert AssetTypePlatformSelector.call(%Envelope.Request{path: "/some/path"}) == {:ok, "MozartNews"}
+    assert Selector.call(@selector, :platform, %Request{path: "/some/path"}) == {:ok, "MozartNews"}
   end
 end

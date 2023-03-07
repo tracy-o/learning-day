@@ -82,30 +82,7 @@ defmodule Routes.SportRoutefileTest do
 
       @examples
       |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
-      |> validate(fn
-        {matcher, %{platform: platform, using: spec_name} = route, example} ->
-          case RouteSpec.get_route_spec({spec_name, platform}) do
-            nil ->
-              # All we can do is validate here as we do not
-              # mock PlatformSelector calls
-              validate_required_attrs_in_route(matcher, route)
-
-            %RouteSpec{} ->
-              conn = make_call(:get, example)
-              plug_route = plug_route(conn)
-
-              # An example may be routed to an incorrect route with the same route spec
-              # as the expected route.
-              #
-              # Given this, below we check that the matched route stored in conn.private.plug_route
-              # is the expected route.
-              if plug_route == matcher do
-                :ok
-              else
-                {:error, "Example #{example} for route #{matcher} has been routed to #{plug_route}"}
-              end
-          end
-      end)
+      |> validate(fn {matcher, route, example} -> validate_example({matcher, route, example}) end)
     end
 
     test "proxy-pass examples are routed correctly" do
@@ -226,6 +203,8 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp validate_route(matcher, route = %{using: spec_name, platform: platform}, env) do
+    spec_name = maybe_selector_spec_name(spec_name)
+
     case RouteSpec.get_route_spec({spec_name, platform}, env) do
       nil ->
         validate_required_attrs_in_route(matcher, route, env)
@@ -234,6 +213,38 @@ defmodule Routes.SportRoutefileTest do
         with :ok <- validate_required_attrs_in_route_spec(matcher, spec, env),
              :ok <- validate_transformers(matcher, spec, env) do
           validate_platform_transformers(matcher, spec, env)
+        end
+    end
+  end
+
+  defp validate_example({matcher, %{platform: platform, using: spec_name}, example}) do
+    spec_name = maybe_selector_spec_name(spec_name)
+
+    case RouteSpec.get_route_spec({spec_name, platform}) do
+      nil ->
+        conn = make_call(:get, example)
+
+        if String.starts_with?(conn.assigns.route_spec, spec_name) do
+          :ok
+        else
+          {:error, "Example #{example} for route #{matcher} that uses a platform selector \
+                                 is not routed to a route spec that starts with #{spec_name}, \
+                                 but to #{conn.assigns.route_spec}"}
+        end
+
+      %RouteSpec{} ->
+        conn = make_call(:get, example)
+        plug_route = plug_route(conn)
+
+        # An example may be routed to an incorrect route with the same route spec
+        # as the expected route.
+        #
+        # Given this, below we check that the matched route stored in conn.private.plug_route
+        # is the expected route.
+        if plug_route == matcher do
+          :ok
+        else
+          {:error, "Example #{example} for route #{matcher} has been routed to #{plug_route}"}
         end
     end
   end
@@ -250,21 +261,6 @@ defmodule Routes.SportRoutefileTest do
       true ->
         {:error,
          "The route with the path #{matcher} has a :platform attribute: #{route.platform} that is neither a Platform Selector nor a Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with 'PlatformSelector'."}
-    end
-  end
-
-  defp validate_required_attrs_in_route(matcher, route) do
-    cond do
-      route.platform in platforms() ->
-        {:error,
-         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that does not exist in the RouteSpec: #{route.using}"}
-
-      route.platform in platform_selectors() ->
-        :ok
-
-      true ->
-        {:error,
-         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that is neither a Platform Selector nor a Platform.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with 'PlatformSelector'."}
     end
   end
 
@@ -334,6 +330,21 @@ defmodule Routes.SportRoutefileTest do
       id: route_state_id,
       start: {RouteState, :start_link, [route_state_id]}
     })
+  end
+
+  defp maybe_selector_spec_name(spec_name) do
+    if selector?(spec_name) do
+      module_name = Module.concat(["Routes", "Specs", "Selectors", spec_name])
+      {:ok, {spec, _partition}} = module_name.call(%Belfrage.Envelope.Request{})
+
+      spec
+    else
+      spec_name
+    end
+  end
+
+  defp selector?(selector_or_platform) do
+    String.ends_with?(selector_or_platform, ["PlatformSelector", "SpecSelector"])
   end
 
   defp plug_route(conn) do

@@ -1,7 +1,8 @@
 defmodule BelfrageWeb do
   alias BelfrageWeb.{EnvelopeAdapter, Response}
   alias Plug.Conn
-  alias Belfrage.{Metrics.LatencyMonitor, Envelope, RouteSpec, RouteSpecManager}
+  alias Belfrage.{Metrics.LatencyMonitor, Envelope, RouteSpec}
+  alias Belfrage.Behaviours.Selector
 
   require Logger
 
@@ -42,14 +43,14 @@ defmodule BelfrageWeb do
 
   respectively.
   """
-  def yield(id, platform_or_selector, conn) do
+  def yield(spec_or_selector, platform_or_selector, conn) do
     try do
       envelope =
         conn
         |> EnvelopeAdapter.Request.adapt()
         |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
 
-      case build_route_state_id(id, platform_or_selector, envelope.request) do
+      case build_route_state_id(spec_or_selector, platform_or_selector, envelope.request) do
         {:ok, route_state_id} ->
           envelope = EnvelopeAdapter.Private.adapt(envelope, conn.private, route_state_id)
 
@@ -58,9 +59,9 @@ defmodule BelfrageWeb do
           |> Conn.assign(:envelope, Belfrage.handle(envelope))
           |> Response.put()
 
-        {:error, status_code} ->
-          :telemetry.execute([:belfrage, :platform_selector, :not_found], %{}, %{selector: platform_or_selector})
-          Logger.log(:error, "", %{msg: "Selector '#{platform_or_selector}' not found", reason: status_code})
+        {:error, selector, status_code} ->
+          :telemetry.execute([:belfrage, :selector, :error], %{}, %{selector: selector})
+          Logger.log(:error, "", %{msg: "Selector '#{selector}' failed", reason: status_code})
 
           conn
           |> Conn.assign(:envelope, Envelope.put_status(%Envelope{}, status_code))
@@ -86,18 +87,35 @@ defmodule BelfrageWeb do
     :erlang.raise(kind, wrapper, stack)
   end
 
-  defp build_route_state_id(spec_name, platform_or_selector, request) do
-    route_state_id = RouteSpec.make_route_state_id(spec_name, platform_or_selector)
+  defp build_route_state_id(spec_or_selector, platform_or_selector, request) do
+    case get_name(platform_or_selector, :platform, request) do
+      {:ok, platform_name} ->
+        case get_name(spec_or_selector, :spec, request) do
+          {:ok, spec_name_partition} ->
+            {:ok, make_route_state_id(spec_name_partition, platform_name)}
 
-    case RouteSpecManager.get_spec(route_state_id) do
-      nil -> call_platform_selector(spec_name, platform_or_selector, request)
-      %RouteSpec{} -> {:ok, route_state_id}
+          {:error, reason} ->
+            {:error, spec_or_selector, reason}
+        end
+
+      {:error, reason} ->
+        {:error, platform_or_selector, reason}
     end
   end
 
-  defp call_platform_selector(spec_name, selector, request) do
-    with {:ok, platform} <- Routes.Platforms.Selector.call(selector, request) do
-      {:ok, RouteSpec.make_route_state_id(spec_name, platform)}
+  defp get_name(name, type, request) do
+    if Selector.selector?(name) do
+      Selector.call(name, type, request)
+    else
+      {:ok, name}
     end
+  end
+
+  defp make_route_state_id({spec_name, partition}, platform_name) do
+    RouteSpec.make_route_state_id(spec_name, platform_name, partition)
+  end
+
+  defp make_route_state_id(spec_name, platform_name) when is_binary(spec_name) do
+    RouteSpec.make_route_state_id(spec_name, platform_name)
   end
 end

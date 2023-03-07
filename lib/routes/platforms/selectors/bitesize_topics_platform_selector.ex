@@ -1,7 +1,7 @@
 defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
   alias Belfrage.Envelope.Request
 
-  @behaviour Routes.Platforms.Selector
+  @behaviour Belfrage.Behaviours.Selector
 
   @valid_year_ids [
     "zjpqqp3",
@@ -356,7 +356,7 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
     "zc4ccmn"
   ]
 
-  @impl Routes.Platforms.Selector
+  @impl Belfrage.Behaviours.Selector
   def call(%Request{path_params: %{"year_id" => year_id, "id" => id}}) do
     cond do
       valid_year?(year_id) and production_environment() == "live" and webcore_live_id?(id) ->

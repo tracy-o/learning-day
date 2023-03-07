@@ -102,7 +102,7 @@ defroutefile "Main" do
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/abl", using: "AblData", platform: "Fabl", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
+  handle "/fd/abl", using: "AblSpecSelector", platform: "Fabl", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
   handle "/fd/p/:name", using: "PersonalisedFablData", platform: "Fabl", only_on: "test", examples: [] do
     return_404 if: [
       !is_valid_length?(name, 3..40),

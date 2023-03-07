@@ -1,6 +1,7 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
   alias Belfrage.Behaviours.Transformer
+  alias Belfrage.Behaviours.Selector
 
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
@@ -46,6 +47,11 @@ defmodule Belfrage.RouteSpec do
   @spec make_route_state_id(String.t(), String.t()) :: route_state_id()
   def make_route_state_id(spec_name, platform) do
     "#{spec_name}.#{platform}"
+  end
+
+  @spec make_route_state_id(String.t(), String.t(), String.t()) :: route_state_id()
+  def make_route_state_id(spec_name, platform, partition) do
+    "#{spec_name}.#{platform}.#{partition}"
   end
 
   @spec list_route_specs(String.t()) :: [RouteSpec.t()]
@@ -207,6 +213,7 @@ defmodule Belfrage.RouteSpec do
 
     for module <- modules,
         String.starts_with?(Macro.to_string(module), module_path),
+        !Selector.selector?(Macro.to_string(module)),
         do: String.trim_leading(Macro.to_string(module), module_path)
   end
 end
