@@ -256,7 +256,7 @@ If the request is not an app request i.e. `envelope.request.app?` is `false`, th
 We also check that personalisation is enabled by checking if:
 
 * The BBC ID service status is available, or `GREEN`.
-* The `:personalisation** dial in Belfrage has a truthy value.
+* The `:personalisation` dial in Belfrage has a truthy value.
 
 ### Appending Allowlists
 
@@ -337,4 +337,4 @@ If the `cache-control` has been marked as `"private"` then it will not be stored
 
 As part of the response pipeline we may fetch a fallback for a subset of error status codes.
 
-If the request has been marked as personalised, i.e. `envelope.private.personalised_request` is `true`, then we mark the `cache-control` to `"private"`.
+If the request has been marked as personalised, i.e. `envelope.private.personalised_request` is `true`, then we mark the `cache-control` to `"private"` if it is public.
