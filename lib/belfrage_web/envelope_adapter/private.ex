@@ -9,4 +9,14 @@ defmodule BelfrageWeb.EnvelopeAdapter.Private do
       preview_mode: private.preview_mode
     })
   end
+
+  def adapt(envelope = %Envelope{}, private, spec, platform) do
+    Envelope.add(envelope, :private, %{
+      spec: spec,
+      platform: platform,
+      overrides: private.overrides,
+      production_environment: private.production_environment,
+      preview_mode: private.preview_mode
+    })
+  end
 end

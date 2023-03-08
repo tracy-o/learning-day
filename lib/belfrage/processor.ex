@@ -4,6 +4,7 @@ defmodule Belfrage.Processor do
   alias Belfrage.{
     RouteStateRegistry,
     Envelope,
+    Envelope.Private,
     RouteState,
     Pipeline,
     RequestHash,
@@ -16,7 +17,8 @@ defmodule Belfrage.Processor do
     Mvt,
     Language,
     WrapperError,
-    ServiceProvider
+    ServiceProvider,
+    Behaviours.Selector
   }
 
   alias Envelope.{Response, Private}
@@ -24,6 +26,7 @@ defmodule Belfrage.Processor do
 
   def pre_request_pipeline(envelope = %Envelope{}) do
     pipeline = [
+      &build_route_state_id/1,
       &get_route_state/1,
       &allowlists/1,
       &Personalisation.maybe_put_personalised_request/1,
@@ -37,7 +40,48 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, envelope)
   end
 
-  def get_route_state(envelope = %Envelope{private: %Envelope.Private{route_state_id: route_state_id}}) do
+  def build_route_state_id(
+        envelope = %Envelope{
+          private: %Private{spec: spec_or_selector, platform: platform_or_selector},
+          request: request
+        }
+      ) do
+    case get_spec_platform_name(platform_or_selector, :platform, request) do
+      {:ok, platform_name} ->
+        case get_spec_platform_name(spec_or_selector, :spec, request) do
+          {:ok, {spec_name, partition}} ->
+            Envelope.add(envelope, :private, %{
+              route_state_id: {spec_name, platform_name, partition},
+              spec: spec_name,
+              platform: platform_name,
+              partition: partition
+            })
+
+          {:ok, spec_name} ->
+            Envelope.add(envelope, :private, %{
+              route_state_id: {spec_name, platform_name},
+              spec: spec_name,
+              platform: platform_name
+            })
+
+          {:error, reason} ->
+            selector_failure(spec_or_selector, reason)
+        end
+
+      {:error, reason} ->
+        selector_failure(platform_or_selector, reason)
+    end
+  end
+
+  defp get_spec_platform_name(name, type, request) do
+    if Selector.selector?(name) do
+      Selector.call(name, type, request)
+    else
+      {:ok, name}
+    end
+  end
+
+  def get_route_state(envelope = %Envelope{private: %Private{route_state_id: route_state_id}}) do
     Metrics.latency_span(:set_request_route_state_data, fn ->
       RouteStateRegistry.find_or_start(route_state_id)
 
@@ -199,6 +243,12 @@ defmodule Belfrage.Processor do
     Logger.log(:error, "Error retrieving route_state state with reason: #{inspect(reason)}}")
 
     raise "Failed to load route_state state."
+  end
+
+  defp selector_failure(selector, reason) do
+    :telemetry.execute([:belfrage, :selector, :error], %{}, %{selector: selector})
+    Logger.log(:error, "", %{msg: "Selector '#{selector}' failed", reason: reason})
+    raise "Selector '#{selector}' failed with reason: #{inspect(reason)}"
   end
 
   defp maybe_log_response_status(envelope = %Envelope{response: %Response{http_status: http_status}})
