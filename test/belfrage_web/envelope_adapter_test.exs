@@ -56,7 +56,7 @@ defmodule BelfrageWeb.EnvelopeAdapterTest do
     |> put_private(:overrides, %{})
   end
 
-  @route_state_id "SomeRouteState"
+  @route_state_id {"SomeRouteSpec", "SomePlatform"}
 
   test "Adds www as the subdomain to the envelope" do
     conn =

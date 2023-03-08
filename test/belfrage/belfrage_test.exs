@@ -11,11 +11,14 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @route_state_id {"SportArticlePage", "Webcore"}
+  @spec_name "SportArticlePage"
+  @platform_name "Webcore"
+  @route_state_id {@spec_name, @platform_name}
 
   @get_request_envelope %Envelope{
     private: %Private{
-      route_state_id: @route_state_id,
+      spec: @spec_name,
+      platform: @platform_name,
       production_environment: "test"
     },
     request: %Request{
@@ -209,8 +212,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(envelope)
 
-      %Private{route_state_id: route_state_id} = envelope.private
-      {:ok, state} = Belfrage.RouteState.state(route_state_id)
+      {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
       assert state.counter.belfrage_cache == %{200 => 1, :errors => 0}
     end
@@ -246,8 +248,7 @@ defmodule BelfrageTest do
 
       Belfrage.handle(envelope)
 
-      %Private{route_state_id: route_state_id} = envelope.private
-      {:ok, state} = Belfrage.RouteState.state(route_state_id)
+      {:ok, state} = Belfrage.RouteState.state(@route_state_id)
 
       assert state.counter == %{
                :errors => 1,

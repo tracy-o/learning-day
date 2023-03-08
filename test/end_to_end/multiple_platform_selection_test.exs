@@ -331,7 +331,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test "When an asset type cannot be retrieved" do
+    test "selector returns an error" do
       conn = conn(:get, "/platform-selection-with-selector")
       url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
@@ -350,9 +350,8 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
         end
       )
 
-      Router.call(conn, [])
-
-      assert {500, _headers, _body} = sent_resp(conn)
+      err_msg = "** (RuntimeError) Selector 'AssetTypePlatformSelector' failed with reason: 500"
+      assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, []) end
     end
   end
 end
