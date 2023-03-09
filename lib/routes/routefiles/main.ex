@@ -2648,13 +2648,13 @@ defroutefile "Main" do
 
   redirect "/weather/forecast-video/:asset_id", to: "/weather/av/:asset_id", status: 302
 
-  handle "/weather/about/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/about/17185651", "/weather/about/17543675", "/weather/about/42960629"] do
+  handle "/weather/about/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/about/17185651", "/weather/about/17543675", {"/weather/about/42960629", 302}] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/features/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/features/63962965", "/weather/features/60850659", "/weather/features/63895092"] do
+  handle "/weather/features/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/features/63962965", "/weather/features/60850659", {"/weather/features/63895092", 302}] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/feeds/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/feeds/23602910", "/weather/feeds/23081292", "/weather/feeds/64827801"] do
+  handle "/weather/feeds/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/feeds/23602910", "/weather/feeds/23081292", {"/weather/feeds/64827801", 302}] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
 
