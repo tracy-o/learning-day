@@ -25,6 +25,10 @@ defroutefile "Sport" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/sport/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage", platform: "Simorgh", examples: ["/sport/articles/cx94820kl0mo.amp"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/sport/:discipline/articles/:optimo_id", using: "SportStorytellingPage", platform: "Webcore", examples: [] do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
