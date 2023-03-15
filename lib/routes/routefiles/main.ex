@@ -458,12 +458,6 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  # Trial news assets setup for initial MVT test experiment
-  handle "/news/articles/cn3zl2drk0ko", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/cn3zl2drk0ko"]
-  handle "/news/articles/cyxjrk98x59o", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/cyxjrk98x59o"]
-  handle "/news/articles/ce5108j80gpo", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/ce5108j80gpo"]
-  handle "/news/articles/ce4xrgggdvgo", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/ce4xrgggdvgo"]
-
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp", platform: "MozartSimorgh", examples: []
   handle "/news/articles/:optimo_id.json", using: "NewsAmp", platform: "MozartSimorgh", examples: []
 
@@ -655,6 +649,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/cymrufyw/erthyglau/:optimo_id.amp", using: "CymrufywAmp", platform: "MozartSimorgh", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
@@ -673,6 +671,10 @@ defroutefile "Main" do
 
   handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", platform: "Webcore", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
+  end
+
+  handle "/naidheachdan/sgeulachdan/:optimo_id.amp", using: "NaidheachdanAmp", platform: "MozartSimorgh", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
