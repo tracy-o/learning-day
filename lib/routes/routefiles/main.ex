@@ -320,7 +320,6 @@ defroutefile "Main" do
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
   redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/topics/cvp28kxz49xt", status: 301
   redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
-  redirect "/news/topics/c779dqxlxv2t/*any", to: "/news/world-48623037", status: 302
   redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
   redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/topics/czpqp1pq5q5t", status: 301
   redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
@@ -523,6 +522,8 @@ defroutefile "Main" do
   redirect "/news/uk-england-tees-48281832", to: "/news/topics/c2ymky7eq13t", status: 301
   redirect "/news/education-46131593", to: "/news/topics/cg41ylwv43pt", status: 301
   redirect "/news/world-middle-east-48433977", to: "/news/topics/cp7r8vgl24lt", status: 301
+  redirect "/news/world-48623037", to: "/news/topics/c779dqxlxv2t", status: 301
+  redirect "/news/world-24371433", to: "/news/topics/c779dqxlxv2t", status: 301
 
   handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
   handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
