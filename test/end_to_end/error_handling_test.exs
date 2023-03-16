@@ -5,7 +5,6 @@ defmodule EndToEnd.ErrorHandlingTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
@@ -13,7 +12,6 @@ defmodule EndToEnd.ErrorHandlingTest do
   setup :clear_cache
 
   test "exception in Belfrage results in a 500" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     {status, _headers, body} = make_call()
     assert status == 500
     assert body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"

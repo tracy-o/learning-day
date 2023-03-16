@@ -1,5 +1,5 @@
 defmodule Belfrage.Mvt.StateTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
   import Test.Support.Helper, only: [set_env: 2]
@@ -88,6 +88,11 @@ defmodule Belfrage.Mvt.StateTest do
   end
 
   describe "filter_headers/2" do
+    setup do
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
+      {:ok, route_state_pid: pid}
+    end
+
     test "drops all bbc-mvt- headers when no route state can be found" do
       assert %{"foo" => "bar"} ==
                Mvt.State.filter_headers(
@@ -120,8 +125,6 @@ defmodule Belfrage.Mvt.StateTest do
 
       set_env(:fetch_route_state_timeout, 10)
 
-      start_supervised!({TestRouteState, "SomeTestRouteState"})
-
       assert %{"foo" => "bar"} ==
                Mvt.State.filter_headers(
                  %{
@@ -133,9 +136,9 @@ defmodule Belfrage.Mvt.StateTest do
                )
     end
 
-    test "drops all bbc-mvt- headers that are not in :mvt_seen in RouteState state" do
+    test "drops all bbc-mvt- headers that are not in :mvt_seen in RouteState state",
+         %{route_state_pid: pid} do
       now = DateTime.utc_now()
-      pid = start_supervised!({RouteState, @route_state_id})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => now})
@@ -152,9 +155,8 @@ defmodule Belfrage.Mvt.StateTest do
                )
     end
 
-    test "drops all bbc-mvt- headers that have values not in the correct format" do
-      pid = start_supervised!({RouteState, @route_state_id})
-
+    test "drops all bbc-mvt- headers that have values not in the correct format",
+         %{route_state_pid: pid} do
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{
           "mvt-button_colour" => DateTime.utc_now(),
@@ -178,7 +180,7 @@ defmodule Belfrage.Mvt.StateTest do
 
   describe "all_vary_headers_seen?/2" do
     setup do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
       {:ok, route_state_pid: pid}
     end
 

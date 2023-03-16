@@ -167,7 +167,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "does not vary on raw MVT header when it is not in :mvt_seen in RouteState state" do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
@@ -195,7 +195,7 @@ defmodule Belfrage.RequestHashTest do
 
     test "does not vary on raw MVT header with datetime older than :mvt_vary_header_ttl after a :reset msg is sent" do
       set_env(:mvt_vary_header_ttl, 10_000)
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
       now = DateTime.utc_now()
 
       :sys.replace_state(pid, fn state ->
@@ -243,7 +243,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "does not vary on different experiment values when MVT headers not in :mvt_seen in RouteState state" do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-sidebar_colour" => DateTime.utc_now()})
@@ -271,7 +271,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "varies on different experiment values for MVT header in :mvt_seen in RouteState state" do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
@@ -299,7 +299,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "varies on raw MVT header in :mvt_seen in RouteState state" do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{"mvt-button_colour" => DateTime.utc_now()})
@@ -326,7 +326,7 @@ defmodule Belfrage.RequestHashTest do
     end
 
     test "varies on different raw MVT headers in :mvt_seen in RouteState state" do
-      pid = start_supervised!({RouteState, @route_state_id})
+      pid = start_supervised!({RouteState, {@route_state_id, %{}}})
 
       :sys.replace_state(pid, fn state ->
         Map.put(state, :mvt_seen, %{

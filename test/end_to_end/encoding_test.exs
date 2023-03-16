@@ -2,7 +2,6 @@ defmodule ContentEncodingTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
@@ -10,7 +9,6 @@ defmodule ContentEncodingTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
     :ok
   end
 

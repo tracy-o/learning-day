@@ -2,7 +2,7 @@ defmodule NonUtf8QueryStringTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.{AWS, RouteState, Services.Webcore}
+  alias Belfrage.{AWS, Services.Webcore}
   alias Belfrage.Clients.{HTTP, HTTPMock, Lambda, LambdaMock}
 
   use Test.Support.Helper, :mox
@@ -24,8 +24,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "Given a query string with accented characters and spaces, it still passes this on to the origin" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -48,8 +46,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "Given a query string with a multi byte character, it still passes this on to the origin" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -72,8 +68,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "Given a query string with no value, it still passes this on to the origin" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -96,8 +90,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "query string with invalid utf characters results in a 200" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -123,8 +115,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "path params with invalid utf chars result in 500 for requests to WebCore" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     conn = conn(:get, "/format/rewrite/fo%a0")
 
     # Actually call ExAws to trigger the error on JSON-encoding the lambda
@@ -149,8 +139,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "path params with invalid utf chars don't raise an error for non-Webcore requests" do
-    start_supervised!({RouteState, {"SomeFablRouteState", "Fabl"}})
-
     fabl_url = URI.decode("#{Application.get_env(:belfrage, :fabl_endpoint)}/module/fo%a0")
 
     expect(HTTPMock, :execute, fn %HTTP.Request{url: ^fabl_url}, :Fabl ->
@@ -162,8 +150,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "malformed URI" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     LambdaMock
     |> expect(:call, fn _credentials,
                         _lambda_function_name,
@@ -189,7 +175,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "invalid string" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     set_env(:lambda_client, Lambda)
     set_env(:aws, AWS)
 
@@ -204,8 +189,6 @@ defmodule NonUtf8QueryStringTest do
   end
 
   test "valid string" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     set_mock_credentials()
 
     expect(HTTPMock, :execute, fn %HTTP.Request{}, :Webcore ->

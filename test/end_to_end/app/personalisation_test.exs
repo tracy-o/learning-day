@@ -6,7 +6,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   import Test.Support.Helper, only: [set_environment: 1]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
+  alias Belfrage.{Clients.HTTPMock, Clients.HTTP}
   alias Fixtures.AuthToken
 
   @token AuthToken.valid_access_token()
@@ -24,11 +24,6 @@ defmodule EndToEnd.App.PersonalisationTest do
   setup :clear_cache
 
   describe "personalised route" do
-    setup do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
-      :ok
-    end
-
     test "non-personalised request" do
       expect_non_personalised_origin_request()
 
@@ -132,8 +127,6 @@ defmodule EndToEnd.App.PersonalisationTest do
   describe "personalised route and expired auth. token" do
     test "invalid auth token on test prod. env." do
       set_environment("test")
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
-
       expect_no_origin_request()
 
       conn =
@@ -146,9 +139,6 @@ defmodule EndToEnd.App.PersonalisationTest do
 
     test "expired auth token on live prod. env." do
       set_environment("live")
-
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
-
       expect_no_origin_request()
 
       conn =
@@ -163,7 +153,6 @@ defmodule EndToEnd.App.PersonalisationTest do
   describe "personalisation is disabled" do
     setup do
       stub_dial(:personalisation, "off")
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
       :ok
     end
 
@@ -192,11 +181,6 @@ defmodule EndToEnd.App.PersonalisationTest do
   end
 
   describe "non-personalised route" do
-    setup do
-      start_supervised!({RouteState, {"FablData", "Fabl"}})
-      :ok
-    end
-
     test "authenticated request" do
       expect_non_personalised_origin_request()
 

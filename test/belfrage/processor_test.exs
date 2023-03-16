@@ -65,7 +65,12 @@ defmodule Belfrage.ProcessorTest do
   end
 
   describe "Processor.get_route_state/1" do
-    @envelope %Envelope{private: %Private{route_state_id: @route_state_id}}
+    @envelope %Envelope{
+      private: %Private{
+        route_state_id: @route_state_id,
+        origin: "https://origin.bbc.co.uk/"
+      }
+    }
 
     test "adds route_state information to Envelope.private" do
       assert %Envelope{

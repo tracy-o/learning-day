@@ -5,14 +5,12 @@ defmodule EndToEnd.App.RouteTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
+  alias Belfrage.{Clients.HTTPMock, Clients.HTTP}
 
   @moduletag :end_to_end
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
-    :ok
   end
 
   @response {:ok,

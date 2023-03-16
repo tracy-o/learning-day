@@ -11,18 +11,14 @@ defmodule EndToEnd.LoggingTest do
   import ExUnit.CaptureLog
 
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
-  @route_state_id {"SomeRouteState", "Webcore"}
 
   setup :clear_cache
 
   describe "generic e2e tests - router call" do
     test "requests are logged" do
-      start_supervised!({RouteState, @route_state_id})
-
       stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
         {:ok,
          %{
@@ -72,8 +68,6 @@ defmodule EndToEnd.LoggingTest do
     test "requests are logged" do
       :erlang.trace(:all, true, [:call])
       :erlang.trace_pattern({IO, :write, 2}, true, [:local])
-
-      start_supervised!({RouteState, @route_state_id})
 
       stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
         {:ok,

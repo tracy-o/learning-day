@@ -1,5 +1,5 @@
 defmodule EndToEnd.MvtTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Plug.Test
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [set_environment: 1]
@@ -93,11 +93,16 @@ defmodule EndToEnd.MvtTest do
   setup do
     :ets.delete_all_objects(:cache)
 
+    route_state_id_1 = {"SomeMvtRouteState", "Webcore"}
+    route_state_id_2 = {"SomeSimorghRouteSpec", "Simorgh"}
+    route_state_args_1 = %{origin: Application.get_env(:belfrage, :pwa_lambda_function)}
+    route_state_args_2 = %{origin: Application.get_env(:belfrage, :simorgh_endpoint)}
+
     %{
       webcore_route_state_pid:
-        start_supervised!({RouteState, {"SomeMvtRouteState", "Webcore"}}, id: :SomeMvtRouteState),
+        start_supervised!({RouteState, {route_state_id_1, route_state_args_1}}, id: :SomeMvtRouteState),
       simorgh_route_state_pid:
-        start_supervised!({RouteState, {"SomeSimorghRouteSpec", "Simorgh"}}, id: :SomeSimorghRouteSpec)
+        start_supervised!({RouteState, {route_state_id_2, route_state_args_2}}, id: :SomeSimorghRouteSpec)
     }
   end
 

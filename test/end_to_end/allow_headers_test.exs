@@ -2,7 +2,7 @@ defmodule AllowHeadersTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, RouteSpecManager}
+  alias Belfrage.RouteSpecManager
   use Test.Support.Helper, :mox
 
   import Test.Support.Helper, only: [set_env: 4]
@@ -23,14 +23,12 @@ defmodule AllowHeadersTest do
 
   test "Allow 'ctx-service-env' header for Fabl platform on test" do
     RouteSpecManager.update_specs()
-    start_supervised!({RouteState, {"FablData", "Fabl"}})
     assert {200, _headers, _body} = sent_resp(get_fabldata_conn_with_header())
   end
 
   test "Don't allow 'ctx-service-env' header for Fabl platform on live" do
     set_env(:belfrage, :production_environment, "live", &RouteSpecManager.update_specs/0)
     RouteSpecManager.update_specs()
-    start_supervised!({RouteState, {"FablData", "Fabl"}})
     assert {404, _headers, _body} = sent_resp(get_fabldata_conn_with_header())
   end
 

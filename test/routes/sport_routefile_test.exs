@@ -77,7 +77,6 @@ defmodule Routes.SportRoutefileTest do
     end
 
     test "example is routed correctly" do
-      stub_origins()
       start_route_states()
 
       @examples
@@ -102,8 +101,6 @@ defmodule Routes.SportRoutefileTest do
     end
 
     test "proxy-pass examples are routed correctly" do
-      start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
-
       @examples
       |> Enum.filter(fn {matcher, _, _} -> matcher == "/*any" end)
       |> validate(fn {matcher, _, example} ->
@@ -155,7 +152,6 @@ defmodule Routes.SportRoutefileTest do
     end
 
     test "redirect is routed correctly" do
-      stub_origins()
       start_route_states()
 
       @redirects
@@ -338,16 +334,31 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp start_route_states() do
-    Belfrage.RouteSpecManager.list_specs()
-    |> Enum.map(&{Map.get(&1, :name), Map.get(&1, :platform)})
-    |> Enum.each(&start_route_state/1)
+    stub_origins()
+    Belfrage.RouteSpecManager.list_specs() |> Enum.each(&start_route_state/1)
   end
 
-  defp start_route_state(route_state_id) do
-    start_supervised!(%{
-      id: route_state_id,
-      start: {RouteState, :start_link, [route_state_id]}
-    })
+  defp start_route_state(%RouteSpec{
+         name: name,
+         platform: platform,
+         origin: origin,
+         circuit_breaker_error_threshold: threshold
+       }) do
+    route_state_id = {name, platform}
+
+    route_state_args = %{
+      origin: origin,
+      circuit_breaker_error_threshold: threshold
+    }
+
+    case start_supervised(%{
+           id: route_state_id,
+           start: {RouteState, :start_link, [{route_state_id, route_state_args}]}
+         }) do
+      {:ok, _pid} -> :ok
+      {:error, {{:already_started, _pid}, _child_spec}} -> :ok
+      error -> raise "failed to start #{inspect(route_state_id)} child, reason: #{inspect(error)}"
+    end
   end
 
   defp maybe_selector_spec_name(spec_name) do

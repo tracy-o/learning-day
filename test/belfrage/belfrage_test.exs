@@ -15,6 +15,11 @@ defmodule BelfrageTest do
   @platform_name "Webcore"
   @route_state_id {@spec_name, @platform_name}
 
+  @route_state_args %{
+    origin: Application.compile_env(:belfrage, :pwa_lambda_function),
+    circuit_breaker_error_threshold: 100
+  }
+
   @get_request_envelope %Envelope{
     private: %Private{
       spec: @spec_name,
@@ -34,7 +39,7 @@ defmodule BelfrageTest do
   @web_core_500_lambda_response {:ok, %{"body" => "500 - internal error", "headers" => %{}, "statusCode" => 500}}
 
   setup do
-    start_supervised!({Belfrage.RouteState, @route_state_id})
+    start_supervised!({Belfrage.RouteState, {@route_state_id, @route_state_args}})
     :ok
   end
 

@@ -2,7 +2,6 @@ defmodule EndToEndTest.PrivateCacheControlTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
 
   use Test.Support.Helper, :mox
 
@@ -26,7 +25,6 @@ defmodule EndToEndTest.PrivateCacheControlTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     :ok
   end
 

@@ -3,12 +3,10 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
   use Plug.Test
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{HTTP, HTTPMock}
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   describe "request is made to FABL" do
     setup do
-      start_supervised!({RouteState, {"ClassicAppFablLdp", "Fabl"}})
       :ets.delete_all_objects(:cache)
       {:ok, %{subject_id: "cd988a73-6c41-4690-b785-c8d3abc2d13c", created_by: "something", language: "en"}}
     end
