@@ -16,6 +16,10 @@ Source5: cloudwatch
 Source6: component-cron
 Source7: access
 Source8: access-cron
+Source9: ship-access-logs.sh
+Source10: delete-uploaded-files-cron
+Source11: delete-uploaded-files.sh
+Source12: ship-access-logs-cron
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -26,6 +30,7 @@ Requires: component-logger
 Requires: belfrage-performance-tuning
 Requires: dial-agent
 Requires: xray
+Requires: google-cloud-sdk
 
 %description
 Belfrage is a proxy pass translating incoming web requests
@@ -58,6 +63,10 @@ cp -p %{SOURCE7} %{buildroot}/etc/logrotate.d/access
 mkdir -p %{buildroot}/etc/cron.d
 cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
 cp -p %{SOURCE8} %{buildroot}/etc/cron.d/access-cron
+cp -p %{SOURCE10} %{buildroot}/etc/cron.d/delete-uploaded-files-cron
+cp -p %{SOURCE12} %{buildroot}/etc/cron.d/ship-access-logs-cron
+cp %{SOURCE9} %{buildroot}/home/component/ship-access-logs.sh
+cp %{SOURCE11} %{buildroot}/home/component/delete-uploaded-files.sh
 
 %post
 systemctl enable belfrage
@@ -67,14 +76,20 @@ systemctl enable cloudformation-signal
 cp /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
 touch /etc/cron.d/component-cron
 touch /etc/cron.d/access-cron
+touch /etc/cron.d/delete-uploaded-files-cron
+touch /etc/cron.d/ship-access-logs-cron
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
+%attr(0755, component, component) /home/component/ship-access-logs.sh
+%attr(0755, component, component) /home/component/delete-uploaded-files.sh
 %attr(0644, root, root) /etc/logrotate.d/cloudwatch
 %attr(0644, root, root) /etc/logrotate.d/access
 %attr(0644, root, root) /etc/cron.d/component-cron
 %attr(0644, root, root) /etc/cron.d/access-cron
+%attr(0644, root, root) /etc/cron.d/delete-uploaded-files-cron
+%attr(0644, root, root) /etc/cron.d/ship-access-logs-cron
 /home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service

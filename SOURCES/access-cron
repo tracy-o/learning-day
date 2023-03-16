@@ -1,1 +1,1 @@
-*/15 * * * * component /usr/sbin/logrotate /etc/logrotate.d/access
+*/5 * * * * component /usr/sbin/logrotate -f /etc/logrotate.d/access

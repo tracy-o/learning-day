@@ -249,5 +249,12 @@
       "test": "https://test-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/development.json",
       "live": "https://live-mvt-slot-allocations.s3.eu-west-1.amazonaws.com/production.json"
     }
-  }
+  },
+  {
+    "name": "GCS_ACCESS_LOGS_BUCKET_NAME",
+    "values": {
+      "test": "bbc-bq-logs-dev-belfrage",
+      "live": "bbc-bq-logs-prod-belfrage"
+    }
+  }  
 ]
