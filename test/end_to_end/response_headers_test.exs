@@ -11,7 +11,7 @@ defmodule EndToEnd.ResponseHeadersTest do
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, "SomeRouteState.Webcore"})
+    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     :ok
   end
 

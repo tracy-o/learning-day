@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.{Cache.Local, Cache.Distributed}
+  alias Belfrage.{Cache.Local, Cache.Distributed, RouteState}
 
   @default_result {:ok, :content_not_found}
   @dial Application.compile_env(:belfrage, :dial)
@@ -60,14 +60,15 @@ defmodule Belfrage.Cache.MultiStrategy do
 
   defp execute_fetch(cache, envelope, accepted_freshness) do
     cache_metric = cache.metric_identifier()
+    route_spec = RouteState.format_id(envelope.private.route_state_id)
 
     with {:ok, {strategy, freshness}, response} <- cache.fetch(envelope),
          true <- freshness in accepted_freshness do
       :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), freshness, :hit], %{}, %{
-        route_spec: envelope.private.route_state_id
+        route_spec: route_spec
       })
 
-      metric_on_stale_routespec(envelope, cache_metric, freshness)
+      metric_on_stale_routespec(route_spec, cache_metric, freshness)
       {:halt, {:ok, {strategy, freshness}, response}}
     else
       # TODO? we could match here on `false` and record a metric that
@@ -76,14 +77,14 @@ defmodule Belfrage.Cache.MultiStrategy do
 
       _content_not_found_or_not_accepted_freshness ->
         :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), :miss], %{}, %{
-          route_spec: envelope.private.route_state_id
+          route_spec: route_spec
         })
 
         {:cont, {:ok, :content_not_found}}
     end
   end
 
-  defp metric_on_stale_routespec(%Belfrage.Envelope{private: %{route_state_id: route_state_id}}, cache_metric, :stale) do
+  defp metric_on_stale_routespec(route_state_id, cache_metric, :stale) do
     Belfrage.Metrics.multi_execute(
       [[:belfrage, :cache, route_state_id, cache_metric, :stale, :hit], [:belfrage, :cache, :stale, :hit]],
       %{count: 1},

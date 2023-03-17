@@ -1,6 +1,8 @@
 # credo:disable-for-this-file Credo.Check.Refactor.LongQuoteBlocks
 # credo:disable-for-this-file Credo.Check.Refactor.CyclomaticComplexity
 defmodule Belfrage.MetricsMigration do
+  alias Belfrage.RouteState
+
   def route_specs_from_file_names() do
     Path.expand("../routes/specs", __DIR__)
     |> File.ls!()
@@ -344,28 +346,36 @@ defmodule Belfrage.MetricsMigration do
           summary(
             "belfrage.request.duration",
             event_name: "belfrage.plug.stop",
-            tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
+            tag_values:
+              &Map.merge(&1, %{
+                status_code: &1.conn.status,
+                route_spec: RouteState.format_id(&1.conn.assigns[:route_spec])
+              }),
             unit: {:native, :millisecond},
             tags: [:status_code, :route_spec]
           ),
           counter(
             "belfrage.response",
             event_name: "belfrage.plug.stop",
-            tag_values: &Map.merge(&1, %{status_code: &1.conn.status, route_spec: &1.conn.assigns[:route_spec]}),
+            tag_values:
+              &Map.merge(&1, %{
+                status_code: &1.conn.status,
+                route_spec: RouteState.format_id(&1.conn.assigns[:route_spec])
+              }),
             tags: [:status_code, :route_spec]
           ),
           counter(
             "belfrage.response.private",
             event_name: "belfrage.plug.stop",
             keep: &(&1.conn.status == 200 && private_response?(&1.conn)),
-            tag_values: &Map.put(&1, :route_spec, &1.conn.assigns[:route_spec]),
+            tag_values: &Map.put(&1, :route_spec, RouteState.format_id(&1.conn.assigns[:route_spec])),
             tags: [:route_spec]
           ),
           counter(
             "befrage.response.stale",
             event_name: "belfrage.plug.stop",
             keep: &(Plug.Conn.get_resp_header(&1.conn, "belfrage-cache-status") == ["STALE"]),
-            tag_values: &Map.put(&1, :route_spec, &1.conn.assigns[:route_spec]),
+            tag_values: &Map.put(&1, :route_spec, RouteState.format_id(&1.conn.assigns[:route_spec])),
             tags: [:route_spec]
           ),
           counter(
@@ -375,7 +385,7 @@ defmodule Belfrage.MetricsMigration do
             tag_values: fn metadata ->
               case metadata.reason do
                 %{conn: conn} ->
-                  Map.put(metadata, :route_spec, conn.assigns[:route_spec])
+                  Map.put(metadata, :route_spec, RouteState.format_id(conn.assigns[:route_spec]))
 
                 _ ->
                   metadata

@@ -94,9 +94,10 @@ defmodule EndToEnd.MvtTest do
     :ets.delete_all_objects(:cache)
 
     %{
-      webcore_route_state_pid: start_supervised!({RouteState, "SomeMvtRouteState.Webcore"}, id: :SomeMvtRouteState),
+      webcore_route_state_pid:
+        start_supervised!({RouteState, {"SomeMvtRouteState", "Webcore"}}, id: :SomeMvtRouteState),
       simorgh_route_state_pid:
-        start_supervised!({RouteState, "SomeSimorghRouteSpec.Simorgh"}, id: :SomeSimorghRouteSpec)
+        start_supervised!({RouteState, {"SomeSimorghRouteSpec", "Simorgh"}}, id: :SomeSimorghRouteSpec)
     }
   end
 

@@ -99,7 +99,7 @@ defmodule Routes.RoutefileTest do
     end
 
     test "proxy-pass examples are routed correctly" do
-      start_supervised!({RouteState, "ProxyPass.OriginSimulator"})
+      start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
 
       @examples
       |> Enum.filter(fn {matcher, _, _} -> matcher == "/*any" end)
@@ -237,12 +237,14 @@ defmodule Routes.RoutefileTest do
       nil ->
         conn = make_call(:get, example)
 
-        if String.starts_with?(conn.assigns.route_spec, spec_name) do
-          :ok
-        else
-          {:error, "Example #{example} for route #{matcher} that uses a platform selector \
-                     is not routed to a route spec that starts with #{spec_name}, \
-                     but to #{conn.assigns.route_spec}"}
+        case conn.assigns.route_spec do
+          {^spec_name, _} ->
+            :ok
+
+          _other ->
+            {:error, "Example #{example} for route #{matcher} that uses a platform selector \
+                      is not routed to a route spec that starts with #{spec_name}, \
+                      but to #{conn.assigns.route_spec}"}
         end
 
       %RouteSpec{} ->
@@ -334,7 +336,7 @@ defmodule Routes.RoutefileTest do
 
   defp start_route_states() do
     Belfrage.RouteSpecManager.list_specs()
-    |> Enum.map(&Map.get(&1, :route_state_id))
+    |> Enum.map(&{Map.get(&1, :name), Map.get(&1, :platform)})
     |> Enum.each(&start_route_state/1)
   end
 

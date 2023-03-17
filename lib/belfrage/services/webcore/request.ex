@@ -1,7 +1,7 @@
 defmodule Belfrage.Services.Webcore.Request do
   alias Belfrage.Envelope
-  alias Belfrage.Envelope.{Request, Private, UserSession}
-  alias Belfrage.Mvt
+  alias Belfrage.Envelope.{Request, Private, UserSession, RouteState}
+  alias Belfrage.{Mvt, RouteState}
 
   def build(envelope) do
     %{
@@ -31,7 +31,7 @@ defmodule Belfrage.Services.Webcore.Request do
       "accept-encoding": "gzip",
       is_uk: request.is_uk,
       host: request.host,
-      "ctx-route-spec": private.route_state_id
+      "ctx-route-spec": RouteState.format_id(private.route_state_id)
     }
   end
 

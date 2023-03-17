@@ -5,6 +5,8 @@ defmodule Belfrage.BelfrageCacheTest do
 
   alias Belfrage.Envelope
 
+  @route_state_id {"ARouteState", "Webcore"}
+
   @cache_seeded_response %Belfrage.Envelope.Response{
     body: :zlib.gzip(~s({"hi": "bonjour"})),
     headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
@@ -40,7 +42,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "served early from cache sets origin to :belfrage_cache" do
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "ARouteState"
+          route_state_id: @route_state_id
         },
         request: %Envelope.Request{
           request_hash: cache_key("fresh")
@@ -55,7 +57,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "does not add a stale response when requesting a fresh response" do
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "ARouteState"
+          route_state_id: @route_state_id
         },
         request: %Envelope.Request{
           request_hash: cache_key("stale")
@@ -68,7 +70,7 @@ defmodule Belfrage.BelfrageCacheTest do
     test "fetches cached stale response when requesting fresh or stale content and the local cache returns the content" do
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "ARouteState"
+          route_state_id: @route_state_id
         },
         request: %Envelope.Request{
           request_hash: cache_key("stale")
@@ -90,7 +92,7 @@ defmodule Belfrage.BelfrageCacheTest do
 
       envelope = %Envelope{
         private: %Envelope.Private{
-          route_state_id: "ARouteState"
+          route_state_id: @route_state_id
         },
         request: %Envelope.Request{
           request_hash: cache_key("stale")
@@ -107,7 +109,7 @@ defmodule Belfrage.BelfrageCacheTest do
       %{
         cacheable_envelope: %Envelope{
           private: %Envelope.Private{
-            route_state_id: "ARouteState"
+            route_state_id: @route_state_id
           },
           request: %Envelope.Request{
             request_hash: unique_cache_key(),

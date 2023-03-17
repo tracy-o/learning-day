@@ -8,7 +8,7 @@ defmodule Belfrage.RouteStateTest do
 
   @failure_status_code Enum.random(500..504)
 
-  @route_state_id "SomeRouteState.Webcore"
+  @route_state_id {"SomeRouteState", "Webcore"}
 
   @resp_envelope %Envelope{
     private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
@@ -37,8 +37,19 @@ defmodule Belfrage.RouteStateTest do
 
     route_spec = Map.from_struct(RouteSpecManager.get_spec(@route_state_id))
 
+    route_spec =
+      route_spec
+      |> Map.put(:spec, Map.get(route_spec, :name))
+      |> Map.delete(:name)
+      |> Map.put(:route_state_id, @route_state_id)
+
     assert RouteState.state(@route_state_id) ==
-             {:ok, Map.merge(route_spec, %{counter: %{}})}
+             {:ok,
+              Map.merge(route_spec, %{
+                counter: %{},
+                mvt_seen: %{},
+                throughput: 100
+              })}
   end
 
   describe "returns a different count per origin" do

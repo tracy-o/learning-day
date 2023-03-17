@@ -4,7 +4,7 @@ defmodule Belfrage.RouteSpecManagerTest do
   alias Belfrage.{RouteSpecManager, RouteSpec}
 
   test "creates a route spec table with expected contents" do
-    assert Enum.all?(ets_table_contents(), fn {key, %Belfrage.RouteSpec{}} -> is_binary(key) end)
+    assert Enum.all?(ets_table_contents(), fn {key, %Belfrage.RouteSpec{}} -> is_tuple(key) end)
   end
 
   describe "get_spec" do
@@ -13,13 +13,8 @@ defmodule Belfrage.RouteSpecManagerTest do
       assert RouteSpecManager.get_spec(key) == route_spec
     end
 
-    test "retrieves expected spec with partition if key is in ets table" do
-      {key, route_spec} = Enum.random(ets_table_contents())
-      assert RouteSpecManager.get_spec("#{key}.SomePartition") == route_spec
-    end
-
     test "retrieves no spec if key is not in ets table" do
-      assert RouteSpecManager.get_spec("SomeRouteSpec.SomePlatform") == nil
+      assert RouteSpecManager.get_spec({"SomeRouteSpec", "SomePlatform"}) == nil
     end
   end
 
@@ -47,7 +42,7 @@ defmodule Belfrage.RouteSpecManagerTest do
   test "Ensure route spec table is correct on test" do
     RouteSpecManager.update_specs()
 
-    fabldata_route_spec = RouteSpecManager.get_spec("FablData.Fabl")
+    fabldata_route_spec = RouteSpecManager.get_spec({"FablData", "Fabl"})
 
     assert ["ctx-service-env"] == fabldata_route_spec.headers_allowlist
     assert ["Personalisation", "CircuitBreaker", "DevelopmentRequests"] == fabldata_route_spec.request_pipeline
@@ -58,7 +53,7 @@ defmodule Belfrage.RouteSpecManagerTest do
     set_env(:belfrage, :production_environment, "live", &RouteSpecManager.update_specs/0)
     RouteSpecManager.update_specs()
 
-    fabldata_route_spec = RouteSpecManager.get_spec("FablData.Fabl")
+    fabldata_route_spec = RouteSpecManager.get_spec({"FablData", "Fabl"})
 
     assert [] == fabldata_route_spec.headers_allowlist
     assert ["Personalisation", "CircuitBreaker"] == fabldata_route_spec.request_pipeline

@@ -8,7 +8,7 @@ defmodule EndToEnd.ClassicAppTest do
 
   describe "request is made to Trevor" do
     setup do
-      start_supervised!({RouteState, "SomeClassicAppsRouteSpec.ClassicApps"})
+      start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
       :ets.delete_all_objects(:cache)
       :ok
     end

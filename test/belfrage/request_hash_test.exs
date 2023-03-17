@@ -6,7 +6,7 @@ defmodule Belfrage.RequestHashTest do
   alias Belfrage.RequestHash
   alias Belfrage.{Envelope, RouteState}
 
-  @route_state_id "SomeRouteState.Webcore"
+  @route_state_id {"SomeRouteState", "Webcore"}
 
   @envelope %Envelope{
     request: %Envelope.Request{

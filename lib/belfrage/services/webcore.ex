@@ -1,6 +1,6 @@
 defmodule Belfrage.Services.Webcore do
   require Logger
-  alias Belfrage.{Envelope, Metrics}
+  alias Belfrage.{Envelope, Metrics, RouteState}
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
@@ -12,6 +12,7 @@ defmodule Belfrage.Services.Webcore do
   @impl Service
   def dispatch(envelope = %Envelope{private: private = %Private{}}) do
     envelope = LatencyMonitor.checkpoint(envelope, :origin_request_sent)
+    route_spec = RouteState.format_id(private.route_state_id)
 
     response =
       with {:ok, response} <- call_lambda(envelope),
@@ -19,20 +20,20 @@ defmodule Belfrage.Services.Webcore do
         Metrics.multi_execute([[:belfage, :webcore, :response], [:belfrage, :platform, :response]], %{}, %{
           platform: "Webcore",
           status_code: response.http_status,
-          route_spec: private.route_state_id
+          route_spec: route_spec
         })
 
         response
       else
         {:error, error_code} ->
-          Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: private.route_state_id})
+          Metrics.event(~w(webcore error)a, %{error_code: error_code, route_spec: route_spec})
 
           {status_code, body} = status_from_error(error_code, private.preview_mode)
 
           :telemetry.execute([:belfrage, :platform, :response], %{}, %{
             platform: "Webcore",
             status_code: status_code,
-            route_spec: private.route_state_id
+            route_spec: route_spec
           })
 
           %Response{http_status: status_code, body: body}
@@ -44,7 +45,7 @@ defmodule Belfrage.Services.Webcore do
 
   defp call_lambda(envelope = %Envelope{request: %Request{}, private: private = %Private{}}) do
     metadata = %{
-      route_spec: private.route_state_id,
+      route_spec: RouteState.format_id(private.route_state_id),
       envelope: envelope
     }
 

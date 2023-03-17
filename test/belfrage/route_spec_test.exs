@@ -193,7 +193,7 @@ defmodule Belfrage.RouteSpecTest do
 
       define_route("AllowedAttrRoute", %{platform: "NotAllowedAttrPlatform"})
 
-      err_msg = "Invalid 'AllowedAttrRoute.NotAllowedAttrPlatform' spec, error: {:badkey, :not_allowed_attr}"
+      err_msg = "Invalid '\"AllowedAttrRoute\"' spec, error: {:badkey, :not_allowed_attr}"
 
       assert_raise RuntimeError, err_msg, fn ->
         RouteSpec.get_route_spec({"AllowedAttrRoute", "NotAllowedAttrPlatform"})
@@ -211,7 +211,7 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       err_msg =
-        ~s(DuplicateTransformersRoute.DuplicateTransformersPlatform contains the following duplicated transformers in the request_pipeline : ["LambdaOriginAlias"])
+        ~s({"DuplicateTransformersRoute", "DuplicateTransformersPlatform"} contains the following duplicated transformers in the request_pipeline : ["LambdaOriginAlias"])
 
       assert_raise RuntimeError, err_msg, fn ->
         RouteSpec.get_route_spec({"DuplicateTransformersRoute", "DuplicateTransformersPlatform"})

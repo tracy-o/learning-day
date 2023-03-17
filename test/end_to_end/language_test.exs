@@ -36,7 +36,7 @@ defmodule EndToEnd.LanguageTest do
 
   describe "when language_from_cookie false" do
     setup do
-      start_supervised!({RouteState, "SomeRouteState.Webcore"})
+      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
       :ok
     end
 
@@ -81,7 +81,7 @@ defmodule EndToEnd.LanguageTest do
 
   describe "when language_from_cookie true" do
     setup do
-      start_supervised!({RouteState, "LanguageFromCookieRouteState.Webcore"})
+      start_supervised!({RouteState, {"LanguageFromCookieRouteState", "Webcore"}})
       :ok
     end
 

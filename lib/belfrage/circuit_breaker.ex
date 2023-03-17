@@ -1,5 +1,5 @@
 defmodule Belfrage.CircuitBreaker do
-  alias Belfrage.Envelope
+  alias Belfrage.{Envelope, RouteState}
   import Enum, only: [random: 1]
 
   def maybe_apply(envelope, dial_enabled? \\ true) do
@@ -11,7 +11,8 @@ defmodule Belfrage.CircuitBreaker do
   end
 
   defp apply(envelope = %Belfrage.Envelope{}) do
-    Belfrage.Metrics.event(~w(circuit_breaker applied)a, %{route_spec: envelope.private.route_state_id})
+    metadata = %{route_spec: RouteState.format_id(envelope.private.route_state_id)}
+    Belfrage.Metrics.event(~w(circuit_breaker applied)a, metadata)
 
     envelope
     |> Envelope.add(:response, %{http_status: 500})

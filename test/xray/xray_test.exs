@@ -14,7 +14,7 @@ defmodule Belfrage.XrayTest do
   @test_envelope %Envelope{
     private: %Private{
       owner: "me!",
-      route_state_id: "some_id",
+      route_state_id: {"some_spec", "some_platform"},
       preview_mode: "off",
       production_environment: "test",
       runbook: "https://some.runbook/url"
@@ -65,7 +65,7 @@ defmodule Belfrage.XrayTest do
 
       assert segment.annotation == %{
                "owner" => "me!",
-               "route_state_id" => "some_id",
+               "route_state_id" => "some_spec.some_platform",
                "preview_mode" => "off",
                "production_environment" => "test",
                "runbook" => "https://some.runbook/url"
@@ -198,7 +198,7 @@ defmodule Belfrage.XrayTest do
 
       assert subsegment.segment.annotation == %{
                "owner" => "me!",
-               "route_state_id" => "some_id",
+               "route_state_id" => "some_spec.some_platform",
                "preview_mode" => "off",
                "production_environment" => "test",
                "runbook" => "https://some.runbook/url"

@@ -1,27 +1,33 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Envelope, CircuitBreaker, Mvt}
+  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Envelope, CircuitBreaker, Mvt, RouteSpec}
   require Logger
 
   @fetch_route_state_timeout Application.compile_env(:belfrage, :fetch_route_state_timeout)
 
-  def start_link(name) do
-    case RouteSpecManager.get_spec(name) do
+  @spec start_link(
+          {RouteSpec.name(), RouteSpec.platform()}
+          | {RouteSpec.name(), RouteSpec.platform(), non_neg_integer | String.t()}
+        ) :: {:ok, pid()}
+  def start_link(id) do
+    spec_name_platform = get_spec_name_platform(id)
+
+    case RouteSpecManager.get_spec(spec_name_platform) do
       nil ->
-        :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: name})
-        reason = "Route spec '#{name}' not found"
+        :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: format_id(spec_name_platform)})
+        reason = "Route spec '#{spec_name_platform}' not found"
         Logger.log(:error, "", %{msg: reason})
         {:error, reason}
 
       spec ->
-        GenServer.start_link(__MODULE__, {name, spec}, name: via_tuple(name))
+        GenServer.start_link(__MODULE__, {id, spec}, name: via_tuple(id))
     end
   end
 
-  def state(name, timeout \\ @fetch_route_state_timeout) do
+  def state(id, timeout \\ @fetch_route_state_timeout) do
     try do
-      GenServer.call(via_tuple(name), :state, timeout)
+      GenServer.call(via_tuple(id), :state, timeout)
     catch
       :exit, value ->
         :telemetry.execute([:belfrage, :route_state, :fetch, :timeout], %{count: 1})
@@ -30,10 +36,10 @@ defmodule Belfrage.RouteState do
   end
 
   def inc(%Envelope{
-        private: %Envelope.Private{route_state_id: name, origin: origin},
+        private: %Envelope.Private{route_state_id: id, origin: origin},
         response: %Envelope.Response{http_status: http_status, fallback: fallback}
       }) do
-    GenServer.cast(via_tuple(name), {:inc, http_status, origin, fallback})
+    GenServer.cast(via_tuple(id), {:inc, http_status, origin, fallback})
   end
 
   @doc """
@@ -43,34 +49,42 @@ defmodule Belfrage.RouteState do
   """
   def update(
         envelope = %Envelope{
-          private: %Envelope.Private{route_state_id: name, origin: origin},
+          private: %Envelope.Private{route_state_id: id, origin: origin},
           response: %Envelope.Response{http_status: http_status, fallback: fallback}
         }
       ) do
     case {fallback, Mvt.State.get_vary_headers(envelope.response)} do
       {false, vary_headers = [_ | _]} ->
-        GenServer.cast(via_tuple(name), {:update, http_status, origin, vary_headers})
+        GenServer.cast(via_tuple(id), {:update, http_status, origin, vary_headers})
 
       _ ->
         inc(envelope)
     end
   end
 
-  def via_tuple(name) do
-    RouteStateRegistry.via_tuple({__MODULE__, name})
+  def via_tuple(id) do
+    RouteStateRegistry.via_tuple({__MODULE__, id})
   end
+
+  def format_id(nil), do: nil
+  def format_id({spec, platform}), do: "#{spec}.#{platform}"
+  def format_id({spec, platform, partition}), do: "#{spec}.#{platform}.#{partition}"
 
   # callbacks
 
   @impl GenServer
-  def init({name, spec}) do
+  def init({id, spec}) do
     Process.send_after(self(), :reset, route_state_reset_interval())
 
-    spec = Map.from_struct(spec)
+    spec_map =
+      spec
+      |> Map.from_struct()
+      |> Map.put(:spec, Map.get(spec, :name))
+      |> Map.delete(:name)
 
     {:ok,
-     Map.merge(spec, %{
-       route_state_id: name,
+     Map.merge(spec_map, %{
+       route_state_id: id,
        counter: Counter.init(),
        mvt_seen: %{},
        throughput: 100
@@ -122,7 +136,7 @@ defmodule Belfrage.RouteState do
       |> Mvt.State.prune_vary_headers(mvt_vary_header_ttl())
 
     Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
-      route_spec: state.route_state_id
+      route_spec: format_id(state.route_state_id)
     })
 
     state = %{state | counter: Counter.init(), throughput: next_throughput, mvt_seen: mvt_seen}
@@ -138,8 +152,11 @@ defmodule Belfrage.RouteState do
   end
 
   defp circuit_breaker_open(0, route_state_id) do
-    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: route_state_id})
+    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: format_id(route_state_id)})
   end
 
   defp circuit_breaker_open(_throughput, _route_state_id), do: false
+
+  defp get_spec_name_platform({spec, platform}), do: {spec, platform}
+  defp get_spec_name_platform({spec, platform, _partition}), do: {spec, platform}
 end

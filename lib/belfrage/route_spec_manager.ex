@@ -7,9 +7,9 @@ defmodule Belfrage.RouteSpecManager do
 
   def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
 
-  @spec get_spec(RouteSpec.route_state_id()) :: RouteSpec.t() | nil
-  def get_spec(route_state_id) do
-    GenServer.call(__MODULE__, {:get_spec, maybe_remove_partition_part(route_state_id)})
+  @spec get_spec({RouteSpec.name(), RouteSpec.platform()}) :: RouteSpec.t() | nil
+  def get_spec({spec, platform}) do
+    GenServer.call(__MODULE__, {:get_spec, {spec, platform}})
   end
 
   @spec list_specs() :: [RouteSpec.t()]
@@ -32,9 +32,9 @@ defmodule Belfrage.RouteSpecManager do
     {:reply, specs, state}
   end
 
-  def handle_call({:get_spec, route_state_id}, _from, state = %{route_spec_table_id: table_id}) do
+  def handle_call({:get_spec, {spec, platform}}, _from, state = %{route_spec_table_id: table_id}) do
     result =
-      case :ets.lookup(table_id, route_state_id) do
+      case :ets.lookup(table_id, {spec, platform}) do
         [{_id, spec}] -> spec
         [] -> nil
       end
@@ -49,16 +49,11 @@ defmodule Belfrage.RouteSpecManager do
   defp do_update_specs(table_id), do: RouteSpec.list_route_specs() |> write_specs(table_id)
 
   defp write_specs(specs, table_id) do
-    objects = for spec <- specs, do: {spec.route_state_id, spec}
+    objects = for spec <- specs, do: {{spec.name, spec.platform}, spec}
     true = :ets.delete_all_objects(table_id)
     true = :ets.insert(table_id, objects)
     :ok
   end
 
   defp bootstrap_route_spec_table(), do: :ets.new(@route_spec_table, [:set])
-
-  defp maybe_remove_partition_part(route_state_id) do
-    [spec, platform | _] = String.split(route_state_id, ".")
-    RouteSpec.make_route_state_id(spec, platform)
-  end
 end

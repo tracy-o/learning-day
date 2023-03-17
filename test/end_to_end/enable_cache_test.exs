@@ -9,7 +9,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "CacheDisabled.Webcore"})
+    start_supervised!({RouteState, {"CacheDisabled", "Webcore"}})
     :ok
   end
 

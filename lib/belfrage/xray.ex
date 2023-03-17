@@ -5,6 +5,7 @@ defmodule Belfrage.Xray do
   alias AwsExRay.Client
   alias AwsExRay.Record.{HTTPResponse, HTTPRequest, Error}
   alias Belfrage.Xray.ParseTrace
+  alias Belfrage.RouteState
 
   @type name :: String.t()
   @type annotations :: map()
@@ -210,7 +211,7 @@ defmodule Belfrage.Xray do
   defp envelope_annotations(envelope) do
     %{
       "owner" => envelope.private.owner,
-      "route_state_id" => envelope.private.route_state_id,
+      "route_state_id" => RouteState.format_id(envelope.private.route_state_id),
       "preview_mode" => envelope.private.preview_mode,
       "production_environment" => envelope.private.production_environment,
       "runbook" => envelope.private.runbook

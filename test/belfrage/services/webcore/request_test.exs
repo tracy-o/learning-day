@@ -57,7 +57,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
         }
       },
       private: %Envelope.Private{
-        route_state_id: "HomePage"
+        route_state_id: {"HomePage", "Webcore"}
       }
     }
 
@@ -81,7 +81,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                host: "bbc.co.uk",
                is_uk: nil,
                language: nil,
-               "ctx-route-spec": "HomePage"
+               "ctx-route-spec": "HomePage.Webcore"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -101,7 +101,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                host: "bbc.co.uk",
                is_uk: nil,
                language: nil,
-               "ctx-route-spec": "HomePage"
+               "ctx-route-spec": "HomePage.Webcore"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -126,7 +126,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                "pers-env": "int",
                "ctx-pii-age-bracket": "o18",
                "ctx-pii-allow-personalisation": "true",
-               "ctx-route-spec": "HomePage"
+               "ctx-route-spec": "HomePage.Webcore"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -149,7 +149,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                authorization: "Bearer a-valid-session-token",
                "x-authentication-provider": "idv5",
                "pers-env": "int",
-               "ctx-route-spec": "HomePage"
+               "ctx-route-spec": "HomePage.Webcore"
              },
              httpMethod: nil,
              path: "/_web_core/12345",
@@ -174,7 +174,7 @@ defmodule Belfrage.Services.Webcore.RequestTest do
                authorization: "Bearer a-valid-session-token",
                "x-authentication-provider": "idv5",
                "pers-env": "int",
-               "ctx-route-spec": "HomePage"
+               "ctx-route-spec": "HomePage.Webcore"
              },
              httpMethod: nil,
              path: "/_web_core/12345",

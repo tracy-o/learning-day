@@ -165,7 +165,9 @@ defmodule BelfrageWeb.RouteMaster do
 
           Response.redirect(
             var!(conn),
-            EnvelopeAdapter.adapt(var!(conn), "redirect"),
+
+            # todo: this is a hacky way of adding route_state_id as a logger metadata and should be re-thought
+            EnvelopeAdapter.adapt(var!(conn), {"redirect", "Belfrage"}),
             unquote(status),
             new_location,
             unquote(ttl)

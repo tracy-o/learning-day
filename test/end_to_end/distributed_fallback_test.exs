@@ -9,7 +9,7 @@ defmodule EndToEnd.DistributedTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, "SomeRouteState.Webcore"})
+    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
 
     %{
       cacheable_lambda_response: %{

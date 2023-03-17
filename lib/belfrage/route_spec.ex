@@ -6,12 +6,15 @@ defmodule Belfrage.RouteSpec do
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
 
-  defstruct route_state_id: nil,
+  @type name :: String.t()
+  @type platform :: String.t()
+
+  defstruct name: nil,
+            platform: nil,
             owner: nil,
             slack_channel: nil,
             request_pipeline: [],
             response_pipeline: [],
-            platform: nil,
             personalisation: nil,
             # TODO: This probably shouldn't be an attribute of RouteSpec. It
             # currently is for convenience, but this value is specific to the
@@ -35,24 +38,10 @@ defmodule Belfrage.RouteSpec do
             default_language: "en-GB",
             language_from_cookie: false,
             circuit_breaker_error_threshold: nil,
-            throughput: 100,
             mvt_project_id: 0,
-            mvt_seen: %{},
             fallback_write_sample: 1,
             etag: false,
             xray_enabled: false
-
-  @type route_state_id :: String.t()
-
-  @spec make_route_state_id(String.t(), String.t()) :: route_state_id()
-  def make_route_state_id(spec_name, platform) do
-    "#{spec_name}.#{platform}"
-  end
-
-  @spec make_route_state_id(String.t(), String.t(), String.t()) :: route_state_id()
-  def make_route_state_id(spec_name, platform, partition) do
-    "#{spec_name}.#{platform}.#{partition}"
-  end
 
   @spec list_route_specs(String.t()) :: [RouteSpec.t()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
@@ -65,15 +54,8 @@ defmodule Belfrage.RouteSpec do
 
   # get_route_spec/2 interface should be removed as it is used for tests only
   #
-  @spec get_route_spec(route_state_id() | {String.t(), String.t()}, String.t()) :: RouteSpec.t() | nil
-  def get_route_spec(_route_state_id, env \\ Application.get_env(:belfrage, :production_environment))
-
-  def get_route_spec(route_state_id, env) when is_binary(route_state_id) do
-    [spec_name, platform] = String.split(route_state_id, ".")
-    get_route_spec({spec_name, platform}, env)
-  end
-
-  def get_route_spec({spec_name, platform}, env) do
+  @spec get_route_spec({name(), platform()}) :: RouteSpec.t() | nil
+  def get_route_spec({spec_name, platform}, env \\ Application.get_env(:belfrage, :production_environment)) do
     found_specs =
       for spec <- get_specs(spec_name, env),
           spec.platform == platform,
@@ -89,8 +71,8 @@ defmodule Belfrage.RouteSpec do
     module = Module.concat([Routes, Specs, spec_name])
 
     case call_specs_func(module, env) do
-      spec when is_map(spec) -> [put_route_state_id(spec, spec_name)]
-      specs when is_list(specs) -> Enum.map(specs, &put_route_state_id(&1, spec_name))
+      spec when is_map(spec) -> [put_spec_name(spec, spec_name)]
+      specs when is_list(specs) -> Enum.map(specs, &put_spec_name(&1, spec_name))
     end
   end
 
@@ -114,12 +96,12 @@ defmodule Belfrage.RouteSpec do
     try do
       struct!(__MODULE__, Map.merge(platform, route_spec_map))
     catch
-      _kind, reason -> raise "Invalid '#{route_spec_map.route_state_id}' spec, error: #{inspect(reason)}"
+      _, reason -> raise "Invalid '#{inspect(route_spec_map.name)}' spec, error: #{inspect(reason)}"
     end
   end
 
-  defp put_route_state_id(spec = %{platform: platform}, spec_name) do
-    Map.put(spec, :route_state_id, make_route_state_id(spec_name, platform))
+  defp put_spec_name(spec, spec_name) do
+    Map.put(spec, :name, spec_name)
   end
 
   defp call_specs_func(module, env) do
@@ -149,7 +131,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline(spec.route_state_id, pipeline_to_transformer_type(type), pipeline)
+    validate_pipeline({spec.name, spec.platform}, pipeline_to_transformer_type(type), pipeline)
     pipeline
   end
 
@@ -170,22 +152,22 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp validate_unique_specs(specs) do
-    route_state_ids = for spec <- specs, do: spec.route_state_id
+    ids = for spec <- specs, do: {spec.name, spec.platform}
 
-    case route_state_ids -- Enum.uniq(route_state_ids) do
+    case ids -- Enum.uniq(ids) do
       [] -> specs
       non_unique_ids -> raise "Specs are not unique: #{inspect(non_unique_ids)}}"
     end
   end
 
-  defp validate_pipeline(route_state_id, type, transformers) do
+  defp validate_pipeline(id, type, transformers) do
     for name <- transformers,
         do: ensure_module_loaded(Transformer.get_transformer_callback(type, name))
 
-    ensure_unique_transformers(route_state_id, type, transformers)
+    ensure_unique_transformers(id, type, transformers)
   end
 
-  defp ensure_unique_transformers(route_state_id, type, transformers) do
+  defp ensure_unique_transformers(id, type, transformers) do
     case Enum.uniq(transformers -- Enum.uniq(transformers)) do
       [] ->
         :ok
@@ -193,7 +175,7 @@ defmodule Belfrage.RouteSpec do
       duplicates ->
         type = Atom.to_string(type)
 
-        raise "#{route_state_id} contains the following duplicated transformers in the #{type}_pipeline : #{inspect(duplicates)}"
+        raise "#{inspect(id)} contains the following duplicated transformers in the #{type}_pipeline : #{inspect(duplicates)}"
     end
   end
 

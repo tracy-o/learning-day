@@ -8,7 +8,7 @@ defmodule EndToEnd.NotModifiedResponseTest do
 
   describe "304 responses" do
     setup do
-      start_supervised!({RouteState, "SomeClassicAppsRouteSpec.ClassicApps"})
+      start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
 
       {:ok,
        response_stub: %HTTP.Response{
