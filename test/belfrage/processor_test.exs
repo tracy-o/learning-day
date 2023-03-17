@@ -9,7 +9,9 @@ defmodule Belfrage.ProcessorTest do
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
-  @route_state_id {"SportVideos", "Webcore"}
+  @spec_name "SportVideos"
+  @platform_name "Webcore"
+  @route_state_id {@spec_name, @platform_name}
 
   defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
     def specs do
@@ -18,6 +20,47 @@ defmodule Belfrage.ProcessorTest do
         personalisation: "test_only",
         response_pipeline: ["CacheDirective"]
       }
+    end
+  end
+
+  describe "Processor.build_route_state_id/1" do
+    @envelope %Envelope{
+      private: %Private{
+        spec: @spec_name,
+        platform: @platform_name
+      }
+    }
+
+    test "adds route_state_id to Envelope.private for spec and platform" do
+      assert %Envelope{
+               private: %Private{route_state_id: @route_state_id}
+             } = Processor.build_route_state_id(@envelope)
+    end
+
+    test "adds route_state_id to Envelope.private for a platform selector" do
+      envelope = %Envelope{
+        private: %Private{
+          spec: @spec_name,
+          platform: "BitesizeTopicsPlatformSelector"
+        }
+      }
+
+      assert %Envelope{
+               private: %Private{route_state_id: {@spec_name, "MorphRouter"}}
+             } = Processor.build_route_state_id(envelope)
+    end
+
+    test "raises an error if selector is failed" do
+      envelope = %Envelope{
+        private: %Private{
+          spec: "FailingSpecSelector",
+          platform: @platform_name
+        }
+      }
+
+      err_msg = "Selector 'FailingSpecSelector' failed with reason: 500"
+
+      assert_raise RuntimeError, err_msg, fn -> Processor.build_route_state_id(envelope) end
     end
   end
 
