@@ -71,8 +71,55 @@ defmodule Belfrage.RouteSpec do
     module = Module.concat([Routes, Specs, spec_name])
 
     case call_specs_func(module, env) do
-      spec when is_map(spec) -> [put_spec_name(spec, spec_name)]
-      specs when is_list(specs) -> Enum.map(specs, &put_spec_name(&1, spec_name))
+      spec when is_map(spec) ->
+        validate_spec(spec_name)
+        [put_spec_name(spec, spec_name)]
+      specs when is_list(specs) ->
+        validate_specs(spec_name)
+        Enum.map(specs, &put_spec_name(&1, spec_name))
+    end
+  end
+
+  defp validate_spec(spec_name) do
+    pre_flight_pipeline_does_not_exist(spec_name)
+  end
+
+  defp pre_flight_pipeline_does_not_exist(spec_name) do
+    if  route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
+      raise "Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform."
+    else
+      :ok
+    end
+  end
+
+  defp validate_specs(spec_name) do
+    pre_flight_pipeline_exists(spec_name)
+    pre_flight_transformers_exist(spec_name)
+  end
+
+  defp pre_flight_pipeline_exists(spec_name) do
+    if route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
+      :ok
+    else
+      raise "Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms."
+    end
+  end
+
+  defp route_spec_module(spec_name) do
+    Module.concat([Routes, Specs, spec_name])
+  end
+
+  defp pre_flight_transformers_exist(spec_name) do
+    case route_spec_module(spec_name).pre_flight_pipeline() do
+      pipeline when is_list(pipeline) -> Enum.each(pipeline, &transformer_exists?/1)
+      _ -> false
+    end
+  end
+
+  defp transformer_exists?(transformer) do
+    case Code.ensure_compiled(Module.concat([Routes, Platforms, Selectors, transformer])) do
+      {:module, _} -> :ok
+      {:error, _} -> raise "Transformer: #{transformer} doesn't exist"
     end
   end
 
