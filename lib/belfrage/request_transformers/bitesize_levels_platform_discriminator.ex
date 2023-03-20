@@ -27,7 +27,9 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
     "zcwyp4j",
     "znyh7nb",
     "zxybmsg",
-    "zf7hgwx"
+    "zf7hgwx",
+    "z3g4d2p",
+    "zbr9wmn"
   ]
 
   @webcore_live_ids [
@@ -43,7 +45,9 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminator do
     "zcwyp4j",
     "znyh7nb",
     "zxybmsg",
-    "zf7hgwx"
+    "zf7hgwx",
+    "z3g4d2p",
+    "zbr9wmn"
   ]
 
   @impl Transformer
