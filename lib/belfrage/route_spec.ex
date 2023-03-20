@@ -74,6 +74,7 @@ defmodule Belfrage.RouteSpec do
       spec when is_map(spec) ->
         validate_spec(spec_name)
         [put_spec_name(spec, spec_name)]
+
       specs when is_list(specs) ->
         validate_specs(spec_name)
         Enum.map(specs, &put_spec_name(&1, spec_name))
@@ -85,7 +86,7 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp pre_flight_pipeline_does_not_exist(spec_name) do
-    if  route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
+    if route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
       raise "Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform."
     else
       :ok
