@@ -9,11 +9,16 @@ defmodule Belfrage.RouteSpecManager do
 
   @spec get_spec({RouteSpec.name(), RouteSpec.platform()}) :: RouteSpec.t() | nil
   def get_spec({spec, platform}) do
-    GenServer.call(__MODULE__, {:get_spec, {spec, platform}})
+    case :ets.lookup(@route_spec_table, {spec, platform}) do
+      [{_id, spec}] -> spec
+      [] -> nil
+    end
   end
 
   @spec list_specs() :: [RouteSpec.t()]
-  def list_specs(), do: GenServer.call(__MODULE__, :list_specs)
+  def list_specs() do
+    for {_id, spec} <- :ets.tab2list(@route_spec_table), do: spec
+  end
 
   @spec update_specs() :: :ok
   def update_specs(), do: GenServer.call(__MODULE__, :update)
@@ -21,39 +26,25 @@ defmodule Belfrage.RouteSpecManager do
   # callbacks
   @impl GenServer
   def init(_) do
-    table_id = bootstrap_route_spec_table()
-    do_update_specs(table_id)
-    {:ok, %{route_spec_table_id: table_id}}
+    bootstrap_route_spec_table()
+    do_update_specs()
+    {:ok, %{}}
   end
 
   @impl GenServer
-  def handle_call(:list_specs, _from, state = %{route_spec_table_id: table_id}) do
-    specs = for {_id, spec} <- :ets.tab2list(table_id), do: spec
-    {:reply, specs, state}
+  def handle_call(:update, _from, state) do
+    {:reply, do_update_specs(), state}
   end
 
-  def handle_call({:get_spec, {spec, platform}}, _from, state = %{route_spec_table_id: table_id}) do
-    result =
-      case :ets.lookup(table_id, {spec, platform}) do
-        [{_id, spec}] -> spec
-        [] -> nil
-      end
+  defp do_update_specs(), do: RouteSpec.list_route_specs() |> write_specs()
 
-    {:reply, result, state}
-  end
-
-  def handle_call(:update, _from, state = %{route_spec_table_id: table_id}) do
-    {:reply, do_update_specs(table_id), state}
-  end
-
-  defp do_update_specs(table_id), do: RouteSpec.list_route_specs() |> write_specs(table_id)
-
-  defp write_specs(specs, table_id) do
+  defp write_specs(specs) do
     objects = for spec <- specs, do: {{spec.name, spec.platform}, spec}
-    true = :ets.delete_all_objects(table_id)
-    true = :ets.insert(table_id, objects)
+    true = :ets.delete_all_objects(@route_spec_table)
+    true = :ets.insert(@route_spec_table, objects)
     :ok
   end
 
-  defp bootstrap_route_spec_table(), do: :ets.new(@route_spec_table, [:set])
+  defp bootstrap_route_spec_table(),
+    do: :ets.new(@route_spec_table, [:set, :protected, :named_table, read_concurrency: true])
 end
