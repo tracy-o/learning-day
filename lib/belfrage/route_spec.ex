@@ -82,35 +82,23 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp validate_spec(spec_name) do
-    pre_flight_pipeline_does_not_exist(spec_name)
-  end
-
-  defp pre_flight_pipeline_does_not_exist(spec_name) do
-    if route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
-      raise "Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform."
-    else
-      :ok
-    end
+   if has_pre_flight_pipeline?(spec_name), do: raise "Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform."
   end
 
   defp validate_specs(spec_name) do
-    pre_flight_pipeline_exists(spec_name)
-    pre_flight_transformers_exist(spec_name)
+    unless has_pre_flight_pipeline?(spec_name), do: raise "Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms."
+    unless transformers_exist?(spec_name), do: raise "Transformer doesn't exist."
   end
 
-  defp pre_flight_pipeline_exists(spec_name) do
-    if route_spec_module(spec_name).module_info(:exports) |> Keyword.has_key?(:pre_flight_pipeline) do
-      :ok
-    else
-      raise "Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms."
-    end
+  defp has_pre_flight_pipeline?(spec_name) do
+    function_exported?(route_spec_module(spec_name), :pre_flight_pipeline, 0)
   end
 
   defp route_spec_module(spec_name) do
     Module.concat([Routes, Specs, spec_name])
   end
 
-  defp pre_flight_transformers_exist(spec_name) do
+  defp transformers_exist?(spec_name) do
     case route_spec_module(spec_name).pre_flight_pipeline() do
       pipeline when is_list(pipeline) -> Enum.each(pipeline, &transformer_exists?/1)
       _ -> false
@@ -118,10 +106,7 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp transformer_exists?(transformer) do
-    case Code.ensure_compiled(Module.concat([Routes, Platforms, Selectors, transformer])) do
-      {:module, _} -> :ok
-      {:error, _} -> raise "Transformer: #{transformer} doesn't exist"
-    end
+    Code.ensure_compiled(Module.concat([Routes, Platforms, Selectors, transformer]))
   end
 
   defp update_spec_with_platform(spec, env) do
