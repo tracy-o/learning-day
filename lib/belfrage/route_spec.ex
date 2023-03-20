@@ -103,13 +103,9 @@ defmodule Belfrage.RouteSpec do
 
   defp transformers_exist?(spec_name) do
     case route_spec_module(spec_name).pre_flight_pipeline() do
-      pipeline when is_list(pipeline) -> Enum.each(pipeline, &transformer_exists?/1)
+      pipeline when is_list(pipeline) -> validate_pipeline(spec_name, :pre_flight, pipeline)
       _ -> false
     end
-  end
-
-  defp transformer_exists?(transformer) do
-    Code.ensure_compiled(Module.concat([Routes, Platforms, Selectors, transformer]))
   end
 
   defp update_spec_with_platform(spec, env) do
