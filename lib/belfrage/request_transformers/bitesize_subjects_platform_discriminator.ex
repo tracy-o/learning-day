@@ -450,7 +450,7 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
     "z4syrmn",
     "z9fvcxs",
     "zky346f",
-    "zgv9qyc",
+    "zgv9qyc"
   ]
 
   @webcore_live_ids [
