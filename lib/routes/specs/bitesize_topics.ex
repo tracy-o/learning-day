@@ -16,6 +16,6 @@ defmodule Routes.Specs.BitesizeTopics do
     ]
   end
   def pre_flight_pipeline do
-    ["BiteSizeTopicsPlatformSelector"]
+    ["BitesizeTopicsPlatformSelector"]
   end
 end
