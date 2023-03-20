@@ -82,12 +82,15 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp validate_spec(spec_name) do
-   if has_pre_flight_pipeline?(spec_name), do: raise "Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform."
+    if has_pre_flight_pipeline?(spec_name),
+      do: raise("Pre flight pipeline exists for #{spec_name}, but spec contains a single Platform.")
   end
 
   defp validate_specs(spec_name) do
-    unless has_pre_flight_pipeline?(spec_name), do: raise "Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms."
-    unless transformers_exist?(spec_name), do: raise "Transformer doesn't exist."
+    unless has_pre_flight_pipeline?(spec_name),
+      do: raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
+
+    unless transformers_exist?(spec_name), do: raise("Transformer doesn't exist.")
   end
 
   defp has_pre_flight_pipeline?(spec_name) do
