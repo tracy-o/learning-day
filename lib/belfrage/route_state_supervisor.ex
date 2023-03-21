@@ -15,18 +15,18 @@ defmodule Belfrage.RouteStateSupervisor do
     }
   end
 
-  def start_route_state(supervisor \\ __MODULE__, name) do
-    case start_child(supervisor, name) do
+  def start_route_state(supervisor \\ __MODULE__, id, args) do
+    case start_child(supervisor, id, args) do
       {:ok, pid} -> pid
       {:error, {:already_started, pid}} -> pid
       {:error, _} = error -> error
     end
   end
 
-  defp start_child(supervisor, name) do
+  defp start_child(supervisor, id, args) do
     DynamicSupervisor.start_child(
       supervisor,
-      {Belfrage.RouteState, name}
+      {Belfrage.RouteState, {id, args}}
     )
   end
 end

@@ -4,14 +4,11 @@ defmodule EndToEndTest.FormatRewriterTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
 
   @moduletag :end_to_end
 
   describe "when path does not have a trailing format" do
     setup do
-      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
       Belfrage.Clients.LambdaMock
       |> stub(:call, fn _lambda_name, _role_arn, _headers, _opts ->
         {:ok,
@@ -69,8 +66,6 @@ defmodule EndToEndTest.FormatRewriterTest do
 
   describe "when path has a trailing format" do
     setup do
-      start_supervised!({RouteState, {"SomeMozartRouteState", "MozartNews"}})
-
       Belfrage.Clients.HTTPMock
       |> expect(:execute, fn _, :MozartNews ->
         {:ok,
@@ -107,8 +102,6 @@ defmodule EndToEndTest.FormatRewriterTest do
 
   describe "when path has multiple formats" do
     setup do
-      start_supervised!({RouteState, {"SomeMozartRouteState", "MozartNews"}})
-
       Belfrage.Clients.HTTPMock
       |> expect(:execute, fn _, :MozartNews ->
         {:ok,

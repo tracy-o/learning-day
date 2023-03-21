@@ -5,7 +5,6 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0, make_cached_response_stale: 1]
 
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   alias Belfrage.Clients
   alias Belfrage.Clients.{LambdaMock, HTTPMock}
 
@@ -14,8 +13,6 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "cache scenarios" do
     setup do
       clear_cache()
-      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-      :ok
     end
 
     test "cache miss" do
@@ -58,8 +55,6 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   describe "ensure certain status codes don't cache and headers are respected from origin" do
     setup do
       clear_cache()
-      start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
-      :ok
     end
 
     test "202's" do

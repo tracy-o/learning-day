@@ -1,14 +1,18 @@
 defmodule Belfrage.RouteStateTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
   import Process, only: [send: 3]
   import Test.Support.Helper, only: [set_env: 2]
 
-  alias Belfrage.{Envelope, RouteState, RouteSpecManager}
+  alias Belfrage.{Envelope, RouteState}
 
   @failure_status_code Enum.random(500..504)
 
   @route_state_id {"SomeRouteState", "Webcore"}
+  @route_state_args %{
+    origin: Application.compile_env(:belfrage, :pwa_lambda_function),
+    circuit_breaker_error_threshold: 100
+  }
 
   @resp_envelope %Envelope{
     private: %Envelope.Private{route_state_id: @route_state_id, origin: "https://origin.bbc.com/"},
@@ -33,23 +37,18 @@ defmodule Belfrage.RouteStateTest do
   }
 
   test "returns a state pointer" do
-    start_supervised!({RouteState, @route_state_id})
-
-    route_spec = Map.from_struct(RouteSpecManager.get_spec(@route_state_id))
-
-    route_spec =
-      route_spec
-      |> Map.put(:spec, Map.get(route_spec, :name))
-      |> Map.delete(:name)
-      |> Map.put(:route_state_id, @route_state_id)
+    start_supervised!({RouteState, {@route_state_id, @route_state_args}})
 
     assert RouteState.state(@route_state_id) ==
              {:ok,
-              Map.merge(route_spec, %{
+              %{
+                route_state_id: @route_state_id,
                 counter: %{},
                 mvt_seen: %{},
-                throughput: 100
-              })}
+                throughput: 100,
+                origin: Application.get_env(:belfrage, :pwa_lambda_function),
+                circuit_breaker_error_threshold: 100
+              }}
   end
 
   describe "returns a different count per origin" do
@@ -118,7 +117,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "resets counter after a specific time" do
-    start_supervised!({RouteState, @route_state_id})
+    start_supervised!({RouteState, {@route_state_id, @route_state_args}})
 
     # Set the interval just for this specifc test
     interval = 100
@@ -163,7 +162,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test "exits when fetch_route_state_timeout reached" do
-    start_supervised!({RouteState, @route_state_id})
+    start_supervised!({RouteState, {@route_state_id, @route_state_args}})
 
     assert catch_exit(RouteState.state(@route_state_id, 0)) ==
              {:timeout,
@@ -172,7 +171,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test ":throughput value is initialised as expected" do
-    pid = start_supervised!({RouteState, @route_state_id})
+    pid = start_supervised!({RouteState, {@route_state_id, @route_state_args}})
     assert match?(%{throughput: 100}, :sys.get_state(pid))
   end
 
@@ -219,7 +218,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   test ":mvt_seen value is initialised as expected" do
-    pid = start_supervised!({RouteState, @route_state_id})
+    pid = start_supervised!({RouteState, {@route_state_id, @route_state_args}})
     assert match?(%{mvt_seen: %{}}, :sys.get_state(pid))
   end
 
@@ -417,7 +416,7 @@ defmodule Belfrage.RouteStateTest do
   end
 
   defp start_route_state(_context) do
-    {:ok, pid: start_supervised!({RouteState, @route_state_id})}
+    {:ok, pid: start_supervised!({RouteState, {@route_state_id, @route_state_args}})}
   end
 
   defp update_mvt_seen_with_button_colour_header(context = %{pid: pid}) do

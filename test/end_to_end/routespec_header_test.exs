@@ -2,7 +2,6 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
@@ -16,8 +15,6 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
   }
 
   test "returns the routespec header" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _payload, _opts ->
       {:ok, @lambda_response}

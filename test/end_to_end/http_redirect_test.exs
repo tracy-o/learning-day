@@ -3,7 +3,6 @@ defmodule EndToEnd.HttpRedirectTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
 
   @moduletag :end_to_end
@@ -36,9 +35,7 @@ defmodule EndToEnd.HttpRedirectTest do
   end
 
   setup do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     clear_cache()
-    :ok
   end
 
   test "no redirect when http in uri but https in edge-scheme" do

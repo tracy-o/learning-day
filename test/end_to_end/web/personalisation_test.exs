@@ -6,15 +6,12 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP}
-  alias Belfrage.RouteState
   alias Fixtures.AuthToken
 
   @moduletag :end_to_end
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-    :ok
   end
 
   @response %{

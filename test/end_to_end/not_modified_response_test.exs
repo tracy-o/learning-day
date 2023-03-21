@@ -4,12 +4,10 @@ defmodule EndToEnd.NotModifiedResponseTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
+  alias Belfrage.{Clients.HTTPMock, Clients.HTTP}
 
   describe "304 responses" do
     setup do
-      start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
-
       {:ok,
        response_stub: %HTTP.Response{
          status_code: 304,

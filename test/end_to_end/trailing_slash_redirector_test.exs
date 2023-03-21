@@ -2,15 +2,9 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
-
-  setup do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-    :ok
-  end
 
   test "redirect preserves multiple slashes if not at beginning or end of path" do
     conn =

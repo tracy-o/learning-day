@@ -1,28 +1,18 @@
 defmodule Belfrage.RouteState do
   use GenServer, restart: :temporary
 
-  alias Belfrage.{Counter, RouteStateRegistry, RouteSpecManager, Envelope, CircuitBreaker, Mvt, RouteSpec}
+  alias Belfrage.{Counter, RouteStateRegistry, Envelope, CircuitBreaker, Mvt, RouteSpec}
   require Logger
+
+  @type route_state_id ::
+          {RouteSpec.name(), RouteSpec.platform()}
+          | {RouteSpec.name(), RouteSpec.platform(), non_neg_integer | String.t()}
 
   @fetch_route_state_timeout Application.compile_env(:belfrage, :fetch_route_state_timeout)
 
-  @spec start_link(
-          {RouteSpec.name(), RouteSpec.platform()}
-          | {RouteSpec.name(), RouteSpec.platform(), non_neg_integer | String.t()}
-        ) :: {:ok, pid()}
-  def start_link(id) do
-    spec_name_platform = get_spec_name_platform(id)
-
-    case RouteSpecManager.get_spec(spec_name_platform) do
-      nil ->
-        :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: format_id(spec_name_platform)})
-        reason = "Route spec '#{spec_name_platform}' not found"
-        Logger.log(:error, "", %{msg: reason})
-        {:error, reason}
-
-      spec ->
-        GenServer.start_link(__MODULE__, {id, spec}, name: via_tuple(id))
-    end
+  @spec start_link({route_state_id(), map()}) :: {:ok, pid()}
+  def start_link({id, args}) do
+    GenServer.start_link(__MODULE__, {id, args}, name: via_tuple(id))
   end
 
   def state(id, timeout \\ @fetch_route_state_timeout) do
@@ -73,22 +63,18 @@ defmodule Belfrage.RouteState do
   # callbacks
 
   @impl GenServer
-  def init({id, spec}) do
+  def init({id, args}) do
     Process.send_after(self(), :reset, route_state_reset_interval())
 
-    spec_map =
-      spec
-      |> Map.from_struct()
-      |> Map.put(:spec, Map.get(spec, :name))
-      |> Map.delete(:name)
-
     {:ok,
-     Map.merge(spec_map, %{
+     %{
        route_state_id: id,
+       origin: Map.get(args, :origin),
+       circuit_breaker_error_threshold: Map.get(args, :circuit_breaker_error_threshold),
        counter: Counter.init(),
        mvt_seen: %{},
        throughput: 100
-     })}
+     }}
   end
 
   @impl GenServer
@@ -156,7 +142,4 @@ defmodule Belfrage.RouteState do
   end
 
   defp circuit_breaker_open(_throughput, _route_state_id), do: false
-
-  defp get_spec_name_platform({spec, platform}), do: {spec, platform}
-  defp get_spec_name_platform({spec, platform, _partition}), do: {spec, platform}
 end

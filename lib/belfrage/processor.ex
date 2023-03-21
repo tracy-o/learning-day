@@ -18,7 +18,8 @@ defmodule Belfrage.Processor do
     Language,
     WrapperError,
     ServiceProvider,
-    Behaviours.Selector
+    Behaviours.Selector,
+    RouteSpecManager
   }
 
   alias Envelope.{Response, Private}
@@ -27,6 +28,7 @@ defmodule Belfrage.Processor do
   def pre_request_pipeline(envelope = %Envelope{}) do
     pipeline = [
       &build_route_state_id/1,
+      &get_route_spec/1,
       &get_route_state/1,
       &allowlists/1,
       &Personalisation.maybe_put_personalised_request/1,
@@ -81,12 +83,37 @@ defmodule Belfrage.Processor do
     end
   end
 
-  def get_route_state(envelope = %Envelope{private: %Private{route_state_id: route_state_id}}) do
+  def get_route_spec(envelope = %Envelope{private: %Private{spec: spec, platform: platform}}) do
+    case RouteSpecManager.get_spec({spec, platform}) do
+      nil -> route_spec_failure({spec, platform})
+      spec -> update_envelope_with_route_spec_attrs(envelope, Map.from_struct(spec))
+    end
+  end
+
+  defp update_envelope_with_route_spec_attrs(envelope, spec) do
+    spec = Map.put(spec, :spec, Map.get(spec, :name))
+    Map.put(envelope, :private, struct(envelope.private, spec))
+  end
+
+  def get_route_state(
+        envelope = %Envelope{
+          private: %Private{
+            route_state_id: route_state_id,
+            origin: origin,
+            circuit_breaker_error_threshold: threshold
+          }
+        }
+      ) do
+    route_state_args = %{
+      origin: origin,
+      circuit_breaker_error_threshold: threshold
+    }
+
     Metrics.latency_span(:set_request_route_state_data, fn ->
-      RouteStateRegistry.find_or_start(route_state_id)
+      RouteStateRegistry.find_or_start(route_state_id, route_state_args)
 
       case RouteState.state(route_state_id) do
-        {:ok, route_state} -> Map.put(envelope, :private, Map.merge(envelope.private, route_state))
+        {:ok, route_state} -> Map.put(envelope, :private, struct(envelope.private, route_state))
         {:error, reason} -> route_state_state_failure(reason)
       end
     end)
@@ -249,6 +276,13 @@ defmodule Belfrage.Processor do
     :telemetry.execute([:belfrage, :selector, :error], %{}, %{selector: selector})
     Logger.log(:error, "", %{msg: "Selector '#{selector}' failed", reason: reason})
     raise "Selector '#{selector}' failed with reason: #{inspect(reason)}"
+  end
+
+  defp route_spec_failure(id = {spec, platform}) do
+    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: "#{spec}.#{platform}"})
+    reason = "Route spec '#{inspect(id)}' not found"
+    Logger.log(:error, "", %{msg: reason})
+    raise reason
   end
 
   defp maybe_log_response_status(envelope = %Envelope{response: %Response{http_status: http_status}})

@@ -5,7 +5,6 @@ defmodule EndToEnd.VaryAllowHeadersTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   alias Routes.Specs.SomeRouteStateAllowHeaders
 
   @lambda_response %{
@@ -19,8 +18,6 @@ defmodule EndToEnd.VaryAllowHeadersTest do
   @moduletag :end_to_end
 
   setup do
-    start_supervised!({RouteState, {"SomeRouteStateAllowHeaders", "Webcore"}})
-
     Belfrage.Clients.LambdaMock
     |> stub(:call, fn _lambda_name, _role_arn, _headers, _opts ->
       {:ok, @lambda_response}

@@ -2,7 +2,6 @@ defmodule EndToEnd.LanguageTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   @moduletag :end_to_end
@@ -35,11 +34,6 @@ defmodule EndToEnd.LanguageTest do
   end
 
   describe "when language_from_cookie false" do
-    setup do
-      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-      :ok
-    end
-
     test "the request_hash doesn't vary on cookie-ckps_language" do
       expect_lambda_call(times_called: 2)
 
@@ -80,11 +74,6 @@ defmodule EndToEnd.LanguageTest do
   end
 
   describe "when language_from_cookie true" do
-    setup do
-      start_supervised!({RouteState, {"LanguageFromCookieRouteState", "Webcore"}})
-      :ok
-    end
-
     test "the request_hash varys on cookie-ckps_language" do
       expect_lambda_call(times_called: 2)
 

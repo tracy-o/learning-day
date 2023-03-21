@@ -7,7 +7,7 @@ defmodule EndToEnd.XrayTest do
   import Test.Support.Helper, only: [set_env: 3]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.HTTP, RouteState}
+  alias Belfrage.Clients.HTTP
 
   @moduletag :end_to_end
 
@@ -31,11 +31,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   describe "request goes through webcore service" do
-    setup do
-      start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-      :ok
-    end
-
     test "a webcore.request.stop event is emitted (triggers subsegment creation)" do
       Belfrage.Clients.LambdaMock
       |> expect(:call, fn _lambda_name, _role_arn, _payload, _opts ->
@@ -62,11 +57,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   describe "hitting the fabl endpoint" do
-    setup do
-      start_supervised!({RouteState, {"SomeFablRouteState", "Fabl"}})
-      :ok
-    end
-
     test "when start_trace/1 is successful, fabl headers contain x-amzn-trace-id" do
       Belfrage.Clients.HTTPMock
       |> expect(:execute, fn %HTTP.Request{headers: headers}, :Fabl ->
@@ -139,7 +129,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "expected messages are sent to AWS X-Ray client when platform is Webcore" do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -165,7 +154,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "expected messages are sent to AWS X-Ray client when platform is Fabl" do
-    start_supervised!({RouteState, {"SomeFablRouteState", "Fabl"}})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -184,7 +172,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   test "no messages are sent to AWS X-Ray client when platform is not Fabl or Webcore" do
-    start_supervised!({RouteState, {"SomeSimorghRouteSpec", "Simorgh"}})
     set_env(:aws_ex_ray, :sampling_rate, 1.0)
     :erlang.trace(aws_ex_ray_udp_client_pid(), true, [:receive])
 
@@ -208,11 +195,6 @@ defmodule EndToEnd.XrayTest do
   end
 
   describe "hitting route which is not have fabl or webcore as platform" do
-    setup do
-      start_supervised!({RouteState, {"ProxyPass", "OriginSimulator"}})
-      :ok
-    end
-
     test "no `x-amzn-trace-id` header is sent downstream" do
       Belfrage.Clients.HTTPMock
       |> expect(:execute, fn %HTTP.Request{headers: headers}, :OriginSimulator ->

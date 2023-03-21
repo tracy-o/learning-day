@@ -2,7 +2,6 @@ defmodule EndToEnd.LambdaTest do
   use ExUnit.Case
   use Plug.Test
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   import Test.Support.Helper, only: [assert_valid_request_hash: 1]
@@ -19,7 +18,6 @@ defmodule EndToEnd.LambdaTest do
 
   setup do
     :ets.delete_all_objects(:cache)
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     :ok
   end
 

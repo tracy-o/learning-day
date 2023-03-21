@@ -3,12 +3,10 @@ defmodule EndToEnd.ClassicAppTest do
   use Plug.Test
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{HTTP, HTTPMock}
-  alias Belfrage.RouteState
   use Test.Support.Helper, :mox
 
   describe "request is made to Trevor" do
     setup do
-      start_supervised!({RouteState, {"SomeClassicAppsRouteSpec", "ClassicApps"}})
       :ets.delete_all_objects(:cache)
       :ok
     end

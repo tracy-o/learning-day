@@ -61,13 +61,6 @@ defmodule Belfrage.RouteSpecManagerTest do
   end
 
   defp ets_table_contents() do
-    :ets.tab2list(route_spec_table_id())
-  end
-
-  defp route_spec_table_id() do
-    Belfrage.RouteSpecManager
-    |> Process.whereis()
-    |> :sys.get_state()
-    |> Map.get(:route_spec_table_id)
+    :ets.tab2list(:route_spec_table)
   end
 end

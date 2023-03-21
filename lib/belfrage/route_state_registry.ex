@@ -5,10 +5,10 @@ defmodule Belfrage.RouteStateRegistry do
     Registry.start_link(keys: :unique, name: __MODULE__)
   end
 
-  def find_or_start(route_state_id) do
+  def find_or_start(route_state_id, args) do
     case Registry.lookup(__MODULE__, {Belfrage.RouteState, route_state_id}) do
       [{pid, _}] -> pid
-      [] -> RouteStateSupervisor.start_route_state(route_state_id)
+      [] -> RouteStateSupervisor.start_route_state(route_state_id, args)
     end
   end
 

@@ -5,14 +5,12 @@ defmodule EndToEnd.ResponseHeadersTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.LambdaMock, RouteState}
+  alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
 
   setup do
     clear_cache()
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
-    :ok
   end
 
   describe "default response headers" do

@@ -3,15 +3,12 @@ defmodule EndToEnd.WeatherLanguageCookieTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   alias BelfrageWeb.Router
-  alias Belfrage.RouteState
   import Belfrage.Test.CachingHelper, only: [clear_cache: 0]
 
   @redirect_languages ["en", "cy", "ga", "gd"]
 
   setup do
-    start_supervised!({RouteState, {"SomeRouteState", "Webcore"}})
     clear_cache()
-    :ok
   end
 
   test "weather/language/:language redirects when language segment is in redirect_languages" do
