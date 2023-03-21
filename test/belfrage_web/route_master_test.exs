@@ -657,7 +657,6 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       handle_proxy_pass("/*any",
         using: "ProxyPass",
-        platform: "OriginSimulator",
         only_on: "some_env",
         examples: ["/foo"]
       )
