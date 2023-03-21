@@ -2,6 +2,7 @@ defmodule Routes.Specs.WorldServiceKyrgyzLivePage do
   def specs(production_env) do
     %{
       platform: "Simorgh",
+      request_pipeline: ["WorldServiceRedirect"],
       query_params_allowlist: query_params_allowlist(production_env)
     }
   end
