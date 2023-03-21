@@ -67,7 +67,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
       end)
 
       :get
-      |> conn("/bitesize/topics/z82hsbk/year/zncsscw")
+      |> conn("/bitesize/topics/zhj47nb/year/zncsscw")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
     end
 
@@ -149,7 +149,7 @@ defmodule EndToEnd.BitesizeTopicsPlatformSelectorTest do
       end)
 
       :get
-      |> conn("/bitesize/topics/z82hsbk")
+      |> conn("/bitesize/topics/zhj47nb")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
     end
 
