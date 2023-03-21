@@ -217,5 +217,40 @@ defmodule Belfrage.RouteSpecTest do
         RouteSpec.get_route_spec({"DuplicateTransformersRoute", "DuplicateTransformersPlatform"})
       end
     end
+
+    test "invalidates when unrequired pre_flight_pipeline is present" do
+      define_platform("SomePlatform", %{
+        request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
+      })
+
+      define_route("UnrequiredPreFlightPipelineRoute", %{platform: "SomePlatform"}, ["BitesizeTopicsPlatformSelector"])
+
+      assert_raise RuntimeError,
+                   "Pre flight pipeline exists for UnrequiredPreFlightPipelineRoute, but spec contains a single Platform.",
+                   fn ->
+                     RouteSpec.get_route_spec({"UnrequiredPreFlightPipelineRoute", "SomeOtherPlatform"})
+                   end
+    end
+
+    test "invalidates when pre_flight_pipeline is required and not present" do
+      define_platform("RequiredPreFlightPipelinePlatform", %{
+        request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
+      })
+
+      define_platform("OtherRequiredPreFlightPipelinePlatform", %{
+        request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
+      })
+
+      define_route("RequiredPreFlightPipelineRoute", [
+        %{platform: "RequiredPreFlightPipelinePlatform"},
+        %{platform: "OtherRequiredPreFlightPipelinePlatform"}
+      ])
+
+      assert_raise RuntimeError,
+                   "Pre flight pipeline doesn't exist for RequiredPreFlightPipelineRoute, but spec contains multiple Platforms.",
+                   fn ->
+                     RouteSpec.get_route_spec({"RequiredPreFlightPipelineRoute", "RequiredPreFlightPipelinePlatform"})
+                   end
+    end
   end
 end
