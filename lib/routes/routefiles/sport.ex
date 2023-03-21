@@ -936,6 +936,7 @@ defroutefile "Sport" do
 
   ## Sport topic redirects
   redirect "/sport/football/fifa-womens-world-cup", to: "/sport/football/womens-world-cup", status: 302
+  redirect "/sport/topics/c9r003qdg5wt", to: "/sport/sustainability", status: 301
 
   ## Sport Visual Journalism
   handle "/sport/extra/*any", using: "Sport", platform: "MozartSport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
@@ -1493,6 +1494,10 @@ defroutefile "Sport" do
   end
 
   handle "/sport/surfing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/surfing"] do
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
+  end
+
+  handle "/sport/sustainability", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sustainability"] do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
