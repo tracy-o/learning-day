@@ -38,7 +38,7 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelectorTest do
       set_environment("live")
 
       assert Selector.call(@selector, :platform, %Request{
-               path_params: %{"id" => "z82hsbk", "year_id" => "zncsscw"}
+               path_params: %{"id" => "zhj47nb", "year_id" => "zncsscw"}
              }) == {:ok, "MorphRouter"}
     end
 
@@ -92,7 +92,7 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelectorTest do
       set_environment("live")
 
       assert Selector.call(@selector, :platform, %Request{
-               path_params: %{"id" => "z82hsbk"}
+               path_params: %{"id" => "zhj47nb"}
              }) == {:ok, "MorphRouter"}
     end
 
