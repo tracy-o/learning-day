@@ -830,7 +830,8 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
     "z4syrmn",
     "z9fvcxs",
     "zky346f",
-    "zgv9qyc"
+    "zgv9qyc",
+    "zhj47nb"
   ]
 
   @webcore_live_ids [
