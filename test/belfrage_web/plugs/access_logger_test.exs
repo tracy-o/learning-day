@@ -46,21 +46,21 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
 
       assert [
                timestamp,
-               "bbc-id-1234",
+               "GET",
                "https",
                "my-host",
-               "GET",
                "/news",
                "foo=bar",
                "200",
+               "GTM,BELFRAGE,MOZART",
+               "bbc-id-1234",
                "bsig-1234",
+               "bid-1234",
                "cache-status",
                "max-age=0, private, must-revalidate",
+               "vary-1234",
                "1234",
-               "bid-1234",
-               "https://my-location",
-               "GTM,BELFRAGE,MOZART",
-               "vary-1234\"\n"
+               "https://my-location\"\n"
              ] = String.split(event, "\" \"")
 
       sanitised_timestamp = String.trim(timestamp, "\"")
@@ -80,21 +80,21 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
 
       assert [
                timestamp,
-               "bbc-id-1234",
+               "GET",
                "https",
                "my-host",
-               "GET",
                "/news",
                "foo=bar",
                "200",
+               "GTM,BELFRAGE,MOZART",
+               "bbc-id-1234",
                "bsig-1234",
+               "bid-1234",
                "cache-status",
                "max-age=0, private, must-revalidate",
+               "vary-1234",
                "1234",
-               "bid-1234",
-               "https://my-location",
-               "GTM,BELFRAGE,MOZART",
-               "vary-1234\"\n"
+               "https://my-location\"\n"
              ] = String.split(event, "\" \"")
 
       sanitised_timestamp = String.trim(timestamp, "\"")
@@ -115,21 +115,21 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
 
       assert [
                timestamp,
-               "bbc-id-1234",
+               "GET",
                "https",
                "my-host",
-               "GET",
                "/news",
                "foo=bar",
                "200",
+               "GTM,BELFRAGE,MOZART",
+               "bbc-id-1234",
                "bsig-1234",
+               "bid-1234",
                "cache-status",
                "max-age=0, private, must-revalidate",
+               "vary-1234",
                "",
-               "bid-1234",
-               "https://my-location",
-               "GTM,BELFRAGE,MOZART",
-               "vary-1234\"\n"
+               "https://my-location\"\n"
              ] = String.split(event, "\" \"")
 
       sanitised_timestamp = String.trim(timestamp, "\"")
