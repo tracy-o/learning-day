@@ -181,7 +181,7 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
     "zk8kkty",
     "z8d88hv",
     "zc4ccmn",
-    "zhj47nb" 
+    "zhj47nb"
   ]
 
   @webcore_live_ids [
