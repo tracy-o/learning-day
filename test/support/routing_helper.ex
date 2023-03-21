@@ -39,6 +39,20 @@ defmodule Belfrage.Test.RoutingHelper do
     end
   end
 
+  defmacro define_route_with_env(name, spec_attrs, pre_flight_attrs) do
+    quote do
+      defmodule Module.concat([Routes, Specs, unquote(name)]) do
+        def specs(_env) do
+          unquote(spec_attrs)
+        end
+
+        def pre_flight_pipeline(_env) do
+          unquote(pre_flight_attrs)
+        end
+      end
+    end
+  end
+
   defmacro define_request_transformer(name, envelope) do
     quote do
       defmodule Module.concat([Belfrage, RequestTransformers, unquote(name)]) do

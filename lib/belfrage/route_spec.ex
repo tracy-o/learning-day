@@ -68,7 +68,7 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp get_specs(spec_name, env) do
-    module = Module.concat([Routes, Specs, spec_name])
+    module = route_spec_module(spec_name)
 
     case call_specs_func(module, env) do
       spec when is_map(spec) ->
@@ -94,7 +94,9 @@ defmodule Belfrage.RouteSpec do
   end
 
   defp has_pre_flight_pipeline?(spec_name) do
-    function_exported?(route_spec_module(spec_name), :pre_flight_pipeline, 0)
+    module = route_spec_module(spec_name)
+
+    function_exported?(module, :pre_flight_pipeline, 1) or function_exported?(module, :pre_flight_pipeline, 0)
   end
 
   defp route_spec_module(spec_name) do
