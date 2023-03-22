@@ -81,21 +81,21 @@ defmodule Belfrage.Logger.Formatter do
       Enum.join(
         [
           timestamp,
-          bbc_request_id,
+          method,
           scheme,
           host,
-          method,
           request_path,
           query_string,
           status,
+          req_svc_chain,
+          bbc_request_id,
           bsig,
+          bid,
           belfrage_cache_status,
           cache_control,
+          vary,
           content_length,
-          bid,
-          location,
-          req_svc_chain,
-          vary
+          location
         ],
         " "
       ) <>

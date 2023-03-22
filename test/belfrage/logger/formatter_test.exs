@@ -72,21 +72,21 @@ defmodule Belfrage.Logger.FormatterTest do
 
       assert [
                "\"2022-01-01T00:00:00.001000Z",
-               "bbc_r_id_1234",
+               "GET",
                "https",
                "www.test.bbc.co.uk",
-               "GET",
                "/status",
                "foo=bar",
                "200",
+               "GTM,BELFRAGE",
+               "bbc_r_id_1234",
                "bsig-1234",
+               "bid-1234",
                "MISS",
                "max-age=0, private, must-revalidate",
+               "Accept-Encoding,Accept-Language,Accept,User-Agent",
                "1234",
-               "bid-1234",
-               "https://www.test.bbc.co.uk",
-               "GTM,BELFRAGE",
-               "Accept-Encoding,Accept-Language,Accept,User-Agent\"\n"
+               "https://www.test.bbc.co.uk\"\n"
              ] = String.split(response, "\" \"")
     end
   end
