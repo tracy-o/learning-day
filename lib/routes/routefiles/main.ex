@@ -2749,8 +2749,12 @@ defroutefile "Main" do
   redirect "/newsround/beta/*_any", to: "/newsround", status: 301
   redirect "/schoolreport", to: "/news/topics/cg41ylwv43pt", status: 301
 
-  handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"]
-  handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", examples: ["/newsround/61545299"]
+  handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", examples: ["/newsround/61545299"] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
   handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
   handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: []
 
