@@ -2823,7 +2823,9 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
   handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy", platform: "MorphRouter", examples: ["/bitesize/guides/zcvy6yc/test.hybrid"]
+  
   handle "/bitesize/groups/:id", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/groups/cz4wkv77g55t"]
+  handle "/bitesize/parents", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/parents"]
 
   handle "/bitesize/*any", using: "BitesizeLegacy", platform: "MorphRouter", examples: ["/bitesize/levels"]
 
