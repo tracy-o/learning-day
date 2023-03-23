@@ -9,6 +9,7 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.Plugs
 
   plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
+  plug(Plugs.AccessLogger, level: :info)
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
@@ -26,7 +27,6 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.Overrides)
   plug(BelfrageWeb.Plugs.VarianceReducer)
   plug(Plugs.PathLogger)
-  plug(Plugs.AccessLogger, level: :info)
   plug(:match)
   plug(:dispatch)
 

@@ -1,7 +1,11 @@
 defmodule BelfrageWeb.Logger.AccessLoggerTest do
   use ExUnit.Case
   use Plug.Test
+
+  alias BelfrageWeb.Router
   alias BelfrageWeb.Plugs.AccessLogger
+
+  use Test.Support.Helper, :mox
 
   describe "call/2" do
     setup do
@@ -29,8 +33,6 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       assert Keyword.get(metadata, :query_string) == "foo=bar"
       assert Keyword.get(metadata, :request_path) == "/news"
       assert Keyword.get(metadata, :status) == 200
-
-      # Complete assetions
     end
 
     test "expected write is attempted", %{conn: conn} do
@@ -137,7 +139,13 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
     end
 
     test "multiple headers scenario", %{conn: conn} do
-      conn = Map.put(conn, :resp_headers, conn.resp_headers ++ [{"vary", "Accept1"}, {"vary", "Accept2"}])
+      conn =
+        Map.put(
+          conn,
+          :resp_headers,
+          conn.resp_headers ++ [{"vary", "Accept1"}, {"vary", "Accept2"}]
+        )
+
       :erlang.trace(:all, true, [:call])
       :erlang.trace_pattern({LoggerFileBackend, :handle_event, 2}, true, [:local])
 
@@ -182,5 +190,140 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
     |> put_resp_header("vary", "vary-1234")
     |> put_resp_header("ssl", "i_should_be_filtered")
     |> put_resp_header("set-cookie", "i_should_be_filtered")
+  end
+
+  describe "redirect scenarios" do
+    test "301 logged in access.log  when TrailingSlashRedirector is executed" do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({IO, :write, 2}, true, [:local])
+
+      :get
+      |> conn("/news/")
+      |> Router.call([])
+
+      assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
+
+      assert [
+               _timestamp,
+               _method,
+               _scheme,
+               _host,
+               _request_path,
+               _query_string,
+               "301",
+               _req_svc_chain,
+               _bbc_request_id,
+               _bsig,
+               _bid,
+               _belfrage_cache_status,
+               _cache_control,
+               _vary,
+               _content_length,
+               "/news\"\n"
+             ] = String.split(event, "\" \"")
+    end
+
+    test "302 logged in access.log when VanityDomainRedirector is executed" do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({IO, :write, 2}, true, [:local])
+
+      :get
+      |> conn("/")
+      |> Map.put(:host, "bbcafaanoromoo.com")
+      |> Router.call([])
+
+      assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
+
+      assert [
+               _timestamp,
+               _method,
+               _scheme,
+               _host,
+               _request_path,
+               _query_string,
+               "302",
+               _req_svc_chain,
+               _bbc_request_id,
+               _bsig,
+               _bid,
+               _belfrage_cache_status,
+               _cache_control,
+               _vary,
+               _content_length,
+               "https://www.bbc.com/afaanoromoo\"\n"
+             ] = String.split(event, "\" \"")
+    end
+
+    test "VarianceReducer and HttpRedirector plugs logging test" do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({IO, :write, 2}, true, [:local])
+
+      stub_dials(news_apps_variance_reducer: "enabled")
+      stub_origins()
+      path = "/fd/abl?clientName=Chrysalis&clientLoc=E7&type=index"
+
+      :get
+      |> conn(path)
+      |> Map.put(:host, "www.test.bbc.co.uk")
+      |> put_req_header("x-bbc-edge-scheme", "http")
+      |> Router.call([])
+
+      assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
+
+      assert [
+               _timestamp,
+               _method,
+               _scheme,
+               _host,
+               _request_path,
+               _query_string,
+               "302",
+               _req_svc_chain,
+               _bbc_request_id,
+               _bsig,
+               _bid,
+               _belfrage_cache_status,
+               _cache_control,
+               _vary,
+               _content_length,
+               "https://www.test.bbc.co.uk/fd/abl?clientLoc=E7&clientName=Chrysalis&type=index\"\n"
+             ] = String.split(event, "\" \"")
+    end
+
+    test "HeadPlug logging test" do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({IO, :write, 2}, true, [:local])
+
+      stub_dials(news_apps_variance_reducer: "enabled")
+      stub_origins()
+      path = "/news"
+
+      :head
+      |> conn(path)
+      |> Map.put(:host, "www.test.bbc.co.uk")
+      |> put_req_header("x-bbc-edge-scheme", "http")
+      |> Router.call([])
+
+      assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
+
+      assert [
+               _timestamp,
+               "HEAD",
+               _scheme,
+               _host,
+               _request_path,
+               _query_string,
+               "302",
+               _req_svc_chain,
+               _bbc_request_id,
+               _bsig,
+               _bid,
+               _belfrage_cache_status,
+               _cache_control,
+               _vary,
+               _content_length,
+               "https://www.test.bbc.co.uk/news\"\n"
+             ] = String.split(event, "\" \"")
+    end
   end
 end

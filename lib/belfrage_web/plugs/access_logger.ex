@@ -24,9 +24,10 @@ defmodule BelfrageWeb.Plugs.AccessLogger do
 
   @impl true
   def call(conn, level) do
+    method = conn.method
+
     Conn.register_before_send(conn, fn conn ->
       %{
-        method: method,
         request_path: request_path,
         query_string: query_string,
         status: status
