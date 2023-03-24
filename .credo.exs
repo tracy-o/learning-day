@@ -2,7 +2,7 @@
   configs: [
     %{
       name: "default",
-      requires: ["credo/checks/**/*.ex"],
+      requires: ["lib/credo/checks/**/*.ex"],
       files: %{
         included: ["lib", "test"],
         excluded: ["lib/belfrage_web/route_master.ex", "test/smoke"]
