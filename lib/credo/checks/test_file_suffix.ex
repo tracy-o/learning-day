@@ -9,7 +9,7 @@ defmodule Credo.Checks.TestFileSuffix do
       """
     ]
 
-  @excluded_files ["test/test_helper.exs"]
+  @excluded_files ["test/test_helper.exs"] ++ Path.wildcard("test/support/**/*")
 
   def run(source_file = %SourceFile{}, params) do
     if valid_test_file?(source_file.filename) do
@@ -18,8 +18,6 @@ defmodule Credo.Checks.TestFileSuffix do
       issue(source_file, params)
     end
   end
-
-  defp valid_test_file?("test/support/" <> _rest), do: true
 
   defp valid_test_file?(filename) when filename in @excluded_files, do: true
 
