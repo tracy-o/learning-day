@@ -12,23 +12,27 @@ defmodule Credo.Check.FileNamesTestSuffix do
   @excluded_files ["test/test_helper.exs"]
 
   def run(source_file = %SourceFile{}, params) do
-    if should_be_validated?(source_file.filename) do
-      if String.ends_with?(source_file.filename, "_test.exs") do
-        []
-      else
-        source_file
-        |> IssueMeta.for(params)
-        |> format_issue(message: "Filename should end with \"_test.exs\"")
-        |> List.wrap()
-      end
-    else
+    if valid_test_file?(source_file.filename) do
       []
+    else
+      issue(source_file, params)
     end
   end
 
-  defp should_be_validated?(filename) do
-    String.starts_with?(filename, "test/") &&
-      not String.starts_with?(filename, "test/support/") &&
-      not Enum.member?(@excluded_files, filename)
+  defp valid_test_file?("test/support/" <> _rest), do: true
+
+  defp valid_test_file?(filename) when filename in @excluded_files, do: true
+
+  defp valid_test_file?("test/" <> rest) do
+    String.ends_with?(rest, "_test.exs")
+  end
+
+  defp valid_test_file?(_filename), do: true
+
+  defp issue(source_file, params) do
+    source_file
+    |> IssueMeta.for(params)
+    |> format_issue(message: "Filename should end with \"_test.exs\"")
+    |> List.wrap()
   end
 end
