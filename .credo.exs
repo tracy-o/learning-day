@@ -12,7 +12,7 @@
         {Credo.Check.Readability.ModuleDoc, false},
         {Credo.Check.Refactor.Nesting, max_nesting: 3},
         {Credo.Check.Warning.MissedMetadataKeyInLoggerConfig, false},
-        {Credo.Check.FileNamesTestSuffix, []}
+        {Credo.Checks.TestFileSuffix, []}
       ]
     }
   ]

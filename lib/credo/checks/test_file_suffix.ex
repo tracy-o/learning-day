@@ -1,4 +1,4 @@
-defmodule Credo.Check.FileNamesTestSuffix do
+defmodule Credo.Checks.TestFileSuffix do
   use Credo.Check,
     base_priority: :high,
     category: :consistency,

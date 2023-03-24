@@ -1,7 +1,7 @@
-defmodule Credo.Checks.FileNamesTestSuffixTest do
+defmodule Credo.Checks.TestFileSuffixTest do
   use Credo.Test.Case
 
-  alias Credo.Check.FileNamesTestSuffix
+  alias Credo.Checks.TestFileSuffix
 
   test "it should NOT report non-test files" do
     """
@@ -10,7 +10,7 @@ defmodule Credo.Checks.FileNamesTestSuffixTest do
     end
     """
     |> to_source_file("lib/credo_sample_module.ex")
-    |> run_check(FileNamesTestSuffix)
+    |> run_check(TestFileSuffix)
     |> refute_issues()
   end
 
@@ -21,7 +21,7 @@ defmodule Credo.Checks.FileNamesTestSuffixTest do
     end
     """
     |> to_source_file("test/credo_sample_module_test.exs")
-    |> run_check(FileNamesTestSuffix)
+    |> run_check(TestFileSuffix)
     |> refute_issues()
   end
 
@@ -32,7 +32,7 @@ defmodule Credo.Checks.FileNamesTestSuffixTest do
     end
     """
     |> to_source_file("test/credo_sample_module.exs")
-    |> run_check(FileNamesTestSuffix)
+    |> run_check(TestFileSuffix)
     |> assert_issue()
   end
 end
