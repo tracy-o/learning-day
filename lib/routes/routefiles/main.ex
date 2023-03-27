@@ -773,6 +773,12 @@ defroutefile "Main" do
   handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets", platform: "Simorgh", examples: ["/afaanoromoo/sw.js"]
   handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", platform: "Karanga", examples: ["/afaanoromoo/rss.xml"]
 
+  handle "/afaanoromoo/tipohome.amp", using: "WorldServiceAfaanoromooTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/afaanoromoo/tipohome.amp"]
+  handle "/afaanoromoo/tipohome/manifest.json", using: "WorldServiceAfaanoromooAssets", platform: "Simorgh", only_on: "test", examples: ["/afaanoromoo/tipohome/manifest.json"]
+  handle "/afaanoromoo/tipohome/sw.js", using: "WorldServiceAfaanoromooAssets", platform: "Simorgh", only_on: "test", examples: ["/afaanoromoo/tipohome/sw.js"]
+  handle "/afaanoromoo/tipohome/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", platform: "Karanga", only_on: "test", examples: ["/afaanoromoo/tipohome/rss.xml"]
+  handle "/afaanoromoo/tipohome", using: "WorldServiceAfaanoromooTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/afaanoromoo/tipohome"]
+
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/afaanoromoo/topics/c7zp5z9n3x5t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -809,6 +815,12 @@ defroutefile "Main" do
   handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets", platform: "Simorgh", examples: ["/afrique/sw.js"]
   handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss", platform: "Karanga", examples: ["/afrique/rss.xml"]
 
+  handle "/afrique/tipohome.amp", using: "WorldServiceAfriqueTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/afrique/tipohome.amp"]
+  handle "/afrique/tipohome/manifest.json", using: "WorldServiceAfriqueAssets", platform: "Simorgh", only_on: "test", examples: ["/afrique/tipohome/manifest.json"]
+  handle "/afrique/tipohome/sw.js", using: "WorldServiceAfriqueAssets", platform: "Simorgh", only_on: "test", examples: ["/afrique/tipohome/sw.js"]
+  handle "/afrique/tipohome/rss.xml", using: "WorldServiceAfriqueHomePageRss", platform: "Karanga", only_on: "test", examples: ["/afrique/tipohome/rss.xml"]
+  handle "/afrique/tipohome", using: "WorldServiceAfriqueTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/afrique/tipohome"]
+
   handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -842,6 +854,12 @@ defroutefile "Main" do
   handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets", platform: "Simorgh", examples: ["/amharic/manifest.json"]
   handle "/amharic/sw.js", using: "WorldServiceAmharicAssets", platform: "Simorgh", examples: ["/amharic/sw.js"]
   handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss", platform: "Karanga", examples: ["/amharic/rss.xml"]
+
+  handle "/amharic/tipohome.amp", using: "WorldServiceAmharicTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/amharic/tipohome.amp"]
+  handle "/amharic/tipohome/manifest.json", using: "WorldServiceAmharicAssets", platform: "Simorgh", only_on: "test", examples: ["/amharic/tipohome/manifest.json"]
+  handle "/amharic/tipohome/sw.js", using: "WorldServiceAmharicAssets", platform: "Simorgh", only_on: "test", examples: ["/amharic/tipohome/sw.js"]
+  handle "/amharic/tipohome/rss.xml", using: "WorldServiceAmharicHomePageRss", platform: "Karanga", only_on: "test", examples: ["/amharic/tipohome/rss.xml"]
+  handle "/amharic/tipohome", using: "WorldServiceAmharicTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/amharic/tipohome"]
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/amharic/topics/c06gq8wdrjyt/page/2", 302}] do
     return_404 if: [
@@ -882,6 +900,12 @@ defroutefile "Main" do
   handle "/arabic/sw.js", using: "WorldServiceArabicAssets", platform: "Simorgh", examples: ["/arabic/sw.js"]
   handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss", platform: "Karanga", examples: ["/arabic/rss.xml"]
 
+  handle "/arabic/tipohome.amp", using: "WorldServiceArabicTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/arabic/tipohome.amp"]
+  handle "/arabic/tipohome/manifest.json", using: "WorldServiceArabicAssets", platform: "Simorgh", only_on: "test", examples: ["/arabic/tipohome/manifest.json"]
+  handle "/arabic/tipohome/sw.js", using: "WorldServiceArabicAssets", platform: "Simorgh", only_on: "test", examples: ["/arabic/tipohome/sw.js"]
+  handle "/arabic/tipohome/rss.xml", using: "WorldServiceArabicHomePageRss", platform: "Karanga", only_on: "test", examples: ["/arabic/tipohome/rss.xml"]
+  handle "/arabic/tipohome", using: "WorldServiceArabicTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/arabic/tipohome"]
+
   handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/arabic/topics/c340qj374j6t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -917,6 +941,12 @@ defroutefile "Main" do
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets", platform: "Simorgh", examples: ["/azeri/manifest.json"]
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets", platform: "Simorgh", examples: ["/azeri/sw.js"]
   handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss", platform: "Karanga", examples: ["/azeri/rss.xml"]
+
+  handle "/azeri/tipohome.amp", using: "WorldServiceAzeriTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/azeri/tipohome.amp"]
+  handle "/azeri/tipohome/manifest.json", using: "WorldServiceAzeriAssets", platform: "Simorgh", only_on: "test", examples: ["/azeri/tipohome/manifest.json"]
+  handle "/azeri/tipohome/sw.js", using: "WorldServiceAzeriAssets", platform: "Simorgh", only_on: "test", examples: ["/azeri/tipohome/sw.js"]
+  handle "/azeri/tipohome/rss.xml", using: "WorldServiceAzeriHomePageRss", platform: "Karanga", only_on: "test", examples: ["/azeri/tipohome/rss.xml"]
+  handle "/azeri/tipohome", using: "WorldServiceAzeriTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/azeri/tipohome"]
 
   handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
     return_404 if: [
@@ -955,6 +985,12 @@ defroutefile "Main" do
   handle "/bengali/sw.js", using: "WorldServiceBengaliAssets", platform: "Simorgh", examples: ["/bengali/sw.js"]
   handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss", platform: "Karanga", examples: ["/bengali/rss.xml"]
 
+  handle "/bengali/tipohome.amp", using: "WorldServiceBengaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/bengali/tipohome.amp"]
+  handle "/bengali/tipohome/manifest.json", using: "WorldServiceBengaliAssets", platform: "Simorgh", only_on: "test", examples: ["/bengali/tipohome/manifest.json"]
+  handle "/bengali/tipohome/sw.js", using: "WorldServiceBengaliAssets", platform: "Simorgh", only_on: "test", examples: ["/bengali/tipohome/sw.js"]
+  handle "/bengali/tipohome/rss.xml", using: "WorldServiceBengaliHomePageRss", platform: "Karanga", only_on: "test", examples: ["/bengali/tipohome/rss.xml"]
+  handle "/bengali/tipohome", using: "WorldServiceBengaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/bengali/tipohome"]
+
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/bengali/topics/c2dwq2nd40xt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -992,6 +1028,12 @@ defroutefile "Main" do
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets", platform: "Simorgh", examples: ["/burmese/sw.js"]
   handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss", platform: "Karanga", examples: ["/burmese/rss.xml"]
 
+  handle "/burmese/tipohome.amp", using: "WorldServiceBurmeseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/burmese/tipohome.amp"]
+  handle "/burmese/tipohome/manifest.json", using: "WorldServiceBurmeseAssets", platform: "Simorgh", only_on: "test", examples: ["/burmese/tipohome/manifest.json"]
+  handle "/burmese/tipohome/sw.js", using: "WorldServiceBurmeseAssets", platform: "Simorgh", only_on: "test", examples: ["/burmese/tipohome/sw.js"]
+  handle "/burmese/tipohome/rss.xml", using: "WorldServiceBurmeseHomePageRss", platform: "Karanga", only_on: "test", examples: ["/burmese/tipohome/rss.xml"]
+  handle "/burmese/tipohome", using: "WorldServiceBurmeseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/burmese/tipohome"]
+
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/burmese/topics/c404v08p1wxt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1028,6 +1070,12 @@ defroutefile "Main" do
   handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets", platform: "Simorgh", examples: ["/gahuza/sw.js"]
   handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss", platform: "Karanga", examples: ["/gahuza/rss.xml"]
 
+  handle "/gahuza/tipohome.amp", using: "WorldServiceGahuzaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/gahuza/tipohome.amp"]
+  handle "/gahuza/tipohome/manifest.json", using: "WorldServiceGahuzaAssets", platform: "Simorgh", only_on: "test", examples: ["/gahuza/tipohome/manifest.json"]
+  handle "/gahuza/tipohome/sw.js", using: "WorldServiceGahuzaAssets", platform: "Simorgh", only_on: "test", examples: ["/gahuza/tipohome/sw.js"]
+  handle "/gahuza/tipohome/rss.xml", using: "WorldServiceGahuzaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/gahuza/tipohome/rss.xml"]
+  handle "/gahuza/tipohome", using: "WorldServiceGahuzaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/gahuza/tipohome"]
+
   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1060,6 +1108,12 @@ defroutefile "Main" do
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", platform: "Simorgh", examples: ["/gujarati/manifest.json"]
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets", platform: "Simorgh", examples: ["/gujarati/sw.js"]
   handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss", platform: "Karanga", examples: ["/gujarati/rss.xml"]
+
+  handle "/gujarati/tipohome.amp", using: "WorldServiceGujaratiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/gujarati/tipohome.amp"]
+  handle "/gujarati/tipohome/manifest.json", using: "WorldServiceGujaratiAssets", platform: "Simorgh", only_on: "test", examples: ["/gujarati/tipohome/manifest.json"]
+  handle "/gujarati/tipohome/sw.js", using: "WorldServiceGujaratiAssets", platform: "Simorgh", only_on: "test", examples: ["/gujarati/tipohome/sw.js"]
+  handle "/gujarati/tipohome/rss.xml", using: "WorldServiceGujaratiHomePageRss", platform: "Karanga", only_on: "test", examples: ["/gujarati/tipohome/rss.xml"]
+  handle "/gujarati/tipohome", using: "WorldServiceGujaratiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/gujarati/tipohome"]
 
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/gujarati/topics/c2dwqj95d30t/page/2", 302}] do
     return_404 if: [
@@ -1096,6 +1150,12 @@ defroutefile "Main" do
   handle "/hausa/manifest.json", using: "WorldServiceHausaAssets", platform: "Simorgh", examples: ["/hausa/manifest.json"]
   handle "/hausa/sw.js", using: "WorldServiceHausaAssets", platform: "Simorgh", examples: ["/hausa/sw.js"]
   handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss", platform: "Karanga", examples: ["/hausa/rss.xml"]
+
+  handle "/hausa/tipohome.amp", using: "WorldServiceHausaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/hausa/tipohome.amp"]
+  handle "/hausa/tipohome/manifest.json", using: "WorldServiceHausaAssets", platform: "Simorgh", only_on: "test", examples: ["/hausa/tipohome/manifest.json"]
+  handle "/hausa/tipohome/sw.js", using: "WorldServiceHausaAssets", platform: "Simorgh", only_on: "test", examples: ["/hausa/tipohome/sw.js"]
+  handle "/hausa/tipohome/rss.xml", using: "WorldServiceHausaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/hausa/tipohome/rss.xml"]
+  handle "/hausa/tipohome", using: "WorldServiceHausaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/hausa/tipohome"]
 
   handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/hausa/topics/c5qvpxkx1j7t/page/2", 302}] do
     return_404 if: [
@@ -1134,6 +1194,12 @@ defroutefile "Main" do
   handle "/hindi/sw.js", using: "WorldServiceHindiAssets", platform: "Simorgh", examples: ["/hindi/sw.js"]
   handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss", platform: "Karanga", examples: ["/hindi/rss.xml"]
 
+  handle "/hindi/tipohome.amp", using: "WorldServiceHindiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/hindi/tipohome.amp"]
+  handle "/hindi/tipohome/manifest.json", using: "WorldServiceHindiAssets", platform: "Simorgh", only_on: "test", examples: ["/hindi/tipohome/manifest.json"]
+  handle "/hindi/tipohome/sw.js", using: "WorldServiceHindiAssets", platform: "Simorgh", only_on: "test", examples: ["/hindi/tipohome/sw.js"]
+  handle "/hindi/tipohome/rss.xml", using: "WorldServiceHindiHomePageRss", platform: "Karanga", only_on: "test", examples: ["/hindi/tipohome/rss.xml"]
+  handle "/hindi/tipohome", using: "WorldServiceHindiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/hindi/tipohome"]
+
   handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/hindi/topics/c6vzy709wvxt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1166,6 +1232,12 @@ defroutefile "Main" do
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", platform: "Simorgh", examples: ["/igbo/manifest.json"]
   handle "/igbo/sw.js", using: "WorldServiceIgboAssets", platform: "Simorgh", examples: ["/igbo/sw.js"]
   handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss", platform: "Karanga", examples: ["/igbo/rss.xml"]
+
+  handle "/igbo/tipohome.amp", using: "WorldServiceIgboTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/igbo/tipohome.amp"]
+  handle "/igbo/tipohome/manifest.json", using: "WorldServiceIgboAssets", platform: "Simorgh", only_on: "test", examples: ["/igbo/tipohome/manifest.json"]
+  handle "/igbo/tipohome/sw.js", using: "WorldServiceIgboAssets", platform: "Simorgh", only_on: "test", examples: ["/igbo/tipohome/sw.js"]
+  handle "/igbo/tipohome/rss.xml", using: "WorldServiceIgboHomePageRss", platform: "Karanga", only_on: "test", examples: ["/igbo/tipohome/rss.xml"]
+  handle "/igbo/tipohome", using: "WorldServiceIgboTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/igbo/tipohome"]
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/igbo/topics/c340qr24xggt/page/2", 302}] do
     return_404 if: [
@@ -1204,6 +1276,12 @@ defroutefile "Main" do
   handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets", platform: "Simorgh", examples: ["/indonesia/sw.js"]
   handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss", platform: "Karanga", examples: ["/indonesia/rss.xml"]
 
+  handle "/indonesia/tipohome.amp", using: "WorldServiceIndonesiaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/indonesia/tipohome.amp"]
+  handle "/indonesia/tipohome/manifest.json", using: "WorldServiceIndonesiaAssets", platform: "Simorgh", only_on: "test", examples: ["/indonesia/tipohome/manifest.json"]
+  handle "/indonesia/tipohome/sw.js", using: "WorldServiceIndonesiaAssets", platform: "Simorgh", only_on: "test", examples: ["/indonesia/tipohome/sw.js"]
+  handle "/indonesia/tipohome/rss.xml", using: "WorldServiceIndonesiaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/indonesia/tipohome/rss.xml"]
+  handle "/indonesia/tipohome", using: "WorldServiceIndonesiaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/indonesia/tipohome"]
+
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/indonesia/topics/c340qrk1znxt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1237,6 +1315,12 @@ defroutefile "Main" do
   handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets", platform: "Simorgh", examples: ["/japanese/sw.js"]
   handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss", platform: "Karanga", examples: ["/japanese/rss.xml"]
 
+  handle "/japanese/tipohome.amp", using: "WorldServiceJapaneseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/japanese/tipohome.amp"]
+  handle "/japanese/tipohome/manifest.json", using: "WorldServiceJapaneseAssets", platform: "Simorgh", only_on: "test", examples: ["/japanese/tipohome/manifest.json"]
+  handle "/japanese/tipohome/sw.js", using: "WorldServiceJapaneseAssets", platform: "Simorgh", only_on: "test", examples: ["/japanese/tipohome/sw.js"]
+  handle "/japanese/tipohome/rss.xml", using: "WorldServiceJapaneseHomePageRss", platform: "Karanga", only_on: "test", examples: ["/japanese/tipohome/rss.xml"]
+  handle "/japanese/tipohome", using: "WorldServiceJapaneseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/japanese/tipohome"]
+
   handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/japanese/topics/c340qrn7pp0t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1269,6 +1353,12 @@ defroutefile "Main" do
   handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", platform: "Simorgh", examples: ["/korean/manifest.json"]
   handle "/korean/sw.js", using: "WorldServiceKoreanAssets", platform: "Simorgh", examples: ["/korean/sw.js"]
   handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss", platform: "Karanga", examples: ["/korean/rss.xml"]
+
+  handle "/korean/tipohome.amp", using: "WorldServiceKoreanTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/korean/tipohome.amp"]
+  handle "/korean/tipohome/manifest.json", using: "WorldServiceKoreanAssets", platform: "Simorgh", only_on: "test", examples: ["/korean/tipohome/manifest.json"]
+  handle "/korean/tipohome/sw.js", using: "WorldServiceKoreanAssets", platform: "Simorgh", only_on: "test", examples: ["/korean/tipohome/sw.js"]
+  handle "/korean/tipohome/rss.xml", using: "WorldServiceKoreanHomePageRss", platform: "Karanga", only_on: "test", examples: ["/korean/tipohome/rss.xml"]
+  handle "/korean/tipohome", using: "WorldServiceKoreanTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/korean/tipohome"]
 
   handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/korean/topics/c17q6yp3jx4t/page/2", 302}] do
     return_404 if: [
@@ -1306,11 +1396,11 @@ defroutefile "Main" do
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", examples: ["/kyrgyz/sw.js"]
   handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", examples: ["/kyrgyz/rss.xml"]
 
-  handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome.amp"]
+  handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome.amp"]
   handle "/kyrgyz/tipohome/manifest.json", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/manifest.json"]
   handle "/kyrgyz/tipohome/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/sw.js"]
   handle "/kyrgyz/tipohome/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", only_on: "test", examples: ["/kyrgyz/tipohome/rss.xml"]
-  handle "/kyrgyz/tipohome", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome"]
+  handle "/kyrgyz/tipohome", using: "WorldServiceKyrgyzTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome"]
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
     return_404 if: [
@@ -1352,6 +1442,12 @@ defroutefile "Main" do
   handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets", platform: "Simorgh", examples: ["/marathi/manifest.json"]
   handle "/marathi/sw.js", using: "WorldServiceMarathiAssets", platform: "Simorgh", examples: ["/marathi/sw.js"]
   handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss", platform: "Karanga", examples: ["/marathi/rss.xml"]
+
+  handle "/marathi/tipohome.amp", using: "WorldServiceMarathiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/marathi/tipohome.amp"]
+  handle "/marathi/tipohome/manifest.json", using: "WorldServiceMarathiAssets", platform: "Simorgh", only_on: "test", examples: ["/marathi/tipohome/manifest.json"]
+  handle "/marathi/tipohome/sw.js", using: "WorldServiceMarathiAssets", platform: "Simorgh", only_on: "test", examples: ["/marathi/tipohome/sw.js"]
+  handle "/marathi/tipohome/rss.xml", using: "WorldServiceMarathiHomePageRss", platform: "Karanga", only_on: "test", examples: ["/marathi/tipohome/rss.xml"]
+  handle "/marathi/tipohome", using: "WorldServiceMarathiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/marathi/tipohome"]
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/marathi/topics/c2dwqjwqqqjt/page/2", 302}] do
     return_404 if: [
@@ -1399,6 +1495,12 @@ defroutefile "Main" do
   handle "/mundo/sw.js", using: "WorldServiceMundoAssets", platform: "Simorgh", examples: ["/mundo/sw.js"]
   handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss", platform: "Karanga", examples: ["/mundo/rss.xml"]
 
+  handle "/mundo/tipohome.amp", using: "WorldServiceMundoTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/mundo/tipohome.amp"]
+  handle "/mundo/tipohome/manifest.json", using: "WorldServiceMundoAssets", platform: "Simorgh", only_on: "test", examples: ["/mundo/tipohome/manifest.json"]
+  handle "/mundo/tipohome/sw.js", using: "WorldServiceMundoAssets", platform: "Simorgh", only_on: "test", examples: ["/mundo/tipohome/sw.js"]
+  handle "/mundo/tipohome/rss.xml", using: "WorldServiceMundoHomePageRss", platform: "Karanga", only_on: "test", examples: ["/mundo/tipohome/rss.xml"]
+  handle "/mundo/tipohome", using: "WorldServiceMundoTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/mundo/tipohome"]
+
   handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/mundo/topics/cdr5613yzwqt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1435,6 +1537,12 @@ defroutefile "Main" do
   handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets", platform: "Simorgh", examples: ["/nepali/manifest.json"]
   handle "/nepali/sw.js", using: "WorldServiceNepaliAssets", platform: "Simorgh", examples: ["/nepali/sw.js"]
   handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss", platform: "Karanga", examples: ["/nepali/rss.xml"]
+
+  handle "/nepali/tipohome.amp", using: "WorldServiceNepaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/nepali/tipohome.amp"]
+  handle "/nepali/tipohome/manifest.json", using: "WorldServiceNepaliAssets", platform: "Simorgh", only_on: "test", examples: ["/nepali/tipohome/manifest.json"]
+  handle "/nepali/tipohome/sw.js", using: "WorldServiceNepaliAssets", platform: "Simorgh", only_on: "test", examples: ["/nepali/tipohome/sw.js"]
+  handle "/nepali/tipohome/rss.xml", using: "WorldServiceNepaliHomePageRss", platform: "Karanga", only_on: "test", examples: ["/nepali/tipohome/rss.xml"]
+  handle "/nepali/tipohome", using: "WorldServiceNepaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/nepali/tipohome"]
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/nepali/topics/c340q4p5136t/page/2", 302}] do
     return_404 if: [
@@ -1473,6 +1581,12 @@ defroutefile "Main" do
   handle "/pashto/sw.js", using: "WorldServicePashtoAssets", platform: "Simorgh", examples: ["/pashto/sw.js"]
   handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss", platform: "Karanga", examples: ["/pashto/rss.xml"]
 
+  handle "/pashto/tipohome.amp", using: "WorldServicePashtoTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/pashto/tipohome.amp"]
+  handle "/pashto/tipohome/manifest.json", using: "WorldServicePashtoAssets", platform: "Simorgh", only_on: "test", examples: ["/pashto/tipohome/manifest.json"]
+  handle "/pashto/tipohome/sw.js", using: "WorldServicePashtoAssets", platform: "Simorgh", only_on: "test", examples: ["/pashto/tipohome/sw.js"]
+  handle "/pashto/tipohome/rss.xml", using: "WorldServicePashtoHomePageRss", platform: "Karanga", only_on: "test", examples: ["/pashto/tipohome/rss.xml"]
+  handle "/pashto/tipohome", using: "WorldServicePashtoTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/pashto/tipohome"]
+
   handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/pashto/topics/c8y94yr7y9rt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1510,6 +1624,12 @@ defroutefile "Main" do
   handle "/persian/sw.js", using: "WorldServicePersianAssets", platform: "Simorgh", examples: ["/persian/sw.js"]
   handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss", platform: "Karanga", examples: ["/persian/rss.xml"]
 
+  handle "/persian/tipohome.amp", using: "WorldServicePersianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/persian/tipohome.amp"]
+  handle "/persian/tipohome/manifest.json", using: "WorldServicePersianAssets", platform: "Simorgh", only_on: "test", examples: ["/persian/tipohome/manifest.json"]
+  handle "/persian/tipohome/sw.js", using: "WorldServicePersianAssets", platform: "Simorgh", only_on: "test", examples: ["/persian/tipohome/sw.js"]
+  handle "/persian/tipohome/rss.xml", using: "WorldServicePersianHomePageRss", platform: "Karanga", only_on: "test", examples: ["/persian/tipohome/rss.xml"]
+  handle "/persian/tipohome", using: "WorldServicePersianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/persian/tipohome"]
+
   handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/persian/topics/cnq68798yw0t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1542,6 +1662,12 @@ defroutefile "Main" do
   handle "/pidgin/manifest.json", using: "WorldServicePidginAssets", platform: "Simorgh", examples: ["/pidgin/manifest.json"]
   handle "/pidgin/sw.js", using: "WorldServicePidginAssets", platform: "Simorgh", examples: ["/pidgin/sw.js"]
   handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss", platform: "Karanga", examples: ["/pidgin/rss.xml"]
+
+  handle "/pidgin/tipohome.amp", using: "WorldServicePidginTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/pidgin/tipohome.amp"]
+  handle "/pidgin/tipohome/manifest.json", using: "WorldServicePidginAssets", platform: "Simorgh", only_on: "test", examples: ["/pidgin/tipohome/manifest.json"]
+  handle "/pidgin/tipohome/sw.js", using: "WorldServicePidginAssets", platform: "Simorgh", only_on: "test", examples: ["/pidgin/tipohome/sw.js"]
+  handle "/pidgin/tipohome/rss.xml", using: "WorldServicePidginHomePageRss", platform: "Karanga", only_on: "test", examples: ["/pidgin/tipohome/rss.xml"]
+  handle "/pidgin/tipohome", using: "WorldServicePidginTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/pidgin/tipohome"]
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/pidgin/topics/c95y35941vrt/page/2", 302}] do
     return_404 if: [
@@ -1580,6 +1706,12 @@ defroutefile "Main" do
   handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets", platform: "Simorgh", examples: ["/portuguese/sw.js"]
   handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss", platform: "Karanga", examples: ["/portuguese/rss.xml"]
 
+  handle "/portuguese/tipohome.amp", using: "WorldServicePortugueseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/portuguese/tipohome.amp"]
+  handle "/portuguese/tipohome/manifest.json", using: "WorldServicePortugueseAssets", platform: "Simorgh", only_on: "test", examples: ["/portuguese/tipohome/manifest.json"]
+  handle "/portuguese/tipohome/sw.js", using: "WorldServicePortugueseAssets", platform: "Simorgh", only_on: "test", examples: ["/portuguese/tipohome/sw.js"]
+  handle "/portuguese/tipohome/rss.xml", using: "WorldServicePortugueseHomePageRss", platform: "Karanga", only_on: "test", examples: ["/portuguese/tipohome/rss.xml"]
+  handle "/portuguese/tipohome", using: "WorldServicePortugueseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/portuguese/tipohome"]
+
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/portuguese/topics/c1gdqg5dr8nt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1612,6 +1744,12 @@ defroutefile "Main" do
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", platform: "Simorgh", examples: ["/punjabi/manifest.json"]
   handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets", platform: "Simorgh", examples: ["/punjabi/sw.js"]
   handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss", platform: "Karanga", examples: ["/punjabi/rss.xml"]
+
+  handle "/punjabi/tipohome.amp", using: "WorldServicePunjabiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/punjabi/tipohome.amp"]
+  handle "/punjabi/tipohome/manifest.json", using: "WorldServicePunjabiAssets", platform: "Simorgh", only_on: "test", examples: ["/punjabi/tipohome/manifest.json"]
+  handle "/punjabi/tipohome/sw.js", using: "WorldServicePunjabiAssets", platform: "Simorgh", only_on: "test", examples: ["/punjabi/tipohome/sw.js"]
+  handle "/punjabi/tipohome/rss.xml", using: "WorldServicePunjabiHomePageRss", platform: "Karanga", only_on: "test", examples: ["/punjabi/tipohome/rss.xml"]
+  handle "/punjabi/tipohome", using: "WorldServicePunjabiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/punjabi/tipohome"]
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/punjabi/topics/c0w258dd62mt/page/2", 302}] do
     return_404 if: [
@@ -1657,6 +1795,12 @@ defroutefile "Main" do
   handle "/russian/sw.js", using: "WorldServiceRussianAssets", platform: "Simorgh", examples: ["/russian/sw.js"]
   handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", platform: "Karanga", examples: ["/russian/rss.xml"]
 
+  handle "/russian/tipohome.amp", using: "WorldServiceRussianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/russian/tipohome.amp"]
+  handle "/russian/tipohome/manifest.json", using: "WorldServiceRussianAssets", platform: "Simorgh", only_on: "test", examples: ["/russian/tipohome/manifest.json"]
+  handle "/russian/tipohome/sw.js", using: "WorldServiceRussianAssets", platform: "Simorgh", only_on: "test", examples: ["/russian/tipohome/sw.js"]
+  handle "/russian/tipohome/rss.xml", using: "WorldServiceRussianHomePageRss", platform: "Karanga", only_on: "test", examples: ["/russian/tipohome/rss.xml"]
+  handle "/russian/tipohome", using: "WorldServiceRussianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/russian/tipohome"]
+
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1689,6 +1833,12 @@ defroutefile "Main" do
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", platform: "Simorgh", examples: ["/serbian/sw.js"]
   handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss", platform: "Karanga", examples: ["/serbian/lat/rss.xml"]
   handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss", platform: "Karanga", examples: ["/serbian/cyr/rss.xml"]
+
+  handle "/serbian/lat/tipohome.amp", using: "WorldServiceSerbianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/serbian/lat/tipohome.amp"]
+  handle "/serbian/lat/tipohome/manifest.json", using: "WorldServiceSerbianAssets", platform: "Simorgh", only_on: "test", examples: ["/serbian/lat/tipohome/manifest.json"]
+  handle "/serbian/lat/tipohome/sw.js", using: "WorldServiceSerbianAssets", platform: "Simorgh", only_on: "test", examples: ["/serbian/lat/tipohome/sw.js"]
+  handle "/serbian/lat/tipohome/rss.xml", using: "WorldServiceSerbianHomePageRss", platform: "Karanga", only_on: "test", examples: ["/serbian/lat/tipohome/rss.xml"]
+  handle "/serbian/lat/tipohome", using: "WorldServiceSerbianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/serbian/lat/tipohome"]
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
     return_404 if: [
@@ -1748,6 +1898,12 @@ defroutefile "Main" do
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", platform: "Simorgh", examples: ["/sinhala/sw.js"]
   handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", platform: "Karanga", examples: ["/sinhala/rss.xml"]
 
+  handle "/sinhala/tipohome.amp", using: "WorldServiceSinhalaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/sinhala/tipohome.amp"]
+  handle "/sinhala/tipohome/manifest.json", using: "WorldServiceSinhalaAssets", platform: "Simorgh", only_on: "test", examples: ["/sinhala/tipohome/manifest.json"]
+  handle "/sinhala/tipohome/sw.js", using: "WorldServiceSinhalaAssets", platform: "Simorgh", only_on: "test", examples: ["/sinhala/tipohome/sw.js"]
+  handle "/sinhala/tipohome/rss.xml", using: "WorldServiceSinhalaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/sinhala/tipohome/rss.xml"]
+  handle "/sinhala/tipohome", using: "WorldServiceSinhalaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/sinhala/tipohome"]
+
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1784,6 +1940,12 @@ defroutefile "Main" do
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets", platform: "Simorgh", examples: ["/somali/sw.js"]
   handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", platform: "Karanga", examples: ["/somali/rss.xml"]
 
+  handle "/somali/tipohome.amp", using: "WorldServiceSomaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/somali/tipohome.amp"]
+  handle "/somali/tipohome/manifest.json", using: "WorldServiceSomaliAssets", platform: "Simorgh", only_on: "test", examples: ["/somali/tipohome/manifest.json"]
+  handle "/somali/tipohome/sw.js", using: "WorldServiceSomaliAssets", platform: "Simorgh", only_on: "test", examples: ["/somali/tipohome/sw.js"]
+  handle "/somali/tipohome/rss.xml", using: "WorldServiceSomaliHomePageRss", platform: "Karanga", only_on: "test", examples: ["/somali/tipohome/rss.xml"]
+  handle "/somali/tipohome", using: "WorldServiceSomaliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/somali/tipohome"]
+
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1819,6 +1981,12 @@ defroutefile "Main" do
   handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", platform: "Simorgh", examples: ["/swahili/manifest.json"]
   handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", platform: "Simorgh", examples: ["/swahili/sw.js"]
   handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", platform: "Karanga", examples: ["/swahili/rss.xml"]
+
+  handle "/swahili/tipohome.amp", using: "WorldServiceSwahiliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/swahili/tipohome.amp"]
+  handle "/swahili/tipohome/manifest.json", using: "WorldServiceSwahiliAssets", platform: "Simorgh", only_on: "test", examples: ["/swahili/tipohome/manifest.json"]
+  handle "/swahili/tipohome/sw.js", using: "WorldServiceSwahiliAssets", platform: "Simorgh", only_on: "test", examples: ["/swahili/tipohome/sw.js"]
+  handle "/swahili/tipohome/rss.xml", using: "WorldServiceSwahiliHomePageRss", platform: "Karanga", only_on: "test", examples: ["/swahili/tipohome/rss.xml"]
+  handle "/swahili/tipohome", using: "WorldServiceSwahiliTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/swahili/tipohome"]
 
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
     return_404 if: [
@@ -1858,6 +2026,12 @@ defroutefile "Main" do
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets", platform: "Simorgh", examples: ["/tamil/sw.js"]
   handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", platform: "Karanga", examples: ["/tamil/rss.xml"]
 
+  handle "/tamil/tipohome.amp", using: "WorldServiceTamilTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/tamil/tipohome.amp"]
+  handle "/tamil/tipohome/manifest.json", using: "WorldServiceTamilAssets", platform: "Simorgh", only_on: "test", examples: ["/tamil/tipohome/manifest.json"]
+  handle "/tamil/tipohome/sw.js", using: "WorldServiceTamilAssets", platform: "Simorgh", only_on: "test", examples: ["/tamil/tipohome/sw.js"]
+  handle "/tamil/tipohome/rss.xml", using: "WorldServiceTamilHomePageRss", platform: "Karanga", only_on: "test", examples: ["/tamil/tipohome/rss.xml"]
+  handle "/tamil/tipohome", using: "WorldServiceTamilTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/tamil/tipohome"]
+
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1890,6 +2064,12 @@ defroutefile "Main" do
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", platform: "Simorgh", examples: ["/telugu/manifest.json"]
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", platform: "Simorgh", examples: ["/telugu/sw.js"]
   handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", platform: "Karanga", examples: ["/telugu/rss.xml"]
+
+  handle "/telugu/tipohome.amp", using: "WorldServiceTeluguTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/telugu/tipohome.amp"]
+  handle "/telugu/tipohome/manifest.json", using: "WorldServiceTeluguAssets", platform: "Simorgh", only_on: "test", examples: ["/telugu/tipohome/manifest.json"]
+  handle "/telugu/tipohome/sw.js", using: "WorldServiceTeluguAssets", platform: "Simorgh", only_on: "test", examples: ["/telugu/tipohome/sw.js"]
+  handle "/telugu/tipohome/rss.xml", using: "WorldServiceTeluguHomePageRss", platform: "Karanga", only_on: "test", examples: ["/telugu/tipohome/rss.xml"]
+  handle "/telugu/tipohome", using: "WorldServiceTeluguTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/telugu/tipohome"]
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
     return_404 if: [
@@ -1924,6 +2104,12 @@ defroutefile "Main" do
   handle "/thai/sw.js", using: "WorldServiceThaiAssets", platform: "Simorgh", examples: ["/thai/sw.js"]
   handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", platform: "Karanga", examples: ["/thai/rss.xml"]
 
+  handle "/thai/tipohome.amp", using: "WorldServiceThaiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/thai/tipohome.amp"]
+  handle "/thai/tipohome/manifest.json", using: "WorldServiceThaiAssets", platform: "Simorgh", only_on: "test", examples: ["/thai/tipohome/manifest.json"]
+  handle "/thai/tipohome/sw.js", using: "WorldServiceThaiAssets", platform: "Simorgh", only_on: "test", examples: ["/thai/tipohome/sw.js"]
+  handle "/thai/tipohome/rss.xml", using: "WorldServiceThaiHomePageRss", platform: "Karanga", only_on: "test", examples: ["/thai/tipohome/rss.xml"]
+  handle "/thai/tipohome", using: "WorldServiceThaiTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/thai/tipohome"]
+
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1956,6 +2142,12 @@ defroutefile "Main" do
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", examples: ["/tigrinya/manifest.json"]
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", examples: ["/tigrinya/sw.js"]
   handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", platform: "Karanga", examples: ["/tigrinya/rss.xml"]
+
+  handle "/tigrinya/tipohome.amp", using: "WorldServiceTigrinyaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/tigrinya/tipohome.amp"]
+  handle "/tigrinya/tipohome/manifest.json", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", only_on: "test", examples: ["/tigrinya/tipohome/manifest.json"]
+  handle "/tigrinya/tipohome/sw.js", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", only_on: "test", examples: ["/tigrinya/tipohome/sw.js"]
+  handle "/tigrinya/tipohome/rss.xml", using: "WorldServiceTigrinyaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/tigrinya/tipohome/rss.xml"]
+  handle "/tigrinya/tipohome", using: "WorldServiceTigrinyaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/tigrinya/tipohome"]
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
     return_404 if: [
@@ -1993,6 +2185,12 @@ defroutefile "Main" do
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", platform: "Simorgh", examples: ["/turkce/manifest.json"]
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", platform: "Simorgh", examples: ["/turkce/sw.js"]
   handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", platform: "Karanga", examples: ["/turkce/rss.xml"]
+
+  handle "/turkce/tipohome.amp", using: "WorldServiceTurkceTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/turkce/tipohome.amp"]
+  handle "/turkce/tipohome/manifest.json", using: "WorldServiceTurkceAssets", platform: "Simorgh", only_on: "test", examples: ["/turkce/tipohome/manifest.json"]
+  handle "/turkce/tipohome/sw.js", using: "WorldServiceTurkceAssets", platform: "Simorgh", only_on: "test", examples: ["/turkce/tipohome/sw.js"]
+  handle "/turkce/tipohome/rss.xml", using: "WorldServiceTurkceHomePageRss", platform: "Karanga", only_on: "test", examples: ["/turkce/tipohome/rss.xml"]
+  handle "/turkce/tipohome", using: "WorldServiceTurkceTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/turkce/tipohome"]
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
     return_404 if: [
@@ -2065,6 +2263,12 @@ defroutefile "Main" do
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", platform: "Simorgh", examples: ["/ukrainian/sw.js"]
   handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", platform: "Karanga", examples: ["/ukrainian/rss.xml"]
 
+  handle "/ukrainian/tipohome.amp", using: "WorldServiceUkrainianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/ukrainian/tipohome.amp"]
+  handle "/ukrainian/tipohome/manifest.json", using: "WorldServiceUkrainianAssets", platform: "Simorgh", only_on: "test", examples: ["/ukrainian/tipohome/manifest.json"]
+  handle "/ukrainian/tipohome/sw.js", using: "WorldServiceUkrainianAssets", platform: "Simorgh", only_on: "test", examples: ["/ukrainian/tipohome/sw.js"]
+  handle "/ukrainian/tipohome/rss.xml", using: "WorldServiceUkrainianHomePageRss", platform: "Karanga", only_on: "test", examples: ["/ukrainian/tipohome/rss.xml"]
+  handle "/ukrainian/tipohome", using: "WorldServiceUkrainianTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/ukrainian/tipohome"]
+
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -2102,6 +2306,12 @@ defroutefile "Main" do
   handle "/urdu/sw.js", using: "WorldServiceUrduAssets", platform: "Simorgh", examples: ["/urdu/sw.js"]
   handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", platform: "Karanga", examples: ["/urdu/rss.xml"]
 
+  handle "/urdu/tipohome.amp", using: "WorldServiceUrduTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/urdu/tipohome.amp"]
+  handle "/urdu/tipohome/manifest.json", using: "WorldServiceUrduAssets", platform: "Simorgh", only_on: "test", examples: ["/urdu/tipohome/manifest.json"]
+  handle "/urdu/tipohome/sw.js", using: "WorldServiceUrduAssets", platform: "Simorgh", only_on: "test", examples: ["/urdu/tipohome/sw.js"]
+  handle "/urdu/tipohome/rss.xml", using: "WorldServiceUrduHomePageRss", platform: "Karanga", only_on: "test", examples: ["/urdu/tipohome/rss.xml"]
+  handle "/urdu/tipohome", using: "WorldServiceUrduTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/urdu/tipohome"]
+
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -2137,6 +2347,12 @@ defroutefile "Main" do
   handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", platform: "Simorgh", examples: ["/uzbek/manifest.json"]
   handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", platform: "Simorgh", examples: ["/uzbek/sw.js"]
   handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss", platform: "Karanga", examples: ["/uzbek/rss.xml"]
+
+  handle "/uzbek/tipohome.amp", using: "WorldServiceUzbekTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/uzbek/tipohome.amp"]
+  handle "/uzbek/tipohome/manifest.json", using: "WorldServiceUzbekAssets", platform: "Simorgh", only_on: "test", examples: ["/uzbek/tipohome/manifest.json"]
+  handle "/uzbek/tipohome/sw.js", using: "WorldServiceUzbekAssets", platform: "Simorgh", only_on: "test", examples: ["/uzbek/tipohome/sw.js"]
+  handle "/uzbek/tipohome/rss.xml", using: "WorldServiceUzbekHomePageRss", platform: "Karanga", only_on: "test", examples: ["/uzbek/tipohome/rss.xml"]
+  handle "/uzbek/tipohome", using: "WorldServiceUzbekTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/uzbek/tipohome"]
 
   handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/uzbek/topics/c340q0q55jvt/page/2", 302}] do
     return_404 if: [
@@ -2174,6 +2390,12 @@ defroutefile "Main" do
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", platform: "Simorgh", examples: ["/vietnamese/sw.js"]
   handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", platform: "Karanga", examples: ["/vietnamese/rss.xml"]
 
+  handle "/vietnamese/tipohome.amp", using: "WorldServiceVietnameseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/vietnamese/tipohome.amp"]
+  handle "/vietnamese/tipohome/manifest.json", using: "WorldServiceVietnameseAssets", platform: "Simorgh", only_on: "test", examples: ["/vietnamese/tipohome/manifest.json"]
+  handle "/vietnamese/tipohome/sw.js", using: "WorldServiceVietnameseAssets", platform: "Simorgh", only_on: "test", examples: ["/vietnamese/tipohome/sw.js"]
+  handle "/vietnamese/tipohome/rss.xml", using: "WorldServiceVietnameseHomePageRss", platform: "Karanga", only_on: "test", examples: ["/vietnamese/tipohome/rss.xml"]
+  handle "/vietnamese/tipohome", using: "WorldServiceVietnameseTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/vietnamese/tipohome"]
+
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -2206,6 +2428,12 @@ defroutefile "Main" do
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", platform: "Simorgh", examples: ["/yoruba/manifest.json"]
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", platform: "Simorgh", examples: ["/yoruba/sw.js"]
   handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", platform: "Karanga", examples: ["/yoruba/rss.xml"]
+
+  handle "/yoruba/tipohome.amp", using: "WorldServiceYorubaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/yoruba/tipohome.amp"]
+  handle "/yoruba/tipohome/manifest.json", using: "WorldServiceYorubaAssets", platform: "Simorgh", only_on: "test", examples: ["/yoruba/tipohome/manifest.json"]
+  handle "/yoruba/tipohome/sw.js", using: "WorldServiceYorubaAssets", platform: "Simorgh", only_on: "test", examples: ["/yoruba/tipohome/sw.js"]
+  handle "/yoruba/tipohome/rss.xml", using: "WorldServiceYorubaHomePageRss", platform: "Karanga", only_on: "test", examples: ["/yoruba/tipohome/rss.xml"]
+  handle "/yoruba/tipohome", using: "WorldServiceYorubaTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/yoruba/tipohome"]
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
     return_404 if: [
@@ -2242,6 +2470,12 @@ defroutefile "Main" do
   handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", platform: "Simorgh", examples: ["/zhongwen/sw.js"]
   handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss", platform: "Karanga", examples: ["/zhongwen/simp/rss.xml"]
   handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss", platform: "Karanga", examples: ["/zhongwen/trad/rss.xml"]
+
+  handle "/zhongwen/trad/tipohome.amp", using: "WorldServiceZhongwenTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/zhongwen/trad/tipohome.amp"]
+  handle "/zhongwen/trad/tipohome/manifest.json", using: "WorldServiceZhongwenAssets", platform: "Simorgh", only_on: "test", examples: ["/zhongwen/trad/tipohome/manifest.json"]
+  handle "/zhongwen/trad/tipohome/sw.js", using: "WorldServiceZhongwenAssets", platform: "Simorgh", only_on: "test", examples: ["/zhongwen/trad/tipohome/sw.js"]
+  handle "/zhongwen/trad/tipohome/rss.xml", using: "WorldServiceZhongwenHomePageRss", platform: "Karanga", only_on: "test", examples: ["/zhongwen/trad/tipohome/rss.xml"]
+  handle "/zhongwen/trad/tipohome", using: "WorldServiceZhongwenTipoHomePage", platform: "Simorgh", only_on: "test", examples: ["/zhongwen/trad/tipohome"]
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
     return_404 if: [

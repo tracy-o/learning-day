@@ -1,4 +1,4 @@
-defmodule Routes.Specs.WorldServiceKyrgyzTipo do
+defmodule Routes.Specs.WorldServiceGujaratiTipoHomePage do
   def specs do
     %{
       platform: "Simorgh",
