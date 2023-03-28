@@ -2990,7 +2990,6 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
   handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
-  handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: []
 
   handle "/schoolreport/*any", using: "Schoolreport", platform: "MozartNews", examples: [{"/schoolreport/home", 301}]
 
