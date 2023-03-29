@@ -658,7 +658,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+  handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage", platform: "Webcore", examples: ["/cymrufyw/erthyglau/ce56v6pk615o"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -682,7 +682,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+  handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", platform: "Webcore", examples: ["/sgeulachdan/c3gr8907m3po"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
