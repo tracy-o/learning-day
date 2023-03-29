@@ -595,6 +595,12 @@ defroutefile "Main" do
   redirect "/cymrufyw/amp/:id", to: "/cymrufyw/:id.amp", status: 301
   redirect "/cymrufyw/amp/:topic/:id", to: "/cymrufyw/:topic/:id.amp", status: 301
 
+  handle "/cymrufyw/etholiad/2015", using: "CymrufywWebcoreIndex", platform: "Webcore", examples: ["/cymrufyw/etholiad/2015"]
+  handle "/cymrufyw/etholiad/2016", using: "CymrufywWebcoreIndex", platform: "Webcore", examples: ["/cymrufyw/etholiad/2016"]
+  handle "/cymrufyw/etholiad/2017", using: "CymrufywWebcoreIndex", platform: "Webcore", examples: ["/cymrufyw/etholiad/2017"]
+  handle "/cymrufyw/etholiad/2019", using: "CymrufywWebcoreIndex", platform: "Webcore", examples: ["/cymrufyw/etholiad/2019"]
+  handle "/cymrufyw/gwleidyddiaeth/refferendwm_ue", using: "CymrufywWebcoreIndex", platform: "Webcore", examples: ["/cymrufyw/gwleidyddiaeth/refferendwm_ue"]
+
   redirect "/cymrufyw/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 302
 
   handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/cylchgrawn"]
