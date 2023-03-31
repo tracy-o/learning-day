@@ -5,10 +5,10 @@ defmodule BelfrageWeb do
 
   require Logger
 
-  def yield(spec, platform, conn) do
+  def yield(spec, _platform, conn) do
     try do
       conn
-      |> adapt_envelope(spec, platform)
+      |> adapt_envelope(spec)
       |> Belfrage.handle()
       |> update_conn_with_response(conn)
     catch
@@ -21,10 +21,10 @@ defmodule BelfrageWeb do
     end
   end
 
-  defp adapt_envelope(conn, spec, platform) do
+  defp adapt_envelope(conn, spec) do
     conn
     |> EnvelopeAdapter.Request.adapt()
-    |> EnvelopeAdapter.Private.adapt(conn.private, spec, platform)
+    |> EnvelopeAdapter.Private.adapt(conn.private, spec)
     |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
   end
 
