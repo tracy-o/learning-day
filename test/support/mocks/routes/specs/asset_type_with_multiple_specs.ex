@@ -1,4 +1,4 @@
-defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
+defmodule Routes.Specs.AssetTypeWithMultipleSpecs do
   def specs do
     [
       %{
@@ -15,6 +15,6 @@ defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
   end
 
   def pre_flight_pipeline do
-    ["TestPreFlightTransformer"]
+    ["AssetTypePlatformSelector"]
   end
 end

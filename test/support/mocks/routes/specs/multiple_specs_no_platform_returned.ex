@@ -1,10 +1,10 @@
-defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
+defmodule Routes.Specs.MultipleSpecsNoPlatformReturned do
   def specs do
     [
       %{
         owner: "Some guy",
         runbook: "Some runbook",
-        platform: "Webcore"
+        platform: "Simorgh"
       },
       %{
         owner: "Some guy",
@@ -15,6 +15,6 @@ defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
   end
 
   def pre_flight_pipeline do
-    ["TestPreFlightTransformer"]
+    ["TestPreFlightPartitionTransformer"]
   end
 end

@@ -12,8 +12,8 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
   setup :clear_metadata_cache
 
-  describe "When a route with a :platform attribute is used that is a platform" do
-    test ~s(MozartNews platform is used when platform is "MozartNews") do
+  describe "When a pre-flight pipeline transformer defines platform" do
+    test ~s(MozartNews platform is selected in pre-flight pipeline) do
       url = "#{@mozart_news_endpoint}/platform-selection-with-mozart-news-platform"
 
       HTTPMock
@@ -39,7 +39,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test ~s(Webcore platform is used when platform is "Webcore") do
+    test ~s(Webcore platform is selected in pre-flight pipeline) do
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
                                    %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
@@ -86,7 +86,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
         expect(LambdaMock, :call, fn _credentials,
                                      _function_arn,
-                                     %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
+                                     %{headers: %{"ctx-route-spec": "AssetTypeWithMultipleSpecs.Webcore"}},
                                      _opts ->
           {:ok,
            %{
@@ -129,7 +129,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
-                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
+                                   %{headers: %{"ctx-route-spec": "AssetTypeWithMultipleSpecs.Webcore"}},
                                    _opts ->
         {:ok,
          %{
@@ -149,7 +149,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
-                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
+                                   %{headers: %{"ctx-route-spec": "AssetTypeWithMultipleSpecs.Webcore"}},
                                    _opts ->
         {:ok,
          %{
@@ -191,7 +191,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
-                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
+                                   %{headers: %{"ctx-route-spec": "AssetTypeWithMultipleSpecs.Webcore"}},
                                    _opts ->
         {:ok,
          %{
@@ -227,7 +227,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
-                                   %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
+                                   %{headers: %{"ctx-route-spec": "AssetTypeWithMultipleSpecs.Webcore"}},
                                    _opts ->
         {:ok,
          %{
@@ -350,7 +350,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
         end
       )
 
-      err_msg = "** (RuntimeError) Selector 'AssetTypePlatformSelector' failed with reason: 500"
+      err_msg = "** (RuntimeError) pre_flight pipeline for 'AssetTypeWithMultipleSpecs' spec failed: 500"
       assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, []) end
     end
   end

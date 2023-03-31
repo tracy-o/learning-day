@@ -98,7 +98,7 @@ defroutefile "Mock", "test" do
 
   handle "/no-etag-support", using: "NoEtagSupport", platform: "MozartNews", examples: []
 
-  handle("/platform-selection-with-selector", using: "SomeRouteStateWithMultipleSpecs", platform: "AssetTypePlatformSelector", examples: [])
+  handle("/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs", platform: "AssetTypePlatformSelector", examples: [])
 
   handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs", platform: "Webcore", examples: [])
 
