@@ -9,4 +9,8 @@ defmodule Routes.Specs.AblData do
       etag: true
     }
   end
+
+  def pre_flight_pipeline do
+    ["AblDataPartitionSelector"]
+  end
 end
