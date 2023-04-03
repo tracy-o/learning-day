@@ -6,7 +6,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   import Test.Support.Helper, only: [set_environment: 1, set_bbc_id_availability: 1]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.HTTPMock, Clients.HTTP}
+  alias Belfrage.{Clients.HTTPMock, Clients.HTTP, RouteState}
   alias Fixtures.AuthToken
 
   @token AuthToken.valid_access_token()
@@ -210,7 +210,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "token is proxied when" do
     setup do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
       :ok
     end
 
@@ -267,7 +267,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "token is not proxied when" do
     test "request has no authentication header" do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
         refute headers["authorization"] == "Bearer #{@token}"
@@ -290,7 +290,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "request has invalid authorization header" do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       expect_no_origin_request()
 
@@ -312,7 +312,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "request has expired authorization header on test" do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       expect_no_origin_request()
 
@@ -330,7 +330,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "request with expired authorization header on live" do
-      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       set_environment("live")
 
@@ -350,7 +350,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "the corresponding RouteSpec does not have :personalisation on, and preserves public cache directive from origin" do
-      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+      start_supervised!({RouteState, {"FablData", %{}}})
 
       expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
         refute headers["authorization"] == "Bearer #{@token}"
@@ -380,7 +380,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "the corresponding RouteSpec does not have :personalisation on, and preserves private cache directive from origin" do
-      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+      start_supervised!({RouteState, {"FablData", %{}}})
 
       expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
         refute headers["authorization"] == "Bearer #{@token}"
@@ -410,7 +410,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     end
 
     test "personalisation dial is off" do
-      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       stub_dials(personalisation: "off")
 
@@ -433,7 +433,7 @@ defmodule EndToEnd.App.PersonalisationTest do
     test "BBCID is not available" do
       set_bbc_id_availability(false)
 
-      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       conn =
         :get
@@ -454,7 +454,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "authorization vary headers are added when" do
     test "the corresponding RouteSpec has personalisation on" do
-      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+      start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
       expect(HTTPMock, :execute, fn _request, :Fabl ->
         {:ok, @response}
@@ -475,7 +475,7 @@ defmodule EndToEnd.App.PersonalisationTest do
 
   describe "authorization vary headers are not added when" do
     test "the corresponding RouteSpec does not have personalisation on" do
-      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+      start_supervised!({RouteState, {"FablData", %{}}})
 
       expect(HTTPMock, :execute, fn _request, :Fabl ->
         {:ok, @response}
@@ -493,7 +493,7 @@ defmodule EndToEnd.App.PersonalisationTest do
   end
 
   test "personalised responses are not cached" do
-    start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+    start_supervised!({RouteState, {"AppPersonalisation", %{}}})
 
     expect(HTTPMock, :execute, fn %{}, :Fabl ->
       {:ok, @response}
