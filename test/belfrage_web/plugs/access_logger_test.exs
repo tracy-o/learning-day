@@ -326,4 +326,14 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
              ] = String.split(event, "\" \"")
     end
   end
+
+  test "handles infinite loop" do
+    conn =
+      :get
+      |> conn("/news")
+      |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
+      |> Router.call([])
+
+    assert conn.status == 404
+  end
 end
