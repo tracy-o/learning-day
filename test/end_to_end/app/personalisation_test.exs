@@ -3,13 +3,14 @@ defmodule EndToEnd.App.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
-  import Test.Support.Helper, only: [set_environment: 1]
+  import Test.Support.Helper, only: [set_environment: 1, set_bbc_id_availability: 1]
 
   alias BelfrageWeb.Router
   alias Belfrage.{Clients.HTTPMock, Clients.HTTP}
   alias Fixtures.AuthToken
 
   @token AuthToken.valid_access_token()
+  @expired_token AuthToken.expired_access_token()
 
   @moduletag :end_to_end
 
@@ -190,7 +191,8 @@ defmodule EndToEnd.App.PersonalisationTest do
         |> make_request()
         |> assert_successful_response()
 
-      refute vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+      refute vary_header_contains?(response, ["authorization"])
+      refute vary_header_contains?(response, ["x-authentication-provider"])
     end
 
     test "non-authenticated request" do
@@ -201,8 +203,309 @@ defmodule EndToEnd.App.PersonalisationTest do
         |> make_request()
         |> assert_successful_response()
 
-      refute vary_header_contains?(response, ["authorization", "x-authentication-provider"])
+      refute vary_header_contains?(response, ["authorization"])
+      refute vary_header_contains?(response, ["x-authentication-provider"])
     end
+  end
+
+  describe "token is proxied when" do
+    setup do
+      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+      :ok
+    end
+
+    test "personalisation is enabled and request contains correct values" do
+      # This includes:
+      #    * valid authorization token
+      #    * *.bbc.co.uk host
+      #    * URI that matches against a RouteSpec with :personalisation "on" (implicitly set to "on" here)
+      #    * personalisation dial is off
+
+      expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
+        assert headers["authorization"] == "Bearer #{@token}"
+        assert headers["x-authentication-provider"] == "idv5"
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      # also check response headers
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "request does not have a *.bbc.co.uk host" do
+      expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
+        assert headers["authorization"] == "Bearer #{@token}"
+        refute headers["x-authentication-provider"] == "idv5"
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.com")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      # also check response headers
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+  end
+
+  describe "token is not proxied when" do
+    test "request has no authentication header" do
+      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+
+      expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
+        refute headers["authorization"] == "Bearer #{@token}"
+        refute headers["x-authentication-provider"] == "idv5"
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> make_request()
+
+      # also check response headers
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "request has invalid authorization header" do
+      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+
+      expect_no_origin_request()
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer some-token")
+        |> make_request()
+
+      assert conn.status == 401
+
+      # also check response headers
+      assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "request has expired authorization header on test" do
+      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> put_req_header("authorization", "Bearer #{@expired_token}")
+        |> make_request()
+
+      assert conn.status == 401
+
+      # also check response headers
+      assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "request with expired authorization header on live" do
+      start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+
+      set_environment("live")
+
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> put_req_header("authorization", "Bearer #{@expired_token}")
+        |> make_request()
+
+      assert conn.status == 401
+
+      # also check response headers
+      assert {"cache-control", "private, stale-while-revalidate=15, max-age=0"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "the corresponding RouteSpec does not have :personalisation on, and preserves public cache directive from origin" do
+      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+
+      expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
+        refute headers["authorization"] == "Bearer #{@token}"
+        refute headers["x-authentication-provider"] == "idv5"
+
+        {:ok,
+         HTTP.Response.new(%{
+           status_code: 200,
+           body: "<h1>Hello from Fabl!</h1>",
+           headers: %{
+             "cache-control" => "public"
+           }
+         })}
+      end)
+
+      conn =
+        :get
+        |> conn("/app-request/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios")
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      # also check response headers
+      assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "authorization"
+      refute vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "the corresponding RouteSpec does not have :personalisation on, and preserves private cache directive from origin" do
+      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+
+      expect(HTTPMock, :execute, fn %{headers: headers}, :Fabl ->
+        refute headers["authorization"] == "Bearer #{@token}"
+        refute headers["x-authentication-provider"] == "idv5"
+
+        {:ok,
+         HTTP.Response.new(%{
+           status_code: 200,
+           body: "<h1>Hello from Fabl!</h1>",
+           headers: %{
+             "cache-control" => "private"
+           }
+         })}
+      end)
+
+      conn =
+        :get
+        |> conn("/app-request/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios")
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      # also check response headers
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "authorization"
+      refute vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "personalisation dial is off" do
+      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+
+      stub_dials(personalisation: "off")
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      assert conn.status == 204
+
+      assert {"cache-control", "private"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+
+    test "BBCID is not available" do
+      set_bbc_id_availability(false)
+
+      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> put_req_header("authorization", "Bearer #{@token}")
+        |> make_request()
+
+      assert conn.status == 204
+
+      assert {"cache-control", "private"} in conn.resp_headers
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+  end
+
+  describe "authorization vary headers are added when" do
+    test "the corresponding RouteSpec has personalisation on" do
+      start_supervised!({Belfrage.RouteState, {"AppPersonalisation", "Fabl"}})
+
+      expect(HTTPMock, :execute, fn _request, :Fabl ->
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn(
+          "/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"
+        )
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> make_request()
+
+      assert vary_header(conn) =~ "authorization"
+      assert vary_header(conn) =~ "x-authentication-provider"
+    end
+  end
+
+  describe "authorization vary headers are not added when" do
+    test "the corresponding RouteSpec does not have personalisation on" do
+      start_supervised!({Belfrage.RouteState, {"FablData", "Fabl"}})
+
+      expect(HTTPMock, :execute, fn _request, :Fabl ->
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/app-request/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios")
+        |> Map.put(:host, "news-app.bbc.co.uk")
+        |> make_request()
+
+      refute vary_header(conn) =~ "authorization"
+      refute vary_header(conn) =~ "x-authentication-provider"
+    end
+  end
+
+  test "personalised responses are not cached" do
+    start_supervised!({RouteState, {"AppPersonalisation", "Fabl"}})
+
+    expect(HTTPMock, :execute, fn %{}, :Fabl ->
+      {:ok, @response}
+    end)
+
+    :get
+    |> conn("/app-request/p/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios")
+    |> Map.put(:host, "news-app.bbc.co.uk")
+    |> put_req_header("authorization", "Bearer #{@token}")
+    |> make_request()
+
+    assert :ets.tab2list(:cache) == []
   end
 
   defp expect_personalised_origin_request() do

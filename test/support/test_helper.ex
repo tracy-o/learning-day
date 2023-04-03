@@ -189,6 +189,13 @@ defmodule Test.Support.Helper do
     :ok
   end
 
+  def set_bbc_id_availability(availability) do
+    orig_availibility = Belfrage.Authentication.BBCID.available?()
+    Belfrage.Authentication.BBCID.set_availability(availability)
+    on_exit(fn -> Belfrage.Authentication.BBCID.set_availability(orig_availibility) end)
+    :ok
+  end
+
   @doc """
   Takes a process ID and an interval in milliseconds.
   The function sleeps for the duration of the interval,

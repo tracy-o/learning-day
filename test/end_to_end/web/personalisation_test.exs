@@ -3,6 +3,11 @@ defmodule EndToEnd.Web.PersonalisationTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.{CachingHelper, PersonalisationHelper}
+  import Test.Support.Helper, only: [set_environment: 1, set_bbc_id_availability: 1]
+  alias Fixtures.AuthToken
+
+  @token AuthToken.valid_access_token()
+  @expired_token AuthToken.expired_access_token()
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP}
@@ -216,6 +221,429 @@ defmodule EndToEnd.Web.PersonalisationTest do
 
       refute vary_header(response) =~ "x-id-oidc-signedin"
     end
+  end
+
+  describe "token is proxied when" do
+    test "personalisation is enabled and request contains correct values" do
+      # This includes:
+      #    * valid x-id-oidc-signedin header
+      #    * valid ckns_atkn cookie
+      #    * *.bbc.co.uk host
+      #    * URI that matches against a RouteSpec with :personalisation "on" (implicitly set to "on" here)
+      #    * personalisation dial is on
+
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        assert headers[:authorization] == "Bearer #{@token}"
+        assert headers[:"x-authentication-provider"]
+        assert headers[:"pers-env"]
+        assert headers[:"ctx-pii-allow-personalisation"]
+        assert headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+  end
+
+  describe "token is not proxied when" do
+    test "request does not have a *.bbc.co.uk host" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.com")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request has no x-id-oidc-signedin header or ckns_atkn cookie" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request has x-id-oidc-signedin header of 0" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "0")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request has invalid x-id-oidc-signedin header" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "foo")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request has invalid ckns_atkn cookie" do
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=some token")
+        |> make_request()
+
+      assert conn.status == 302
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+
+      assert {"location",
+              "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fmy%2Fsession%2Fwebcore-platform"} in conn.resp_headers
+
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request has expired ckns_atkn cookie on test" do
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@expired_token}")
+        |> make_request()
+
+      assert conn.status == 302
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+
+      assert {"location",
+              "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fmy%2Fsession%2Fwebcore-platform"} in conn.resp_headers
+
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "request with expired ckns_atkn cookie on live" do
+      set_environment("live")
+
+      expect_no_origin_request()
+
+      conn =
+        build_request()
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@expired_token}")
+        |> make_request()
+
+      assert conn.status == 302
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+
+      assert {"location",
+              "https://session.test.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fmy%2Fsession%2Fwebcore-platform"} in conn.resp_headers
+
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "the corresponding RouteSpec does not have :personalisation on, and private cache control from origin is preserved" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "private"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/200-ok-response")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "the corresponding RouteSpec does not have :personalisation on, and public cache control from origin is preserved" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/200-ok-response")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "personalisation dial is off, and private cache directive from origin is preserved" do
+      stub_dials(personalisation: "off")
+
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "private"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "personalisation dial is off, and public cache directive from origin is preserved" do
+      stub_dials(personalisation: "off")
+
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "BBCID is not available, and private cache control from origin is preserved" do
+      set_bbc_id_availability(false)
+
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"] == "true"
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "private"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+
+    test "BBCID is not available, and public cache control from origin is preserved" do
+      set_bbc_id_availability(false)
+
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "public"
+           },
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@token}")
+        |> make_request()
+
+      assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30"} in conn.resp_headers
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+  end
+
+  describe "x-id-oidc-signedin vary header is added when" do
+    test "the corresponding RouteSpec has personalisation on" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"] == "true"
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/my/session/webcore-platform")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> make_request()
+
+      assert vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+  end
+
+  describe "x-id-oidc-signedin vary header is not added when" do
+    test "the corresponding RouteSpec does not have personalisation on" do
+      expect(LambdaMock, :call, fn _role_arn, _function_arn, %{headers: headers}, _opts ->
+        refute headers[:authorization] == "Bearer #{@token}"
+        refute headers[:"x-authentication-provider"]
+        refute headers[:"pers-env"]
+        refute headers[:"ctx-pii-allow-personalisation"]
+        refute headers[:"ctx-pii-age-bracket"]
+        {:ok, @response}
+      end)
+
+      conn =
+        :get
+        |> conn("/200-ok-response")
+        |> Map.put(:host, "www.bbc.co.uk")
+        |> make_request()
+
+      refute vary_header(conn) =~ "x-id-oidc-signedin"
+    end
+  end
+
+  test "personalised responses are not cached" do
+    expect(LambdaMock, :call, fn _role_arn, _function_arn, %{}, _opts ->
+      {:ok, @response}
+    end)
+
+    :get
+    |> conn("/my/session/webcore-platform")
+    |> Map.put(:host, "www.bbc.co.uk")
+    |> put_req_header("x-id-oidc-signedin", "1")
+    |> put_req_header("cookie", "ckns_atkn=#{@token}")
+    |> make_request()
+
+    assert :ets.tab2list(:cache) == []
   end
 
   defp expect_origin_request(fun, opts \\ []) do
