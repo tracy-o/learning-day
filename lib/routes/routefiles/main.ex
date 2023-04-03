@@ -2947,8 +2947,6 @@ defroutefile "Main" do
   # example test route: "/comments/embed/news/world-europe-23348005"
   handle "/comments/embed/*any", using: "CommentsEmbed", platform: "MozartWeather", examples: []
 
-  handle "/web/shell", using: "WebShell", platform: "Webcore", examples: ["/web/shell"]
-
   handle "/my/session", using: "MySession", platform: "OriginSimulator", only_on: "test", examples: []
 
   handle "/scotland/articles/*any", using: "ScotlandArticles", platform: "MozartNews", examples: []
