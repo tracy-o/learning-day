@@ -2,7 +2,7 @@ defmodule Belfrage.Services.Fabl do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.{Clients, Envelope, Metrics}
   alias Belfrage.Services.Fabl.Request
 
   @http_client Application.compile_env(:belfrage, :http_client, Clients.HTTP)
@@ -11,14 +11,17 @@ defmodule Belfrage.Services.Fabl do
 
   @impl Service
   def dispatch(envelope = %Envelope{}) do
-    :telemetry.span([:belfrage, :function, :timing, :service, :Fabl, :request], %{}, fn ->
-      {
-        envelope
-        |> execute_request()
-        |> handle_response(envelope),
-        %{}
-      }
-    end)
+    before_time = System.monotonic_time(:millisecond)
+
+    fabl_response =
+      envelope
+      |> execute_request()
+      |> handle_response(envelope)
+
+    timing = (System.monotonic_time(:millisecond) - before_time) |> abs
+    :telemetry.execute([:belfrage, :function, :timing, :service, "Fabl", :request], %{duration: timing})
+    :telemetry.execute([:platform, :timing], %{duration: timing}, %{platform: "Fabl"})
+    fabl_response
   end
 
   defp execute_request(envelope) do
@@ -26,7 +29,7 @@ defmodule Belfrage.Services.Fabl do
   end
 
   defp handle_response({:ok, %Clients.HTTP.Response{status_code: status, body: body, headers: headers}}, envelope) do
-    Belfrage.Metrics.multi_execute(
+    Metrics.multi_execute(
       [[:belfrage, :service, :Fabl, :response, String.to_atom(to_string(status))], [:belfrage, :platform, :response]],
       %{count: 1},
       %{

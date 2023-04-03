@@ -148,6 +148,12 @@ defmodule Belfrage.MetricsMigration do
             event_name: [:belfrage, :selector, :error],
             measurement: :count,
             tags: [:selector]
+          ),
+          summary("platform.timing",
+            event_name: [:platform, :timing],
+            measurement: :duration,
+            unit: {:native, :millisecond},
+            tags: [:platform]
           )
         ]
       end

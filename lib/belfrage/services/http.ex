@@ -2,7 +2,7 @@ defmodule Belfrage.Services.HTTP do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.{Clients, Envelope, Metrics}
   alias Belfrage.Envelope.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
@@ -135,9 +135,13 @@ defmodule Belfrage.Services.HTTP do
   defp execute_request(request = %Clients.HTTP.Request{}, private = %Private{}) do
     platform = platform_name(private)
 
-    :telemetry.span([:belfrage, :function, :timing, :service, platform, :request], %{}, fn ->
-      {http_impl().execute(request, platform), %{}}
-    end)
+    before_time = System.monotonic_time(:millisecond)
+    http_response = http_impl().execute(request, platform)
+
+    timing = (System.monotonic_time(:millisecond) - before_time) |> abs
+    :telemetry.execute([:belfrage, :function, :timing, :service, platform, :request], %{duration: timing})
+    :telemetry.execute([:platform, :timing], %{duration: timing}, %{platform: private.platform})
+    http_response
   end
 
   defp http_impl() do
@@ -145,7 +149,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp track_response(private = %Private{}, status) do
-    Belfrage.Metrics.multi_execute(
+    Metrics.multi_execute(
       [
         [:belfrage, :service, platform_name(private), :response, String.to_atom(to_string(status))],
         [:belfrage, :platform, :response]
@@ -156,7 +160,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp track_error(envelope = %Envelope{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
-    Belfrage.Metrics.multi_execute(
+    Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :timeout],
         [:belfrage, :platform, :response]
@@ -169,7 +173,7 @@ defmodule Belfrage.Services.HTTP do
   end
 
   defp track_error(envelope = %Envelope{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
-    Belfrage.Metrics.multi_execute(
+    Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :request],
         [:belfrage, :error, :service, :request]

@@ -3,7 +3,7 @@ defmodule Belfrage.Clients.CCP do
   The interface to the Belfrage Central Cache Processor (CCP)
   """
   require Logger
-  alias Belfrage.{Envelope, Envelope.Request}
+  alias Belfrage.{Envelope, Envelope.Request, Metrics}
 
   @s3_not_found_response_code 403
 
@@ -32,10 +32,11 @@ defmodule Belfrage.Clients.CCP do
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
     :telemetry.execute([:belfrage, :service, :S3, :request, :timing], %{duration: timing})
+    :telemetry.execute([:platform, :timing], %{duration: timing}, %{platform: "S3"})
 
     case ccp_response do
       {:ok, %Finch.Response{status: 200, body: cached_body}} ->
-        Belfrage.Metrics.multi_execute(
+        Metrics.multi_execute(
           [[:belfrage, :service, :S3, :response, :"200"], [:belfrage, :platform, :response]],
           %{count: 1},
           %{status_code: 200, platform: "S3"}
@@ -48,7 +49,7 @@ defmodule Belfrage.Clients.CCP do
         {:ok, :content_not_found}
 
       {:ok, response = %Finch.Response{status: status_code}} ->
-        Belfrage.Metrics.multi_execute(
+        Metrics.multi_execute(
           [
             [:belfrage, :service, :S3, :response, String.to_atom(to_string(status_code))],
             [:belfrage, :platform, :response]
