@@ -13,4 +13,8 @@ defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
       }
     ]
   end
+
+  def pre_flight_pipeline do
+    ["BitesizeTopicsPlatformSelector"]
+  end
 end

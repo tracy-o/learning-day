@@ -15,11 +15,39 @@ defmodule Belfrage.Test.RoutingHelper do
   @doc """
   Defines a new route spec with the passed name and attributes
   """
+  defmacro define_route(name, spec_attrs, pre_flight_attrs) do
+    quote do
+      defmodule Module.concat([Routes, Specs, unquote(name)]) do
+        def specs() do
+          unquote(spec_attrs)
+        end
+
+        def pre_flight_pipeline() do
+          unquote(pre_flight_attrs)
+        end
+      end
+    end
+  end
+
   defmacro define_route(name, attrs) do
     quote do
       defmodule Module.concat([Routes, Specs, unquote(name)]) do
         def specs() do
           unquote(attrs)
+        end
+      end
+    end
+  end
+
+  defmacro define_route_with_env(name, spec_attrs, pre_flight_attrs) do
+    quote do
+      defmodule Module.concat([Routes, Specs, unquote(name)]) do
+        def specs(_env) do
+          unquote(spec_attrs)
+        end
+
+        def pre_flight_pipeline(_env) do
+          unquote(pre_flight_attrs)
         end
       end
     end
