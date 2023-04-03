@@ -9,6 +9,7 @@ defmodule BelfrageWeb.Router do
   alias BelfrageWeb.Plugs
 
   plug(Plug.Telemetry, event_prefix: [:belfrage, :plug])
+  plug(RequestHeaders.Handler)
   plug(Plugs.AccessLogger, level: :info)
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
@@ -16,7 +17,6 @@ defmodule BelfrageWeb.Router do
   plug(BelfrageWeb.Plugs.Xray, builder_opts())
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AppLogger)
-  plug(RequestHeaders.Handler)
   plug(ProductionEnvironment)
   plug(Plugs.VanityDomainRedirector)
   plug(Plugs.TrailingSlashRedirector)
