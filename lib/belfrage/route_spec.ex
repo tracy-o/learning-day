@@ -43,54 +43,49 @@ defmodule Belfrage.RouteSpec do
             etag: false,
             xray_enabled: false
 
-  @spec list_route_specs(String.t()) :: [RouteSpec.t()]
+  @spec list_route_specs(String.t()) :: [map()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
     list_spec_names()
-    |> Enum.map(&get_specs(&1, env))
-    |> :lists.append()
-    |> Enum.map(&update_spec_with_platform(&1, env))
+    |> Enum.map(&get_route_spec(&1, env))
     |> validate_unique_specs()
   end
 
-  # get_route_spec/2 interface should be removed as it is used for tests only
-  #
-  @spec get_route_spec({name(), platform()}) :: RouteSpec.t() | nil
-  def get_route_spec({spec_name, platform}, env \\ Application.get_env(:belfrage, :production_environment)) do
-    found_specs =
-      for spec <- get_specs(spec_name, env),
-          spec.platform == platform,
-          do: update_spec_with_platform(spec, env)
-
-    case found_specs do
-      [spec] -> spec
-      [] -> nil
-    end
-  end
-
-  defp get_specs(spec_name, env) do
-    module = route_spec_module(spec_name)
+  @spec get_route_spec(String.t(), String.t()) :: map()
+  def get_route_spec(spec_name, env \\ Application.get_env(:belfrage, :production_environment)) do
+    module = Module.concat([Routes, Specs, spec_name])
     ensure_module_loaded(module)
 
-    pre_flight_pipeline = call_pre_flight_pipeline_func(module, env)
-    validate_pipeline(spec_name, :pre_flight, pre_flight_pipeline)
+    pre_flight_pipeline =
+      call_pre_flight_pipeline_func(module, env)
+      |> validate_pipeline(spec_name, :pre_flight)
 
-    case call_specs_func(module, env) do
-      spec when is_map(spec) ->
-        [put_spec_name(spec, spec_name)]
-
-      [spec] ->
-        [put_spec_name(spec, spec_name)]
-
-      specs when length(specs) > 1 ->
-        if pre_flight_pipeline == [],
-          do: raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
-
-        Enum.map(specs, &put_spec_name(&1, spec_name))
-    end
+    %{
+      name: spec_name,
+      pre_flight_pipeline: pre_flight_pipeline,
+      specs: get_specs(spec_name, pre_flight_pipeline, module, env)
+    }
   end
 
-  defp route_spec_module(spec_name) do
-    Module.concat([Routes, Specs, spec_name])
+  defp get_specs(spec_name, pre_flight_pipeline, module, env) do
+    specs =
+      case call_specs_func(module, env) do
+        spec when is_map(spec) ->
+          [spec]
+
+        [spec] ->
+          [spec]
+
+        specs when length(specs) > 1 ->
+          if pre_flight_pipeline == [],
+            do: raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
+
+          specs
+      end
+
+    specs
+    |> Enum.map(&put_spec_name(&1, spec_name))
+    |> Enum.map(&update_spec_with_platform(&1, env))
+    |> validate_unique_platforms(spec_name)
   end
 
   defp update_spec_with_platform(spec, env) do
@@ -100,7 +95,7 @@ defmodule Belfrage.RouteSpec do
     |> Map.merge(merge_allowlists(platform, spec))
     |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
     |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
-    |> to_envelope(platform)
+    |> to_route_spec_struct(platform)
     |> Personalisation.maybe_put_personalised_route()
   end
 
@@ -110,11 +105,11 @@ defmodule Belfrage.RouteSpec do
     call_specs_func(module, env)
   end
 
-  defp to_envelope(route_spec_map, platform) do
+  defp to_route_spec_struct(spec, platform) do
     try do
-      struct!(__MODULE__, Map.merge(platform, route_spec_map))
+      struct!(__MODULE__, Map.merge(platform, spec))
     catch
-      _, reason -> raise "Invalid '#{inspect(route_spec_map.name)}' spec, error: #{inspect(reason)}"
+      _, reason -> raise "Invalid '#{inspect(spec.name)}' spec, error: #{inspect(reason)}"
     end
   end
 
@@ -155,8 +150,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline({spec.name, spec.platform}, pipeline_to_transformer_type(type), pipeline)
-    pipeline
+    validate_pipeline(pipeline, spec.name, pipeline_to_transformer_type(type))
   end
 
   defp merge_allowlists(platform, spec) do
@@ -175,31 +169,29 @@ defmodule Belfrage.RouteSpec do
     end)
   end
 
-  defp validate_unique_specs(specs) do
-    ids = for spec <- specs, do: {spec.name, spec.platform}
-
-    case ids -- Enum.uniq(ids) do
-      [] -> specs
-      non_unique_ids -> raise "Specs are not unique: #{inspect(non_unique_ids)}}"
-    end
-  end
-
-  defp validate_pipeline(id, type, transformers) do
+  defp validate_pipeline(transformers, spec_name, type) do
     for name <- transformers,
         do: ensure_module_loaded(Transformer.get_transformer_callback(type, name))
 
-    ensure_unique_transformers(id, type, transformers)
+    validate_unique(transformers, spec_name, "#{type}_transformers")
   end
 
-  defp ensure_unique_transformers(id, type, transformers) do
-    case Enum.uniq(transformers -- Enum.uniq(transformers)) do
-      [] ->
-        :ok
+  defp validate_unique_specs(specs) do
+    spec_names = for spec <- specs, do: spec.name
+    validate_unique(spec_names, "n/a", "spec names")
+    specs
+  end
 
-      duplicates ->
-        type = Atom.to_string(type)
+  defp validate_unique_platforms(specs, spec_name) do
+    platforms = for spec <- specs, do: spec.platform
+    validate_unique(platforms, spec_name, "platforms in specs")
+    specs
+  end
 
-        raise "#{inspect(id)} contains the following duplicated transformers in the #{type}_pipeline : #{inspect(duplicates)}"
+  defp validate_unique(entities, spec_name, what) do
+    case entities -- Enum.uniq(entities) do
+      [] -> entities
+      duplicates -> raise "#{what} are not unique, spec: '#{spec_name}', duplicates: #{inspect(duplicates)}"
     end
   end
 

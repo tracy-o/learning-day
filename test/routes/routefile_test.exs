@@ -5,7 +5,7 @@ defmodule Routes.RoutefileTest do
   import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, RouteSpec}
+  alias Belfrage.{RouteState, RouteSpec, RouteSpecManager}
   alias Routes.Routefiles.Main.Test, as: Routefile
 
   @moduletag :routes_test
@@ -56,11 +56,14 @@ defmodule Routes.RoutefileTest do
 
     test "route spec for 'live' env is valid" do
       env = "live"
+      update_specs(env)
 
       validate(@routes, fn
         {matcher, route = %{using: _, platform: _, only_on: nil}} -> validate_route(matcher, route, env)
         _ -> :ok
       end)
+
+      update_specs("test")
     end
 
     test "example is prefixed with a '/'" do
@@ -214,7 +217,7 @@ defmodule Routes.RoutefileTest do
   defp validate_route(matcher, route = %{using: spec_name, platform: platform}, env) do
     spec_name = maybe_selector_spec_name(spec_name)
 
-    case RouteSpec.get_route_spec({spec_name, platform}, env) do
+    case RouteSpecManager.get_spec({spec_name, platform}) do
       nil ->
         validate_required_attrs_in_route(matcher, route, env)
 
@@ -229,7 +232,7 @@ defmodule Routes.RoutefileTest do
   defp validate_example({matcher, %{platform: platform, using: spec_name}, example}) do
     spec_name = maybe_selector_spec_name(spec_name)
 
-    case RouteSpec.get_route_spec({spec_name, platform}) do
+    case RouteSpecManager.get_spec({spec_name, platform}) do
       nil ->
         conn = make_call(:get, example)
 
@@ -332,7 +335,7 @@ defmodule Routes.RoutefileTest do
 
   defp start_route_states() do
     stub_origins()
-    Belfrage.RouteSpecManager.list_specs() |> Enum.each(&start_route_state/1)
+    Belfrage.RouteSpecManager.list_specs() |> Enum.map(fn spec -> Enum.each(spec.specs, &start_route_state/1) end)
   end
 
   defp start_route_state(%RouteSpec{
@@ -437,5 +440,10 @@ defmodule Routes.RoutefileTest do
   defp same_path_message(same_path_routes) do
     "The following routes contain the same path - only one route should exist for a given path." <>
       "\n" <> serialize_routes(same_path_routes) <> "\n"
+  end
+
+  defp update_specs(env) do
+    Application.put_env(:belfrage, :production_environment, env)
+    RouteSpecManager.update_specs()
   end
 end

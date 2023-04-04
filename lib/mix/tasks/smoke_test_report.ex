@@ -2,7 +2,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
   use Mix.Task
 
   alias Mix.Tasks.ReportSmokeTestResults.Message
-  alias Belfrage.RouteSpec
+  alias Belfrage.RouteSpecManager
 
   @shortdoc "Reports smoke test failures to route owner teams."
 
@@ -94,7 +94,7 @@ defmodule Mix.Tasks.ReportSmokeTestResults do
 
   defp build_result_message({{spec, platform}, failure_messages}, slack_auth_token) do
     slack_channel =
-      case RouteSpec.get_route_spec({spec, platform}) do
+      case RouteSpecManager.get_spec({spec, platform}) do
         nil -> @results_slack_channel
         route_spec -> route_spec.slack_channel || @results_slack_channel
       end
