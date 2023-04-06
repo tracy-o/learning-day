@@ -1425,6 +1425,10 @@ defroutefile "Sport" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
+  handle "/sport/insight", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/insight"] do
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
+  end
+
   handle "/sport/judo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/judo"] do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
