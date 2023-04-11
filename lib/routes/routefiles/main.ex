@@ -2915,6 +2915,10 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
 
+  handle "/weather/videos/:optimo_id", using: "WeatherVideos", platform: "Webcore", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end 
+
   handle "/weather/:location_id", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
