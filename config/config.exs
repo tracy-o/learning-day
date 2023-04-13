@@ -3,7 +3,7 @@
 import Config
 
 config :finch,
-  pool_timeout: 300_000,
+  pool_timeout: 5_000,
   cacertfile: System.get_env("CLIENT_CERT_CA"),
   certfile: System.get_env("CLIENT_CERT"),
   keyfile: System.get_env("CLIENT_CERT_KEY")
