@@ -831,7 +831,23 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
     "z9fvcxs",
     "zky346f",
     "zgv9qyc",
-    "zhj47nb"
+    "zhj47nb",
+    "zgpk7v4",
+    "zp2bkhv",
+    "znmg8p3",
+    "ztqv46f",
+    "zh739ty",
+    "zryj6rd",
+    "z3n8239",
+    "zcvqtcw",
+    "zgfwxg8",
+    "zbsdmbk",
+    "z8rxs82",
+    "z9b2p9q",
+    "zkgmnk7",
+    "zh2bkhv",
+    "zpmg8p3",
+    "znxrdnb"
   ]
 
   @webcore_live_ids [
@@ -1650,7 +1666,23 @@ defmodule Routes.Platforms.Selectors.BitesizeTopicsPlatformSelector do
     "z4syrmn",
     "z9fvcxs",
     "zky346f",
-    "zgv9qyc"
+    "zgv9qyc",
+    "zgpk7v4",
+    "zp2bkhv",
+    "znmg8p3",
+    "ztqv46f",
+    "zh739ty",
+    "zryj6rd",
+    "z3n8239",
+    "zcvqtcw",
+    "zgfwxg8",
+    "zbsdmbk",
+    "z8rxs82",
+    "z9b2p9q",
+    "zkgmnk7",
+    "zh2bkhv",
+    "zpmg8p3",
+    "znxrdnb"
   ]
 
   @impl Belfrage.Behaviours.Selector
