@@ -272,7 +272,7 @@ defmodule Belfrage.MetricsMigration do
               tags: [:pool_name]
             ),
             counter(
-              "finch.checkout",
+              "finch.checkout.count",
               event_name: "finch.queue.start",
               tag_values:
                 &Map.merge(&1, %{
