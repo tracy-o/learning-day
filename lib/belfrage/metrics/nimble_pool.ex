@@ -7,19 +7,24 @@ defmodule Belfrage.Metrics.NimblePool do
     Enum.each(nimble_pool_pids(supervisor), &track/1)
   end
 
+  def properties(pid) do
+    state = :sys.get_state(pid)
+    %{queue: state.queue, lazy: state.lazy, resources: state.resources, host: host(state.state)}
+  end
+
   defp track(pid) do
-    %{queue: queue, lazy: lazy, resources: resources, state: {pool, %{}}} = :sys.get_state(pid)
+    properties = properties(pid)
 
     Metrics.measurement(
       [:nimble_pool, :status],
       %{
-        available_workers: lazy + :queue.len(resources),
+        available_workers: properties.lazy + :queue.len(properties.resources),
         # WARNING: This is an O(N) measurement that is unbounded
         # as there is no upper bound on the number of queued requests.
-        queued_requests: :queue.len(queue)
+        queued_requests: :queue.len(properties.queue)
       },
       %{
-        pool_name: pool_name(pool)
+        pool_name: properties.host
       }
     )
   end
@@ -30,5 +35,5 @@ defmodule Belfrage.Metrics.NimblePool do
     |> Enum.map(fn {:undefined, pid, :worker, _} -> pid end)
   end
 
-  defp pool_name({_scheme, host, _port}), do: host
+  defp host({{_scheme, host, _port}, _config}), do: host
 end
