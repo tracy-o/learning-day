@@ -2,6 +2,7 @@
 # credo:disable-for-this-file Credo.Check.Refactor.CyclomaticComplexity
 defmodule Belfrage.MetricsMigration do
   alias Belfrage.RouteState
+  alias Belfrage.Metrics.NimblePool
 
   def route_specs_from_file_names() do
     Path.expand("../routes/specs", __DIR__)
@@ -259,7 +260,27 @@ defmodule Belfrage.MetricsMigration do
             event_name: "belfrage.request.#{name}.stop",
             unit: {:native, :millisecond}
           )
-        end)
+        end) ++
+          [
+            summary("finch.checkout.duration",
+              event_name: "finch.queue.stop",
+              unit: {:native, :millisecond},
+              tag_values:
+                &Map.merge(&1, %{
+                  pool_name: NimblePool.properties(&1.pool)[:host]
+                }),
+              tags: [:pool_name]
+            ),
+            counter(
+              "finch.checkout",
+              event_name: "finch.queue.start",
+              tag_values:
+                &Map.merge(&1, %{
+                  pool_name: NimblePool.properties(&1.pool)[:host]
+                }),
+              tags: [:pool_name]
+            )
+          ]
       end
 
       def route_state_metrics() do
