@@ -18,7 +18,6 @@ defmodule Belfrage.Processor do
     Language,
     WrapperError,
     ServiceProvider,
-    Behaviours.Selector,
     RouteSpecManager
   }
 
@@ -27,7 +26,6 @@ defmodule Belfrage.Processor do
 
   def pre_request_pipeline(envelope = %Envelope{}) do
     pipeline = [
-      &build_route_state_id/1,
       &get_route_spec/1,
       &get_route_state/1,
       &allowlists/1,
@@ -42,58 +40,48 @@ defmodule Belfrage.Processor do
     WrapperError.wrap(pipeline, envelope)
   end
 
-  def build_route_state_id(
-        envelope = %Envelope{
-          private: %Private{spec: spec_or_selector, platform: platform_or_selector},
-          request: request
-        }
-      ) do
-    case get_spec_platform_name(platform_or_selector, :platform, request) do
-      {:ok, platform_name} ->
-        case get_spec_platform_name(spec_or_selector, :spec, request) do
-          {:ok, {spec_name, partition}} ->
-            Envelope.add(envelope, :private, %{
-              route_state_id: {spec_name, platform_name, partition},
-              spec: spec_name,
-              platform: platform_name,
-              partition: partition
-            })
+  def get_route_spec(envelope = %Envelope{private: %Private{spec: spec_name}}) do
+    case RouteSpecManager.get_spec(spec_name) do
+      nil ->
+        route_spec_not_found_failure(spec_name)
 
-          {:ok, spec_name} ->
-            Envelope.add(envelope, :private, %{
-              route_state_id: {spec_name, platform_name},
-              spec: spec_name,
-              platform: platform_name
-            })
-
-          {:error, reason} ->
-            selector_failure(spec_or_selector, reason)
-        end
-
-      {:error, reason} ->
-        selector_failure(platform_or_selector, reason)
+      %{specs: specs, pre_flight_pipeline: pre_flight_pipeline} ->
+        envelope
+        |> maybe_process_pre_flight_pipeline(pre_flight_pipeline)
+        |> update_envelope_with_spec(specs)
     end
   end
 
-  defp get_spec_platform_name(name, type, request) do
-    if Selector.selector?(name) do
-      Selector.call(name, type, request)
-    else
-      {:ok, name}
+  defp maybe_process_pre_flight_pipeline(envelope, []), do: envelope
+  defp maybe_process_pre_flight_pipeline(envelope, pipeline), do: process_pipeline(envelope, :pre_flight, pipeline)
+
+  defp update_envelope_with_spec(envelope = %Envelope{private: private}, [spec])
+       when private.platform == nil do
+    update_envelope_with_route_spec_attrs(envelope, spec)
+  end
+
+  defp update_envelope_with_spec(envelope = %Envelope{private: private}, specs)
+       when private.platform != nil do
+    matched_specs = for spec <- specs, spec.platform == private.platform, do: spec
+
+    case matched_specs do
+      [] -> match_platform_failure(private.spec, private.platform)
+      [spec] -> update_envelope_with_route_spec_attrs(envelope, spec)
     end
   end
 
-  def get_route_spec(envelope = %Envelope{private: %Private{spec: spec, platform: platform}}) do
-    case RouteSpecManager.get_spec({spec, platform}) do
-      nil -> route_spec_failure({spec, platform})
-      spec -> update_envelope_with_route_spec_attrs(envelope, Map.from_struct(spec))
-    end
+  defp update_envelope_with_spec(%Envelope{private: private}, _specs) do
+    match_platform_failure(private.spec, private.platform)
   end
 
-  defp update_envelope_with_route_spec_attrs(envelope, spec) do
-    spec = Map.put(spec, :spec, Map.get(spec, :name))
-    Map.put(envelope, :private, struct(envelope.private, spec))
+  defp update_envelope_with_route_spec_attrs(envelope = %Envelope{private: private}, spec) do
+    route_state_id = make_route_state_id(private.spec, spec.platform, private.partition)
+    spec = Map.put(Map.from_struct(spec), :route_state_id, route_state_id)
+    Map.put(envelope, :private, struct(private, spec))
   end
+
+  defp make_route_state_id(spec, platform, nil), do: {spec, platform}
+  defp make_route_state_id(spec, platform, partition), do: {spec, platform, partition}
 
   def get_route_state(
         envelope = %Envelope{
@@ -165,13 +153,6 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  defp process_request_pipeline(envelope = %Envelope{}) do
-    case Pipeline.process(envelope, :request, envelope.private.request_pipeline) do
-      {:ok, envelope} -> envelope
-      {:error, _envelope, msg} -> raise "Request pipeline failure: #{msg}"
-    end
-  end
-
   def perform_call(envelope = %Envelope{response: %Envelope.Response{http_status: code}}) when is_number(code) do
     envelope
   end
@@ -180,10 +161,14 @@ defmodule Belfrage.Processor do
     ServiceProvider.service_for(origin).dispatch(envelope)
   end
 
-  def process_response_pipeline(envelope = %Envelope{}) do
-    case Pipeline.process(envelope, :response, envelope.private.response_pipeline) do
+  def process_response_pipeline(envelope), do: process_pipeline(envelope, :response, envelope.private.response_pipeline)
+
+  defp process_request_pipeline(envelope), do: process_pipeline(envelope, :request, envelope.private.request_pipeline)
+
+  defp process_pipeline(envelope = %Envelope{private: private}, type, pipeline) do
+    case Pipeline.process(envelope, type, pipeline) do
       {:ok, envelope} -> envelope
-      {:error, _envelope, msg} -> raise "Response pipeline failure: #{msg}"
+      {:error, _envelope, msg} -> raise "#{type} pipeline for '#{private.spec}' spec failed: #{msg}"
     end
   end
 
@@ -266,21 +251,20 @@ defmodule Belfrage.Processor do
 
   defp route_state_state_failure(reason) do
     :telemetry.execute([:belfrage, :error, :route_state, :state], %{})
-
     Logger.log(:error, "Error retrieving route_state state with reason: #{inspect(reason)}}")
-
     raise "Failed to load route_state state."
   end
 
-  defp selector_failure(selector, reason) do
-    :telemetry.execute([:belfrage, :selector, :error], %{}, %{selector: selector})
-    Logger.log(:error, "", %{msg: "Selector '#{selector}' failed", reason: reason})
-    raise "Selector '#{selector}' failed with reason: #{inspect(reason)}"
+  defp route_spec_not_found_failure(spec) do
+    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: spec})
+    reason = "Route spec '#{spec}' not found"
+    Logger.log(:error, "", %{msg: reason})
+    raise reason
   end
 
-  defp route_spec_failure(id = {spec, platform}) do
-    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: "#{spec}.#{platform}"})
-    reason = "Route spec '#{inspect(id)}' not found"
+  defp match_platform_failure(spec, platform) do
+    :telemetry.execute([:belfrage, :platform, :not_matched], %{}, %{route_spec: spec, platform: platform})
+    reason = "Platform '#{platform}' cannot be matched in '#{spec}' spec"
     Logger.log(:error, "", %{msg: reason})
     raise reason
   end

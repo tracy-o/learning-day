@@ -1,4 +1,4 @@
-defmodule Routes.Specs.AblData do
+defmodule Routes.Specs.AblDataPreview do
   def specs do
     %{
       owner: "#data-systems",
@@ -8,9 +8,5 @@ defmodule Routes.Specs.AblData do
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
       etag: true
     }
-  end
-
-  def pre_flight_pipeline do
-    ["AblDataPartitionSelector"]
   end
 end

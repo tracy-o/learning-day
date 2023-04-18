@@ -61,7 +61,7 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelectorTest do
 
     test "if the id is a test webcore id, the year_id is valid and the production environment is live MorphRouter is returned" do
       set_environment("live")
-      path_params = %{"id" => "z82hsbk", "year_id" => "zncsscw"}
+      path_params = %{"id" => "zhj47nb", "year_id" => "zncsscw"}
 
       assert BitesizeTopicsPlatformSelector.call(%Envelope{
                request: %Request{path_params: path_params}
@@ -159,7 +159,7 @@ defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelectorTest do
 
     test "if the id is a test webcore id and the production environment is live MorphRouter is returned" do
       set_environment("live")
-      path_params = %{"id" => "z82hsbk"}
+      path_params = %{"id" => "zhj47nb"}
 
       assert BitesizeTopicsPlatformSelector.call(%Envelope{
                request: %Request{path_params: path_params}

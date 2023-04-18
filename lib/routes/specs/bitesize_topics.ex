@@ -2,10 +2,10 @@ defmodule Routes.Specs.BitesizeTopics do
   def specs do
     [
       %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: "MorphRouter",
-      language_from_cookie: true,
-      request_pipeline: ["ComToUKRedirect", "Language"]
+        owner: "bitesize-production@lists.forge.bbc.co.uk",
+        platform: "MorphRouter",
+        language_from_cookie: true,
+        request_pipeline: ["ComToUKRedirect", "Language"]
       },
       %{
         owner: "bitesize-production@lists.forge.bbc.co.uk",
@@ -15,6 +15,7 @@ defmodule Routes.Specs.BitesizeTopics do
       }
     ]
   end
+
   def pre_flight_pipeline do
     ["BitesizeTopicsPlatformSelector"]
   end

@@ -1,5 +1,5 @@
 defmodule Belfrage.ProcessorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
   import ExUnit.CaptureLog
@@ -23,44 +23,82 @@ defmodule Belfrage.ProcessorTest do
     end
   end
 
-  describe "Processor.build_route_state_id/1" do
-    @envelope %Envelope{
-      private: %Private{
-        spec: @spec_name,
-        platform: @platform_name
-      }
-    }
+  describe "Processor.get_route_spec/1" do
+    @webcore_request_pipeline [
+      "Personalisation",
+      "LambdaOriginAlias",
+      "Language",
+      "PlatformKillSwitch",
+      "CircuitBreaker",
+      "DevelopmentRequests"
+    ]
+    @webcore_response_pipeline [
+      "CacheDirective",
+      "ClassicAppCacheControl",
+      "ResponseHeaderGuardian",
+      "CustomRssErrorResponse",
+      "PreCacheCompression"
+    ]
 
-    test "adds route_state_id to Envelope.private for spec and platform" do
+    test "with multiple specs and pre-flight pipeline that updates platform" do
+      spec_name = "SomeRouteStateWithMultipleSpecs"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
+
       assert %Envelope{
-               private: %Private{route_state_id: @route_state_id}
-             } = Processor.build_route_state_id(@envelope)
+               private: %Private{
+                 route_state_id: {^spec_name, @platform_name},
+                 spec: ^spec_name,
+                 platform: @platform_name,
+                 partition: nil,
+                 request_pipeline: @webcore_request_pipeline,
+                 response_pipeline: @webcore_response_pipeline,
+                 owner: "Some guy",
+                 runbook: "Some runbook"
+               }
+             } = Processor.get_route_spec(envelope)
     end
 
-    test "adds route_state_id to Envelope.private for a platform selector" do
-      envelope = %Envelope{
-        private: %Private{
-          spec: @spec_name,
-          platform: "BitesizeTopicsPlatformSelector"
-        }
-      }
+    test "with single spec and pre-flight pipeline that updates partition only" do
+      spec_name = "SingleSpecWithPartitionTransformer"
+      partition = "Partition1"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
 
       assert %Envelope{
-               private: %Private{route_state_id: {@spec_name, "MorphRouter"}}
-             } = Processor.build_route_state_id(envelope)
+               private: %Private{
+                 route_state_id: {^spec_name, @platform_name, ^partition},
+                 spec: ^spec_name,
+                 platform: @platform_name,
+                 partition: ^partition,
+                 request_pipeline: @webcore_request_pipeline,
+                 response_pipeline: @webcore_response_pipeline,
+                 owner: "Some guy",
+                 runbook: "Some runbook"
+               }
+             } = Processor.get_route_spec(envelope)
     end
 
-    test "raises an error if selector is failed" do
-      envelope = %Envelope{
-        private: %Private{
-          spec: "FailingSpecSelector",
-          platform: @platform_name
-        }
-      }
+    test "raises an error when spec has multiple platforms and pre-flight doesn't update platform" do
+      spec_name = "MultipleSpecsNoPlatformReturned"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
+      err_msg = "Platform '' cannot be matched in '#{spec_name}' spec"
 
-      err_msg = "Selector 'FailingSpecSelector' failed with reason: 500"
+      assert_raise RuntimeError, err_msg, fn -> Processor.get_route_spec(envelope) end
+    end
 
-      assert_raise RuntimeError, err_msg, fn -> Processor.build_route_state_id(envelope) end
+    test "raises an error when spec is not matched on platform" do
+      spec_name = "MultipleSpecsFailedPlatformMatch"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
+      err_msg = "Platform 'Webcore' cannot be matched in '#{spec_name}' spec"
+
+      assert_raise RuntimeError, err_msg, fn -> Processor.get_route_spec(envelope) end
+    end
+
+    test "raises an error if route spec is not found" do
+      spec_name = "NonExistingSpec"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
+      err_msg = "Route spec '#{spec_name}' not found"
+
+      assert_raise RuntimeError, err_msg, fn -> Processor.get_route_spec(envelope) end
     end
   end
 

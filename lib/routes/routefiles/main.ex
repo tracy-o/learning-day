@@ -94,15 +94,15 @@ defroutefile "Main" do
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/preview/abl", using: "AblData", platform: "Fabl", examples: []
-  handle "/fd/preview/spike-abl-core", using: "AblData", platform: "Fabl", examples: []
+  handle "/fd/preview/abl", using: "AblDataPreview", platform: "Fabl", examples: []
+  handle "/fd/preview/spike-abl-core", using: "AblDataPreview", platform: "Fabl", examples: []
   handle "/fd/preview/:name", using: "FablData", platform: "Fabl", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"] do
     return_404 if: [
       !is_valid_length?(name, 3..40),
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/abl", using: "AblSpecSelector", platform: "Fabl", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
+  handle "/fd/abl", using: "AblData", platform: "Fabl", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
   handle "/fd/p/:name", using: "PersonalisedFablData", platform: "Fabl", only_on: "test", examples: [] do
     return_404 if: [
       !is_valid_length?(name, 3..40),
