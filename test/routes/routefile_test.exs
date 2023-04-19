@@ -10,6 +10,8 @@ defmodule Routes.RoutefileTest do
 
   @moduletag :routes_test
 
+  @pipeline_placeholder :_routespec_pipeline_placeholder
+
   @redirect_statuses Application.compile_env(:belfrage, :redirect_statuses)
 
   @routes Routefile.routes()
@@ -42,15 +44,7 @@ defmodule Routes.RoutefileTest do
       env = "test"
 
       validate(@routes, fn
-        # If route spec cannot be found by spec name and platform attributes,
-        # then we simply validate the route as we cannot validate the
-        # route spec or transformers. This is because the :platform
-        # attribute is then expected to be a platform selector, which
-        # requires a %Envelope to select the platform. Given that we
-        # are simply iterating through a list of routes, we do not
-        # have access to the %Envelope and therefore cannot select the
-        # platform and build the route state id.
-        {matcher, route = %{using: _, platform: _}} -> validate_route(matcher, route, env)
+        {matcher, route = %{using: _}} -> validate_route(matcher, route, env)
       end)
     end
 
@@ -59,7 +53,7 @@ defmodule Routes.RoutefileTest do
       update_specs(env)
 
       validate(@routes, fn
-        {matcher, route = %{using: _, platform: _, only_on: nil}} -> validate_route(matcher, route, env)
+        {matcher, route = %{using: _, only_on: nil}} -> validate_route(matcher, route, env)
         _ -> :ok
       end)
 
@@ -209,44 +203,49 @@ defmodule Routes.RoutefileTest do
 
     unless errors == [] do
       errors
+      |> List.flatten()
       |> Enum.map_join("\n", &"* #{&1}")
       |> flunk()
     end
   end
 
-  defp validate_route(matcher, route = %{using: spec_name, platform: platform}, env) do
-    spec_name = maybe_selector_spec_name(spec_name)
-
-    case RouteSpecManager.get_spec({spec_name, platform}) do
+  defp validate_route(matcher, %{using: spec_name}, env) do
+    case RouteSpecManager.get_spec(spec_name) do
       nil ->
-        validate_required_attrs_in_route(matcher, route, env)
+        {:error, "The route with the path #{matcher} does not exist in the RouteSpec: #{spec_name} for #{env}."}
 
-      spec ->
-        with :ok <- validate_required_attrs_in_route_spec(matcher, spec, env),
-             :ok <- validate_transformers(matcher, spec, env) do
-          validate_platform_transformers(matcher, spec, env)
+      %{specs: specs, pre_flight_pipeline: pre_flight_pipeline} ->
+        with :ok <- validate_transformers(matcher, pre_flight_pipeline, PreFlightTransformers, env) do
+          validate_specs(matcher, specs, env)
         end
     end
   end
 
-  defp validate_example({matcher, %{platform: platform, using: spec_name}, example}) do
-    spec_name = maybe_selector_spec_name(spec_name)
+  defp validate_specs(matcher, specs, env) do
+    results = for spec <- specs, do: validate_spec(matcher, spec, env)
 
-    case RouteSpecManager.get_spec({spec_name, platform}) do
+    if Enum.all?(results, fn x -> x == :ok end) do
+      :ok
+    else
+      {:error, results}
+    end
+  end
+
+  defp validate_spec(matcher, spec, env) do
+    with :ok <- validate_required_attrs_in_route_spec(matcher, spec, env),
+         :ok <- validate_transformers(matcher, spec.request_pipeline, RequestTransformers, env),
+         :ok <- validate_transformers(matcher, spec.response_pipeline, ResponseTransformers, env),
+         :ok <- validate_platform_transformers(matcher, spec.platform, spec.request_pipeline, :request, env) do
+      validate_platform_transformers(matcher, spec.platform, spec.response_pipeline, :response, env)
+    end
+  end
+
+  defp validate_example({matcher, %{using: spec_name}, example}) do
+    case RouteSpecManager.get_spec(spec_name) do
       nil ->
-        conn = make_call(:get, example)
+        {:error, "The route with the path #{matcher} does not exist in the RouteSpec: #{spec_name}."}
 
-        case conn.assigns.route_spec do
-          {^spec_name, _} ->
-            :ok
-
-          _other ->
-            {:error, "Example #{example} for route #{matcher} that uses a platform selector \
-                      is not routed to a route spec that starts with #{spec_name}, \
-                      but to #{conn.assigns.route_spec}"}
-        end
-
-      %RouteSpec{} ->
+      %{name: ^spec_name} ->
         conn = make_call(:get, example)
         plug_route = plug_route(conn)
 
@@ -263,70 +262,66 @@ defmodule Routes.RoutefileTest do
     end
   end
 
-  defp validate_required_attrs_in_route(matcher, route, env) do
-    cond do
-      route.platform in platforms() ->
-        {:error,
-         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that does not exist in the RouteSpec: #{route.using} for #{env}."}
-
-      route.platform in platform_selectors() ->
-        :ok
-
-      true ->
-        {:error,
-         "The route with the path #{matcher} has a :platform attribute: #{route.platform} that is neither a Platform Selector nor a Platform for #{env}.\n Please provide a :platform attribute that is a Platform, or a Platform Selector that ends with 'PlatformSelector'."}
-    end
-  end
-
   defp validate_required_attrs_in_route_spec(matcher, spec, env) do
     required_attrs = ~w[platform request_pipeline circuit_breaker_error_threshold origin]a
     missing_attrs = required_attrs -- Map.keys(spec)
 
     if missing_attrs != [] do
-      {:error, "Route #{matcher} doesn't have required attrs #{inspect(missing_attrs)} in route spec for #{env}"}
+      "Route #{matcher} doesn't have required attrs #{inspect(missing_attrs)} in route spec for #{env}"
     else
       :ok
     end
   end
 
-  defp validate_transformers(matcher, spec, env) do
+  defp validate_transformers(matcher, pipeline, pipeline_path, env) do
     invalid_transformers =
-      Enum.filter(spec.request_pipeline, fn transformer ->
-        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, RequestTransformers, transformer])))
+      Enum.filter(pipeline, fn transformer ->
+        match?({:error, _}, Code.ensure_compiled(Module.concat([Belfrage, pipeline_path, transformer])))
       end)
 
-    duplicate_transformers = Enum.uniq(spec.request_pipeline -- Enum.uniq(spec.request_pipeline))
+    duplicate_transformers = Enum.uniq(pipeline -- Enum.uniq(pipeline))
 
     cond do
       invalid_transformers != [] ->
-        {:error,
-         "Route #{matcher} contains invalid transformers in the request_pipeline on #{env}: #{inspect(invalid_transformers)}"}
+        "Route #{matcher} contains invalid transformers in the #{pipeline_path} on #{env}: #{inspect(invalid_transformers)}"
 
       duplicate_transformers != [] ->
-        {:error,
-         "Route #{matcher} contains duplicate transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+        "Route #{matcher} contains duplicate transformers in the #{pipeline_path} on #{env}: #{inspect(duplicate_transformers)}"
 
-      env == "live" && "DevelopmentRequests" in spec.request_pipeline ->
-        {:error, "Route #{matcher} contains DevelopmentRequests transformer in the request_pipeline on live"}
+      env == "live" && "DevelopmentRequests" in pipeline ->
+        "Route #{matcher} contains DevelopmentRequests transformer in the #{pipeline_path} on live"
 
       true ->
         :ok
     end
   end
 
-  defp validate_platform_transformers(matcher, spec, env) do
-    platform_transformers = Module.concat([Routes, Platforms, spec.platform]).specs(env).request_pipeline
+  defp validate_platform_transformers(matcher, platform, pipeline, type = :request, env) do
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).request_pipeline
+    do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
+  end
+
+  defp validate_platform_transformers(matcher, platform, pipeline, type = :response, env) do
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).response_pipeline
+    do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
+  end
+
+  defp do_validate_platform_transformers(matcher, platform_transformers, spec_transformers, type, env) do
     duplicate_transformers = Enum.uniq(platform_transformers -- Enum.uniq(platform_transformers))
-    missing_transformers = (platform_transformers -- spec.request_pipeline) -- [:_routespec_pipeline_placeholder]
+
+    missing_transformers =
+      if Enum.member?(platform_transformers, @pipeline_placeholder) do
+        (platform_transformers -- spec_transformers) -- [@pipeline_placeholder]
+      else
+        []
+      end
 
     cond do
       duplicate_transformers != [] ->
-        {:error,
-         "Route #{matcher} contains duplicate platform transformers in the request_pipeline on #{env}: #{inspect(duplicate_transformers)}"}
+        "Route #{matcher} contains duplicate platform transformers in the #{type}_pipeline on #{env}: #{inspect(duplicate_transformers)}"
 
       missing_transformers != [] ->
-        {:error,
-         "Route #{matcher} doesn't have platform transformers #{inspect(missing_transformers)} in the request_pipeline on #{env}"}
+        "Route #{matcher} doesn't have platform transformers #{inspect(missing_transformers)} in the #{type}_pipeline on #{env}"
 
       true ->
         :ok
@@ -361,21 +356,6 @@ defmodule Routes.RoutefileTest do
     end
   end
 
-  defp maybe_selector_spec_name(spec_name) do
-    if selector?(spec_name) do
-      module_name = Module.concat(["Routes", "Specs", "Selectors", spec_name])
-      {:ok, {spec, _partition}} = module_name.call(%Belfrage.Envelope.Request{})
-
-      spec
-    else
-      spec_name
-    end
-  end
-
-  defp selector?(selector_or_platform) do
-    String.ends_with?(selector_or_platform, ["PlatformSelector", "SpecSelector"])
-  end
-
   defp plug_route(conn) do
     conn.private.plug_route
     |> elem(0)
@@ -385,26 +365,6 @@ defmodule Routes.RoutefileTest do
     #
     #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
     |> String.replace("/.", ".")
-  end
-
-  defp platforms() do
-    Path.expand("../../lib/routes/platforms", __DIR__)
-    |> File.ls!()
-    |> Enum.filter(&String.ends_with?(&1, ".ex"))
-    |> Enum.map(&to_module/1)
-  end
-
-  defp platform_selectors() do
-    Path.expand("../../lib/routes/platforms/selectors/", __DIR__)
-    |> File.ls!()
-    |> Enum.filter(&String.ends_with?(&1, ".ex"))
-    |> Enum.map(&to_module/1)
-  end
-
-  defp to_module(path) do
-    path
-    |> Path.basename(".ex")
-    |> Macro.camelize()
   end
 
   # Takes a list of routes and returns a string
@@ -428,13 +388,13 @@ defmodule Routes.RoutefileTest do
 
   defp serialize_route(route, prefix \\ " * ")
 
-  defp serialize_route({matcher, %{using: id, platform: platform, only_on: env}}, prefix)
+  defp serialize_route({matcher, %{using: id, only_on: env}}, prefix)
        when env in ["live", "test"] do
-    prefix <> "handle #{matcher}, using: #{id}, platform: #{platform}, only_on: #{env}  ..."
+    prefix <> "handle #{matcher}, using: #{id}, only_on: #{env} ..."
   end
 
-  defp serialize_route({matcher, %{using: id, platform: platform}}, prefix) do
-    prefix <> "handle #{matcher}, using: #{id}, platform: #{platform}  ..."
+  defp serialize_route({matcher, %{using: id}}, prefix) do
+    prefix <> "handle #{matcher}, using: #{id} ..."
   end
 
   defp same_path_message(same_path_routes) do
