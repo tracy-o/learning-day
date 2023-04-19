@@ -104,6 +104,13 @@ defroutefile "Mock", "test" do
 
   handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs", examples: [])
 
+  handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode", examples: ["/election2023postcode/MK36EB"] do
+    return_404 if: !String.match?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
+  end
+  handle "/election2023address/:uprn", using: "ElectoralCommissionAddress", examples: ["/election2023address/25050756"] do
+    return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
+  end
+
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
 
   no_match()

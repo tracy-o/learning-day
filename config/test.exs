@@ -36,6 +36,7 @@ config :belfrage,
   dotcom_reel_endpoint: "https://reel.gnl-test.bbcverticals.com",
   dotcom_travel_endpoint: "https://travel-features.gnl-test.bbcverticals.com",
   dotcom_worklife_endpoint: "https://worklife-features.gnl-test.bbcverticals.com",
+  electoral_commission_endpoint: "https://api.electoralcommission.org.uk",
   sup_observer_timer_ms: 10,
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

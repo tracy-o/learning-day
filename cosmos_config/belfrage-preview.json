@@ -148,6 +148,13 @@
   },
   {
     "values": {
+      "test": "https://api.electoralcommission.org.uk",
+      "live": "https://api.electoralcommission.org.uk"
+    },
+    "name": "ELECTORAL_COMMISSION_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole",
       "live": "arn:aws:iam::997052946310:role/int-presentation-layer-dev-preview-BelfrageXRayRole"
     },

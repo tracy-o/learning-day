@@ -147,6 +147,13 @@
     "name": "DOTCOM_WORKLIFE_ENDPOINT"
   },
   {
+      "values": {
+          "test": "https://api.electoralcommission.org.uk",
+          "live": "https://api.electoralcommission.org.uk"
+      },
+      "name": "ELECTORAL_COMMISSION_ENDPOINT"
+  },
+  {
     "values": {
       "test": "arn:aws:iam::997052946310:role/test-presentation-layer-BelfrageXRayRole",
       "live": "arn:aws:iam::561847100151:role/live-presentation-layer-BelfrageXRayRole"
