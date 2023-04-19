@@ -756,7 +756,6 @@ defroutefile "Main" do
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
-  
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
@@ -2905,6 +2904,9 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/feeds/23602910", "/weather/feeds/23081292", {"/weather/feeds/64827801", 301}] do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
+  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   redirect "/weather/about", to: "/weather", status: 302
   redirect "/weather/features", to: "/weather", status: 302
@@ -2917,7 +2919,7 @@ defroutefile "Main" do
 
   handle "/weather/videos/:optimo_id", using: "WeatherVideos", platform: "Webcore", only_on: "test", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
-  end 
+  end
 
   handle "/weather/:location_id", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225"] do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
@@ -2966,6 +2968,13 @@ defroutefile "Main" do
   handle "/newsround/:id.amp", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.amp"]
   handle "/newsround/:id.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.json"]
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/articles/manifest.json"]
+
+  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp", platform: "Simorgh", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/watch_newsround"]
   handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/newsroundbsl"]
@@ -3068,7 +3077,6 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
   handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy", platform: "MorphRouter", examples: ["/bitesize/guides/zcvy6yc/test.hybrid"]
-  
   handle "/bitesize/groups/:id", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/groups/cz4wkv77g55t"]
   handle "/bitesize/parents", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/parents"]
 
