@@ -5,7 +5,7 @@ defmodule BelfrageWeb do
 
   require Logger
 
-  def yield(spec, _platform, conn) do
+  def yield(spec, conn) do
     try do
       conn
       |> adapt_envelope(spec)
