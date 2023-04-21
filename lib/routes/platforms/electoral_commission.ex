@@ -7,7 +7,7 @@ defmodule Routes.Platforms.ElectoralCommission do
       request_pipeline: request_pipeline(production_env),
       response_pipeline: ["CacheDirective", "ElectoralCommissionResponseHandler", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: [],
-      circuit_breaker_error_threshold: 10
+      circuit_breaker_error_threshold: 60
     }
   end
 
