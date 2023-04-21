@@ -47,6 +47,10 @@ defmodule Belfrage.MetricsMigration do
               event_name: [:belfrage, :http, :pools, :error, :timeout],
               measurement: :count
             ),
+            counter("http.client.error.invalid_request_target",
+              event_name: [:belfrage, :http, :client, :error, :invalid_request_target],
+              measurement: :count
+            ),
             counter("http.client.error",
               event_name: [:belfrage, :http, :client, :error],
               measurement: :count

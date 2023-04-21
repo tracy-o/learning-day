@@ -107,10 +107,13 @@ defmodule Belfrage.Services.Dispatcher do
   end
 
   defp log_error(reason, envelope = %Envelope{}) do
-    Logger.log(:error, "", %{
+    Logger.log(level(reason), "", %{
       msg: "HTTP Service request error",
       reason: reason,
       envelope: Envelope.loggable(envelope)
     })
   end
+
+  defp level(:timeout), do: :warn
+  defp level(_reason), do: :error
 end
