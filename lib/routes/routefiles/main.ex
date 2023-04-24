@@ -1440,7 +1440,8 @@ defroutefile "Main" do
   end
 
   handle "/kyrgyz/send/:id", using: "UploaderWorldService", examples: ["/kyrgyz/send/u39697902"]
-  handle "/kyrgyz/*any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz"]
+  handle "/kyrgyz", using: "WorldServiceKyrgyzTipoHomePage", only_on: "test", examples: ["/kyrgyz"]
+  handle "/kyrgyz/*any", using: "WorldServiceKyrgyz", examples: ["/kyrgyz/popular/read"]
 
   handle "/marathi.amp", using: "WorldServiceMarathi", examples: ["/marathi.amp"]
   handle "/marathi.json", using: "WorldServiceMarathi", examples: ["/marathi.json"]
