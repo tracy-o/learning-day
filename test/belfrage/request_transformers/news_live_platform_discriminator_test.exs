@@ -31,9 +31,8 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
                {:ok,
                 Envelope.add(envelope, :private, %{
                   platform: "Webcore",
-                  origin: Application.get_env(:belfrage, :pwa_lambda_function),
-                  request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
-                })}
+                  origin: Application.get_env(:belfrage, :pwa_lambda_function)
+                }), {:replace, ["LambdaOriginAlias", "CircuitBreaker"]}}
     end
   end
 
@@ -152,9 +151,8 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminatorTest do
                {:ok,
                 Envelope.add(envelope, :private, %{
                   platform: "Webcore",
-                  origin: Application.get_env(:belfrage, :pwa_lambda_function),
-                  request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
-                })}
+                  origin: Application.get_env(:belfrage, :pwa_lambda_function)
+                }), {:replace, ["LambdaOriginAlias", "CircuitBreaker"]}}
     end
   end
 
