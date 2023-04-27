@@ -21,8 +21,8 @@ defmodule Belfrage.Pipeline do
       {:error, envelope, msg} ->
         handle_server_error(envelope, type, msg)
 
-      _other ->
-        handle_error(envelope, type)
+      invalid_response ->
+        handle_error(envelope, type, invalid_response)
     end
   end
 
@@ -35,10 +35,10 @@ defmodule Belfrage.Pipeline do
     {:error, envelope, msg}
   end
 
-  defp handle_error(envelope, type) do
+  defp handle_error(envelope, type, response) do
     :telemetry.execute([:belfrage, :error, :pipeline, :process, :unhandled], %{})
     msg = "Transformer did not return a valid response tuple"
-    log_error(envelope, type, msg)
+    log_error(envelope, type, [msg, response])
     {:error, envelope, msg}
   end
 
