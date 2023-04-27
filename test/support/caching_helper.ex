@@ -88,7 +88,7 @@ defmodule Belfrage.Test.CachingHelper do
   """
   def make_cached_response_stale(conn = %Conn{}) do
     conn
-    |> BelfrageWeb.EnvelopeAdapter.adapt(conn.assigns.route_spec)
+    |> BelfrageWeb.EnvelopeAdapter.Request.adapt()
     |> Belfrage.RequestHash.generate()
     |> make_cached_response_stale()
   end

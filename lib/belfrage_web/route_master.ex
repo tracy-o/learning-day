@@ -160,12 +160,11 @@ defmodule BelfrageWeb.RouteMaster do
 
         get(to_string(uri_from.path), host: uri_from.host) do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
+          Logger.metadata(is_redirect: true)
 
           Response.redirect(
             var!(conn),
-
-            # todo: this is a hacky way of adding route_state_id as a logger metadata and should be re-thought
-            EnvelopeAdapter.adapt(var!(conn), {"redirect", "Belfrage"}),
+            EnvelopeAdapter.Request.adapt(var!(conn)),
             unquote(status),
             new_location,
             unquote(ttl)
