@@ -1,7 +1,5 @@
 defmodule Belfrage.PipelineTest do
   use ExUnit.Case
-  import ExUnit.CaptureLog
-  import Belfrage.Test.MetricsHelper
 
   alias Belfrage.Pipeline
   alias Belfrage.Envelope
@@ -72,26 +70,11 @@ defmodule Belfrage.PipelineTest do
   test "return error when response tuple is invalid" do
     envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["MockTransformerBad"]}}
 
-    assert {:error, envelope, "Transformer did not return a valid response tuple"} =
-             Pipeline.process(envelope, :request, envelope.private.request_pipeline)
+    assert_raise CaseClauseError, fn ->
+      Pipeline.process(envelope, :request, envelope.private.request_pipeline)
+    end
 
     assert_pipeline_trail(envelope, [])
-  end
-
-  test "log error when response tuple is invalid" do
-    envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["MockTransformerBad"]}}
-
-    assert capture_log(fn ->
-             Pipeline.process(envelope, :request, envelope.private.request_pipeline)
-           end) =~ "Transformer did not return a valid response tuple"
-  end
-
-  test "send event when response tuple is invalid" do
-    envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["MockTransformerBad"]}}
-
-    assert_metric({[:error, :pipeline, :process, :unhandled], %{}, %{}}, fn ->
-      Pipeline.process(envelope, :request, envelope.private.request_pipeline)
-    end)
   end
 
   defp assert_pipeline_trail(envelope, expected_trail) do
