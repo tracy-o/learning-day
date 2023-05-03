@@ -1,7 +1,6 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
   alias Belfrage.Behaviours.Transformer
-  alias Belfrage.Behaviours.Selector
 
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
@@ -211,7 +210,6 @@ defmodule Belfrage.RouteSpec do
 
     for module <- modules,
         String.starts_with?(Macro.to_string(module), module_path),
-        !Selector.selector?(Macro.to_string(module)),
         do: String.trim_leading(Macro.to_string(module), module_path)
   end
 end
