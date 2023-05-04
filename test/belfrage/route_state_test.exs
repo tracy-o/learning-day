@@ -416,7 +416,12 @@ defmodule Belfrage.RouteStateTest do
   end
 
   defp start_route_state(_context) do
-    {:ok, pid: start_supervised!({RouteState, {@route_state_id, @route_state_args}})}
+    stub_dials(circuit_breaker: "true")
+    pid = start_supervised!({RouteState, {@route_state_id, @route_state_args}})
+
+    # Allow the route state process to share the mock
+    Mox.allow(Belfrage.Dials.ServerMock, self(), pid)
+    {:ok, pid: pid}
   end
 
   defp update_mvt_seen_with_button_colour_header(context = %{pid: pid}) do
