@@ -3,9 +3,10 @@ Belfrage dials architecture and how-to.
 ## Architecture
 Belfrage relies on Cosmos dials to provide near real-time controls for caching TTL, logging verbosity (log-level) and circuit breaker that throttles requests to malfunctioning origins. Dial values are imported into Belfrage runtime through supervised [GenServer](https://hexdocs.pm/elixir/GenServer.html) architecture (below) which is based on two key elements: supervised GenServer dial processes and event handling.
 
-![https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_dials_architecture.png]
+[Dials Architecture](https://github.com/bbc/belfrage/blob/master/docs/img/belfrage_dials_architecture.png)
+
 ### Supervised GenServer dial processes
-Each dial has a runtime state that is based on a discrete value in the JSON file (`dials.json`) serialised by Cosmos dials service. A fault-tolerant architecture necessitates decoupling of dials values in the file from their runtime usage because the JSON file is network-dependent and liable to corruption. GenServer provides a safe way to extract, transform and store a dial state in-memory efficiently. Dial read performance is also crucial, for example the TTL (multiplier) dial is read by [`CacheDirective`](https://github.com/bbc/belfrage/blob/1c6feb2d6d5d6501e4b90e2004e76357b2bef2f0/lib/belfrage/response_transformers/cache_directive.ex#L17) for every request.
+Each dial has a runtime state that is based on a discrete value in the JSON file (`dials.json`) serialised by Cosmos dials service. A fault-tolerant architecture necessitates decoupling of dials values in the file from their runtime usage because the JSON file is network-dependent and liable to corruption. GenServer provides a safe way to extract, transform and store a dial state in-memory efficiently. Dial read performance is also crucial, for example the TTL (multiplier) dial is read by [`CacheDirective`](https://github.com/bbc/belfrage/blob/master/lib/belfrage/response_transformers/cache_directive.ex) for every request.
 
 A dial in Belfrage is an implementation of [`Dial` behaviour](https://github.com/bbc/belfrage/blob/master/lib/belfrage/dial.ex) which in turn implements `GenServer`. This makes Belfrage dial a GenServer process. `Dial` consists both the following callbacks and default implementation in the mould of Template Method (*cf.* abstract class):
 
@@ -20,12 +21,12 @@ Default callbacks implementation in `Dial`:
 - `dials_changed` event handling: `GenServer` callback override that triggers dial state transformation and actions, i.e. the `transforms`, `on_change` callbacks.
 
 `DialsSupervisor` has a dual role: [Supervisor](https://hexdocs.pm/elixir/Supervisor.html) and event manager. It provides
-fault-tolerance and responsible for handling the lifecycle of dials while ensuring high-availability such as initialise dial with usable default states. `DialConfig` deals with the concerns related to dial modules and defaults configuration such that new dials can be added to Belfrage without further changes in other parts of the architecture.
+fault-tolerance and is responsible for handling the lifecycle of dials while ensuring high-availability such as initialise dial with usable default states. `DialConfig` deals with the concerns related to dial modules and defaults configuration such that new dials can be added to Belfrage without further changes in other parts of the architecture.
  
 ### Event handling
 Dials state updates are facilitated through event-handling:
 
-- `Poller` is a GenServer process that read and parse Cosmos dials JSON at regular interval. It stores the parsed JSON in-memory, notifies `DialsSupervisor` of dials changed events.
+- `Poller` is a GenServer process that reads and parses Cosmos dials JSON at regular interval. It stores the parsed JSON in-memory, notifies `DialsSupervisor` of dials changed events.
 - `DialsSupervisor` acts as [event manager](http://blog.plataformatec.com.br/2016/11/replacing-genevent-by-a-supervisor-genserver/). It keeps a list of dials as event handlers, sends JSON data and propagates "dials_changed" event on all dials.
 
 ## Fault tolerance

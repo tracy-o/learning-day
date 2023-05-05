@@ -22,7 +22,7 @@ R5 | Belfrage external libraries from github being modified | We point to a spec
 R6 | Jenkins access | Any developer with a developer certificate can access Jenkins. https://jira.dev.bbc.co.uk/browse/RESFRAME-4066 | No | Low
 R7 | Jenkins admin access | People on other teams and departments have admin access which gives them more control and could effect us. https://jira.dev.bbc.co.uk/browse/RESFRAME-4067 | No | Medium
 R8 | Jenkins plugins | These are only on Jenkins and the application build is inside a Docker container which they will not access. They could affect the binary output but this seems very low. We can review the plugins to remove unnecessary ones. https://jira.dev.bbc.co.uk/browse/RESFRAME-4068 | No | Low
-R9 | Container images used for build | We use the latest public images. We could specify a particular version we have checked or build our own. https://jira.dev.bbc.co.uk/browse/RESFRAME-4069 | No | Low
+R9 | Container images used for build | We use the latest public images. We could specify a particular version we have checked or build our own. https://jira.dev.bbc.co.uk/browse/RESFRAME-4069 | Yes | Low
 R10 | Resources outside of container during pipeline steps and could be effected by plugins | Some part of the pipeline are in containers. Other parts are run direclty on Jenkins. Plugins could have vulnerabilities. https://jira.dev.bbc.co.uk/browse/RESFRAME-4070 | No | Low
 R11 | Cosmos-release pushing something else | This would have to be done by someone with access to Jenkins. https://jira.dev.bbc.co.uk/browse/RESFRAME-4071 | No | Low
 R12 | Third-party RPM dependency vulnerabilities | Automated vulnerability scanning. Most RPM dependencies are from the BBC. https://jira.dev.bbc.co.uk/browse/RESFRAME-4072 | No | Medium

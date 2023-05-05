@@ -47,7 +47,7 @@ So the unit of action for Belfrage, the one which keeps track of the state of th
 ### How to add a route
 
 1. **go** to the `lib/routes/routefiles` dir
-2. **add a new matcher** in `lib/routes/routfiles/main.ex`, like:
+2. **add a new matcher** in `lib/routes/routefiles/main.ex`, like:
 
 ```elixir
   handle "/sport/videos/:id", using: "SportVideos", examples: ["/sport/videos/49104905"]
@@ -87,8 +87,8 @@ defmodule Routes.Specs.SportVideos do
     %{
       owner: "sfv_team@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: :webcore,
-      pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
+      platform: "Webcore",
+      request_pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
       query_params_allowlist: ["keyOne", "keyTwo"]
     }
   end
@@ -126,8 +126,8 @@ defmodule Routes.Specs.HomePagePersonalised do
     %{
       owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
-      platform: Webcore,
-      pipeline: pipeline(production_env),
+      platform: "Webcore",
+      request_pipeline: pipeline(production_env),
       personalisation: "on"
     }
   end
