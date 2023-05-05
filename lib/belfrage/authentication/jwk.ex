@@ -22,7 +22,7 @@ defmodule Belfrage.Authentication.JWK do
     if key do
       {:ok, alg, key}
     else
-      Logger.log(:error, "Public key not found", %{
+      Logger.log(:warn, "Public key not found", %{
         kid: kid,
         alg: alg
       })

@@ -55,12 +55,17 @@ defmodule Belfrage.Authentication.TokenTest do
     end
 
     test "no public key" do
-      log =
-        capture_log(fn ->
-          assert Token.parse(T.invalid_key_token()) == {false, %{}}
-        end)
+      assert Token.parse(T.invalid_key_token()) == {false, %{}}
+    end
 
-      assert log =~ ~s(Public key not found)
+    test "warn logged when no public key" do
+      refute capture_log([level: :error], fn ->
+        Token.parse(T.invalid_key_token())
+      end) =~ ~s(Public key not found)
+
+      assert capture_log([level: :warn], fn ->
+        Token.parse(T.invalid_key_token())
+      end) =~ ~s(Public key not found)
     end
   end
 end
