@@ -1,4 +1,5 @@
 defmodule Belfrage.Authentication.JWK do
+  alias Belfrage.Metrics
   require Logger
   use Agent
 
@@ -22,6 +23,8 @@ defmodule Belfrage.Authentication.JWK do
     if key do
       {:ok, alg, key}
     else
+      Metrics.event([:request, :public_key_not_found])
+
       Logger.log(:warn, "Public key not found", %{
         kid: kid,
         alg: alg

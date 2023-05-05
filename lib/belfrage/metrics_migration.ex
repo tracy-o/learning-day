@@ -323,6 +323,7 @@ defmodule Belfrage.MetricsMigration do
               tags: [:pool_name]
             ),
             counter("belfrage.request.infinite_loop"),
+            counter("belfrage.request.public_key_not_found")
           ]
       end
 

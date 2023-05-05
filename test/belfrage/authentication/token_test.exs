@@ -2,7 +2,7 @@ defmodule Belfrage.Authentication.TokenTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import ExUnit.CaptureLog
-
+  import Belfrage.Test.MetricsHelper
   alias Belfrage.Authentication.Token
   alias Fixtures.AuthToken, as: T
 
@@ -60,12 +60,18 @@ defmodule Belfrage.Authentication.TokenTest do
 
     test "warn logged when no public key" do
       refute capture_log([level: :error], fn ->
-        Token.parse(T.invalid_key_token())
-      end) =~ ~s(Public key not found)
+               Token.parse(T.invalid_key_token())
+             end) =~ ~s(Public key not found)
 
       assert capture_log([level: :warn], fn ->
+               Token.parse(T.invalid_key_token())
+             end) =~ ~s(Public key not found)
+    end
+
+    test "event sent when no public key" do
+      assert_metric([:request, :public_key_not_found], fn ->
         Token.parse(T.invalid_key_token())
-      end) =~ ~s(Public key not found)
+      end)
     end
   end
 end
