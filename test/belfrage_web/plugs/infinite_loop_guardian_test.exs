@@ -3,6 +3,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import ExUnit.CaptureLog
+  import Belfrage.Test.MetricsHelper
 
   alias BelfrageWeb.Plugs.InfiniteLoopGuardian
   import Test.Support.Helper, only: [set_stack_id: 1]
@@ -35,6 +36,14 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
       assert capture_log([level: :warn], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end) =~
                "Returned a 404 as infinite Belfrage/Mozart loop detected"
+    end
+
+    test "sends an event if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
+      conn =
+        conn(:get, "/news")
+        |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
+
+      assert_metric([:request, :infinite_loop], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end)
     end
 
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with //news" do

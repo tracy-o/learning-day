@@ -321,7 +321,8 @@ defmodule Belfrage.MetricsMigration do
                   pool_name: NimblePool.properties(&1.pool)[:host]
                 }),
               tags: [:pool_name]
-            )
+            ),
+            counter("belfrage.request.infinite_loop"),
           ]
       end
 
