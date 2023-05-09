@@ -1087,6 +1087,13 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
+  handle "/burmese/new_live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
   handle "/burmese/send/:id", using: "UploaderWorldService", examples: ["/burmese/send/u39697902"]
   handle "/burmese/*any", using: "WorldServiceBurmese", examples: ["/burmese"]
 
@@ -1588,6 +1595,13 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
+  handle "/mundo/new_live/:id", using: "WorldServiceMundoLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
   handle "/mundo/send/:id", using: "UploaderWorldService", examples: ["/mundo/send/u39697902"]
   handle "/mundo/*any", using: "WorldServiceMundo", examples: ["/mundo"]
 
@@ -1766,6 +1780,13 @@ defroutefile "Main" do
   end
   handle "/pidgin/articles/:id.app", using: "WorldServicePidginAppArticlePage", only_on: "test", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/pidgin/new_live/:id", using: "WorldServicePidginLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
   end
 
   handle "/pidgin/send/:id", using: "UploaderWorldService", examples: ["/pidgin/send/u39697902"]
@@ -1973,6 +1994,13 @@ defroutefile "Main" do
   end
   handle "/serbian/articles/:id/lat.app", using: "WorldServiceSerbianAppArticlePage", only_on: "test", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/serbian/new_live/:id", using: "WorldServiceSerbianLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
   end
 
   handle "/serbian/send/:id", using: "UploaderWorldService", examples: ["/serbian/send/u39697902"]
@@ -2454,6 +2482,13 @@ defroutefile "Main" do
   end
   handle "/urdu/articles/:id.app", using: "WorldServiceUrduAppArticlePage", only_on: "test", examples: [] do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/urdu/new_live/:id", using: "WorldServiceUrduLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
   end
 
   handle "/urdu/send/:id", using: "UploaderWorldService", examples: ["/urdu/send/u39697902"]
