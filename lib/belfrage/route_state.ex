@@ -4,6 +4,8 @@ defmodule Belfrage.RouteState do
   alias Belfrage.{Counter, RouteStateRegistry, Envelope, CircuitBreaker, Mvt, RouteSpec}
   require Logger
 
+  @dial Application.compile_env(:belfrage, :dial)
+
   @type route_state_id ::
           {RouteSpec.name(), RouteSpec.platform()}
           | {RouteSpec.name(), RouteSpec.platform(), non_neg_integer | String.t()}
@@ -112,7 +114,7 @@ defmodule Belfrage.RouteState do
     next_throughput =
       state
       |> CircuitBreaker.threshold_exceeded?()
-      |> CircuitBreaker.next_throughput(throughput)
+      |> CircuitBreaker.next_throughput(throughput, @dial.state(:circuit_breaker))
 
     circuit_breaker_open(next_throughput, state.route_state_id)
 
