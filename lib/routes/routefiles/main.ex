@@ -1996,7 +1996,14 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/serbian/new_live/:id", using: "WorldServiceSerbianLivePage", only_on: "test", examples: [] do
+  handle "/serbian/new_live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test", examples: [] do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/serbian/new_live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test", examples: [] do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !integer_in_range?(conn.query_params["page"] || "1", 1..999)
