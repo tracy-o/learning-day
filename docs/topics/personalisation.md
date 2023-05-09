@@ -57,6 +57,8 @@ In Belfrage a user is considered authenticated if:
 * The value of the request header `x-id-oidc-signedin` (set by GTM) is '1' or
 * Identity token (`ckns_id` cookie) is present in the request
 
+(On the other hand, a user is considered not authenticated if the value of `x-id-oidc-signedin` is '0').
+
 User's session is considered valid if a valid user access token (`ckns_atkn`
 cookie) is present in the request.
 
