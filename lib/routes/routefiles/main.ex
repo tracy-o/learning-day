@@ -40,6 +40,7 @@ defroutefile "Main" do
   redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
   redirect "/news/election", to: "/news/politics", status: 302
   redirect "/news/election/2021", to: "/news/politics", status: 302
+  redirect "/news/election/2023/northern-ireland", to: "/news/election/2023/northern-ireland/results", status: 302
 
   redirect "https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302
   redirect "https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
