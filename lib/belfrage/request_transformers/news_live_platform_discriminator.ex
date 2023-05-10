@@ -12,7 +12,7 @@ defmodule Belfrage.RequestTransformers.NewsLivePlatformDiscriminator do
           platform: "Webcore",
           origin: Application.get_env(:belfrage, :pwa_lambda_function)
         }),
-        {:replace, ["LambdaOriginAlias", "CircuitBreaker"]}
+        {:replace, ["LambdaOriginAlias", "Language", "CircuitBreaker"]}
       }
     else
       {:ok, envelope}
