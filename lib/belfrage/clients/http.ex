@@ -33,7 +33,7 @@ defmodule Belfrage.Clients.HTTP do
       |> FinchAPI.request(
         Finch,
         receive_timeout: request.timeout,
-        pool_timeout: finch_pool_timeout()
+        pool_timeout: Application.get_env(:finch, :pool_timeout)
       )
     catch
       type, reason -> {:error, {type, reason}}
@@ -81,9 +81,5 @@ defmodule Belfrage.Clients.HTTP do
       _ ->
         response
     end
-  end
-
-  defp finch_pool_timeout() do
-    Application.get_env(:finch, :pool_timeout)
   end
 end
