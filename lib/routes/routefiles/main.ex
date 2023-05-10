@@ -166,9 +166,9 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/news/election/2023/:polity/councils", using: "NewsElectionResults", examples: ["/news/election/2023/england/councils", "/news/election/2023/northern-ireland/councils"] do
+  handle "/news/election/2023/:polity/councils", using: "NewsElectionResults", examples: ["/news/election/2023/england/councils"] do
     return_404 if: [
-      !String.match?(polity, ~r/^(england|northern-ireland)$/)
+      !String.match?(polity, ~r/^(england)$/)
     ]
   end
 
