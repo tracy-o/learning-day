@@ -11,7 +11,9 @@ defmodule Belfrage.RequestTransformers.BitesizeArticlesPlatformDiscriminator do
     "zwdtrwx"
   ]
 
-  @webcore_live_ids []
+  @webcore_live_ids [
+    "zj8yydm"
+  ]
 
   @impl Transformer
   def call(envelope = %Envelope{request: %Envelope.Request{path_params: %{"id" => id}}}) do
