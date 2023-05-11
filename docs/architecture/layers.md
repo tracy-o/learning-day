@@ -33,6 +33,11 @@ A legacy match is more complex as routes are not very uniform. This will require
 /sport/a/legacy/page?abc=123 => :sport_project_foo_story
 ```
 
+## Pre Flight Pipeline
+
+After a request matches against a route, it goes through a pipeline called pre_flight_pipeline. It transforms the envelope through a series of functions (transformers) which amend the envelope before a request to an origin is made. Aftter this, it will fetch the route_state in order to proceed with the request.
+
+
 ## RouteState
 > input: route_state id, output: struct “private” key
 

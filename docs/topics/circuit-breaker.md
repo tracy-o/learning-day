@@ -4,16 +4,19 @@ The circuit breaker is designed to protect Belfrage, and up-stream services thro
 ***
 
 ### How can I use the circuit breaker?
-For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform or routspec pipieline and should have the `circuit_breaker_error_threshold` key/value as shown:
+For a route to take advantage of the circuit breaker, it must have the circuit breaker transformer in it's platform `request pipeline` and should have the `circuit_breaker_error_threshold` key/value as shown:
 
 ```elixir
-defmodule Routes.Specs.MyRouteSpec do
+defmodule Routes.Platforms.MyPlatform do
   def specs do
     %{
       circuit_breaker_error_threshold: 500,
-      pipeline: ["CircuitBreaker"]
+      request_pipeline: request_pipeline(production_env)
     }
   end
+
+  defp request_pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp request_pipeline(_production_env), do: request_pipeline("live") ++ ["DevelopmentRequests"]
 end
 
 ```
@@ -29,7 +32,7 @@ The circuit breaker dial, found in the dials section for each belfrage stack mus
 Belfrage tracks the number of errors returned from HTTP requests. An error is classed as a response with status code between `500..504` or a `408`.
 If the up-stream service is a lambda, failure to invoke the lambda, will also count as an error.
 
-When a route receives more errors in 60 seconds than what is defined in the `circuit_breaker_error_threshold` key within it's routespec (As shown below), the circuit breaker is turned on.
+When a route receives more errors in 60 seconds than what is defined in the `circuit_breaker_error_threshold` key (as shown above), the circuit breaker is turned on.
 
 ***
 
