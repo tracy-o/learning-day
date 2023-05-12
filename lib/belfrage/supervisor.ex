@@ -51,7 +51,7 @@ defmodule Belfrage.Supervisor do
       pools: %{
         :default => [size: 512, conn_opts: [transport_opts: {:verify, :verify_none}]],
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [
-          size: 1024,
+          size: 2048,
           conn_opts: [
             transport_opts: [
               {:inet6, true}
