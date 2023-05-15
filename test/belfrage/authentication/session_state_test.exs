@@ -30,10 +30,6 @@ defmodule Belfrage.Authentication.SessionStateTest do
     test "returns true if x-id-oidc-signedin header is not set but ckns_id cookie is alphanumeric" do
       assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}})
     end
-
-    test "returns false if x-id-oidc-signedin header is not set and ckns_id cookie is not alphanumeric" do
-      refute SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "!"}})
-    end
   end
 
   describe "build/1" do

@@ -14,14 +14,8 @@ defmodule Belfrage.Authentication.SessionState do
     case request.raw_headers["x-id-oidc-signedin"] do
       "0" -> false
       "1" -> true
-      _ -> alphanumeric?(request.cookies["ckns_id"])
+      _ -> request.cookies["ckns_id"]
     end
-  end
-
-  defp alphanumeric?(nil), do: false
-
-  defp alphanumeric?(value) do
-    String.match?(value, ~r/^[[:alnum:]]+$/)
   end
 
   def build(request = %Request{}) do
