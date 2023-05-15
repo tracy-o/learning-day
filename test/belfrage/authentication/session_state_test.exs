@@ -27,12 +27,8 @@ defmodule Belfrage.Authentication.SessionStateTest do
       assert SessionState.authenticated?(%Request{raw_headers: %{"x-id-oidc-signedin" => "1"}})
     end
 
-    test "returns true if x-id-oidc-signedin header is not set but ckns_id cookie is alphanumeric" do
-      assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}})
-    end
-
-    test "returns false if x-id-oidc-signedin header is not set and ckns_id cookie is not alphanumeric" do
-      refute SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "!"}})
+    test "returns a truthy value if x-id-oidc-signedin header is not set but ckns_id cookie is present" do
+      assert SessionState.authenticated?(%Request{cookies: %{"ckns_id" => "foo"}}) == "foo"
     end
   end
 
