@@ -165,7 +165,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
     end
   end
 
-  defp generate_conn_object do
+  defp generate_conn_object(request_path \\ "/news") do
     bbc_headers = %{
       scheme: :https,
       host: "my-host",
@@ -175,7 +175,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
     :get
     |> conn("/")
     |> Map.put(:host, "example.com")
-    |> Map.put(:request_path, "/news")
+    |> Map.put(:request_path, request_path)
     |> Map.put(:query_string, "foo=bar")
     |> put_private(:bbc_headers, bbc_headers)
     |> put_req_header("x-bbc-request-id", "bbc-id-1234")
@@ -324,6 +324,23 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
                _content_length,
                "https://www.test.bbc.co.uk/news\"\n"
              ] = String.split(event, "\" \"")
+    end
+
+    test ~s(requests to "/status" are not sent to the FileLoggerBackend event handler) do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({LoggerFileBackend, :handle_event, 2}, true, [:local])
+
+      generate_conn_object("/status")
+      |> AccessLogger.call(:info)
+      |> resp(200, "")
+      |> send_resp()
+
+      refute_receive {:trace, _, :call,
+                      {LoggerFileBackend, :handle_event,
+                       [
+                         {_level, _, {Logger, "", _datetime, _metadata}},
+                         _config
+                       ]}}
     end
   end
 
