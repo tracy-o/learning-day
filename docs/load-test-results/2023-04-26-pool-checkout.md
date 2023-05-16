@@ -121,3 +121,18 @@ Status Codes  [code:count]               0:1407  200:49546  500:249047
 ```
 
 ![Worker Checkout Duration](./img/2023-04-26/FinchCheckoutMetrics.png)
+
+
+# Summary
+
+The load tests show that if in a scenario where an origin starts returning extremely slow responses (in this simulation set to 12s) for a prolonged amount of time, Cowboy would start accumulating requests and struggle to respect its max timeout, currently set to 10s.
+The problem is especially visible in a scenario where Belfrage cascades to multiple origins, in this case fetching fallbacks from a potentially slow S3. By disabling fallbacks, the issue seems disappearing for 99p of requests.
+
+This is an extreme scenario, but there are a few learnings:
+- We should be careful at accumulating IO time by calling multiple origins, which is certain scenarios could take more than the allowed 10s
+- we should consider reducing the max timeout in Cowboy to less then 10s
+- We should reduce the max timeouts from origins as much as we can.
+- We should reduce the max timeout for S3 (currently set to 1s).
+- We can further reduce the max timeout for getting a checkout from the pool.
+- We should investigate the behaviour of a different webserver, especially Bandit.
+
