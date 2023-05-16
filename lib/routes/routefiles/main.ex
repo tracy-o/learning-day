@@ -816,7 +816,8 @@ defroutefile "Main" do
   end
 
   handle "/afaanoromoo/send/:id", using: "UploaderWorldService", examples: ["/afaanoromoo/send/u39697902"]
-  handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo"]
+  handle "/afaanoromoo", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test", examples: ["/afaanoromoo"]
+  handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo", examples: ["/afaanoromoo/popular/read"]
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
 
@@ -861,7 +862,8 @@ defroutefile "Main" do
   end
 
   handle "/afrique/send/:id", using: "UploaderWorldService", examples: ["/afrique/send/u39697902"]
-  handle "/afrique/*any", using: "WorldServiceAfrique", examples: ["/afrique"]
+  handle "/afrique", using: "WorldServiceAfriqueTipoHomePage", only_on: "test", examples: ["/afrique"]
+  handle "/afrique/*any", using: "WorldServiceAfrique", examples: ["/afrique/popular/read"]
 
   handle "/amharic.amp", using: "WorldServiceAmharic", examples: ["/amharic.amp"]
   handle "/amharic.json", using: "WorldServiceAmharic", examples: ["/amharic.json"]
@@ -904,7 +906,8 @@ defroutefile "Main" do
   end
 
   handle "/amharic/send/:id", using: "UploaderWorldService", examples: ["/amharic/send/u39697902"]
-  handle "/amharic/*any", using: "WorldServiceAmharic", examples: ["/amharic"]
+  handle "/amharic", using: "WorldServiceAmharicTipoHomePage", only_on: "test", examples: ["/amharic"]
+  handle "/amharic/*any", using: "WorldServiceAmharic", examples: ["/amharic/popular/read"]
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
@@ -952,7 +955,8 @@ defroutefile "Main" do
   end
 
   handle "/arabic/send/:id", using: "UploaderWorldService", examples: ["/arabic/send/u39697902"]
-  handle "/arabic/*any", using: "WorldServiceArabic", examples: ["/arabic"]
+  handle "/arabic", using: "WorldServiceArabicTipoHomePage", only_on: "test", examples: ["/arabic"]
+  handle "/arabic/*any", using: "WorldServiceArabic", examples: ["/arabic/popular/read"]
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
 
@@ -997,7 +1001,8 @@ defroutefile "Main" do
   end
 
   handle "/azeri/send/:id", using: "UploaderWorldService", examples: ["/azeri/send/u39697902"]
-  handle "/azeri/*any", using: "WorldServiceAzeri", examples: ["/azeri"]
+  handle "/azeri", using: "WorldServiceAzeriTipoHomePage", only_on: "test", examples: ["/azeri"]
+  handle "/azeri/*any", using: "WorldServiceAzeri", examples: ["/azeri/popular/read"]
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
   redirect "/bengali/mobile/*any", to: "/bengali", status: 301
@@ -1043,7 +1048,8 @@ defroutefile "Main" do
   end
 
   handle "/bengali/send/:id", using: "UploaderWorldService", examples: ["/bengali/send/u39697902"]
-  handle "/bengali/*any", using: "WorldServiceBengali", examples: ["/bengali"]
+  handle "/bengali", using: "WorldServiceBengaliTipoHomePage", only_on: "test", examples: ["/bengali"]
+  handle "/bengali/*any", using: "WorldServiceBengali", examples: ["/bengali/popular/read"]
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
@@ -1096,7 +1102,8 @@ defroutefile "Main" do
   end
 
   handle "/burmese/send/:id", using: "UploaderWorldService", examples: ["/burmese/send/u39697902"]
-  handle "/burmese/*any", using: "WorldServiceBurmese", examples: ["/burmese"]
+  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage", only_on: "test", examples: ["/burmese"]
+  handle "/burmese/*any", using: "WorldServiceBurmese", examples: ["/burmese/popular/read"]
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
 
@@ -1141,7 +1148,9 @@ defroutefile "Main" do
   end
 
   handle "/gahuza/send/:id", using: "UploaderWorldService", examples: ["/gahuza/send/u39697902"]
-  handle "/gahuza/*any", using: "WorldServiceGahuza", examples: ["/gahuza"]
+  handle "/gahuza", using: "WorldServiceGahuzaTipoHomePage", only_on: "test", examples: ["/gahuza"]
+  handle "/gahuza/*any", using: "WorldServiceGahuza", examples: ["/gahuza/popular/read"]
+
   handle "/gujarati.amp", using: "WorldServiceGujarati", examples: ["/gujarati.amp"]
   handle "/gujarati.json", using: "WorldServiceGujarati", examples: ["/gujarati.json"]
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", examples: ["/gujarati/manifest.json"]
@@ -1183,7 +1192,8 @@ defroutefile "Main" do
   end
 
   handle "/gujarati/send/:id", using: "UploaderWorldService", examples: ["/gujarati/send/u39697902"]
-  handle "/gujarati/*any", using: "WorldServiceGujarati", examples: ["/gujarati"]
+  handle "/gujarati", using: "WorldServiceGujaratiTipoHomePage", only_on: "test", examples: ["/gujarati"]
+  handle "/gujarati/*any", using: "WorldServiceGujarati", examples: ["/gujarati/popular/read"]
 
   redirect "/hausa/mobile/*any", to: "/hausa", status: 301
 
@@ -1228,7 +1238,8 @@ defroutefile "Main" do
   end
 
   handle "/hausa/send/:id", using: "UploaderWorldService", examples: ["/hausa/send/u39697902"]
-  handle "/hausa/*any", using: "WorldServiceHausa", examples: ["/hausa"]
+  handle "/hausa", using: "WorldServiceHausaTipoHomePage", only_on: "test", examples: ["/hausa"]
+  handle "/hausa/*any", using: "WorldServiceHausa", examples: ["/hausa/popular/read"]
 
   redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
   redirect "/hindi/mobile/*any", to: "/hindi", status: 301
@@ -1274,7 +1285,9 @@ defroutefile "Main" do
   end
 
   handle "/hindi/send/:id", using: "UploaderWorldService", examples: ["/hindi/send/u39697902"]
-  handle "/hindi/*any", using: "WorldServiceHindi", examples: ["/hindi"]
+  handle "/hindi", using: "WorldServiceHindiTipoHomePage", only_on: "test", examples: ["/hindi"]
+  handle "/hindi/*any", using: "WorldServiceHindi", examples: ["/hindi/popular/read"]
+
   handle "/igbo.amp", using: "WorldServiceIgbo", examples: ["/igbo.amp"]
   handle "/igbo.json", using: "WorldServiceIgbo", examples: ["/igbo.json"]
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", examples: ["/igbo/manifest.json"]
@@ -1317,7 +1330,8 @@ defroutefile "Main" do
   end
 
   handle "/igbo/send/:id", using: "UploaderWorldService", examples: ["/igbo/send/u39697902"]
-  handle "/igbo/*any", using: "WorldServiceIgbo", examples: ["/igbo"]
+  handle "/igbo", using: "WorldServiceIgboTipoHomePage", only_on: "test", examples: ["/igbo"]
+  handle "/igbo/*any", using: "WorldServiceIgbo", examples: ["/igbo/popular/read"]
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
 
@@ -1362,7 +1376,9 @@ defroutefile "Main" do
   end
 
   handle "/indonesia/send/:id", using: "UploaderWorldService", examples: ["/indonesia/send/u39697902"]
-  handle "/indonesia/*any", using: "WorldServiceIndonesia", examples: ["/indonesia"]
+  handle "/indonesia", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test", examples: ["/indonesia"]
+  handle "/indonesia/*any", using: "WorldServiceIndonesia", examples: ["/indonesia/popular/read"]
+
   handle "/japanese.amp", using: "WorldServiceJapanese", examples: ["/japanese.amp"]
   handle "/japanese.json", using: "WorldServiceJapanese", examples: ["/japanese.json"]
   handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets", examples: ["/japanese/manifest.json"]
@@ -1404,7 +1420,9 @@ defroutefile "Main" do
   end
 
   handle "/japanese/send/:id", using: "UploaderWorldService", examples: ["/japanese/send/u39697902"]
-  handle "/japanese/*any", using: "WorldServiceJapanese", examples: ["/japanese"]
+  handle "/japanese", using: "WorldServiceJapaneseTipoHomePage", only_on: "test", examples: ["/japanese"]
+  handle "/japanese/*any", using: "WorldServiceJapanese", examples: ["/japanese/popular/read"]
+
   handle "/korean.amp", using: "WorldServiceKorean", examples: ["/korean.amp"]
   handle "/korean.json", using: "WorldServiceKorean", examples: ["/korean.json"]
   handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", examples: ["/korean/manifest.json"]
@@ -1446,7 +1464,8 @@ defroutefile "Main" do
   end
 
   handle "/korean/send/:id", using: "UploaderWorldService", examples: ["/korean/send/u39697902"]
-  handle "/korean/*any", using: "WorldServiceKorean", examples: ["/korean"]
+  handle "/korean", using: "WorldServiceKoreanTipoHomePage", only_on: "test", examples: ["/korean"]
+  handle "/korean/*any", using: "WorldServiceKorean", examples: ["/korean/popular/read"]
 
   redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
 
@@ -1542,7 +1561,8 @@ defroutefile "Main" do
   end
 
   handle "/marathi/send/:id", using: "UploaderWorldService", examples: ["/marathi/send/u39697902"]
-  handle "/marathi/*any", using: "WorldServiceMarathi", examples: ["/marathi"]
+  handle "/marathi", using: "WorldServiceMarathiTipoHomePage", only_on: "test", examples: ["/marathi"]
+  handle "/marathi/*any", using: "WorldServiceMarathi", examples: ["/marathi/popular/read"]
 
   ## World Service - Olympic Redirects
   redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
@@ -1604,7 +1624,8 @@ defroutefile "Main" do
   end
 
   handle "/mundo/send/:id", using: "UploaderWorldService", examples: ["/mundo/send/u39697902"]
-  handle "/mundo/*any", using: "WorldServiceMundo", examples: ["/mundo"]
+  handle "/mundo", using: "WorldServiceMundoTipoHomePage", only_on: "test", examples: ["/mundo"]
+  handle "/mundo/*any", using: "WorldServiceMundo", examples: ["/mundo/popular/read"]
 
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
   redirect "/nepali/mobile/*any", to: "/nepali", status: 301
@@ -1650,7 +1671,8 @@ defroutefile "Main" do
   end
 
   handle "/nepali/send/:id", using: "UploaderWorldService", examples: ["/nepali/send/u39697902"]
-  handle "/nepali/*any", using: "WorldServiceNepali", examples: ["/nepali"]
+  handle "/nepali", using: "WorldServiceNepaliTipoHomePage", only_on: "test", examples: ["/nepali"]
+  handle "/nepali/*any", using: "WorldServiceNepali", examples: ["/nepali/popular/read"]
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
   redirect "/pashto/mobile/*any", to: "/pashto", status: 301
@@ -1696,7 +1718,8 @@ defroutefile "Main" do
   end
 
   handle "/pashto/send/:id", using: "UploaderWorldService", examples: ["/pashto/send/u39697902"]
-  handle "/pashto/*any", using: "WorldServicePashto", examples: ["/pashto"]
+  handle "/pashto", using: "WorldServicePashtoTipoHomePage", only_on: "test", examples: ["/pashto"]
+  handle "/pashto/*any", using: "WorldServicePashto", examples: ["/pashto/popular/read"]
 
   redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
   redirect "/persian/mobile/*any", to: "/persian", status: 301
@@ -1742,7 +1765,9 @@ defroutefile "Main" do
   end
 
   handle "/persian/send/:id", using: "UploaderWorldService", examples: ["/persian/send/u39697902"]
-  handle "/persian/*any", using: "WorldServicePersian", examples: ["/persian"]
+  handle "/persian", using: "WorldServicePersianTipoHomePage", only_on: "test", examples: ["/persian"]
+  handle "/persian/*any", using: "WorldServicePersian", examples: ["/persian/popular/read"]
+
   handle "/pidgin.amp", using: "WorldServicePidgin", examples: ["/pidgin.amp"]
   handle "/pidgin.json", using: "WorldServicePidgin", examples: ["/pidgin.json"]
   handle "/pidgin/manifest.json", using: "WorldServicePidginAssets", examples: ["/pidgin/manifest.json"]
@@ -1791,7 +1816,8 @@ defroutefile "Main" do
   end
 
   handle "/pidgin/send/:id", using: "UploaderWorldService", examples: ["/pidgin/send/u39697902"]
-  handle "/pidgin/*any", using: "WorldServicePidgin", examples: ["/pidgin"]
+  handle "/pidgin", using: "WorldServicePidginTipoHomePage", only_on: "test", examples: ["/pidgin"]
+  handle "/pidgin/*any", using: "WorldServicePidgin", examples: ["/pidgin/popular/read"]
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
   redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
@@ -1837,7 +1863,9 @@ defroutefile "Main" do
   end
 
   handle "/portuguese/send/:id", using: "UploaderWorldService", examples: ["/portuguese/send/u39697902"]
-  handle "/portuguese/*any", using: "WorldServicePortuguese", examples: ["/portuguese"]
+  handle "/portuguese", using: "WorldServicePortugueseTipoHomePage", only_on: "test", examples: ["/portuguese"]
+  handle "/portuguese/*any", using: "WorldServicePortuguese", examples: ["/portuguese/popular/read"]
+
   handle "/punjabi.amp", using: "WorldServicePunjabi", examples: ["/punjabi.amp"]
   handle "/punjabi.json", using: "WorldServicePunjabi", examples: ["/punjabi.json"]
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", examples: ["/punjabi/manifest.json"]
@@ -1879,7 +1907,8 @@ defroutefile "Main" do
   end
 
   handle "/punjabi/send/:id", using: "UploaderWorldService", examples: ["/punjabi/send/u39697902"]
-  handle "/punjabi/*any", using: "WorldServicePunjabi", examples: ["/punjabi"]
+  handle "/punjabi", using: "WorldServicePunjabiTipoHomePage", only_on: "test", examples: ["/punjabi"]
+  handle "/punjabi/*any", using: "WorldServicePunjabi", examples: ["/punjabi/popular/read"]
 
   ## World Service - Russian Partners Redirects
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
@@ -1932,7 +1961,8 @@ defroutefile "Main" do
   end
 
   handle "/russian/send/:id", using: "UploaderWorldService", examples: ["/russian/send/u39697902"]
-  handle "/russian/*any", using: "WorldServiceRussian", examples: ["/russian"]
+  handle "/russian", using: "WorldServiceRussianTipoHomePage", only_on: "test", examples: ["/russian"]
+  handle "/russian/*any", using: "WorldServiceRussian", examples: ["/russian/popular/read"]
 
   handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", examples: ["/serbian/manifest.json"]
   handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", examples: ["/serbian/sw.js"]
@@ -2058,7 +2088,8 @@ defroutefile "Main" do
   end
 
   handle "/sinhala/send/:id", using: "UploaderWorldService", examples: ["/sinhala/send/u39697902"]
-  handle "/sinhala/*any", using: "WorldServiceSinhala", examples: ["/sinhala"]
+  handle "/sinhala", using: "WorldServiceSinhalaTipoHomePage", only_on: "test", examples: ["/sinhala"]
+  handle "/sinhala/*any", using: "WorldServiceSinhala", examples: ["/sinhala/popular/read"]
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
 
@@ -2103,7 +2134,8 @@ defroutefile "Main" do
   end
 
   handle "/somali/send/:id", using: "UploaderWorldService", examples: ["/somali/send/u39697902"]
-  handle "/somali/*any", using: "WorldServiceSomali", examples: ["/somali"]
+  handle "/somali", using: "WorldServiceSomaliTipoHomePage", only_on: "test", examples: ["/somali"]
+  handle "/somali/*any", using: "WorldServiceSomali", examples: ["/somali/popular/read"]
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
 
@@ -2148,7 +2180,9 @@ defroutefile "Main" do
   end
 
   handle "/swahili/send/:id", using: "UploaderWorldService", examples: ["/swahili/send/u39697902"]
-  handle "/swahili/*any", using: "WorldServiceSwahili", examples: ["/swahili"]
+  handle "/swahili", using: "WorldServiceSwahiliTipoHomePage", only_on: "test", examples: ["/swahili"]
+  handle "/swahili/*any", using: "WorldServiceSwahili", examples: ["/swahili/popular/read"]
+
   handle "/tajik/*any", using: "WorldServiceTajik", examples: ["/tajik"]
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
@@ -2195,7 +2229,9 @@ defroutefile "Main" do
   end
 
   handle "/tamil/send/:id", using: "UploaderWorldService", examples: ["/tamil/send/u39697902"]
-  handle "/tamil/*any", using: "WorldServiceTamil", examples: ["/tamil"]
+  handle "/tamil", using: "WorldServiceTamilTipoHomePage", only_on: "test", examples: ["/tamil"]
+  handle "/tamil/*any", using: "WorldServiceTamil", examples: ["/tamil/popular/read"]
+
   handle "/telugu.amp", using: "WorldServiceTelugu", examples: ["/telugu.amp"]
   handle "/telugu.json", using: "WorldServiceTelugu", examples: ["/telugu.json"]
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", examples: ["/telugu/manifest.json"]
@@ -2237,7 +2273,9 @@ defroutefile "Main" do
   end
 
   handle "/telugu/send/:id", using: "UploaderWorldService", examples: ["/telugu/send/u39697902"]
-  handle "/telugu/*any", using: "WorldServiceTelugu", examples: ["/telugu"]
+  handle "/telugu", using: "WorldServiceTeluguTipoHomePage", only_on: "test", examples: ["/telugu"]
+  handle "/telugu/*any", using: "WorldServiceTelugu", examples: ["/telugu/popular/read"]
+
   handle "/thai.amp", using: "WorldServiceThai", examples: ["/thai.amp"]
   handle "/thai.json", using: "WorldServiceThai", examples: ["/thai.json"]
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets", examples: ["/thai/manifest.json"]
@@ -2279,7 +2317,9 @@ defroutefile "Main" do
   end
 
   handle "/thai/send/:id", using: "UploaderWorldService", examples: ["/thai/send/u39697902"]
-  handle "/thai/*any", using: "WorldServiceThai", examples: ["/thai"]
+  handle "/thai", using: "WorldServiceThaiTipoHomePage", only_on: "test", examples: ["/thai"]
+  handle "/thai/*any", using: "WorldServiceThai", examples: ["/thai/popular/read"]
+
   handle "/tigrinya.amp", using: "WorldServiceTigrinya", examples: ["/tigrinya.amp"]
   handle "/tigrinya.json", using: "WorldServiceTigrinya", examples: ["/tigrinya.json"]
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", examples: ["/tigrinya/manifest.json"]
@@ -2321,7 +2361,8 @@ defroutefile "Main" do
   end
 
   handle "/tigrinya/send/:id", using: "UploaderWorldService", examples: ["/tigrinya/send/u39697902"]
-  handle "/tigrinya/*any", using: "WorldServiceTigrinya", examples: ["/tigrinya"]
+  handle "/tigrinya", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test", examples: ["/tigrinya"]
+  handle "/tigrinya/*any", using: "WorldServiceTigrinya", examples: ["/tigrinya/popular/read"]
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
   redirect "/turkce/cep/*any", to: "/turkce", status: 301
@@ -2367,7 +2408,8 @@ defroutefile "Main" do
   end
 
   handle "/turkce/send/:id", using: "UploaderWorldService", examples: ["/turkce/send/u39697902"]
-  handle "/turkce/*any", using: "WorldServiceTurkce", examples: ["/turkce"]
+  handle "/turkce", using: "WorldServiceTurkceTipoHomePage", only_on: "test", examples: ["/turkce"]
+  handle "/turkce/*any", using: "WorldServiceTurkce", examples: ["/turkce/popular/read"]
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
@@ -2447,7 +2489,8 @@ defroutefile "Main" do
   end
 
   handle "/ukrainian/send/:id", using: "UploaderWorldService", examples: ["/ukrainian/send/u39697902"]
-  handle "/ukrainian/*any", using: "WorldServiceUkrainian", examples: ["/ukrainian"]
+  handle "/ukrainian", using: "WorldServiceUkrainianTipoHomePage", only_on: "test", examples: ["/ukrainian"]
+  handle "/ukrainian/*any", using: "WorldServiceUkrainian", examples: ["/ukrainian/popular/read"]
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
   redirect "/urdu/mobile/*any", to: "/urdu", status: 301
@@ -2500,7 +2543,8 @@ defroutefile "Main" do
   end
 
   handle "/urdu/send/:id", using: "UploaderWorldService", examples: ["/urdu/send/u39697902"]
-  handle "/urdu/*any", using: "WorldServiceUrdu", examples: ["/urdu"]
+  handle "/urdu", using: "WorldServiceUrduTipoHomePage", only_on: "test", examples: ["/urdu"]
+  handle "/urdu/*any", using: "WorldServiceUrdu", examples: ["/urdu/popular/read"]
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
 
@@ -2590,7 +2634,9 @@ defroutefile "Main" do
   end
 
   handle "/vietnamese/send/:id", using: "UploaderWorldService", examples: ["/vietnamese/send/u39697902"]
-  handle "/vietnamese/*any", using: "WorldServiceVietnamese", examples: ["/vietnamese"]
+  handle "/vietnamese", using: "WorldServiceVietnameseTipoHomePage", only_on: "test", examples: ["/vietnamese"]
+  handle "/vietnamese/*any", using: "WorldServiceVietnamese", examples: ["/vietnamese/popular/read"]
+
   handle "/yoruba.amp", using: "WorldServiceYoruba", examples: ["/yoruba.amp"]
   handle "/yoruba.json", using: "WorldServiceYoruba", examples: ["/yoruba.json"]
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", examples: ["/yoruba/manifest.json"]
@@ -2632,7 +2678,8 @@ defroutefile "Main" do
   end
 
   handle "/yoruba/send/:id", using: "UploaderWorldService", examples: ["/yoruba/send/u39697902"]
-  handle "/yoruba/*any", using: "WorldServiceYoruba", examples: ["/yoruba"]
+  handle "/yoruba", using: "WorldServiceYorubaTipoHomePage", only_on: "test", examples: ["/yoruba"]
+  handle "/yoruba/*any", using: "WorldServiceYoruba", examples: ["/yoruba/popular/read"]
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
