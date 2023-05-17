@@ -54,33 +54,26 @@ defmodule Belfrage.RouteSpec do
     module = Module.concat([Routes, Specs, spec_name])
     ensure_module_loaded(module)
 
-    preflight_pipeline =
-      call_preflight_pipeline_func(module, env)
-      |> validate_pipeline(spec_name, :preflight)
+    specification = call_specification_func(module, env)
+    preflight_pipeline = Map.get(specification, :preflight_pipeline, [])
+    specs = Map.get(specification, :specs)
 
     %{
       name: spec_name,
-      preflight_pipeline: preflight_pipeline,
-      specs: get_specs(spec_name, preflight_pipeline, module, env)
+      preflight_pipeline: validate_pipeline(preflight_pipeline, spec_name, :preflight),
+      specs: parse_specs(spec_name, specs, preflight_pipeline, env)
     }
   end
 
-  defp get_specs(spec_name, preflight_pipeline, module, env) do
-    specs =
-      case call_specs_func(module, env) do
-        spec when is_map(spec) ->
-          [spec]
+  defp parse_specs(spec_name, spec, preflight_pipeline, env) when is_map(spec) do
+    parse_specs(spec_name, [spec], preflight_pipeline, env)
+  end
 
-        [spec] ->
-          [spec]
+  defp parse_specs(spec_name, specs, [], _env) when length(specs) > 1 do
+    raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
+  end
 
-        specs when length(specs) > 1 ->
-          if preflight_pipeline == [],
-            do: raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
-
-          specs
-      end
-
+  defp parse_specs(spec_name, specs, _preflight_pipeline, env) do
     specs
     |> Enum.map(&put_spec_name(&1, spec_name))
     |> Enum.map(&update_spec_with_platform(&1, env))
@@ -101,7 +94,7 @@ defmodule Belfrage.RouteSpec do
   defp get_platform(platform_name, env) do
     module = Module.concat([Routes, Platforms, platform_name])
     ensure_module_loaded(module)
-    call_specs_func(module, env)
+    call_specification_func(module, env)
   end
 
   defp to_route_spec_struct(spec, platform) do
@@ -116,19 +109,11 @@ defmodule Belfrage.RouteSpec do
     Map.put(spec, :name, spec_name)
   end
 
-  defp call_preflight_pipeline_func(module, env) do
+  defp call_specification_func(module, env) do
     cond do
-      function_exported?(module, :preflight_pipeline, 1) -> module.preflight_pipeline(env)
-      function_exported?(module, :preflight_pipeline, 0) -> module.preflight_pipeline()
-      true -> []
-    end
-  end
-
-  defp call_specs_func(module, env) do
-    cond do
-      function_exported?(module, :specs, 1) -> module.specs(env)
-      function_exported?(module, :specs, 0) -> module.specs()
-      true -> raise "Module '#{module}' must define a specs/0 or specs/1 function"
+      function_exported?(module, :specification, 1) -> module.specification(env)
+      function_exported?(module, :specification, 0) -> module.specification()
+      true -> raise "Module '#{module}' must define a specification/0 or specification/1 function"
     end
   end
 
