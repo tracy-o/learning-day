@@ -1,5 +1,4 @@
 defmodule Belfrage.RequestTransformers.NiElectionFailoverModeTest do
-
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
@@ -41,7 +40,7 @@ defmodule Belfrage.RequestTransformers.NiElectionFailoverModeTest do
                    }
                  }
                }
-      } = NiElectionFailoverMode.call(envelope())
+             } = NiElectionFailoverMode.call(envelope())
     end
   end
 end

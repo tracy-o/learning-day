@@ -1,10 +1,9 @@
-defmodule Routes.Specs.NewsNiElectionResults do
+defmodule Routes.Specs.NewsElectionResults do
   def specs do
     %{
       owner: "DENewsElections@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Operational+support",
-      platform: "Webcore",
-      request_pipeline: ["NiElectionFailoverMode"]
-    }
+      platform: "Webcore"
+     }
   end
 end
