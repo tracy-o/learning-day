@@ -14,11 +14,13 @@ defmodule Belfrage.ProcessorTest do
   @route_state_id {@spec_name, @platform_name}
 
   defmodule Module.concat([Routes, Specs, SomePersonalisedRouteState]) do
-    def specs do
+    def specification do
       %{
-        platform: "Webcore",
-        personalisation: "test_only",
-        response_pipeline: ["CacheDirective"]
+        specs: %{
+          platform: "Webcore",
+          personalisation: "test_only",
+          response_pipeline: ["CacheDirective"]
+        }
       }
     end
   end

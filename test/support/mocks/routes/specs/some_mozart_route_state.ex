@@ -1,10 +1,12 @@
 defmodule Routes.Specs.SomeMozartRouteState do
-  def specs do
+  def specification do
     %{
-      owner: "An owner",
-      runbook: "Some runbook",
-      platform: "MozartNews",
-      query_params_allowlist: ["page"]
+      specs: %{
+        owner: "An owner",
+        runbook: "Some runbook",
+        platform: "MozartNews",
+        query_params_allowlist: ["page"]
+      }
     }
   end
 end

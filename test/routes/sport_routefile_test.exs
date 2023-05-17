@@ -300,12 +300,12 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp validate_platform_transformers(matcher, platform, pipeline, type = :request, env) do
-    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).request_pipeline
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specification(env).request_pipeline
     do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
   end
 
   defp validate_platform_transformers(matcher, platform, pipeline, type = :response, env) do
-    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).response_pipeline
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specification(env).response_pipeline
     do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
   end
 
