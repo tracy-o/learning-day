@@ -1,9 +1,11 @@
 defmodule Routes.Specs.SportAmp do
-  def specs do
+  def specification do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: "MozartSimorgh",
+      specs: %{
+        owner: "DENewsFrameworksTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+        platform: "MozartSimorgh",
+      }
     }
   end
 end

@@ -1,8 +1,10 @@
 defmodule Routes.Specs.ContainerData do
-  def specs do
+  def specification do
     %{
-      platform: "Webcore",
-      query_params_allowlist: "*"
+      specs: %{
+        platform: "Webcore",
+        query_params_allowlist: "*"
+      }
     }
   end
 end

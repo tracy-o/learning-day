@@ -1,8 +1,10 @@
 defmodule Routes.Specs.DotComFuture do
-  def specs do
+  def specification do
     %{
-      request_pipeline: [],
-      platform: "DotComFuture"
+      specs: %{
+        request_pipeline: [],
+        platform: "DotComFuture"
+      }
     }
   end
 end

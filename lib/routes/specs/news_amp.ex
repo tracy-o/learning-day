@@ -1,9 +1,11 @@
 defmodule Routes.Specs.NewsAmp do
-  def specs do
+  def specification do
     %{
-      owner: "#support-simorgh",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-      platform: "MozartSimorgh"
+      specs: %{
+        owner: "#support-simorgh",
+        runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
+        platform: "MozartSimorgh"
+      }
     }
   end
 end

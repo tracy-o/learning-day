@@ -1,8 +1,10 @@
 defmodule Routes.Specs.WeatherCoastAndSea do
-  def specs do
+  def specification do
     %{
-      platform: "MozartWeather",
-      caching_enabled: false
+      specs: %{
+        platform: "MozartWeather",
+        caching_enabled: false
+      }
     }
   end
 end

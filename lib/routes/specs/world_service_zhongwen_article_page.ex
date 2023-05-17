@@ -1,9 +1,11 @@
 defmodule Routes.Specs.WorldServiceZhongwenArticlePage do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"],
-      headers_allowlist: ["cookie-ckps_chinese"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        headers_allowlist: ["cookie-ckps_chinese"]
+      }
     }
   end
 end

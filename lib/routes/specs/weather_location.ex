@@ -1,8 +1,9 @@
 defmodule Routes.Specs.WeatherLocation do
-    def specs do
-      %{
+  def specification do
+    %{
+      specs: %{
         platform: "MozartWeather"
       }
-    end
+    }
   end
-  
+end

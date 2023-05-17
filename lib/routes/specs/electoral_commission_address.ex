@@ -1,7 +1,9 @@
 defmodule Routes.Specs.ElectoralCommissionAddress do
-  def specs do
+  def specification do
     %{
-     platform: "ElectoralCommission"
+      specs: %{
+        platform: "ElectoralCommission"
+      }
     }
   end
 end

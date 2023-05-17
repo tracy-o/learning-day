@@ -1,9 +1,11 @@
 defmodule Routes.Specs.WorldServiceSerbian do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "MozartSimorgh",
-      request_pipeline: pipeline(production_env),
-      headers_allowlist: ["cookie-ckps_serbian"]
+      specs: %{
+        platform: "MozartSimorgh",
+        request_pipeline: pipeline(production_env),
+        headers_allowlist: ["cookie-ckps_serbian"]
+      }
     }
   end
 

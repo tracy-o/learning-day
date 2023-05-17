@@ -1,6 +1,7 @@
 defmodule Routes.Specs.EchoSpec do
-    def specs do
-      %{
+  def specification do
+    %{
+      specs: %{
         owner: "DENewsFrameworksTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
         request_pipeline: ["Echo"],
@@ -8,5 +9,6 @@ defmodule Routes.Specs.EchoSpec do
         query_params_allowlist: ["latency", "size"],
         headers_allowlist: ["latency", "size"]
       }
-    end
+    }
   end
+end

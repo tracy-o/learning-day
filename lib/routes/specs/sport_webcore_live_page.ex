@@ -1,10 +1,12 @@
 defmodule Routes.Specs.SportWebcoreLivePage do
-  def specs do
+  def specification do
     %{
-      owner: "#help-live",
-      runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Experience+on+Webcore+Run+Book",
-      platform: "Webcore",
-      query_params_allowlist: ["page", "post"]
+      specs: %{
+        owner: "#help-live",
+        runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Experience+on+Webcore+Run+Book",
+        platform: "Webcore",
+        query_params_allowlist: ["page", "post"]
+      }
     }
   end
 

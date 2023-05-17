@@ -1,11 +1,13 @@
 defmodule Routes.Specs.ContainerEnvelopeError do
-  def specs do
+  def specification do
     %{
-      owner: "d&ewebcorepresentationteam@bbc.co.uk",
-      platform: "Webcore",
-      request_pipeline: ["UserAgentValidator"],
-      runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book",
-      query_params_allowlist: ["static"]
+      specs: %{
+        owner: "d&ewebcorepresentationteam@bbc.co.uk",
+        platform: "Webcore",
+        request_pipeline: ["UserAgentValidator"],
+        runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book",
+        query_params_allowlist: ["static"]
+      }
     }
   end
 end

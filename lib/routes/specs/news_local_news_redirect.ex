@@ -1,10 +1,12 @@
 defmodule Routes.Specs.NewsLocalNewsRedirect do
-  def specs do
+  def specification do
     %{
-      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
-      request_pipeline: ["LocalNewsTopicsRedirect"],
-      platform: "MozartNews"
+      specs: %{
+        owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
+        request_pipeline: ["LocalNewsTopicsRedirect"],
+        platform: "MozartNews"
+      }
     }
   end
 end

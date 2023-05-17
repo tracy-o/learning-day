@@ -1,10 +1,12 @@
 defmodule Routes.Specs.WeatherStorytellingPage do
-  def specs do
+  def specification do
     %{
-      owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
-      platform: "Webcore",
-      request_pipeline: ["ObitMode"]
+      specs: %{
+        owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
+        platform: "Webcore",
+        request_pipeline: ["ObitMode"]
+      }
     }
   end
 end

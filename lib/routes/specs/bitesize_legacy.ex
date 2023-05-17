@@ -6,11 +6,13 @@ defmodule Routes.Specs.BitesizeLegacy do
   from morph router to webcore.
   """
 
-  def specs do
+  def specification do
     %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: "MorphRouter",
-      language_from_cookie: true
+      specs: %{
+        owner: "bitesize-production@lists.forge.bbc.co.uk",
+        platform: "MorphRouter",
+        language_from_cookie: true
+      }
     }
   end
 end

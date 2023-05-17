@@ -1,9 +1,11 @@
 defmodule Routes.Specs.PhoPrivateContent do
-  def specs do
+  def specification do
     %{
-      owner: "#platform-health",
-      platform: "Webcore",
-      personalisation: "on"
+      specs: %{
+        owner: "#platform-health",
+        platform: "Webcore",
+        personalisation: "on"
+      }
     }
   end
 end

@@ -1,7 +1,9 @@
 defmodule Routes.Specs.FablData do
-  def specs do
+  def specification do
     %{
-      platform: "Fabl"
+      specs: %{
+        platform: "Fabl"
+      }
     }
   end
 end

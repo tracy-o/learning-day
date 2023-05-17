@@ -1,8 +1,10 @@
 defmodule Routes.Specs.DotComReel do
-  def specs do
+  def specification do
     %{
-      request_pipeline: [],
-      platform: "DotComReel"
+      specs: %{
+        request_pipeline: [],
+        platform: "DotComReel"
+      }
     }
   end
 end

@@ -1,8 +1,10 @@
 defmodule Routes.Specs.WorldServiceTopicsRedirect do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsRedirect"]
+      }
     }
   end
 end

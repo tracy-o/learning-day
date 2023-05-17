@@ -6,21 +6,24 @@ defmodule Routes.Specs.BitesizeTransition do
   from morph router to webcore.
   """
 
-
-  def specs("live") do
+  def specification("live") do
     %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: "MorphRouter",
-      language_from_cookie: true
+      specs: %{
+        owner: "bitesize-production@lists.forge.bbc.co.uk",
+        platform: "MorphRouter",
+        language_from_cookie: true
+      }
     }
   end
 
-  def specs(_production_env) do
+  def specification(_production_env) do
     %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: "Webcore",
-      request_pipeline: ["ComToUKRedirect"],
-      language_from_cookie: true
+      specs: %{
+        owner: "bitesize-production@lists.forge.bbc.co.uk",
+        platform: "Webcore",
+        request_pipeline: ["ComToUKRedirect"],
+        language_from_cookie: true
+      }
     }
   end
 end

@@ -1,10 +1,12 @@
 defmodule Routes.Specs.CymrufywEtholiadCanlyniadau do
-  def specs do
+  def specification do
     %{
-      owner: "DENewsElections@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Operational+support",
-      platform: "Webcore",
-      default_language: "cy"
-     }
+      specs: %{
+        owner: "DENewsElections@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Operational+support",
+        platform: "Webcore",
+        default_language: "cy"
+      }
+    }
   end
 end

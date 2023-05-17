@@ -6,7 +6,7 @@ defmodule Routes.Platforms.MorphRouter do
   morph router to webcore.
   """
 
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :morph_router_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",

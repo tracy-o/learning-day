@@ -1,7 +1,9 @@
 defmodule Routes.Specs.NewsElection do
-    def specs do
-      %{
+  def specification do
+    %{
+      specs: %{
         platform: "MozartNews"
-       }
-    end
+      }
+    }
   end
+end

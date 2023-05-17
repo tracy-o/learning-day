@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Simorgh do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :simorgh_endpoint),
       owner: "DENewsSimorghDev@bbc.co.uk",

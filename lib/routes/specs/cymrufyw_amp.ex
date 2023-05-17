@@ -1,9 +1,11 @@
 defmodule Routes.Specs.CymrufywAmp do
-  def specs do
+  def specification do
     %{
-      owner: "#support-simorgh",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-      platform: "Simorgh"
+      specs: %{
+        owner: "#support-simorgh",
+        runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
+        platform: "Simorgh"
+      }
     }
   end
 end

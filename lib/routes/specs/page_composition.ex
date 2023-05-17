@@ -1,8 +1,10 @@
 defmodule Routes.Specs.PageComposition do
-  def specs do
+  def specification do
     %{
-      platform: "Webcore",
-      query_params_allowlist: ["path", "params", "query"]
+      specs: %{
+        platform: "Webcore",
+        query_params_allowlist: ["path", "params", "query"]
+      }
     }
   end
 end

@@ -1,10 +1,12 @@
 defmodule Routes.Specs.CommentsEmbed do
-  def specs do
+  def specification do
     %{
-      owner: "D&EHomeParticipationTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Run+Book+for+Comments+on+WebCore",
-      platform: "MozartWeather",
-      query_params_allowlist: ["embeddingPageUri", "embeddingPageTitle"]
+      specs: %{
+        owner: "D&EHomeParticipationTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Run+Book+for+Comments+on+WebCore",
+        platform: "MozartWeather",
+        query_params_allowlist: ["embeddingPageUri", "embeddingPageTitle"]
+      }
     }
   end
 end

@@ -1,8 +1,10 @@
 defmodule Routes.Specs.BreakingNews do
-  def specs do
+  def specification do
     %{
-      platform: "MozartNews",
-      fallback_write_sample: 0.0
+      specs: %{
+        platform: "MozartNews",
+        fallback_write_sample: 0.0
+      }
     }
   end
 end

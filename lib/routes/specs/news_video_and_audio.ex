@@ -1,9 +1,11 @@
 defmodule Routes.Specs.NewsVideoAndAudio do
-  def specs do
+  def specification do
     %{
-      owner: "sfv-team@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
-      platform: "Webcore"
+      specs: %{
+        owner: "sfv-team@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
+        platform: "Webcore"
+      }
     }
   end
 end

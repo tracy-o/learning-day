@@ -1,11 +1,13 @@
 defmodule Routes.Specs.CymrufywVideos do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      owner: "sfv-team@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
-      platform: "Webcore",
-      default_language: "cy",
-      query_params_allowlist: query_params_allowlist(production_env)
+      specs: %{
+        owner: "sfv-team@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
+        platform: "Webcore",
+        default_language: "cy",
+        query_params_allowlist: query_params_allowlist(production_env)
+      }
     }
   end
 

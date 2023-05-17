@@ -1,9 +1,11 @@
 defmodule Routes.Specs.SportAlpha do
-  def specs do
+  def specification do
     %{
-      owner: "#help-sport",
-      runbook: "https://confluence.dev.bbc.co.uk/display/sport/BBC+Sport+Technical+Design",
-      platform: "Webcore"
+      specs: %{
+        owner: "#help-sport",
+        runbook: "https://confluence.dev.bbc.co.uk/display/sport/BBC+Sport+Technical+Design",
+        platform: "Webcore"
+      }
     }
   end
 end

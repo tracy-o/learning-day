@@ -1,10 +1,12 @@
 defmodule Routes.Specs.NaidheachdanHomePage do
-  def specs do
+  def specification do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: "MozartNews",
-      request_pipeline: ["NaidheachdanObitRedirect"]
+      specs: %{
+        owner: "DENewsFrameworksTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+        platform: "MozartNews",
+        request_pipeline: ["NaidheachdanObitRedirect"]
+      }
     }
   end
 end
