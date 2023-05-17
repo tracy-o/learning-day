@@ -12,7 +12,8 @@
         {Credo.Check.Readability.ModuleDoc, false},
         {Credo.Check.Refactor.Nesting, max_nesting: 3},
         {Credo.Check.Warning.MissedMetadataKeyInLoggerConfig, false},
-        {Credo.Checks.TestFileSuffix, []}
+        {Credo.Checks.TestFileSuffix, []},
+        {Credo.Checks.RouteSpecFilePath, []}
       ]
     }
   ]
