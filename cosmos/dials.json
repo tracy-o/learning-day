@@ -278,5 +278,20 @@
         "description": "Keeps all allowed query strings"
       }
     ]
+  },
+  {
+    "name": "ni_election_failover",
+    "description": "Allows redirecting NI elections results to a different page",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enable failover redirect"
+      },
+      {
+        "value": "off",
+        "description": "Serve from results page"
+      }
+    ]
   }
 ]

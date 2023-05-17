@@ -10,6 +10,7 @@
   "news_apps_hardcoded_response": "disabled",
   "news_apps_variance_reducer": "disabled",
   "news_articles_personalisation": "on",
+  "ni_election_failover": "off",
   "non_webcore_ttl_multiplier": "default",
   "obit_mode": "off",
   "personalisation": "on",
