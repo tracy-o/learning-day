@@ -1,8 +1,8 @@
 defmodule Routes.Specs.MyTopicsFollows do
   def specs(env) do
     %{
-      owner: "DandESportApp@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/sportws4/My+Topics+Run+Book",
+      owner: "newsappsabl@bbc.co.uk",
+      runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=342561568",
       platform: "Fabl",
       personalisation: "on",
       fallback_write_sample: 0,
