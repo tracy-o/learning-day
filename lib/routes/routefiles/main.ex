@@ -160,15 +160,23 @@ defroutefile "Main" do
     ]
   end
 
+  handle "/news/election/2023/northern-ireland/results", using: "NewsNiElectionResults", examples: ["/news/election/2023/northern-ireland/results"]
+
   handle "/news/election/2023/:polity/results", using: "NewsElectionResults", examples: ["/news/election/2023/england/results"]  do
     return_404 if: [
-                 !String.match?(polity, ~r/^(england|northern-ireland)$/)
+                 !String.match?(polity, ~r/^(england)$/)
                ]
   end
 
   handle "/news/election/2023/:polity/councils", using: "NewsElectionResults", examples: ["/news/election/2023/england/councils"] do
     return_404 if: [
       !String.match?(polity, ~r/^(england)$/)
+    ]
+  end
+
+  handle "/news/election/2023/northern-ireland/councils/:gss_id", using: "NewsNiElectionResults", examples: ["/news/election/2023/northern-ireland/councils/N09000001"] do
+    return_404 if: [
+      !String.match?(gss_id, ~r/^[A-Z][0-9]{8}$/)
     ]
   end
 
