@@ -32,9 +32,9 @@ defmodule Belfrage.RequestTransformers.NiElectionFailoverModeTest do
                %Belfrage.Envelope{
                  response: %Belfrage.Envelope.Response{
                    http_status: 302,
-                   body: "Redirecting",
+                   body: "",
                    headers: %{
-                     "location" => "https://www.bbc.co.uk/news",
+                     "location" => "/news",
                      "x-bbc-no-scheme-rewrite" => "1",
                      "cache-control" => "public, stale-while-revalidate=10, max-age=60"
                    }

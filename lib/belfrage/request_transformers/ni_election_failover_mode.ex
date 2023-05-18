@@ -10,11 +10,11 @@ defmodule Belfrage.RequestTransformers.NiElectionFailoverMode do
        Envelope.add(envelope, :response, %{
          http_status: 302,
          headers: %{
-           "location" => "https://www.bbc.co.uk/news",
+           "location" => "/news",
            "x-bbc-no-scheme-rewrite" => "1",
            "cache-control" => "public, stale-while-revalidate=10, max-age=60"
          },
-         body: "Redirecting"
+         body: ""
        })}
     else
       {:ok, envelope}
