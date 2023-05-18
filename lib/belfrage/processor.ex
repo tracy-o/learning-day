@@ -76,7 +76,7 @@ defmodule Belfrage.Processor do
 
   defp update_envelope_with_route_spec_attrs(envelope = %Envelope{private: private}, spec) do
     route_state_id = make_route_state_id(private.spec, spec.platform, private.partition)
-    spec = Map.put(Map.from_struct(spec), :route_state_id, route_state_id)
+    spec = Map.put(spec, :route_state_id, route_state_id)
     Map.put(envelope, :private, struct(private, spec))
   end
 

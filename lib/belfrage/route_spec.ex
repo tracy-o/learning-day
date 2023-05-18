@@ -8,8 +8,7 @@ defmodule Belfrage.RouteSpec do
   @type name :: String.t()
   @type platform :: String.t()
 
-  defstruct name: nil,
-            platform: nil,
+  defstruct platform: nil,
             owner: nil,
             slack_channel: nil,
             request_pipeline: [],
@@ -75,19 +74,18 @@ defmodule Belfrage.RouteSpec do
 
   defp parse_specs(spec_name, specs, _preflight_pipeline, env) do
     specs
-    |> Enum.map(&put_spec_name(&1, spec_name))
-    |> Enum.map(&update_spec_with_platform(&1, env))
+    |> Enum.map(&update_spec_with_platform(&1, spec_name, env))
     |> validate_unique_platforms(spec_name)
   end
 
-  defp update_spec_with_platform(spec, env) do
+  defp update_spec_with_platform(spec, spec_name, env) do
     platform = get_platform(spec.platform, env)
 
     spec
     |> Map.merge(merge_allowlists(platform, spec))
-    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
-    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
-    |> to_route_spec_struct(platform)
+    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, spec, spec_name, platform))
+    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, spec, spec_name, platform))
+    |> validate_spec_fields(spec_name, platform)
     |> Personalisation.maybe_put_personalised_route()
   end
 
@@ -97,16 +95,14 @@ defmodule Belfrage.RouteSpec do
     call_specification_func(module, env)
   end
 
-  defp to_route_spec_struct(spec, platform) do
+  # Currently we use %RouteSpec{} struct as a spec fields validator.
+  # This should be transformed to the json schema validation later.
+  defp validate_spec_fields(spec, spec_name, platform) do
     try do
-      struct!(__MODULE__, Map.merge(platform, spec))
+      struct!(__MODULE__, Map.merge(platform, spec)) |> Map.from_struct()
     catch
-      _, reason -> raise "Invalid '#{inspect(spec.name)}' spec, error: #{inspect(reason)}"
+      _, reason -> raise "Invalid '#{inspect(spec_name)}' spec, error: #{inspect(reason)}"
     end
-  end
-
-  defp put_spec_name(spec, spec_name) do
-    Map.put(spec, :name, spec_name)
   end
 
   defp call_specification_func(module, env) do
@@ -117,7 +113,7 @@ defmodule Belfrage.RouteSpec do
     end
   end
 
-  defp merge_validate_pipelines(type, platform, spec) do
+  defp merge_validate_pipelines(type, spec, spec_name, platform) do
     platform_pipeline = Map.get(platform, type, [])
     spec_pipeline = spec[type]
 
@@ -134,7 +130,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline(pipeline, spec.name, pipeline_to_transformer_type(type))
+    validate_pipeline(pipeline, spec_name, pipeline_to_transformer_type(type))
   end
 
   defp merge_allowlists(platform, spec) do

@@ -1,13 +1,13 @@
 defmodule Belfrage.Personalisation do
-  alias Belfrage.{Envelope, RouteSpec, Metrics}
+  alias Belfrage.{Envelope, Metrics}
   alias Belfrage.Envelope.{Request, Private}
   alias Belfrage.Authentication.{BBCID, SessionState}
 
   @dial Application.compile_env(:belfrage, :dial)
 
-  def maybe_put_personalised_route(spec = %RouteSpec{}) do
-    if personalised_route_spec?(spec) do
-      %RouteSpec{spec | personalised_route: true}
+  def maybe_put_personalised_route(spec = %{personalisation: personalisation}) do
+    if personalised_route_spec?(personalisation) do
+      %{spec | personalised_route: true}
     else
       spec
     end
@@ -42,7 +42,7 @@ defmodule Belfrage.Personalisation do
     Application.get_env(:belfrage, :production_environment)
   end
 
-  defp personalised_route_spec?(%RouteSpec{personalisation: personalisation}) do
+  defp personalised_route_spec?(personalisation) do
     case personalisation do
       "on" -> true
       "test_only" -> production_environment() == "test"

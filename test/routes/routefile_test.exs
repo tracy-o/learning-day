@@ -5,7 +5,7 @@ defmodule Routes.RoutefileTest do
   import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, RouteSpec, RouteSpecManager}
+  alias Belfrage.{RouteState, RouteSpecManager}
   alias Routes.Routefiles.Main.Test, as: Routefile
 
   @moduletag :routes_test
@@ -330,15 +330,19 @@ defmodule Routes.RoutefileTest do
 
   defp start_route_states() do
     stub_origins()
-    Belfrage.RouteSpecManager.list_specs() |> Enum.map(fn spec -> Enum.each(spec.specs, &start_route_state/1) end)
+
+    Belfrage.RouteSpecManager.list_specs()
+    |> Enum.map(fn %{name: spec_name, specs: specs} -> Enum.each(specs, &start_route_state(spec_name, &1)) end)
   end
 
-  defp start_route_state(%RouteSpec{
-         name: name,
-         platform: platform,
-         origin: origin,
-         circuit_breaker_error_threshold: threshold
-       }) do
+  defp start_route_state(
+         name,
+         %{
+           platform: platform,
+           origin: origin,
+           circuit_breaker_error_threshold: threshold
+         }
+       ) do
     route_state_id = {name, platform}
 
     route_state_args = %{

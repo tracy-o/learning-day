@@ -73,6 +73,6 @@ defmodule Belfrage.RouteSpecManagerTest do
   end
 
   defp is_route_spec_list?(spec_list) do
-    Enum.all?(spec_list, &is_struct(&1, RouteSpec))
+    Enum.all?(spec_list, &is_map/1)
   end
 end
