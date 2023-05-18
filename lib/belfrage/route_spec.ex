@@ -39,7 +39,8 @@ defmodule Belfrage.RouteSpec do
             mvt_project_id: 0,
             fallback_write_sample: 1,
             etag: false,
-            xray_enabled: false
+            xray_enabled: false,
+            examples: []
 
   @spec list_route_specs(String.t()) :: [map()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
@@ -64,6 +65,26 @@ defmodule Belfrage.RouteSpec do
     }
   end
 
+  @spec list_examples(String.t()) :: [map()]
+  def list_examples(env \\ Application.get_env(:belfrage, :production_environment)) do
+    list_route_specs(env)
+    |> Enum.flat_map(&get_examples/1)
+  end
+
+  @spec get_examples(String.t() | map(), String.t()) :: map()
+  def get_examples(%{name: spec_name, specs: specs}) do
+    examples =
+      for %{platform: platform_name, examples: examples} <- specs do
+        for example <- examples, do: Map.merge(example, %{platform: platform_name, spec: spec_name})
+      end
+
+    :lists.append(examples)
+  end
+
+  def get_examples(spec_name, env \\ Application.get_env(:belfrage, :production_environment)) do
+    get_route_spec(spec_name, env) |> get_examples()
+  end
+
   defp parse_specs(spec_name, spec, preflight_pipeline, env) when is_map(spec) do
     parse_specs(spec_name, [spec], preflight_pipeline, env)
   end
@@ -85,8 +106,30 @@ defmodule Belfrage.RouteSpec do
     |> Map.merge(merge_allowlists(platform, spec))
     |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, spec, spec_name, platform))
     |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, spec, spec_name, platform))
+    |> Map.put(:examples, parse_examples(spec, platform))
     |> validate_spec_fields(spec_name, platform)
     |> Personalisation.maybe_put_personalised_route()
+  end
+
+  defp parse_examples(spec, platform) do
+    case Map.get(spec, :examples, []) do
+      [] -> []
+      examples -> Enum.map(examples, &parse_example(&1, platform))
+    end
+  end
+
+  defp parse_example(path, platform) when is_binary(path) do
+    parse_example(%{path: path}, platform)
+  end
+
+  defp parse_example(example = %{path: path}, platform) do
+    platform_example = Map.get(platform, :examples, %{})
+
+    %{
+      path: path,
+      expected_status: Map.get(example, :expected_status, 200),
+      headers: Map.merge(Map.get(platform_example, :headers, %{}), Map.get(example, :headers, %{}))
+    }
   end
 
   defp get_platform(platform_name, env) do

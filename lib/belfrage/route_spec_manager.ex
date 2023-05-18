@@ -28,6 +28,12 @@ defmodule Belfrage.RouteSpecManager do
   @spec update_specs() :: :ok
   def update_specs(), do: GenServer.call(__MODULE__, :update)
 
+  @spec list_examples() :: [map()]
+  def list_examples() do
+    list_specs()
+    |> Enum.flat_map(&RouteSpec.get_examples/1)
+  end
+
   # callbacks
   @impl GenServer
   def init(_) do

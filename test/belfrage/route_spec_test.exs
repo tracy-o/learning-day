@@ -326,5 +326,104 @@ defmodule Belfrage.RouteSpecTest do
                      RouteSpec.get_route_spec("RequiredPreflightPipelineRoute")
                    end
     end
+
+    test "merges tests and platform example attributes" do
+      define_platform("ExampleAttrsPlatform1", %{
+        examples: %{
+          headers: %{"header-1": "header-value-1"},
+          non_existing_attribute: "some_value"
+        }
+      })
+
+      define_platform("ExampleAttrsPlatform2", %{})
+
+      define_route(
+        "ExampleTestsRoute",
+        %{
+          preflight_pipeline: ["TestPreflightTransformer"],
+          specs: [
+            %{
+              platform: "ExampleAttrsPlatform1",
+              examples: [
+                "/path/1",
+                %{
+                  path: "/path/2",
+                  headers: %{
+                    "header-1": "spec-header-value-1",
+                    "spec-header-2": "spec-header-value-2"
+                  }
+                }
+              ]
+            },
+            %{
+              platform: "ExampleAttrsPlatform2",
+              examples: [
+                %{
+                  path: "/path/3",
+                  expected_status: 301
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      spec_1_examples_result = [
+        %{
+          path: "/path/1",
+          headers: %{"header-1": "header-value-1"},
+          expected_status: 200
+        },
+        %{
+          path: "/path/2",
+          headers: %{
+            "header-1": "spec-header-value-1",
+            "spec-header-2": "spec-header-value-2"
+          },
+          expected_status: 200
+        }
+      ]
+
+      spec_2_examples_result = [
+        %{
+          path: "/path/3",
+          headers: %{},
+          expected_status: 301
+        }
+      ]
+
+      %{specs: [spec_1, spec_2]} = RouteSpec.get_route_spec("ExampleTestsRoute")
+      assert spec_1.examples == spec_1_examples_result
+      assert spec_2.examples == spec_2_examples_result
+    end
+  end
+
+  describe "get_examples/1" do
+    test "return correct examples per spec" do
+      define_platform("GetExamplePlatform", %{})
+
+      define_route(
+        "GetExampleRoute",
+        %{specs: %{platform: "GetExamplePlatform", examples: ["/path/1", "/path/2"]}}
+      )
+
+      [example1, example2] = RouteSpec.get_examples("GetExampleRoute")
+
+      assert example1 == %{
+               expected_status: 200,
+               headers: %{},
+               path: "/path/1",
+               platform: "GetExamplePlatform",
+               spec: "GetExampleRoute"
+             }
+
+      assert example2 == %{
+               expected_status: 200,
+               headers: %{},
+               path: "/path/2",
+               platform: "GetExamplePlatform",
+               spec: "GetExampleRoute"
+             }
+    end
   end
 end
