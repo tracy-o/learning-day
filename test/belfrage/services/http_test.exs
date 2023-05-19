@@ -383,6 +383,42 @@ defmodule Belfrage.Services.HTTPTest do
       )
     end
 
+    test "when the URI contains a char that is not allowed to be unescaped a metric is sent" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
+
+      {socket, udp_port} = given_udp_port_opened()
+
+      start_reporter(
+        metrics: Belfrage.Metrics.Statsd.statix_static_metrics(),
+        formatter: :datadog,
+        global_tags: [BBCEnvironment: "live"],
+        port: udp_port
+      )
+
+      HTTP.dispatch(%Envelope{
+        private: %Envelope.Private{
+          origin: "http://localhost:#{port}",
+          platform: "SomePlatform"
+        },
+        request: %Envelope.Request{
+          method: "GET",
+          path: "/some-path/?{",
+          query_params: %{},
+          host: "localhost",
+          req_svc_chain: "BELFRAGE"
+        }
+      })
+
+      assert_reported(
+        socket,
+        "http.client.error.invalid_request_target:1|c|#BBCEnvironment:live"
+      )
+    end
+
     test "when varnish is set, the varnish header is used" do
       envelope = %Envelope{
         private: %Envelope.Private{

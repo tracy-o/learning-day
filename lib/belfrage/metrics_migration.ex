@@ -47,10 +47,6 @@ defmodule Belfrage.MetricsMigration do
               event_name: [:belfrage, :http, :pools, :error, :timeout],
               measurement: :count
             ),
-            counter("http.client.error.invalid_request_target",
-              event_name: [:belfrage, :http, :client, :error, :invalid_request_target],
-              measurement: :count
-            ),
             counter("http.client.error",
               event_name: [:belfrage, :http, :client, :error],
               measurement: :count
@@ -73,6 +69,18 @@ defmodule Belfrage.MetricsMigration do
             ),
             counter("error.process.crash",
               event_name: [:belfrage, :error, :process, :crash],
+              measurement: :count
+            ),
+            counter("http.client.error.invalid_request_target",
+              event_name: [:belfrage, :http, :client, :error, :invalid_request_target],
+              measurement: :count
+            ),
+            counter("belfrage.request.infinite_loop",
+              event_name: [:belfrage, :request, :infinite_loop],
+              measurement: :count
+            ),
+            counter("belfrage.request.public_key_not_found",
+              event_name: [:belfrage, :request, :public_key_not_found],
               measurement: :count
             )
           ] ++
@@ -321,9 +329,7 @@ defmodule Belfrage.MetricsMigration do
                   pool_name: NimblePool.properties(&1.pool)[:host]
                 }),
               tags: [:pool_name]
-            ),
-            counter("belfrage.request.infinite_loop"),
-            counter("belfrage.request.public_key_not_found")
+            )
           ]
       end
 

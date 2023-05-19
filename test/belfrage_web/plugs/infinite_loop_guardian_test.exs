@@ -46,6 +46,27 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       assert_metric([:request, :infinite_loop], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end)
     end
 
+    test "sends a metric if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
+      {socket, port} = given_udp_port_opened()
+
+      start_reporter(
+        metrics: Belfrage.Metrics.Statsd.statix_static_metrics(),
+        formatter: :datadog,
+        global_tags: [BBCEnvironment: "live"],
+        port: port
+      )
+
+      :get
+      |> conn("/news")
+      |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
+      |> InfiniteLoopGuardian.call(_opts = [])
+
+      assert_reported(
+        socket,
+        "belfrage.request.infinite_loop:1|c|#BBCEnvironment:live"
+      )
+    end
+
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with //news" do
       # This must include the hostname because with // it thinks the host is following
       conn =
