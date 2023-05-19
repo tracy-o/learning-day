@@ -74,7 +74,7 @@ defmodule Belfrage.Authentication.TokenTest do
       end)
     end
 
-    test "metrics sent when public key not found" do
+    test "metric sent when public key not found" do
       {socket, port} = given_udp_port_opened()
 
       start_reporter(
