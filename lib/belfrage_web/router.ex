@@ -14,7 +14,7 @@ defmodule BelfrageWeb.Router do
   plug(Plugs.InfiniteLoopGuardian)
   plug(Plugs.RequestId)
   plug(Plugs.LatencyMonitor)
-  plug(BelfrageWeb.Plugs.Xray, builder_opts())
+  plug(BelfrageWeb.Plugs.Xray)
   plug(Plug.Head)
   plug(BelfrageWeb.Plugs.AppLogger)
   plug(ProductionEnvironment)
