@@ -18,8 +18,11 @@ defmodule Belfrage.MixProject do
     ]
   end
 
-  defp elixirc_paths(mix_env) when mix_env in @test_envs,
+  defp elixirc_paths(mix_env) when mix_env == :test,
     do: ["lib", "test/support", "credo"]
+
+  defp elixirc_paths(mix_env) when mix_env == :smoke_test,
+    do: ["lib", "test/support"]
 
   defp elixirc_paths(mix_env) when mix_env == :dev,
     do: [
