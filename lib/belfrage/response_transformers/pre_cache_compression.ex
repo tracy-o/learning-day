@@ -5,21 +5,26 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   """
   require Logger
 
-  alias Belfrage.{Envelope, Metrics}
+  alias Belfrage.{Envelope, Envelope.Response, Envelope.Private, Metrics, RouteState}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => "gzip"}}}) do
+  def call(envelope = %Envelope{response: %Response{headers: %{"content-encoding" => "gzip"}}}) do
     {:ok, envelope}
   end
 
-  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => content_encoding}}}) do
+  def call(
+        envelope = %Envelope{
+          response: %Response{headers: %{"content-encoding" => content_encoding}},
+          private: %Private{route_state_id: route_state_id}
+        }
+      ) do
     Logger.log(:error, "", %{
       msg: "Cannot handle compression type",
       content_encoding: content_encoding
     })
 
-    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{})
+    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{}, RouteState.map_id(route_state_id))
 
     {:ok, Envelope.add(envelope, :response, %{body: "", http_status: 415})}
   end
@@ -35,7 +40,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   defp gzip_response_body(
          envelope = %Envelope{
            request: %Envelope.Request{path: path},
-           private: private = %Envelope.Private{platform: platform}
+           private: private = %Envelope.Private{platform: platform, route_state_id: route_state_id}
          }
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
@@ -45,7 +50,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
           [:belfrage, :platform, :pre_cache_compression, :response]
         ],
         %{count: 1},
-        %{platform: platform_name(private)}
+        RouteState.map_id(route_state_id)
       )
 
       Logger.log(:info, "", %{

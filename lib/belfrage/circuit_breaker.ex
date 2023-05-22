@@ -11,7 +11,7 @@ defmodule Belfrage.CircuitBreaker do
   end
 
   defp apply(envelope = %Belfrage.Envelope{}) do
-    metadata = %{route_spec: RouteState.format_id(envelope.private.route_state_id)}
+    metadata = RouteState.map_id(envelope.private.route_state_id)
     Belfrage.Metrics.event(~w(circuit_breaker applied)a, metadata)
 
     envelope

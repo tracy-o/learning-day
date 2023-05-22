@@ -2,7 +2,7 @@ defmodule Belfrage.Services.Fabl do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.{Clients, Envelope, Envelope.Private, RouteState}
   alias Belfrage.Services.Fabl.Request
 
   @http_client Application.compile_env(:belfrage, :http_client, Clients.HTTP)
@@ -10,15 +10,19 @@ defmodule Belfrage.Services.Fabl do
   @behaviour Service
 
   @impl Service
-  def dispatch(envelope = %Envelope{}) do
-    :telemetry.span([:belfrage, :function, :timing, :service, :Fabl, :request], %{}, fn ->
-      {
-        envelope
-        |> execute_request()
-        |> handle_response(envelope),
-        %{}
-      }
-    end)
+  def dispatch(envelope = %Envelope{private: %Private{route_state_id: route_state_id}}) do
+    :telemetry.span(
+      [:belfrage, :function, :timing, :service, :Fabl, :request],
+      RouteState.map_id(route_state_id),
+      fn ->
+        {
+          envelope
+          |> execute_request()
+          |> handle_response(envelope),
+          RouteState.map_id(route_state_id)
+        }
+      end
+    )
   end
 
   defp execute_request(envelope) do
@@ -29,10 +33,7 @@ defmodule Belfrage.Services.Fabl do
     Belfrage.Metrics.multi_execute(
       [[:belfrage, :service, :Fabl, :response, String.to_atom(to_string(status))], [:belfrage, :platform, :response]],
       %{count: 1},
-      %{
-        status_code: status,
-        platform: :Fabl
-      }
+      Map.merge(RouteState.map_id(envelope.private.route_state_id), %{status_code: status})
     )
 
     Map.put(envelope, :response, %Envelope.Response{http_status: status, body: body, headers: headers})
@@ -46,9 +47,15 @@ defmodule Belfrage.Services.Fabl do
     handle_error_resp(reason, :request, envelope)
   end
 
-  defp handle_error_resp(reason, metric, envelope) do
+  defp handle_error_resp(reason, metric, envelope = %Envelope{private: %Private{route_state_id: route_state_id}}) do
     :telemetry.execute([:belfrage, :error, :service, :Fabl, metric], %{})
-    :telemetry.execute([:belfrage, :platform, :response], %{}, %{status_code: 500, platform: "Fabl"})
+
+    :telemetry.execute(
+      [:belfrage, :platform, :response],
+      %{},
+      Map.merge(RouteState.map_id(route_state_id), %{status_code: 500})
+    )
+
     log(reason, envelope)
     Envelope.add(envelope, :response, %Envelope.Response{http_status: 500, body: ""})
   end

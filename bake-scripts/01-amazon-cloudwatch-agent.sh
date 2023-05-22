@@ -83,17 +83,20 @@ cat > /etc/cloudwatch-agent-config.json <<EOF
       }
     },
     "aggregation_dimensions" : [
-      ["BBCEnvironment"],
       ["BBCEnvironment", "pool_name"],
-      ["supervisor_id"],
-      ["platform"],
-      ["status_code"],
-      ["status_code", "platform"],
-      ["status_code", "platform", "route_spec"],
-      ["status_code", "route_spec"],
-      ["error_code"],
+      ["BBCEnvironment"],
       ["error_code", "route_spec"],
-      ["route_spec"]
+      ["error_code"],
+      ["partition", "platform", "route_spec", "status_code"],
+      ["platform", "route_spec", "partition"],
+      ["platform", "route_spec", "status_code"],
+      ["platform", "route_spec"],
+      ["platform", "status_code"],
+      ["platform"],
+      ["route_spec", "status_code"],
+      ["route_spec"],
+      ["status_code"],
+      ["supervisor_id"]
     ]
   },
   "logs": {

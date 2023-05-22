@@ -62,6 +62,10 @@ defmodule Belfrage.RouteState do
   def format_id({spec, platform}), do: "#{spec}.#{platform}"
   def format_id({spec, platform, partition}), do: "#{spec}.#{platform}.#{partition}"
 
+  def map_id(nil), do: %{route_spec: nil}
+  def map_id({spec, platform}), do: %{route_spec: spec, platform: platform}
+  def map_id({spec, platform, partition}), do: %{route_spec: spec, platform: platform, partition: partition}
+
   # callbacks
 
   @impl GenServer
@@ -123,9 +127,11 @@ defmodule Belfrage.RouteState do
       |> Map.get(:mvt_seen)
       |> Mvt.State.prune_vary_headers(mvt_vary_header_ttl())
 
-    Belfrage.Metrics.measurement(~w(circuit_breaker throughput)a, %{throughput: next_throughput}, %{
-      route_spec: format_id(state.route_state_id)
-    })
+    Belfrage.Metrics.measurement(
+      ~w(circuit_breaker throughput)a,
+      %{throughput: next_throughput},
+      map_id(state.route_state_id)
+    )
 
     state = %{state | counter: Counter.init(), throughput: next_throughput, mvt_seen: mvt_seen}
     {:noreply, state}
@@ -140,7 +146,7 @@ defmodule Belfrage.RouteState do
   end
 
   defp circuit_breaker_open(0, route_state_id) do
-    Belfrage.Metrics.event(~w(circuit_breaker open)a, %{route_spec: format_id(route_state_id)})
+    Belfrage.Metrics.event(~w(circuit_breaker open)a, map_id(route_state_id))
   end
 
   defp circuit_breaker_open(_throughput, _route_state_id), do: false

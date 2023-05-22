@@ -91,7 +91,8 @@ defmodule Belfrage.MetricsMigration do
               cache_metric <- @cache_metrics do
             counter("cache.#{route_state}.#{cache_metric}.stale.hit",
               event_name: "belfrage.cache.#{route_state}.#{cache_metric}.stale.hit",
-              measurement: :count
+              measurement: :count,
+              tags: [:partition, :platform, :route_spec]
             )
           end ++
             for platform <- @platforms do
@@ -128,21 +129,16 @@ defmodule Belfrage.MetricsMigration do
 
       def platform_metrics() do
         [
-          counter("platform.response",
-            event_name: "belfrage.platform.response",
-            measurement: :count,
-            tags: [:status_code, :platform]
-          ),
           counter(
             "platform.response",
             event_name: "belfrage.platform.response",
             measurement: :count,
-            tags: [:platform, :route_spec, :status_code]
+            tags: [:status_code, :platform, :route_spec, :partition]
           ),
           counter("platform.response.pre_cache_compression",
             event_name: "belfrage.platform.pre_cache_compression.response",
             measurement: :count,
-            tags: [:platform]
+            tags: [:route_spec, :partition, :platform]
           ),
           counter(
             "selector.error",
@@ -288,21 +284,41 @@ defmodule Belfrage.MetricsMigration do
           last_value("circuit_breaker.throughput",
             measurement: :throughput,
             event_name: "belfrage.circuit_breaker.throughput",
-            tags: [:route_spec]
+            tags: [:route_spec, :partition, :platform]
           ),
           counter("circuit_breaker.applied",
             event_name: "belfrage.circuit_breaker.applied",
-            tags: [:route_spec]
+            tags: [:route_spec, :partiton, :platform]
           ),
           counter("circuit_breaker.open",
             event_name: "belfrage.circuit_breaker.open",
-            tags: [:route_spec]
+            tags: [:route_spec, :partition, :platform]
           )
         ]
       end
 
       def cache_metrics() do
-        [counter("cache.local.fetch_exit")]
+        cache_metrics =
+          for cache_metric <- [:local, :distributed] do
+            ["cache.#{cache_metric}.miss"] ++
+              for freshness <- [:fresh, :stale] do
+                ["cache.#{cache_metric}.#{freshness}.hit"]
+              end
+          end
+          |> :lists.flatten()
+
+        metrics =
+          [
+            "ccp.unexpected_response",
+            "ccp.fetch_error",
+            "ccp.put_error",
+            "cache.local.fetch_exit"
+          ] ++ cache_metrics
+
+        for metric <- metrics do
+          event_name = [:belfrage | String.split(metric, ".") |> Enum.map(&String.to_atom/1)]
+          counter(metric, event_name: event_name, tags: [:route_spec, :partition, :platform])
+        end
       end
 
       def webcore_metrics() do
@@ -321,12 +337,12 @@ defmodule Belfrage.MetricsMigration do
           counter(
             "webcore.response",
             event_name: "belfrage.webcore.response",
-            tags: [:status_code, :route_spec]
+            tags: [:status_code, :route_spec, :platform, :partition]
           ),
           counter(
             "webcore.error",
             event_name: "belfrage.webcore.error",
-            tags: [:error_code, :route_spec]
+            tags: [:error_code, :route_spec, :platform, :partition]
           )
         ]
       end
@@ -367,37 +383,33 @@ defmodule Belfrage.MetricsMigration do
           summary(
             "belfrage.request.duration",
             event_name: "belfrage.plug.stop",
-            tag_values:
-              &Map.merge(&1, %{
-                status_code: &1.conn.status,
-                route_spec: RouteState.format_id(&1.conn.assigns[:route_spec])
-              }),
+            tag_values: fn metadata ->
+              Map.merge(RouteState.map_id(metadata.conn.assigns[:route_spec]), %{status_code: metadata.conn.status})
+            end,
             unit: {:native, :millisecond},
-            tags: [:status_code, :route_spec]
+            tags: [:status_code, :route_spec, :partition, :platform]
           ),
           counter(
             "belfrage.response",
             event_name: "belfrage.plug.stop",
-            tag_values:
-              &Map.merge(&1, %{
-                status_code: &1.conn.status,
-                route_spec: RouteState.format_id(&1.conn.assigns[:route_spec])
-              }),
-            tags: [:status_code, :route_spec]
+            tag_values: fn metadata ->
+              Map.merge(RouteState.map_id(metadata.conn.assigns[:route_spec]), %{status_code: metadata.conn.status})
+            end,
+            tags: [:status_code, :route_spec, :partition, :platform]
           ),
           counter(
             "belfrage.response.private",
             event_name: "belfrage.plug.stop",
             keep: &(&1.conn.status == 200 && private_response?(&1.conn)),
-            tag_values: &Map.put(&1, :route_spec, RouteState.format_id(&1.conn.assigns[:route_spec])),
-            tags: [:route_spec]
+            tag_values: &Map.merge(&1, RouteState.map_id(&1.conn.assigns[:route_spec])),
+            tags: [:route_spec, :partition, :platform]
           ),
           counter(
             "befrage.response.stale",
             event_name: "belfrage.plug.stop",
             keep: &(Plug.Conn.get_resp_header(&1.conn, "belfrage-cache-status") == ["STALE"]),
-            tag_values: &Map.put(&1, :route_spec, RouteState.format_id(&1.conn.assigns[:route_spec])),
-            tags: [:route_spec]
+            tag_values: &Map.merge(&1, RouteState.map_id(&1.conn.assigns[:route_spec])),
+            tags: [:route_spec, :partition, :platform]
           ),
           counter(
             "belfrage.error",
@@ -406,13 +418,16 @@ defmodule Belfrage.MetricsMigration do
             tag_values: fn metadata ->
               case metadata.reason do
                 %{conn: conn} ->
-                  Map.put(metadata, :route_spec, RouteState.format_id(conn.assigns[:route_spec]))
+                  Map.merge(
+                    metadata,
+                    RouteState.map_id(conn.assigns[:route_spec])
+                  )
 
                 _ ->
                   metadata
               end
             end,
-            tags: [:route_spec]
+            tags: [:route_spec, :partition, :platform]
           )
         ]
       end
@@ -472,32 +487,19 @@ defmodule Belfrage.MetricsMigration do
       end
 
       def misc_metrics() do
-        cache_metrics =
-          for cache_metric <- [:local, :distributed] do
-            ["cache.#{cache_metric}.miss"] ++
-              for freshness <- [:fresh, :stale] do
-                ["cache.#{cache_metric}.#{freshness}.hit"]
-              end
-          end
-          |> :lists.flatten()
-
-        metrics =
-          [
-            "error.view.render.unhandled_content_type",
-            "error.pipeline.process",
-            "error.pipeline.process.unhandled",
-            "error.route_state.state",
-            "clients.lambda.assume_role_failure",
-            "invalid_content_encoding_from_origin",
-            "web.response.uncompressed",
-            "ccp.unexpected_response",
-            "ccp.fetch_error",
-            "ccp.put_error"
-          ] ++ cache_metrics
+        metrics = [
+          "error.view.render.unhandled_content_type",
+          "error.pipeline.process",
+          "error.pipeline.process.unhandled",
+          "error.route_state.state",
+          "clients.lambda.assume_role_failure",
+          "invalid_content_encoding_from_origin",
+          "web.response.uncompressed"
+        ]
 
         for metric <- metrics do
           event_name = [:belfrage | String.split(metric, ".") |> Enum.map(&String.to_atom/1)]
-          counter(metric, event_name: event_name, tags: [:route_spec])
+          counter(metric, event_name: event_name, tags: [:platform, :route_spec])
         end
       end
 
@@ -523,7 +525,7 @@ defmodule Belfrage.MetricsMigration do
             "route_spec.not_found",
             event_name: [:belfrage, :route_spec, :not_found],
             measurement: :count,
-            tags: [:route_spec]
+            tags: [:route_spec, :partition, :platform]
           )
         ]
       end

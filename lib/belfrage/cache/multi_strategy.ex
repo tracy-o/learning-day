@@ -60,15 +60,13 @@ defmodule Belfrage.Cache.MultiStrategy do
 
   defp execute_fetch(cache, envelope, accepted_freshness) do
     cache_metric = cache.metric_identifier()
-    route_spec = RouteState.format_id(envelope.private.route_state_id)
+    route_spec_attrs = RouteState.map_id(envelope.private.route_state_id)
 
     with {:ok, {strategy, freshness}, response} <- cache.fetch(envelope),
          true <- freshness in accepted_freshness do
-      :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), freshness, :hit], %{}, %{
-        route_spec: route_spec
-      })
+      :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), freshness, :hit], %{}, route_spec_attrs)
 
-      metric_on_stale_routespec(route_spec, cache_metric, freshness)
+      metric_on_stale_routespec(route_spec_attrs, cache_metric, freshness)
       {:halt, {:ok, {strategy, freshness}, response}}
     else
       # TODO? we could match here on `false` and record a metric that
@@ -76,22 +74,17 @@ defmodule Belfrage.Cache.MultiStrategy do
       # stale one exists.
 
       _content_not_found_or_not_accepted_freshness ->
-        :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), :miss], %{}, %{
-          route_spec: route_spec
-        })
+        :telemetry.execute([:belfrage, :cache, String.to_atom(cache_metric), :miss], %{}, route_spec_attrs)
 
         {:cont, {:ok, :content_not_found}}
     end
   end
 
-  defp metric_on_stale_routespec(route_state_id, cache_metric, :stale) do
+  defp metric_on_stale_routespec(route_spec_attrs, cache_metric, :stale) do
     Belfrage.Metrics.multi_execute(
-      [[:belfrage, :cache, route_state_id, cache_metric, :stale, :hit], [:belfrage, :cache, :stale, :hit]],
+      [[:belfrage, :cache, route_spec_attrs.route_spec, cache_metric, :stale, :hit], [:belfrage, :cache, :stale, :hit]],
       %{count: 1},
-      %{
-        route_state: route_state_id,
-        cache_metric: cache_metric
-      }
+      Map.merge(route_spec_attrs, %{cache_metric: cache_metric})
     )
   end
 

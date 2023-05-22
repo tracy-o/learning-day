@@ -2,7 +2,7 @@ defmodule Belfrage.Services.HTTP do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Envelope}
+  alias Belfrage.{Clients, Envelope, RouteState}
   alias Belfrage.Envelope.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
@@ -151,7 +151,7 @@ defmodule Belfrage.Services.HTTP do
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      %{platform: platform_name(private), status_code: status}
+      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: status})
     )
   end
 
@@ -162,7 +162,7 @@ defmodule Belfrage.Services.HTTP do
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      %{platform: platform_name(private), status_code: "408"}
+      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: "408"})
     )
 
     log_error(:timeout, envelope)
@@ -175,7 +175,7 @@ defmodule Belfrage.Services.HTTP do
         [:belfrage, :error, :service, :request]
       ],
       %{count: 1},
-      %{platform: platform_name(private)}
+      RouteState.map_id(private.route_state_id)
     )
 
     log_error(error, envelope)
