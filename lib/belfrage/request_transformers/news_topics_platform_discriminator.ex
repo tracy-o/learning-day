@@ -23,7 +23,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
         {
           :stop,
           Envelope.add(envelope, :response, %{
-            http_status: 302,
+            http_status: 301,
             headers: %{
               "location" => "/news/topics/#{envelope.request.path_params["id"]}",
               "x-bbc-no-scheme-rewrite" => "1",

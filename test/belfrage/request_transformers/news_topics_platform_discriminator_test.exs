@@ -105,7 +105,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
       assert {:stop,
               %Envelope{
                 response: %Envelope.Response{
-                  http_status: 302,
+                  http_status: 301,
                   headers: %{
                     "location" => "/news/topics/cl16knzkz9yt",
                     "x-bbc-no-scheme-rewrite" => "1",
