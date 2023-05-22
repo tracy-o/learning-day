@@ -76,7 +76,6 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
           Telemetry.Metrics.last_value("route_state.mailbox_size",
             event_name: [:belfrage, :route_state_message_queue_length],
             measurement: :message_queue_len,
-            keep: &(&1.name == name),
             tags: [:BBCEnvironment, :platform, :route_spec]
           )
         end)
