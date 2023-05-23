@@ -45,7 +45,7 @@ mix local.hex && mix deps.get
 
 ### Run the app
 
-Start the Belfrage application with: 
+Start the Belfrage application with:
 
 ```
 mix run --no-halt
@@ -65,7 +65,7 @@ for the account. You can set these however you wish - if in doubt you can use
 mozart_dev account number `134209033928`.
 
 ### Working with Belfrage locally
-It may be useful to also run origin-simulator locally to understand how belfrage communicates with other layers. For this, see [Origin-Simulator](https://github.com/bbc/origin_simulator)  
+It may be useful to also run origin-simulator locally to understand how belfrage communicates with other layers. For this, see [Origin-Simulator](https://github.com/bbc/origin_simulator)
 
 ## See all the defined route matchers
 
@@ -118,30 +118,68 @@ Belfrage is deployed using Jenkins and Cosmos. The [Belfrage job](https://ci.new
 If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk/job/belfrage-multi-stack/) is run in order to build the RPMs for all belfrage stacks. If the job is run for the master branch then a release is also created for the stacks.
 
 ## Creating a basic route
-1. Create your new route within the [`main.ex`](lib/routes/routefiles/main.ex) routefile
+1. Create your new route within the [`main.ex`](lib/routes/routefiles/main.ex) or [`sport.ex`](lib/routes/routefiles/sport.ex) Routefiles.
     - A basic route should look like this: `handle "/search", using: "Search", examples: ["/search"]`
     - `handle "/search"` is the URL matcher (see the docs for more info on the format).
     - `using: "Search"` is the routespec you wish to use, these can be found and added to in the [specs folder](lib/routes/specs)
     - `examples: ["/search"]` is a required list of example routes which are used to test your route in [`routefile_test.ex`](test/routes/routefile_test.ex)
 
-2. If you need to create a routespec for your new route:
-    - A basic routespec will look like this:
-        ```
-        defmodule Routes.Specs.Search do
-          def specs do
-            %{
+2. If you need to create a RouteSXSpec for your new route:
+    A basic routespec will look like this:
+    ```elixir
+    defmodule Routes.Specs.Search do
+      def specification do
+        %{
+          specs: %{
             owner: "D+ESearchAndNavigationDev@bbc.co.uk",
             runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
-            platform: Webcore
-          end
-        end
-        ```
+            request_pipeline: ["ComToUKRedirect"],
+            platform: "Webcore"
+          }
+        }
+      end
+    end
+    ```
     - `owner` is the email of the team that owns the routes tied to this routespec
-    - `runbook` is the relevant runbook 
+    - `runbook` is the relevant runbook
     - `platform` is the platform which the routes tied to this routespec will be routes to
-    - A full list of spec keys that can be used can be found in the [route_spec file](lib/belfrage/route_spec.ex)
+    - a full list of spec keys that can be used can be found in the [route_spec file](lib/belfrage/route_spec.ex)
 
-3. If you've got Belfrage set-up locally you can run `mix routes_test` to ensure that there are no issues with the routes that you added / edited. It will run on CI anyway though.
+
+    A more complex RouteSpec could contain multiple platforms and a pre-flight pipeline to define the business logic to identify the correct platform at request time:
+    ```elixir
+    defmodule Routes.Specs.BitesizeTopics do
+      def specification do
+        %{
+          pre_flight_pipeline: ["BitesizeTopicsPlatformSelector"],
+          specs: [
+            %{
+              owner: "bitesize-production@lists.forge.bbc.co.uk",
+              platform: "MorphRouter",
+              language_from_cookie: true,
+              request_pipeline: ["ComToUKRedirect", "Language"],
+              examples: [
+                %{
+                  path: "/bitesize/topics/some_id",
+                  headers: %{"some-test-header": "some-test-header-val"}
+                }
+              ]
+            },
+            %{
+              owner: "bitesize-production@lists.forge.bbc.co.uk",
+              platform: "Webcore",
+              language_from_cookie: true,
+              request_pipeline: ["ComToUKRedirect"],
+              examples: [
+                "/bitesize/topics/z82hsbk"
+              ]
+            }
+          ]
+        }
+      end
+    end
+    ```
+3. If you've got Belfrage set-up locally you can run `mix test` to ensure that there are no issues with the routes that you added / edited. It will run on CI anyway though.
 
 5. Create a PR against the Belfrage repository with a meaningful branch name and a link to the ticket along with any description needed
 
