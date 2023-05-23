@@ -790,10 +790,6 @@ defroutefile "Main" do
   handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", examples: ["/afaanoromoo/rss.xml"]
 
   handle "/afaanoromoo/tipohome.amp", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test", examples: ["/afaanoromoo/tipohome.amp"]
-  handle "/afaanoromoo/tipohome/manifest.json", using: "WorldServiceAfaanoromooAssets", only_on: "test", examples: ["/afaanoromoo/tipohome/manifest.json"]
-  handle "/afaanoromoo/tipohome/sw.js", using: "WorldServiceAfaanoromooAssets", only_on: "test", examples: ["/afaanoromoo/tipohome/sw.js"]
-  handle "/afaanoromoo/tipohome/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", only_on: "test", examples: ["/afaanoromoo/tipohome/rss.xml"]
-  handle "/afaanoromoo/tipohome", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test", examples: ["/afaanoromoo/tipohome"]
 
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afaanoromoo/topics/c7zp5z9n3x5t/page/2", 302}] do
     return_404 if: [
@@ -836,10 +832,6 @@ defroutefile "Main" do
   handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss", examples: ["/afrique/rss.xml"]
 
   handle "/afrique/tipohome.amp", using: "WorldServiceAfriqueTipoHomePage", only_on: "test", examples: ["/afrique/tipohome.amp"]
-  handle "/afrique/tipohome/manifest.json", using: "WorldServiceAfriqueAssets", only_on: "test", examples: ["/afrique/tipohome/manifest.json"]
-  handle "/afrique/tipohome/sw.js", using: "WorldServiceAfriqueAssets", only_on: "test", examples: ["/afrique/tipohome/sw.js"]
-  handle "/afrique/tipohome/rss.xml", using: "WorldServiceAfriqueHomePageRss", only_on: "test", examples: ["/afrique/tipohome/rss.xml"]
-  handle "/afrique/tipohome", using: "WorldServiceAfriqueTipoHomePage", only_on: "test", examples: ["/afrique/tipohome"]
 
   handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
     return_404 if: [
@@ -880,10 +872,6 @@ defroutefile "Main" do
   handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss", examples: ["/amharic/rss.xml"]
 
   handle "/amharic/tipohome.amp", using: "WorldServiceAmharicTipoHomePage", only_on: "test", examples: ["/amharic/tipohome.amp"]
-  handle "/amharic/tipohome/manifest.json", using: "WorldServiceAmharicAssets", only_on: "test", examples: ["/amharic/tipohome/manifest.json"]
-  handle "/amharic/tipohome/sw.js", using: "WorldServiceAmharicAssets", only_on: "test", examples: ["/amharic/tipohome/sw.js"]
-  handle "/amharic/tipohome/rss.xml", using: "WorldServiceAmharicHomePageRss", only_on: "test", examples: ["/amharic/tipohome/rss.xml"]
-  handle "/amharic/tipohome", using: "WorldServiceAmharicTipoHomePage", only_on: "test", examples: ["/amharic/tipohome"]
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/amharic/topics/c06gq8wdrjyt/page/2", 302}] do
     return_404 if: [
@@ -929,10 +917,6 @@ defroutefile "Main" do
   handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss", examples: ["/arabic/rss.xml"]
 
   handle "/arabic/tipohome.amp", using: "WorldServiceArabicTipoHomePage", only_on: "test", examples: ["/arabic/tipohome.amp"]
-  handle "/arabic/tipohome/manifest.json", using: "WorldServiceArabicAssets", only_on: "test", examples: ["/arabic/tipohome/manifest.json"]
-  handle "/arabic/tipohome/sw.js", using: "WorldServiceArabicAssets", only_on: "test", examples: ["/arabic/tipohome/sw.js"]
-  handle "/arabic/tipohome/rss.xml", using: "WorldServiceArabicHomePageRss", only_on: "test", examples: ["/arabic/tipohome/rss.xml"]
-  handle "/arabic/tipohome", using: "WorldServiceArabicTipoHomePage", only_on: "test", examples: ["/arabic/tipohome"]
 
   handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/arabic/topics/c340qj374j6t/page/2", 302}] do
     return_404 if: [
@@ -975,10 +959,6 @@ defroutefile "Main" do
   handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss", examples: ["/azeri/rss.xml"]
 
   handle "/azeri/tipohome.amp", using: "WorldServiceAzeriTipoHomePage", only_on: "test", examples: ["/azeri/tipohome.amp"]
-  handle "/azeri/tipohome/manifest.json", using: "WorldServiceAzeriAssets", only_on: "test", examples: ["/azeri/tipohome/manifest.json"]
-  handle "/azeri/tipohome/sw.js", using: "WorldServiceAzeriAssets", only_on: "test", examples: ["/azeri/tipohome/sw.js"]
-  handle "/azeri/tipohome/rss.xml", using: "WorldServiceAzeriHomePageRss", only_on: "test", examples: ["/azeri/tipohome/rss.xml"]
-  handle "/azeri/tipohome", using: "WorldServiceAzeriTipoHomePage", only_on: "test", examples: ["/azeri/tipohome"]
 
   handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
     return_404 if: [
@@ -1022,10 +1002,6 @@ defroutefile "Main" do
   handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss", examples: ["/bengali/rss.xml"]
 
   handle "/bengali/tipohome.amp", using: "WorldServiceBengaliTipoHomePage", only_on: "test", examples: ["/bengali/tipohome.amp"]
-  handle "/bengali/tipohome/manifest.json", using: "WorldServiceBengaliAssets", only_on: "test", examples: ["/bengali/tipohome/manifest.json"]
-  handle "/bengali/tipohome/sw.js", using: "WorldServiceBengaliAssets", only_on: "test", examples: ["/bengali/tipohome/sw.js"]
-  handle "/bengali/tipohome/rss.xml", using: "WorldServiceBengaliHomePageRss", only_on: "test", examples: ["/bengali/tipohome/rss.xml"]
-  handle "/bengali/tipohome", using: "WorldServiceBengaliTipoHomePage", only_on: "test", examples: ["/bengali/tipohome"]
 
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/bengali/topics/c2dwq2nd40xt/page/2", 302}] do
     return_404 if: [
@@ -1069,10 +1045,6 @@ defroutefile "Main" do
   handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss", examples: ["/burmese/rss.xml"]
 
   handle "/burmese/tipohome.amp", using: "WorldServiceBurmeseTipoHomePage", only_on: "test", examples: ["/burmese/tipohome.amp"]
-  handle "/burmese/tipohome/manifest.json", using: "WorldServiceBurmeseAssets", only_on: "test", examples: ["/burmese/tipohome/manifest.json"]
-  handle "/burmese/tipohome/sw.js", using: "WorldServiceBurmeseAssets", only_on: "test", examples: ["/burmese/tipohome/sw.js"]
-  handle "/burmese/tipohome/rss.xml", using: "WorldServiceBurmeseHomePageRss", only_on: "test", examples: ["/burmese/tipohome/rss.xml"]
-  handle "/burmese/tipohome", using: "WorldServiceBurmeseTipoHomePage", only_on: "test", examples: ["/burmese/tipohome"]
 
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/burmese/topics/c404v08p1wxt/page/2", 302}] do
     return_404 if: [
@@ -1122,10 +1094,6 @@ defroutefile "Main" do
   handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss", examples: ["/gahuza/rss.xml"]
 
   handle "/gahuza/tipohome.amp", using: "WorldServiceGahuzaTipoHomePage", only_on: "test", examples: ["/gahuza/tipohome.amp"]
-  handle "/gahuza/tipohome/manifest.json", using: "WorldServiceGahuzaAssets", only_on: "test", examples: ["/gahuza/tipohome/manifest.json"]
-  handle "/gahuza/tipohome/sw.js", using: "WorldServiceGahuzaAssets", only_on: "test", examples: ["/gahuza/tipohome/sw.js"]
-  handle "/gahuza/tipohome/rss.xml", using: "WorldServiceGahuzaHomePageRss", only_on: "test", examples: ["/gahuza/tipohome/rss.xml"]
-  handle "/gahuza/tipohome", using: "WorldServiceGahuzaTipoHomePage", only_on: "test", examples: ["/gahuza/tipohome"]
 
   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
     return_404 if: [
@@ -1166,10 +1134,6 @@ defroutefile "Main" do
   handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss", examples: ["/gujarati/rss.xml"]
 
   handle "/gujarati/tipohome.amp", using: "WorldServiceGujaratiTipoHomePage", only_on: "test", examples: ["/gujarati/tipohome.amp"]
-  handle "/gujarati/tipohome/manifest.json", using: "WorldServiceGujaratiAssets", only_on: "test", examples: ["/gujarati/tipohome/manifest.json"]
-  handle "/gujarati/tipohome/sw.js", using: "WorldServiceGujaratiAssets", only_on: "test", examples: ["/gujarati/tipohome/sw.js"]
-  handle "/gujarati/tipohome/rss.xml", using: "WorldServiceGujaratiHomePageRss", only_on: "test", examples: ["/gujarati/tipohome/rss.xml"]
-  handle "/gujarati/tipohome", using: "WorldServiceGujaratiTipoHomePage", only_on: "test", examples: ["/gujarati/tipohome"]
 
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/gujarati/topics/c2dwqj95d30t/page/2", 302}] do
     return_404 if: [
@@ -1212,10 +1176,6 @@ defroutefile "Main" do
   handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss", examples: ["/hausa/rss.xml"]
 
   handle "/hausa/tipohome.amp", using: "WorldServiceHausaTipoHomePage", only_on: "test", examples: ["/hausa/tipohome.amp"]
-  handle "/hausa/tipohome/manifest.json", using: "WorldServiceHausaAssets", only_on: "test", examples: ["/hausa/tipohome/manifest.json"]
-  handle "/hausa/tipohome/sw.js", using: "WorldServiceHausaAssets", only_on: "test", examples: ["/hausa/tipohome/sw.js"]
-  handle "/hausa/tipohome/rss.xml", using: "WorldServiceHausaHomePageRss", only_on: "test", examples: ["/hausa/tipohome/rss.xml"]
-  handle "/hausa/tipohome", using: "WorldServiceHausaTipoHomePage", only_on: "test", examples: ["/hausa/tipohome"]
 
   handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hausa/topics/c5qvpxkx1j7t/page/2", 302}] do
     return_404 if: [
@@ -1259,10 +1219,6 @@ defroutefile "Main" do
   handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss", examples: ["/hindi/rss.xml"]
 
   handle "/hindi/tipohome.amp", using: "WorldServiceHindiTipoHomePage", only_on: "test", examples: ["/hindi/tipohome.amp"]
-  handle "/hindi/tipohome/manifest.json", using: "WorldServiceHindiAssets", only_on: "test", examples: ["/hindi/tipohome/manifest.json"]
-  handle "/hindi/tipohome/sw.js", using: "WorldServiceHindiAssets", only_on: "test", examples: ["/hindi/tipohome/sw.js"]
-  handle "/hindi/tipohome/rss.xml", using: "WorldServiceHindiHomePageRss", only_on: "test", examples: ["/hindi/tipohome/rss.xml"]
-  handle "/hindi/tipohome", using: "WorldServiceHindiTipoHomePage", only_on: "test", examples: ["/hindi/tipohome"]
 
   handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/hindi/topics/c6vzy709wvxt/page/2", 302}] do
     return_404 if: [
@@ -1303,10 +1259,6 @@ defroutefile "Main" do
   handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss", examples: ["/igbo/rss.xml"]
 
   handle "/igbo/tipohome.amp", using: "WorldServiceIgboTipoHomePage", only_on: "test", examples: ["/igbo/tipohome.amp"]
-  handle "/igbo/tipohome/manifest.json", using: "WorldServiceIgboAssets", only_on: "test", examples: ["/igbo/tipohome/manifest.json"]
-  handle "/igbo/tipohome/sw.js", using: "WorldServiceIgboAssets", only_on: "test", examples: ["/igbo/tipohome/sw.js"]
-  handle "/igbo/tipohome/rss.xml", using: "WorldServiceIgboHomePageRss", only_on: "test", examples: ["/igbo/tipohome/rss.xml"]
-  handle "/igbo/tipohome", using: "WorldServiceIgboTipoHomePage", only_on: "test", examples: ["/igbo/tipohome"]
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/igbo/topics/c340qr24xggt/page/2", 302}] do
     return_404 if: [
@@ -1350,10 +1302,6 @@ defroutefile "Main" do
   handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss", examples: ["/indonesia/rss.xml"]
 
   handle "/indonesia/tipohome.amp", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test", examples: ["/indonesia/tipohome.amp"]
-  handle "/indonesia/tipohome/manifest.json", using: "WorldServiceIndonesiaAssets", only_on: "test", examples: ["/indonesia/tipohome/manifest.json"]
-  handle "/indonesia/tipohome/sw.js", using: "WorldServiceIndonesiaAssets", only_on: "test", examples: ["/indonesia/tipohome/sw.js"]
-  handle "/indonesia/tipohome/rss.xml", using: "WorldServiceIndonesiaHomePageRss", only_on: "test", examples: ["/indonesia/tipohome/rss.xml"]
-  handle "/indonesia/tipohome", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test", examples: ["/indonesia/tipohome"]
 
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/indonesia/topics/c340qrk1znxt/page/2", 302}] do
     return_404 if: [
@@ -1394,10 +1342,6 @@ defroutefile "Main" do
   handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss", examples: ["/japanese/rss.xml"]
 
   handle "/japanese/tipohome.amp", using: "WorldServiceJapaneseTipoHomePage", only_on: "test", examples: ["/japanese/tipohome.amp"]
-  handle "/japanese/tipohome/manifest.json", using: "WorldServiceJapaneseAssets", only_on: "test", examples: ["/japanese/tipohome/manifest.json"]
-  handle "/japanese/tipohome/sw.js", using: "WorldServiceJapaneseAssets", only_on: "test", examples: ["/japanese/tipohome/sw.js"]
-  handle "/japanese/tipohome/rss.xml", using: "WorldServiceJapaneseHomePageRss", only_on: "test", examples: ["/japanese/tipohome/rss.xml"]
-  handle "/japanese/tipohome", using: "WorldServiceJapaneseTipoHomePage", only_on: "test", examples: ["/japanese/tipohome"]
 
   handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/japanese/topics/c340qrn7pp0t/page/2", 302}] do
     return_404 if: [
@@ -1438,10 +1382,6 @@ defroutefile "Main" do
   handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss", examples: ["/korean/rss.xml"]
 
   handle "/korean/tipohome.amp", using: "WorldServiceKoreanTipoHomePage", only_on: "test", examples: ["/korean/tipohome.amp"]
-  handle "/korean/tipohome/manifest.json", using: "WorldServiceKoreanAssets", only_on: "test", examples: ["/korean/tipohome/manifest.json"]
-  handle "/korean/tipohome/sw.js", using: "WorldServiceKoreanAssets", only_on: "test", examples: ["/korean/tipohome/sw.js"]
-  handle "/korean/tipohome/rss.xml", using: "WorldServiceKoreanHomePageRss", only_on: "test", examples: ["/korean/tipohome/rss.xml"]
-  handle "/korean/tipohome", using: "WorldServiceKoreanTipoHomePage", only_on: "test", examples: ["/korean/tipohome"]
 
   handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/korean/topics/c17q6yp3jx4t/page/2", 302}] do
     return_404 if: [
@@ -1484,10 +1424,6 @@ defroutefile "Main" do
   handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", examples: ["/kyrgyz/rss.xml"]
 
   handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipoHomePage", only_on: "test", examples: ["/kyrgyz/tipohome.amp"]
-  handle "/kyrgyz/tipohome/manifest.json", using: "WorldServiceKyrgyzAssets", only_on: "test", examples: ["/kyrgyz/tipohome/manifest.json"]
-  handle "/kyrgyz/tipohome/sw.js", using: "WorldServiceKyrgyzAssets", only_on: "test", examples: ["/kyrgyz/tipohome/sw.js"]
-  handle "/kyrgyz/tipohome/rss.xml", using: "WorldServiceKyrgyzHomePageRss", only_on: "test", examples: ["/kyrgyz/tipohome/rss.xml"]
-  handle "/kyrgyz/tipohome", using: "WorldServiceKyrgyzTipoHomePage", only_on: "test", examples: ["/kyrgyz/tipohome"]
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
     return_404 if: [
@@ -1535,10 +1471,6 @@ defroutefile "Main" do
   handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss", examples: ["/marathi/rss.xml"]
 
   handle "/marathi/tipohome.amp", using: "WorldServiceMarathiTipoHomePage", only_on: "test", examples: ["/marathi/tipohome.amp"]
-  handle "/marathi/tipohome/manifest.json", using: "WorldServiceMarathiAssets", only_on: "test", examples: ["/marathi/tipohome/manifest.json"]
-  handle "/marathi/tipohome/sw.js", using: "WorldServiceMarathiAssets", only_on: "test", examples: ["/marathi/tipohome/sw.js"]
-  handle "/marathi/tipohome/rss.xml", using: "WorldServiceMarathiHomePageRss", only_on: "test", examples: ["/marathi/tipohome/rss.xml"]
-  handle "/marathi/tipohome", using: "WorldServiceMarathiTipoHomePage", only_on: "test", examples: ["/marathi/tipohome"]
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/marathi/topics/c2dwqjwqqqjt/page/2", 302}] do
     return_404 if: [
@@ -1591,10 +1523,6 @@ defroutefile "Main" do
   handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss", examples: ["/mundo/rss.xml"]
 
   handle "/mundo/tipohome.amp", using: "WorldServiceMundoTipoHomePage", only_on: "test", examples: ["/mundo/tipohome.amp"]
-  handle "/mundo/tipohome/manifest.json", using: "WorldServiceMundoAssets", only_on: "test", examples: ["/mundo/tipohome/manifest.json"]
-  handle "/mundo/tipohome/sw.js", using: "WorldServiceMundoAssets", only_on: "test", examples: ["/mundo/tipohome/sw.js"]
-  handle "/mundo/tipohome/rss.xml", using: "WorldServiceMundoHomePageRss", only_on: "test", examples: ["/mundo/tipohome/rss.xml"]
-  handle "/mundo/tipohome", using: "WorldServiceMundoTipoHomePage", only_on: "test", examples: ["/mundo/tipohome"]
 
   handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/mundo/topics/cdr5613yzwqt/page/2", 302}] do
     return_404 if: [
@@ -1645,10 +1573,6 @@ defroutefile "Main" do
   handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss", examples: ["/nepali/rss.xml"]
 
   handle "/nepali/tipohome.amp", using: "WorldServiceNepaliTipoHomePage", only_on: "test", examples: ["/nepali/tipohome.amp"]
-  handle "/nepali/tipohome/manifest.json", using: "WorldServiceNepaliAssets", only_on: "test", examples: ["/nepali/tipohome/manifest.json"]
-  handle "/nepali/tipohome/sw.js", using: "WorldServiceNepaliAssets", only_on: "test", examples: ["/nepali/tipohome/sw.js"]
-  handle "/nepali/tipohome/rss.xml", using: "WorldServiceNepaliHomePageRss", only_on: "test", examples: ["/nepali/tipohome/rss.xml"]
-  handle "/nepali/tipohome", using: "WorldServiceNepaliTipoHomePage", only_on: "test", examples: ["/nepali/tipohome"]
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/nepali/topics/c340q4p5136t/page/2", 302}] do
     return_404 if: [
@@ -1692,10 +1616,6 @@ defroutefile "Main" do
   handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss", examples: ["/pashto/rss.xml"]
 
   handle "/pashto/tipohome.amp", using: "WorldServicePashtoTipoHomePage", only_on: "test", examples: ["/pashto/tipohome.amp"]
-  handle "/pashto/tipohome/manifest.json", using: "WorldServicePashtoAssets", only_on: "test", examples: ["/pashto/tipohome/manifest.json"]
-  handle "/pashto/tipohome/sw.js", using: "WorldServicePashtoAssets", only_on: "test", examples: ["/pashto/tipohome/sw.js"]
-  handle "/pashto/tipohome/rss.xml", using: "WorldServicePashtoHomePageRss", only_on: "test", examples: ["/pashto/tipohome/rss.xml"]
-  handle "/pashto/tipohome", using: "WorldServicePashtoTipoHomePage", only_on: "test", examples: ["/pashto/tipohome"]
 
   handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pashto/topics/c8y94yr7y9rt/page/2", 302}] do
     return_404 if: [
@@ -1739,10 +1659,6 @@ defroutefile "Main" do
   handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss", examples: ["/persian/rss.xml"]
 
   handle "/persian/tipohome.amp", using: "WorldServicePersianTipoHomePage", only_on: "test", examples: ["/persian/tipohome.amp"]
-  handle "/persian/tipohome/manifest.json", using: "WorldServicePersianAssets", only_on: "test", examples: ["/persian/tipohome/manifest.json"]
-  handle "/persian/tipohome/sw.js", using: "WorldServicePersianAssets", only_on: "test", examples: ["/persian/tipohome/sw.js"]
-  handle "/persian/tipohome/rss.xml", using: "WorldServicePersianHomePageRss", only_on: "test", examples: ["/persian/tipohome/rss.xml"]
-  handle "/persian/tipohome", using: "WorldServicePersianTipoHomePage", only_on: "test", examples: ["/persian/tipohome"]
 
   handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/persian/topics/cnq68798yw0t/page/2", 302}] do
     return_404 if: [
@@ -1783,10 +1699,6 @@ defroutefile "Main" do
   handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss", examples: ["/pidgin/rss.xml"]
 
   handle "/pidgin/tipohome.amp", using: "WorldServicePidginTipoHomePage", only_on: "test", examples: ["/pidgin/tipohome.amp"]
-  handle "/pidgin/tipohome/manifest.json", using: "WorldServicePidginAssets", only_on: "test", examples: ["/pidgin/tipohome/manifest.json"]
-  handle "/pidgin/tipohome/sw.js", using: "WorldServicePidginAssets", only_on: "test", examples: ["/pidgin/tipohome/sw.js"]
-  handle "/pidgin/tipohome/rss.xml", using: "WorldServicePidginHomePageRss", only_on: "test", examples: ["/pidgin/tipohome/rss.xml"]
-  handle "/pidgin/tipohome", using: "WorldServicePidginTipoHomePage", only_on: "test", examples: ["/pidgin/tipohome"]
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/pidgin/topics/c95y35941vrt/page/2", 302}] do
     return_404 if: [
@@ -1837,10 +1749,6 @@ defroutefile "Main" do
   handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss", examples: ["/portuguese/rss.xml"]
 
   handle "/portuguese/tipohome.amp", using: "WorldServicePortugueseTipoHomePage", only_on: "test", examples: ["/portuguese/tipohome.amp"]
-  handle "/portuguese/tipohome/manifest.json", using: "WorldServicePortugueseAssets", only_on: "test", examples: ["/portuguese/tipohome/manifest.json"]
-  handle "/portuguese/tipohome/sw.js", using: "WorldServicePortugueseAssets", only_on: "test", examples: ["/portuguese/tipohome/sw.js"]
-  handle "/portuguese/tipohome/rss.xml", using: "WorldServicePortugueseHomePageRss", only_on: "test", examples: ["/portuguese/tipohome/rss.xml"]
-  handle "/portuguese/tipohome", using: "WorldServicePortugueseTipoHomePage", only_on: "test", examples: ["/portuguese/tipohome"]
 
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/portuguese/topics/c1gdqg5dr8nt/page/2", 302}] do
     return_404 if: [
@@ -1881,10 +1789,6 @@ defroutefile "Main" do
   handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss", examples: ["/punjabi/rss.xml"]
 
   handle "/punjabi/tipohome.amp", using: "WorldServicePunjabiTipoHomePage", only_on: "test", examples: ["/punjabi/tipohome.amp"]
-  handle "/punjabi/tipohome/manifest.json", using: "WorldServicePunjabiAssets", only_on: "test", examples: ["/punjabi/tipohome/manifest.json"]
-  handle "/punjabi/tipohome/sw.js", using: "WorldServicePunjabiAssets", only_on: "test", examples: ["/punjabi/tipohome/sw.js"]
-  handle "/punjabi/tipohome/rss.xml", using: "WorldServicePunjabiHomePageRss", only_on: "test", examples: ["/punjabi/tipohome/rss.xml"]
-  handle "/punjabi/tipohome", using: "WorldServicePunjabiTipoHomePage", only_on: "test", examples: ["/punjabi/tipohome"]
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/punjabi/topics/c0w258dd62mt/page/2", 302}] do
     return_404 if: [
@@ -1935,10 +1839,6 @@ defroutefile "Main" do
   handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", examples: ["/russian/rss.xml"]
 
   handle "/russian/tipohome.amp", using: "WorldServiceRussianTipoHomePage", only_on: "test", examples: ["/russian/tipohome.amp"]
-  handle "/russian/tipohome/manifest.json", using: "WorldServiceRussianAssets", only_on: "test", examples: ["/russian/tipohome/manifest.json"]
-  handle "/russian/tipohome/sw.js", using: "WorldServiceRussianAssets", only_on: "test", examples: ["/russian/tipohome/sw.js"]
-  handle "/russian/tipohome/rss.xml", using: "WorldServiceRussianHomePageRss", only_on: "test", examples: ["/russian/tipohome/rss.xml"]
-  handle "/russian/tipohome", using: "WorldServiceRussianTipoHomePage", only_on: "test", examples: ["/russian/tipohome"]
 
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
     return_404 if: [
@@ -2062,10 +1962,6 @@ defroutefile "Main" do
   handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", examples: ["/sinhala/rss.xml"]
 
   handle "/sinhala/tipohome.amp", using: "WorldServiceSinhalaTipoHomePage", only_on: "test", examples: ["/sinhala/tipohome.amp"]
-  handle "/sinhala/tipohome/manifest.json", using: "WorldServiceSinhalaAssets", only_on: "test", examples: ["/sinhala/tipohome/manifest.json"]
-  handle "/sinhala/tipohome/sw.js", using: "WorldServiceSinhalaAssets", only_on: "test", examples: ["/sinhala/tipohome/sw.js"]
-  handle "/sinhala/tipohome/rss.xml", using: "WorldServiceSinhalaHomePageRss", only_on: "test", examples: ["/sinhala/tipohome/rss.xml"]
-  handle "/sinhala/tipohome", using: "WorldServiceSinhalaTipoHomePage", only_on: "test", examples: ["/sinhala/tipohome"]
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
     return_404 if: [
@@ -2108,10 +2004,6 @@ defroutefile "Main" do
   handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", examples: ["/somali/rss.xml"]
 
   handle "/somali/tipohome.amp", using: "WorldServiceSomaliTipoHomePage", only_on: "test", examples: ["/somali/tipohome.amp"]
-  handle "/somali/tipohome/manifest.json", using: "WorldServiceSomaliAssets", only_on: "test", examples: ["/somali/tipohome/manifest.json"]
-  handle "/somali/tipohome/sw.js", using: "WorldServiceSomaliAssets", only_on: "test", examples: ["/somali/tipohome/sw.js"]
-  handle "/somali/tipohome/rss.xml", using: "WorldServiceSomaliHomePageRss", only_on: "test", examples: ["/somali/tipohome/rss.xml"]
-  handle "/somali/tipohome", using: "WorldServiceSomaliTipoHomePage", only_on: "test", examples: ["/somali/tipohome"]
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
     return_404 if: [
@@ -2154,10 +2046,6 @@ defroutefile "Main" do
   handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", examples: ["/swahili/rss.xml"]
 
   handle "/swahili/tipohome.amp", using: "WorldServiceSwahiliTipoHomePage", only_on: "test", examples: ["/swahili/tipohome.amp"]
-  handle "/swahili/tipohome/manifest.json", using: "WorldServiceSwahiliAssets", only_on: "test", examples: ["/swahili/tipohome/manifest.json"]
-  handle "/swahili/tipohome/sw.js", using: "WorldServiceSwahiliAssets", only_on: "test", examples: ["/swahili/tipohome/sw.js"]
-  handle "/swahili/tipohome/rss.xml", using: "WorldServiceSwahiliHomePageRss", only_on: "test", examples: ["/swahili/tipohome/rss.xml"]
-  handle "/swahili/tipohome", using: "WorldServiceSwahiliTipoHomePage", only_on: "test", examples: ["/swahili/tipohome"]
 
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
     return_404 if: [
@@ -2203,10 +2091,6 @@ defroutefile "Main" do
   handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", examples: ["/tamil/rss.xml"]
 
   handle "/tamil/tipohome.amp", using: "WorldServiceTamilTipoHomePage", only_on: "test", examples: ["/tamil/tipohome.amp"]
-  handle "/tamil/tipohome/manifest.json", using: "WorldServiceTamilAssets", only_on: "test", examples: ["/tamil/tipohome/manifest.json"]
-  handle "/tamil/tipohome/sw.js", using: "WorldServiceTamilAssets", only_on: "test", examples: ["/tamil/tipohome/sw.js"]
-  handle "/tamil/tipohome/rss.xml", using: "WorldServiceTamilHomePageRss", only_on: "test", examples: ["/tamil/tipohome/rss.xml"]
-  handle "/tamil/tipohome", using: "WorldServiceTamilTipoHomePage", only_on: "test", examples: ["/tamil/tipohome"]
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
     return_404 if: [
@@ -2247,10 +2131,6 @@ defroutefile "Main" do
   handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", examples: ["/telugu/rss.xml"]
 
   handle "/telugu/tipohome.amp", using: "WorldServiceTeluguTipoHomePage", only_on: "test", examples: ["/telugu/tipohome.amp"]
-  handle "/telugu/tipohome/manifest.json", using: "WorldServiceTeluguAssets", only_on: "test", examples: ["/telugu/tipohome/manifest.json"]
-  handle "/telugu/tipohome/sw.js", using: "WorldServiceTeluguAssets", only_on: "test", examples: ["/telugu/tipohome/sw.js"]
-  handle "/telugu/tipohome/rss.xml", using: "WorldServiceTeluguHomePageRss", only_on: "test", examples: ["/telugu/tipohome/rss.xml"]
-  handle "/telugu/tipohome", using: "WorldServiceTeluguTipoHomePage", only_on: "test", examples: ["/telugu/tipohome"]
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
     return_404 if: [
@@ -2291,10 +2171,6 @@ defroutefile "Main" do
   handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", examples: ["/thai/rss.xml"]
 
   handle "/thai/tipohome.amp", using: "WorldServiceThaiTipoHomePage", only_on: "test", examples: ["/thai/tipohome.amp"]
-  handle "/thai/tipohome/manifest.json", using: "WorldServiceThaiAssets", only_on: "test", examples: ["/thai/tipohome/manifest.json"]
-  handle "/thai/tipohome/sw.js", using: "WorldServiceThaiAssets", only_on: "test", examples: ["/thai/tipohome/sw.js"]
-  handle "/thai/tipohome/rss.xml", using: "WorldServiceThaiHomePageRss", only_on: "test", examples: ["/thai/tipohome/rss.xml"]
-  handle "/thai/tipohome", using: "WorldServiceThaiTipoHomePage", only_on: "test", examples: ["/thai/tipohome"]
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
     return_404 if: [
@@ -2335,10 +2211,6 @@ defroutefile "Main" do
   handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", examples: ["/tigrinya/rss.xml"]
 
   handle "/tigrinya/tipohome.amp", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test", examples: ["/tigrinya/tipohome.amp"]
-  handle "/tigrinya/tipohome/manifest.json", using: "WorldServiceTigrinyaAssets", only_on: "test", examples: ["/tigrinya/tipohome/manifest.json"]
-  handle "/tigrinya/tipohome/sw.js", using: "WorldServiceTigrinyaAssets", only_on: "test", examples: ["/tigrinya/tipohome/sw.js"]
-  handle "/tigrinya/tipohome/rss.xml", using: "WorldServiceTigrinyaHomePageRss", only_on: "test", examples: ["/tigrinya/tipohome/rss.xml"]
-  handle "/tigrinya/tipohome", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test", examples: ["/tigrinya/tipohome"]
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
     return_404 if: [
@@ -2382,10 +2254,6 @@ defroutefile "Main" do
   handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", examples: ["/turkce/rss.xml"]
 
   handle "/turkce/tipohome.amp", using: "WorldServiceTurkceTipoHomePage", only_on: "test", examples: ["/turkce/tipohome.amp"]
-  handle "/turkce/tipohome/manifest.json", using: "WorldServiceTurkceAssets", only_on: "test", examples: ["/turkce/tipohome/manifest.json"]
-  handle "/turkce/tipohome/sw.js", using: "WorldServiceTurkceAssets", only_on: "test", examples: ["/turkce/tipohome/sw.js"]
-  handle "/turkce/tipohome/rss.xml", using: "WorldServiceTurkceHomePageRss", only_on: "test", examples: ["/turkce/tipohome/rss.xml"]
-  handle "/turkce/tipohome", using: "WorldServiceTurkceTipoHomePage", only_on: "test", examples: ["/turkce/tipohome"]
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
     return_404 if: [
@@ -2463,10 +2331,6 @@ defroutefile "Main" do
   handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", examples: ["/ukrainian/rss.xml"]
 
   handle "/ukrainian/tipohome.amp", using: "WorldServiceUkrainianTipoHomePage", only_on: "test", examples: ["/ukrainian/tipohome.amp"]
-  handle "/ukrainian/tipohome/manifest.json", using: "WorldServiceUkrainianAssets", only_on: "test", examples: ["/ukrainian/tipohome/manifest.json"]
-  handle "/ukrainian/tipohome/sw.js", using: "WorldServiceUkrainianAssets", only_on: "test", examples: ["/ukrainian/tipohome/sw.js"]
-  handle "/ukrainian/tipohome/rss.xml", using: "WorldServiceUkrainianHomePageRss", only_on: "test", examples: ["/ukrainian/tipohome/rss.xml"]
-  handle "/ukrainian/tipohome", using: "WorldServiceUkrainianTipoHomePage", only_on: "test", examples: ["/ukrainian/tipohome"]
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
     return_404 if: [
@@ -2510,10 +2374,6 @@ defroutefile "Main" do
   handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", examples: ["/urdu/rss.xml"]
 
   handle "/urdu/tipohome.amp", using: "WorldServiceUrduTipoHomePage", only_on: "test", examples: ["/urdu/tipohome.amp"]
-  handle "/urdu/tipohome/manifest.json", using: "WorldServiceUrduAssets", only_on: "test", examples: ["/urdu/tipohome/manifest.json"]
-  handle "/urdu/tipohome/sw.js", using: "WorldServiceUrduAssets", only_on: "test", examples: ["/urdu/tipohome/sw.js"]
-  handle "/urdu/tipohome/rss.xml", using: "WorldServiceUrduHomePageRss", only_on: "test", examples: ["/urdu/tipohome/rss.xml"]
-  handle "/urdu/tipohome", using: "WorldServiceUrduTipoHomePage", only_on: "test", examples: ["/urdu/tipohome"]
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
     return_404 if: [
@@ -2608,10 +2468,6 @@ defroutefile "Main" do
   handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", examples: ["/vietnamese/rss.xml"]
 
   handle "/vietnamese/tipohome.amp", using: "WorldServiceVietnameseTipoHomePage", only_on: "test", examples: ["/vietnamese/tipohome.amp"]
-  handle "/vietnamese/tipohome/manifest.json", using: "WorldServiceVietnameseAssets", only_on: "test", examples: ["/vietnamese/tipohome/manifest.json"]
-  handle "/vietnamese/tipohome/sw.js", using: "WorldServiceVietnameseAssets", only_on: "test", examples: ["/vietnamese/tipohome/sw.js"]
-  handle "/vietnamese/tipohome/rss.xml", using: "WorldServiceVietnameseHomePageRss", only_on: "test", examples: ["/vietnamese/tipohome/rss.xml"]
-  handle "/vietnamese/tipohome", using: "WorldServiceVietnameseTipoHomePage", only_on: "test", examples: ["/vietnamese/tipohome"]
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
     return_404 if: [
@@ -2652,10 +2508,6 @@ defroutefile "Main" do
   handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", examples: ["/yoruba/rss.xml"]
 
   handle "/yoruba/tipohome.amp", using: "WorldServiceYorubaTipoHomePage", only_on: "test", examples: ["/yoruba/tipohome.amp"]
-  handle "/yoruba/tipohome/manifest.json", using: "WorldServiceYorubaAssets", only_on: "test", examples: ["/yoruba/tipohome/manifest.json"]
-  handle "/yoruba/tipohome/sw.js", using: "WorldServiceYorubaAssets", only_on: "test", examples: ["/yoruba/tipohome/sw.js"]
-  handle "/yoruba/tipohome/rss.xml", using: "WorldServiceYorubaHomePageRss", only_on: "test", examples: ["/yoruba/tipohome/rss.xml"]
-  handle "/yoruba/tipohome", using: "WorldServiceYorubaTipoHomePage", only_on: "test", examples: ["/yoruba/tipohome"]
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
     return_404 if: [
