@@ -1,11 +1,12 @@
 #
 # How to add a route:
-# https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#how-to-add-a-route
+# docs/topics/routing/routing.md#how-to-add-a-route
 # What types of route matcher you can  use:
-# https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
+# docs/topics/routing/route-matcher-types.md
 #
 # How to validate a route:
 # lib/belfrage_web/validators.ex
+#
 
 import BelfrageWeb.Routefile
 

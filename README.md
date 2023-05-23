@@ -124,7 +124,7 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
     - `using: "Search"` is the routespec you wish to use, these can be found and added to in the [specs folder](lib/routes/specs)
     - `examples: ["/search"]` is a required list of example routes which are used to test your route in [`routefile_test.ex`](test/routes/routefile_test.ex)
 
-2. If you need to create a RouteSXSpec for your new route:
+2. If you need to create a RouteSpec for your new route:
     A basic routespec will look like this:
     ```elixir
     defmodule Routes.Specs.Search do
@@ -185,4 +185,5 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
 
 6. Post the PR in the #help-belfrage slack channel to get it reviewed by us (As well as in your own channels to get it reviewed by your team members)
 
-7. More information can be found in the [routing documentation](docs/topics/routing/routing.md)
+7. More information can be found in the [routing documentation](docs/topics/routing/routing.md) and in  the (wiki)[https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#how-to-add-a-route)
+
