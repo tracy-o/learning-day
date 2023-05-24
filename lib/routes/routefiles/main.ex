@@ -64,6 +64,9 @@ defroutefile "Main" do
 
   handle "/newstipo", using: "NewsTipoHomePage", only_on: "test", examples: ["/newstipo"]
 
+  handle "/weathertipo", using: "WeatherTipoHomePage", only_on: "test", examples: ["/weathertipo"]
+  handle "/homepage/weather/test", using: "TestWeatherHomePage", only_on: "test", examples: ["/homepage/weather/test"]
+
   handle "/homepage/news/preview", using: "NewsHomePagePreview", only_on: "test", examples: ["/homepage/news/preview"]
   handle "/homepage/news/test", using: "TestNewsHomePage", only_on: "test", examples: ["/homepage/news/test"]
   handle "/homepage/index-examples", using: "IndexExamplesHomePage", only_on: "test", examples: ["/homepage/index-examples"]
