@@ -56,7 +56,8 @@ defmodule Belfrage.Metrics.CacheTest do
       private: %Belfrage.Envelope.Private{
         route_state_id: {"ARouteState", "Webcore", "Partition1"},
         platform: "Webcore",
-        spec: "ARouteState"
+        spec: "ARouteState",
+        partition: "Partition1"
       }
     }
 

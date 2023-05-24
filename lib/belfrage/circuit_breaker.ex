@@ -1,5 +1,5 @@
 defmodule Belfrage.CircuitBreaker do
-  alias Belfrage.{Envelope, RouteState}
+  alias Belfrage.{Envelope, Envelope.Private}
   import Enum, only: [random: 1]
 
   def maybe_apply(envelope, dial_enabled? \\ true) do
@@ -10,8 +10,8 @@ defmodule Belfrage.CircuitBreaker do
     end
   end
 
-  defp apply(envelope = %Belfrage.Envelope{}) do
-    metadata = RouteState.map_id(envelope.private.route_state_id)
+  defp apply(envelope = %Envelope{private: %Private{spec: route_spec, platform: platform, partition: partition}}) do
+    metadata = %{route_spec: route_spec, platform: platform, partition: partition}
     Belfrage.Metrics.event(~w(circuit_breaker applied)a, metadata)
 
     envelope

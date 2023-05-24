@@ -1,6 +1,6 @@
 defmodule Belfrage.Services.Webcore do
   require Logger
-  alias Belfrage.{Envelope, Metrics, RouteState}
+  alias Belfrage.{Envelope, Metrics}
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Services.Webcore
   alias Belfrage.Behaviours.Service
@@ -10,7 +10,9 @@ defmodule Belfrage.Services.Webcore do
   @behaviour Service
 
   @impl Service
-  def dispatch(envelope = %Envelope{private: private = %Private{platform: platform, spec: route_spec}}) do
+  def dispatch(
+        envelope = %Envelope{private: private = %Private{platform: platform, spec: route_spec, partition: partition}}
+      ) do
     envelope = LatencyMonitor.checkpoint(envelope, :origin_request_sent)
 
     response =
@@ -19,20 +21,25 @@ defmodule Belfrage.Services.Webcore do
         Metrics.multi_execute(
           [[:belfage, :webcore, :response], [:belfrage, :platform, :response]],
           %{},
-          Map.merge(RouteState.map_id(private.route_state_id), %{status_code: response.http_status})
+          %{route_spec: route_spec, platform: platform, partition: partition, status_code: response.http_status}
         )
 
         response
       else
         {:error, error_code} ->
-          Metrics.event(~w(webcore error)a, %{route_spec: route_spec, platform: platform, error_code: error_code})
+          Metrics.event(~w(webcore error)a, %{
+            route_spec: route_spec,
+            platform: platform,
+            partition: partition,
+            error_code: error_code
+          })
 
           {status_code, body} = status_from_error(error_code, private.preview_mode)
 
           :telemetry.execute(
             [:belfrage, :platform, :response],
             %{},
-            Map.merge(RouteState.map_id(private.route_state_id), %{status_code: status_code})
+            %{route_spec: route_spec, platform: platform, partition: partition, status_code: status_code}
           )
 
           %Response{http_status: status_code, body: body}
@@ -42,8 +49,13 @@ defmodule Belfrage.Services.Webcore do
     Envelope.add(envelope, :response, response)
   end
 
-  defp call_lambda(envelope = %Envelope{request: %Request{}, private: private = %Private{}}) do
-    metadata = Map.merge(RouteState.map_id(private.route_state_id), %{envelope: envelope})
+  defp call_lambda(
+         envelope = %Envelope{
+           request: %Request{},
+           private: private = %Private{spec: route_spec, platform: platform, partition: partition}
+         }
+       ) do
+    metadata = %{route_spec: route_spec, platform: platform, partition: partition, envelope: envelope}
 
     Metrics.duration(~w(webcore request)a, metadata, fn ->
       lambda_client().call(

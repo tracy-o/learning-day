@@ -2,7 +2,7 @@ defmodule Belfrage.Services.HTTP do
   require Logger
 
   alias Belfrage.Behaviours.Service
-  alias Belfrage.{Clients, Envelope, RouteState}
+  alias Belfrage.{Clients, Envelope}
   alias Belfrage.Envelope.{Request, Private, Response}
   alias Belfrage.Helpers.QueryParams
   alias Belfrage.Metrics.LatencyMonitor
@@ -144,38 +144,44 @@ defmodule Belfrage.Services.HTTP do
     Application.get_env(:belfrage, :http_client, Belfrage.Clients.HTTP)
   end
 
-  defp track_response(private = %Private{}, status) do
+  defp track_response(private = %Private{spec: route_spec, platform: platform, partition: partition}, status) do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :service, platform_name(private), :response, String.to_atom(to_string(status))],
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: status})
+      %{route_spec: route_spec, platform: platform, partition: partition, status_code: status}
     )
   end
 
-  defp track_error(envelope = %Envelope{private: private = %Private{}}, %Clients.HTTP.Error{reason: :timeout}) do
+  defp track_error(
+         envelope = %Envelope{private: private = %Private{spec: route_spec, platform: platform, partition: partition}},
+         %Clients.HTTP.Error{reason: :timeout}
+       ) do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :timeout],
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: "408"})
+      %{route_spec: route_spec, platform: platform, partition: partition, status_code: "408"}
     )
 
     log_error(:timeout, envelope)
   end
 
-  defp track_error(envelope = %Envelope{private: private = %Private{}}, error = %Clients.HTTP.Error{}) do
+  defp track_error(
+         envelope = %Envelope{private: private = %Private{spec: route_spec, platform: platform, partition: partition}},
+         error = %Clients.HTTP.Error{}
+       ) do
     Belfrage.Metrics.multi_execute(
       [
         [:belfrage, :error, :service, platform_name(private), :request],
         [:belfrage, :error, :service, :request]
       ],
       %{count: 1},
-      RouteState.map_id(private.route_state_id)
+      %{route_spec: route_spec, platform: platform, partition: partition}
     )
 
     log_error(error, envelope)

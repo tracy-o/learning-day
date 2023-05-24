@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   This is not quite a CacheStrategy itself, but implements a very similar interface
   of fetch/2 and store/1.
   """
-  alias Belfrage.{Cache.Local, Cache.Distributed, RouteState}
+  alias Belfrage.{Cache.Local, Cache.Distributed, Envelope, Envelope.Private}
 
   @default_result {:ok, :content_not_found}
   @dial Application.compile_env(:belfrage, :dial)
@@ -58,9 +58,13 @@ defmodule Belfrage.Cache.MultiStrategy do
     :stale in accepted_freshness and envelope.private.fallback_write_sample > 0 and @dial.state(:ccp_enabled)
   end
 
-  defp execute_fetch(cache, envelope, accepted_freshness) do
+  defp execute_fetch(
+         cache,
+         envelope = %Envelope{private: %Private{spec: route_spec, platform: platform, partition: partition}},
+         accepted_freshness
+       ) do
     cache_metric = cache.metric_identifier()
-    route_spec_attrs = RouteState.map_id(envelope.private.route_state_id)
+    route_spec_attrs = %{platform: platform, route_spec: route_spec, partition: partition}
 
     with {:ok, {strategy, freshness}, response} <- cache.fetch(envelope),
          true <- freshness in accepted_freshness do

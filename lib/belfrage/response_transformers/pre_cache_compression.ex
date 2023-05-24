@@ -5,7 +5,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   """
   require Logger
 
-  alias Belfrage.{Envelope, Envelope.Response, Envelope.Private, Metrics, RouteState}
+  alias Belfrage.{Envelope, Envelope.Response, Envelope.Private, Metrics}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
@@ -16,7 +16,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   def call(
         envelope = %Envelope{
           response: %Response{headers: %{"content-encoding" => content_encoding}},
-          private: %Private{route_state_id: route_state_id}
+          private: %Private{spec: route_spec, platform: platform, partition: partition}
         }
       ) do
     Logger.log(:error, "", %{
@@ -24,7 +24,11 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
       content_encoding: content_encoding
     })
 
-    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{}, RouteState.map_id(route_state_id))
+    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{}, %{
+      route_spec: route_spec,
+      platform: platform,
+      partition: partition
+    })
 
     {:ok, Envelope.add(envelope, :response, %{body: "", http_status: 415})}
   end
@@ -40,7 +44,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   defp gzip_response_body(
          envelope = %Envelope{
            request: %Envelope.Request{path: path},
-           private: private = %Envelope.Private{platform: platform, route_state_id: route_state_id}
+           private: private = %Envelope.Private{spec: route_spec, platform: platform, partition: partition}
          }
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
@@ -50,7 +54,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
           [:belfrage, :platform, :pre_cache_compression, :response]
         ],
         %{count: 1},
-        RouteState.map_id(route_state_id)
+        %{route_spec: route_spec, platform: platform, partition: partition}
       )
 
       Logger.log(:info, "", %{
