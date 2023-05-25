@@ -1,4 +1,4 @@
-defmodule Belfrage.RequestTransformers.BBCX_auth do
+defmodule Belfrage.RequestTransformers.BBCXAuth do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer

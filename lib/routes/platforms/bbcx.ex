@@ -11,7 +11,7 @@ defmodule Routes.Platforms.BBCX do
     }
   end
 
-  defp pipeline("live"), do: ["BBCX_auth", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: ["BBCXAuth", :_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 
   defp query_params_allowlist("live"), do: []
