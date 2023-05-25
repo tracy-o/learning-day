@@ -5,30 +5,21 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   """
   require Logger
 
-  alias Belfrage.{Envelope, Envelope.Response, Envelope.Private, Metrics}
+  alias Belfrage.{Envelope, Metrics}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
-  def call(envelope = %Envelope{response: %Response{headers: %{"content-encoding" => "gzip"}}}) do
+  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => "gzip"}}}) do
     {:ok, envelope}
   end
 
-  def call(
-        envelope = %Envelope{
-          response: %Response{headers: %{"content-encoding" => content_encoding}},
-          private: %Private{spec: route_spec, platform: platform, partition: partition}
-        }
-      ) do
+  def call(envelope = %Envelope{response: %Envelope.Response{headers: %{"content-encoding" => content_encoding}}}) do
     Logger.log(:error, "", %{
       msg: "Cannot handle compression type",
       content_encoding: content_encoding
     })
 
-    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{}, %{
-      route_spec: route_spec,
-      platform: platform,
-      partition: partition
-    })
+    :telemetry.execute([:belfrage, :invalid_content_encoding_from_origin], %{})
 
     {:ok, Envelope.add(envelope, :response, %{body: "", http_status: 415})}
   end
@@ -44,7 +35,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
   defp gzip_response_body(
          envelope = %Envelope{
            request: %Envelope.Request{path: path},
-           private: private = %Envelope.Private{spec: route_spec, platform: platform, partition: partition}
+           private: private = %Envelope.Private{platform: platform}
          }
        ) do
     Metrics.latency_span(:pre_cache_compression, fn ->
@@ -54,7 +45,7 @@ defmodule Belfrage.ResponseTransformers.PreCacheCompression do
           [:belfrage, :platform, :pre_cache_compression, :response]
         ],
         %{count: 1},
-        %{route_spec: route_spec, platform: platform, partition: partition}
+        %{platform: platform_name(private)}
       )
 
       Logger.log(:info, "", %{

@@ -2,6 +2,7 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
   use Supervisor
 
   alias Belfrage.Metrics.ProcessMessageQueueLength
+  alias Belfrage.RouteState
 
   @processes [
     :ttl_multiplier,
@@ -69,11 +70,14 @@ defmodule Belfrage.Metrics.ProcessMessageQueueLength.Supervisor do
 
     metrics =
       metrics ++
-        Enum.map(@route_states, fn _name ->
-          Telemetry.Metrics.last_value("route_state.mailbox_size",
+        Enum.map(@route_states, fn name ->
+          name = RouteState.format_id(name)
+
+          Telemetry.Metrics.last_value("route_state.#{name}.mailbox_size",
             event_name: [:belfrage, :route_state_message_queue_length],
             measurement: :message_queue_len,
-            tags: [:BBCEnvironment, :platform, :route_spec]
+            keep: &(&1.name == name),
+            tags: [:BBCEnvironment]
           )
         end)
 

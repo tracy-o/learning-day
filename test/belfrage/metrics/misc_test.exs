@@ -1,4 +1,4 @@
-defmodule Belfrage.Metrics.CacheTest do
+defmodule Belfrage.Metrics.MiscTest do
   use ExUnit.Case, async: true
 
   import Belfrage.Test.MetricsHelper
@@ -46,7 +46,7 @@ defmodule Belfrage.Metrics.CacheTest do
     {socket, port} = given_udp_port_opened()
 
     start_reporter(
-      metrics: Belfrage.Metrics.Statsd.cache_metrics(),
+      metrics: Belfrage.Metrics.Statsd.misc_metrics(),
       formatter: :datadog,
       global_tags: [BBCEnvironment: "live"],
       port: port
@@ -54,10 +54,7 @@ defmodule Belfrage.Metrics.CacheTest do
 
     envelope = %Belfrage.Envelope{
       private: %Belfrage.Envelope.Private{
-        route_state_id: {"ARouteState", "Webcore", "Partition1"},
-        platform: "Webcore",
-        spec: "ARouteState",
-        partition: "Partition1"
+        route_state_id: {"ARouteState", "Webcore"}
       }
     }
 
@@ -66,25 +63,16 @@ defmodule Belfrage.Metrics.CacheTest do
     assert {:ok, {:fresh_strategy, :fresh}, _} =
              Belfrage.Cache.MultiStrategy.fetch([LocalStrategy, DistributedStrategy], envelope, accepted_freshness)
 
-    assert_reported(
-      socket,
-      "cache.local.fresh.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState,partition:Partition1,platform:Webcore"
-    )
+    assert_reported(socket, "cache.local.fresh.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
 
     assert {:ok, {:stale_strategy, :stale}, _} =
              Belfrage.Cache.MultiStrategy.fetch([DistributedStrategy], envelope, accepted_freshness)
 
-    assert_reported(
-      socket,
-      "cache.distributed.stale.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState,partition:Partition1,platform:Webcore"
-    )
+    assert_reported(socket, "cache.distributed.stale.hit:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
 
     assert {:ok, :content_not_found} =
              Belfrage.Cache.MultiStrategy.fetch([LocalNotFoundStrategy], envelope, accepted_freshness)
 
-    assert_reported(
-      socket,
-      "cache.local.miss:1|c|#BBCEnvironment:live,route_spec:ARouteState,partition:Partition1,platform:Webcore"
-    )
+    assert_reported(socket, "cache.local.miss:1|c|#BBCEnvironment:live,route_spec:ARouteState.Webcore")
   end
 end

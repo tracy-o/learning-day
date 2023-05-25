@@ -1,5 +1,5 @@
 defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
-  alias Belfrage.{Envelope, Envelope.Private, Metrics}
+  alias Belfrage.{Envelope, Metrics}
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer
@@ -19,18 +19,10 @@ defmodule Belfrage.ResponseTransformers.CompressionAsRequested do
   defp contains_gzip?(nil), do: false
   defp contains_gzip?(string), do: String.contains?(string, "gzip")
 
-  defp decompress_body(
-         envelope = %Envelope{private: %Private{spec: route_spec, platform: platform, partition: partition}}
-       ) do
+  defp decompress_body(envelope) do
     Metrics.latency_span(:decompress_response, fn ->
       response_headers = Map.delete(envelope.response.headers, "content-encoding")
-
-      :telemetry.execute([:belfrage, :web, :response, :uncompressed], %{}, %{
-        route_spec: route_spec,
-        platform: platform,
-        partition: partition
-      })
-
+      :telemetry.execute([:belfrage, :web, :response, :uncompressed], %{})
       Envelope.add(envelope, :response, %{body: :zlib.gunzip(envelope.response.body), headers: response_headers})
     end)
   end

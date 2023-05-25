@@ -51,7 +51,7 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "tracks the duration of the lambda call" do
     stub_lambda_success()
-    envelope = %Envelope{private: %Private{spec: "SomeRouteSpec", platform: "Webcore"}}
+    envelope = %Envelope{private: %Private{route_state_id: @route_state_id}}
 
     {_event, measurement, metadata} =
       intercept_metric(~w(webcore request stop)a, fn ->
@@ -59,8 +59,7 @@ defmodule Belfrage.Services.WebcoreTest do
       end)
 
     assert measurement.duration > 0
-    assert metadata.route_spec == "SomeRouteSpec"
-    assert metadata.platform == "Webcore"
+    assert metadata.route_spec == "SomeRouteSpec.Webcore"
   end
 
   test "convert values of response headers to strings" do
@@ -85,17 +84,13 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invoking lambda fails" do
     stub_lambda_error(:some_error)
-    envelope = %Envelope{private: %Private{spec: "SomeRouteSpec", platform: "Webcore", partition: "Partition1"}}
+    envelope = %Envelope{private: %Private{route_state_id: @route_state_id}}
 
-    assert_metric(
-      {~w(webcore error)a,
-       %{error_code: :some_error, route_spec: "SomeRouteSpec", platform: "Webcore", partition: "Partition1"}},
-      fn ->
-        assert %Envelope{response: response} = Webcore.dispatch(envelope)
-        assert response.http_status == 500
-        assert response.body == ""
-      end
-    )
+    assert_metric({~w(webcore error)a, %{error_code: :some_error, route_spec: "SomeRouteSpec.Webcore"}}, fn ->
+      assert %Envelope{response: response} = Webcore.dispatch(envelope)
+      assert response.http_status == 500
+      assert response.body == ""
+    end)
   end
 
   test "lambda function not found" do
@@ -113,16 +108,10 @@ defmodule Belfrage.Services.WebcoreTest do
 
   test "invalid response format" do
     stub_lambda({:ok, %{"some" => "unexpected format"}})
-    envelope = %Envelope{private: %Private{spec: "SomeRouteSpec", platform: "Webcore", partition: "Partition1"}}
+    envelope = %Envelope{private: %Private{route_state_id: @route_state_id}}
 
     assert_metric(
-      {~w(webcore error)a,
-       %{
-         error_code: :invalid_web_core_contract,
-         partition: "Partition1",
-         route_spec: "SomeRouteSpec",
-         platform: "Webcore"
-       }},
+      {~w(webcore error)a, %{error_code: :invalid_web_core_contract, route_spec: "SomeRouteSpec.Webcore"}},
       fn ->
         assert %Envelope{response: response} = Webcore.dispatch(envelope)
         assert response.http_status == 500
