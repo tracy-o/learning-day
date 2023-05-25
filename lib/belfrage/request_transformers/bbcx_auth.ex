@@ -5,12 +5,11 @@ defmodule Belfrage.RequestTransformers.BBCX_auth do
   def call(envelope = %Envelope{request: %Envelope.Request{raw_headers: raw_headers}}) do
     credentials = "bbcx:cihWhx2WAaQrMSUaw1N9B0tq"
 
-     envelope =
+    envelope =
       Envelope.add(envelope, :request, %{
         raw_headers:
           Map.merge(raw_headers, %{
-            "authorization" => "Basic " <> Base.encode64(credentials),
-
+            "authorization" => "Basic " <> Base.encode64(credentials)
           })
       })
 
