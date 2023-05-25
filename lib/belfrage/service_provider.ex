@@ -11,6 +11,7 @@ defmodule Belfrage.ServiceProvider do
     cond do
       origin == :stubbed_session_origin -> Services.StubbedSession
       origin =~ ~r[^http(s)?://fabl] -> Services.Fabl
+      origin =~ ~r[bbcx-internal] -> Services.BBCX
       origin =~ ~r[^http(s)?://] -> Services.HTTP
       true -> Services.Webcore
     end
