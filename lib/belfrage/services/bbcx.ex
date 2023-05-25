@@ -1,7 +1,7 @@
 defmodule Belfrage.Services.BBCX do
   require Logger
 
-  alias Belfrage.Services.Base
+  alias Belfrage.Services.Dispatcher
   alias Belfrage.Behaviours.Service
   alias Belfrage.Envelope
 
@@ -9,7 +9,7 @@ defmodule Belfrage.Services.BBCX do
 
   @impl Service
   def dispatch(envelope) do
-    Base.dispatch(envelope, build_headers(envelope))
+    Dispatcher.dispatch(envelope, build_headers(envelope))
   end
 
   defp build_headers(%Envelope{request: request}) do

@@ -46,7 +46,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -81,7 +80,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -106,7 +104,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
         response
@@ -126,7 +123,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/invalid\\path",
-          payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
         {:error, %Clients.HTTP.Error{reason: :invalid_request_target}}
@@ -224,7 +220,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
         response
@@ -256,7 +251,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -297,7 +291,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -339,7 +332,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-bbc-edge-cache" => "1",
@@ -384,7 +376,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.com/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-bbc-edge-cache" => "1",

@@ -1,7 +1,7 @@
 defmodule Belfrage.Services.Dispatcher do
   require Logger
 
-  alias Belfrage.{Clients, RouteState}
+  alias Belfrage.Clients
   alias Belfrage.Envelope
   alias Belfrage.Envelope.{Private, Response}
   alias Belfrage.Helpers.QueryParams
@@ -72,7 +72,7 @@ defmodule Belfrage.Services.Dispatcher do
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: status})
+      %{platform: platform_name(private), status_code: status}
     )
   end
 
@@ -83,7 +83,7 @@ defmodule Belfrage.Services.Dispatcher do
         [:belfrage, :platform, :response]
       ],
       %{count: 1},
-      Map.merge(RouteState.map_id(private.route_state_id), %{status_code: "408"})
+      %{platform: platform_name(private), status_code: "408"}
     )
 
     log_error(:timeout, envelope)
@@ -96,7 +96,7 @@ defmodule Belfrage.Services.Dispatcher do
         [:belfrage, :error, :service, :request]
       ],
       %{count: 1},
-      RouteState.map_id(private.route_state_id)
+      %{platform: platform_name(private)}
     )
 
     log_error(error, envelope)
