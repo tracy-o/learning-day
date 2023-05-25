@@ -148,6 +148,13 @@
   },
   {
     "values": {
+      "test": "https://web.test.bbcx-internal.com",
+      "live": "https://web.stage.bbcx-internal.com"
+    },
+    "name": "BBCX_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "https://api.electoralcommission.org.uk",
       "live": "https://api.electoralcommission.org.uk"
     },
@@ -263,5 +270,5 @@
       "test": "bbc-bq-logs-dev-belfrage",
       "live": "bbc-bq-logs-prod-belfrage"
     }
-  }  
+  }
 ]
