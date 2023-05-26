@@ -1,6 +1,4 @@
 defmodule Belfrage.Services.BBCX do
-  require Logger
-
   alias Belfrage.Services.Dispatcher
   alias Belfrage.Behaviours.Service
   alias Belfrage.Envelope

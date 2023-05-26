@@ -1,15 +1,18 @@
 defmodule Belfrage.RequestTransformers.BBCXAuth do
   use Belfrage.Behaviours.Transformer
 
+  #
+  # https://datatracker.ietf.org/doc/html/rfc7617#section-2
+  #
+  @auth_scheme "Basic " <> Base.encode64("bbcx:cihWhx2WAaQrMSUaw1N9B0tq")
+
   @impl Transformer
   def call(envelope = %Envelope{request: %Envelope.Request{raw_headers: raw_headers}}) do
-    credentials = "bbcx:cihWhx2WAaQrMSUaw1N9B0tq"
-
     envelope =
       Envelope.add(envelope, :request, %{
         raw_headers:
           Map.merge(raw_headers, %{
-            "authorization" => "Basic " <> Base.encode64(credentials)
+            "authorization" => @auth_scheme
           })
       })
 
