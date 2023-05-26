@@ -22,13 +22,30 @@ defmodule Belfrage.Clients.HTTP do
     |> metric_response()
   end
 
-  defp perform_request(request = %HTTP.Request{}) do
+  defp perform_request(request = %HTTP.Request{method: :post}) do
     try do
       Finch.build(
         request.method,
         request.url,
         Enum.into(request.headers, []),
         request.payload
+      )
+      |> FinchAPI.request(
+        Finch,
+        receive_timeout: request.timeout,
+        pool_timeout: Application.get_env(:finch, :pool_timeout)
+      )
+    catch
+      type, reason -> {:error, {type, reason}}
+    end
+  end
+
+  defp perform_request(request = %HTTP.Request{}) do
+    try do
+      Finch.build(
+        request.method,
+        request.url,
+        Enum.into(request.headers, [])
       )
       |> FinchAPI.request(
         Finch,
