@@ -45,15 +45,15 @@ defmodule Belfrage.Processor do
       nil ->
         route_spec_not_found_failure(spec_name)
 
-      %{specs: specs, pre_flight_pipeline: pre_flight_pipeline} ->
+      %{specs: specs, preflight_pipeline: preflight_pipeline} ->
         envelope
-        |> maybe_process_pre_flight_pipeline(pre_flight_pipeline)
+        |> maybe_process_preflight_pipeline(preflight_pipeline)
         |> update_envelope_with_spec(specs)
     end
   end
 
-  defp maybe_process_pre_flight_pipeline(envelope, []), do: envelope
-  defp maybe_process_pre_flight_pipeline(envelope, pipeline), do: process_pipeline(envelope, :pre_flight, pipeline)
+  defp maybe_process_preflight_pipeline(envelope, []), do: envelope
+  defp maybe_process_preflight_pipeline(envelope, pipeline), do: process_pipeline(envelope, :preflight, pipeline)
 
   defp update_envelope_with_spec(envelope = %Envelope{private: private}, [spec])
        when private.platform == nil do

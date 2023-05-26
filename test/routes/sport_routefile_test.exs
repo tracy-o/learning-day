@@ -217,8 +217,8 @@ defmodule Routes.SportRoutefileTest do
       nil ->
         {:error, "The route with the path #{matcher} does not exist in the RouteSpec: #{spec_name} for #{env}."}
 
-      %{specs: specs, pre_flight_pipeline: pre_flight_pipeline} ->
-        with :ok <- validate_transformers(matcher, pre_flight_pipeline, PreFlightTransformers, env) do
+      %{specs: specs, preflight_pipeline: preflight_pipeline} ->
+        with :ok <- validate_transformers(matcher, preflight_pipeline, PreflightTransformers, env) do
           validate_specs(matcher, specs, env)
         end
     end

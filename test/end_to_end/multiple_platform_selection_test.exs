@@ -2,7 +2,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Belfrage.Test.CachingHelper, only: [clear_pre_flight_metadata_cache: 1, clear_pre_flight_metadata_cache: 0]
+  import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1, clear_preflight_metadata_cache: 0]
   alias BelfrageWeb.Router
   alias Belfrage.Clients.{HTTP, HTTPMock, LambdaMock}
 
@@ -10,10 +10,10 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
   @mozart_news_endpoint Application.compile_env!(:belfrage, :mozart_news_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
-  setup :clear_pre_flight_metadata_cache
+  setup :clear_preflight_metadata_cache
 
-  describe "When a pre-flight pipeline transformer defines platform" do
-    test ~s(MozartNews platform is selected in pre-flight pipeline) do
+  describe "When a preflight pipeline transformer defines platform" do
+    test ~s(MozartNews platform is selected in preflight pipeline) do
       url = "#{@mozart_news_endpoint}/platform-selection-with-mozart-news-platform"
 
       HTTPMock
@@ -39,7 +39,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test ~s(Webcore platform is selected in pre-flight pipeline) do
+    test ~s(Webcore platform is selected in preflight pipeline) do
       expect(LambdaMock, :call, fn _credentials,
                                    _function_arn,
                                    %{headers: %{"ctx-route-spec": "SomeRouteStateWithMultipleSpecs.Webcore"}},
@@ -65,7 +65,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
   describe "When a route with a :platform attribute is used that is a selector" do
     test ~s(webcore platform is used when asset type in ["MAP", "CSP", "PGL", "STY"]) do
       Enum.each(@webcore_asset_types, fn asset_type ->
-        clear_pre_flight_metadata_cache()
+        clear_preflight_metadata_cache()
         url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
         HTTPMock
@@ -239,7 +239,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
          }}
       end)
 
-      Process.sleep(Application.get_env(:belfrage, :pre_flight_metadata_cache)[:default_ttl_ms] + 1)
+      Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
 
       conn =
         conn(:get, "/platform-selection-with-selector")
@@ -350,7 +350,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
         end
       )
 
-      err_msg = "** (RuntimeError) pre_flight pipeline for 'AssetTypeWithMultipleSpecs' spec failed: 500"
+      err_msg = "** (RuntimeError) preflight pipeline for 'AssetTypeWithMultipleSpecs' spec failed: 500"
       assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, []) end
     end
   end

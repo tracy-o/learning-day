@@ -1,4 +1,4 @@
-defmodule Belfrage.PreFlightTransformers.AblDataPartitionSelector do
+defmodule Belfrage.PreflightTransformers.AblDataPartitionSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Envelope
 

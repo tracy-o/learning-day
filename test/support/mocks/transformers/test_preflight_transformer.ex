@@ -1,4 +1,4 @@
-defmodule Belfrage.PreFlightTransformers.TestPreFlightTransformer do
+defmodule Belfrage.PreflightTransformers.TestPreflightTransformer do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Envelope
 

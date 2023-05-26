@@ -5,12 +5,18 @@ defmodule Routes.Specs.AblData do
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
       platform: "Fabl",
       request_pipeline: ["NewsAppsHardcodedResponse"],
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
+      response_pipeline: [
+        "CacheDirective",
+        "ClassicAppCacheControl",
+        "ResponseHeaderGuardian",
+        "PreCacheCompression",
+        "Etag"
+      ],
       etag: true
     }
   end
 
-  def pre_flight_pipeline do
+  def preflight_pipeline do
     ["AblDataPartitionSelector"]
   end
 end

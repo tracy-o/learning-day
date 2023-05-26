@@ -19,8 +19,7 @@ defmodule Routes.Specs.BitesizeArticles do
     ]
   end
 
-  def pre_flight_pipeline do
+  def preflight_pipeline do
     ["BitesizeArticlesPlatformSelector"]
   end
-
 end

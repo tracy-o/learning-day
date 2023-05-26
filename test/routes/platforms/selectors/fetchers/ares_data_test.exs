@@ -3,14 +3,14 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
   use Plug.Test
   alias Belfrage.Clients.{HTTP, HTTPMock}
   use Test.Support.Helper, :mox
-  import Belfrage.Test.CachingHelper, only: [clear_pre_flight_metadata_cache: 1, clear_pre_flight_metadata_cache: 0]
+  import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1, clear_preflight_metadata_cache: 0]
   alias Routes.Platforms.Selectors.Fetchers.AresData
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
-  @table_name :pre_flight_metadata_cache
+  @table_name :preflight_metadata_cache
 
-  setup :clear_pre_flight_metadata_cache
+  setup :clear_preflight_metadata_cache
 
   describe "fetch_metadata/1" do
     test "returns a HTTP Response" do
@@ -32,7 +32,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
       Enum.each(@webcore_asset_types, fn asset_type ->
-        clear_pre_flight_metadata_cache()
+        clear_preflight_metadata_cache()
 
         expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
           {:ok,
@@ -143,7 +143,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      Process.sleep(Application.get_env(:belfrage, :pre_flight_metadata_cache)[:default_ttl_ms] + 1)
+      Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
 
       assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
     end

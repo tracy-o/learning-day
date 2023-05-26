@@ -9,7 +9,7 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
     @envelope %Envelope{
       private: %Envelope.Private{production_environment: "test"},
       debug: %Envelope.Debug{
-        pre_flight_pipeline_trail: ["SomePlatformSelector"],
+        preflight_pipeline_trail: ["SomePlatformSelector"],
         request_pipeline_trail: ["CircuitBreaker", "HttpRedirector"],
         response_pipeline_trail: ["CacheDirective"]
       }
@@ -39,8 +39,8 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrailTest do
     end
   end
 
-  defp assert_trail_headers(conn, pre_flight_trail_res, req_trail_res, resp_trail_res) do
-    assert get_resp_header(conn, "belfrage-pre-flight-pipeline-trail") == pre_flight_trail_res
+  defp assert_trail_headers(conn, preflight_trail_res, req_trail_res, resp_trail_res) do
+    assert get_resp_header(conn, "belfrage-preflight-pipeline-trail") == preflight_trail_res
     assert get_resp_header(conn, "belfrage-request-pipeline-trail") == req_trail_res
     assert get_resp_header(conn, "belfrage-response-pipeline-trail") == resp_trail_res
   end

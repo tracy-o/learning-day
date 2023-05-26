@@ -9,7 +9,7 @@ defmodule Routes.Specs.SingleSpecWithPartitionTransformer do
     ]
   end
 
-  def pre_flight_pipeline do
-    ["TestPreFlightPartitionTransformer"]
+  def preflight_pipeline do
+    ["TestPreflightPartitionTransformer"]
   end
 end

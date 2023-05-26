@@ -1,17 +1,17 @@
-defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
+defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
   alias Belfrage.{Envelope, Clients}
-  alias Belfrage.PreFlightTransformers.AssetTypePlatformSelector
+  alias Belfrage.PreflightTransformers.AssetTypePlatformSelector
 
   import ExUnit.CaptureLog
-  import Belfrage.Test.CachingHelper, only: [clear_pre_flight_metadata_cache: 1]
+  import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1]
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
-  setup :clear_pre_flight_metadata_cache
+  setup :clear_preflight_metadata_cache
 
   test "returns error tuple if origin returns 500 http status" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -33,7 +33,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
              assert AssetTypePlatformSelector.call(envelope) ==
                       {:error, envelope, 500}
            end) =~
-             "\"message\":\"Elixir.Belfrage.PreFlightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
+             "\"message\":\"Elixir.Belfrage.PreflightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
   end
 
   test "returns error tuple if origin response body does not contain assetType" do
@@ -60,7 +60,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
              assert AssetTypePlatformSelector.call(envelope) ==
                       {:error, envelope, 500}
            end) =~
-             "\"message\":\"Elixir.Belfrage.PreFlightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
+             "\"message\":\"Elixir.Belfrage.PreflightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
   end
 
   test "returns Webcore platform if origin response contains a Webcore assetType" do
@@ -180,7 +180,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
       end
     )
 
-    Process.sleep(Application.get_env(:belfrage, :pre_flight_metadata_cache)[:default_ttl_ms] + 1)
+    Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
 
     assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
              {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}

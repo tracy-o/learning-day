@@ -1,11 +1,11 @@
-defmodule Belfrage.Cache.PreFlightMetadata do
+defmodule Belfrage.Cache.PreflightMetadata do
   require Cachex.Spec
 
-  @table_name :pre_flight_metadata_cache
+  @table_name :preflight_metadata_cache
 
   def child_spec(arg) do
     %{
-      id: Belfrage.Cache.PreFlightMetadata,
+      id: Belfrage.Cache.PreflightMetadata,
       start: {Cachex, :start_link, [arg]}
     }
   end
@@ -36,7 +36,7 @@ defmodule Belfrage.Cache.PreFlightMetadata do
   end
 
   defp config() do
-    Application.get_env(:belfrage, :pre_flight_metadata_cache)
+    Application.get_env(:belfrage, :preflight_metadata_cache)
   end
 
   defp limit(size: size, policy: policy, reclaim: reclaim, options: options) do

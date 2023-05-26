@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.Supervisor do
   defp children(_opts) do
     [
       {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-      {Belfrage.Cache.PreFlightMetadata, Belfrage.Cache.PreFlightMetadata.options()}
+      {Belfrage.Cache.PreflightMetadata, Belfrage.Cache.PreflightMetadata.options()}
     ]
   end
 

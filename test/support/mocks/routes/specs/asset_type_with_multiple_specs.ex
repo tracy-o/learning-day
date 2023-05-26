@@ -14,7 +14,7 @@ defmodule Routes.Specs.AssetTypeWithMultipleSpecs do
     ]
   end
 
-  def pre_flight_pipeline do
+  def preflight_pipeline do
     ["AssetTypePlatformSelector"]
   end
 end

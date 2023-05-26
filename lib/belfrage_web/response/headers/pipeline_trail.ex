@@ -8,14 +8,14 @@ defmodule BelfrageWeb.Response.Headers.PipelineTrail do
   def add_header(conn, %Envelope{
         private: %Envelope.Private{production_environment: env},
         debug: %Envelope.Debug{
-          pre_flight_pipeline_trail: pre_flight_trail,
+          preflight_pipeline_trail: preflight_trail,
           request_pipeline_trail: request_trail,
           response_pipeline_trail: response_trail
         }
       })
       when env != "live" do
     conn
-    |> maybe_put_header("belfrage-pre-flight-pipeline-trail", pre_flight_trail)
+    |> maybe_put_header("belfrage-preflight-pipeline-trail", preflight_trail)
     |> maybe_put_header("belfrage-request-pipeline-trail", request_trail)
     |> maybe_put_header("belfrage-response-pipeline-trail", response_trail)
   end

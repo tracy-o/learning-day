@@ -6,7 +6,7 @@ defmodule Belfrage.Cache.SupervisorTest do
 
   @belfrage_local_cache :cache
   @test_cache :test_cache
-  @pre_flight_metadata_cache :pre_flight_metadata_cache
+  @preflight_metadata_cache :preflight_metadata_cache
 
   setup_all do
     conf = Application.get_env(:cachex, :limit)
@@ -65,9 +65,9 @@ defmodule Belfrage.Cache.SupervisorTest do
 
   describe "metadata cache" do
     test "is alive" do
-      [{Belfrage.Cache.PreFlightMetadata, pid, :worker, [Cachex]}] =
+      [{Belfrage.Cache.PreflightMetadata, pid, :worker, [Cachex]}] =
         Supervisor.which_children(Belfrage.Cache.Supervisor)
-        |> Enum.filter(fn {cache, _, _, _} -> cache == Belfrage.Cache.PreFlightMetadata end)
+        |> Enum.filter(fn {cache, _, _, _} -> cache == Belfrage.Cache.PreflightMetadata end)
 
       assert is_pid(pid)
       assert Process.alive?(pid)
@@ -78,7 +78,7 @@ defmodule Belfrage.Cache.SupervisorTest do
       limit = limit(size: conf[:size], policy: conf[:policy], reclaim: conf[:reclaim], options: conf[:options])
 
       assert [limit] ==
-               Cachex.inspect(@pre_flight_metadata_cache, :cache)
+               Cachex.inspect(@preflight_metadata_cache, :cache)
                |> elem(1)
                |> Tuple.to_list()
                |> Enum.filter(fn x -> is_tuple(x) and elem(x, 0) == :limit end)

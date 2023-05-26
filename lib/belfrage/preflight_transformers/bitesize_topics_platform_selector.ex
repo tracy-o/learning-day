@@ -1,4 +1,4 @@
-defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector do
+defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector do
   use Belfrage.Behaviours.Transformer
 
   @valid_year_ids [

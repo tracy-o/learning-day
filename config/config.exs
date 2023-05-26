@@ -61,7 +61,7 @@ config :belfrage,
     mvt_file: 60_000
   ],
   date_time: Belfrage.Utils.Current.Real,
-  pre_flight_metadata_cache: [
+  preflight_metadata_cache: [
     # 24 hours
     default_ttl_ms: 86_400_000,
     expiration_interval_ms: 60_000,

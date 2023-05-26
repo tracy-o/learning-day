@@ -40,7 +40,7 @@ defmodule Belfrage.ProcessorTest do
       "PreCacheCompression"
     ]
 
-    test "with multiple specs and pre-flight pipeline that updates platform" do
+    test "with multiple specs and preflight pipeline that updates platform" do
       spec_name = "SomeRouteStateWithMultipleSpecs"
       envelope = %Envelope{private: %Private{spec: spec_name}}
 
@@ -58,7 +58,7 @@ defmodule Belfrage.ProcessorTest do
              } = Processor.get_route_spec(envelope)
     end
 
-    test "with single spec and pre-flight pipeline that updates partition only" do
+    test "with single spec and preflight pipeline that updates partition only" do
       spec_name = "SingleSpecWithPartitionTransformer"
       partition = "Partition1"
       envelope = %Envelope{private: %Private{spec: spec_name}}
@@ -77,7 +77,7 @@ defmodule Belfrage.ProcessorTest do
              } = Processor.get_route_spec(envelope)
     end
 
-    test "raises an error when spec has multiple platforms and pre-flight doesn't update platform" do
+    test "raises an error when spec has multiple platforms and preflight doesn't update platform" do
       spec_name = "MultipleSpecsNoPlatformReturned"
       envelope = %Envelope{private: %Private{spec: spec_name}}
       err_msg = "Platform '' cannot be matched in '#{spec_name}' spec"

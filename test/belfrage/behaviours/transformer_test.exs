@@ -27,15 +27,15 @@ defmodule Belfrage.Behaviours.TransformerTest do
              Subject.call(envelope, :response, "MvtMapper")
   end
 
-  test "call pre-flight transformer behaviour" do
+  test "call preflight transformer behaviour" do
     envelope = %Envelope{
-      debug: %Debug{response_pipeline_trail: ["TestPreFlightTransformer"]}
+      debug: %Debug{response_pipeline_trail: ["TestPreflightTransformer"]}
     }
 
     assert {:ok,
             %Envelope{
               private: %Private{platform: "Webcore"},
-              debug: %Debug{pre_flight_pipeline_trail: ["TestPreFlightTransformer"]}
-            }} = Subject.call(envelope, :pre_flight, "TestPreFlightTransformer")
+              debug: %Debug{preflight_pipeline_trail: ["TestPreflightTransformer"]}
+            }} = Subject.call(envelope, :preflight, "TestPreflightTransformer")
   end
 end

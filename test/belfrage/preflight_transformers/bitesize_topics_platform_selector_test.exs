@@ -1,6 +1,6 @@
-defmodule Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelectorTest do
+defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelectorTest do
   use ExUnit.Case
-  alias Belfrage.PreFlightTransformers.BitesizeTopicsPlatformSelector
+  alias Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request, Envelope.Private}
 
   import Test.Support.Helper, only: [set_environment: 1]

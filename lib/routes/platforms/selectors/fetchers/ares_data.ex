@@ -18,7 +18,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresData do
   #
   # [1] https://github.com/bbc/fabl-modules/tree/efd29deb89a728eda7a213ebb7eda99af3ce638e#inbox_tray-module-inputs
   def fetch_metadata(path) do
-    case Cache.PreFlightMetadata.get(@cache_prefix, path) do
+    case Cache.PreflightMetadata.get(@cache_prefix, path) do
       {:ok, metadata} -> {:ok, metadata}
       {:error, :metadata_not_found} -> fetch_metadata_from_api(path)
     end
@@ -27,7 +27,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresData do
   def fetch_metadata_from_api(path) do
     with {:ok, %HTTP.Response{body: payload, status_code: 200}} <- make_request(path),
          {:ok, asset_type} <- extract_asset_type(payload) do
-      Cache.PreFlightMetadata.put(@cache_prefix, path, asset_type)
+      Cache.PreflightMetadata.put(@cache_prefix, path, asset_type)
       {:ok, asset_type}
     else
       {:ok, response = %HTTP.Response{}} ->

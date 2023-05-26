@@ -38,15 +38,15 @@ defmodule Belfrage.Test.CachingHelper do
   This clears the entire metadata cache, so can affect other tests if called from an
   async test. Can be called from setup/1 like:
 
-      setup :clear_pre_flight_metadata_cache
+      setup :clear_preflight_metadata_cache
   """
-  def clear_pre_flight_metadata_cache(_context) do
-    clear_pre_flight_metadata_cache()
+  def clear_preflight_metadata_cache(_context) do
+    clear_preflight_metadata_cache()
     :ok
   end
 
-  def clear_pre_flight_metadata_cache() do
-    :ets.delete_all_objects(:pre_flight_metadata_cache)
+  def clear_preflight_metadata_cache() do
+    :ets.delete_all_objects(:preflight_metadata_cache)
   end
 
   @doc """

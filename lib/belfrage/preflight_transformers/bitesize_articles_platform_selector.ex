@@ -1,4 +1,4 @@
-defmodule Belfrage.PreFlightTransformers.BitesizeArticlesPlatformSelector do
+defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
   use Belfrage.Behaviours.Transformer
 
   @webcore_test_ids [

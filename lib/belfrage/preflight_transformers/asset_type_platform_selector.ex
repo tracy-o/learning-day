@@ -1,4 +1,4 @@
-defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelector do
+defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Clients.HTTP
   alias Routes.Platforms.Selectors.Fetchers.AresData

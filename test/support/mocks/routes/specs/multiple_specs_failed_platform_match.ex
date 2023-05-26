@@ -14,7 +14,7 @@ defmodule Routes.Specs.MultipleSpecsFailedPlatformMatch do
     ]
   end
 
-  def pre_flight_pipeline do
-    ["TestPreFlightTransformer"]
+  def preflight_pipeline do
+    ["TestPreflightTransformer"]
   end
 end

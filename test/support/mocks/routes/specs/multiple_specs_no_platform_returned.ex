@@ -14,7 +14,7 @@ defmodule Routes.Specs.MultipleSpecsNoPlatformReturned do
     ]
   end
 
-  def pre_flight_pipeline do
-    ["TestPreFlightPartitionTransformer"]
+  def preflight_pipeline do
+    ["TestPreflightPartitionTransformer"]
   end
 end

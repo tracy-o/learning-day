@@ -1,7 +1,7 @@
-defmodule Belfrage.PreFlightTransformers.AblDataPartitionSelectorTest do
+defmodule Belfrage.PreflightTransformers.AblDataPartitionSelectorTest do
   use ExUnit.Case
 
-  alias Belfrage.PreFlightTransformers.AblDataPartitionSelector
+  alias Belfrage.PreflightTransformers.AblDataPartitionSelector
   alias Belfrage.Envelope
 
   test "returns Abl spec with WSContentPartition" do
