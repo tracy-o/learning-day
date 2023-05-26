@@ -293,5 +293,20 @@
         "description": "Serve from results page"
       }
     ]
+  },
+  {
+    "name": "bbcx_enabled",
+    "description": "Allows disabling BBCX content by pointing to the original Origin",
+    "default-value": "true",
+    "values": [
+      {
+        "value": "true",
+        "description": "Default value. Enables BBCX content"
+      },
+      {
+        "value": "false",
+        "description": "Disables BBCX content"
+      }
+    ]
   }
 ]

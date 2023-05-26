@@ -2,6 +2,7 @@ import Config
 
 config :belfrage,
   dial_handlers: %{
+    "bbcx_enabled" => Belfrage.Dials.BBCXEnabled,
     "cache_enabled" => Belfrage.Dials.CacheEnabled,
     "ccp_enabled" => Belfrage.Dials.CcpEnabled,
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
