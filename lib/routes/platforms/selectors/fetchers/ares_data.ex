@@ -1,9 +1,9 @@
 defmodule Routes.Platforms.Selectors.Fetchers.AresData do
   alias Belfrage.{Helpers.QueryParams, Clients.HTTP}
-  alias Belfrage.MetadataCache
+  alias Belfrage.Cache
 
   @http_client Application.compile_env(:belfrage, :http_client, HTTP)
-  @source "AresData"
+  @cache_prefix "AresData"
 
   # Makes a GET request to the FABL module ares-data with the module
   # input (page path) provided via the queryparams,
@@ -18,7 +18,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresData do
   #
   # [1] https://github.com/bbc/fabl-modules/tree/efd29deb89a728eda7a213ebb7eda99af3ce638e#inbox_tray-module-inputs
   def fetch_metadata(path) do
-    case MetadataCache.get(@source, path) do
+    case Cache.PreFlightMetadata.get(@cache_prefix, path) do
       {:ok, metadata} -> {:ok, metadata}
       {:error, :metadata_not_found} -> fetch_metadata_from_api(path)
     end
@@ -27,11 +27,12 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresData do
   def fetch_metadata_from_api(path) do
     with {:ok, %HTTP.Response{body: payload, status_code: 200}} <- make_request(path),
          {:ok, asset_type} <- extract_asset_type(payload) do
-      MetadataCache.put(@source, path, asset_type)
+      Cache.PreFlightMetadata.put(@cache_prefix, path, asset_type)
       {:ok, asset_type}
     else
       {:ok, response = %HTTP.Response{}} ->
         {:error, response}
+
       result = {:error, _reason} ->
         result
     end

@@ -6,12 +6,12 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
   alias Belfrage.PreFlightTransformers.AssetTypePlatformSelector
 
   import ExUnit.CaptureLog
-  import Belfrage.Test.CachingHelper, only: [clear_metadata_cache: 1]
+  import Belfrage.Test.CachingHelper, only: [clear_pre_flight_metadata_cache: 1]
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
-  setup :clear_metadata_cache
+  setup :clear_pre_flight_metadata_cache
 
   test "returns error tuple if origin returns 500 http status" do
     url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -180,7 +180,7 @@ defmodule Belfrage.PreFlightTransformers.AssetTypePlatformSelectorTest do
       end
     )
 
-    Process.sleep(Application.get_env(:belfrage, :metadata_cache)[:default_ttl_ms] + 1)
+    Process.sleep(Application.get_env(:belfrage, :pre_flight_metadata_cache)[:default_ttl_ms] + 1)
 
     assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
              {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}

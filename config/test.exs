@@ -50,7 +50,7 @@ config :belfrage,
     mvt_file: 50
   ],
   date_time: Belfrage.Utils.Current.Mock,
-  metadata_cache: [
+  pre_flight_metadata_cache: [
     default_ttl_ms: 100,
     expiration_interval_ms: 60_000,
     limit: [
