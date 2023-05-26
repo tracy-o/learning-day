@@ -5,19 +5,32 @@ defmodule Belfrage.RequestTransformers.BBCXAuthTest do
   alias Belfrage.RequestTransformers.BBCXAuth
   alias Belfrage.Envelope
 
-  @envelope %Envelope{
-    request: %Envelope.Request{
-      raw_headers: %{"header1" => "header1value"}
-    }
-  }
-
   describe "Basic Authorization logic" do
-    test "adds the authorization header to the raw headers" do
-      {:ok, envelope} = BBCXAuth.call(@envelope)
+    test "adds the TEST authorization header to the raw headers" do
+      envelope = %Envelope{
+        request: %Envelope.Request{raw_headers: %{"header1" => "header1value"}},
+        private: %Envelope.Private{production_environment: "test"}
+      }
+
+      {:ok, envelope} = BBCXAuth.call(envelope)
 
       assert envelope.request.raw_headers == %{
                "header1" => "header1value",
                "authorization" => "Basic YmJjeDpjaWhXaHgyV0FhUXJNU1VhdzFOOUIwdHE="
+             }
+    end
+
+    test "adds the LIVE authorization header to the raw headers" do
+      envelope = %Envelope{
+        request: %Envelope.Request{raw_headers: %{"header1" => "header1value"}},
+        private: %Envelope.Private{production_environment: "live"}
+      }
+
+      {:ok, envelope} = BBCXAuth.call(envelope)
+
+      assert envelope.request.raw_headers == %{
+               "header1" => "header1value",
+               "authorization" => "Basic YmJjeDpyZWZvcmVzdC1kaXNsaWtlLWNvbW1pdA=="
              }
     end
   end
