@@ -5,11 +5,15 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
     "zm8fhbk",
     "zjykkmn",
     "zj8yydm",
-    "zwdtrwx"
+    "zwdtrwx",
+    "z6x992p",
+    "zgd682p"
   ]
 
   @webcore_live_ids [
-    "zj8yydm"
+    "zj8yydm",
+    "z6x992p",
+    "zgd682p"
   ]
 
   @impl Transformer
