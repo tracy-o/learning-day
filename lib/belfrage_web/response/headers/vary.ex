@@ -24,6 +24,8 @@ defmodule BelfrageWeb.Response.Headers.Vary do
     |> base_headers()
     |> Kernel.++(route_headers(envelope))
     |> Kernel.++(adverts_headers(edge_cache?, platform))
+    |> Kernel.++(bbcx(envelope.private))
+    |> Enum.uniq()
     |> Enum.join(",")
   end
 
@@ -38,6 +40,9 @@ defmodule BelfrageWeb.Response.Headers.Vary do
       "X-BBC-Edge-Scheme"
     ]
   end
+
+  defp bbcx(%Private{bbcx_enabled: false}), do: []
+  defp bbcx(%Private{bbcx_enabled: true}), do: ["cookie_ckns_bbccom_beta"]
 
   # TODO: to be improved in RESFRAME-3924
   defp route_headers(envelope = %Envelope{private: %Private{headers_allowlist: []}}) do

@@ -4,6 +4,10 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
 
   @allowed_countries ["us", "ca"]
 
+  #TODO
+  # - add unit tests for the vary header
+  # - add end to end tests for the production env. we want bbcx to be only on test
+
   @impl Transformer
   def call(envelope = %Envelope{request: request}) do
     platform =
@@ -13,7 +17,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
         select_platform(request)
       end
 
-    {:ok, Envelope.add(envelope, :private, %{platform: platform})}
+    {:ok, Envelope.add(envelope, :private, %{bbcx_enabled: true, platform: platform})}
   end
 
   defp select_platform(%{raw_headers: %{"cookie_ckns_bbccom_beta" => ""}}), do: "Webcore"
