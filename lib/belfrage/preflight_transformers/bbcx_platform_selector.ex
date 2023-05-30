@@ -4,17 +4,13 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
 
   @allowed_countries ["us", "ca"]
 
-  #TODO
-  # - add unit tests for the vary header
-  # - add end to end tests for the production env. we want bbcx to be only on test
-
   @impl Transformer
-  def call(envelope = %Envelope{request: request}) do
+  def call(envelope = %Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do
     platform =
-      if !Map.has_key?(request.raw_headers, "cookie_ckns_bbccom_beta") do
-        "Webcore"
-      else
-        select_platform(request)
+      cond do
+        prod_env == "live" -> "Webcore"
+        !Map.has_key?(request.raw_headers, "cookie_ckns_bbccom_beta") -> "Webcore"
+        true -> select_platform(request)
       end
 
     {:ok, Envelope.add(envelope, :private, %{bbcx_enabled: true, platform: platform})}
