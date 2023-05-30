@@ -8,8 +8,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
   import Test.Support.Helper, only: [set_environment: 1]
 
   @successful_lambda_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
-  @successful_http_response {:ok,
-                             %Response{status_code: 200, headers: %{"content-type" => "text/html"}, body: "OK"}}
+  @successful_http_response {:ok, %Response{status_code: 200, headers: %{"content-type" => "text/html"}, body: "OK"}}
 
   setup do
     :ets.delete_all_objects(:cache)
@@ -25,10 +24,12 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
 
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
-    |> put_req_header("cookie_ckns_bbccom_beta", "some value")
-    |> Router.call(routefile: Routes.Routefiles.Main.Live)
+      |> put_req_header("cookie_ckns_bbccom_beta", "some value")
+      |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
-    assert get_resp_header(conn, "vary") == ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"]
+    assert get_resp_header(conn, "vary") == [
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+           ]
   end
 
   test "the BBCX platform selector points to Webcore when cookie_ckns_bbccom_beta is not set" do
@@ -40,9 +41,11 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
 
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
-    |> Router.call(routefile: Routes.Routefiles.Main.Live)
+      |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
-    assert get_resp_header(conn, "vary") == ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"]
+    assert get_resp_header(conn, "vary") == [
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+           ]
   end
 
   test "the BBCX platform selector points to BBCX" do
@@ -58,9 +61,10 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
       |> put_req_header("cookie_ckns_bbccom_beta", "some value")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
-    assert get_resp_header(conn, "vary") == ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"]
+    assert get_resp_header(conn, "vary") == [
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+           ]
   end
-
 
   test "the BBCX platform selector points to Webcore when Cosmos Environment is live" do
     set_environment("live")
@@ -75,6 +79,8 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
       |> put_req_header("cookie_ckns_bbccom_beta", "some value")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
-    assert get_resp_header(conn, "vary") == ["Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"]
+    assert get_resp_header(conn, "vary") == [
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+           ]
   end
 end

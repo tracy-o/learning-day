@@ -59,7 +59,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
       })
 
     assert response.private.platform == "BBCX"
-        assert response.private.bbcx_enabled == true
+    assert response.private.bbcx_enabled == true
   end
 
   test " when the cookie is present, and the host is bbc.com and the country is us or ca, but the Cosmos environment is live return WebCore" do
@@ -74,7 +74,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
       })
 
     assert response.private.platform == "Webcore"
-        assert response.private.bbcx_enabled == true
+    assert response.private.bbcx_enabled == true
   end
 
   test " when the cookie is present, and the host is not bbc.com and the country is us or ca return Webcore" do
