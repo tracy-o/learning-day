@@ -13,7 +13,7 @@ defmodule Routes.Specs.NewsStorytellingPage do
     ]
   end
 
-  def pre_flight_pipeline do
+  def preflight_pipeline do
     ["BBCXPlatformSelector"]
   end
 end
