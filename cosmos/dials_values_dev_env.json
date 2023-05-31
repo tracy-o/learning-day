@@ -1,4 +1,5 @@
 {
+  "bbcx_enabled": "true",
   "cache_enabled": "true",
   "ccp_enabled": "true",
   "circuit_breaker": "false",
