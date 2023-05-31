@@ -1,5 +1,7 @@
 defmodule BelfrageWeb.RouteMaster do
-  alias BelfrageWeb.{Response, EnvelopeAdapter}
+  alias BelfrageWeb.Response
+  alias Belfrage.Envelope
+
   import BelfrageWeb.Rewriter, only: [rewrite: 1]
 
   defmacro __using__(_opts) do
@@ -160,11 +162,12 @@ defmodule BelfrageWeb.RouteMaster do
 
         get(to_string(uri_from.path), host: uri_from.host) do
           new_location = BelfrageWeb.ReWrite.interpolate(unquote(matcher), var!(conn).path_params)
+
           Logger.metadata(is_redirect: true)
 
           Response.redirect(
             var!(conn),
-            EnvelopeAdapter.Request.adapt(var!(conn)),
+            Envelope.adapt_request(%Envelope{}, var!(conn)),
             unquote(status),
             new_location,
             unquote(ttl)
