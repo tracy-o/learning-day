@@ -10,7 +10,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
         request: %Request{
           host: "www.bbc.com",
           country: "gb",
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "a truthy value"}
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
         },
         private: %Envelope.Private{production_environment: "test"}
       })
@@ -51,7 +51,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "another truthy value"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
           country: "ca"
         },
@@ -66,7 +66,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "another truthy value"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
           country: "ca"
         },
@@ -92,11 +92,11 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test " when the cookie is a non-truthy value, and the host is bbc.com and the country is us or ca return Webcore" do
+  test " when the cookie is set to '0', and the host is bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie-ckns_bbccom_beta" => ""},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
           host: "www.bbc.com",
           country: "ca"
         },

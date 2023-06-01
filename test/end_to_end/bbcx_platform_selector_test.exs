@@ -24,7 +24,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
 
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
-      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "1")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
@@ -58,7 +58,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
       |> put_req_header("x-country", "us")
-      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "1")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
@@ -76,7 +76,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
       |> put_req_header("x-country", "us")
-      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "1")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
