@@ -9,14 +9,14 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
     platform =
       cond do
         prod_env == "live" -> "Webcore"
-        !Map.has_key?(request.raw_headers, "cookie_ckns_bbccom_beta") -> "Webcore"
+        !Map.has_key?(request.raw_headers, "cookie-ckns_bbccom_beta") -> "Webcore"
         true -> select_platform(request)
       end
 
     {:ok, Envelope.add(envelope, :private, %{bbcx_enabled: true, platform: platform})}
   end
 
-  defp select_platform(%{raw_headers: %{"cookie_ckns_bbccom_beta" => ""}}), do: "Webcore"
+  defp select_platform(%{raw_headers: %{"cookie-ckns_bbccom_beta" => ""}}), do: "Webcore"
   defp select_platform(%{host: "www.bbc.com", country: country}) when country in @allowed_countries, do: "BBCX"
   defp select_platform(_), do: "Webcore"
 end

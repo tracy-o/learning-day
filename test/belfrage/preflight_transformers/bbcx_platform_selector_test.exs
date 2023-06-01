@@ -10,7 +10,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
         request: %Request{
           host: "www.bbc.com",
           country: "gb",
-          raw_headers: %{"cookie_ckns_bbccom_beta" => "a truthy value"}
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "a truthy value"}
         },
         private: %Envelope.Private{production_environment: "test"}
       })
@@ -51,7 +51,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie_ckns_bbccom_beta" => "another truthy value"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "another truthy value"},
           host: "www.bbc.com",
           country: "ca"
         },
@@ -66,7 +66,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie_ckns_bbccom_beta" => "another truthy value"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "another truthy value"},
           host: "www.bbc.com",
           country: "ca"
         },
@@ -81,7 +81,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie_ckns_bbccom_beta" => "value"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "value"},
           host: "www.bbc.co.uk",
           country: "ca"
         },
@@ -96,7 +96,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
-          raw_headers: %{"cookie_ckns_bbccom_beta" => ""},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => ""},
           host: "www.bbc.com",
           country: "ca"
         },

@@ -6,7 +6,7 @@ defmodule Routes.Platforms.BBCX do
       runbook: "TBD",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
-      headers_allowlist: ["cookie_ckns_bbccom_beta"],
+      headers_allowlist: ["cookie-ckns_bbccom_beta"],
       circuit_breaker_error_threshold: 200
     }
   end

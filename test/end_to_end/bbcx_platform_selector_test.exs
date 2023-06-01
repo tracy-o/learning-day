@@ -24,15 +24,15 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
 
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
-      |> put_req_header("cookie_ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 
-  test "the BBCX platform selector points to Webcore when cookie_ckns_bbccom_beta is not set" do
+  test "the BBCX platform selector points to Webcore when cookie-ckns_bbccom_beta is not set" do
     set_environment("test")
 
     expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
@@ -44,7 +44,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 
@@ -58,11 +58,11 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
       |> put_req_header("x-country", "us")
-      |> put_req_header("cookie_ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 
@@ -76,11 +76,11 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
     conn =
       conn(:get, "https://www.bbc.com/news/articles/c5ll353v7y9o")
       |> put_req_header("x-country", "us")
-      |> put_req_header("cookie_ckns_bbccom_beta", "some value")
+      |> put_req_header("cookie-ckns_bbccom_beta", "some value")
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie_ckns_bbccom_beta"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 end
