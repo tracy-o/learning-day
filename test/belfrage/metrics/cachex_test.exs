@@ -34,6 +34,11 @@ defmodule Belfrage.Metrics.CachexTest do
       )
     )
 
+    assert_reported(
+      socket,
+      "cachex.size:0|g|#BBCEnvironment:live,cache_name:#{cache}"
+    )
+
     Cachex.put(cache, "key1", "value1", ttl: 50)
     Cachex.get(cache, "key1")
 
@@ -52,6 +57,11 @@ defmodule Belfrage.Metrics.CachexTest do
         ],
         "\n"
       )
+    )
+
+    assert_reported(
+      socket,
+      "cachex.size:1|g|#BBCEnvironment:live,cache_name:#{cache}"
     )
 
     # wait for entry to expire and trigger a cleanup
@@ -73,6 +83,11 @@ defmodule Belfrage.Metrics.CachexTest do
         ],
         "\n"
       )
+    )
+
+    assert_reported(
+      socket,
+      "cachex.size:0|g|#BBCEnvironment:live,cache_name:#{cache}"
     )
   end
 end
