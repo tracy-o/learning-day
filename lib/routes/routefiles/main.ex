@@ -2999,7 +2999,7 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
 
-  handle "/weather/videos/:optimo_id", using: "WeatherVideos", only_on: "test", examples: [] do
+  handle "/weather/videos/:optimo_id", using: "WeatherVideos", examples: ["/weather/videos/cpvx015ypvxo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
