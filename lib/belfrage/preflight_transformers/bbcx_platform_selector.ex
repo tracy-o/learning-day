@@ -8,7 +8,16 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
 
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    {:ok, Envelope.add(envelope, :private, %{bbcx_enabled: true, platform: select_platform(envelope)})}
+    {:ok,
+     Envelope.add(envelope, :private, %{bbcx_enabled: bbcx_enabled?(envelope), platform: select_platform(envelope)})}
+  end
+
+  defp bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
+    if prod_env == "test" do
+      true
+    else
+      false
+    end
   end
 
   defp select_platform(%Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do

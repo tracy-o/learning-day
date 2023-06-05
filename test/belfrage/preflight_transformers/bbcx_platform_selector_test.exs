@@ -48,7 +48,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test " when the cookie is present, and the host is bbc.com and the country is us or ca return BBCX" do
+  test "when the cookie is present, and the host is bbc.com and the country is us or ca return BBCX" do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
@@ -63,7 +63,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test " when the cookie is present, and the host is bbc.com and the country is us or ca, but the Cosmos environment is live return WebCore" do
+  test "when the cookie is present, and the host is bbc.com and the country is us or ca, but the Cosmos environment is live return WebCore" do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
@@ -75,10 +75,25 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
       })
 
     assert response.private.platform == "Webcore"
-    assert response.private.bbcx_enabled == true
+    assert response.private.bbcx_enabled == false
   end
 
-  test " when the cookie is present, and the host is bbc.com and the country is us or ca, the Cosmos environment is test but the Dial is disabled return WebCore" do
+  test "when the Cosmos environment is live always return webcore and set bbcx_anbled to false" do
+    {:ok, response} =
+      BBCXPlatformSelector.call(%Envelope{
+        request: %Request{
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
+          host: "www.bbc.co.uk",
+          country: "gb"
+        },
+        private: %Envelope.Private{production_environment: "live"}
+      })
+
+    assert response.private.platform == "Webcore"
+    assert response.private.bbcx_enabled == false
+  end
+
+  test "when the cookie is present, and the host is bbc.com and the country is us or ca, the Cosmos environment is test but the Dial is disabled return WebCore" do
     stub_dials(bbcx_enabled: "false")
 
     {:ok, response} =
@@ -95,7 +110,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test " when the cookie is present, and the host is not bbc.com and the country is us or ca return Webcore" do
+  test "when the cookie is present, and the host is not bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
@@ -110,7 +125,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test " when the cookie is set to '0', and the host is bbc.com and the country is us or ca return Webcore" do
+  test "when the cookie is set to '0', and the host is bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
       BBCXPlatformSelector.call(%Envelope{
         request: %Request{
