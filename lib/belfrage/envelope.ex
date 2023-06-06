@@ -98,7 +98,8 @@ defmodule Belfrage.Envelope.Private do
             fallback_write_sample: 1,
             etag: false,
             metadata: %{},
-            xray_enabled: false
+            xray_enabled: false,
+            bbcx_enabled: false
 
   @type t :: %__MODULE__{}
 end
