@@ -10,7 +10,7 @@ defmodule Routes.Specs.NewsTopics do
     }
   end
 
-  defp query_params_allowlist("live"), do: ["page"]
+  defp query_params_allowlist("live"), do: ["page", "market"]
 
   # allows both Mozart and Webcore query string params
   defp query_params_allowlist(_production_env) do
