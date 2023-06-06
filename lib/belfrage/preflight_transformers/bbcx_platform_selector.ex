@@ -13,16 +13,12 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
   end
 
   defp bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
-    if prod_env == "test" do
-      true
-    else
-      false
-    end
+    prod_env == "test"
   end
 
   defp select_platform(%Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do
     if prod_env == "test" &&
-         bbcx_enabled?() &&
+         @dial.state(:bbcx_enabled) == true &&
          String.ends_with?(request.host, "bbc.com") &&
          Map.get(request.raw_headers, "cookie-ckns_bbccom_beta") == "1" &&
          request.country in @allowed_countries do
@@ -30,9 +26,5 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
     else
       "Webcore"
     end
-  end
-
-  defp bbcx_enabled? do
-    @dial.state(:bbcx_enabled) == true
   end
 end

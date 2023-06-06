@@ -66,7 +66,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
            ]
   end
 
-  test "the BBCX platform selector points to Webcore and don't vary on cookie-ckns_bbccom_bet when Cosmos Environment is live" do
+  test "the BBCX platform selector points to Webcore and don't vary on cookie-ckns_bbccom_beta when Cosmos Environment is live" do
     set_environment("live")
 
     expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
