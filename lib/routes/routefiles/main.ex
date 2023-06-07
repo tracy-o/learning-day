@@ -339,6 +339,7 @@ defroutefile "Main" do
   redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
   redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
+  redirect "/news/topics/cxqvep8kqext/*any", to: "/news/the_reporters", status: 302
 
   # News Correspondents
   redirect "/news/correspondents/allegrastratton", to: "/news/topics/cl16knzkz9yt", status: 301, ttl: 3600
@@ -495,7 +496,7 @@ defroutefile "Main" do
   handle "/news/explainers", using: "NewsIndex", examples: ["/news/explainers"]
   handle "/news/front_page", using: "NewsIndex", examples: ["/news/front_page"]
   handle "/news/front-page-service-worker.js", using: "NewsIndex", examples: ["/news/front-page-service-worker.js"]
-  handle "/news/have_your_say", using: "NewsIndex", examples: ["/news/have_your_say"]
+  handle "/news/have_your_say", using: "NewsWebcoreIndex", examples: ["/news/have_your_say"]
   handle "/news/health", using: "NewsIndex", examples: ["/news/health"]
   handle "/news/in_pictures", using: "NewsIndex", examples: ["/news/in_pictures"]
   handle "/news/newsbeat", using: "NewsIndex", examples: ["/news/newsbeat"]
@@ -505,9 +506,9 @@ defroutefile "Main" do
   handle "/news/reality_check", using: "NewsIndex", examples: ["/news/reality_check"]
   handle "/news/science_and_environment", using: "NewsIndex", examples: ["/news/science_and_environment"]
   handle "/news/scotland", using: "NewsIndex", examples: ["/news/scotland"]
-  handle "/news/stories", using: "NewsIndex", examples: ["/news/stories"]
+  handle "/news/stories", using: "NewsWebcoreIndex", examples: ["/news/stories"]
   handle "/news/technology", using: "NewsIndex", examples: ["/news/technology"]
-  handle "/news/the_reporters", using: "NewsIndex", examples: ["/news/the_reporters"]
+  handle "/news/the_reporters", using: "NewsWebcoreIndex", examples: ["/news/the_reporters"]
   handle "/news/uk", using: "NewsIndex", examples: ["/news/uk"]
   handle "/news/wales", using: "NewsIndex", examples: ["/news/wales"]
   handle "/news/world", using: "NewsIndex", examples: ["/news/world"]
