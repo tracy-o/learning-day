@@ -760,6 +760,7 @@ defroutefile "Main" do
   redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
   redirect "/kyrgyz/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
   redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
+  redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
   redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
   redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
   redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
