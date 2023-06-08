@@ -1,6 +1,6 @@
 # Envelope
 
-The envelope is how Belfrage keeps track of the connection throughout its entire lifetime. It is an Elixir struct which is similar to a map but has default keys. It is designed in a way so at any point in a connections lifetime you could inspect it and see the exact state of the connection.
+The envelope is how Belfrage keeps track of the connection throughout its entire lifetime. It is an Elixir struct which is similar to a map but has default keys. It is designed in a way so at any point in a connection's lifetime you could inspect it and see the exact state of the connection.
 
 The Envelope currently contains five main sections:
 - Debug

@@ -87,8 +87,8 @@ defmodule Belfrage.Test.CachingHelper do
   * key - marks the response stored under the passed key as stale
   """
   def make_cached_response_stale(conn = %Conn{}) do
-    conn
-    |> BelfrageWeb.EnvelopeAdapter.Request.adapt()
+    %Envelope{}
+    |> Envelope.adapt_request(conn)
     |> Belfrage.RequestHash.generate()
     |> make_cached_response_stale()
   end
