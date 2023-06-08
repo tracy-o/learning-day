@@ -1,9 +1,6 @@
 defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.Clients.HTTP
-  alias Routes.Platforms.Selectors.Fetchers.AresData
-
-  require Logger
+  alias Belfrage.PreflightServices.AresData
 
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
@@ -32,19 +29,14 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   """
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    case AresData.fetch_metadata(envelope.request.path) do
+    case AresData.call(envelope) do
       {:ok, asset_type} ->
         select_platform(envelope, asset_type)
 
-      {:error, %HTTP.Response{status_code: 404}} ->
+      {:error, :preflight_data_not_found} ->
         {:ok, Envelope.add(envelope, :private, %{platform: "MozartNews"})}
 
-      {_, reason} ->
-        Logger.log(
-          :error,
-          "#{__MODULE__} could not select platform: %{path: #{envelope.request.path}, reason: #{inspect(reason)}}"
-        )
-
+      {:error, :preflight_data_error} ->
         {:error, envelope, 500}
     end
   end

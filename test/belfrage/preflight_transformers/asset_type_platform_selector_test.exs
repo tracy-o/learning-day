@@ -5,7 +5,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   alias Belfrage.{Envelope, Clients}
   alias Belfrage.PreflightTransformers.AssetTypePlatformSelector
 
-  import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1]
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
@@ -24,16 +23,12 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok, %Clients.HTTP.Response{status_code: 500}}
       end
     )
 
-    assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(envelope) ==
-                      {:error, envelope, 500}
-           end) =~
-             "\"message\":\"Elixir.Belfrage.PreflightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: %Belfrage.Clients.HTTP.Response{status_code: 500, body: nil, headers: %{}}}"
+    assert AssetTypePlatformSelector.call(envelope) == {:error, envelope, 500}
   end
 
   test "returns error tuple if origin response body does not contain assetType" do
@@ -47,7 +42,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
@@ -56,11 +51,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       end
     )
 
-    assert capture_log(fn ->
-             assert AssetTypePlatformSelector.call(envelope) ==
-                      {:error, envelope, 500}
-           end) =~
-             "\"message\":\"Elixir.Belfrage.PreflightTransformers.AssetTypePlatformSelector could not select platform: %{path: /some/path, reason: :no_asset_type}"
+    assert AssetTypePlatformSelector.call(envelope) == {:error, envelope, 500}
   end
 
   test "returns Webcore platform if origin response contains a Webcore assetType" do
@@ -76,7 +67,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
              method: :get,
              url: ^url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %Clients.HTTP.Response{
              status_code: 200,
@@ -101,7 +92,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
@@ -125,7 +116,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
@@ -152,7 +143,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
@@ -171,7 +162,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 200,
@@ -197,7 +188,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
            method: :get,
            url: ^url
          },
-         :Fabl ->
+         :Preflight ->
         {:ok,
          %Clients.HTTP.Response{
            status_code: 404

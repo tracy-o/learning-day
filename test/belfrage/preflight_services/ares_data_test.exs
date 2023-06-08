@@ -1,10 +1,11 @@
-defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
+defmodule Belfrage.PreflightServices.AresDataTest do
   use ExUnit.Case
   use Plug.Test
   alias Belfrage.Clients.{HTTP, HTTPMock}
+  alias Belfrage.Envelope
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1, clear_preflight_metadata_cache: 0]
-  alias Routes.Platforms.Selectors.Fetchers.AresData
+  alias Belfrage.PreflightServices.AresData
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
@@ -12,11 +13,11 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
 
   setup :clear_preflight_metadata_cache
 
-  describe "fetch_metadata/1" do
+  describe "fetch/1" do
     test "returns a HTTP Response" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -25,7 +26,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      AresData.fetch_metadata("/some/path")
+      AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
     end
 
     test "stores successful response in cache when asset type in webcore asset types" do
@@ -34,7 +35,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
       Enum.each(@webcore_asset_types, fn asset_type ->
         clear_preflight_metadata_cache()
 
-        expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+        expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
           {:ok,
            %HTTP.Response{
              headers: %{},
@@ -43,7 +44,8 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
            }}
         end)
 
-        assert {:ok, ^asset_type} = AresData.fetch_metadata("/some/path")
+        assert {:ok, ^asset_type} = AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
+
         assert Cachex.get(@table_name, {"AresData", "/some/path"}) == {:ok, asset_type}
       end)
     end
@@ -51,7 +53,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
     test "stores successful response in cache when asset type not in webcore asset types" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -60,14 +62,16 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
+      assert {:ok, "SOME_ASSET_TYPE"} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
+
       assert Cachex.get(@table_name, {"AresData", "/some/path"}) == {:ok, "SOME_ASSET_TYPE"}
     end
 
     test "does not store successful response in cache when 404 response status code" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -75,11 +79,8 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      assert {:error,
-              %HTTP.Response{
-                headers: %{},
-                status_code: 404
-              }} = AresData.fetch_metadata("/some/path")
+      assert {:error, :preflight_data_not_found} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
 
       assert Cachex.get(@table_name, {"AresData", "/some/path"}) == {:ok, nil}
     end
@@ -87,7 +88,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
     test "does not store successful response in cache when non-200 and non-404 response status code" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -95,11 +96,8 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      assert {:error,
-              %HTTP.Response{
-                headers: %{},
-                status_code: 500
-              }} = AresData.fetch_metadata("/some/path")
+      assert {:error, :preflight_data_error} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
 
       assert Cachex.get(@table_name, {"AresData", "/some/path"}) == {:ok, nil}
     end
@@ -107,7 +105,7 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
     test "fetches stored successful response from cache" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -116,14 +114,17 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
-      assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
+      assert {:ok, "SOME_ASSET_TYPE"} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
+
+      assert {:ok, "SOME_ASSET_TYPE"} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
     end
 
     test "does not fetch stored successful response from cache after TTL" do
       url = @fabl_endpoint <> "/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -132,9 +133,10 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
          }}
       end)
 
-      assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
+      assert {:ok, "SOME_ASSET_TYPE"} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Fabl ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{},
@@ -145,7 +147,8 @@ defmodule Routes.Platforms.Selectors.Fetchers.AresDataTest do
 
       Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
 
-      assert {:ok, "SOME_ASSET_TYPE"} = AresData.fetch_metadata("/some/path")
+      assert {:ok, "SOME_ASSET_TYPE"} =
+               AresData.call(%Belfrage.Envelope{request: %Envelope.Request{path: "/some/path"}})
     end
   end
 end

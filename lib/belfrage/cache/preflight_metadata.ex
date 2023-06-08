@@ -13,7 +13,7 @@ defmodule Belfrage.Cache.PreflightMetadata do
   def get(cache_prefix, path) do
     case Cachex.get(@table_name, {cache_prefix, path}) do
       {:ok, metadata} when is_binary(metadata) -> {:ok, metadata}
-      _ -> {:error, :metadata_not_found}
+      _ -> {:error, :preflight_data_not_found}
     end
   end
 

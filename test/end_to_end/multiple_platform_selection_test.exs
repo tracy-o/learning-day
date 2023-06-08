@@ -75,7 +75,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
                method: :get,
                url: ^url
              },
-             :Fabl ->
+             :Preflight ->
             {:ok,
              %HTTP.Response{
                status_code: 200,
@@ -118,7 +118,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 200,
@@ -180,7 +180,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 200,
@@ -216,7 +216,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 200,
@@ -260,7 +260,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^ares_url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 200,
@@ -302,7 +302,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^ares_url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 404
@@ -342,7 +342,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
              method: :get,
              url: ^url
            },
-           :Fabl ->
+           :Preflight ->
           {:ok,
            %HTTP.Response{
              status_code: 500
