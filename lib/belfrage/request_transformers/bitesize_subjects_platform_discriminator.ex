@@ -180,7 +180,9 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
     "z6qv46f",
     "zt739ty",
     "zsgp3qt",
-    "z93p3qt"
+    "z93p3qt",
+    "zycsg2p",
+    "zr2wxg8"
   ]
 
   @webcore_live_ids [
@@ -358,7 +360,9 @@ defmodule Belfrage.RequestTransformers.BitesizeSubjectsPlatformDiscriminator do
     "z6qv46f",
     "zt739ty",
     "zsgp3qt",
-    "z93p3qt"
+    "z93p3qt",
+    "zycsg2p",
+    "zr2wxg8"
   ]
 
   @impl Transformer
