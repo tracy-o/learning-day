@@ -13,7 +13,8 @@
         {Credo.Check.Refactor.Nesting, max_nesting: 3},
         {Credo.Check.Warning.MissedMetadataKeyInLoggerConfig, false},
         {Credo.Checks.TestFileSuffix, []},
-        {Credo.Checks.RouteSpecFilePath, []}
+        {Credo.Checks.RouteSpecFilePath, []},
+        {Credo.Checks.RequestTransformerPrefix, []}
       ]
     }
   ]
