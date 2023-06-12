@@ -3165,10 +3165,9 @@ defroutefile "Main" do
   handle "/bitesize/preview/topics/:id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
   handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
   handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy", examples: ["/bitesize/guides/zcvy6yc/test.hybrid"]
-  handle "/bitesize/groups/:id", using: "BitesizeTipoTopic", only_on: "test", examples: ["/bitesize/groups/cz4wkv77g55t"]
-  handle "/bitesize/parents", using: "BitesizeTipoTopic", only_on: "test", examples: ["/bitesize/parents"]
+  handle "/bitesize/groups/:id", using: "BitesizeTipoTopic", examples: ["/bitesize/groups/cz4wkv77g55t"]
+  handle "/bitesize/parents", using: "BitesizeTipoTopic", examples: ["/bitesize/parents"]
   handle "/bitesize/study-support", using: "BitesizeTipoTopic", only_on: "test", examples: ["/bitesize/study-support"]
-
 
   handle "/bitesize/*any", using: "BitesizeLegacy", examples: ["/bitesize/levels"]
 

@@ -1,7 +1,7 @@
 defmodule Routes.Specs.BitesizeTipoTopic do
   def specs do
     %{
-      owner: "childrensfutureweb@bbc.co.uk",
+      owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
       platform: "Webcore",
       language_from_cookie: true,
       runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
