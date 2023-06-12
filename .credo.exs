@@ -14,7 +14,7 @@
         {Credo.Check.Warning.MissedMetadataKeyInLoggerConfig, false},
         {Credo.Checks.TestFileSuffix, []},
         {Credo.Checks.RouteSpecFilePath, []},
-        {Credo.Checks.RequestTransformerPrefix, []}
+        {Credo.Checks.TransformerModulePrefix, []}
       ]
     }
   ]
