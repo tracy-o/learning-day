@@ -972,7 +972,7 @@ defroutefile "Sport" do
   handle "/sport/av/:discipline/:id", using: "SportVideos" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !String.match?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
 

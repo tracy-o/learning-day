@@ -115,6 +115,12 @@ defroutefile "Mock", "test" do
     return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
   end
 
+  handle "/sport/av/football/:id", using: "MySessionWebcorePlatform" do
+    return_404 if: [
+      !String.match?(id, ~r/\A[0-9]{4,9}\z/)
+    ]
+  end
+
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
   no_match()
