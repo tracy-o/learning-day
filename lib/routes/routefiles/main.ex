@@ -484,6 +484,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/news/articles/:optimo_id.app", using: "NewsStorytellingAppPage", examples: ["/news/articles/c5ll353v7y9o.app", "/news/articles/c8xxl4l3dzeo.app"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   # News indexes
   handle "/news/access-to-news", using: "NewsIndex", examples: ["/news/access-to-news"]
   handle "/news/business", using: "NewsIndex", examples: ["/news/business"]
@@ -683,6 +687,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/cymrufyw/erthyglau/:optimo_id.app", using: "CymrufywStorytellingAppPage", examples: ["/cymrufyw/erthyglau/ce56v6pk615o.app"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/cymrufyw/*any", using: "Cymrufyw", examples: ["/cymrufyw"]
 
   # Naidheachdan
@@ -704,6 +712,10 @@ defroutefile "Main" do
   end
 
   handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", examples: ["/naidheachdan/sgeulachdan/c3gr8907m3po"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/naidheachdan/sgeulachdan/:optimo_id.app", using: "NaidheachdanStorytellingAppPage", examples: ["/naidheachdan/sgeulachdan/c3gr8907m3po.app"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -2991,6 +3003,9 @@ defroutefile "Main" do
   handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage", only_on: "test", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
+  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   redirect "/weather/about", to: "/weather", status: 302
   redirect "/weather/features", to: "/weather", status: 302
@@ -3032,6 +3047,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/articles/:optimo_id.app", using: "StorytellingAppPage", examples: ["/articles/c1vy1zrejnno.app"] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   # Catch all
 
   # example test route: "/comments/embed/news/world-europe-23348005"
@@ -3054,6 +3073,9 @@ defroutefile "Main" do
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp", examples: ["/newsround/articles/manifest.json"]
 
   handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage", only_on: "test", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
   handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp", only_on: "test", examples: [] do
@@ -3090,6 +3112,7 @@ defroutefile "Main" do
   handle "/newsround/:id", using: "NewsroundArticlePage", examples: ["/newsround/61545299"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
+
   handle "/newsround", using: "NewsroundHomePage", examples: ["/newsround"]
 
   handle "/schoolreport/*any", using: "Schoolreport", examples: [{"/schoolreport/home", 301}]
