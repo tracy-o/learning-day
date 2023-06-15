@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceTamil do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/tamil/popular/read", "/tamil.json", "/tamil.amp"]
       }
     }
   end

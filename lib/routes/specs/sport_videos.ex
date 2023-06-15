@@ -5,7 +5,8 @@ defmodule Routes.Specs.SportVideos do
         owner: "sfv-team@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
         platform: "Webcore",
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310", "/sport/av/51107180"]
       }
     }
   end

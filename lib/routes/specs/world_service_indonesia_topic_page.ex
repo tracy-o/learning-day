@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceIndonesiaTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/indonesia/topics/c340qrk1znxt", "/indonesia/topics/c340qrk1znxt?page=2"]
       }
     }
   end

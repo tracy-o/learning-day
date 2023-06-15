@@ -7,7 +7,8 @@ defmodule Routes.Specs.ClassicAppFablLdp do
         platform: "Fabl",
         request_pipeline: ["ClassicAppFablLdp"],
         response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
-        etag: true
+        etag: true,
+        examples: ["/content/ldp/de648736-7268-454c-a7b1-dbff416f2865"]
       }
     }
   end

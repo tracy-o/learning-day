@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceThaiAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/thai/sw.js", "/thai/manifest.json"]
       }
     }
   end

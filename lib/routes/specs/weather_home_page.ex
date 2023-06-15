@@ -3,7 +3,8 @@ defmodule Routes.Specs.WeatherHomePage do
     %{
       specs: %{
         platform: "MozartWeather",
-        fallback_write_sample: 0.5
+        fallback_write_sample: 0.5,
+        examples: ["/weather"]
       }
     }
   end

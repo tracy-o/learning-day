@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAfriqueAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/afrique/sw.js", "/afrique/manifest.json"]
       }
     }
   end

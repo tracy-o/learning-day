@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceKyrgyzAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/kyrgyz/sw.js", "/kyrgyz/manifest.json"]
       }
     }
   end

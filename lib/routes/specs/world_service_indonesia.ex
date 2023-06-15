@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceIndonesia do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/indonesia/popular/read", "/indonesia.json", "/indonesia.amp"]
       }
     }
   end

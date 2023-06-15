@@ -6,7 +6,8 @@ defmodule Routes.Specs.CymrufywStorytellingAppPage do
         runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
         platform: "Webcore",
         default_language: "cy",
-        request_pipeline: ["ElectionBannerCouncilStory"]
+        request_pipeline: ["ElectionBannerCouncilStory"],
+        examples: ["/cymrufyw/erthyglau/ce56v6pk615o.app"]
       }
     }
   end

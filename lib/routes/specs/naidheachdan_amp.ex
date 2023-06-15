@@ -4,7 +4,8 @@ defmodule Routes.Specs.NaidheachdanAmp do
       specs: %{
         owner: "#support-simorgh",
         runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Simorgh+Run+Book",
-        platform: "Simorgh"
+        platform: "Simorgh",
+        examples: []
       }
     }
   end

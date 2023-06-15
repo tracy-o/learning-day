@@ -5,7 +5,8 @@ defmodule Routes.Specs.SportWebcoreLivePage do
         owner: "#help-live",
         runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Experience+on+Webcore+Run+Book",
         platform: "Webcore",
-        query_params_allowlist: ["page", "post"]
+        query_params_allowlist: ["page", "post"],
+        examples: ["/sport/rugby-league/live/cy5q0051p7vt.app?mode=testData", "/sport/rugby-league/live/cy5q0051p7vt?mode=testData"]
       }
     }
   end

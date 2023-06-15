@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceMundo do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/mundo/popular/read", "/mundo.json", "/mundo.amp"]
       }
     }
   end

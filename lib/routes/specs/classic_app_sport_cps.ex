@@ -6,7 +6,8 @@ defmodule Routes.Specs.ClassicAppSportCps do
         runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
         platform: "ClassicApps",
         query_params_allowlist: ["subjectId", "language", "createdBy"],
-        etag: true
+        etag: true,
+        examples: ["/content/cps/sport/rugby-union/59369204", "/content/cps/sport/tennis/59328440"]
       }
     }
   end

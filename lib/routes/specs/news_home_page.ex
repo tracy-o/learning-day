@@ -4,7 +4,8 @@ defmodule Routes.Specs.NewsHomePage do
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "MozartNews",
-        fallback_write_sample: 0.5
+        fallback_write_sample: 0.5,
+        examples: ["/news"]
       }
     }
   end

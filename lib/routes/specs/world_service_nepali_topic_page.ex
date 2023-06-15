@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceNepaliTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/nepali/topics/c340q4p5136t", "/nepali/topics/c340q4p5136t?page=2"]
       }
     }
   end

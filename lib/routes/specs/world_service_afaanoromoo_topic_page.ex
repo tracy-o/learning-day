@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceAfaanoromooTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/afaanoromoo/topics/c7zp5z9n3x5t"]
       }
     }
   end

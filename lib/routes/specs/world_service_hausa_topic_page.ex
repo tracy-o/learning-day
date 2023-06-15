@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceHausaTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/hausa/topics/c5qvpxkx1j7t", "/hausa/topics/c5qvpxkx1j7t?page=2"]
       }
     }
   end

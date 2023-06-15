@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceGujaratiTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/gujarati/topics/c2dwqj95d30t", "/gujarati/topics/c2dwqj95d30t?page=2"]
       }
     }
   end

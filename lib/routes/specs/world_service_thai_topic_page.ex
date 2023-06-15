@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceThaiTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/thai/topics/c340qx429k7t", "/thai/topics/c340qx429k7t?page=2"]
       }
     }
   end

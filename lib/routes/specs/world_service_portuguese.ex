@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServicePortuguese do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/portuguese/popular/read", "/portuguese.json", "/portuguese.amp"]
       }
     }
   end

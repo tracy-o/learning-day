@@ -5,7 +5,8 @@ defmodule Routes.Specs.NaidheachdanHomePage do
         owner: "DENewsFrameworksTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
         platform: "MozartNews",
-        request_pipeline: ["NaidheachdanObitRedirect"]
+        request_pipeline: ["NaidheachdanObitRedirect"],
+        examples: ["/naidheachdan"]
       }
     }
   end

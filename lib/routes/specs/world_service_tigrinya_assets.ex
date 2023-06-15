@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceTigrinyaAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/tigrinya/sw.js", "/tigrinya/manifest.json"]
       }
     }
   end

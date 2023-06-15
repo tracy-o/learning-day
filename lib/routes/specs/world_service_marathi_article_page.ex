@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceMarathiArticlePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: []
       }
     }
   end

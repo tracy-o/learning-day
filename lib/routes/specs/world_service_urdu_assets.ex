@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceUrduAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/urdu/sw.js", "/urdu/manifest.json"]
       }
     }
   end

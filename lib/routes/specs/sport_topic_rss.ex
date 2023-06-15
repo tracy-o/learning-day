@@ -5,7 +5,8 @@ defmodule Routes.Specs.SportTopicRss do
         owner: "#help-sport",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
-        request_pipeline: ["RssFeedRedirect", "SportTopicRssFeedsMapper"]
+        request_pipeline: ["RssFeedRedirect", "SportTopicRssFeedsMapper"],
+        examples: ["/sport/rss.xml"]
       }
     }
   end

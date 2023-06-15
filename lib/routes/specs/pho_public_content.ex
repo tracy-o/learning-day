@@ -4,7 +4,8 @@ defmodule Routes.Specs.PhoPublicContent do
       specs: %{
         owner: "#platform-health",
         platform: "Webcore",
-        personalisation: "off"
+        personalisation: "off",
+        examples: ["/_health/public_content"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.DotComFuture do
     %{
       specs: %{
         request_pipeline: [],
-        platform: "DotComFuture"
+        platform: "DotComFuture",
+        examples: ["/future"]
       }
     }
   end

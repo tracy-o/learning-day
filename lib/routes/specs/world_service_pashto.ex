@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServicePashto do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/pashto/popular/read", "/pashto.json", "/pashto.amp"]
       }
     }
   end

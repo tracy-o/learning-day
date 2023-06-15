@@ -3,7 +3,8 @@ defmodule Routes.Specs.DotComReel do
     %{
       specs: %{
         request_pipeline: [],
-        platform: "DotComReel"
+        platform: "DotComReel",
+        examples: ["/reel"]
       }
     }
   end

@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceUkChina do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        headers_allowlist: ["cookie-ckps_chinese"]
+        headers_allowlist: ["cookie-ckps_chinese"],
+        examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceBurmese do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/burmese/popular/read", "/burmese.json", "/burmese.amp"]
       }
     }
   end

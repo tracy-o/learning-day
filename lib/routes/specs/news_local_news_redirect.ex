@@ -5,7 +5,8 @@ defmodule Routes.Specs.NewsLocalNewsRedirect do
         owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         request_pipeline: ["LocalNewsTopicsRedirect"],
-        platform: "MozartNews"
+        platform: "MozartNews",
+        examples: [%{expected_status: 302, path: "/news/localnews/2643743-london/0"}]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSwahili do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/swahili/popular/read", "/swahili.json", "/swahili.amp"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAzeriAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/azeri/sw.js", "/azeri/manifest.json"]
       }
     }
   end

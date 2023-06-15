@@ -3,7 +3,8 @@ defmodule Routes.Specs.DotComTravel do
     %{
       specs: %{
         request_pipeline: [],
-        platform: "DotComTravel"
+        platform: "DotComTravel",
+        examples: ["/travel"]
       }
     }
   end

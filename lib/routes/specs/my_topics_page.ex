@@ -10,7 +10,8 @@ defmodule Routes.Specs.MyTopicsPage do
         caching_enabled: false,
         request_pipeline: request_pipeline(env),
         response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
-        etag: true
+        etag: true,
+        examples: []
       }
     }
   end

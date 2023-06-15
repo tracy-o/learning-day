@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceJapanese do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/japanese/popular/read", "/japanese.json", "/japanese.amp"]
       }
     }
   end

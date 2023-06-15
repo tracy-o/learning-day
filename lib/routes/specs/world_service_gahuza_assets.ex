@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceGahuzaAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/gahuza/sw.js", "/gahuza/manifest.json"]
       }
     }
   end

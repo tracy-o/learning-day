@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceKoreanAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/korean/sw.js", "/korean/manifest.json"]
       }
     }
   end

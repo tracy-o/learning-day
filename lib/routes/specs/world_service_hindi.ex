@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceHindi do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/hindi/popular/read", "/hindi.json", "/hindi.amp"]
       }
     }
   end

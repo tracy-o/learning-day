@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceNepali do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/nepali/popular/read", "/nepali.json", "/nepali.amp"]
       }
     }
   end

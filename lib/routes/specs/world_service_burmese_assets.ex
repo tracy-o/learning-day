@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceBurmeseAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/burmese/sw.js", "/burmese/manifest.json"]
       }
     }
   end

@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceArabicTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/arabic/topics/c340qj374j6t", "/arabic/topics/c340qj374j6t?page=2"]
       }
     }
   end

@@ -6,7 +6,8 @@ defmodule Routes.Specs.ContainerEnvelopeEditorialText do
         platform: "Webcore",
         request_pipeline: ["UserAgentValidator"],
         runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2021",
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2", "/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2?static=true&mode=testData"]
       }
     }
   end

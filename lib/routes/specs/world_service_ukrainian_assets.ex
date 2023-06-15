@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceUkrainianAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/ukrainian/sw.js", "/ukrainian/manifest.json"]
       }
     }
   end

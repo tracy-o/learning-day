@@ -5,7 +5,8 @@ defmodule Routes.Specs.WorldServiceSomaliTopicRss do
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
-        request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"]
+        request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
+        examples: ["/somali/topics/cz74k7jd8n8t/rss.xml"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.DotComCulture do
     %{
       specs: %{
         request_pipeline: [],
-        platform: "DotComCulture"
+        platform: "DotComCulture",
+        examples: ["/culture"]
       }
     }
   end

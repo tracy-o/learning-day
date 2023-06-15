@@ -5,7 +5,8 @@ defmodule Routes.Specs.WorldServiceUkchinaTopicPage do
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
         query_params_allowlist: query_params_allowlist(production_env),
-        headers_allowlist: ["cookie-ckps_chinese"]
+        headers_allowlist: ["cookie-ckps_chinese"],
+        examples: ["/ukchina/trad/topics/cgqnyy07pqyt", "/ukchina/trad/topics/cgqnyy07pqyt?page=2", "/ukchina/simp/topics/c1nq04kp0r0t", "/ukchina/simp/topics/c1nq04kp0r0t?page=2"]
       }
     }
   end

@@ -7,7 +7,8 @@ defmodule Routes.Specs.NewsTopics do
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),
         request_pipeline: ["NewsTopicsPlatformDiscriminator"],
-        personalisation: "test_only"
+        personalisation: "test_only",
+        examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e"}, "/news/topics/cwjzj55q2p3t/gold", %{expected_status: 301, path: "/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e/gold"}]
       }
     }
   end

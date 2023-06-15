@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceMarathiAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/marathi/sw.js", "/marathi/manifest.json"]
       }
     }
   end

@@ -6,7 +6,8 @@ defmodule Routes.Specs.Bitesize do
         platform: "Webcore",
         request_pipeline: ["ComToUKRedirect"],
         language_from_cookie: true,
-        query_params_allowlist: ["course"]
+        query_params_allowlist: ["course"],
+        examples: ["/bitesize/subjects"]
       }
     }
   end

@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceSerbian do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        headers_allowlist: ["cookie-ckps_serbian"]
+        headers_allowlist: ["cookie-ckps_serbian"],
+        examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
       }
     }
   end

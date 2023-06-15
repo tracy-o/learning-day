@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceThai do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/thai/popular/read", "/thai.json", "/thai.amp"]
       }
     }
   end

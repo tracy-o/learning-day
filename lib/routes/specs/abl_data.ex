@@ -14,7 +14,8 @@ defmodule Routes.Specs.AblData do
           "PreCacheCompression",
           "Etag"
         ],
-        etag: true
+        etag: true,
+        examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
       }
     }
   end

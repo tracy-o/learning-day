@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceIndonesiaAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/indonesia/sw.js", "/indonesia/manifest.json"]
       }
     }
   end

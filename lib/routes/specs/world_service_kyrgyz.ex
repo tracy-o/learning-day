@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceKyrgyz do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/kyrgyz/popular/read", "/kyrgyz.json", "/kyrgyz.amp"]
       }
     }
   end

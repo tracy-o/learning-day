@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceIndonesiaArticlePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: []
       }
     }
   end

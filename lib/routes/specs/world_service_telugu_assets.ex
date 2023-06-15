@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceTeluguAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/telugu/sw.js", "/telugu/manifest.json"]
       }
     }
   end

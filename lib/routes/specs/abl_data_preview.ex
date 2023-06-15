@@ -7,7 +7,8 @@ defmodule Routes.Specs.AblDataPreview do
         platform: "Fabl",
         request_pipeline: ["NewsAppsHardcodedResponse"],
         response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
-        etag: true
+        etag: true,
+        examples: []
       }
     }
   end

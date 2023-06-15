@@ -7,7 +7,8 @@ defmodule Routes.Specs.ClassicAppSport do
         platform: "ClassicApps",
         query_params_allowlist: ["subjectId", "language", "createdBy"],
         response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
-        etag: true
+        etag: true,
+        examples: []
       }
     }
   end

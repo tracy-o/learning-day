@@ -6,7 +6,8 @@ defmodule Routes.Specs.NaidheachdanVideos do
         runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
         platform: "Webcore",
         default_language: "gd",
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/naidheachdan/fbh/53159144"]
       }
     }
   end

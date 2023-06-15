@@ -3,7 +3,8 @@ defmodule Routes.Specs.WeatherLanguage do
     %{
       specs: %{
         platform: "MozartWeather",
-        request_pipeline: ["WeatherLanguageCookie"]
+        request_pipeline: ["WeatherLanguageCookie"],
+        examples: [%{expected_status: 301, path: "/weather/language/en"}]
       }
     }
   end

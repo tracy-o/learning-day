@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceHausaAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/hausa/sw.js", "/hausa/manifest.json"]
       }
     }
   end

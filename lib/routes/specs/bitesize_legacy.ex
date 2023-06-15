@@ -11,7 +11,8 @@ defmodule Routes.Specs.BitesizeLegacy do
       specs: %{
         owner: "bitesize-production@lists.forge.bbc.co.uk",
         platform: "MorphRouter",
-        language_from_cookie: true
+        language_from_cookie: true,
+        examples: ["/bitesize/levels", "/bitesize/guides/zcvy6yc/test.hybrid"]
       }
     }
   end

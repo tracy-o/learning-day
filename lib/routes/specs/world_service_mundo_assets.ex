@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceMundoAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/mundo/sw.js", "/mundo/manifest.json"]
       }
     }
   end

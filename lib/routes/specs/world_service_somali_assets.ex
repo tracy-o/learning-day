@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSomaliAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/somali/sw.js", "/somali/manifest.json"]
       }
     }
   end

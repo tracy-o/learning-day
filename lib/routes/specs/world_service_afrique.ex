@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAfrique do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/afrique/popular/read", "/afrique.json", "/afrique.amp"]
       }
     }
   end

@@ -4,7 +4,8 @@ defmodule Routes.Specs.SportFootballMainScoresFixturesDataPageInApps do
       specs: %{
         owner: "#help-sport",
         runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
-        platform: "MozartSport"
+        platform: "MozartSport",
+        examples: ["/sport/football/scores-fixtures.app"]
       }
     }
   end

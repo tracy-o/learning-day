@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceUzbek do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/uzbek", "/uzbek.json", "/uzbek.amp"]
       }
     }
   end

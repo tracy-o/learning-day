@@ -7,7 +7,8 @@ defmodule Routes.Specs.Search do
         request_pipeline: ["ComToUKRedirect"],
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),
-        caching_enabled: false
+        caching_enabled: false,
+        examples: ["/sounds/search", "/bitesize/search", "/cbbc/search", "/cbeebies/search", "/search"]
       }
     }
   end

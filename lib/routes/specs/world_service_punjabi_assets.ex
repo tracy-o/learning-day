@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServicePunjabiAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/punjabi/sw.js", "/punjabi/manifest.json"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSinhalaAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/sinhala/sw.js", "/sinhala/manifest.json"]
       }
     }
   end

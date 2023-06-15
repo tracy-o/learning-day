@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceKorean do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/korean/popular/read", "/korean.json", "/korean.amp"]
       }
     }
   end

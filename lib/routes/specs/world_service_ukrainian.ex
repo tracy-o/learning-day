@@ -4,6 +4,7 @@ defmodule Routes.Specs.WorldServiceUkrainian do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
+        examples: ["/ukrainian/popular/read", "/ukrainian.json", "/ukrainian.amp"]
       }
     }
   end

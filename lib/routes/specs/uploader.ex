@@ -6,7 +6,8 @@ defmodule Routes.Specs.Uploader do
         runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=300173395",
         platform: "Webcore",
         personalisation: "on",
-        request_pipeline: ["ComToUKRedirect"]
+        request_pipeline: ["ComToUKRedirect"],
+        examples: ["/send/u39697902"]
       }
     }
   end

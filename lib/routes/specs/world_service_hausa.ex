@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceHausa do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/hausa/popular/read", "/hausa.json", "/hausa.amp"]
       }
     }
   end

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAmharic do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env)
+        request_pipeline: pipeline(production_env),
+        examples: ["/amharic/popular/read", "/amharic.json", "/amharic.amp"]
       }
     }
   end

@@ -5,7 +5,8 @@ defmodule Routes.Specs.WeatherVideos do
         owner: "sfv-team@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
         platform: "Webcore",
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/weather/videos/cpvx015ypvxo", "/weather/av/64475513"]
       }
     }
   end

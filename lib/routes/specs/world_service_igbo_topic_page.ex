@@ -4,7 +4,8 @@ defmodule Routes.Specs.WorldServiceIgboTopicPage do
       specs: %{
         platform: "Simorgh",
         request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env)
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/igbo/topics/c340qr24xggt", "/igbo/topics/c340qr24xggt?page=2"]
       }
     }
   end

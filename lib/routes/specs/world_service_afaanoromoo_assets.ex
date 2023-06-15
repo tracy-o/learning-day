@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAfaanoromooAssets do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/afaanoromoo/sw.js", "/afaanoromoo/manifest.json"]
       }
     }
   end

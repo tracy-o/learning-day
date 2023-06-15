@@ -8,7 +8,8 @@ defmodule Routes.Specs.WelshSearch do
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),
         default_language: "cy",
-        caching_enabled: false
+        caching_enabled: false,
+        examples: ["/chwilio"]
       }
     }
   end
