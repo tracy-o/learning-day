@@ -16,6 +16,6 @@ defmodule Routes.Platforms.MozartNews do
     ["ads-debug", "component_env", "country", "edition", "mode", "morph_env", "prominence", "renderer_env", "use_fixture"]
   end
 
-  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "IsCommercial", "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
