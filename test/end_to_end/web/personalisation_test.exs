@@ -692,7 +692,7 @@ defmodule EndToEnd.Web.PersonalisationTest do
   end
 
   defp make_request(conn) do
-    Router.call(conn, [])
+    Router.call(conn, routefile: Routes.Routefiles.Mock)
   end
 
   defp assert_successful_response(conn) do

@@ -10,7 +10,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       :get
       |> conn("/some//path//with//multiple///forward////slashes///")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, _headers, ""} = sent_resp(conn)
     assert Plug.Conn.get_resp_header(conn, "location") == ["/some//path//with//multiple///forward////slashes"]
@@ -20,7 +20,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "///")
       |> Map.put(:request_path, "///")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"location", "/"} in headers
@@ -28,7 +28,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
 
   test "a succesful redirect if there is a trailing slash" do
     conn = conn(:get, "/200-ok-response///")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"location", "/200-ok-response"} in headers
@@ -39,7 +39,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "/200-ok-response///")
       |> put_req_header("req-svc-chain", "GTM")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"server", "Belfrage"} in headers
@@ -51,7 +51,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       conn(:get, "/200-ok-response///")
       |> put_req_header("req-svc-chain", "GTM")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, headers, ""} = sent_resp(conn)
     assert {"req-svc-chain", "GTM,BELFRAGE"} in headers
@@ -61,7 +61,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       :get
       |> conn("https://example.com//foo.com/")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, _headers, ""} = sent_resp(conn)
     assert Plug.Conn.get_resp_header(conn, "location") == ["/foo.com"]
@@ -71,7 +71,7 @@ defmodule EndToEndTest.TrailingSlashRedirectorTest do
     conn =
       :get
       |> conn("https://example.com//foo.com/?foo=bar&a=b")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {301, _headers, ""} = sent_resp(conn)
     assert Plug.Conn.get_resp_header(conn, "location") == ["/foo.com?foo=bar&a=b"]

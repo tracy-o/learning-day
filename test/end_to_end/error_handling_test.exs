@@ -27,7 +27,7 @@ defmodule EndToEnd.ErrorHandlingTest do
     conn = conn(:get, "/200-ok-response")
 
     assert_raise Plug.Conn.WrapperError, "** (RuntimeError) Boom", fn ->
-      Router.call(conn, [])
+      Router.call(conn, routefile: Routes.Routefiles.Mock)
     end
 
     sent_resp(conn)

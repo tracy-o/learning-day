@@ -10,7 +10,7 @@ defmodule BelfrageWeb.RouterTest do
     Enum.each(["/wc-data", "/wc-data/container", "/wc-data/p/container"], fn path ->
       test "will return a 204 for #{path}" do
         conn = conn(:options, unquote(path))
-        conn = Router.call(conn, [])
+        conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
         assert conn.status == 204
 
@@ -26,7 +26,7 @@ defmodule BelfrageWeb.RouterTest do
 
     test "will return a 405" do
       conn = conn(:options, "/")
-      conn = Router.call(conn, [])
+      conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 405
       assert conn.resp_body == ""
@@ -36,7 +36,7 @@ defmodule BelfrageWeb.RouterTest do
   describe "GET /status" do
     test "will return 'OK'" do
       conn = conn(:get, "/status")
-      conn = Router.call(conn, [])
+      conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 200
       assert conn.resp_body == "I'm ok thanks"

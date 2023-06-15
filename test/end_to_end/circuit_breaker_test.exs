@@ -46,7 +46,7 @@ defmodule EndToEnd.CircuitBreakerTest do
     conn =
       :get
       |> conn("/caching-disabled")
-      |> BelfrageWeb.Router.call([])
+      |> BelfrageWeb.Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.status == 200
   end
@@ -79,7 +79,7 @@ defmodule EndToEnd.CircuitBreakerTest do
     conn =
       :get
       |> conn("/caching-disabled")
-      |> BelfrageWeb.Router.call([])
+      |> BelfrageWeb.Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.status == 500
   end

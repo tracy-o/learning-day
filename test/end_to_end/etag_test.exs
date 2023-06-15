@@ -21,7 +21,7 @@ defmodule EndToEnd.EtagTest do
       conn =
         conn(:get, "/etag-support")
         |> put_req_header("if-none-match", @etag)
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [@etag] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)
@@ -31,7 +31,7 @@ defmodule EndToEnd.EtagTest do
       conn =
         conn(:get, "/etag-support")
         |> put_req_header("if-none-match", ~s("something"))
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [@etag] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)
@@ -40,7 +40,7 @@ defmodule EndToEnd.EtagTest do
     test ~s(and no "if-none-match" request header is present, etag is added to response) do
       conn =
         conn(:get, "/etag-support")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [@etag] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)
@@ -52,7 +52,7 @@ defmodule EndToEnd.EtagTest do
       conn =
         conn(:get, "/no-etag-support")
         |> put_req_header("if-none-match", @etag)
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)
@@ -62,7 +62,7 @@ defmodule EndToEnd.EtagTest do
       conn =
         conn(:get, "/no-etag-support")
         |> put_req_header("if-none-match", ~s("something"))
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)
@@ -71,7 +71,7 @@ defmodule EndToEnd.EtagTest do
     test ~s(and no "if-none-match" request header is present, etag is not added to response) do
       conn =
         conn(:get, "/no-etag-support")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert [] == get_resp_header(conn, "etag")
       assert {200, _headers, _body} = sent_resp(conn)

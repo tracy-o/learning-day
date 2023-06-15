@@ -8,7 +8,7 @@ defmodule EndToEnd.RobotsTest do
 
   test "returns the robots.txt file" do
     robots_content = File.read!("priv/static/robots.txt")
-    response_conn = conn(:get, "/robots.txt") |> Router.call([])
+    response_conn = conn(:get, "/robots.txt") |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {200,
             [

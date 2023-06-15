@@ -24,7 +24,7 @@ defmodule ContentEncodingTest do
     end)
 
     conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "gzip, deflate, br")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, headers, compressed_body} = sent_resp(conn)
     assert {"content-encoding", "gzip"} in headers
@@ -43,7 +43,7 @@ defmodule ContentEncodingTest do
     end)
 
     conn = conn(:get, "/proxy-pass") |> put_req_header("accept-encoding", "deflate, br")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
     assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
@@ -66,7 +66,7 @@ defmodule ContentEncodingTest do
 
     test "the response is not encoded (when response is from origin)" do
       conn = conn(:get, "/proxy-pass")
-      conn = Router.call(conn, [])
+      conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
       assert [] == Plug.Conn.get_req_header(conn, "content-encoding")
@@ -76,11 +76,11 @@ defmodule ContentEncodingTest do
       # seed the cache
       conn(:get, "/proxy-pass")
       |> put_req_header("accept-encoding", "deflate, br")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
       conn =
         conn(:get, "/proxy-pass")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<p>content</p>"} = sent_resp(conn)
       assert [] == Plug.Conn.get_req_header(conn, "content-encoding")

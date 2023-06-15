@@ -30,7 +30,7 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
         :get,
         "https://news-app-classic.test.api.bbci.co.uk/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test ~s(with cache-control header values from origin response, with "stale-" values added), %{
@@ -52,7 +52,7 @@ defmodule EndToEnd.ClassicAppFablLdpTest do
           :get,
           "https://news-app-classic.test.api.bbci.co.uk/content/ldp/#{subject_id}?language=#{language}&createdBy=#{created_by}&foo=bar"
         )
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert ["public, stale-if-error=90, stale-while-revalidate=30, max-age=60"] ==
                get_resp_header(conn, "cache-control")

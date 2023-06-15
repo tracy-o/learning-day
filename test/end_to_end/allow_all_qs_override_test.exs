@@ -36,7 +36,7 @@ defmodule AllowAllQsOverrideTest do
     end)
 
     conn = conn(:get, "/moz?country=gb&b=foo&only_allow_this_on_live=123")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
@@ -57,7 +57,7 @@ defmodule AllowAllQsOverrideTest do
     end)
 
     conn = conn(:get, "/moz?a=bar&b=foo&only_allow_this_on_live=123")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _body} = sent_resp(conn)
   end

@@ -20,7 +20,7 @@ defmodule BelfrageWeb.ResponseHeaders.RouteSpecHeaderTest do
       {:ok, @lambda_response}
     end)
 
-    response_conn = conn(:get, "/200-ok-response") |> Router.call([])
+    response_conn = conn(:get, "/200-ok-response") |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {200, _resp_headers, _body} = sent_resp(response_conn)
 

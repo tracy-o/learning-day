@@ -38,7 +38,7 @@ defmodule EndToEnd.ProxyOnJoan do
       HTTPMock |> expect(:execute, 1, fn %HTTP.Request{url: ^url}, _pool -> @http_response end)
 
       conn(:get, "/proxy-on-joan/49336140")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 
@@ -55,7 +55,7 @@ defmodule EndToEnd.ProxyOnJoan do
       end)
 
       conn(:get, "/proxy-on-joan/49336140")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 end

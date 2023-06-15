@@ -40,14 +40,14 @@ defmodule EndToEnd.LanguageTest do
       conn_ga =
         conn(:get, "/200-ok-response")
         |> put_req_header("cookie-ckps_language", "ga")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       :ets.delete_all_objects(:cache)
 
       conn_cy =
         conn(:get, "/200-ok-response")
         |> put_req_header("cookie-ckps_language", "cy")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert get_resp_header(conn_ga, "bsig") == get_resp_header(conn_cy, "bsig")
     end
@@ -57,7 +57,7 @@ defmodule EndToEnd.LanguageTest do
 
       conn(:get, "/200-ok-response")
       |> put_req_header("cookie-ckps_language", "ga")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "the vary header doesn't contain cookie-ckps_language" do
@@ -66,7 +66,7 @@ defmodule EndToEnd.LanguageTest do
       [vary_string] =
         conn(:get, "/200-ok-response")
         |> put_req_header("cookie-ckps_language", "ga")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
         |> get_resp_header("vary")
 
       refute vary_string =~ "cookie-ckps_language"
@@ -80,12 +80,12 @@ defmodule EndToEnd.LanguageTest do
       conn_ga =
         conn(:get, "/language-from-cookie")
         |> put_req_header("cookie-ckps_language", "ga")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       conn_cy =
         conn(:get, "/language-from-cookie")
         |> put_req_header("cookie-ckps_language", "cy")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert get_resp_header(conn_ga, "bsig") != get_resp_header(conn_cy, "bsig")
     end
@@ -95,7 +95,7 @@ defmodule EndToEnd.LanguageTest do
 
       conn(:get, "/language-from-cookie")
       |> put_req_header("cookie-ckps_language", "ga")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "the vary header contains cookie-ckps_language" do
@@ -104,7 +104,7 @@ defmodule EndToEnd.LanguageTest do
       [vary_string] =
         conn(:get, "/language-from-cookie")
         |> put_req_header("cookie-ckps_language", "ga")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
         |> get_resp_header("vary")
 
       assert vary_string =~ "cookie-ckps_language"

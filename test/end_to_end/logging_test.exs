@@ -37,7 +37,7 @@ defmodule EndToEnd.LoggingTest do
           conn(:get, "/200-ok-response?query=querystring")
           |> put_req_header("authorization", "auth-heaader-value")
           |> put_req_header("access-log-req-header", "yes")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
         end)
 
       assert captured_log =~ "query=querystring", "Failed to log querystring"

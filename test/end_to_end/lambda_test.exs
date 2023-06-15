@@ -47,7 +47,7 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/200-ok-response")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200,
             [
@@ -83,7 +83,7 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/200-ok-response?query[hi]=foo")
-    Router.call(conn, [])
+    Router.call(conn, routefile: Routes.Routefiles.Mock)
   end
 
   test "a failed response from a lambda e2e" do
@@ -97,7 +97,7 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/downstream-broken")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {500,
             [
