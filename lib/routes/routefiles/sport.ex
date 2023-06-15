@@ -1036,7 +1036,6 @@ defroutefile "Sport" do
     ]
   end
 
-  # Sport BBC Live - Webcore .app route
   handle "/sport/football/live/:tipo_id.app", using: "SportWebcoreFootballLivePage", examples: ["/sport/football/live/cvpx5wr4nv8t.app"] do
     return_404 if: [
       !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
@@ -1044,6 +1043,26 @@ defroutefile "Sport" do
       !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
     ]
   end
+
+  # Sport BBC Live - Webcore
+  handle "/sport/:discipline/live/:tipo_id", using: "SportWebcoreLivePage", examples: ["/sport/rugby-league/live/cy5q0051p7vt?mode=testData"] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
+      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
+      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+    ]
+  end
+
+  handle "/sport/:discipline/live/:tipo_id.app", using: "SportWebcoreLivePage", examples: ["/sport/rugby-league/live/cy5q0051p7vt.app?mode=testData"] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
+      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
+      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+    ]
+  end
+
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport", examples: ["/sport/sitemap.xml"]
