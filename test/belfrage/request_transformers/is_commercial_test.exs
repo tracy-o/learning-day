@@ -4,7 +4,7 @@ defmodule Belfrage.RequestTransformers.IsCommercialTest do
   use Test.Support.Helper, :mox
 
   alias Belfrage.RequestTransformers.IsCommercial
-  alias Belfrage.{Envelope, Envelope.Request}
+  alias Belfrage.Envelope
 
   describe "call/1" do
     test "adds a request header if request qualifies for bbcx" do
