@@ -953,14 +953,23 @@ defroutefile "Sport" do
   handle "/sport/extra/*any", using: "Sport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
-  handle "/sport/av/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:id.app", using: "SportVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
+  handle "/sport/av/:id.app", using: "SportMediaAssetPage", only_on: "live", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
   handle "/sport/av/:id", using: "SportVideos", examples: ["/sport/av/51107180"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
 
-  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", only_on: "live", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
 
   ## Sport SFV - validate Section(Discipline) and ID
+  handle "/sport/av/:discipline/:id.app", using: "SportVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(id, ~r/^[0-9]{4,9}$/)
+    ]
+  end
   handle "/sport/av/:discipline/:id", using: "SportVideos", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
@@ -970,12 +979,21 @@ defroutefile "Sport" do
 
   redirect "/sport/videos", to: "/sport", status: 301
 
+  handle "/sport/videos/:optimo_id.app", using: "SportVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
   handle "/sport/videos/:optimo_id", using: "SportVideos", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   redirect "/sport/:discipline/videos", to: "/sport/:discipline", status: 301
 
+  handle "/sport/:discipline/videos/:optimo_id.app", using: "SportVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
+  end
   handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", examples: [] do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),

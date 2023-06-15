@@ -453,6 +453,10 @@ defroutefile "Main" do
 
   redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
 
+  handle "/news/av/:id.app", using: "NewsVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
   handle "/news/av/:id", using: "NewsVideos", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
       return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
@@ -466,6 +470,10 @@ defroutefile "Main" do
   end
 
   redirect "/news/videos", to: "/news", status: 301
+
+  handle "/news/videos/:optimo_id.app", using: "NewsVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
   handle "/news/videos/:optimo_id", using: "NewsVideos", examples: [] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -671,8 +679,16 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
+  handle "/cymrufyw/saf/:id.app", using: "CymrufywVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
   handle "/cymrufyw/saf/:id", using: "CymrufywVideos", examples: ["/cymrufyw/saf/53073086"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/cymrufyw/fideo/:optimo_id.app", using: "CymrufywVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", examples: [] do
@@ -719,8 +735,16 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/naidheachdan/fbh/:id.app", using: "NaidheachdanVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
   handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", examples: ["/naidheachdan/fbh/53159144"] do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/naidheachdan/bhidio/:optimo_id.app", using: "NaidheachdanVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", examples: [] do
@@ -3016,6 +3040,10 @@ defroutefile "Main" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
 
+  handle "/weather/videos/:optimo_id.app", using: "WeatherVideosAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
   handle "/weather/videos/:optimo_id", using: "WeatherVideos", examples: ["/weather/videos/cpvx015ypvxo"] do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
@@ -3082,7 +3110,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
+  handle "/newsround/news/watch_newsround.app", using: "NewsroundVideoPageAppPage", only_on: "test", examples: []
   handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", examples: ["/newsround/news/watch_newsround"]
+  handle "/newsround/news/newsroundbsl.app", using: "NewsroundVideoPageAppPage", only_on: "test", examples: []
   handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", examples: ["/newsround/news/newsroundbsl"]
 
   redirect "/newsround/news", to: "/newsround", status: 301
@@ -3106,6 +3136,9 @@ defroutefile "Main" do
   redirect "/newsround/beta/*_any", to: "/newsround", status: 301
   redirect "/schoolreport", to: "/news/topics/cg41ylwv43pt", status: 301
 
+  handle "/newsround/av/:id.app", using: "NewsroundVideoPageAppPage", only_on: "test", examples: [] do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
   handle "/newsround/av/:id", using: "NewsroundVideoPage", examples: ["/newsround/av/43245617"] do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
