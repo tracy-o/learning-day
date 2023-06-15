@@ -22,7 +22,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, [using: id, examples: _examples] = args, do: block) do
+  defmacro handle(matcher, [using: id] = args, do: block) do
     quote bind_quoted: [
             id: id,
             matcher: matcher,
@@ -33,7 +33,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args) do
+  defmacro handle(matcher, [using: id, only_on: env] = args) do
     quote do
       var!(add_route_for_env, BelfrageWeb.RouteMaster).(
         unquote(matcher),
@@ -44,7 +44,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, [using: id, only_on: env, examples: _examples] = args, do: block) do
+  defmacro handle(matcher, [using: id, only_on: env] = args, do: block) do
     quote bind_quoted: [
             id: id,
             matcher: matcher,
@@ -56,7 +56,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle_proxy_pass(matcher, [using: id, only_on: env, examples: _examples] = args) do
+  defmacro handle_proxy_pass(matcher, [using: id, only_on: env] = args) do
     quote do
       var!(add_route_for_env_proxy_pass, BelfrageWeb.RouteMaster).(
         unquote(matcher),
@@ -67,7 +67,7 @@ defmodule BelfrageWeb.RouteMaster do
     end
   end
 
-  defmacro handle(matcher, [using: id, examples: _examples] = args) do
+  defmacro handle(matcher, [using: id] = args) do
     quote do
       var!(add_route, BelfrageWeb.RouteMaster).(unquote(matcher), unquote(id), unquote(args))
     end

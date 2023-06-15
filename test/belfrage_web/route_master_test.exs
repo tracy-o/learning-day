@@ -657,8 +657,7 @@ defmodule BelfrageWeb.RouteMasterTest do
 
       handle_proxy_pass("/*any",
         using: "ProxyPass",
-        only_on: "some_env",
-        examples: ["/foo"]
+        only_on: "some_env"
       )
 
       no_match()
