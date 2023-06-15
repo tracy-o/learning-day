@@ -8,6 +8,7 @@ defmodule Routes.Specs.BitesizeGuides do
           platform: "MorphRouter",
           language_from_cookie: true,
           request_pipeline: ["ComToUKRedirect", "Language"],
+          examples: []
         },
         %{
           owner: "bitesize-production@lists.forge.bbc.co.uk",
@@ -15,6 +16,7 @@ defmodule Routes.Specs.BitesizeGuides do
           language_from_cookie: true,
           personalisation: "on",
           request_pipeline: ["ComToUKRedirect"],
+          examples: ["/bitesize/guides/z9ppv4j/revision/1"]
         }
       ]
     }
