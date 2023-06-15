@@ -1,0 +1,2 @@
+defmodule Belfrage.RequestTransformers.IsCommercial do
+end
