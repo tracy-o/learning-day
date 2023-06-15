@@ -70,27 +70,27 @@ defmodule Belfrage.BrandsTest do
         }
       }
 
-     refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
-   end
+      refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
+    end
 
-   test "returns false if environment is not test" do
-     stub_dial(:bbcx_enabled, "true")
+    test "returns false if environment is not test" do
+      stub_dial(:bbcx_enabled, "true")
 
-     bbcx_envelope = %Envelope{
-       request: %Envelope.Request{
-         raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
-         host: "bbc.com",
-         country: "ca"
-       },
-       private: %Envelope.Private{
-         production_environment: "live"
-       }
-     }
+      bbcx_envelope = %Envelope{
+        request: %Envelope.Request{
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
+          host: "bbc.com",
+          country: "ca"
+        },
+        private: %Envelope.Private{
+          production_environment: "live"
+        }
+      }
 
-     refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
-  end
+      refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
+    end
 
-  test "returns false if cookie not set" do
+    test "returns false if cookie not set" do
       stub_dial(:bbcx_enabled, "true")
 
       bbcx_envelope = %Envelope{
