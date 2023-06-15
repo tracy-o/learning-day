@@ -31,6 +31,7 @@ defmodule Belfrage.ProcessorTest do
       "LambdaOriginAlias",
       "Language",
       "PlatformKillSwitch",
+      "IsCommercial",
       "CircuitBreaker",
       "DevelopmentRequests"
     ]
