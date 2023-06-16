@@ -30,7 +30,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
       expect(Belfrage.Clients.CCPMock, :put, 0, fn _envelope -> flunk("Should never be called.") end)
 
-      conn(:get, "/caching-disabled") |> Router.call([])
+      conn(:get, "/caching-disabled") |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "the cache is never checked for a response" do
@@ -41,7 +41,7 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
 
       expect(Belfrage.Clients.CCPMock, :fetch, 0, fn _envelope -> flunk("Should never be called.") end)
 
-      conn(:get, "/caching-disabled") |> Router.call([])
+      conn(:get, "/caching-disabled") |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "returns a miss from cache" do
@@ -50,9 +50,9 @@ defmodule EndToEnd.ResponseHeaders.EnableCacheTest do
         {:ok, @cacheable_lambda_response}
       end)
 
-      conn(:get, "/caching-disabled") |> Router.call([])
+      conn(:get, "/caching-disabled") |> Router.call(routefile: Routes.Routefiles.Mock)
 
-      response_conn = conn(:get, "/caching-disabled") |> Router.call([])
+      response_conn = conn(:get, "/caching-disabled") |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _resp_headers, _body} = sent_resp(response_conn)
       assert ["MISS"] = get_resp_header(response_conn, "belfrage-cache-status")

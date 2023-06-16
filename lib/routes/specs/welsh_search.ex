@@ -1,13 +1,16 @@
 defmodule Routes.Specs.WelshSearch do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      owner: "D+ESearchAndNavigationDev@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
-      request_pipeline: ["ComToUKRedirect"],
-      platform: "Webcore",
-      query_params_allowlist: query_params_allowlist(production_env),
-      default_language: "cy",
-      caching_enabled: false
+      specs: %{
+        owner: "D+ESearchAndNavigationDev@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
+        request_pipeline: ["ComToUKRedirect"],
+        platform: "Webcore",
+        query_params_allowlist: query_params_allowlist(production_env),
+        default_language: "cy",
+        caching_enabled: false,
+        examples: ["/chwilio"]
+      }
     }
   end
 

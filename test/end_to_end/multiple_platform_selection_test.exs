@@ -34,7 +34,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-mozart-news-platform")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
@@ -56,7 +56,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-webcore-platform")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
@@ -100,7 +100,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
         conn =
           conn(:get, "/platform-selection-with-selector")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
 
         assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
       end)
@@ -143,7 +143,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
 
@@ -163,7 +163,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
@@ -205,7 +205,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
 
@@ -243,7 +243,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
@@ -285,7 +285,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
@@ -326,7 +326,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
 
       conn =
         conn(:get, "/platform-selection-with-selector")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
@@ -351,7 +351,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       )
 
       err_msg = "** (RuntimeError) preflight pipeline for 'AssetTypeWithMultipleSpecs' spec failed: 500"
-      assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, []) end
+      assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, routefile: Routes.Routefiles.Mock) end
     end
   end
 end

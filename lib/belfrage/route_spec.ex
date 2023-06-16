@@ -8,8 +8,7 @@ defmodule Belfrage.RouteSpec do
   @type name :: String.t()
   @type platform :: String.t()
 
-  defstruct name: nil,
-            platform: nil,
+  defstruct platform: nil,
             owner: nil,
             slack_channel: nil,
             request_pipeline: [],
@@ -40,7 +39,8 @@ defmodule Belfrage.RouteSpec do
             mvt_project_id: 0,
             fallback_write_sample: 1,
             etag: false,
-            xray_enabled: false
+            xray_enabled: false,
+            examples: []
 
   @spec list_route_specs(String.t()) :: [map()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
@@ -54,85 +54,109 @@ defmodule Belfrage.RouteSpec do
     module = Module.concat([Routes, Specs, spec_name])
     ensure_module_loaded(module)
 
-    preflight_pipeline =
-      call_preflight_pipeline_func(module, env)
-      |> validate_pipeline(spec_name, :preflight)
+    specification = call_specification_func(module, env)
+    preflight_pipeline = Map.get(specification, :preflight_pipeline, [])
+    specs = Map.get(specification, :specs)
 
     %{
       name: spec_name,
-      preflight_pipeline: preflight_pipeline,
-      specs: get_specs(spec_name, preflight_pipeline, module, env)
+      preflight_pipeline: validate_pipeline(preflight_pipeline, spec_name, :preflight),
+      specs: parse_specs(spec_name, specs, preflight_pipeline, env)
     }
   end
 
-  defp get_specs(spec_name, preflight_pipeline, module, env) do
-    specs =
-      case call_specs_func(module, env) do
-        spec when is_map(spec) ->
-          [spec]
+  @spec list_examples(String.t()) :: [map()]
+  def list_examples(env \\ Application.get_env(:belfrage, :production_environment)) do
+    list_route_specs(env)
+    |> Enum.flat_map(&get_examples/1)
+  end
 
-        [spec] ->
-          [spec]
-
-        specs when length(specs) > 1 ->
-          if preflight_pipeline == [],
-            do: raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
-
-          specs
+  @spec get_examples(String.t() | map(), String.t()) :: map()
+  def get_examples(%{name: spec_name, specs: specs}) do
+    examples =
+      for %{platform: platform_name, examples: examples} <- specs do
+        for example <- examples, do: Map.merge(example, %{platform: platform_name, spec: spec_name})
       end
 
+    :lists.append(examples)
+  end
+
+  def get_examples(spec_name, env \\ Application.get_env(:belfrage, :production_environment)) do
+    get_route_spec(spec_name, env) |> get_examples()
+  end
+
+  defp parse_specs(spec_name, spec, preflight_pipeline, env) when is_map(spec) do
+    parse_specs(spec_name, [spec], preflight_pipeline, env)
+  end
+
+  defp parse_specs(spec_name, specs, [], _env) when length(specs) > 1 do
+    raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
+  end
+
+  defp parse_specs(spec_name, specs, _preflight_pipeline, env) do
     specs
-    |> Enum.map(&put_spec_name(&1, spec_name))
-    |> Enum.map(&update_spec_with_platform(&1, env))
+    |> Enum.map(&update_spec_with_platform(&1, spec_name, env))
     |> validate_unique_platforms(spec_name)
   end
 
-  defp update_spec_with_platform(spec, env) do
+  defp update_spec_with_platform(spec, spec_name, env) do
     platform = get_platform(spec.platform, env)
 
     spec
     |> Map.merge(merge_allowlists(platform, spec))
-    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
-    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
-    |> to_route_spec_struct(platform)
+    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, spec, spec_name, platform))
+    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, spec, spec_name, platform))
+    |> Map.put(:examples, parse_examples(spec, platform))
+    |> validate_spec_fields(spec_name, platform)
     |> Personalisation.maybe_put_personalised_route()
+  end
+
+  defp parse_examples(spec, platform) do
+    case Map.get(spec, :examples, []) do
+      [] -> []
+      examples -> Enum.map(examples, &parse_example(&1, platform))
+    end
+  end
+
+  defp parse_example(path, platform) when is_binary(path) do
+    parse_example(%{path: path}, platform)
+  end
+
+  defp parse_example(example = %{path: path}, platform) do
+    platform_example = Map.get(platform, :examples, %{})
+
+    %{
+      path: path,
+      expected_status: Map.get(example, :expected_status, 200),
+      headers: Map.merge(Map.get(platform_example, :headers, %{}), Map.get(example, :headers, %{}))
+    }
   end
 
   defp get_platform(platform_name, env) do
     module = Module.concat([Routes, Platforms, platform_name])
     ensure_module_loaded(module)
-    call_specs_func(module, env)
+    call_specification_func(module, env)
   end
 
-  defp to_route_spec_struct(spec, platform) do
+  # Currently we use %RouteSpec{} struct as a spec fields validator.
+  # This should be transformed to the json schema validation later.
+  defp validate_spec_fields(spec, spec_name, platform) do
     try do
-      struct!(__MODULE__, Map.merge(platform, spec))
+      struct!(__MODULE__, Map.merge(platform, spec)) |> Map.from_struct()
     catch
-      _, reason -> raise "Invalid '#{inspect(spec.name)}' spec, error: #{inspect(reason)}"
+      _, reason -> raise "Invalid '#{inspect(spec_name)}' spec, error: #{inspect(reason)}"
     end
   end
 
-  defp put_spec_name(spec, spec_name) do
-    Map.put(spec, :name, spec_name)
-  end
-
-  defp call_preflight_pipeline_func(module, env) do
+  defp call_specification_func(module, env) do
     cond do
-      function_exported?(module, :preflight_pipeline, 1) -> module.preflight_pipeline(env)
-      function_exported?(module, :preflight_pipeline, 0) -> module.preflight_pipeline()
-      true -> []
+      function_exported?(module, :specification, 1) -> module.specification(env)
+      function_exported?(module, :specification, 0) -> module.specification()
+      true -> raise "Module '#{module}' must define a specification/0 or specification/1 function"
     end
   end
 
-  defp call_specs_func(module, env) do
-    cond do
-      function_exported?(module, :specs, 1) -> module.specs(env)
-      function_exported?(module, :specs, 0) -> module.specs()
-      true -> raise "Module '#{module}' must define a specs/0 or specs/1 function"
-    end
-  end
-
-  defp merge_validate_pipelines(type, platform, spec) do
+  defp merge_validate_pipelines(type, spec, spec_name, platform) do
     platform_pipeline = Map.get(platform, type, [])
     spec_pipeline = spec[type]
 
@@ -149,7 +173,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline(pipeline, spec.name, pipeline_to_transformer_type(type))
+    validate_pipeline(pipeline, spec_name, pipeline_to_transformer_type(type))
   end
 
   defp merge_allowlists(platform, spec) do

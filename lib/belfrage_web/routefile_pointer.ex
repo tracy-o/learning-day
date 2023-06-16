@@ -11,30 +11,23 @@ defmodule BelfrageWeb.RoutefilePointer do
     routefile.call(conn, routefile.init([]))
   end
 
-  def routefile_module(_conn, _cosmos_env, _mix_env = :test) do
-    Routes.Routefiles.Mock
-  end
-
-  def routefile_module(conn, _cosmos_env, _mix_env = :smoke_test) do
-    Module.concat(["Routes", "Routefiles", product(conn), "Test"])
-  end
-
-  def routefile_module(conn, "live", _mix_env) do
-    Module.concat(["Routes", "Routefiles", product(conn), "Live"])
-  end
-
-  def routefile_module(conn, "test", _mix_env) do
-    Module.concat(["Routes", "Routefiles", product(conn), "Test"])
-  end
-
   def routefile_module(conn, cosmos_env, mix_env) do
+    Module.concat(["Routes", "Routefiles", product(conn), get_env(cosmos_env, mix_env)])
+  end
+
+  def get_env(_cosmos_env, :test), do: "Test"
+  def get_env(_cosmos_env, :smoke_test), do: "Test"
+  def get_env("live", _mix_env), do: "Live"
+  def get_env("test", _mix_env), do: "Test"
+
+  def get_env(cosmos_env, mix_env) do
     Logger.log(:error, "", %{
       msg: "Using Live Routefile as catch all",
       cosmos_env: cosmos_env,
       mix_env: mix_env
     })
 
-    Module.concat(["Routes", "Routefiles", product(conn), "Live"])
+    "Live"
   end
 
   defp product(_conn = %{path_info: []}), do: "Main"

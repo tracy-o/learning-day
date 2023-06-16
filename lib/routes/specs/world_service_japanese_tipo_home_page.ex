@@ -1,8 +1,10 @@
 defmodule Routes.Specs.WorldServiceJapaneseTipoHomePage do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"]
+      }
     }
   end
 end

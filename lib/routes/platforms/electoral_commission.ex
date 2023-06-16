@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.ElectoralCommission do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :electoral_commission_endpoint),
       owner: "NewsSpecialsDevelopment2@bbc.co.uk@bbc.co.uk",

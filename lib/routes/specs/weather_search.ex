@@ -1,8 +1,10 @@
 defmodule Routes.Specs.WeatherSearch do
-    def specs do
-      %{
-        platform: "MozartWeather"
+  def specification do
+    %{
+      specs: %{
+        platform: "MozartWeather",
+        examples: ["/weather/search?s=london"]
       }
-    end
+    }
   end
-  
+end

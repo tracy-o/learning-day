@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServicePersian do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "MozartSimorgh",
-      request_pipeline: pipeline(production_env)
+      specs: %{
+        platform: "MozartSimorgh",
+        request_pipeline: pipeline(production_env),
+        examples: ["/persian/popular/read", "/persian.json", "/persian.amp"]
+      }
     }
   end
 

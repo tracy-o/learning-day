@@ -1,9 +1,12 @@
 defmodule Routes.Specs.WorldServiceHausaTopicPage do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-      query_params_allowlist: query_params_allowlist(production_env)
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/hausa/topics/c5qvpxkx1j7t", "/hausa/topics/c5qvpxkx1j7t?page=2"]
+      }
     }
   end
 

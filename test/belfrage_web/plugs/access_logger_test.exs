@@ -199,7 +199,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
 
       :get
       |> conn("/news/")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
 
@@ -230,7 +230,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       :get
       |> conn("/")
       |> Map.put(:host, "bbcafaanoromoo.com")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
 
@@ -266,7 +266,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       |> conn(path)
       |> Map.put(:host, "www.test.bbc.co.uk")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
 
@@ -302,7 +302,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       |> conn(path)
       |> Map.put(:host, "www.test.bbc.co.uk")
       |> put_req_header("x-bbc-edge-scheme", "http")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
 
@@ -349,7 +349,7 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       :get
       |> conn("/news")
       |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.status == 404
   end

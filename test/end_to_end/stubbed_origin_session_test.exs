@@ -9,7 +9,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
   @moduletag :end_to_end
 
   test "when no token provided" do
-    response_conn = conn(:get, "/my/session") |> Router.call([])
+    response_conn = conn(:get, "/my/session") |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in resp_headers
@@ -21,7 +21,7 @@ defmodule EndToEnd.StubbedOriginSessionTest do
       conn(:get, "/my/session")
       |> Map.put(:host, "www.bbc.co.uk")
       |> personalise_request()
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {200, resp_headers, resp_body} = sent_resp(response_conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"} in resp_headers

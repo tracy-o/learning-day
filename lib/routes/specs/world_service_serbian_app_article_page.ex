@@ -1,9 +1,11 @@
 defmodule Routes.Specs.WorldServiceSerbianAppArticlePage do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      headers_allowlist: ["cookie-ckps_serbian"],
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        headers_allowlist: ["cookie-ckps_serbian"],
+        request_pipeline: ["WorldServiceRedirect"]
+      }
     }
   end
 end

@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceTelugu do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "MozartSimorgh",
-      request_pipeline: pipeline(production_env)
+      specs: %{
+        platform: "MozartSimorgh",
+        request_pipeline: pipeline(production_env),
+        examples: ["/telugu/popular/read", "/telugu.json", "/telugu.amp"]
+      }
     }
   end
 

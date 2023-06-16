@@ -1,10 +1,13 @@
 defmodule Routes.Specs.NaidheachdanStorytellingAppPage do
-  def specs do
+  def specification do
     %{
-      owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
-      platform: "Webcore",
-      default_language: "gd"
+      specs: %{
+        owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
+        platform: "Webcore",
+        default_language: "gd",
+        examples: ["/naidheachdan/sgeulachdan/c3gr8907m3po.app"]
+      }
     }
   end
 end

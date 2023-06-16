@@ -1,10 +1,13 @@
 defmodule Routes.Specs.WorldServiceSerbianTopicPage do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-      query_params_allowlist: query_params_allowlist(production_env),
-      headers_allowlist: ["cookie-ckps_serbian"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
+        query_params_allowlist: query_params_allowlist(production_env),
+        headers_allowlist: ["cookie-ckps_serbian"],
+        examples: ["/serbian/lat/topics/c5wzvzzz5vrt", "/serbian/lat/topics/c5wzvzzz5vrt?page=2", "/serbian/cyr/topics/cqwvxvvw9qrt", "/serbian/cyr/topics/cqwvxvvw9qrt?page=2"]
+      }
     }
   end
 

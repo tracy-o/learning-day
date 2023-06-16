@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.MozartWeather do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :mozart_weather_endpoint),
       owner: "DEWeather@bbc.co.uk",

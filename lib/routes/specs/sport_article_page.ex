@@ -1,8 +1,10 @@
 defmodule Routes.Specs.SportArticlePage do
-  def specs do
+  def specification do
     %{
-      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
-      platform: "Webcore"
+      specs: %{
+        owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
+        platform: "Webcore"
+      }
     }
   end
 end

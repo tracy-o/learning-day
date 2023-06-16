@@ -13,7 +13,7 @@ defmodule Belfrage.RouteSpecTest do
 
     test "merges route attributes into platform attributes" do
       define_platform("MergePlatform", %{caching_enabled: false, default_language: "foo"})
-      define_route("MergeRoute", %{platform: "MergePlatform", default_language: "bar", owner: "baz"})
+      define_route("MergeRoute", %{specs: %{platform: "MergePlatform", default_language: "bar", owner: "baz"}})
 
       %{specs: [spec]} = RouteSpec.get_route_spec("MergeRoute")
       assert spec.platform == "MergePlatform"
@@ -30,10 +30,12 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("MergeAllowlistRoute", %{
-        platform: "MergeAllowlistPlatform",
-        query_params_allowlist: ["param2"],
-        headers_allowlist: ["header2"],
-        cookie_allowlist: ["cookie2"]
+        specs: %{
+          platform: "MergeAllowlistPlatform",
+          query_params_allowlist: ["param2"],
+          headers_allowlist: ["header2"],
+          cookie_allowlist: ["cookie2"]
+        }
       })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("MergeAllowlistRoute")
@@ -51,10 +53,12 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("PlatformWildcardAllowlistRoute", %{
-        platform: "PlatformWildcardAllowlistPlatform",
-        query_params_allowlist: ["param2"],
-        headers_allowlist: ["header2"],
-        cookie_allowlist: ["cookie2"]
+        specs: %{
+          platform: "PlatformWildcardAllowlistPlatform",
+          query_params_allowlist: ["param2"],
+          headers_allowlist: ["header2"],
+          cookie_allowlist: ["cookie2"]
+        }
       })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("PlatformWildcardAllowlistRoute")
@@ -72,10 +76,12 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("RouteWildcardAllowlistRoute", %{
-        platform: "RouteWildcardAllowlistPlatform",
-        query_params_allowlist: "*",
-        headers_allowlist: "*",
-        cookie_allowlist: "*"
+        specs: %{
+          platform: "RouteWildcardAllowlistPlatform",
+          query_params_allowlist: "*",
+          headers_allowlist: "*",
+          cookie_allowlist: "*"
+        }
       })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("RouteWildcardAllowlistRoute")
@@ -90,8 +96,11 @@ defmodule Belfrage.RouteSpecTest do
         request_pipeline: ["Foo", :_routespec_pipeline_placeholder, "Bar"]
       })
 
-      define_route("NoPipelineRoute", %{platform: "PipelinePlaceholderPlatform"})
-      define_route("PipelineRoute", %{platform: "PipelinePlaceholderPlatform", request_pipeline: ["Baz1", "Baz2"]})
+      define_route("NoPipelineRoute", %{specs: %{platform: "PipelinePlaceholderPlatform"}})
+
+      define_route("PipelineRoute", %{
+        specs: %{platform: "PipelinePlaceholderPlatform", request_pipeline: ["Baz1", "Baz2"]}
+      })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("NoPipelineRoute")
       assert spec.platform == "PipelinePlaceholderPlatform"
@@ -106,8 +115,10 @@ defmodule Belfrage.RouteSpecTest do
       define_platform("OverwriteRequestPipelinePlatform", %{request_pipeline: ["Foo"]})
 
       define_route("OverwriteRequestPipelineRoute", %{
-        platform: "OverwriteRequestPipelinePlatform",
-        request_pipeline: ["Bar"]
+        specs: %{
+          platform: "OverwriteRequestPipelinePlatform",
+          request_pipeline: ["Bar"]
+        }
       })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("OverwriteRequestPipelineRoute")
@@ -121,8 +132,10 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("OverwriteResponsePipelineRoute", %{
-        platform: "OverwriteResponsePipelinePlatform",
-        response_pipeline: ["Bar"]
+        specs: %{
+          platform: "OverwriteResponsePipelinePlatform",
+          response_pipeline: ["Bar"]
+        }
       })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("OverwriteResponsePipelineRoute")
@@ -132,8 +145,8 @@ defmodule Belfrage.RouteSpecTest do
 
     test "sets personalised_route attribute" do
       define_platform("PersonalisedPlatform", %{})
-      define_route("PersonalisedRoute", %{platform: "PersonalisedPlatform", personalisation: "on"})
-      define_route("NonPersonalisedRoute", %{platform: "PersonalisedPlatform", personalisation: "off"})
+      define_route("PersonalisedRoute", %{specs: %{platform: "PersonalisedPlatform", personalisation: "on"}})
+      define_route("NonPersonalisedRoute", %{specs: %{platform: "PersonalisedPlatform", personalisation: "off"}})
 
       %{specs: [spec]} = RouteSpec.get_route_spec("PersonalisedRoute")
       assert spec.platform == "PersonalisedPlatform"
@@ -152,8 +165,10 @@ defmodule Belfrage.RouteSpecTest do
 
       define_route(
         "MultiSpecRoute",
-        [%{platform: "MultiSpecPlatform1"}, %{platform: "MultiSpecPlatform2"}],
-        ["TestPreflightTransformer"]
+        %{
+          preflight_pipeline: ["TestPreflightTransformer"],
+          specs: [%{platform: "MultiSpecPlatform1"}, %{platform: "MultiSpecPlatform2"}]
+        }
       )
 
       %{specs: [spec_1, spec_2]} = RouteSpec.get_route_spec("MultiSpecRoute")
@@ -167,8 +182,10 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("ResponsePipelineRoute", %{
-        platform: "ResponsePipelinePlatform",
-        response_pipeline: ["Bar"]
+        specs: %{
+          platform: "ResponsePipelinePlatform",
+          response_pipeline: ["Bar"]
+        }
       })
 
       err_msg = "Module 'Elixir.Belfrage.ResponseTransformers.NonExistingTransformer' doesn't exist"
@@ -182,8 +199,10 @@ defmodule Belfrage.RouteSpecTest do
       define_platform("RequestPipelinePlatform", %{})
 
       define_route("RequestPipelineRoute", %{
-        platform: "RequestPipelinePlatform",
-        request_pipeline: ["NonExistingTransformer"]
+        specs: %{
+          platform: "RequestPipelinePlatform",
+          request_pipeline: ["NonExistingTransformer"]
+        }
       })
 
       err_msg = "Module 'Elixir.Belfrage.RequestTransformers.NonExistingTransformer' doesn't exist"
@@ -200,7 +219,7 @@ defmodule Belfrage.RouteSpecTest do
     end
 
     test "invalidates non-existing platform" do
-      define_route("Route", %{platform: "NonExistingPlatform"})
+      define_route("Route", %{specs: %{platform: "NonExistingPlatform"}})
 
       assert_raise RuntimeError, "Module 'Elixir.Routes.Platforms.NonExistingPlatform' doesn't exist", fn ->
         RouteSpec.get_route_spec("Route")
@@ -215,7 +234,7 @@ defmodule Belfrage.RouteSpecTest do
         not_allowed_attr: :blah
       })
 
-      define_route("AllowedAttrRoute", %{platform: "NotAllowedAttrPlatform"})
+      define_route("AllowedAttrRoute", %{specs: %{platform: "NotAllowedAttrPlatform"}})
 
       err_msg = "Invalid '\"AllowedAttrRoute\"' spec, error: {:badkey, :not_allowed_attr}"
 
@@ -230,8 +249,10 @@ defmodule Belfrage.RouteSpecTest do
       })
 
       define_route("DuplicateTransformersRoute", %{
-        platform: "DuplicateTransformersPlatform",
-        request_pipeline: ["LambdaOriginAlias"]
+        specs: %{
+          platform: "DuplicateTransformersPlatform",
+          request_pipeline: ["LambdaOriginAlias"]
+        }
       })
 
       err_msg =
@@ -247,8 +268,10 @@ defmodule Belfrage.RouteSpecTest do
 
       define_route(
         "DuplicatePreflightTransformersRoute",
-        %{platform: "DuplicatePreflightTransformersPlatform"},
-        ["TestPreflightTransformer", "TestPreflightTransformer"]
+        %{
+          preflight_pipeline: ["TestPreflightTransformer", "TestPreflightTransformer"],
+          specs: %{platform: "DuplicatePreflightTransformersPlatform"}
+        }
       )
 
       err_msg =
@@ -264,8 +287,10 @@ defmodule Belfrage.RouteSpecTest do
 
       define_route(
         "DuplicatePlatformRoute",
-        [%{platform: "DuplicatePlatform"}, %{platform: "DuplicatePlatform"}],
-        ["TestPreflightTransformer"]
+        %{
+          preflight_pipeline: ["TestPreflightTransformer"],
+          specs: [%{platform: "DuplicatePlatform"}, %{platform: "DuplicatePlatform"}]
+        }
       )
 
       err_msg =
@@ -285,16 +310,120 @@ defmodule Belfrage.RouteSpecTest do
         request_pipeline: ["LambdaOriginAlias", "CircuitBreaker"]
       })
 
-      define_route("RequiredPreflightPipelineRoute", [
-        %{platform: "RequiredPreflightPipelinePlatform"},
-        %{platform: "OtherRequiredPreflightPipelinePlatform"}
-      ])
+      define_route(
+        "RequiredPreflightPipelineRoute",
+        %{
+          specs: [
+            %{platform: "RequiredPreflightPipelinePlatform"},
+            %{platform: "OtherRequiredPreflightPipelinePlatform"}
+          ]
+        }
+      )
 
       assert_raise RuntimeError,
                    "Pre flight pipeline doesn't exist for RequiredPreflightPipelineRoute, but spec contains multiple Platforms.",
                    fn ->
                      RouteSpec.get_route_spec("RequiredPreflightPipelineRoute")
                    end
+    end
+
+    test "merges tests and platform example attributes" do
+      define_platform("ExampleAttrsPlatform1", %{
+        examples: %{
+          headers: %{"header-1": "header-value-1"},
+          non_existing_attribute: "some_value"
+        }
+      })
+
+      define_platform("ExampleAttrsPlatform2", %{})
+
+      define_route(
+        "ExampleTestsRoute",
+        %{
+          preflight_pipeline: ["TestPreflightTransformer"],
+          specs: [
+            %{
+              platform: "ExampleAttrsPlatform1",
+              examples: [
+                "/path/1",
+                %{
+                  path: "/path/2",
+                  headers: %{
+                    "header-1": "spec-header-value-1",
+                    "spec-header-2": "spec-header-value-2"
+                  }
+                }
+              ]
+            },
+            %{
+              platform: "ExampleAttrsPlatform2",
+              examples: [
+                %{
+                  path: "/path/3",
+                  expected_status: 301
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      spec_1_examples_result = [
+        %{
+          path: "/path/1",
+          headers: %{"header-1": "header-value-1"},
+          expected_status: 200
+        },
+        %{
+          path: "/path/2",
+          headers: %{
+            "header-1": "spec-header-value-1",
+            "spec-header-2": "spec-header-value-2"
+          },
+          expected_status: 200
+        }
+      ]
+
+      spec_2_examples_result = [
+        %{
+          path: "/path/3",
+          headers: %{},
+          expected_status: 301
+        }
+      ]
+
+      %{specs: [spec_1, spec_2]} = RouteSpec.get_route_spec("ExampleTestsRoute")
+      assert spec_1.examples == spec_1_examples_result
+      assert spec_2.examples == spec_2_examples_result
+    end
+  end
+
+  describe "get_examples/1" do
+    test "return correct examples per spec" do
+      define_platform("GetExamplePlatform", %{})
+
+      define_route(
+        "GetExampleRoute",
+        %{specs: %{platform: "GetExamplePlatform", examples: ["/path/1", "/path/2"]}}
+      )
+
+      [example1, example2] = RouteSpec.get_examples("GetExampleRoute")
+
+      assert example1 == %{
+               expected_status: 200,
+               headers: %{},
+               path: "/path/1",
+               platform: "GetExamplePlatform",
+               spec: "GetExampleRoute"
+             }
+
+      assert example2 == %{
+               expected_status: 200,
+               headers: %{},
+               path: "/path/2",
+               platform: "GetExamplePlatform",
+               spec: "GetExampleRoute"
+             }
     end
   end
 end

@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.DotComReel do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :dotcom_reel_endpoint),
       owner: "GnlDevOps@bbc.com",

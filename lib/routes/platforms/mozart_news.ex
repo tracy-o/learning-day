@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.MozartNews do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :mozart_news_endpoint),
       owner: "DENewsFrameworksTeam@bbc.co.uk",

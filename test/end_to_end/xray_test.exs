@@ -40,7 +40,7 @@ defmodule EndToEnd.XrayTest do
       assert {_event, %{start_time: _start_time, duration: _duration}, _metadata} =
                intercept_metric(~w(webcore request stop)a, fn ->
                  conn(:get, "/200-ok-response")
-                 |> Router.call([])
+                 |> Router.call(routefile: Routes.Routefiles.Mock)
                end)
     end
 
@@ -52,7 +52,7 @@ defmodule EndToEnd.XrayTest do
       end)
 
       conn(:get, "/200-ok-response")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 
@@ -72,7 +72,7 @@ defmodule EndToEnd.XrayTest do
         conn(:get, "/fabl/xray")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _, _} = sent_resp(conn)
     end
@@ -97,7 +97,7 @@ defmodule EndToEnd.XrayTest do
         conn(:get, "/fabl/xray")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/5.0")
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _, _} = sent_resp(conn)
     end
@@ -122,7 +122,7 @@ defmodule EndToEnd.XrayTest do
         conn(:get, "/fabl/xray")
         |> Plug.Conn.put_req_header("user-agent", "Mozilla/fo%a0%B4%E")
         |> Plug.Conn.put_req_header("referer", "https://bbc.co.uk/%ED%95%B4%EC")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _, _} = sent_resp(conn)
     end
@@ -138,7 +138,7 @@ defmodule EndToEnd.XrayTest do
     end)
 
     conn(:get, "/200-ok-response")
-    |> Router.call([])
+    |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert_receive {:trace, _, :receive, {_, _, {:send, webcore_service_subsegment}}}
     assert_receive {:trace, _, :receive, {_, _, {:send, invoke_lambda_service_subsegment}}}
@@ -163,7 +163,7 @@ defmodule EndToEnd.XrayTest do
     end)
 
     conn(:get, "/fabl/xray")
-    |> Router.call([])
+    |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert_receive {:trace, _, :receive, {_, _, {:send, segment}}}
     refute_receive {:trace, _, :receive, {_, _, {:send, _subsegment}}}
@@ -181,7 +181,7 @@ defmodule EndToEnd.XrayTest do
     end)
 
     conn(:get, "/ws-mvt")
-    |> Router.call([])
+    |> Router.call(routefile: Routes.Routefiles.Mock)
 
     refute_receive {:trace, _, :receive, {_, _, {:send, _segment}}}
   end
@@ -203,7 +203,7 @@ defmodule EndToEnd.XrayTest do
         {:ok, @http_response}
       end)
 
-      conn = conn(:get, "/proxy-pass") |> Router.call([])
+      conn = conn(:get, "/proxy-pass") |> Router.call(routefile: Routes.Routefiles.Mock)
       {200, _, _} = sent_resp(conn)
     end
   end

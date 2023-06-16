@@ -1,9 +1,11 @@
 defmodule Routes.Specs.PersonalisedToNonPersonalised do
-  def specs() do
+  def specification do
     %{
-      platform: "Webcore",
-      request_pipeline: ["PersonalisedToNonPersonalised"],
-      personalisation: "test_only"
+      specs: %{
+        platform: "Webcore",
+        request_pipeline: ["PersonalisedToNonPersonalised"],
+        personalisation: "test_only"
+      }
     }
   end
 end

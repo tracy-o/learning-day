@@ -1,9 +1,12 @@
 defmodule Routes.Specs.WorldServicePashtoTopicPage do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-      query_params_allowlist: query_params_allowlist(production_env)
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/pashto/topics/c8y94yr7y9rt", "/pashto/topics/c8y94yr7y9rt?page=2"]
+      }
     }
   end
 

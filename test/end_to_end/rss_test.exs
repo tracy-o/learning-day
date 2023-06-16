@@ -31,7 +31,7 @@ defmodule EndToEnd.RssTest do
         :get,
         "https://feeds.bbci.co.uk/sport/9f2b27b0-641f-4d9a-a400-b9db34e9cdea/rss.xml"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.resp_body == "<h1>500 Internal Server Error</h1>\n<!-- Belfrage -->"
     assert conn.status == 500
@@ -60,7 +60,7 @@ defmodule EndToEnd.RssTest do
         :get,
         "https://feeds.bbci.co.uk/sport/9f2b27b0-641f-4d9a-a400-b9db34e9cdea/rss.xml"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.resp_body == "<h1>404 Page Not Found</h1>\n<!-- Belfrage -->"
     assert conn.status == 404
@@ -88,7 +88,7 @@ defmodule EndToEnd.RssTest do
         :get,
         "https://feeds.bbci.co.uk/sport/9f2b27b0-641f-4d9a-a400-b9db34e9cdea/rss.xml"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert conn.resp_body == "RSS Content from FABL"
     assert conn.status == 200

@@ -100,6 +100,6 @@ defmodule EndToEnd.ResponseHeadersTest do
   end
 
   def call(path) do
-    conn(:get, path) |> Router.call([])
+    conn(:get, path) |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 end

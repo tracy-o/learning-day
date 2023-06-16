@@ -1,20 +1,19 @@
 defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
-  def specs do
-    [
-      %{
-        owner: "Some guy",
-        runbook: "Some runbook",
-        platform: "Webcore"
-      },
-      %{
-        owner: "Some guy",
-        runbook: "Some runbook",
-        platform: "MozartNews"
-      }
-    ]
-  end
-
-  def preflight_pipeline do
-    ["TestPreflightTransformer"]
+  def specification do
+    %{
+      preflight_pipeline: ["TestPreflightTransformer"],
+      specs: [
+        %{
+          owner: "Some guy",
+          runbook: "Some runbook",
+          platform: "Webcore"
+        },
+        %{
+          owner: "Some guy",
+          runbook: "Some runbook",
+          platform: "MozartNews"
+        }
+      ]
+    }
   end
 end

@@ -57,9 +57,9 @@ defmodule Test.Support.Helper do
     apply(__MODULE__, which, [])
   end
 
-  def get_route(endpoint, path, "WorldService" <> _language) do
+  def get_route(endpoint, path, headers, "WorldService" <> _language) do
     if String.ends_with?(path, "/rss.xml") do
-      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"}])
+      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"} | headers])
     else
       host_header =
         case String.contains?(endpoint, ".test.") do
@@ -67,43 +67,46 @@ defmodule Test.Support.Helper do
           false -> "www.bbc.com"
         end
 
-      request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+      request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
     end
   end
 
-  def get_route(endpoint, path, "UploaderWorldService") do
+  def get_route(endpoint, path, headers, "UploaderWorldService") do
     host_header =
       case String.contains?(endpoint, ".test.") do
         true -> "www.test.bbc.com"
         false -> "www.bbc.com"
       end
 
-    request_route(endpoint, path, [{"x-forwarded-host", host_header}])
+    request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
   end
 
   # ContainerEnvelope* route specs use `UserAgentValidator` that checks that a
   # certain user-agent header is present, otherwise a 400 response is returned
-  def get_route(endpoint, path, "ContainerEnvelope" <> _spec) do
-    request_route(endpoint, path, [{"x-forwarded-host", endpoint}, {"user-agent", "MozartFetcher"}])
+  def get_route(endpoint, path, headers, "ContainerEnvelope" <> _spec) do
+    headers = [{"x-forwarded-host", endpoint}, {"user-agent", "MozartFetcher"} | headers]
+    request_route(endpoint, path, headers)
   end
 
-  def get_route(endpoint, path, "ClassicApp" <> _spec) do
-    request_route(endpoint, path, [{"host", "news-app-classic.api.bbci.co.uk"}])
+  def get_route(endpoint, path, headers, "ClassicApp" <> _spec) do
+    request_route(endpoint, path, [{"host", "news-app-classic.api.bbci.co.uk"} | headers])
   end
 
-  def get_route(endpoint, path, "Bitesize" <> _spec) do
-    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"}])
+  def get_route(endpoint, path, headers, "Bitesize" <> _spec) do
+    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"} | headers])
   end
 
-  def get_route(endpoint, path, _spec), do: get_route(endpoint, path)
+  def get_route(endpoint, path, headers, _spec), do: get_route(endpoint, path, headers)
 
-  def get_route(endpoint, path) do
+  def get_route(endpoint, path, headers) do
     if String.ends_with?(path, "/rss.xml") do
-      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"}])
+      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"} | headers])
     else
-      request_route(endpoint, path, [{"x-forwarded-host", endpoint}])
+      request_route(endpoint, path, [{"x-forwarded-host", endpoint} | headers])
     end
   end
+
+  def get_route(endpoint, path), do: get_route(endpoint, path, [])
 
   defp request_route(endpoint, path, headers) do
     Finch.build(:get, "https://#{endpoint}#{path}", headers)

@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceUkChinaAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/ukchina/sw.js", "/ukchina/manifest.json"]
+      }
     }
   end
 end

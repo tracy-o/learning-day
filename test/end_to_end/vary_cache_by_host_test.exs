@@ -31,11 +31,16 @@ defmodule VaryCacheByHost do
   end
 
   test "different hosts produce different request hashes", conns do
-    [no_host_header_bsig] = conns.no_host_header |> Router.call([]) |> get_resp_header("bsig")
-    [no_host_header_on_preview_bsig] = conns.no_host_header_on_preview |> Router.call([]) |> get_resp_header("bsig")
+    [no_host_header_bsig] =
+      conns.no_host_header |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("bsig")
 
-    [edge_host_bsig] = conns.edge_host |> Router.call([]) |> get_resp_header("bsig")
-    [forwarded_host_bsig] = conns.forwarded_host |> Router.call([]) |> get_resp_header("bsig")
+    [no_host_header_on_preview_bsig] =
+      conns.no_host_header_on_preview |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("bsig")
+
+    [edge_host_bsig] = conns.edge_host |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("bsig")
+
+    [forwarded_host_bsig] =
+      conns.forwarded_host |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("bsig")
 
     signatures = [no_host_header_bsig, no_host_header_on_preview_bsig, edge_host_bsig, forwarded_host_bsig]
     assert signatures == signatures |> Enum.uniq()

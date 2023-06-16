@@ -1,11 +1,13 @@
 defmodule Routes.Specs.ContainerEnvelopeTestContainers do
-  def specs do
+  def specification do
     %{
-      owner: "d&ewebcorepresentationteam@bbc.co.uk",
-      platform: "Webcore",
-      runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book#PresentationLayerRunBook-ContainerAPI",
-      query_params_allowlist: ["q", "page", "static"],
-      request_pipeline: ["UserAgentValidator"]
+      specs: %{
+        owner: "d&ewebcorepresentationteam@bbc.co.uk",
+        platform: "Webcore",
+        runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book#PresentationLayerRunBook-ContainerAPI",
+        query_params_allowlist: ["q", "page", "static"],
+        request_pipeline: ["UserAgentValidator"]
+      }
     }
   end
 end

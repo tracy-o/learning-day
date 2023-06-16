@@ -17,10 +17,6 @@ defmodule Belfrage.SmokeTestCase do
     Application.get_env(:belfrage, :smoke)[String.to_atom(environment)]
   end
 
-  def normalise_example(path) when is_binary(path), do: {path, 200}
-
-  def normalise_example({path, status_code}) when is_binary(path) and is_integer(status_code), do: {path, status_code}
-
   def truncate_path(path) do
     if String.length(path) > 100 do
       "#{String.slice(path, 0, 25)}...#{String.slice(path, -25, 25)}"
@@ -29,12 +25,12 @@ defmodule Belfrage.SmokeTestCase do
     end
   end
 
-  def retry_route(endpoint, path, spec, retry_check) do
-    do_retry({endpoint, path, spec}, retry_check, @retry_times)
+  def retry_route(endpoint, path, headers, spec, retry_check) do
+    do_retry({endpoint, path, headers, spec}, retry_check, @retry_times)
   end
 
-  defp do_retry({endpoint, path, spec}, retry_check, times) do
-    with {:ok, resp} <- Helper.get_route(endpoint, path, spec),
+  defp do_retry({endpoint, path, headers, spec}, retry_check, times) do
+    with {:ok, resp} <- Helper.get_route(endpoint, path, Map.to_list(headers), spec),
          :ok <- retry_check.(resp) do
       {:ok, resp}
     else
@@ -43,7 +39,7 @@ defmodule Belfrage.SmokeTestCase do
           Process.sleep(@retry_interval)
 
           IO.puts("[🐡] error: #{inspect(reason)}, retry #{times + 1 - @retry_times}/#{@retry_times}: #{path}")
-          do_retry({endpoint, path, spec}, retry_check, times - 1)
+          do_retry({endpoint, path, headers, spec}, retry_check, times - 1)
         else
           {:error, reason}
         end
@@ -51,7 +47,6 @@ defmodule Belfrage.SmokeTestCase do
   end
 
   defmacro __using__(
-             route_matcher: route_matcher,
              matcher_spec: matcher_spec,
              environments: environments
            ) do
@@ -60,9 +55,8 @@ defmodule Belfrage.SmokeTestCase do
       alias Test.Support.Helper
 
       import Belfrage.SmokeTestCase,
-        only: [truncate_path: 1, tld: 1, targets_for: 1, normalise_example: 1, retry_route: 4]
+        only: [truncate_path: 1, tld: 1, targets_for: 1, retry_route: 5]
 
-      @route_matcher unquote(route_matcher)
       @matcher_spec unquote(matcher_spec)
       @environments unquote(environments)
 
@@ -71,40 +65,33 @@ defmodule Belfrage.SmokeTestCase do
         @smoke_env smoke_env
         @host host
 
-        describe "#{@matcher_spec.using} #{@route_matcher} against #{@smoke_env} #{@target}" do
-          @describetag spec: @matcher_spec.using
+        describe "#{@matcher_spec.spec} #{@matcher_spec.platform} against #{@smoke_env} #{@target}" do
+          @describetag spec: @matcher_spec.spec
+          @tag stack: @target
 
-          for example <- @matcher_spec.examples do
-            {path, expected_status_code} = normalise_example(example)
-            @path path
-            @expected_status_code expected_status_code
+          test "#{truncate_path(@matcher_spec.path)}" do
+            test_properties = %{
+              expected_status: @matcher_spec.expected_status,
+              matcher: @matcher_spec,
+              smoke_env: @smoke_env,
+              target: @target,
+              host: @host,
+              tld: tld(@host)
+            }
 
-            @tag route: @route_matcher
-            @tag stack: @target
-            test "#{truncate_path(path)}", context do
-              test_properties = %{
-                expected_status: @expected_status_code,
-                matcher: @matcher_spec,
-                smoke_env: @smoke_env,
-                target: @target,
-                host: @host,
-                tld: tld(@host)
-              }
+            retry_check = fn resp ->
+              Expectations.expect_response(resp, test_properties)
+            end
 
-              retry_check = fn resp ->
-                Expectations.expect_response(resp, test_properties)
-              end
+            case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, @matcher_spec.spec, retry_check) do
+              {:ok, resp} ->
+                assert true
 
-              case retry_route(@host, @path, @matcher_spec.using, retry_check) do
-                {:ok, resp} ->
-                  assert true
+              {:error, reason} when is_binary(reason) ->
+                assert false, reason
 
-                {:error, reason} when is_binary(reason) ->
-                  assert false, reason
-
-                {:error, reason} ->
-                  assert false, inspect(reason)
-              end
+              {:error, reason} ->
+                assert false, inspect(reason)
             end
           end
         end

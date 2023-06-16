@@ -119,7 +119,7 @@ defmodule EndToEnd.MvtTest do
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -134,7 +134,7 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -148,14 +148,14 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value_a")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_one] = get_resp_header(response, "bsig")
 
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value_b")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_two] = get_resp_header(response, "bsig")
 
@@ -176,7 +176,7 @@ defmodule EndToEnd.MvtTest do
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -192,7 +192,7 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -214,7 +214,7 @@ defmodule EndToEnd.MvtTest do
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -229,14 +229,14 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;green")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_one] = get_resp_header(response, "bsig")
 
       response =
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;blue")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_two] = get_resp_header(response, "bsig")
 
@@ -249,7 +249,7 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -263,14 +263,14 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value_a")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_one] = get_resp_header(response, "bsig")
 
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value_b")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [request_id_two] = get_resp_header(response, "bsig")
 
@@ -291,7 +291,7 @@ defmodule EndToEnd.MvtTest do
         conn(:get, "/mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -306,7 +306,7 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/mvt")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -323,7 +323,7 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [vary_header] = get_resp_header(response, "vary")
     assert String.contains?(vary_header, "bbc-mvt-1")
@@ -336,7 +336,7 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [vary_header] = get_resp_header(response, "vary")
     assert String.contains?(vary_header, "bbc-mvt-1")
@@ -357,7 +357,7 @@ defmodule EndToEnd.MvtTest do
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
       |> put_req_header("bbc-mvt-2", "feature;sidebar;false")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert cached_responses() == 1
 
@@ -375,7 +375,7 @@ defmodule EndToEnd.MvtTest do
 
     response =
       conn(:get, "/mvt")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [vary_header] = get_resp_header(response, "vary")
     assert String.contains?(vary_header, "bbc-mvt-2")
@@ -388,7 +388,7 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [vary_header] = get_resp_header(response, "vary")
     refute String.contains?(vary_header, "bbc-mvt-2")
@@ -401,14 +401,14 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;green")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [request_id_one] = get_resp_header(response, "bsig")
 
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;blue")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     [request_id_two] = get_resp_header(response, "bsig")
 
@@ -432,7 +432,7 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert cached_responses() == 0
 
@@ -453,7 +453,7 @@ defmodule EndToEnd.MvtTest do
     response =
       conn(:get, "/mvt")
       |> put_req_header("bbc-mvt-2", "experiment;button_colour;red")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert cached_responses() == 0
 
@@ -485,7 +485,7 @@ defmodule EndToEnd.MvtTest do
       conn(:get, "/ws-mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
       |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "on live, mvt headers but not override headers are in the request headers" do
@@ -500,7 +500,7 @@ defmodule EndToEnd.MvtTest do
       conn(:get, "/ws-mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
       |> put_req_header("mvt-some_experiment", "experiment;some_value")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "on test, mvt headers and override headers are in the request headers" do
@@ -518,7 +518,7 @@ defmodule EndToEnd.MvtTest do
       conn(:get, "/ws-mvt")
       |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
       |> put_req_header("mvt-some_experiment", "experiment;some_value")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "on test and live 'bbc-mvt-complete' is removed from the raw headers" do
@@ -529,7 +529,7 @@ defmodule EndToEnd.MvtTest do
 
       conn(:get, "/ws-mvt")
       |> put_req_header("bbc-mvt-complete", "1")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
 
     test "on live, will vary on mapped mvt headers but will not vary on override headers" do
@@ -547,7 +547,7 @@ defmodule EndToEnd.MvtTest do
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -571,7 +571,7 @@ defmodule EndToEnd.MvtTest do
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
         |> put_req_header("bbc-mvt-5", "feature;sidebar;false")
         |> put_req_header("mvt-some_experiment", "experiment;some_value")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 
@@ -590,7 +590,7 @@ defmodule EndToEnd.MvtTest do
       response =
         conn(:get, "/ws-mvt")
         |> put_req_header("bbc-mvt-1", "experiment;button_colour;red")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       [vary_header] = get_resp_header(response, "vary")
 

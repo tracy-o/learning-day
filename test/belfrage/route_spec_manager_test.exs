@@ -23,6 +23,7 @@ defmodule Belfrage.RouteSpecManagerTest do
   describe "list_specs" do
     test "retrieves specs with expected values" do
       Enum.each(Belfrage.RouteSpecManager.list_specs(), fn spec ->
+        assert match?(%{name: _, preflight_pipeline: _, specs: _}, spec)
         assert is_route_spec_list?(spec.specs)
       end)
     end
@@ -38,6 +39,14 @@ defmodule Belfrage.RouteSpecManagerTest do
       live_specs = Belfrage.RouteSpecManager.list_specs()
 
       refute live_specs == test_specs
+    end
+  end
+
+  describe "list_examples" do
+    test "retrieves examples with expected values" do
+      Enum.each(Belfrage.RouteSpecManager.list_examples(), fn example ->
+        assert match?(%{expected_status: _, headers: _, path: _, platform: _, spec: _}, example)
+      end)
     end
   end
 
@@ -73,6 +82,6 @@ defmodule Belfrage.RouteSpecManagerTest do
   end
 
   defp is_route_spec_list?(spec_list) do
-    Enum.all?(spec_list, &is_struct(&1, RouteSpec))
+    Enum.all?(spec_list, &is_map/1)
   end
 end

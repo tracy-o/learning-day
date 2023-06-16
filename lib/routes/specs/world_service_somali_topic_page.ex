@@ -1,9 +1,12 @@
 defmodule Routes.Specs.WorldServiceSomaliTopicPage do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-      query_params_allowlist: query_params_allowlist(production_env)
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
+        query_params_allowlist: query_params_allowlist(production_env),
+        examples: ["/somali/topics/cz74k7jd8n8t", "/somali/topics/cz74k7jd8n8t?page=2"]
+      }
     }
   end
 

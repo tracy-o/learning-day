@@ -19,7 +19,6 @@ defmodule Mix.Tasks.Routes do
   defp get_route_maps(
          {route_matcher, %{
            using: spec_name,
-           examples: examples,
            only_on: only_on}},
          env
        ) do
@@ -29,7 +28,6 @@ defmodule Mix.Tasks.Routes do
       "Route Matcher" => route_matcher,
       "RouteSpec" => spec_name,
       "Platform" => spec.platform,
-      "Examples" => examples,
       "Runbook" => spec.runbook,
       "Owner" => spec.owner,
       "env" => only_on || "live"

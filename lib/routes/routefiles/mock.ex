@@ -29,89 +29,89 @@ defroutefile "Mock", "test" do
   redirect("/some/path/*any", to: "/another-path/*any", status: 301)
   redirect("/redirect-to-root", to: "/", status: 302)
 
-  handle "/", using: "SomeRouteState", examples: ["/"]
+  handle "/", using: "SomeRouteState"
 
-  handle "/fabl/:name", using: "SomeFablRouteState", examples: ["/fabl/xray"]
+  handle "/fabl/:name", using: "SomeFablRouteState"
 
-  handle "/200-ok-response", using: "SomeRouteState", examples: ["/200-ok-response"]
+  handle "/200-ok-response", using: "SomeRouteState"
 
-  handle "/202-ok-response", using: "SomeClassicAppsRouteSpec", examples: ["/202-ok-response"]
+  handle "/202-ok-response", using: "SomeClassicAppsRouteSpec"
 
-  handle "/downstream-not-found", using: "SomeRouteState", examples: ["/downstream-not-found"]
+  handle "/downstream-not-found", using: "SomeRouteState"
 
-  handle "/downstream-broken", using: "SomeRouteState", examples: ["/downstream-broken"]
+  handle "/downstream-broken", using: "SomeRouteState"
 
-  handle "/premature-404", using: "SomeRouteState", examples: ["/premature-404"] do
+  handle "/premature-404", using: "SomeRouteState" do
     return_404(if: true)
   end
 
-  handle "/sends-request-downstream", using: "SomeRouteState", examples: ["/sends-request-downstream"] do
+  handle "/sends-request-downstream", using: "SomeRouteState" do
     return_404(if: false)
   end
 
-  handle "/moz", using: "Moz", examples: ["/moz"]
+  handle "/moz", using: "Moz"
 
-  handle "/com-to-uk-redirect", using: "SomeRouteStateComToUK", examples: ["/com-to-uk-redirect"]
+  handle "/com-to-uk-redirect", using: "SomeRouteStateComToUK"
 
-  handle "/my/session", using: "MySession", examples: []
+  handle "/my/session", using: "MySession"
 
-  handle "/my/session/webcore-platform", using: "MySessionWebcorePlatform", examples: []
+  handle "/my/session/webcore-platform", using: "MySessionWebcorePlatform"
 
-  handle "/route-allow-headers", using: "SomeRouteStateAllowHeaders", examples: []
+  handle "/route-allow-headers", using: "SomeRouteStateAllowHeaders"
 
-  handle "/format/rewrite/:discipline/av/:team.app", using: "SomeMozartRouteState", examples: []
-  handle "/format/rewrite/:discipline/av/:team", using: "SomeRouteState", examples: []
+  handle "/format/rewrite/:discipline/av/:team.app", using: "SomeMozartRouteState"
+  handle "/format/rewrite/:discipline/av/:team", using: "SomeRouteState"
 
-  handle "/format/rewrite/:discipline.app", using: "SomeMozartRouteState", examples: []
-  handle "/format/rewrite/:discipline", using: "SomeRouteState", examples: []
-  handle "/format/rewrite/:discipline/av", using: "SomeRouteState", examples: []
+  handle "/format/rewrite/:discipline.app", using: "SomeMozartRouteState"
+  handle "/format/rewrite/:discipline", using: "SomeRouteState"
+  handle "/format/rewrite/:discipline/av", using: "SomeRouteState"
 
-  handle "/proxy-pass", using: "ProxyPass", examples: ["/proxy-pass"]
+  handle "/proxy-pass", using: "ProxyPass"
 
-  handle "/caching-disabled", using: "CacheDisabled", examples: []
+  handle "/caching-disabled", using: "CacheDisabled"
 
-  handle "/language-from-cookie", using: "LanguageFromCookieRouteState", examples: []
+  handle "/language-from-cookie", using: "LanguageFromCookieRouteState"
 
-  handle "/personalised-news-article-page", using: "PersonalisedContainerData", examples: []
+  handle "/personalised-news-article-page", using: "PersonalisedContainerData"
 
-  handle "/mvt", using: "SomeMvtRouteState", examples: ["/mvt"]
+  handle "/mvt", using: "SomeMvtRouteState"
 
-  handle "/ws-mvt", using: "SomeSimorghRouteSpec", examples: ["/ws-mvt"]
+  handle "/ws-mvt", using: "SomeSimorghRouteSpec"
 
-  handle "/proxy-on-joan/:id", using: "NewsArticlePage", examples: ["/proxy-on-joan/49336140"]
+  handle "/proxy-on-joan/:id", using: "NewsArticlePage"
 
-  handle "/app-request/p/:name", using: "AppPersonalisation", examples: []
-  handle "/app-request/:name", using: "FablData", examples: []
+  handle "/app-request/p/:name", using: "AppPersonalisation"
+  handle "/app-request/:name", using: "FablData"
 
-  handle "/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", examples: []
+  handle "/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised"
 
   # will remove and use real route spec in RESFRAME-4718
-  handle "/classic-apps-route", using: "SomeClassicAppsRouteSpec", examples: []
+  handle "/classic-apps-route", using: "SomeClassicAppsRouteSpec"
 
-  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", examples: []
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid"
 
-  handle "/content/ldp/:guid", using: "ClassicAppFablLdp", examples: []
+  handle "/content/ldp/:guid", using: "ClassicAppFablLdp"
 
-  handle "/etag-support", using: "EtagSupport", examples: []
+  handle "/etag-support", using: "EtagSupport"
 
-  handle "/fd/abl", using: "AblDataWithNoCache", examples: []
+  handle "/fd/abl", using: "AblDataWithNoCache"
 
-  handle "/no-etag-support", using: "NoEtagSupport", examples: []
+  handle "/no-etag-support", using: "NoEtagSupport"
 
-  handle("/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs", examples: [])
+  handle("/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs")
 
-  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs", examples: [])
+  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs")
 
-  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs", examples: [])
+  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs")
 
-  handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode", examples: ["/election2023postcode/MK36EB"] do
+  handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
     return_404 if: !String.match?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
   end
-  handle "/election2023address/:uprn", using: "ElectoralCommissionAddress", examples: ["/election2023address/25050756"] do
+  handle "/election2023address/:uprn", using: "ElectoralCommissionAddress" do
     return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
   end
 
-  handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test", examples: ["/foo/bar"]
+  handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
   no_match()
 end

@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceSwahiliAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/swahili/sw.js", "/swahili/manifest.json"]
+      }
     }
   end
 end

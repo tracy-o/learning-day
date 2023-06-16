@@ -7,22 +7,12 @@ defmodule Belfrage.SmokeTestCase.Expectations do
 
   def expect_response(response, test_properties) do
     cond do
-      is_test_only_route(test_properties) ->
-        expected_test_route(response, test_properties)
-
       test_properties.expected_status in @redirects_statuses ->
         expected_redirect(response, test_properties)
 
       true ->
         expected_response(response, test_properties)
     end
-  end
-
-  defp expected_test_route(response, test_properties) do
-    expect_all([
-      expected_status(response, 404),
-      expected_stack_id(response, test_properties)
-    ])
   end
 
   defp expected_redirect(response, test_properties) do
@@ -41,13 +31,6 @@ defmodule Belfrage.SmokeTestCase.Expectations do
       expected_response_not_stale(response),
       expected_stack_id(response, test_properties)
     ])
-  end
-
-  defp is_test_only_route(test_properties) do
-    smoke_env = test_properties.smoke_env
-    only_on = test_properties.matcher.only_on
-
-    smoke_env == "live" and only_on == "test"
   end
 
   defp expected_response_with_body(response) do

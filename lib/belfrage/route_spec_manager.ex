@@ -7,7 +7,7 @@ defmodule Belfrage.RouteSpecManager do
 
   def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
 
-  @spec get_spec({RouteSpec.name(), RouteSpec.platform()}) :: RouteSpec.t() | nil
+  @spec get_spec({RouteSpec.name(), RouteSpec.platform()}) :: map() | nil
   def get_spec({spec_name, platform}) do
     case do_get_spec(spec_name) do
       %{specs: specs} -> match_spec_by_platform(specs, platform)
@@ -20,13 +20,19 @@ defmodule Belfrage.RouteSpecManager do
     do_get_spec(spec_name)
   end
 
-  @spec list_specs() :: [RouteSpec.t()]
+  @spec list_specs() :: [map()]
   def list_specs() do
     for {_id, spec} <- :ets.tab2list(@route_spec_table), do: spec
   end
 
   @spec update_specs() :: :ok
   def update_specs(), do: GenServer.call(__MODULE__, :update)
+
+  @spec list_examples() :: [map()]
+  def list_examples() do
+    list_specs()
+    |> Enum.flat_map(&RouteSpec.get_examples/1)
+  end
 
   # callbacks
   @impl GenServer

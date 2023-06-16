@@ -25,9 +25,9 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn(:get, "/200-ok-response") |> Router.call([])
-    conn(:get, "/200-ok-response") |> Router.call([])
-    conn(:get, "/200-ok-response") |> Router.call([])
+    conn(:get, "/200-ok-response") |> Router.call(routefile: Routes.Routefiles.Mock)
+    conn(:get, "/200-ok-response") |> Router.call(routefile: Routes.Routefiles.Mock)
+    conn(:get, "/200-ok-response") |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 
   test "always calls the origin when the cache bust override is set" do
@@ -36,9 +36,9 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
-    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
-    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
+    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
+    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
+    conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 
   test "request hash is in cache bust format when cache bust override is set" do
@@ -47,7 +47,7 @@ defmodule EndToEnd.CacheBustTest do
       {:ok, @cacheable_lambda_response}
     end)
 
-    conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
+    conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert [request_hash] = get_resp_header(conn, "bsig")
     assert String.starts_with?(request_hash, "cache-bust.")

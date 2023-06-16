@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Ares do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :ares_endpoint),
       owner: "DENewsSimorghDev@bbc.co.uk",

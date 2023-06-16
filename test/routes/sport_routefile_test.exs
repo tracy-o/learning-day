@@ -8,7 +8,7 @@ defmodule Routes.SportRoutefileTest do
   import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
-  alias Belfrage.{RouteState, RouteSpec, RouteSpecManager}
+  alias Belfrage.{RouteState, RouteSpecManager}
   alias Routes.Routefiles.Sport.Test, as: Routefile
 
   @moduletag :routes_test
@@ -19,18 +19,6 @@ defmodule Routes.SportRoutefileTest do
 
   @routes Routefile.routes()
   @redirects Routefile.redirects()
-
-  @examples Enum.flat_map(@routes, fn {matcher, %{examples: examples} = spec} ->
-              Enum.map(examples, fn example ->
-                example_path =
-                  case example do
-                    {path, _status_code} -> path
-                    path -> path
-                  end
-
-                {matcher, spec, example_path}
-              end)
-            end)
 
   describe "routes" do
     test "matcher is prefixed with a '/'" do
@@ -63,26 +51,7 @@ defmodule Routes.SportRoutefileTest do
       update_specs("test")
     end
 
-    test "example is prefixed with a '/'" do
-      validate(@examples, fn {matcher, _, example} ->
-        if String.starts_with?(example, "/") do
-          :ok
-        else
-          {:error, "Example #{example} for route #{matcher} must start with a '/'"}
-        end
-      end)
-    end
-
-    test "example is routed correctly" do
-      start_route_states()
-
-      @examples
-      |> Enum.reject(fn {matcher, _, _} -> matcher == "/*any" end)
-      |> validate(fn {matcher, route, example} -> validate_example({matcher, route, example}) end)
-    end
-
     test "no routes with the same path exist" do
-      stub_origins()
       start_route_states()
 
       @routes
@@ -95,21 +64,6 @@ defmodule Routes.SportRoutefileTest do
         msg ->
           flunk(msg)
       end
-    end
-
-    test "proxy-pass examples are routed correctly" do
-      @examples
-      |> Enum.filter(fn {matcher, _, _} -> matcher == "/*any" end)
-      |> validate(fn {matcher, _, example} ->
-        conn = make_call(:get, example)
-
-        if conn.status == 404 && conn.resp_body =~ "404" do
-          :ok
-        else
-          {:error,
-           "Example #{example} for route #{matcher} is not routed correctly. Response status: #{conn.status}. Body: #{conn.resp_body}"}
-        end
-      end)
     end
   end
 
@@ -243,28 +197,6 @@ defmodule Routes.SportRoutefileTest do
     end
   end
 
-  defp validate_example({matcher, %{using: spec_name}, example}) do
-    case RouteSpecManager.get_spec(spec_name) do
-      nil ->
-        {:error, "The route with the path #{matcher} does not exist in the RouteSpec: #{spec_name}."}
-
-      %{name: ^spec_name} ->
-        conn = make_call(:get, example)
-        plug_route = plug_route(conn)
-
-        # An example may be routed to an incorrect route with the same route spec
-        # as the expected route.
-        #
-        # Given this, below we check that the matched route stored in conn.private.plug_route
-        # is the expected route.
-        if plug_route == matcher do
-          :ok
-        else
-          {:error, "Example #{example} for route #{matcher} has been routed to #{plug_route}"}
-        end
-    end
-  end
-
   defp validate_required_attrs_in_route_spec(matcher, spec, env) do
     required_attrs = ~w[platform request_pipeline circuit_breaker_error_threshold origin]a
     missing_attrs = required_attrs -- Map.keys(spec)
@@ -300,12 +232,12 @@ defmodule Routes.SportRoutefileTest do
   end
 
   defp validate_platform_transformers(matcher, platform, pipeline, type = :request, env) do
-    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).request_pipeline
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specification(env).request_pipeline
     do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
   end
 
   defp validate_platform_transformers(matcher, platform, pipeline, type = :response, env) do
-    platform_transformers = Module.concat([Routes, Platforms, platform]).specs(env).response_pipeline
+    platform_transformers = Module.concat([Routes, Platforms, platform]).specification(env).response_pipeline
     do_validate_platform_transformers(matcher, platform_transformers, pipeline, type, env)
   end
 
@@ -333,15 +265,19 @@ defmodule Routes.SportRoutefileTest do
 
   defp start_route_states() do
     stub_origins()
-    Belfrage.RouteSpecManager.list_specs() |> Enum.map(fn spec -> Enum.each(spec.specs, &start_route_state/1) end)
+
+    Belfrage.RouteSpecManager.list_specs()
+    |> Enum.map(fn %{name: spec_name, specs: specs} -> Enum.each(specs, &start_route_state(spec_name, &1)) end)
   end
 
-  defp start_route_state(%RouteSpec{
-         name: name,
-         platform: platform,
-         origin: origin,
-         circuit_breaker_error_threshold: threshold
-       }) do
+  defp start_route_state(
+         name,
+         %{
+           platform: platform,
+           origin: origin,
+           circuit_breaker_error_threshold: threshold
+         }
+       ) do
     route_state_id = {name, platform}
 
     route_state_args = %{
@@ -357,17 +293,6 @@ defmodule Routes.SportRoutefileTest do
       {:error, {{:already_started, _pid}, _child_spec}} -> :ok
       error -> raise "failed to start #{inspect(route_state_id)} child, reason: #{inspect(error)}"
     end
-  end
-
-  defp plug_route(conn) do
-    conn.private.plug_route
-    |> elem(0)
-    |> String.replace("/*_path", "")
-    # conn.private.plug_route seems to not show as expected for paths with file extensions,
-    # for example:
-    #
-    #      /news/:id.amp (route) -> /*path/news/:id/.amp (plug_route)
-    |> String.replace("/.", ".")
   end
 
   # Takes a list of routes and returns a string

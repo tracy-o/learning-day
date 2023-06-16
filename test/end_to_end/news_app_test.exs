@@ -15,7 +15,7 @@ defmodule EndToEnd.NewsAppsTest do
     test "returns a hardcoded payload" do
       stub_dials(news_apps_hardcoded_response: "enabled")
 
-      response_conn = conn(:get, "/fd/abl") |> Router.call([])
+      response_conn = conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
 
       {200, _resp_headers, body} = sent_resp(response_conn)
 
@@ -34,7 +34,7 @@ defmodule EndToEnd.NewsAppsTest do
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
-      response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
+      response_conn1 = conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
       {200, _resp_headers, body} = sent_resp(response_conn1)
 
       body_t1 = body |> Json.decode!()
@@ -45,7 +45,7 @@ defmodule EndToEnd.NewsAppsTest do
       Current.Mock.freeze(~D[2022-12-02], ~T[11:34:56.368815Z])
       Belfrage.NewsApps.Failover.update()
 
-      response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
+      response_conn2 = conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
       {200, _resp_headers, body} = sent_resp(response_conn2)
 
       body_t2 = body |> Json.decode!()
@@ -59,7 +59,7 @@ defmodule EndToEnd.NewsAppsTest do
 
       stub_dials(news_apps_hardcoded_response: "enabled")
 
-      response_conn1 = conn(:get, "/fd/abl") |> Router.call([])
+      response_conn1 = conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
       {200, _resp_headers, body} = sent_resp(response_conn1)
 
       body_t1 = body |> Json.decode!()
@@ -69,7 +69,7 @@ defmodule EndToEnd.NewsAppsTest do
       Current.Mock.freeze(~D[2022-12-02], ~T[12:01:16.368815Z])
       Belfrage.NewsApps.Failover.update()
 
-      response_conn2 = conn(:get, "/fd/abl") |> Router.call([])
+      response_conn2 = conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
       {200, _resp_headers, body} = sent_resp(response_conn2)
 
       body_t2 = body |> Json.decode!()
@@ -94,7 +94,7 @@ defmodule EndToEnd.NewsAppsTest do
          }}
       end)
 
-      conn(:get, "/fd/abl") |> Router.call([])
+      conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 
@@ -121,7 +121,7 @@ defmodule EndToEnd.NewsAppsTest do
         :get,
         "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 
@@ -148,7 +148,7 @@ defmodule EndToEnd.NewsAppsTest do
         :get,
         "/fd/abl?clientName=Chrysalis&clientVersion=pre-4&release=team&type=index&page=chrysalis_discovery&service=news&segmentId=70022f59ab_10&clientLoc=E7&clientNeedsUpdate=true"
       )
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 end

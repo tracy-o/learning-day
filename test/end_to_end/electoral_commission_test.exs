@@ -35,7 +35,7 @@ defmodule EndToEnd.ElectoralCommissionTest do
           "https://web-cdn.test.api.bbci.co.uk/election2023postcode/IP224DN"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 200
 
@@ -70,7 +70,7 @@ defmodule EndToEnd.ElectoralCommissionTest do
           "https://web-cdn.test.api.bbci.co.uk/election2023address/25050756"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 200
 
@@ -88,7 +88,7 @@ defmodule EndToEnd.ElectoralCommissionTest do
           "https://web-cdn.test.api.bbci.co.uk/election2023postcode/foo456"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 404
 
@@ -124,7 +124,7 @@ defmodule EndToEnd.ElectoralCommissionTest do
           "https://web-cdn.test.api.bbci.co.uk/election2023address/25050756"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 401
 
@@ -160,7 +160,7 @@ defmodule EndToEnd.ElectoralCommissionTest do
           "https://web-cdn.test.api.bbci.co.uk/election2023postcode/IP224DN"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 400
 

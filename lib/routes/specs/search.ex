@@ -1,12 +1,15 @@
 defmodule Routes.Specs.Search do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      owner: "D+ESearchAndNavigationDev@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
-      request_pipeline: ["ComToUKRedirect"],
-      platform: "Webcore",
-      query_params_allowlist: query_params_allowlist(production_env),
-      caching_enabled: false
+      specs: %{
+        owner: "D+ESearchAndNavigationDev@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
+        request_pipeline: ["ComToUKRedirect"],
+        platform: "Webcore",
+        query_params_allowlist: query_params_allowlist(production_env),
+        caching_enabled: false,
+        examples: ["/sounds/search", "/bitesize/search", "/cbbc/search", "/cbeebies/search", "/search"]
+      }
     }
   end
 

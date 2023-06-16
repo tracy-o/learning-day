@@ -1,8 +1,11 @@
 defmodule Routes.Specs.DotComWorklife do
-  def specs do
+  def specification do
     %{
-      request_pipeline: [],
-      platform: "DotComWorklife"
+      specs: %{
+        request_pipeline: [],
+        platform: "DotComWorklife",
+        examples: ["/worklife"]
+      }
     }
   end
 end

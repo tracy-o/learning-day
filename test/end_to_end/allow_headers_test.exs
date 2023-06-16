@@ -35,7 +35,7 @@ defmodule AllowHeadersTest do
   defp get_fabldata_conn_with_header() do
     conn(:get, "/app-request/some_name")
     |> put_req_header("ctx-service-env", "test")
-    |> Router.call([])
+    |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 
   defp mock_http_response() do

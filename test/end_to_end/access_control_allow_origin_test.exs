@@ -29,7 +29,7 @@ defmodule AccessControlAllowOriginTest do
       conn(:get, "/200-ok-response")
       |> put_req_header("x-bbc-edge-cdn", "1")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, headers, _response_body} = sent_resp(conn)
     assert {"access-control-allow-origin", "*"} in headers
@@ -43,7 +43,7 @@ defmodule AccessControlAllowOriginTest do
 
     conn = conn(:get, "/200-ok-response")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, headers, _response_body} = sent_resp(conn)
     refute {"access-control-allow-origin", "*"} in headers
