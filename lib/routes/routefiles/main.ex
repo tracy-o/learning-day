@@ -3165,6 +3165,27 @@ defroutefile "Main" do
   handle "/music", using: "Music"
 
   # Bitesize
+  # KS3 Maths study guide redirects
+  redirect "/bitesize/guides/zvybkqt/revision/2", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/3", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/4", to: "/bitesize/topics/z3nygk7/articles/z39wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/5", to: "/bitesize/topics/z3nygk7/articles/z9qxs82", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/7", to: "/bitesize/topics/z3nygk7/articles/z82tywx", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/2", to: "/bitesize/topics/ztwhvj6/articles/zy7xs82", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/3", to: "/bitesize/topics/ztwhvj6/articles/zr76fdm", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/4", to: "/bitesize/topics/ztwhvj6/articles/zjvrdnb", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/5", to: "/bitesize/topics/ztwhvj6/articles/z3mhvj6", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/6", to: "/bitesize/topics/ztwhvj6/articles/z3mhvj6", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/7", to: "/bitesize/topics/ztwhvj6/articles/zt6v46f", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/8", to: "/bitesize/topics/ztwhvj6/articles/z8prdnb", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/9", to: "/bitesize/topics/ztwhvj6/articles/z8prdnb", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/1", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/3", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/4", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/5", to: "/bitesize/topics/zbsvr82/articles/z7qsg2p", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/6", to: "/bitesize/topics/zbsvr82/articles/zvkj6rd", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/7", to: "/bitesize/topics/zbsvr82/articles/z3kj6rd", status: 301
+
   redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
   redirect "/bitesize/guides/:id/revision", to: "/bitesize/guides/:id/revision/1", status: 301
 
