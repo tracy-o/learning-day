@@ -1460,13 +1460,10 @@ defroutefile "Main" do
 
   redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
 
-  handle "/kyrgyz.amp", using: "WorldServiceKyrgyz"
-  handle "/kyrgyz.json", using: "WorldServiceKyrgyz"
+  handle "/kyrgyz.amp", using: "WorldServiceKyrgyzTipoHomePage"
   handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets"
   handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets"
   handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss"
-
-  handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipoHomePage", only_on: "test"
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1504,7 +1501,7 @@ defroutefile "Main" do
   end
 
   handle "/kyrgyz/send/:id", using: "UploaderWorldService"
-  handle "/kyrgyz", using: "WorldServiceKyrgyzTipoHomePage", only_on: "test"
+  handle "/kyrgyz", using: "WorldServiceKyrgyzTipoHomePage"
   handle "/kyrgyz/*any", using: "WorldServiceKyrgyz"
 
   handle "/marathi.amp", using: "WorldServiceMarathi"
