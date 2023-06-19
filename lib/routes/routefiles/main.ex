@@ -452,14 +452,14 @@ defroutefile "Main" do
   handle "/news/:asset_id/embed", using: "NewsVideosEmbed"
   handle "/news/:asset_id/embed/:pid", using: "NewsVideosEmbed"
 
-  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
-
   handle "/news/av/:id.app", using: "NewsVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
+
   handle "/news/av/:id", using: "NewsVideos" do
-      return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
   handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio" do
@@ -3037,6 +3037,10 @@ defroutefile "Main" do
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
 
+  handle "/weather/av/:asset_id.app", using: "WeatherVideosAppPage", only_on: "test" do
+    return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
+  end
+  
   handle "/weather/av/:asset_id", using: "WeatherVideos" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
