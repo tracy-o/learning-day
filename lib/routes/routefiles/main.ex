@@ -3228,7 +3228,7 @@ defroutefile "Main" do
   handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy"
   handle "/bitesize/groups/:id", using: "BitesizeTipoTopic"
   handle "/bitesize/parents", using: "BitesizeTipoTopic"
-  handle "/bitesize/study-support", using: "BitesizeTipoTopic", only_on: "test"
+  handle "/bitesize/study-support", using: "BitesizeTipoTopic"
 
   handle "/bitesize/*any", using: "BitesizeLegacy"
 
