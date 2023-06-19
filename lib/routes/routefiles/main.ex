@@ -3038,7 +3038,7 @@ defroutefile "Main" do
   handle "/weather/av/:asset_id.app", using: "WeatherVideosAppPage", only_on: "test" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
-  
+
   handle "/weather/av/:asset_id", using: "WeatherVideos" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
@@ -3325,7 +3325,7 @@ defroutefile "Main" do
   handle "/echo", using: "EchoSpec", only_on: "test"
 
   # Personalised Account
-  handle "/foryou", using: "PersonalisedAccountForYou", only_on: "test"
+  handle "/foryou", using: "PersonalisedAccount", only_on: "test"
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
