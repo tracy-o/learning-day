@@ -7,6 +7,7 @@ defmodule Routes.Platforms.Webcore do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
+      headers_allowlist: ["cookie-ckns_bbccom_beta"],
       query_params_allowlist: query_params_allowlist(production_env),
       mvt_project_id: 1,
       xray_enabled: true

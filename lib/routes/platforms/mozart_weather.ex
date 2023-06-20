@@ -7,7 +7,7 @@ defmodule Routes.Platforms.MozartWeather do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
-      headers_allowlist: ["cookie-ckps_language"],
+      headers_allowlist: ["cookie-ckps_language", "cookie-ckns_bbccom_beta"],
       circuit_breaker_error_threshold: 200
     }
   end
