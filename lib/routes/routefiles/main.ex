@@ -798,6 +798,8 @@ defroutefile "Main" do
   redirect "/kyrgyz/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
   redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
   redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
+  redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
+  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
   redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
   redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
   redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
