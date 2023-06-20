@@ -52,6 +52,7 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   defp route_headers(envelope = %Envelope{private: %Private{headers_allowlist: allowlist}}) do
     allowlist
     |> List.delete("cookie")
+    |> List.delete("cookie-ckns_bbccom_beta")
     |> remove_signed_in_header(envelope)
     |> Language.vary(envelope)
   end
