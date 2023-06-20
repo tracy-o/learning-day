@@ -2,8 +2,7 @@ defmodule Belfrage.PreflightServices.AresData do
   alias Belfrage.Behaviours.PreflightService
   alias Belfrage.Envelope
   alias Belfrage.Helpers.QueryParams
-
-  use Belfrage.PreflightServices, cache_prefix: "AresData"
+  @behaviour PreflightService
 
   @impl PreflightService
   def request(%Envelope{request: %Envelope.Request{path: path}}) do
@@ -22,13 +21,6 @@ defmodule Belfrage.PreflightServices.AresData do
   end
 
   @impl PreflightService
-  def callback_success(response) do
-    case response do
-      %{"data" => %{"assetType" => asset_type}} ->
-        {:ok, asset_type}
-
-      _ ->
-        {:error, :preflight_data_error}
-    end
-  end
+  def handle_response(%{"data" => %{"assetType" => asset_type}}), do: {:ok, asset_type}
+  def handle_response(_response), do: {:error, :preflight_data_error}
 end
