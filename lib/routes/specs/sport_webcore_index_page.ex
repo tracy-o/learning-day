@@ -7,7 +7,7 @@ defmodule Routes.Specs.SportWebcoreIndexPage do
         platform: "Webcore",
         personalisation: "on",
         query_params_allowlist: ["page"],
-        examples: ["/sport/wales", "/sport/scotland", "/sport/rugby-union/welsh", "/sport/rugby-union/scottish", "/sport/rugby-union/irish", "/sport/northern-ireland/motorbikes", "/sport/northern-ireland/gaelic-games", "/sport/northern-ireland", "/sport/football/welsh", "/sport/football/scottish", "/sport/football/irish"]
+        examples: ["/sport/wales", "/sport/scotland", "/sport/rugby-union/welsh", "/sport/rugby-union/scottish", "/sport/rugby-union/irish", "/sport/northern-ireland/motorbikes", "/sport/northern-ireland/gaelic-games", "/sport/northern-ireland", "/sport/football/welsh", "/sport/football/scottish", "/sport/football/irish", "/sport/winter-sports", "/sport/motorsport", "/sport/disability-sport", "/sport/boxing", "/sport/basketball", "/sport/american-football", "/sport/football/world-cup"]
       }
     }
   end
