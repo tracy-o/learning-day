@@ -70,16 +70,23 @@ defmodule Routes.SpecExamplesTest do
 
   defp validate_example(example) do
     resp_headers = make_call(:get, example.path).resp_headers
-    resp_route_spec = :proplists.get_value("routespec", resp_headers)
-    [resp_spec, resp_platform | _partition] = String.split(resp_route_spec, ".")
 
-    case {example.spec, example.platform} do
-      {^resp_spec, ^resp_platform} ->
-        :ok
+    case :proplists.get_value("routespec", resp_headers, nil) do
+      nil ->
+        {:error, "Example #{example.path} for route #{example.spec} was not routed.
+                  There is no routespec in response headers"}
 
-      _other ->
-        {:error, "Example #{example.path} for route #{example.spec} is not routed correctly.
-                  Response routespec header: #{resp_route_spec}"}
+      resp_route_spec ->
+        [resp_spec, resp_platform | _partition] = String.split(resp_route_spec, ".")
+
+        case {example.spec, example.platform} do
+          {^resp_spec, ^resp_platform} ->
+            :ok
+
+          _other ->
+            {:error, "Example #{example.path} for route #{example.spec} is not routed correctly.
+                      Response routespec header: #{resp_route_spec}"}
+        end
     end
   end
 
