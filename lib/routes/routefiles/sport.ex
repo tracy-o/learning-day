@@ -1139,7 +1139,9 @@ defroutefile "Sport" do
   handle "/sport/football/european", using: "SportFootballIndexPage"
   handle "/sport/football/fa-cup.app", using: "SportFootballIndexPage"
   handle "/sport/football/fa-cup", using: "SportFootballIndexPage"
-  handle "/sport/football/irish.app", using: "SportFootballIndexPage"
+  handle "/sport/football/irish.app", using: "SportFootballIndexPage" do
+    return_404()
+  end
   handle "/sport/football/irish", using: "SportWebcoreIndexPage"
   handle "/sport/football/premier-league.app", using: "SportFootballIndexPage"
   handle "/sport/football/premier-league", using: "SportFootballIndexPage"
@@ -1165,11 +1167,17 @@ defroutefile "Sport" do
   handle "/sport/motorsport", using: "SportWebcoreIndexPage"
   handle "/sport/netball.app", using: "SportIndexPage"
   handle "/sport/netball", using: "SportIndexPage"
-  handle "/sport/northern-ireland.app", using: "SportHomeNationIndexPage"
+  handle "/sport/northern-ireland.app", using: "SportHomeNationIndexPage" do
+    return_404()
+  end
   handle "/sport/northern-ireland", using: "SportWebcoreIndexPage"
-  handle "/sport/northern-ireland/gaelic-games.app", using: "SportHomeNationIndexPage"
+  handle "/sport/northern-ireland/gaelic-games.app", using: "SportHomeNationIndexPage" do
+    return_404()
+  end
   handle "/sport/northern-ireland/gaelic-games", using: "SportWebcoreIndexPage"
-  handle "/sport/northern-ireland/motorbikes.app", using: "SportHomeNationIndexPage"
+  handle "/sport/northern-ireland/motorbikes.app", using: "SportHomeNationIndexPage" do
+    return_404()
+  end
   handle "/sport/northern-ireland/motorbikes", using: "SportWebcoreIndexPage"
   handle "/sport/olympics.app", using: "SportIndexPage"
   handle "/sport/olympics", using: "SportIndexPage"
@@ -1179,7 +1187,9 @@ defroutefile "Sport" do
   handle "/sport/rugby-union", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union/english.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union/english", using: "SportRugbyIndexPage"
-  handle "/sport/rugby-union/irish.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union/irish.app", using: "SportRugbyIndexPage" do
+    return_404()
+  end
   handle "/sport/rugby-union/irish", using: "SportWebcoreIndexPage"
   handle "/sport/rugby-union/scottish", using: "SportWebcoreIndexPage"
   handle "/sport/rugby-union/welsh", using: "SportWebcoreIndexPage"
