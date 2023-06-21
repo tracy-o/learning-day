@@ -24,7 +24,8 @@ defmodule EndToEnd.ResponseHeadersTest do
       assert [
                {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"},
                {"content-type", "text/html; charset=utf-8"},
-               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+               {"vary",
+                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
                {"server", "Belfrage"},
                {"bsig", "16aa506c48f67bbbd845a5e4ac48b8f2"},
                {"bid", "local"},
@@ -68,7 +69,8 @@ defmodule EndToEnd.ResponseHeadersTest do
       assert [
                {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"},
                {"content-type", "text/html; charset=utf-8"},
-               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+               {"vary",
+                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
                {"server", "Belfrage"},
                {"bsig", "16aa506c48f67bbbd845a5e4ac48b8f2"},
                {"bid", "local"},
