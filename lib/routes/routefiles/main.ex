@@ -3192,6 +3192,8 @@ defroutefile "Main" do
   redirect "/bitesize/preview/guides/:id", to: "/bitesize/preview/guides/:id/revision/1", status: 301
   redirect "/bitesize/preview/guides/:id/revision", to: "/bitesize/preview/guides/:id/revision/1", status: 301
 
+  handle "/bitesize", using: "BitesizeHomePage"
+
   handle "/bitesize/preview", using: "BitesizeHomePage"
 
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
