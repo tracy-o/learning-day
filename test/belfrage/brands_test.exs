@@ -129,7 +129,7 @@ defmodule Belfrage.BrandsTest do
 
       bbcx_envelope = %Envelope{
         request: %Envelope.Request{
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "bbcmews.co.uk",
           country: "ca"
         },

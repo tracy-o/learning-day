@@ -7,7 +7,7 @@ defmodule Belfrage.RequestTransformers.IsCommercialTest do
   alias Belfrage.Envelope
 
   describe "call/1" do
-    test "adds a request header if request qualifies for bbcx" do
+    test "adds a request header if request qualifies for bbcx content" do
       stub_dial(:bbcx_enabled, "true")
 
       bbcx_envelope = %Envelope{
@@ -24,7 +24,7 @@ defmodule Belfrage.RequestTransformers.IsCommercialTest do
       assert envelope.request.raw_headers == %{"is_commercial" => "true"}
     end
 
-    test "does not add is_commercial header" do
+    test "does not add is_commercial header if request doesn't qualify for bbcx content" do
       stub_dial(:bbcx_enabled, "true")
 
       bbcx_envelope = %Envelope{
