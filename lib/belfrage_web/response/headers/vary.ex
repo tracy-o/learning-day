@@ -52,8 +52,17 @@ defmodule BelfrageWeb.Response.Headers.Vary do
   defp route_headers(envelope = %Envelope{private: %Private{headers_allowlist: allowlist}}) do
     allowlist
     |> List.delete("cookie")
+    |> maybe_delete_bbccom_beta(envelope)
     |> remove_signed_in_header(envelope)
     |> Language.vary(envelope)
+  end
+
+  defp maybe_delete_bbccom_beta(headers, envelope = %Envelope{private: %Private{production_environment: prod_env}}) do
+    if prod_env == "live" do
+      List.delete(headers, "cookie-ckns_bbccom_beta")
+    else
+      headers
+    end
   end
 
   defp remove_signed_in_header(headers, %Envelope{request: request, private: private = %Private{}}) do

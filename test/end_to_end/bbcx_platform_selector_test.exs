@@ -66,7 +66,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
            ]
   end
 
-  test "the BBCX platform selector points to Webcore and varies on cookie-ckns_bbccom_beta when Cosmos Environment is live" do
+  test "the BBCX platform selector points to Webcore and doesn't vary on cookie-ckns_bbccom_beta when Cosmos Environment is live" do
     set_environment("live")
 
     expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
@@ -80,7 +80,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
       |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
            ]
   end
 end
