@@ -1,6 +1,6 @@
 defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.PreflightServices.AresData
+  alias Belfrage.Behaviours.PreflightService
 
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
 
@@ -29,7 +29,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   """
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    case AresData.call(envelope) do
+    case PreflightService.call(envelope, "AresData") do
       {:ok, asset_type} ->
         select_platform(envelope, asset_type)
 
