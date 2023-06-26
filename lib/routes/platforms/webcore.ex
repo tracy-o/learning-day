@@ -7,12 +7,15 @@ defmodule Routes.Platforms.Webcore do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
-      headers_allowlist: ["cookie-ckns_bbccom_beta"],
+      headers_allowlist: headers_allowlist(production_env),
       query_params_allowlist: query_params_allowlist(production_env),
       mvt_project_id: 1,
       xray_enabled: true
     }
   end
+
+  defp headers_allowlist("live"), do: []
+  defp headers_allowlist(_production_env), do: ["cookie-ckns_bbccom_beta"]
 
   defp query_params_allowlist("live"), do: []
   defp query_params_allowlist(_production_env), do: ["mode", "chameleon", "mvt", "renderer_env", "toggles", "experiments"]
