@@ -67,7 +67,7 @@ defmodule Mix.Tasks.SmokeTest do
 
   """
 
-  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}, {:raw_output, :string}]
+  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}, {:raw_output, :string}, {:with_diff, :string}]
   @standard_mix_test_parse_rules [{:color, :boolean}, {:only, :string}, {:slowest, :string}]
 
   @impl Mix.Task
@@ -103,6 +103,10 @@ defmodule Mix.Tasks.SmokeTest do
 
   defp parse_env_opts([{:raw_output, raw_output} | rest], flag_args, result) do
     parse_env_opts(rest, flag_args, "RAW_OUTPUT=#{raw_output} " <> result)
+  end
+
+  defp parse_env_opts([{:with_diff, stack_name} | rest], flag_args, result) do
+    parse_env_opts(rest, flag_args, "WITH_DIFF=#{stack_name} " <> result)
   end
 
   defp parse_env_opts([param | rest], flag_args, result) do

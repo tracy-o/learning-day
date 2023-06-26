@@ -1,6 +1,6 @@
 defmodule Belfrage.SmokeTestCase do
   alias Test.Support.Helper
-  alias Belfrage.SmokeTestCase.Expectations
+  alias Belfrage.{SmokeTestCase.Expectations, SmokeTestDiff}
   import ExUnit.Assertions
 
   @retry_times 2
@@ -85,6 +85,7 @@ defmodule Belfrage.SmokeTestCase do
 
             case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, @matcher_spec.spec, retry_check) do
               {:ok, resp} ->
+                SmokeTestDiff.build(@matcher_spec.path, @smoke_env, resp)
                 assert true
 
               {:error, reason} when is_binary(reason) ->
