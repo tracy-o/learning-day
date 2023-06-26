@@ -40,7 +40,7 @@ defmodule EndToEnd.VaryAllowHeadersTest do
       [vary_header] =
         conn(:get, "/route-allow-headers") |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("vary")
 
-      refute vary_header =~ "cookie\n"
+      refute String.ends_with?(vary_header, ",cookie")
       refute vary_header =~ "cookie,"
     end
 

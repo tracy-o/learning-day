@@ -4,7 +4,7 @@ defmodule Belfrage.BrandsTest do
 
   alias Belfrage.Envelope
 
-  describe "bbcx_potential?" do
+  describe "is_bbcx?/1" do
     test "returns true if request qualifies for bbcx content, country is ca" do
       stub_dial(:bbcx_enabled, "true")
 
