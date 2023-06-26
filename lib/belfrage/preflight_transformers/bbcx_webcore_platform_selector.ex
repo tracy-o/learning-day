@@ -1,4 +1,4 @@
-defmodule Belfrage.PreflightTransformers.BBCXPlatformSelector do
+defmodule Belfrage.PreflightTransformers.BBCXWebcorePlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.{Brands, Envelope}
 

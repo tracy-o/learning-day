@@ -1,13 +1,13 @@
-defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
+defmodule Belfrage.PreflightTransformers.BBCXWebcorePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.PreflightTransformers.BBCXPlatformSelector
+  alias Belfrage.PreflightTransformers.BBCXWebcorePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
   test "when the cookie is present, and the host is bbc.com but the country is not us or ca return Webcore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           host: "www.bbc.com",
           country: "gb",
@@ -22,7 +22,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is not present, and the host is bbc.com but the country is not us or ca return Webcore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           host: "www.bbc.com",
           country: "gb"
@@ -36,7 +36,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is not present, and the host is bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           host: "www.bbc.com",
           country: "us"
@@ -50,7 +50,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is present, and the host is bbc.com and the country is us or ca return BBCX" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
@@ -65,7 +65,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is present, and the host is bbc.com and the country is us or ca, but the Cosmos environment is live return WebCore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
@@ -80,7 +80,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the Cosmos environment is live always return webcore and set bbcx_anbled to false" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.co.uk",
@@ -97,7 +97,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
     stub_dials(bbcx_enabled: "false")
 
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
@@ -112,7 +112,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is present, and the host is not bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "value"},
           host: "www.bbc.co.uk",
@@ -127,7 +127,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorTest do
 
   test "when the cookie is set to '0', and the host is bbc.com and the country is us or ca return Webcore" do
     {:ok, response} =
-      BBCXPlatformSelector.call(%Envelope{
+      BBCXWebcorePlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
           host: "www.bbc.com",
