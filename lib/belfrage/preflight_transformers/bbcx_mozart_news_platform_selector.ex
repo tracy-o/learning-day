@@ -1,30 +1,14 @@
 defmodule Belfrage.PreflightTransformers.BBCXMozartNewsPlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Envelope
+  alias Belfrage.PreflightTransformers.BBCXPlatformSelectorCommon
 
   @dial Application.compile_env(:belfrage, :dial)
 
-  @allowed_countries ["us", "ca"]
+  @route_platform "MozartNews"
 
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    {:ok,
-     Envelope.add(envelope, :private, %{bbcx_enabled: bbcx_enabled?(envelope), platform: select_platform(envelope)})}
-  end
-
-  defp bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
-    prod_env == "test"
-  end
-
-  defp select_platform(%Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do
-    if prod_env == "test" &&
-         @dial.state(:bbcx_enabled) == true &&
-         String.ends_with?(request.host, "bbc.com") &&
-         Map.get(request.raw_headers, "cookie-ckns_bbccom_beta") == "1" &&
-         request.country in @allowed_countries do
-      "BBCX"
-    else
-      "MozartNews"
-    end
+    BBCXPlatformSelectorCommon.add_platform_to_envelope(envelope, @route_platform)
   end
 end
