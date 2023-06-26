@@ -1,6 +1,6 @@
 defmodule Belfrage.PreflightTransformers.BBCXWebcorePlatformSelector do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.{Brands, Envelope}
+  alias Belfrage.PreflightTransformers.BBCXPlatformSelectorCommon
 
   @route_platform "Webcore"
 
