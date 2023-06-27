@@ -3,8 +3,6 @@ defmodule Belfrage.PreflightTransformers.BBCXMozartSportPlatformSelector do
   alias Belfrage.Envelope
   alias Belfrage.PreflightTransformers.BBCXPlatformSelectorCommon
 
-  @dial Application.compile_env(:belfrage, :dial)
-
   @route_platform "MozartSport"
 
   @impl Transformer
