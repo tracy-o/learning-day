@@ -53,7 +53,7 @@ defmodule EndToEnd.DistributedTest do
       conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
       assert [request_hash] = get_resp_header(conn, "bsig")
 
-      assert_received({:ccp_request_hash_stored, ^request_hash})
+      assert_received({:ccp_request_hash_stored, "/200-ok-response" <> "/" <> ^request_hash})
     end
   end
 

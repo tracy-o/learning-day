@@ -95,7 +95,8 @@ defmodule Belfrage.BelfrageCacheTest do
           route_state_id: @route_state_id
         },
         request: %Envelope.Request{
-          request_hash: cache_key("stale")
+          request_hash: cache_key("stale"),
+          path: "/news/live"
         }
       }
 
@@ -113,7 +114,8 @@ defmodule Belfrage.BelfrageCacheTest do
           },
           request: %Envelope.Request{
             request_hash: unique_cache_key(),
-            method: "GET"
+            method: "GET",
+            path: "/news/live"
           },
           response: %Envelope.Response{
             http_status: 200,

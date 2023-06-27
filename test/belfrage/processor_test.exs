@@ -179,6 +179,10 @@ defmodule Belfrage.ProcessorTest do
 
   describe "Processor.response_pipeline/1" do
     @resp_envelope %Envelope{
+      request: %Request{
+        request_hash: "a-request-hash",
+        path: "/news/live"
+      },
       response: %Response{
         http_status: 501,
         body: "",
@@ -292,7 +296,7 @@ defmodule Belfrage.ProcessorTest do
   describe "fetch_fallback_from_cache/1" do
     setup do
       envelope = %Envelope{
-        request: %Request{request_hash: unique_cache_key(), request_id: UUID.uuid4()},
+        request: %Request{request_hash: unique_cache_key(), request_id: UUID.uuid4(), path: "/news/live"},
         response: %Response{http_status: 200}
       }
 
