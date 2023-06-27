@@ -852,7 +852,19 @@ defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector do
     "z6gycxs",
     "ztrv46f",
     "zhc39ty",
-    "zjfhvj6"
+    "zjfhvj6",
+    "zy72p9q",
+    "zvmxs82",
+    "z3x6fdm",
+    "zb6tywx",
+    "zgthvj6",
+    "zrhp3qt",
+    "z4nsg2p",
+    "z9sfrmn",
+    "zkfycxs",
+    "z8yv46f",
+    "zdv39ty",
+    "zw3bkhv"
   ]
 
   @webcore_live_ids [
@@ -1694,7 +1706,19 @@ defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector do
     "z6gycxs",
     "ztrv46f",
     "zhc39ty",
-    "zjfhvj6"
+    "zjfhvj6",
+    "zy72p9q",
+    "zvmxs82",
+    "z3x6fdm",
+    "zb6tywx",
+    "zgthvj6",
+    "zrhp3qt",
+    "z4nsg2p",
+    "z9sfrmn",
+    "zkfycxs",
+    "z8yv46f",
+    "zdv39ty",
+    "zw3bkhv"
   ]
 
   @impl Transformer
