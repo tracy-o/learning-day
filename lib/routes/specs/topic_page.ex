@@ -2,7 +2,7 @@ defmodule Routes.Specs.TopicPage do
   def specification do
     %{
       specs: %{
-        owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
+        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         query_params_allowlist: ["page"],

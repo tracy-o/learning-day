@@ -12,6 +12,11 @@ defmodule Routes.SpecExamplesTest do
   @examples RouteSpecManager.list_examples()
 
   describe "spec" do
+    setup do
+      start_supervised!({Belfrage.RouteState, {{"HomePage", "Webcore"}, %{}}})
+      :ok
+    end
+
     test "examples are prefixed with a '/'" do
       validate(@examples, fn example ->
         if String.starts_with?(example.path, "/") do

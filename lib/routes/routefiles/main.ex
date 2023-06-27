@@ -2657,6 +2657,12 @@ defroutefile "Main" do
   handle "/ws/includes/*any", using: "WsIncludes"
   handle "/worldservice/assets/images/*any", using: "WsImages"
 
+  # Newsletters
+
+  handle "/newsletterstest/:id", using: "Newsletter" do
+    return_404 if: !is_zid?(id)
+  end
+
   # /programmes
 
   handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy" do

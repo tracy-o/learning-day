@@ -11,7 +11,7 @@ defmodule BelfrageTest do
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @spec_name "SportArticlePage"
+  @spec_name "HomePage"
   @platform_name "Webcore"
   @route_state_id {@spec_name, @platform_name}
 
@@ -31,7 +31,7 @@ defmodule BelfrageTest do
       method: "GET",
       country: "gb",
       request_id: "gerald-the-get-request",
-      host: "bbc.co.uk"
+      host: "www.bbc.co.uk"
     }
   }
 

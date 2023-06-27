@@ -2,7 +2,7 @@ defmodule Routes.Specs.NewsTopics do
   def specification(production_env) do
     %{
       specs: %{
-        owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
+        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),

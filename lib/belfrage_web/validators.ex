@@ -121,4 +121,16 @@ defmodule BelfrageWeb.Validators do
   def is_guid?(param) do
     String.match?(param, ~r/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/)
   end
+
+  @doc """
+  ## Examples
+    iex> is_zid?("zbdmwty")
+    true
+
+    iex> is_zid?("zi10")
+    false
+  """
+  def is_zid?(param) do
+    String.match?(param, ~r/^z[bcdfghjkmnpqrstvwxy2346789]{6,10}$/)
+  end
 end
