@@ -5,7 +5,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
   use Test.Support.Helper, :mox
   alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP.Response}
 
-  import Test.Support.Helper, only: [set_environment: 1, set_env: 3]
+  import Test.Support.Helper, only: [set_environment: 1, set_env: 4]
 
   @successful_lambda_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
   @successful_http_response {:ok, %Response{status_code: 200, headers: %{"content-type" => "text/html"}, body: "OK"}}
@@ -67,11 +67,7 @@ defmodule EndToEnd.BbcxPlatformSelectorTest do
   end
 
   test "the BBCX platform selector points to Webcore and doesn't vary on cookie-ckns_bbccom_beta when Cosmos Environment is live" do
-    on_exit(fn ->
-      Belfrage.RouteSpecManager.update_specs()
-    end)
-
-    set_env(:belfrage, :production_environment, "live")
+    set_env(:belfrage, :production_environment, "live", &Belfrage.RouteSpecManager.update_specs/0)
     Belfrage.RouteSpecManager.update_specs()
 
     expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
