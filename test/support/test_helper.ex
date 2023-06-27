@@ -182,7 +182,7 @@ defmodule Test.Support.Helper do
 
     on_exit(fn ->
       Application.put_env(app, name, original_value)
-      on_exit_fun
+      on_exit_fun.()
     end)
   end
 

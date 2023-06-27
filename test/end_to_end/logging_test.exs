@@ -150,7 +150,7 @@ defmodule EndToEnd.LoggingTest do
                "local",
                "MISS",
                "private",
-               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme",
+               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta",
                "1234",
                "https://my-location\"\n"
              ] = String.split(event, "\" \"")

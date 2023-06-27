@@ -19,6 +19,7 @@ defmodule Belfrage.Services.Webcore.Request do
     |> base_headers()
     |> put_obit_mode_headers(envelope.request)
     |> put_election_headers(envelope.request)
+    |> put_is_commercial_header(envelope.request)
     |> put_user_session_headers(envelope.user_session)
     |> put_feature_header(envelope.private)
     |> Mvt.Headers.put_mvt_headers(envelope.private)
@@ -55,6 +56,15 @@ defmodule Belfrage.Services.Webcore.Request do
     if raw_headers["election-banner-ni-story"] do
       headers
       |> Map.put("election-banner-ni-story", raw_headers["election-banner-ni-story"])
+    else
+      headers
+    end
+  end
+
+  defp put_is_commercial_header(headers, %Request{raw_headers: raw_headers}) do
+    if raw_headers["is_commercial"] do
+      headers
+      |> Map.put("is_commercial", raw_headers["is_commercial"])
     else
       headers
     end

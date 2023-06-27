@@ -66,6 +66,10 @@ defroutefile "Mock", "test" do
   handle "/format/rewrite/:discipline", using: "SomeRouteState"
   handle "/format/rewrite/:discipline/av", using: "SomeRouteState"
 
+  handle "/some-webcore-bbcx-content", using: "SomeRouteState"
+  handle "/some-mozart-bbcx-content", using: "SomeMozartRouteState"
+  handle "/some-mozart-sport-bbcx-content", using: "SomeMozartSportRouteState"
+
   handle "/proxy-pass", using: "ProxyPass"
 
   handle "/caching-disabled", using: "CacheDisabled"

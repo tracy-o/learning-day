@@ -30,7 +30,8 @@ defmodule BelfrageTest do
       path: "/_web_core",
       method: "GET",
       country: "gb",
-      request_id: "gerald-the-get-request"
+      request_id: "gerald-the-get-request",
+      host: "bbc.co.uk"
     }
   }
 

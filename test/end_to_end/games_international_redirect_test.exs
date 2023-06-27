@@ -28,7 +28,9 @@ defmodule EndToEnd.GamesInternationalRedirectTest do
 
       assert {301, headers, ""} = sent_resp(response_conn)
       assert {"location", "https://www.bbcchannels.com"} in headers
-      assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+      assert {"vary",
+              "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
     end
 
     test "bbc.com/games redirects to bbcchannels.com when x-ip_is_uk_combined not set" do
@@ -38,7 +40,9 @@ defmodule EndToEnd.GamesInternationalRedirectTest do
 
       assert {301, headers, ""} = sent_resp(response_conn)
       assert {"location", "https://www.bbcchannels.com"} in headers
-      assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+      assert {"vary",
+              "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
     end
   end
 
@@ -55,7 +59,9 @@ defmodule EndToEnd.GamesInternationalRedirectTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
       assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
-      assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+      assert {"vary",
+              "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
     end
 
     test "bbc.co.uk/games does not redirect to bbcchannels.com when x-ip_is_uk_combined is set to no" do
@@ -70,7 +76,9 @@ defmodule EndToEnd.GamesInternationalRedirectTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
       assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
-      assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+      assert {"vary",
+              "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
     end
 
     test "bbc.co.uk/games does not redirect to bbcchannels.com when x-ip_is_uk_combined is not set" do
@@ -84,7 +92,9 @@ defmodule EndToEnd.GamesInternationalRedirectTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
       assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(response_conn)
-      assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+      assert {"vary",
+              "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
     end
   end
 end
