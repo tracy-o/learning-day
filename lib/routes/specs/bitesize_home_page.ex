@@ -8,7 +8,7 @@ defmodule Routes.Specs.BitesizeHomePage do
         request_pipeline: ["ComToUKRedirect"],
         language_from_cookie: true,
         query_params_allowlist: ["page"],
-        examples: ["/bitesize/preview"]
+        examples: ["/bitesize"]
       }
     }
   end
