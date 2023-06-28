@@ -13,8 +13,6 @@ import BelfrageWeb.Routefile
 defroutefile "Sport" do
   # Vanity URLs
 
-  handle "/sport/alpha/homepage", using: "SportAlphaHomePage"
-
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
 

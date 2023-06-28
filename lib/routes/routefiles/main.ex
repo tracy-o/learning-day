@@ -80,12 +80,6 @@ defroutefile "Main" do
   handle "/homepage/preview/alba", using: "HomePagePreviewAlba"
   handle "/homepage/newsround/preview", using: "NewsroundHomePagePreview"
 
-  handle "/homepage/personalised", using: "HomePagePersonalised"
-  handle "/homepage/segmented", using: "HomePageSegmented"
-
-  handle "/sportproto", using: "SportHomePage", only_on: "test"
-  handle "/sporttipo", using: "SportTipo"
-
   handle "/homepage/sport/preview", using: "SportHomePagePreview"
   handle "/homepage/sport/test", using: "TestSportHomePage", only_on: "test"
 
