@@ -5,7 +5,8 @@ defmodule Routes.Specs.PersonalisedAccount do
         owner: "PersonalisedAccountOperations@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCAccount/Personalised+Account+Runbook",
         platform: "Webcore",
-        personalisation: "on"
+        personalisation: "on",
+        request_pipeline: ["PersonalisedAccountNonUkRedirect"]
       }
     }
   end
