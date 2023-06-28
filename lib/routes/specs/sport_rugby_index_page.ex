@@ -5,7 +5,7 @@ defmodule Routes.Specs.SportRugbyIndexPage do
         owner: "#help-sport",
         runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
         platform: "MozartSport",
-        examples: ["/sport/rugby-union/english", "/sport/rugby-union/english.app", "/sport/rugby-union", "/sport/rugby-union.app", "/sport/rugby-league", "/sport/rugby-league.app"]
+        examples: ["/sport/rugby-union/english.app", "/sport/rugby-union", "/sport/rugby-union.app", "/sport/rugby-league", "/sport/rugby-league.app"]
       }
     }
   end

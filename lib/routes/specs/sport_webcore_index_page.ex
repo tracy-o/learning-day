@@ -3,11 +3,11 @@ defmodule Routes.Specs.SportWebcoreIndexPage do
     %{
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
-        runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
+        runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         personalisation: "on",
         query_params_allowlist: ["page"],
-        examples: ["/sport/wales", "/sport/scotland", "/sport/rugby-union/welsh", "/sport/rugby-union/scottish", "/sport/rugby-union/irish", "/sport/northern-ireland/motorbikes", "/sport/northern-ireland/gaelic-games", "/sport/northern-ireland", "/sport/football/welsh", "/sport/football/scottish", "/sport/football/irish", "/sport/winter-sports", "/sport/motorsport", "/sport/disability-sport", "/sport/boxing", "/sport/basketball", "/sport/american-football", "/sport/football/world-cup"]
+        examples: ["/sport/rugby-union/welsh", "/sport/rugby-union/scottish", "/sport/rugby-union/irish", "/sport/northern-ireland/motorbikes", "/sport/northern-ireland/gaelic-games", "/sport/winter-sports", "/sport/motorsport", "/sport/disability-sport", "/sport/boxing", "/sport/basketball", "/sport/american-football"]
       }
     }
   end
