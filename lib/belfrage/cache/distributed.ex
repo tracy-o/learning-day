@@ -42,6 +42,8 @@ defmodule Belfrage.Cache.Distributed do
   @impl CacheStrategy
   def metric_identifier, do: "distributed"
 
+  def prepend_path("/", hash), do: "/" <> hash
+
   def prepend_path(path, hash) do
     truncated_path = truncate_path(path)
     truncated_path <> "/" <> hash
