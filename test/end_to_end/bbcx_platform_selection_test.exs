@@ -216,13 +216,14 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   test "the BBCX MozartSport platform selector points to BBCX" do
     set_environment("test")
 
-    expect(HTTPMock, :execute, fn _request, _origin ->
+    expect(HTTPMock, :execute, fn _request, :BBCX ->
       @successful_http_response
     end)
 
     conn =
       conn(:get, "/bbcx-platform-selector-mozart-sport")
       |> put_req_header("x-country", "us")
+      |> put_req_header("x-bbc-edge-host", "bbc.com")
       |> put_req_header("cookie-ckns_bbccom_beta", "1")
       |> Router.call(routefile: Routes.Routefiles.Mock)
 
