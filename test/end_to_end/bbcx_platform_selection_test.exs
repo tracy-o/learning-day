@@ -111,7 +111,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   test "the BBCX MozartNews platform selector points to MozartNews" do
     set_environment("test")
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartNews ->
       @successful_http_response
     end)
 
@@ -128,7 +128,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   test "the BBCX MozartNews platform selector points to MozartNews when cookie-ckns_bbccom_beta is not set" do
     set_environment("test")
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartNews ->
       @successful_http_response
     end)
 
@@ -165,7 +165,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
     set_env(:belfrage, :production_environment, "live", &Belfrage.RouteSpecManager.update_specs/0)
     Belfrage.RouteSpecManager.update_specs()
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartNews ->
       @successful_http_response
     end)
 
@@ -183,7 +183,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   test "the BBCX MozartSport platform selector points to MozartSport" do
     set_environment("test")
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartSport ->
       @successful_http_response
     end)
 
@@ -200,7 +200,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   test "the BBCX MozartSport platform selector points to MozartSport when cookie-ckns_bbccom_beta is not set" do
     set_environment("test")
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartSport ->
       @successful_http_response
     end)
 
@@ -236,7 +236,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
     set_env(:belfrage, :production_environment, "live", &Belfrage.RouteSpecManager.update_specs/0)
     Belfrage.RouteSpecManager.update_specs()
 
-    expect(HTTPMock, :execute, 1, fn _request, _origin ->
+    expect(HTTPMock, :execute, 1, fn _request, :MozartSport ->
       @successful_http_response
     end)
 
