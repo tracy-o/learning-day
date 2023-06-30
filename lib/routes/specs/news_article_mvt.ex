@@ -1,7 +1,7 @@
 defmodule Routes.Specs.NewsArticleMvt do
   def specification do
     %{
-      preflight_pipeline: ["BBCXPlatformSelector"],
+      preflight_pipeline: ["BBCXWebcorePlatformSelector"],
       specs: [
         %{
           owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
