@@ -2,24 +2,10 @@ defmodule Belfrage.PreflightTransformers.BBCXFuturePlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.{Brands, Envelope}
 
+  @route_platform "DotComFuture"
+
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    {:ok,
-     Envelope.add(envelope, :private, %{
-       bbcx_enabled: bbcx_enabled?(envelope),
-       platform: select_platform(envelope)
-     })}
-  end
-
-  defp bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
-    prod_env == "test"
-  end
-
-  defp select_platform(envelope) do
-    if Brands.is_bbcx?(envelope) do
-      "BBCX"
-    else
-      "DotComFuture"
-    end
+    BBCXPlatformSelectorCommon.add_platform_to_envelope(envelope, @route_platform)
   end
 end
