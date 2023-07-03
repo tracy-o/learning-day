@@ -1,4 +1,4 @@
-defmodule Belfrage.PreflightTransformers.DotComHomepagePlatformSelector do
+defmodule Belfrage.PreflightTransformers.HomepagePlatformSelector do
   use Belfrage.Behaviours.Transformer
 
   @impl Transformer

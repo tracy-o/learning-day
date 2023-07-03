@@ -1,14 +1,13 @@
-defmodule Belfrage.PreflightTransformers.DotComHomepagePlatformSelectorCommonTest do
+defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.PreflightTransformers.DotComHomepagePlatformSelector
+  alias Belfrage.PreflightTransformers.HomepagePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
-
 
   test "when the host is bbc.com then the DotCom platform is used" do
     {:ok, response} =
-      DotComHomepagePlatformSelector.call(
+      HomepagePlatformSelector.call(
         %Envelope{
           request: %Request{
             host: "www.bbc.com",
@@ -21,7 +20,7 @@ defmodule Belfrage.PreflightTransformers.DotComHomepagePlatformSelectorCommonTes
 
   test "when the host is bbc.co.uk then Webcore is used" do
     {:ok, response} =
-      DotComHomepagePlatformSelector.call(
+      HomepagePlatformSelector.call(
         %Envelope{
           request: %Request{
             host: "www.bbc.co.uk",
@@ -34,7 +33,7 @@ defmodule Belfrage.PreflightTransformers.DotComHomepagePlatformSelectorCommonTes
 
   test "when the host is localhost then Webcore is used" do
     {:ok, response} =
-      DotComHomepagePlatformSelector.call(
+      HomepagePlatformSelector.call(
         %Envelope{
           request: %Request{
             host: "localhost",
@@ -47,7 +46,7 @@ defmodule Belfrage.PreflightTransformers.DotComHomepagePlatformSelectorCommonTes
 
   test "when the host is empty then Webcore is used" do
     {:ok, response} =
-      DotComHomepagePlatformSelector.call(
+      HomepagePlatformSelector.call(
         %Envelope{
           request: %Request{
             host: "",

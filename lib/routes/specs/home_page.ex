@@ -1,7 +1,7 @@
 defmodule Routes.Specs.HomePage do
   def specification do
     %{
-      preflight_pipeline: ["DotComHomepagePlatformSelector"],
+      preflight_pipeline: ["HomepagePlatformSelector"],
       specs: [
         %{
           owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
