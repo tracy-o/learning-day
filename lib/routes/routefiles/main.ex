@@ -3364,7 +3364,7 @@ defroutefile "Main" do
 
   # DotCom routes
   handle "/future", using: "DotComFuture"
-  handle "/future/articles/:id", using: "DotComFuture"
+  handle "/future/article/:id", using: "DotComFuture"
   handle "/future/*any", using: "DotComFutureAny"
   handle "/culture/*any", using: "DotComCulture"
   handle "/reel/*any", using: "DotComReel"
