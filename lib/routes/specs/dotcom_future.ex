@@ -6,11 +6,10 @@ defmodule Routes.Specs.DotComFuture do
         %{
           request_pipeline: [],
           platform: "DotComFuture",
-          examples: ["/future"]
+          examples: ["/future", "future/article/20230630-will-texas-become-too-hot-for-humans"]
         },
         %{
-          platform: "BBCX",
-          examples: []
+          platform: "BBCX"
         }
       ]
     }
