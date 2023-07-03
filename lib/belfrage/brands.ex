@@ -5,6 +5,10 @@ defmodule Belfrage.Brands do
 
   @allowed_countries ["us", "ca"]
 
+  def bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
+    prod_env == "test"
+  end
+
   def is_bbcx?(%Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do
     prod_env == "test" and
       @dial.state(:bbcx_enabled) and

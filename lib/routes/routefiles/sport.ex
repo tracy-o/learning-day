@@ -1175,17 +1175,23 @@ defroutefile "Sport" do
   handle "/sport/get-inspired", using: "SportIndexPage"
   handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
   handle "/sport/get-inspired/activity-guides", using: "SportIndexPage"
-  handle "/sport/golf.app", using: "SportMajorIndexPage"
+  handle "/sport/golf.app", using: "SportMajorIndexPage" do
+    return_404()
+  end
   handle "/sport/golf", using: "SportWebcoreIndexPage"
   handle "/sport/horse-racing.app", using: "SportIndexPage"
   handle "/sport/horse-racing", using: "SportIndexPage"
-  handle "/sport/mixed-martial-arts.app", using: "SportIndexPage"
+  handle "/sport/mixed-martial-arts.app", using: "SportIndexPage" do
+    return_404()
+  end
   handle "/sport/mixed-martial-arts", using: "SportWebcoreIndexPage"
   handle "/sport/motorsport.app", using: "SportIndexPage" do
     return_404()
   end
   handle "/sport/motorsport", using: "SportWebcoreIndexPage"
-  handle "/sport/netball.app", using: "SportIndexPage"
+  handle "/sport/netball.app", using: "SportIndexPage" do
+    return_404()
+  end
   handle "/sport/netball", using: "SportWebcoreIndexPage"
   handle "/sport/northern-ireland.app", using: "SportHomeNationIndexPage" do
     return_404()
@@ -1205,7 +1211,9 @@ defroutefile "Sport" do
   handle "/sport/rugby-league", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union", using: "SportRugbyIndexPage"
-  handle "/sport/rugby-union/english.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union/english.app", using: "SportRugbyIndexPage" do
+    return_404()
+  end
   handle "/sport/rugby-union/english", using: "SportWebcoreIndexPage"
   handle "/sport/rugby-union/irish.app", using: "SportRugbyIndexPage" do
     return_404()
@@ -1223,9 +1231,13 @@ defroutefile "Sport" do
     return_404()
   end
   handle "/sport/scotland", using: "SportWebcoreNationIndexPage"
-  handle "/sport/snooker.app", using: "SportIndexPage"
+  handle "/sport/snooker.app", using: "SportIndexPage" do
+    return_404()
+  end
   handle "/sport/snooker", using: "SportWebcoreIndexPage"
-  handle "/sport/sports-personality.app", using: "SportIndexPage"
+  handle "/sport/sports-personality.app", using: "SportIndexPage" do
+    return_404()
+  end
   handle "/sport/sports-personality", using: "SportWebcoreIndexPage"
   handle "/sport/swimming.app", using: "SportIndexPage"
   handle "/sport/swimming", using: "SportIndexPage"

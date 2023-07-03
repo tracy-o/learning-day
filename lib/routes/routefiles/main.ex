@@ -3192,6 +3192,70 @@ defroutefile "Main" do
   redirect "/bitesize/preview/guides/:id", to: "/bitesize/preview/guides/:id/revision/1", status: 301
   redirect "/bitesize/preview/guides/:id/revision", to: "/bitesize/preview/guides/:id/revision/1", status: 301
 
+  redirect "/bitesize/articles/znsmxyc", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zf4gg7h", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zs64r2p", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z7j496f", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zhxpscw", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z4rkd6f", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z7fb3j6", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zgqq6rd", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zxvqdp3", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z63htrd", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zwcfp4j", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zv7mh4j", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zvpvbqt", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z9pxtrd", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z32kjfr", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zy44bqt", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z4b3sk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zkcfsk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z84yf82", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z9rsn9q", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zchysk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zkyr47h", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z4crvwx", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zctbydm", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zt42jsg", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zd8kr2p", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zx9mqfr", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zm42jsg", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zqbt6g8", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/z32mxbk", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zmxc96f", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zr99g7h", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zp64cmn", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zbnpxbk", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zcnw8hv", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zhm7jsg", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/z9948hv", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zrsbrj6", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zpj896f", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/z6nk4xs", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zw3fn9q", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zq8cg7h", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zywtxbk", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zkbf3j6", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zt7q8hv", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/znxmjsg", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zn27dp3", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zdhxm39", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zg6qwnb", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/z3cbcmn", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zn3svwx", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zh9v382", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zh744xs", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zmcvrmn", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zw94bqt", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/z6xmjsg", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/collections/starting-primary-school", to: "/bitesize/groups/cx1lpm3ve37t", status: 301          # Parents' Toolkit - Starting Primary School (English)
+  redirect "/bitesize/collections/starting-primary-school/*any", to: "/bitesize/groups/cx1lpm3ve37t", status: 301     # Parents' Toolkit - Starting Primary School (English)
+  redirect "/bitesize/articles/z6vfn9q", to: "/bitesize/groups/cjx58zqw94xt", status: 301                             # Parents' Toolkit - Starting Primary School (Welsh)
+  redirect "/bitesize/tags/zh4wy9q/starting-secondary-school", to: "/bitesize/groups/c5vpkq1l934t", status: 301       # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/tags/zh4wy9q/starting-secondary-school/*any", to: "/bitesize/groups/c5vpkq1l934t", status: 301  # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/articles/zjkk96f", to: "/bitesize/groups/c5vpkq1l934t", status: 301                             # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/articles/zhkjbdm", to: "/bitesize/groups/cq0zpjylx38t", status: 301                             # Parents' Toolkit - Starting Secondary School (Welsh)
+
   handle "/bitesize", using: "BitesizeHomePage"
 
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
