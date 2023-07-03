@@ -1103,9 +1103,7 @@ defroutefile "Sport" do
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportMajorIndexPage"
   handle "/sport", using: "SportHomePage"
-  handle "/sport/africa.app", using: "SportIndexPage" do
-    return_404()
-  end
+  handle "/sport/africa.app", using: "SportIndexPage"
   handle "/sport/africa", using: "SportIndexPage"
   handle "/sport/american-football.app", using: "SportIndexPage" do
     return_404()
@@ -1135,9 +1133,7 @@ defroutefile "Sport" do
     return_404()
   end
   handle "/sport/disability-sport", using: "SportWebcoreIndexPage"
-  handle "/sport/england.app", using: "SportHomeNationIndexPage" do
-    return_404()
-  end
+  handle "/sport/england.app", using: "SportHomeNationIndexPage"
   handle "/sport/england", using: "SportHomeNationIndexPage"
   handle "/sport/football.app", using: "SportFootballIndexPage"
   handle "/sport/football", using: "SportFootballIndexPage"
