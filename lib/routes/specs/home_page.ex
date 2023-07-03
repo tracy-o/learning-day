@@ -13,6 +13,9 @@ defmodule Routes.Specs.HomePage do
         },
         %{
           platform: "DotComHomepage"
+        },
+        %{
+          platform: "BBCX"
         }
       ]
     }
