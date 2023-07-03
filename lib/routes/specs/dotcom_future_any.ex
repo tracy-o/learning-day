@@ -4,7 +4,7 @@ defmodule Routes.Specs.DotComFutureAny do
       specs: %{
         request_pipeline: [],
         platform: "DotComFuture",
-        examples: ["/future/tags", "/future/columns/the-lost-index/"]
+        examples: ["/future/tags", "/future/columns"]
       }
     }
   end
