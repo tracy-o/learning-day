@@ -3391,7 +3391,7 @@ defroutefile "Main" do
   handle "/echo", using: "EchoSpec", only_on: "test"
 
   # Personalised Account
-  handle "/foryou", using: "PersonalisedAccount", only_on: "test"
+  handle "/foryou", using: "PersonalisedAccount"
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
