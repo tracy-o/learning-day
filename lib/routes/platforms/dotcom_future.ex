@@ -7,7 +7,6 @@ defmodule Routes.Platforms.DotComFuture do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
-      headers_allowlist: ["cookie-ckns_bbccom_beta"],
       circuit_breaker_error_threshold: 200
     }
   end
