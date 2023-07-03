@@ -39,7 +39,24 @@ defmodule Belfrage.BrandsTest do
       assert Belfrage.Brands.is_bbcx?(bbcx_envelope)
     end
 
-    test "returns false if country not us or ca" do
+    test "returns true if request qualifies for bbcx content, country is gu" do
+      stub_dial(:bbcx_enabled, "true")
+
+      bbcx_envelope = %Envelope{
+        request: %Envelope.Request{
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
+          host: "bbc.com",
+          country: "gu"
+        },
+        private: %Envelope.Private{
+          production_environment: "test"
+        }
+      }
+
+      assert Belfrage.Brands.is_bbcx?(bbcx_envelope)
+    end
+
+    test "returns false if country code is not in allowed list of country codes" do
       stub_dial(:bbcx_enabled, "true")
 
       bbcx_envelope = %Envelope{
