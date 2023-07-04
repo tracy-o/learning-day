@@ -7,7 +7,7 @@ defmodule Routes.Specs.SportWebcoreFootballSubIndexPage do
         platform: "Webcore",
         personalisation: "on",
         query_params_allowlist: ["page"],
-        examples: ["/sport/football/welsh", "/sport/football/scottish", "/sport/football/irish", "/sport/football/world-cup"]
+        examples: ["/sport/football/premier-league", "/sport/football/fa-cup", "/sport/football/european", "/sport/football/european-championship", "/sport/football/welsh", "/sport/football/scottish", "/sport/football/irish", "/sport/football/world-cup"]
       }
     }
   end
