@@ -12,10 +12,12 @@ defmodule Routes.Specs.HomePage do
           examples: ["/"]
         },
         %{
-          platform: "DotComHomepage"
+          platform: "DotComHomepage",
+          fallback_write_sample: 0.5
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          fallback_write_sample: 0.5
         }
       ]
     }
