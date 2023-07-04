@@ -94,6 +94,21 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.status == 404
       assert conn.resp_body =~ "404"
     end
+
+    test "when route includes UTF-8 encoded characters" do
+      stub_origins()
+
+      conn =
+        conn(:get, "/sport/av/football/59070797%0A")
+        |> put_bbc_headers()
+        |> put_private(:production_environment, "some_environment")
+        |> put_private(:preview_mode, "off")
+        |> put_private(:overrides, %{})
+        |> Routefile.call([])
+
+      assert conn.status == 404
+      assert conn.resp_body =~ "404"
+    end
   end
 
   describe "calling handle with only_on option" do
