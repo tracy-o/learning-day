@@ -3370,7 +3370,9 @@ defroutefile "Main" do
   handle "/reel", using: "DotComReel"
   handle "/reel/video/:id", using: "DotComReel"
   handle "/reel/*any", using: "DotComReelAny"
-  handle "/travel/*any", using: "DotComTravel"
+  handle "/travel", using: "DotComTravel"
+  handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/*any", using: "DotComTravelAny"
   handle "/worklife/*any", using: "DotComWorklife"
 
   # ElectoralComission routes
