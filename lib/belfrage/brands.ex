@@ -3,7 +3,7 @@ defmodule Belfrage.Brands do
 
   @dial Application.compile_env(:belfrage, :dial)
 
-  @allowed_countries ["us", "ca"]
+  @allowed_countries ["us", "as", "gu", "mp", "pr", "vi", "ca"]
 
   def bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
     prod_env == "test"
