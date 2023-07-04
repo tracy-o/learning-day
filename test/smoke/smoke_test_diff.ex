@@ -1,58 +1,63 @@
 defmodule Belfrage.SmokeTestDiff do
-  @outputs %{"www" => "www_output.txt", "named" => "stack_output.txt"}
   @compare_to System.get_env("WITH_DIFF")
 
-  def build(matcher_path, env, response) do
-    if @compare_to, do: write_data(matcher_path, env, response)
+  def build(response, path, spec) do
+    if @compare_to, do: now_compare_with_live(response, path, spec) |> IO.inspect(label: "comparing")
   end
 
-  defp write_data(path, env, %Finch.Response{headers: headers}) do
-    resp_headers =
-      headers
-      |> Enum.into(%{})
-      |> Map.drop(["date", "brequestid", "bsig"])
+  defp now_compare_with_live(_resp = %Finch.Response{headers: canary_headers}, path, spec) do
+    live_endpoint = Application.get_env(:belfrage, :smoke)[:live][endpoint_name()]
 
-    case resp_headers["bid"] do
-      "www" -> generate_output(inspect({env, path,  Map.delete(resp_headers, "bid")}, limit: :infinity))
-      @compare_to -> generate_output(inspect({env, path,  Map.delete(resp_headers, "bid")}, limit: :infinity), "named")
-      _ -> nil
+    {:ok, %Finch.Response{headers: live_headers}} = Helper.get_route(live_endpoint, path, spec)
+
+    compare_headers(Map.new(canary_headers), Map.new(live_headers))
+  end
+
+  defp endpoint_name() do
+    Application.get_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]
+      |> Enum.find(fn {_endpoint, id_map} -> id_map[:value] == @compare_to end)
+      |> elem(0)
+  end
+
+  defp compare_headers(canary_headers, live_headers) do
+    headers_mismatches =
+      check_identical_headers(canary_headers, live_headers) ++ check_similar_headers(canary_headers, live_headers)
+
+    case headers_mismatches do
+      [] -> :ok
+      reason -> {:error, reason}
     end
   end
 
-  defp generate_output(content, bid \\ "www") do
-    {:ok, output} = File.open(@outputs[bid], [:append])
-    IO.puts(output, content)
-    File.close(output)
+  defp check_identical_headers(canary_headers, live_headers) do
+    ["cache-control", "content-type", "req-svc-chain", "vary"]
+    |> Enum.reduce([], fn h, acc ->
+      if canary_headers[h] != live_headers[h] do
+        acc ++ "Response header #{h} mismatch: canary: #{canary_headers[h]}, live: #{live_headers[h]}"
+      else
+        acc
+      end
+    end)
   end
 
-  def sort_files() do
-    for {_, output} <- @outputs do
-      {:ok, data} = File.read(output)
-      content = data |> String.split("\n") |> Enum.uniq() |> Enum.sort() |> Enum.join("\n")
-      File.write(output, content)
+  defp check_similar_headers(canary_headers, live_headers) do
+    acceptance = 1.0
+
+    perc_diff = fn h ->
+      ch = String.to_integer(canary_headers[h])
+      lh = String.to_integer(live_headers[h])
+
+      ((ch - lh) / lh * 100)
+      |> abs()
     end
-  end
 
-  def get_route_diff() do
-    {:ok, stack_data} = File.read(@outputs["named"])
-    {:ok, www_data} = File.read(@outputs["www"])
-
-    output =
-      stack_data
-      |> String.split("\n")
-      |> Enum.filter(fn l -> l != "" end)
-      |> Enum.map(fn line ->
-        [_, path, _] = String.split(line, ", ", parts: 3)
-        path = String.replace(path, "\"", "")
-
-        case Enum.find(String.split(www_data, "\n"), fn l -> l =~ line end) do
-          nil ->
-            "Route not found on WWW: " <> path <> "\n"
-          www_line ->
-            "Approximately #{String.bag_distance(line, www_line) * 100}% similarity to WWW for route: " <> path <> "\n"
-        end
-      end)
-
-    File.write("smoke_test_diff.txt", output)
+    ["content-length"]
+    |> Enum.reduce([], fn h, acc ->
+      if perc_diff.(h) > acceptance do
+        acc ++ "Response header #{h} exceeding variance: canary: #{canary_headers[h]}, live: #{live_headers[h]}"
+      else
+        acc
+      end
+    end)
   end
 end

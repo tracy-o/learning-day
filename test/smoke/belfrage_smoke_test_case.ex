@@ -85,8 +85,11 @@ defmodule Belfrage.SmokeTestCase do
 
             case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, @matcher_spec.spec, retry_check) do
               {:ok, resp} ->
-                SmokeTestDiff.build(@matcher_spec.path, @smoke_env, resp)
-                assert true
+                case SmokeTestDiff.build(resp, @matcher_spec.path, @matcher_spec.spec) do
+                  nil -> assert true
+                  :ok -> assert true
+                  {:error, reason} -> assert false, inspect(reason)
+                end
 
               {:error, reason} when is_binary(reason) ->
                 assert false, reason
