@@ -1140,17 +1140,17 @@ defroutefile "Sport" do
   handle "/sport/football/championship.app", using: "SportFootballIndexPage"
   handle "/sport/football/championship", using: "SportFootballIndexPage"
   handle "/sport/football/european-championship.app", using: "SportFootballIndexPage"
-  handle "/sport/football/european-championship", using: "SportFootballIndexPage"
+  handle "/sport/football/european-championship", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/european.app", using: "SportFootballIndexPage"
-  handle "/sport/football/european", using: "SportFootballIndexPage"
+  handle "/sport/football/european", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/fa-cup.app", using: "SportFootballIndexPage"
-  handle "/sport/football/fa-cup", using: "SportFootballIndexPage"
+  handle "/sport/football/fa-cup", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/irish.app", using: "SportFootballIndexPage" do
     return_404()
   end
   handle "/sport/football/irish", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/premier-league.app", using: "SportFootballIndexPage"
-  handle "/sport/football/premier-league", using: "SportFootballIndexPage"
+  handle "/sport/football/premier-league", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/scottish.app", using: "SportWebcoreIndexPage" do
     return_404()
   end
