@@ -9,19 +9,26 @@ defmodule Belfrage.SmokeTest do
 
   @moduletag :smoke_test
 
-  Belfrage.RouteSpec.list_examples(@prod_env)
-  |> Enum.filter(fn example -> example.spec not in @ignore_specs end)
-  |> Enum.each(fn example ->
-    @matcher_spec Macro.escape(example)
+  output =
+    Belfrage.RouteSpec.list_examples(@prod_env)
+    |> Enum.filter(fn example -> example.spec not in @ignore_specs end)
+    |> Enum.each(fn example ->
+      @matcher_spec Macro.escape(example)
 
-    contents =
-      quote do
-        use Belfrage.SmokeTestCase,
-          matcher_spec: unquote(@matcher_spec),
-          environments: unquote(@environments)
-      end
+      contents =
+        quote do
+          use Belfrage.SmokeTestCase,
+            matcher_spec: unquote(@matcher_spec),
+            environments: unquote(@environments)
+        end
 
-    unique_module_name = Module.concat(["Belfrage.SmokeTest", example.spec, UUID.uuid4(:hex)])
-    Module.create(unique_module_name, contents, Macro.Env.location(__ENV__))
-  end)
+      unique_module_name = Module.concat(["Belfrage.SmokeTest", example.spec, UUID.uuid4(:hex)])
+      Module.create(unique_module_name, contents, Macro.Env.location(__ENV__))
+    end)
+
+  :timer.sleep(2_000)
+  Belfrage.SmokeTestDiff.sort_files()
+  Belfrage.SmokeTestDiff.get_route_diff()
+
+  output
 end
