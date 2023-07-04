@@ -3365,7 +3365,9 @@ defroutefile "Main" do
   # DotCom routes
   handle "/future/*any", using: "DotComFuture"
   handle "/culture/*any", using: "DotComCulture"
-  handle "/reel/*any", using: "DotComReel"
+  handle "/reel", using: "DotComReel"
+  handle "/reel/video/:id", using: "DotComReel"
+  handle "/reel/*any", using: "DotComReelAny"
   handle "/travel/*any", using: "DotComTravel"
   handle "/worklife/*any", using: "DotComWorklife"
 
