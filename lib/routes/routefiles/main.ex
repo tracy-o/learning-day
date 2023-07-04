@@ -3264,7 +3264,7 @@ defroutefile "Main" do
 
   handle "/bitesize/subjects", using: "Bitesize"
   handle "/bitesize/subjects/:id", using: "BitesizeSubjects"
-  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjects"
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjectsYear"
 
   handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test"
   handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test"
