@@ -3373,7 +3373,9 @@ defroutefile "Main" do
   handle "/travel", using: "DotComTravel"
   handle "/travel/article/:id", using: "DotComTravel"
   handle "/travel/*any", using: "DotComTravelAny"
-  handle "/worklife/*any", using: "DotComWorklife"
+  handle "/worklife", using: "DotComWorklife"
+  handle "/worklife/article/:id", using: "DotComWorklife"
+  handle "/worklife/*any", using: "DotComWorklifeAny"
 
   # ElectoralComission routes
   handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
