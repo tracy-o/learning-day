@@ -21,7 +21,7 @@ defmodule Routes.Platforms.Webcore do
   defp query_params_allowlist(_production_env), do: ["mode", "chameleon", "mvt", "renderer_env", "toggles", "experiments"]
 
   defp pipeline("live") do
-    [:_routespec_pipeline_placeholder, "Personalisation", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "IsCommercial", "CircuitBreaker"]
+    ["SessionState", :_routespec_pipeline_placeholder, "PersonalisationGuardian", "LambdaOriginAlias", "Language", "PlatformKillSwitch", "IsCommercial", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

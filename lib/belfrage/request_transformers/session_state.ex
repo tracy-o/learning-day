@@ -10,7 +10,6 @@ defmodule Belfrage.RequestTransformers.SessionState do
   @impl Transformer
   def call(envelope = %Envelope{}) do
     session_state = SessionState.build(envelope.request)
-    IO.inspect(session_state)
     envelope = Envelope.add(envelope, :user_session, session_state)
 
     {:ok, envelope}

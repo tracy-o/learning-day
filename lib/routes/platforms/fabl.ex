@@ -14,7 +14,7 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline("live") do
-    [:_routespec_pipeline_placeholder, "Personalisation", "CircuitBreaker"]
+    ["SessionState", :_routespec_pipeline_placeholder, "PersonalisationGuardian", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

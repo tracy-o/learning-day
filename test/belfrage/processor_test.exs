@@ -27,7 +27,8 @@ defmodule Belfrage.ProcessorTest do
 
   describe "Processor.get_route_spec/1" do
     @webcore_request_pipeline [
-      "Personalisation",
+      "SessionState",
+      "PersonalisationGuardian",
       "LambdaOriginAlias",
       "Language",
       "PlatformKillSwitch",

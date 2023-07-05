@@ -1,4 +1,4 @@
-defmodule Belfrage.RequestTransformers.PersonalisationTest do
+defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
@@ -6,7 +6,8 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
 
   alias Belfrage.Envelope
   alias Belfrage.Envelope.{Request, Private}
-  alias Belfrage.RequestTransformers.Personalisation
+  alias Belfrage.RequestTransformers.SessionState
+  alias Belfrage.RequestTransformers.PersonalisationGuardian
 
   setup do
     envelope =
@@ -29,17 +30,19 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
   describe "call/2" do
     test "request is not personalised", %{envelope: envelope} do
       envelope = Envelope.add(envelope, :private, %{personalised_request: false})
-      assert Personalisation.call(envelope) == {:ok, envelope}
+      assert PersonalisationGuardian.call(envelope) == {:ok, envelope}
     end
 
-    test "user is not authenticated", %{envelope: envelope} do
-      envelope = deauthenticate_request(envelope)
-      assert {:ok, envelope} = Personalisation.call(envelope)
-      refute envelope.user_session.authenticated
-    end
+    # test "user is not authenticated", %{envelope: envelope} do
+    #   envelope = deauthenticate_request(envelope)
+    #   assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
+    #   refute envelope.user_session.authenticated
+    # end
 
     test "user is authenticated, web session is invalid", %{envelope: envelope} do
-      assert {:stop, envelope} = Personalisation.call(envelope)
+      {:ok, envelope} = SessionState.call(envelope)
+
+      assert {:stop, envelope} = PersonalisationGuardian.call(envelope)
       assert envelope.user_session.authenticated
       refute envelope.user_session.valid_session
 
@@ -58,8 +61,9 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
     test "user is authenticated, session is valid", %{envelope: envelope} do
       token = Fixtures.AuthToken.valid_access_token()
       envelope = personalise_request(envelope, token)
+      {:ok, envelope} = SessionState.call(envelope)
 
-      assert {:ok, envelope} = Personalisation.call(envelope)
+      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
       assert envelope.user_session.authenticated
       assert envelope.user_session.valid_session
       assert envelope.user_session.session_token == token
@@ -79,7 +83,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, envelope} = Personalisation.call(envelope)
+      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
 
       refute envelope.user_session.authenticated
       refute envelope.user_session.valid_session
@@ -100,6 +104,8 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
+      {:ok, envelope} = SessionState.call(envelope)
+
       assert {
                :stop,
                envelope = %Belfrage.Envelope{
@@ -107,7 +113,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
                    http_status: 401
                  }
                }
-             } = Personalisation.call(envelope)
+             } = PersonalisationGuardian.call(envelope)
 
       assert envelope.user_session.authenticated
       refute envelope.user_session.valid_session
@@ -130,7 +136,9 @@ defmodule Belfrage.RequestTransformers.PersonalisationTest do
         }
       }
 
-      assert {:ok, envelope} = Personalisation.call(envelope)
+      {:ok, envelope} = SessionState.call(envelope)
+
+      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
 
       assert envelope.user_session.authenticated
       assert envelope.user_session.valid_session

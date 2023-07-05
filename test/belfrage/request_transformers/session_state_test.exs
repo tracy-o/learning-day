@@ -22,7 +22,6 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
       }
       |> authenticate_request()
 
-
     %{envelope: envelope}
   end
 
@@ -48,7 +47,6 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
       refute envelope.user_session.authenticated
     end
 
-   
     test "user is authenticated, web session is invalid", %{envelope: envelope} do
       assert {:ok, envelope} = SessionState.call(envelope)
       assert envelope.user_session.authenticated
