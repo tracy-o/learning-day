@@ -4,7 +4,6 @@ defmodule Routes.Specs.DotComFuture do
       preflight_pipeline: ["BBCXFuturePlatformSelector"],
       specs: [
         %{
-          request_pipeline: [],
           platform: "DotComFuture",
           examples: ["/future", "/future/article/20230630-will-texas-become-too-hot-for-humans"]
         },
