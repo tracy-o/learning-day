@@ -50,7 +50,9 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{
         request: %Request{
-          host: "www.bbc.co.uk"
+          host: "www.bbc.co.uk",
+          country: "us",
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
         }
       })
 
@@ -61,7 +63,9 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{
         request: %Request{
-          host: "www.belfrage.api.bbc.co.uk"
+          host: "www.belfrage.api.bbc.co.uk",
+          country: "us",
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
         }
       })
 
@@ -72,7 +76,9 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{
         request: %Request{
-          host: "localhost"
+          host: "localhost",
+          country: "us",
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
         }
       })
 
@@ -83,7 +89,9 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{
         request: %Request{
-          host: ""
+          host: "",
+          country: "us",
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
         }
       })
 
