@@ -109,15 +109,15 @@ defroutefile "Mock", "test" do
   handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs")
 
   handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
-    return_404 if: !String.match?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
+    return_404 if: !matches?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
   end
   handle "/election2023address/:uprn", using: "ElectoralCommissionAddress" do
-    return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
+    return_404 if: !matches?(uprn, ~r/^\d{6,12}$/)
   end
 
   handle "/sport/av/football/:id", using: "MySessionWebcorePlatform" do
     return_404 if: [
-      !String.match?(id, ~r/\A[0-9]{4,9}\z/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
 
