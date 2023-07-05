@@ -1,11 +1,16 @@
 defmodule Routes.Specs.DotComTravel do
   def specification do
     %{
-      specs: %{
-        request_pipeline: [],
-        platform: "DotComTravel",
-        examples: ["/travel"]
-      }
+      preflight_pipeline: ["BBCXTravelPlatformSelector"],
+      specs: [
+        %{
+          platform: "DotComTravel",
+          examples: ["/travel"]
+        },
+        %{
+          platform: "BBCX"
+        }
+      ]
     }
   end
 end

@@ -113,10 +113,16 @@ defroutefile "Mock", "test" do
   handle "/bbcx-platform-selector-mozart-sport", using: "BBCXMozartSportPlatformSelector"
 
   handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
-    return_404 if: !String.match?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
+    return_404 if: !matches?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
   end
   handle "/election2023address/:uprn", using: "ElectoralCommissionAddress" do
-    return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
+    return_404 if: !matches?(uprn, ~r/^\d{6,12}$/)
+  end
+
+  handle "/sport/av/football/:id", using: "MySessionWebcorePlatform" do
+    return_404 if: [
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
+    ]
   end
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"

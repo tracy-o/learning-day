@@ -28,7 +28,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                {:replace, ["CircuitBreaker"]}
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
-                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
+                 request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt"}},
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
@@ -96,7 +96,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                {:replace, ["CircuitBreaker"]}
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
-                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
+                 request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt", "slug" => "some-slug"}},
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end

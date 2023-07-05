@@ -953,11 +953,11 @@ defroutefile "Sport" do
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportVideosAppPage", only_on: "test" do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
   end
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", only_on: "live"
   handle "/sport/av/:id", using: "SportVideos" do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
   end
 
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", only_on: "live"
@@ -966,13 +966,13 @@ defroutefile "Sport" do
   handle "/sport/av/:discipline/:id.app", using: "SportVideosAppPage", only_on: "test" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
   handle "/sport/av/:discipline/:id", using: "SportVideos" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
 
@@ -1103,9 +1103,7 @@ defroutefile "Sport" do
   ## Sport Manual Indexes
   handle "/sport.app", using: "SportMajorIndexPage"
   handle "/sport", using: "SportHomePage"
-  handle "/sport/africa.app", using: "SportIndexPage" do
-    return_404()
-  end
+  handle "/sport/africa.app", using: "SportIndexPage"
   handle "/sport/africa", using: "SportIndexPage"
   handle "/sport/american-football.app", using: "SportIndexPage" do
     return_404()
@@ -1135,26 +1133,24 @@ defroutefile "Sport" do
     return_404()
   end
   handle "/sport/disability-sport", using: "SportWebcoreIndexPage"
-  handle "/sport/england.app", using: "SportHomeNationIndexPage" do
-    return_404()
-  end
+  handle "/sport/england.app", using: "SportHomeNationIndexPage"
   handle "/sport/england", using: "SportHomeNationIndexPage"
   handle "/sport/football.app", using: "SportFootballIndexPage"
   handle "/sport/football", using: "SportFootballIndexPage"
   handle "/sport/football/championship.app", using: "SportFootballIndexPage"
   handle "/sport/football/championship", using: "SportFootballIndexPage"
   handle "/sport/football/european-championship.app", using: "SportFootballIndexPage"
-  handle "/sport/football/european-championship", using: "SportFootballIndexPage"
+  handle "/sport/football/european-championship", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/european.app", using: "SportFootballIndexPage"
-  handle "/sport/football/european", using: "SportFootballIndexPage"
+  handle "/sport/football/european", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/fa-cup.app", using: "SportFootballIndexPage"
-  handle "/sport/football/fa-cup", using: "SportFootballIndexPage"
+  handle "/sport/football/fa-cup", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/irish.app", using: "SportFootballIndexPage" do
     return_404()
   end
   handle "/sport/football/irish", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/premier-league.app", using: "SportFootballIndexPage"
-  handle "/sport/football/premier-league", using: "SportFootballIndexPage"
+  handle "/sport/football/premier-league", using: "SportWebcoreFootballSubIndexPage"
   handle "/sport/football/scottish.app", using: "SportWebcoreIndexPage" do
     return_404()
   end

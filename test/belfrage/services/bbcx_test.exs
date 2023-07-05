@@ -46,7 +46,7 @@ defmodule Belfrage.Services.BBCXTest do
           url: "https://web.test.bbcx-internal.com/news/articles/crgm198rvgdo?foo=bar",
           headers: %{
             "accept-encoding" => "gzip",
-            "x-country" => "us",
+            "country" => "us",
             "user-agent" => "Belfrage",
             "req-svc-chain" => "BELFRAGE"
           }
@@ -78,7 +78,7 @@ defmodule Belfrage.Services.BBCXTest do
           url: "https://web.test.bbcx-internal.com/news/articles/crgm198rvgdo?foo=bar",
           headers: %{
             "accept-encoding" => "gzip",
-            "x-country" => "us",
+            "country" => "us",
             "user-agent" => "Belfrage",
             "req-svc-chain" => "BELFRAGE"
           }
@@ -103,7 +103,7 @@ defmodule Belfrage.Services.BBCXTest do
           url: "https://web.test.bbcx-internal.com/news/articles/crgm198rvgdo?foo=bar",
           headers: %{
             "accept-encoding" => "gzip",
-            "x-country" => "us",
+            "country" => "us",
             "user-agent" => "Belfrage",
             "req-svc-chain" => "BELFRAGE"
           }

@@ -14,21 +14,9 @@ defmodule Belfrage.Services.BBCX do
     %{
       "accept-encoding" => "gzip",
       "user-agent" => "Belfrage",
-      "req-svc-chain" => request.req_svc_chain
+      "req-svc-chain" => request.req_svc_chain,
+      "country" => request.country
     }
     |> Map.merge(request.raw_headers)
-    |> Map.merge(edge_headers(request))
-  end
-
-  defp edge_headers(request = %Envelope.Request{edge_cache?: true}) do
-    %{
-      "x-bbc-edge-country" => request.country
-    }
-  end
-
-  defp edge_headers(request) do
-    %{
-      "x-country" => request.country
-    }
   end
 end

@@ -1,11 +1,16 @@
 defmodule Routes.Specs.DotComWorklife do
   def specification do
     %{
-      specs: %{
-        request_pipeline: [],
-        platform: "DotComWorklife",
-        examples: ["/worklife"]
-      }
+      preflight_pipeline: ["BBCXWorklifePlatformSelector"],
+      specs: [
+        %{
+          platform: "DotComWorklife",
+          examples: ["/worklife"]
+        },
+        %{
+          platform: "BBCX"
+        }
+      ]
     }
   end
 end

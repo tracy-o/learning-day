@@ -3025,10 +3025,10 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage", only_on: "test" do
+  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage", only_on: "test" do
+  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -3105,13 +3105,13 @@ defroutefile "Main" do
   handle "/newsround/:id.json", using: "NewsroundAmp"
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp"
 
-  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage", only_on: "test" do
+  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage", only_on: "test" do
+  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp", only_on: "test" do
+  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -3264,7 +3264,7 @@ defroutefile "Main" do
 
   handle "/bitesize/subjects", using: "Bitesize"
   handle "/bitesize/subjects/:id", using: "BitesizeSubjects"
-  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjects"
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjectsYear"
 
   handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test"
   handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test"
@@ -3366,10 +3366,18 @@ defroutefile "Main" do
   handle "/future", using: "DotComFuture"
   handle "/future/article/:id", using: "DotComFuture"
   handle "/future/*any", using: "DotComFutureAny"
-  handle "/culture/*any", using: "DotComCulture"
-  handle "/reel/*any", using: "DotComReel"
-  handle "/travel/*any", using: "DotComTravel"
-  handle "/worklife/*any", using: "DotComWorklife"
+  handle "/culture", using: "DotComCulture"
+  handle "/culture/article/:id", using: "DotComCulture"
+  handle "/culture/*any", using: "DotComCultureAny"
+  handle "/reel", using: "DotComReel"
+  handle "/reel/video/:id", using: "DotComReel"
+  handle "/reel/*any", using: "DotComReelAny"
+  handle "/travel", using: "DotComTravel"
+  handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/*any", using: "DotComTravelAny"
+  handle "/worklife", using: "DotComWorklife"
+  handle "/worklife/article/:id", using: "DotComWorklife"
+  handle "/worklife/*any", using: "DotComWorklifeAny"
 
   # ElectoralComission routes
   handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
@@ -3393,7 +3401,7 @@ defroutefile "Main" do
   handle "/echo", using: "EchoSpec", only_on: "test"
 
   # Personalised Account
-  handle "/foryou", using: "PersonalisedAccount", only_on: "test"
+  handle "/foryou", using: "PersonalisedAccount"
 
   handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
