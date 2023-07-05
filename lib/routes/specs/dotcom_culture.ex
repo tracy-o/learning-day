@@ -4,7 +4,6 @@ defmodule Routes.Specs.DotComCulture do
       preflight_pipeline: [BBCXCulturePlatformSelector],
       specs: [
         %{
-          request_pipeline: [],
           platform: "DotComCulture",
           examples: ["/culture"]
         },

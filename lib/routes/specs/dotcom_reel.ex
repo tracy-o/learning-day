@@ -4,7 +4,6 @@ defmodule Routes.Specs.DotComReel do
       preflight_pipeline: ["BBCXReelPlatformSelector"],
       specs: [
         %{
-          request_pipeline: [],
           platform: "DotComReel",
           examples: ["/reel"]
         },
