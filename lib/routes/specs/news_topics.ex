@@ -8,7 +8,7 @@ defmodule Routes.Specs.NewsTopics do
         query_params_allowlist: query_params_allowlist(production_env),
         request_pipeline: ["NewsTopicsPlatformDiscriminator"],
         personalisation: "test_only",
-        examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e"}, "/news/topics/cwjzj55q2p3t/gold", %{expected_status: 301, path: "/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e/gold"}]
+        examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"}, "/news/topics/c207p54mljpt/aberdeenshire-council", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9/aberdeenshire-council"}]
       }
     }
   end
