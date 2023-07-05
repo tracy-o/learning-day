@@ -33,11 +33,11 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
       assert PersonalisationGuardian.call(envelope) == {:ok, envelope}
     end
 
-    # test "user is not authenticated", %{envelope: envelope} do
-    #   envelope = deauthenticate_request(envelope)
-    #   assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
-    #   refute envelope.user_session.authenticated
-    # end
+    test "user is not authenticated", %{envelope: envelope} do
+      envelope = deauthenticate_request(envelope)
+      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
+      refute envelope.user_session.authenticated
+    end
 
     test "user is authenticated, web session is invalid", %{envelope: envelope} do
       {:ok, envelope} = SessionState.call(envelope)
