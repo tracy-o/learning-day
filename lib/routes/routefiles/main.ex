@@ -3025,10 +3025,10 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage", only_on: "test" do
+  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage", only_on: "test" do
+  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
@@ -3105,13 +3105,13 @@ defroutefile "Main" do
   handle "/newsround/:id.json", using: "NewsroundAmp"
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp"
 
-  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage", only_on: "test" do
+  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage", only_on: "test" do
+  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
-  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp", only_on: "test" do
+  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
