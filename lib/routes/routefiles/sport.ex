@@ -953,11 +953,11 @@ defroutefile "Sport" do
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
   handle "/sport/av/:id.app", using: "SportVideosAppPage", only_on: "test" do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
   end
   handle "/sport/av/:id.app", using: "SportMediaAssetPage", only_on: "live"
   handle "/sport/av/:id", using: "SportVideos" do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
   end
 
   handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", only_on: "live"
@@ -966,13 +966,13 @@ defroutefile "Sport" do
   handle "/sport/av/:discipline/:id.app", using: "SportVideosAppPage", only_on: "test" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
   handle "/sport/av/:discipline/:id", using: "SportVideos" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
 
