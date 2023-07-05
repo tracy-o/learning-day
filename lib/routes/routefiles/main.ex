@@ -3364,10 +3364,18 @@ defroutefile "Main" do
 
   # DotCom routes
   handle "/future/*any", using: "DotComFuture"
-  handle "/culture/*any", using: "DotComCulture"
-  handle "/reel/*any", using: "DotComReel"
-  handle "/travel/*any", using: "DotComTravel"
-  handle "/worklife/*any", using: "DotComWorklife"
+  handle "/culture", using: "DotComCulture"
+  handle "/culture/article/:id", using: "DotComCulture"
+  handle "/culture/*any", using: "DotComCultureAny"
+  handle "/reel", using: "DotComReel"
+  handle "/reel/video/:id", using: "DotComReel"
+  handle "/reel/*any", using: "DotComReelAny"
+  handle "/travel", using: "DotComTravel"
+  handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/*any", using: "DotComTravelAny"
+  handle "/worklife", using: "DotComWorklife"
+  handle "/worklife/article/:id", using: "DotComWorklife"
+  handle "/worklife/*any", using: "DotComWorklifeAny"
 
   # ElectoralComission routes
   handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
