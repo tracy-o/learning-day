@@ -7,7 +7,7 @@ defmodule Routes.Platforms.DotComHomepage do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
-      circuit_breaker_error_threshold: 200
+      circuit_breaker_error_threshold: 500
     }
   end
 
