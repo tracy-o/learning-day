@@ -3255,6 +3255,36 @@ defroutefile "Main" do
   redirect "/bitesize/tags/zh4wy9q/starting-secondary-school/*any", to: "/bitesize/groups/c5vpkq1l934t", status: 301  # Parents' Toolkit - Starting Secondary School (English)
   redirect "/bitesize/articles/zjkk96f", to: "/bitesize/groups/c5vpkq1l934t", status: 301                             # Parents' Toolkit - Starting Secondary School (English)
   redirect "/bitesize/articles/zhkjbdm", to: "/bitesize/groups/cq0zpjylx38t", status: 301                             # Parents' Toolkit - Starting Secondary School (Welsh)
+  redirect "/bitesize/support", to: "/bitesize/study-support", status: 301                                            # Study Support
+  redirect "/bitesize/articles/zv3bvwx", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zfwnb7h", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zqpnhcw", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zxq76rd", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zmt42sg", to: "/bitesize/groups/c89rm0640e9t", status: 301                             # Study Support - Study Skills (Welsh)
+  redirect "/bitesize/articles/zghhxbk", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z877wnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zwtdwnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z42496f", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zcbcr2p", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zdbwmbk", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zcf3vwx", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z999r2p", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zrjqwnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/ztxnp4j", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z3x6m39", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zc72qfr", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z9cd8hv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zwnw8hv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zjf3vwx", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zkyvvwx", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z3sm7yc", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zj3h6g8", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zwkqjsg", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z7ddkty", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z4hsn9q", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zn8jwnb", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
 
   handle "/bitesize", using: "BitesizeHomePage"
 
