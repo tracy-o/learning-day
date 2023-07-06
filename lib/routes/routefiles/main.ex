@@ -3363,7 +3363,9 @@ defroutefile "Main" do
   handle "/flagpoles/*any", using: "ClassicAppFlagpole"
 
   # DotCom routes
-  handle "/future/*any", using: "DotComFuture"
+  handle "/future", using: "DotComFuture"
+  handle "/future/article/:id", using: "DotComFuture"
+  handle "/future/*any", using: "DotComFutureAny"
   handle "/culture", using: "DotComCulture"
   handle "/culture/article/:id", using: "DotComCulture"
   handle "/culture/*any", using: "DotComCultureAny"
