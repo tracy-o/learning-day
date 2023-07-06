@@ -517,7 +517,9 @@ defroutefile "Main" do
   handle "/news/technology", using: "NewsIndex"
   handle "/news/the_reporters", using: "NewsWebcoreIndex"
   handle "/news/uk", using: "NewsIndex"
+  handle "/news/us-canada", using: "BBCX"
   handle "/news/wales", using: "NewsIndex"
+  handle "/news/war-in-ukraine", using: "BBCX"
   handle "/news/world", using: "NewsIndex"
   handle "/news/world_radio_and_tv", using: "NewsIndex"
 
@@ -3391,6 +3393,17 @@ defroutefile "Main" do
   handle "/content/*any", using: "ClassicApp"
   handle "/static/*any", using: "ClassicAppStaticContent"
   handle "/flagpoles/*any", using: "ClassicAppFlagpole"
+
+  # BBCX routes
+  handle "/business/*any", using: "BBCX"
+  handle "/future-planet/*any", using: "BBCX"
+  handle "/innovation/*any", using: "BBCX"
+  handle "/live/*any", using: "BBCX"
+  handle "/travel/adventures", using: "BBCX"
+  handle "/travel/cultural-experiences", using: "BBCX"
+  handle "/travel/history-heritage", using: "BBCX"
+  handle "/travel/specialist", using: "BBCX"
+  handle "/video/*any", using: "BBCX"
 
   # DotCom routes
   handle "/future", using: "DotComFuture"
