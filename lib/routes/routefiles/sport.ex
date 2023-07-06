@@ -1422,9 +1422,10 @@ defroutefile "Sport" do
   handle "/sport/rugby-union/match/:id", using: "SportDataPage"
 
   ## Sport Football World Cup
-  handle "/sport/football/world-cup/schedule", using: "SportFootballWorldCupSchedule"
-  handle "/sport/app-webview/football/world-cup/schedule", using: "SportFootballWorldCupSchedule"
-  redirect "/sport/football/world-cup/schedule.app", to: "/sport/app-webview/football/world-cup/schedule", status: 302
+  handle "/sport/football/world-cup/schedule.app", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/world-cup/schedule", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/womens-world-cup/schedule.app", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/womens-world-cup/schedule", using: "SportFootballGroupsAndSchedule"
   # redirect old URLs from previous competitions - e.g., /group-stage, /knockout-stage
   redirect "/sport/football/world-cup/schedule/*any", to: "/sport/football/world-cup/schedule", status: 302
 
