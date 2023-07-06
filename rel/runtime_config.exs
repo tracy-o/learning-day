@@ -15,6 +15,7 @@ use Mix.Config
   {"PHILIPPA_ENDPOINT", :default},
   {"TREVOR_ENDPOINT", :default},
   {"WALTER_ENDPOINT", :default},
+  {"DOTCOM_HOMEPAGE_ENDPOINT", :default},
   {"DOTCOM_CULTURE_ENDPOINT", :default},
   {"DOTCOM_FUTURE_ENDPOINT", :default},
   {"DOTCOM_REEL_ENDPOINT", :default},
