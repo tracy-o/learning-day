@@ -3,17 +3,21 @@ defmodule Belfrage.SmokeTestDiff do
 
   @comparison_bid System.get_env("WITH_DIFF")
 
-  def build(response = %Finch.Response{headers: headers}, path, spec) do
+  def build(response = %Finch.Response{headers: headers}, matcher_spec, "live") do
     if "www" == Map.new(headers)["bid"] and @comparison_bid do
-      now_compare_with_stack(response, path, spec)
+      now_compare_with_stack(response, matcher_spec.path, matcher_spec.headers, matcher_spec.spec)
     else
       :ok
     end
   end
 
-  defp now_compare_with_stack(_resp = %Finch.Response{headers: www_headers}, path, spec) do
+  def build(_resp, _matcher_spec, _env), do: :ok
+
+  defp now_compare_with_stack(_resp = %Finch.Response{headers: www_headers}, path, req_headers, spec) do
     comparison_endpoint = get_live_endpoint(@comparison_bid)
-    {:ok, %Finch.Response{headers: comparison_headers}} = Helper.get_route(comparison_endpoint, path, [], spec)
+
+    {:ok, %Finch.Response{headers: comparison_headers}} =
+      Helper.get_route(comparison_endpoint, path, Map.to_list(req_headers), spec)
 
     compare_headers(path, Map.new(www_headers), Map.new(comparison_headers))
   end
@@ -30,10 +34,11 @@ defmodule Belfrage.SmokeTestDiff do
         :ok
 
       reason ->
-        to_log("\nPath: " <> path <> "\nRoutes: " <> www_endpoint <> ", " <> comparison_endpoint)
-        for r <- reason, do: to_log(r)
+        reasons = Enum.join(reason, "\n")
+        to_log("Path: " <> path <> "\n" <> www_endpoint <> " || " <> comparison_endpoint <> "\n" <> reasons <> "\n")
         {:error, reason}
     end
+    :ok
   end
 
   defp check_identical_headers(www_headers, comparison_headers) do
