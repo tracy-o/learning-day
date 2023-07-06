@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCulturePlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXCulturePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when envelope data does not fulfill bbcx selection requirements, return DotComCulture" do
     {:ok, response} =
       BBCXCulturePlatformSelector.call(%Envelope{

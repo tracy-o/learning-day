@@ -297,11 +297,11 @@
   {
     "name": "bbcx_enabled",
     "description": "Allows disabling BBCX content by pointing to the original Origin",
-    "default-value": "true",
+    "default-value": "false",
     "values": [
       {
         "value": "true",
-        "description": "Default value. Enables BBCX content"
+        "description": "Enables BBCX content"
       },
       {
         "value": "false",

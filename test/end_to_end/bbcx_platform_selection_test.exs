@@ -17,6 +17,7 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
 
   setup do
     :ets.delete_all_objects(:cache)
+    stub_dials(bbcx_enabled: "true")
     :ok
   end
 

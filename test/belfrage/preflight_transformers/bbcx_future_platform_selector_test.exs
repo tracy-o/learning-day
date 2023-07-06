@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.BBCXFuturePlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXFuturePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the envelope data does fulfill the bbcx selection requirements, return BBCX" do
     {:ok, response} =
       BBCXFuturePlatformSelector.call(%Envelope{

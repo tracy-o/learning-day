@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.BBCXTravelPlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXTravelPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the envelope data does not fulfill bbcx selection requirements, return DotComTravel" do
     {:ok, response} =
       BBCXTravelPlatformSelector.call(%Envelope{

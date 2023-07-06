@@ -7,6 +7,10 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorCommonTest do
 
   @mock_platform "Foo"
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the cookie is present, the host is bbc.com and the country is in the allowed country list return BBCX" do
     {:ok, response} =
       BBCXPlatformSelectorCommon.add_platform_to_envelope(

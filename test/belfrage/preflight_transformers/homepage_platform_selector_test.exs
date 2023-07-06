@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
   alias Belfrage.PreflightTransformers.HomepagePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the host is bbc.com and the request does not meet the criteria for BBCX then the DotCom platform is used" do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{
