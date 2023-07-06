@@ -20,6 +20,8 @@ defmodule Belfrage.Test.StubHelper do
         Belfrage.Dials.LiveServer.state(dial_name)
       end
     end)
+
+    :ok
   end
 
   defp transform_dial_value(name, value) do

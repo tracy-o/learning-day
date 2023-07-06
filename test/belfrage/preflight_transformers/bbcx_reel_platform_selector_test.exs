@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.BBCXReelPlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXReelPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when envelope data does not fulfill bbcx selection requirements, return DotComReel" do
     {:ok, response} =
       BBCXReelPlatformSelector.call(%Envelope{

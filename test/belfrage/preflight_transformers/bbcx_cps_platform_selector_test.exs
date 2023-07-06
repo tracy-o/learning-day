@@ -6,6 +6,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXCPSPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the request can be BBCX and the last part of the id is over 62729301" do
     {:ok, response} =
       BBCXCPSPlatformSelector.call(%Envelope{

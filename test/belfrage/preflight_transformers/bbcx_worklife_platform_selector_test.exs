@@ -5,6 +5,10 @@ defmodule Belfrage.PreflightTransformers.BBCXWorklifePlatformSelectorTest do
   alias Belfrage.PreflightTransformers.BBCXWorklifePlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the envelope data does not fulfill bbcx selection requirements, return DotComWorklife" do
     {:ok, response} =
       BBCXWorklifePlatformSelector.call(%Envelope{
