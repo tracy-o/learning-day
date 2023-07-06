@@ -1,6 +1,7 @@
 defmodule Belfrage.SmokeTestCase do
   alias Test.Support.Helper
-  alias Belfrage.{SmokeTestCase.Expectations, SmokeTestDiff}
+  alias Belfrage.SmokeTestCase.Expectations
+  alias Belfrage.SmokeTestDiff
   import ExUnit.Assertions
 
   @retry_times 2
