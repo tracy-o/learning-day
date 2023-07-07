@@ -518,6 +518,8 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
   handle "/news/in_pictures", using: "NewsIndex"
+  handle "/news/in-pictures", using: "BBCXIndex"
+  handle "/news/long-reads", using: "BBCXIndex"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
   handle "/news/paradisepapers", using: "NewsIndex"
@@ -529,7 +531,9 @@ defroutefile "Main" do
   handle "/news/technology", using: "NewsIndex"
   handle "/news/the_reporters", using: "NewsWebcoreIndex"
   handle "/news/uk", using: "NewsIndex"
+  handle "/news/us-canada", using: "BBCXIndex"
   handle "/news/wales", using: "NewsIndex"
+  handle "/news/war-in-ukraine", using: "BBCXIndex"
   handle "/news/world", using: "NewsIndex"
   handle "/news/world_radio_and_tv", using: "NewsIndex"
 
@@ -602,6 +606,8 @@ defroutefile "Main" do
   handle "/news/special/*any", using: "News"
   handle "/news/technology/*any", using: "NewsScienceAndTechnology"
   handle "/news/wales/*any", using: "NewsUk"
+  handle "/news/world/latin-america", using: "BBCXIndex"
+  handle "/news/world/middle-east", using: "BBCXIndex"
   handle "/news/world/*any", using: "NewsWorld"
   handle "/news/world_radio_and_tv/*any", using: "NewsWorld"
 
@@ -3404,6 +3410,12 @@ defroutefile "Main" do
   handle "/static/*any", using: "ClassicAppStaticContent"
   handle "/flagpoles/*any", using: "ClassicAppFlagpole"
 
+  # BBCX index routes
+  handle "/business/*any", using: "BBCXIndex"
+  handle "/future-planet/*any", using: "BBCXIndex"
+  handle "/innovation/*any", using: "BBCXIndex"
+  handle "/video/*any", using: "BBCXIndex"
+
   # DotCom routes
   handle "/future", using: "DotComFuture"
   handle "/future/article/:id", using: "DotComFuture"
@@ -3416,6 +3428,10 @@ defroutefile "Main" do
   handle "/reel/*any", using: "DotComReelAny"
   handle "/travel", using: "DotComTravel"
   handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/adventures", using: "BBCXIndex"
+  handle "/travel/cultural-experiences", using: "BBCXIndex"
+  handle "/travel/history-heritage", using: "BBCXIndex"
+  handle "/travel/specialist", using: "BBCXIndex"
   handle "/travel/*any", using: "DotComTravelAny"
   handle "/worklife", using: "DotComWorklife"
   handle "/worklife/article/:id", using: "DotComWorklife"
