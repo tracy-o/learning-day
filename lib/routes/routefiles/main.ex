@@ -506,6 +506,7 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
   handle "/news/in_pictures", using: "NewsIndex"
+  handle "/news/in-pictures", using: "BBCX"
   handle "/news/long-reads", using: "BBCX"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
