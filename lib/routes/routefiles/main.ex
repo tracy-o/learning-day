@@ -3402,10 +3402,6 @@ defroutefile "Main" do
   handle "/future-planet/*any", using: "BBCX"
   handle "/innovation/*any", using: "BBCX"
   handle "/live/*any", using: "BBCX"
-  handle "/travel/adventures", using: "BBCX"
-  handle "/travel/cultural-experiences", using: "BBCX"
-  handle "/travel/history-heritage", using: "BBCX"
-  handle "/travel/specialist", using: "BBCX"
   handle "/video/*any", using: "BBCX"
 
   # DotCom routes
@@ -3420,6 +3416,10 @@ defroutefile "Main" do
   handle "/reel/*any", using: "DotComReelAny"
   handle "/travel", using: "DotComTravel"
   handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/adventures", using: "BBCX"
+  handle "/travel/cultural-experiences", using: "BBCX"
+  handle "/travel/history-heritage", using: "BBCX"
+  handle "/travel/specialist", using: "BBCX"
   handle "/travel/*any", using: "DotComTravelAny"
   handle "/worklife", using: "DotComWorklife"
   handle "/worklife/article/:id", using: "DotComWorklife"
