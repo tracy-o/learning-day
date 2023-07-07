@@ -1,4 +1,4 @@
-defmodule Routes.Specs.BBCX do
+defmodule Routes.Specs.BBCXIndex do
   def specification do
     %{
       specs: %{
