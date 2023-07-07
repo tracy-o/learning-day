@@ -506,6 +506,7 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
   handle "/news/in_pictures", using: "NewsIndex"
+  handle "/news/long-reads", using: "BBCX"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
   handle "/news/paradisepapers", using: "NewsIndex"
@@ -592,6 +593,8 @@ defroutefile "Main" do
   handle "/news/special/*any", using: "News"
   handle "/news/technology/*any", using: "NewsScienceAndTechnology"
   handle "/news/wales/*any", using: "NewsUk"
+  handle "/news/world/latin-america", using: "BBCX"
+  handle "/news/world/middle-east", using: "BBCX"
   handle "/news/world/*any", using: "NewsWorld"
   handle "/news/world_radio_and_tv/*any", using: "NewsWorld"
 

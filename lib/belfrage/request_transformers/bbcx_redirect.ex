@@ -9,6 +9,7 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
   @bbcx_redirect_mapping %{
     "/business" => "/news/business",
     "/business/technology-of-business" => "/news/business-11428889",
+    "/news/long-reads" => "/news/the_reporters",
     "/news/us-canada" => "/news/world/us_and_canada",
     "/news/war-in-ukraine" => "/news/world-60525350",
     "/news/world/latin-america" => "/news/world/latin_america",
