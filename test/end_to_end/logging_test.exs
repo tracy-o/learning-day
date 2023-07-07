@@ -162,7 +162,7 @@ defmodule EndToEnd.LoggingTest do
     end
   end
 
-  test "conn is logged in exception metadata" do
+  test "conn is not logged in exception metadata" do
     on_exit(fn ->
       Credentials.update(%Belfrage.AWS.Credentials{})
       :inets.stop()
@@ -183,7 +183,7 @@ defmodule EndToEnd.LoggingTest do
       raise "some error"
     end)
 
-    assert capture_log(fn ->
+    refute capture_log(fn ->
              :httpc.request(:get, {"http://localhost:7081/news/election/2016?foo=bar", []}, [], [])
            end) =~ ~s("conn":{")
   end
