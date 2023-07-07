@@ -437,13 +437,13 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/business/topics/cem601g08pkt", using: "NewsTopics", only_on: "test" do
+  handle "/news/business/topics/cem601g08pkt", using: "NewsBusinessTopics", only_on: "test" do
     return_404 if: [
       !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
 
-  handle "/news/business/topics/cjl3llgk4k2t", using: "NewsTopics", only_on: "test" do
+  handle "/news/business/topics/cjl3llgk4k2t", using: "NewsBusinessTopics", only_on: "test" do
     return_404 if: [
       !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
