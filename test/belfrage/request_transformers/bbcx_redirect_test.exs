@@ -40,7 +40,7 @@ defmodule Belfrage.RequestTransformers.BBCXRedirectTest do
     assert envelope.response.http_status == nil
   end
 
-  test "when the envelope data does not fulfill bbcx selection requirements but there is no entry in the redirect map for the path" do
+  test "when the envelope data does not fulfill bbcx selection requirements but there is no entry in the redirect map for the path then we redirect to the default path" do
     {:stop, envelope} =
       BBCXRedirect.call(%Envelope{
         request: %Request{
@@ -56,22 +56,5 @@ defmodule Belfrage.RequestTransformers.BBCXRedirectTest do
     assert envelope.response.headers["x-bbc-no-scheme-rewrite"] == "1"
     assert envelope.response.headers["cache-control"] == "public, max-age=60"
     assert envelope.response.headers["location"] == "/"
-  end
-
-  test "when the envelope data fulfills the bbcx selection requirements" do
-    {:ok, envelope} =
-      BBCXRedirect.call(%Envelope{
-        request: %Request{
-          path: "/innovation/1234",
-          host: "www.bbc.com",
-          country: "us",
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
-        },
-        private: %Envelope.Private{production_environment: "test"}
-      })
-
-    assert envelope.request.path == "/innovation/1234"
-    assert envelope.request.host == "www.bbc.com"
-    assert envelope.response.http_status == nil
   end
 end
