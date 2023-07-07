@@ -9,9 +9,11 @@ defmodule EndToEnd.LoggingTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
   import ExUnit.CaptureLog
+  import Test.Support.Helper, only: [set_env: 2]
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.Clients.{LambdaMock, HTTPMock}
+  alias Belfrage.Services.Webcore.Credentials
 
   @moduletag :end_to_end
 
@@ -158,5 +160,31 @@ defmodule EndToEnd.LoggingTest do
       sanitised_timestamp = String.replace(timestamp, "\"", "")
       assert {:ok, _, _} = DateTime.from_iso8601(sanitised_timestamp)
     end
+  end
+
+  test "conn is logged in exception metadata" do
+    on_exit(fn ->
+      Credentials.update(%Belfrage.AWS.Credentials{})
+      :inets.stop()
+    end)
+
+    Credentials.update(%Belfrage.AWS.Credentials{
+      access_key_id: "test",
+      secret_access_key: "test",
+      session_token: "test"
+    })
+
+    :inets.start()
+
+    set_env(:lambda_client, Belfrage.Clients.Lambda)
+    set_env(:aws, Belfrage.AWS)
+
+    expect(HTTPMock, :execute, fn %Belfrage.Clients.HTTP.Request{}, _ ->
+      raise "some error"
+    end)
+
+    assert capture_log(fn ->
+             :httpc.request(:get, {"http://localhost:7081/news/election/2016?foo=bar", []}, [], [])
+           end) =~ ~s("conn":{")
   end
 end
