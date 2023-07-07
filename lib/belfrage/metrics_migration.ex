@@ -153,6 +153,45 @@ defmodule Belfrage.MetricsMigration do
         ]
       end
 
+      def preflight_metrics() do
+        [
+          counter("preflight.request",
+            event_name: "preflight.request",
+            measurement: :count,
+            tags: [:preflight_service]
+          ),
+          summary("preflight.request.timing",
+            event_name: "preflight.request.timing",
+            measurement: :duration,
+            unit: {:native, :millisecond},
+            tags: [:preflight_service, :status_code]
+          ),
+          counter("preflight.response",
+            event_name: "preflight.response",
+            measurement: :count,
+            tags: [:status_code, :preflight_service]
+          ),
+          counter(
+            "preflight.error",
+            event_name: [:preflight, :error],
+            measurement: :count,
+            tags: [:preflight_service, :error_type]
+          ),
+          counter(
+            "preflight.cache.get",
+            event_name: [:preflight, :cache, :get],
+            measurement: :count,
+            tags: [:preflight_service]
+          ),
+          counter(
+            "preflight.cache.put",
+            event_name: [:preflight, :cache, :put],
+            measurement: :count,
+            tags: [:preflight_service]
+          )
+        ]
+      end
+
       def vm_metrics() do
         [
           last_value("vm.memory.total", unit: {:byte, :kilobyte}),
