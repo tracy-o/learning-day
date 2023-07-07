@@ -108,5 +108,8 @@ config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 512
 
+config :plug_cowboy,
+  conn_in_exception_metadata: false
+
 import_config "dials.exs"
 import_config "#{Mix.env()}.exs"
