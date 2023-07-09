@@ -38,7 +38,6 @@ defmodule Belfrage.SmokeTestDiff do
         to_log("Path: " <> path <> "\n" <> www_endpoint <> " || " <> comparison_endpoint <> "\n" <> reasons <> "\n")
         {:error, reason}
     end
-    :ok
   end
 
   defp check_identical_headers(www_headers, comparison_headers) do

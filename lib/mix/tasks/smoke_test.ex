@@ -14,6 +14,7 @@ defmodule Mix.Tasks.SmokeTest do
     * `--bbc-env` - specify the Cosmos production environment to run the tests on, either `test` or `live`
     * `--only` - runs only tests that match the filter. See "Test route subset with `--only`" below
     * `--raw-output` - Writes the erlang term containing the result structure to the provided file path
+    * `--with-diff` - specify a stack bid to get a comparison on the response headers between www and the other stack
     * all other [`mix test` options](https://hexdocs.pm/mix/Mix.Tasks.Test.html#module-command-line-options)
 
   ## Examples
@@ -29,6 +30,10 @@ defmodule Mix.Tasks.SmokeTest do
   Perform personalisation check (6 tests)
 
       mix smoke_test --only personalisation
+
+  Compare response headers
+
+      mix smoke_test --with-diff bruce --bbc-env live
 
   Using other `mix test` options, e.g. increase verbosity and outputs all test
   details with timing, as well as identify the slowest (3) tests
@@ -106,7 +111,7 @@ defmodule Mix.Tasks.SmokeTest do
   end
 
   defp parse_env_opts([{:with_diff, stack_name} | rest], flag_args, result) do
-    parse_env_opts(rest, flag_args, "WITH_DIFF=#{stack_name} " <> result)
+    parse_env_opts(rest ++ [only: "stack:belfrage"], flag_args, "WITH_DIFF=#{stack_name} " <> result)
   end
 
   defp parse_env_opts([param | rest], flag_args, result) do
