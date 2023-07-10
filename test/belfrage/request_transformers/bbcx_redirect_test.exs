@@ -5,6 +5,10 @@ defmodule Belfrage.RequestTransformers.BBCXRedirectTest do
   alias Belfrage.RequestTransformers.BBCXRedirect
   alias Belfrage.{Envelope, Envelope.Request}
 
+  setup do
+    stub_dials(bbcx_enabled: "true")
+  end
+
   test "when the envelope data fulfills the bbcx selection requirements then we continue without redirection" do
     {:ok, envelope} =
       BBCXRedirect.call(%Envelope{
