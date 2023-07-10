@@ -111,6 +111,22 @@ defmodule BelfrageWeb.Validators do
   end
 
   @doc """
+  Documentation on short ID generation: https://confluence.dev.bbc.co.uk/display/cps/Generating+Short+IDs
+  ## Examples
+    iex> is_cps_id?("23247541")
+    true
+
+    iex> is_cps_id?("world-europe-66026851")
+    true
+
+    iex> is_cps_id?("zx11pk6ve3kkb")
+    false
+  """
+  def is_cps_id?(param) do
+    String.match?(param, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})/)
+  end
+
+  @doc """
   ## Examples
     iex> is_guid?("ea49bb5e-9a7d-4456-98df-b7087ecc0788")
     true
@@ -120,6 +136,19 @@ defmodule BelfrageWeb.Validators do
   """
   def is_guid?(param) do
     String.match?(param, ~r/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/)
+  end
+
+  @doc """
+  Validate asset GUIDs in the following format: 'asset:cf7402da-c94c-4400-8662-c7ebd65ba957'
+  ## Examples
+    iex> is_asset_guid?("asset:cf7402da-c94c-4400-8662-c7ebd65ba957")
+    true
+
+    iex> is_asset_guid?("cf7402da-c94c-4400-8662")
+    false
+  """
+  def is_asset_guid?(param) do
+    String.match?(param, ~r/^asset:[a-z,0-9,-]{36}$/)
   end
 
   @doc """

@@ -1023,45 +1023,78 @@ defroutefile "Sport" do
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
-  handle "/sport/live/football/*any", using: "SportFootballLivePage"
-  handle "/sport/live/*any", using: "SportLivePage"
 
-  ## Sport BBC Live - Webcore Football Live - TIPO IDs
+  ### Sport BBC Live - CPS & TIPO - No Discipline
+  handle "/sport/live/:asset_id", using: "SportLivePage" do
+    return_404 if: [
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+  handle "/sport/live/:asset_id.app", using: "SportLivePage" do
+    return_404 if: [
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+
+  ### Sport BBC Live - CPS - No Discipline & Page Number
+  handle "/sport/live/:asset_id/page/:page_number", using: "SportLivePage" do
+    return_404 if: [
+      !is_cps_id?(asset_id),
+    ]
+  end
+  handle "/sport/live/:asset_id/page/:page_number.app", using: "SportLivePage" do
+    return_404 if: [
+      !is_cps_id?(asset_id),
+    ]
+  end
+
+  ### Sport BBC Live - CPS - Football Discipline
+  handle "/sport/live/football/*any", using: "SportFootballLivePage"
+
+  ### Sport BBC Live - CPS - Discipline
+  handle "/sport/live/:discipline/:asset_id/*any", using: "SportLivePage" do
+    return_404 if: [
+      !is_cps_id?(asset_id),
+    ]
+  end
+
+  ### Sport BBC Live - TIPO - Football Discipline
   handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage" do
     return_404 if: [
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
-
   handle "/sport/football/live/:tipo_id.app", using: "SportWebcoreFootballLivePage" do
     return_404 if: [
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
-  # Sport BBC Live - Webcore
+  ### Sport BBC Live - TIPO - Discipline
   handle "/sport/:discipline/live/:tipo_id", using: "SportWebcoreLivePage" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
-
   handle "/sport/:discipline/live/:tipo_id.app", using: "SportWebcoreLivePage" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
-
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport"
