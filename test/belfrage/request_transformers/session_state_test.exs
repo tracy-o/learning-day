@@ -2,38 +2,44 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  import Belfrage.Test.PersonalisationHelper
-
   alias Belfrage.Envelope
   alias Belfrage.Envelope.{Request, Private}
   alias Belfrage.RequestTransformers.SessionState
 
-  setup do
-    envelope =
-      %Envelope{
+  describe "call/2" do
+    test "request is not personalised" do
+      envelope = %Envelope{
         request: %Request{
           path: "/sport",
           scheme: :http,
           host: "bbc.co.uk"
         },
         private: %Private{
-          personalised_request: true
+          personalised_request: false
         }
       }
-      |> authenticate_request()
 
-    %{envelope: envelope}
-  end
-
-  describe "call/2" do
-    test "request is not personalised", %{envelope: envelope} do
-      envelope = Envelope.add(envelope, :private, %{personalised_request: false})
       assert SessionState.call(envelope) == {:ok, envelope}
     end
 
-    test "user is authenticated, session is valid", %{envelope: envelope} do
+    test "user is authenticated, session is valid" do
       token = Fixtures.AuthToken.valid_access_token()
-      envelope = personalise_request(envelope, token)
+
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{
+            "x-id-oidc-signedin" => "1"
+          },
+          cookies: %{"ckns_atkn" => token}
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
 
       assert {:ok, envelope} = SessionState.call(envelope)
       assert envelope.user_session.authenticated
@@ -41,13 +47,46 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
       assert envelope.user_session.session_token == token
     end
 
-    test "user is not authenticated", %{envelope: envelope} do
-      envelope = deauthenticate_request(envelope)
+    test "user is not authenticated" do
+      token = Fixtures.AuthToken.valid_access_token()
+
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{
+            "x-id-oidc-signedin" => "0"
+          },
+          cookies: %{"ckns_atkn" => token}
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
+
       assert {:ok, envelope} = SessionState.call(envelope)
       refute envelope.user_session.authenticated
     end
 
-    test "user is authenticated, web session is invalid", %{envelope: envelope} do
+    test "user is authenticated, web session is invalid" do
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{
+            "x-id-oidc-signedin" => "1"
+          },
+          cookies: %{"ckns_atkn" => "foo"}
+        },
+        private: %Private{
+          personalised_request: true
+        }
+      }
+
       assert {:ok, envelope} = SessionState.call(envelope)
       assert envelope.user_session.authenticated
       refute envelope.user_session.valid_session
