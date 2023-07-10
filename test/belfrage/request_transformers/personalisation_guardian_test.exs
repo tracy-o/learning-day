@@ -6,8 +6,6 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
   alias Belfrage.Envelope.{Request, Private, UserSession}
   alias Belfrage.RequestTransformers.PersonalisationGuardian
 
-  @token "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlNPTUVfRUNfS0VZX0lEIn0.eyJzdWIiOiIzNGZlcnIzLWI0NmItNDk4Ni04ZTNjLTVhZjg5ZGZiZTAzZCIsImN0cyI6Ik9BVVRIMl9TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJncmc2NTk2NS03MjIzLTRiNjctYWY0Mi0zNmYxNDI0MzE3ODMtMjQ0NTA5MzU0IiwiaXNzIjoiaHR0cHM6Ly9hY2Nlc3MuaW50LmFwaS5iYmMuY29tL2JiY2lkdjUvb2F1dGgyIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiNWdydGFFaWU0eF8xczNnODRyNEQwdXFLQ00iLCJhdWQiOiJBY2NvdW50IiwibmJmIjoxNTkwNjE0MTgzLCJncmFudF90eXBlIjoicmVmcmVzaF90b2tlbiIsInNjb3BlIjpbImV4cGxpY2l0IiwidWlkIiwiaW1wbGljaXQiLCJwaWkiLCJjb3JlIiwib3BlbmlkIl0sImF1dGhfdGltZSI6MTU5MDUwMjc2MCwicmVhbG0iOiIvIiwiZXhwIjoxOTAxNTIxMzgzLCJpYXQiOjE1OTA2MTQxODMsImV4cGlyZXNfaW4iOjMxMDkwNzIwMCwianRpIjoiTjZGaE1WcGdVUnlTaFl1ekhnTHN4VzdsNWRJIiwidXNlckF0dHJpYnV0ZXMiOnsiYWdlQnJhY2tldCI6Im8xOCIsImFsbG93UGVyc29uYWxpc2F0aW9uIjp0cnVlLCJhbmFseXRpY3NIYXNoZWRJZCI6ImdKT0YtOWFJUTYwaVpJcFlhRXlTUVAwSU1JMmdBcmZVVEZMay1sZ0VHVEUifX0.xg4vY41q6X9XlejwUX_8MGADWigvd_xj-wMEn8rnnwaV3FxWhE2gb9NVX3gMEjZJUw4CSwq_-ajd8hhUNXmChw"
-
   describe "call/2" do
     test "request is not personalised" do
       envelope = %Envelope{
@@ -127,13 +125,15 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     end
 
     test "app session is authenticated but invalid" do
+      token = Fixtures.AuthToken.valid_access_token()
+
       envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
           host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
-          raw_headers: %{"authorization" => "Bearer #{@token}"},
+          raw_headers: %{"authorization" => "Bearer #{token}"},
           app?: true
         },
         private: %Private{
@@ -159,6 +159,8 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     end
 
     test "app session is authenticated and valid" do
+      token = Fixtures.AuthToken.valid_access_token()
+
       envelope = %Envelope{
         request: %Request{
           path: "/search",
@@ -166,7 +168,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
-            "authorization" => "Bearer #{@token}"
+            "authorization" => "Bearer #{token}"
           },
           app?: true
         },
@@ -176,7 +178,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         user_session: %UserSession{
           authenticated: true,
           authentication_env: "int",
-          session_token: @token,
+          session_token: token,
           user_attributes: %{age_bracket: "o18", allow_personalisation: true},
           valid_session: true
         }
