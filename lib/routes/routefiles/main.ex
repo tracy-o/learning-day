@@ -1083,6 +1083,7 @@ defroutefile "Main" do
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets"
   handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss"
 
+  handle "/burmese/tipohome.amp", using: "WorldServiceBurmeseTipoHomePage", only_on: "test"
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
@@ -1119,7 +1120,7 @@ defroutefile "Main" do
   end
 
   handle "/burmese/send/:id", using: "UploaderWorldService"
-  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage", only_on: "test"
+  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage" 
   handle "/burmese/*any", using: "WorldServiceBurmese"
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
