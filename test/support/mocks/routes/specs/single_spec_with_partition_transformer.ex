@@ -6,7 +6,9 @@ defmodule Routes.Specs.SingleSpecWithPartitionTransformer do
         %{
           owner: "Some guy",
           runbook: "Some runbook",
-          platform: "Webcore"
+          platform: "Webcore",
+          headers_allowlist: ["webcore-header"],
+          query_params_allowlist: ["webcore_qparam"]
         }
       ]
     }
