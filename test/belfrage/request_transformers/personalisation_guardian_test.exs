@@ -2,16 +2,15 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  import Belfrage.Test.PersonalisationHelper
-
   alias Belfrage.Envelope
-  alias Belfrage.Envelope.{Request, Private}
-  alias Belfrage.RequestTransformers.SessionState
+  alias Belfrage.Envelope.{Request, Private, UserSession}
   alias Belfrage.RequestTransformers.PersonalisationGuardian
 
-  setup do
-    envelope =
-      %Envelope{
+  @token "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlNPTUVfRUNfS0VZX0lEIn0.eyJzdWIiOiIzNGZlcnIzLWI0NmItNDk4Ni04ZTNjLTVhZjg5ZGZiZTAzZCIsImN0cyI6Ik9BVVRIMl9TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJncmc2NTk2NS03MjIzLTRiNjctYWY0Mi0zNmYxNDI0MzE3ODMtMjQ0NTA5MzU0IiwiaXNzIjoiaHR0cHM6Ly9hY2Nlc3MuaW50LmFwaS5iYmMuY29tL2JiY2lkdjUvb2F1dGgyIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiNWdydGFFaWU0eF8xczNnODRyNEQwdXFLQ00iLCJhdWQiOiJBY2NvdW50IiwibmJmIjoxNTkwNjE0MTgzLCJncmFudF90eXBlIjoicmVmcmVzaF90b2tlbiIsInNjb3BlIjpbImV4cGxpY2l0IiwidWlkIiwiaW1wbGljaXQiLCJwaWkiLCJjb3JlIiwib3BlbmlkIl0sImF1dGhfdGltZSI6MTU5MDUwMjc2MCwicmVhbG0iOiIvIiwiZXhwIjoxOTAxNTIxMzgzLCJpYXQiOjE1OTA2MTQxODMsImV4cGlyZXNfaW4iOjMxMDkwNzIwMCwianRpIjoiTjZGaE1WcGdVUnlTaFl1ekhnTHN4VzdsNWRJIiwidXNlckF0dHJpYnV0ZXMiOnsiYWdlQnJhY2tldCI6Im8xOCIsImFsbG93UGVyc29uYWxpc2F0aW9uIjp0cnVlLCJhbmFseXRpY3NIYXNoZWRJZCI6ImdKT0YtOWFJUTYwaVpJcFlhRXlTUVAwSU1JMmdBcmZVVEZMay1sZ0VHVEUifX0.xg4vY41q6X9XlejwUX_8MGADWigvd_xj-wMEn8rnnwaV3FxWhE2gb9NVX3gMEjZJUw4CSwq_-ajd8hhUNXmChw"
+
+  describe "call/2" do
+    test "request is not personalised" do
+      envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
@@ -19,32 +18,59 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
         },
         private: %Private{
-          personalised_request: true
+          personalised_request: false
         }
       }
-      |> authenticate_request()
 
-    %{envelope: envelope}
-  end
-
-  describe "call/2" do
-    test "request is not personalised", %{envelope: envelope} do
-      envelope = Envelope.add(envelope, :private, %{personalised_request: false})
       assert PersonalisationGuardian.call(envelope) == {:ok, envelope}
     end
 
-    test "user is not authenticated", %{envelope: envelope} do
-      envelope = deauthenticate_request(envelope)
-      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
-      refute envelope.user_session.authenticated
+    test "user is not authenticated" do
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{"x-id-oidc-signedin" => "0"}
+        },
+        private: %Private{
+          personalised_request: true
+        },
+        user_session: %UserSession{
+          authenticated: false,
+          authentication_env: "int",
+          session_token: nil,
+          user_attributes: %{},
+          valid_session: false
+        }
+      }
+
+      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
     end
 
-    test "user is authenticated, web session is invalid", %{envelope: envelope} do
-      {:ok, envelope} = SessionState.call(envelope)
+    test "user is authenticated, web session is invalid" do
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{"x-id-oidc-signedin" => "1"}
+        },
+        private: %Private{
+          personalised_request: true
+        },
+        user_session: %UserSession{
+          authenticated: true,
+          authentication_env: "int",
+          session_token: nil,
+          user_attributes: %{},
+          valid_session: false
+        }
+      }
 
       assert {:stop, envelope} = PersonalisationGuardian.call(envelope)
-      assert envelope.user_session.authenticated
-      refute envelope.user_session.valid_session
 
       assert envelope.response == %Envelope.Response{
                http_status: 302,
@@ -58,15 +84,29 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
              }
     end
 
-    test "user is authenticated, session is valid", %{envelope: envelope} do
-      token = Fixtures.AuthToken.valid_access_token()
-      envelope = personalise_request(envelope, token)
-      {:ok, envelope} = SessionState.call(envelope)
+    test "user is authenticated, session is valid" do
+      envelope = %Envelope{
+        request: %Request{
+          path: "/search",
+          scheme: :http,
+          host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          raw_headers: %{
+            "x-id-oidc-signedin" => "1"
+          }
+        },
+        private: %Private{
+          personalised_request: true
+        },
+        user_session: %UserSession{
+          authenticated: true,
+          authentication_env: "int",
+          user_attributes: %{age_bracket: "o18", allow_personalisation: true},
+          valid_session: true
+        }
+      }
 
-      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
-      assert envelope.user_session.authenticated
-      assert envelope.user_session.valid_session
-      assert envelope.user_session.session_token == token
+      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
     end
 
     test "app session is not authenticated nor valid" do
@@ -83,10 +123,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
-
-      refute envelope.user_session.authenticated
-      refute envelope.user_session.valid_session
+      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
     end
 
     test "app session is authenticated but invalid" do
@@ -96,53 +133,56 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           scheme: :http,
           host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
-          raw_headers: %{"authorization" => "Bearer some-token"},
+          raw_headers: %{"authorization" => "Bearer #{@token}"},
           app?: true
         },
         private: %Private{
           personalised_request: true
+        },
+        user_session: %UserSession{
+          authenticated: true,
+          authentication_env: "int",
+          session_token: nil,
+          user_attributes: %{},
+          valid_session: false
         }
       }
 
-      {:ok, envelope} = SessionState.call(envelope)
-
       assert {
                :stop,
-               envelope = %Belfrage.Envelope{
+               %Belfrage.Envelope{
                  response: %Belfrage.Envelope.Response{
                    http_status: 401
                  }
                }
              } = PersonalisationGuardian.call(envelope)
-
-      assert envelope.user_session.authenticated
-      refute envelope.user_session.valid_session
     end
 
     test "app session is authenticated and valid" do
-      token = Fixtures.AuthToken.valid_access_token()
-
       envelope = %Envelope{
         request: %Request{
           path: "/search",
           scheme: :http,
           host: "bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
-          raw_headers: %{"authorization" => "Bearer #{token}"},
+          raw_headers: %{
+            "authorization" => "Bearer #{@token}"
+          },
           app?: true
         },
         private: %Private{
           personalised_request: true
+        },
+        user_session: %UserSession{
+          authenticated: true,
+          authentication_env: "int",
+          session_token: @token,
+          user_attributes: %{age_bracket: "o18", allow_personalisation: true},
+          valid_session: true
         }
       }
 
-      {:ok, envelope} = SessionState.call(envelope)
-
-      assert {:ok, envelope} = PersonalisationGuardian.call(envelope)
-
-      assert envelope.user_session.authenticated
-      assert envelope.user_session.valid_session
-      assert envelope.user_session.session_token == token
+      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
     end
   end
 end
