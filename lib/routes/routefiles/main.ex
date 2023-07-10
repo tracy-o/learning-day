@@ -808,6 +808,7 @@ defroutefile "Main" do
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
+  redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
