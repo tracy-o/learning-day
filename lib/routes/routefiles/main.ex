@@ -1077,8 +1077,7 @@ defroutefile "Main" do
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
 
-  handle "/burmese.amp", using: "WorldServiceBurmese"
-  handle "/burmese.json", using: "WorldServiceBurmese"
+  handle "/burmese.amp", using: "WorldServiceBurmeseTipoHomePage"
   handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets"
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets"
   handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss"
