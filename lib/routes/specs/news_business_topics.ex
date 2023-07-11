@@ -6,8 +6,7 @@ defmodule Routes.Specs.NewsBusinessTopics do
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),
-        personalisation: "test_only",
-        examples: ["/news/business/topics/cem601g08pkt"]
+        personalisation: "test_only"
       }
     }
   end
