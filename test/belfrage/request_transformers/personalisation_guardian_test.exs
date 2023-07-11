@@ -12,7 +12,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         request: %Request{
           path: "/sport",
           scheme: :http,
-          host: "bbc.co.uk",  
+          host: "bbc.co.uk"
         },
         private: %Private{
           personalised_request: false
@@ -53,6 +53,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
+          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         },
         private: %Private{
@@ -73,7 +74,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
                http_status: 302,
                headers: %{
                  "location" =>
-                   "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsearch%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
+                   "https://session.test.bbc.co.uk/session?ptrt=http%3A%2F%2Fbbc.co.uk%2Fsport%3Fq=5tr%21ctly+c0m3+d%40nc%21nG",
                  "x-bbc-no-scheme-rewrite" => "1",
                  "cache-control" => "private"
                },
@@ -162,7 +163,6 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           path: "/fd/p/mytopics-page",
           scheme: :http,
           host: "news-app.api.bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "authorization" => "Bearer #{token}"
           },
