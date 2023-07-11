@@ -534,7 +534,7 @@ defroutefile "Main" do
   handle "/news/us-canada", using: "BBCXIndex"
   handle "/news/wales", using: "NewsIndex"
   handle "/news/war-in-ukraine", using: "BBCXIndex"
-  handle "/news/world", using: "NewsIndex"
+  handle "/news/world", using: "NewsWorld"
   handle "/news/world_radio_and_tv", using: "NewsIndex"
 
   # News feature indexes (FIX assets)
@@ -568,7 +568,7 @@ defroutefile "Main" do
   handle "/news/business-45489065", using: "NewsBusiness"
   handle "/news/uk-england-47486169", using: "NewsUk"
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology"
-  handle "/news/world-us-canada-15949569", using: "NewsWorld"
+  handle "/news/world-us-canada-15949569", using: "News"
 
   # News archive assets
   handle "/news/10284448/ticker.sjson", using: "NewsArchive"
@@ -609,7 +609,7 @@ defroutefile "Main" do
   handle "/news/world/latin-america", using: "BBCXIndex"
   handle "/news/world/middle-east", using: "BBCXIndex"
   handle "/news/world/*any", using: "NewsWorld"
-  handle "/news/world_radio_and_tv/*any", using: "NewsWorld"
+  handle "/news/world_radio_and_tv/*any", using: "News"
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News" do
