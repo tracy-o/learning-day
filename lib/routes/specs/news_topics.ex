@@ -1,7 +1,7 @@
 defmodule Routes.Specs.NewsTopics do
   def specification(production_env) do
     %{
-      preflight_pipeline: ["BBCXWebcorePlatformSelector"],
+      preflight_pipeline: ["BBCXTopicsWebcorePlatformSelector"],
       specs: [
         %{
           owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
