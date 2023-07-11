@@ -21,10 +21,7 @@ defmodule Routes.Specs.SportLivePage do
           runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Experience+on+Webcore+Run+Book",
           platform: "Webcore",
           query_params_allowlist: ["page", "post"],
-          examples: [
-            "/sport/live/cmqnxg444ket",  
-            "/sport/live/cmqnxg444ket.app?page=2&post=asset:cf7402da-c94c-4400-8662-c7ebd65ba957"
-          ]
+          examples: [] # we currently have no production assets on /sport/live/
         },
       ]
     }
