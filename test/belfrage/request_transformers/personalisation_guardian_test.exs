@@ -10,10 +10,9 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     test "request is not personalised" do
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
-          host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"}
+          host: "bbc.co.uk",  
         },
         private: %Private{
           personalised_request: false
@@ -26,14 +25,13 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     test "user is not authenticated" do
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{"x-id-oidc-signedin" => "0"}
         },
         private: %Private{
-          personalised_request: true
+          personalised_request: false
         },
         user_session: %UserSession{
           authenticated: false,
@@ -44,16 +42,17 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
+      assert {:ok, ^envelope} = PersonalisationGuardian.call(envelope)
     end
 
-    test "user is authenticated, web session is invalid" do
+    test "user is authenticated, token is invalid" do
+      token = Fixtures.AuthToken.invalid_access_token()
+
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{"x-id-oidc-signedin" => "1"}
         },
         private: %Private{
@@ -62,7 +61,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         user_session: %UserSession{
           authenticated: true,
           authentication_env: "int",
-          session_token: nil,
+          session_token: token,
           user_attributes: %{},
           valid_session: false
         }
@@ -85,10 +84,9 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     test "user is authenticated, session is valid" do
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "x-id-oidc-signedin" => "1"
           }
@@ -104,35 +102,33 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
+      assert {:ok, ^envelope} = PersonalisationGuardian.call(envelope)
     end
 
     test "app session is not authenticated nor valid" do
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/fd/p/mytopics-page",
           scheme: :http,
-          host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          host: "news-app.api.bbc.co.uk",
           app?: true
         },
         private: %Private{
-          personalised_request: true
+          personalised_request: false
         }
       }
 
       assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
     end
 
-    test "app session is authenticated but invalid" do
-      token = Fixtures.AuthToken.valid_access_token()
+    test "app session is authenticated but token invalid" do
+      token = Fixtures.AuthToken.invalid_access_token()
 
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/fd/p/mytopics-page",
           scheme: :http,
-          host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
+          host: "news-app.api.bbc.co.uk",
           raw_headers: %{"authorization" => "Bearer #{token}"},
           app?: true
         },
@@ -142,7 +138,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         user_session: %UserSession{
           authenticated: true,
           authentication_env: "int",
-          session_token: nil,
+          session_token: token,
           user_attributes: %{},
           valid_session: false
         }
@@ -163,9 +159,9 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
 
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/fd/p/mytopics-page",
           scheme: :http,
-          host: "bbc.co.uk",
+          host: "news-app.api.bbc.co.uk",
           query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "authorization" => "Bearer #{token}"
@@ -184,7 +180,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
+      assert {:ok, ^envelope} = PersonalisationGuardian.call(envelope)
     end
   end
 end

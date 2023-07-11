@@ -27,10 +27,9 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
 
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "x-id-oidc-signedin" => "1"
           },
@@ -48,21 +47,18 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
     end
 
     test "user is not authenticated" do
-      token = Fixtures.AuthToken.valid_access_token()
-
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "x-id-oidc-signedin" => "0"
           },
-          cookies: %{"ckns_atkn" => token}
+          cookies: %{}
         },
         private: %Private{
-          personalised_request: true
+          personalised_request: false
         }
       }
 
@@ -71,16 +67,17 @@ defmodule Belfrage.RequestTransformers.SessionStateTest do
     end
 
     test "user is authenticated, web session is invalid" do
+      token = Fixtures.AuthToken.invalid_access_token()
+
       envelope = %Envelope{
         request: %Request{
-          path: "/search",
+          path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          query_params: %{"q" => "5tr!ctly c0m3 d@nc!nG"},
           raw_headers: %{
             "x-id-oidc-signedin" => "1"
           },
-          cookies: %{"ckns_atkn" => "foo"}
+          cookies: %{"ckns_atkn" => token}
         },
         private: %Private{
           personalised_request: true
