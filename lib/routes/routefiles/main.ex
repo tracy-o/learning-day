@@ -992,9 +992,8 @@ defroutefile "Main" do
   handle "/arabic/*any", using: "WorldServiceArabic"
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
-
-  handle "/azeri.amp", using: "WorldServiceAzeri"
-  handle "/azeri.json", using: "WorldServiceAzeri"
+  
+  handle "/azeri.amp", using: "WorldServiceAzeriTipoHomePage"
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets"
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets"
   handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss"
