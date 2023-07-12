@@ -38,7 +38,7 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
       })
 
     assert response.private.platform == "Webcore"
-    assert response.private.bbcx_enabled == false
+    assert response.private.bbcx_enabled == true
   end
 
   test "when the request meets the criteria for BBCX, the id is a GUID and there is no slug param then the Webcore platform is selected" do
@@ -54,7 +54,7 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
       })
 
     assert response.private.platform == "Webcore"
-    assert response.private.bbcx_enabled == false
+    assert response.private.bbcx_enabled == true
   end
 
   test "when the request does not meet the criteria for BBCX and id is a Tipo ID and there is no slug param then the Webcore platform is selected" do
@@ -86,7 +86,7 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
       })
 
     assert response.private.platform == "Webcore"
-    assert response.private.bbcx_enabled == false
+    assert response.private.bbcx_enabled == true
   end
 
   test "when the request does not meet the criteria for BBCX and id is a Tipo ID and there is a slug param then the Webcore platform is selected" do
@@ -102,6 +102,6 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
       })
 
     assert response.private.platform == "Webcore"
-    assert response.private.bbcx_enabled == false
+    assert response.private.bbcx_enabled == true
   end
 end
