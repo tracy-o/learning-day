@@ -16,6 +16,7 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/future-planet" => "/future",
     "/innovation" => "/news/technology",
     "/innovation/tech" => "/news/technology",
+    "/live" => "/news",
     "/news/in-pictures" => "/news/in_pictures",
     "/news/long-reads" => "/news/the_reporters",
     "/news/us-canada" => "/news/world/us_and_canada",
@@ -25,7 +26,8 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/travel/adventures" => "/travel/columns/adventure-experience",
     "/travel/cultural-experiences" => "/travel/columns/culture-identity",
     "/travel/history-heritage" => "/travel/tags/history",
-    "/travel/specialist" => "/travel/columns/the-specialist"
+    "/travel/specialist" => "/travel/columns/the-specialist",
+    "/video" => "/reel"
   }
 
   @default_route "/"

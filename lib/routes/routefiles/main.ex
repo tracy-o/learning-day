@@ -3414,6 +3414,7 @@ defroutefile "Main" do
   handle "/business/*any", using: "BBCXIndex"
   handle "/future-planet/*any", using: "BBCXIndex"
   handle "/innovation/*any", using: "BBCXIndex"
+  handle "/live", using: "BBCXIndex"
   handle "/video/*any", using: "BBCXIndex"
 
   # DotCom routes
