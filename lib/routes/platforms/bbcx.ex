@@ -3,7 +3,7 @@ defmodule Routes.Platforms.BBCX do
     %{
       origin: Application.get_env(:belfrage, :bbcx_endpoint),
       owner: "GnlDevOps@bbc.com",
-      runbook: "TBD",
+      runbook: "https://confluence.dev.bbc.co.uk/display/BBCX/BBCX+Product+and+Technology+Run+book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       headers_allowlist: ["cookie-ckns_bbccom_beta"],
@@ -11,6 +11,6 @@ defmodule Routes.Platforms.BBCX do
     }
   end
 
-  defp pipeline("live"), do: ["BBCXAuth", :_routespec_pipeline_placeholder, "CircuitBreaker"]
+  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
