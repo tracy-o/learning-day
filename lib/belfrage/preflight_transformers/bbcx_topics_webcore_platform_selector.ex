@@ -12,10 +12,11 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelector do
          !Map.has_key?(envelope.request.path_params, "slug") do
       BBCXPlatformSelectorCommon.add_platform_to_envelope(envelope, @route_platform)
     else
-      {:ok, Envelope.add(envelope, :private, %{
-        bbcx_enabled: Brands.bbcx_enabled?(envelope),
-        platform: "Webcore"
-      })}
+      {:ok,
+       Envelope.add(envelope, :private, %{
+         bbcx_enabled: Brands.bbcx_enabled?(envelope),
+         platform: "Webcore"
+       })}
     end
   end
 end
