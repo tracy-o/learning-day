@@ -1119,7 +1119,7 @@ defroutefile "Main" do
   end
 
   handle "/burmese/send/:id", using: "UploaderWorldService"
-  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage" 
+  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage"
   handle "/burmese/*any", using: "WorldServiceBurmese"
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
