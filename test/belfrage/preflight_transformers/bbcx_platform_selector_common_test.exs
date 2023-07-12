@@ -117,42 +117,6 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorCommonTest do
       )
 
     assert response.private.platform == "Foo"
-    assert response.private.bbcx_enabled == true
-  end
-
-  test "when the cookie is present, the host is bbc.com, the country is in the allowed country list but the Cosmos environment is live return Foo and set bbcx_enabled to false" do
-    {:ok, response} =
-      BBCXPlatformSelectorCommon.add_platform_to_envelope(
-        %Envelope{
-          request: %Request{
-            raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
-            host: "www.bbc.com",
-            country: "ca"
-          },
-          private: %Envelope.Private{production_environment: "live"}
-        },
-        @mock_platform
-      )
-
-    assert response.private.platform == "Foo"
-    assert response.private.bbcx_enabled == false
-  end
-
-  test "when the Cosmos environment is live, always return Foo and set bbcx_enabled to false" do
-    {:ok, response} =
-      BBCXPlatformSelectorCommon.add_platform_to_envelope(
-        %Envelope{
-          request: %Request{
-            raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
-            host: "www.bbc.co.uk",
-            country: "gb"
-          },
-          private: %Envelope.Private{production_environment: "live"}
-        },
-        @mock_platform
-      )
-
-    assert response.private.platform == "Foo"
     assert response.private.bbcx_enabled == false
   end
 end

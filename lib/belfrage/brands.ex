@@ -5,15 +5,14 @@ defmodule Belfrage.Brands do
 
   @allowed_countries ["us", "as", "gu", "mp", "pr", "vi", "ca"]
 
-  def bbcx_enabled?(%Envelope{private: %Envelope.Private{production_environment: prod_env}}) do
-    prod_env == "test"
+  def bbcx_enabled? do
+    @dial.state(:bbcx_enabled)
   end
 
-  def is_bbcx?(%Envelope{request: request, private: %Envelope.Private{production_environment: prod_env}}) do
-    prod_env == "test" and
-      @dial.state(:bbcx_enabled) and
+  def is_bbcx?(%Envelope{request: request}) do
+    request.country in @allowed_countries and
       String.ends_with?(request.host, "bbc.com") and
       Map.get(request.raw_headers, "cookie-ckns_bbccom_beta") == "1" and
-      request.country in @allowed_countries
+      @dial.state(:bbcx_enabled)
   end
 end

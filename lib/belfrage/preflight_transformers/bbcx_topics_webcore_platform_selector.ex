@@ -14,7 +14,7 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelector do
     else
       {:ok,
        Envelope.add(envelope, :private, %{
-         bbcx_enabled: Brands.bbcx_enabled?(envelope),
+         bbcx_enabled: Brands.bbcx_enabled?(),
          platform: "Webcore"
        })}
     end

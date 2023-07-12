@@ -1,7 +1,7 @@
 defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.{Brands, Envelope}
-  alias Belfrage.Envelope.{Private, Request}
+  alias Belfrage.Envelope.Request
 
   # CPS IDs generated after 1st of January 2021
   # have been ingested in the BBCX middlelayer.
@@ -11,13 +11,9 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelector do
   def call(envelope) do
     {:ok,
      Envelope.add(envelope, :private, %{
-       bbcx_enabled: bbcx_enabled?(envelope),
+       bbcx_enabled: Brands.bbcx_enabled?(),
        platform: select_platform(envelope)
      })}
-  end
-
-  defp bbcx_enabled?(%Envelope{private: %Private{production_environment: prod_env}}) do
-    prod_env == "test"
   end
 
   defp select_platform(envelope) do

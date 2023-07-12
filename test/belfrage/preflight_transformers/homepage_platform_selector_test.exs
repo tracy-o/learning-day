@@ -36,20 +36,6 @@ defmodule Belfrage.PreflightTransformers.HomepagePlatformSelectorCommonTest do
     assert response.private.platform == "BBCX"
   end
 
-  test "when the host is bbc.com and the request meets the criteria for BBCX on the live env. then the DotCom platform is used" do
-    {:ok, response} =
-      HomepagePlatformSelector.call(%Envelope{
-        request: %Request{
-          host: "www.bbc.com",
-          country: "us",
-          raw_headers: %{"cookie-ckns_bbccom_beta" => "1"}
-        },
-        private: %Envelope.Private{production_environment: "live"}
-      })
-
-    assert response.private.platform == "DotComHomepage"
-  end
-
   test "when the host is bbc.co.uk then Webcore is used" do
     {:ok, response} =
       HomepagePlatformSelector.call(%Envelope{

@@ -90,7 +90,7 @@ defmodule Belfrage.BrandsTest do
       refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
     end
 
-    test "returns false if environment is not test" do
+    test "returns true if environment is live" do
       stub_dial(:bbcx_enabled, "true")
 
       bbcx_envelope = %Envelope{
@@ -104,7 +104,7 @@ defmodule Belfrage.BrandsTest do
         }
       }
 
-      refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
+      assert Belfrage.Brands.is_bbcx?(bbcx_envelope)
     end
 
     test "returns false if cookie not set" do
@@ -156,6 +156,20 @@ defmodule Belfrage.BrandsTest do
       }
 
       refute Belfrage.Brands.is_bbcx?(bbcx_envelope)
+    end
+  end
+
+  describe "bbcx_enabled?/0" do
+    test "returns true when dial is enabled" do
+      stub_dial(:bbcx_enabled, "true")
+
+      assert Belfrage.Brands.bbcx_enabled?()
+    end
+
+    test "returns false when dial is disabled" do
+      stub_dial(:bbcx_enabled, "false")
+
+      refute Belfrage.Brands.bbcx_enabled?()
     end
   end
 end

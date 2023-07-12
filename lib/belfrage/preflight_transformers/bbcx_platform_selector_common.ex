@@ -4,7 +4,7 @@ defmodule Belfrage.PreflightTransformers.BBCXPlatformSelectorCommon do
   def add_platform_to_envelope(envelope = %Envelope{}, route_platform) do
     {:ok,
      Envelope.add(envelope, :private, %{
-       bbcx_enabled: Brands.bbcx_enabled?(envelope),
+       bbcx_enabled: Brands.bbcx_enabled?(),
        platform: select_platform(envelope, route_platform)
      })}
   end
