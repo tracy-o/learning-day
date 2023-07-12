@@ -56,4 +56,20 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
     assert response.private.platform == "Webcore"
     assert response.private.bbcx_enabled == false
   end
+
+  test "when the request does not meet the criteria for BBCX and id is a Tipo ID and there is no slug param then the Webcore platform is selected" do
+    {:ok, response} =
+      BBCXTopicsWebcorePlatformSelector.call(%Envelope{
+        request: %Request{
+          raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
+          host: "www.bbc.com",
+          country: "us",
+          path_params: %{"id" => "cg41ylwvgjyt"}
+        },
+        private: %Envelope.Private{production_environment: "test"}
+      })
+
+    assert response.private.platform == "Webcore"
+    assert response.private.bbcx_enabled == true
+  end
 end
