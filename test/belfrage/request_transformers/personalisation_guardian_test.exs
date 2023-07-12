@@ -83,6 +83,8 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
     end
 
     test "user is authenticated, session is valid" do
+      token = Fixtures.AuthToken.valid_access_token()
+
       envelope = %Envelope{
         request: %Request{
           path: "/sport",
@@ -98,6 +100,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         user_session: %UserSession{
           authenticated: true,
           authentication_env: "int",
+          session_token: token,
           user_attributes: %{age_bracket: "o18", allow_personalisation: true},
           valid_session: true
         }
