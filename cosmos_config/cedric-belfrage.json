@@ -156,7 +156,7 @@
   {
     "values": {
       "test": "https://web.test.bbcx-internal.com",
-      "live": "https://web.stage.bbcx-internal.com"
+      "live": "https://web.live.bbcx-internal.com"
     },
     "name": "BBCX_ENDPOINT"
   },
