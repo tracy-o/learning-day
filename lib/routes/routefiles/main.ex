@@ -1029,7 +1029,7 @@ defroutefile "Main" do
   end
 
   handle "/azeri/send/:id", using: "UploaderWorldService"
-  handle "/azeri", using: "WorldServiceAzeriTipoHomePage", only_on: "test"
+  handle "/azeri", using: "WorldServiceAzeriTipoHomePage"
   handle "/azeri/*any", using: "WorldServiceAzeri"
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
