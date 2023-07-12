@@ -3432,7 +3432,7 @@ defroutefile "Main" do
   handle "/culture/tags/:id", using: "DotComCulture"
   handle "/culture/*any", using: "DotComCultureAny"
   handle "/reel", using: "DotComReel"
-  handle "/reel/video/:id", using: "DotComReel"
+  handle "/reel/video/:id/:slug", using: "DotComReel"
   handle "/reel/topic/:id", using: "DotComReel"
   handle "/reel/*any", using: "DotComReelAny"
   handle "/travel", using: "DotComTravel"
