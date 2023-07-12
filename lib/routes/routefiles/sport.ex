@@ -1134,154 +1134,109 @@ defroutefile "Sport" do
   handle "/sport/rugby-union/teams", using: "SportStoryPage"
 
   ## Sport Manual Indexes
-  handle "/sport.app", using: "SportMajorIndexPage"
   handle "/sport", using: "SportHomePage"
-  handle "/sport/africa.app", using: "SportIndexPage"
   handle "/sport/africa", using: "SportIndexPage"
-  handle "/sport/american-football.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/american-football", using: "SportWebcoreIndexPage"
-  handle "/sport/athletics.app", using: "SportMajorIndexPage"
   handle "/sport/athletics", using: "SportMajorIndexPage"
-  handle "/sport/basketball.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/basketball", using: "SportWebcoreIndexPage"
-  handle "/sport/boxing.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/boxing", using: "SportWebcoreIndexPage"
-  handle "/sport/commonwealth-games.app", using: "SportIndexPage"
   handle "/sport/commonwealth-games", using: "SportIndexPage"
-  handle "/sport/cricket.app", using: "SportCricketIndexPage"
   handle "/sport/cricket", using: "SportCricketIndexPage"
-  handle "/sport/cricket/counties.app", using: "SportCricketIndexPage"
   handle "/sport/cricket/counties", using: "SportCricketIndexPage"
-  handle "/sport/cricket/womens.app", using: "SportCricketIndexPage"
   handle "/sport/cricket/womens", using: "SportCricketIndexPage"
-  handle "/sport/cycling.app", using: "SportMajorIndexPage"
   handle "/sport/cycling", using: "SportMajorIndexPage"
-  handle "/sport/disability-sport.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/disability-sport", using: "SportWebcoreIndexPage"
-  handle "/sport/england.app", using: "SportHomeNationIndexPage"
   handle "/sport/england", using: "SportHomeNationIndexPage"
-  handle "/sport/football.app", using: "SportFootballIndexPage"
   handle "/sport/football", using: "SportFootballIndexPage"
-  handle "/sport/football/championship.app", using: "SportFootballIndexPage"
   handle "/sport/football/championship", using: "SportFootballIndexPage"
-  handle "/sport/football/european-championship.app", using: "SportFootballIndexPage"
   handle "/sport/football/european-championship", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/european.app", using: "SportFootballIndexPage"
   handle "/sport/football/european", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/fa-cup.app", using: "SportFootballIndexPage"
   handle "/sport/football/fa-cup", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/irish.app", using: "SportFootballIndexPage" do
-    return_404()
-  end
   handle "/sport/football/irish", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/premier-league.app", using: "SportFootballIndexPage"
   handle "/sport/football/premier-league", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/scottish.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/football/scottish", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/welsh.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/football/welsh", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/football/womens.app", using: "SportFootballIndexPage"
   handle "/sport/football/womens", using: "SportFootballIndexPage"
-  handle "/sport/football/world-cup.app", using: "SportFootballIndexPage" do
-    return_404()
-  end
   handle "/sport/football/world-cup", using: "SportWebcoreFootballSubIndexPage"
-  handle "/sport/formula1.app", using: "SportMajorIndexPage"
   handle "/sport/formula1", using: "SportMajorIndexPage"
-  handle "/sport/get-inspired.app", using: "SportIndexPage"
   handle "/sport/get-inspired", using: "SportIndexPage"
-  handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
   handle "/sport/get-inspired/activity-guides", using: "SportIndexPage"
-  handle "/sport/golf.app", using: "SportMajorIndexPage" do
-    return_404()
-  end
   handle "/sport/golf", using: "SportWebcoreIndexPage"
-  handle "/sport/horse-racing.app", using: "SportIndexPage"
   handle "/sport/horse-racing", using: "SportIndexPage"
-  handle "/sport/mixed-martial-arts.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/mixed-martial-arts", using: "SportWebcoreIndexPage"
-  handle "/sport/motorsport.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/motorsport", using: "SportWebcoreIndexPage"
-  handle "/sport/netball.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/netball", using: "SportWebcoreIndexPage"
-  handle "/sport/northern-ireland.app", using: "SportHomeNationIndexPage" do
-    return_404()
-  end
   handle "/sport/northern-ireland", using: "SportWebcoreNationIndexPage"
-  handle "/sport/northern-ireland/gaelic-games.app", using: "SportHomeNationIndexPage" do
-    return_404()
-  end
   handle "/sport/northern-ireland/gaelic-games", using: "SportWebcoreIndexPage"
-  handle "/sport/northern-ireland/motorbikes.app", using: "SportHomeNationIndexPage" do
-    return_404()
-  end
   handle "/sport/northern-ireland/motorbikes", using: "SportWebcoreIndexPage"
-  handle "/sport/olympics.app", using: "SportIndexPage"
   handle "/sport/olympics", using: "SportIndexPage"
-  handle "/sport/rugby-league.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-league", using: "SportRugbyIndexPage"
-  handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union", using: "SportRugbyIndexPage"
-  handle "/sport/rugby-union/english.app", using: "SportRugbyIndexPage" do
-    return_404()
-  end
   handle "/sport/rugby-union/english", using: "SportWebcoreIndexPage"
-  handle "/sport/rugby-union/irish.app", using: "SportRugbyIndexPage" do
-    return_404()
-  end
   handle "/sport/rugby-union/irish", using: "SportWebcoreIndexPage"
-  handle "/sport/rugby-union/scottish.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/rugby-union/scottish", using: "SportWebcoreIndexPage"
-  handle "/sport/rugby-union/welsh.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/rugby-union/welsh", using: "SportWebcoreIndexPage"
-  handle "/sport/scotland.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/scotland", using: "SportWebcoreNationIndexPage"
-  handle "/sport/snooker.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/snooker", using: "SportWebcoreIndexPage"
-  handle "/sport/sports-personality.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/sports-personality", using: "SportWebcoreIndexPage"
-  handle "/sport/swimming.app", using: "SportIndexPage"
   handle "/sport/swimming", using: "SportIndexPage"
-  handle "/sport/tennis.app", using: "SportMajorIndexPage"
   handle "/sport/tennis", using: "SportMajorIndexPage"
-  handle "/sport/wales.app", using: "SportWebcoreIndexPage" do
-    return_404()
-  end
   handle "/sport/wales", using: "SportWebcoreNationIndexPage"
-  handle "/sport/winter-olympics.app", using: "SportIndexPage"
   handle "/sport/winter-olympics", using: "SportIndexPage"
-  handle "/sport/winter-sports.app", using: "SportIndexPage" do
-    return_404()
-  end
   handle "/sport/winter-sports", using: "SportWebcoreIndexPage"
+
+  ## Morph (.app) Sport Manual Indexes
+
+  handle "/sport.app", using: "SportMajorIndexPage"
+  handle "/sport/africa.app", using: "SportIndexPage"
+  handle "/sport/american-football.app", using: "Sport"
+  handle "/sport/athletics.app", using: "SportMajorIndexPage"
+  handle "/sport/basketball.app", using: "Sport"
+  handle "/sport/boxing.app", using: "Sport"
+  handle "/sport/commonwealth-games.app", using: "SportIndexPage"
+  handle "/sport/cricket.app", using: "SportCricketIndexPage"
+  handle "/sport/cricket/counties.app", using: "SportCricketIndexPage"
+  handle "/sport/cricket/womens.app", using: "SportCricketIndexPage"
+  handle "/sport/cycling.app", using: "SportMajorIndexPage"
+  handle "/sport/disability-sport.app", using: "Sport"
+  handle "/sport/england.app", using: "SportHomeNationIndexPage"
+  handle "/sport/football.app", using: "SportFootballIndexPage"
+  handle "/sport/football/championship.app", using: "SportFootballIndexPage"
+  handle "/sport/football/european-championship.app", using: "Sport"
+  handle "/sport/football/european.app", using: "Sport"
+  handle "/sport/football/fa-cup.app", using: "Sport"
+  handle "/sport/football/irish.app", using: "Sport"
+  handle "/sport/football/premier-league.app", using: "Sport"
+  handle "/sport/football/scottish.app", using: "Sport"
+  handle "/sport/football/welsh.app", using: "Sport"
+  handle "/sport/football/womens.app", using: "SportFootballIndexPage"
+  handle "/sport/football/world-cup.app", using: "Sport"
+  handle "/sport/formula1.app", using: "SportMajorIndexPage"
+  handle "/sport/get-inspired.app", using: "SportIndexPage"
+  handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
+  handle "/sport/golf.app", using: "Sport"
+  handle "/sport/horse-racing.app", using: "SportIndexPage" 
+  handle "/sport/mixed-martial-arts.app", using: "Sport"
+  handle "/sport/motorsport.app", using: "Sport"
+  handle "/sport/netball.app", using: "Sport"
+  handle "/sport/northern-ireland.app", using: "Sport"
+  handle "/sport/northern-ireland/gaelic-games.app", using: "Sport"
+  handle "/sport/northern-ireland/motorbikes.app", using: "Sport"
+  handle "/sport/olympics.app", using: "SportIndexPage"
+  handle "/sport/rugby-league.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union/english.app", using: "Sport"
+  handle "/sport/rugby-union/irish.app", using: "Sport"
+  handle "/sport/rugby-union/scottish.app", using: "Sport"
+  handle "/sport/rugby-union/welsh.app", using: "Sport"
+  handle "/sport/scotland.app", using: "Sport"
+  handle "/sport/snooker.app", using: "Sport"
+  handle "/sport/sports-personality.app", using: "Sport"
+  handle "/sport/swimming.app", using: "SportIndexPage"
+  handle "/sport/tennis.app", using: "SportMajorIndexPage"
+  handle "/sport/wales.app", using: "Sport"
+  handle "/sport/winter-olympics.app", using: "SportIndexPage"
+  handle "/sport/winter-sports.app", using: "Sport"
 
   ## Sport Calendars
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage"
