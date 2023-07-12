@@ -96,7 +96,7 @@ defmodule Belfrage.PreflightTransformers.BBCXTopicsWebcorePlatformSelectorTest d
           raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
           host: "www.bbc.com",
           country: "us",
-          path_params: %{"id" => "66535a45-8563-4598-be75-851e8e3cb9a9", "slug" => "my-slug"}
+          path_params: %{"id" => "cg41ylwvgjyt", "slug" => "my-slug"}
         },
         private: %Envelope.Private{production_environment: "test"}
       })
