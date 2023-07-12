@@ -63,7 +63,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)
@@ -114,7 +114,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)

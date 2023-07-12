@@ -57,7 +57,9 @@ defmodule Belfrage.RouteSpecManagerTest do
 
     for spec <- fabldata_route_spec.specs do
       assert ["ctx-service-env"] == spec.headers_allowlist
-      assert ["Personalisation", "CircuitBreaker", "DevelopmentRequests"] == spec.request_pipeline
+
+      assert ["SessionState", "PersonalisationGuardian", "CircuitBreaker", "DevelopmentRequests"] ==
+               spec.request_pipeline
     end
 
     assert Enum.sort(RouteSpec.list_route_specs()) == Enum.sort(RouteSpecManager.list_specs())
@@ -71,7 +73,7 @@ defmodule Belfrage.RouteSpecManagerTest do
 
     for spec <- fabldata_route_spec.specs do
       assert [] == spec.headers_allowlist
-      assert ["Personalisation", "CircuitBreaker"] == spec.request_pipeline
+      assert ["SessionState", "PersonalisationGuardian", "CircuitBreaker"] == spec.request_pipeline
     end
 
     assert Enum.sort(RouteSpec.list_route_specs()) == Enum.sort(RouteSpecManager.list_specs())

@@ -35,7 +35,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
@@ -80,7 +80,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
