@@ -5,7 +5,7 @@ defmodule Routes.Specs.DotComFuture do
       specs: [
         %{
           platform: "DotComFuture",
-          examples: ["/future", "/future/article/20230630-will-texas-become-too-hot-for-humans"]
+          examples: ["/future", "/future/article/20230630-will-texas-become-too-hot-for-humans", "/future/tags/oceans"]
         },
         %{
           platform: "BBCX"

@@ -5,7 +5,7 @@ defmodule Routes.Specs.DotComReel do
       specs: [
         %{
           platform: "DotComReel",
-          examples: ["/reel"]
+          examples: ["/reel", "/reel/video/p0cjtl2v", "/reel/topic/travel"]
         },
         %{
           platform: "BBCX"

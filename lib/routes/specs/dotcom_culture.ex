@@ -5,7 +5,7 @@ defmodule Routes.Specs.DotComCulture do
       specs: [
         %{
           platform: "DotComCulture",
-          examples: ["/culture"]
+          examples: ["/culture", "/culture/tags/jazz-music"]
         },
         %{
           platform: "BBCX"

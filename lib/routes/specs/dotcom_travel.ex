@@ -5,7 +5,7 @@ defmodule Routes.Specs.DotComTravel do
       specs: [
         %{
           platform: "DotComTravel",
-          examples: ["/travel"]
+          examples: ["/travel", "/travel/tags/covid-19"]
         },
         %{
           platform: "BBCX"

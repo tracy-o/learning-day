@@ -3419,12 +3419,15 @@ defroutefile "Main" do
   # DotCom routes
   handle "/future", using: "DotComFuture"
   handle "/future/article/:id", using: "DotComFuture"
+  handle "/future/tags/:id", using: "DotComFuture"
   handle "/future/*any", using: "DotComFutureAny"
   handle "/culture", using: "DotComCulture"
   handle "/culture/article/:id", using: "DotComCulture"
+  handle "/culture/tags/:id", using: "DotComCulture"
   handle "/culture/*any", using: "DotComCultureAny"
   handle "/reel", using: "DotComReel"
   handle "/reel/video/:id", using: "DotComReel"
+  handle "/reel/topic/:id", using: "DotComReel"
   handle "/reel/*any", using: "DotComReelAny"
   handle "/travel", using: "DotComTravel"
   handle "/travel/article/:id", using: "DotComTravel"
@@ -3432,9 +3435,11 @@ defroutefile "Main" do
   handle "/travel/cultural-experiences", using: "BBCXIndex"
   handle "/travel/history-heritage", using: "BBCXIndex"
   handle "/travel/specialist", using: "BBCXIndex"
+  handle "/travel/tags/:id", using: "DotComTravel"
   handle "/travel/*any", using: "DotComTravelAny"
   handle "/worklife", using: "DotComWorklife"
   handle "/worklife/article/:id", using: "DotComWorklife"
+  handle "/worklife/tags/:id", using: "DotComWorklife"
   handle "/worklife/*any", using: "DotComWorklifeAny"
 
   # ElectoralComission routes
