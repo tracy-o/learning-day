@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert PersonalisationGuardian.call(envelope) == {:ok, envelope}
+      assert {:ok, ^envelope} = PersonalisationGuardian.call(envelope)
     end
 
     test "user is not authenticated" do
@@ -122,7 +122,7 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
         }
       }
 
-      assert {:ok, _envelope} = PersonalisationGuardian.call(envelope)
+      assert {:ok, ^envelope} = PersonalisationGuardian.call(envelope)
     end
 
     test "app session is authenticated but token invalid" do
