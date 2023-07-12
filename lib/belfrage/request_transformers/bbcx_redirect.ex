@@ -9,16 +9,23 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
   @bbcx_redirect_mapping %{
     "/business" => "/news/business",
     "/business/technology-of-business" => "/news/business-11428889",
+    "/culture/art" => "/culture/columns/art",
+    "/culture/books" => "/culture/tags/books",
+    "/culture/entertainment-news" => "/news/entertainment_and_arts",
+    "/culture/film-tv" => "/culture/columns/film",
+    "/future-planet" => "/future",
+    "/innovation" => "/news/technology",
+    "/innovation/tech" => "/news/technology",
     "/news/in-pictures" => "/news/in_pictures",
     "/news/long-reads" => "/news/the_reporters",
     "/news/us-canada" => "/news/world/us_and_canada",
     "/news/war-in-ukraine" => "/news/world-60525350",
     "/news/world/latin-america" => "/news/world/latin_america",
     "/news/world/middle-east" => "/news/world/middle_east",
-    "/travel/adventures" => "/travel",
-    "/travel/cultural-experiences" => "/travel",
-    "/travel/history-heritage" => "/travel",
-    "/travel/specialist" => "/travel"
+    "/travel/adventures" => "/travel/columns/adventure-experience",
+    "/travel/cultural-experiences" => "/travel/columns/culture-identity",
+    "/travel/history-heritage" => "/travel/tags/history",
+    "/travel/specialist" => "/travel/columns/the-specialist"
   }
 
   @default_route "/"
