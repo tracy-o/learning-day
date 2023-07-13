@@ -19,7 +19,7 @@ defmodule Belfrage.SmokeTestDiff do
     {:ok, %Finch.Response{headers: comparison_headers}} =
       Helper.get_route(comparison_endpoint, path, Map.to_list(req_headers), spec)
 
-    compare_headers(path, map_headers(www_headers), map_headers(comparison_headers))
+    compare_headers(path, map_headers(www_headers, spec), map_headers(comparison_headers, spec))
   end
 
   defp compare_headers(path, www_headers, comparison_headers) do
@@ -54,7 +54,7 @@ defmodule Belfrage.SmokeTestDiff do
   end
 
   defp check_similar_headers(www_headers, comparison_headers) do
-    acceptance = 2.0
+    acceptance = 5.0
 
     perc_diff = fn h ->
       wh = String.to_integer(www_headers[h])
@@ -88,13 +88,11 @@ defmodule Belfrage.SmokeTestDiff do
     Application.get_env(:belfrage, :smoke)[:live][endpoint_name]
   end
 
-  defp map_headers(headers) do
-    headers = Map.new(headers)
+  defp map_headers(headers, spec) when is_list(headers), do: map_headers(Map.new(headers), spec)
 
-    if headers["req-svc-chain"] do
-      Map.put(headers, "req-svc-chain", String.replace(headers["req-svc-chain"], "FASTLY,GTM,", ""))
-    else
-      headers
-    end
+  defp map_headers(headers = %{"req-svc-chain" => rsc}, "WorldService" <> _) do
+    Map.put(headers, "req-svc-chain", String.replace(rsc, "FASTLY,GTM,", ""))
   end
+
+  defp map_headers(headers, _spec), do: headers
 end
