@@ -90,9 +90,8 @@ defmodule Belfrage.RequestTransformers.PersonalisationGuardianTest do
           path: "/sport",
           scheme: :http,
           host: "bbc.co.uk",
-          raw_headers: %{
-            "x-id-oidc-signedin" => "1"
-          }
+          raw_headers: %{"x-id-oidc-signedin" => "1"},
+          cookies: %{"ckns_atkn" => token}
         },
         private: %Private{
           personalised_request: true
