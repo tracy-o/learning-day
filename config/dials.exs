@@ -18,6 +18,7 @@ config :belfrage,
     "non_webcore_ttl_multiplier" => Belfrage.Dials.NonWebcoreTtlMultiplier,
     "obit_mode" => Belfrage.Dials.ObitMode,
     "personalisation" => Belfrage.Dials.Personalisation,
+    "preflight_ares_data_fetch" => Belfrage.Dials.PreflightAresDataFetch,
     "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
     "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier
   }
