@@ -1,202 +1,109 @@
 defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
+  import Mock
 
-  alias Belfrage.{Envelope, Clients}
+  alias Belfrage.Envelope
+  alias Belfrage.Behaviours.PreflightService
   alias Belfrage.PreflightTransformers.AssetTypePlatformSelector
 
-  import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1]
+  @path "/some/path"
+  @service "AresData"
 
-  @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
-  @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
+  test_with_mock(
+    "returns MozartNews platform if origin returns preflight_data_error",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:error, :preflight_data_error} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
 
-  setup :clear_preflight_metadata_cache
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-  test "returns error tuple if origin returns 500 http status" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    envelope = %Envelope{request: %Envelope.Request{path: "/some/path"}}
-
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok, %Clients.HTTP.Response{status_code: 500}}
-      end
-    )
-
-    assert AssetTypePlatformSelector.call(envelope) == {:error, envelope, 500}
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
+                request: request
+              }}
   end
 
-  test "returns error tuple if origin response body does not contain assetType" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    envelope = %Envelope{request: %Envelope.Request{path: "/some/path"}}
+  test_with_mock(
+    "returns Webcore platform if origin response contains a Webcore asset type",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:ok, "STY"} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
 
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 200,
-           body: "{\"data\":{\"section\":\"business\"},\"contentType\":\"application/json; charset=utf-8\"}"
-         }}
-      end
-    )
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-    assert AssetTypePlatformSelector.call(envelope) == {:error, envelope, 500}
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
+                request: request
+              }}
   end
 
-  test "returns Webcore platform if origin response contains a Webcore assetType" do
-    Enum.each(@webcore_asset_types, fn asset_type ->
-      path_segment = String.downcase(asset_type)
-      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2F#{path_segment}%2Fpath"
-      request = %Envelope.Request{path: "/some/#{path_segment}/path"}
+  test_with_mock(
+    "returns MozartNews platform if origin response does not contain a Webcore asset type",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:ok, "IDX"} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
 
-      Clients.HTTPMock
-      |> expect(
-        :execute,
-        fn %Clients.HTTP.Request{
-             method: :get,
-             url: ^url
-           },
-           :Preflight ->
-          {:ok,
-           %Clients.HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
-           }}
-        end
-      )
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-      assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-               {:ok, %Envelope{private: %Envelope.Private{platform: "Webcore"}, request: request}}
-    end)
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
+                request: request
+              }}
   end
 
-  test "returns MozartNews platform if origin response does not contain a Webcore assetType" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    request = %Envelope.Request{path: "/some/path"}
+  test_with_mock(
+    "returns MozartNews platform if origin response contains a 404 status code",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:error, :preflight_data_not_found} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
 
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 200,
-           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
-         }}
-      end
-    )
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
+                request: request
+              }}
   end
 
-  test "returns cached platform" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    request = %Envelope.Request{path: "/some/path"}
+  test_with_mock(
+    "returns MozartNews platform and does not make data request if dial is off",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:error, :preflight_data_not_found} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "off")
 
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 200,
-           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
-         }}
-      end
-    )
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
+                request: request
+              }}
 
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
-  end
-
-  test "does not return cached platform after TTL" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    request = %Envelope.Request{path: "/some/path"}
-
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 200,
-           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
-         }}
-      end
-    )
-
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
-
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 200,
-           body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
-         }}
-      end
-    )
-
-    Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
-
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
-  end
-
-  test "returns MozartNews platform if origin response contains a 404 status code" do
-    url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fsome%2Fpath"
-    request = %Envelope.Request{path: "/some/path"}
-
-    Clients.HTTPMock
-    |> expect(
-      :execute,
-      fn %Clients.HTTP.Request{
-           method: :get,
-           url: ^url
-         },
-         :Preflight ->
-        {:ok,
-         %Clients.HTTP.Response{
-           status_code: 404
-         }}
-      end
-    )
-
-    assert AssetTypePlatformSelector.call(%Envelope{request: request}) ==
-             {:ok, %Envelope{private: %Envelope.Private{platform: "MozartNews"}, request: request}}
+    assert_not_called(PreflightService.call(envelope, "AresData"))
   end
 end

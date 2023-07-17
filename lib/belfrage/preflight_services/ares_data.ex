@@ -10,8 +10,8 @@ defmodule Belfrage.PreflightServices.AresData do
       method: :get,
       url:
         Application.get_env(:belfrage, :fabl_endpoint) <>
-          "/preview/module/spike-ares-asset-identifier" <> QueryParams.encode(%{path: path}),
-      timeout: 1_000
+          "/module/ares-asset-identifier" <> QueryParams.encode(%{path: path}),
+      timeout: 500
     }
   end
 
@@ -21,6 +21,6 @@ defmodule Belfrage.PreflightServices.AresData do
   end
 
   @impl PreflightService
-  def handle_response(%{"data" => %{"assetType" => asset_type}}), do: {:ok, asset_type}
+  def handle_response(%{"data" => %{"type" => asset_type}}), do: {:ok, asset_type}
   def handle_response(_response), do: {:error, :preflight_data_error}
 end

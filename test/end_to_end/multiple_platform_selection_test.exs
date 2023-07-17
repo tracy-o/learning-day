@@ -66,7 +66,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test ~s(webcore platform is used when asset type in ["MAP", "CSP", "PGL", "STY"]) do
       Enum.each(@webcore_asset_types, fn asset_type ->
         clear_preflight_metadata_cache()
-        url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+        url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
         HTTPMock
         |> expect(
@@ -79,7 +79,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
             {:ok,
              %HTTP.Response{
                status_code: 200,
-               body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
+               body: "{\"data\": {\"type\": \"#{asset_type}\"}}"
              }}
           end
         )
@@ -109,7 +109,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test "asset type is cached" do
       asset_type = Enum.random(@webcore_asset_types)
 
-      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -122,7 +122,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
+             body: "{\"data\": {\"type\": \"#{asset_type}\"}}"
            }}
         end
       )
@@ -171,7 +171,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test "cached asset type expires after TTL" do
       asset_type = Enum.random(@webcore_asset_types)
 
-      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -184,7 +184,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
+             body: "{\"data\": {\"type\": \"#{asset_type}\"}}"
            }}
         end
       )
@@ -220,7 +220,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"data\": {\"assetType\": \"#{asset_type}\"}}"
+             body: "{\"data\": {\"type\": \"#{asset_type}\"}}"
            }}
         end
       )
@@ -249,7 +249,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     end
 
     test ~s(MozartNews platform is used when asset type not in ["MAP", "CSP", "PGL", "STY"]) do
-      ares_url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
@@ -264,7 +264,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
           {:ok,
            %HTTP.Response{
              status_code: 200,
-             body: "{\"data\": {\"assetType\": \"SOME_OTHER_ASSET_TYPE\"}}"
+             body: "{\"data\": {\"type\": \"SOME_OTHER_ASSET_TYPE\"}}"
            }}
         end
       )
@@ -290,8 +290,8 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test ~s(MozartNews platform is used when 404 response is returned) do
-      ares_url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+    test "MozartNews platform is used when 404 response is returned" do
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
 
       mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
@@ -331,16 +331,16 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test "selector returns an error" do
-      conn = conn(:get, "/platform-selection-with-selector")
-      url = "#{@fabl_endpoint}/preview/module/spike-ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+    test "MozartNews platform is used when 500 response is returned" do
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
       HTTPMock
       |> expect(
         :execute,
         fn %HTTP.Request{
              method: :get,
-             url: ^url
+             url: ^ares_url
            },
            :Preflight ->
           {:ok,
@@ -349,9 +349,26 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
            }}
         end
       )
+      |> expect(
+        :execute,
+        fn %HTTP.Request{
+             method: :get,
+             url: ^mozart_url
+           },
+           :MozartNews ->
+          {:ok,
+           %HTTP.Response{
+             status_code: 200,
+             body: "<h1>Hello from MozartNews!</h1>"
+           }}
+        end
+      )
 
-      err_msg = "** (RuntimeError) preflight pipeline for 'AssetTypeWithMultipleSpecs' spec failed: 500"
-      assert_raise Plug.Conn.WrapperError, err_msg, fn -> Router.call(conn, routefile: Routes.Routefiles.Mock) end
+      conn =
+        conn(:get, "/platform-selection-with-selector")
+        |> Router.call(routefile: Routes.Routefiles.Mock)
+
+      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
   end
 end
