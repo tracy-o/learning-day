@@ -26,7 +26,7 @@ defmodule Belfrage.MetricsMigration do
       @backend unquote(backend)
       @status_codes [200, 202, 204, 301, 302, 400, 404, 405, 406, 408, 429, 500, 501, 502, 503]
       @route_states unquote(__MODULE__).route_specs_from_file_names()
-      @platforms unquote(__MODULE__).platforms_from_file_names()
+      @platforms unquote(__MODULE__).platforms_from_file_names() ++ ["BBCX"]
       @cache_metrics [:local, :distributed]
 
       def metrics do
