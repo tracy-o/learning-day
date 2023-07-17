@@ -3368,6 +3368,7 @@ defroutefile "Main" do
   handle "/bitesize/groups/:id", using: "BitesizeTipoTopic"
   handle "/bitesize/parents", using: "BitesizeTipoTopic"
   handle "/bitesize/study-support", using: "BitesizeTipoTopic"
+  handle "/bitesize/learn", using: "BitesizeTipoTopic", only_on: "test"
 
   handle "/bitesize/*any", using: "BitesizeLegacy"
 
