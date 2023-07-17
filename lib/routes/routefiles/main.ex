@@ -809,14 +809,20 @@ defroutefile "Main" do
   redirect "/indonesia/media-45640737", to: "/indonesia/podcasts/p02pc9v6", status: 301
   redirect "/kyrgyz/kyrgyzstan/2016/02/160215_war_in_afghanistan", to: "/kyrgyz/articles/cpgqrwy5zvzo", status: 301
   redirect "/nepali/media-45658289", to: "/nepali/podcasts/p02pc9w3", status: 301
-  redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
-  redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
-  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
   redirect "/persian/media-45683503", to: "/persian/podcasts/p05gyy09", status: 301
   redirect "/persian/media-45679210", to: "/persian/podcasts/p02pc9mc", status: 301
   redirect "/russian/media-37828473", to: "/russian/podcasts/p05607v8", status: 301
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
+
+  ## World Service - Article Redirects
+  redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
+  redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
+  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
+  redirect "/portuguese/institutional-36202452", to: "/portuguese/articles/ce5rvednerpo", status: 301
+  redirect "/portuguese/institutional-36202454", to: "/portuguese/articles/cw0w9z6p491o", status: 301
+  redirect "/portuguese/institutional-36202448", to: "/portuguese/articles/cjrldj8285do", status: 301
+  redirect "/portuguese/institutional-50054434", to: "/portuguese/articles/c2x5mvrdk74o", status: 301
 
   ## World Service - "Access to News" Redirects
   redirect "/arabic/middleeast/2013/11/131114_shia_ashura_rituals", to: "/arabic/middleeast-62442578", status: 301
