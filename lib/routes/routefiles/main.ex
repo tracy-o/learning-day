@@ -462,6 +462,10 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
+  handle "/news/av/favicon.ico", using: "News" do
+    return_404 if: true
+  end
+
   redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
 
   handle "/news/av/:id", using: "NewsVideos" do
@@ -613,10 +617,6 @@ defroutefile "Main" do
 
   # 404 matchers
   handle "/news/favicon.ico", using: "News" do
-    return_404 if: true
-  end
-
-  handle "/news/av/favicon.ico", using: "News" do
     return_404 if: true
   end
 
