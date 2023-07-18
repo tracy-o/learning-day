@@ -626,7 +626,7 @@ defroutefile "Main" do
   handle "/news/:id", using: "NewsArticlePage"
 
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
-  handle "/news/*any", using: "News"
+  handle "/news/*any", using: "NewsAny"
 
   # Cymrufyw
 
