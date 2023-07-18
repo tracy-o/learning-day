@@ -1014,11 +1014,11 @@ defroutefile "Sport" do
   ## Sport Alpha Trials
   handle "/sport/alpha/:sport/scores-fixtures", using: "SportDataWebcore"
   handle "/sport/alpha/:sport/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
   end
   handle "/sport/alpha/:sport/:tournament/scores-fixtures", using: "SportDataWebcore"
   handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
   end
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
