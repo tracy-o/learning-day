@@ -588,7 +588,7 @@ defroutefile "Main" do
     return_404 if: !is_tipo_id?(id)
   end
 
-  handle "/news/business/market-data", using: "NewsMarketData", only_on: "test"
+  handle "/news/business/market-data", using: "NewsMarketData"
 
   # News section matchers
   handle "/news/ampstories/*any", using: "News"

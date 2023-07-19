@@ -4,22 +4,6 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopic
   """
 
   @test_ids [
-    #### Currency Topics
-
-    # Euro (EUR)
-    "c34v29kj722t",
-    # Japanese Yen (JPY)
-    "c34v29ky0zkt",
-    # Pound Sterling (GBP)
-    "cg83gy20ynpt",
-    # US Dollar (USD)
-    "crnvl9k9790t",
-
-    #### Commodity Topics
-
-    # Oil
-    "c2x6gdkj24kt",
-
     #### Politics Topics
 
     # Aberdeen City Council
@@ -887,22 +871,6 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopic
   ]
 
   @live_ids [
-    #### Currency Topics
-
-    # Euro (EUR)
-    "ce2gz75e8g0t",
-    # Japanese Yen (JPY)
-    "cleld6gp05et",
-    # Pound Sterling (GBP)
-    "cx250jmk4e7t",
-    # US Dollar (USD)
-    "cljevy2yz5lt",
-
-    #### Commodity Topics
-
-    # Oil
-    "cmjpj223708t",
-
     #### Politics Topics
 
     # Aberdeen City Council
