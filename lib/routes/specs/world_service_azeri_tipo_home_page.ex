@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceAzeriTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/azeri", "/azeri.amp"]
       }
     }
   end

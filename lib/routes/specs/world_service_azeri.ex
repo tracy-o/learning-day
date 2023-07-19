@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceAzeri do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/azeri/popular/read", "/azeri.json", "/azeri.amp"]
+        examples: ["/azeri/popular/read"]
       }
     }
   end

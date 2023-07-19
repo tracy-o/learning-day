@@ -832,6 +832,8 @@ defroutefile "Main" do
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
+  redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
+  redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
@@ -1014,9 +1016,8 @@ defroutefile "Main" do
   handle "/arabic/*any", using: "WorldServiceArabic"
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
-
-  handle "/azeri.amp", using: "WorldServiceAzeri"
-  handle "/azeri.json", using: "WorldServiceAzeri"
+  
+  handle "/azeri.amp", using: "WorldServiceAzeriTipoHomePage"
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets"
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets"
   handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss"
@@ -1052,7 +1053,7 @@ defroutefile "Main" do
   end
 
   handle "/azeri/send/:id", using: "UploaderWorldService"
-  handle "/azeri", using: "WorldServiceAzeriTipoHomePage", only_on: "test"
+  handle "/azeri", using: "WorldServiceAzeriTipoHomePage"
   handle "/azeri/*any", using: "WorldServiceAzeri"
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
@@ -1101,13 +1102,10 @@ defroutefile "Main" do
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
 
-  handle "/burmese.amp", using: "WorldServiceBurmese"
-  handle "/burmese.json", using: "WorldServiceBurmese"
+  handle "/burmese.amp", using: "WorldServiceBurmeseTipoHomePage"
   handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets"
   handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets"
   handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss"
-
-  handle "/burmese/tipohome.amp", using: "WorldServiceBurmeseTipoHomePage", only_on: "test"
 
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1145,7 +1143,7 @@ defroutefile "Main" do
   end
 
   handle "/burmese/send/:id", using: "UploaderWorldService"
-  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage", only_on: "test"
+  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage"
   handle "/burmese/*any", using: "WorldServiceBurmese"
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
