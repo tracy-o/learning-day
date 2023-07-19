@@ -4,8 +4,9 @@ defmodule Belfrage.ProcessorTest do
 
   import ExUnit.CaptureLog
   import Belfrage.Test.CachingHelper
+  import Mock
 
-  alias Belfrage.{Processor, Envelope}
+  alias Belfrage.{Processor, Pipeline, Envelope, RequestHash}
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Metrics.LatencyMonitor
 
@@ -104,6 +105,148 @@ defmodule Belfrage.ProcessorTest do
 
       assert_raise RuntimeError, err_msg, fn -> Processor.get_route_spec(envelope) end
     end
+  end
+
+  describe "pre_request_pipeline/1" do
+    @raw_headers %{"webcore-header" => "header-1", "mozartnews-header" => "header-2"}
+    @query_params %{"webcore_qparam" => "a", "mozartnews_qparam" => "b"}
+
+    @request %Request{
+      path: "/dummy/path",
+      raw_headers: @raw_headers,
+      query_params: @query_params
+    }
+
+    @multi_spec_envelope %Envelope{
+      private: %Private{spec: "AssetTypeWithMultipleSpecs"},
+      request: @request
+    }
+
+    @single_spec_envelope %Envelope{
+      private: %Private{spec: "SingleSpecWithPartitionTransformer"},
+      request: @request
+    }
+
+    setup do
+      clear_cache()
+    end
+
+    test_with_mock(
+      "generates cache key based on merged allowlists for a multi-platform spec and successful preflight pipeline result",
+      Pipeline,
+      process: fn %Envelope{}, :preflight, _ -> mock_ok_preflight_resp(@multi_spec_envelope) end
+    ) do
+      route_state_id = {"AssetTypeWithMultipleSpecs", @platform_name}
+      hash_envelope = Envelope.add(@multi_spec_envelope, :private, %{route_state_id: route_state_id})
+      request_hash = RequestHash.generate(hash_envelope)
+
+      assert %Envelope{
+               private: %Private{
+                 route_state_id: ^route_state_id,
+                 query_params_allowlist: query_params_allowlist,
+                 headers_allowlist: headers_allowlist
+               },
+               request: %Request{
+                 request_hash: ^request_hash,
+                 raw_headers: @raw_headers,
+                 query_params: @query_params
+               }
+             } = Processor.pre_request_pipeline(@multi_spec_envelope)
+
+      assert Enum.member?(query_params_allowlist, "webcore_qparam")
+      assert Enum.member?(query_params_allowlist, "mozartnews_qparam")
+      assert Enum.member?(headers_allowlist, "webcore-header")
+      assert Enum.member?(headers_allowlist, "mozartnews-header")
+    end
+
+    test_with_mock(
+      "use cached response for a single-platform spec as fallback if preflight pipeline failed",
+      Pipeline,
+      process: fn %Envelope{}, :preflight, _ -> mock_error_preflight_resp(@single_spec_envelope) end
+    ) do
+      resp_body = "Single-spec cached response"
+      route_state_id = {"SingleSpecWithPartitionTransformer", @platform_name}
+
+      cached_envelope = %Envelope{
+        private: %Private{
+          route_state_id: route_state_id,
+          spec: "SingleSpecWithPartitionTransformer"
+        },
+        request: %Request{
+          path: "/dummy/path",
+          raw_headers: %{"webcore-header" => "header-1"},
+          query_params: %{"webcore_qparam" => "a"}
+        },
+        response: %Response{
+          http_status: 200,
+          body: resp_body
+        }
+      }
+
+      put_into_cache(cached_envelope)
+
+      assert %Envelope{
+               private: %Private{
+                 route_state_id: ^route_state_id
+               },
+               request: %Request{
+                 raw_headers: %{"webcore-header" => "header-1"},
+                 query_params: %{"webcore_qparam" => "a"}
+               },
+               response: %Response{
+                 http_status: 200,
+                 body: ^resp_body,
+                 fallback: true
+               }
+             } = Processor.pre_request_pipeline(@single_spec_envelope)
+    end
+
+    test_with_mock(
+      "uses cached response based on merged allowlists for a multi-platform spec as fallback if preflight pipeline failed",
+      Pipeline,
+      process: fn %Envelope{}, :preflight, _ -> mock_error_preflight_resp(@multi_spec_envelope) end
+    ) do
+      resp_body = "Multi-spec cached response"
+
+      cached_envelope =
+        Envelope.add(@multi_spec_envelope, :response, %{
+          http_status: 200,
+          body: resp_body
+        })
+
+      put_into_cache(cached_envelope)
+
+      assert %Envelope{
+               private: %Private{
+                 route_state_id: nil
+               },
+               response: %Response{
+                 http_status: 200,
+                 body: ^resp_body,
+                 fallback: true
+               }
+             } = Processor.pre_request_pipeline(@multi_spec_envelope)
+    end
+
+    test_with_mock(
+      "does not use cached response if preflight pipeline failed and caching is disabled",
+      Pipeline,
+      process: fn %Envelope{}, :preflight, _ -> mock_error_preflight_resp(@multi_spec_envelope) end
+    ) do
+      assert %Envelope{
+               private: %Private{
+                 route_state_id: nil
+               },
+               response: %Response{
+                 http_status: 500,
+                 fallback: false
+               }
+             } = Processor.pre_request_pipeline(@multi_spec_envelope)
+    end
+
+    defp mock_ok_preflight_resp(envelope), do: {:ok, Envelope.add(envelope, :private, %{platform: @platform_name})}
+
+    defp mock_error_preflight_resp(envelope), do: {:error, Envelope.add(envelope, :response, %{http_status: 500}), 500}
   end
 
   describe "Processor.get_route_state/1" do

@@ -6,12 +6,16 @@ defmodule Routes.Specs.AssetTypeWithMultipleSpecs do
         %{
           owner: "Some guy",
           runbook: "Some runbook",
-          platform: "Webcore"
+          platform: "Webcore",
+          headers_allowlist: ["webcore-header"],
+          query_params_allowlist: ["webcore_qparam"]
         },
         %{
           owner: "Some guy",
           runbook: "Some runbook",
-          platform: "MozartNews"
+          platform: "MozartNews",
+          headers_allowlist: ["mozartnews-header"],
+          query_params_allowlist: ["mozartnews_qparam"]
         }
       ]
     }
