@@ -3,7 +3,7 @@ defmodule Routes.Specs.DotComWorklifeAny do
     %{
       specs: %{
         platform: "DotComWorklife",
-        examples: ["/worklife/columns"]
+        examples: ["/worklife", "/worklife/columns"]
       }
     }
   end

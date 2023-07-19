@@ -5,7 +5,7 @@ defmodule Routes.Specs.DotComWorklife do
       specs: [
         %{
           platform: "DotComWorklife",
-          examples: ["/worklife"]
+          examples: ["/worklife/tags/business"]
         },
         %{
           platform: "BBCX"
