@@ -4,7 +4,8 @@ defmodule Routes.Specs.NewsMarketData do
       specs: %{
         owner: "NewsAndSportWebTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/x/Og9rF",
-        platform: "Webcore"
+        platform: "Webcore",
+        query_params_allowlist: ["q"]
       }
     }
   end
