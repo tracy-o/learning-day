@@ -6,14 +6,11 @@ defmodule Routes.Platforms.MozartNews do
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
-      headers_allowlist: headers_allowlist(production_env),
+      headers_allowlist: ["cookie-ckns_bbccom_beta"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200
     }
   end
-
-  defp headers_allowlist("live"), do: []
-  defp headers_allowlist(_production_env), do: ["cookie-ckns_bbccom_beta"]
 
   defp query_params_allowlist("live"), do: []
   defp query_params_allowlist(_production_env) do
