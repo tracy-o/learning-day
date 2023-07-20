@@ -7,7 +7,14 @@ defmodule Routes.Platforms.BBCX do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       headers_allowlist: headers_allowlist(production_env),
-      circuit_breaker_error_threshold: 200
+      circuit_breaker_error_threshold: 200,
+      examples: %{
+        headers: %{
+          "x-country" => "us",
+          "x-bbc-edge-host" => "www.bbc.com",
+          "cookie-ckns_bbccom_beta" => "1"
+        }
+      }
     }
   end
 
