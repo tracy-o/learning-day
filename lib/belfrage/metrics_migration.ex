@@ -163,7 +163,6 @@ defmodule Belfrage.MetricsMigration do
           summary("preflight.request.timing",
             event_name: "preflight.request.timing",
             measurement: :duration,
-            unit: {:native, :millisecond},
             tags: [:preflight_service, :status_code]
           ),
           counter("preflight.response",
