@@ -3,6 +3,7 @@ defmodule Belfrage.Processor do
 
   alias Belfrage.{
     Allowlist,
+    Behaviours.Service,
     Cache,
     CacheControl,
     Envelope,
@@ -19,7 +20,6 @@ defmodule Belfrage.Processor do
     RouteSpecManager,
     RouteState,
     RouteStateRegistry,
-    ServiceProvider,
     WrapperError
   }
 
@@ -194,14 +194,8 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  def perform_call(envelope = %Envelope{response: %Response{http_status: code}}) when is_number(code) do
-    envelope
-  end
-
-  def perform_call(envelope = %Envelope{private: %Private{origin: origin}}) do
-    service = ServiceProvider.service_for(origin)
-    WrapperError.wrap(&service.dispatch/1, envelope)
-  end
+  def perform_call(envelope) when is_integer(envelope.response.http_status), do: envelope
+  def perform_call(envelope), do: WrapperError.wrap(&Service.dispatch/1, envelope)
 
   def process_response_pipeline(envelope), do: process_pipeline(envelope, :response, envelope.private.response_pipeline)
 
