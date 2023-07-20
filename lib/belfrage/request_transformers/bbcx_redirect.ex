@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/future-planet/solutions" => "/future",
     "/future-planet/environment" => "/future",
     "/innovation" => "/news/technology",
-    "/innovation/tech" => "/news/technology",
+    "/innovation/technology" => "/news/technology",
     "/innovation/science" => "/news/technology",
     "/innovation/artificial-intelligence" => "/news/technology",
     "/innovation/future-now" => "/news/technology",

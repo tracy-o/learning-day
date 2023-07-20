@@ -20,7 +20,7 @@ defmodule Routes.Specs.BBCXIndex do
           "/future-planet/solutions",
           "/future-planet/environment",
           "/innovation",
-          "/innovation/tech",
+          "/innovation/technology",
           "/innovation/science",
           "/innovation/artificial-intelligence",
           "/innovation/future-now",
