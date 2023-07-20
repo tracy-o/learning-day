@@ -27,8 +27,10 @@ defmodule Belfrage.Clients.Lambda do
 
     case lambda_response do
       {:ok, body} -> {:ok, body}
+      {:error, {:aws_unhandled, _type, _msg, _err}} -> failed_to_invoke_lambda(nil, nil)
       {:error, {:http_error, 404, response}} -> function_not_found(response)
       {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
+      {:error, {_type, _msg, _expectedSequenceToken}} -> failed_to_invoke_lambda(nil, nil)
       {:error, :timeout} -> failed_to_invoke_lambda(408, :timeout)
       {:error, nil} -> failed_to_invoke_lambda(nil, nil)
     end
