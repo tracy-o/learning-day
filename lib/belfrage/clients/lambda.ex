@@ -1,6 +1,5 @@
 defmodule Belfrage.Clients.Lambda do
   require Logger
-  require Belfrage.Xray
 
   alias Belfrage.{AWS}
 
