@@ -15,5 +15,4 @@ defmodule Routes.Specs.Search do
 
   defp query_params_allowlist("live"), do: ["q", "page", "d"]
   defp query_params_allowlist(_production_env), do: query_params_allowlist("live") ++ ["contentenv"]
-
 end

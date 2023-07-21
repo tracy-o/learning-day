@@ -83,13 +83,16 @@ Check out [Route Matcher Types](route-matcher-types.md) and [Route Validation](r
 
 ```elixir
 defmodule Routes.Specs.SportVideos do
-  def specs do
+  def specification(production_env) do
     %{
-      owner: "sfv_team@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: "Webcore",
-      request_pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"],
-      query_params_allowlist: ["keyOne", "keyTwo"]
+      specs: %{
+        owner: "sfv-team@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
+        platform: "Webcore",
+        request_pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"]
+        query_params_allowlist: ["keyOne", "keyTwo"],
+        examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534"],
+      }
     }
   end
 end
@@ -100,10 +103,9 @@ where:
 - `owner` is the email of the owning team
 - `runbook` is the link of the tenant page
 - `platform` is the platform used
-- `pipeline` is a list of zero or more pipeline transformers, which decorate the request or add some business logic to take further decisions for the request (i.e. think a migration business logic process)
+- `request_pipeline` is a list of zero or more pipeline transformers, which decorate the request or add some business logic to take further decisions for the request (i.e. think a migration business logic process)
 - `query_params_allowlist` valid values are: `"*"` or an array of query string keys to allow. This property is optional, and if not specified, the route defaults to removing the query string from the request.
-
-We plan to add more properties to the RouteSpec while the app evolves.
+- `examples` is a list of live routes. They will be used by the Belfrage Smoke Tes to verify the health of tthe RouteSpec, by checking that the example route returns a 200 non-stale response.
 
 4. **create a PR** and inform the Belfrage team
 
@@ -122,21 +124,18 @@ For example:
 
 ```elixir
 defmodule Routes.Specs.HomePagePersonalised do
-  def specs(production_env) do
+  def specification do
     %{
-      owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
-      platform: "Webcore",
-      request_pipeline: pipeline(production_env),
-      personalisation: "on"
+      specs: %{
+        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
+        platform: "Webcore",
+        personalisation: "on",
+        fallback_write_sample: 0.5,
+        examples: ["/sport"]
+      }
     }
   end
-
-  defp pipeline("live") do
-    ["HTTPredirect", "Personalisation", "LambdaOriginAlias", "PlatformKillSwitch", "CircuitBreaker", "Language"]
-  end
-
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
 ```
 
