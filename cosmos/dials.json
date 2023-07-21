@@ -316,7 +316,11 @@
     "values": [
       {
         "value": "on",
-        "description": "Allows fetching metadata from FABL"
+        "description": "Allows fetching metadata from FABL for routing decision"
+      },
+      {
+        "value": "learning",
+        "description": "Allows fetching metadata from FABL but only for logging"
       },
       {
         "value": "off",

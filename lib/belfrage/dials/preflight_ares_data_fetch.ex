@@ -6,4 +6,7 @@ defmodule Belfrage.Dials.PreflightAresDataFetch do
 
   @impl Belfrage.Dial
   def transform("off"), do: "off"
+
+  @impl Belfrage.Dial
+  def transform("learning"), do: "learning"
 end

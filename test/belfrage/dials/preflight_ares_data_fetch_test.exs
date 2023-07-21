@@ -8,4 +8,8 @@ defmodule Belfrage.Dials.PreflightAresDataFetchTest do
   test "when dial off returns 'off'" do
     assert Belfrage.Dials.PreflightAresDataFetch.transform("off") == "off"
   end
+
+  test "when dial off returns 'learning'" do
+    assert Belfrage.Dials.PreflightAresDataFetch.transform("learning") == "learning"
+  end
 end
