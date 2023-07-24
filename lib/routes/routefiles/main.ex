@@ -138,7 +138,6 @@ defroutefile "Main" do
   handle "/cbeebies/search", using: "Search"
   handle "/cbbc/search", using: "Search"
   handle "/bitesize/search", using: "Search"
-  handle "/sounds/search", using: "Search"
 
   # News
 

@@ -8,7 +8,7 @@ defmodule Routes.Specs.Search do
         platform: "Webcore",
         query_params_allowlist: query_params_allowlist(production_env),
         caching_enabled: false,
-        examples: ["/sounds/search", "/bitesize/search", "/cbbc/search", "/cbeebies/search", "/search"]
+        examples: ["/bitesize/search", "/cbbc/search", "/cbeebies/search", "/search"]
       }
     }
   end
