@@ -83,7 +83,8 @@ defmodule EndToEnd.NewsAppsTest do
     test "does not return an hardcoded payload" do
       stub_dials(news_apps_hardcoded_response: "disabled")
 
-      url = "#{@fabl_endpoint}/module/abl"
+      qs = "clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"
+      url = "#{@fabl_endpoint}/module/abl?#{qs}"
 
       expect(HTTPMock, :execute, 1, fn %HTTP.Request{url: ^url}, _pool ->
         {:ok,
@@ -94,7 +95,8 @@ defmodule EndToEnd.NewsAppsTest do
          }}
       end)
 
-      conn(:get, "/fd/abl") |> Router.call(routefile: Routes.Routefiles.Mock)
+      conn(:get, "/fd/abl?#{qs}")
+      |> Router.call(routefile: Routes.Routefiles.Main.Live)
     end
   end
 

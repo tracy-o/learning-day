@@ -6,12 +6,16 @@ defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
         %{
           owner: "Some guy",
           runbook: "Some runbook",
-          platform: "Webcore"
+          platform: "Webcore",
+          query_params_allowlist: ["webcore_qparam"],
+          headers_allowlist: ["webcore-header"]
         },
         %{
           owner: "Some guy",
           runbook: "Some runbook",
-          platform: "MozartNews"
+          platform: "MozartNews",
+          query_params_allowlist: "*",
+          headers_allowlist: ["mozartnews-header"]
         }
       ]
     }
