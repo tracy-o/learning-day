@@ -16,6 +16,7 @@ defroutefile "Main" do
   redirect "/news/mobile", to: "/news", status: 302
   redirect "/news/popular/read", to: "/news", status: 302
 
+  redirect "/news/contact-us/editorial", to: "/news/55077304", status: 302
   redirect "/news/help", to: "/news", status: 302
   redirect "/news/also_in_the_news", to: "/news", status: 302
   redirect "/news/cop26-alerts", to: "/news/help-58765412", status: 302
@@ -1014,7 +1015,7 @@ defroutefile "Main" do
   handle "/arabic/*any", using: "WorldServiceArabic"
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
-  
+
   handle "/azeri.amp", using: "WorldServiceAzeriTipoHomePage"
   handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets"
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets"

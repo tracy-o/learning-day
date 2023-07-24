@@ -7,7 +7,7 @@ defmodule Routes.Specs.NewsAny do
           owner: "DENewsFrameworksTeam@bbc.co.uk",
           runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
           platform: "MozartNews",
-          examples: [%{expected_status: 302, path: "/news/contact-us/editorial"}]
+          examples: []
         },
         %{
           owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
