@@ -69,7 +69,7 @@ defmodule Belfrage.Processor do
   end
 
   defp update_envelope_with_spec(envelope = %Envelope{private: private}, [spec])
-       when private.platform == nil do
+       when private.platform in [nil, spec.platform] do
     update_envelope_with_route_spec_attrs(envelope, spec)
   end
 
@@ -151,9 +151,12 @@ defmodule Belfrage.Processor do
   end
 
   defp get_platform_allowlist(specs, type) do
-    Enum.map(specs, fn spec -> Map.get(spec, type, []) end)
-    |> List.flatten()
-    |> Enum.uniq()
+    Enum.reduce_while(specs, [], fn spec, acc ->
+      case Map.get(spec, type, []) do
+        "*" -> {:halt, "*"}
+        allowlist -> {:cont, Enum.uniq(acc ++ allowlist)}
+      end
+    end)
   end
 
   def generate_request_hash(envelope = %Envelope{}) do
