@@ -3,9 +3,11 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   use Plug.Test
   alias BelfrageWeb.Router
   use Test.Support.Helper, :mox
-  alias Belfrage.Clients.{LambdaMock, HTTPMock, HTTP.Response}
+  alias Belfrage.Clients.{HTTP, LambdaMock, HTTPMock, HTTP.Response}
 
   import Test.Support.Helper, only: [set_environment: 1]
+
+  @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
 
   @successful_lambda_response {:ok, %{"statusCode" => 200, "headers" => %{}, "body" => "OK"}}
   @successful_http_response {:ok,
@@ -68,6 +70,24 @@ defmodule EndToEnd.BBCXPlatformSelectionTest do
   end
 
   test "for News CPS content when the environment allows, the BBCX platform selector points to BBCX" do
+    fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2F62729302"
+
+    HTTPMock
+    |> expect(
+      :execute,
+      fn %HTTP.Request{
+           method: :get,
+           url: ^fabl_url
+         },
+         :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"STY\"}}"
+         }}
+      end
+    )
+
     expect(HTTPMock, :execute, fn _request, :BBCX ->
       @successful_http_response
     end)

@@ -290,10 +290,8 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test "MozartNews platform is used when 404 response is returned" do
+    test "Webcore platform is used when 404 response is returned - all stacks apart from Joan" do
       ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
-
-      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -309,31 +307,27 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
            }}
         end
       )
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^mozart_url
+
+      expect(LambdaMock, :call, fn _credentials, _function_arn, _headers, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "private"
            },
-           :MozartNews ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "<h1>Hello from MozartNews!</h1>"
-           }}
-        end
-      )
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
 
       conn =
         conn(:get, "/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
-      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
+      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
-    test "MozartNews platform is used when 500 response is returned" do
+    test "Webcore platform is used when 500 response is returned - all stacks apart from Joan" do
       ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
-      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -349,26 +343,23 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
            }}
         end
       )
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^mozart_url
+
+      expect(LambdaMock, :call, fn _credentials, _function_arn, _headers, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "cache-control" => "private"
            },
-           :MozartNews ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "<h1>Hello from MozartNews!</h1>"
-           }}
-        end
-      )
+           "statusCode" => 200,
+           "body" => "<h1>Hello from the Lambda!</h1>"
+         }}
+      end)
 
       conn =
         conn(:get, "/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
-      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
+      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
   end
 end

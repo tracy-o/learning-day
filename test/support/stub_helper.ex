@@ -37,12 +37,20 @@ defmodule Belfrage.Test.StubHelper do
   def stub_origins() do
     Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn request, _platform ->
       cond do
-        String.contains?(request.url, "/preview/module/spike-ares-asset-identifier") ->
+        String.contains?(request.url, "/module/ares-asset-identifier?path=%2Fnews%2Fcontact-us%2Feditorial") ->
           {:ok,
            Belfrage.Clients.HTTP.Response.new(%{
              status_code: 200,
              headers: %{},
-             body: "{\"data\": {\"section\": \"business\", \"assetType\": \"ABC\"}}"
+             body: "{\"data\": {\"section\": \"UK\", \"type\": \"FIX\"}}"
+           })}
+
+        String.contains?(request.url, "/module/ares-asset-identifier") ->
+          {:ok,
+           Belfrage.Clients.HTTP.Response.new(%{
+             status_code: 200,
+             headers: %{},
+             body: "{\"data\": {\"section\": \"UK\", \"type\": \"STY\"}}"
            })}
 
         String.contains?(request.url, "/module/education-metadata") ->

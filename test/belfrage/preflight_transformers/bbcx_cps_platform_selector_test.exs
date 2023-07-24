@@ -19,7 +19,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ca",
           path_params: %{"id" => "uk-foo-62729302"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "BBCX"
@@ -35,7 +38,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ca",
           path_params: %{"id" => "uk-foo-123456"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "Webcore"
@@ -51,7 +57,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ca",
           path_params: %{"id" => "uk-foo-not-a-number"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "Webcore"
@@ -67,7 +76,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ca",
           path_params: %{"id" => "62729302"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "BBCX"
@@ -83,7 +95,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ca",
           path_params: %{"foo" => "uk-foo-123"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "Webcore"
@@ -99,7 +114,10 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           country: "ie",
           path_params: %{"id" => "uk-foo-6272930"}
         },
-        private: %Envelope.Private{production_environment: "test"}
+        private: %Envelope.Private{
+          production_environment: "test",
+          platform: "Webcore"
+        }
       })
 
     assert response.private.platform == "Webcore"

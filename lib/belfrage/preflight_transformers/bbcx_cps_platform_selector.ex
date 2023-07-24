@@ -20,7 +20,7 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelector do
     if Brands.is_bbcx?(envelope) and match_id?(envelope) do
       "BBCX"
     else
-      "Webcore"
+      envelope.private.platform
     end
   end
 
