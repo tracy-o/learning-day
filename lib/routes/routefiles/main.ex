@@ -287,28 +287,29 @@ defroutefile "Main" do
 
   handle "/news/election/*any", using: "NewsElection"
 
-  # News Live - Both Morph and WebCore Traffic
+  ### News BBC Live - CPS & TIPO - No Discipline
   handle "/news/live/:asset_id", using: "NewsLive" do
-    # example "/news/live/c1v596ken6vt" is causing smoke tests to fail.
     return_404 if: [
-      !String.match?(asset_id, ~r/^(([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})|(c[a-z0-9]{10,}t))$/), # CPS & TIPO IDs
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
-  # News Live - Morph Traffic with Page ID
+  ### News BBC Live - CPS - Page Number
   handle "/news/live/:asset_id/page/:page_number", using: "NewsLive" do
     return_404 if: [
-      !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
-      !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+      !is_cps_id?(asset_id),
+      !integer_in_range?(page_number || "1", 1..50),
     ]
   end
 
-  # News Live - .app route webcore traffic to platform discriminator
-  handle "/news/live/:asset_id.app", using: "NewsLive", only_on: "test" do
+  ### News BBC Live - TIPO - .app route (not available on Morph news)
+  handle "/news/live/:asset_id.app", using: "NewsLive" do
     return_404 if: [
-      !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
+      !(is_tipo_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
