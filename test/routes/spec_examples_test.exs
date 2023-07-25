@@ -2,7 +2,7 @@ defmodule Routes.SpecExamplesTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
-  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
+  import Belfrage.Test.StubHelper
 
   alias BelfrageWeb.Router
   alias Belfrage.RouteSpecManager
@@ -29,6 +29,7 @@ defmodule Routes.SpecExamplesTest do
 
     test "examples are routed correctly" do
       stub_origins()
+      stub_dial(:bbcx_enabled, "true")
 
       @examples
       |> Enum.reject(fn %{spec: spec} -> spec == "ProxyPass" end)
@@ -39,7 +40,7 @@ defmodule Routes.SpecExamplesTest do
       [spec] = RouteSpecManager.get_spec("ProxyPass").specs
 
       validate(spec.examples, fn example ->
-        conn = make_call(:get, example.path)
+        conn = make_call(:get, example.path, example.headers)
 
         if conn.status == 404 && conn.resp_body =~ "404" do
           :ok
@@ -74,7 +75,7 @@ defmodule Routes.SpecExamplesTest do
   end
 
   defp validate_example(example) do
-    resp_headers = make_call(:get, example.path).resp_headers
+    resp_headers = make_call(:get, example.path, example.headers).resp_headers
 
     case :proplists.get_value("routespec", resp_headers, nil) do
       nil ->
@@ -95,7 +96,15 @@ defmodule Routes.SpecExamplesTest do
     end
   end
 
-  defp make_call(method, path) do
-    conn(method, path) |> Router.call([])
+  defp make_call(method, path, headers) do
+    conn(method, path)
+    |> put_headers(headers)
+    |> Router.call([])
+  end
+
+  defp put_headers(conn, headers) do
+    Enum.reduce(headers, conn, fn {header, value}, conn_acc ->
+      put_req_header(conn_acc, header, value)
+    end)
   end
 end
