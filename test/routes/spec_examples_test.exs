@@ -3,7 +3,7 @@ defmodule Routes.SpecExamplesTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.StubHelper
-
+  import Test.Support.Helper, only: [set_logging_level: 1]
   alias BelfrageWeb.Router
   alias Belfrage.RouteSpecManager
 
@@ -28,6 +28,7 @@ defmodule Routes.SpecExamplesTest do
     end
 
     test "examples are routed correctly" do
+      set_logging_level(:error)
       stub_origins()
       stub_dial(:bbcx_enabled, "true")
 
