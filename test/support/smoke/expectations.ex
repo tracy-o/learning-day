@@ -6,12 +6,10 @@ defmodule Belfrage.SmokeTestCase.Expectations do
   alias Test.Support.Helper
 
   def expect_response(response, test_properties) do
-    cond do
-      test_properties.expected_status in @redirects_statuses ->
-        expected_redirect(response, test_properties)
-
-      true ->
-        expected_response(response, test_properties)
+    if test_properties.expected_status in @redirects_statuses do
+      expected_redirect(response, test_properties)
+    else
+      expected_response(response, test_properties)
     end
   end
 
