@@ -1,10 +1,10 @@
 ## Query String Params in Belfrage
 
-Belfrage allows to define custom allow-lists of query string params. The only query string params that you need to specify are the ones used for server-side rendering purposes.
+Belfrage allows developers to define custom allow-lists of query string params. The only query string params that you need to specify are the ones used for server-side rendering purposes.
 
 ### Adding Query String Params to your RouteSpecs
 
-You can specify you custom allow-list in your RouteSpec using the `query_params_allowlist` property:
+You can specify a custom allow-list in your RouteSpec using the `query_params_allowlist` property:
 
 ```elixir
 defmodule Routes.Specs.Search do
@@ -30,9 +30,9 @@ If you don't specify an allow-list, your RouteSpec will inherit the one defined 
 
 ### Avoiding Cache Key Collision
 
-The allow-list is used to build your resources cache keys. By not setting it correctly your query params will not be considered when generating the cache key. As a result, different responses can be cached under the same cache key, leading to incorrect or inconsistent caching behaviours.
+The allow-list is used to build your resources cache key. By not setting it correctly your query params will not be considered when generating the cache key. As a result, different responses can be cached under the same cache key, leading to incorrect or inconsistent caching behaviours.
 
 ### Go Live With New Query String Params
 
 It's extremely important that all the BBC cache layers maintain identical allow lists for a specific route.
-When a new query strings get introduced, the belfrage team can assist in requesting similar work in GTM and Fastly. Please create a RESFRAME ticket and sharing it on #help-belfrage, please keep in mind that this tasks will take a few days to reach live.
+When new query strings get introduced, the Belfrage team can assist in requesting similar work in GTM and Fastly. Please create a [RESFRAME](https://jira.dev.bbc.co.uk/browse/RESFRAME) ticket and sharing it on #help-belfrage, please keep in mind this tasks will take a number of days to reach live.

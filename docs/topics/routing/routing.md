@@ -105,7 +105,7 @@ where:
 - `platform` is the platform used
 - `request_pipeline` is a list of zero or more pipeline transformers, which decorate the request or add some business logic to take further decisions for the request (i.e. think a migration business logic process)
 - `query_params_allowlist` valid values are: `"*"` or an array of query string keys to allow. This property is optional, and if not specified, the route defaults to removing the query string from the request.
-- `examples` is a list of live routes. They will be used by the Belfrage Smoke Tes to verify the health of tthe RouteSpec, by checking that the example route returns a 200 non-stale response.
+- `examples` is a list of live routes. They will be used by the Belfrage Smoke Tests to verify the health of the RouteSpec, by checking that the example route returns a 200 non-stale response.
 
 4. **create a PR** and inform the Belfrage team
 

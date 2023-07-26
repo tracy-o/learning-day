@@ -6,7 +6,7 @@ _PR changes summary to go here._
 - [ ] Examples for new routes added?
 - [ ] Are your changes introducing personalised content?
 - [ ] Are you introducing a brand new feature? Check out the Webcore [Infosec Guidance](https://confluence.dev.bbc.co.uk/display/SECARC/Webcore+Guidance)
-- [ ] Are your changes requiring a GTM migration?
+- [ ] Do your changes require a GTM migration?
 
 Additional Documentation: 
 [Adding a route to Belfrage](./topics/routing/routing.md)
