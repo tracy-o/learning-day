@@ -53,5 +53,10 @@ defmodule Belfrage.Cache.PreflightMetadataTest do
     test "does not retrieve an item from the cache if does not exist" do
       assert Cache.PreflightMetadata.get("SomeCachePrefix", "/some/path") == {:error, :preflight_data_not_found}
     end
+
+    test "does not retrieve an item of value nil from the cache" do
+      Cache.PreflightMetadata.put("SomeCachePrefix", "/some/path", nil)
+      assert Cache.PreflightMetadata.get("SomeCachePrefix", "/some/path") == {:error, :preflight_data_not_found}
+    end
   end
 end
