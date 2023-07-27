@@ -3045,6 +3045,9 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
+   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage", only_on: "test" do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
   handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
@@ -3056,6 +3059,7 @@ defroutefile "Main" do
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
+  redirect "/weather/weather-watcher", to: "/weather", status: 302
 
   handle "/weather/av/:asset_id.app", using: "WeatherVideosAppPage", only_on: "test" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
