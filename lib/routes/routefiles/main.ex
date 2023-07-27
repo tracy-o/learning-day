@@ -2994,7 +2994,7 @@ defroutefile "Main" do
   handle "/weather/search", using: "WeatherSearch" do
     return_404 if: [
         !is_valid_length?(conn.query_params["s"] || "", 0..100),
-        !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+        !integer_in_range?(conn.query_params["page"] || "1", 0..999)
       ]
   end
 
