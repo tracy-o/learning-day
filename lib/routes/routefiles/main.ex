@@ -821,6 +821,7 @@ defroutefile "Main" do
   redirect "/portuguese/institutional-36202454", to: "/portuguese/articles/cw0w9z6p491o", status: 301
   redirect "/portuguese/institutional-36202448", to: "/portuguese/articles/cjrldj8285do", status: 301
   redirect "/portuguese/institutional-50054434", to: "/portuguese/articles/c2x5mvrdk74o", status: 301
+  redirect "/portuguese/geral-44930392", to: "/portuguese/articles/cd1gmq2gzg5o", status: 301
 
   ## World Service - "Access to News" Redirects
   redirect "/arabic/middleeast/2013/11/131114_shia_ashura_rituals", to: "/arabic/middleeast-62442578", status: 301
