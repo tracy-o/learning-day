@@ -2677,6 +2677,13 @@ defroutefile "Main" do
     return_404 if: !is_zid?(id)
   end
 
+  handle "/newsletters/:slug/:zid", using: "NewsletterLegacy" do
+    return_404 if: [
+      !String.match?(slug, ~r/^[\w-]+$/),
+      !is_zid?(zid),
+    ]
+  end
+
   # /programmes
 
   handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy" do
