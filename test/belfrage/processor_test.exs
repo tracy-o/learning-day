@@ -105,6 +105,18 @@ defmodule Belfrage.ProcessorTest do
 
       assert_raise RuntimeError, err_msg, fn -> Processor.get_route_spec(envelope) end
     end
+
+    test "tracks latency checkpoints when making preflight request" do
+      spec_name = "SomeRouteStateWithMultipleSpecs"
+      envelope = %Envelope{private: %Private{spec: spec_name}}
+      envelope = Processor.get_route_spec(envelope)
+
+      checkpoints = LatencyMonitor.get_checkpoints(envelope)
+
+      assert checkpoints[:preflight_request_begin]
+      assert checkpoints[:preflight_request_end]
+      assert checkpoints[:preflight_request_end] > checkpoints[:preflight_request_begin]
+    end
   end
 
   describe "pre_request_pipeline/1" do
