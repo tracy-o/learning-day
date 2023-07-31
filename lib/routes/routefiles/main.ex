@@ -1073,6 +1073,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/azeri/:topic/rss.xml", using: "WorldServiceAzeriRss"
+  handle "/azeri/:topic/:subtopic/rss.xml", using: "WorldServiceAzeriRss"
+
   handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1155,6 +1158,9 @@ defroutefile "Main" do
   handle "/burmese/topics/:id/rss.xml", using: "WorldServiceBurmeseTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/burmese/:topic/rss.xml", using: "WorldServiceBurmeseRss"
+  handle "/burmese/:topic/:subtopic/rss.xml", using: "WorldServiceBurmeseRss"
 
   handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1531,6 +1537,9 @@ defroutefile "Main" do
   handle "/kyrgyz/topics/:id/rss.xml", using: "WorldServiceKyrgyzTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/kyrgyz/:topic/rss.xml", using: "WorldServiceKyrgyzRss"
+  handle "/kyrgyz/:topic/:subtopic/rss.xml", using: "WorldServiceKyrgyzRss"
 
   handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
