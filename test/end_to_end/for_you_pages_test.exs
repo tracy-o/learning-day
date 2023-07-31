@@ -4,11 +4,8 @@ defmodule EndToEnd.PersonalisedAccountTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.LambdaMock
-  alias Belfrage.RouteSpecManager
+  alias Belfrage.{Clients.LambdaMock, RouteSpecManager}
   alias Fixtures.AuthToken
-
-  import Test.Support.Helper, only: [set_env: 4]
 
   @moduledoc """
   Integration tests for the /foryou route.
@@ -26,13 +23,11 @@ defmodule EndToEnd.PersonalisedAccountTest do
   @valid_token AuthToken.valid_access_token()
   @valid_token_without_user_attributes AuthToken.valid_access_token_without_user_attributes()
   @valid_vary [
-    "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,x-id-oidc-signedin"
+    "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta,x-id-oidc-signedin"
   ]
 
   setup do
     stub_dial(:personalisation, "on")
-    set_env(:belfrage, :production_environment, "live", &RouteSpecManager.update_specs/0)
-    RouteSpecManager.update_specs()
     :ets.delete_all_objects(:cache)
     :ok
   end
@@ -50,7 +45,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
 
       assert get_resp_header(conn, "vary") == [
-               "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme"
+               "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
              ]
     end
 
@@ -80,21 +75,6 @@ defmodule EndToEnd.PersonalisedAccountTest do
 
       assert conn.status == 302
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
-      assert get_resp_header(conn, "vary") == @valid_vary
-    end
-
-    test "to profile-switcher path if ckns_profile cookie is present" do
-      conn =
-        conn(:get, "/foryou")
-        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
-        |> put_req_header("x-bbc-edge-cache", "1")
-        |> put_req_header("x-id-oidc-signedin", "1")
-        |> put_req_header("x-bbc-edge-isuk", "yes")
-        |> put_req_header("cookie", "ckns_profile")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert conn.status == 302
-      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account/profile-switcher"]
       assert get_resp_header(conn, "vary") == @valid_vary
     end
   end
