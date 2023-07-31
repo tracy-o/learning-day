@@ -321,6 +321,38 @@ defroutefile "Main" do
   handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews"
   handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect"
 
+  # News Indexes
+  redirect "/news/topics/c05pg0wvm83t/*any", to: "/news/wales", status: 301
+  redirect "/news/topics/c05pgvdm849t/*any", to: "/news/world/europe", status: 301
+  redirect "/news/topics/cwgdj57820vt/*any", to: "/news/world/africa", status: 301
+  redirect "/news/topics/ck71r1x591xt/*any", to: "/news/england", status: 301
+  redirect "/news/topics/c05p9vgdr6pt/*any", to: "/news/world/middle_east", status: 301
+  redirect "/news/topics/cp35rmprpn5t/*any", to: "/news/world/us_and_canada", status: 301
+  redirect "/news/topics/c43v1n0wl83t/*any", to: "/news/scotland", status: 301
+  redirect "/news/topics/cv5j55kq5p6t/*any", to: "/news/world/europe/guernsey", status: 301
+  redirect "/news/topics/c97e7xl514xt/*any", to: "/news/england/cornwall", status: 301
+  redirect "/news/topics/cr1k15w1vk6t/*any", to: "/news/england/birmingham_and_black_country", status: 301
+  redirect "/news/topics/cnlklx5gl9rt/*any", to: "/news/england/dorset", status: 301
+  redirect "/news/topics/czpqpg9jzjkt/*any", to: "/news/england/essex", status: 301
+  redirect "/news/topics/c13r3338vlpt/*any", to: "/news/england/berkshire", status: 301
+  redirect "/news/topics/cnlkl1gkn5jt/*any", to: "/news/england/coventry_and_warwickshire", status: 301
+  redirect "/news/topics/cwvgv34x7vxt/*any", to: "/news/england/gloucestershire", status: 301
+  redirect "/news/topics/cr1k11ryy55t/*any", to: "/news/england/hampshire", status: 301
+  redirect "/news/topics/czpqp47g86pt/*any", to: "/news/england/cumbria", status: 301
+  redirect "/news/topics/cr1k15gr6gnt/*any", to: "/news/england/derbyshire", status: 301
+  redirect "/news/topics/ckrkrnv7yqzt/*any", to: "/news/england/bristol", status: 301
+  redirect "/news/topics/cq6k679g9l6t/*any", to: "/news/england/cambridgeshire", status: 301
+  redirect "/news/topics/cezkzgl6858t/*any", to: "/news/england/devon", status: 301
+  redirect "/news/topics/cnjn674nvdvt/*any", to: "/news/world", status: 301
+  redirect "/news/topics/cwrw9n0dgp5t/*any", to: "/news/england/hereford_and_worcester", status: 301
+  redirect "/news/topics/czpxgx8070wt/*any", to: "/news/uk", status: 301
+  redirect "/news/topics/c7p3v5qzg01t/*any", to: "/news/england/lancashire", status: 301
+  redirect "/news/topics/c8654v3gj5xt/*any", to: "/news/the_reporters", status: 301
+  redirect "/news/topics/ceq8p90z9xpt/*any", to: "/news/england/manchester", status: 301
+  redirect "/news/topics/c893vgw19q1t/*any", to: "/news/england/lincolnshire", status: 301
+  redirect "/news/topics/c383j9k4qd8t/*any", to: "/news/england/merseyside", status: 301
+  redirect "/news/topics/cezdel3r8q0t/*any", to: "/news/world/europe/isle_of_man", status: 301
+
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
