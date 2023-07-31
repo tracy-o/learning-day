@@ -352,6 +352,28 @@ defroutefile "Main" do
   redirect "/news/topics/c893vgw19q1t/*any", to: "/news/england/lincolnshire", status: 301
   redirect "/news/topics/c383j9k4qd8t/*any", to: "/news/england/merseyside", status: 301
   redirect "/news/topics/cezdel3r8q0t/*any", to: "/news/world/europe/isle_of_man", status: 301
+  redirect "/news/topics/cjn6w9x7j9wt/*any", to: "/news/business", status: 301
+  redirect "/news/topics/c4dldkkz1net/*any", to: "/news/business/global_car_industry", status: 301
+  redirect "/news/topics/cvrl962gz9xt/*any", to: "/news/politics", status: 301
+  redirect "/news/topics/cvrl2wn3063t/*any", to: "/news/politics/uk_leaves_the_eu", status: 301
+  redirect "/news/topics/cvrl9jzx0r5t/*any", to: "/news/technology", status: 301
+  redirect "/news/topics/c43v9644301t/*any", to: "/news/science_and_environment", status: 301
+  redirect "/news/topics/c902n88xrgwt/*any", to: "/news/health", status: 301
+  redirect "/news/topics/cwgdx0ppwnzt/*any", to: "/news/education", status: 301
+  redirect "/news/topics/cvrl9j39l8pt/*any", to: "/news/entertainment_and_arts", status: 301
+  redirect "/news/topics/c43v9x3zpl4t/*any", to: "/news/in_pictures", status: 301
+  redirect "/news/topics/c9mn073kx8jt/*any", to: "/news/newsbeat", status: 301
+  redirect "/news/topics/c58m9d3v2m4t/*any", to: "/news/disability", status: 301
+  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 301
+  redirect "/news/topics/cp60w97z6lpt/*any", to: "/news/explainers", status: 301
+  redirect "/news/topics/c0r51g8gzj4t/*any", to: "/naidheachdan", status: 301
+  redirect "/news/topics/c3y3yz5y46wt/*any", to: "/cymrufyw", status: 301
+  redirect "/news/topics/cd59gnpep0mt/*any", to: "/cymrufyw/gwleidyddiaeth", status: 301
+  redirect "/news/topics/c89624nd36zt/*any", to: "/cymrufyw/gogledd-orllewin", status: 301
+  redirect "/news/topics/c6z1jm2e958t/*any", to: "/cymrufyw/gogledd-ddwyrain", status: 301
+  redirect "/news/topics/c44dg7xd5j0t/*any", to: "/cymrufyw/canolbarth", status: 301
+  redirect "/news/topics/cr0p1mgq088t/*any", to: "/cymrufyw/de-orllewin", status: 301
+  redirect "/news/topics/c7p2x560jqqt/*any", to: "/cymrufyw/de-ddwyrain", status: 301
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
@@ -366,7 +388,6 @@ defroutefile "Main" do
   redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
   redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
-  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
   redirect "/news/topics/cxqvep8kqext/*any", to: "/news/the_reporters", status: 302
 
   # News Correspondents
