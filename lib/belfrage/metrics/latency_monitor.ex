@@ -7,8 +7,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
     :fallback_request_sent,
     :fallback_response_received,
     :response_sent,
-    :preflight_request_begin,
-    :preflight_request_end
+    :preflight_service_request_timing
   ]
 
   def checkpoint(envelope, :response_sent) do
@@ -50,11 +49,8 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   end
 
   defp preflight_latency(checkpoints) do
-    start = checkpoints[:preflight_request_begin]
-    finish = checkpoints[:preflight_request_end]
-
-    if start && finish do
-      finish - start
+    if checkpoints[:preflight_service_request_timing] do
+      checkpoints[:preflight_service_request_timing]
     else
       0
     end

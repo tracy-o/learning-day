@@ -49,15 +49,8 @@ defmodule Belfrage.Processor do
         update_envelope_with_spec(envelope, specs)
 
       %{specs: specs, preflight_pipeline: pipeline} ->
-        start_preflight_pipeline(envelope, specs, pipeline)
+        process_preflight_pipeline(envelope, specs, pipeline)
     end
-  end
-
-  defp start_preflight_pipeline(envelope, specs, pipeline) do
-    envelope
-    |> LatencyMonitor.checkpoint(:preflight_request_begin)
-    |> process_preflight_pipeline(specs, pipeline)
-    |> LatencyMonitor.checkpoint(:preflight_request_end)
   end
 
   defp process_preflight_pipeline(envelope, specs, pipeline) do

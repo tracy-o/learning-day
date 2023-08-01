@@ -1,8 +1,5 @@
 defmodule Belfrage.Behaviours.PreflightService do
-  alias Belfrage.Envelope
-  alias Belfrage.Cache
-  alias Belfrage.Clients.HTTP
-  alias Belfrage.Envelope
+  alias Belfrage.{Envelope, Cache, Clients.HTTP, Envelope, Metrics.LatencyMonitor}
 
   require Logger
 
@@ -66,6 +63,8 @@ defmodule Belfrage.Behaviours.PreflightService do
     request = preflight_service_callback(service).request(envelope)
     {state, response} = @http_client.execute(struct!(HTTP.Request, request), :Preflight)
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
+
+    LatencyMonitor.checkpoint(envelope, :preflight_service_request_timing, timing)
 
     metric([:preflight, :request, :timing], %{duration: timing}, %{
       preflight_service: service,
