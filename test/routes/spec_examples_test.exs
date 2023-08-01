@@ -4,8 +4,11 @@ defmodule Routes.SpecExamplesTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.StubHelper
   import Test.Support.Helper, only: [set_logging_level: 1]
+
+  import Mock
+
   alias BelfrageWeb.Router
-  alias Belfrage.RouteSpecManager
+  alias Belfrage.{RouteSpecManager, PreflightTransformers, Envelope}
 
   @moduletag :routes_test
 
@@ -76,7 +79,7 @@ defmodule Routes.SpecExamplesTest do
   end
 
   defp validate_example(example) do
-    resp_headers = make_call(:get, example.path, example.headers).resp_headers
+    resp_headers = maybe_mock_preflight_and_call(example).resp_headers
 
     case :proplists.get_value("routespec", resp_headers, nil) do
       nil ->
@@ -93,6 +96,33 @@ defmodule Routes.SpecExamplesTest do
           _other ->
             {:error, "Example #{example.path} for route #{example.spec} is not routed correctly.
                       Response routespec header: #{resp_route_spec}"}
+        end
+    end
+  end
+
+  # 'mock_preflight_transformer_map' must incorporate mapping specifications for preflight
+  # transformers that interact with external downstream services.
+  # For each specification included in the mock map, the corresponding preflight transformer
+  # will be mocked to provide platform-specific responses for the current example.
+  # This approach avoids the need to mock downstream service calls for every example that
+  # utilizes preflight transformers, as the preflight transformer itself will be mocked
+  # based on the specific platform being considered in each case.
+  @mock_preflight_transformer_map %{
+    "BitesizeSubjects" => BitesizeSubjectsPlatformSelector,
+    "NewsArticlePage" => AssetTypePlatformSelector
+  }
+
+  defp maybe_mock_preflight_and_call(example) do
+    case Map.get(@mock_preflight_transformer_map, example.spec) do
+      nil ->
+        make_call(:get, example.path, example.headers)
+
+      transformer_module ->
+        with_mock(
+          Module.concat([PreflightTransformers, transformer_module]),
+          call: fn envelope -> {:ok, Envelope.add(envelope, :private, %{platform: example.platform})} end
+        ) do
+          make_call(:get, example.path, example.headers)
         end
     end
   end
