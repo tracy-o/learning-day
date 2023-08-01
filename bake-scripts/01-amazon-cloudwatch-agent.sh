@@ -93,6 +93,7 @@ cat > /etc/cloudwatch-agent-config.json <<EOF
       ["status_code", "route_spec"],
       ["status_code", "preflight_service"],
       ["preflight_service", "error_type"],
+      ["preflight_service", "type"],
       ["preflight_service"],
       ["error_code"],
       ["error_code", "route_spec"],

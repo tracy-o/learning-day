@@ -180,7 +180,7 @@ defmodule Belfrage.MetricsMigration do
             "preflight.cache.get",
             event_name: [:preflight, :cache, :get],
             measurement: :count,
-            tags: [:preflight_service]
+            tags: [:preflight_service, :type]
           ),
           counter(
             "preflight.cache.put",

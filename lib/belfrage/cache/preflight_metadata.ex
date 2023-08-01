@@ -11,11 +11,14 @@ defmodule Belfrage.Cache.PreflightMetadata do
   end
 
   def get(cache_prefix, path) do
-    :telemetry.execute([:preflight, :cache, :get], %{}, %{preflight_service: cache_prefix})
-
     case Cachex.get(@table_name, {cache_prefix, path}) do
-      {:ok, metadata} when not is_nil(metadata) -> {:ok, metadata}
-      _ -> {:error, :preflight_data_not_found}
+      {:ok, metadata} when not is_nil(metadata) ->
+        :telemetry.execute([:preflight, :cache, :get], %{}, %{preflight_service: cache_prefix, type: "hit"})
+        {:ok, metadata}
+
+      _ ->
+        :telemetry.execute([:preflight, :cache, :get], %{}, %{preflight_service: cache_prefix, type: "miss"})
+        {:error, :preflight_data_not_found}
     end
   end
 
