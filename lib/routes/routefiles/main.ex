@@ -315,8 +315,6 @@ defroutefile "Main" do
 
   # Local News
   handle "/news/localnews", using: "NewsLocalNews"
-  handle "/news/localnews/faqs", using: "NewsLocalNews"
-  handle "/news/localnews/locations", using: "NewsLocalNews"
   # this route goes to mozart and 500s on live, may be we should remove it?
   handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews"
   handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect"
