@@ -14,7 +14,7 @@ defmodule Belfrage.Cache.PreflightMetadata do
     :telemetry.execute([:preflight, :cache, :get], %{}, %{preflight_service: cache_prefix})
 
     case Cachex.get(@table_name, {cache_prefix, path}) do
-      {:ok, metadata} when is_binary(metadata) -> {:ok, metadata}
+      {:ok, metadata} when not is_nil(metadata) -> {:ok, metadata}
       _ -> {:error, :preflight_data_not_found}
     end
   end
