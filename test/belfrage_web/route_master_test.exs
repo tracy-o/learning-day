@@ -82,8 +82,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when route includes an escaped character" do
-      stub_origins()
-
       conn =
         conn(:get, "/sport/av/football/59070797\n")
         |> put_bbc_headers()
@@ -97,8 +95,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when route includes UTF-8 encoded characters" do
-      stub_origins()
-
       conn =
         conn(:get, "/sport/av/football/59070797%0A")
         |> put_bbc_headers()
