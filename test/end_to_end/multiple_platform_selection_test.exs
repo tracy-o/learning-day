@@ -66,7 +66,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test ~s(webcore platform is used when asset type in ["MAP", "CSP", "PGL", "STY"]) do
       Enum.each(@webcore_asset_types, fn asset_type ->
         clear_preflight_metadata_cache()
-        url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+        url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
         HTTPMock
         |> expect(
@@ -99,7 +99,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
         end)
 
         conn =
-          conn(:get, "/platform-selection-with-selector")
+          conn(:get, "/news/platform-selection-with-selector")
           |> Router.call(routefile: Routes.Routefiles.Mock)
 
         assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
@@ -109,7 +109,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test "asset type is cached" do
       asset_type = Enum.random(@webcore_asset_types)
 
-      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -142,7 +142,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       end)
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
@@ -171,7 +171,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
     test "cached asset type expires after TTL" do
       asset_type = Enum.random(@webcore_asset_types)
 
-      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -204,7 +204,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       end)
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
@@ -242,16 +242,16 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       Process.sleep(Application.get_env(:belfrage, :preflight_metadata_cache)[:default_ttl_ms] + 1)
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
     test ~s(MozartNews platform is used when asset type not in ["MAP", "CSP", "PGL", "STY"]) do
-      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
-      mozart_url = "#{@mozart_news_endpoint}/platform-selection-with-selector"
+      mozart_url = "#{@mozart_news_endpoint}/news/platform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -284,14 +284,14 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       )
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
     test "Webcore platform is used when 404 response is returned - all stacks apart from Joan" do
-      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -320,14 +320,14 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       end)
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
     test "Webcore platform is used when 500 response is returned - all stacks apart from Joan" do
-      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fplatform-selection-with-selector"
+      ares_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fplatform-selection-with-selector"
 
       HTTPMock
       |> expect(
@@ -356,7 +356,7 @@ defmodule EndToEnd.MultiplePlatformSelectionTest do
       end)
 
       conn =
-        conn(:get, "/platform-selection-with-selector")
+        conn(:get, "/news/platform-selection-with-selector")
         |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
