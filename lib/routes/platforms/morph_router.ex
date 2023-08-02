@@ -13,12 +13,7 @@ defmodule Routes.Platforms.MorphRouter do
       runbook: "https://confluence.dev.bbc.co.uk/display/morph/Morph+Router+Run+Book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
-      circuit_breaker_error_threshold: 200,
-      examples: %{
-        headers: %{
-          "x-bbc-edge-host" => "www.bbc.co.uk"
-        }
-      }
+      circuit_breaker_error_threshold: 200
     }
   end
 

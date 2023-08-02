@@ -81,6 +81,16 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
   end
 
+  def get_route(endpoint, path, headers, "NewsletterLegacy") do
+    host_header =
+      case String.contains?(endpoint, ".test.") do
+        true -> "www.test.bbc.co.uk"
+        false -> "www.bbc.co.uk"
+      end
+
+    request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
+  end
+
   # ContainerEnvelope* route specs use `UserAgentValidator` that checks that a
   # certain user-agent header is present, otherwise a 400 response is returned
   def get_route(endpoint, path, headers, "ContainerEnvelope" <> _spec) do
