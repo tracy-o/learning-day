@@ -669,8 +669,30 @@ defroutefile "Main" do
     return_404 if: true
   end
 
+  handle "/news/null", using: "News" do
+    return_404()
+  end
+
+  handle "/news/onward-journeys", using: "News" do
+    return_404()
+  end
+
+  handle "/news/undefined", using: "News" do
+    return_404()
+  end
+
+  handle "/news/feed", using: "News" do
+    return_404()
+  end
+
+
+
   handle "/news/:id.amp", using: "NewsAmp"
   handle "/news/:id.json", using: "NewsAmp"
+
+  handle "/news/sitemap.xml", using: "News"
+  handle "/news/news_sitemap.xml", using: "News"
+  handle "/news/video_sitemap.xml", using: "News"
 
   handle "/news/:id", using: "NewsArticlePage"
 
