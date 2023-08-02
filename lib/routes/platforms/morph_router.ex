@@ -14,6 +14,11 @@ defmodule Routes.Platforms.MorphRouter do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
+      examples: %{
+        headers: %{
+          "x-bbc-edge-host" => "www.bbc.co.uk"
+        }
+      }
     }
   end
 
