@@ -33,7 +33,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}
@@ -53,7 +53,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}

@@ -25,24 +25,24 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
           {:error, :ares_data_dial_off}
       end
 
-    platform =
+    envelope =
       case asset_response do
-        {:ok, asset_type} ->
+        {:ok, envelope, asset_type} ->
           if asset_type in @webcore_asset_types do
-            "Webcore"
+            Envelope.add(envelope, :private, %{platform: "Webcore"})
           else
-            "MozartNews"
+            Envelope.add(envelope, :private, %{platform: "MozartNews"})
           end
 
         _ ->
           if stack_id() == "joan" do
-            "MozartNews"
+            Envelope.add(envelope, :private, %{platform: "MozartNews"})
           else
-            "Webcore"
+            Envelope.add(envelope, :private, %{platform: "Webcore"})
           end
       end
 
-    {:ok, Envelope.add(envelope, :private, %{platform: platform})}
+    {:ok, envelope}
   end
 
   defp fetch_data(envelope) do

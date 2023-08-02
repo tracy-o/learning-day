@@ -9,30 +9,30 @@ defmodule Belfrage.Behaviours.PreflightService do
 
   @http_client Application.compile_env(:belfrage, :http_client, HTTP)
 
-  @spec call(Envelope.t(), String.t()) :: {:ok, any()} | {:error, atom()}
+  @spec call(Envelope.t(), String.t()) :: {:ok, Envelope.t(), any()} | {:error, atom()}
   def call(envelope, service) do
     metric([:preflight, :request], %{preflight_service: service})
     cache_key = preflight_service_callback(service).cache_key(envelope)
 
     case Cache.PreflightMetadata.get(service, cache_key) do
       {:ok, metadata} ->
-        {:ok, metadata}
+        {:ok, envelope, metadata}
 
       {:error, :preflight_data_not_found} ->
         case make_request(envelope, service) do
-          {:ok, response = %HTTP.Response{status_code: 200}} ->
+          {:ok, envelope, response = %HTTP.Response{status_code: 200}} ->
             metric([:preflight, :response], %{preflight_service: service, status_code: 200})
             decode_handle_response(response, service, cache_key, envelope)
 
-          {:ok, response = %HTTP.Response{status_code: status_code}} when status_code in [404, 410] ->
+          {:ok, envelope, response = %HTTP.Response{status_code: status_code}} when status_code in [404, 410] ->
             metric([:preflight, :response], %{preflight_service: service, status_code: status_code})
             handle_not_found(response, service, envelope)
 
-          {:ok, response = %HTTP.Response{status_code: status_code}} ->
+          {:ok, envelope, response = %HTTP.Response{status_code: status_code}} ->
             metric([:preflight, :response], %{preflight_service: service, status_code: status_code})
             handle_error(:preflight_unacceptable_status_code, response, nil, service, envelope)
 
-          {:error, reason} ->
+          {:error, envelope, reason} ->
             handle_error(:preflight_unacceptable_status_code, nil, reason, service, envelope)
         end
     end
@@ -45,7 +45,7 @@ defmodule Belfrage.Behaviours.PreflightService do
       case preflight_service_callback(service).handle_response(decoded) do
         {:ok, data} ->
           Cache.PreflightMetadata.put(service, cache_key, data)
-          {:ok, data}
+          {:ok, envelope, data}
 
         {:error, reason} ->
           metric([:preflight, :error], %{preflight_service: service, error_type: "invalid_response"})
@@ -64,14 +64,14 @@ defmodule Belfrage.Behaviours.PreflightService do
     {state, response} = @http_client.execute(struct!(HTTP.Request, request), :Preflight)
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs
 
-    LatencyMonitor.checkpoint(envelope, :preflight_service_request_timing, timing)
+    envelope = LatencyMonitor.checkpoint(envelope, :preflight_service_request_timing, timing)
 
     metric([:preflight, :request, :timing], %{duration: timing}, %{
       preflight_service: service,
       status_code: Map.get(response, :status_code, "500")
     })
 
-    {state, response}
+    {state, envelope, response}
   end
 
   defp preflight_service_callback(preflight_service) do

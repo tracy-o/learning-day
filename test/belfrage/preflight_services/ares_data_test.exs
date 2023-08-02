@@ -28,7 +28,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
          }}
       end)
 
-      assert {:ok, "MAP"} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, "MAP"} = PreflightService.call(@envelope, @service)
     end
 
     test "returns preflight_data_not_found when data returns a 404" do

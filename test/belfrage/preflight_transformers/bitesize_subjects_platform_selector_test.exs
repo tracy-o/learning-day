@@ -36,7 +36,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns Webcore for a 200 with Primary as the label",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:ok, "Primary"} end
+    call: fn %Envelope{}, @service ->
+      {:ok,
+       %Envelope{private: %Envelope.Private{production_environment: "test"}, request: %Envelope.Request{path: @path}},
+       "Primary"}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "test"}
@@ -53,7 +57,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns Webcore for a 200 with an empty string as the label",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:ok, ""} end
+    call: fn %Envelope{}, @service ->
+      {:ok,
+       %Envelope{private: %Envelope.Private{production_environment: "test"}, request: %Envelope.Request{path: @path}},
+       ""}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "test"}
@@ -70,7 +78,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns MorphRouter for a 200 with Secondary as the label",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:ok, "Secondary"} end
+    call: fn %Envelope{}, @service ->
+      {:ok,
+       %Envelope{private: %Envelope.Private{production_environment: "test"}, request: %Envelope.Request{path: @path}},
+       "Secondary"}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "test"}
@@ -87,7 +99,10 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns MorphRouter for live environment and does not call data source",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:ok, "Primary"} end
+    call: fn %Envelope{}, @service ->
+      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: -576_460_641_580}}},
+       "Primary"}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "live"}
@@ -101,5 +116,24 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
               }}
 
     assert_not_called(PreflightService.call(envelope, "BitesizeSubjectsData"))
+  end
+
+  test_with_mock(
+    "returns an envelope with an external request latency checkpoint",
+    PreflightService,
+    call: fn %Envelope{}, @service ->
+      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: -576_460_641_580}}},
+       "STY"}
+    end
+  ) do
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
+
+    {:ok, envelope} = BitesizeSubjectsPlatformSelector.call(envelope)
+
+    checkpoints = envelope.private.checkpoints
+
+    assert Map.has_key?(checkpoints, :preflight_service_request_timing)
   end
 end
