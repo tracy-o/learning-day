@@ -35,27 +35,27 @@ defmodule Belfrage.Clients.Json do
   end
 
   defp handle_response({:ok, %Clients.HTTP.Response{status_code: 200, body: body}}, poller_name) do
-    Logger.log(:info, "#{poller_name} polled successfully", cloudwatch: true)
+    Logger.log(:info, "#{poller_name} polled successfully")
     {:ok, body}
   end
 
   defp handle_response({:ok, %Clients.HTTP.Response{status_code: status_code}}, poller_name) do
-    Logger.log(:warn, "Non 200 Status Code (#{status_code}) from #{poller_name}", cloudwatch: true)
+    Logger.log(:warn, "Non 200 Status Code (#{status_code}) from #{poller_name}")
     {:error, status_code}
   end
 
   defp handle_response({:ok, _response}, poller_name) do
-    Logger.log(:warn, "Unknown response from #{poller_name}", cloudwatch: true)
+    Logger.log(:warn, "Unknown response from #{poller_name}")
     {:error, "unknown response"}
   end
 
   defp handle_response({:error, %Clients.HTTP.Error{reason: reason}}, poller_name) do
-    Logger.log(:warn, "Error received from #{poller_name}: #{reason}", cloudwatch: true)
+    Logger.log(:warn, "Error received from #{poller_name}: #{reason}")
     {:error, reason}
   end
 
   defp handle_response({:error, _http_error}, poller_name) do
-    Logger.log(:warn, "Unknown error received from #{poller_name}", cloudwatch: true)
+    Logger.log(:warn, "Unknown error received from #{poller_name}")
     {:error, "unknown http error"}
   end
 
@@ -63,7 +63,7 @@ defmodule Belfrage.Clients.Json do
     {:ok, @json_codec.decode!(json_data)}
   rescue
     _exception ->
-      Logger.log(:warn, "Error while decoding data from #{poller_name}", cloudwatch: true)
+      Logger.log(:warn, "Error while decoding data from #{poller_name}")
       {:error, "JSON decode error"}
   end
 end

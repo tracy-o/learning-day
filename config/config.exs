@@ -82,20 +82,13 @@ config :cachex, :limit,
   options: []
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, {LoggerFileBackend, :access}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :access}]
 
 config :logger, :file,
   path: "local.log",
   format: {Belfrage.Logger.Formatter, :app},
   level: :debug,
   metadata: :all
-
-config :logger, :cloudwatch,
-  path: "cloudwatch.log",
-  format: {Belfrage.Logger.Formatter, :cloudwatch},
-  level: :warn,
-  metadata: :all,
-  metadata_filter: [cloudwatch: true]
 
 config :logger, :access,
   path: "access.log",

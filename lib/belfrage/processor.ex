@@ -315,7 +315,7 @@ defmodule Belfrage.Processor do
 
   defp maybe_log_response_status(envelope = %Envelope{response: %Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
-    Logger.log(:warn, "#{http_status} error from origin", cloudwatch: true)
+    Logger.log(:warn, "#{http_status} error from origin")
     envelope
   end
 
