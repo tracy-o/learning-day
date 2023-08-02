@@ -12,7 +12,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns error tuple if preflight data service returns data error",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:error, :preflight_data_error} end
+    call: fn %Envelope{}, @service ->
+      {:error,
+       %Envelope{private: %Envelope.Private{production_environment: "test"}, request: %Envelope.Request{path: @path}},
+       :preflight_data_error}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "test"}
@@ -24,7 +28,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   test_with_mock(
     "returns error tuple with 404 if preflight data service returns not found error",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:error, :preflight_data_not_found} end
+    call: fn %Envelope{}, @service ->
+      {:error,
+       %Envelope{private: %Envelope.Private{production_environment: "test"}, request: %Envelope.Request{path: @path}},
+       :preflight_data_not_found}
+    end
   ) do
     request = %Envelope.Request{path: @path}
     private = %Envelope.Private{production_environment: "test"}
@@ -122,7 +130,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
     "returns an envelope with an external request latency checkpoint",
     PreflightService,
     call: fn %Envelope{}, @service ->
-      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: -576_460_641_580}}},
+      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: 576_460_641_580}}},
        "STY"}
     end
   ) do

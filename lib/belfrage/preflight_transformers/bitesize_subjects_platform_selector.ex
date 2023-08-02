@@ -11,10 +11,10 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelector do
         {:ok, envelope, subject_level} ->
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform(subject_level)})}
 
-        {:error, :preflight_data_not_found} ->
+        {:error, envelope, :preflight_data_not_found} ->
           {:error, envelope, 404}
 
-        {:error, :preflight_data_error} ->
+        {:error, envelope, :preflight_data_error} ->
           {:error, envelope, 500}
       end
     end

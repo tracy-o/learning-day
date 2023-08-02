@@ -69,7 +69,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:error, :preflight_data_error} = PreflightService.call(@envelope, @service)
+      assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
     end
 
     test "returns not found when returns a 404" do
@@ -82,7 +82,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:error, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
+      assert {:error, %Envelope{}, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
     end
   end
 end

@@ -44,7 +44,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
       log =
         capture_log(fn ->
-          assert {:error, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
+          assert {:error, %Envelope{}, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
         end)
 
       assert log =~
@@ -64,7 +64,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
       log =
         capture_log(fn ->
-          assert {:error, :preflight_data_error} = PreflightService.call(@envelope, @service)
+          assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
         end)
 
       assert log =~

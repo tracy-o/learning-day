@@ -49,11 +49,7 @@ defmodule Belfrage.Metrics.LatencyMonitor do
   end
 
   defp preflight_latency(checkpoints) do
-    if checkpoints[:preflight_service_request_timing] do
-      checkpoints[:preflight_service_request_timing]
-    else
-      0
-    end
+    checkpoints[:preflight_service_request_timing] || 0
   end
 
   defp response_latency(checkpoints) do
