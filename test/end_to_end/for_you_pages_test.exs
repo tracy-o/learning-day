@@ -4,7 +4,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   use Test.Support.Helper, :mox
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.LambdaMock, RouteSpecManager}
+  alias Belfrage.Clients.LambdaMock
   alias Fixtures.AuthToken
 
   @moduledoc """
