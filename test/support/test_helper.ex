@@ -209,6 +209,13 @@ defmodule Test.Support.Helper do
     :ok
   end
 
+  def set_logging_level(level)
+      when level in [:emergency, :alert, :critical, :error, :warning, :warn, :notice, :info, :debug] do
+    previous_level = Logger.level()
+    Logger.configure(level: level)
+    on_exit(fn -> Logger.configure(level: previous_level) end)
+  end
+
   @doc """
   Takes a process ID and an interval in milliseconds.
   The function sleeps for the duration of the interval,
