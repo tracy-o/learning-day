@@ -54,6 +54,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   end
 
   defp valid_path?(path) do
-    String.match?(path, ~r/\A\/news\/([a-zA-Z0-9-_\/+]+)\z/)
+    String.match?(path, ~r/\A\/news\/([a-zA-Z0-9-_\/+]{2,})\z/)
   end
 end

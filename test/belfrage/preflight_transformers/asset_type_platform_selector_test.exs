@@ -104,7 +104,27 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
              {:ok,
               %Envelope{
                 private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
-                # "%2Fnews%2Fsome%2Fpath%2Fthat_is%2F.invalid"
+                request: request
+              }}
+
+    assert_not_called(PreflightService.call(envelope, "AresData"))
+  end
+
+  test_with_mock(
+    "returns Webcore and does not make an AresData request when the invalid path has not enough characters and the stack is not Joan",
+    PreflightService,
+    call: fn %Envelope{}, @service -> {:ok, "STY"} end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
+
+    request = %Envelope.Request{path: "/news/a"}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
+
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
                 request: request
               }}
 
