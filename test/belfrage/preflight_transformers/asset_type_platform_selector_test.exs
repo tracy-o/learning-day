@@ -52,7 +52,16 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   test_with_mock(
     "returns MozartNews platform if origin response does not contain a Webcore asset type",
     PreflightService,
-    call: fn %Envelope{}, @service -> {:ok, "IDX"} end
+    call: fn %Envelope{}, @service ->
+      {:ok,
+       %Envelope{
+         request: %Envelope.Request{path: @path},
+         private: %Envelope.Private{
+           production_environment: "test",
+           checkpoints: %{preflight_service_request_timing: 576_460_641_580}
+         }
+       }, "IDX"}
+    end
   ) do
     stub_dial(:preflight_ares_data_fetch, "on")
 
@@ -63,7 +72,11 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
     assert AssetTypePlatformSelector.call(envelope) ==
              {:ok,
               %Envelope{
-                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
+                private: %Envelope.Private{
+                  platform: "MozartNews",
+                  production_environment: "test",
+                  checkpoints: %{preflight_service_request_timing: 576_460_641_580}
+                },
                 request: request
               }}
   end
@@ -172,7 +185,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns Webcore platform if origin response contains a MozartNews asset type and dial is set to logging mode on all stacks apart from Joan",
+    "returns Webcore platform if origin response contains a MozartNews asset type and dial is set to learning mode on all stacks apart from Joan",
     PreflightService,
     call: fn %Envelope{}, @service -> {:ok, "FIX"} end
   ) do
@@ -191,7 +204,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns MozartNews platform if origin response contains a Webcore asset type and dial is set to logging mode on Joan",
+    "returns MozartNews platform if origin response contains a Webcore asset type and dial is set to learning mode on Joan",
     PreflightService,
     call: fn %Envelope{}, @service -> {:ok, "STY"} end
   ) do
@@ -208,5 +221,26 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                 private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
                 request: request
               }}
+  end
+
+  test_with_mock(
+    "returns an envelope with an external request latency checkpoint",
+    PreflightService,
+    call: fn %Envelope{}, @service ->
+      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: 576_460_641_580}}},
+       "STY"}
+    end
+  ) do
+    stub_dial(:preflight_ares_data_fetch, "on")
+
+    request = %Envelope.Request{path: @path}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
+
+    {:ok, envelope} = AssetTypePlatformSelector.call(envelope)
+
+    checkpoints = envelope.private.checkpoints
+
+    assert Map.has_key?(checkpoints, :preflight_service_request_timing)
   end
 end

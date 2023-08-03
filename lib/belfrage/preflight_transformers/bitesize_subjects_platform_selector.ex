@@ -8,13 +8,13 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelector do
       {:ok, Envelope.add(envelope, :private, %{platform: "MorphRouter"})}
     else
       case PreflightService.call(envelope, "BitesizeSubjectsData") do
-        {:ok, subject_level} ->
+        {:ok, envelope, subject_level} ->
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform(subject_level)})}
 
-        {:error, :preflight_data_not_found} ->
+        {:error, envelope, :preflight_data_not_found} ->
           {:error, envelope, 404}
 
-        {:error, :preflight_data_error} ->
+        {:error, envelope, :preflight_data_error} ->
           {:error, envelope, 500}
       end
     end

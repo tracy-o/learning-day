@@ -33,7 +33,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}
@@ -53,7 +53,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}
@@ -69,7 +69,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:error, :preflight_data_error} = PreflightService.call(@envelope, @service)
+      assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
     end
 
     test "returns not found when returns a 404" do
@@ -82,7 +82,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:error, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
+      assert {:error, %Envelope{}, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
     end
   end
 end
