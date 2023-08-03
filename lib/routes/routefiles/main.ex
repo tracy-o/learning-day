@@ -685,7 +685,25 @@ defroutefile "Main" do
     return_404()
   end
 
+  handle "/news/newsbeat-entertainment", using: "News" do
+    return_404()
+  end
 
+  handle "/news/newsbeat-music", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-health", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-technology", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-the_p_word", using: "News" do
+    return_404()
+  end
 
   handle "/news/:id.amp", using: "NewsAmp"
   handle "/news/:id.json", using: "NewsAmp"
