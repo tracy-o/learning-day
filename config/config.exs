@@ -66,7 +66,7 @@ config :belfrage,
     default_ttl_ms: 86_400_000,
     expiration_interval_ms: 60_000,
     limit: [
-      size: 36_000,
+      size: 48_000,
       # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
       policy: Cachex.Policy.LRW,
       reclaim: 0.3,
