@@ -37,16 +37,14 @@ defmodule EndToEnd.PersonalisedAccountTest do
       conn =
         conn(:get, "/foryou")
         |> put_req_header("x-bbc-edge-cache", "1")
-        |> put_req_header("x-bbc-edge-host", "www.bbc.com")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
         |> put_req_header("x-bbc-edge-isuk", "no")
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 302
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
 
-      assert get_resp_header(conn, "vary") == [
-               "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
-             ]
+      assert get_resp_header(conn, "vary") == @valid_vary
     end
 
     test "to sign in path if is_uk true, but user not authenticated" do
