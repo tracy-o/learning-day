@@ -1,8 +1,7 @@
 defmodule BelfrageWeb.RouteMasterTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
-  use Test.Support.Helper, :mox
-  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
+  import Mock
 
   alias Routes.Routefiles.Mock, as: Routefile
   alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
@@ -45,9 +44,13 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "handle/2" do
-    test "successful match" do
-      stub_origins()
-
+    test_with_mock(
+      "successful match",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/200-ok-response"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/200-ok-response")
         |> put_bbc_headers()
@@ -70,9 +73,13 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body =~ "404"
     end
 
-    test "when 404 check is false, the request continues downstream" do
-      stub_origins()
-
+    test_with_mock(
+      "when 404 check is false, the request continues downstream",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/sends-request-downstream"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/sends-request-downstream")
         |> put_bbc_headers()
@@ -106,9 +113,13 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "calling handle with only_on option" do
-    test "when the environments match, will yield request" do
-      stub_origins()
-
+    test_with_mock(
+      "when the environments match, will yield request",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/only-on"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/only-on")
         |> put_bbc_headers()
@@ -129,9 +140,13 @@ defmodule BelfrageWeb.RouteMasterTest do
       assert conn.resp_body =~ "404"
     end
 
-    test "when the environments do not match, will match similar route from other environment" do
-      stub_origins()
-
+    test_with_mock(
+      "when the environments do not match, will match similar route from other environment",
+      BelfrageWeb,
+      yield: fn "SomeMozartRouteState", conn = %Plug.Conn{request_path: "/only-on-multi-env"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/only-on-multi-env")
         |> put_bbc_headers()
@@ -481,9 +496,13 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "matching proxy_pass routes" do
-    test "200 is returned when on the test env and origin_simulator header is set" do
-      stub_origins()
-
+    test_with_mock(
+      "200 is returned when on the test env and origin_simulator header is set",
+      BelfrageWeb,
+      yield: fn "ProxyPass", conn = %Plug.Conn{request_path: "/some-route-for-proxy-pass"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/some-route-for-proxy-pass")
         |> put_bbc_headers("true")
@@ -491,12 +510,15 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
-    test "200 is returned when on the test env and replayed_header header is set" do
-      stub_origins()
-
+    test_with_mock(
+      "200 is returned when on the test env and replayed_header header is set",
+      BelfrageWeb,
+      yield: fn "ProxyPass", conn = %Plug.Conn{request_path: "/some-route-for-proxy-pass"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/some-route-for-proxy-pass")
         |> put_private(:bbc_headers, %{
@@ -527,7 +549,6 @@ defmodule BelfrageWeb.RouteMasterTest do
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
     test "404 is returned when on test and origin_simulator header is not set" do
