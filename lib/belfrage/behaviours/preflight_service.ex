@@ -32,7 +32,12 @@ defmodule Belfrage.Behaviours.PreflightService do
             metric([:preflight, :response], %{preflight_service: service, status_code: status_code})
             handle_error(:preflight_unacceptable_status_code, response, nil, service, envelope)
 
+          {:error, envelope, :timeout} ->
+            metric([:preflight, :response], %{preflight_service: service, status_code: 408})
+            handle_error(:preflight_unacceptable_status_code, nil, :timeout, service, envelope)
+
           {:error, envelope, reason} ->
+            metric([:preflight, :response], %{preflight_service: service, status_code: "error"})
             handle_error(:preflight_unacceptable_status_code, nil, reason, service, envelope)
         end
     end
