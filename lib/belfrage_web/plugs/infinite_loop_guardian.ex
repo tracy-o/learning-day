@@ -27,7 +27,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardian do
   defp send_404(conn) do
     Metrics.event([:request, :infinite_loop])
 
-    Logger.log(:warn, "", %{
+    Logger.log(:error, "", %{
       msg: "Returned a 404 as infinite Belfrage/Mozart loop detected",
       request_path: conn.request_path
     })

@@ -26,12 +26,12 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       assert {"bid", "bruce"} in resp_headers
     end
 
-    test "logs a warning if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
+    test "logs an error if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
       conn =
         conn(:get, "/news")
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
-      refute capture_log([level: :error], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end) =~
+      assert capture_log([level: :error], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end) =~
                "Returned a 404 as infinite Belfrage/Mozart loop detected"
 
       assert capture_log([level: :warn], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end) =~
