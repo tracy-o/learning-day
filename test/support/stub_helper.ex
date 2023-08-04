@@ -35,27 +35,8 @@ defmodule Belfrage.Test.StubHelper do
   any request to an origin will succeed.
   """
   def stub_origins() do
-    Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn request, _platform ->
-      cond do
-        String.contains?(request.url, "/module/ares-asset-identifier") ->
-          {:ok,
-           Belfrage.Clients.HTTP.Response.new(%{
-             status_code: 200,
-             headers: %{},
-             body: "{\"data\": {\"section\": \"UK\", \"type\": \"STY\"}}"
-           })}
-
-        String.contains?(request.url, "/module/education-metadata") ->
-          {:ok,
-           Belfrage.Clients.HTTP.Response.new(%{
-             status_code: 200,
-             headers: %{},
-             body: "{\"data\": {\"phase\": {\"label\": \"Primary\"}}}"
-           })}
-
-        true ->
-          {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
-      end
+    Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn _request, _platform ->
+      {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
     end)
 
     Mox.stub(Belfrage.Clients.LambdaMock, :call, fn _creds, _arn, _payload, _opts ->

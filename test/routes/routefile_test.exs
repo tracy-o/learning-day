@@ -1,8 +1,6 @@
 defmodule Routes.RoutefileTest do
   use ExUnit.Case
   use Plug.Test
-  use Test.Support.Helper, :mox
-  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
 
   alias BelfrageWeb.Router
   alias Belfrage.{RouteState, RouteSpecManager}
@@ -261,8 +259,6 @@ defmodule Routes.RoutefileTest do
   end
 
   defp start_route_states() do
-    stub_origins()
-
     Belfrage.RouteSpecManager.list_specs()
     |> Enum.map(fn %{name: spec_name, specs: specs} -> Enum.each(specs, &start_route_state(spec_name, &1)) end)
   end

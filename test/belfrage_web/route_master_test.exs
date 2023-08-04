@@ -1,18 +1,14 @@
 defmodule BelfrageWeb.RouteMasterTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
-  use Test.Support.Helper, :mox
-  import Belfrage.Test.StubHelper, only: [stub_origins: 0]
+  import Mock
 
   alias Routes.Routefiles.Mock, as: Routefile
   alias Routes.Routefiles.{RoutefileOnlyOnMock, RoutefileOnlyOnMultiEnvMock}
   import BelfrageWeb.RouteMaster
 
   defp put_bbc_headers(conn, origin_simulator \\ nil) do
-    conn
-    |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-    |> put_private(:request_id, "req-12345678")
-    |> put_private(:bbc_headers, %{
+    put_private(conn, :bbc_headers, %{
       country: "gb",
       scheme: "",
       host: "",
@@ -38,16 +34,27 @@ defmodule BelfrageWeb.RouteMasterTest do
     })
   end
 
-  describe "handle/2" do
-    test "successful match" do
-      stub_origins()
+  defp put_private_headers(conn, environment) do
+    conn
+    |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
+    |> put_private(:request_id, "req-12345678")
+    |> put_private(:production_environment, environment)
+    |> put_private(:preview_mode, "off")
+    |> put_private(:overrides, %{})
+  end
 
+  describe "handle/2" do
+    test_with_mock(
+      "successful match",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/200-ok-response"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/200-ok-response")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 200
@@ -59,37 +66,34 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/premature-404")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 404
       assert conn.resp_body =~ "404"
     end
 
-    test "when 404 check is false, the request continues downstream" do
-      stub_origins()
-
+    test_with_mock(
+      "when 404 check is false, the request continues downstream",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/sends-request-downstream"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/sends-request-downstream")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 200
     end
 
     test "when route includes an escaped character" do
-      stub_origins()
-
       conn =
         conn(:get, "/sport/av/football/59070797\n")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 404
@@ -97,14 +101,10 @@ defmodule BelfrageWeb.RouteMasterTest do
     end
 
     test "when route includes UTF-8 encoded characters" do
-      stub_origins()
-
       conn =
         conn(:get, "/sport/av/football/59070797%0A")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 404
@@ -113,15 +113,17 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "calling handle with only_on option" do
-    test "when the environments match, will yield request" do
-      stub_origins()
-
+    test_with_mock(
+      "when the environments match, will yield request",
+      BelfrageWeb,
+      yield: fn "SomeRouteState", conn = %Plug.Conn{request_path: "/only-on"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/only-on")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> RoutefileOnlyOnMock.call([])
 
       assert conn.status == 200
@@ -131,24 +133,24 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/only-on")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_other_environment")
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 404
       assert conn.resp_body =~ "404"
     end
 
-    test "when the environments do not match, will match similar route from other environment" do
-      stub_origins()
-
+    test_with_mock(
+      "when the environments do not match, will match similar route from other environment",
+      BelfrageWeb,
+      yield: fn "SomeMozartRouteState", conn = %Plug.Conn{request_path: "/only-on-multi-env"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
         conn(:get, "/only-on-multi-env")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_other_environment")
         |> fetch_query_params()
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
@@ -161,9 +163,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> RoutefileOnlyOnMock.call([])
 
       assert conn.status == 200
@@ -174,8 +174,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/only-on-with-block")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
+        |> put_private_headers("some_other_environment")
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 404
@@ -186,9 +185,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/only-on-with-block-multi-env")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_other_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_other_environment")
         |> RoutefileOnlyOnMultiEnvMock.call([])
 
       assert conn.status == 200
@@ -201,9 +198,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 301
@@ -215,9 +210,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert get_resp_header(conn, "cache-control") == [
@@ -229,9 +222,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/permanent-redirect")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert get_resp_header(conn, "req-svc-chain") == ["GTM,BELFRAGE"]
@@ -240,8 +231,6 @@ defmodule BelfrageWeb.RouteMasterTest do
     test "redirect has a simple vary header" do
       conn =
         conn(:get, "/permanent-redirect")
-        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-        |> put_private(:request_id, "req-12345678")
         |> put_private(:bbc_headers, %{
           country: "gb",
           scheme: "",
@@ -266,9 +255,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           referer: nil,
           user_agent: ""
         })
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> put_req_header("x-host", "www.bbc.co.uk")
         |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
         |> put_req_header("cookie", "foo=bar")
@@ -283,9 +270,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/rewrite-redirect/resource-id-123345")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -297,9 +282,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/rewrite-redirect/12345/section/catch-all/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -311,9 +294,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/rewrite-redirect/resource-id-123345.ext")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -325,9 +306,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://example.net/rewrite-redirect/12345/catch-all/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -339,9 +318,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://example.net/rewrite-redirect/12345/i-am-a-url-slug-for-SEO")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -353,9 +330,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/redirect-with-path/feed.xml")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -367,9 +342,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/some/path.js")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 301
@@ -381,9 +354,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/redirect-with-path/subpath/asset-1234")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -395,9 +366,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/redirect-to-root")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -411,9 +380,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "http://www.bbcarabic.com")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert get_resp_header(conn, "cache-control") == [
@@ -425,9 +392,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "http://www.bbcarabic.com")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -439,9 +404,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://bbcarabic.com/")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -453,9 +416,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://www.bbcarabic.com")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -467,9 +428,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://bbcarabic.com")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -481,9 +440,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://www.bbcarabic.com/")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -495,9 +452,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "https://www.bbcarabic.com/middleeast-51412901")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -509,9 +464,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/redirect-with-path/abc")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -523,9 +476,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:get, "/redirect-with-path.ext")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 302
@@ -537,9 +488,7 @@ defmodule BelfrageWeb.RouteMasterTest do
       conn =
         conn(:post, "/redirect-with-path/abc")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "some_environment")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("some_environment")
         |> Routefile.call([])
 
       assert conn.status == 405
@@ -547,33 +496,31 @@ defmodule BelfrageWeb.RouteMasterTest do
   end
 
   describe "matching proxy_pass routes" do
-    test "200 is returned when on the test env and origin_simulator header is set" do
-      origin_simulator_header = "true"
-      route = "/some-route-for-proxy-pass"
-
-      stub_origins()
-
+    test_with_mock(
+      "200 is returned when on the test env and origin_simulator header is set",
+      BelfrageWeb,
+      yield: fn "ProxyPass", conn = %Plug.Conn{request_path: "/some-route-for-proxy-pass"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
-        conn(:get, route)
-        |> put_bbc_headers(origin_simulator_header)
-        |> put_private(:production_environment, "test")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        conn(:get, "/some-route-for-proxy-pass")
+        |> put_bbc_headers("true")
+        |> put_private_headers("test")
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
-    test "200 is returned when on the test env and replayed_header header is set" do
-      route = "/some-route-for-proxy-pass"
-
-      stub_origins()
-
+    test_with_mock(
+      "200 is returned when on the test env and replayed_header header is set",
+      BelfrageWeb,
+      yield: fn "ProxyPass", conn = %Plug.Conn{request_path: "/some-route-for-proxy-pass"} ->
+        %Plug.Conn{conn | status: 200}
+      end
+    ) do
       conn =
-        conn(:get, route)
-        |> put_private(:xray_trace_id, "1-xxxx-yyyyyyyyyyyyyyy")
-        |> put_private(:request_id, "req-12345678")
+        conn(:get, "/some-route-for-proxy-pass")
         |> put_private(:bbc_headers, %{
           country: "gb",
           scheme: "",
@@ -598,49 +545,35 @@ defmodule BelfrageWeb.RouteMasterTest do
           referer: nil,
           user_agent: ""
         })
-        |> put_private(:production_environment, "test")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("test")
         |> Routefile.call([])
 
       assert conn.status == 200
-      assert conn.assigns.route_spec == {"ProxyPass", "OriginSimulator"}
     end
 
     test "404 is returned when on test and origin_simulator header is not set" do
-      route = "/some-route-for-proxy-pass"
-
       conn =
-        conn(:get, route)
+        conn(:get, "/some-route-for-proxy-pass")
         |> put_bbc_headers()
-        |> put_private(:production_environment, "test")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("test")
         |> Routefile.call([])
 
       assert conn.status == 404
     end
 
     test "404 is returned when origin_simulator is set but env is not test" do
-      origin_simulator_header = "true"
-      route = "/some-route-for-proxy-pass"
-
       conn =
-        conn(:get, route)
-        |> put_bbc_headers(origin_simulator_header)
-        |> put_private(:production_environment, "live")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        conn(:get, "/some-route-for-proxy-pass")
+        |> put_bbc_headers("true")
+        |> put_private_headers("live")
         |> Routefile.call([])
 
       assert conn.status == 404
     end
 
     test "404 is returned when replayed_header is set but env is not test" do
-      route = "/some-route-for-proxy-pass"
-
       conn =
-        conn(:get, route)
+        conn(:get, "/some-route-for-proxy-pass")
         |> put_private(:bbc_headers, %{
           country: "gb",
           scheme: "",
@@ -665,9 +598,7 @@ defmodule BelfrageWeb.RouteMasterTest do
           referer: nil,
           user_agent: ""
         })
-        |> put_private(:production_environment, "live")
-        |> put_private(:preview_mode, "off")
-        |> put_private(:overrides, %{})
+        |> put_private_headers("live")
         |> Routefile.call([])
 
       assert conn.status == 404

@@ -259,7 +259,6 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       :erlang.trace_pattern({IO, :write, 2}, true, [:local])
 
       stub_dials(news_apps_variance_reducer: "enabled")
-      stub_origins()
       path = "/fd/abl?clientName=Chrysalis&clientLoc=E7&type=index"
 
       :get
@@ -295,7 +294,6 @@ defmodule BelfrageWeb.Logger.AccessLoggerTest do
       :erlang.trace_pattern({IO, :write, 2}, true, [:local])
 
       stub_dials(news_apps_variance_reducer: "enabled")
-      stub_origins()
       path = "/news"
 
       :head

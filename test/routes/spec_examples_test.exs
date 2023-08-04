@@ -4,8 +4,11 @@ defmodule Routes.SpecExamplesTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.StubHelper
   import Test.Support.Helper, only: [set_logging_level: 1]
+
+  import Mock
+
   alias BelfrageWeb.Router
-  alias Belfrage.RouteSpecManager
+  alias Belfrage.{RouteSpecManager, PreflightTransformers, Envelope}
 
   @moduletag :routes_test
 
@@ -76,7 +79,7 @@ defmodule Routes.SpecExamplesTest do
   end
 
   defp validate_example(example) do
-    resp_headers = make_call(:get, example.path, example.headers).resp_headers
+    resp_headers = make_call(example).resp_headers
 
     case :proplists.get_value("routespec", resp_headers, nil) do
       nil ->
@@ -97,6 +100,21 @@ defmodule Routes.SpecExamplesTest do
     end
   end
 
+  defp make_call(example) do
+    if example.spec in ["BitesizeSubjects", "NewsArticlePage"] do
+      with_mocks([
+        {PreflightTransformers.BitesizeSubjectsPlatformSelector, [],
+         [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]},
+        {PreflightTransformers.AssetTypePlatformSelector, [],
+         [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]}
+      ]) do
+        make_call(:get, example.path, example.headers)
+      end
+    else
+      make_call(:get, example.path, example.headers)
+    end
+  end
+
   defp make_call(method, path, headers) do
     conn(method, path)
     |> put_headers(headers)
@@ -107,5 +125,9 @@ defmodule Routes.SpecExamplesTest do
     Enum.reduce(headers, conn, fn {header, value}, conn_acc ->
       put_req_header(conn_acc, header, value)
     end)
+  end
+
+  defp add_platform(envelope, platform) do
+    Envelope.add(envelope, :private, %{platform: platform})
   end
 end
