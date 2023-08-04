@@ -99,6 +99,19 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == ["/some//path//with//multiple///forward////slashes"]
   end
 
+  test "redirect has expected cache-control values set" do
+    conn =
+      incoming_request("/a-page/")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+
+    assert get_resp_header(conn, "cache-control") == [
+             "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
+           ]
+  end
+
   test "does not issue open redirects" do
     conn =
       incoming_request("https://example.com//foo.com/")
