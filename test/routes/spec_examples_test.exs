@@ -79,7 +79,7 @@ defmodule Routes.SpecExamplesTest do
   end
 
   defp validate_example(example) do
-    resp_headers = maybe_mock_preflight_and_call(example).resp_headers
+    resp_headers = make_call(example).resp_headers
 
     case :proplists.get_value("routespec", resp_headers, nil) do
       nil ->
@@ -100,30 +100,18 @@ defmodule Routes.SpecExamplesTest do
     end
   end
 
-  # 'mock_preflight_transformer_map' must incorporate mapping specifications for preflight
-  # transformers that interact with external downstream services.
-  # For each specification included in the mock map, the corresponding preflight transformer
-  # will be mocked to provide platform-specific responses for the current example.
-  # This approach avoids the need to mock downstream service calls for every example that
-  # utilizes preflight transformers, as the preflight transformer itself will be mocked
-  # based on the specific platform being considered in each case.
-  @mock_preflight_transformer_map %{
-    "BitesizeSubjects" => BitesizeSubjectsPlatformSelector,
-    "NewsArticlePage" => AssetTypePlatformSelector
-  }
-
-  defp maybe_mock_preflight_and_call(example) do
-    case Map.get(@mock_preflight_transformer_map, example.spec) do
-      nil ->
+  defp make_call(example) do
+    if example.spec in ["BitesizeSubjects", "NewsArticlePage"] do
+      with_mocks([
+        {PreflightTransformers.BitesizeSubjectsPlatformSelector, [],
+         [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]},
+        {PreflightTransformers.AssetTypePlatformSelector, [],
+         [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]}
+      ]) do
         make_call(:get, example.path, example.headers)
-
-      transformer_module ->
-        with_mock(
-          Module.concat([PreflightTransformers, transformer_module]),
-          call: fn envelope -> {:ok, Envelope.add(envelope, :private, %{platform: example.platform})} end
-        ) do
-          make_call(:get, example.path, example.headers)
-        end
+      end
+    else
+      make_call(:get, example.path, example.headers)
     end
   end
 
@@ -137,5 +125,9 @@ defmodule Routes.SpecExamplesTest do
     Enum.reduce(headers, conn, fn {header, value}, conn_acc ->
       put_req_header(conn_acc, header, value)
     end)
+  end
+
+  defp add_platform(envelope, platform) do
+    Envelope.add(envelope, :private, %{platform: platform})
   end
 end
