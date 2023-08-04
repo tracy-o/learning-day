@@ -15,14 +15,14 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
           fetch_data(envelope)
 
         {true, "learning"} ->
-          fetch_data(envelope)
-          {:error, :ares_data_dial_learning_mode}
+          {_state, envelope, _metadata} = fetch_data(envelope)
+          {:error, envelope, :ares_data_dial_learning_mode}
 
         {false, _} ->
-          {:error, :invalid_path}
+          {:error, envelope, :invalid_path}
 
         _ ->
-          {:error, :ares_data_dial_off}
+          {:error, envelope, :ares_data_dial_off}
       end
 
     envelope =
@@ -34,7 +34,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
             Envelope.add(envelope, :private, %{platform: "MozartNews"})
           end
 
-        _ ->
+        {:error, envelope, _metadata} ->
           if stack_id() == "joan" do
             Envelope.add(envelope, :private, %{platform: "MozartNews"})
           else
