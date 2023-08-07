@@ -17,6 +17,9 @@ defroutefile "Main" do
   redirect "/news/popular/read", to: "/news", status: 302
 
   redirect "/news/contact-us/editorial", to: "/news/55077304", status: 302
+  redirect "/news/contact-us/school-report-feedback", to: "/teach/young-reporter/what-is-bbc-young-reporter/z6ncf82", status: 301
+  redirect "/news/contact-us/school-report-subscribe", to: "/send/u58606905", status: 301
+
   redirect "/news/help", to: "/news", status: 302
   redirect "/news/also_in_the_news", to: "/news", status: 302
   redirect "/news/cop26-alerts", to: "/news/help-58765412", status: 302
@@ -271,6 +274,11 @@ defroutefile "Main" do
     ]
   end
 
+  redirect "/news/16630456", to: "/news/events/scotland-decides", status: 301
+  redirect "/news/uk-politics-33256201", to: "/news/politics/eu_referendum", status: 301
+  redirect "/news/election-2017-39946901", to: "/news/election-2019-50459517", status: 301
+  redirect "/news/election/2015/live", to: "/news/live/election-2015-32753161", status: 301
+
   handle "/news/election/2015", using: "NewsWebcoreIndex"
   handle "/news/election/2015/england", using: "NewsWebcoreIndex"
   handle "/news/election/2015/northern_ireland", using: "NewsWebcoreIndex"
@@ -470,6 +478,8 @@ defroutefile "Main" do
   redirect "/news/correspondents/willgompertz", to: "/news/topics/cvrkv4xp7ret", status: 301, ttl: 3600
   redirect "/news/correspondents/wyredavies", to: "/news/topics/cqypkzl0n79t", status: 301, ttl: 3600
 
+  redirect "/news/science-environment-34320399", to: "/news/topics/cmj34zmwm1zt/climate-change", status: 301
+
   # News Blogs
   redirect "/news/blogs/trending", to: "/news/topics/cme72mv58q4t", status: 301, ttl: 3600
   redirect "/news/blogs/the_papers", to: "/news/topics/cpml2v678pxt", status: 301, ttl: 3600
@@ -632,6 +642,11 @@ defroutefile "Main" do
   handle "/news/sport1/*any", using: "NewsArchive"
   handle "/news/bigscreen/*any", using: "NewsArchive"
 
+  redirect "/news/uk-england-52934822", to: "/news/uk-54373904", status: 301
+  redirect "/news/uk/newsnightlive", to: "/programmes/b006mk25", status: 301
+
+  redirect "/news/world-39146653", to: "/news/reality_check", status: 301
+
   # News RSS feeds
   handle "/news/rss.xml", using: "NewsRss"
   handle "/news/:id/rss.xml", using: "NewsRss"
@@ -653,7 +668,13 @@ defroutefile "Main" do
   handle "/news/local_news_slice/*any", using: "NewsUk"
   handle "/news/northern_ireland/*any", using: "NewsUk"
   handle "/news/politics/*any", using: "NewsUk"
+
+  redirect "/news/health-52300114", to: "/news/resources/idt-29ceaf8c-03db-47b3-9318-0df359669f8f", status: 301
+  redirect "/news/resources/idt-sh/boeing_two_deadly_crashes", to: "/news/extra/IFtb42kkNv/boeing-two-deadly-crashes", status: 301
+  redirect "/news/resources/idt-sh/the_boy_in_the_photo", to: "/news/extra/WkiLgbPpdd/boy-in-the-photo", status: 301
+
   handle "/news/resources/*any", using: "News"
+
   handle "/news/rss/*any", using: "NewsRssSection"
   handle "/news/science-environment/*any", using: "NewsScienceAndTechnology"
   handle "/news/scotland/*any", using: "NewsUk"
