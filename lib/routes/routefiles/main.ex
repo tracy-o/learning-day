@@ -3297,6 +3297,10 @@ defroutefile "Main" do
   handle "/music", using: "Music"
 
   # Bitesize
+  # GCSE Eduqas Science deprecation - Study guide redirects
+  redirect "/bitesize/guides/zcxmfcw/revision/1", to: "/bitesize/guides/zgmpgdm/revision/1", status: 301
+  redirect "/bitesize/guides/z9m6v9q/revision/2", to: "/bitesize/guides/z8gx3k7/revision/2", status: 301
+
   # KS3 Maths study guide redirects
   redirect "/bitesize/guides/zvybkqt/revision/2", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
   redirect "/bitesize/guides/zvybkqt/revision/3", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
