@@ -39,6 +39,45 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirectorTest do
     assert get_resp_header(conn, "location") == []
   end
 
+  test "no redirect when path is a future bespoke content on .com" do
+    conn =
+      incoming_request("/future/bespoke/follow-the-food/the-forgotten-plants-that-could-excite-our-tastebuds/")
+      |> Map.put(:host, "www.bbc.com")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 200
+    assert conn.resp_body == "not being redirected"
+    assert get_resp_header(conn, "location") == []
+  end
+
+  test "redirects when path is a future bespoke content on .co.uk" do
+    conn =
+      incoming_request("/future/bespoke/follow-the-food/the-forgotten-plants-that-could-excite-our-tastebuds/")
+      |> Map.put(:host, "www.bbc.co.uk")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+
+    assert get_resp_header(conn, "location") == [
+             "/future/bespoke/follow-the-food/the-forgotten-plants-that-could-excite-our-tastebuds"
+           ]
+  end
+
+  test "redirects when path is a non-future bespoke content on .com" do
+    conn =
+      incoming_request("/future/article/20230802-what-is-the-best-clothing-to-keep-you-cool/")
+      |> Map.put(:host, "www.bbc.com")
+      |> TrailingSlashRedirector.call([])
+
+    assert conn.status == 301
+    assert conn.resp_body == ""
+
+    assert get_resp_header(conn, "location") == [
+             "/future/article/20230802-what-is-the-best-clothing-to-keep-you-cool"
+           ]
+  end
+
   test "redirect when root path has trailing slashes" do
     conn =
       incoming_request("/a-page///")

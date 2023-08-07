@@ -10,7 +10,7 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if trailing_slash?(conn) do
+    if should_redirect_trailing_slash?(conn) do
       redirect(conn)
     else
       conn
@@ -60,7 +60,17 @@ defmodule BelfrageWeb.Plugs.TrailingSlashRedirector do
     end
   end
 
-  defp trailing_slash?(%{request_path: path}) do
-    path != "/" and String.ends_with?(path, "/")
+  defp should_redirect_trailing_slash?(%{host: host, request_path: path}) do
+    path != "/" and String.ends_with?(path, "/") and not dotcom_bespoke?(host, path)
+  end
+
+  @dotcom_paths ["/culture/bespoke/", "/future/bespoke/", "/travel/bespoke/", "/worklife/bespoke"]
+
+  defp dotcom_bespoke?(host, request_path) do
+    String.ends_with?(host, ".com") and
+      Enum.any?(@dotcom_paths, fn dotcom_path ->
+        # PERF this replaces String.contains? producing a 5X gain
+        :binary.match(request_path, dotcom_path) != :nomatch
+      end)
   end
 end
