@@ -14,7 +14,7 @@ defmodule Routes.Specs.WelshSearch do
     }
   end
 
-  defp query_params_allowlist("live"), do: ["q", "page", "d"]
+  defp query_params_allowlist("live"), do: ["q", "page", "d", "seqId"]
   defp query_params_allowlist(_production_env), do: query_params_allowlist("live") ++ ["contentenv"]
 
 end
