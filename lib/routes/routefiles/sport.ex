@@ -1734,29 +1734,93 @@ defroutefile "Sport" do
   handle "/sport/:discipline/:id.json", using: "SportAmp"
 
   ## Sport Stories - use query string params in example URLs to use live data via Mozart
-  handle "/sport/:id.app", using: "SportMajorStoryPage"
-  handle "/sport/:id", using: "SportMajorStoryPage"
-  handle "/sport/athletics/:id.app", using: "SportMajorStoryPage"
-  handle "/sport/athletics/:id", using: "SportMajorStoryPage"
-  handle "/sport/cricket/:id.app", using: "SportCricketStoryPage"
-  handle "/sport/cricket/:id", using: "SportCricketStoryPage"
-  handle "/sport/cycling/:id.app", using: "SportMajorStoryPage"
-  handle "/sport/cycling/:id", using: "SportMajorStoryPage"
-  handle "/sport/football/:id.app", using: "SportFootballStoryPage"
-  handle "/sport/football/:id", using: "SportFootballStoryPage"
-  handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage"
-  handle "/sport/formula1/:id", using: "SportFormula1StoryPage"
-  handle "/sport/golf/:id.app", using: "SportMajorStoryPage"
-  handle "/sport/golf/:id", using: "SportMajorStoryPage"
-  handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage"
-  handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage"
-  handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage"
-  handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage"
-  handle "/sport/tennis/:id.app", using: "SportMajorStoryPage"
-  handle "/sport/tennis/:id", using: "SportMajorStoryPage"
+  handle "/sport/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
 
-  handle "/sport/:discipline/:id.app", using: "SportStoryPage"
-  handle "/sport/:discipline/:id", using: "SportStoryPage"
+  handle "/sport/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/athletics/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/athletics/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cricket/:id.app", using: "SportCricketStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cricket/:id", using: "SportCricketStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cycling/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cycling/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/football/:id.app", using: "SportFootballStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/football/:id", using: "SportFootballStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/formula1/:id", using: "SportFormula1StoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/golf/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/golf/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/tennis/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/tennis/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/:discipline/:id.app", using: "SportStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/:discipline/:id", using: "SportStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
 
   # Sport catch-all
   handle "/sport/*any", using: "Sport"

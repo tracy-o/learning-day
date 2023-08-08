@@ -127,6 +127,23 @@ defmodule BelfrageWeb.Validators do
   end
 
   @doc """
+  Validates numeric CPS IDs. For example Sport CPS IDs are typically numeric.
+  Documentation on short ID generation: https://confluence.dev.bbc.co.uk/display/cps/Generating+Short+IDs
+  ## Examples
+    iex> is_numeric_cps_id?("23247541")
+    true
+
+    iex> is_numeric_cps_id?("world-europe-66026851")
+    false
+
+    iex> is_numeric_cps_id?("zx11pk6ve3kkb")
+    false
+  """
+  def is_numeric_cps_id?(param) do
+    String.match?(param, ~r/^[0-9]{5,9}/)
+  end
+
+  @doc """
   ## Examples
     iex> is_guid?("ea49bb5e-9a7d-4456-98df-b7087ecc0788")
     true
