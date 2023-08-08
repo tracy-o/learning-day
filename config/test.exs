@@ -72,7 +72,7 @@ config :cachex, :limit,
   options: []
 
 config :logger, :console,
-  format: {Belfrage.Logger.Formatter, :format},
+  format: {Belfrage.Logger.Formatter, :app},
   colors: [enabled: false],
   metadata: :all
 

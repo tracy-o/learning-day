@@ -1,26 +1,6 @@
 defmodule Belfrage.Logger.Formatter do
   require Logger
 
-  def app(level, message, timestamp, metadata) do
-    case Keyword.get(metadata, :cloudwatch) do
-      true ->
-        ""
-
-      _ ->
-        format(level, message, timestamp, metadata)
-    end
-  end
-
-  def cloudwatch(level, message, timestamp, metadata) do
-    case Keyword.get(metadata, :cloudwatch) do
-      true ->
-        format(level, message, timestamp, metadata)
-
-      _ ->
-        ""
-    end
-  end
-
   def access(level, message, timestamp, metadata) do
     case Keyword.get(metadata, :access) do
       true ->
@@ -31,7 +11,7 @@ defmodule Belfrage.Logger.Formatter do
     end
   end
 
-  def format(level, message, timestamp, metadata) do
+  def app(level, message, timestamp, metadata) do
     [
       Json.encode!(
         Map.merge(
@@ -120,7 +100,6 @@ defmodule Belfrage.Logger.Formatter do
       :gl,
       :pid,
       :mfa,
-      :cloudwatch,
       :crash_reason
     ])
   end
