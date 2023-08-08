@@ -80,3 +80,9 @@ config :logger, :console,
 config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 1
+
+config :os_mon,
+  start_cpu_sup: false,
+  start_disksup: false,
+  start_memsup: false,
+  start_os_sup: false

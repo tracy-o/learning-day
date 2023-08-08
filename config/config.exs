@@ -104,5 +104,11 @@ config :aws_ex_ray,
 config :plug_cowboy,
   conn_in_exception_metadata: false
 
+config :os_mon,
+  start_cpu_sup: false,
+  start_disksup: false,
+  start_memsup: true,
+  start_os_sup: false
+
 import_config "dials.exs"
 import_config "#{Mix.env()}.exs"
