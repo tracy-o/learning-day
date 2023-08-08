@@ -3,13 +3,16 @@ defmodule Belfrage.Cache.SupervisorTest do
 
   import Cachex.Spec, only: [{:limit, 1}]
   import Fixtures.Envelope
+  import Mock
+
+  alias Belfrage.Cache.Supervisor, as: CacheSup
 
   @belfrage_local_cache :cache
   @test_cache :test_cache
   @preflight_metadata_cache :preflight_metadata_cache
 
   setup_all do
-    conf = Application.get_env(:cachex, :limit)
+    conf = get_local_cache_limit_config()
 
     overflow = 5
     overflow_size = conf[:size] + overflow
@@ -74,7 +77,7 @@ defmodule Belfrage.Cache.SupervisorTest do
     end
 
     test "size limit and reclaim policy configured" do
-      conf = Application.get_env(:cachex, :limit)
+      conf = get_local_cache_limit_config()
       limit = limit(size: conf[:size], policy: conf[:policy], reclaim: conf[:reclaim], options: conf[:options])
 
       assert [limit] ==
@@ -82,6 +85,39 @@ defmodule Belfrage.Cache.SupervisorTest do
                |> elem(1)
                |> Tuple.to_list()
                |> Enum.filter(fn x -> is_tuple(x) and elem(x, 0) == :limit end)
+    end
+  end
+
+  describe "cache limit config" do
+    test "uses size if cache size option is specified" do
+      config = [
+        limit: [
+          size: size = 10,
+          policy: policy = Cachex.Policy.LRW,
+          reclaim: reclaim = 0.3,
+          options: []
+        ]
+      ]
+
+      assert {:limit, size, policy, reclaim, []} == CacheSup.get_limit_config(config)
+    end
+
+    test_with_mock(
+      "calculates size if ram_allocated and average_entry_size_kb options are set",
+      :memsup,
+      get_system_memory_data: fn -> [total_memory: 1024 ** 3] end
+    ) do
+      config = [
+        limit: [
+          average_entry_size_kb: 100,
+          ram_allocated: 0.1,
+          policy: policy = Cachex.Policy.LRW,
+          reclaim: reclaim = 0.3,
+          options: []
+        ]
+      ]
+
+      assert {:limit, 1049, policy, reclaim, []} == CacheSup.get_limit_config(config)
     end
   end
 
@@ -110,5 +146,10 @@ defmodule Belfrage.Cache.SupervisorTest do
 
       :timer.sleep(1)
     end)
+  end
+
+  defp get_local_cache_limit_config() do
+    config = Application.get_env(:belfrage, :cache)
+    config[:limit]
   end
 end

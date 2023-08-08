@@ -64,13 +64,16 @@ config :belfrage,
       reclaim: 0.5,
       options: []
     ]
+  ],
+  cache: [
+    limit: [
+      size: 6,
+      # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
+      policy: Cachex.Policy.LRW,
+      reclaim: 0.5,
+      options: []
+    ]
   ]
-
-config :cachex, :limit,
-  size: 6,
-  policy: Cachex.Policy.LRW,
-  reclaim: 0.5,
-  options: []
 
 config :logger, :console,
   format: {Belfrage.Logger.Formatter, :app},

@@ -72,14 +72,17 @@ config :belfrage,
       reclaim: 0.3,
       options: []
     ]
+  ],
+  cache: [
+    limit: [
+      average_entry_size_kb: 170,
+      ram_allocated: 0.4,
+      # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
+      policy: Cachex.Policy.LRW,
+      reclaim: 0.3,
+      options: []
+    ]
   ]
-
-config :cachex, :limit,
-  size: 36_000,
-  # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
-  policy: Cachex.Policy.LRW,
-  reclaim: 0.3,
-  options: []
 
 config :logger,
   backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :access}]
