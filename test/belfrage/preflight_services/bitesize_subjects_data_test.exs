@@ -59,7 +59,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
                {:ok, bitesize_subject_label}
     end
 
-    test "returns data error when phase has not been determined" do
+    test "returns empty label if phase is empty object" do
       expect(HTTPMock, :execute, fn %HTTP.Request{url: @url}, :Preflight ->
         {:ok,
          %HTTP.Response{
@@ -69,7 +69,7 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{}, ""} = PreflightService.call(@envelope, @service)
     end
 
     test "returns not found when returns a 404" do

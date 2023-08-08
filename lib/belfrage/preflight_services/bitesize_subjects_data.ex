@@ -23,5 +23,6 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsData do
 
   @impl PreflightService
   def handle_response(%{"data" => %{"phase" => %{"label" => label}}}), do: {:ok, label}
+  def handle_response(%{"data" => %{"phase" => %{}}}), do: {:ok, ""}
   def handle_response(_response), do: {:error, :preflight_data_error}
 end
