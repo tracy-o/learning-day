@@ -105,28 +105,6 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns MorphRouter for live environment and does not call data source",
-    PreflightService,
-    call: fn %Envelope{}, @service ->
-      {:ok, %Envelope{private: %Envelope.Private{checkpoints: %{preflight_service_request_timing: -576_460_641_580}}},
-       "Primary"}
-    end
-  ) do
-    request = %Envelope.Request{path: @path}
-    private = %Envelope.Private{production_environment: "live"}
-    envelope = %Envelope{request: request, private: private}
-
-    assert BitesizeSubjectsPlatformSelector.call(envelope) ==
-             {:ok,
-              %Envelope{
-                private: %Envelope.Private{platform: "MorphRouter", production_environment: "live"},
-                request: request
-              }}
-
-    assert_not_called(PreflightService.call(envelope, "BitesizeSubjectsData"))
-  end
-
-  test_with_mock(
     "returns an envelope with an external request latency checkpoint",
     PreflightService,
     call: fn %Envelope{}, @service ->

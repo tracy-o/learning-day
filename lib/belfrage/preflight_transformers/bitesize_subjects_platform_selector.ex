@@ -4,19 +4,15 @@ defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelector do
 
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    if envelope.private.production_environment == "live" do
-      {:ok, Envelope.add(envelope, :private, %{platform: "MorphRouter"})}
-    else
-      case PreflightService.call(envelope, "BitesizeSubjectsData") do
-        {:ok, envelope, subject_level} ->
-          {:ok, Envelope.add(envelope, :private, %{platform: get_platform(subject_level)})}
+    case PreflightService.call(envelope, "BitesizeSubjectsData") do
+      {:ok, envelope, subject_level} ->
+        {:ok, Envelope.add(envelope, :private, %{platform: get_platform(subject_level)})}
 
-        {:error, envelope, :preflight_data_not_found} ->
-          {:error, envelope, 404}
+      {:error, envelope, :preflight_data_not_found} ->
+        {:error, envelope, 404}
 
-        {:error, envelope, :preflight_data_error} ->
-          {:error, envelope, 500}
-      end
+      {:error, envelope, :preflight_data_error} ->
+        {:error, envelope, 500}
     end
   end
 

@@ -9,7 +9,6 @@ defmodule Routes.Specs.BitesizeSubjects do
           language_from_cookie: true,
           request_pipeline: [
             "ComToUKRedirect",
-            "BitesizeSubjectsPlatformDiscriminator",
             "LambdaOriginAlias",
             "Language"
           ],

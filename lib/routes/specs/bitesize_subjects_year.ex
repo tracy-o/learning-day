@@ -3,9 +3,9 @@ defmodule Routes.Specs.BitesizeSubjectsYear do
     %{
       specs: %{
         owner: "bitesize-production@lists.forge.bbc.co.uk",
-        platform: "MorphRouter",
+        platform: "Webcore",
         language_from_cookie: true,
-        request_pipeline: ["ComToUKRedirect", "BitesizeSubjectsPlatformDiscriminator", "LambdaOriginAlias", "Language"],
+        request_pipeline: ["ComToUKRedirect"],
         examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
       }
     }
