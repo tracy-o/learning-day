@@ -39,6 +39,7 @@ config :belfrage,
   dotcom_worklife_endpoint: "https://worklife-features.gnl-test.bbcverticals.com",
   bbcx_endpoint: "https://web.test.bbcx-internal.com",
   electoral_commission_endpoint: "https://api.electoralcommission.org.uk",
+  childrens_responsive_endpoint: "https://cbbc-web.test.api.bbc.co.uk",
   sup_observer_timer_ms: 10,
   # Arbitrary long values so that the corresponding operations are never
   # executed in tests

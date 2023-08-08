@@ -23,6 +23,7 @@ use Mix.Config
   {"DOTCOM_WORKLIFE_ENDPOINT", :default},
   {"BBCX_ENDPOINT", :default},
   {"ELECTORAL_COMMISSION_ENDPOINT", :default},
+  {"CHILDRENS_RESPONSIVE_ENDPOINT", :default},
   {"PRODUCTION_ENVIRONMENT", :default},
   {"PREVIEW_MODE", :default},
   {"STACK_NAME", :default},

@@ -3252,6 +3252,10 @@ defroutefile "Main" do
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
   handle "/archive/*any", using: "Archive"
 
+  # CBBC
+  handle "/cbbc/findoutmore/help-me-out-exercise", using: "CBBCArticlePage", only_on: "test"
+  handle "/cbbc/*any", using: "CBBCLegacy"
+
   # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   handle "/newsround/:id.amp", using: "NewsroundAmp"
