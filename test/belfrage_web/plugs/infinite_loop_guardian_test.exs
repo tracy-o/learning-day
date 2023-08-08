@@ -1,5 +1,5 @@
 defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
   import ExUnit.CaptureLog
