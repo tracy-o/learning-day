@@ -91,6 +91,10 @@ defmodule Belfrage.Clients.HTTP do
         :telemetry.execute([:belfrage, :http, :pools, :error, :timeout], %{count: 1})
         response
 
+      {:error, %HTTP.Error{reason: :invalid_request_target}} ->
+        :telemetry.execute([:belfrage, :http, :client, :error, :invalid_request_target], %{count: 1})
+        response
+
       {:error, %HTTP.Error{reason: _reason}} ->
         :telemetry.execute([:belfrage, :http, :client, :error], %{count: 1})
         response
