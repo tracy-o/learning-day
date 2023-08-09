@@ -84,5 +84,19 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
 
       assert {:error, %Envelope{}, :preflight_data_not_found} = PreflightService.call(@envelope, @service)
     end
+
+    test "returns :preflight_data_error if phase contains a key other than label" do
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: @url}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{},
+           status_code: 200,
+           body: "{\"data\": {\"phase\": {\"some_key\": \"some_value\"}}}"
+         }}
+      end)
+
+      assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
+    end
+
   end
 end
