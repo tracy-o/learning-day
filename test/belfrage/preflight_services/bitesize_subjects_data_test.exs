@@ -97,6 +97,5 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
 
       assert {:error, %Envelope{}, :preflight_data_error} = PreflightService.call(@envelope, @service)
     end
-
   end
 end
