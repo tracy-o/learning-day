@@ -1,11 +1,16 @@
 defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
   use ExUnit.Case
   use Plug.Test
-  alias Belfrage.Clients.{HTTP, HTTPMock}
-  alias Belfrage.Envelope
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1, clear_preflight_metadata_cache: 0]
-  alias Belfrage.Behaviours.PreflightService
+
+  alias Belfrage.{
+    Behaviours.PreflightService,
+    Clients.HTTP,
+    Clients.HTTPMock,
+    Envelope,
+    Envelope.Private
+  }
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @url @fabl_endpoint <> "/module/education-metadata?id=zgkw2hv&preflight=true&service=bitesize&type=subject"
@@ -33,7 +38,8 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => ^bitesize_subject_label}}}} =
+               PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}
@@ -53,7 +59,8 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, %Envelope{}, ^bitesize_subject_label} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => ^bitesize_subject_label}}}} =
+               PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {"BitesizeSubjectsData", "/bitesize/subjects/zgkw2hv"}) ==
                {:ok, bitesize_subject_label}
@@ -69,7 +76,8 @@ defmodule Belfrage.PreflightServices.BitesizeSubjectsDataTest do
          }}
       end)
 
-      assert {:ok, %Envelope{}, ""} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => ""}}}} =
+               PreflightService.call(@envelope, @service)
     end
 
     test "returns not found when returns a 404" do

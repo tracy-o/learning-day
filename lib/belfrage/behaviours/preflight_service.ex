@@ -9,14 +9,14 @@ defmodule Belfrage.Behaviours.PreflightService do
 
   @http_client Application.compile_env(:belfrage, :http_client, HTTP)
 
-  @spec call(Envelope.t(), String.t()) :: {:ok, Envelope.t(), any()} | {:error, Envelope.t(), atom()}
+  @spec call(Envelope.t(), String.t()) :: {:ok, Envelope.t()} | {:error, Envelope.t(), atom()}
   def call(envelope, service) do
     metric([:preflight, :request], %{preflight_service: service})
     cache_key = preflight_service_callback(service).cache_key(envelope)
 
     case Cache.PreflightMetadata.get(service, cache_key) do
       {:ok, metadata} ->
-        {:ok, envelope, metadata}
+        {:ok, add_metadata(envelope, service, metadata)}
 
       {:error, :preflight_data_not_found} ->
         case make_request(envelope, service) do
@@ -50,7 +50,7 @@ defmodule Belfrage.Behaviours.PreflightService do
       case preflight_service_callback(service).handle_response(decoded) do
         {:ok, data} ->
           Cache.PreflightMetadata.put(service, cache_key, data)
-          {:ok, envelope, data}
+          {:ok, add_metadata(envelope, service, data)}
 
         {:error, reason} ->
           metric([:preflight, :error], %{preflight_service: service, error_type: "invalid_response"})
@@ -136,5 +136,10 @@ defmodule Belfrage.Behaviours.PreflightService do
 
   defp metric(metric, measurement \\ %{}, dimensions) do
     :telemetry.execute(metric, measurement, dimensions)
+  end
+
+  defp add_metadata(envelope = %Envelope{private: private}, service, metadata) do
+    preflight_metadata = Map.merge(private.preflight_metadata, %{service => metadata})
+    Envelope.add(envelope, :private, %{preflight_metadata: preflight_metadata})
   end
 end
