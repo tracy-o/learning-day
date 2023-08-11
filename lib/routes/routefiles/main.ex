@@ -967,6 +967,7 @@ defroutefile "Main" do
   redirect "/sinhala/index.html", to: "/sinhala", status: 301
   redirect "/somali/index.html", to: "/somali", status: 301
   redirect "/swahili/index.html", to: "/swahili", status: 301
+  redirect "/tamil/index.html", to: "/tamil", status: 301
 
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
