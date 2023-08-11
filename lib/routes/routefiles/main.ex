@@ -948,6 +948,9 @@ defroutefile "Main" do
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
+  ## World Service - Homepage Redirects
+  redirect "/afrique/index.html", to: "/afrique", status: 301
+
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
   redirect "/hindi/iswoty", to: "/hindi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
