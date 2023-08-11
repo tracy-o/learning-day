@@ -13,6 +13,7 @@ use Mix.Config
   {"KARANGA_ENDPOINT", :default},
   {"ARES_ENDPOINT", :default},
   {"PHILIPPA_ENDPOINT", :default},
+  {"THREE_ENDPOINT", :default},
   {"TREVOR_ENDPOINT", :default},
   {"WALTER_ENDPOINT", :default},
   {"DOTCOM_HOMEPAGE_ENDPOINT", :default},

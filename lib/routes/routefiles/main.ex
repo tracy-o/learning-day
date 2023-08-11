@@ -2793,6 +2793,37 @@ defroutefile "Main" do
   handle "/ws/includes/*any", using: "WsIncludes"
   handle "/worldservice/assets/images/*any", using: "WsImages"
 
+  # BBC Three
+
+  redirect "/bbcthree/tag/:id/:page", to: "/bbcthree/category/:id/:page", status: 301
+  redirect "/bbcthree/tag/:id", to: "/bbcthree/category/:id", status: 301
+  redirect "/bbcthree/article/b2a8c0be-5418-4f21-a0ef-992a059136e4", to: "/bbcthree/article/bed59408-8831-42db-b415-2c876017eb5b", status: 301
+  redirect "/bbcthree/item/b6402a4c-30af-4e2a-87a6-5c263279b20b", to: "/bbcthree/terms-and-conditions", status: 301
+  redirect "/bbcthree/item/9602352d-227e-43b9-a030-c0d577ce49d2", to: "/bbcthree/privacy", status: 301
+  handle "/bbcthree/item/:id", using: "ThreeRedirect"
+  
+  handle "/bbcthree/sitemap.xml", using: "ThreeSitemap"
+  handle "/bbcthree/privacy", using: "ThreeInfo"
+  handle "/bbcthree/terms-and-conditions", using: "ThreeInfo"
+  handle "/bbcthree/twitter-polls-terms-and-conditions", using: "ThreeInfo"
+  handle "/bbcthree/category/:id/:page", using: "ThreeCategory" do
+    return_404 if: [
+      !String.match?(id, ~r/^[a-z0-9-]+$/),
+      !integer_in_range?(page, 2..99)
+    ]
+  end
+  handle "/bbcthree/category/:id", using: "ThreeCategory" do
+    return_404 if: !String.match?(id, ~r/^[a-z0-9-]+$/)
+  end
+  handle "/bbcthree/clip/:id", using: "ThreeClip" do
+    return_404 if: !is_guid?(id)
+  end
+  handle "/bbcthree/article/:id", using: "ThreeArticle" do
+    return_404 if: !is_guid?(id)
+  end
+  handle "/bbcthree", using: "ThreeHomePage"
+  handle "/bbcthree/*any", using: "Three"
+
   # Newsletters
 
   handle "/newsletterstest/:id", using: "Newsletter" do
