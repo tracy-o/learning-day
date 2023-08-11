@@ -954,6 +954,8 @@ defroutefile "Main" do
   redirect "/azeri/index.html", to: "/azeri", status: 301
   redirect "/bengali/index.html", to: "/bengali", status: 301
   redirect "/burmese/index.html", to: "/burmese", status: 301
+  redirect "/gahuza/index.html", to: "/gahuza", status: 301
+
 
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
