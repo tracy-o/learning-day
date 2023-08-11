@@ -959,6 +959,7 @@ defroutefile "Main" do
   redirect "/hindi/index.html", to: "/hindi", status: 301
   redirect "/indonesia/index.html", to: "/indonesia", status: 301
   redirect "/kyrgyz/index.html", to: "/kyrgyz", status: 301
+  redirect "/nepali/index.html", to: "/nepali", status: 301
 
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
