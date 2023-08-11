@@ -37,6 +37,18 @@ defmodule Belfrage.Mvt.AllowlistTest do
       raw_headers = Processor.allowlists(envelope).request.raw_headers
       assert Map.has_key?(raw_headers, "bbc-mvt-1")
     end
+
+    test "are not in envelope.request.raw_headers if route_state_id is nil (preflight pipeline failed for multi-platform spec)" do
+      envelope =
+        build_envelope(
+          raw_header: %{"bbc-mvt-1" => "experiment;name;some_value"},
+          mvt_project_id: 1,
+          route_state_id: nil
+        )
+
+      raw_headers = Processor.allowlists(envelope).request.raw_headers
+      refute Map.has_key?(raw_headers, "bbc-mvt-1")
+    end
   end
 
   # When a header key has the format 'mvt-*' its considered an override header.
@@ -169,9 +181,11 @@ defmodule Belfrage.Mvt.AllowlistTest do
   defp build_envelope(opts) do
     raw_headers = Keyword.get(opts, :raw_headers, %{})
     mvt_project_id = Keyword.get(opts, :mvt_project_id, 0)
+    route_state_id = Keyword.get(opts, :route_state_id, {"SomeSpec", "SomePlatform"})
 
     %Envelope{
       private: %Private{
+        route_state_id: route_state_id,
         mvt_project_id: mvt_project_id
       },
       request: %Request{

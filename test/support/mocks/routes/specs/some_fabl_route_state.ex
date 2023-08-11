@@ -1,9 +1,11 @@
 defmodule Routes.Specs.SomeFablRouteState do
-  def specs do
+  def specification do
     %{
-      owner: "Some chap/chapette",
-      runbook: "Some runbook",
-      platform: "Fabl"
+      specs: %{
+        owner: "Some chap/chapette",
+        runbook: "Some runbook",
+        platform: "Fabl"
+      }
     }
   end
 end

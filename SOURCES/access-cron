@@ -1,1 +1,1 @@
-*/5 * * * * component /usr/sbin/logrotate -f /etc/logrotate.d/access
+* * * * * component /usr/sbin/logrotate --state /var/log/component/logrotate.status -f /etc/logrotate.d/access

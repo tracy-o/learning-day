@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceThai do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "MozartSimorgh",
-      request_pipeline: pipeline(production_env)
+      specs: %{
+        platform: "MozartSimorgh",
+        request_pipeline: pipeline(production_env),
+        examples: ["/thai/popular/read", "/thai.json", "/thai.amp"]
+      }
     }
   end
 

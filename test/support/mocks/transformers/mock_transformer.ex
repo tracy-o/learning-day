@@ -47,3 +47,13 @@ defmodule Belfrage.RequestTransformers.MockTransformerRedirect do
     {:stop, envelope}
   end
 end
+
+defmodule Belfrage.RequestTransformers.MockTransformerBad do
+  use Belfrage.Behaviours.Transformer
+
+  @impl Transformer
+
+  def call(envelope) do
+    {:something, envelope}
+  end
+end

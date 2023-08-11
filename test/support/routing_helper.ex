@@ -5,7 +5,7 @@ defmodule Belfrage.Test.RoutingHelper do
   defmacro define_platform(name, attrs) do
     quote do
       defmodule Module.concat([Routes, Platforms, unquote(name)]) do
-        def specs() do
+        def specification() do
           unquote(attrs)
         end
       end
@@ -18,7 +18,17 @@ defmodule Belfrage.Test.RoutingHelper do
   defmacro define_route(name, attrs) do
     quote do
       defmodule Module.concat([Routes, Specs, unquote(name)]) do
-        def specs() do
+        def specification() do
+          unquote(attrs)
+        end
+      end
+    end
+  end
+
+  defmacro define_route_with_env(name, attrs) do
+    quote do
+      defmodule Module.concat([Routes, Specs, unquote(name)]) do
+        def specification(_env) do
           unquote(attrs)
         end
       end

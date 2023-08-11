@@ -1,11 +1,24 @@
 defmodule Routes.Specs.BitesizeGuides do
-  def specs do
+  def specification do
     %{
-      owner: "bitesize-production@lists.forge.bbc.co.uk",
-      platform: "MorphRouter",
-      language_from_cookie: true,
-      personalisation: "test_only",
-      request_pipeline: ["ComToUKRedirect", "Personalisation", "BitesizeGuidesPlatformDiscriminator", "LambdaOriginAlias", "Language"]
+      preflight_pipeline: ["BitesizeGuidesPlatformSelector"],
+      specs: [
+        %{
+          owner: "bitesize-production@lists.forge.bbc.co.uk",
+          platform: "MorphRouter",
+          language_from_cookie: true,
+          request_pipeline: ["ComToUKRedirect", "Language"],
+          examples: []
+        },
+        %{
+          owner: "bitesize-production@lists.forge.bbc.co.uk",
+          platform: "Webcore",
+          language_from_cookie: true,
+          personalisation: "on",
+          request_pipeline: ["ComToUKRedirect"],
+          examples: ["/bitesize/guides/z9ppv4j/revision/1"]
+        }
+      ]
     }
   end
 end

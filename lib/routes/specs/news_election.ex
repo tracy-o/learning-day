@@ -1,7 +1,10 @@
 defmodule Routes.Specs.NewsElection do
-    def specs do
-      %{
-        platform: "MozartNews"
-       }
-    end
+  def specification do
+    %{
+      specs: %{
+        platform: "MozartNews",
+        examples: ["/news/election/2019"]
+      }
+    }
   end
+end

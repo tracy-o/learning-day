@@ -20,6 +20,8 @@ defmodule Belfrage.Test.StubHelper do
         Belfrage.Dials.LiveServer.state(dial_name)
       end
     end)
+
+    :ok
   end
 
   defp transform_dial_value(name, value) do
@@ -33,17 +35,8 @@ defmodule Belfrage.Test.StubHelper do
   any request to an origin will succeed.
   """
   def stub_origins() do
-    Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn request, _platform ->
-      if String.contains?(request.url, "/preview/module/spike-ares-asset-identifier") do
-        {:ok,
-         Belfrage.Clients.HTTP.Response.new(%{
-           status_code: 200,
-           headers: %{},
-           body: "{\"data\": {\"section\": \"business\", \"assetType\": \"ABC\"}}"
-         })}
-      else
-        {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
-      end
+    Mox.stub(Belfrage.Clients.HTTPMock, :execute, fn _request, _platform ->
+      {:ok, Belfrage.Clients.HTTP.Response.new(%{status_code: 200, headers: %{}, body: "OK"})}
     end)
 
     Mox.stub(Belfrage.Clients.LambdaMock, :call, fn _creds, _arn, _payload, _opts ->

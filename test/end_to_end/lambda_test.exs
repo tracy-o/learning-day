@@ -47,12 +47,13 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/200-ok-response")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200,
             [
               {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"},
-              {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+              {"vary",
+               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
               {"bid", "local"},
@@ -62,7 +63,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)
@@ -83,7 +84,7 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/200-ok-response?query[hi]=foo")
-    Router.call(conn, [])
+    Router.call(conn, routefile: Routes.Routefiles.Mock)
   end
 
   test "a failed response from a lambda e2e" do
@@ -97,12 +98,13 @@ defmodule EndToEnd.LambdaTest do
     end)
 
     conn = conn(:get, "/downstream-broken")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {500,
             [
               {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=30"},
-              {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+              {"vary",
+               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
               {"server", "Belfrage"},
               {"bsig", request_hash},
               {"bid", "local"},
@@ -112,7 +114,7 @@ defmodule EndToEnd.LambdaTest do
               {"belfrage-cache-status", "MISS"},
               {"routespec", "SomeRouteState.Webcore"},
               {"belfrage-request-pipeline-trail",
-               "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+               "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
               {"belfrage-response-pipeline-trail",
                "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
             ], response_body} = sent_resp(conn)

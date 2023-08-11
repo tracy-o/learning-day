@@ -6,7 +6,15 @@ defmodule Belfrage.Authentication.SessionState do
     if request.app? do
       request.raw_headers["authorization"]
     else
-      request.cookies["ckns_id"] || request.raw_headers["x-id-oidc-signedin"] == "1"
+      validate_sign_in(request)
+    end
+  end
+
+  defp validate_sign_in(request) do
+    case request.raw_headers["x-id-oidc-signedin"] do
+      "0" -> false
+      "1" -> true
+      _ -> request.cookies["ckns_id"]
     end
   end
 

@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Fabl do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :fabl_endpoint),
       owner: "D&EMorphCoreEngineering@bbc.co.uk",
@@ -14,7 +14,7 @@ defmodule Routes.Platforms.Fabl do
   end
 
   defp pipeline("live") do
-    [:_routespec_pipeline_placeholder, "Personalisation", "CircuitBreaker"]
+    ["SessionState", :_routespec_pipeline_placeholder, "PersonalisationGuardian", "CircuitBreaker"]
   end
 
   defp pipeline(_production_env) do

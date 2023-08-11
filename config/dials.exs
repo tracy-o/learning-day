@@ -2,6 +2,7 @@ import Config
 
 config :belfrage,
   dial_handlers: %{
+    "bbcx_enabled" => Belfrage.Dials.BBCXEnabled,
     "cache_enabled" => Belfrage.Dials.CacheEnabled,
     "ccp_enabled" => Belfrage.Dials.CcpEnabled,
     "circuit_breaker" => Belfrage.Dials.CircuitBreaker,
@@ -13,9 +14,11 @@ config :belfrage,
     "news_apps_hardcoded_response" => Belfrage.Dials.NewsAppsHardcodedResponse,
     "news_apps_variance_reducer" => Belfrage.Dials.NewsAppsVarianceReducer,
     "news_articles_personalisation" => Belfrage.Dials.NewsArticlesPersonalisation,
+    "ni_election_failover" => Belfrage.Dials.NiElectionFailover,
     "non_webcore_ttl_multiplier" => Belfrage.Dials.NonWebcoreTtlMultiplier,
     "obit_mode" => Belfrage.Dials.ObitMode,
     "personalisation" => Belfrage.Dials.Personalisation,
+    "preflight_ares_data_fetch" => Belfrage.Dials.PreflightAresDataFetch,
     "webcore_kill_switch" => Belfrage.Dials.WebcoreKillSwitch,
     "webcore_ttl_multiplier" => Belfrage.Dials.WebcoreTtlMultiplier
   }

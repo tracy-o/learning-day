@@ -1,18 +1,17 @@
 #
 # How to add a route:
-# https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#how-to-add-a-route
+# docs/topics/routing/routing.md#how-to-add-a-route
 # What types of route matcher you can  use:
-# https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
+# docs/topics/routing/route-matcher-types.md
 #
 # How to validate a route:
 # lib/belfrage_web/validators.ex
+#
 
 import BelfrageWeb.Routefile
 
 defroutefile "Sport" do
   # Vanity URLs
-
-  handle "/sport/alpha/homepage", using: "SportAlphaHomePage", platform: "Webcore", examples: ["/sport/alpha/homepage"]
 
   redirect "/sport/0.app", to: "/sport.app", status: 301
   redirect "/sport/0/*any", to: "/sport/*any", status: 301
@@ -21,22 +20,33 @@ defroutefile "Sport" do
   redirect "/sport/articles", to: "/sport", status: 302
   redirect "/sport/:discipline/articles", to: "/sport/:discipline", status: 302
 
-  handle "/sport/articles/:optimo_id", using: "SportStorytellingPage", platform: "Webcore", examples: ["/sport/articles/cx94820kl0mo"] do
+  handle "/sport/articles/:optimo_id", using: "SportStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/sport/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage", platform: "Simorgh", examples: ["/sport/articles/cx94820kl0mo.amp"] do
+  handle "/sport/articles/:optimo_id.app", using: "SportStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/sport/:discipline/articles/:optimo_id", using: "SportStorytellingPage", platform: "Webcore", examples: [] do
+  handle "/sport/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/sport/:discipline/articles/:optimo_id", using: "SportStorytellingPage" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
     ]
   end
 
-  handle "/sport/:discipline/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage", platform: "Simorgh", examples: [] do
+  handle "/sport/:discipline/articles/:optimo_id.app", using: "SportStorytellingAppPage" do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
+  end
+
+  handle "/sport/:discipline/articles/:optimo_id.amp", using: "WorldServiceSportArticleAmpPage" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -842,10 +852,38 @@ defroutefile "Sport" do
   redirect "/sport/rugby-union/teams/worcester/rss.xml", to: "https://feeds.bbci.co.uk/sport/f9bcd500-e383-408f-9177-6d8468d6ae35/rss.xml", status: 301, ttl: 3600
 
   ## Sport RSS feeds
-  handle "/sport/rss.xml", using: "SportTopicRss", platform: "Fabl", examples: ["/sport/rss.xml"]
-  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", platform: "Karanga", examples: ["/sport/football/rss.xml"]
-  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss", platform: "Karanga", examples: ["/sport/football/premier-league/rss.xml"]
-  handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss", platform: "Karanga", examples: ["/sport/football/european-championship/2016/rss.xml"]
+  handle "/sport/rss.xml", using: "SportTopicRss"
+  handle "/sport/scotland/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/scottish/rss.xml", using: "SportTopicRss"
+  handle "/sport/rugby-union/scottish/rss.xml", using: "SportTopicRss"
+  handle "/sport/wales/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/welsh/rss.xml", using: "SportTopicRss"
+  handle "/sport/rugby-union/welsh/rss.xml", using: "SportTopicRss"
+  handle "/sport/northern-ireland/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/irish/rss.xml", using: "SportTopicRss"
+  handle "/sport/rugby-union/irish/rss.xml", using: "SportTopicRss"
+  handle "/sport/northern-ireland/gaelic-games/rss.xml", using: "SportTopicRss"
+  handle "/sport/northern-ireland/motorbikes/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/world-cup/rss.xml", using: "SportTopicRss"
+  handle "/sport/disability-sport/rss.xml", using: "SportTopicRss"
+  handle "/sport/winter-sports/rss.xml", using: "SportTopicRss"
+  handle "/sport/motorsport/rss.xml", using: "SportTopicRss"
+  handle "/sport/american-football/rss.xml", using: "SportTopicRss"
+  handle "/sport/basketball/rss.xml", using: "SportTopicRss"
+  handle "/sport/boxing/rss.xml", using: "SportTopicRss"
+  handle "/sport/golf/rss.xml", using: "SportTopicRss"
+  handle "/sport/snooker/rss.xml", using: "SportTopicRss"
+  handle "/sport/netball/rss.xml", using: "SportTopicRss"
+  handle "/sport/mixed-martial-arts/rss.xml", using: "SportTopicRss"
+  handle "/sport/rugby-union/english/rss.xml", using: "SportTopicRss"
+  handle "/sport/sports-personality/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/european/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/european-championship/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/fa-cup/rss.xml", using: "SportTopicRss"
+  handle "/sport/football/premier-league/rss.xml", using: "SportTopicRss"
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid"
+  handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss"
+  handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss"
 
   ## Sport Supermovers redirects
   redirect "/sport/football/supermovers.app", to: "/teach/supermovers", status: 301
@@ -914,58 +952,76 @@ defroutefile "Sport" do
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
   ## Sport unsupported data page redirects handled by Mozart
-  handle "/sport/commonwealth-games/home-nations/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/commonwealth-games/home-nations", 302}, {"/sport/commonwealth-games/home-nations.app", 302}]
-  handle "/sport/commonwealth-games/medals/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/commonwealth-games/medals/countries/canada", 302}, {"/sport/commonwealth-games/medals/countries/british-virgin-islands.app", 302}]
-  handle "/sport/commonwealth-games/results/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/commonwealth-games/results/sports/hockey/hockey-women", 302}, {"/sport/commonwealth-games/results.app", 302}]
-  handle "/sport/commonwealth-games/schedule/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/commonwealth-games/schedule/sports/gymnastics", 302}, {"/sport/commonwealth-games/schedule/sports/volleyball.app", 302}]
-  handle "/sport/commonwealth-games/sports/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/commonwealth-games/sports", 302}, {"/sport/commonwealth-games/sports.app", 302}]
-  handle "/sport/football/european-championship/2012/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/football/european-championship/2012", 301}, {"/sport/football/european-championship/2012.app", 301}]
-  handle "/sport/football/european-championship/2016/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/football/european-championship/2016", 301}, {"/sport/football/european-championship/2016.app", 301}]
-  handle "/sport/football/european-championship/euro-2016/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/football/european-championship/euro-2016", 301}, {"/sport/football/european-championship/euro-2016.app", 301}]
-  handle "/sport/football/european-championship/schedule/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/football/european-championship/schedule/knockout-stage", 302}, {"/sport/football/european-championship/schedule.app", 302}]
-  handle "/sport/olympics/2012/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/olympics/2012", 301}, {"/sport/olympics/2012/medals.app", 301}]
-  handle "/sport/olympics/2016/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/olympics/2016", 301}, {"/sport/olympics/2016/schedule.app", 301}]
-  handle "/sport/olympics/rio-2016/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/olympics/rio-2016", 301}, {"/sport/olympics/rio-2016.app", 301}]
-  handle "/sport/paralympics/rio-2016/medals/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/paralympics/rio-2016/medals", 301}, {"/sport/paralympics/rio-2016/medals.app", 301}]
-  handle "/sport/paralympics/rio-2016/schedule/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/paralympics/rio-2016/schedule", 301}, {"/sport/paralympics/rio-2016/schedule.app", 301}]
-  handle "/sport/winter-olympics/home-nations/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/home-nations", 302}, {"/sport/winter-olympics/home-nations.app", 302}]
-  handle "/sport/winter-olympics/medals/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/medals/countries/new-zealand", 302}, {"/sport/winter-olympics/medals/countries/great-britain.app", 302}]
-  handle "/sport/winter-olympics/results/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/results/sports/ski-jumping/ski-jumping-mens-team", 302}, {"/sport/winter-olympics/results/sports/curling/curling-mixed-doubles.app", 302}]
-  handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/schedule/sports/figure-skating", 302}, {"/sport/winter-olympics/schedule/sports/snowboarding.app", 302}]
-  handle "/sport/winter-olympics/sports/*any", using: "SportRedirects", platform: "MozartSport", examples: [{"/sport/winter-olympics/sports", 302}, {"/sport/winter-olympics/sports.app", 302}]
+  handle "/sport/commonwealth-games/home-nations/*any", using: "SportRedirects"
+  handle "/sport/commonwealth-games/medals/*any", using: "SportRedirects"
+  handle "/sport/commonwealth-games/results/*any", using: "SportRedirects"
+  handle "/sport/commonwealth-games/schedule/*any", using: "SportRedirects"
+  handle "/sport/commonwealth-games/sports/*any", using: "SportRedirects"
+  handle "/sport/football/european-championship/2012/*any", using: "SportRedirects"
+  handle "/sport/football/european-championship/2016/*any", using: "SportRedirects"
+  handle "/sport/football/european-championship/euro-2016/*any", using: "SportRedirects"
+  handle "/sport/football/european-championship/schedule/*any", using: "SportRedirects"
+  handle "/sport/olympics/2012/*any", using: "SportRedirects"
+  handle "/sport/olympics/2016/*any", using: "SportRedirects"
+  handle "/sport/olympics/rio-2016/*any", using: "SportRedirects"
+  handle "/sport/paralympics/rio-2016/medals/*any", using: "SportRedirects"
+  handle "/sport/paralympics/rio-2016/schedule/*any", using: "SportRedirects"
+  handle "/sport/winter-olympics/home-nations/*any", using: "SportRedirects"
+  handle "/sport/winter-olympics/medals/*any", using: "SportRedirects"
+  handle "/sport/winter-olympics/results/*any", using: "SportRedirects"
+  handle "/sport/winter-olympics/schedule/*any", using: "SportRedirects"
+  handle "/sport/winter-olympics/sports/*any", using: "SportRedirects"
 
   ## Sport topic redirects
   redirect "/sport/football/fifa-womens-world-cup", to: "/sport/football/womens-world-cup", status: 302
   redirect "/sport/topics/c9r003qdg5wt", to: "/sport/sustainability", status: 301
 
   ## Sport Visual Journalism
-  handle "/sport/extra/*any", using: "Sport", platform: "MozartSport", examples: ["/sport/extra/c1nx5lutpg/The-real-Lewis-Hamilton-story"]
+  handle "/sport/extra/*any", using: "Sport"
 
   ## Sport SFV - use query string params in example URLs to use live data via Mozart where required
-  handle "/sport/av/:id.app", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/av/51107180.app?morph_env=live&renderer_env=live"]
-  handle "/sport/av/:id", using: "SportVideos", platform: "Webcore", examples: ["/sport/av/51107180"] do
-    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  handle "/sport/av/:id.app", using: "SportVideosAppPage", only_on: "test" do
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
+  end
+  handle "/sport/av/:id.app", using: "SportMediaAssetPage", only_on: "live"
+  handle "/sport/av/:id", using: "SportVideos" do
+    return_404 if: !matches?(id, ~r/\A[0-9]{4,9}\z/)
   end
 
-  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/av/football/55975423.app?morph_env=live&renderer_env=live"]
+  handle "/sport/av/:discipline/:id.app", using: "SportMediaAssetPage", only_on: "live"
 
   ## Sport SFV - validate Section(Discipline) and ID
-  handle "/sport/av/:discipline/:id", using: "SportVideos", platform: "Webcore", examples: ["/sport/av/football/55975423", "/sport/av/formula1/55303534", "/sport/av/rugby-league/56462310"] do
+  handle "/sport/av/:discipline/:id.app", using: "SportVideosAppPage", only_on: "test" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
-      !String.match?(id, ~r/^[0-9]{4,9}$/)
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
+    ]
+  end
+  handle "/sport/av/:discipline/:id", using: "SportVideos" do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
     ]
   end
 
   redirect "/sport/videos", to: "/sport", status: 301
 
-  handle "/sport/videos/:optimo_id", using: "SportVideos", platform: "Webcore", examples: [] do
+  handle "/sport/videos/:optimo_id.app", using: "SportVideosAppPage", only_on: "test" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/sport/videos/:optimo_id", using: "SportVideos" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   redirect "/sport/:discipline/videos", to: "/sport/:discipline", status: 301
 
-  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos", platform: "Webcore", examples: [] do
+  handle "/sport/:discipline/videos/:optimo_id.app", using: "SportVideosAppPage", only_on: "test" do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
+      !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+    ]
+  end
+  handle "/sport/:discipline/videos/:optimo_id", using: "SportVideos" do
     return_404 if: [
       !Enum.member?(Routes.Specs.SportVideos.sports_disciplines_routes, discipline),
       !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -973,195 +1029,250 @@ defroutefile "Sport" do
   end
 
   ## Sport Internal Tools - use query string params in example URLs to use live data via Mozart where required
-  handle "/sport/internal/football-team-selector/:slug", using: "Sport", platform: "MozartSport", examples: ["/sport/internal/football-team-selector/england-xi?morph_env=live&renderer_env=live"]
-  handle "/sport/internal/player-rater/:event_id", using: "Sport", platform: "MozartSport", examples: ["/sport/internal/player-rater/EFBO2128305?morph_env=live&renderer_env=live"]
-  handle "/sport/internal/ranked-list/:slug", using: "Sport", platform: "MozartSport", examples: ["/sport/internal/ranked-list/lions-2021-XV?morph_env=live&renderer_env=live"]
+  handle "/sport/internal/football-team-selector/:slug", using: "Sport"
+  handle "/sport/internal/player-rater/:event_id", using: "Sport"
+  handle "/sport/internal/ranked-list/:slug", using: "Sport"
 
   ## Sport Top 4
-  handle "/sport/alpha/top-4.app", using: "Sport", platform: "MozartSport", examples: ["/sport/alpha/top-4.app"]
-  handle "/sport/alpha/top-4", using: "Sport", platform: "MozartSport", examples: ["/sport/alpha/top-4"]
-  handle "/sport/top-4.app", using: "Sport", platform: "MozartSport", examples: ["/sport/top-4.app"]
-  handle "/sport/top-4", using: "Sport", platform: "MozartSport", examples: ["/sport/top-4"]
+  handle "/sport/alpha/top-4.app", using: "Sport"
+  handle "/sport/alpha/top-4", using: "Sport"
+  handle "/sport/top-4.app", using: "Sport"
+  handle "/sport/top-4", using: "Sport"
 
   ## Sport Alpha Trials
-  handle "/sport/alpha/:sport/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/scores-fixtures"]
-  handle "/sport/alpha/:sport/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/scores-fixtures/2023-02-21"] do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  handle "/sport/alpha/:sport/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/:sport/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
   end
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/premier-league/scores-fixtures"]
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/alpha/football/premier-league/scores-fixtures/2023-02-21"] do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
   end
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
-  handle "/sport/live/football/*any", using: "SportFootballLivePage", platform: "MozartSport", examples: []
-  handle "/sport/live/*any", using: "SportLivePage", platform: "MozartSport", examples: []
 
-  ## Sport BBC Live - Webcore Football Live - TIPO IDs
-  handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage", platform: "Webcore", examples: ["/sport/football/live/cvpx5wr4nv8t"] do
+  ### Sport BBC Live - CPS & TIPO - No Discipline
+  handle "/sport/live/:asset_id", using: "SportLivePage" do
     return_404 if: [
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+  handle "/sport/live/:asset_id.app", using: "SportLivePage" do
+    return_404 if: [
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
-  # Sport BBC Live - Webcore .app route
-  handle "/sport/football/live/:tipo_id.app", using: "SportWebcoreFootballLivePage", platform: "Webcore", examples: ["/sport/football/live/cvpx5wr4nv8t.app"] do
+  ### Sport BBC Live - CPS - No Discipline & Page Number
+  handle "/sport/live/:asset_id/page/:page_number", using: "SportLivePage" do
     return_404 if: [
-      !String.match?(conn.query_params["post"] || "", ~r/^$|^asset:[a-z,0-9,-]{36}$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/),
-      !String.match?(tipo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/)
+      !is_cps_id?(asset_id),
+    ]
+  end
+  handle "/sport/live/:asset_id/page/:page_number.app", using: "SportLivePage" do
+    return_404 if: [
+      !is_cps_id?(asset_id),
+    ]
+  end
+
+  ### Sport BBC Live - CPS - Football Discipline
+  handle "/sport/live/football/*any", using: "SportFootballLivePage"
+
+  ### Sport BBC Live - CPS - Discipline
+  handle "/sport/live/:discipline/:asset_id/*any", using: "SportLivePage" do
+    return_404 if: [
+      !is_cps_id?(asset_id),
+    ]
+  end
+
+  ### Sport BBC Live - TIPO - Football Discipline
+  handle "/sport/football/live/:tipo_id", using: "SportWebcoreFootballLivePage" do
+    return_404 if: [
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+  handle "/sport/football/live/:tipo_id.app", using: "SportWebcoreFootballLivePage" do
+    return_404 if: [
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+
+  ### Sport BBC Live - TIPO - Discipline
+  handle "/sport/:discipline/live/:tipo_id", using: "SportWebcoreLivePage" do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
+    ]
+  end
+  handle "/sport/:discipline/live/:tipo_id.app", using: "SportWebcoreLivePage" do
+    return_404 if: [
+      !Enum.member?(Routes.Specs.SportWebcoreLivePage.sports_disciplines_routes, discipline),
+      !is_tipo_id?(tipo_id),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
   ## Sport Misc
-  handle "/sport/sitemap.xml", using: "Sport", platform: "MozartSport", examples: ["/sport/sitemap.xml"]
-  handle "/sport/alpha/*any", using: "SportAlpha", platform: "Webcore", examples: []
+  handle "/sport/sitemap.xml", using: "Sport"
+  handle "/sport/alpha/*any", using: "SportAlpha"
 
   ## Sport Live Guide
-  handle "/sport/live-guide.app", using: "SportLiveGuide", platform: "MozartSport", examples: ["/sport/live-guide.app"]
-  handle "/sport/live-guide", using: "SportLiveGuide", platform: "MozartSport", examples: ["/sport/live-guide"]
-  handle "/sport/live-guide/*any", using: "SportLiveGuide", platform: "MozartSport", examples: ["/sport/live-guide/football.app", "/sport/live-guide/football"]
+  handle "/sport/live-guide.app", using: "SportLiveGuide"
+  handle "/sport/live-guide", using: "SportLiveGuide"
+  handle "/sport/live-guide/*any", using: "SportLiveGuide"
 
   ## Sport Video Collections
-  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/cricket/video.app"]
-  handle "/sport/:discipline/video", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/cricket/video"]
-  handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/football/fa-cup/video.app"]
-  handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage", platform: "MozartSport", examples: ["/sport/football/fa-cup/video"]
+  handle "/sport/:discipline/video.app", using: "SportMediaAssetPage"
+  handle "/sport/:discipline/video", using: "SportMediaAssetPage"
+  handle "/sport/:discipline/:tournament/video.app", using: "SportMediaAssetPage"
+  handle "/sport/:discipline/:tournament/video", using: "SportMediaAssetPage"
 
   ## Sport Vanity Urls
-  handle "/sport/all-sports.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/all-sports.app"]
-  handle "/sport/all-sports", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/all-sports"]
-  handle "/sport/cricket/teams.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/cricket/teams.app"]
-  handle "/sport/cricket/teams", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/cricket/teams"]
-  handle "/sport/football/gossip.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/gossip.app"]
-  handle "/sport/football/gossip", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/gossip"]
-  handle "/sport/football/leagues-cups.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/leagues-cups.app"]
-  handle "/sport/football/leagues-cups", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/leagues-cups"]
-  handle "/sport/football/scottish/gossip.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/scottish/gossip.app"]
-  handle "/sport/football/scottish/gossip", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/scottish/gossip"]
-  handle "/sport/football/teams.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/teams.app"]
-  handle "/sport/football/teams", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/teams"]
-  handle "/sport/football/transfers.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/transfers.app"]
-  handle "/sport/football/transfers", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/football/transfers"]
-  handle "/sport/my-sport.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/my-sport.app"]
-  handle "/sport/my-sport", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/my-sport"]
-  handle "/sport/rugby-league/teams.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/rugby-league/teams.app"]
-  handle "/sport/rugby-league/teams", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/rugby-league/teams"]
-  handle "/sport/rugby-union/teams.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/rugby-union/teams.app"]
-  handle "/sport/rugby-union/teams", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/rugby-union/teams"]
+  handle "/sport/all-sports.app", using: "SportStoryPage"
+  handle "/sport/all-sports", using: "SportStoryPage"
+  handle "/sport/cricket/teams.app", using: "SportStoryPage"
+  handle "/sport/cricket/teams", using: "SportStoryPage"
+  handle "/sport/football/gossip.app", using: "SportStoryPage"
+  handle "/sport/football/gossip", using: "SportStoryPage"
+  handle "/sport/football/leagues-cups.app", using: "SportStoryPage"
+  handle "/sport/football/leagues-cups", using: "SportStoryPage"
+  handle "/sport/football/scottish/gossip.app", using: "SportStoryPage"
+  handle "/sport/football/scottish/gossip", using: "SportStoryPage"
+  handle "/sport/football/teams.app", using: "SportStoryPage"
+  handle "/sport/football/teams", using: "SportStoryPage"
+  handle "/sport/football/transfers.app", using: "SportStoryPage"
+  handle "/sport/football/transfers", using: "SportStoryPage"
+  handle "/sport/my-sport.app", using: "SportStoryPage"
+  handle "/sport/my-sport", using: "SportStoryPage"
+  handle "/sport/rugby-league/teams.app", using: "SportStoryPage"
+  handle "/sport/rugby-league/teams", using: "SportStoryPage"
+  handle "/sport/rugby-union/teams.app", using: "SportStoryPage"
+  handle "/sport/rugby-union/teams", using: "SportStoryPage"
 
   ## Sport Manual Indexes
-  handle "/sport.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport.app"]
-  handle "/sport", using: "SportHomePage", platform: "Webcore", examples: ["/sport"]
-  handle "/sport/africa.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/africa.app"]
-  handle "/sport/africa", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/africa"]
-  handle "/sport/american-football.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/american-football.app"]
-  handle "/sport/american-football", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/american-football"]
-  handle "/sport/athletics.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/athletics.app"]
-  handle "/sport/athletics", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/athletics"]
-  handle "/sport/basketball.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/basketball.app"]
-  handle "/sport/basketball", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/basketball"]
-  handle "/sport/boxing.app", using: "SportIndexPage", platform: "MozartSport", examples: []
-  handle "/sport/boxing", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/boxing"]
-  handle "/sport/commonwealth-games.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/commonwealth-games.app"]
-  handle "/sport/commonwealth-games", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/commonwealth-games"]
-  handle "/sport/cricket.app", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket.app"]
-  handle "/sport/cricket", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket"]
-  handle "/sport/cricket/counties.app", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket/counties.app"]
-  handle "/sport/cricket/counties", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket/counties"]
-  handle "/sport/cricket/womens.app", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket/womens.app"]
-  handle "/sport/cricket/womens", using: "SportCricketIndexPage", platform: "MozartSport", examples: ["/sport/cricket/womens"]
-  handle "/sport/cycling.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/cycling.app"]
-  handle "/sport/cycling", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/cycling"]
-  handle "/sport/disability-sport.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/disability-sport.app"]
-  handle "/sport/disability-sport", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/disability-sport"]
-  handle "/sport/england.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/england.app"]
-  handle "/sport/england", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/england"]
-  handle "/sport/football.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football.app"]
-  handle "/sport/football", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football"]
-  handle "/sport/football/championship.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/championship.app"]
-  handle "/sport/football/championship", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/championship"]
-  handle "/sport/football/european-championship.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/european-championship.app"]
-  handle "/sport/football/european-championship", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/european-championship"]
-  handle "/sport/football/european.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/european.app"]
-  handle "/sport/football/european", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/european"]
-  handle "/sport/football/fa-cup.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/fa-cup.app"]
-  handle "/sport/football/fa-cup", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/fa-cup"]
-  handle "/sport/football/irish.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/irish.app"]
-  handle "/sport/football/irish", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/irish"]
-  handle "/sport/football/premier-league.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/premier-league.app"]
-  handle "/sport/football/premier-league", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/premier-league"]
-  handle "/sport/football/scottish.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/scottish.app"]
-  handle "/sport/football/scottish", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/scottish"]
-  handle "/sport/football/welsh.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/welsh.app"]
-  handle "/sport/football/welsh", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/welsh"]
-  handle "/sport/football/womens.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/womens.app"]
-  handle "/sport/football/womens", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/womens"]
-  handle "/sport/football/world-cup.app", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/world-cup.app"]
-  handle "/sport/football/world-cup", using: "SportFootballIndexPage", platform: "MozartSport", examples: ["/sport/football/world-cup"]
-  handle "/sport/formula1.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/formula1.app"]
-  handle "/sport/formula1", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/formula1"]
-  handle "/sport/get-inspired.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/get-inspired.app"]
-  handle "/sport/get-inspired", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/get-inspired"]
-  handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/get-inspired/activity-guides.app"]
-  handle "/sport/get-inspired/activity-guides", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/get-inspired/activity-guides"]
-  handle "/sport/golf.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/golf.app"]
-  handle "/sport/golf", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/golf"]
-  handle "/sport/horse-racing.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/horse-racing.app"]
-  handle "/sport/horse-racing", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/horse-racing"]
-  handle "/sport/mixed-martial-arts.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/mixed-martial-arts.app"]
-  handle "/sport/mixed-martial-arts", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/mixed-martial-arts"]
-  handle "/sport/motorsport.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/motorsport.app"]
-  handle "/sport/motorsport", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/motorsport"]
-  handle "/sport/netball.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/netball.app"]
-  handle "/sport/netball", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/netball"]
-  handle "/sport/northern-ireland.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland.app"]
-  handle "/sport/northern-ireland", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland"]
-  handle "/sport/northern-ireland/gaelic-games.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland/gaelic-games.app"]
-  handle "/sport/northern-ireland/gaelic-games", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland/gaelic-games"]
-  handle "/sport/northern-ireland/motorbikes.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland/motorbikes.app"]
-  handle "/sport/northern-ireland/motorbikes", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/northern-ireland/motorbikes"]
-  handle "/sport/olympics.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/olympics.app"]
-  handle "/sport/olympics", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/olympics"]
-  handle "/sport/rugby-league.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-league.app"]
-  handle "/sport/rugby-league", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-league"]
-  handle "/sport/rugby-union.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union.app"]
-  handle "/sport/rugby-union", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union"]
-  handle "/sport/rugby-union/english.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/english.app"]
-  handle "/sport/rugby-union/english", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/english"]
-  handle "/sport/rugby-union/irish.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/irish.app"]
-  handle "/sport/rugby-union/irish", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/irish"]
-  handle "/sport/rugby-union/scottish.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/scottish.app"]
-  handle "/sport/rugby-union/scottish", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/scottish"]
-  handle "/sport/rugby-union/welsh.app", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/welsh.app"]
-  handle "/sport/rugby-union/welsh", using: "SportRugbyIndexPage", platform: "MozartSport", examples: ["/sport/rugby-union/welsh"]
-  handle "/sport/scotland.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/scotland.app"]
-  handle "/sport/scotland", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/scotland"]
-  handle "/sport/snooker.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/snooker.app"]
-  handle "/sport/snooker", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/snooker"]
-  handle "/sport/sports-personality.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/sports-personality.app"]
-  handle "/sport/sports-personality", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/sports-personality"]
-  handle "/sport/swimming.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/swimming.app"]
-  handle "/sport/swimming", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/swimming"]
-  handle "/sport/tennis.app", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/tennis.app"]
-  handle "/sport/tennis", using: "SportMajorIndexPage", platform: "MozartSport", examples: ["/sport/tennis"]
-  handle "/sport/wales.app", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/wales.app"]
-  handle "/sport/wales", using: "SportHomeNationIndexPage", platform: "MozartSport", examples: ["/sport/wales"]
-  handle "/sport/winter-olympics.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/winter-olympics.app"]
-  handle "/sport/winter-olympics", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/winter-olympics"]
-  handle "/sport/winter-sports.app", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/winter-sports.app"]
-  handle "/sport/winter-sports", using: "SportIndexPage", platform: "MozartSport", examples: ["/sport/winter-sports"]
+  handle "/sport", using: "SportHomePage"
+  handle "/sport/africa", using: "SportIndexPage"
+  handle "/sport/american-football", using: "SportWebcoreIndexPage"
+  handle "/sport/athletics", using: "SportMajorIndexPage"
+  handle "/sport/basketball", using: "SportWebcoreIndexPage"
+  handle "/sport/boxing", using: "SportWebcoreIndexPage"
+  handle "/sport/commonwealth-games", using: "SportIndexPage"
+  handle "/sport/cricket", using: "SportCricketIndexPage"
+  handle "/sport/cricket/counties", using: "SportCricketIndexPage"
+  handle "/sport/cricket/womens", using: "SportCricketIndexPage"
+  handle "/sport/cycling", using: "SportMajorIndexPage"
+  handle "/sport/disability-sport", using: "SportWebcoreIndexPage"
+  handle "/sport/england", using: "SportHomeNationIndexPage"
+  handle "/sport/football", using: "SportFootballIndexPage"
+  handle "/sport/football/championship", using: "SportFootballIndexPage"
+  handle "/sport/football/european-championship", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/european", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/fa-cup", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/irish", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/premier-league", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/scottish", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/welsh", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/football/womens", using: "SportFootballIndexPage"
+  handle "/sport/football/world-cup", using: "SportWebcoreFootballSubIndexPage"
+  handle "/sport/formula1", using: "SportMajorIndexPage"
+  handle "/sport/get-inspired", using: "SportIndexPage"
+  handle "/sport/get-inspired/activity-guides", using: "SportIndexPage"
+  handle "/sport/golf", using: "SportWebcoreIndexPage"
+  handle "/sport/horse-racing", using: "SportIndexPage"
+  handle "/sport/mixed-martial-arts", using: "SportWebcoreIndexPage"
+  handle "/sport/motorsport", using: "SportWebcoreIndexPage"
+  handle "/sport/netball", using: "SportWebcoreIndexPage"
+  handle "/sport/northern-ireland", using: "SportWebcoreNationIndexPage"
+  handle "/sport/northern-ireland/gaelic-games", using: "SportWebcoreIndexPage"
+  handle "/sport/northern-ireland/motorbikes", using: "SportWebcoreIndexPage"
+  handle "/sport/olympics", using: "SportIndexPage"
+  handle "/sport/rugby-league", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union/english", using: "SportWebcoreIndexPage"
+  handle "/sport/rugby-union/irish", using: "SportWebcoreIndexPage"
+  handle "/sport/rugby-union/scottish", using: "SportWebcoreIndexPage"
+  handle "/sport/rugby-union/welsh", using: "SportWebcoreIndexPage"
+  handle "/sport/scotland", using: "SportWebcoreNationIndexPage"
+  handle "/sport/snooker", using: "SportWebcoreIndexPage"
+  handle "/sport/sports-personality", using: "SportWebcoreIndexPage"
+  handle "/sport/swimming", using: "SportIndexPage"
+  handle "/sport/tennis", using: "SportMajorIndexPage"
+  handle "/sport/wales", using: "SportWebcoreNationIndexPage"
+  handle "/sport/winter-olympics", using: "SportIndexPage"
+  handle "/sport/winter-sports", using: "SportWebcoreIndexPage"
+
+  ## Morph (.app) Sport Manual Indexes
+
+  handle "/sport.app", using: "SportMajorIndexPage"
+  handle "/sport/africa.app", using: "SportIndexPage"
+  handle "/sport/american-football.app", using: "Sport"
+  handle "/sport/athletics.app", using: "SportMajorIndexPage"
+  handle "/sport/basketball.app", using: "Sport"
+  handle "/sport/boxing.app", using: "Sport"
+  handle "/sport/commonwealth-games.app", using: "SportIndexPage"
+  handle "/sport/cricket.app", using: "SportCricketIndexPage"
+  handle "/sport/cricket/counties.app", using: "SportCricketIndexPage"
+  handle "/sport/cricket/womens.app", using: "SportCricketIndexPage"
+  handle "/sport/cycling.app", using: "SportMajorIndexPage"
+  handle "/sport/disability-sport.app", using: "Sport"
+  handle "/sport/england.app", using: "SportHomeNationIndexPage"
+  handle "/sport/football.app", using: "SportFootballIndexPage"
+  handle "/sport/football/championship.app", using: "SportFootballIndexPage"
+  handle "/sport/football/european-championship.app", using: "Sport"
+  handle "/sport/football/european.app", using: "Sport"
+  handle "/sport/football/fa-cup.app", using: "Sport"
+  handle "/sport/football/irish.app", using: "Sport"
+  handle "/sport/football/premier-league.app", using: "Sport"
+  handle "/sport/football/scottish.app", using: "Sport"
+  handle "/sport/football/welsh.app", using: "Sport"
+  handle "/sport/football/womens.app", using: "SportFootballIndexPage"
+  handle "/sport/football/world-cup.app", using: "Sport"
+  handle "/sport/formula1.app", using: "SportMajorIndexPage"
+  handle "/sport/get-inspired.app", using: "SportIndexPage"
+  handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
+  handle "/sport/golf.app", using: "Sport"
+  handle "/sport/horse-racing.app", using: "SportIndexPage" 
+  handle "/sport/mixed-martial-arts.app", using: "Sport"
+  handle "/sport/motorsport.app", using: "Sport"
+  handle "/sport/netball.app", using: "Sport"
+  handle "/sport/northern-ireland.app", using: "Sport"
+  handle "/sport/northern-ireland/gaelic-games.app", using: "Sport"
+  handle "/sport/northern-ireland/motorbikes.app", using: "Sport"
+  handle "/sport/olympics.app", using: "SportIndexPage"
+  handle "/sport/rugby-league.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
+  handle "/sport/rugby-union/english.app", using: "Sport"
+  handle "/sport/rugby-union/irish.app", using: "Sport"
+  handle "/sport/rugby-union/scottish.app", using: "Sport"
+  handle "/sport/rugby-union/welsh.app", using: "Sport"
+  handle "/sport/scotland.app", using: "Sport"
+  handle "/sport/snooker.app", using: "Sport"
+  handle "/sport/sports-personality.app", using: "Sport"
+  handle "/sport/swimming.app", using: "SportIndexPage"
+  handle "/sport/tennis.app", using: "SportMajorIndexPage"
+  handle "/sport/wales.app", using: "Sport"
+  handle "/sport/winter-olympics.app", using: "SportIndexPage"
+  handle "/sport/winter-sports.app", using: "Sport"
 
   ## Sport Calendars
-  handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/calendar.app"]
-  handle "/sport/formula1/calendar/*any", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/calendar"]
-  handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/calendar.app"]
-  handle "/sport/horse-racing/calendar/*any", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/calendar"]
-  handle "/sport/:discipline/calendar.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/winter-sports/calendar.app"]
-  handle "/sport/:discipline/calendar/*any", using: "SportDataPage", platform: "MozartSport", examples: []
+  handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/calendar/*any", using: "SportFormula1DataPage"
+  handle "/sport/horse-racing/calendar.app", using: "SportHorseRacingDataPage"
+  handle "/sport/horse-racing/calendar/*any", using: "SportHorseRacingDataPage"
+  handle "/sport/:discipline/calendar.app", using: "SportDataPage"
+  handle "/sport/:discipline/calendar/*any", using: "SportDataPage"
 
   ## Sport Fixtures pages
   redirect "/sport/basketball/:tournament/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
@@ -1169,31 +1280,31 @@ defroutefile "Sport" do
   redirect "/sport/basketball/fixtures.app", to: "/sport/basketball/scores-fixtures", status: 301
   redirect "/sport/basketball/fixtures", to: "/sport/basketball/scores-fixtures", status: 301
 
-  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/ice-hockey/nhl/fixtures"]
-  handle "/sport/:discipline/fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/ice-hockey/fixtures.app"]
-  handle "/sport/:discipline/fixtures", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/ice-hockey/fixtures"]
+  handle "/sport/:discipline/:tournament/fixtures.app", using: "SportDataPage"
+  handle "/sport/:discipline/:tournament/fixtures", using: "SportDataPage"
+  handle "/sport/:discipline/fixtures.app", using: "SportDataPage"
+  handle "/sport/:discipline/fixtures", using: "SportDataPage"
 
   ## Sport Horse Racing Results
-  handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/uk-ireland/results.app"]
-  handle "/sport/horse-racing/:tournament/results/*any", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/uk-ireland/results"]
+  handle "/sport/horse-racing/:tournament/results.app", using: "SportHorseRacingDataPage"
+  handle "/sport/horse-racing/:tournament/results/*any", using: "SportHorseRacingDataPage"
 
   ## Sport Formula 1 Pages
   redirect "/sport/formula1/standings.app", to: "/sport/formula1/drivers-world-championship/standings.app", status: 302
   redirect "/sport/formula1/standings", to: "/sport/formula1/drivers-world-championship/standings", status: 302
-  handle "/sport/formula1/latest.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/latest.app"]
-  handle "/sport/formula1/latest", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/latest"]
-  handle "/sport/formula1/results.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/results.app"]
-  handle "/sport/formula1/results", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/results"]
-  handle "/sport/formula1/:season/results.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/2020/results.app"]
-  handle "/sport/formula1/:season/results", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/2020/results"]
-  handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/2019/monaco-grand-prix/results.app"]
-  handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/2019/monaco-grand-prix/results"]
-  handle "/sport/formula1/:season/:tournament/results/*any", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/2020/70th-anniversary-grand-prix/results/qualifying.app", "/sport/formula1/2020/70th-anniversary-grand-prix/results/race"]
-  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/constructors-world-championship/standings.app"]
-  handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/constructors-world-championship/standings"]
-  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/drivers-world-championship/standings.app"]
-  handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage", platform: "MozartSport", examples: ["/sport/formula1/drivers-world-championship/standings"]
+  handle "/sport/formula1/latest.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/latest", using: "SportFormula1DataPage"
+  handle "/sport/formula1/results.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/results", using: "SportFormula1DataPage"
+  handle "/sport/formula1/:season/results.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/:season/results", using: "SportFormula1DataPage"
+  handle "/sport/formula1/:season/:tournament/results.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/:season/:tournament/results", using: "SportFormula1DataPage"
+  handle "/sport/formula1/:season/:tournament/results/*any", using: "SportFormula1DataPage"
+  handle "/sport/formula1/constructors-world-championship/standings.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/constructors-world-championship/standings", using: "SportFormula1DataPage"
+  handle "/sport/formula1/drivers-world-championship/standings.app", using: "SportFormula1DataPage"
+  handle "/sport/formula1/drivers-world-championship/standings", using: "SportFormula1DataPage"
 
   ## Sport Results pages
   redirect "/sport/basketball/:tournament/results.app", to: "/sport/basketball/scores-fixtures", status: 301
@@ -1201,449 +1312,518 @@ defroutefile "Sport" do
   redirect "/sport/basketball/results.app", to: "/sport/basketball/scores-fixtures", status: 301
   redirect "/sport/basketball/results", to: "/sport/basketball/scores-fixtures", status: 301
 
-  handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage", platform: "MozartSport", examples: [] # flakey /sport/athletics/british-championship/results.app
-  handle "/sport/:discipline/:tournament/results", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/athletics/british-championship/results"]
-  handle "/sport/:discipline/results.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/snooker/results.app", "/sport/tennis/results.app"]
-  handle "/sport/:discipline/results", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/snooker/results", "/sport/tennis/results"]
+  handle "/sport/:discipline/:tournament/results.app", using: "SportDataPage" # flakey /sport/athletics/british-championship/results.app
+  handle "/sport/:discipline/:tournament/results", using: "SportDataPage"
+  handle "/sport/:discipline/results.app", using: "SportDataPage"
+  handle "/sport/:discipline/results", using: "SportDataPage"
 
   ## Sport Football Scores-Fixtures pages
-  handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPageInApps", platform: "MozartSport", examples: ["/sport/football/scores-fixtures.app"]
-  handle "/sport/football/scores-fixtures/:date.app", using: "SportFootballMainScoresFixturesDataPageInApps", platform: "MozartSport", examples: []
-  handle "/sport/football/scores-fixtures/*any", using: "SportFootballMainScoresFixturesDataPage", platform: "MozartSport", examples: ["/sport/football/scores-fixtures"]
-  handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", platform: "MozartSport", examples: ["/sport/football/champions-league/scores-fixtures.app"]
-  handle "/sport/football/:tournament/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage", platform: "MozartSport", examples: ["/sport/football/champions-league/scores-fixtures"]
-  handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage", platform: "MozartSport", examples: ["/sport/football/teams/hull-city/scores-fixtures.app"]
-  handle "/sport/football/teams/:team/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage", platform: "MozartSport", examples: ["/sport/football/teams/hull-city/scores-fixtures"]
+  handle "/sport/football/scores-fixtures.app", using: "SportFootballMainScoresFixturesDataPageInApps"
+  handle "/sport/football/scores-fixtures/:date.app", using: "SportFootballMainScoresFixturesDataPageInApps"
+  handle "/sport/football/scores-fixtures/*any", using: "SportFootballMainScoresFixturesDataPage"
+  handle "/sport/football/:tournament/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage"
+  handle "/sport/football/:tournament/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage"
+  handle "/sport/football/teams/:team/scores-fixtures.app", using: "SportFootballScoresFixturesDataPage"
+  handle "/sport/football/teams/:team/scores-fixtures/*any", using: "SportFootballScoresFixturesDataPage"
 
   ## Sport Basketball Scores-Fixtures pages
-  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/basketball/scores-fixtures"]
-  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/basketball/scores-fixtures/2021-04-26"] do
+  handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
-  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/basketball/nba/scores-fixtures"]
-  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/basketball/nba/scores-fixtures/2021-04-26"] do
+  handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
 
   ## Sport Netball Scores-Fixtures pages
-  handle "/sport/netball/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/scores-fixtures"]
-  handle "/sport/app-webview/netball/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/scores-fixtures"]
+  handle "/sport/netball/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/app-webview/netball/scores-fixtures", using: "SportDataWebcore"
   redirect "/sport/netball/scores-fixtures.app", to: "/sport/app-webview/netball/scores-fixtures", status: 302
 
-  handle "/sport/netball/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/scores-fixtures/2023-02-11"] do
+  handle "/sport/netball/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
-  handle "/sport/app-webview/netball/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/scores-fixtures/2023-02-11"] do
+  handle "/sport/app-webview/netball/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
   redirect "/sport/netball/scores-fixtures/:date.app", to: "/sport/app-webview/netball/scores-fixtures/:date", status: 302
 
-  handle "/sport/netball/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/world-cup/scores-fixtures"]
-  handle "/sport/app-webview/netball/:tournament/scores-fixtures", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/world-cup/scores-fixtures"]
+  handle "/sport/netball/:tournament/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/app-webview/netball/:tournament/scores-fixtures", using: "SportDataWebcore"
   redirect "/sport/netball/:tournament/scores-fixtures.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures", status: 302
 
-  handle "/sport/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/netball/world-cup/scores-fixtures/2023-02-11"] do
+  handle "/sport/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
-  handle "/sport/app-webview/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore", platform: "Webcore", examples: ["/sport/app-webview/netball/world-cup/scores-fixtures/2023-02-11"] do
+  handle "/sport/app-webview/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
   end
   redirect "/sport/netball/:tournament/scores-fixtures/:date.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures/:date", status: 302
 
   ## Sport Scores-Fixtures pages
-  handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/scores-fixtures.app"]
-  handle "/sport/:discipline/scores-fixtures/*any", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/scores-fixtures"]
-  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/:discipline/:tournament/scores-fixtures/*any", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/super-league/scores-fixtures"]
-  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/:discipline/teams/:team/scores-fixtures/*any", using: "SportDataPage", platform: "MozartSport", examples: []
+  handle "/sport/:discipline/scores-fixtures.app", using: "SportDataPage"
+  handle "/sport/:discipline/scores-fixtures/*any", using: "SportDataPage"
+  handle "/sport/:discipline/:tournament/scores-fixtures.app", using: "SportDataPage"
+  handle "/sport/:discipline/:tournament/scores-fixtures/*any", using: "SportDataPage"
+  handle "/sport/:discipline/teams/:team/scores-fixtures.app", using: "SportDataPage"
+  handle "/sport/:discipline/teams/:team/scores-fixtures/*any", using: "SportDataPage"
 
   ## Sport League Two Table page
 
-  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/league-two/table.app"]
-  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage", platform: "Webcore", examples: ["/sport/football/league-two/table"]
+  handle "/sport/football/league-two/table.app", using: "SportFootballDataPage"
+  handle "/sport/football/league-two/table", using: "SportFootballStandingsTablePage"
 
   ## Sport Premier League Table page
-  handle "/sport/football/premier-league/table.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/premier-league/table.app"]
-  handle "/sport/football/premier-league/table", using: "SportFootballPremierLeagueStandingsTablePage", platform: "Webcore", examples: ["/sport/football/premier-league/table"]
+  handle "/sport/football/premier-league/table.app", using: "SportFootballDataPage"
+  handle "/sport/football/premier-league/table", using: "SportFootballPremierLeagueStandingsTablePage"
 
   ## Sport Football Table pages
-  handle "/sport/football/tables.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/tables.app"]
-  handle "/sport/football/tables", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/tables"]
-  handle "/sport/football/:tournament/table.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/championship/table.app"]
-  handle "/sport/football/:tournament/table", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/championship/table"]
-  handle "/sport/football/teams/:team/table.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/arsenal/table.app"]
-  handle "/sport/football/teams/:team/table", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/arsenal/table"]
+  handle "/sport/football/tables.app", using: "SportFootballDataPage"
+  handle "/sport/football/tables", using: "SportFootballDataPage"
+  handle "/sport/football/:tournament/table.app", using: "SportFootballDataPage"
+  handle "/sport/football/:tournament/table", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/table.app", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/table", using: "SportFootballDataPage"
 
   ## Sport Table pages
-  handle "/sport/:discipline/tables.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/tables.app"]
-  handle "/sport/:discipline/tables", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/tables"]
-  handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/:discipline/:tournament/table", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/super-league/table"]
-  handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/:discipline/teams/:team/table", using: "SportDataPage", platform: "MozartSport", examples: []
+  handle "/sport/:discipline/tables.app", using: "SportDataPage"
+  handle "/sport/:discipline/tables", using: "SportDataPage"
+  handle "/sport/:discipline/:tournament/table.app", using: "SportDataPage"
+  handle "/sport/:discipline/:tournament/table", using: "SportDataPage"
+  handle "/sport/:discipline/teams/:team/table.app", using: "SportDataPage"
+  handle "/sport/:discipline/teams/:team/table", using: "SportDataPage"
 
   ## Sport Cricket Averages
-  handle "/sport/cricket/averages.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/averages.app"]
-  handle "/sport/cricket/averages", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/averages"]
-  handle "/sport/cricket/:tournament/averages.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/indian-premier-league/averages.app"]
-  handle "/sport/cricket/:tournament/averages", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/indian-premier-league/averages"]
-  handle "/sport/cricket/teams/:team/averages.app", using: "SportDataPage", platform: "MozartSport", examples: [{"/sport/cricket/teams/lancashire/averages.app", 302}]
-  handle "/sport/cricket/teams/:team/averages", using: "SportDataPage", platform: "MozartSport", examples: [{"/sport/cricket/teams/lancashire/averages", 302}]
+  handle "/sport/cricket/averages.app", using: "SportDataPage"
+  handle "/sport/cricket/averages", using: "SportDataPage"
+  handle "/sport/cricket/:tournament/averages.app", using: "SportDataPage"
+  handle "/sport/cricket/:tournament/averages", using: "SportDataPage"
+  handle "/sport/cricket/teams/:team/averages.app", using: "SportDataPage"
+  handle "/sport/cricket/teams/:team/averages", using: "SportDataPage"
 
   ## Sport Football Top-Scorers
-  handle "/sport/football/:tournament/top-scorers.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/european-championship/top-scorers.app"]
-  handle "/sport/football/:tournament/top-scorers", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/european-championship/top-scorers"]
-  handle "/sport/football/:tournament/top-scorers/assists.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/european-championship/top-scorers/assists.app"]
-  handle "/sport/football/:tournament/top-scorers/assists", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/european-championship/top-scorers/assists"]
-  handle "/sport/football/teams/:team/top-scorers.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/everton/top-scorers.app"]
-  handle "/sport/football/teams/:team/top-scorers", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/everton/top-scorers"]
-  handle "/sport/football/teams/:team/top-scorers/assists.app", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/everton/top-scorers/assists.app"]
-  handle "/sport/football/teams/:team/top-scorers/assists", using: "SportFootballDataPage", platform: "MozartSport", examples: ["/sport/football/teams/everton/top-scorers/assists"]
+  handle "/sport/football/:tournament/top-scorers.app", using: "SportFootballDataPage"
+  handle "/sport/football/:tournament/top-scorers", using: "SportFootballDataPage"
+  handle "/sport/football/:tournament/top-scorers/assists.app", using: "SportFootballDataPage"
+  handle "/sport/football/:tournament/top-scorers/assists", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/top-scorers.app", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/top-scorers", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/top-scorers/assists.app", using: "SportFootballDataPage"
+  handle "/sport/football/teams/:team/top-scorers/assists", using: "SportFootballDataPage"
 
   ## Sport Golf Leaderboard
-  handle "/sport/golf/leaderboard.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/golf/leaderboard.app"]
-  handle "/sport/golf/leaderboard", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/golf/leaderboard"]
-  handle "/sport/golf/:tournament/leaderboard.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/golf/lpga-tour/leaderboard.app"]
-  handle "/sport/golf/:tournament/leaderboard", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/golf/lpga-tour/leaderboard"]
+  handle "/sport/golf/leaderboard.app", using: "SportDataPage"
+  handle "/sport/golf/leaderboard", using: "SportDataPage"
+  handle "/sport/golf/:tournament/leaderboard.app", using: "SportDataPage"
+  handle "/sport/golf/:tournament/leaderboard", using: "SportDataPage"
 
   ## Sport Tennis Pages
-  handle "/sport/tennis/live-scores.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/tennis/live-scores.app"]
-  handle "/sport/tennis/live-scores", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/tennis/live-scores"]
-  handle "/sport/tennis/live-scores/*any", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/tennis/order-of-play.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/tennis/order-of-play.app"]
-  handle "/sport/tennis/order-of-play", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/tennis/order-of-play"]
-  handle "/sport/tennis/order-of-play/*any", using: "SportDataPage", platform: "MozartSport", examples: []
-  handle "/sport/tennis/results/*any", using: "SportDataPage", platform: "MozartSport", examples: []
+  handle "/sport/tennis/live-scores.app", using: "SportDataPage"
+  handle "/sport/tennis/live-scores", using: "SportDataPage"
+  handle "/sport/tennis/live-scores/*any", using: "SportDataPage"
+  handle "/sport/tennis/order-of-play.app", using: "SportDataPage"
+  handle "/sport/tennis/order-of-play", using: "SportDataPage"
+  handle "/sport/tennis/order-of-play/*any", using: "SportDataPage"
+  handle "/sport/tennis/results/*any", using: "SportDataPage"
 
   ## Sport Event Data Pages
-  handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/scorecard/ECKO39913.app"]
-  handle "/sport/cricket/scorecard/:id", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/cricket/scorecard/ECKO39913"]
-  handle "/sport/horse-racing/race/:id.app", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/race/EHRP771835.app"]
-  handle "/sport/horse-racing/race/:id", using: "SportHorseRacingDataPage", platform: "MozartSport", examples: ["/sport/horse-racing/race/EHRP771835"]
-  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/match/EVP3489302.app"]
-  handle "/sport/rugby-league/match/:id", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-league/match/EVP3489302"]
-  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-union/match/EVP3551735.app"]
-  handle "/sport/rugby-union/match/:id", using: "SportDataPage", platform: "MozartSport", examples: ["/sport/rugby-union/match/EVP3551735"]
+  handle "/sport/cricket/scorecard/:id.app", using: "SportDataPage"
+  handle "/sport/cricket/scorecard/:id", using: "SportDataPage"
+  handle "/sport/horse-racing/race/:id.app", using: "SportHorseRacingDataPage"
+  handle "/sport/horse-racing/race/:id", using: "SportHorseRacingDataPage"
+  handle "/sport/rugby-league/match/:id.app", using: "SportDataPage"
+  handle "/sport/rugby-league/match/:id", using: "SportDataPage"
+  handle "/sport/rugby-union/match/:id.app", using: "SportDataPage"
+  handle "/sport/rugby-union/match/:id", using: "SportDataPage"
 
   ## Sport Football World Cup
-  handle "/sport/football/world-cup/schedule", using: "SportFootballWorldCupSchedule", platform: "Webcore", examples: ["/sport/football/world-cup/schedule"]
-  handle "/sport/app-webview/football/world-cup/schedule", using: "SportFootballWorldCupSchedule", platform: "Webcore", examples: ["/sport/app-webview/football/world-cup/schedule"]
-  redirect "/sport/football/world-cup/schedule.app", to: "/sport/app-webview/football/world-cup/schedule", status: 302
+  handle "/sport/football/world-cup/schedule.app", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/world-cup/schedule", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/womens-world-cup/schedule.app", using: "SportFootballGroupsAndSchedule"
+  handle "/sport/football/womens-world-cup/schedule", using: "SportFootballGroupsAndSchedule"
   # redirect old URLs from previous competitions - e.g., /group-stage, /knockout-stage
   redirect "/sport/football/world-cup/schedule/*any", to: "/sport/football/world-cup/schedule", status: 302
 
   ## Sport Topics
-  handle "/sport/topics/:id", using: "SportTopicPage", platform: "Webcore", examples: ["/sport/topics/cd61kendv7et"] do
+  handle "/sport/topics/:id", using: "SportTopicPage" do
     return_404 if: [
       !is_tipo_id?(id),
       !integer_in_range?(conn.query_params["page"] || "1", 1..42)
     ]
   end
 
-  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", platform: "Webcore", only_on: "test", examples: ["/sport/topics-test-blitzball"] do
+  handle "/sport/topics-test-blitzball", using: "SportDisciplineTopic", only_on: "test" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/alpine-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/alpine-skiing"] do
+  handle "/sport/alpine-skiing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/archery", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/archery"] do
+  handle "/sport/archery", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/badminton", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/badminton"] do
+  handle "/sport/badminton", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/baseball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/baseball"] do
+  handle "/sport/baseball", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/biathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/biathlon"] do
+  handle "/sport/biathlon", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/bobsleigh", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/bobsleigh"] do
+  handle "/sport/bobsleigh", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/bowls", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/bowls"] do
+  handle "/sport/bowls", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/canoeing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/canoeing"] do
+  handle "/sport/canoeing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/cross-country-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/cross-country-skiing"] do
+  handle "/sport/cross-country-skiing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/curling", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/curling"] do
+  handle "/sport/curling", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/darts", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/darts"] do
+  handle "/sport/darts", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/diving", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/diving"] do
+  handle "/sport/diving", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/equestrian", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/equestrian"] do
+  handle "/sport/equestrian", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/fencing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/fencing"] do
+  handle "/sport/fencing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/figure-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/figure-skating"] do
+  handle "/sport/figure-skating", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/freestyle-skiing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/freestyle-skiing"] do
+  handle "/sport/freestyle-skiing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/gymnastics", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/gymnastics"] do
+  handle "/sport/gymnastics", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/handball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/handball"] do
+  handle "/sport/handball", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/hockey", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/hockey"] do
+  handle "/sport/hockey", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/ice-hockey", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/ice-hockey"] do
+  handle "/sport/ice-hockey", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/judo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/judo"] do
+  handle "/sport/insight", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/karate", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/karate"] do
+  handle "/sport/judo", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/luge", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/luge"] do
+  handle "/sport/karate", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/modern-pentathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/modern-pentathlon"] do
+  handle "/sport/luge", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/nordic-combined", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/nordic-combined"] do
+  handle "/sport/modern-pentathlon", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/rowing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/rowing"] do
+  handle "/sport/nordic-combined", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/rugby-sevens", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/rugby-sevens"] do
+  handle "/sport/rowing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/sailing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sailing"] do
+  handle "/sport/rugby-sevens", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/shooting", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/shooting"] do
+  handle "/sport/sailing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/short-track-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/short-track-skating"] do
+  handle "/sport/shooting", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/skateboarding", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/skateboarding"] do
+  handle "/sport/short-track-skating", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/skeleton", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/skeleton"] do
+  handle "/sport/skateboarding", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/ski-jumping", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/ski-jumping"] do
+  handle "/sport/skeleton", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/snowboarding", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/snowboarding"] do
+  handle "/sport/ski-jumping", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/speed-skating", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/speed-skating"] do
+  handle "/sport/snowboarding", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/sport-climbing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sport-climbing"] do
+  handle "/sport/speed-skating", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/squash", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/squash"] do
+  handle "/sport/sport-climbing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/surfing", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/surfing"] do
+  handle "/sport/squash", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/sustainability", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/sustainability"] do
+  handle "/sport/surfing", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/synchronised-swimming", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/synchronised-swimming"] do
+  handle "/sport/sustainability", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/table-tennis", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/table-tennis"] do
+  handle "/sport/synchronised-swimming", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/taekwondo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/taekwondo"] do
+  handle "/sport/table-tennis", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/triathlon", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/triathlon"] do
+  handle "/sport/taekwondo", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/volleyball", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/volleyball"] do
+  handle "/sport/triathlon", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/water-polo", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/water-polo"] do
+  handle "/sport/volleyball", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/weightlifting", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/weightlifting"] do
+  handle "/sport/water-polo", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/wrestling", using: "SportDisciplineTopic", platform: "Webcore", examples: ["/sport/wrestling"] do
+  handle "/sport/weightlifting", using: "SportDisciplineTopic" do
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
+  end
+
+  handle "/sport/wrestling", using: "SportDisciplineTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   # Sports Team Pages
-  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic", platform: "Webcore", examples: ["/sport/football/teams/liverpool"] do
+  handle "/sport/:discipline/teams/:team", using: "SportDisciplineTeamTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
-  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/cricket/the-hundred"] do
+  handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/champions-league"] do
+  handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/dutch-eredivisie"] do
+  handle "/sport/football/dutch-eredivisie", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/europa-league"] do
+  handle "/sport/football/europa-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/french-ligue-one"] do
+  handle "/sport/football/french-ligue-one", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/german-bundesliga"] do
+  handle "/sport/football/german-bundesliga", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/italian-serie-a"] do
+  handle "/sport/football/italian-serie-a", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-cup"] do
+  handle "/sport/football/league-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-one"] do
+  handle "/sport/football/league-one", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/league-two"] do
+  handle "/sport/football/league-two", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/national-league"] do
+  handle "/sport/football/national-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/portuguese-primeira-liga"] do
+  handle "/sport/football/portuguese-primeira-liga", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-challenge-cup"] do
+  handle "/sport/football/scottish-challenge-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-championship"] do
+  handle "/sport/football/scottish-championship", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-cup"] do
+  handle "/sport/football/scottish-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-cup"] do
+  handle "/sport/football/scottish-league-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-one"] do
+  handle "/sport/football/scottish-league-one", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-league-two"] do
+  handle "/sport/football/scottish-league-two", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/scottish-premiership"] do
+  handle "/sport/football/scottish-premiership", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/spanish-la-liga"] do
+  handle "/sport/football/spanish-la-liga", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/us-major-league"] do
+  handle "/sport/football/us-major-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/welsh-premier-league"] do
+  handle "/sport/football/welsh-premier-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-  handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/womens-european-championship"] do
+  handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-   handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic", platform: "Webcore", examples: ["/sport/football/womens-world-cup"] do
+   handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 
   ## Sport Stories AMP & JSON - use query string params in example URLs to use live data via Mozart
-  handle "/sport/:id.amp", using: "SportAmp", platform: "MozartSimorgh", examples: ["/sport/50562296.amp?morph_env=live&renderer_env=live"]
-  handle "/sport/:id.json", using: "SportAmp", platform: "MozartSimorgh", examples: ["/sport/50562296.json?morph_env=live&renderer_env=live"]
-  handle "/sport/:discipline/:id.amp", using: "SportAmp", platform: "MozartSimorgh", examples: ["/sport/football/56064289.amp?morph_env=live&renderer_env=live"]
-  handle "/sport/:discipline/:id.json", using: "SportAmp", platform: "MozartSimorgh", examples: ["/sport/football/56064289.json?morph_env=live&renderer_env=live"]
+  handle "/sport/:id.amp", using: "SportAmp"
+  handle "/sport/:id.json", using: "SportAmp"
+  handle "/sport/:discipline/:id.amp", using: "SportAmp"
+  handle "/sport/:discipline/:id.json", using: "SportAmp"
 
   ## Sport Stories - use query string params in example URLs to use live data via Mozart
-  handle "/sport/:id.app", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/50562296.app?morph_env=live&renderer_env=live"]
-  handle "/sport/:id", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/50562296?morph_env=live&renderer_env=live"]
-  handle "/sport/athletics/:id.app", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/athletics/56628151.app?morph_env=live&renderer_env=live"]
-  handle "/sport/athletics/:id", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/athletics/56628151?morph_env=live&renderer_env=live"]
-  handle "/sport/cricket/:id.app", using: "SportCricketStoryPage", platform: "MozartSport", examples: ["/sport/cricket/56734095.app?morph_env=live&renderer_env=live"]
-  handle "/sport/cricket/:id", using: "SportCricketStoryPage", platform: "MozartSport", examples: ["/sport/cricket/56734095?morph_env=live&renderer_env=live"]
-  handle "/sport/cycling/:id.app", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/cycling/56655734.app?morph_env=live&renderer_env=live"]
-  handle "/sport/cycling/:id", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/cycling/56655734?morph_env=live&renderer_env=live"]
-  handle "/sport/football/:id.app", using: "SportFootballStoryPage", platform: "MozartSport", examples: ["/sport/football/56064289.app?morph_env=live&renderer_env=live"]
-  handle "/sport/football/:id", using: "SportFootballStoryPage", platform: "MozartSport", examples: ["/sport/football/56064289?morph_env=live&renderer_env=live"]
-  handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage", platform: "MozartSport", examples: ["/sport/formula1/56604356.app?morph_env=live&renderer_env=live"]
-  handle "/sport/formula1/:id", using: "SportFormula1StoryPage", platform: "MozartSport", examples: ["/sport/formula1/56604356?morph_env=live&renderer_env=live"]
-  handle "/sport/golf/:id.app", using: "SportMajorStoryPage", platform: "MozartSport", examples: []
-  handle "/sport/golf/:id", using: "SportMajorStoryPage", platform: "MozartSport", examples: []
-  handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage", platform: "MozartSport", examples: ["/sport/rugby-league/56730320.app?morph_env=live&renderer_env=live"]
-  handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage", platform: "MozartSport", examples: ["/sport/rugby-league/56730320?morph_env=live&renderer_env=live"]
-  handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage", platform: "MozartSport", examples: ["/sport/rugby-union/56719025.app?morph_env=live&renderer_env=live"]
-  handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage", platform: "MozartSport", examples: ["/sport/rugby-union/56719025?morph_env=live&renderer_env=live"]
-  handle "/sport/tennis/:id.app", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/tennis/56731414.app?morph_env=live&renderer_env=live"]
-  handle "/sport/tennis/:id", using: "SportMajorStoryPage", platform: "MozartSport", examples: ["/sport/tennis/56731414?morph_env=live&renderer_env=live"]
+  handle "/sport/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
 
-  handle "/sport/:discipline/:id.app", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/swimming/56674917.app?morph_env=live&renderer_env=live"]
-  handle "/sport/:discipline/:id", using: "SportStoryPage", platform: "MozartSport", examples: ["/sport/swimming/56674917?morph_env=live&renderer_env=live"]
+  handle "/sport/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/athletics/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/athletics/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cricket/:id.app", using: "SportCricketStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cricket/:id", using: "SportCricketStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cycling/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/cycling/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/football/:id.app", using: "SportFootballStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/football/:id", using: "SportFootballStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/formula1/:id.app", using: "SportFormula1StoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/formula1/:id", using: "SportFormula1StoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/golf/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/golf/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-league/:id.app", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-league/:id", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-union/:id.app", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/rugby-union/:id", using: "SportRugbyStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/tennis/:id.app", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/tennis/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/:discipline/:id.app", using: "SportStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/:discipline/:id", using: "SportStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
 
   # Sport catch-all
-  handle "/sport/*any", using: "Sport", platform: "MozartSport", examples: []
+  handle "/sport/*any", using: "Sport"
 
   no_match()
 end

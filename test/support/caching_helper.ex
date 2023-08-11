@@ -38,15 +38,15 @@ defmodule Belfrage.Test.CachingHelper do
   This clears the entire metadata cache, so can affect other tests if called from an
   async test. Can be called from setup/1 like:
 
-      setup :clear_metadata_cache
+      setup :clear_preflight_metadata_cache
   """
-  def clear_metadata_cache(_context) do
-    clear_metadata_cache()
+  def clear_preflight_metadata_cache(_context) do
+    clear_preflight_metadata_cache()
     :ok
   end
 
-  def clear_metadata_cache() do
-    :ets.delete_all_objects(:metadata_cache)
+  def clear_preflight_metadata_cache() do
+    :ets.delete_all_objects(:preflight_metadata_cache)
   end
 
   @doc """
@@ -87,8 +87,8 @@ defmodule Belfrage.Test.CachingHelper do
   * key - marks the response stored under the passed key as stale
   """
   def make_cached_response_stale(conn = %Conn{}) do
-    conn
-    |> BelfrageWeb.EnvelopeAdapter.adapt(conn.assigns.route_spec)
+    %Envelope{}
+    |> Envelope.adapt_request(conn)
     |> Belfrage.RequestHash.generate()
     |> make_cached_response_stale()
   end

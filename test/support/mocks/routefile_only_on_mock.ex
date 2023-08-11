@@ -3,13 +3,11 @@
 import BelfrageWeb.Routefile
 
 defroutefile "RoutefileOnlyOnMock", "test" do
-  handle("/only-on", using: "SomeRouteState", platform: "Webcore", only_on: "test", examples: ["/only-on"])
+  handle("/only-on", using: "SomeRouteState", only_on: "test")
 
   handle "/only-on-with-block",
     using: "SomeRouteState",
-    platform: "Webcore",
-    only_on: "test",
-    examples: ["/only-on-with-block"] do
+    only_on: "test" do
     send_resp(conn, 200, "block run")
   end
 

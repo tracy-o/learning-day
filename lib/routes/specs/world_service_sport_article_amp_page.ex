@@ -1,7 +1,10 @@
 defmodule Routes.Specs.WorldServiceSportArticleAmpPage do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh"
+      specs: %{
+        platform: "Simorgh",
+        examples: ["/sport/articles/cx94820kl0mo.amp"]
+      }
     }
   end
 end

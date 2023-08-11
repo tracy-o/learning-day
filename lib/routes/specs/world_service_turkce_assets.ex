@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceTurkceAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/turkce/sw.js", "/turkce/manifest.json"]
+      }
     }
   end
 end

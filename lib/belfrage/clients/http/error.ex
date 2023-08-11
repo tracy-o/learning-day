@@ -22,7 +22,7 @@ defmodule Belfrage.Clients.HTTP.Error do
   end
 
   def new(error_type, reason) do
-    Logger.log(:error, "", %{
+    Logger.log(level(reason), "", %{
       info: "Http error",
       third_party_reason: third_party_reason(error_type, reason),
       belfrage_http_reason: format_error(reason)
@@ -44,6 +44,14 @@ defmodule Belfrage.Clients.HTTP.Error do
   defp format_error(%Mint.TransportError{reason: :timeout}), do: :timeout
   defp format_error(%Mint.HTTPError{reason: reason}) when is_tuple(reason), do: elem(reason, 0)
   defp format_error(_reason), do: nil
+
+  defp level(reason) do
+    case reason do
+      %Mint.HTTPError{reason: {:invalid_request_target, _path}} -> :warn
+      %Mint.TransportError{reason: :timeout} -> :warn
+      _reason -> :error
+    end
+  end
 end
 
 defimpl String.Chars, for: Belfrage.Clients.HTTP.Error do

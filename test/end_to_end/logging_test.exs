@@ -9,9 +9,11 @@ defmodule EndToEnd.LoggingTest do
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
   import ExUnit.CaptureLog
+  import Test.Support.Helper, only: [set_env: 2]
 
   alias BelfrageWeb.Router
-  alias Belfrage.Clients.LambdaMock
+  alias Belfrage.Clients.{LambdaMock, HTTPMock}
+  alias Belfrage.Services.Webcore.Credentials
 
   @moduletag :end_to_end
 
@@ -37,7 +39,7 @@ defmodule EndToEnd.LoggingTest do
           conn(:get, "/200-ok-response?query=querystring")
           |> put_req_header("authorization", "auth-heaader-value")
           |> put_req_header("access-log-req-header", "yes")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
         end)
 
       assert captured_log =~ "query=querystring", "Failed to log querystring"
@@ -65,7 +67,7 @@ defmodule EndToEnd.LoggingTest do
   end
 
   describe "e2e tests for access log generation" do
-    test "requests are logged" do
+    test "/status requests are not logged" do
       :erlang.trace(:all, true, [:call])
       :erlang.trace_pattern({IO, :write, 2}, true, [:local])
 
@@ -96,7 +98,43 @@ defmodule EndToEnd.LoggingTest do
       |> put_resp_header("location", "https://my-location")
       |> put_resp_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
       |> put_resp_header("vary", "vary-1234")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Main.Test)
+
+      refute_receive {:trace, _, :call, {IO, :write, [_pid, [_event]]}}
+    end
+
+    test "requests are logged" do
+      :erlang.trace(:all, true, [:call])
+      :erlang.trace_pattern({IO, :write, 2}, true, [:local])
+
+      stub(LambdaMock, :call, fn _role_arn, _function_arn, _request, _opts ->
+        {:ok,
+         %{
+           "headers" => %{
+             "access-log-res-header" => "yes",
+             "ssl" => "ssl-value",
+             "set-cookie" => "session=12345"
+           },
+           "statusCode" => 200,
+           "body" => "OK"
+         }}
+      end)
+
+      :get
+      |> conn("/news/election/2016?foo=bar")
+      |> put_req_header("x-bbc-edge-host", "my-host")
+      |> put_req_header("authorization", "auth-heaader-value")
+      |> put_req_header("access-log-req-header", "yes")
+      |> put_req_header("x-bbc-request-id", "bbc-id-1234")
+      |> put_req_header("x-bbc-edge-scheme", "https")
+      |> put_resp_header("bsig", "bsig-1234")
+      |> put_resp_header("belfrage-cache-status", "cache-status")
+      |> put_resp_header("content-length", "1234")
+      |> put_resp_header("bid", "bid-1234")
+      |> put_resp_header("location", "https://my-location")
+      |> put_resp_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
+      |> put_resp_header("vary", "vary-1234")
+      |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
       assert_receive {:trace, _, :call, {IO, :write, [_pid, [event]]}}
 
@@ -105,16 +143,16 @@ defmodule EndToEnd.LoggingTest do
                "GET",
                "https",
                "my-host",
-               "/status",
+               "/news/election/2016",
                "foo=bar",
                "200",
-               "GTM,BELFRAGE,MOZART",
+               "BELFRAGE",
                "bbc-id-1234",
-               "bsig-1234",
-               "bid-1234",
-               "cache-status",
-               "max-age=0, private, must-revalidate",
-               "vary-1234",
+               "56f76f57b82e023a2307402b13060a43",
+               "local",
+               "MISS",
+               "private",
+               "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta",
                "1234",
                "https://my-location\"\n"
              ] = String.split(event, "\" \"")
@@ -122,5 +160,31 @@ defmodule EndToEnd.LoggingTest do
       sanitised_timestamp = String.replace(timestamp, "\"", "")
       assert {:ok, _, _} = DateTime.from_iso8601(sanitised_timestamp)
     end
+  end
+
+  test "conn is not logged in exception metadata" do
+    on_exit(fn ->
+      Credentials.update(%Belfrage.AWS.Credentials{})
+      :inets.stop()
+    end)
+
+    Credentials.update(%Belfrage.AWS.Credentials{
+      access_key_id: "test",
+      secret_access_key: "test",
+      session_token: "test"
+    })
+
+    :inets.start()
+
+    set_env(:lambda_client, Belfrage.Clients.Lambda)
+    set_env(:aws, Belfrage.AWS)
+
+    expect(HTTPMock, :execute, fn %Belfrage.Clients.HTTP.Request{}, _ ->
+      raise "some error"
+    end)
+
+    refute capture_log(fn ->
+             :httpc.request(:get, {"http://localhost:7081/news/election/2016?foo=bar", []}, [], [])
+           end) =~ ~s("conn":{")
   end
 end

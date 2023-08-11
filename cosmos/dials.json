@@ -278,5 +278,54 @@
         "description": "Keeps all allowed query strings"
       }
     ]
+  },
+  {
+    "name": "ni_election_failover",
+    "description": "Allows redirecting NI elections results to a different page",
+    "default-value": "off",
+    "values": [
+      {
+        "value": "on",
+        "description": "Enable failover redirect"
+      },
+      {
+        "value": "off",
+        "description": "Serve from results page"
+      }
+    ]
+  },
+  {
+    "name": "bbcx_enabled",
+    "description": "Allows disabling BBCX content by pointing to the original Origin",
+    "default-value": "false",
+    "values": [
+      {
+        "value": "true",
+        "description": "Enables BBCX content"
+      },
+      {
+        "value": "false",
+        "description": "Disables BBCX content"
+      }
+    ]
+  },
+  {
+    "name": "preflight_ares_data_fetch",
+    "description": "Allows fetching Ares metadata from FABL",
+    "default-value": "on",
+    "values": [
+      {
+        "value": "on",
+        "description": "Allows fetching metadata from FABL for routing decision"
+      },
+      {
+        "value": "learning",
+        "description": "Allows fetching metadata from FABL but only for logging"
+      },
+      {
+        "value": "off",
+        "description": "Disable fetching metadata from FABL"
+      }
+    ]
   }
 ]

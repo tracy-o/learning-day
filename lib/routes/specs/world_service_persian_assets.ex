@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServicePersianAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/persian/sw.js", "/persian/manifest.json"]
+      }
     }
   end
 end

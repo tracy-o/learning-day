@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceRussianAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/russian/sw.js", "/russian/manifest.json"]
+      }
     }
   end
 end

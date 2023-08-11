@@ -28,7 +28,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                {:replace, ["CircuitBreaker"]}
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
-                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt"}},
+                 request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt"}},
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
@@ -96,7 +96,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                {:replace, ["CircuitBreaker"]}
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
-                 request: %Envelope.Request{path_params: %{"id" => "c2x6gdkj24kt", "slug" => "some-slug"}},
+                 request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt", "slug" => "some-slug"}},
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
@@ -105,7 +105,7 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
       assert {:stop,
               %Envelope{
                 response: %Envelope.Response{
-                  http_status: 302,
+                  http_status: 301,
                   headers: %{
                     "location" => "/news/topics/cl16knzkz9yt",
                     "x-bbc-no-scheme-rewrite" => "1",

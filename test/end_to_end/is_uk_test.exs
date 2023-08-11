@@ -35,7 +35,7 @@ defmodule IsUKTest do
       |> put_req_header("x-bbc-edge-isuk", "no")
       |> put_req_header("x-bbc-edge-cache", "1")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _response_body} = sent_resp(conn)
   end
@@ -56,7 +56,7 @@ defmodule IsUKTest do
       |> put_req_header("x-bbc-edge-isuk", "yes")
       |> put_req_header("x-bbc-edge-cache", "1")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _response_body} = sent_resp(conn)
   end
@@ -76,7 +76,7 @@ defmodule IsUKTest do
       conn(:get, "/200-ok-response")
       |> put_req_header("x-ip_is_uk_combined", "no")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _response_body} = sent_resp(conn)
   end
@@ -96,7 +96,7 @@ defmodule IsUKTest do
       conn(:get, "/200-ok-response")
       |> put_req_header("x-ip_is_uk_combined", "yes")
 
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _response_body} = sent_resp(conn)
   end

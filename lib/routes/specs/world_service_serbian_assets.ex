@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceSerbianAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/serbian/sw.js", "/serbian/manifest.json"]
+      }
     }
   end
 end

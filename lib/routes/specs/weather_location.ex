@@ -1,8 +1,10 @@
 defmodule Routes.Specs.WeatherLocation do
-    def specs do
-      %{
-        platform: "MozartWeather"
+  def specification do
+    %{
+      specs: %{
+        platform: "MozartWeather",
+        examples: ["/weather/2650225/today", "/weather/2650225"]
       }
-    end
+    }
   end
-  
+end

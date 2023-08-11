@@ -11,7 +11,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     conn =
       conn(:get, "/com-to-uk-redirect")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)
     assert {"location", "https://www.test.bbc.co.uk/com-to-uk-redirect"} in headers
@@ -22,7 +22,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     conn =
       conn(:get, "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.com")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {302, headers, "Redirecting"} = sent_resp(conn)
     assert {"location", "https://www.test.bbc.co.uk/com-to-uk-redirect?page=3&q=ruby"} in headers
@@ -43,7 +43,7 @@ defmodule EndToEndTest.ComToUKRedirectTest do
     conn =
       conn(:get, "/com-to-uk-redirect?q=ruby&page=3&not_allowed=bar")
       |> put_req_header("x-bbc-edge-host", "www.test.bbc.co.uk")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     assert {200, headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers

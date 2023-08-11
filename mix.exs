@@ -18,7 +18,10 @@ defmodule Belfrage.MixProject do
     ]
   end
 
-  defp elixirc_paths(mix_env) when mix_env in @test_envs,
+  defp elixirc_paths(mix_env) when mix_env == :test,
+    do: ["lib", "test/support", "credo"]
+
+  defp elixirc_paths(mix_env) when mix_env == :smoke_test,
     do: ["lib", "test/support"]
 
   defp elixirc_paths(mix_env) when mix_env == :dev,
@@ -54,7 +57,7 @@ defmodule Belfrage.MixProject do
     [
       {:uuid, "~> 1.1"},
       {:benchee, "~> 1.1", only: :dev},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:crimpex, git: "https://github.com/bbc-news/Crimpex.git"},
       {:distillery, "~> 2.0"},
       {:jason, "~> 1.0"},
@@ -66,6 +69,7 @@ defmodule Belfrage.MixProject do
       {:logger_file_backend, "~> 0.0.10"},
       {:finch, "~> 0.13.0"},
       {:mox, "~> 1.0.2", only: @test_envs},
+      {:mock, "~> 0.3.8", only: @test_envs},
       {:plug_cowboy, "~> 2.6"},
       {:sweet_xml, "~> 0.7"},
       {:cachex, "~> 3.4"},

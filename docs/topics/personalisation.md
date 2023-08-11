@@ -57,6 +57,8 @@ In Belfrage a user is considered authenticated if:
 * The value of the request header `x-id-oidc-signedin` (set by GTM) is '1' or
 * Identity token (`ckns_id` cookie) is present in the request
 
+(On the other hand, a user is considered not authenticated if the value of `x-id-oidc-signedin` is '0').
+
 User's session is considered valid if a valid user access token (`ckns_atkn`
 cookie) is present in the request.
 
@@ -194,3 +196,147 @@ off (e.g. in case of an incident, when we want to reduce the load on GTM and
 upstream), Belfrage doesn't include `x-id-oidc-signedin` in the `Vary` header.
 When personalisation is off all users (both authenticated and not) get the same
 responses, so they are always public and can be cached downstream.
+
+---
+
+# Personalisation Journey through Belfrage
+```
+| stage                | personalisation process                                                                                                    | request type | module                   |
+|----------------------+----------------------------------------------------------------------------------------------------------------------------+-------------+--------------------------|
+| pre_request_pipeline | check authorisation header exists                                                                                          | App         | Belfrage.SessionState    |
+| pre_request_pipeline | check ckns_id cookie exists or x-id-oidc-signedin header == "1"                                                            | Web         | Belfrage.SessionState    |
+| pre_request_pipeline | check BBC ID Availability is "GREEN" and Personalisation dial is on                                                        | App,Web     | Belfrage.SessionState    |
+| pre_request_pipeline | update envelope.request.personalised_request to true                                                                       | App,Web     | Belfrage.Personalisation |
+| pre_request_pipeline | append header allowlist with x-id-oidc-signedin                                                                            | Web         | Belfrage.Personalisation |
+| pre_request_pipeline | append cookie allowlist ckns_atkn,ckns_id                                                                                  | Web         | Belfrage.Personalisation |
+| pre_request_pipeline | append header allowlist with authorization,x-authentication-provider                                                       | App         | Belfrage.Personalisation |
+| pre_request_pipeline | do not fetch early reponse from cache if envelope.request.personalised_request is true                                     | App,Web     | AppPersonalisationHalter |
+| request_pipeline     | return 204 response if personalisation is not enabled                                                                      | App         | AppPersonalisationHalter |
+| request_pipeline     | return 401 response if authorization header exists but token is invalid or expired                                         | App         | Personalisation          |
+| request_pipeline     | return 302 redirect if ckns_id cookie exists or x-id-oidc-signedin header == "1" but ckns_atkn token is invalid or expired | Web         | Personalisation          |
+| perform_call         | add authorization,x-authentication-provider to vary header                                                                 | App         | Belfrage.Response        |
+| perform_call         | add x-id-oidc-signed in to vary header                                                                                     | Web         | Belfrage.Response        |
+| response_pipeline    | do not store in cache if cache-control is private                                                                          | App,Web     | Belfrage.Cache.Store     |
+| response_pipeline    | mark the cache-control as private if envelope.private.personalised_request is true                                         | App,Web     | Processor                |
+```
+
+## pre_request_pipeline
+
+### Marking the request as personalised
+
+When a request (`%Conn{}`) is matched against a route in `Routes.Routefiles.Main.Live`, it is passed to `BelfrageWeb.yield`, which adapts the `%Conn{}` to an `%Envelope{}`.
+
+`BelfrageWeb.yield` then passes the `%Envelope{}` to `Belfrage.handle`, which in turn passes it through a pipeline called `pre_request_pipeline` (found in `Belfrage.Processor`).
+
+`pre_request_pipeline` does some transformations on the `%Envelope{}` via a set of functions - the relevant functions for us are `get_route_state/1` and `maybe_put_personalised_request/1`, found in `Belfrage.Processor` and `Belfrage.Personalisation` respectively.
+
+`get_route_state/1` is important as it updates the `%Envelope{}` with data that lets Belfrage know if the route that it has matched on is personalised or not i.e. `envelope.private.personalised_route`.
+
+`maybe_put_personalised_request/1` uses `envelope.private.personalised_route` as well as a number of request headers and/or cookies and dial values to determine if the request should be marked as personalised,  i.e. `envelope.private.personalised_request`.
+
+We discuss these checks below.
+
+`maybe_put_personalised_request/1` uses the `personalised_request?` function, found in `Belfrage.Personalisation` which runs a series of checks to determine whether or not a request is personalised.
+
+If following checks pass then we mark the request as personalised by setting `envelope.private.personalised_request` to `true`.
+
+**Request attributes that are checked**
+
+The first request attribute that is checked is `envelope.request.host` - this must end with `bbc.co.uk`.
+
+The other request attributes that are checked depend on the nature of the request.
+
+If the request is an app request i.e. `envelope.request.app?` is `true`, then the following must be true:
+* The `authorization` exists.
+
+If the request is not an app request i.e. `envelope.request.app?` is `false`, then one of the following must be true:
+* The `ckns_id` cookie exists
+* The `x-id-oidc-signedin` request header equals `"1"`
+
+**Other values that are checked**
+
+We also check that personalisation is enabled by checking if:
+
+* The BBC ID service status is available, or `GREEN`.
+* The `:personalisation` dial in Belfrage has a truthy value.
+
+### Appending Allowlists
+
+Another Personalisation concern is the appending of the allowlists using the `append_allowlists` function in the `Belfrage.Personalisation` module.
+
+Without this operation the neccessary request headers/cookies would be filtered out.
+
+If the request is an app request, then we add the following to the `headers_allowlist`:
+* `"authorization"`
+* `"x-authentication-provider"`
+
+If the request is a web request, then we add the following to the `headers_allowlist`:
+* `"x-id-oidc-signedin"`
+
+and the following to the `cookie_allowlist`:
+* `"ckns_atkn"`
+* `"ckns_id"`
+
+## fetch_early_response_from_cache
+
+The next personalisation concern is determining whether or not an early response is cached, using the `fetch_early_response_from_cache` function found in the `Belfrage.Processor` module.
+
+If `envelope.private.personalised_request` is `true` then we do not fetch an early response from the cache.
+
+## request_pipeline
+
+The next stage that occurs is the request pipeline, which runs a series of Request Transformers on the `%Envelope{}`.
+
+The transformers that are used depend on the `request_pipeline` specified by the `RouteSpec`, but the important transformers here are `AppPersonalisationHalter` and `Personalisation`.
+
+### AppPersonalisationHalter
+
+This Request Transformer checks if `envelope.request.app?` is `true` - if it is then we check that personalisation is enabled by checking if:
+
+* The BBC ID service status is available, or `GREEN`.
+* The `:personalisation` dial in Belfrage has a truthy value.
+
+If the request is an app request and personalisation is not enabled, then a `204` response is returned.
+
+### Personalisation
+
+This Request Transformer checks the following request values:
+
+If the request is an app request i.e. `envelope.request.app?` is `true`, then the following must be true:
+* The `authorization` header exists.
+
+If the request is not an app request i.e. `envelope.request.app?` is `false`, then one of the following must be true:
+* The `ckns_id` cookie exists
+* The `x-id-oidc-signedin` request header equals `"1"`
+
+Validation also occurs on the user token, which is found in the `authorization` header for app requests and the `ckns_atkn` header for non-app requests.
+
+We check that the `tokenName` attribute is equal to `access_token` and that the token has not expired  using the `exp` attribute.
+
+If the request is an app request, the `authorization` header exists and the token is not valid or has expired then a 401 response is returned.
+
+If the request is a web request, the `ckns_id` cookie exists, and the token is not valid or has expired then a 302 redirect is returned.
+
+If the request is a web request, the `x-id-oidc-signedin` request header equals `"1"` and the token is not valid or has expired then a 302 redirect is returned.
+
+## perform_call
+
+The next personalisation concern is the `"vary"` header in the response.
+
+The vary header is constructed from the allowlists, which were appended to in the `Appending Allowlists` stage.
+
+The `x-id-oidc-signedin` header will be removed from the vary header if:
+
+* The route is personalised
+* `envelope.request.host` ends with `bbc.co.uk`
+* The BBC ID service status is available, or `GREEN`.
+* The `:personalisation` dial in Belfrage has a truthy value.
+
+
+## response_pipeline
+
+If the `cache-control` has been marked as `"private"` then it will not be stored in the local or distributed cache.
+
+As part of the response pipeline we may fetch a fallback for a subset of error status codes.
+
+If the request has been marked as personalised, i.e. `envelope.private.personalised_request` is `true`, then we mark the `cache-control` to `"private"` if it is public.

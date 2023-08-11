@@ -1,7 +1,9 @@
 defmodule Routes.Specs.ProxyPass do
-  def specs do
+  def specification do
     %{
-      platform: "OriginSimulator"
+      specs: %{
+        platform: "OriginSimulator"
+      }
     }
   end
 end

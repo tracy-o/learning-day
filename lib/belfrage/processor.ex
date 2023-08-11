@@ -2,32 +2,29 @@ defmodule Belfrage.Processor do
   require Logger
 
   alias Belfrage.{
-    RouteStateRegistry,
+    Allowlist,
+    Behaviours.Service,
+    Cache,
+    CacheControl,
     Envelope,
     Envelope.Private,
-    RouteState,
+    Envelope.Response,
+    Language,
+    Metrics,
+    Metrics.LatencyMonitor,
+    Mvt,
+    Personalisation,
     Pipeline,
     RequestHash,
-    Cache,
     ResponseTransformers,
-    Allowlist,
-    Personalisation,
-    CacheControl,
-    Metrics,
-    Mvt,
-    Language,
-    WrapperError,
-    ServiceProvider,
-    Behaviours.Selector,
-    RouteSpecManager
+    RouteSpecManager,
+    RouteState,
+    RouteStateRegistry,
+    WrapperError
   }
-
-  alias Envelope.{Response, Private}
-  alias Belfrage.Metrics.LatencyMonitor
 
   def pre_request_pipeline(envelope = %Envelope{}) do
     pipeline = [
-      &build_route_state_id/1,
       &get_route_spec/1,
       &get_route_state/1,
       &allowlists/1,
@@ -36,63 +33,76 @@ defmodule Belfrage.Processor do
       &Mvt.Mapper.map/1,
       &Belfrage.Xray.Enable.call/1,
       &generate_request_hash/1,
-      &Mvt.Headers.remove_original_headers/1
+      &Mvt.Headers.remove_original_headers/1,
+      &maybe_fetch_fallback/1
     ]
 
     WrapperError.wrap(pipeline, envelope)
   end
 
-  def build_route_state_id(
-        envelope = %Envelope{
-          private: %Private{spec: spec_or_selector, platform: platform_or_selector},
-          request: request
-        }
-      ) do
-    case get_spec_platform_name(platform_or_selector, :platform, request) do
-      {:ok, platform_name} ->
-        case get_spec_platform_name(spec_or_selector, :spec, request) do
-          {:ok, {spec_name, partition}} ->
-            Envelope.add(envelope, :private, %{
-              route_state_id: {spec_name, platform_name, partition},
-              spec: spec_name,
-              platform: platform_name,
-              partition: partition
-            })
+  def get_route_spec(envelope = %Envelope{private: %Private{spec: spec_name}}) do
+    case RouteSpecManager.get_spec(spec_name) do
+      nil ->
+        route_spec_not_found_failure(spec_name)
 
-          {:ok, spec_name} ->
-            Envelope.add(envelope, :private, %{
-              route_state_id: {spec_name, platform_name},
-              spec: spec_name,
-              platform: platform_name
-            })
+      %{specs: specs, preflight_pipeline: []} ->
+        update_envelope_with_spec(envelope, specs)
 
-          {:error, reason} ->
-            selector_failure(spec_or_selector, reason)
+      %{specs: specs, preflight_pipeline: pipeline} ->
+        process_preflight_pipeline(envelope, specs, pipeline)
+    end
+  end
+
+  defp process_preflight_pipeline(envelope, specs, pipeline) do
+    case Pipeline.process(envelope, :preflight, pipeline) do
+      {:ok, envelope} ->
+        update_envelope_with_spec(envelope, specs)
+
+      {:error, envelope, msg} ->
+        envelope = Envelope.add(envelope, :response, %{http_status: get_pipeline_fail_status(msg)})
+
+        case specs do
+          [_spec] -> update_envelope_with_spec(envelope, specs)
+          specs -> merge_platform_allowlists(envelope, specs)
         end
-
-      {:error, reason} ->
-        selector_failure(platform_or_selector, reason)
     end
   end
 
-  defp get_spec_platform_name(name, type, request) do
-    if Selector.selector?(name) do
-      Selector.call(name, type, request)
-    else
-      {:ok, name}
+  defp update_envelope_with_spec(envelope = %Envelope{private: private}, [spec])
+       when private.platform in [nil, spec.platform] do
+    update_envelope_with_route_spec_attrs(envelope, spec)
+  end
+
+  defp update_envelope_with_spec(envelope = %Envelope{private: private}, specs)
+       when private.platform != nil do
+    matched_specs = for spec <- specs, spec.platform == private.platform, do: spec
+
+    case matched_specs do
+      [] ->
+        match_platform_failure(private.spec, private.platform)
+
+      [spec] ->
+        envelope
+        |> update_envelope_with_route_spec_attrs(spec)
+        |> merge_platform_allowlists(specs)
     end
   end
 
-  def get_route_spec(envelope = %Envelope{private: %Private{spec: spec, platform: platform}}) do
-    case RouteSpecManager.get_spec({spec, platform}) do
-      nil -> route_spec_failure({spec, platform})
-      spec -> update_envelope_with_route_spec_attrs(envelope, Map.from_struct(spec))
-    end
+  defp update_envelope_with_spec(%Envelope{private: private}, _specs) do
+    match_platform_failure(private.spec, private.platform)
   end
 
-  defp update_envelope_with_route_spec_attrs(envelope, spec) do
-    spec = Map.put(spec, :spec, Map.get(spec, :name))
-    Map.put(envelope, :private, struct(envelope.private, spec))
+  defp update_envelope_with_route_spec_attrs(envelope = %Envelope{private: private}, spec) do
+    route_state_id = make_route_state_id(private.spec, spec.platform, private.partition)
+    spec = Map.put(spec, :route_state_id, route_state_id)
+    Map.put(envelope, :private, struct(private, spec))
+  end
+
+  defp make_route_state_id(spec, platform, nil), do: {spec, platform}
+  defp make_route_state_id(spec, platform, partition), do: {spec, platform, partition}
+
+  def get_route_state(envelope) when envelope.private.route_state_id == nil do
+    envelope
   end
 
   def get_route_state(
@@ -123,10 +133,29 @@ defmodule Belfrage.Processor do
     Metrics.latency_span(:filter_request_data, fn ->
       envelope
       |> Personalisation.append_allowlists()
-      |> Mvt.Allowlist.add()
+      |> maybe_add_mvt_allowlists()
       |> Allowlist.QueryParams.filter()
       |> Allowlist.Cookies.filter()
       |> Allowlist.Headers.filter()
+    end)
+  end
+
+  defp maybe_add_mvt_allowlists(envelope) when envelope.private.route_state_id == nil, do: envelope
+  defp maybe_add_mvt_allowlists(envelope), do: Mvt.Allowlist.add(envelope)
+
+  defp merge_platform_allowlists(envelope, specs) do
+    Envelope.add(envelope, :private, %{
+      query_params_allowlist: get_platform_allowlist(specs, :query_params_allowlist),
+      headers_allowlist: get_platform_allowlist(specs, :headers_allowlist)
+    })
+  end
+
+  defp get_platform_allowlist(specs, type) do
+    Enum.reduce_while(specs, [], fn spec, acc ->
+      case Map.get(spec, type, []) do
+        "*" -> {:halt, "*"}
+        allowlist -> {:cont, Enum.uniq(acc ++ allowlist)}
+      end
     end)
   end
 
@@ -165,25 +194,17 @@ defmodule Belfrage.Processor do
     end)
   end
 
-  defp process_request_pipeline(envelope = %Envelope{}) do
-    case Pipeline.process(envelope, :request, envelope.private.request_pipeline) do
+  def perform_call(envelope) when is_integer(envelope.response.http_status), do: envelope
+  def perform_call(envelope), do: WrapperError.wrap(&Service.dispatch/1, envelope)
+
+  def process_response_pipeline(envelope), do: process_pipeline(envelope, :response, envelope.private.response_pipeline)
+
+  defp process_request_pipeline(envelope), do: process_pipeline(envelope, :request, envelope.private.request_pipeline)
+
+  defp process_pipeline(envelope = %Envelope{private: private}, type, pipeline) do
+    case Pipeline.process(envelope, type, pipeline) do
       {:ok, envelope} -> envelope
-      {:error, _envelope, msg} -> raise "Request pipeline failure: #{msg}"
-    end
-  end
-
-  def perform_call(envelope = %Envelope{response: %Envelope.Response{http_status: code}}) when is_number(code) do
-    envelope
-  end
-
-  def perform_call(envelope = %Envelope{private: %Envelope.Private{origin: origin}}) do
-    ServiceProvider.service_for(origin).dispatch(envelope)
-  end
-
-  def process_response_pipeline(envelope = %Envelope{}) do
-    case Pipeline.process(envelope, :response, envelope.private.response_pipeline) do
-      {:ok, envelope} -> envelope
-      {:error, _envelope, msg} -> raise "Response pipeline failure: #{msg}"
+      {:error, _envelope, msg} -> raise "#{type} pipeline for '#{private.spec}' spec failed: #{msg}"
     end
   end
 
@@ -213,6 +234,14 @@ defmodule Belfrage.Processor do
   defp update_route_state(envelope = %Envelope{}) do
     RouteState.update(envelope)
     envelope
+  end
+
+  defp maybe_fetch_fallback(envelope) do
+    if envelope.response.http_status do
+      fetch_fallback_from_cache(envelope)
+    else
+      envelope
+    end
   end
 
   def fetch_fallback_from_cache(envelope = %Envelope{}) do
@@ -266,32 +295,34 @@ defmodule Belfrage.Processor do
 
   defp route_state_state_failure(reason) do
     :telemetry.execute([:belfrage, :error, :route_state, :state], %{})
-
     Logger.log(:error, "Error retrieving route_state state with reason: #{inspect(reason)}}")
-
     raise "Failed to load route_state state."
   end
 
-  defp selector_failure(selector, reason) do
-    :telemetry.execute([:belfrage, :selector, :error], %{}, %{selector: selector})
-    Logger.log(:error, "", %{msg: "Selector '#{selector}' failed", reason: reason})
-    raise "Selector '#{selector}' failed with reason: #{inspect(reason)}"
+  defp route_spec_not_found_failure(spec) do
+    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: spec})
+    reason = "Route spec '#{spec}' not found"
+    Logger.log(:error, "", %{msg: reason})
+    raise reason
   end
 
-  defp route_spec_failure(id = {spec, platform}) do
-    :telemetry.execute([:belfrage, :route_spec, :not_found], %{}, %{route_spec: "#{spec}.#{platform}"})
-    reason = "Route spec '#{inspect(id)}' not found"
+  defp match_platform_failure(spec, platform) do
+    :telemetry.execute([:belfrage, :platform, :not_matched], %{}, %{route_spec: spec, platform: platform})
+    reason = "Platform '#{platform}' cannot be matched in '#{spec}' spec"
     Logger.log(:error, "", %{msg: reason})
     raise reason
   end
 
   defp maybe_log_response_status(envelope = %Envelope{response: %Response{http_status: http_status}})
        when http_status in [404, 408] or http_status > 499 do
-    Logger.log(:warn, "#{http_status} error from origin", cloudwatch: true)
+    Logger.log(:warn, "#{http_status} error from origin")
     envelope
   end
 
   defp maybe_log_response_status(envelope), do: envelope
+
+  defp get_pipeline_fail_status(code) when is_integer(code), do: code
+  defp get_pipeline_fail_status(_msg), do: 500
 
   defp unwrap_ok_response(func) do
     fn envelope ->

@@ -18,6 +18,7 @@ defmodule Belfrage.Metrics.Statsd do
       :platform_metrics,
       :plug_metrics,
       :plug_legacy_metrics,
+      :preflight_metrics,
       :service_error_metrics,
       :misc_metrics,
       :supervisor_observer_metrics

@@ -1,8 +1,16 @@
 defmodule Routes.Specs.DotComCulture do
-  def specs do
+  def specification do
     %{
-      request_pipeline: [],
-      platform: "DotComCulture"
+      preflight_pipeline: ["BBCXCulturePlatformSelector"],
+      specs: [
+        %{
+          platform: "DotComCulture",
+          examples: ["/culture", "/culture/tags/jazz-music"]
+        },
+        %{
+          platform: "BBCX"
+        },
+      ]
     }
   end
 end

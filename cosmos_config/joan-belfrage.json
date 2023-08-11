@@ -113,6 +113,13 @@
   },
   {
     "values": {
+      "test": "https://wwhp.gnl-test.bbcverticals.com",
+      "live": "https://wwhp.gnl-live.bbcverticals.com"
+    },
+    "name": "DOTCOM_HOMEPAGE_ENDPOINT"
+  },
+  {
+    "values": {
       "test": "https://culture-features.gnl-test.bbcverticals.com",
       "live": "https://culture-features.gnl-live.bbcverticals.com"
     },
@@ -145,6 +152,27 @@
       "live": "https://worklife-features.gnl-live.bbcverticals.com"
     },
     "name": "DOTCOM_WORKLIFE_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://web.test.bbcx-internal.com",
+      "live": "https://web.live.bbcx-internal.com"
+    },
+    "name": "BBCX_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://api.electoralcommission.org.uk",
+      "live": "https://api.electoralcommission.org.uk"
+    },
+    "name": "ELECTORAL_COMMISSION_ENDPOINT"
+  },
+  {
+    "values": {
+      "test": "https://cbbc-web.test.api.bbc.co.uk",
+      "live": "https://cbbc-web.api.bbc.co.uk"
+    },
+    "name": "CHILDRENS_RESPONSIVE_ENDPOINT"
   },
   {
     "values": {

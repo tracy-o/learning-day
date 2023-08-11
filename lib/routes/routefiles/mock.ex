@@ -29,82 +29,105 @@ defroutefile "Mock", "test" do
   redirect("/some/path/*any", to: "/another-path/*any", status: 301)
   redirect("/redirect-to-root", to: "/", status: 302)
 
-  handle "/", using: "SomeRouteState", platform: "Webcore", examples: ["/"]
+  handle "/", using: "SomeRouteState"
 
-  handle "/fabl/:name", using: "SomeFablRouteState", platform: "Fabl", examples: ["/fabl/xray"]
+  handle "/fabl/:name", using: "SomeFablRouteState"
 
-  handle "/200-ok-response", using: "SomeRouteState", platform: "Webcore", examples: ["/200-ok-response"]
+  handle "/200-ok-response", using: "SomeRouteState"
 
-  handle "/202-ok-response", using: "SomeClassicAppsRouteSpec", platform: "ClassicApps", examples: ["/202-ok-response"]
+  handle "/202-ok-response", using: "SomeClassicAppsRouteSpec"
 
-  handle "/downstream-not-found", using: "SomeRouteState", platform: "Webcore", examples: ["/downstream-not-found"]
+  handle "/downstream-not-found", using: "SomeRouteState"
 
-  handle "/downstream-broken", using: "SomeRouteState", platform: "Webcore", examples: ["/downstream-broken"]
+  handle "/downstream-broken", using: "SomeRouteState"
 
-  handle "/premature-404", using: "SomeRouteState", platform: "Webcore", examples: ["/premature-404"] do
+  handle "/premature-404", using: "SomeRouteState" do
     return_404(if: true)
   end
 
-  handle "/sends-request-downstream", using: "SomeRouteState", platform: "Webcore", examples: ["/sends-request-downstream"] do
+  handle "/sends-request-downstream", using: "SomeRouteState" do
     return_404(if: false)
   end
 
-  handle "/moz", using: "Moz", platform: "MozartNews", examples: ["/moz"]
+  handle "/moz", using: "Moz"
 
-  handle "/com-to-uk-redirect", using: "SomeRouteStateComToUK", platform: "Webcore", examples: ["/com-to-uk-redirect"]
+  handle "/com-to-uk-redirect", using: "SomeRouteStateComToUK"
 
-  handle "/my/session", using: "MySession", platform: "OriginSimulator", examples: []
+  handle "/my/session", using: "MySession"
 
-  handle "/my/session/webcore-platform", using: "MySessionWebcorePlatform", platform: "Webcore", examples: []
+  handle "/my/session/webcore-platform", using: "MySessionWebcorePlatform"
 
-  handle "/route-allow-headers", using: "SomeRouteStateAllowHeaders", platform: "Webcore", examples: []
+  handle "/route-allow-headers", using: "SomeRouteStateAllowHeaders"
 
-  handle "/format/rewrite/:discipline/av/:team.app", using: "SomeMozartRouteState", platform: "MozartNews", examples: []
-  handle "/format/rewrite/:discipline/av/:team", using: "SomeRouteState", platform: "Webcore", examples: []
+  handle "/format/rewrite/:discipline/av/:team.app", using: "SomeMozartRouteState"
+  handle "/format/rewrite/:discipline/av/:team", using: "SomeRouteState"
 
-  handle "/format/rewrite/:discipline.app", using: "SomeMozartRouteState", platform: "MozartNews", examples: []
-  handle "/format/rewrite/:discipline", using: "SomeRouteState", platform: "Webcore", examples: []
-  handle "/format/rewrite/:discipline/av", using: "SomeRouteState", platform: "Webcore", examples: []
+  handle "/format/rewrite/:discipline.app", using: "SomeMozartRouteState"
+  handle "/format/rewrite/:discipline", using: "SomeRouteState"
+  handle "/format/rewrite/:discipline/av", using: "SomeRouteState"
 
-  handle "/proxy-pass", using: "ProxyPass", platform: "OriginSimulator", examples: ["/proxy-pass"]
+  handle "/some-webcore-bbcx-content", using: "SomeRouteState"
+  handle "/some-mozart-bbcx-content", using: "SomeMozartRouteState"
+  handle "/some-mozart-sport-bbcx-content", using: "SomeMozartSportRouteState"
 
-  handle "/caching-disabled", using: "CacheDisabled", platform: "Webcore", examples: []
+  handle "/proxy-pass", using: "ProxyPass"
 
-  handle "/language-from-cookie", using: "LanguageFromCookieRouteState", platform: "Webcore", examples: []
+  handle "/caching-disabled", using: "CacheDisabled"
 
-  handle "/personalised-news-article-page", using: "PersonalisedContainerData", platform: "Webcore", examples: []
+  handle "/language-from-cookie", using: "LanguageFromCookieRouteState"
 
-  handle "/mvt", using: "SomeMvtRouteState", platform: "Webcore", examples: ["/mvt"]
+  handle "/personalised-news-article-page", using: "PersonalisedContainerData"
 
-  handle "/ws-mvt", using: "SomeSimorghRouteSpec", platform: "Simorgh", examples: ["/ws-mvt"]
+  handle "/mvt", using: "SomeMvtRouteState"
 
-  handle "/proxy-on-joan/:id", using: "NewsArticlePage", platform: "Webcore", examples: ["/proxy-on-joan/49336140"]
+  handle "/ws-mvt", using: "SomeSimorghRouteSpec"
 
-  handle "/app-request/p/:name", using: "AppPersonalisation", platform: "Fabl", examples: []
-  handle "/app-request/:name", using: "FablData", platform: "Fabl", examples: []
+  handle "/proxy-on-joan/:id", using: "NewsArticlePage"
 
-  handle "/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised", platform: "Webcore", examples: []
+  handle "/app-request/p/:name", using: "AppPersonalisation"
+  handle "/app-request/:name", using: "FablData"
+
+  handle "/personalised-to-non-personalised", using: "PersonalisedToNonPersonalised"
 
   # will remove and use real route spec in RESFRAME-4718
-  handle "/classic-apps-route", using: "SomeClassicAppsRouteSpec", platform: "ClassicApps", examples: []
+  handle "/classic-apps-route", using: "SomeClassicAppsRouteSpec"
 
-  handle "/sport/:discipline/rss.xml", using: "SportRssGuid", platform: "Karanga", examples: []
+  handle "/sport/:discipline/rss.xml", using: "SportRssGuid"
 
-  handle "/content/ldp/:guid", using: "ClassicAppFablLdp", platform: "Fabl", examples: []
+  handle "/content/ldp/:guid", using: "ClassicAppFablLdp"
 
-  handle "/etag-support", using: "EtagSupport", platform: "MozartNews", examples: []
+  handle "/etag-support", using: "EtagSupport"
 
-  handle "/fd/abl", using: "AblDataWithNoCache", platform: "Fabl", examples: []
+  handle "/fd/abl", using: "AblDataWithNoCache"
 
-  handle "/no-etag-support", using: "NoEtagSupport", platform: "MozartNews", examples: []
+  handle "/no-etag-support", using: "NoEtagSupport"
 
-  handle("/platform-selection-with-selector", using: "SomeRouteStateWithMultipleSpecs", platform: "AssetTypePlatformSelector", examples: [])
+  handle("/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs")
 
-  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs", platform: "Webcore", examples: [])
+  handle("/news/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs")
 
-  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs", platform: "MozartNews", examples: [])
+  handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs")
 
-  handle_proxy_pass "/*any", using: "ProxyPass", platform: "OriginSimulator", only_on: "test", examples: ["/foo/bar"]
+  handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs")
+
+  # Remove these when the preflight transformers are used in production
+  handle "/bbcx-platform-selector-mozart-news", using: "BBCXMozartNewsPlatformSelector"
+  handle "/bbcx-platform-selector-mozart-sport", using: "BBCXMozartSportPlatformSelector"
+
+  handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
+    return_404 if: !matches?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
+  end
+  handle "/election2023address/:uprn", using: "ElectoralCommissionAddress" do
+    return_404 if: !matches?(uprn, ~r/^\d{6,12}$/)
+  end
+
+  handle "/sport/av/football/:id", using: "MySessionWebcorePlatform" do
+    return_404 if: [
+      !matches?(id, ~r/\A[0-9]{4,9}\z/)
+    ]
+  end
+
+  handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
   no_match()
 end

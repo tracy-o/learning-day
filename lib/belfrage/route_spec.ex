@@ -1,7 +1,6 @@
 defmodule Belfrage.RouteSpec do
   alias Belfrage.Personalisation
   alias Belfrage.Behaviours.Transformer
-  alias Belfrage.Behaviours.Selector
 
   @allowlists ~w(headers_allowlist query_params_allowlist cookie_allowlist)a
   @pipeline_placeholder :_routespec_pipeline_placeholder
@@ -9,8 +8,7 @@ defmodule Belfrage.RouteSpec do
   @type name :: String.t()
   @type platform :: String.t()
 
-  defstruct name: nil,
-            platform: nil,
+  defstruct platform: nil,
             owner: nil,
             slack_channel: nil,
             request_pipeline: [],
@@ -41,80 +39,124 @@ defmodule Belfrage.RouteSpec do
             mvt_project_id: 0,
             fallback_write_sample: 1,
             etag: false,
-            xray_enabled: false
+            xray_enabled: false,
+            examples: []
 
-  @spec list_route_specs(String.t()) :: [RouteSpec.t()]
+  @spec list_route_specs(String.t()) :: [map()]
   def list_route_specs(env \\ Application.get_env(:belfrage, :production_environment)) do
     list_spec_names()
-    |> Enum.map(&get_specs(&1, env))
-    |> :lists.append()
-    |> Enum.map(&update_spec_with_platform(&1, env))
+    |> Enum.map(&get_route_spec(&1, env))
     |> validate_unique_specs()
   end
 
-  # get_route_spec/2 interface should be removed as it is used for tests only
-  #
-  @spec get_route_spec({name(), platform()}) :: RouteSpec.t() | nil
-  def get_route_spec({spec_name, platform}, env \\ Application.get_env(:belfrage, :production_environment)) do
-    found_specs =
-      for spec <- get_specs(spec_name, env),
-          spec.platform == platform,
-          do: update_spec_with_platform(spec, env)
-
-    case found_specs do
-      [spec] -> spec
-      [] -> nil
-    end
-  end
-
-  defp get_specs(spec_name, env) do
+  @spec get_route_spec(String.t(), String.t()) :: map()
+  def get_route_spec(spec_name, env \\ Application.get_env(:belfrage, :production_environment)) do
     module = Module.concat([Routes, Specs, spec_name])
+    ensure_module_loaded(module)
 
-    case call_specs_func(module, env) do
-      spec when is_map(spec) -> [put_spec_name(spec, spec_name)]
-      specs when is_list(specs) -> Enum.map(specs, &put_spec_name(&1, spec_name))
-    end
+    specification = call_specification_func(module, env)
+    preflight_pipeline = Map.get(specification, :preflight_pipeline, [])
+    specs = Map.get(specification, :specs)
+
+    %{
+      name: spec_name,
+      preflight_pipeline: validate_pipeline(preflight_pipeline, spec_name, :preflight),
+      specs: parse_specs(spec_name, specs, preflight_pipeline, env)
+    }
   end
 
-  defp update_spec_with_platform(spec, env) do
+  @spec list_examples(String.t()) :: [map()]
+  def list_examples(env \\ Application.get_env(:belfrage, :production_environment)) do
+    list_route_specs(env)
+    |> Enum.flat_map(&get_examples/1)
+  end
+
+  @spec get_examples(String.t() | map(), String.t()) :: map()
+  def get_examples(%{name: spec_name, specs: specs}) do
+    examples =
+      for %{platform: platform_name, examples: examples} <- specs do
+        for example <- examples, do: Map.merge(example, %{platform: platform_name, spec: spec_name})
+      end
+
+    :lists.append(examples)
+  end
+
+  def get_examples(spec_name, env \\ Application.get_env(:belfrage, :production_environment)) do
+    get_route_spec(spec_name, env) |> get_examples()
+  end
+
+  defp parse_specs(spec_name, spec, preflight_pipeline, env) when is_map(spec) do
+    parse_specs(spec_name, [spec], preflight_pipeline, env)
+  end
+
+  defp parse_specs(spec_name, specs, [], _env) when length(specs) > 1 do
+    raise("Pre flight pipeline doesn't exist for #{spec_name}, but spec contains multiple Platforms.")
+  end
+
+  defp parse_specs(spec_name, specs, _preflight_pipeline, env) do
+    specs
+    |> Enum.map(&update_spec_with_platform(&1, spec_name, env))
+    |> validate_unique_platforms(spec_name)
+  end
+
+  defp update_spec_with_platform(spec, spec_name, env) do
     platform = get_platform(spec.platform, env)
 
     spec
     |> Map.merge(merge_allowlists(platform, spec))
-    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, platform, spec))
-    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, platform, spec))
-    |> to_envelope(platform)
+    |> Map.put(:request_pipeline, merge_validate_pipelines(:request_pipeline, spec, spec_name, platform))
+    |> Map.put(:response_pipeline, merge_validate_pipelines(:response_pipeline, spec, spec_name, platform))
+    |> Map.put(:examples, parse_examples(spec, platform))
+    |> validate_spec_fields(spec_name, platform)
     |> Personalisation.maybe_put_personalised_route()
+  end
+
+  defp parse_examples(spec, platform) do
+    case Map.get(spec, :examples, []) do
+      [] -> []
+      examples -> Enum.map(examples, &parse_example(&1, platform))
+    end
+  end
+
+  defp parse_example(path, platform) when is_binary(path) do
+    parse_example(%{path: path}, platform)
+  end
+
+  defp parse_example(example = %{path: path}, platform) do
+    platform_example = Map.get(platform, :examples, %{})
+
+    %{
+      path: path,
+      expected_status: Map.get(example, :expected_status, 200),
+      headers: Map.merge(Map.get(platform_example, :headers, %{}), Map.get(example, :headers, %{}))
+    }
   end
 
   defp get_platform(platform_name, env) do
     module = Module.concat([Routes, Platforms, platform_name])
-    call_specs_func(module, env)
-  end
-
-  defp to_envelope(route_spec_map, platform) do
-    try do
-      struct!(__MODULE__, Map.merge(platform, route_spec_map))
-    catch
-      _, reason -> raise "Invalid '#{inspect(route_spec_map.name)}' spec, error: #{inspect(reason)}"
-    end
-  end
-
-  defp put_spec_name(spec, spec_name) do
-    Map.put(spec, :name, spec_name)
-  end
-
-  defp call_specs_func(module, env) do
     ensure_module_loaded(module)
+    call_specification_func(module, env)
+  end
 
-    cond do
-      function_exported?(module, :specs, 1) -> module.specs(env)
-      function_exported?(module, :specs, 0) -> module.specs()
-      true -> raise "Module '#{module}' must define a specs/0 or specs/1 function"
+  # Currently we use %RouteSpec{} struct as a spec fields validator.
+  # This should be transformed to the json schema validation later.
+  defp validate_spec_fields(spec, spec_name, platform) do
+    try do
+      struct!(__MODULE__, Map.merge(platform, spec)) |> Map.from_struct()
+    catch
+      _, reason -> raise "Invalid '#{inspect(spec_name)}' spec, error: #{inspect(reason)}"
     end
   end
 
-  defp merge_validate_pipelines(type, platform, spec) do
+  defp call_specification_func(module, env) do
+    cond do
+      function_exported?(module, :specification, 1) -> module.specification(env)
+      function_exported?(module, :specification, 0) -> module.specification()
+      true -> raise "Module '#{module}' must define a specification/0 or specification/1 function"
+    end
+  end
+
+  defp merge_validate_pipelines(type, spec, spec_name, platform) do
     platform_pipeline = Map.get(platform, type, [])
     spec_pipeline = spec[type]
 
@@ -131,8 +173,7 @@ defmodule Belfrage.RouteSpec do
         spec_pipeline || platform_pipeline
       end
 
-    validate_pipeline({spec.name, spec.platform}, pipeline_to_transformer_type(type), pipeline)
-    pipeline
+    validate_pipeline(pipeline, spec_name, pipeline_to_transformer_type(type))
   end
 
   defp merge_allowlists(platform, spec) do
@@ -151,31 +192,29 @@ defmodule Belfrage.RouteSpec do
     end)
   end
 
-  defp validate_unique_specs(specs) do
-    ids = for spec <- specs, do: {spec.name, spec.platform}
-
-    case ids -- Enum.uniq(ids) do
-      [] -> specs
-      non_unique_ids -> raise "Specs are not unique: #{inspect(non_unique_ids)}}"
-    end
-  end
-
-  defp validate_pipeline(id, type, transformers) do
+  defp validate_pipeline(transformers, spec_name, type) do
     for name <- transformers,
         do: ensure_module_loaded(Transformer.get_transformer_callback(type, name))
 
-    ensure_unique_transformers(id, type, transformers)
+    validate_unique(transformers, spec_name, "#{type}_transformers")
   end
 
-  defp ensure_unique_transformers(id, type, transformers) do
-    case Enum.uniq(transformers -- Enum.uniq(transformers)) do
-      [] ->
-        :ok
+  defp validate_unique_specs(specs) do
+    spec_names = for spec <- specs, do: spec.name
+    validate_unique(spec_names, "n/a", "spec names")
+    specs
+  end
 
-      duplicates ->
-        type = Atom.to_string(type)
+  defp validate_unique_platforms(specs, spec_name) do
+    platforms = for spec <- specs, do: spec.platform
+    validate_unique(platforms, spec_name, "platforms in specs")
+    specs
+  end
 
-        raise "#{inspect(id)} contains the following duplicated transformers in the #{type}_pipeline : #{inspect(duplicates)}"
+  defp validate_unique(entities, spec_name, what) do
+    case entities -- Enum.uniq(entities) do
+      [] -> entities
+      duplicates -> raise "#{what} are not unique, spec: '#{spec_name}', duplicates: #{inspect(duplicates)}"
     end
   end
 
@@ -195,7 +234,6 @@ defmodule Belfrage.RouteSpec do
 
     for module <- modules,
         String.starts_with?(Macro.to_string(module), module_path),
-        !Selector.selector?(Macro.to_string(module)),
         do: String.trim_leading(Macro.to_string(module), module_path)
   end
 end

@@ -5,6 +5,9 @@ defmodule Belfrage.Services.HTTPTest do
   alias Belfrage.Metrics.LatencyMonitor
   alias Belfrage.Test.XrayHelper
 
+  import ExUnit.CaptureLog
+  import Belfrage.Test.MetricsHelper
+
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
@@ -40,13 +43,22 @@ defmodule Belfrage.Services.HTTPTest do
     end
   end
 
+  defmodule TestPlug do
+    import Plug.Conn
+
+    def init(_), do: []
+
+    def call(conn, _opts) do
+      send_resp(conn, 200, get_req_header(conn, "referer"))
+    end
+  end
+
   describe "HTTP service" do
     test "get returns a response" do
       expect_request(
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -81,7 +93,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -106,7 +117,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
         response
@@ -126,7 +136,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/invalid\\path",
-          payload: "",
           headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
         },
         {:error, %Clients.HTTP.Error{reason: :invalid_request_target}}
@@ -183,19 +192,9 @@ defmodule Belfrage.Services.HTTPTest do
       do_not_mock_http_client()
       do_not_mock_finch()
 
-      defmodule MyApp do
-        import Plug.Conn
-
-        def init(_), do: []
-
-        def call(conn, _opts) do
-          send_resp(conn, 200, get_req_header(conn, "referer"))
-        end
-      end
-
       port = random_port()
 
-      start_supervised({Plug.Cowboy, scheme: :http, plug: MyApp, options: [port: port]})
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
 
       referer = "https://fa.wikipedia.org/wiki/۲۰۰۸"
       urlencoded_referer = URI.encode(referer)
@@ -217,18 +216,13 @@ defmodule Belfrage.Services.HTTPTest do
                })
     end
 
-    test "origin times out" do
-      response = {:error, %Clients.HTTP.Error{reason: :timeout}}
+    test "when origin times out a 500 response is returned" do
+      do_not_mock_http_client()
 
-      expect_request(
-        %Clients.HTTP.Request{
-          method: :get,
-          url: "https://www.bbc.co.uk/_some_path?foo=bar",
-          payload: "",
-          headers: %{"accept-encoding" => "gzip", "x-country" => "gb", "user-agent" => "Belfrage"}
-        },
-        response
-      )
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
 
       assert %Envelope{
                response: %Envelope.Response{
@@ -236,6 +230,193 @@ defmodule Belfrage.Services.HTTPTest do
                  body: ""
                }
              } = HTTP.dispatch(@get_envelope)
+    end
+
+    test "when origin times out the client error is logged as a warning" do
+      do_not_mock_http_client()
+
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
+
+      assert capture_log([level: :warn], fn -> HTTP.dispatch(@get_envelope) end) =~
+               "\"third_party_reason\":\"timeout\",\"info\":\"Http error\",\"belfrage_http_reason\":\"timeout\""
+
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
+
+      refute capture_log([level: :error], fn -> HTTP.dispatch(@get_envelope) end) =~
+               "\"third_party_reason\":\"timeout\",\"info\":\"Http error\",\"belfrage_http_reason\":\"timeout\""
+    end
+
+    test "when origin times out a service error is logged as a warning" do
+      do_not_mock_http_client()
+
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
+
+      assert capture_log([level: :warn], fn -> HTTP.dispatch(@get_envelope) end) =~
+               "\"reason\":\"timeout\",\"msg\":\"HTTP Service request error\""
+
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
+
+      refute capture_log([level: :error], fn -> HTTP.dispatch(@get_envelope) end) =~
+               "\"reason\":\"timeout\",\"msg\":\"HTTP Service request error\""
+    end
+
+    test "when origin times out a telemetry event is sent" do
+      do_not_mock_http_client()
+
+      FinchMock
+      |> expect(:request, fn _request, Finch, _opts ->
+        {:error, %Mint.TransportError{reason: :timeout}}
+      end)
+
+      assert_metric(
+        {[:error, :service, :SomePlatform, :timeout], %{count: 1}, %{platform: :SomePlatform, status_code: "408"}},
+        fn -> HTTP.dispatch(@get_envelope) end
+      )
+    end
+
+    test "when the URI contains a char that is not allowed to be unescaped a 404 response is returned" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
+
+      assert assert %Envelope{
+                      response: %Envelope.Response{
+                        http_status: 404,
+                        body: ""
+                      }
+                    } =
+                      HTTP.dispatch(%Envelope{
+                        private: %Envelope.Private{
+                          origin: "http://localhost:#{port}",
+                          platform: "SomePlatform"
+                        },
+                        request: %Envelope.Request{
+                          method: "GET",
+                          path: "/some-path/?{",
+                          query_params: %{},
+                          host: "localhost",
+                          req_svc_chain: "BELFRAGE"
+                        }
+                      })
+    end
+
+    test "when the URI contains a char that is not allowed to be unescaped a client error is logged as a warning" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
+
+      assert capture_log([level: :warn], fn ->
+               HTTP.dispatch(%Envelope{
+                 private: %Envelope.Private{
+                   origin: "http://localhost:#{port}",
+                   platform: "SomePlatform"
+                 },
+                 request: %Envelope.Request{
+                   method: "GET",
+                   path: "/some-path/?{",
+                   query_params: %{},
+                   host: "localhost",
+                   req_svc_chain: "BELFRAGE"
+                 }
+               })
+             end) =~
+               "\"third_party_reason\":\"invalid request target: \\\"/some-path/?{\\\"\",\"info\":\"Http error\",\"belfrage_http_reason\":\"invalid_request_target\""
+
+      refute capture_log([level: :error], fn ->
+               HTTP.dispatch(%Envelope{
+                 private: %Envelope.Private{
+                   origin: "http://localhost:#{port}",
+                   platform: "SomePlatform"
+                 },
+                 request: %Envelope.Request{
+                   method: "GET",
+                   path: "/some-path/?{",
+                   query_params: %{},
+                   host: "localhost",
+                   req_svc_chain: "BELFRAGE"
+                 }
+               })
+             end) =~
+               "\"third_party_reason\":\"invalid request target: \\\"/some-path/?{\\\"\",\"info\":\"Http error\",\"belfrage_http_reason\":\"invalid_request_target\""
+    end
+
+    test "when the URI contains a char that is not allowed to be unescaped a telemetry event is sent" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
+
+      assert_metric(
+        {[:http, :client, :error, :invalid_request_target], %{count: 1}, %{}},
+        fn ->
+          HTTP.dispatch(%Envelope{
+            private: %Envelope.Private{
+              origin: "http://localhost:#{port}",
+              platform: "SomePlatform"
+            },
+            request: %Envelope.Request{
+              method: "GET",
+              path: "/some-path/?{",
+              query_params: %{},
+              host: "localhost",
+              req_svc_chain: "BELFRAGE"
+            }
+          })
+        end
+      )
+    end
+
+    test "when the URI contains a char that is not allowed to be unescaped a metric is sent" do
+      do_not_mock_http_client()
+      do_not_mock_finch()
+      port = random_port()
+
+      start_supervised({Plug.Cowboy, scheme: :http, plug: TestPlug, options: [port: port]})
+
+      {socket, udp_port} = given_udp_port_opened()
+
+      start_reporter(
+        metrics: Belfrage.Metrics.Statsd.statix_static_metrics(),
+        formatter: :datadog,
+        global_tags: [BBCEnvironment: "live"],
+        port: udp_port
+      )
+
+      HTTP.dispatch(%Envelope{
+        private: %Envelope.Private{
+          origin: "http://localhost:#{port}",
+          platform: "SomePlatform"
+        },
+        request: %Envelope.Request{
+          method: "GET",
+          path: "/some-path/?{",
+          query_params: %{},
+          host: "localhost",
+          req_svc_chain: "BELFRAGE"
+        }
+      })
+
+      assert_reported(
+        socket,
+        "http.client.error.invalid_request_target:1|c|#BBCEnvironment:live"
+      )
     end
 
     test "when varnish is set, the varnish header is used" do
@@ -256,7 +437,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -297,7 +477,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-country" => "gb",
@@ -339,7 +518,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.co.uk/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-bbc-edge-cache" => "1",
@@ -384,7 +562,6 @@ defmodule Belfrage.Services.HTTPTest do
         %Clients.HTTP.Request{
           method: :get,
           url: "https://www.bbc.com/_some_path",
-          payload: "",
           headers: %{
             "accept-encoding" => "gzip",
             "x-bbc-edge-cache" => "1",

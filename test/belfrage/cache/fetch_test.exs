@@ -12,7 +12,7 @@ defmodule Belfrage.Cache.FetchTest do
   describe "fetch/2" do
     setup do
       envelope = %Envelope{
-        request: %Request{request_hash: unique_cache_key()}
+        request: %Request{request_hash: unique_cache_key(), path: "/news/live"}
       }
 
       response = %Response{body: "Cached response", personalised_route: true}

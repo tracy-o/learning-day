@@ -8,9 +8,7 @@ export PATH=${PATH}:/usr/local/bin:/sbin
 #######
 
 ####### Global Variables #######
-START_TIME=$(date +%s)
-STATUS_CODE=1
-FILES_COUNTER=0
+START_DATE=$(date)
 
 # Inject values obtained via Cosmos
 GCS_ACCESS_LOGS_BUCKET_NAME=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["GCS_ACCESS_LOGS_BUCKET_NAME"]')
@@ -18,6 +16,7 @@ ACCESS_LOG_ENV=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;
 ACCESS_LOG_FAMILY="www"
 ACCESS_LOG_TYPE="access"
 STACK_ID=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["STACK_ID"]')
+AUTHENTICATION_FLAG_FILE="/tmp/gcp_authenticated"
 
 # GCS bucket path, dependent on some injected info
 BUCKET_PATH="gs://$GCS_ACCESS_LOGS_BUCKET_NAME/$ACCESS_LOG_ENV/$ACCESS_LOG_FAMILY/$ACCESS_LOG_TYPE/$STACK_ID"
@@ -27,19 +26,24 @@ cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys
 
 # google-cloud-sdk configuration
 configure_gcloud() {
-    gcloud auth activate-service-account --key-file /tmp/gcp_auth.json 1> /dev/null
-    if [ $? -ne 0 ]; then
-        log_message "Failed to authenticate with GCP"
-        exit 1
+    if [ ! -f $AUTHENTICATION_FLAG_FILE ]; then
+        gcloud auth activate-service-account --key-file /tmp/gcp_auth.json 1> /dev/null
+        if [ $? -ne 0 ]; then
+            log_message "GCP error" "Failed GCP service account activation"
+            exit 1
+        else
+            log_message "GCP success" "GCP service account activated"
+            touch $AUTHENTICATION_FLAG_FILE
+        fi
+        rm /tmp/gcp_auth.json
     else
-        echo "GCP service account activated"
+        log_message "info" "GCP service account already activated, flag file present"
     fi
-    rm /tmp/gcp_auth.json
 }
 
 ####### Functions #######
 log_message() {
-    echo -e "$(date +'%d/%m/%Y %H:%M:%S'): ${1}"
+    logger "bq-logs-shipping [$1]: ${2}"
 }
 
 ship_log_files() {    
@@ -50,27 +54,25 @@ ship_log_files() {
         # We are prefixing *on the fly* a UUID to the file name
         # so that we can avoid collisions in the bucket
         FILE_NAME="$(uuidgen -t)-$(basename $LOG_FILE_PATH)"
-        DESTINATION="${BUCKET_PATH}/${FILE_NAME}"
+        DESTINATION="$BUCKET_PATH/$FILE_NAME"
 
         if [ -f "$LOG_FILE_PATH" ]; then
             gsutil -q cp $LOG_FILE_PATH $DESTINATION 1>/dev/null
             RETURN_STATUS=$(echo $?)
             if [ $RETURN_STATUS -ne 0 ]; then
-                log_message "File ${FILE_NAME} failed to get uploaded on the bucket"
-                STATUS_CODE=0
+                log_message "GCP error" "Upload to bucket failed for file ${FILE_NAME}"
             else
-                mv "${LOG_FILE_PATH}" "${LOG_FILE_PATH}.uploaded" 1>/dev/null
+                log_message "GCP success" "File $FILE_NAME uploaded to bucket"
+                mv "$LOG_FILE_PATH" "$LOG_FILE_PATH.uploaded" 1>/dev/null
                 RETURN_STATUS=$(echo $?)
                 if [ $RETURN_STATUS -ne 0 ]; then 
-                    log_message "File deletion failed"
-                    STATUS_CODE=0
+                    log_message "error" "Failed to rename $LOG_FILE_PATH to $LOG_FILE_PATH.uploaded"
                 else
-                    FILES_COUNTER=$(($FILES_COUNTER+1))
+                    log_message "success" "File ${LOG_FILE_PATH} renamed to $LOG_FILE_PATH.uploaded"
                 fi
             fi
         else
-            log_message "File not found or not a regular file: ${LOG_FILE_PATH}"
-            STATUS_CODE=0
+            log_message "error" "File not found or not a regular file: $LOG_FILE_PATH"
         fi
     done
 }
@@ -83,8 +85,6 @@ get_files() {
     ACCESS_LOG_FILES=$(find /var/log/component/ -iname "access.*log.gz" )
 }
 
-log_message "START: $(basename "$0")"
-
 configure_gcloud
 
 get_files
@@ -93,7 +93,4 @@ ship_log_files \
     ACCESS_LOG_FILES[@] \
     $BUCKET_PATH
 
-END_TIME=$(date +%s)
-TIME_TAKEN=$(expr ${END_TIME} - ${START_TIME})
-log_message " ${FILES_COUNTER} files were shipped"
-log_message " FINISH: Time taken - ${TIME_TAKEN} seconds\n "
+log_message "info" "Logs shipping execution at ${START_DATE} finished."

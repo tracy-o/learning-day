@@ -1,12 +1,14 @@
 defmodule Routes.Specs.MySession do
-  def specs do
+  def specification do
     %{
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
-      platform: "OriginSimulator",
-      origin: :stubbed_session_origin,
-      request_pipeline: ["Personalisation"],
-      personalisation: "test_only"
+      specs: %{
+        owner: "DENewsFrameworksTeam@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
+        platform: "OriginSimulator",
+        origin: :stubbed_session_origin,
+        request_pipeline: ["SessionState", "PersonalisationGuardian"],
+        personalisation: "test_only"
+      }
     }
   end
 end

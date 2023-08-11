@@ -24,10 +24,11 @@ defmodule Belfrage.Clients.CCP do
     ccp_response =
       Finch.build(
         :get,
-        "https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com/#{request_hash}"
+        "https://#{s3_bucket()}.s3-#{s3_region()}.amazonaws.com" <> request_hash
       )
       |> FinchAPI.request(Finch,
-        receive_timeout: Application.get_env(:belfrage, :s3_http_client_timeout)
+        receive_timeout: Application.get_env(:belfrage, :s3_http_client_timeout),
+        pool_timeout: Application.get_env(:finch, :pool_timeout)
       )
 
     timing = (System.monotonic_time(:millisecond) - before_time) |> abs

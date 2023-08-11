@@ -1,6 +1,5 @@
 defmodule Belfrage.Clients.Lambda do
   require Logger
-  require Belfrage.Xray
 
   alias Belfrage.{AWS}
 
@@ -32,6 +31,7 @@ defmodule Belfrage.Clients.Lambda do
       {:error, {:http_error, status_code, response}} -> failed_to_invoke_lambda(status_code, response)
       {:error, :timeout} -> failed_to_invoke_lambda(408, :timeout)
       {:error, nil} -> failed_to_invoke_lambda(nil, nil)
+      {:error, response} -> failed_to_invoke_lambda(nil, response)
     end
   end
 
@@ -45,6 +45,14 @@ defmodule Belfrage.Clients.Lambda do
 
   defp failed_to_invoke_lambda(nil, nil) do
     Logger.log(:error, "Failed to Invoke Lambda")
+
+    {:error, :invoke_failure}
+  end
+
+  defp failed_to_invoke_lambda(nil, response) do
+    Logger.log(:error, "Failed to Invoke Lambda", %{
+      response: inspect(response)
+    })
 
     {:error, :invoke_failure}
   end

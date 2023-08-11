@@ -2,7 +2,7 @@ defmodule Belfrage.Behaviours.Transformer do
   alias Belfrage.Envelope
 
   @type updated_transformers :: {:add | :replace, list()}
-  @type transformer_type :: :request | :response | :pre_flight
+  @type transformer_type :: :request | :response | :preflight
 
   @callback call(Envelope.t()) ::
               {:ok, Envelope.t()}
@@ -36,7 +36,7 @@ defmodule Belfrage.Behaviours.Transformer do
 
   defp get_transformer_path(:request), do: RequestTransformers
   defp get_transformer_path(:response), do: ResponseTransformers
-  defp get_transformer_path(:pre_flight), do: PreFlightTransformers
+  defp get_transformer_path(:preflight), do: PreflightTransformers
 
   defp update_pipeline_trail(envelope, :request, name) do
     update_in(envelope.debug.request_pipeline_trail, &[name | &1])
@@ -46,7 +46,7 @@ defmodule Belfrage.Behaviours.Transformer do
     update_in(envelope.debug.response_pipeline_trail, &[name | &1])
   end
 
-  defp update_pipeline_trail(envelope, :pre_flight, name) do
-    update_in(envelope.debug.pre_flight_pipeline_trail, &[name | &1])
+  defp update_pipeline_trail(envelope, :preflight, name) do
+    update_in(envelope.debug.preflight_pipeline_trail, &[name | &1])
   end
 end

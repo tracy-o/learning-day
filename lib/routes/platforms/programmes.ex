@@ -1,5 +1,5 @@
 defmodule Routes.Platforms.Programmes do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :programmes_endpoint),
       owner: "homedatacap@bbc.co.uk",

@@ -24,7 +24,8 @@ defmodule EndToEnd.ResponseHeadersTest do
       assert [
                {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"},
                {"content-type", "text/html; charset=utf-8"},
-               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+               {"vary",
+                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
                {"server", "Belfrage"},
                {"bsig", "16aa506c48f67bbbd845a5e4ac48b8f2"},
                {"bid", "local"},
@@ -34,7 +35,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
@@ -68,7 +69,8 @@ defmodule EndToEnd.ResponseHeadersTest do
       assert [
                {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30"},
                {"content-type", "text/html; charset=utf-8"},
-               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+               {"vary",
+                "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"},
                {"server", "Belfrage"},
                {"bsig", "16aa506c48f67bbbd845a5e4ac48b8f2"},
                {"bid", "local"},
@@ -78,7 +80,7 @@ defmodule EndToEnd.ResponseHeadersTest do
                {"belfrage-cache-status", "MISS"},
                {"routespec", "SomeRouteState.Webcore"},
                {"belfrage-request-pipeline-trail",
-                "DevelopmentRequests,CircuitBreaker,PlatformKillSwitch,Language,LambdaOriginAlias,Personalisation"},
+                "DevelopmentRequests,CircuitBreaker,IsCommercial,PlatformKillSwitch,Language,LambdaOriginAlias,PersonalisationGuardian,SessionState"},
                {"belfrage-response-pipeline-trail",
                 "PreCacheCompression,CustomRssErrorResponse,ResponseHeaderGuardian,ClassicAppCacheControl,CacheDirective"}
              ] = conn.resp_headers
@@ -100,6 +102,6 @@ defmodule EndToEnd.ResponseHeadersTest do
   end
 
   def call(path) do
-    conn(:get, path) |> Router.call([])
+    conn(:get, path) |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 end

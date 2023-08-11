@@ -1,4 +1,5 @@
 {
+  "bbcx_enabled": "true",
   "cache_enabled": "true",
   "ccp_enabled": "true",
   "circuit_breaker": "false",
@@ -10,9 +11,11 @@
   "news_apps_hardcoded_response": "disabled",
   "news_apps_variance_reducer": "disabled",
   "news_articles_personalisation": "on",
+  "ni_election_failover": "off",
   "non_webcore_ttl_multiplier": "default",
   "obit_mode": "off",
   "personalisation": "on",
+  "preflight_ares_data_fetch": "on",
   "webcore_kill_switch": "inactive",
   "webcore_ttl_multiplier": "default"
 }

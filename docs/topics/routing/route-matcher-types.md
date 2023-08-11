@@ -1,21 +1,24 @@
-A simple route matcher:  `handle "/news/business/:id", using: "MyRouteSpec", examples: ["/news/business/123456"]`
- * This will match a route like /news/business/123456 and generate an id param: `path_params: %{"id" => "123456"}`
+A simple route matcher looks like this:  `handle "/news/business/:id", using: "MyRouteSpec"`
+ * This will match a route like `/news/business/123456` and generate an id param: `path_params: %{"id" => "123456"}`
 
-I need a catch-all 
-* You can add a glob matcher at the end of the path matcher: `handle "/news/russian/*any", using: "MyRouteSpec", examples: ["/news/russian/123456"]`
-* This will match a route like /news/russian/doll/123456 and generate an any param ` path_params: %{"any" => ["doll", "123456"}`
+If you need need a catch-all, add `/*any` at the end of the path matcher: `handle "/news/russian/*any", using: "MyRouteSpec"`
+* This will match a route like `/news/russian/doll/123456` and generate an any param ` path_params: %{"any" => ["doll", "123456"]}`
+> Note: You should avoid using a catch-all if your route has an identifier in the same segment. For instance, if your route is similar to this: `handle "/news/business/:id", using: "MyRouteSpec"`, you shouldn't have a catch-all such as `handle "/news/business/*any", using: "MyOtherRouteSpec"` as well.
 
-I need to match a path containing an extension `handle "/sport/av/:discipline/:id.app", using: "MyRouteSpecForApps", examples: ["/sport/av/golf/123456.app"]`
-* produces: `path_params: %{"id" => "123456", "discipline" => "golf", "format" => "app"} `
+If you need to match a path containing an extension such as `.app` or `.json`, do it like so:
+* `handle "/sport/av/:discipline/:id.app", using: "MyRouteSpecForApps"`
+* In that case, a route like `"/sport/av/golf/123456.app"` produces `path_params: %{"id" => "123456", "discipline" => "golf", "format" => "app"} `
 
-My route is more complicated! 
-* Say you have a path segment /news/business-123456 which - for historical reasons - includes a prefix along with the id:
- * `handle "/news/business/business-:id", using: "MyRouteSpec", examples: ["/news/business-123456"]` - `path_params: %{"id" => "123456"}`
-* But my path also has a slug! /news/business-123456/i-love-seo 
-* `handle "/news/business/business-:id/*rest", using: "MyRouteSpec", examples: ["/news/business-123456/foobar"]`
-* produces: `path_params: %{"id" => "123456", "rest" => ["i-love-seo"]}`
-* As you see rest is a list, this is because it's a glob - it can match anything after it: /news/business-123456/i-love-seo/also/42
-* Produces:`path_params: %{"id" => "123456", "rest" => ["i-love-seo", "also", "42"]}`
+My route is more complicated!
+If you have a path segment /news/business-123456 which - for historical reasons - includes a prefix, you can do:
+* `handle "/news/business/business-:id", using: "MyRouteSpec"`
+* In this case, an example like `"/news/business-123456"` would generate: `path_params: %{"id" => "123456"}`
+
+If you also need a slug, for instance /news/business-123456/i-love-seo, do this:
+* `handle "/news/business/business-:id/*rest", using: "MyRouteSpec"`
+* Here, an example such as `"/news/business-123456/foobar"` produces: `path_params: %{"id" => "123456", "rest" => ["i-love-seo"]}`
+> Note: rest is a list and it can match anything after it. An example like `/news/business-123456/i-love-seo/also/42` produces `path_params: %{"id" => "123456", "rest" => ["i-love-seo", "also", "42"]}`
+
 
 I want to use a Regex! Unfortunately you can't, by design.
 > Note: while you can't match a route using a regex, you can use one for validation. For details on this see [Route-Validation-in-Belfrage].

@@ -28,31 +28,36 @@ defmodule EndToEnd.VaryAllowHeadersTest do
 
   describe "when route allows headers" do
     test "vary header contains allow headers" do
-      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specification().specs.headers_allowlist -- ["cookie"]
 
-      [vary_header] = conn(:get, "/route-allow-headers") |> Router.call([]) |> get_resp_header("vary")
+      [vary_header] =
+        conn(:get, "/route-allow-headers") |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("vary")
+
       assert vary_header =~ ",#{headers_allowlist |> Enum.join(",")}"
     end
 
     test "vary header does not contain cookie" do
-      [vary_header] = conn(:get, "/route-allow-headers") |> Router.call([]) |> get_resp_header("vary")
-      refute vary_header =~ ",cookie"
+      [vary_header] =
+        conn(:get, "/route-allow-headers") |> Router.call(routefile: Routes.Routefiles.Mock) |> get_resp_header("vary")
+
+      refute String.ends_with?(vary_header, ",cookie")
+      refute vary_header =~ "cookie,"
     end
 
     test "request hash varies on allow headers of different values" do
-      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specification().specs.headers_allowlist -- ["cookie"]
 
       for allow_header <- headers_allowlist do
         [request_hash1] =
           conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "foo")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
           |> get_resp_header("bsig")
 
         [request_hash2] =
           conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "bar")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
           |> get_resp_header("bsig")
 
         assert request_hash1 != request_hash2
@@ -60,19 +65,19 @@ defmodule EndToEnd.VaryAllowHeadersTest do
     end
 
     test "request hash does not vary on allow headers of the same value" do
-      headers_allowlist = SomeRouteStateAllowHeaders.specs().headers_allowlist -- ["cookie"]
+      headers_allowlist = SomeRouteStateAllowHeaders.specification().specs.headers_allowlist -- ["cookie"]
 
       for allow_header <- headers_allowlist do
         [request_hash1] =
           conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "the_same_foo")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
           |> get_resp_header("bsig")
 
         [request_hash2] =
           conn(:get, "/route-allow-headers")
           |> put_req_header(allow_header, "the_same_foo")
-          |> Router.call([])
+          |> Router.call(routefile: Routes.Routefiles.Mock)
           |> get_resp_header("bsig")
 
         assert request_hash1 == request_hash2
@@ -83,13 +88,13 @@ defmodule EndToEnd.VaryAllowHeadersTest do
       [request_hash1] =
         conn(:get, "/route-allow-headers")
         |> put_req_header("cookie", "foo")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
         |> get_resp_header("bsig")
 
       [request_hash2] =
         conn(:get, "/route-allow-headers")
         |> put_req_header("cookie", "bar")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
         |> get_resp_header("bsig")
 
       assert request_hash1 == request_hash2

@@ -15,7 +15,7 @@ defmodule Belfrage.Clients.HTTPTest do
   describe "successful requests" do
     test ":post request" do
       FinchMock
-      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 300_000] ->
+      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 1_000] ->
         assert request.method == "POST"
 
         {:ok,
@@ -46,7 +46,7 @@ defmodule Belfrage.Clients.HTTPTest do
 
     test ":get request" do
       FinchMock
-      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 300_000] ->
+      |> expect(:request, fn request, Finch, [receive_timeout: 500, pool_timeout: 1_000] ->
         assert request.method == "GET"
 
         {:ok, %Finch.Response{status: 200, body: ~s(<p>some content</p>), headers: []}}

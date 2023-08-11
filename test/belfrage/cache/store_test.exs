@@ -11,7 +11,8 @@ defmodule Belfrage.Cache.StoreTest do
       envelope: %Envelope{
         request: %Envelope.Request{
           method: "GET",
-          request_hash: unique_cache_key()
+          request_hash: unique_cache_key(),
+          path: "/news/live"
         },
         response: %Envelope.Response{
           http_status: 200,

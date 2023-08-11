@@ -108,12 +108,17 @@ defmodule Belfrage.Cache.MultiStrategyTest do
       stub_dial(:ccp_enabled, "true")
 
       envelope = %Envelope{
-        request: %Envelope.Request{request_hash: "multi-strategy-cache-test"},
+        request: %Envelope.Request{request_hash: "multi-strategy-cache-test", path: "/news/live"},
+        response: %Envelope.Response{body: "<p>Hello</p>"}
+      }
+
+      updated_envelope = %Envelope{
+        request: %Envelope.Request{request_hash: "/news/live/multi-strategy-cache-test", path: "/news/live"},
         response: %Envelope.Response{body: "<p>Hello</p>"}
       }
 
       Belfrage.Clients.CCPMock
-      |> expect(:put, 1, fn ^envelope -> :ok end)
+      |> expect(:put, 1, fn ^updated_envelope -> :ok end)
 
       MultiStrategy.store(envelope)
     end

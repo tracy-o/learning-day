@@ -35,7 +35,9 @@ defmodule Belfrage.CircuitBreaker do
 
   defp parse_count(x), do: if(x == nil, do: 0, else: x)
 
-  def next_throughput(threshold_exceeded, throughput) when throughput in [0, 20, 60, 100] do
+  def next_throughput(_threshold_exceeded, _throughput, false), do: 100
+
+  def next_throughput(threshold_exceeded, throughput, _dial_enabled?) when throughput in [0, 20, 60, 100] do
     cond do
       threshold_exceeded -> 0
       max_throughput?(throughput) -> throughput

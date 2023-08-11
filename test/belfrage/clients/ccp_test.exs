@@ -7,18 +7,20 @@ defmodule Belfrage.Clients.CCPTest do
   describe "put/2" do
     test "sends request and request hash as cast" do
       envelope = %Envelope{
-        request: %Request{request_hash: "a-request-hash"},
+        request: %Request{request_hash: "/news/live/cb5fooc91cd8b32dcec1fe441a0854fd"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
       assert :ok == CCP.put(envelope, self())
 
-      assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
+      assert_received(
+        {:"$gen_cast", {:put, "/news/live/cb5fooc91cd8b32dcec1fe441a0854fd", %Response{body: "<h1>Hi</h1>"}}}
+      )
     end
 
     test "sends request globally and request hash as cast" do
       envelope = %Envelope{
-        request: %Request{request_hash: "a-request-hash"},
+        request: %Request{request_hash: "/news/live/cb5fooc91cd8b32dcec1fe441a0854fd"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
@@ -26,12 +28,14 @@ defmodule Belfrage.Clients.CCPTest do
 
       assert :ok == CCP.put(envelope, {:global, :belfrage_ccp_test})
 
-      assert_received({:"$gen_cast", {:put, "a-request-hash", %Response{body: "<h1>Hi</h1>"}}})
+      assert_received(
+        {:"$gen_cast", {:put, "/news/live/cb5fooc91cd8b32dcec1fe441a0854fd", %Response{body: "<h1>Hi</h1>"}}}
+      )
     end
 
     test "returns :error whith non existant target" do
       envelope = %Envelope{
-        request: %Request{request_hash: "a-request-hash"},
+        request: %Request{request_hash: "/news/live/cb5fooc91cd8b32dcec1fe441a0854fd"},
         response: %Response{body: "<h1>Hi</h1>"}
       }
 
@@ -57,7 +61,7 @@ defmodule Belfrage.Clients.CCPTest do
       expected_s3_request =
         Finch.build(
           :get,
-          "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/request-hash-123"
+          "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/sport/cb5fooc91cd8b32dcec1fe441a0854fd"
         )
 
       FinchMock
@@ -70,7 +74,27 @@ defmodule Belfrage.Clients.CCPTest do
          }}
       end)
 
-      CCP.fetch("request-hash-123")
+      CCP.fetch("/sport/cb5fooc91cd8b32dcec1fe441a0854fd")
+    end
+
+    test "correctly sends GET request for home page", %{s3_response_body: s3_response_body} do
+      expected_s3_request =
+        Finch.build(
+          :get,
+          "https://belfrage-distributed-cache-test.s3-eu-west-1.amazonaws.com/cb5fooc91cd8b32dcec1fe441a0854fd"
+        )
+
+      FinchMock
+      |> expect(:request, fn ^expected_s3_request, _name, _opts ->
+        {:ok,
+         %Finch.Response{
+           status: 200,
+           body: s3_response_body,
+           headers: []
+         }}
+      end)
+
+      CCP.fetch("/cb5fooc91cd8b32dcec1fe441a0854fd")
     end
 
     test "converts binary format of erlang terms in response, to erlang terms", %{s3_response_body: s3_response_body} do
@@ -85,7 +109,7 @@ defmodule Belfrage.Clients.CCPTest do
       end)
 
       fallback_response = :erlang.binary_to_term(s3_response_body)
-      assert {:ok, fallback_response} == CCP.fetch("request-hash-123")
+      assert {:ok, fallback_response} == CCP.fetch("/news/live/cb5fooc91cd8b32dcec1fe441a0854fd")
     end
   end
 
@@ -100,7 +124,7 @@ defmodule Belfrage.Clients.CCPTest do
        }}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("/news/live/cb5fooc91cd8b32dcec1fe441a0854fd")
   end
 
   test "S3 returns unexpected status code" do
@@ -114,7 +138,7 @@ defmodule Belfrage.Clients.CCPTest do
        }}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("/news/live/cb5fooc91cd8b32dcec1fe441a0854fd")
   end
 
   test "when HTTP client returns an error" do
@@ -123,6 +147,6 @@ defmodule Belfrage.Clients.CCPTest do
       {:error, %Mint.TransportError{reason: :timeout}}
     end)
 
-    assert {:ok, :content_not_found} == CCP.fetch("request-hash-123")
+    assert {:ok, :content_not_found} == CCP.fetch("/news/live/cb5fooc91cd8b32dcec1fe441a0854fd")
   end
 end

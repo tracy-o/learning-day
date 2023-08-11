@@ -1,16 +1,25 @@
 defmodule Routes.Specs.NewsTopics do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      owner: "D&EKLDevelopmentOnCallTeam@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
-      platform: "Webcore",
-      query_params_allowlist: query_params_allowlist(production_env),
-      request_pipeline: ["NewsTopicsPlatformDiscriminator"],
-      personalisation: "test_only"
+      preflight_pipeline: ["BBCXTopicsWebcorePlatformSelector"],
+      specs: [
+        %{
+          owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+          runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
+          platform: "Webcore",
+          query_params_allowlist: query_params_allowlist(production_env),
+          request_pipeline: ["NewsTopicsPlatformDiscriminator"],
+          personalisation: "test_only",
+          examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"}, "/news/topics/c207p54mljpt/aberdeenshire-council", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9/aberdeenshire-council"}]
+        },
+        %{
+          platform: "BBCX"
+        }
+      ]
     }
   end
 
-  defp query_params_allowlist("live"), do: ["page"]
+  defp query_params_allowlist("live"), do: ["page", "market"]
 
   # allows both Mozart and Webcore query string params
   defp query_params_allowlist(_production_env) do

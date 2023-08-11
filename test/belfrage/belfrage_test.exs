@@ -3,15 +3,16 @@ defmodule BelfrageTest do
   use Plug.Test
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper
+  import Mock
 
-  alias Belfrage.Envelope
+  alias Belfrage.{Envelope, Processor}
   alias Belfrage.Envelope.{Request, Response, Private}
   alias Belfrage.Clients.LambdaMock
   alias Belfrage.Metrics.LatencyMonitor
 
   import Test.Support.Helper, only: [assert_gzipped: 2]
 
-  @spec_name "SportArticlePage"
+  @spec_name "HomePage"
   @platform_name "Webcore"
   @route_state_id {@spec_name, @platform_name}
 
@@ -30,7 +31,8 @@ defmodule BelfrageTest do
       path: "/_web_core",
       method: "GET",
       country: "gb",
-      request_id: "gerald-the-get-request"
+      request_id: "gerald-the-get-request",
+      host: "www.bbc.co.uk"
     }
   }
 
@@ -259,6 +261,38 @@ defmodule BelfrageTest do
                :errors => 1,
                "pwa-lambda-function:test" => %{500 => 1, :errors => 1, :fallback => 1}
              }
+    end
+  end
+
+  describe "stops further processing" do
+    test_with_mock(
+      "if pre request pipeline returned fallback or failed",
+      Processor,
+      pre_request_pipeline: fn envelope -> Envelope.add(envelope, :response, %{http_status: 500}) end,
+      post_response_pipeline: fn envelope -> envelope end
+    ) do
+      init_envelope = %Envelope{}
+      result_envelope = %Envelope{response: %Response{http_status: 500}}
+
+      assert result_envelope == Belfrage.handle(init_envelope)
+      assert_called(Processor.pre_request_pipeline(init_envelope))
+      assert_called(Processor.post_response_pipeline(result_envelope))
+    end
+
+    test_with_mock(
+      "if an early response was fetched from cache",
+      Processor,
+      pre_request_pipeline: fn envelope -> envelope end,
+      fetch_early_response_from_cache: fn envelope -> Envelope.add(envelope, :response, %{http_status: 200}) end,
+      post_response_pipeline: fn envelope -> envelope end
+    ) do
+      init_envelope = %Envelope{}
+      result_envelope = %Envelope{response: %Response{http_status: 200}}
+
+      assert result_envelope == Belfrage.handle(init_envelope)
+      assert_called(Processor.pre_request_pipeline(init_envelope))
+      assert_called(Processor.fetch_early_response_from_cache(init_envelope))
+      assert_called(Processor.post_response_pipeline(result_envelope))
     end
   end
 end

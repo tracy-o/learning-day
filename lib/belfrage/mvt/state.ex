@@ -123,9 +123,9 @@ defmodule Belfrage.Mvt.State do
 
   # Similar to RouteState.state/1 but takes a route_state_id as the first argument,
   # and returns {:error, value} if the GenServer.call/3 fails rather than exiting the caller process.
-  defp routestate_state(route_state_id, timeout \\ Application.get_env(:belfrage, :fetch_route_state_timeout)) do
+  defp routestate_state(route_state_id) do
     try do
-      GenServer.call(RouteState.via_tuple(route_state_id), :state, timeout)
+      RouteState.state(route_state_id)
     catch
       :exit, value ->
         {:error, value}

@@ -11,12 +11,16 @@ defmodule Belfrage.BelfrageCacheTest do
     body: :zlib.gzip(~s({"hi": "bonjour"})),
     headers: %{"content-type" => "application/json", "content-encoding" => "gzip"},
     http_status: 200,
-    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30},
-    cache_last_updated: Belfrage.Timer.now_ms()
+    cache_directive: %Belfrage.CacheControl{cacheability: "public", max_age: 30}
   }
 
   setup do
-    put_into_cache(cache_key("fresh"), @cache_seeded_response)
+    fresh_response = %{
+      @cache_seeded_response
+      | cache_last_updated: Belfrage.Timer.now_ms()
+    }
+
+    put_into_cache(cache_key("fresh"), fresh_response)
 
     stale_response = %{
       @cache_seeded_response
@@ -25,18 +29,18 @@ defmodule Belfrage.BelfrageCacheTest do
 
     put_into_cache(cache_key("stale"), stale_response)
 
-    %{stale_response: stale_response}
+    %{stale_response: stale_response, fresh_response: fresh_response}
   end
 
   describe "a fresh cache" do
-    test "serves a cached response" do
+    test "serves a cached response", %{fresh_response: fresh_response} do
       envelope = %Envelope{
         request: %Envelope.Request{
           request_hash: cache_key("fresh")
         }
       }
 
-      assert %Belfrage.Envelope{response: @cache_seeded_response} = Belfrage.Cache.fetch(envelope, [:fresh])
+      assert %Belfrage.Envelope{response: ^fresh_response} = Belfrage.Cache.fetch(envelope, [:fresh])
     end
 
     test "served early from cache sets origin to :belfrage_cache" do
@@ -95,7 +99,8 @@ defmodule Belfrage.BelfrageCacheTest do
           route_state_id: @route_state_id
         },
         request: %Envelope.Request{
-          request_hash: cache_key("stale")
+          request_hash: cache_key("stale"),
+          path: "/news/live"
         }
       }
 
@@ -113,7 +118,8 @@ defmodule Belfrage.BelfrageCacheTest do
           },
           request: %Envelope.Request{
             request_hash: unique_cache_key(),
-            method: "GET"
+            method: "GET",
+            path: "/news/live"
           },
           response: %Envelope.Response{
             http_status: 200,

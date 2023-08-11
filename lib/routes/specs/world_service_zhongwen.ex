@@ -1,9 +1,12 @@
 defmodule Routes.Specs.WorldServiceZhongwen do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
-      platform: "MozartSimorgh",
-      request_pipeline: pipeline(production_env),
-      headers_allowlist: ["cookie-ckps_chinese"]
+      specs: %{
+        platform: "MozartSimorgh",
+        request_pipeline: pipeline(production_env),
+        headers_allowlist: ["cookie-ckps_chinese"],
+        examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
+      }
     }
   end
 

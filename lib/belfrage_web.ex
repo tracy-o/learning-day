@@ -1,14 +1,14 @@
 defmodule BelfrageWeb do
-  alias BelfrageWeb.{EnvelopeAdapter, Response}
+  alias BelfrageWeb.Response
   alias Plug.Conn
   alias Belfrage.{Metrics.LatencyMonitor, Envelope}
 
   require Logger
 
-  def yield(spec, platform, conn) do
+  def yield(spec, conn) do
     try do
       conn
-      |> adapt_envelope(spec, platform)
+      |> adapt_to_envelope(spec)
       |> Belfrage.handle()
       |> update_conn_with_response(conn)
     catch
@@ -21,10 +21,10 @@ defmodule BelfrageWeb do
     end
   end
 
-  defp adapt_envelope(conn, spec, platform) do
-    conn
-    |> EnvelopeAdapter.Request.adapt()
-    |> EnvelopeAdapter.Private.adapt(conn.private, spec, platform)
+  defp adapt_to_envelope(conn, spec) do
+    %Envelope{}
+    |> Envelope.adapt_request(conn)
+    |> Envelope.adapt_private(conn.private, spec)
     |> LatencyMonitor.checkpoint(:request_received, conn.assigns[:request_received])
   end
 

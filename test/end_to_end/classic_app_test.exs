@@ -32,7 +32,7 @@ defmodule EndToEnd.ClassicAppTest do
           :get,
           "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route"
         )
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert ["public, stale-if-error=90, stale-while-revalidate=30, max-age=60"] =
                get_resp_header(conn, "cache-control")
@@ -57,7 +57,7 @@ defmodule EndToEnd.ClassicAppTest do
           :get,
           "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route"
         )
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert ["public, stale-if-error=90, stale-while-revalidate=60, max-age=60"] =
                get_resp_header(conn, "cache-control")
@@ -70,7 +70,7 @@ defmodule EndToEnd.ClassicAppTest do
           "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route-will-404-as-no-match"
         )
         |> put_req_header("x-bbc-edge-cdn", "1")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert ["Accept-Encoding"] = get_resp_header(conn, "vary")
     end

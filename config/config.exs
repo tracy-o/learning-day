@@ -3,7 +3,7 @@
 import Config
 
 config :finch,
-  pool_timeout: 300_000,
+  pool_timeout: 1_000,
   cacertfile: System.get_env("CLIENT_CERT_CA"),
   certfile: System.get_env("CLIENT_CERT"),
   keyfile: System.get_env("CLIENT_CERT_KEY")
@@ -61,12 +61,12 @@ config :belfrage,
     mvt_file: 60_000
   ],
   date_time: Belfrage.Utils.Current.Real,
-  metadata_cache: [
+  preflight_metadata_cache: [
     # 24 hours
     default_ttl_ms: 86_400_000,
     expiration_interval_ms: 60_000,
     limit: [
-      size: 36_000,
+      size: 48_000,
       # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
       policy: Cachex.Policy.LRW,
       reclaim: 0.3,
@@ -82,20 +82,13 @@ config :cachex, :limit,
   options: []
 
 config :logger,
-  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :cloudwatch}, {LoggerFileBackend, :access}]
+  backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :access}]
 
 config :logger, :file,
   path: "local.log",
   format: {Belfrage.Logger.Formatter, :app},
   level: :debug,
   metadata: :all
-
-config :logger, :cloudwatch,
-  path: "cloudwatch.log",
-  format: {Belfrage.Logger.Formatter, :cloudwatch},
-  level: :warn,
-  metadata: :all,
-  metadata_filter: [cloudwatch: true]
 
 config :logger, :access,
   path: "access.log",
@@ -107,6 +100,9 @@ config :logger, :access,
 config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 512
+
+config :plug_cowboy,
+  conn_in_exception_metadata: false
 
 import_config "dials.exs"
 import_config "#{Mix.env()}.exs"

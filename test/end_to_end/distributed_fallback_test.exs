@@ -50,10 +50,10 @@ defmodule EndToEnd.DistributedTest do
         :ok
       end)
 
-      conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
+      conn = conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
       assert [request_hash] = get_resp_header(conn, "bsig")
 
-      assert_received({:ccp_request_hash_stored, ^request_hash})
+      assert_received({:ccp_request_hash_stored, "/200-ok-response" <> "/" <> ^request_hash})
     end
   end
 
@@ -69,7 +69,7 @@ defmodule EndToEnd.DistributedTest do
         flunk("Should not call the ccp.")
       end)
 
-      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call([])
+      conn(:get, "/200-ok-response?belfrage-cache-bust") |> Router.call(routefile: Routes.Routefiles.Mock)
     end
   end
 
@@ -86,7 +86,7 @@ defmodule EndToEnd.DistributedTest do
       end)
 
       conn = conn(:get, "/200-ok-response?belfrage-cache-bust")
-      Router.call(conn, [])
+      Router.call(conn, routefile: Routes.Routefiles.Mock)
     end
   end
 end

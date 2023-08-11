@@ -5,19 +5,33 @@ defmodule Belfrage.CircuitBreakerTest do
   alias Belfrage.Envelope
   alias Belfrage.Envelope.Private
 
-  describe "next_throughput/2" do
-    test "next throughput is 0 when threshold is exceeded" do
-      for t <- [0, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t) == 0)
+  describe "next_throughput/3" do
+    test "next throughput is 0 when threshold is exceeded and circuit breaker dial is set to true" do
+      for t <- [0, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t, true) == 0)
     end
 
-    test "next throughput remains the same when at the maximum, and threshold is not exceeded" do
-      assert CircuitBreaker.next_throughput(false, 100) == 100
+    test "next throughput is 100 when threshold is exceeded and circuit breaker dial is set to false" do
+      for t <- [0, 20, 60, 100], do: assert(CircuitBreaker.next_throughput(true, t, false) == 100)
     end
 
-    test "next throughput is as expected when not at the maximum, and threshold is not exceeded" do
-      assert CircuitBreaker.next_throughput(false, 0) == 20
-      assert CircuitBreaker.next_throughput(false, 20) == 60
-      assert CircuitBreaker.next_throughput(false, 60) == 100
+    test "next throughput remains the same when at the maximum, and threshold is not exceeded and circuit breaker dial is set to true" do
+      assert CircuitBreaker.next_throughput(false, 100, true) == 100
+    end
+
+    test "next throughput remains the same when at the maximum, and threshold is not exceeded and circuit breaker dial is set to false" do
+      assert CircuitBreaker.next_throughput(false, 100, false) == 100
+    end
+
+    test "next throughput is as expected when not at the maximum, threshold is not exceeded and circuit breaker dial is set to true" do
+      assert CircuitBreaker.next_throughput(false, 0, true) == 20
+      assert CircuitBreaker.next_throughput(false, 20, true) == 60
+      assert CircuitBreaker.next_throughput(false, 60, true) == 100
+    end
+
+    test "next throughput is as expected when not at the maximum, threshold is not exceeded and circuit breaker dial is set to false" do
+      assert CircuitBreaker.next_throughput(false, 0, false) == 100
+      assert CircuitBreaker.next_throughput(false, 20, false) == 100
+      assert CircuitBreaker.next_throughput(false, 60, false) == 100
     end
   end
 

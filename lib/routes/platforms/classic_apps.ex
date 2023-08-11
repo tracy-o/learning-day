@@ -6,7 +6,7 @@
 # because we always expect apps to give us a valid URL.
 
 defmodule Routes.Platforms.ClassicApps do
-  def specs(production_env) do
+  def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :trevor_endpoint),
       owner: "#data-systems",

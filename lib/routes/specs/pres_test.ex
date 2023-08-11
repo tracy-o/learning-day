@@ -1,9 +1,12 @@
 defmodule Routes.Specs.PresTest do
-  def specs do
+  def specification do
     %{
-      owner: "D&EWebCorePresentationTeam@bbc.co.uk",
-      platform: "Webcore",
-      query_params_allowlist: "*"
+      specs: %{
+        owner: "D&EWebCorePresentationTeam@bbc.co.uk",
+        platform: "Webcore",
+        language_from_cookie: true,
+        query_params_allowlist: "*"
+      }
     }
   end
 end

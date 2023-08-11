@@ -40,7 +40,7 @@ defmodule NonUtf8QueryStringTest do
     end)
 
     conn = conn(:get, "/200-ok-response?query=science%20caf%C3%A9")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
@@ -62,7 +62,7 @@ defmodule NonUtf8QueryStringTest do
     end)
 
     conn = conn(:get, "/200-ok-response?query=%E2%82%AC100")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
@@ -84,7 +84,7 @@ defmodule NonUtf8QueryStringTest do
     end)
 
     conn = conn(:get, "/200-ok-response?query")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, _headers, _body} = sent_resp(conn)
   end
@@ -108,7 +108,7 @@ defmodule NonUtf8QueryStringTest do
     conn =
       :get
       |> conn("/200-ok-response?query=%f6")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     {status, _headers, _body} = sent_resp(conn)
     assert status == 200
@@ -131,7 +131,7 @@ defmodule NonUtf8QueryStringTest do
 
     # TODO the invalid string is actually causing the logger to fail (because the string is not a valid string!)
     assert_raise Plug.Conn.WrapperError, "** (ErlangError) Erlang error: {:invalid_string, <<102, 111, 160>>}", fn ->
-      Router.call(conn, [])
+      Router.call(conn, routefile: Routes.Routefiles.Mock)
     end
 
     {status, _headers, _body} = sent_resp(conn)
@@ -145,7 +145,7 @@ defmodule NonUtf8QueryStringTest do
       {:ok, %HTTP.Response{status_code: 200, body: "OK"}}
     end)
 
-    conn = conn(:get, "/fabl/fo%a0") |> Router.call([])
+    conn = conn(:get, "/fabl/fo%a0") |> Router.call(routefile: Routes.Routefiles.Mock)
     assert conn.status == 200
   end
 
@@ -168,7 +168,7 @@ defmodule NonUtf8QueryStringTest do
     conn =
       :get
       |> conn("/200-ok-response?query=%%E0%%")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     {status, _headers, _body} = sent_resp(conn)
     assert status == 200
@@ -181,7 +181,7 @@ defmodule NonUtf8QueryStringTest do
     conn =
       :get
       |> conn("/200-ok-response?query=%ED%95%B4%EC")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     {status, _headers, body} = sent_resp(conn)
     assert status == 404
@@ -201,7 +201,7 @@ defmodule NonUtf8QueryStringTest do
     conn =
       :get
       |> conn("/200-ok-response?query=abc")
-      |> Router.call([])
+      |> Router.call(routefile: Routes.Routefiles.Mock)
 
     {status, _headers, _body} = sent_resp(conn)
     assert status == 200

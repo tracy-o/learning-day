@@ -1,1 +1,1 @@
-*/15 * * * * component /usr/sbin/logrotate /etc/logrotate.d/component
+*/15 * * * * component /usr/sbin/logrotate --state /var/log/component/logrotate.status /etc/logrotate.d/component

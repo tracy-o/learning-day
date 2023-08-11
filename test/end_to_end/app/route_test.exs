@@ -26,7 +26,7 @@ defmodule EndToEnd.App.RouteTest do
 
       conn =
         conn(:get, "https://news-app-classic.test.api.bbci.co.uk/classic-apps-route")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert conn.assigns.envelope.private.origin == Application.get_env(:belfrage, :trevor_endpoint)
     end
@@ -38,7 +38,7 @@ defmodule EndToEnd.App.RouteTest do
 
       conn =
         conn(:get, "https://invalid-host.test.api.bbci.co.uk/classic-apps-route")
-        |> Router.call([])
+        |> Router.call(routefile: Routes.Routefiles.Mock)
 
       assert {400, _headers, _body} = sent_resp(conn)
     end

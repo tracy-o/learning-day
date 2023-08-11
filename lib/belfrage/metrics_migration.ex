@@ -2,6 +2,7 @@
 # credo:disable-for-this-file Credo.Check.Refactor.CyclomaticComplexity
 defmodule Belfrage.MetricsMigration do
   alias Belfrage.RouteState
+  alias Belfrage.Metrics.NimblePool
 
   def route_specs_from_file_names() do
     Path.expand("../routes/specs", __DIR__)
@@ -25,7 +26,7 @@ defmodule Belfrage.MetricsMigration do
       @backend unquote(backend)
       @status_codes [200, 202, 204, 301, 302, 400, 404, 405, 406, 408, 429, 500, 501, 502, 503]
       @route_states unquote(__MODULE__).route_specs_from_file_names()
-      @platforms unquote(__MODULE__).platforms_from_file_names()
+      @platforms unquote(__MODULE__).platforms_from_file_names() ++ ["BBCX"]
       @cache_metrics [:local, :distributed]
 
       def metrics do
@@ -68,6 +69,18 @@ defmodule Belfrage.MetricsMigration do
             ),
             counter("error.process.crash",
               event_name: [:belfrage, :error, :process, :crash],
+              measurement: :count
+            ),
+            counter("http.client.error.invalid_request_target",
+              event_name: [:belfrage, :http, :client, :error, :invalid_request_target],
+              measurement: :count
+            ),
+            counter("belfrage.request.infinite_loop",
+              event_name: [:belfrage, :request, :infinite_loop],
+              measurement: :count
+            ),
+            counter("belfrage.request.public_key_not_found",
+              event_name: [:belfrage, :request, :public_key_not_found],
               measurement: :count
             )
           ] ++
@@ -148,6 +161,44 @@ defmodule Belfrage.MetricsMigration do
             event_name: [:belfrage, :selector, :error],
             measurement: :count,
             tags: [:selector]
+          )
+        ]
+      end
+
+      def preflight_metrics() do
+        [
+          counter("preflight.request",
+            event_name: "preflight.request",
+            measurement: :count,
+            tags: [:preflight_service]
+          ),
+          summary("preflight.request.timing",
+            event_name: "preflight.request.timing",
+            measurement: :duration,
+            tags: [:preflight_service, :status_code]
+          ),
+          counter("preflight.response",
+            event_name: "preflight.response",
+            measurement: :count,
+            tags: [:status_code, :preflight_service]
+          ),
+          counter(
+            "preflight.error",
+            event_name: [:preflight, :error],
+            measurement: :count,
+            tags: [:preflight_service, :error_type]
+          ),
+          counter(
+            "preflight.cache.get",
+            event_name: [:preflight, :cache, :get],
+            measurement: :count,
+            tags: [:preflight_service, :type]
+          ),
+          counter(
+            "preflight.cache.put",
+            event_name: [:preflight, :cache, :put],
+            measurement: :count,
+            tags: [:preflight_service]
           )
         ]
       end
@@ -259,7 +310,27 @@ defmodule Belfrage.MetricsMigration do
             event_name: "belfrage.request.#{name}.stop",
             unit: {:native, :millisecond}
           )
-        end)
+        end) ++
+          [
+            summary("finch.checkout.duration",
+              event_name: "finch.queue.stop",
+              unit: {:native, :millisecond},
+              tag_values:
+                &Map.merge(&1, %{
+                  pool_name: NimblePool.properties(&1.pool)[:host]
+                }),
+              tags: [:pool_name]
+            ),
+            counter(
+              "finch.checkout.count",
+              event_name: "finch.queue.start",
+              tag_values:
+                &Map.merge(&1, %{
+                  pool_name: NimblePool.properties(&1.pool)[:host]
+                }),
+              tags: [:pool_name]
+            )
+          ]
       end
 
       def route_state_metrics() do

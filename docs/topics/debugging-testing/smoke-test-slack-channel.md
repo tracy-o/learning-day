@@ -13,7 +13,7 @@ Example of adding it to a routespec:
 defmodule Routes.Specs.NewsSearch do
   def specs do
     %{
-      platform: Webcore,
+      platform: "Webcore",
       slack_channel: "news-search"
     }
   end

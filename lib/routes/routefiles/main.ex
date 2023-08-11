@@ -1,11 +1,12 @@
 #
 # How to add a route:
-# https://github.com/bbc/belfrage/wiki/Routing-in-Belfrage#how-to-add-a-route
+# docs/topics/routing/routing.md#how-to-add-a-route
 # What types of route matcher you can  use:
-# https://github.com/bbc/belfrage/wiki/Types-of-Route-Matchers-in-Belfrage
+# docs/topics/routing/route-matcher-types.md
 #
 # How to validate a route:
 # lib/belfrage_web/validators.ex
+#
 
 import BelfrageWeb.Routefile
 
@@ -14,6 +15,10 @@ defroutefile "Main" do
   redirect "/news/2/hi", to: "/news", status: 302
   redirect "/news/mobile", to: "/news", status: 302
   redirect "/news/popular/read", to: "/news", status: 302
+
+  redirect "/news/contact-us/editorial", to: "/news/55077304", status: 302
+  redirect "/news/contact-us/school-report-feedback", to: "/teach/young-reporter/what-is-bbc-young-reporter/z6ncf82", status: 301
+  redirect "/news/contact-us/school-report-subscribe", to: "/send/u58606905", status: 301
 
   redirect "/news/help", to: "/news", status: 302
   redirect "/news/also_in_the_news", to: "/news", status: 302
@@ -40,6 +45,7 @@ defroutefile "Main" do
   redirect "/cymrufyw/etholiad/2021", to: "/cymrufyw/gwleidyddiaeth", status: 302
   redirect "/news/election", to: "/news/politics", status: 302
   redirect "/news/election/2021", to: "/news/politics", status: 302
+  redirect "/news/election/2023/northern-ireland", to: "/news/election/2023/northern-ireland/results", status: 302
 
   redirect "https://www.bbc.com/ukraine", to: "https://www.bbc.com/ukrainian", status: 302
   redirect "https://www.bbc.co.uk/ukraine", to: "/news/world-60525350", status: 302
@@ -52,93 +58,89 @@ defroutefile "Main" do
   # Home Page
   redirect "/ni", to: "/northernireland", status: 302
 
-  handle "/", using: "HomePage", platform: "Webcore", examples: ["/"]
-  handle "/scotland", using: "ScotlandHomePage", platform: "Webcore", examples: ["/scotland"]
-  handle "/homepage/test", using: "TestHomePage", platform: "Webcore", only_on: "test", examples: ["/homepage/test"]
-  handle "/homepage/automation", using: "AutomationHomePage", platform: "Webcore", only_on: "test", examples: ["/homepage/automation"]
-  handle "/northernireland", using: "NorthernIrelandHomePage", platform: "Webcore", examples: ["/northernireland"]
-  handle "/wales", using: "WalesHomePage", platform: "Webcore", examples: ["/wales"]
-  handle "/cymru", using: "CymruHomePage", platform: "Webcore", examples: ["/cymru"]
-  handle "/alba", using: "AlbaHomePage", platform: "Webcore", examples: ["/alba"]
+  handle "/", using: "HomePage"
+  handle "/scotland", using: "ScotlandHomePage"
+  handle "/homepage/test", using: "TestHomePage", only_on: "test"
+  handle "/homepage/automation", using: "AutomationHomePage", only_on: "test"
+  handle "/northernireland", using: "NorthernIrelandHomePage"
+  handle "/wales", using: "WalesHomePage"
+  handle "/cymru", using: "CymruHomePage"
+  handle "/alba", using: "AlbaHomePage"
 
-  handle "/newstipo", using: "NewsTipoHomePage", platform: "Webcore", only_on: "test", examples: ["/newstipo"]
+  handle "/newstipo", using: "NewsTipoHomePage", only_on: "test"
 
-  handle "/homepage/news/preview", using: "NewsHomePagePreview", platform: "Webcore", only_on: "test", examples: ["/homepage/news/preview"]
-  handle "/homepage/news/test", using: "TestNewsHomePage", platform: "Webcore", only_on: "test", examples: ["/homepage/news/test"]
-  handle "/homepage/index-examples", using: "IndexExamplesHomePage", platform: "Webcore", only_on: "test", examples: ["/homepage/index-examples"]
+  handle "/weathertipo", using: "WeatherTipoHomePage", only_on: "test"
+  handle "/homepage/weather/test", using: "TestWeatherHomePage", only_on: "test"
 
-  handle "/homepage/preview", using: "HomePagePreview", platform: "Webcore", examples: ["/homepage/preview"]
-  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland", platform: "Webcore", examples: ["/homepage/preview/scotland"]
-  handle "/homepage/preview/wales", using: "HomePagePreviewWales", platform: "Webcore", examples: ["/homepage/preview/wales"]
-  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland", platform: "Webcore", examples: []
-  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru", platform: "Webcore", examples: ["/homepage/preview/cymru"]
-  handle "/homepage/preview/alba", using: "HomePagePreviewAlba", platform: "Webcore", examples: ["/homepage/preview/alba"]
-  handle "/homepage/newsround/preview", using: "NewsroundHomePagePreview", platform: "Webcore", examples: ["/homepage/newsround/preview"]
+  handle "/homepage/news/preview", using: "NewsHomePagePreview", only_on: "test"
+  handle "/homepage/news/test", using: "TestNewsHomePage", only_on: "test"
+  handle "/homepage/index-examples", using: "IndexExamplesHomePage", only_on: "test"
 
-  handle "/homepage/personalised", using: "HomePagePersonalised", platform: "Webcore", examples: ["/homepage/personalised"]
-  handle "/homepage/segmented", using: "HomePageSegmented", platform: "Webcore", examples: ["/homepage/segmented"]
+  handle "/homepage/preview", using: "HomePagePreview"
+  handle "/homepage/preview/scotland", using: "HomePagePreviewScotland"
+  handle "/homepage/preview/wales", using: "HomePagePreviewWales"
+  handle "/homepage/preview/northernireland", using: "HomePagePreviewNorthernIreland"
+  handle "/homepage/preview/cymru", using: "HomePagePreviewCymru"
+  handle "/homepage/preview/alba", using: "HomePagePreviewAlba"
+  handle "/homepage/newsround/preview", using: "NewsroundHomePagePreview"
 
-  handle "/sportproto", using: "SportHomePage", platform: "Webcore", only_on: "test", examples: ["/sportproto"]
-  handle "/sporttipo", using: "SportTipo", platform: "Webcore", examples: ["/sporttipo"]
-
-  handle "/homepage/sport/preview", using: "SportHomePagePreview", platform: "Webcore", examples: ["/homepage/sport/preview"]
-  handle "/homepage/sport/test", using: "TestSportHomePage", platform: "Webcore", only_on: "test", examples: ["/homepage/sport/test"]
+  handle "/homepage/sport/preview", using: "SportHomePagePreview"
+  handle "/homepage/sport/test", using: "TestSportHomePage", only_on: "test"
 
   # data endpoints
 
-  handle "/fd/p/mytopics-page", using: "MyTopicsPage", platform: "Fabl", examples: []
-  handle "/fd/p/mytopics-follows", using: "MyTopicsFollows", platform: "Fabl", examples: []
-  handle "/fd/p/preview/:name", using: "PersonalisedFablData", platform: "Fabl", only_on: "test", examples: [] do
+  handle "/fd/p/mytopics-page", using: "MyTopicsPage"
+  handle "/fd/p/mytopics-follows", using: "MyTopicsFollows"
+  handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test" do
     return_404 if: [
       !is_valid_length?(name, 3..40),
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/preview/abl", using: "AblData", platform: "Fabl", examples: []
-  handle "/fd/preview/spike-abl-core", using: "AblData", platform: "Fabl", examples: []
-  handle "/fd/preview/:name", using: "FablData", platform: "Fabl", examples: ["/fd/preview/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios"] do
+  handle "/fd/preview/abl", using: "AblDataPreview"
+  handle "/fd/preview/spike-abl-core", using: "AblDataPreview"
+  handle "/fd/preview/:name", using: "FablData" do
     return_404 if: [
       !is_valid_length?(name, 3..40),
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/abl", using: "AblSpecSelector", platform: "Fabl", examples: ["/fd/abl?clientName=Hindi&clientVersion=pre-4&page=india-63495511&release=public-alpha&service=hindi&type=asset"]
-  handle "/fd/p/:name", using: "PersonalisedFablData", platform: "Fabl", only_on: "test", examples: [] do
+  handle "/fd/abl", using: "AblData"
+  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test" do
     return_404 if: [
       !is_valid_length?(name, 3..40),
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
-  handle "/fd/sport-app-allsport", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-allsport?env=live&edition=domestic"]
-  handle "/fd/sport-app-followables", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-followables?env=live&edition=domestic"]
-  handle "/fd/sport-app-images", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-images"]
-  handle "/fd/sport-app-menu", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-menu?edition=domestic&platform=ios&env=live"]
-  handle "/fd/sport-app-notification-data", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-notification-data"]
-  handle "/fd/sport-app-page", using: "SportData", platform: "Fabl", examples: ["/fd/sport-app-page?page=http%3A%2F%2Fwww.bbc.co.uk%2Fsport%2Fgymnastics.app&v=9&platform=ios", "/fd/sport-app-page?page=https%3A%2F%2Fwww.bbc.co.uk%2Fsport&v=11&platform=ios&edition=domestic"]
-  handle "/fd/topic-mapping", using: "SportData", platform: "Fabl", examples: ["/fd/topic-mapping?product=sport&followable=true&alias=false", "/fd/topic-mapping?product=sport&route=/sport&edition=domestic"]
+  handle "/fd/sport-app-allsport", using: "SportData"
+  handle "/fd/sport-app-followables", using: "SportData"
+  handle "/fd/sport-app-images", using: "SportData"
+  handle "/fd/sport-app-menu", using: "SportData"
+  handle "/fd/sport-app-notification-data", using: "SportData"
+  handle "/fd/sport-app-page", using: "SportData"
+  handle "/fd/topic-mapping", using: "SportData"
 
-  handle "/fd/:name", using: "FablData", platform: "Fabl", examples: [] do
+  handle "/fd/:name", using: "FablData" do
     return_404 if: [
       !is_valid_length?(name, 3..40),
       !matches?(name, ~r/^[a-z0-9-]+$/)
     ]
   end
 
-  handle "/wc-data/container/:name", using: "ContainerData", platform: "Webcore", examples: ["/wc-data/container/consent-banner"]
-  handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData", platform: "Webcore", examples: []
-  handle "/wc-data/p/container/simple-promo-collection", using: "PersonalisedContainerData", platform: "Webcore", examples: []
-  handle "/wc-data/p/container/test-client-side-personalised", using: "PersonalisedContainerData", platform: "Webcore", only_on: "test", examples: []
-  handle "/wc-data/p/container/:name", using: "ContainerData", platform: "Webcore", examples: ["/wc-data/p/container/consent-banner"]
-  handle "/wc-data/page-composition", using: "PageComposition", platform: "Webcore", examples: ["/wc-data/page-composition?path=/search&params=%7B%7D"]
+  handle "/wc-data/container/:name", using: "ContainerData"
+  handle "/wc-data/p/container/onward-journeys", using: "PersonalisedContainerData"
+  handle "/wc-data/p/container/simple-promo-collection", using: "PersonalisedContainerData"
+  handle "/wc-data/p/container/test-client-side-personalised", using: "PersonalisedContainerData", only_on: "test"
+  handle "/wc-data/p/container/:name", using: "ContainerData"
+  handle "/wc-data/page-composition", using: "PageComposition"
 
   # Search
 
-  handle "/search", using: "Search", platform: "Webcore", examples: ["/search"]
-  handle "/chwilio", using: "WelshSearch", platform: "Webcore", examples: ["/chwilio"]
-  handle "/cbeebies/search", using: "Search", platform: "Webcore", examples: ["/cbeebies/search"]
-  handle "/cbbc/search", using: "Search", platform: "Webcore", examples: ["/cbbc/search"]
-  handle "/bitesize/search", using: "Search", platform: "Webcore", examples: ["/bitesize/search"]
-  handle "/sounds/search", using: "Search", platform: "Webcore", examples: ["/sounds/search"]
+  handle "/search", using: "Search"
+  handle "/chwilio", using: "WelshSearch"
+  handle "/cbeebies/search", using: "Search"
+  handle "/cbbc/search", using: "Search"
+  handle "/bitesize/search", using: "Search"
 
   # News
 
@@ -147,68 +149,76 @@ defroutefile "Main" do
   ## News - Mobile Redirect
   redirect "/news/mobile/*any", to: "/news", status: 301
 
-  handle "/news", using: "NewsHomePage", platform: "MozartNews", examples: ["/news"]
+  handle "/news", using: "NewsHomePage"
 
-  handle "/news/breaking-news/audience", using: "BreakingNews", platform: "MozartNews", examples: [] do
+  handle "/news/breaking-news/audience", using: "BreakingNews" do
     return_404 if: true
   end
 
-  handle "/news/breaking-news/audience/:audience", using: "BreakingNews", platform: "MozartNews", examples: ["/news/breaking-news/audience/domestic", "/news/breaking-news/audience/us", "/news/breaking-news/audience/international", "/news/breaking-news/audience/asia"] do
+  handle "/news/breaking-news/audience/:audience", using: "BreakingNews" do
     return_404 if: [
       !String.match?(audience, ~r/^(domestic|us|international|asia)$/)
     ]
   end
 
-  handle "/news/election/2023/:polity/results", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/results"]  do
+  handle "/news/election/2023/northern-ireland/results", using: "NewsNiElectionResults"
+
+  handle "/news/election/2023/:polity/results", using: "NewsElectionResults"  do
     return_404 if: [
-                 !String.match?(polity, ~r/^(england|northern-ireland)$/)
+                 !String.match?(polity, ~r/^(england)$/)
                ]
   end
 
-  handle "/news/election/2023/:polity/councils", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/councils", "/news/election/2023/northern-ireland/councils"] do
+  handle "/news/election/2023/:polity/councils", using: "NewsElectionResults" do
     return_404 if: [
-      !String.match?(polity, ~r/^(england|northern-ireland)$/)
+      !String.match?(polity, ~r/^(england)$/)
     ]
   end
 
-  handle "/news/election/2023/:polity/councils/:gss_id", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2023/england/councils/E09000016"] do
+  handle "/news/election/2023/northern-ireland/councils/:gss_id", using: "NewsNiElectionResults" do
+    return_404 if: [
+      !String.match?(gss_id, ~r/^[A-Z][0-9]{8}$/)
+    ]
+  end
+
+  handle "/news/election/2023/:polity/councils/:gss_id", using: "NewsElectionResults" do
     return_404 if: [
       !String.match?(polity, ~r/^(england|northern-ireland)$/),
       !String.match?(gss_id, ~r/^[A-Z][0-9]{8}$/)
     ]
   end
 
-  handle "/news/election/2022/us/results", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/results"]
+  handle "/news/election/2022/us/results", using: "NewsElectionResults"
 
-  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/us/states/al"] do
+  handle "/news/election/2022/us/states/:state_id", using: "NewsElectionResults" do
     return_404 if: [
       !String.match?(state_id, ~r/^[a-z]{2}$/)
     ]
   end
 
-  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2022/usa/midterms-test"]
+  handle "/news/election/2022/usa/midterms-test", using: "NewsElectionResults", only_on: "test"
 
-  handle "/news/election/2021/:polity/results", using: "NewsElection2021", platform: "Webcore", examples: ["/news/election/2021/england/results", "/news/election/2021/scotland/results", "/news/election/2021/wales/results"] do
+  handle "/news/election/2021/:polity/results", using: "NewsElection2021" do
     return_404 if: [
                  !String.match?(polity, ~r/^(england|scotland|wales)$/)
                ]
   end
 
-  handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021", platform: "Webcore", examples: ["/news/election/2021/england/councils", "/news/election/2021/scotland/constituencies", "/news/election/2021/wales/constituencies"] do
+  handle "/news/election/2021/:polity/:division_name", using: "NewsElection2021" do
     return_404 if: [
       !String.match?(polity, ~r/^(england|scotland|wales)$/),
       !String.match?(division_name, ~r/^(councils|constituencies)$/),
     ]
   end
 
-  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021", platform: "Webcore", examples: ["/news/election/2021/england/councils/E06000023"] do
+  handle "/news/election/2021/england/:division_name/:division_id", using: "NewsElection2021" do
     return_404 if: [
       !String.match?(division_name, ~r/^(councils|mayors)$/),
       !String.match?(division_id, ~r/^[E][0-9]{8}$/),
     ]
   end
 
-  handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021", platform: "Webcore", examples: ["/news/election/2021/scotland/constituencies/S16000084", "/news/election/2021/scotland/regions/S17000014", "/news/election/2021/wales/constituencies/W09000001", "/news/election/2021/wales/regions/W10000006"] do
+  handle "/news/election/2021/:polity/:division_name/:division_id", using: "NewsElection2021" do
     return_404 if: [
       !String.match?(polity, ~r/^(scotland|wales)$/),
       !String.match?(division_name, ~r/^(regions|constituencies)$/),
@@ -216,30 +226,30 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2017/northern-ireland/results"]
+  handle "/news/election/2017/northern-ireland/results", using: "NewsElectionResults", only_on: "test"
 
-  handle "/news/election/2022/:polity/results", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/england/results", "/news/election/2022/scotland/results", "/news/election/2022/wales/results", "/news/election/2022/northern-ireland/results"] do
+  handle "/news/election/2022/:polity/results", using: "NewsElectionResults" do
     return_404 if: [
                  !String.match?(polity, ~r/^(england|scotland|wales|northern-ireland)$/)
                ]
   end
 
-  handle "/news/election/2017/northern-ireland/constituencies", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies"]
+  handle "/news/election/2017/northern-ireland/constituencies", using: "NewsElectionResults", only_on: "test"
 
-  handle "/news/election/2022/:polity/:division_name", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/northern-ireland/constituencies", "/news/election/2022/england/councils", "/news/election/2022/scotland/councils", "/news/election/2022/wales/councils"] do
+  handle "/news/election/2022/:polity/:division_name", using: "NewsElectionResults" do
     return_404 if: [
        !String.match?(polity, ~r/^(england|scotland|wales|northern-ireland)$/),
        !String.match?(division_name, ~r/^(constituencies|councils)$/)
     ]
   end
 
-  handle "/news/election/2017/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2017/northern-ireland/constituencies/N06000001"] do
+  handle "/news/election/2017/northern-ireland/constituencies/:division_id", using: "NewsElectionResults", only_on: "test" do
     return_404 if: [
                  !String.match?(division_id, ~r/^[N][0-9]{8}$/)
                ]
   end
 
-  handle "/news/election/2022/:polity/:division_name/:division_id", using: "NewsElectionResults", platform: "Webcore", examples: ["/news/election/2022/northern-ireland/constituencies/N06000001", "/news/election/2022/wales/councils/W06000001"] do
+  handle "/news/election/2022/:polity/:division_name/:division_id", using: "NewsElectionResults" do
 
     return_404 if: [
                  !String.match?(polity, ~r/^(northern-ireland|england|wales|scotland)$/),
@@ -248,70 +258,128 @@ defroutefile "Main" do
                ]
   end
 
-  handle "/news/election/2019/uk/results", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2019/uk/results"]
+  handle "/news/election/2019/uk/results", using: "NewsElectionResults", only_on: "test"
 
-  handle "/news/election/2019/uk/constituencies", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2019/uk/constituencies"]
+  handle "/news/election/2019/uk/constituencies", using: "NewsElectionResults", only_on: "test"
 
-  handle "/news/election/2019/uk/constituencies/:division_id", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2019/uk/constituencies/E92000001", "/news/election/2019/uk/constituencies/S83000001", "/news/election/2019/uk/constituencies/W76000005", "/news/election/2019/uk/constituencies/N12000001"] do
+  handle "/news/election/2019/uk/constituencies/:division_id", using: "NewsElectionResults", only_on: "test" do
     return_404 if: [
       !String.match?(division_id, ~r/^[NSWE][0-9]{8}$/)
     ]
   end
 
-  handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", platform: "Webcore", only_on: "test", examples: ["/news/election/2019/uk/regions/E92000001", "/news/election/2019/uk/regions/W92000004", "/news/election/2019/uk/regions/S92000003", "/news/election/2019/uk/regions/N92000002"] do
+  handle "/news/election/2019/uk/regions/:division_id", using: "NewsElectionResults", only_on: "test" do
     return_404 if: [
       !String.match?(division_id, ~r/^(E92000001|W92000004|S92000003|N92000002)$/)
     ]
   end
 
-  handle "/news/election/2015", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015"]
-  handle "/news/election/2015/england", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/england"]
-  handle "/news/election/2015/northern_ireland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/northern_ireland"]
-  handle "/news/election/2015/wales", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/wales"]
-  handle "/news/election/2015/scotland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2015/scotland"]
-  handle "/news/election/2016", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016"]
-  handle "/news/election/2016/london", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/london"]
-  handle "/news/election/2016/northern_ireland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/northern_ireland"]
-  handle "/news/election/2016/scotland", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/scotland"]
-  handle "/news/election/2016/wales", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2016/wales"]
-  handle "/news/election/2017", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/2017"]
-  handle "/news/election/ni2017", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/ni2017"]
-  handle "/news/election/us2016", using: "NewsWebcoreIndex", platform: "Webcore", examples: ["/news/election/us2016"]
+  redirect "/news/16630456", to: "/news/events/scotland-decides", status: 301
+  redirect "/news/uk-politics-33256201", to: "/news/politics/eu_referendum", status: 301
+  redirect "/news/election-2017-39946901", to: "/news/election-2019-50459517", status: 301
+  redirect "/news/election/2015/live", to: "/news/live/election-2015-32753161", status: 301
 
-  handle "/news/election/*any", using: "NewsElection", platform: "MozartNews", examples: ["/news/election/2019"]
+  handle "/news/election/2015", using: "NewsWebcoreIndex"
+  handle "/news/election/2015/england", using: "NewsWebcoreIndex"
+  handle "/news/election/2015/northern_ireland", using: "NewsWebcoreIndex"
+  handle "/news/election/2015/wales", using: "NewsWebcoreIndex"
+  handle "/news/election/2015/scotland", using: "NewsWebcoreIndex"
+  handle "/news/election/2016", using: "NewsWebcoreIndex"
+  handle "/news/election/2016/london", using: "NewsWebcoreIndex"
+  handle "/news/election/2016/northern_ireland", using: "NewsWebcoreIndex"
+  handle "/news/election/2016/scotland", using: "NewsWebcoreIndex"
+  handle "/news/election/2016/wales", using: "NewsWebcoreIndex"
+  handle "/news/election/2017", using: "NewsWebcoreIndex"
+  handle "/news/election/ni2017", using: "NewsWebcoreIndex"
+  handle "/news/election/us2016", using: "NewsWebcoreIndex"
 
-  # News Live - Both Morph and WebCore Traffic
-  handle "/news/live/:asset_id", using: "NewsLive", platform: "MozartNews", examples: ["/news/live/uk-55930940"] do
-    # example "/news/live/c1v596ken6vt" is causing smoke tests to fail.
+  handle "/news/election/*any", using: "NewsElection"
+
+  ### News BBC Live - CPS & TIPO - No Discipline
+  handle "/news/live/:asset_id", using: "NewsLive" do
     return_404 if: [
-      !String.match?(asset_id, ~r/^(([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})|(c[a-z0-9]{10,}t))$/), # CPS & TIPO IDs
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
+      !(is_tipo_id?(asset_id) or is_cps_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
-  # News Live - Morph Traffic with Page ID
-  handle "/news/live/:asset_id/page/:page_number", using: "NewsLive", platform: "MozartNews", examples: ["/news/live/uk-55930940/page/2"] do
+  ### News BBC Live - CPS - Page Number
+  handle "/news/live/:asset_id/page/:page_number", using: "NewsLive" do
     return_404 if: [
-      !String.match?(asset_id, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})$/),
-      !String.match?(page_number, ~r/\A[1-9][0-9]{0,2}\z/)
+      !is_cps_id?(asset_id),
+      !integer_in_range?(page_number || "1", 1..50),
     ]
   end
 
-  # News Live - .app route webcore traffic to platform discriminator
-  handle "/news/live/:asset_id.app", using: "NewsLive", platform: "MozartNews", only_on: "test", examples: ["/news/live/c1v596ken6vt.app", "/news/live/c1v596ken6vt.app?page=1"] do
+  ### News BBC Live - TIPO - .app route (not available on Morph news)
+  handle "/news/live/:asset_id.app", using: "NewsLive" do
     return_404 if: [
-      !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/), # TIPO - if has pageID validate it
+      !(is_tipo_id?(asset_id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50),
+      !(is_nil(conn.query_params["post"]) or is_asset_guid?(conn.query_params["post"])),
     ]
   end
 
   # Local News
-  handle "/news/localnews", using: "NewsLocalNews", platform: "MozartNews", examples: ["/news/localnews"]
-  handle "/news/localnews/faqs", using: "NewsLocalNews", platform: "MozartNews", examples: ["/news/localnews/faqs"]
-  handle "/news/localnews/locations", using: "NewsLocalNews", platform: "MozartNews", examples: ["/news/localnews/locations"]
+  handle "/news/localnews", using: "NewsLocalNews"
   # this route goes to mozart and 500s on live, may be we should remove it?
-  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews", platform: "MozartNews", examples: ["/news/localnews/locations/sitemap.xml"]
-  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect", platform: "MozartNews", examples: [{"/news/localnews/2643743-london/0", 302}]
+  handle "/news/localnews/locations/sitemap.xml", using: "NewsLocalNews"
+  handle "/news/localnews/:location_id_and_name/*_radius", using: "NewsLocalNewsRedirect"
+
+  # News Indexes
+  redirect "/news/topics/c05pg0wvm83t/*any", to: "/news/wales", status: 301
+  redirect "/news/topics/c05pgvdm849t/*any", to: "/news/world/europe", status: 301
+  redirect "/news/topics/cwgdj57820vt/*any", to: "/news/world/africa", status: 301
+  redirect "/news/topics/ck71r1x591xt/*any", to: "/news/england", status: 301
+  redirect "/news/topics/c05p9vgdr6pt/*any", to: "/news/world/middle_east", status: 301
+  redirect "/news/topics/cp35rmprpn5t/*any", to: "/news/world/us_and_canada", status: 301
+  redirect "/news/topics/c43v1n0wl83t/*any", to: "/news/scotland", status: 301
+  redirect "/news/topics/cv5j55kq5p6t/*any", to: "/news/world/europe/guernsey", status: 301
+  redirect "/news/topics/c97e7xl514xt/*any", to: "/news/england/cornwall", status: 301
+  redirect "/news/topics/cr1k15w1vk6t/*any", to: "/news/england/birmingham_and_black_country", status: 301
+  redirect "/news/topics/cnlklx5gl9rt/*any", to: "/news/england/dorset", status: 301
+  redirect "/news/topics/czpqpg9jzjkt/*any", to: "/news/england/essex", status: 301
+  redirect "/news/topics/c13r3338vlpt/*any", to: "/news/england/berkshire", status: 301
+  redirect "/news/topics/cnlkl1gkn5jt/*any", to: "/news/england/coventry_and_warwickshire", status: 301
+  redirect "/news/topics/cwvgv34x7vxt/*any", to: "/news/england/gloucestershire", status: 301
+  redirect "/news/topics/cr1k11ryy55t/*any", to: "/news/england/hampshire", status: 301
+  redirect "/news/topics/czpqp47g86pt/*any", to: "/news/england/cumbria", status: 301
+  redirect "/news/topics/cr1k15gr6gnt/*any", to: "/news/england/derbyshire", status: 301
+  redirect "/news/topics/ckrkrnv7yqzt/*any", to: "/news/england/bristol", status: 301
+  redirect "/news/topics/cq6k679g9l6t/*any", to: "/news/england/cambridgeshire", status: 301
+  redirect "/news/topics/cezkzgl6858t/*any", to: "/news/england/devon", status: 301
+  redirect "/news/topics/cnjn674nvdvt/*any", to: "/news/world", status: 301
+  redirect "/news/topics/cwrw9n0dgp5t/*any", to: "/news/england/hereford_and_worcester", status: 301
+  redirect "/news/topics/czpxgx8070wt/*any", to: "/news/uk", status: 301
+  redirect "/news/topics/c7p3v5qzg01t/*any", to: "/news/england/lancashire", status: 301
+  redirect "/news/topics/c8654v3gj5xt/*any", to: "/news/the_reporters", status: 301
+  redirect "/news/topics/ceq8p90z9xpt/*any", to: "/news/england/manchester", status: 301
+  redirect "/news/topics/c893vgw19q1t/*any", to: "/news/england/lincolnshire", status: 301
+  redirect "/news/topics/c383j9k4qd8t/*any", to: "/news/england/merseyside", status: 301
+  redirect "/news/topics/cezdel3r8q0t/*any", to: "/news/world/europe/isle_of_man", status: 301
+  redirect "/news/topics/cjn6w9x7j9wt/*any", to: "/news/business", status: 301
+  redirect "/news/topics/c4dldkkz1net/*any", to: "/news/business/global_car_industry", status: 301
+  redirect "/news/topics/cvrl962gz9xt/*any", to: "/news/politics", status: 301
+  redirect "/news/topics/cvrl2wn3063t/*any", to: "/news/politics/uk_leaves_the_eu", status: 301
+  redirect "/news/topics/cvrl9jzx0r5t/*any", to: "/news/technology", status: 301
+  redirect "/news/topics/c43v9644301t/*any", to: "/news/science_and_environment", status: 301
+  redirect "/news/topics/c902n88xrgwt/*any", to: "/news/health", status: 301
+  redirect "/news/topics/cwgdx0ppwnzt/*any", to: "/news/education", status: 301
+  redirect "/news/topics/cvrl9j39l8pt/*any", to: "/news/entertainment_and_arts", status: 301
+  redirect "/news/topics/c43v9x3zpl4t/*any", to: "/news/in_pictures", status: 301
+  redirect "/news/topics/c9mn073kx8jt/*any", to: "/news/newsbeat", status: 301
+  redirect "/news/topics/c58m9d3v2m4t/*any", to: "/news/disability", status: 301
+  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 301
+  redirect "/news/topics/cp60w97z6lpt/*any", to: "/news/explainers", status: 301
+  redirect "/news/topics/c0r51g8gzj4t/*any", to: "/naidheachdan", status: 301
+  redirect "/news/topics/c3y3yz5y46wt/*any", to: "/cymrufyw", status: 301
+  redirect "/news/topics/cd59gnpep0mt/*any", to: "/cymrufyw/gwleidyddiaeth", status: 301
+  redirect "/news/topics/c89624nd36zt/*any", to: "/cymrufyw/gogledd-orllewin", status: 301
+  redirect "/news/topics/c6z1jm2e958t/*any", to: "/cymrufyw/gogledd-ddwyrain", status: 301
+  redirect "/news/topics/c44dg7xd5j0t/*any", to: "/cymrufyw/canolbarth", status: 301
+  redirect "/news/topics/cr0p1mgq088t/*any", to: "/cymrufyw/de-orllewin", status: 301
+  redirect "/news/topics/c7p2x560jqqt/*any", to: "/cymrufyw/de-ddwyrain", status: 301
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
@@ -326,7 +394,7 @@ defroutefile "Main" do
   redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
   redirect "/news/topics/czv6rjvdy9gt/*any", to: "/news/world/australia", status: 302
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
-  redirect "/news/topics/cyz0z8w0ydwt/*any", to: "/news/coronavirus", status: 302
+  redirect "/news/topics/cxqvep8kqext/*any", to: "/news/the_reporters", status: 302
 
   # News Correspondents
   redirect "/news/correspondents/allegrastratton", to: "/news/topics/cl16knzkz9yt", status: 301, ttl: 3600
@@ -410,11 +478,13 @@ defroutefile "Main" do
   redirect "/news/correspondents/willgompertz", to: "/news/topics/cvrkv4xp7ret", status: 301, ttl: 3600
   redirect "/news/correspondents/wyredavies", to: "/news/topics/cqypkzl0n79t", status: 301, ttl: 3600
 
+  redirect "/news/science-environment-34320399", to: "/news/topics/cmj34zmwm1zt/climate-change", status: 301
+
   # News Blogs
   redirect "/news/blogs/trending", to: "/news/topics/cme72mv58q4t", status: 301, ttl: 3600
   redirect "/news/blogs/the_papers", to: "/news/topics/cpml2v678pxt", status: 301, ttl: 3600
 
-  handle "/news/topics/:id/:slug", using: "NewsTopics", platform: "Webcore", examples: ["/news/topics/cwjzj55q2p3t/gold", {"/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e/gold", 301}] do
+  handle "/news/topics/:id/:slug", using: "NewsTopics" do
     return_404 if: [
       !(is_tipo_id?(id) or is_guid?(id)),
       !String.match?(slug, ~r/^([a-z0-9-]+)$/),
@@ -422,9 +492,21 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/news/topics/:id", using: "NewsTopics", platform: "Webcore", examples: ["/news/topics/cljev4jz3pjt", {"/news/topics/23ef11cb-a0eb-4cee-824a-098c6782ad4e", 301}] do
+  handle "/news/topics/:id", using: "NewsTopics" do
     return_404 if: [
       !(is_tipo_id?(id) or is_guid?(id)),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50)
+    ]
+  end
+
+  handle "/news/business/topics/cem601g08pkt", using: "NewsBusinessTopics", only_on: "test" do
+    return_404 if: [
+      !integer_in_range?(conn.query_params["page"] || "1", 1..50)
+    ]
+  end
+
+  handle "/news/business/topics/cjl3llgk4k2t", using: "NewsBusinessTopics", only_on: "test" do
+    return_404 if: [
       !integer_in_range?(conn.query_params["page"] || "1", 1..50)
     ]
   end
@@ -432,74 +514,93 @@ defroutefile "Main" do
   redirect "/news/amp/:id", to: "/news/:id.amp", status: 301
   redirect "/news/amp/:topic/:id", to: "/news/:topic/:id.amp", status: 301
 
-  handle "/news/av/:asset_id/embed", using: "NewsVideosEmbed", platform: "MozartNews", examples: [{"/news/av/world-us-canada-50294316/embed", 302}]
-  handle "/news/av/:asset_id/:slug/embed", using: "NewsVideosEmbed", platform: "MozartNews", examples: [{"/news/av/business-49843970/i-built-my-software-empire-from-a-stoke-council-house/embed", 302}]
-  handle "/news/av/embed/:vpid/:asset_id", using: "NewsVideosEmbed", platform: "MozartNews", examples: [{"/news/av/embed/p07pd78q/49843970", 302}]
-  handle "/news/:asset_id/embed", using: "NewsVideosEmbed", platform: "MozartNews", examples: [{"/news/health-54088206/embed", 302}, {"/news/uk-politics-54003483/embed?amp=1", 302}]
-  handle "/news/:asset_id/embed/:pid", using: "NewsVideosEmbed", platform: "MozartNews", examples: [{"/news/health-54088206/embed/p08m8yx4", 302}, {"/news/health-54088206/embed/p08m8yx4?amp=1", 302}]
+  handle "/news/av/:asset_id/embed", using: "NewsVideosEmbed"
+  handle "/news/av/:asset_id/:slug/embed", using: "NewsVideosEmbed"
+  handle "/news/av/embed/:vpid/:asset_id", using: "NewsVideosEmbed"
+  handle "/news/:asset_id/embed", using: "NewsVideosEmbed"
+  handle "/news/:asset_id/embed/:pid", using: "NewsVideosEmbed"
 
-  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
-
-  handle "/news/av/:id", using: "NewsVideos", platform: "Webcore", examples: ["/news/av/48404351", "/news/av/uk-51729702", "/news/av/uk-england-hampshire-50266218", "/news/av/entertainment+arts-10646650"] do
-      return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
-  end
-
-  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio", platform: "Webcore", examples: [{"/news/video_and_audio/must_see/54327412/scientists-create-a-microscopic-robot-that-walks", 301}] do
+  handle "/news/av/:id.app", using: "NewsVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/news/video_and_audio/*any", using: "NewsVideoAndAudio", platform: "Webcore", examples: [] do
+  handle "/news/av/favicon.ico", using: "News" do
+    return_404 if: true
+  end
+
+  redirect "/news/av/:asset_id/:slug", to: "/news/av/:asset_id", status: 302
+
+  handle "/news/av/:id", using: "NewsVideos" do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/news/video_and_audio/:index/:id/:slug", using: "NewsVideoAndAudio" do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/news/video_and_audio/*any", using: "NewsVideoAndAudio" do
     return_404 if: true
   end
 
   redirect "/news/videos", to: "/news", status: 301
 
-  handle "/news/videos/:optimo_id", using: "NewsVideos", platform: "Webcore", examples: [] do
+  handle "/news/videos/:optimo_id.app", using: "NewsVideosAppPage", only_on: "test" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/news/videos/:optimo_id", using: "NewsVideos" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   # Trial news assets setup for initial MVT test experiment
-  handle "/news/articles/cn3zl2drk0ko", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/cn3zl2drk0ko"]
-  handle "/news/articles/cyxjrk98x59o", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/cyxjrk98x59o"]
-  handle "/news/articles/ce5108j80gpo", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/ce5108j80gpo"]
-  handle "/news/articles/ce4xrgggdvgo", using: "NewsArticleMvt", platform: "Webcore", examples: ["/news/articles/ce4xrgggdvgo"]
+  handle "/news/articles/cn3zl2drk0ko", using: "NewsArticleMvt"
+  handle "/news/articles/cyxjrk98x59o", using: "NewsArticleMvt"
+  handle "/news/articles/ce5108j80gpo", using: "NewsArticleMvt"
+  handle "/news/articles/ce4xrgggdvgo", using: "NewsArticleMvt"
 
-  handle "/news/articles/:optimo_id.amp", using: "NewsAmp", platform: "MozartSimorgh", examples: []
-  handle "/news/articles/:optimo_id.json", using: "NewsAmp", platform: "MozartSimorgh", examples: []
+  handle "/news/articles/:optimo_id.amp", using: "NewsAmp"
+  handle "/news/articles/:optimo_id.json", using: "NewsAmp"
 
-  handle "/news/articles/:optimo_id", using: "NewsStorytellingPage", platform: "Webcore", examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"] do
+  handle "/news/articles/:optimo_id", using: "NewsStorytellingPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/news/articles/:optimo_id.app", using: "NewsStorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   # News indexes
-  handle "/news/access-to-news", using: "NewsIndex", platform: "MozartNews", examples: ["/news/access-to-news"]
-  handle "/news/business", using: "NewsIndex", platform: "MozartNews", examples: ["/news/business"]
-  handle "/news/components", using: "NewsComponents", platform: "MozartNews", examples: []
-  handle "/news/coronavirus", using: "NewsIndex", platform: "MozartNews", examples: ["/news/coronavirus"]
-  handle "/news/disability", using: "NewsIndex", platform: "MozartNews", examples: ["/news/disability"]
-  handle "/news/education", using: "NewsIndex", platform: "MozartNews", examples: ["/news/education"]
-  handle "/news/england", using: "NewsIndex", platform: "MozartNews", examples: ["/news/england"]
-  handle "/news/entertainment_and_arts", using: "NewsIndex", platform: "MozartNews", examples: ["/news/entertainment_and_arts"]
-  handle "/news/explainers", using: "NewsIndex", platform: "MozartNews", examples: ["/news/explainers"]
-  handle "/news/front_page", using: "NewsIndex", platform: "MozartNews", examples: ["/news/front_page"]
-  handle "/news/front-page-service-worker.js", using: "NewsIndex", platform: "MozartNews", examples: ["/news/front-page-service-worker.js"]
-  handle "/news/have_your_say", using: "NewsIndex", platform: "MozartNews", examples: ["/news/have_your_say"]
-  handle "/news/health", using: "NewsIndex", platform: "MozartNews", examples: ["/news/health"]
-  handle "/news/in_pictures", using: "NewsIndex", platform: "MozartNews", examples: ["/news/in_pictures"]
-  handle "/news/newsbeat", using: "NewsIndex", platform: "MozartNews", examples: ["/news/newsbeat"]
-  handle "/news/northern_ireland", using: "NewsIndex", platform: "MozartNews", examples: ["/news/northern_ireland"]
-  handle "/news/paradisepapers", using: "NewsIndex", platform: "MozartNews", examples: ["/news/paradisepapers"]
-  handle "/news/politics", using: "NewsIndex", platform: "MozartNews", examples: ["/news/politics"]
-  handle "/news/reality_check", using: "NewsIndex", platform: "MozartNews", examples: ["/news/reality_check"]
-  handle "/news/science_and_environment", using: "NewsIndex", platform: "MozartNews", examples: ["/news/science_and_environment"]
-  handle "/news/scotland", using: "NewsIndex", platform: "MozartNews", examples: ["/news/scotland"]
-  handle "/news/stories", using: "NewsIndex", platform: "MozartNews", examples: ["/news/stories"]
-  handle "/news/technology", using: "NewsIndex", platform: "MozartNews", examples: ["/news/technology"]
-  handle "/news/the_reporters", using: "NewsIndex", platform: "MozartNews", examples: ["/news/the_reporters"]
-  handle "/news/uk", using: "NewsIndex", platform: "MozartNews", examples: ["/news/uk"]
-  handle "/news/wales", using: "NewsIndex", platform: "MozartNews", examples: ["/news/wales"]
-  handle "/news/world", using: "NewsIndex", platform: "MozartNews", examples: ["/news/world"]
-  handle "/news/world_radio_and_tv", using: "NewsIndex", platform: "MozartNews", examples: ["/news/world_radio_and_tv"]
+  handle "/news/access-to-news", using: "NewsIndex"
+  handle "/news/business", using: "NewsIndex"
+  handle "/news/components", using: "NewsComponents"
+  handle "/news/coronavirus", using: "NewsIndex"
+  handle "/news/disability", using: "NewsIndex"
+  handle "/news/education", using: "NewsIndex"
+  handle "/news/england", using: "NewsIndex"
+  handle "/news/entertainment_and_arts", using: "NewsIndex"
+  handle "/news/explainers", using: "NewsIndex"
+  handle "/news/front_page", using: "NewsIndex"
+  handle "/news/front-page-service-worker.js", using: "NewsIndex"
+  handle "/news/have_your_say", using: "NewsWebcoreIndex"
+  handle "/news/health", using: "NewsIndex"
+  handle "/news/in_pictures", using: "NewsInPicturesIndex"
+  handle "/news/long_reads", using: "BBCXIndex"
+  handle "/news/newsbeat", using: "NewsIndex"
+  handle "/news/northern_ireland", using: "NewsIndex"
+  handle "/news/paradisepapers", using: "NewsIndex"
+  handle "/news/politics", using: "NewsIndex"
+  handle "/news/reality_check", using: "NewsRealityCheckIndex"
+  handle "/news/science_and_environment", using: "NewsIndex"
+  handle "/news/scotland", using: "NewsIndex"
+  handle "/news/stories", using: "NewsStoriesIndex"
+  handle "/news/technology", using: "NewsIndex"
+  handle "/news/the_reporters", using: "NewsWebcoreIndex"
+  handle "/news/uk", using: "NewsUkIndex"
+  handle "/news/us-canada", using: "BBCXIndex"
+  handle "/news/wales", using: "NewsIndex"
+  handle "/news/war-in-ukraine", using: "BBCXIndex"
+  handle "/news/world", using: "NewsWorld"
+  handle "/news/world_radio_and_tv", using: "NewsIndex"
 
   # News feature indexes (FIX assets)
 
@@ -525,68 +626,117 @@ defroutefile "Main" do
   redirect "/news/world-48623037", to: "/news/topics/c779dqxlxv2t", status: 301
   redirect "/news/world-24371433", to: "/news/topics/c779dqxlxv2t", status: 301
 
-  handle "/news/business-11428889", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-11428889"]
-  handle "/news/business-15521824", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-15521824"]
-  handle "/news/business-33712313", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-33712313"]
-  handle "/news/business-38507481", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-38507481"]
-  handle "/news/business-45489065", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business-45489065"]
-  handle "/news/uk-england-47486169", using: "NewsUk", platform: "MozartNews", examples: ["/news/uk-england-47486169"]
-  handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment-56837908"]
-  handle "/news/world-us-canada-15949569", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world-us-canada-15949569"]
+  handle "/news/business-11428889", using: "NewsBusiness"
+  handle "/news/business-15521824", using: "NewsBusiness"
+  handle "/news/business-33712313", using: "NewsBusiness"
+  handle "/news/business-38507481", using: "NewsBusiness"
+  handle "/news/business-45489065", using: "NewsBusiness"
+  handle "/news/uk-england-47486169", using: "NewsUk"
+  handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology"
+  handle "/news/world-us-canada-15949569", using: "News"
 
   # News archive assets
-  handle "/news/10284448/ticker.sjson", using: "NewsArchive", platform: "MozartNews", examples: ["/news/10284448/ticker.sjson"]
-  handle "/news/1/*any", using: "NewsArchive", platform: "MozartNews", examples: ["/news/1/shared/spl/hi/uk_politics/03/the_cabinet/html/chancellor_exchequer.stm"]
-  handle "/news/2/*any", using: "NewsArchive", platform: "MozartNews", examples: ["/news/2/text_only.stm"]
-  handle "/news/sport1/*any", using: "NewsArchive", platform: "MozartNews", examples: ["/news/sport1/hi/football/teams/n/newcastle_united/4405841.stm"]
-  handle "/news/bigscreen/*any", using: "NewsArchive", platform: "MozartNews", examples: ["/news/bigscreen/top_stories/iptvfeed.sjson"]
+  handle "/news/10284448/ticker.sjson", using: "NewsArchive"
+  handle "/news/1/*any", using: "NewsArchive"
+  handle "/news/2/*any", using: "NewsArchive"
+  handle "/news/sport1/*any", using: "NewsArchive"
+  handle "/news/bigscreen/*any", using: "NewsArchive"
+
+  redirect "/news/uk-england-52934822", to: "/news/uk-54373904", status: 301
+  redirect "/news/uk/newsnightlive", to: "/programmes/b006mk25", status: 301
+
+  redirect "/news/world-39146653", to: "/news/reality_check", status: 301
 
   # News RSS feeds
-  handle "/news/rss.xml", using: "NewsRss", platform: "Karanga", examples: ["/news/rss.xml"]
-  handle "/news/:id/rss.xml", using: "NewsRss", platform: "Karanga", examples: ["/news/uk/rss.xml"]
+  handle "/news/rss.xml", using: "NewsRss"
+  handle "/news/:id/rss.xml", using: "NewsRss"
 
-  handle "/news/topics/:id/rss.xml", using: "NewsTopicRss", platform: "Fabl", examples: ["/news/topics/cgmxjppkwl7t/rss.xml"] do
+  handle "/news/topics/:id/rss.xml", using: "NewsTopicRss" do
     return_404 if: !is_tipo_id?(id)
   end
 
+  handle "/news/business/market-data", using: "NewsMarketData"
+
   # News section matchers
-  handle "/news/ampstories/*any", using: "News", platform: "MozartNews", examples: []
-  handle "/news/av-embeds/*any", using: "News", platform: "MozartNews", examples: ["/news/av-embeds/58869966/vpid/p07r2y68"]
-  handle "/news/business/*any", using: "NewsBusiness", platform: "MozartNews", examples: ["/news/business/companies"]
-  handle "/news/england/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/england/regions"]
-  handle "/news/extra/*any", using: "News", platform: "MozartNews", examples: ["/news/extra/3O3eptdEYR/after-the-wall-fell"]
-  handle "/news/events/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/events/scotland-decides/results"]
-  handle "/news/iptv/*any", using: "News", platform: "MozartNews", examples: ["/news/iptv/scotland/iptvfeed.sjson"]
-  handle "/news/local_news_slice/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/local_news_slice/%252Fnews%252Fengland%252Flondon"]
-  handle "/news/northern_ireland/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/northern_ireland/northern_ireland_politics"]
-  handle "/news/politics/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/politics/eu_referendum/results"]
-  handle "/news/resources/*any", using: "News", platform: "MozartNews", examples: ["/news/resources/idt-d6338d9f-8789-4bc2-b6d7-3691c0e7d138"]
-  handle "/news/rss/*any", using: "NewsRssSection", platform: "MozartNews", examples: ["/news/rss/newsonline_uk_edition/front_page/rss.xml"]
-  handle "/news/science-environment/*any", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/science-environment/18552512"]
-  handle "/news/scotland/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/scotland/glasgow_and_west"]
-  handle "/news/slides/*any", using: "News", platform: "MozartNews", examples: []
-  handle "/news/special/*any", using: "News", platform: "MozartNews", examples: ["/news/special/2015/newsspec_10857/bbc_news_logo.png"]
-  handle "/news/technology/*any", using: "NewsScienceAndTechnology", platform: "MozartNews", examples: ["/news/technology/31153361"]
-  handle "/news/wales/*any", using: "NewsUk", platform: "MozartNews", examples: ["/news/wales/south_east_wales"]
-  handle "/news/world/*any", using: "NewsWorld", platform: "MozartNews", examples: ["/news/world/europe"]
-  handle "/news/world_radio_and_tv/*any", using: "NewsWorld", platform: "MozartNews", examples: []
+  handle "/news/ampstories/*any", using: "News"
+  handle "/news/av-embeds/*any", using: "News"
+  handle "/news/business/*any", using: "NewsBusiness"
+  handle "/news/england/*any", using: "NewsUk"
+  handle "/news/extra/*any", using: "News"
+  handle "/news/events/*any", using: "NewsUk"
+  handle "/news/iptv/*any", using: "News"
+  handle "/news/local_news_slice/*any", using: "NewsUk"
+  handle "/news/northern_ireland/*any", using: "NewsUk"
+  handle "/news/politics/*any", using: "NewsUk"
+
+  redirect "/news/health-52300114", to: "/news/resources/idt-29ceaf8c-03db-47b3-9318-0df359669f8f", status: 301
+  redirect "/news/resources/idt-sh/boeing_two_deadly_crashes", to: "/news/extra/IFtb42kkNv/boeing-two-deadly-crashes", status: 301
+  redirect "/news/resources/idt-sh/the_boy_in_the_photo", to: "/news/extra/WkiLgbPpdd/boy-in-the-photo", status: 301
+
+  handle "/news/resources/*any", using: "News"
+
+  handle "/news/rss/*any", using: "NewsRssSection"
+  handle "/news/science-environment/*any", using: "NewsScienceAndTechnology"
+  handle "/news/scotland/*any", using: "NewsUk"
+  handle "/news/slides/*any", using: "News"
+  handle "/news/special/*any", using: "News"
+  handle "/news/technology/*any", using: "NewsScienceAndTechnology"
+  handle "/news/wales/*any", using: "NewsUk"
+  handle "/news/world/*any", using: "NewsWorld"
+  handle "/news/world_radio_and_tv/*any", using: "News"
 
   # 404 matchers
-  handle "/news/favicon.ico", using: "News", platform: "MozartNews", examples: [] do
+  handle "/news/favicon.ico", using: "News" do
     return_404 if: true
   end
 
-  handle "/news/av/favicon.ico", using: "News", platform: "MozartNews", examples: [] do
-    return_404 if: true
+  handle "/news/null", using: "News" do
+    return_404()
   end
 
-  handle "/news/:id.amp", using: "NewsAmp", platform: "MozartSimorgh", examples: ["/news/business-58847275.amp"]
-  handle "/news/:id.json", using: "NewsAmp", platform: "MozartSimorgh", examples: ["/news/business-58847275.json"]
+  handle "/news/onward-journeys", using: "News" do
+    return_404()
+  end
 
-  handle "/news/:id", using: "NewsArticlePage", platform: "Webcore", examples: ["/news/uk-politics-49336144", "/news/world-asia-china-51787936", "/news/technology-51960865", "/news/uk-england-derbyshire-18291916", "/news/entertainment+arts-10636043"]
+  handle "/news/undefined", using: "News" do
+    return_404()
+  end
+
+  handle "/news/feed", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-entertainment", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-music", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-health", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-technology", using: "News" do
+    return_404()
+  end
+
+  handle "/news/newsbeat-the_p_word", using: "News" do
+    return_404()
+  end
+
+  handle "/news/:id.amp", using: "NewsAmp"
+  handle "/news/:id.json", using: "NewsAmp"
+
+  handle "/news/sitemap.xml", using: "News"
+  handle "/news/news_sitemap.xml", using: "News"
+  handle "/news/video_sitemap.xml", using: "News"
+
+  handle "/news/:id", using: "NewsArticlePage"
 
   # TODO issue with routes such as /news/education-46131593 being matched to the /news/:id matcher
-  handle "/news/*any", using: "News", platform: "MozartNews", examples: [{"/news/contact-us/editorial", 302}]
+  handle "/news/*any", using: "NewsAny"
 
   # Cymrufyw
 
@@ -595,125 +745,155 @@ defroutefile "Main" do
   redirect "/cymrufyw/amp/:id", to: "/cymrufyw/:id.amp", status: 301
   redirect "/cymrufyw/amp/:topic/:id", to: "/cymrufyw/:topic/:id.amp", status: 301
 
+  handle "/cymrufyw/etholiad/2015", using: "CymrufywWebcoreIndex"
+  handle "/cymrufyw/etholiad/2016", using: "CymrufywWebcoreIndex"
+  handle "/cymrufyw/etholiad/2017", using: "CymrufywWebcoreIndex"
+  handle "/cymrufyw/etholiad/2019", using: "CymrufywWebcoreIndex"
+  handle "/cymrufyw/gwleidyddiaeth/refferendwm_ue", using: "CymrufywWebcoreIndex"
+
   redirect "/cymrufyw/correspondents/vaughanroderick", to: "/news/topics/ckj6kvx7pdyt", status: 302
 
-  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/cylchgrawn"]
+  handle "/cymrufyw/cylchgrawn", using: "Cymrufyw"
 
-  handle "/cymrufyw/etholiad/:year/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau", platform: "Webcore", examples: ["/cymrufyw/etholiad/2022/cymru/canlyniadau", "/cymrufyw/etholiad/2021/cymru/canlyniadau"] do
+  handle "/cymrufyw/etholiad/:year/cymru/canlyniadau", using: "CymrufywEtholiadCanlyniadau" do
     return_404 if: [
       !String.match?(year, ~r/^(2021|2022)$/)
     ]
   end
 
-  handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021", platform: "Webcore", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau"]
+  handle "/cymrufyw/etholiad/2021/cymru/etholaethau", using: "CymrufywEtholiad2021"
 
-  handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021", platform: "Webcore", examples: ["/cymrufyw/etholiad/2021/cymru/etholaethau/W09000001", "/cymrufyw/etholiad/2021/cymru/rhanbarthau/W10000006"] do
+  handle "/cymrufyw/etholiad/2021/cymru/:division_name/:division_id", using: "CymrufywEtholiad2021" do
     return_404 if: [
       !String.match?(division_name, ~r/^(rhanbarthau|etholaethau)$/),
       !String.match?(division_id, ~r/^W[0-9]{8}$/)
     ]
   end
 
-  handle "/cymrufyw/etholiad/2022/cymru/cynghorau", using: "CymrufywEtholiadCanlyniadau", platform: "Webcore", examples: ["/cymrufyw/etholiad/2022/cymru/cynghorau"]
+  handle "/cymrufyw/etholiad/2022/cymru/cynghorau", using: "CymrufywEtholiadCanlyniadau"
 
-  handle "/cymrufyw/etholiad/2022/cymru/cynghorau/:division_id", using: "CymrufywEtholiadCanlyniadau", platform: "Webcore", examples: [] do
+  handle "/cymrufyw/etholiad/2022/cymru/cynghorau/:division_id", using: "CymrufywEtholiadCanlyniadau" do
     return_404 if: [
                  !String.match?(division_id, ~r/^[W][0-9]{8}$/)
                ]
   end
 
-  handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", platform: "Webcore", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/etholaethau/W09000001"] do
+  handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test" do
     return_404 if: [
       !String.match?(division_id, ~r/^W[0-9]{8}$/)
     ]
   end
 
-  handle "/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004", using: "CymrufywEtholiadCanlyniadau", platform: "Webcore", only_on: "test", examples: ["/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004"]
+  handle "/cymrufyw/etholiad/2019/du/rhanbarthau/W92000004", using: "CymrufywEtholiadCanlyniadau", only_on: "test"
 
-  handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/gwleidyddiaeth"]
-  handle "/cymrufyw/gogledd-orllewin", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/gogledd-orllewin"]
-  handle "/cymrufyw/gogledd-ddwyrain", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/gogledd-ddwyrain"]
-  handle "/cymrufyw/canolbarth", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/canolbarth"]
-  handle "/cymrufyw/de-orllewin", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/de-orllewin"]
-  handle "/cymrufyw/de-ddwyrain", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/de-ddwyrain"]
-  handle "/cymrufyw/eisteddfod", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw/eisteddfod"]
-  handle "/cymrufyw/components", using: "Cymrufyw", platform: "MozartNews", examples: []
-  handle "/cymrufyw/hafan", using: "Cymrufyw", platform: "MozartNews", examples: [{"/cymrufyw/hafan", 301}]
+  handle "/cymrufyw/gwleidyddiaeth", using: "Cymrufyw"
+  handle "/cymrufyw/gogledd-orllewin", using: "Cymrufyw"
+  handle "/cymrufyw/gogledd-ddwyrain", using: "Cymrufyw"
+  handle "/cymrufyw/canolbarth", using: "Cymrufyw"
+  handle "/cymrufyw/de-orllewin", using: "Cymrufyw"
+  handle "/cymrufyw/de-ddwyrain", using: "Cymrufyw"
+  handle "/cymrufyw/eisteddfod", using: "Cymrufyw"
+  handle "/cymrufyw/components", using: "Cymrufyw"
+  handle "/cymrufyw/hafan", using: "Cymrufyw"
 
   redirect "/cymrufyw/fideo", to: "/cymrufyw", status: 301
 
-  handle "/cymrufyw/:id", using: "CymrufywArticlePage", platform: "Webcore", examples: ["/cymrufyw/52998018", "/cymrufyw/52995676", "/cymrufyw/etholiad-2017-39407507"] do
+  handle "/cymrufyw/:id", using: "CymrufywArticlePage" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
-  handle "/cymrufyw/saf/:id", using: "CymrufywVideos", platform: "Webcore", examples: ["/cymrufyw/saf/53073086"] do
+  handle "/cymrufyw/saf/:id.app", using: "CymrufywVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos", platform: "Webcore", examples: [] do
+  handle "/cymrufyw/saf/:id", using: "CymrufywVideos" do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/cymrufyw/fideo/:optimo_id.app", using: "CymrufywVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/cymrufyw/erthyglau/:optimo_id.amp", using: "CymrufywAmp", platform: "Simorgh", examples: [] do
+  handle "/cymrufyw/fideo/:optimo_id", using: "CymrufywVideos" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+  handle "/cymrufyw/erthyglau/:optimo_id.amp", using: "CymrufywAmp" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/cymrufyw/*any", using: "Cymrufyw", platform: "MozartNews", examples: ["/cymrufyw"]
+  handle "/cymrufyw/erthyglau/:optimo_id", using: "CymrufywStorytellingPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/cymrufyw/erthyglau/:optimo_id.app", using: "CymrufywStorytellingAppPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/cymrufyw/*any", using: "Cymrufyw"
 
   # Naidheachdan
 
-  handle "/naidheachdan", using: "NaidheachdanHomePage", platform: "MozartNews", examples: ["/naidheachdan"]
-  handle "/naidheachdan/dachaigh", using: "Naidheachdan", platform: "MozartNews", examples: [{"/naidheachdan/dachaigh", 301}]
-  handle "/naidheachdan/components", using: "Naidheachdan", platform: "MozartNews", examples: []
+  handle "/naidheachdan", using: "NaidheachdanHomePage"
+  handle "/naidheachdan/dachaigh", using: "Naidheachdan"
+  handle "/naidheachdan/components", using: "Naidheachdan"
   redirect "/naidheachdan/amp/:id", to: "/naidheachdan/:id.amp", status: 301
   redirect "/naidheachdan/amp/:topic/:id", to: "/naidheachdan/:topic/:id.amp", status: 301
 
   redirect "/naidheachdan/bhidio", to: "/naidheachdan", status: 301
 
-  handle "/naidheachdan/:id", using: "NaidheachdanArticlePage", platform: "Webcore", examples: ["/naidheachdan/52992845", "/naidheachdan/52990788", "/naidheachdan/52991029"] do
+  handle "/naidheachdan/:id", using: "NaidheachdanArticlePage" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{4,9}$/)
   end
 
-  handle "/naidheachdan/sgeulachdan/:optimo_id.amp", using: "NaidheachdanAmp", platform: "Simorgh", examples: [] do
+  handle "/naidheachdan/sgeulachdan/:optimo_id.amp", using: "NaidheachdanAmp" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage", platform: "Webcore", only_on: "test", examples: [] do
+  handle "/naidheachdan/sgeulachdan/:optimo_id", using: "NaidheachdanStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos", platform: "Webcore", examples: ["/naidheachdan/fbh/53159144"] do
+  handle "/naidheachdan/sgeulachdan/:optimo_id.app", using: "NaidheachdanStorytellingAppPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/naidheachdan/fbh/:id.app", using: "NaidheachdanVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
   end
 
-  handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos", platform: "Webcore", examples: [] do
+  handle "/naidheachdan/fbh/:id", using: "NaidheachdanVideos" do
+    return_404 if: !String.match?(id, ~r/^([a-zA-Z0-9\+]+-)*[0-9]{8}$/)
+  end
+
+  handle "/naidheachdan/bhidio/:optimo_id.app", using: "NaidheachdanVideosAppPage", only_on: "test" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  handle "/naidheachdan/*any", using: "Naidheachdan", platform: "MozartNews", examples: []
+  handle "/naidheachdan/bhidio/:optimo_id", using: "NaidheachdanVideos" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
 
-  handle "/pres-test/personalisation", using: "PresTestPersonalised", platform: "Webcore", only_on: "test", examples: ["/pres-test/personalisation"]
-  handle "/pres-test/personalisation/*any", using: "PresTestPersonalised", platform: "Webcore", only_on: "test", examples: ["/pres-test/personalisation/follow-suggestions"]
-  handle "/pres-test/*any", using: "PresTest", platform: "Webcore", only_on: "test", examples: ["/pres-test/greeting-loader"]
+  handle "/naidheachdan/*any", using: "Naidheachdan"
 
-  handle "/devx-test/personalisation", using: "DevXPersonalisation", platform: "Webcore", only_on: "test", examples: ["/devx-test/personalisation"]
+  handle "/pres-test/personalisation", using: "PresTestPersonalised", only_on: "test"
+  handle "/pres-test/personalisation/*any", using: "PresTestPersonalised", only_on: "test"
+  handle "/pres-test/*any", using: "PresTest", only_on: "test"
+
+  handle "/devx-test/personalisation", using: "DevXPersonalisation", only_on: "test"
 
   # Container API
-  handle "/container/envelope/editorial-text/*any", using: "ContainerEnvelopeEditorialText", platform: "Webcore", examples: ["/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2", "/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2?static=true&mode=testData"]
-  handle "/container/envelope/election-banner/*any", using: "ContainerEnvelopeElectionBanner", platform: "Webcore", examples: ["/container/envelope/election-banner/logoOnly/true", "/container/envelope/election-banner/assetUri/%2Fnews/hasFetcher/true?static=true&mode=testData"]
-  handle "/container/envelope/error/*any", using: "ContainerEnvelopeError", platform: "Webcore", examples: ["/container/envelope/error/brandPalette/weatherLightV2/fontPalette/sansSimple/linkText/BBC%20Weather/linkUrl/%2Fweather/status/500?static=true"]
-  handle "/container/envelope/navigation-links/*any", using: "ContainerEnvelopeNavigationLinks", platform: "Webcore", examples: ["/container/envelope/navigation-links/brandPalette/weatherLightV2/corePalette/lightV2/country/gb/fontPalette/sansSimple/hasFetcher/true/language/en/service/weather?static=true"]
-  handle "/container/envelope/page-link/*any", using: "ContainerEnvelopePageLink", platform: "Webcore", examples: ["/container/envelope/page-link/linkHref/%23belfrage/linkLabel/Belfrage%20Test"]
-  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard", platform: "Webcore", examples: ["/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true", "/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData"]
-  handle "/container/envelope/simple-promo-collection/*any", using: "ContainerEnvelopeSimplePromoCollection", platform: "Webcore", examples: ["/container/envelope/simple-promo-collection/brandPalette/weatherLightV2/corePalette/lightV2/enablePromoDescriptions/true/fontPalette/sansSimple/hasFetcher/true/home/weather/isUk/true/title/Features/urn/urn:bbc:cps:curie:asset:b5c5324a-aa36-e059-e040-850a02846523/withContainedPromos/false?static=true"]
-  handle "/container/envelope/turnout/*any", using: "ContainerEnvelopeTurnout", platform: "Webcore", examples: ["/container/envelope/turnout/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true", "/container/envelope/turnout/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData"]
-  handle "/container/envelope/winner-flash/*any", using: "ContainerEnvelopeWinnerFlash", platform: "Webcore", examples: ["/container/envelope/winner-flash/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true", "/container/envelope/winner-flash/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData"]
-  handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", platform: "Webcore", only_on: "test", examples: ["/container/envelope/test-message/message/hello"]
-  handle "/container/envelope/*any", using: "ContainerEnvelope", platform: "Webcore", examples: ["/container/envelope/global-footer/hasFetcher/true"]
+  handle "/container/envelope/editorial-text/*any", using: "ContainerEnvelopeEditorialText"
+  handle "/container/envelope/election-banner/*any", using: "ContainerEnvelopeElectionBanner"
+  handle "/container/envelope/error/*any", using: "ContainerEnvelopeError"
+  handle "/container/envelope/navigation-links/*any", using: "ContainerEnvelopeNavigationLinks"
+  handle "/container/envelope/page-link/*any", using: "ContainerEnvelopePageLink"
+  handle "/container/envelope/scoreboard/*any", using: "ContainerEnvelopeScoreboard"
+  handle "/container/envelope/simple-promo-collection/*any", using: "ContainerEnvelopeSimplePromoCollection"
+  handle "/container/envelope/turnout/*any", using: "ContainerEnvelopeTurnout"
+  handle "/container/envelope/winner-flash/*any", using: "ContainerEnvelopeWinnerFlash"
+  handle "/container/envelope/test-:name/*any", using: "ContainerEnvelopeTestContainers", only_on: "test"
+  handle "/container/envelope/*any", using: "ContainerEnvelope"
 
   # World Service
 
@@ -745,15 +925,27 @@ defroutefile "Main" do
   redirect "/zhongwen/simp/institutional-38228429", to: "/zhongwen/simp/podcasts/p02pc9xp", status: 301
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
+  ## World Service - Article Redirects
+  redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
+  redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
+  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
+  redirect "/portuguese/institutional-36202452", to: "/portuguese/articles/ce5rvednerpo", status: 301
+  redirect "/portuguese/institutional-36202454", to: "/portuguese/articles/cw0w9z6p491o", status: 301
+  redirect "/portuguese/institutional-36202448", to: "/portuguese/articles/cjrldj8285do", status: 301
+  redirect "/portuguese/institutional-50054434", to: "/portuguese/articles/c2x5mvrdk74o", status: 301
+  redirect "/portuguese/geral-44930392", to: "/portuguese/articles/cd1gmq2gzg5o", status: 301
+
   ## World Service - "Access to News" Redirects
   redirect "/arabic/middleeast/2013/11/131114_shia_ashura_rituals", to: "/arabic/middleeast-62442578", status: 301
   redirect "/persian/institutional-43952617", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_bbcpersian_proxy", to: "/persian/access-to-news", status: 301
   redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
-  
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
+  redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
+  redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
+  redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
   # World Service - Indian Sports Woman of The Year
@@ -767,619 +959,728 @@ defroutefile "Main" do
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
   ##    Mobile Redirects: /<service>/mobile/*any
-  handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo", platform: "MozartSimorgh", examples: ["/afaanoromoo.amp"]
-  handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo", platform: "MozartSimorgh", examples: ["/afaanoromoo.json"]
-  handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets", platform: "Simorgh", examples: ["/afaanoromoo/manifest.json"]
-  handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets", platform: "Simorgh", examples: ["/afaanoromoo/sw.js"]
-  handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss", platform: "Karanga", examples: ["/afaanoromoo/rss.xml"]
+  handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo"
+  handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo"
+  handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets"
+  handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets"
+  handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss"
 
-  handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/afaanoromoo/topics/c7zp5z9n3x5t/page/2", 302}] do
+  handle "/afaanoromoo/tipohome.amp", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test"
+
+  handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/afaanoromoo/topics/:id", using: "WorldServiceAfaanoromooTopicPage", platform: "Simorgh", examples: ["/afaanoromoo/topics/c7zp5z9n3x5t"] do
+  handle "/afaanoromoo/topics/:id", using: "WorldServiceAfaanoromooTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/afaanoromoo/topics/:id/rss.xml", using: "WorldServiceAfaanoromooTopicRss", platform: "Fabl", examples: ["/afaanoromoo/topics/c7zp5z9n3x5t/rss.xml"] do
+  handle "/afaanoromoo/topics/:id/rss.xml", using: "WorldServiceAfaanoromooTopicRss" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)$/)
   end
 
-  handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage", platform: "Simorgh", examples: [] do
+  handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/afaanoromoo/articles/:id.amp", using: "WorldServiceAfaanoromooArticlePage", platform: "Simorgh", examples: [] do
+  handle "/afaanoromoo/articles/:id.amp", using: "WorldServiceAfaanoromooArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/afaanoromoo/articles/:id.app", using: "WorldServiceAfaanoromooAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/afaanoromoo/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/afaanoromoo/send/u39697902"]
-  handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo", platform: "MozartSimorgh", examples: ["/afaanoromoo"]
+  handle "/afaanoromoo/send/:id", using: "UploaderWorldService"
+  handle "/afaanoromoo", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test"
+  handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo"
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
 
-  handle "/afrique.amp", using: "WorldServiceAfrique", platform: "MozartSimorgh", examples: ["/afrique.amp"]
-  handle "/afrique.json", using: "WorldServiceAfrique", platform: "MozartSimorgh", examples: ["/afrique.json"]
-  handle "/afrique/manifest.json", using: "WorldServiceAfriqueAssets", platform: "Simorgh", examples: ["/afrique/manifest.json"]
-  handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets", platform: "Simorgh", examples: ["/afrique/sw.js"]
-  handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss", platform: "Karanga", examples: ["/afrique/rss.xml"]
+  handle "/afrique.amp", using: "WorldServiceAfrique"
+  handle "/afrique.json", using: "WorldServiceAfrique"
+  handle "/afrique/manifest.json", using: "WorldServiceAfriqueAssets"
+  handle "/afrique/sw.js", using: "WorldServiceAfriqueAssets"
+  handle "/afrique/rss.xml", using: "WorldServiceAfriqueHomePageRss"
 
-  handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/afrique/topics/c9ny75kpxlkt/page/2", 302}] do
+  handle "/afrique/tipohome.amp", using: "WorldServiceAfriqueTipoHomePage", only_on: "test"
+
+  handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/afrique/topics/:id", using: "WorldServiceAfriqueTopicPage", platform: "Simorgh", examples: ["/afrique/topics/c9ny75kpxlkt", "/afrique/topics/c9ny75kpxlkt?page=2"] do
+  handle "/afrique/topics/:id", using: "WorldServiceAfriqueTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/afrique/topics/:id/rss.xml", using: "WorldServiceAfriqueTopicRss", platform: "Fabl", examples: ["/afrique/topics/c9ny75kpxlkt/rss.xml"] do
+  handle "/afrique/topics/:id/rss.xml", using: "WorldServiceAfriqueTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage", platform: "Simorgh", examples: [] do
+  handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/afrique/articles/:id.amp", using: "WorldServiceAfriqueArticlePage", platform: "Simorgh", examples: [] do
+  handle "/afrique/articles/:id.amp", using: "WorldServiceAfriqueArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/afrique/articles/:id.app", using: "WorldServiceAfriqueAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/afrique/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/afrique/send/u39697902"]
-  handle "/afrique/*any", using: "WorldServiceAfrique", platform: "MozartSimorgh", examples: ["/afrique"]
+  handle "/afrique/send/:id", using: "UploaderWorldService"
+  handle "/afrique", using: "WorldServiceAfriqueTipoHomePage", only_on: "test"
+  handle "/afrique/*any", using: "WorldServiceAfrique"
 
-  handle "/amharic.amp", using: "WorldServiceAmharic", platform: "MozartSimorgh", examples: ["/amharic.amp"]
-  handle "/amharic.json", using: "WorldServiceAmharic", platform: "MozartSimorgh", examples: ["/amharic.json"]
-  handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets", platform: "Simorgh", examples: ["/amharic/manifest.json"]
-  handle "/amharic/sw.js", using: "WorldServiceAmharicAssets", platform: "Simorgh", examples: ["/amharic/sw.js"]
-  handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss", platform: "Karanga", examples: ["/amharic/rss.xml"]
+  handle "/amharic.amp", using: "WorldServiceAmharic"
+  handle "/amharic.json", using: "WorldServiceAmharic"
+  handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets"
+  handle "/amharic/sw.js", using: "WorldServiceAmharicAssets"
+  handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss"
 
-  handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/amharic/topics/c06gq8wdrjyt/page/2", 302}] do
+  handle "/amharic/tipohome.amp", using: "WorldServiceAmharicTipoHomePage", only_on: "test"
+
+  handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/amharic/topics/:id", using: "WorldServiceAmharicTopicPage", platform: "Simorgh", examples: ["/amharic/topics/c06gq8wdrjyt", "/amharic/topics/c06gq8wdrjyt?page=2"] do
+  handle "/amharic/topics/:id", using: "WorldServiceAmharicTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss", platform: "Fabl", examples: ["/amharic/topics/c06gq8wdrjyt/rss.xml"] do
+  handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage", platform: "Simorgh", examples: [] do
+  handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/amharic/articles/:id.amp", using: "WorldServiceAmharicArticlePage", platform: "Simorgh", examples: [] do
+  handle "/amharic/articles/:id.amp", using: "WorldServiceAmharicArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/amharic/articles/:id.app", using: "WorldServiceAmharicAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/amharic/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/amharic/send/u39697902"]
-  handle "/amharic/*any", using: "WorldServiceAmharic", platform: "MozartSimorgh", examples: ["/amharic"]
+  handle "/amharic/send/:id", using: "UploaderWorldService"
+  handle "/amharic", using: "WorldServiceAmharicTipoHomePage", only_on: "test"
+  handle "/amharic/*any", using: "WorldServiceAmharic"
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
   redirect "/arabic/institutional/2011/01/000000_tv_schedule", to: "/arabic/tv-and-radio-58432380", status: 301
   redirect "/arabic/institutional/2011/01/000000_frequencies_radio", to: "/arabic/tv-and-radio-57895092", status: 301
   redirect "/arabic/investigations", to: "/arabic/tv-and-radio-42414864", status: 301
 
-  handle "/arabic.amp", using: "WorldServiceArabic", platform: "MozartSimorgh", examples: ["/arabic.amp"]
-  handle "/arabic.json", using: "WorldServiceArabic", platform: "MozartSimorgh", examples: ["/arabic.json"]
-  handle "/arabic/manifest.json", using: "WorldServiceArabicAssets", platform: "Simorgh", examples: ["/arabic/manifest.json"]
-  handle "/arabic/sw.js", using: "WorldServiceArabicAssets", platform: "Simorgh", examples: ["/arabic/sw.js"]
-  handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss", platform: "Karanga", examples: ["/arabic/rss.xml"]
+  handle "/arabic.amp", using: "WorldServiceArabic"
+  handle "/arabic.json", using: "WorldServiceArabic"
+  handle "/arabic/manifest.json", using: "WorldServiceArabicAssets"
+  handle "/arabic/sw.js", using: "WorldServiceArabicAssets"
+  handle "/arabic/rss.xml", using: "WorldServiceArabicHomePageRss"
 
-  handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/arabic/topics/c340qj374j6t/page/2", 302}] do
+  handle "/arabic/tipohome.amp", using: "WorldServiceArabicTipoHomePage", only_on: "test"
+
+  handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/arabic/topics/:id", using: "WorldServiceArabicTopicPage", platform: "Simorgh", examples: ["/arabic/topics/c340qj374j6t", "/arabic/topics/c340qj374j6t?page=2"] do
+  handle "/arabic/topics/:id", using: "WorldServiceArabicTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/arabic/topics/:id/rss.xml", using: "WorldServiceArabicTopicRss", platform: "Fabl", examples: ["/arabic/topics/c340qj374j6t/rss.xml"] do
+  handle "/arabic/topics/:id/rss.xml", using: "WorldServiceArabicTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage", platform: "Simorgh", examples: [] do
+  handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/arabic/articles/:id.amp", using: "WorldServiceArabicArticlePage", platform: "Simorgh", examples: [] do
+  handle "/arabic/articles/:id.amp", using: "WorldServiceArabicArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/arabic/articles/:id.app", using: "WorldServiceArabicAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/arabic/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/arabic/send/u39697902"]
-  handle "/arabic/*any", using: "WorldServiceArabic", platform: "MozartSimorgh", examples: ["/arabic"]
+  handle "/arabic/send/:id", using: "UploaderWorldService"
+  handle "/arabic", using: "WorldServiceArabicTipoHomePage", only_on: "test"
+  handle "/arabic/*any", using: "WorldServiceArabic"
 
   redirect "/azeri/mobile/*any", to: "/azeri", status: 301
 
-  handle "/azeri.amp", using: "WorldServiceAzeri", platform: "MozartSimorgh", examples: ["/azeri.amp"]
-  handle "/azeri.json", using: "WorldServiceAzeri", platform: "MozartSimorgh", examples: ["/azeri.json"]
-  handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets", platform: "Simorgh", examples: ["/azeri/manifest.json"]
-  handle "/azeri/sw.js", using: "WorldServiceAzeriAssets", platform: "Simorgh", examples: ["/azeri/sw.js"]
-  handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss", platform: "Karanga", examples: ["/azeri/rss.xml"]
+  handle "/azeri.amp", using: "WorldServiceAzeriTipoHomePage"
+  handle "/azeri/manifest.json", using: "WorldServiceAzeriAssets"
+  handle "/azeri/sw.js", using: "WorldServiceAzeriAssets"
+  handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss"
 
-  handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/azeri/topics/c1gdq32g3ddt/page/1", 302}] do
+  handle "/azeri/tipohome.amp", using: "WorldServiceAzeriTipoHomePage", only_on: "test"
+
+  handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/azeri/topics/:id", using: "WorldServiceAzeriTopicPage", platform: "Simorgh", examples: ["/azeri/topics/c1gdq32g3ddt", "/azeri/topics/c1gdq32g3ddt?page=1"] do
+  handle "/azeri/topics/:id", using: "WorldServiceAzeriTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/azeri/topics/:id/rss.xml", using: "WorldServiceAzeriTopicRss", platform: "Fabl", examples: ["/azeri/topics/c1gdq32g3ddt/rss.xml"] do
+  handle "/azeri/topics/:id/rss.xml", using: "WorldServiceAzeriTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage", platform: "Simorgh", examples: [] do
+  handle "/azeri/:topic/rss.xml", using: "WorldServiceAzeriRss"
+  handle "/azeri/:topic/:subtopic/rss.xml", using: "WorldServiceAzeriRss"
+
+  handle "/azeri/articles/:id", using: "WorldServiceAzeriArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/azeri/articles/:id.amp", using: "WorldServiceAzeriArticlePage", platform: "Simorgh", examples: [] do
+  handle "/azeri/articles/:id.amp", using: "WorldServiceAzeriArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/azeri/articles/:id.app", using: "WorldServiceAzeriAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/azeri/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/azeri/send/u39697902"]
-  handle "/azeri/*any", using: "WorldServiceAzeri", platform: "MozartSimorgh", examples: ["/azeri"]
+  handle "/azeri/send/:id", using: "UploaderWorldService"
+  handle "/azeri", using: "WorldServiceAzeriTipoHomePage"
+  handle "/azeri/*any", using: "WorldServiceAzeri"
 
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
   redirect "/bengali/mobile/*any", to: "/bengali", status: 301
 
-  handle "/bengali.amp", using: "WorldServiceBengali", platform: "MozartSimorgh", examples: ["/bengali.amp"]
-  handle "/bengali.json", using: "WorldServiceBengali", platform: "MozartSimorgh", examples: ["/bengali.json"]
-  handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets", platform: "Simorgh", examples: ["/bengali/manifest.json"]
-  handle "/bengali/sw.js", using: "WorldServiceBengaliAssets", platform: "Simorgh", examples: ["/bengali/sw.js"]
-  handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss", platform: "Karanga", examples: ["/bengali/rss.xml"]
+  handle "/bengali.amp", using: "WorldServiceBengali"
+  handle "/bengali.json", using: "WorldServiceBengali"
+  handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets"
+  handle "/bengali/sw.js", using: "WorldServiceBengaliAssets"
+  handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss"
 
-  handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/bengali/topics/c2dwq2nd40xt/page/2", 302}] do
+  handle "/bengali/tipohome.amp", using: "WorldServiceBengaliTipoHomePage", only_on: "test"
+
+  handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/bengali/topics/:id", using: "WorldServiceBengaliTopicPage", platform: "Simorgh", examples: ["/bengali/topics/c2dwq2nd40xt", "/bengali/topics/c2dwq2nd40xt?page=2"] do
+  handle "/bengali/topics/:id", using: "WorldServiceBengaliTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/bengali/topics/:id/rss.xml", using: "WorldServiceBengaliTopicRss", platform: "Fabl", examples: ["/bengali/topics/c2dwq2nd40xt/rss.xml"] do
+  handle "/bengali/topics/:id/rss.xml", using: "WorldServiceBengaliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/bengali/articles/:id.amp", using: "WorldServiceBengaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/bengali/articles/:id.amp", using: "WorldServiceBengaliArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/bengali/articles/:id.app", using: "WorldServiceBengaliAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/bengali/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/bengali/send/u39697902"]
-  handle "/bengali/*any", using: "WorldServiceBengali", platform: "MozartSimorgh", examples: ["/bengali"]
+  handle "/bengali/send/:id", using: "UploaderWorldService"
+  handle "/bengali", using: "WorldServiceBengaliTipoHomePage", only_on: "test"
+  handle "/bengali/*any", using: "WorldServiceBengali"
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
   redirect "/burmese/mobile/*any", to: "/burmese", status: 301
 
-  handle "/burmese.amp", using: "WorldServiceBurmese", platform: "MozartSimorgh", examples: ["/burmese.amp"]
-  handle "/burmese.json", using: "WorldServiceBurmese", platform: "MozartSimorgh", examples: ["/burmese.json"]
-  handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets", platform: "Simorgh", examples: ["/burmese/manifest.json"]
-  handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets", platform: "Simorgh", examples: ["/burmese/sw.js"]
-  handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss", platform: "Karanga", examples: ["/burmese/rss.xml"]
+  handle "/burmese.amp", using: "WorldServiceBurmeseTipoHomePage"
+  handle "/burmese/manifest.json", using: "WorldServiceBurmeseAssets"
+  handle "/burmese/sw.js", using: "WorldServiceBurmeseAssets"
+  handle "/burmese/rss.xml", using: "WorldServiceBurmeseHomePageRss"
 
-  handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/burmese/topics/c404v08p1wxt/page/2", 302}] do
+  handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/burmese/topics/:id", using: "WorldServiceBurmeseTopicPage", platform: "Simorgh", examples: ["/burmese/topics/c404v08p1wxt", "/burmese/topics/c404v08p1wxt?page=2"] do
+  handle "/burmese/topics/:id", using: "WorldServiceBurmeseTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/burmese/topics/:id/rss.xml", using: "WorldServiceBurmeseTopicRss", platform: "Fabl", examples: ["/burmese/topics/c404v08p1wxt/rss.xml"] do
+  handle "/burmese/topics/:id/rss.xml", using: "WorldServiceBurmeseTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/burmese/:topic/rss.xml", using: "WorldServiceBurmeseRss"
+  handle "/burmese/:topic/:subtopic/rss.xml", using: "WorldServiceBurmeseRss"
+
+  handle "/burmese/articles/:id", using: "WorldServiceBurmeseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/burmese/articles/:id.amp", using: "WorldServiceBurmeseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/burmese/articles/:id.amp", using: "WorldServiceBurmeseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-
-  handle "/burmese/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/burmese/send/u39697902"]
-  handle "/burmese/*any", using: "WorldServiceBurmese", platform: "MozartSimorgh", examples: ["/burmese"]
-
-  redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
-
-  handle "/gahuza.amp", using: "WorldServiceGahuza", platform: "MozartSimorgh", examples: ["/gahuza.amp"]
-  handle "/gahuza.json", using: "WorldServiceGahuza", platform: "MozartSimorgh", examples: ["/gahuza.json"]
-  handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets", platform: "Simorgh", examples: ["/gahuza/manifest.json"]
-  handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets", platform: "Simorgh", examples: ["/gahuza/sw.js"]
-  handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss", platform: "Karanga", examples: ["/gahuza/rss.xml"]
-
-  handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/gahuza/topics/c7zp5z0yd0xt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/gahuza/topics/:id", using: "WorldServiceGahuzaTopicPage", platform: "Simorgh", examples: ["/gahuza/topics/c7zp5z0yd0xt", "/gahuza/topics/c7zp5z0yd0xt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/gahuza/topics/:id/rss.xml", using: "WorldServiceGahuzaTopicRss", platform: "Fabl", examples: ["/gahuza/topics/c7zp5z0yd0xt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/gahuza/articles/:id.amp", using: "WorldServiceGahuzaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/burmese/articles/:id.app", using: "WorldServiceBurmeseAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/gahuza/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/gahuza/send/u39697902"]
-  handle "/gahuza/*any", using: "WorldServiceGahuza", platform: "MozartSimorgh", examples: ["/gahuza"]
-  handle "/gujarati.amp", using: "WorldServiceGujarati", platform: "MozartSimorgh", examples: ["/gujarati.amp"]
-  handle "/gujarati.json", using: "WorldServiceGujarati", platform: "MozartSimorgh", examples: ["/gujarati.json"]
-  handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets", platform: "Simorgh", examples: ["/gujarati/manifest.json"]
-  handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets", platform: "Simorgh", examples: ["/gujarati/sw.js"]
-  handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss", platform: "Karanga", examples: ["/gujarati/rss.xml"]
-
-  handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/gujarati/topics/c2dwqj95d30t/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/gujarati/topics/:id", using: "WorldServiceGujaratiTopicPage", platform: "Simorgh", examples: ["/gujarati/topics/c2dwqj95d30t", "/gujarati/topics/c2dwqj95d30t?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/gujarati/topics/:id/rss.xml", using: "WorldServiceGujaratiTopicRss", platform: "Fabl", examples: ["/gujarati/topics/c2dwqj95d30t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/gujarati/articles/:id.amp", using: "WorldServiceGujaratiArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/gujarati/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/gujarati/send/u39697902"]
-  handle "/gujarati/*any", using: "WorldServiceGujarati", platform: "MozartSimorgh", examples: ["/gujarati"]
-
-  redirect "/hausa/mobile/*any", to: "/hausa", status: 301
-
-  handle "/hausa.amp", using: "WorldServiceHausa", platform: "MozartSimorgh", examples: ["/hausa.amp"]
-  handle "/hausa.json", using: "WorldServiceHausa", platform: "MozartSimorgh", examples: ["/hausa.json"]
-  handle "/hausa/manifest.json", using: "WorldServiceHausaAssets", platform: "Simorgh", examples: ["/hausa/manifest.json"]
-  handle "/hausa/sw.js", using: "WorldServiceHausaAssets", platform: "Simorgh", examples: ["/hausa/sw.js"]
-  handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss", platform: "Karanga", examples: ["/hausa/rss.xml"]
-
-  handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/hausa/topics/c5qvpxkx1j7t/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/hausa/topics/:id", using: "WorldServiceHausaTopicPage", platform: "Simorgh", examples: ["/hausa/topics/c5qvpxkx1j7t", "/hausa/topics/c5qvpxkx1j7t?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/hausa/topics/:id/rss.xml", using: "WorldServiceHausaTopicRss", platform: "Fabl", examples: ["/hausa/topics/c5qvpxkx1j7t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/hausa/articles/:id.amp", using: "WorldServiceHausaArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/hausa/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/hausa/send/u39697902"]
-  handle "/hausa/*any", using: "WorldServiceHausa", platform: "MozartSimorgh", examples: ["/hausa"]
-
-  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
-  redirect "/hindi/mobile/*any", to: "/hindi", status: 301
-
-  handle "/hindi.amp", using: "WorldServiceHindi", platform: "MozartSimorgh", examples: ["/hindi.amp"]
-  handle "/hindi.json", using: "WorldServiceHindi", platform: "MozartSimorgh", examples: ["/hindi.json"]
-  handle "/hindi/manifest.json", using: "WorldServiceHindiAssets", platform: "Simorgh", examples: ["/hindi/manifest.json"]
-  handle "/hindi/sw.js", using: "WorldServiceHindiAssets", platform: "Simorgh", examples: ["/hindi/sw.js"]
-  handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss", platform: "Karanga", examples: ["/hindi/rss.xml"]
-
-  handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/hindi/topics/c6vzy709wvxt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/hindi/topics/:id", using: "WorldServiceHindiTopicPage", platform: "Simorgh", examples: ["/hindi/topics/c6vzy709wvxt", "/hindi/topics/c6vzy709wvxt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/hindi/topics/:id/rss.xml", using: "WorldServiceHindiTopicRss", platform: "Fabl", examples: ["/hindi/topics/c6vzy709wvxt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/hindi/articles/:id.amp", using: "WorldServiceHindiArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/hindi/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/hindi/send/u39697902"]
-  handle "/hindi/*any", using: "WorldServiceHindi", platform: "MozartSimorgh", examples: ["/hindi"]
-  handle "/igbo.amp", using: "WorldServiceIgbo", platform: "MozartSimorgh", examples: ["/igbo.amp"]
-  handle "/igbo.json", using: "WorldServiceIgbo", platform: "MozartSimorgh", examples: ["/igbo.json"]
-  handle "/igbo/manifest.json", using: "WorldServiceIgboAssets", platform: "Simorgh", examples: ["/igbo/manifest.json"]
-  handle "/igbo/sw.js", using: "WorldServiceIgboAssets", platform: "Simorgh", examples: ["/igbo/sw.js"]
-  handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss", platform: "Karanga", examples: ["/igbo/rss.xml"]
-
-  handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/igbo/topics/c340qr24xggt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-
-  handle "/igbo/topics/:id", using: "WorldServiceIgboTopicPage", platform: "Simorgh", examples: ["/igbo/topics/c340qr24xggt", "/igbo/topics/c340qr24xggt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss", platform: "Fabl", examples: ["/igbo/topics/c340qr24xggt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/igbo/articles/:id.amp", using: "WorldServiceIgboArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/igbo/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/igbo/send/u39697902"]
-  handle "/igbo/*any", using: "WorldServiceIgbo", platform: "MozartSimorgh", examples: ["/igbo"]
-
-  redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
-
-  handle "/indonesia.amp", using: "WorldServiceIndonesia", platform: "MozartSimorgh", examples: ["/indonesia.amp"]
-  handle "/indonesia.json", using: "WorldServiceIndonesia", platform: "MozartSimorgh", examples: ["/indonesia.json"]
-  handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets", platform: "Simorgh", examples: ["/indonesia/manifest.json"]
-  handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets", platform: "Simorgh", examples: ["/indonesia/sw.js"]
-  handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss", platform: "Karanga", examples: ["/indonesia/rss.xml"]
-
-  handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/indonesia/topics/c340qrk1znxt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/indonesia/topics/:id", using: "WorldServiceIndonesiaTopicPage", platform: "Simorgh", examples: ["/indonesia/topics/c340qrk1znxt", "/indonesia/topics/c340qrk1znxt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/indonesia/topics/:id/rss.xml", using: "WorldServiceIndonesiaTopicRss", platform: "Fabl", examples: ["/indonesia/topics/c340qrk1znxt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/indonesia/articles/:id.amp", using: "WorldServiceIndonesiaArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/indonesia/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/indonesia/send/u39697902"]
-  handle "/indonesia/*any", using: "WorldServiceIndonesia", platform: "MozartSimorgh", examples: ["/indonesia"]
-  handle "/japanese.amp", using: "WorldServiceJapanese", platform: "MozartSimorgh", examples: ["/japanese.amp"]
-  handle "/japanese.json", using: "WorldServiceJapanese", platform: "MozartSimorgh", examples: ["/japanese.json"]
-  handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets", platform: "Simorgh", examples: ["/japanese/manifest.json"]
-  handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets", platform: "Simorgh", examples: ["/japanese/sw.js"]
-  handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss", platform: "Karanga", examples: ["/japanese/rss.xml"]
-
-  handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/japanese/topics/c340qrn7pp0t/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/japanese/topics/:id", using: "WorldServiceJapaneseTopicPage", platform: "Simorgh", examples: ["/japanese/topics/c340qrn7pp0t", "/japanese/topics/c340qrn7pp0t?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/japanese/topics/:id/rss.xml", using: "WorldServiceJapaneseTopicRss", platform: "Fabl", examples: ["/japanese/topics/c340qrn7pp0t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/japanese/articles/:id.amp", using: "WorldServiceJapaneseArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/japanese/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/japanese/send/u39697902"]
-  handle "/japanese/*any", using: "WorldServiceJapanese", platform: "MozartSimorgh", examples: ["/japanese"]
-  handle "/korean.amp", using: "WorldServiceKorean", platform: "MozartSimorgh", examples: ["/korean.amp"]
-  handle "/korean.json", using: "WorldServiceKorean", platform: "MozartSimorgh", examples: ["/korean.json"]
-  handle "/korean/manifest.json", using: "WorldServiceKoreanAssets", platform: "Simorgh", examples: ["/korean/manifest.json"]
-  handle "/korean/sw.js", using: "WorldServiceKoreanAssets", platform: "Simorgh", examples: ["/korean/sw.js"]
-  handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss", platform: "Karanga", examples: ["/korean/rss.xml"]
-
-  handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/korean/topics/c17q6yp3jx4t/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/korean/topics/:id", using: "WorldServiceKoreanTopicPage", platform: "Simorgh", examples: ["/korean/topics/c17q6yp3jx4t", "/korean/topics/c17q6yp3jx4t?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/korean/topics/:id/rss.xml", using: "WorldServiceKoreanTopicRss", platform: "Fabl", examples: ["/korean/topics/c17q6yp3jx4t/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/korean/articles/:id.amp", using: "WorldServiceKoreanArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/korean/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/korean/send/u39697902"]
-  handle "/korean/*any", using: "WorldServiceKorean", platform: "MozartSimorgh", examples: ["/korean"]
-
-  redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
-
-  handle "/kyrgyz.amp", using: "WorldServiceKyrgyz", platform: "MozartSimorgh", examples: ["/kyrgyz.amp"]
-  handle "/kyrgyz.json", using: "WorldServiceKyrgyz", platform: "MozartSimorgh", examples: ["/kyrgyz.json"]
-  handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", examples: ["/kyrgyz/manifest.json"]
-  handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", examples: ["/kyrgyz/sw.js"]
-  handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", examples: ["/kyrgyz/rss.xml"]
-
-  handle "/kyrgyz/tipohome.amp", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome.amp"]
-  handle "/kyrgyz/tipohome/manifest.json", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/manifest.json"]
-  handle "/kyrgyz/tipohome/sw.js", using: "WorldServiceKyrgyzAssets", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome/sw.js"]
-  handle "/kyrgyz/tipohome/rss.xml", using: "WorldServiceKyrgyzHomePageRss", platform: "Karanga", only_on: "test", examples: ["/kyrgyz/tipohome/rss.xml"]
-  handle "/kyrgyz/tipohome", using: "WorldServiceKyrgyzTipo", platform: "Simorgh", only_on: "test", examples: ["/kyrgyz/tipohome"]
-
-  handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/kyrgyz/topics/c0109l9xrpnt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/kyrgyz/topics/:id", using: "WorldServiceKyrgyzTopicPage", platform: "Simorgh", examples: ["/kyrgyz/topics/c0109l9xrpnt", "/kyrgyz/topics/c0109l9xrpnt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/kyrgyz/topics/:id/rss.xml", using: "WorldServiceKyrgyzTopicRss", platform: "Fabl", examples: ["/kyrgyz/topics/c0109l9xrpnt/rss.xml"] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
-  end
-
-  handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage", platform: "Simorgh", examples: [] do
-    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
-  end
-
-  handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", platform: "Simorgh", only_on: "test", examples: [] do
+  handle "/burmese/new_live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !integer_in_range?(conn.query_params["page"] || "1", 1..999)
     ]
   end
 
-  handle "/kyrgyz/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/kyrgyz/send/u39697902"]
-  handle "/kyrgyz/*any", using: "WorldServiceKyrgyz", platform: "MozartSimorgh", examples: ["/kyrgyz"]
+  handle "/burmese/send/:id", using: "UploaderWorldService"
+  handle "/burmese", using: "WorldServiceBurmeseTipoHomePage"
+  handle "/burmese/*any", using: "WorldServiceBurmese"
 
-  handle "/marathi.amp", using: "WorldServiceMarathi", platform: "MozartSimorgh", examples: ["/marathi.amp"]
-  handle "/marathi.json", using: "WorldServiceMarathi", platform: "MozartSimorgh", examples: ["/marathi.json"]
-  handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets", platform: "Simorgh", examples: ["/marathi/manifest.json"]
-  handle "/marathi/sw.js", using: "WorldServiceMarathiAssets", platform: "Simorgh", examples: ["/marathi/sw.js"]
-  handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss", platform: "Karanga", examples: ["/marathi/rss.xml"]
+  redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
 
-  handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/marathi/topics/c2dwqjwqqqjt/page/2", 302}] do
+  handle "/gahuza.amp", using: "WorldServiceGahuza"
+  handle "/gahuza.json", using: "WorldServiceGahuza"
+  handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets"
+  handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets"
+  handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss"
+
+  handle "/gahuza/tipohome.amp", using: "WorldServiceGahuzaTipoHomePage", only_on: "test"
+
+  handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/marathi/topics/:id", using: "WorldServiceMarathiTopicPage", platform: "Simorgh", examples: ["/marathi/topics/c2dwqjwqqqjt", "/marathi/topics/c2dwqjwqqqjt?page=2"] do
+  handle "/gahuza/topics/:id", using: "WorldServiceGahuzaTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/marathi/topics/:id/rss.xml", using: "WorldServiceMarathiTopicRss", platform: "Fabl", examples: ["/marathi/topics/c2dwqjwqqqjt/rss.xml"] do
+  handle "/gahuza/topics/:id/rss.xml", using: "WorldServiceGahuzaTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/marathi/articles/:id.amp", using: "WorldServiceMarathiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/gahuza/articles/:id.amp", using: "WorldServiceGahuzaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/gahuza/articles/:id.app", using: "WorldServiceGahuzaAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/marathi/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/marathi/send/u39697902"]
-  handle "/marathi/*any", using: "WorldServiceMarathi", platform: "MozartSimorgh", examples: ["/marathi"]
+  handle "/gahuza/send/:id", using: "UploaderWorldService"
+  handle "/gahuza", using: "WorldServiceGahuzaTipoHomePage", only_on: "test"
+  handle "/gahuza/*any", using: "WorldServiceGahuza"
+
+  handle "/gujarati.amp", using: "WorldServiceGujarati"
+  handle "/gujarati.json", using: "WorldServiceGujarati"
+  handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets"
+  handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets"
+  handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss"
+
+  handle "/gujarati/tipohome.amp", using: "WorldServiceGujaratiTipoHomePage", only_on: "test"
+
+  handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/gujarati/topics/:id", using: "WorldServiceGujaratiTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/gujarati/topics/:id/rss.xml", using: "WorldServiceGujaratiTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/gujarati/articles/:id.amp", using: "WorldServiceGujaratiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/gujarati/articles/:id.app", using: "WorldServiceGujaratiAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/gujarati/send/:id", using: "UploaderWorldService"
+  handle "/gujarati", using: "WorldServiceGujaratiTipoHomePage", only_on: "test"
+  handle "/gujarati/*any", using: "WorldServiceGujarati"
+
+  redirect "/hausa/mobile/*any", to: "/hausa", status: 301
+
+  handle "/hausa.amp", using: "WorldServiceHausa"
+  handle "/hausa.json", using: "WorldServiceHausa"
+  handle "/hausa/manifest.json", using: "WorldServiceHausaAssets"
+  handle "/hausa/sw.js", using: "WorldServiceHausaAssets"
+  handle "/hausa/rss.xml", using: "WorldServiceHausaHomePageRss"
+
+  handle "/hausa/tipohome.amp", using: "WorldServiceHausaTipoHomePage", only_on: "test"
+
+  handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/hausa/topics/:id", using: "WorldServiceHausaTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/hausa/topics/:id/rss.xml", using: "WorldServiceHausaTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/hausa/articles/:id.amp", using: "WorldServiceHausaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/hausa/articles/:id.app", using: "WorldServiceHausaAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/hausa/send/:id", using: "UploaderWorldService"
+  handle "/hausa", using: "WorldServiceHausaTipoHomePage", only_on: "test"
+  handle "/hausa/*any", using: "WorldServiceHausa"
+
+  redirect "/hindi/mobile/image/*any", to: "/hindi/*any", status: 302
+  redirect "/hindi/mobile/*any", to: "/hindi", status: 301
+
+  handle "/hindi.amp", using: "WorldServiceHindi"
+  handle "/hindi.json", using: "WorldServiceHindi"
+  handle "/hindi/manifest.json", using: "WorldServiceHindiAssets"
+  handle "/hindi/sw.js", using: "WorldServiceHindiAssets"
+  handle "/hindi/rss.xml", using: "WorldServiceHindiHomePageRss"
+
+  handle "/hindi/tipohome.amp", using: "WorldServiceHindiTipoHomePage", only_on: "test"
+
+  handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/hindi/topics/:id", using: "WorldServiceHindiTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/hindi/topics/:id/rss.xml", using: "WorldServiceHindiTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/hindi/articles/:id.amp", using: "WorldServiceHindiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/hindi/articles/:id.app", using: "WorldServiceHindiAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/hindi/send/:id", using: "UploaderWorldService"
+  handle "/hindi", using: "WorldServiceHindiTipoHomePage", only_on: "test"
+  handle "/hindi/*any", using: "WorldServiceHindi"
+
+  handle "/igbo.amp", using: "WorldServiceIgbo"
+  handle "/igbo.json", using: "WorldServiceIgbo"
+  handle "/igbo/manifest.json", using: "WorldServiceIgboAssets"
+  handle "/igbo/sw.js", using: "WorldServiceIgboAssets"
+  handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss"
+
+  handle "/igbo/tipohome.amp", using: "WorldServiceIgboTipoHomePage", only_on: "test"
+
+  handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+
+  handle "/igbo/topics/:id", using: "WorldServiceIgboTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/igbo/articles/:id.amp", using: "WorldServiceIgboArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/igbo/articles/:id.app", using: "WorldServiceIgboAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/igbo/send/:id", using: "UploaderWorldService"
+  handle "/igbo", using: "WorldServiceIgboTipoHomePage", only_on: "test"
+  handle "/igbo/*any", using: "WorldServiceIgbo"
+
+  redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
+
+  handle "/indonesia.amp", using: "WorldServiceIndonesia"
+  handle "/indonesia.json", using: "WorldServiceIndonesia"
+  handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets"
+  handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets"
+  handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss"
+
+  handle "/indonesia/tipohome.amp", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test"
+
+  handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/indonesia/topics/:id", using: "WorldServiceIndonesiaTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/indonesia/topics/:id/rss.xml", using: "WorldServiceIndonesiaTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/indonesia/articles/:id.amp", using: "WorldServiceIndonesiaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/indonesia/articles/:id.app", using: "WorldServiceIndonesiaAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/indonesia/send/:id", using: "UploaderWorldService"
+  handle "/indonesia", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test"
+  handle "/indonesia/*any", using: "WorldServiceIndonesia"
+
+  handle "/japanese.amp", using: "WorldServiceJapanese"
+  handle "/japanese.json", using: "WorldServiceJapanese"
+  handle "/japanese/manifest.json", using: "WorldServiceJapaneseAssets"
+  handle "/japanese/sw.js", using: "WorldServiceJapaneseAssets"
+  handle "/japanese/rss.xml", using: "WorldServiceJapaneseHomePageRss"
+
+  handle "/japanese/tipohome.amp", using: "WorldServiceJapaneseTipoHomePage", only_on: "test"
+
+  handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/japanese/topics/:id", using: "WorldServiceJapaneseTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/japanese/topics/:id/rss.xml", using: "WorldServiceJapaneseTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/japanese/articles/:id.amp", using: "WorldServiceJapaneseArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/japanese/articles/:id.app", using: "WorldServiceJapaneseAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/japanese/send/:id", using: "UploaderWorldService"
+  handle "/japanese", using: "WorldServiceJapaneseTipoHomePage", only_on: "test"
+  handle "/japanese/*any", using: "WorldServiceJapanese"
+
+  handle "/korean.amp", using: "WorldServiceKorean"
+  handle "/korean.json", using: "WorldServiceKorean"
+  handle "/korean/manifest.json", using: "WorldServiceKoreanAssets"
+  handle "/korean/sw.js", using: "WorldServiceKoreanAssets"
+  handle "/korean/rss.xml", using: "WorldServiceKoreanHomePageRss"
+
+  handle "/korean/tipohome.amp", using: "WorldServiceKoreanTipoHomePage", only_on: "test"
+
+  handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/korean/topics/:id", using: "WorldServiceKoreanTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/korean/topics/:id/rss.xml", using: "WorldServiceKoreanTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/korean/articles/:id.amp", using: "WorldServiceKoreanArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/korean/articles/:id.app", using: "WorldServiceKoreanAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/korean/send/:id", using: "UploaderWorldService"
+  handle "/korean", using: "WorldServiceKoreanTipoHomePage", only_on: "test"
+  handle "/korean/*any", using: "WorldServiceKorean"
+
+  redirect "/kyrgyz/mobile/*any", to: "/kyrgyz", status: 301
+
+  handle "/kyrgyz.amp", using: "WorldServiceKyrgyzTipoHomePage"
+  handle "/kyrgyz/manifest.json", using: "WorldServiceKyrgyzAssets"
+  handle "/kyrgyz/sw.js", using: "WorldServiceKyrgyzAssets"
+  handle "/kyrgyz/rss.xml", using: "WorldServiceKyrgyzHomePageRss"
+
+  handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/kyrgyz/topics/:id", using: "WorldServiceKyrgyzTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/kyrgyz/topics/:id/rss.xml", using: "WorldServiceKyrgyzTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/kyrgyz/:topic/rss.xml", using: "WorldServiceKyrgyzRss"
+  handle "/kyrgyz/:topic/:subtopic/rss.xml", using: "WorldServiceKyrgyzRss"
+
+  handle "/kyrgyz/articles/:id", using: "WorldServiceKyrgyzArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/kyrgyz/articles/:id.amp", using: "WorldServiceKyrgyzArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/kyrgyz/articles/:id.app", using: "WorldServiceKyrgyzAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/kyrgyz/send/:id", using: "UploaderWorldService"
+  handle "/kyrgyz", using: "WorldServiceKyrgyzTipoHomePage"
+  handle "/kyrgyz/*any", using: "WorldServiceKyrgyz"
+
+  handle "/marathi.amp", using: "WorldServiceMarathi"
+  handle "/marathi.json", using: "WorldServiceMarathi"
+  handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets"
+  handle "/marathi/sw.js", using: "WorldServiceMarathiAssets"
+  handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss"
+
+  handle "/marathi/tipohome.amp", using: "WorldServiceMarathiTipoHomePage", only_on: "test"
+
+  handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/marathi/topics/:id", using: "WorldServiceMarathiTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/marathi/topics/:id/rss.xml", using: "WorldServiceMarathiTopicRss" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
+  end
+
+  handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/marathi/articles/:id.amp", using: "WorldServiceMarathiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/marathi/articles/:id.app", using: "WorldServiceMarathiAppArticlePage", only_on: "test" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+
+  handle "/marathi/send/:id", using: "UploaderWorldService"
+  handle "/marathi", using: "WorldServiceMarathiTipoHomePage", only_on: "test"
+  handle "/marathi/*any", using: "WorldServiceMarathi"
 
   ## World Service - Olympic Redirects
   redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
@@ -1391,255 +1692,313 @@ defroutefile "Main" do
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
 
-  handle "/mundo/mvt/*any", using: "WorldServiceMvtPoc", platform: "MozartSimorgh", only_on: "test", examples: ["/mundo/mvt/testing"]
+  handle "/mundo/mvt/*any", using: "WorldServiceMvtPoc", only_on: "test"
 
-  handle "/mundo.amp", using: "WorldServiceMundo", platform: "MozartSimorgh", examples: ["/mundo.amp"]
-  handle "/mundo.json", using: "WorldServiceMundo", platform: "MozartSimorgh", examples: ["/mundo.json"]
-  handle "/mundo/manifest.json", using: "WorldServiceMundoAssets", platform: "Simorgh", examples: ["/mundo/manifest.json"]
-  handle "/mundo/sw.js", using: "WorldServiceMundoAssets", platform: "Simorgh", examples: ["/mundo/sw.js"]
-  handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss", platform: "Karanga", examples: ["/mundo/rss.xml"]
+  handle "/mundo.amp", using: "WorldServiceMundo"
+  handle "/mundo.json", using: "WorldServiceMundo"
+  handle "/mundo/manifest.json", using: "WorldServiceMundoAssets"
+  handle "/mundo/sw.js", using: "WorldServiceMundoAssets"
+  handle "/mundo/rss.xml", using: "WorldServiceMundoHomePageRss"
 
-  handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/mundo/topics/cdr5613yzwqt/page/2", 302}] do
+  handle "/mundo/tipohome.amp", using: "WorldServiceMundoTipoHomePage", only_on: "test"
+
+  handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/mundo/topics/:id", using: "WorldServiceMundoTopicPage", platform: "Simorgh", examples: ["/mundo/topics/cdr5613yzwqt", "/mundo/topics/cdr5613yzwqt?page=2"] do
+  handle "/mundo/topics/:id", using: "WorldServiceMundoTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/mundo/topics/:id/rss.xml", using: "WorldServiceMundoTopicRss", platform: "Fabl", examples: ["/mundo/topics/cdr5613yzwqt/rss.xml"] do
+  handle "/mundo/topics/:id/rss.xml", using: "WorldServiceMundoTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage", platform: "Simorgh", examples: [] do
+  handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/mundo/articles/:id.amp", using: "WorldServiceMundoArticlePage", platform: "Simorgh", examples: [] do
+  handle "/mundo/articles/:id.amp", using: "WorldServiceMundoArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/mundo/articles/:id.app", using: "WorldServiceMundoAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/mundo/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/mundo/send/u39697902"]
-  handle "/mundo/*any", using: "WorldServiceMundo", platform: "MozartSimorgh", examples: ["/mundo"]
+  handle "/mundo/new_live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/mundo/send/:id", using: "UploaderWorldService"
+  handle "/mundo", using: "WorldServiceMundoTipoHomePage", only_on: "test"
+  handle "/mundo/*any", using: "WorldServiceMundo"
 
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
   redirect "/nepali/mobile/*any", to: "/nepali", status: 301
 
-  handle "/nepali.amp", using: "WorldServiceNepali", platform: "MozartSimorgh", examples: ["/nepali.amp"]
-  handle "/nepali.json", using: "WorldServiceNepali", platform: "MozartSimorgh", examples: ["/nepali.json"]
-  handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets", platform: "Simorgh", examples: ["/nepali/manifest.json"]
-  handle "/nepali/sw.js", using: "WorldServiceNepaliAssets", platform: "Simorgh", examples: ["/nepali/sw.js"]
-  handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss", platform: "Karanga", examples: ["/nepali/rss.xml"]
+  handle "/nepali.amp", using: "WorldServiceNepali"
+  handle "/nepali.json", using: "WorldServiceNepali"
+  handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets"
+  handle "/nepali/sw.js", using: "WorldServiceNepaliAssets"
+  handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss"
 
-  handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/nepali/topics/c340q4p5136t/page/2", 302}] do
+  handle "/nepali/tipohome.amp", using: "WorldServiceNepaliTipoHomePage", only_on: "test"
+
+  handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/nepali/topics/:id", using: "WorldServiceNepaliTopicPage", platform: "Simorgh", examples: ["/nepali/topics/c340q4p5136t", "/nepali/topics/c340q4p5136t?page=2"] do
+  handle "/nepali/topics/:id", using: "WorldServiceNepaliTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/nepali/topics/:id/rss.xml", using: "WorldServiceNepaliTopicRss", platform: "Fabl", examples: ["/nepali/topics/c340q4p5136t/rss.xml"] do
+  handle "/nepali/topics/:id/rss.xml", using: "WorldServiceNepaliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/nepali/articles/:id.amp", using: "WorldServiceNepaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/nepali/articles/:id.amp", using: "WorldServiceNepaliArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/nepali/articles/:id.app", using: "WorldServiceNepaliAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/nepali/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/nepali/send/u39697902"]
-  handle "/nepali/*any", using: "WorldServiceNepali", platform: "MozartSimorgh", examples: ["/nepali"]
+  handle "/nepali/send/:id", using: "UploaderWorldService"
+  handle "/nepali", using: "WorldServiceNepaliTipoHomePage", only_on: "test"
+  handle "/nepali/*any", using: "WorldServiceNepali"
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
   redirect "/pashto/mobile/*any", to: "/pashto", status: 301
 
-  handle "/pashto.amp", using: "WorldServicePashto", platform: "MozartSimorgh", examples: ["/pashto.amp"]
-  handle "/pashto.json", using: "WorldServicePashto", platform: "MozartSimorgh", examples: ["/pashto.json"]
-  handle "/pashto/manifest.json", using: "WorldServicePashtoAssets", platform: "Simorgh", examples: ["/pashto/manifest.json"]
-  handle "/pashto/sw.js", using: "WorldServicePashtoAssets", platform: "Simorgh", examples: ["/pashto/sw.js"]
-  handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss", platform: "Karanga", examples: ["/pashto/rss.xml"]
+  handle "/pashto.amp", using: "WorldServicePashto"
+  handle "/pashto.json", using: "WorldServicePashto"
+  handle "/pashto/manifest.json", using: "WorldServicePashtoAssets"
+  handle "/pashto/sw.js", using: "WorldServicePashtoAssets"
+  handle "/pashto/rss.xml", using: "WorldServicePashtoHomePageRss"
 
-  handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/pashto/topics/c8y94yr7y9rt/page/2", 302}] do
+  handle "/pashto/tipohome.amp", using: "WorldServicePashtoTipoHomePage", only_on: "test"
+
+  handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/pashto/topics/:id", using: "WorldServicePashtoTopicPage", platform: "Simorgh", examples: ["/pashto/topics/c8y94yr7y9rt", "/pashto/topics/c8y94yr7y9rt?page=2"] do
+  handle "/pashto/topics/:id", using: "WorldServicePashtoTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/pashto/topics/:id/rss.xml", using: "WorldServicePashtoTopicRss", platform: "Fabl", examples: ["/pashto/topics/c8y94yr7y9rt/rss.xml"] do
+  handle "/pashto/topics/:id/rss.xml", using: "WorldServicePashtoTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage", platform: "Simorgh", examples: [] do
+  handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/pashto/articles/:id.amp", using: "WorldServicePashtoArticlePage", platform: "Simorgh", examples: [] do
+  handle "/pashto/articles/:id.amp", using: "WorldServicePashtoArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/pashto/articles/:id.app", using: "WorldServicePashtoAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/pashto/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/pashto/send/u39697902"]
-  handle "/pashto/*any", using: "WorldServicePashto", platform: "MozartSimorgh", examples: ["/pashto"]
+  handle "/pashto/send/:id", using: "UploaderWorldService"
+  handle "/pashto", using: "WorldServicePashtoTipoHomePage", only_on: "test"
+  handle "/pashto/*any", using: "WorldServicePashto"
 
   redirect "/persian/mobile/image/*any", to: "/persian/*any", status: 302
   redirect "/persian/mobile/*any", to: "/persian", status: 301
 
-  handle "/persian.amp", using: "WorldServicePersian", platform: "MozartSimorgh", examples: ["/persian.amp"]
-  handle "/persian.json", using: "WorldServicePersian", platform: "MozartSimorgh", examples: ["/persian.json"]
-  handle "/persian/manifest.json", using: "WorldServicePersianAssets", platform: "Simorgh", examples: ["/persian/manifest.json"]
-  handle "/persian/sw.js", using: "WorldServicePersianAssets", platform: "Simorgh", examples: ["/persian/sw.js"]
-  handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss", platform: "Karanga", examples: ["/persian/rss.xml"]
+  handle "/persian.amp", using: "WorldServicePersian"
+  handle "/persian.json", using: "WorldServicePersian"
+  handle "/persian/manifest.json", using: "WorldServicePersianAssets"
+  handle "/persian/sw.js", using: "WorldServicePersianAssets"
+  handle "/persian/rss.xml", using: "WorldServicePersianHomePageRss"
 
-  handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/persian/topics/cnq68798yw0t/page/2", 302}] do
+  handle "/persian/tipohome.amp", using: "WorldServicePersianTipoHomePage", only_on: "test"
+
+  handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/persian/topics/:id", using: "WorldServicePersianTopicPage", platform: "Simorgh", examples: ["/persian/topics/cnq68798yw0t", "/persian/topics/cnq68798yw0t?page=2"] do
+  handle "/persian/topics/:id", using: "WorldServicePersianTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/persian/topics/:id/rss.xml", using: "WorldServicePersianTopicRss", platform: "Fabl", examples: ["/persian/topics/cnq68798yw0t/rss.xml"] do
+  handle "/persian/topics/:id/rss.xml", using: "WorldServicePersianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/persian/articles/:id", using: "WorldServicePersianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/persian/articles/:id", using: "WorldServicePersianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/persian/articles/:id.amp", using: "WorldServicePersianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/persian/articles/:id.amp", using: "WorldServicePersianArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/persian/articles/:id.app", using: "WorldServicePersianAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/persian/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/persian/send/u39697902"]
-  handle "/persian/*any", using: "WorldServicePersian", platform: "MozartSimorgh", examples: ["/persian"]
-  handle "/pidgin.amp", using: "WorldServicePidgin", platform: "MozartSimorgh", examples: ["/pidgin.amp"]
-  handle "/pidgin.json", using: "WorldServicePidgin", platform: "MozartSimorgh", examples: ["/pidgin.json"]
-  handle "/pidgin/manifest.json", using: "WorldServicePidginAssets", platform: "Simorgh", examples: ["/pidgin/manifest.json"]
-  handle "/pidgin/sw.js", using: "WorldServicePidginAssets", platform: "Simorgh", examples: ["/pidgin/sw.js"]
-  handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss", platform: "Karanga", examples: ["/pidgin/rss.xml"]
+  handle "/persian/send/:id", using: "UploaderWorldService"
+  handle "/persian", using: "WorldServicePersianTipoHomePage", only_on: "test"
+  handle "/persian/*any", using: "WorldServicePersian"
 
-  handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/pidgin/topics/c95y35941vrt/page/2", 302}] do
+  handle "/pidgin.amp", using: "WorldServicePidgin"
+  handle "/pidgin.json", using: "WorldServicePidgin"
+  handle "/pidgin/manifest.json", using: "WorldServicePidginAssets"
+  handle "/pidgin/sw.js", using: "WorldServicePidginAssets"
+  handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss"
+
+  handle "/pidgin/tipohome.amp", using: "WorldServicePidginTipoHomePage", only_on: "test"
+
+  handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/pidgin/topics/:id", using: "WorldServicePidginTopicPage", platform: "Simorgh", examples: ["/pidgin/topics/c95y35941vrt", "/pidgin/topics/c95y35941vrt?page=2"] do
+  handle "/pidgin/topics/:id", using: "WorldServicePidginTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss", platform: "Fabl", examples: ["/pidgin/topics/c95y35941vrt/rss.xml"] do
+  handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage", platform: "Simorgh", examples: [] do
+  handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/pidgin/articles/:id.amp", using: "WorldServicePidginArticlePage", platform: "Simorgh", examples: [] do
+  handle "/pidgin/articles/:id.amp", using: "WorldServicePidginArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/pidgin/articles/:id.app", using: "WorldServicePidginAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/pidgin/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/pidgin/send/u39697902"]
-  handle "/pidgin/*any", using: "WorldServicePidgin", platform: "MozartSimorgh", examples: ["/pidgin"]
+  handle "/pidgin/new_live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/pidgin/send/:id", using: "UploaderWorldService"
+  handle "/pidgin", using: "WorldServicePidginTipoHomePage", only_on: "test"
+  handle "/pidgin/*any", using: "WorldServicePidgin"
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
   redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
 
-  handle "/portuguese.amp", using: "WorldServicePortuguese", platform: "MozartSimorgh", examples: ["/portuguese.amp"]
-  handle "/portuguese.json", using: "WorldServicePortuguese", platform: "MozartSimorgh", examples: ["/portuguese.json"]
-  handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets", platform: "Simorgh", examples: ["/portuguese/manifest.json"]
-  handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets", platform: "Simorgh", examples: ["/portuguese/sw.js"]
-  handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss", platform: "Karanga", examples: ["/portuguese/rss.xml"]
+  handle "/portuguese.amp", using: "WorldServicePortuguese"
+  handle "/portuguese.json", using: "WorldServicePortuguese"
+  handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets"
+  handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets"
+  handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss"
 
-  handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/portuguese/topics/c1gdqg5dr8nt/page/2", 302}] do
+  handle "/portuguese/tipohome.amp", using: "WorldServicePortugueseTipoHomePage", only_on: "test"
+
+  handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/portuguese/topics/:id", using: "WorldServicePortugueseTopicPage", platform: "Simorgh", examples: ["/portuguese/topics/c1gdqg5dr8nt", "/portuguese/topics/c1gdqg5dr8nt?page=2"] do
+  handle "/portuguese/topics/:id", using: "WorldServicePortugueseTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/portuguese/topics/:id/rss.xml", using: "WorldServicePortugueseTopicRss", platform: "Fabl", examples: ["/portuguese/topics/c1gdqg5dr8nt/rss.xml"] do
+  handle "/portuguese/topics/:id/rss.xml", using: "WorldServicePortugueseTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/portuguese/articles/:id.amp", using: "WorldServicePortugueseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/portuguese/articles/:id.amp", using: "WorldServicePortugueseArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/portuguese/articles/:id.app", using: "WorldServicePortugueseAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/portuguese/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/portuguese/send/u39697902"]
-  handle "/portuguese/*any", using: "WorldServicePortuguese", platform: "MozartSimorgh", examples: ["/portuguese"]
-  handle "/punjabi.amp", using: "WorldServicePunjabi", platform: "MozartSimorgh", examples: ["/punjabi.amp"]
-  handle "/punjabi.json", using: "WorldServicePunjabi", platform: "MozartSimorgh", examples: ["/punjabi.json"]
-  handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets", platform: "Simorgh", examples: ["/punjabi/manifest.json"]
-  handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets", platform: "Simorgh", examples: ["/punjabi/sw.js"]
-  handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss", platform: "Karanga", examples: ["/punjabi/rss.xml"]
+  handle "/portuguese/send/:id", using: "UploaderWorldService"
+  handle "/portuguese", using: "WorldServicePortugueseTipoHomePage", only_on: "test"
+  handle "/portuguese/*any", using: "WorldServicePortuguese"
 
-  handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/punjabi/topics/c0w258dd62mt/page/2", 302}] do
+  handle "/punjabi.amp", using: "WorldServicePunjabi"
+  handle "/punjabi.json", using: "WorldServicePunjabi"
+  handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets"
+  handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets"
+  handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss"
+
+  handle "/punjabi/tipohome.amp", using: "WorldServicePunjabiTipoHomePage", only_on: "test"
+
+  handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/punjabi/topics/:id", using: "WorldServicePunjabiTopicPage", platform: "Simorgh", examples: ["/punjabi/topics/c0w258dd62mt", "/punjabi/topics/c0w258dd62mt?page=2"] do
+  handle "/punjabi/topics/:id", using: "WorldServicePunjabiTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/punjabi/topics/:id/rss.xml", using: "WorldServicePunjabiTopicRss", platform: "Fabl", examples: ["/punjabi/topics/c0w258dd62mt/rss.xml"] do
+  handle "/punjabi/topics/:id/rss.xml", using: "WorldServicePunjabiTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/punjabi/articles/:id.amp", using: "WorldServicePunjabiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/punjabi/articles/:id.amp", using: "WorldServicePunjabiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/punjabi/articles/:id.app", using: "WorldServicePunjabiAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/punjabi/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/punjabi/send/u39697902"]
-  handle "/punjabi/*any", using: "WorldServicePunjabi", platform: "MozartSimorgh", examples: ["/punjabi"]
+  handle "/punjabi/send/:id", using: "UploaderWorldService"
+  handle "/punjabi", using: "WorldServicePunjabiTipoHomePage", only_on: "test"
+  handle "/punjabi/*any", using: "WorldServicePunjabi"
 
   ## World Service - Russian Partners Redirects
   redirect "/russian/international/2011/02/000000_g_partners", to: "/russian/institutional-43463215", status: 301
@@ -1651,791 +2010,941 @@ defroutefile "Main" do
   redirect "/russia", to: "/russian", status: 301
 
 
-  handle "/russian.amp", using: "WorldServiceRussian", platform: "MozartSimorgh", examples: ["/russian.amp"]
-  handle "/russian.json", using: "WorldServiceRussian", platform: "MozartSimorgh", examples: ["/russian.json"]
-  handle "/russian/manifest.json", using: "WorldServiceRussianAssets", platform: "Simorgh", examples: ["/russian/manifest.json"]
-  handle "/russian/sw.js", using: "WorldServiceRussianAssets", platform: "Simorgh", examples: ["/russian/sw.js"]
-  handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss", platform: "Karanga", examples: ["/russian/rss.xml"]
+  handle "/russian.amp", using: "WorldServiceRussian"
+  handle "/russian.json", using: "WorldServiceRussian"
+  handle "/russian/manifest.json", using: "WorldServiceRussianAssets"
+  handle "/russian/sw.js", using: "WorldServiceRussianAssets"
+  handle "/russian/rss.xml", using: "WorldServiceRussianHomePageRss"
 
-  handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/russian/topics/c50nzm54vzmt/page/2", 302}] do
+  handle "/russian/tipohome.amp", using: "WorldServiceRussianTipoHomePage", only_on: "test"
+
+  handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/russian/topics/:id", using: "WorldServiceRussianTopicPage", platform: "Simorgh", examples: ["/russian/topics/c50nzm54vzmt", "/russian/topics/c50nzm54vzmt?page=2"] do
+  handle "/russian/topics/:id", using: "WorldServiceRussianTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/russian/topics/:id/rss.xml", using: "WorldServiceRussianTopicRss", platform: "Fabl", examples: ["/russian/topics/c50nzm54vzmt/rss.xml"] do
+  handle "/russian/topics/:id/rss.xml", using: "WorldServiceRussianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/russian/articles/:id.amp", using: "WorldServiceRussianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/russian/articles/:id.amp", using: "WorldServiceRussianArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/russian/articles/:id.app", using: "WorldServiceRussianAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/russian/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/russian/send/u39697902"]
-  handle "/russian/*any", using: "WorldServiceRussian", platform: "MozartSimorgh", examples: ["/russian"]
+  handle "/russian/send/:id", using: "UploaderWorldService"
+  handle "/russian", using: "WorldServiceRussianTipoHomePage", only_on: "test"
+  handle "/russian/*any", using: "WorldServiceRussian"
 
-  handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets", platform: "Simorgh", examples: ["/serbian/manifest.json"]
-  handle "/serbian/sw.js", using: "WorldServiceSerbianAssets", platform: "Simorgh", examples: ["/serbian/sw.js"]
-  handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss", platform: "Karanga", examples: ["/serbian/lat/rss.xml"]
-  handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss", platform: "Karanga", examples: ["/serbian/cyr/rss.xml"]
+  handle "/serbian/manifest.json", using: "WorldServiceSerbianAssets"
+  handle "/serbian/sw.js", using: "WorldServiceSerbianAssets"
+  handle "/serbian/lat/rss.xml", using: "WorldServiceSerbianHomePageRss"
+  handle "/serbian/cyr/rss.xml", using: "WorldServiceSerbianHomePageRss"
 
-  handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/serbian/cyr/topics/cqwvxvvw9qrt/page/2", 302}] do
+  handle "/serbian/lat/tipohome.amp", using: "WorldServiceSerbianTipoHomePage", only_on: "test"
+  handle "/serbian/lat/tipohome/manifest.json", using: "WorldServiceSerbianAssets", only_on: "test"
+  handle "/serbian/lat/tipohome/sw.js", using: "WorldServiceSerbianAssets", only_on: "test"
+  handle "/serbian/lat/tipohome/rss.xml", using: "WorldServiceSerbianHomePageRss", only_on: "test"
+  handle "/serbian/lat/tipohome", using: "WorldServiceSerbianTipoHomePage", only_on: "test"
+
+  handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
-  handle "/serbian/lat/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/serbian/lat/topics/c5wzvzzz5vrt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/serbian/cyr/topics/:id", using: "WorldServiceSerbianTopicPage", platform: "Simorgh", examples: ["/serbian/cyr/topics/cqwvxvvw9qrt", "/serbian/cyr/topics/cqwvxvvw9qrt?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-  handle "/serbian/lat/topics/:id", using: "WorldServiceSerbianTopicPage", platform: "Simorgh", examples: ["/serbian/lat/topics/c5wzvzzz5vrt", "/serbian/lat/topics/c5wzvzzz5vrt?page=2"] do
+  handle "/serbian/lat/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/serbian/cyr/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", platform: "Fabl", examples: ["/serbian/cyr/topics/cqwvxvvw9qrt/rss.xml"] do
+  handle "/serbian/cyr/topics/:id", using: "WorldServiceSerbianTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+  handle "/serbian/lat/topics/:id", using: "WorldServiceSerbianTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/serbian/cyr/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
-  handle "/serbian/lat/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss", platform: "Fabl", examples: ["/serbian/lat/topics/c5wzvzzz5vrt/rss.xml"] do
+  handle "/serbian/lat/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/serbian/articles/:id/cyr", using: "WorldServiceSerbianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/serbian/articles/:id/cyr", using: "WorldServiceSerbianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/serbian/articles/:id/cyr.amp", using: "WorldServiceSerbianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/serbian/articles/:id/cyr.amp", using: "WorldServiceSerbianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/serbian/articles/:id/lat", using: "WorldServiceSerbianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/serbian/articles/:id/cyr.app", using: "WorldServiceSerbianAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/serbian/articles/:id/lat.amp", using: "WorldServiceSerbianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/serbian/articles/:id/lat", using: "WorldServiceSerbianArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/serbian/articles/:id/lat.amp", using: "WorldServiceSerbianArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/serbian/articles/:id/lat.app", using: "WorldServiceSerbianAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/serbian/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/serbian/send/u39697902"]
-  handle "/serbian/*any", using: "WorldServiceSerbian", platform: "MozartSimorgh", examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
+  handle "/serbian/new_live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/serbian/new_live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/serbian/send/:id", using: "UploaderWorldService"
+  handle "/serbian/*any", using: "WorldServiceSerbian"
 
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
   redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
 
-  handle "/sinhala.amp", using: "WorldServiceSinhala", platform: "MozartSimorgh", examples: ["/sinhala.amp"]
-  handle "/sinhala.json", using: "WorldServiceSinhala", platform: "MozartSimorgh", examples: ["/sinhala.json"]
-  handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets", platform: "Simorgh", examples: ["/sinhala/manifest.json"]
-  handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets", platform: "Simorgh", examples: ["/sinhala/sw.js"]
-  handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss", platform: "Karanga", examples: ["/sinhala/rss.xml"]
+  handle "/sinhala.amp", using: "WorldServiceSinhala"
+  handle "/sinhala.json", using: "WorldServiceSinhala"
+  handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets"
+  handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets"
+  handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss"
 
-  handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/sinhala/topics/c2dwqd311xyt/page/2", 302}] do
+  handle "/sinhala/tipohome.amp", using: "WorldServiceSinhalaTipoHomePage", only_on: "test"
+
+  handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/sinhala/topics/:id", using: "WorldServiceSinhalaTopicPage", platform: "Simorgh", examples: ["/sinhala/topics/c2dwqd311xyt", "/sinhala/topics/c2dwqd311xyt?page=2"] do
+  handle "/sinhala/topics/:id", using: "WorldServiceSinhalaTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/sinhala/topics/:id/rss.xml", using: "WorldServiceSinhalaTopicRss", platform: "Fabl", examples: ["/sinhala/topics/c2dwqd311xyt/rss.xml"] do
+  handle "/sinhala/topics/:id/rss.xml", using: "WorldServiceSinhalaTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/sinhala/articles/:id.amp", using: "WorldServiceSinhalaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/sinhala/articles/:id.amp", using: "WorldServiceSinhalaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/sinhala/articles/:id.app", using: "WorldServiceSinhalaAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/sinhala/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/sinhala/send/u39697902"]
-  handle "/sinhala/*any", using: "WorldServiceSinhala", platform: "MozartSimorgh", examples: ["/sinhala"]
+  handle "/sinhala/send/:id", using: "UploaderWorldService"
+  handle "/sinhala", using: "WorldServiceSinhalaTipoHomePage", only_on: "test"
+  handle "/sinhala/*any", using: "WorldServiceSinhala"
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
 
-  handle "/somali.amp", using: "WorldServiceSomali", platform: "MozartSimorgh", examples: ["/somali.amp"]
-  handle "/somali.json", using: "WorldServiceSomali", platform: "MozartSimorgh", examples: ["/somali.json"]
-  handle "/somali/manifest.json", using: "WorldServiceSomaliAssets", platform: "Simorgh", examples: ["/somali/manifest.json"]
-  handle "/somali/sw.js", using: "WorldServiceSomaliAssets", platform: "Simorgh", examples: ["/somali/sw.js"]
-  handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss", platform: "Karanga", examples: ["/somali/rss.xml"]
+  handle "/somali.amp", using: "WorldServiceSomali"
+  handle "/somali.json", using: "WorldServiceSomali"
+  handle "/somali/manifest.json", using: "WorldServiceSomaliAssets"
+  handle "/somali/sw.js", using: "WorldServiceSomaliAssets"
+  handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss"
 
-  handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/somali/topics/cz74k7jd8n8t/page/2", 302}] do
+  handle "/somali/tipohome.amp", using: "WorldServiceSomaliTipoHomePage", only_on: "test"
+
+  handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/somali/topics/:id", using: "WorldServiceSomaliTopicPage", platform: "Simorgh", examples: ["/somali/topics/cz74k7jd8n8t", "/somali/topics/cz74k7jd8n8t?page=2"] do
+  handle "/somali/topics/:id", using: "WorldServiceSomaliTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/somali/topics/:id/rss.xml", using: "WorldServiceSomaliTopicRss", platform: "Fabl", examples: ["/somali/topics/cz74k7jd8n8t/rss.xml"] do
+  handle "/somali/topics/:id/rss.xml", using: "WorldServiceSomaliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/somali/articles/:id.amp", using: "WorldServiceSomaliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/somali/articles/:id.amp", using: "WorldServiceSomaliArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/somali/articles/:id.app", using: "WorldServiceSomaliAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/somali/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/somali/send/u39697902"]
-  handle "/somali/*any", using: "WorldServiceSomali", platform: "MozartSimorgh", examples: ["/somali"]
+  handle "/somali/send/:id", using: "UploaderWorldService"
+  handle "/somali", using: "WorldServiceSomaliTipoHomePage", only_on: "test"
+  handle "/somali/*any", using: "WorldServiceSomali"
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
 
-  handle "/swahili.amp", using: "WorldServiceSwahili", platform: "MozartSimorgh", examples: ["/swahili.amp"]
-  handle "/swahili.json", using: "WorldServiceSwahili", platform: "MozartSimorgh", examples: ["/swahili.json"]
-  handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets", platform: "Simorgh", examples: ["/swahili/manifest.json"]
-  handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets", platform: "Simorgh", examples: ["/swahili/sw.js"]
-  handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss", platform: "Karanga", examples: ["/swahili/rss.xml"]
+  handle "/swahili.amp", using: "WorldServiceSwahili"
+  handle "/swahili.json", using: "WorldServiceSwahili"
+  handle "/swahili/manifest.json", using: "WorldServiceSwahiliAssets"
+  handle "/swahili/sw.js", using: "WorldServiceSwahiliAssets"
+  handle "/swahili/rss.xml", using: "WorldServiceSwahiliHomePageRss"
 
-  handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/swahili/topics/c06gq663n6jt/page/2", 302}] do
+  handle "/swahili/tipohome.amp", using: "WorldServiceSwahiliTipoHomePage", only_on: "test"
+
+  handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/swahili/topics/:id", using: "WorldServiceSwahiliTopicPage", platform: "Simorgh", examples: ["/swahili/topics/c06gq663n6jt", "/swahili/topics/c06gq663n6jt?page=2"] do
+  handle "/swahili/topics/:id", using: "WorldServiceSwahiliTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/swahili/topics/:id/rss.xml", using: "WorldServiceSwahiliTopicRss", platform: "Fabl", examples: ["/swahili/topics/c06gq663n6jt/rss.xml"] do
+  handle "/swahili/topics/:id/rss.xml", using: "WorldServiceSwahiliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/swahili/articles/:id.amp", using: "WorldServiceSwahiliArticlePage", platform: "Simorgh", examples: [] do
+  handle "/swahili/articles/:id.amp", using: "WorldServiceSwahiliArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/swahili/articles/:id.app", using: "WorldServiceSwahiliAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/swahili/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/swahili/send/u39697902"]
-  handle "/swahili/*any", using: "WorldServiceSwahili", platform: "MozartSimorgh", examples: ["/swahili"]
-  handle "/tajik/*any", using: "WorldServiceTajik", platform: "MozartNews", examples: ["/tajik"]
+  handle "/swahili/send/:id", using: "UploaderWorldService"
+  handle "/swahili", using: "WorldServiceSwahiliTipoHomePage", only_on: "test"
+  handle "/swahili/*any", using: "WorldServiceSwahili"
+
+  handle "/tajik/*any", using: "WorldServiceTajik"
 
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
   redirect "/tamil/mobile/*any", to: "/tamil", status: 301
 
-  handle "/tamil.amp", using: "WorldServiceTamil", platform: "MozartSimorgh", examples: ["/tamil.amp"]
-  handle "/tamil.json", using: "WorldServiceTamil", platform: "MozartSimorgh", examples: ["/tamil.json"]
-  handle "/tamil/manifest.json", using: "WorldServiceTamilAssets", platform: "Simorgh", examples: ["/tamil/manifest.json"]
-  handle "/tamil/sw.js", using: "WorldServiceTamilAssets", platform: "Simorgh", examples: ["/tamil/sw.js"]
-  handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss", platform: "Karanga", examples: ["/tamil/rss.xml"]
+  handle "/tamil.amp", using: "WorldServiceTamil"
+  handle "/tamil.json", using: "WorldServiceTamil"
+  handle "/tamil/manifest.json", using: "WorldServiceTamilAssets"
+  handle "/tamil/sw.js", using: "WorldServiceTamilAssets"
+  handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss"
 
-  handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/tamil/topics/c06gq6gnzdgt/page/2", 302}] do
+  handle "/tamil/tipohome.amp", using: "WorldServiceTamilTipoHomePage", only_on: "test"
+
+  handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/tamil/topics/:id", using: "WorldServiceTamilTopicPage", platform: "Simorgh", examples: ["/tamil/topics/c06gq6gnzdgt", "/tamil/topics/c06gq6gnzdgt?page=2"] do
+  handle "/tamil/topics/:id", using: "WorldServiceTamilTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/tamil/topics/:id/rss.xml", using: "WorldServiceTamilTopicRss", platform: "Fabl", examples: ["/tamil/topics/c06gq6gnzdgt/rss.xml"] do
+  handle "/tamil/topics/:id/rss.xml", using: "WorldServiceTamilTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage", platform: "Simorgh", examples: [] do
+  handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/tamil/articles/:id.amp", using: "WorldServiceTamilArticlePage", platform: "Simorgh", examples: [] do
+  handle "/tamil/articles/:id.amp", using: "WorldServiceTamilArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/tamil/articles/:id.app", using: "WorldServiceTamilAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/tamil/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/tamil/send/u39697902"]
-  handle "/tamil/*any", using: "WorldServiceTamil", platform: "MozartSimorgh", examples: ["/tamil"]
-  handle "/telugu.amp", using: "WorldServiceTelugu", platform: "MozartSimorgh", examples: ["/telugu.amp"]
-  handle "/telugu.json", using: "WorldServiceTelugu", platform: "MozartSimorgh", examples: ["/telugu.json"]
-  handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets", platform: "Simorgh", examples: ["/telugu/manifest.json"]
-  handle "/telugu/sw.js", using: "WorldServiceTeluguAssets", platform: "Simorgh", examples: ["/telugu/sw.js"]
-  handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss", platform: "Karanga", examples: ["/telugu/rss.xml"]
+  handle "/tamil/send/:id", using: "UploaderWorldService"
+  handle "/tamil", using: "WorldServiceTamilTipoHomePage", only_on: "test"
+  handle "/tamil/*any", using: "WorldServiceTamil"
 
-  handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/telugu/topics/c5qvp16w7dnt/page/2", 302}] do
+  handle "/telugu.amp", using: "WorldServiceTelugu"
+  handle "/telugu.json", using: "WorldServiceTelugu"
+  handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets"
+  handle "/telugu/sw.js", using: "WorldServiceTeluguAssets"
+  handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss"
+
+  handle "/telugu/tipohome.amp", using: "WorldServiceTeluguTipoHomePage", only_on: "test"
+
+  handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/telugu/topics/:id", using: "WorldServiceTeluguTopicPage", platform: "Simorgh", examples: ["/telugu/topics/c5qvp16w7dnt", "/telugu/topics/c5qvp16w7dnt?page=2"] do
+  handle "/telugu/topics/:id", using: "WorldServiceTeluguTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss", platform: "Fabl", examples: ["/telugu/topics/c5qvp16w7dnt/rss.xml"] do
+  handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage", platform: "Simorgh", examples: [] do
+  handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/telugu/articles/:id.amp", using: "WorldServiceTeluguArticlePage", platform: "Simorgh", examples: [] do
+  handle "/telugu/articles/:id.amp", using: "WorldServiceTeluguArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/telugu/articles/:id.app", using: "WorldServiceTeluguAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/telugu/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/telugu/send/u39697902"]
-  handle "/telugu/*any", using: "WorldServiceTelugu", platform: "MozartSimorgh", examples: ["/telugu"]
-  handle "/thai.amp", using: "WorldServiceThai", platform: "MozartSimorgh", examples: ["/thai.amp"]
-  handle "/thai.json", using: "WorldServiceThai", platform: "MozartSimorgh", examples: ["/thai.json"]
-  handle "/thai/manifest.json", using: "WorldServiceThaiAssets", platform: "Simorgh", examples: ["/thai/manifest.json"]
-  handle "/thai/sw.js", using: "WorldServiceThaiAssets", platform: "Simorgh", examples: ["/thai/sw.js"]
-  handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss", platform: "Karanga", examples: ["/thai/rss.xml"]
+  handle "/telugu/send/:id", using: "UploaderWorldService"
+  handle "/telugu", using: "WorldServiceTeluguTipoHomePage", only_on: "test"
+  handle "/telugu/*any", using: "WorldServiceTelugu"
 
-  handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/thai/topics/c340qx429k7t/page/2", 302}] do
+  handle "/thai.amp", using: "WorldServiceThai"
+  handle "/thai.json", using: "WorldServiceThai"
+  handle "/thai/manifest.json", using: "WorldServiceThaiAssets"
+  handle "/thai/sw.js", using: "WorldServiceThaiAssets"
+  handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss"
+
+  handle "/thai/tipohome.amp", using: "WorldServiceThaiTipoHomePage", only_on: "test"
+
+  handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/thai/topics/:id", using: "WorldServiceThaiTopicPage", platform: "Simorgh", examples: ["/thai/topics/c340qx429k7t", "/thai/topics/c340qx429k7t?page=2"] do
+  handle "/thai/topics/:id", using: "WorldServiceThaiTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/thai/topics/:id/rss.xml", using: "WorldServiceThaiTopicRss", platform: "Fabl", examples: ["/thai/topics/c340qx429k7t/rss.xml"] do
+  handle "/thai/topics/:id/rss.xml", using: "WorldServiceThaiTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/thai/articles/:id.amp", using: "WorldServiceThaiArticlePage", platform: "Simorgh", examples: [] do
+  handle "/thai/articles/:id.amp", using: "WorldServiceThaiArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/thai/articles/:id.app", using: "WorldServiceThaiAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/thai/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/thai/send/u39697902"]
-  handle "/thai/*any", using: "WorldServiceThai", platform: "MozartSimorgh", examples: ["/thai"]
-  handle "/tigrinya.amp", using: "WorldServiceTigrinya", platform: "MozartSimorgh", examples: ["/tigrinya.amp"]
-  handle "/tigrinya.json", using: "WorldServiceTigrinya", platform: "MozartSimorgh", examples: ["/tigrinya.json"]
-  handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", examples: ["/tigrinya/manifest.json"]
-  handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets", platform: "Simorgh", examples: ["/tigrinya/sw.js"]
-  handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss", platform: "Karanga", examples: ["/tigrinya/rss.xml"]
+  handle "/thai/send/:id", using: "UploaderWorldService"
+  handle "/thai", using: "WorldServiceThaiTipoHomePage", only_on: "test"
+  handle "/thai/*any", using: "WorldServiceThai"
 
-  handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/tigrinya/topics/c1gdqrg28zxt/page/2", 302}] do
+  handle "/tigrinya.amp", using: "WorldServiceTigrinya"
+  handle "/tigrinya.json", using: "WorldServiceTigrinya"
+  handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets"
+  handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets"
+  handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss"
+
+  handle "/tigrinya/tipohome.amp", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test"
+
+  handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/tigrinya/topics/:id", using: "WorldServiceTigrinyaTopicPage", platform: "Simorgh", examples: ["/tigrinya/topics/c1gdqrg28zxt", "/tigrinya/topics/c1gdqrg28zxt?page=2"] do
+  handle "/tigrinya/topics/:id", using: "WorldServiceTigrinyaTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/tigrinya/topics/:id/rss.xml", using: "WorldServiceTigrinyaTopicRss", platform: "Fabl", examples: ["/tigrinya/topics/c1gdqrg28zxt/rss.xml"] do
+  handle "/tigrinya/topics/:id/rss.xml", using: "WorldServiceTigrinyaTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/tigrinya/articles/:id.amp", using: "WorldServiceTigrinyaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/tigrinya/articles/:id.amp", using: "WorldServiceTigrinyaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/tigrinya/articles/:id.app", using: "WorldServiceTigrinyaAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/tigrinya/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/tigrinya/send/u39697902"]
-  handle "/tigrinya/*any", using: "WorldServiceTigrinya", platform: "MozartSimorgh", examples: ["/tigrinya"]
+  handle "/tigrinya/send/:id", using: "UploaderWorldService"
+  handle "/tigrinya", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test"
+  handle "/tigrinya/*any", using: "WorldServiceTigrinya"
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
   redirect "/turkce/cep/*any", to: "/turkce", status: 301
 
-  handle "/turkce.amp", using: "WorldServiceTurkce", platform: "MozartSimorgh", examples: ["/turkce.amp"]
-  handle "/turkce.json", using: "WorldServiceTurkce", platform: "MozartSimorgh", examples: ["/turkce.json"]
-  handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets", platform: "Simorgh", examples: ["/turkce/manifest.json"]
-  handle "/turkce/sw.js", using: "WorldServiceTurkceAssets", platform: "Simorgh", examples: ["/turkce/sw.js"]
-  handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss", platform: "Karanga", examples: ["/turkce/rss.xml"]
+  handle "/turkce.amp", using: "WorldServiceTurkce"
+  handle "/turkce.json", using: "WorldServiceTurkce"
+  handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets"
+  handle "/turkce/sw.js", using: "WorldServiceTurkceAssets"
+  handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss"
 
-  handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/turkce/topics/c2dwqnwkvnqt/page/2", 302}] do
+  handle "/turkce/tipohome.amp", using: "WorldServiceTurkceTipoHomePage", only_on: "test"
+
+  handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/turkce/topics/:id", using: "WorldServiceTurkceTopicPage", platform: "Simorgh", examples: ["/turkce/topics/c2dwqnwkvnqt", "/turkce/topics/c2dwqnwkvnqt?page=2"] do
+  handle "/turkce/topics/:id", using: "WorldServiceTurkceTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/turkce/topics/:id/rss.xml", using: "WorldServiceTurkceTopicRss", platform: "Fabl", examples: ["/turkce/topics/c2dwqnwkvnqt/rss.xml"] do
+  handle "/turkce/topics/:id/rss.xml", using: "WorldServiceTurkceTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage", platform: "Simorgh", examples: [] do
+  handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/turkce/articles/:id.amp", using: "WorldServiceTurkceArticlePage", platform: "Simorgh", examples: [] do
+  handle "/turkce/articles/:id.amp", using: "WorldServiceTurkceArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/turkce/articles/:id.app", using: "WorldServiceTurkceAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/turkce/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/turkce/send/u39697902"]
-  handle "/turkce/*any", using: "WorldServiceTurkce", platform: "MozartSimorgh", examples: ["/turkce"]
+  handle "/turkce/send/:id", using: "UploaderWorldService"
+  handle "/turkce", using: "WorldServiceTurkceTipoHomePage", only_on: "test"
+  handle "/turkce/*any", using: "WorldServiceTurkce"
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
   redirect "/ukchina/trad/mobile/*any", to: "/ukchina/trad", status: 301
 
-  handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets", platform: "Simorgh", examples: ["/ukchina/manifest.json"]
-  handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets", platform: "Simorgh", examples: ["/ukchina/sw.js"]
+  handle "/ukchina/manifest.json", using: "WorldServiceUkChinaAssets"
+  handle "/ukchina/sw.js", using: "WorldServiceUkChinaAssets"
 
-  handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/ukchina/simp/topics/c1nq04kp0r0t/page/2", 302}] do
+  handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
-  handle "/ukchina/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/ukchina/trad/topics/cgqnyy07pqyt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-
-  handle "/ukchina/simp/topics/:id", using: "WorldServiceUkchinaTopicPage", platform: "Simorgh", examples: ["/ukchina/simp/topics/c1nq04kp0r0t", "/ukchina/simp/topics/c1nq04kp0r0t?page=2"] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-  handle "/ukchina/trad/topics/:id", using: "WorldServiceUkchinaTopicPage", platform: "Simorgh", examples: ["/ukchina/trad/topics/cgqnyy07pqyt", "/ukchina/trad/topics/cgqnyy07pqyt?page=2"] do
+  handle "/ukchina/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/ukchina/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/ukchina/send/u39697902"]
-  handle "/ukchina/*any", using: "WorldServiceUkChina", platform: "MozartSimorgh", examples: ["/ukchina/simp", "/ukchina/trad", "/ukchina/trad.json", "/ukchina/trad.amp"]
+  handle "/ukchina/simp/topics/:id", using: "WorldServiceUkchinaTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+  handle "/ukchina/trad/topics/:id", using: "WorldServiceUkchinaTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/ukchina/send/:id", using: "UploaderWorldService"
+  handle "/ukchina/*any", using: "WorldServiceUkChina"
 
   redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
 
-  handle "/ukrainian.amp", using: "WorldServiceUkrainian", platform: "MozartSimorgh", examples: ["/ukrainian.amp"]
-  handle "/ukrainian.json", using: "WorldServiceUkrainian", platform: "MozartSimorgh", examples: ["/ukrainian.json"]
-  handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets", platform: "Simorgh", examples: ["/ukrainian/manifest.json"]
-  handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets", platform: "Simorgh", examples: ["/ukrainian/sw.js"]
-  handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss", platform: "Karanga", examples: ["/ukrainian/rss.xml"]
+  handle "/ukrainian.amp", using: "WorldServiceUkrainian"
+  handle "/ukrainian.json", using: "WorldServiceUkrainian"
+  handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets"
+  handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets"
+  handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss"
 
-  handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/ukrainian/topics/c340qxwr67yt/page/2", 302}] do
+  handle "/ukrainian/tipohome.amp", using: "WorldServiceUkrainianTipoHomePage", only_on: "test"
+
+  handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/ukrainian/topics/:id", using: "WorldServiceUkrainianTopicPage", platform: "Simorgh", examples: ["/ukrainian/topics/c340qxwr67yt", "/ukrainian/topics/c340qxwr67yt?page=2"] do
+  handle "/ukrainian/topics/:id", using: "WorldServiceUkrainianTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/ukrainian/topics/:id/rss.xml", using: "WorldServiceUkrainianTopicRss", platform: "Fabl", examples: ["/ukrainian/topics/c340qxwr67yt/rss.xml"] do
+  handle "/ukrainian/topics/:id/rss.xml", using: "WorldServiceUkrainianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/ukrainian/articles/:id.amp", using: "WorldServiceUkrainianArticlePage", platform: "Simorgh", examples: [] do
+  handle "/ukrainian/articles/:id.amp", using: "WorldServiceUkrainianArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/ukrainian/articles/:id.app", using: "WorldServiceUkrainianAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/ukrainian/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/ukrainian/send/u39697902"]
-  handle "/ukrainian/*any", using: "WorldServiceUkrainian", platform: "MozartSimorgh", examples: ["/ukrainian"]
+  handle "/ukrainian/send/:id", using: "UploaderWorldService"
+  handle "/ukrainian", using: "WorldServiceUkrainianTipoHomePage", only_on: "test"
+  handle "/ukrainian/*any", using: "WorldServiceUkrainian"
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
   redirect "/urdu/mobile/*any", to: "/urdu", status: 301
 
-  handle "/urdu.amp", using: "WorldServiceUrdu", platform: "MozartSimorgh", examples: ["/urdu.amp"]
-  handle "/urdu.json", using: "WorldServiceUrdu", platform: "MozartSimorgh", examples: ["/urdu.json"]
-  handle "/urdu/manifest.json", using: "WorldServiceUrduAssets", platform: "Simorgh", examples: ["/urdu/manifest.json"]
-  handle "/urdu/sw.js", using: "WorldServiceUrduAssets", platform: "Simorgh", examples: ["/urdu/sw.js"]
-  handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss", platform: "Karanga", examples: ["/urdu/rss.xml"]
+  handle "/urdu.amp", using: "WorldServiceUrdu"
+  handle "/urdu.json", using: "WorldServiceUrdu"
+  handle "/urdu/manifest.json", using: "WorldServiceUrduAssets"
+  handle "/urdu/sw.js", using: "WorldServiceUrduAssets"
+  handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss"
 
-  handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/urdu/topics/c44pxlmy60mt/page/2", 302}] do
+  handle "/urdu/tipohome.amp", using: "WorldServiceUrduTipoHomePage", only_on: "test"
+
+  handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/urdu/topics/:id", using: "WorldServiceUrduTopicPage", platform: "Simorgh", examples: ["/urdu/topics/c44pxlmy60mt", "/urdu/topics/c44pxlmy60mt?page=2"] do
+  handle "/urdu/topics/:id", using: "WorldServiceUrduTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/urdu/topics/:id/rss.xml", using: "WorldServiceUrduTopicRss", platform: "Fabl", examples: ["/urdu/topics/c44pxlmy60mt/rss.xml"] do
+  handle "/urdu/topics/:id/rss.xml", using: "WorldServiceUrduTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage", platform: "Simorgh", examples: [] do
+  handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/urdu/articles/:id.amp", using: "WorldServiceUrduArticlePage", platform: "Simorgh", examples: [] do
+  handle "/urdu/articles/:id.amp", using: "WorldServiceUrduArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/urdu/articles/:id.app", using: "WorldServiceUrduAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/urdu/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/urdu/send/u39697902"]
-  handle "/urdu/*any", using: "WorldServiceUrdu", platform: "MozartSimorgh", examples: ["/urdu"]
+  handle "/urdu/new_live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
+    return_404 if: [
+      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+    ]
+  end
+
+  handle "/urdu/send/:id", using: "UploaderWorldService"
+  handle "/urdu", using: "WorldServiceUrduTipoHomePage", only_on: "test"
+  handle "/urdu/*any", using: "WorldServiceUrdu"
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301
 
-  handle "/uzbek.amp", using: "WorldServiceUzbek", platform: "MozartSimorgh", examples: ["/uzbek.amp"]
-  handle "/uzbek.json", using: "WorldServiceUzbek", platform: "MozartSimorgh", examples: ["/uzbek.json"]
-  handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets", platform: "Simorgh", examples: ["/uzbek/manifest.json"]
-  handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets", platform: "Simorgh", examples: ["/uzbek/sw.js"]
-  handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss", platform: "Karanga", examples: ["/uzbek/rss.xml"]
+  handle "/uzbek.amp", using: "WorldServiceUzbek"
+  handle "/uzbek.json", using: "WorldServiceUzbek"
+  handle "/uzbek/manifest.json", using: "WorldServiceUzbekAssets"
+  handle "/uzbek/sw.js", using: "WorldServiceUzbekAssets"
+  handle "/uzbek/rss.xml", using: "WorldServiceUzbekHomePageRss"
 
-  handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/uzbek/topics/c340q0q55jvt/page/2", 302}] do
+  handle "/uzbek/tipohome.amp", using: "WorldServiceUzbekTipoHomePage", only_on: "test"
+  handle "/uzbek/tipohome/manifest.json", using: "WorldServiceUzbekAssets", only_on: "test"
+  handle "/uzbek/tipohome/sw.js", using: "WorldServiceUzbekAssets", only_on: "test"
+  handle "/uzbek/tipohome/rss.xml", using: "WorldServiceUzbekHomePageRss", only_on: "test"
+  handle "/uzbek/tipohome", using: "WorldServiceUzbekTipoHomePage", only_on: "test"
+
+  handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/uzbek/topics/:id", using: "WorldServiceUzbekTopicPage", platform: "Simorgh", examples: ["/uzbek/topics/c340q0q55jvt", "/uzbek/topics/c340q0q55jvt?page=2"] do
+  handle "/uzbek/topics/:id", using: "WorldServiceUzbekTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/uzbek/topics/:id/rss.xml", using: "WorldServiceUzbekTopicRss", platform: "Fabl", examples: ["/uzbek/topics/c340q0q55jvt/rss.xml"] do
+  handle "/uzbek/topics/:id/rss.xml", using: "WorldServiceUzbekTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage", platform: "Simorgh", examples: [] do
+  handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/uzbek/articles/:id.amp", using: "WorldServiceUzbekArticlePage", platform: "Simorgh", examples: [] do
+  handle "/uzbek/articles/:id.amp", using: "WorldServiceUzbekArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/uzbek/articles/:id.app", using: "WorldServiceUzbekAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/uzbek/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/uzbek/send/u39697902"]
-  handle "/uzbek/*any", using: "WorldServiceUzbek", platform: "MozartSimorgh", examples: ["/uzbek"]
+  handle "/uzbek/send/:id", using: "UploaderWorldService"
+  handle "/uzbek/*any", using: "WorldServiceUzbek"
 
   redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
 
-  handle "/vietnamese.amp", using: "WorldServiceVietnamese", platform: "MozartSimorgh", examples: ["/vietnamese.amp"]
-  handle "/vietnamese.json", using: "WorldServiceVietnamese", platform: "MozartSimorgh", examples: ["/vietnamese.json"]
-  handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets", platform: "Simorgh", examples: ["/vietnamese/manifest.json"]
-  handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets", platform: "Simorgh", examples: ["/vietnamese/sw.js"]
-  handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss", platform: "Karanga", examples: ["/vietnamese/rss.xml"]
+  handle "/vietnamese.amp", using: "WorldServiceVietnamese"
+  handle "/vietnamese.json", using: "WorldServiceVietnamese"
+  handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets"
+  handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets"
+  handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss"
 
-  handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/vietnamese/topics/c340q0gkg4kt/page/2", 302}] do
+  handle "/vietnamese/tipohome.amp", using: "WorldServiceVietnameseTipoHomePage", only_on: "test"
+
+  handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/vietnamese/topics/:id", using: "WorldServiceVietnameseTopicPage", platform: "Simorgh", examples: ["/vietnamese/topics/c340q0gkg4kt", "/vietnamese/topics/c340q0gkg4kt?page=2"] do
+  handle "/vietnamese/topics/:id", using: "WorldServiceVietnameseTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/vietnamese/topics/:id/rss.xml", using: "WorldServiceVietnameseTopicRss", platform: "Fabl", examples: ["/vietnamese/topics/c340q0gkg4kt/rss.xml"] do
+  handle "/vietnamese/topics/:id/rss.xml", using: "WorldServiceVietnameseTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/vietnamese/articles/:id.amp", using: "WorldServiceVietnameseArticlePage", platform: "Simorgh", examples: [] do
+  handle "/vietnamese/articles/:id.amp", using: "WorldServiceVietnameseArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/vietnamese/articles/:id.app", using: "WorldServiceVietnameseAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/vietnamese/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/vietnamese/send/u39697902"]
-  handle "/vietnamese/*any", using: "WorldServiceVietnamese", platform: "MozartSimorgh", examples: ["/vietnamese"]
-  handle "/yoruba.amp", using: "WorldServiceYoruba", platform: "MozartSimorgh", examples: ["/yoruba.amp"]
-  handle "/yoruba.json", using: "WorldServiceYoruba", platform: "MozartSimorgh", examples: ["/yoruba.json"]
-  handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets", platform: "Simorgh", examples: ["/yoruba/manifest.json"]
-  handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets", platform: "Simorgh", examples: ["/yoruba/sw.js"]
-  handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss", platform: "Karanga", examples: ["/yoruba/rss.xml"]
+  handle "/vietnamese/send/:id", using: "UploaderWorldService"
+  handle "/vietnamese", using: "WorldServiceVietnameseTipoHomePage", only_on: "test"
+  handle "/vietnamese/*any", using: "WorldServiceVietnamese"
 
-  handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/yoruba/topics/c12jqpnxn44t/page/2", 302}] do
+  handle "/yoruba.amp", using: "WorldServiceYoruba"
+  handle "/yoruba.json", using: "WorldServiceYoruba"
+  handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets"
+  handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets"
+  handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss"
+
+  handle "/yoruba/tipohome.amp", using: "WorldServiceYorubaTipoHomePage", only_on: "test"
+
+  handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/yoruba/topics/:id", using: "WorldServiceYorubaTopicPage", platform: "Simorgh", examples: ["/yoruba/topics/c12jqpnxn44t", "/yoruba/topics/c12jqpnxn44t?page=2"] do
+  handle "/yoruba/topics/:id", using: "WorldServiceYorubaTopicPage" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/yoruba/topics/:id/rss.xml", using: "WorldServiceYorubaTopicRss", platform: "Fabl", examples: ["/yoruba/topics/c12jqpnxn44t/rss.xml"] do
+  handle "/yoruba/topics/:id/rss.xml", using: "WorldServiceYorubaTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/yoruba/articles/:id.amp", using: "WorldServiceYorubaArticlePage", platform: "Simorgh", examples: [] do
+  handle "/yoruba/articles/:id.amp", using: "WorldServiceYorubaArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/yoruba/articles/:id.app", using: "WorldServiceYorubaAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/yoruba/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/yoruba/send/u39697902"]
-  handle "/yoruba/*any", using: "WorldServiceYoruba", platform: "MozartSimorgh", examples: ["/yoruba"]
+  handle "/yoruba/send/:id", using: "UploaderWorldService"
+  handle "/yoruba", using: "WorldServiceYorubaTipoHomePage", only_on: "test"
+  handle "/yoruba/*any", using: "WorldServiceYoruba"
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
   redirect "/zhongwen/trad/mobile/*any", to: "/zhongwen/trad", status: 301
 
-  handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets", platform: "Simorgh", examples: ["/zhongwen/manifest.json"]
-  handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets", platform: "Simorgh", examples: ["/zhongwen/sw.js"]
-  handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss", platform: "Karanga", examples: ["/zhongwen/simp/rss.xml"]
-  handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss", platform: "Karanga", examples: ["/zhongwen/trad/rss.xml"]
+  handle "/zhongwen/manifest.json", using: "WorldServiceZhongwenAssets"
+  handle "/zhongwen/sw.js", using: "WorldServiceZhongwenAssets"
+  handle "/zhongwen/simp/rss.xml", using: "WorldServiceZhongwenHomePageRss"
+  handle "/zhongwen/trad/rss.xml", using: "WorldServiceZhongwenHomePageRss"
 
-  handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/zhongwen/simp/topics/c0dg90z8nqxt/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
-  handle "/zhongwen/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect", platform: "Simorgh", examples: [{"/zhongwen/trad/topics/cpydz21p02et/page/2", 302}] do
-    return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
-    ]
-  end
+  handle "/zhongwen/trad/tipohome.amp", using: "WorldServiceZhongwenTipoHomePage", only_on: "test"
+  handle "/zhongwen/trad/tipohome/manifest.json", using: "WorldServiceZhongwenAssets", only_on: "test"
+  handle "/zhongwen/trad/tipohome/sw.js", using: "WorldServiceZhongwenAssets", only_on: "test"
+  handle "/zhongwen/trad/tipohome/rss.xml", using: "WorldServiceZhongwenHomePageRss", only_on: "test"
+  handle "/zhongwen/trad/tipohome", using: "WorldServiceZhongwenTipoHomePage", only_on: "test"
 
-  handle "/zhongwen/simp/topics/:id", using: "WorldServiceZhongwenTopicPage", platform: "Simorgh", examples: ["/zhongwen/simp/topics/c0dg90z8nqxt", "/zhongwen/simp/topics/c0dg90z8nqxt?page=2"] do
+  handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
-  handle "/zhongwen/trad/topics/:id", using: "WorldServiceZhongwenTopicPage", platform: "Simorgh", examples: ["/zhongwen/trad/topics/cpydz21p02et", "/zhongwen/trad/topics/cpydz21p02et?page=2"] do
+  handle "/zhongwen/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
     ]
   end
 
-  handle "/zhongwen/simp/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", platform: "Fabl", examples: ["/zhongwen/simp/topics/c0dg90z8nqxt/rss.xml"] do
+  handle "/zhongwen/simp/topics/:id", using: "WorldServiceZhongwenTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+  handle "/zhongwen/trad/topics/:id", using: "WorldServiceZhongwenTopicPage" do
+    return_404 if: [
+      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+    ]
+  end
+
+  handle "/zhongwen/simp/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
-  handle "/zhongwen/trad/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss", platform: "Fabl", examples: ["/zhongwen/trad/topics/cpydz21p02et/rss.xml"] do
+  handle "/zhongwen/trad/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
-  handle "/zhongwen/articles/:id/simp", using: "WorldServiceZhongwenArticlePage", platform: "Simorgh", examples: [] do
+  handle "/zhongwen/articles/:id/simp", using: "WorldServiceZhongwenArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/zhongwen/articles/:id/simp.amp", using: "WorldServiceZhongwenArticlePage", platform: "Simorgh", examples: [] do
+  handle "/zhongwen/articles/:id/simp.amp", using: "WorldServiceZhongwenArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/zhongwen/articles/:id/trad", using: "WorldServiceZhongwenArticlePage", platform: "Simorgh", examples: [] do
+  handle "/zhongwen/articles/:id/simp.app", using: "WorldServiceZhongwenAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
-  handle "/zhongwen/articles/:id/trad.amp", using: "WorldServiceZhongwenArticlePage", platform: "Simorgh", examples: [] do
+  handle "/zhongwen/articles/:id/trad", using: "WorldServiceZhongwenArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/zhongwen/articles/:id/trad.amp", using: "WorldServiceZhongwenArticlePage" do
+    return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
+  end
+  handle "/zhongwen/articles/:id/trad.app", using: "WorldServiceZhongwenAppArticlePage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/zhongwen/send/:id", using: "UploaderWorldService", platform: "MorphRouter", examples: ["/zhongwen/send/u39697902"]
-  handle "/zhongwen/*any", using: "WorldServiceZhongwen", platform: "MozartSimorgh", examples: ["/zhongwen/simp", "/zhongwen/trad", "/zhongwen/trad.json", "/zhongwen/trad.amp"]
+  handle "/zhongwen/send/:id", using: "UploaderWorldService"
+  handle "/zhongwen/*any", using: "WorldServiceZhongwen"
 
-  handle "/ws/languages", using: "WsLanguages", platform: "MozartNews", examples: ["/ws/languages"]
-  handle "/ws/av-embeds/*any", using: "WsAvEmbeds", platform: "MozartNews", examples: []
-  handle "/ws/includes/*any", using: "WsIncludes", platform: "MozartNews", examples: ["/ws/includes/include/vjamericas/176-eclipse-lookup/mundo/app/embed"]
-  handle "/worldservice/assets/images/*any", using: "WsImages", platform: "MozartSimorgh", examples: [{"/worldservice/assets/images/2012/07/12/120712163431_img_0328.jpg", 301}]
+  handle "/ws/languages", using: "WsLanguages"
+  handle "/ws/av-embeds/*any", using: "WsAvEmbeds"
+  handle "/ws/includes/*any", using: "WsIncludes"
+  handle "/worldservice/assets/images/*any", using: "WsImages"
+
+  # Newsletters
+
+  handle "/newsletterstest/:id", using: "Newsletter" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/newsletters/:slug/:zid", using: "NewsletterLegacy" do
+    return_404 if: [
+      !String.match?(slug, ~r/^[\w-]+$/),
+      !is_zid?(zid),
+    ]
+  end
 
   # /programmes
 
-  handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/articles/49FbN1s7dwnWXBmHRGK308B/5-unforgettable-moments-from-the-semi-final/contact", 301}] do
+  handle "/programmes/articles/:key/:slug/contact", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/articles/:key/:slug", using: "ProgrammesArticle", platform: "Programmes", examples: ["/programmes/articles/4xJyCpMp64NcCXD0FVlhmSz/frequently-asked-questions"] do
+  handle "/programmes/articles/:key/:slug", using: "ProgrammesArticle" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/articles/:key", using: "ProgrammesArticle", platform: "Programmes", examples: [{"/programmes/articles/4xJyCpMp64NcCXD0FVlhmSz", 301}] do
+  handle "/programmes/articles/:key", using: "ProgrammesArticle" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/a-z/current", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/a-z/current", 301}]
+  handle "/programmes/a-z/current", using: "ProgrammesLegacy"
 
-  handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/a-z/by/b/current", 301}] do
+  handle "/programmes/a-z/by/:search/current", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
   end
 
-  handle "/programmes/a-z/by/:search/:slice.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/a-z/by/b/all.json", "/programmes/a-z/by/b/player.json"] do
+  handle "/programmes/a-z/by/:search/:slice.json", using: "ProgrammesData" do
     return_404 if: [
       !String.match?(search, ~r/^[a-zA-Z@]$/),
       !Enum.member?(["all", "player"], slice),
     ]
   end
 
-  handle "/programmes/a-z/by/:search.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/a-z/by/b.json"] do
+  handle "/programmes/a-z/by/:search.json", using: "ProgrammesData" do
     return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
   end
 
-  handle "/programmes/a-z/by/:search/:slice", using: "Programmes", platform: "Programmes", examples: ["/programmes/a-z/by/b/all", "/programmes/a-z/by/b/player"] do
+  handle "/programmes/a-z/by/:search/:slice", using: "Programmes" do
     return_404 if: [
       !String.match?(search, ~r/^[a-zA-Z@]$/),
       !Enum.member?(["all", "player"], slice),
     ]
   end
 
-  handle "/programmes/a-z/by/:search", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/a-z/by/b", 301}] do
+  handle "/programmes/a-z/by/:search", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(search, ~r/^[a-zA-Z@]$/)
   end
 
-  handle "/programmes/a-z/:slice.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/a-z/player.json", "/programmes/a-z/all.json"] do
+  handle "/programmes/a-z/:slice.json", using: "ProgrammesData" do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/a-z.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/a-z.json"]
+  handle "/programmes/a-z.json", using: "ProgrammesData"
 
-  handle "/programmes/a-z", using: "Programmes", platform: "Programmes", examples: ["/programmes/a-z"]
+  handle "/programmes/a-z", using: "Programmes"
 
-  handle "/programmes/formats/:category/:slice", using: "Programmes", platform: "Programmes", examples: ["/programmes/formats/animation/all", "/programmes/formats/animation/player"] do
+  handle "/programmes/formats/:category/:slice", using: "Programmes" do
     return_404 if: !Enum.member?(["all", "player"], slice)
   end
 
-  handle "/programmes/formats/:category", using: "Programmes", platform: "Programmes", examples: ["/programmes/formats/animation"]
+  handle "/programmes/formats/:category", using: "Programmes"
 
-  handle "/programmes/formats", using: "Programmes", platform: "Programmes", examples: ["/programmes/formats"]
+  handle "/programmes/formats", using: "Programmes"
 
-  handle "/programmes/genres", using: "Programmes", platform: "Programmes", examples: ["/programmes/genres"]
+  handle "/programmes/genres", using: "Programmes"
 
-  handle "/programmes/genres/*any", using: "Programmes", platform: "Programmes", examples: ["/programmes/genres/childrens", "/programmes/genres/comedy/sitcoms", "/programmes/genres/childrens/all", "/programmes/genres/childrens/player", "/programmes/genres/comedy/music/player", "/programmes/genres/comedy/music/all", "/programmes/genres/factual/scienceandnature/scienceandtechnology/player", "/programmes/genres/factual/scienceandnature/scienceandtechnology"]
+  handle "/programmes/genres/*any", using: "Programmes"
 
-  handle "/programmes/profiles/:key/:slug", using: "Programmes", platform: "Programmes", examples: ["/programmes/profiles/5NGNHQKKXGsFfnkxPBzKPMW/alistair-lloyd"] do
+  handle "/programmes/profiles/:key/:slug", using: "Programmes" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/profiles/:key", using: "Programmes", platform: "Programmes", examples: [{"/programmes/profiles/23ca89bd-f35e-4803-bb86-c300c88afb2f", 301}, {"/programmes/profiles/5NGNHQKKXGsFfnkxPBzKPMW", 301}] do
+  handle "/programmes/profiles/:key", using: "Programmes" do
     return_404 if: !String.match?(key, ~r/^[a-zA-Z0-9-]{1,40}$/)
   end
 
-  handle "/programmes/snippet/:records_ids.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/snippet/n45bj5.json"]
+  handle "/programmes/snippet/:records_ids.json", using: "ProgrammesData"
 
-  handle "/programmes/topics/:topic/:slice", using: "Programmes", platform: "Programmes", examples: [{"/programmes/topics/21st-century_American_non-fiction_writers/video", 301}, {"/programmes/topics/21st-century_American_non-fiction_writers/audio", 301}, {"/programmes/topics/Documentary_films_about_HIV/AIDS", 301}]
+  handle "/programmes/topics/:topic/:slice", using: "Programmes"
 
-  handle "/programmes/topics/:topic", using: "Programmes", platform: "Programmes", examples: [{"/programmes/topics/Performers_of_Sufi_music", 301}]
+  handle "/programmes/topics/:topic", using: "Programmes"
 
-  handle "/programmes/topics", using: "Programmes", platform: "Programmes", examples: [{"/programmes/topics", 301}]
+  handle "/programmes/topics", using: "Programmes"
 
-  handle "/programmes/:pid/articles", using: "ProgrammesArticle", platform: "Programmes", examples: ["/programmes/b006m8dq/articles"] do
+  handle "/programmes/:pid/articles", using: "ProgrammesArticle" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b006qsq5/broadcasts/2020/01", 302}] do
+  handle "/programmes/:pid/broadcasts/:year/:month", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/w172vkw6f1ffv5f/broadcasts", 302}] do
+  handle "/programmes/:pid/broadcasts", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/children.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq/children.json"] do
+  handle "/programmes/:pid/children.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/clips", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b045fz8r/clips"] do
+  handle "/programmes/:pid/clips", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/contact", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006qj9z/contact"] do
+  handle "/programmes/:pid/contact", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/credits", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b06ss3j4/credits", 301}] do
+  handle "/programmes/:pid/credits", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b006qnmr/episodes/a-z/a", 301}] do
+  handle "/programmes/:pid/episodes/a-z/:az", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p02nrw8y/episodes/downloads.rss", 301}] do
+  handle "/programmes/:pid/episodes/downloads.rss", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/downloads", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/p02nrw8y/episodes/downloads"] do
+  handle "/programmes/:pid/episodes/downloads", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/guide", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006m8dq/episodes/guide"] do
+  handle "/programmes/:pid/episodes/guide", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/guide.2013inc", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/p02zmzss/episodes/guide.2013inc"] do
+  handle "/programmes/:pid/episodes/guide.2013inc", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/last.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq/episodes/last.json"] do
+  handle "/programmes/:pid/episodes/last.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/player", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006m8dq/episodes/player"] do
+  handle "/programmes/:pid/episodes/player", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/upcoming.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b04drklx/episodes/upcoming.json"] do
+  handle "/programmes/:pid/episodes/upcoming.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes/:year/:month.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq/episodes/2020/12.json"] do
+  handle "/programmes/:pid/episodes/:year/:month.json", using: "ProgrammesData" do
     return_404 if: [
       !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
       !String.match?(year, ~r/^[1-2][0-9]{3}$/),
@@ -2443,155 +2952,155 @@ defroutefile "Main" do
     ]
   end
 
-  handle "/programmes/:pid/episodes.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq/episodes.json"] do
+  handle "/programmes/:pid/episodes.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/episodes", using: "ProgrammesEntity", platform: "Programmes", examples: [{"/programmes/b006m8dq/episodes", 302}] do
+  handle "/programmes/:pid/episodes", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/galleries", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b045fz8r/galleries"] do
+  handle "/programmes/:pid/galleries", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/members/all", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p001rshg/members/all", 301}] do
+  handle "/programmes/:pid/members/all", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/members", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p001rshg/members", 301}] do
+  handle "/programmes/:pid/members", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/microsite", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p001rshg/microsite", 301}] do
+  handle "/programmes/:pid/microsite", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/player", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/p097pw9q/player"] do
+  handle "/programmes/:pid/player", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/playlist.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b08lkyzk/playlist.json"] do
+  handle "/programmes/:pid/playlist.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/podcasts", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p02nrw8y/podcasts", 301}] do
+  handle "/programmes/:pid/podcasts", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/profiles", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006qpgr/profiles"] do
+  handle "/programmes/:pid/profiles", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/recipes.ameninc", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006v5y2/recipes.ameninc"] do
+  handle "/programmes/:pid/recipes.ameninc", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/recipes.2013inc", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006v5y2/recipes.2013inc"] do
+  handle "/programmes/:pid/recipes.2013inc", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/recipes", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006v5y2/recipes"] do
+  handle "/programmes/:pid/recipes", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p02str2y/schedules", 301}] do
+  handle "/programmes/:pid/schedules", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/schedules/*any", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/p02str2y/schedules/2019/03/18", 301}] do
+  handle "/programmes/:pid/schedules/*any", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/segments.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b01m2fyy/segments.json"] do
+  handle "/programmes/:pid/segments.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/segments", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b01m2fz4/segments", 301}] do
+  handle "/programmes/:pid/segments", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/series.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq/series.json"] do
+  handle "/programmes/:pid/series.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/series", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b006m8dq/series", 301}] do
+  handle "/programmes/:pid/series", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity", platform: "Programmes", examples: [{"/programmes/b00lvdrj/topics/1091_Media_films", 301}] do
+  handle "/programmes/:pid/topics/:topic", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/topics", using: "ProgrammesEntity", platform: "Programmes", examples: [{"/programmes/b00lvdrj/topics", 301}] do
+  handle "/programmes/:pid/topics", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid.html", using: "ProgrammesLegacy", platform: "Programmes", examples: [{"/programmes/b006m8dq.html", 301}] do
+  handle "/programmes/:pid.html", using: "ProgrammesLegacy" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid.json", using: "ProgrammesData", platform: "Programmes", examples: ["/programmes/b006m8dq.json"] do
+  handle "/programmes/:pid.json", using: "ProgrammesData" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes/:pid/:imagepid", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/p028d9jw/p028d8nr"] do
+  handle "/programmes/:pid/:imagepid", using: "ProgrammesEntity" do
     return_404 if: [
       !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/),
       !String.match?(imagepid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
     ]
   end
 
-  handle "/programmes/:pid", using: "ProgrammesEntity", platform: "Programmes", examples: ["/programmes/b006m8dq"] do
+  handle "/programmes/:pid", using: "ProgrammesEntity" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/programmes", using: "ProgrammesHomePage", platform: "Programmes", examples: ["/programmes"]
+  handle "/programmes", using: "ProgrammesHomePage"
 
   # /programmes catch all
-  handle "/programmes/*any", using: "Programmes", platform: "Programmes", examples: []
+  handle "/programmes/*any", using: "Programmes"
 
   # /schedules
 
-  handle "/schedules/network/:network/on-now", using: "Schedules", platform: "Programmes", examples: [{"/schedules/network/bbcone/on-now", 302}] do
+  handle "/schedules/network/:network/on-now", using: "Schedules" do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
-  handle "/schedules/network/:network", using: "Schedules", platform: "Programmes", examples: [{"/schedules/network/radioscotland", 301}] do
+  handle "/schedules/network/:network", using: "Schedules" do
     return_404 if: !String.match?(network, ~r/^[a-zA-Z0-9]{2,35}$/)
   end
 
-  handle "/schedules/:pid/*any", using: "Schedules", platform: "Programmes", examples: ["/schedules/p00fzl6v/2021/06/28", "/schedules/p05pkt1d/2020/w02", "/schedules/p05pkt1d/2020/01", {"/schedules/p05pkt1d/yesterday", 302}, "/schedules/p05pkt1d/2021"] do
+  handle "/schedules/:pid/*any", using: "Schedules" do
     return_404 if: !String.match?(pid, ~r/^[0-9b-df-hj-np-tv-z]{8,15}$/)
   end
 
-  handle "/schedules", using: "Schedules", platform: "Programmes", examples: ["/schedules"]
+  handle "/schedules", using: "Schedules"
 
   # /schedules catch all
-  handle "/schedules/*any", using: "Schedules", platform: "Programmes", examples: []
+  handle "/schedules/*any", using: "Schedules"
 
   # Uploader
 
-  handle "/send/:id", using: "Uploader", platform: "Webcore", examples: ["/send/u39697902"]
+  handle "/send/:id", using: "Uploader"
 
   # topics
 
-  handle "/topics", using: "TopicPage", platform: "Webcore", examples: ["/topics"]
+  handle "/topics", using: "TopicPage"
 
-  handle "/topics/:id", using: "TopicPage", platform: "Webcore", examples: ["/topics/c583y7zk042t"] do
+  handle "/topics/:id", using: "TopicPage" do
     return_404 if: [
       !is_tipo_id?(id),
       !integer_in_range?(conn.query_params["page"] || "1", 1..42)
     ]
   end
 
-  handle "/topics/:id/rss.xml", using: "TopicRss", platform: "Fabl", examples: [] do
+  handle "/topics/:id/rss.xml", using: "TopicRss" do
     # example "/topics/c57jjx4233xt/rss.xml" need "feeds.api.bbci.co.uk" as host
     return_404 if: !is_tipo_id?(id)
   end
 
   ## Live WebCore
-  handle "/live/:asset_id", using: "Live", platform: "Webcore", only_on: "test", examples: ["/live/c1v596ken6vt", "/live/c1v596ken6vt?page=6"] do
+  handle "/live/:asset_id", using: "Live", only_on: "test" do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
@@ -2599,7 +3108,7 @@ defroutefile "Main" do
   end
 
   ## Live WebCore - .app route
-  handle "/live/:asset_id.app", using: "Live",  platform: "Webcore", only_on: "test", examples: ["/live/cvpx5wr4nv8t.app", "/live/cvpx5wr4nv8t.app?page=6"] do
+  handle "/live/:asset_id.app", using: "Live",  only_on: "test" do
     return_404 if: [
       !String.match?(asset_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}t$/), # TIPO IDs
       !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
@@ -2609,43 +3118,43 @@ defroutefile "Main" do
   # Weather
   redirect "/weather/0/*any", to: "/weather/*any", status: 301
 
-  handle "/weather", using: "WeatherHomePage", platform: "MozartWeather", examples: ["/weather"]
+  handle "/weather", using: "WeatherHomePage"
 
-  handle "/weather/search", using: "WeatherSearch", platform: "MozartWeather", examples: ["/weather/search?s=london"] do
+  handle "/weather/search", using: "WeatherSearch" do
     return_404 if: [
         !is_valid_length?(conn.query_params["s"] || "", 0..100),
-        !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+        !integer_in_range?(conn.query_params["page"] || "1", 0..999)
       ]
   end
 
-  handle "/weather/outlook", using: "Weather", platform: "MozartWeather", examples: ["/weather/outlook"]
+  handle "/weather/outlook", using: "Weather"
 
-  handle "/weather/map", using: "Weather", platform: "MozartWeather", examples: ["/weather/map"]
+  handle "/weather/map", using: "Weather"
 
   redirect "/weather/warnings", to: "/weather/warnings/weather", status: 302
-  handle "/weather/warnings/weather", using: "WeatherWarnings", platform: "MozartWeather", examples: ["/weather/warnings/weather"]
-  handle "/weather/warnings/floods", using: "WeatherWarnings", platform: "MozartWeather", examples: ["/weather/warnings/floods"]
+  handle "/weather/warnings/weather", using: "WeatherWarnings"
+  handle "/weather/warnings/floods", using: "WeatherWarnings"
 
   redirect "/weather/coast_and_sea", to: "/weather/coast-and-sea", status: 301
   redirect "/weather/coast_and_sea/shipping_forecast", to: "/weather/coast-and-sea/shipping-forecast", status: 301
-  handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea", platform: "MozartWeather", examples: ["/weather/coast-and-sea/tide-tables"]
-  handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea", platform: "MozartWeather", examples: ["/weather/coast-and-sea/tide-tables/1"] do
+  handle "/weather/coast-and-sea/tide-tables", using: "WeatherCoastAndSea"
+  handle "/weather/coast-and-sea/tide-tables/:region_id", using: "WeatherCoastAndSea" do
     return_404 if: !integer_in_range?(region_id, 1..12)
   end
-  handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea", platform: "MozartWeather", examples: ["/weather/coast-and-sea/tide-tables/1/111a"] do
+  handle "/weather/coast-and-sea/tide-tables/:region_id/:tide_location_id", using: "WeatherCoastAndSea" do
     return_404 if: [
         !matches?(tide_location_id, ~r/^\d{1,4}[a-f]?$/),
         !integer_in_range?(region_id, 1..12)
       ]
   end
-  handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea", platform: "MozartWeather", examples: []
-  handle "/weather/coast-and-sea/*any", using: "WeatherCoastAndSea", platform: "MozartWeather", examples: ["/weather/coast-and-sea", "/weather/coast-and-sea/inshore-waters"]
+  handle "/weather/coast_and_sea/inshore_waters/:id", using: "WeatherCoastAndSea"
+  handle "/weather/coast-and-sea/*any", using: "WeatherCoastAndSea"
 
-  handle "/weather/error/:status", using: "Weather", platform: "MozartWeather", examples: ["/weather/error/404", "/weather/error/500"] do
+  handle "/weather/error/:status", using: "Weather" do
     return_404 if: !integer_in_range?(status, [404, 500])
   end
 
-  handle "/weather/language/:language", using: "WeatherLanguage", platform: "MozartWeather", examples: [{"/weather/language/en", 301}] do
+  handle "/weather/language/:language", using: "WeatherLanguage" do
     return_404(
       if: [
         !starts_with?(conn.query_params["redirect_location"] || "/weather", "/"),
@@ -2656,29 +3165,51 @@ defroutefile "Main" do
 
   redirect "/weather/forecast-video/:asset_id", to: "/weather/av/:asset_id", status: 302
 
-  handle "/weather/about/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/about/17185651", "/weather/about/17543675", {"/weather/about/42960629", 301}] do
+  handle "/weather/about/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/features/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/features/63962965", "/weather/features/60850659", {"/weather/features/63895092", 301}] do
+  handle "/weather/features/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-  handle "/weather/feeds/:cps_id", using: "WeatherArticlePage", platform: "Webcore", examples: ["/weather/feeds/23602910", "/weather/feeds/23081292", {"/weather/feeds/64827801", 301}] do
+  handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage", only_on: "test" do
+    return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
+  end
+  handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/weather/articles/:optimo_id.app", using: "WeatherStorytellingAppPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   redirect "/weather/about", to: "/weather", status: 302
   redirect "/weather/features", to: "/weather", status: 302
   redirect "/weather/feeds", to: "/weather", status: 302
   redirect "/weather/forecast-video", to: "/weather", status: 302
+  redirect "/weather/weather-watcher", to: "/weather", status: 302
 
-  handle "/weather/av/:asset_id", using: "WeatherVideos", platform: "Webcore", examples: ["/weather/av/64475513"] do
+  handle "/weather/av/:asset_id.app", using: "WeatherVideosAppPage", only_on: "test" do
     return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
   end
 
-  handle "/weather/:location_id", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225"] do
+  handle "/weather/av/:asset_id", using: "WeatherVideos" do
+    return_404 if: !integer_in_range?(asset_id, 1..999_999_999_999)
+  end
+
+  handle "/weather/videos/:optimo_id.app", using: "WeatherVideosAppPage", only_on: "test" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/weather/videos/:optimo_id", using: "WeatherVideos" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/weather/:location_id", using: "WeatherLocation" do
     return_404 if: !matches?(location_id, ~r/^([a-z0-9]{1,50})$/)
   end
-  handle "/weather/:location_id/:day", using: "WeatherLocation", platform: "MozartWeather", examples: ["/weather/2650225/today"] do
+  handle "/weather/:location_id/:day", using: "WeatherLocation" do
     return_404 if: [
       !matches?(location_id, ~r/^([a-z0-9]{1,50})$/),
       !matches?(day, ~r/^(none|today|tomorrow|day([1][0-3]|[0-9]))$/)
@@ -2698,35 +3229,53 @@ defroutefile "Main" do
   # BBC Optimo Articles
   redirect "/articles", to: "/", status: 302
 
-  handle "/articles/:optimo_id", using: "StorytellingPage", platform: "Webcore", examples: ["/articles/c1vy1zrejnno"] do
+  handle "/articles/:optimo_id", using: "StorytellingPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/articles/:optimo_id.app", using: "StorytellingAppPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
   # Catch all
 
   # example test route: "/comments/embed/news/world-europe-23348005"
-  handle "/comments/embed/*any", using: "CommentsEmbed", platform: "MozartWeather", examples: []
+  handle "/comments/embed/*any", using: "CommentsEmbed"
 
-  handle "/web/shell", using: "WebShell", platform: "Webcore", examples: ["/web/shell"]
+  handle "/my/session", using: "MySession", only_on: "test"
 
-  handle "/my/session", using: "MySession", platform: "OriginSimulator", only_on: "test", examples: []
-
-  handle "/scotland/articles/*any", using: "ScotlandArticles", platform: "MozartNews", examples: []
+  handle "/scotland/articles/*any", using: "ScotlandArticles"
   # TODO this may not be an actual required route
-  handle "/scotland/*any", using: "Scotland", platform: "MozartNews", examples: []
+  handle "/scotland/*any", using: "Scotland"
 
-  handle "/archive/articles/*any", using: "ArchiveArticles", platform: "MozartNews", examples: ["/archive/articles/sw.js"]
+  handle "/archive/articles/*any", using: "ArchiveArticles"
   # TODO this may not be an actual required route e.g. archive/collections-transport-and-travel/zhb9f4j showing as Morph Router
-  handle "/archive/*any", using: "Archive", platform: "MozartNews", examples: []
+  handle "/archive/*any", using: "Archive"
+
+  # CBBC
+  handle "/cbbc/findoutmore/help-me-out-exercise", using: "CBBCArticlePage", only_on: "test"
+  handle "/cbbc/*any", using: "CBBCLegacy"
 
   # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
-  handle "/newsround/:id.amp", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.amp"]
-  handle "/newsround/:id.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/61545299.json"]
-  handle "/newsround/articles/manifest.json", using: "NewsroundAmp", platform: "MozartNews", examples: ["/newsround/articles/manifest.json"]
+  handle "/newsround/:id.amp", using: "NewsroundAmp"
+  handle "/newsround/:id.json", using: "NewsroundAmp"
+  handle "/newsround/articles/manifest.json", using: "NewsroundAmp"
 
-  handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/watch_newsround"]
-  handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/news/newsroundbsl"]
+  handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/newsround/articles/:optimo_id.app", using: "NewsroundStorytellingAppPage" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+  handle "/newsround/articles/:optimo_id.amp", using: "NewsroundStorytellingAmp" do
+    return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
+  end
+
+  handle "/newsround/news/watch_newsround.app", using: "NewsroundVideoPageAppPage", only_on: "test"
+  handle "/newsround/news/watch_newsround", using: "NewsroundVideoPage"
+  handle "/newsround/news/newsroundbsl.app", using: "NewsroundVideoPageAppPage", only_on: "test"
+  handle "/newsround/news/newsroundbsl", using: "NewsroundVideoPage"
 
   redirect "/newsround/news", to: "/newsround", status: 301
   redirect "/newsround/news/*_any", to: "/newsround", status: 301
@@ -2749,156 +3298,326 @@ defroutefile "Main" do
   redirect "/newsround/beta/*_any", to: "/newsround", status: 301
   redirect "/schoolreport", to: "/news/topics/cg41ylwv43pt", status: 301
 
-  handle "/newsround/av/:id", using: "NewsroundVideoPage", platform: "Webcore", examples: ["/newsround/av/43245617"] do
+  handle "/newsround/av/:id.app", using: "NewsroundVideoPageAppPage", only_on: "test" do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/newsround/:id", using: "NewsroundArticlePage", platform: "Webcore", examples: ["/newsround/61545299"] do
+  handle "/newsround/av/:id", using: "NewsroundVideoPage" do
     return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
   end
-  handle "/newsround", using: "NewsroundHomePage", platform: "Webcore", examples: ["/newsround"]
-  handle "/newsround/*any", using: "NewsroundLegacy", platform: "MorphRouter", only_on: "live", examples: []
+  handle "/newsround/:id", using: "NewsroundArticlePage" do
+    return_404 if: !String.match?(id, ~r/^[0-9]{4,9}$/)
+  end
 
-  handle "/schoolreport/*any", using: "Schoolreport", platform: "MozartNews", examples: [{"/schoolreport/home", 301}]
+  handle "/newsround", using: "NewsroundHomePage"
 
-  handle "/wide/*any", using: "Wide", platform: "MozartNews", examples: []
+  handle "/schoolreport/*any", using: "Schoolreport"
 
-  handle "/archivist/*any", using: "Archivist", platform: "MozartNews", examples: []
+  handle "/wide/*any", using: "Wide"
+
+  handle "/archivist/*any", using: "Archivist"
 
   # TODO /proms/extra
-  handle "/proms/*any", using: "Proms", platform: "MozartNews", examples: []
+  handle "/proms/*any", using: "Proms"
 
-  handle "/music", using: "Music", platform: "MozartNews", examples: []
+  handle "/music", using: "Music"
 
   # Bitesize
+  # GCSE Eduqas Science deprecation - Study guide redirects
+  redirect "/bitesize/guides/zcxmfcw/revision/1", to: "/bitesize/guides/zgmpgdm/revision/1", status: 301
+  redirect "/bitesize/guides/z9m6v9q/revision/2", to: "/bitesize/guides/z8gx3k7/revision/2", status: 301
+
+  # KS3 Maths study guide redirects
+  redirect "/bitesize/guides/zvybkqt/revision/2", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/3", to: "/bitesize/topics/z3nygk7/articles/zr9wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/4", to: "/bitesize/topics/z3nygk7/articles/z39wxg8", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/5", to: "/bitesize/topics/z3nygk7/articles/z9qxs82", status: 301
+  redirect "/bitesize/guides/zvybkqt/revision/7", to: "/bitesize/topics/z3nygk7/articles/z82tywx", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/2", to: "/bitesize/topics/ztwhvj6/articles/zy7xs82", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/3", to: "/bitesize/topics/ztwhvj6/articles/zr76fdm", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/4", to: "/bitesize/topics/ztwhvj6/articles/zjvrdnb", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/5", to: "/bitesize/topics/ztwhvj6/articles/z3mhvj6", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/6", to: "/bitesize/topics/ztwhvj6/articles/z3mhvj6", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/7", to: "/bitesize/topics/ztwhvj6/articles/zt6v46f", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/8", to: "/bitesize/topics/ztwhvj6/articles/z8prdnb", status: 301
+  redirect "/bitesize/guides/zrg4jxs/revision/9", to: "/bitesize/topics/ztwhvj6/articles/z8prdnb", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/1", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/3", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/4", to: "/bitesize/topics/zbsvr82/articles/zj6nb7h", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/5", to: "/bitesize/topics/zbsvr82/articles/z7qsg2p", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/6", to: "/bitesize/topics/zbsvr82/articles/zvkj6rd", status: 301
+  redirect "/bitesize/guides/znhsgk7/revision/7", to: "/bitesize/topics/zbsvr82/articles/z3kj6rd", status: 301
+
   redirect "/bitesize/guides/:id", to: "/bitesize/guides/:id/revision/1", status: 301
   redirect "/bitesize/guides/:id/revision", to: "/bitesize/guides/:id/revision/1", status: 301
 
   redirect "/bitesize/preview/guides/:id", to: "/bitesize/preview/guides/:id/revision/1", status: 301
   redirect "/bitesize/preview/guides/:id/revision", to: "/bitesize/preview/guides/:id/revision/1", status: 301
 
-  handle "/bitesize/preview/secondary", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/secondary"]
+  redirect "/bitesize/articles/znsmxyc", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zf4gg7h", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zs64r2p", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z7j496f", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zhxpscw", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z4rkd6f", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z7fb3j6", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zgqq6rd", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/zxvqdp3", to: "/bitesize/parents", status: 301                                         # Parents' Toolkit
+  redirect "/bitesize/articles/z63htrd", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zwcfp4j", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zv7mh4j", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zvpvbqt", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z9pxtrd", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z32kjfr", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zy44bqt", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z4b3sk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zkcfsk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z84yf82", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z9rsn9q", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zchysk7", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zkyr47h", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/z4crvwx", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zctbydm", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zt42jsg", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zd8kr2p", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zx9mqfr", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zm42jsg", to: "/bitesize/groups/cw9v6l8d0q6t", status: 301                             # Parents' Toolkit - Wellbeing
+  redirect "/bitesize/articles/zqbt6g8", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/z32mxbk", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zmxc96f", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zr99g7h", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zp64cmn", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zbnpxbk", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zcnw8hv", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zhm7jsg", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/z9948hv", to: "/bitesize/groups/cx1lpm3x7v4t", status: 301                             # Parents' Toolkit - Learning
+  redirect "/bitesize/articles/zrsbrj6", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zpj896f", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/z6nk4xs", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zw3fn9q", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zq8cg7h", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zywtxbk", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zkbf3j6", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zt7q8hv", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/znxmjsg", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zn27dp3", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zdhxm39", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zg6qwnb", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/z3cbcmn", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zn3svwx", to: "/bitesize/groups/ceq8p90x033t", status: 301                             # Parents' Toolkit - Activities
+  redirect "/bitesize/articles/zh9v382", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zh744xs", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zmcvrmn", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/zw94bqt", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/articles/z6xmjsg", to: "/bitesize/groups/c5vpkq13gpxt", status: 301                             # Parents' Toolkit - SEND
+  redirect "/bitesize/collections/starting-primary-school", to: "/bitesize/groups/cx1lpm3ve37t", status: 301          # Parents' Toolkit - Starting Primary School (English)
+  redirect "/bitesize/collections/starting-primary-school/*any", to: "/bitesize/groups/cx1lpm3ve37t", status: 301     # Parents' Toolkit - Starting Primary School (English)
+  redirect "/bitesize/articles/z6vfn9q", to: "/bitesize/groups/cjx58zqw94xt", status: 301                             # Parents' Toolkit - Starting Primary School (Welsh)
+  redirect "/bitesize/tags/zh4wy9q/starting-secondary-school", to: "/bitesize/groups/c5vpkq1l934t", status: 301       # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/tags/zh4wy9q/starting-secondary-school/*any", to: "/bitesize/groups/c5vpkq1l934t", status: 301  # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/articles/zjkk96f", to: "/bitesize/groups/c5vpkq1l934t", status: 301                             # Parents' Toolkit - Starting Secondary School (English)
+  redirect "/bitesize/articles/zhkjbdm", to: "/bitesize/groups/cq0zpjylx38t", status: 301                             # Parents' Toolkit - Starting Secondary School (Welsh)
+  redirect "/bitesize/support", to: "/bitesize/study-support", status: 301                                            # Study Support
+  redirect "/bitesize/articles/zv3bvwx", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zfwnb7h", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zqpnhcw", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zxq76rd", to: "/bitesize/groups/cp60w97z7y1t", status: 301                             # Study Support - Study Skills (English)
+  redirect "/bitesize/articles/zmt42sg", to: "/bitesize/groups/c89rm0640e9t", status: 301                             # Study Support - Study Skills (Welsh)
+  redirect "/bitesize/articles/zghhxbk", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z877wnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zwtdwnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z42496f", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zcbcr2p", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zdbwmbk", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zcf3vwx", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z999r2p", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/zrjqwnb", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/ztxnp4j", to: "/bitesize/groups/cd5exmm663et", status: 301                             # Study Support - Exams and revision
+  redirect "/bitesize/articles/z3x6m39", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zc72qfr", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z9cd8hv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zwnw8hv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zjf3vwx", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zkyvvwx", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z3sm7yc", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zj3h6g8", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zwkqjsg", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z7ddkty", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z4hsn9q", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zn8jwnb", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+  redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
 
-  handle "/bitesize/subjects", using: "Bitesize", platform: "Webcore", examples: ["/bitesize/subjects"]
-  handle "/bitesize/subjects/:id", using: "BitesizeSubjects", platform: "MorphRouter", examples: ["/bitesize/subjects/z8tnvcw", "/bitesize/subjects/zbhy4wx"]
-  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjects", platform: "MorphRouter", examples: ["/bitesize/subjects/zjxhfg8/year/zjpqqp3"]
+  handle "/bitesize", using: "BitesizeHomePage"
 
-  handle "/bitesize/preview/subjects/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/subjects/z8tnvcw", "/bitesize/preview/subjects/zbhy4wx"]
-  handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/subjects/zjxhfg8/year/zjpqqp3"]
+  handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
 
-  handle "/bitesize/courses/:id", using: "BitesizeTransition", platform: "Webcore", only_on: "test", examples: ["/bitesize/courses/zdcg3j6"]
+  handle "/bitesize/preview/secondary", using: "Bitesize", only_on: "test"
 
-  handle "/bitesize/articles/:id", using: "BitesizeArticles", platform: "MorphRouter", examples: ["/bitesize/articles/zjykkmn"]
-  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles", platform: "MorphRouter", examples: ["/bitesize/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/subjects", using: "Bitesize"
+  handle "/bitesize/subjects/:id", using: "BitesizeSubjects"
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjectsYear"
 
-  handle "/bitesize/preview/articles/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm"]
-  handle "/bitesize/preview/articles/:id/:game_version", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/articles/zj8yydm/latest"]
-  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/zmhxjhv/articles/zwdtrwx"]
+  handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test"
+
+  handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test"
+
+  handle "/bitesize/articles/:id", using: "BitesizeArticles"
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles"
+
+  handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/articles/:id/:game_version", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test"
 
 
-  handle "/bitesize/levels/:id", using: "BitesizeLevels", platform: "MorphRouter", examples: ["/bitesize/levels/zr48q6f"]
-  handle "/bitesize/levels/:id/year/:year_id", using: "BitesizeLevels", platform: "MorphRouter", examples: ["/bitesize/levels/z3g4d2p/year/zjpqqp3"] do
+  handle "/bitesize/levels/:id", using: "BitesizeLevels"
+  handle "/bitesize/levels/:id/year/:year_id", using: "BitesizeLevels" do
     return_404 if: !(
       String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)
       or String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/)
     )
   end
 
-  handle "/bitesize/preview/levels/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/levels/zgckjxs"]
-  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/levels/zbr9wmn/year/zmyxxyc"]  do
+  handle "/bitesize/preview/levels/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", only_on: "test"  do
     return_404 if: !(
       String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)
       or String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/)
     )
   end
 
-  handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides", platform: "MorphRouter", examples: ["/bitesize/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/guides/:id/test", using: "BitesizeGuides", platform: "MorphRouter", examples: ["/bitesize/guides/zw7xfcw/test"]
-  handle "/bitesize/guides/:id/audio", using: "BitesizeGuides", platform: "MorphRouter", examples: ["/bitesize/guides/zwsffg8/audio"]
-  handle "/bitesize/guides/:id/video", using: "BitesizeGuides", platform: "MorphRouter", examples: ["/bitesize/guides/zcvy6yc/video"]
+  handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides"
+  handle "/bitesize/guides/:id/test", using: "BitesizeGuides"
+  handle "/bitesize/guides/:id/audio", using: "BitesizeGuides"
+  handle "/bitesize/guides/:id/video", using: "BitesizeGuides"
 
-  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zw3bfcw/revision/1"]
-  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zw7xfcw/test"]
-  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zwsffg8/audio"]
-  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/guides/zcvy6yc/video"]
+  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test"
 
-  handle "/bitesize/topics/:id", using: "BitesizeTopics", platform: "BitesizeTopicsPlatformSelector", examples: ["/bitesize/topics/z82hsbk"]
-  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics", platform: "BitesizeTopicsPlatformSelector", examples: ["/bitesize/topics/zwv39j6/year/zjpqqp3"]
+  handle "/bitesize/topics/:id", using: "BitesizeTopics"
+  handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics"
 
-  handle "/bitesize/preview/topics/:id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/z82hsbk"]
-  handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", platform: "Webcore", only_on: "test", examples: ["/bitesize/preview/topics/zwv39j6/year/zjpqqp3"]
-  handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy", platform: "MorphRouter", examples: ["/bitesize/guides/zcvy6yc/test.hybrid"]
-  
-  handle "/bitesize/groups/:id", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/groups/cz4wkv77g55t"]
-  handle "/bitesize/parents", using: "BitesizeTipoTopic", platform: "Webcore", only_on: "test", examples: ["/bitesize/parents"]
+  handle "/bitesize/preview/topics/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/topics/:id/year/:year_id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/guides/:id/test.hybrid", using: "BitesizeLegacy"
+  handle "/bitesize/groups/:id", using: "BitesizeTipoTopic"
+  handle "/bitesize/parents", using: "BitesizeTipoTopic"
+  handle "/bitesize/study-support", using: "BitesizeTipoTopic"
+  handle "/bitesize/learn", using: "BitesizeTipoTopic"
+  handle "/bitesize/careers", using: "BitesizeTipoTopic", only_on: "test"
 
-  handle "/bitesize/*any", using: "BitesizeLegacy", platform: "MorphRouter", examples: ["/bitesize/levels"]
+  handle "/bitesize/*any", using: "BitesizeLegacy"
 
 
   # Games
-  handle "/games/*any", using: "Games", platform: "Webcore", examples: ["/games/embed/genie-starter-pack"]
+  handle "/games/*any", using: "Games"
 
 
   # Classic Apps
 
-  handle "/content/trending/events", using: "ClassicApp", platform: "ClassicApps", examples: [] do
+  handle "/content/trending/events", using: "ClassicApp" do
     return_404 if: true
   end
-  handle "/content/cps/news/front_page", using: "ClassicAppNewsFrontpage", platform: "ClassicApps", examples: ["/content/cps/news/front_page"]
-  handle "/content/cps/news/live/*any", using: "ClassicAppNewsLive", platform: "ClassicApps", examples: ["/content/cps/news/live/world-africa-47639452"]
-  handle "/content/cps/news/av/*any", using: "ClassicAppNewsAv", platform: "ClassicApps", examples: []
-  handle "/content/cps/news/articles/*any", using: "ClassicAppNewsArticles", platform: "ClassicApps", examples: []
-  handle "/content/cps/news/video_and_audio/*any", using: "ClassicAppNewsAudioVideo", platform: "ClassicApps", examples: ["/content/cps/news/video_and_audio/ten_to_watch", "/content/cps/news/video_and_audio/top_stories"]
-  handle "/content/cps/news/*any", using: "ClassicAppNewsCps", platform: "ClassicApps", examples: ["/content/cps/news/uk-england-london-59333481"]
+  handle "/content/cps/news/front_page", using: "ClassicAppNewsFrontpage"
+  handle "/content/cps/news/live/*any", using: "ClassicAppNewsLive"
+  handle "/content/cps/news/av/*any", using: "ClassicAppNewsAv"
+  handle "/content/cps/news/articles/*any", using: "ClassicAppNewsArticles"
+  handle "/content/cps/news/video_and_audio/*any", using: "ClassicAppNewsAudioVideo"
+  handle "/content/cps/news/*any", using: "ClassicAppNewsCps"
 
-  handle "/content/cps/sport/front-page", using: "ClassicAppSportFrontpage", platform: "ClassicApps", examples: ["/content/cps/sport/front-page"]
-  handle "/content/cps/sport/live/*any", using: "ClassicAppSportLive", platform: "ClassicApps", examples: ["/content/cps/sport/live/football/59369278", "/content/cps/sport/live/formula1/58748830"]
-  handle "/content/cps/sport/football/*any", using: "ClassicAppSportFootball", platform: "ClassicApps", examples: ["/content/cps/sport/football/59372826", "/content/cps/sport/football/58643317"]
-  handle "/content/cps/sport/av/football/*any", using: "ClassicAppSportFootballAv", platform: "ClassicApps", examples: ["/content/cps/sport/av/football/59346509"]
-  handle "/content/cps/sport/*any", using: "ClassicAppSportCps", platform: "ClassicApps", examples: ["/content/cps/sport/rugby-union/59369204", "/content/cps/sport/tennis/59328440"]
+  handle "/content/cps/sport/front-page", using: "ClassicAppSportFrontpage"
+  handle "/content/cps/sport/live/*any", using: "ClassicAppSportLive"
+  handle "/content/cps/sport/football/*any", using: "ClassicAppSportFootball"
+  handle "/content/cps/sport/av/football/*any", using: "ClassicAppSportFootballAv"
+  handle "/content/cps/sport/*any", using: "ClassicAppSportCps"
 
-  handle "/content/cps/newsround/*any", using: "ClassicAppNewsround", platform: "ClassicApps", examples: ["/content/cps/newsround/45274517"]
-  handle "/content/cps/naidheachdan/*any", using: "ClassicAppNaidheachdan", platform: "ClassicApps", examples: ["/content/cps/naidheachdan/59371990", "/content/cps/naidheachdan/front_page", "/content/cps/naidheachdan/dachaigh"]
-  handle "/content/cps/mundo/*any", using: "ClassicAppMundo", platform: "ClassicApps", examples: ["/content/cps/mundo/vert-cap-59223070?createdBy=mundo&language=es", "/content/cps/mundo/noticias-59340165?createdBy=mundo&language=es"]
-  handle "/content/cps/arabic/*any", using: "ClassicAppArabic", platform: "ClassicApps", examples: ["/content/cps/arabic/live/53833263?createdBy=arabic&language=ar", "/content/cps/arabic/art-and-culture-59307957?createdBy=arabic&language=ar"]
-  handle "/content/cps/russian/*any", using: "ClassicAppRussianCps", platform: "ClassicApps", examples: ["/content/cps/russian/front_page?createdBy=russian&language=ru", "/content/cps/russian/news?createdBy=russian&language=ru", "/content/cps/russian/features-58536209?createdBy=russian&language=ru"]
-  handle "/content/cps/hindi/*any", using: "ClassicAppHindi", platform: "ClassicApps", examples: ["/content/cps/hindi/india?createdBy=hindi&language=hi", "/content/cps/hindi/india-59277161?createdBy=hindi&language=hi"]
-  handle "/content/cps/learning_english/*any", using: "ClassicAppLearningEnglish", platform: "ClassicApps", examples: ["/content/cps/learning_english/home", "/content/cps/learning_english/6-minute-english-59142810"]
-  handle "/content/cps/:product/*any", using: "ClassicAppProducts", platform: "ClassicApps", examples: []
-  handle "/content/cps/*any", using: "ClassicAppCps", platform: "ClassicApps", examples: []
+  handle "/content/cps/newsround/*any", using: "ClassicAppNewsround"
+  handle "/content/cps/naidheachdan/*any", using: "ClassicAppNaidheachdan"
+  handle "/content/cps/mundo/*any", using: "ClassicAppMundo"
+  handle "/content/cps/arabic/*any", using: "ClassicAppArabic"
+  handle "/content/cps/russian/*any", using: "ClassicAppRussianCps"
+  handle "/content/cps/hindi/*any", using: "ClassicAppHindi"
+  handle "/content/cps/learning_english/*any", using: "ClassicAppLearningEnglish"
+  handle "/content/cps/:product/*any", using: "ClassicAppProducts"
+  handle "/content/cps/*any", using: "ClassicAppCps"
 
-  handle "/content/ldp/:guid", using: "ClassicAppFablLdp", platform: "Fabl", examples: ["/content/ldp/de648736-7268-454c-a7b1-dbff416f2865"]
-  handle "/content/most_popular/*any", using: "ClassicAppMostPopular", platform: "ClassicApps", examples: ["/content/most_popular/news"]
-  handle "/content/ww/*any", using: "ClassicAppWw", platform: "ClassicApps", examples: []
-  handle "/content/news/*any", using: "ClassicAppNews", platform: "ClassicApps", examples: []
-  handle "/content/sport/*any", using: "ClassicAppSport", platform: "ClassicApps", examples: []
-  handle "/content/russian/*any", using: "ClassicAppRussian", platform: "ClassicApps", examples: []
-  handle "/content/:hash", using: "ClassicAppId", platform: "ClassicApps", examples: []
-  handle "/content/:service/*any", using: "ClassicAppService", platform: "ClassicApps", examples: []
-  handle "/content/*any", using: "ClassicApp", platform: "ClassicApps", examples: []
-  handle "/static/*any", using: "ClassicAppStaticContent", platform: "ClassicApps", examples: ["/static/LE/android/1.5.0/config.json", "/static/MUNDO/ios/5.19.0/layouts.zip"]
-  handle "/flagpoles/*any", using: "ClassicAppFlagpole", platform: "ClassicApps", examples: ["/flagpoles/ads"]
+  handle "/content/ldp/:guid", using: "ClassicAppFablLdp"
+  handle "/content/most_popular/*any", using: "ClassicAppMostPopular"
+  handle "/content/ww/*any", using: "ClassicAppWw"
+  handle "/content/news/*any", using: "ClassicAppNews"
+  handle "/content/sport/*any", using: "ClassicAppSport"
+  handle "/content/russian/*any", using: "ClassicAppRussian"
+  handle "/content/:hash", using: "ClassicAppId"
+  handle "/content/:service/*any", using: "ClassicAppService"
+  handle "/content/*any", using: "ClassicApp"
+  handle "/static/*any", using: "ClassicAppStaticContent"
+  handle "/flagpoles/*any", using: "ClassicAppFlagpole"
+
+  # BBCX index routes
+  handle "/business/*any", using: "BBCXIndex"
+  handle "/future-planet/*any", using: "BBCXIndex"
+  handle "/innovation/*any", using: "BBCXIndex"
+  handle "/live", using: "BBCXIndex"
+  handle "/video/*any", using: "BBCXIndex"
 
   # DotCom routes
-  handle "/future/*any", using: "DotComFuture", platform: "DotComFuture", examples: ["/future"]
-  handle "/culture/*any", using: "DotComCulture", platform: "DotComCulture", examples: ["/culture"]
-  handle "/reel/*any", using: "DotComReel", platform: "DotComReel", examples: ["/reel"]
-  handle "/travel/*any", using: "DotComTravel", platform: "DotComTravel", examples: ["/travel"]
-  handle "/worklife/*any", using: "DotComWorklife", platform: "DotComWorklife", examples: ["/worklife"]
+  handle "/future/article/:id", using: "DotComFuture"
+  handle "/future/tags/:id", using: "DotComFuture"
+  handle "/future/*any", using: "DotComFutureAny"
+  handle "/culture", using: "DotComCulture"
+  handle "/culture/article/:id", using: "DotComCulture"
+  handle "/culture/art", using: "BBCXIndex"
+  handle "/culture/books", using: "BBCXIndex"
+  handle "/culture/entertainment-news", using: "BBCXIndex"
+  handle "/culture/film-tv", using: "BBCXIndex"
+  handle "/culture/music", using: "DotComCulture"
+  handle "/culture/style", using: "DotComCulture"
+  handle "/culture/tags/:id", using: "DotComCulture"
+  handle "/culture/*any", using: "DotComCultureAny"
+  handle "/reel/video/:id/:slug", using: "DotComReel"
+  handle "/reel/topic/:id", using: "DotComReel"
+  handle "/reel/*any", using: "DotComReelAny"
+  handle "/travel", using: "DotComTravel"
+  handle "/travel/article/:id", using: "DotComTravel"
+  handle "/travel/adventures", using: "BBCXIndex"
+  handle "/travel/cultural-experiences", using: "BBCXIndex"
+  handle "/travel/destinations/*any", using: "DotComTravel"
+  handle "/travel/history-heritage", using: "BBCXIndex"
+  handle "/travel/specialist", using: "BBCXIndex"
+  handle "/travel/worlds-table", using: "DotComTravel"
+  handle "/travel/tags/:id", using: "DotComTravel"
+  handle "/travel/*any", using: "DotComTravelAny"
+  handle "/worklife/article/:id", using: "DotComWorklife"
+  handle "/worklife/tags/:id", using: "DotComWorklife"
+  handle "/worklife/*any", using: "DotComWorklifeAny"
+
+  # ElectoralComission routes
+  handle "/election2023postcode/:postcode", using: "ElectoralCommissionPostcode" do
+    return_404 if: !String.match?(postcode, ~r/^(GIR 0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))|[0-9][A-HJKPS-UW]) *[0-9][ABD-HJLNP-UW-Z]{2})$/)
+  end
+  handle "/election2023address/:uprn", using: "ElectoralCommissionAddress" do
+    return_404 if: !String.match?(uprn, ~r/^\d{6,12}$/)
+  end
 
   # Platform Health Observability endpoints for response time monitoring of Webcore platform
-  handle "/_health/public_content", using: "PhoPublicContent", platform: "Webcore", examples: ["/_health/public_content"]
-  handle "/_health/private_content", using: "PhoPrivateContent", platform: "Webcore", examples: ["/_health/private_content"]
+  handle "/_health/public_content", using: "PhoPublicContent"
+  handle "/_health/private_content", using: "PhoPrivateContent"
 
-  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"], examples: ["/"]
-  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"], examples: ["/"]
+  # handle "/news/business-:id", using: ["NewsStories", "NewsSFV", "MozartNews"]
+  # handle "/news/business-:id", using: ["NewsBusiness", "MozartNews"]
 
-  handle "/full-stack-test/a/*any", using: "FullStackTestA", platform: "Webcore", only_on: "test", examples: []
-  handle "/full-stack-test/b/*any", using: "FullStackTestB", platform: "Webcore", only_on: "test", examples: []
+  handle "/full-stack-test/a/*any", using: "FullStackTestA", only_on: "test"
+  handle "/full-stack-test/b/*any", using: "FullStackTestB", only_on: "test"
   redirect "/full-stack-test/*any", to: "/full-stack-test/a/*any", status: 302
 
-  handle "/echo", using: "EchoSpec", platform: "Webcore", only_on: "test", examples: ["/echo"]
+  handle "/echo", using: "EchoSpec", only_on: "test"
 
-  handle_proxy_pass "/*any", using: "ProxyPass", platform: "OriginSimulator", only_on: "test", examples: ["/foo/bar"]
+  # Personalised Account
+  handle "/foryou", using: "PersonalisedAccount"
+
+  handle_proxy_pass "/*any", using: "ProxyPass", only_on: "test"
 
   no_match()
 end

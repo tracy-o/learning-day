@@ -94,6 +94,13 @@ defmodule Belfrage.Cache.Local do
     {:ok, :content_not_found}
   end
 
+  # TODO: We should consider if the cache is not available
+  # if we should go to the origin for every request
+  # or if we should return a 500 for every request
+  defp format_cache_result({:error, :no_cache}) do
+    {:ok, :content_not_found}
+  end
+
   defp stale?(nil, _max_age), do: true
 
   defp stale?(last_updated, max_age) do

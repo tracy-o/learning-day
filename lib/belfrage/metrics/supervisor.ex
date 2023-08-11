@@ -39,7 +39,8 @@ defmodule Belfrage.Metrics.Supervisor do
        ]},
       {:telemetry_poller,
        measurements: [
-         {Metrics.Cachex, :track, [:cache]}
+         {Metrics.Cachex, :track, [:cache]},
+         {Metrics.Cachex, :track, [:preflight_metadata_cache]}
        ],
        period: :timer.seconds(30),
        name: :cachex_telemetry_poller},

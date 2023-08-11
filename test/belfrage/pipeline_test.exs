@@ -67,6 +67,16 @@ defmodule Belfrage.PipelineTest do
     assert_pipeline_trail(envelope, ["MyTransformer3"])
   end
 
+  test "return error when response tuple is invalid" do
+    envelope = %Envelope{private: %Envelope.Private{request_pipeline: ["MockTransformerBad"]}}
+
+    assert_raise CaseClauseError, fn ->
+      Pipeline.process(envelope, :request, envelope.private.request_pipeline)
+    end
+
+    assert_pipeline_trail(envelope, [])
+  end
+
   defp assert_pipeline_trail(envelope, expected_trail) do
     assert ^expected_trail = envelope.debug.request_pipeline_trail
   end

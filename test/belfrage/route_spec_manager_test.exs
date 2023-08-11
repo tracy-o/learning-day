@@ -4,7 +4,9 @@ defmodule Belfrage.RouteSpecManagerTest do
   alias Belfrage.{RouteSpecManager, RouteSpec}
 
   test "creates a route spec table with expected contents" do
-    assert Enum.all?(ets_table_contents(), fn {key, %Belfrage.RouteSpec{}} -> is_tuple(key) end)
+    assert Enum.all?(ets_table_contents(), fn {key, spec_map} ->
+             is_bitstring(key) and is_route_spec_list?(spec_map.specs)
+           end)
   end
 
   describe "get_spec" do
@@ -14,14 +16,15 @@ defmodule Belfrage.RouteSpecManagerTest do
     end
 
     test "retrieves no spec if key is not in ets table" do
-      assert RouteSpecManager.get_spec({"SomeRouteSpec", "SomePlatform"}) == nil
+      assert RouteSpecManager.get_spec("SomeRouteSpec") == nil
     end
   end
 
   describe "list_specs" do
     test "retrieves specs with expected values" do
       Enum.each(Belfrage.RouteSpecManager.list_specs(), fn spec ->
-        assert %Belfrage.RouteSpec{} = spec
+        assert match?(%{name: _, preflight_pipeline: _, specs: _}, spec)
+        assert is_route_spec_list?(spec.specs)
       end)
     end
 
@@ -39,13 +42,26 @@ defmodule Belfrage.RouteSpecManagerTest do
     end
   end
 
+  describe "list_examples" do
+    test "retrieves examples with expected values" do
+      Enum.each(Belfrage.RouteSpecManager.list_examples(), fn example ->
+        assert match?(%{expected_status: _, headers: _, path: _, platform: _, spec: _}, example)
+      end)
+    end
+  end
+
   test "Ensure route spec table is correct on test" do
     RouteSpecManager.update_specs()
 
-    fabldata_route_spec = RouteSpecManager.get_spec({"FablData", "Fabl"})
+    fabldata_route_spec = RouteSpecManager.get_spec("FablData")
 
-    assert ["ctx-service-env"] == fabldata_route_spec.headers_allowlist
-    assert ["Personalisation", "CircuitBreaker", "DevelopmentRequests"] == fabldata_route_spec.request_pipeline
+    for spec <- fabldata_route_spec.specs do
+      assert ["ctx-service-env"] == spec.headers_allowlist
+
+      assert ["SessionState", "PersonalisationGuardian", "CircuitBreaker", "DevelopmentRequests"] ==
+               spec.request_pipeline
+    end
+
     assert Enum.sort(RouteSpec.list_route_specs()) == Enum.sort(RouteSpecManager.list_specs())
   end
 
@@ -53,14 +69,21 @@ defmodule Belfrage.RouteSpecManagerTest do
     set_env(:belfrage, :production_environment, "live", &RouteSpecManager.update_specs/0)
     RouteSpecManager.update_specs()
 
-    fabldata_route_spec = RouteSpecManager.get_spec({"FablData", "Fabl"})
+    fabldata_route_spec = RouteSpecManager.get_spec("FablData")
 
-    assert [] == fabldata_route_spec.headers_allowlist
-    assert ["Personalisation", "CircuitBreaker"] == fabldata_route_spec.request_pipeline
+    for spec <- fabldata_route_spec.specs do
+      assert [] == spec.headers_allowlist
+      assert ["SessionState", "PersonalisationGuardian", "CircuitBreaker"] == spec.request_pipeline
+    end
+
     assert Enum.sort(RouteSpec.list_route_specs()) == Enum.sort(RouteSpecManager.list_specs())
   end
 
   defp ets_table_contents() do
     :ets.tab2list(:route_spec_table)
+  end
+
+  defp is_route_spec_list?(spec_list) do
+    Enum.all?(spec_list, &is_map/1)
   end
 end

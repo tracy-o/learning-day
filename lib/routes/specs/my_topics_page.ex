@@ -1,15 +1,18 @@
 defmodule Routes.Specs.MyTopicsPage do
-  def specs(env) do
+  def specification(env) do
     %{
-      owner: "DandESportApp@bbc.co.uk",
-      runbook: "https://confluence.dev.bbc.co.uk/display/sportws4/My+Topics+Run+Book",
-      platform: "Fabl",
-      personalisation: "on",
-      fallback_write_sample: 0,
-      caching_enabled: false,
-      request_pipeline: request_pipeline(env),
-      response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
-      etag: true
+      specs: %{
+        owner: "newsappsabl@bbc.co.uk",
+        runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=342561568",
+        platform: "Fabl",
+        personalisation: "on",
+        fallback_write_sample: 0,
+        caching_enabled: false,
+        request_pipeline: request_pipeline(env),
+        response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
+        etag: true,
+        examples: []
+      }
     }
   end
 

@@ -1,14 +1,10 @@
 defmodule Belfrage.Supervisor do
   use Supervisor
-  require Cachex.Spec
 
   def start_link(init_arg) do
     Supervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
   end
 
-  # TODO: refactor definition of Cachex, according to
-  # documentation it should be defined as:
-  # {Cachex, [name: :cache, limit: cachex_limit()]}
   def children(env: env) do
     conditional_servers(env) ++
       [
@@ -21,8 +17,7 @@ defmodule Belfrage.Supervisor do
         {Belfrage.Dials.Supervisor, [env: env]},
         {Belfrage.Metrics.Supervisor, [env: env]},
         {Belfrage.Mvt.Supervisor, [env: env]},
-        {Cachex, name: :cache, limit: cachex_limit(), stats: true},
-        {Belfrage.MetadataCache, Belfrage.MetadataCache.options()},
+        {Belfrage.Cache.Supervisor, [env: env]},
         {Belfrage.Services.Webcore.Supervisor, [env: env]},
         {Belfrage.NewsApps.Supervisor, [env: env]},
         {Belfrage.SupervisorObserver, get_observed_ids()}
@@ -51,7 +46,7 @@ defmodule Belfrage.Supervisor do
       pools: %{
         :default => [size: 512, conn_opts: [transport_opts: {:verify, :verify_none}]],
         "https://#{bucket}.s3-#{region}.amazonaws.com" => [
-          size: 1024,
+          size: 2048,
           conn_opts: [
             transport_opts: [
               {:inet6, true}
@@ -172,12 +167,6 @@ defmodule Belfrage.Supervisor do
   @impl true
   def init(args) do
     Supervisor.init(children(args), strategy: :one_for_one, max_restarts: 40)
-  end
-
-  defp cachex_limit(conf \\ Application.get_env(:cachex, :limit))
-
-  defp cachex_limit(size: size, policy: policy, reclaim: reclaim, options: options) do
-    {:limit, size, policy, reclaim, options}
   end
 
   defp conditional_servers(:prod) do

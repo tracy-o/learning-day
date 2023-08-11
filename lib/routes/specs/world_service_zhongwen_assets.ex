@@ -1,8 +1,11 @@
 defmodule Routes.Specs.WorldServiceZhongwenAssets do
-  def specs do
+  def specification do
     %{
-      platform: "Simorgh",
-      request_pipeline: ["WorldServiceRedirect"]
+      specs: %{
+        platform: "Simorgh",
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/zhongwen/sw.js", "/zhongwen/manifest.json"]
+      }
     }
   end
 end

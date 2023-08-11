@@ -110,7 +110,7 @@ defmodule EndToEnd.ResponseHeaders.CacheStatusTest do
   end
 
   defp make_request(path \\ "/200-ok-response") do
-    conn(:get, path) |> Router.call([])
+    conn(:get, path) |> Router.call(routefile: Routes.Routefiles.Mock)
   end
 
   defp cache_status_header(conn) do

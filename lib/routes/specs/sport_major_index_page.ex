@@ -1,9 +1,12 @@
 defmodule Routes.Specs.SportMajorIndexPage do
-  def specs do
+  def specification do
     %{
-      owner: "#help-sport",
-      runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
-      platform: "MozartSport"
+      specs: %{
+        owner: "#help-sport",
+        runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
+        platform: "MozartSport",
+        examples: ["/sport/tennis", "/sport/tennis.app", "/sport/formula1", "/sport/formula1.app", "/sport/cycling", "/sport/cycling.app", "/sport/athletics", "/sport/athletics.app", "/sport.app"]
+      }
     }
   end
 end

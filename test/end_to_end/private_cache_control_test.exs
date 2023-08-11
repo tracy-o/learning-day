@@ -35,7 +35,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     end)
 
     conn = conn(:get, "/200-ok-response")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {200, headers, _body} = sent_resp(conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30, max-age=60"} in headers
@@ -43,7 +43,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
 
   test "when belfrage 404s, stale-while-revalidate is added to cache-control" do
     conn = conn(:get, "/this-is-a-404")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {404, headers, _body} = sent_resp(conn)
     assert {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"} in headers
@@ -56,7 +56,7 @@ defmodule EndToEndTest.PrivateCacheControlTest do
     end)
 
     conn = conn(:get, "/downstream-broken")
-    conn = Router.call(conn, [])
+    conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
     assert {500, headers, _body} = sent_resp(conn)
     assert {"cache-control", "private, stale-if-error=90, stale-while-revalidate=30, max-age=123"} in headers

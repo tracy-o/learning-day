@@ -1,8 +1,10 @@
 defmodule Routes.Specs.PersonalisedFablData do
-  def specs() do
+  def specification do
     %{
-      platform: "Fabl",
-      personalisation: "on"
+      specs: %{
+        platform: "Fabl",
+        personalisation: "on"
+      }
     }
   end
 end
