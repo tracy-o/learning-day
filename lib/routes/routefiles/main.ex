@@ -959,6 +959,7 @@ defroutefile "Main" do
   redirect "/hindi/index.html", to: "/hindi", status: 301
   redirect "/indonesia/index.html", to: "/indonesia", status: 301
   redirect "/kyrgyz/index.html", to: "/kyrgyz", status: 301
+  redirect "/mundo/index.html", to: "/mundo", status: 301
   redirect "/nepali/index.html", to: "/nepali", status: 301
   redirect "/pashto/index.html", to: "/pashto", status: 301
   redirect "/persian/index.html", to: "/persian", status: 301
