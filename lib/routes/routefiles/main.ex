@@ -1376,7 +1376,7 @@ defroutefile "Main" do
   end
 
   handle "/gujarati/send/:id", using: "UploaderWorldService"
-  handle "/gujarati", using: "WorldServiceGujaratiTipoHomePage", only_on: "test"
+  handle "/gujarati", using: "WorldServiceGujaratiTipoHomePage"
   handle "/gujarati/*any", using: "WorldServiceGujarati"
 
   redirect "/hausa/mobile/*any", to: "/hausa", status: 301
