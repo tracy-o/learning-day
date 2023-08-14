@@ -1340,7 +1340,7 @@ defroutefile "Main" do
   handle "/gahuza", using: "WorldServiceGahuzaTipoHomePage", only_on: "test"
   handle "/gahuza/*any", using: "WorldServiceGahuza"
 
-  handle "/gujarati.amp", using: "WorldServiceGujarati"
+  handle "/gujarati.amp", using: "WorldServiceGujaratiTipoHomePage"
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets"
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets"
   handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss"
