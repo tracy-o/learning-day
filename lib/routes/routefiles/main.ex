@@ -948,6 +948,33 @@ defroutefile "Main" do
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
+  ## World Service - Homepage Redirects
+  redirect "/afrique/index.html", to: "/afrique", status: 301
+  redirect "/arabic/index.html", to: "/arabic", status: 301
+  redirect "/azeri/index.html", to: "/azeri", status: 301
+  redirect "/bengali/index.html", to: "/bengali", status: 301
+  redirect "/burmese/index.html", to: "/burmese", status: 301
+  redirect "/gahuza/index.html", to: "/gahuza", status: 301
+  redirect "/hausa/index.html", to: "/hausa", status: 301
+  redirect "/hindi/index.html", to: "/hindi", status: 301
+  redirect "/indonesia/index.html", to: "/indonesia", status: 301
+  redirect "/kyrgyz/index.html", to: "/kyrgyz", status: 301
+  redirect "/mundo/index.html", to: "/mundo", status: 301
+  redirect "/nepali/index.html", to: "/nepali", status: 301
+  redirect "/pashto/index.html", to: "/pashto", status: 301
+  redirect "/persian/index.html", to: "/persian", status: 301
+  redirect "/portuguese/index.html", to: "/portuguese", status: 301
+  redirect "/russian/index.html", to: "/russian", status: 301
+  redirect "/sinhala/index.html", to: "/sinhala", status: 301
+  redirect "/somali/index.html", to: "/somali", status: 301
+  redirect "/swahili/index.html", to: "/swahili", status: 301
+  redirect "/tamil/index.html", to: "/tamil", status: 301
+  redirect "/turkce/index.html", to: "/turkce", status: 301
+  redirect "/ukrainian/index.html", to: "/ukrainian", status: 301
+  redirect "/urdu/index.html", to: "/urdu", status: 301
+  redirect "/uzbek/index.html", to: "/uzbek", status: 301
+  redirect "/vietnamese/index.html", to: "/vietnamese", status: 301
+
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
   redirect "/hindi/iswoty", to: "/hindi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
