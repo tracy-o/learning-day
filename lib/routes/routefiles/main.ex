@@ -1345,8 +1345,6 @@ defroutefile "Main" do
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets"
   handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss"
 
-  handle "/gujarati/tipohome.amp", using: "WorldServiceGujaratiTipoHomePage", only_on: "test"
-
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
