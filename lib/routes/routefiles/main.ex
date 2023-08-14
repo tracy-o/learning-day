@@ -1340,7 +1340,6 @@ defroutefile "Main" do
   handle "/gahuza/*any", using: "WorldServiceGahuza"
 
   handle "/gujarati.amp", using: "WorldServiceGujarati"
-  handle "/gujarati.json", using: "WorldServiceGujarati"
   handle "/gujarati/manifest.json", using: "WorldServiceGujaratiAssets"
   handle "/gujarati/sw.js", using: "WorldServiceGujaratiAssets"
   handle "/gujarati/rss.xml", using: "WorldServiceGujaratiHomePageRss"
@@ -2835,7 +2834,7 @@ defroutefile "Main" do
   redirect "/bbcthree/item/b6402a4c-30af-4e2a-87a6-5c263279b20b", to: "/bbcthree/terms-and-conditions", status: 301
   redirect "/bbcthree/item/9602352d-227e-43b9-a030-c0d577ce49d2", to: "/bbcthree/privacy", status: 301
   handle "/bbcthree/item/:id", using: "ThreeRedirect"
-  
+
   handle "/bbcthree/sitemap.xml", using: "ThreeSitemap"
   handle "/bbcthree/privacy", using: "ThreeInfo"
   handle "/bbcthree/terms-and-conditions", using: "ThreeInfo"
